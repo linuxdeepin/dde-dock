@@ -10,12 +10,12 @@ msgstr ""
 "POT-Creation-Date: 2017-10-16 14:48+0800\n"
 "PO-Revision-Date: 2017-10-16 08:44+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
+"Language-Team: Filipino (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fil/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: fil\n"
+"Plural-Forms: nplurals=2; plural=(n == 1 || n==2 || n==3) || (n % 10 != 4 || n % 10 != 6 || n % 10 != 9);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
-msgstr "El nom d'usuari no pot ser buit"
+msgstr ""
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
@@ -45,7 +45,7 @@ msgstr ""
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
-msgstr ""
+msgstr "Ang username ay ginagamit ng system."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
@@ -128,7 +128,7 @@ msgstr ""
 
 #: ../../dock/app_entry_menu.go:107
 msgid "_Open"
-msgstr "_Obrir"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:114
 msgid "_Close All"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: ../../dock/app_entry_menu.go:137
 msgid "_Undock"
-msgstr "_Treure del dock"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
@@ -160,11 +160,11 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Llançador"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr "Terminal"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
@@ -342,7 +342,7 @@ msgstr ""
 
 #: ../../mime/media.go:67 ../../mime/media.go:68
 msgid "Nothing"
-msgstr "Nothing"
+msgstr ""
 
 #: ../../mime/media.go:76 ../../mime/media.go:77
 msgid "Open Folder"
@@ -378,7 +378,7 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:250
 #: ../../network/nm_setting_vpn_vpnc.go:161
 msgid "None"
-msgstr "Cap"
+msgstr ""
 
 #: ../../network/manager_active.go:349
 #: ../../network/nm_setting_virtual_key.go:190
@@ -425,7 +425,7 @@ msgstr ""
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
-msgstr "Connexió per cable"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:226
 msgid "Connection"
@@ -465,19 +465,19 @@ msgstr ""
 
 #: ../../network/nm_custom_type.go:246
 msgid "VPN L2TP"
-msgstr "VPN L2TP"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:248
 msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:250
 msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:252
 msgid "VPN PPTP"
-msgstr "VPN PPTP"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
@@ -485,7 +485,7 @@ msgstr ""
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
-msgstr "VPN VPNC"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:34
 msgid "PAP"
@@ -543,11 +543,11 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:39
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:40
 msgid "Automatically connect"
-msgstr "Connecta't automàticament"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "For All Users"
@@ -555,34 +555,34 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:47
 msgid "Ethernet"
-msgstr "Ethernet"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr "Adreça MAC del dispositiu"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr "Adreça MAC clonada"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr "Personalitzar MTU"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
 #: ../../network/nm_setting_beans_gen.go:359
 msgid "MTU"
-msgstr "MTU"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:58
 #: ../../network/nm_setting_beans_gen.go:80
 #: ../../network/nm_setting_beans_gen.go:94
 msgid "Mobile"
-msgstr "Mòbil"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:60
 msgid "Country or region"
@@ -598,20 +598,20 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
-msgstr "Tipus de servei"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:65
 #: ../../network/nm_setting_beans_gen.go:82
 msgid "APN"
-msgstr "APN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:66
 #: ../../network/nm_setting_beans_gen.go:72
 #: ../../network/nm_setting_beans_gen.go:83
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Number"
-msgstr "Número"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:67
 #: ../../network/nm_setting_beans_gen.go:73
@@ -630,7 +630,7 @@ msgstr "Número"
 #: ../../network/nm_setting_beans_gen.go:405
 #: ../../network/nm_setting_beans_gen.go:420
 msgid "Username"
-msgstr "Nom d'usuari"
+msgstr "Username"
 
 #: ../../network/nm_setting_beans_gen.go:68
 #: ../../network/nm_setting_beans_gen.go:74
@@ -650,37 +650,37 @@ msgstr "Nom d'usuari"
 #: ../../network/nm_setting_beans_gen.go:408
 #: ../../network/nm_setting_vpn_openvpn.go:114
 msgid "Password"
-msgstr "Contrasenya"
+msgstr "Password"
 
 #: ../../network/nm_setting_beans_gen.go:69
 #: ../../network/nm_setting_beans_gen.go:86
 msgid "Network ID"
-msgstr "ID de xarxa"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr "Xarxa domèstica només"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
 msgid "PIN"
-msgstr "PIN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
 #: ../../network/nm_setting_beans_gen.go:260
 #: ../../network/nm_setting_beans_gen.go:384
 msgid "Security"
-msgstr "Seguretat"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr "Seguretat requerida"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
-msgstr "Clau"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
@@ -688,7 +688,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:111
 msgid "Identity"
-msgstr "Identitat"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:112
 #: ../../network/nm_setting_beans_gen.go:115
@@ -705,7 +705,7 @@ msgstr "Identitat"
 #: ../../network/nm_setting_beans_gen.go:421
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Ask for Pwd"
-msgstr "Ask for Pwd"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Anonymous ID"
@@ -726,7 +726,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:407
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
-msgstr "Clau Privada"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:118
 #: ../../network/nm_setting_beans_gen.go:183
@@ -736,7 +736,7 @@ msgstr "Clau Privada"
 #: ../../network/nm_setting_beans_gen.go:300
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "CA Cert"
-msgstr "Certificat CA"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:187
@@ -746,7 +746,7 @@ msgstr "Certificat CA"
 #: ../../network/nm_setting_beans_gen.go:301
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "User Cert"
-msgstr "Cert. d'usuari"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:120
 msgid "Provisioning"
@@ -758,7 +758,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:122
 msgid "PEAP Version"
-msgstr "Versió PEAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:123
 msgid "Inner Auth"
@@ -766,35 +766,35 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:129
 msgid "Wi-Fi"
-msgstr "Wi-Fi"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:131
 msgid "SSID"
-msgstr "SSID"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:132
 msgid "Mode"
-msgstr "Mode"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:133
 msgid "Band"
-msgstr "Banda"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:134
 msgid "Channel"
-msgstr "Canal"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:144
 msgid "PPPoE"
-msgstr "PPPoE"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:147
 msgid "Service"
-msgstr "Servei"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:154
 msgid "PPP"
-msgstr "PPP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:156
 #: ../../network/nm_setting_beans_gen.go:259
@@ -804,7 +804,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"
-msgstr "128-bit MPPE"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:261
@@ -874,11 +874,11 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:417
 msgid "VPN"
-msgstr "VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:176
 msgid "Need VPN Plugin"
-msgstr "Necessita el plugin de la VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:177
 #: ../../network/nm_setting_beans_gen.go:182
@@ -895,7 +895,7 @@ msgstr "Necessita el plugin de la VPN"
 #: ../../network/nm_setting_beans_gen.go:454
 #: ../../network/nm_setting_beans_gen.go:468
 msgid "Gateway"
-msgstr "Pasarel·la"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
@@ -907,7 +907,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
 msgid "Proxy"
-msgstr "Proxy"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:283
@@ -917,7 +917,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:186
 #: ../../network/nm_setting_beans_gen.go:284
 msgid "CSD Script"
-msgstr "Escriptura CSD"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:287
@@ -929,13 +929,13 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:296
 #: ../../network/nm_setting_beans_gen.go:404
 msgid "Auth Type"
-msgstr "Tipus d'autorització"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:200
 #: ../../network/nm_setting_beans_gen.go:305
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
-msgstr "Clau estàtica"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:201
 #: ../../network/nm_setting_beans_gen.go:306
@@ -947,17 +947,17 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:330
 msgid "Key Direction"
-msgstr "Direcció de la clau"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:203
 #: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote IP"
-msgstr "IP remota"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:204
 #: ../../network/nm_setting_beans_gen.go:309
 msgid "Local IP"
-msgstr "IP local"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:409
@@ -983,7 +983,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:249
 #: ../../network/nm_setting_beans_gen.go:423
 msgid "Group Name"
-msgstr "Nom del grup"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:226
 #: ../../network/nm_setting_beans_gen.go:425
@@ -993,7 +993,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:426
 msgid "Use Hybrid Authentication"
-msgstr "Utilitzar l'autenticació híbrida"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:427
@@ -1002,7 +1002,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:246
 msgid "VPN IPsec"
-msgstr "VPN IPsec"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:248
 msgid "Enable IPsec"
@@ -1010,7 +1010,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:250
 msgid "Group ID"
-msgstr "Group ID"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
@@ -1020,7 +1020,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:257
 #: ../../network/nm_setting_beans_gen.go:381
 msgid "VPN PPP"
-msgstr "VPN PPP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:270
 msgid "No Protocol Field Compression"
@@ -1032,19 +1032,19 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:315
 msgid "VPN Security"
-msgstr "Seguretat VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "Cipher"
-msgstr "Xifratge"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:318
 msgid "HMAC Auth"
-msgstr "HMAC Auth"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:324
 msgid "VPN TLS Authentication"
-msgstr "Autenticació VPN TLS"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "Subject Match"
@@ -1064,15 +1064,15 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
-msgstr "Tipus de servidor intermediari"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Server IP"
-msgstr "Servidor IP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "Port"
-msgstr "Port"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Retry Indefinitely When Failed"
@@ -1105,11 +1105,11 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "Use TCP connection"
-msgstr "Usa connexió TCP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:357
 msgid "Use TAP device"
-msgstr "Usa dispositiu TAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:358
 msgid "Customize Tunnel MTU"
@@ -1125,7 +1125,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Restrict Tunnel TCP MSS"
-msgstr "Restringir túnel TCP MSS"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:363
 msgid "Randomize Remote Hosts"
@@ -1133,19 +1133,19 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:435
 msgid "Domain"
-msgstr "Domini"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:436
 msgid "Vendor"
-msgstr "Venedor"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:437
 msgid "Version"
-msgstr "Versió"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:438
 msgid "Encryption"
-msgstr "Encriptació"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "NAT Traversal"
@@ -1161,7 +1161,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "Local Port"
-msgstr "Port local"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Disable Dead Peer Detection"
@@ -1169,31 +1169,31 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:449
 msgid "IPv4"
-msgstr "IPv4"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:451
 #: ../../network/nm_setting_beans_gen.go:465
 msgid "Method"
-msgstr "Mètode"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:452
 #: ../../network/nm_setting_beans_gen.go:466
 msgid "IP Address"
-msgstr "Adreça IP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:453
 msgid "Netmask"
-msgstr "Màscara de xarxa"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:455
 #: ../../network/nm_setting_beans_gen.go:469
 msgid "Primary DNS"
-msgstr "DNS primari"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:456
 #: ../../network/nm_setting_beans_gen.go:470
 msgid "Secondary DNS"
-msgstr "DNS secundari"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
@@ -1202,16 +1202,16 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
-msgstr "IPv6"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:467
 msgid "Prefix"
-msgstr "Prefix"
+msgstr ""
 
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "Custom"
-msgstr "Personalitzat"
+msgstr ""
 
 #: ../../network/nm_setting_gsm.go:165
 #: ../../network/nm_setting_virtual_key.go:159
@@ -1226,7 +1226,7 @@ msgstr ""
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip6_config.go:38
 msgid "Auto"
-msgstr "Automàtic"
+msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip6_config.go:40
@@ -1236,7 +1236,7 @@ msgstr ""
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
 msgid "Manual"
-msgstr "Manual"
+msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:41
 #: ../../network/nm_setting_ip6_config.go:42
@@ -1246,7 +1246,7 @@ msgstr ""
 
 #: ../../network/nm_setting_ip6_config.go:37
 msgid "Ignore"
-msgstr "Ignora"
+msgstr ""
 
 #: ../../network/nm_setting_ip6_config.go:39
 msgid "DHCP"
@@ -1262,23 +1262,23 @@ msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "L2TP"
-msgstr "L2TP"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:173
 msgid "PPTP"
-msgstr "PPTP"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:174
 msgid "OpenConnect"
-msgstr "OpenConnect"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:175
 msgid "OpenVPN"
-msgstr "OpenVPN"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "VPNC"
-msgstr "VPNC"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
@@ -1919,7 +1919,7 @@ msgstr ""
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
-msgstr "Desconegut"
+msgstr ""
 
 #: ../../network/utils_notify.go:92
 msgid "You are now offline."
@@ -1936,7 +1936,7 @@ msgstr ""
 #: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
 #: ../../network/utils_notify.go:115
 msgid "Network"
-msgstr "Xarxa"
+msgstr ""
 
 #: ../../network/utils_notify.go:108
 msgid ""
