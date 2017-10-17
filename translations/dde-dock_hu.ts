@@ -2,17 +2,17 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="104"/>
         <source>12 Hour Time</source>
         <translation>12 órás idő</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="106"/>
         <source>24 Hour Time</source>
         <translation>24 órás idő</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="112"/>
         <source>Time Settings</source>
         <translation>Idő beállítás</translation>
     </message>
@@ -20,17 +20,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="35"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
         <translation>Hálózat engedélyezése</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="37"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
         <translation>Hálózat letiltása</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="43"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
         <translation>Hálózati beállítások</translation>
     </message>
@@ -69,82 +69,82 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
         <translation>Stílus mód</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
         <translation>Hatékony mód</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="45"/>
         <source>Top</source>
         <translation>Fent</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
         <translation>Lent</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Left</source>
         <translation>Bal</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Right</source>
         <translation>Jobb</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Large</source>
         <translation>Nagy</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="30"/>
+        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
         <translation>Közepes</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="31"/>
+        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Small</source>
         <translation>Kicsi</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="32"/>
+        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
         <translation>Megjelenítve tartás</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="33"/>
+        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
         <translation>Elrejtve tartás</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="34"/>
+        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
         <translation>Intelligens elrejtés</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="68"/>
+        <location filename="../frame/util/docksettings.cpp" line="88"/>
         <source>Mode</source>
         <translation>Mód</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="76"/>
+        <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Location</source>
         <translation>Hely</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="83"/>
+        <location filename="../frame/util/docksettings.cpp" line="103"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="90"/>
+        <location filename="../frame/util/docksettings.cpp" line="110"/>
         <source>Status</source>
         <translation>Állapot</translation>
     </message>
@@ -152,7 +152,7 @@
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="17"/>
+        <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
         <translation>Indító</translation>
     </message>
@@ -188,53 +188,53 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="69"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="119"/>
         <source>Shut down</source>
         <translation>Leállítás</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="56"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="77"/>
         <source>Remaining Capacity %1</source>
         <translation>Hátralevő kapacitás %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="83"/>
         <source>Charged %1</source>
         <translation>Töltve %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="85"/>
         <source>Charging %1</source>
         <translation>Töltés %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="125"/>
         <source>Restart</source>
         <translation>Újraindítás </translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="137"/>
         <source>Lock</source>
         <translation>Zárolás</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
         <source>Log out</source>
         <translation>Kijelentkezés</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>Felfüggesztés</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Switch account</source>
         <translation>Felhasználóváltás</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
         <source>Power settings</source>
         <translation>Energiagazdálkodási beállítások</translation>
     </message>
@@ -242,12 +242,12 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="31"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
         <translation>Eszköz</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
         <translation>Alkalmazás</translation>
     </message>
@@ -255,22 +255,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="56"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
         <translation>Elnémítás törlése</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="58"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>Némítás</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="64"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
         <translation>Hangeszköz beállítások</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="185"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
         <source>Current Volume %1</source>
         <translation>Jelenlegi hangerő %1</translation>
     </message>
@@ -278,7 +278,7 @@
 <context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
         <source>System Tray</source>
         <translation>Rendszertálca</translation>
     </message>
@@ -312,17 +312,17 @@
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="46"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknow</source>
         <translation>Ismeretlen</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
         <translation>Nincs hálózat</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="61"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
         <translation>Vezetékes kapcsolat: %1</translation>
     </message>
@@ -330,12 +330,12 @@
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
         <translation>Nincs hálózat</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
         <translation>Vezeték nélküli kapcsolat: %1</translation>
     </message>
@@ -343,32 +343,32 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
         <translation>Automatikus csatlakozás</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
         <source>Connect</source>
         <translation>Csatlakozás</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
         <source>Cancel</source>
         <translation>Mégse</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="169"/>
         <source>Wireless Network</source>
         <translation>Vezeték nélküli hálózat</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="171"/>
         <source>Wireless Network %1</source>
         <translation>Vezeték nélküli Hálózat %1 </translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="385"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="412"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>&lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt; kapcsolathoz jelszó szükséges.</translation>
     </message>

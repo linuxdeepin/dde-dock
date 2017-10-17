@@ -2,17 +2,17 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="104"/>
         <source>12 Hour Time</source>
         <translation>توقيت الـ 12 ساعة</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="106"/>
         <source>24 Hour Time</source>
         <translation>توقيت الـ 24 ساعة</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="112"/>
         <source>Time Settings</source>
         <translation>إعدادات الوقت</translation>
     </message>
@@ -20,17 +20,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="35"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
         <translation>تمكين الشبكة</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="37"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
         <translation>تعطيل الشبكة</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="43"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
         <translation>إعدادات الشبكة</translation>
     </message>
@@ -69,82 +69,82 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
         <translation>النمط الحداثي</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
         <translation>النمط الفعال</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="45"/>
         <source>Top</source>
         <translation>أعلى</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
         <translation>أسفل</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Left</source>
         <translation>يسار</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Right</source>
         <translation>يمين</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Large</source>
         <translation>كبير</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="30"/>
+        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
         <translation>متوسط</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="31"/>
+        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Small</source>
         <translation>صغير</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="32"/>
+        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
-        <translation>الإبقاء ظاهراً</translation>
+        <translation>اﻹبقاء ظاهراً</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="33"/>
+        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
         <translation>الإبقاء مخفياً</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="34"/>
+        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
         <translation>إخفاء ذكي</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="68"/>
+        <location filename="../frame/util/docksettings.cpp" line="88"/>
         <source>Mode</source>
         <translation>النمط</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="76"/>
+        <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Location</source>
         <translation>الموقع</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="83"/>
+        <location filename="../frame/util/docksettings.cpp" line="103"/>
         <source>Size</source>
         <translation>الحجم</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="90"/>
+        <location filename="../frame/util/docksettings.cpp" line="110"/>
         <source>Status</source>
         <translation>الحالة</translation>
     </message>
@@ -152,7 +152,7 @@
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="17"/>
+        <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
         <translation>المُطلق</translation>
     </message>
@@ -188,53 +188,53 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="69"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="119"/>
         <source>Shut down</source>
         <translation>إيقاف التشغيل</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="56"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="77"/>
         <source>Remaining Capacity %1</source>
         <translation>القدرة المتبقية %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="83"/>
         <source>Charged %1</source>
         <translation>مشحون %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="85"/>
         <source>Charging %1</source>
         <translation>قيد الشحن %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="125"/>
         <source>Restart</source>
         <translation>إعادة التشغيل</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="137"/>
         <source>Lock</source>
         <translation>قفل</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
         <source>Log out</source>
         <translation>تسجيل الخروج</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>إسبات</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Switch account</source>
         <translation>تبديل الحساب</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
         <source>Power settings</source>
         <translation>إعدادت الطاقة</translation>
     </message>
@@ -242,12 +242,12 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="31"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
         <translation>جهاز</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
         <translation>تطبيق</translation>
     </message>
@@ -255,22 +255,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="56"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
         <translation>إلغاء الكتم</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="58"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>صامت</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="64"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
         <translation>إعدادات الصوت</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="185"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
         <source>Current Volume %1</source>
         <translation>الحجم الحالي %1</translation>
     </message>
@@ -278,9 +278,9 @@
 <context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
         <source>System Tray</source>
-        <translation>صينبة النظام</translation>
+        <translation>منطقة إعلام النظام</translation>
     </message>
 </context>
 <context>
@@ -293,7 +293,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation>نقل  %1 ملف إلى المحذوفات </translation>
+        <translation>نقل  %1 من الملفات إلى المحذوفات </translation>
     </message>
 </context>
 <context>
@@ -312,17 +312,17 @@
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="46"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknow</source>
         <translation>غير معروف</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
         <translation>لا توجد شبكة</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="61"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
         <translation>اتصال سلكي بـ : %1</translation>
     </message>
@@ -330,12 +330,12 @@
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
         <translation>لا توجد شبكة</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
         <translation>اتصال لاسلكي بـ : %1</translation>
     </message>
@@ -343,32 +343,32 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
         <translation>اتصال تلقائي</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
         <source>Connect</source>
         <translation>اتصال</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="169"/>
         <source>Wireless Network</source>
         <translation>شبكة لاسلكية</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="171"/>
         <source>Wireless Network %1</source>
         <translation>الشبكة اللاسلكية : %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="385"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="412"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>كلمة السر مطلوبة للاتصال بـ  &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>

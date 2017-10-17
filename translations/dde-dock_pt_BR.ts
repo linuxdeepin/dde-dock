@@ -2,17 +2,17 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="104"/>
         <source>12 Hour Time</source>
         <translation>Formato 12 horas</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="106"/>
         <source>24 Hour Time</source>
         <translation>Formato 24 horas</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="112"/>
         <source>Time Settings</source>
         <translation>Alterar data e hora</translation>
     </message>
@@ -20,17 +20,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="35"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
         <translation>Ativar rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="37"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
         <translation>Desativar rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="43"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
         <translation>Configurações de rede</translation>
     </message>
@@ -69,82 +69,82 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
-        <translation>Modo Fashion</translation>
+        <translation>Fashion</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
-        <translation>Modo Eficiente</translation>
+        <translation>Eficiente</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="45"/>
         <source>Top</source>
         <translation>Acima</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
         <translation>Abaixo</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Left</source>
         <translation>Esquerda</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Right</source>
         <translation>Direita</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Large</source>
         <translation>Grande</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="30"/>
+        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
         <translation>Médio</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="31"/>
+        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Small</source>
         <translation>Pequeno</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="32"/>
+        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
         <translation>Continuar exibindo </translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="33"/>
+        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
         <translation>Continuar oculto</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="34"/>
+        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
         <translation>Ocultação inteligente</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="68"/>
+        <location filename="../frame/util/docksettings.cpp" line="88"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="76"/>
+        <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Location</source>
         <translation>Localização</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="83"/>
+        <location filename="../frame/util/docksettings.cpp" line="103"/>
         <source>Size</source>
         <translation>Tamanho</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="90"/>
+        <location filename="../frame/util/docksettings.cpp" line="110"/>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
@@ -152,7 +152,7 @@
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="17"/>
+        <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
         <translation>Lançador</translation>
     </message>
@@ -162,7 +162,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
         <source>Empty</source>
-        <translation>Vazio</translation>
+        <translation>Esvaziar</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
@@ -177,64 +177,64 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="74"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Tem certeza que deseja esvaziar 1 item?</translation>
+        <translation>Deseja remover 1 item da lixeira?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="76"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Tem certeza que deseja esvaziar %1 itens?</translation>
+        <translation>Deseja remover %1 itens da lixeira?</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="69"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="119"/>
         <source>Shut down</source>
         <translation>Desligar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="56"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="77"/>
         <source>Remaining Capacity %1</source>
         <translation>Bateria restante %1 </translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="83"/>
         <source>Charged %1</source>
         <translation>Carregado %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="85"/>
         <source>Charging %1</source>
         <translation>Carregando %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="125"/>
         <source>Restart</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="137"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
         <source>Log out</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>Suspender</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Switch account</source>
         <translation>Trocar de conta</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
         <source>Power settings</source>
         <translation>Configurações de energia</translation>
     </message>
@@ -242,12 +242,12 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="31"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
         <translation>Aplicação</translation>
     </message>
@@ -255,22 +255,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="56"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
         <translation>Ativar o som</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="58"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>Mudo</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="64"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
         <translation>Configurações de áudio</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="185"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
         <source>Current Volume %1</source>
         <translation>Volume %1</translation>
     </message>
@@ -278,7 +278,7 @@
 <context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
         <source>System Tray</source>
         <translation>Bandeja do sistema</translation>
     </message>
@@ -306,23 +306,23 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
         <source>Empty</source>
-        <translation>Vazio</translation>
+        <translation>Esvaziar</translation>
     </message>
 </context>
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="46"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknow</source>
         <translation>Desconhecido</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
         <translation>Sem rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="61"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
         <translation>Conexão com fio %1</translation>
     </message>
@@ -330,12 +330,12 @@
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
         <translation>Sem rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
         <translation>Conexão Wi-Fi: %1 </translation>
     </message>
@@ -343,32 +343,32 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
         <translation>Auto-conectar</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="169"/>
         <source>Wireless Network</source>
         <translation>Rede Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="171"/>
         <source>Wireless Network %1</source>
         <translation>Rede Wi-Fi %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="385"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="412"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>Digite a senha para conectar a &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
