@@ -143,7 +143,14 @@ func (m *Manager) ClearShortcutKeystrokes(id string, type0 int32) error {
 		return ErrShortcutNotFound{id, type0}
 	}
 	m.shortcutManager.ModifyShortcutKeystrokes(shortcut, nil)
-	return shortcut.SaveKeystrokes()
+	err := shortcut.SaveKeystrokes()
+	if err != nil {
+		return err
+	}
+	if shouldEmitSignalChanged(shortcut) {
+		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
+	}
+	return nil
 }
 
 func (m *Manager) LookupConflictingShortcut(keystroke string) (string, error) {
@@ -207,8 +214,12 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, keystroke string) error {
 	customShortcut.Name = name
 	customShortcut.Cmd = cmd
 	m.shortcutManager.ModifyShortcutKeystrokes(shortcut, keystrokes)
+	err := customShortcut.Save()
+	if err != nil {
+		return err
+	}
 	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
-	return customShortcut.Save()
+	return nil
 }
 
 func (m *Manager) AddShortcutKeystroke(id string, type0 int32, keystroke string) error {
@@ -241,8 +252,13 @@ func (m *Manager) AddShortcutKeystroke(id string, type0 int32, keystroke string)
 	}
 	if conflictKeystroke == nil {
 		m.shortcutManager.AddShortcutKeystroke(shortcut, ks)
-		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
-		shortcut.SaveKeystrokes()
+		err := shortcut.SaveKeystrokes()
+		if err != nil {
+			return err
+		}
+		if shouldEmitSignalChanged(shortcut) {
+			m.emitShortcutSignal(shortcutSignalChanged, shortcut)
+		}
 	} else if conflictKeystroke.Shortcut != shortcut {
 		return errKeystrokeUsed
 	}
@@ -267,8 +283,13 @@ func (m *Manager) DeleteShortcutKeystroke(id string, type0 int32, keystroke stri
 	logger.Debug("keystroke:", ks.DebugString())
 
 	m.shortcutManager.DeleteShortcutKeystroke(shortcut, ks)
-	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
-	shortcut.SaveKeystrokes()
+	err = shortcut.SaveKeystrokes()
+	if err != nil {
+		return err
+	}
+	if shouldEmitSignalChanged(shortcut) {
+		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
+	}
 	return nil
 }
 

@@ -49,6 +49,7 @@ func (gs *GSettingsShortcut) SaveKeystrokes() error {
 		keystrokesStrv = append(keystrokesStrv, ks.String())
 	}
 	gs.gsettings.SetStrv(gs.Id, keystrokesStrv)
+	gio.SettingsSync()
 	logger.Debugf("GSettingsShortcut.SaveKeystrokes id: %v, keystrokes: %v", gs.Id, keystrokesStrv)
 	return nil
 }

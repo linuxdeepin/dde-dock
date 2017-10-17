@@ -253,7 +253,12 @@ func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
 	}
 }
 
+func shouldEmitSignalChanged(shortcut shortcuts.Shortcut) bool {
+	return shortcut.GetType() == shortcuts.ShortcutTypeCustom
+}
+
 func (m *Manager) emitShortcutSignal(signalName string, shortcut shortcuts.Shortcut) {
+	logger.Debug("emit DBus signal", signalName, shortcut.GetId(), shortcut.GetType())
 	dbus.Emit(m, signalName, shortcut.GetId(), shortcut.GetType())
 }
 
