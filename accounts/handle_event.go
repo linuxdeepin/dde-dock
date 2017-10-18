@@ -20,9 +20,9 @@
 package accounts
 
 import (
-	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/fsnotify"
 	"strings"
 	"time"
 )
@@ -122,6 +122,7 @@ func (m *Manager) handleFileGroupChanged() {
 	defer m.mapLocker.Unlock()
 	for _, u := range m.usersMap {
 		u.updatePropAccountType()
+		u.setPropBool(&u.NoPasswdLogin, "NoPasswdLogin", users.CanNoPasswdLogin(u.UserName))
 	}
 }
 

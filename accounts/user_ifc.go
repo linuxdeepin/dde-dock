@@ -209,6 +209,34 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 	return nil
 }
 
+func (u *User) EnableNoPasswdLogin(dbusMsg dbus.DMessage, enabled bool) error {
+	logger.Debug("[EnableNoPasswdLogin] enabled:", enabled)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
+	pid := dbusMsg.GetSenderPID()
+	if err := polkitAuthManagerUser(pid); err != nil {
+		logger.Debug("[EnableNoPasswdLogin] access denied:", err)
+		return err
+	}
+
+	if u.Locked {
+		return fmt.Errorf("user %s has been locked", u.UserName)
+	}
+
+	if u.NoPasswdLogin == enabled {
+		return nil
+	}
+
+	if err := users.EnableNoPasswdLogin(u.UserName, enabled); err != nil {
+		logger.Warning("DoAction: enable nopasswdlogin failed:", err)
+		return err
+	}
+
+	u.setPropBool(&u.NoPasswdLogin, "NoPasswdLogin", users.CanNoPasswdLogin(u.UserName))
+	return nil
+}
+
 func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
 	logger.Debug("[SetLocale] locale:", locale)
 	pid := dbusMsg.GetSenderPID()

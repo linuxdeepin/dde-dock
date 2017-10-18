@@ -38,6 +38,8 @@ var (
 	groupFileTimestamp int64 = 0
 	groupFileInfo            = make(map[string][]string)
 	groupFileLocker    sync.Mutex
+
+	groupNameNoPasswdLogin = "nopasswdlogin"
 )
 
 const CommentFieldsLen = 5
@@ -152,6 +154,29 @@ func IsAdminUser(username string) bool {
 	}
 
 	return isStrInArray(username, admins)
+}
+
+func CanNoPasswdLogin(username string) bool {
+	return isUserInGroup(username, groupNameNoPasswdLogin)
+}
+
+func EnableNoPasswdLogin(username string, enabled bool) error {
+	if !isGroupExists(groupNameNoPasswdLogin) {
+		doAction("groupadd", []string{"-r", groupNameNoPasswdLogin})
+	}
+
+	var err error
+	exists := isUserInGroup(username, groupNameNoPasswdLogin)
+	if enabled {
+		if !exists {
+			err = doAction(userCmdGroup, []string{"-a", username, groupNameNoPasswdLogin})
+		}
+	} else {
+		if exists {
+			err = doAction(userCmdGroup, []string{"-d", username, groupNameNoPasswdLogin})
+		}
+	}
+	return err
 }
 
 func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {

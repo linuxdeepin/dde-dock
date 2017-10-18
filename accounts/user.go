@@ -88,6 +88,8 @@ type User struct {
 	AutomaticLogin bool
 	SystemAccount  bool
 
+	NoPasswdLogin bool
+
 	AccountType int32
 	LoginTime   uint64
 
@@ -119,6 +121,7 @@ func NewUser(userPath string) (*User, error) {
 
 	u.setPropBool(&u.AutomaticLogin, "AutomaticLogin",
 		users.IsAutoLoginUser(info.Name))
+	u.setPropBool(&u.NoPasswdLogin, "NoPasswdLogin", users.CanNoPasswdLogin(u.UserName))
 
 	u.updatePropLocked()
 	u.updatePropAccountType()

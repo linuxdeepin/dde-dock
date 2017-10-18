@@ -35,7 +35,7 @@ func isStrInArray(str string, array []string) bool {
 }
 
 func doAction(cmd string, args []string) error {
-	out, err := exec.Command(cmd, args...).Output()
+	out, err := exec.Command(cmd, args...).CombinedOutput()
 	if err != nil {
 		fmt.Printf("[doAction] exec '%s' failed: %s, %v\n", cmd, string(out), err)
 	}
