@@ -26,9 +26,12 @@
 ContainerItem::ContainerItem(QWidget *parent)
     : DockItem(parent),
       m_dropping(false),
+      m_popupTips(new QLabel),
       m_containerWidget(new ContainerWidget(this))
 {
     m_containerWidget->setVisible(false);
+    m_popupTips->setText(tr("Click to display hidden icon"));
+    m_popupTips->setVisible(false);
 
     setAcceptDrops(true);
 }
@@ -116,4 +119,9 @@ void ContainerItem::mouseReleaseEvent(QMouseEvent *e)
 QSize ContainerItem::sizeHint() const
 {
     return QSize(24, 24);
+}
+
+QWidget *ContainerItem::popupTips()
+{
+    return m_popupTips;
 }

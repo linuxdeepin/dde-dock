@@ -50,9 +50,11 @@ protected:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     QSize sizeHint() const;
+    QWidget *popupTips();
 
 private:
     bool m_dropping;
+    QLabel *m_popupTips;
     ContainerWidget *m_containerWidget;
     QPixmap m_icon;
 };

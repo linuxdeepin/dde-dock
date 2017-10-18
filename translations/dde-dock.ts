@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>ContainerItem</name>
+    <message>
+        <location filename="../frame/item/containeritem.cpp" line="33"/>
+        <source>Click to display hidden icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="104"/>
