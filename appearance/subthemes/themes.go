@@ -20,26 +20,19 @@
 package subthemes
 
 import (
-	"dbus/com/deepin/api/cursorhelper"
 	"fmt"
-	"gir/gio-2.0"
 	"os"
 	"path"
-	"pkg.deepin.io/dde/api/themes"
-	"pkg.deepin.io/dde/api/thumbnails/cursor"
-	"pkg.deepin.io/dde/api/thumbnails/gtk"
-	"pkg.deepin.io/dde/api/thumbnails/icon"
-	dutils "pkg.deepin.io/lib/utils"
 	"strings"
+
+	"dbus/com/deepin/api/cursorhelper"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/api/theme_thumb"
+	"pkg.deepin.io/dde/api/themes"
 )
 
 const (
-	thumbWidth  = 320
-	thumbHeight = 70
-
-	thumbDir   = "/usr/share/personalization/thumbnail"
-	thumbBgDir = "/var/cache/appearance/thumbnail/background"
-
 	appearanceSchema  = "com.deepin.dde.appearance"
 	gsKeyExcludedIcon = "excluded-icon-themes"
 )
@@ -138,44 +131,30 @@ func SetCursorTheme(id string) error {
 func GetGtkThumbnail(id string) (string, error) {
 	info := ListGtkTheme().Get(id)
 	if info == nil {
-		return "", fmt.Errorf("Not found '%s'", id)
+		return "", fmt.Errorf("not found %q", id)
 	}
 
-	var thumb = path.Join(thumbDir, "WindowThemes", id+"-thumbnail.png")
-	if dutils.IsFileExist(thumb) {
-		return thumb, nil
-	}
-
-	return gtk.ThumbnailForTheme(path.Join(info.Path, "index.theme"), "",
-		thumbWidth, thumbHeight, false)
+	descFile := path.Join(info.Path, "index.theme")
+	return theme_thumb.GetGtk(id, descFile)
 }
 
 func GetIconThumbnail(id string) (string, error) {
 	info := ListIconTheme().Get(id)
 	if info == nil {
-		return "", fmt.Errorf("Not found '%s'", id)
+		return "", fmt.Errorf("not found %q", id)
 	}
 
-	var thumb = path.Join(thumbDir, "IconThemes", id+"-thumbnail.png")
-	if dutils.IsFileExist(thumb) {
-		return thumb, nil
-	}
-	return icon.ThumbnailForTheme(path.Join(info.Path, "index.theme"), "",
-		thumbWidth, thumbHeight, false)
+	descFile := path.Join(info.Path, "index.theme")
+	return theme_thumb.GetIcon(id, descFile)
 }
 
 func GetCursorThumbnail(id string) (string, error) {
 	info := ListCursorTheme().Get(id)
 	if info == nil {
-		return "", fmt.Errorf("Not found '%s'", id)
+		return "", fmt.Errorf("not found %q", id)
 	}
-
-	var thumb = path.Join(thumbDir, "CursorThemes", id+"-thumbnail.png")
-	if dutils.IsFileExist(thumb) {
-		return thumb, nil
-	}
-	return cursor.ThumbnailForTheme(path.Join(info.Path, "cursor.theme"), "",
-		thumbWidth, thumbHeight, false)
+	descFile := path.Join(info.Path, "cursor.theme")
+	return theme_thumb.GetCursor(id, descFile)
 }
 
 func (infos Themes) GetIds() []string {
@@ -198,14 +177,14 @@ func (infos Themes) Get(id string) *Theme {
 func (infos Themes) Delete(id string) error {
 	info := infos.Get(id)
 	if info == nil {
-		return fmt.Errorf("Not found '%s'", id)
+		return fmt.Errorf("not found %q", id)
 	}
 	return info.Delete()
 }
 
 func (info *Theme) Delete() error {
 	if !info.Deletable {
-		return fmt.Errorf("Permission Denied")
+		return fmt.Errorf("permission denied")
 	}
 	return os.RemoveAll(info.Path)
 }

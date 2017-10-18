@@ -27,6 +27,7 @@ import (
 	"gir/gio-2.0"
 	"io/ioutil"
 	"os/user"
+	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
@@ -200,6 +201,8 @@ func (m *Manager) resetFonts() {
 }
 
 func (m *Manager) init() {
+	theme_thumb.Init(doGetScaleFactor())
+
 	// Init theme list
 	time.AfterFunc(time.Second*10, func() {
 		if !dutils.IsFileExist(fonts.DeepinFontConfig) {
