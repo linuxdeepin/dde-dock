@@ -99,5 +99,9 @@ QPixmap PowerStatusWidget::getBatteryIcon()
         iconStr = QString("battery-%1-symbolic").arg(percentageStr);
     }
 
-    return QIcon::fromTheme(iconStr).pixmap(16, 16);
+    const auto ratio = devicePixelRatioF();
+    QPixmap pix = QIcon::fromTheme(iconStr).pixmap(QSize(16, 16) * ratio);
+    pix.setDevicePixelRatio(ratio);
+
+    return pix;
 }
