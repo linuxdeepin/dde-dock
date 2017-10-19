@@ -81,7 +81,7 @@ func (link *LinkInfo) update() {
 }
 
 func (link *LinkInfo) hasP2PSupported() bool {
-	infos, err := iw.ListDeviceInfo()
+	infos, err := iw.ListWirelessInfo()
 	if err != nil {
 		return false
 	}

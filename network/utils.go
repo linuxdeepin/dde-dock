@@ -31,8 +31,6 @@ import (
 	"strings"
 )
 
-const iwBin = "iw"
-
 func isStringInArray(s string, list []string) bool {
 	for _, i := range list {
 		if i == s {
@@ -206,9 +204,8 @@ func execWithIO(name string, arg ...string) (process *os.Process, stdin io.Write
 	return
 }
 
-// FIXME: temporary solution, please use libnl instead later
 func isWirelessDeviceSuportHotspot(macAddress string) bool {
-	devices, err := iw.ListDeviceInfo()
+	devices, err := iw.ListWirelessInfo()
 	if err != nil {
 		logger.Warning("Failed to detect hotspot:", macAddress, err)
 		return false

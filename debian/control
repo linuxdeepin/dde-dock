@@ -36,6 +36,8 @@ Build-Depends: debhelper (>= 9), golang-go,
  libxcb1-dev,libxcb-record0-dev,
  libpam-dev,
  deepin-gettext-tools,
+ libnl-3-dev,
+ libnl-genl-3-dev,
  deepin-desktop-schemas
 Standards-Version: 3.9.5
 Homepage: http://www.deepin.com
@@ -60,6 +62,8 @@ Depends: ${shlibs:Depends},
  dde-polkit-agent,
  xdotool,
  libpam0g,
+ libnl-3-200,
+ libnl-genl-3-200,
  deepin-installer-timezones
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration

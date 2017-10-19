@@ -13,6 +13,8 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * fontconfig
 * libbamf3
 * pam
+* libnl-3.0
+* libnl-genl-3.0
 
 ### Runtime dependencies
 
@@ -31,6 +33,8 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * xdotool
 * fontconfig
 * pam
+* libnl-3.0
+* libnl-genl-3.0
 
 ### Optional Dependencies
 
@@ -41,7 +45,6 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * network-manager-openvpn-gnome
 * network-manager-openconnect-gnome
 * iso-codes
-* iw (check if wireless device support hotspot mode)
 * mobile-broadband-provider-info
 * xserver-xorg-input-synaptics (provide mode features, such as disable touchpad when typing ...)
 * [miraclecast](https://github.com/derekdai/miraclecast) (provide WIFI Direct)

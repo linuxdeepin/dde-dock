@@ -66,7 +66,7 @@ type Miracast struct {
 	network *networkmanager.Manager
 	links   LinkInfos
 	sinks   SinkInfos
-	devices iw.DeviceInfos
+	devices iw.WirelessInfos
 
 	linkLocker   sync.Mutex
 	sinkLocker   sync.Mutex
@@ -109,7 +109,7 @@ func newMiracast() (*Miracast, error) {
 }
 
 func (m *Miracast) init() {
-	devices, err := iw.ListDeviceInfo()
+	devices, err := iw.ListWirelessInfo()
 	if err != nil {
 		logger.Error("Failed to list wireless info:", err)
 	}
@@ -282,7 +282,7 @@ func (m *Miracast) handleEvent() {
 		m.deviceLocker.Lock()
 		defer m.deviceLocker.Unlock()
 		logger.Debug("[Device Added]:", dpath)
-		devices, err := iw.ListDeviceInfo()
+		devices, err := iw.ListWirelessInfo()
 		if err != nil {
 			logger.Warning("[DeviceAdded] Failed to list wireless devices:", err)
 			return
@@ -293,7 +293,7 @@ func (m *Miracast) handleEvent() {
 		m.deviceLocker.Lock()
 		defer m.deviceLocker.Unlock()
 		logger.Debug("[Device Removed]:", dpath)
-		devices, err := iw.ListDeviceInfo()
+		devices, err := iw.ListWirelessInfo()
 		if err != nil {
 			logger.Warning("[DeviceRemoved] Failed to list wireless devices:", err)
 			return

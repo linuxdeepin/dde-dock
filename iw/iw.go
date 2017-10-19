@@ -19,38 +19,49 @@
 
 package iw
 
+// #cgo CFLAGS: -Wall -g
+// #cgo pkg-config: libnl-3.0 libnl-genl-3.0
+// #include <stdlib.h>
+// #include "core.h"
+import "C"
+
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
-	"os/exec"
 	"pkg.deepin.io/lib/strv"
 	"strings"
+	"unsafe"
 )
 
-type DeviceInfo struct {
-	Name       string
-	MacAddress string
-	Ciphers    []string
-	IFCModes   []string
-	Commands   []string
+type WirelessInfo struct {
+	Wiphy     string
+	HwAddress string
+	IFCModes  []string
 }
-type DeviceInfos []*DeviceInfo
+type WirelessInfos []*WirelessInfo
 
-func ListDeviceInfo() (DeviceInfos, error) {
-	var envPath = os.Getenv("PATH")
-	os.Setenv("PATH", "/sbin:"+envPath)
-	defer os.Setenv("PATH", envPath)
-	outputs, err := exec.Command("/bin/sh", "-c",
-		"exec iw list").CombinedOutput()
-	if err != nil {
-		return nil, err
+var wirelessSets = make(map[string][]string)
+
+func ListWirelessInfo() (WirelessInfos, error) {
+	ret := C.wireless_info_query()
+	if int(ret) != 0 {
+		fmt.Println("Failed to query wireless info")
+		return nil, fmt.Errorf("Query wireless info failed")
 	}
-	return parseIwOutputs(outputs), nil
+
+	var infos WirelessInfos
+	for phy, modes := range wirelessSets {
+		infos = append(infos, &WirelessInfo{
+			Wiphy:     phy,
+			HwAddress: getHwAddressByFile(hwAddressFile(phy)),
+			IFCModes:  modes,
+		})
+	}
+	return infos, nil
 }
 
-func (infos DeviceInfos) ListMiracastDevice() DeviceInfos {
-	var ret DeviceInfos
+func (infos WirelessInfos) ListMiracastDevice() WirelessInfos {
+	var ret WirelessInfos
 	for _, info := range infos {
 		if !info.SupportedMiracast() {
 			continue
@@ -60,8 +71,8 @@ func (infos DeviceInfos) ListMiracastDevice() DeviceInfos {
 	return ret
 }
 
-func (infos DeviceInfos) ListHotspotDevice() DeviceInfos {
-	var ret DeviceInfos
+func (infos WirelessInfos) ListHotspotDevice() WirelessInfos {
+	var ret WirelessInfos
 	for _, info := range infos {
 		if !info.SupportedHotspot() {
 			continue
@@ -71,105 +82,65 @@ func (infos DeviceInfos) ListHotspotDevice() DeviceInfos {
 	return ret
 }
 
-func (infos DeviceInfos) Get(macAddress string) *DeviceInfo {
+func (infos WirelessInfos) Get(address string) *WirelessInfo {
 	for _, info := range infos {
-		if strings.ToLower(info.MacAddress) == strings.ToLower(macAddress) {
+		if strings.ToLower(info.HwAddress) == strings.ToLower(address) {
 			return info
 		}
 	}
 	return nil
 }
 
-func (info *DeviceInfo) SupportedHotspot() bool {
+func (info WirelessInfo) SupportedHotspot() bool {
 	return strv.Strv(info.IFCModes).Contains("AP")
 }
 
-func (info *DeviceInfo) SupportedMiracast() bool {
+func (info *WirelessInfo) SupportedMiracast() bool {
 	list := strv.Strv(info.IFCModes)
 	return list.Contains("P2P-client") &&
 		list.Contains("P2P-GO")
 	// list.Contains("P2P-device")
 }
 
-func debugDeviceInfos() {
-	infos, err := ListDeviceInfo()
-	if err != nil {
-		fmt.Println("Failed to list wireless devices:", err)
+//export addWirelessInfo
+func addWirelessInfo(cname, cmode *C.char) {
+	name := C.GoString(cname)
+	mode := C.GoString(cmode)
+	C.free(unsafe.Pointer(cmode))
+
+	modes, ok := wirelessSets[name]
+	if !ok {
+		wirelessSets[name] = []string{mode}
 		return
 	}
 
-	for _, info := range infos {
-		fmt.Println(info.Name)
-		fmt.Println("\tMac Address\t:", info.MacAddress)
-		fmt.Println("\tCiphers\t:", info.Ciphers)
-		fmt.Println("\tInterface Modes\t:", info.IFCModes)
-		fmt.Println("\tCommands\t:", info.Commands)
-	}
+	modes = append(modes, mode)
+	wirelessSets[name] = modes
 }
 
-func parseIwOutputs(contents []byte) DeviceInfos {
-	lines := strings.Split(string(contents), "\n")
-	length := len(lines)
-	var infos DeviceInfos
-	for i := 0; i < length; {
-		line := lines[i]
-		if len(line) == 0 {
-			i += 1
-			continue
-		}
-
-		line = strings.TrimSpace(line)
-		if strings.Contains(line, "Wiphy phy") {
-			infos = append(infos, new(DeviceInfo))
-			name := strings.Split(line, "Wiphy ")[1]
-			infos[len(infos)-1].Name = name
-			infos[len(infos)-1].MacAddress = getMacAddressByFile(macAddressFile(name))
-			i += 1
-			continue
-		}
-
-		if strings.Contains(line, "Supported Ciphers:") {
-			i, infos[len(infos)-1].Ciphers = getValues(i+1, &lines)
-			continue
-		}
-
-		if strings.Contains(line, "Supported interface modes:") {
-			i, infos[len(infos)-1].IFCModes = getValues(i+1, &lines)
-			continue
-		}
-
-		if strings.Contains(line, "Supported commands:") {
-			i, infos[len(infos)-1].Commands = getValues(i+1, &lines)
-			continue
-		}
-
-		i += 1
-	}
-	return infos
-}
-
-func getValues(idx int, lines *[]string) (int, []string) {
-	var values []string
-	length := len(*lines)
-	for ; idx < length; idx++ {
-		value := strings.TrimSpace((*lines)[idx])
-		if value[0] != '*' {
-			break
-		}
-		values = append(values, strings.Split(value, "* ")[1])
-	}
-	return idx, values
-}
-
-func macAddressFile(name string) string {
+func hwAddressFile(name string) string {
 	return "/sys/class/ieee80211/" + name + "/macaddress"
 }
 
-func getMacAddressByFile(file string) string {
+func getHwAddressByFile(file string) string {
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
 		return ""
 	}
 
 	return strings.TrimSpace(string(contents))
+}
+
+func printWirelessInfos() {
+	infos, err := ListWirelessInfo()
+	if err != nil {
+		fmt.Println("Failed to list wireless devices:", err)
+		return
+	}
+
+	for _, info := range infos {
+		fmt.Println(info.Wiphy)
+		fmt.Println("\tMac Address\t:", info.HwAddress)
+		fmt.Println("\tInterface Modes\t:", info.IFCModes)
+	}
 }
