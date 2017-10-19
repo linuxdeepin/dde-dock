@@ -43,17 +43,13 @@ type matchResInfo struct {
 	poorList      []string
 }
 
-const (
-	_CACHE_DIR = "deepin-search"
-)
-
 func getCachePath() (string, bool) {
 	userCache := dutils.GetCacheDir()
 	if len(userCache) < 1 {
 		return "", false
 	}
 
-	cachePath := path.Join(userCache, _CACHE_DIR)
+	cachePath := path.Join(userCache, "deepin", "dde-daemon", "search")
 	if !dutils.IsFileExist(cachePath) {
 		if err := os.MkdirAll(cachePath, 0755); err != nil {
 			logger.Warningf("MkdirAll '%s' failed: %v",
