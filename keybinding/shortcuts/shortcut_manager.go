@@ -600,7 +600,7 @@ func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
 		sysShortcut := &SystemShortcut{
 			GSettingsShortcut: gs,
 			arg: &ActionExecCmdArg{
-				Cmd: getSystemAction(id),
+				Cmd: getSystemActionCmd(id),
 			},
 		}
 		sm.AddWithoutLock(sysShortcut)

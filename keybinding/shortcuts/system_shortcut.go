@@ -23,12 +23,15 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"path"
+	"sync"
+
 	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
 	// Under '/usr/share' or '/usr/local/share'
-	systemActionsFile = "dde-daemon/keybinding/system_actions.json"
+	systemActionsFile   = "dde-daemon/keybinding/system_actions.json"
+	screenshotCmdPrefix = "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot."
 )
 
 type SystemShortcut struct {
@@ -63,23 +66,29 @@ func (ss *SystemShortcut) SetAction(newAction *Action) error {
 	return nil
 }
 
-func getSystemAction(id string) string {
-	file := getSystemActionsFile()
-	handler, err := getActionHandler(file)
-	if err != nil {
-		return findSysActionInTable(id)
-	}
+var loadSysActionsFileOnce sync.Once
+var actionsCache *actionHandler
 
-	for _, v := range handler.Actions {
-		if v.Key == id {
-			return v.Action
+func getSystemActionCmd(id string) string {
+	loadSysActionsFileOnce.Do(func() {
+		file := getSystemActionsFile()
+		actions, err := loadSystemActionsFile(file)
+		if err != nil {
+			logger.Warning("failed to load system actions file:", err)
+			return
+		}
+		actionsCache = actions
+	})
+
+	if actionsCache != nil {
+		if cmd, ok := actionsCache.getCmd(id); ok {
+			return cmd
 		}
 	}
-
-	return findSysActionInTable(id)
+	return getDefaultSysActionCmd(id)
 }
 
-func findSysActionInTable(id string) string {
+func getDefaultSysActionCmd(id string) string {
 	switch id {
 	case "launcher":
 		return "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
@@ -93,16 +102,18 @@ func findSysActionInTable(id string) string {
 		return "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show"
 	case "terminal-quake":
 		return "deepin-terminal --quake-mode"
-	case "screenshot":
-		return "deepin-screenshot"
-	case "screenshot-fullscreen":
-		return "deepin-screenshot -f"
 	case "deepin-screen-recorder":
 		return "/usr/bin/deepin-screen-recorder"
+		// screenshot actions:
+	case "screenshot":
+		return screenshotCmdPrefix + "StartScreenshot"
+	case "screenshot-fullscreen":
+		return screenshotCmdPrefix + "FullscreenScreenshot"
 	case "screenshot-window":
-		return "deepin-screenshot -w"
+		return screenshotCmdPrefix + "TopWindowScreenshot"
 	case "screenshot-delayed":
-		return "deepin-screenshot -d 5"
+		return screenshotCmdPrefix + "DelayScreenshot int64:5"
+
 	case "file-manager":
 		return "/usr/lib/deepin-daemon/default-file-manager"
 	case "disable-touchpad":
@@ -121,7 +132,18 @@ type actionHandler struct {
 	} `json:"Actions"`
 }
 
-func getActionHandler(file string) (*actionHandler, error) {
+func (a *actionHandler) getCmd(id string) (cmd string, ok bool) {
+	for _, v := range a.Actions {
+		if v.Key == id {
+			return v.Action, true
+		}
+	}
+	return "", false
+}
+
+func loadSystemActionsFile(file string) (*actionHandler, error) {
+	logger.Debug("load system action file:", file)
+
 	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err

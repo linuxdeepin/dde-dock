@@ -30,19 +30,19 @@
 	},
 	{
 		"Key": "screenshot",
-		"Action": "deepin-screenshot"
+		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.StartScreenshot"
 	},
 	{
 		"Key": "screenshot-fullscreen",
-		"Action": "deepin-screenshot -f"
+		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.FullscreenScreenshot"
 	},
 	{
 		"Key": "screenshot-window",
-		"Action": "deepin-screenshot -w"
+		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.TopWindowScreenshot"
 	},
 	{
 		"Key": "screenshot-delayed",
-		"Action": "deepin-screenshot -d 5"
+		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.DelayScreenshot int64:5"
 	},
 	{
 		"Key": "file-manager",
