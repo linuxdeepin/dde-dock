@@ -35,6 +35,7 @@ Build-Depends: debhelper (>= 9), golang-go,
  libinput-dev,
  libxcb1-dev,libxcb-record0-dev,
  libpam-dev,
+ deepin-gettext-tools,
  deepin-desktop-schemas
 Standards-Version: 3.9.5
 Homepage: http://www.deepin.com

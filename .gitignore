@@ -44,3 +44,4 @@ gopath/
 .vscode/
 
 a.out
+misc/polkit-action/*.policy

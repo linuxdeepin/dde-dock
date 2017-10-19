@@ -143,18 +143,12 @@ func initPolkit() {
 	polkit.Init()
 }
 
-func Tr(str string) string {
-	return str
-}
-
 func checkAuthWithPid(pid uint32) (bool, error) {
 	subject := polkit.NewSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
 	subject.SetDetail("start-time", uint64(0))
 	const actionId = DBusDest
 	details := make(map[string]string)
-	details["polkit.gettext_domain"] = "dde-daemon"
-	details["polkit.message"] = Tr("Authentication is required to change the grub2 configuration")
 	result, err := polkit.CheckAuthorization(subject, actionId, details,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {

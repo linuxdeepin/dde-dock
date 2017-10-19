@@ -65,7 +65,13 @@ translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LA
 pot:
 	deepin-update-pot misc/po/locale_config.ini
 
-build: prepare out/bin/default-terminal out/bin/default-file-manager out/bin/desktop-toggle $(addprefix out/bin/, ${BINARIES})
+ts:
+	deepin-policy-ts-convert policy2ts misc/polkit-action/com.deepin.daemon.Grub2.policy.in misc/ts/com.deepin.daemon.Grub2.policy
+
+ts_to_policy:
+	deepin-policy-ts-convert ts2policy misc/polkit-action/com.deepin.daemon.Grub2.policy.in misc/ts/com.deepin.daemon.Grub2.policy misc/polkit-action/com.deepin.daemon.Grub2.policy
+
+build: prepare out/bin/default-terminal out/bin/default-file-manager out/bin/desktop-toggle $(addprefix out/bin/, ${BINARIES}) ts_to_policy
 
 test: prepare
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...
@@ -85,7 +91,7 @@ install: build translate install-dde-data
 	cp -r misc/system-services ${DESTDIR}${PREFIX}/share/dbus-1/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/polkit-1/actions
-	cp misc/polkit-action/* ${DESTDIR}${PREFIX}/share/polkit-1/actions/
+	cp misc/polkit-action/*.policy ${DESTDIR}${PREFIX}/share/polkit-1/actions/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r misc/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/

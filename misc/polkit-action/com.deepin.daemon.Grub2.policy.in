@@ -7,8 +7,8 @@
   <vendor_url>https://www.deepin.com/</vendor_url>
 
   <action id="com.deepin.daemon.Grub2">
-    <message>Change the grub2 configuration</message>
-    <message xml:lang="zh_CN">修改 Grub2 的配置</message>
+    <description>Change the grub2 configuration</description>
+    <message>Authentication is required to change the grub2 configuration</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>

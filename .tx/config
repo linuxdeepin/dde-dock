@@ -8,3 +8,9 @@ file_filter = misc/po/<lang>.po
 source_file = misc/po/dde-daemon.pot
 source_lang = en
 type = PO
+
+[deepin-desktop-environment.dde-daemon-grub2-policyts]
+file_filter = misc/ts/com.deepin.daemon.Grub2.policy/policy_<lang>.ts
+source_file = misc/ts/com.deepin.daemon.Grub2.policy/policy.ts
+source_lang = en
+type = QT
