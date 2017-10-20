@@ -93,6 +93,7 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
     connect(this, &WirelessList::activeAPChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(this, &WirelessList::wirelessStateChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, m_pwdDialog, &DInputDialog::close);
     connect(m_pwdDialog, &DInputDialog::textValueChanged, this, &WirelessList::onPwdDialogTextChanged);
@@ -301,12 +302,10 @@ void WirelessList::deviceStateChanged()
                 if (prevInfo.activeAp() != m_device.activeAp())
                     onActiveAPChanged();
 
-                break;
+                return;
             }
         }
-        break;
     }
-
 }
 
 void WirelessList::onActiveAPChanged()
