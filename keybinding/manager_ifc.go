@@ -102,28 +102,31 @@ func (m *Manager) ListShortcutsByType(type0 int32) (string, error) {
 	return ret, nil
 }
 
-func (m *Manager) AddCustomShortcut(name, action, keystroke string) error {
+func (m *Manager) AddCustomShortcut(name, action, keystroke string) (id string, type0 int32, err error) {
 	logger.Debugf("Add custom key: %q %q %q", name, action, keystroke)
 	ks, err := shortcuts.ParseKeystroke(keystroke)
 	if err != nil {
-		return err
+		return
 	}
 
 	conflictKeystroke, err := m.shortcutManager.FindConflictingKeystroke(ks)
 	if err != nil {
-		return err
+		return
 	}
 	if conflictKeystroke != nil {
-		return errKeystrokeUsed
+		err = errKeystrokeUsed
+		return
 	}
 
 	shortcut, err := m.customShortcutManager.Add(name, action, []*shortcuts.Keystroke{ks})
 	if err != nil {
-		return err
+		return
 	}
 	m.shortcutManager.Add(shortcut)
 	m.emitShortcutSignal(shortcutSignalAdded, shortcut)
-	return nil
+	id = shortcut.GetId()
+	type0 = shortcut.GetType()
+	return
 }
 
 func (m *Manager) DeleteCustomShortcut(id string) error {

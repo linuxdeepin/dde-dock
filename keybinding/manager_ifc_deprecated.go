@@ -16,7 +16,8 @@ func (m *Manager) List() (string, error) {
 // ret1: false
 // ret2: error
 func (m *Manager) Add(name, action, keystroke string) (string, bool, error) {
-	return "", false, m.AddCustomShortcut(name, action, keystroke)
+	_, _, err := m.AddCustomShortcut(name, action, keystroke)
+	return "", false, err
 }
 
 // Delete delete shortcut by id and type
