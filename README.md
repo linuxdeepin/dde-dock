@@ -15,6 +15,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * pam
 * libnl-3.0
 * libnl-genl-3.0
+* librsvg
 
 ### Runtime dependencies
 

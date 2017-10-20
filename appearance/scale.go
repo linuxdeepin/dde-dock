@@ -20,14 +20,18 @@
 package appearance
 
 import (
+	ddaemon "dbus/com/deepin/daemon/daemon/system"
 	"dbus/com/deepin/daemon/greeter"
 	"fmt"
 	"gir/gio-2.0"
 	"io/ioutil"
 	"math"
 	"os"
+	"pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/notify"
 	"pkg.deepin.io/lib/utils"
 	"strings"
+	"sync"
 )
 
 var pamEnvFile = os.Getenv("HOME") + "/.pam_environment"
@@ -40,6 +44,8 @@ func doGetScaleFactor() float64 {
 }
 
 func doSetScaleFactor(scale float64) {
+	sendNotify(gettext.Tr("Display scaling"),
+		gettext.Tr("Setting display scaling"), "dialog-window-scale")
 	var s = gio.NewSettings("com.deepin.xsettings")
 	defer s.Unref()
 	v := s.GetDouble("scale-factor")
@@ -63,19 +69,40 @@ func doSetScaleFactor(scale float64) {
 		s.SetInt("window-scale", tmp)
 	}
 
-	doSetGreeterScale(scale)
+	doScaleGreeter(scale)
+	go func() {
+		doScalePlymouth(uint32(tmp))
+		sendNotify(gettext.Tr("Display scaling"),
+			gettext.Tr("Set successfully"), "dialog-window-scale")
+		setScaleStatus(false)
+	}()
 }
 
-func doSetGreeterScale(scale float64) {
+func doScaleGreeter(scale float64) {
 	setter, err := greeter.NewGreeter("com.deepin.daemon.Greeter", "/com/deepin/daemon/Greeter")
 	if err != nil {
-		logger.Warning("Failed to create greeter setter connection:", err)
+		logger.Warning("Invalid dbus path:", err)
 		return
 	}
 
 	err = setter.SetScaleFactor(scale)
 	if err != nil {
 		logger.Warning("Failed to set greeter scale:", err)
+	}
+	setter = nil
+}
+
+func doScalePlymouth(scale uint32) {
+	setter, err := ddaemon.NewDaemon("com.deepin.daemon.Daemon",
+		"/com/deepin/daemon/Daemon")
+	if err != nil {
+		logger.Warning("Invalid dbus path:", err)
+		return
+	}
+
+	err = setter.ScalePlymouth(scale)
+	if err != nil {
+		logger.Warning("Failed to scale plymouth:", err)
 	}
 	setter = nil
 }
@@ -114,4 +141,36 @@ func writeKeyToEnvFile(key, value, filename string) error {
 		lines[len(lines)-1] = key + "=" + value
 	}
 	return ioutil.WriteFile(filename, []byte(strings.Join(lines, "\n")), 0644)
+}
+
+var (
+	_isScaling   bool = false
+	_scaleLocker sync.Mutex
+)
+
+func setScaleStatus(status bool) {
+	_scaleLocker.Lock()
+	_isScaling = status
+	_scaleLocker.Unlock()
+}
+
+func getScaleStatus() bool {
+	_scaleLocker.Lock()
+	defer _scaleLocker.Unlock()
+	return _isScaling
+}
+
+var _notifier *notify.Notification
+
+func sendNotify(summary, body, icon string) {
+	if _notifier == nil {
+		notify.Init("dde-daemon")
+		_notifier = notify.NewNotification(summary, body, icon)
+	} else {
+		_notifier.Update(summary, body, icon)
+	}
+	err := _notifier.Show()
+	if err != nil {
+		logger.Warning("Failed to send notify:", summary, body)
+	}
 }

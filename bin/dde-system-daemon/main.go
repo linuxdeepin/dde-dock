@@ -33,13 +33,22 @@ import "pkg.deepin.io/dde/daemon/loader"
 import . "pkg.deepin.io/lib/gettext"
 import "gir/glib-2.0"
 
+type Daemon struct{}
+
+const (
+	dbusDest = "com.deepin.daemon.Daemon"
+	dbusPath = "/com/deepin/daemon/Daemon"
+	dbusIFC  = dbusDest
+)
+
 var logger = log.NewLogger("daemon/dde-system-daemon")
+var _daemon *Daemon
 
 func main() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
-	if !lib.UniqueOnSystem("com.deepin.daemon") {
+	if !lib.UniqueOnSystem(dbusDest) {
 		logger.Warning("There already has an dde daemon running.")
 		return
 	}
@@ -55,10 +64,17 @@ func main() {
 
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-system-daemon")
 
+	_daemon = &Daemon{}
+	err := dbus.InstallOnSystem(_daemon)
+	if err != nil {
+		logger.Error("Failed to install daemon bus:", err)
+		return
+	}
+	dbus.DealWithUnhandledMessage()
+
 	loader.StartAll()
 	defer loader.StopAll()
 
-	dbus.DealWithUnhandledMessage()
 	// NOTE: system/power module requires glib loop
 	go glib.StartLoop()
 
@@ -67,5 +83,13 @@ func main() {
 		os.Exit(-1)
 	} else {
 		os.Exit(0)
+	}
+}
+
+func (*Daemon) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       dbusDest,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
 }

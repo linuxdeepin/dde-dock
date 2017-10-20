@@ -76,7 +76,7 @@ build: prepare out/bin/default-terminal out/bin/default-file-manager out/bin/des
 test: prepare
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...
 
-install: build translate install-dde-data
+install: build translate install-dde-data install-icons
 	mkdir -pv ${DESTDIR}${PREFIX}/lib/deepin-daemon
 	cp out/bin/* ${DESTDIR}${PREFIX}/lib/deepin-daemon/
 
@@ -102,6 +102,11 @@ install: build translate install-dde-data
 install-dde-data:
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde/
 	cp -r misc/data ${DESTDIR}${PREFIX}/share/dde/
+
+install-icons:
+	python3 misc/icons/install_to_hicolor.py -d status -o out/icons misc/icons/status
+	mkdir -pv ${DESTDIR}${PREFIX}/share/icons/
+	cp -r out/icons/hicolor ${DESTDIR}${PREFIX}/share/icons/
 
 clean:
 	rm -rf ${GOPATH_DIR}

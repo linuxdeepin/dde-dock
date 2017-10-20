@@ -207,6 +207,12 @@ func (m *Manager) SetScaleFactor(scale float64) error {
 	if scale < 0 {
 		return fmt.Errorf("Invalid scale value: %v", scale)
 	}
+
+	if getScaleStatus() {
+		return fmt.Errorf("There is a scale job running.")
+	}
+
+	setScaleStatus(true)
 	doSetScaleFactor(scale)
 	return nil
 }

@@ -38,7 +38,9 @@ Build-Depends: debhelper (>= 9), golang-go,
  deepin-gettext-tools,
  libnl-3-dev,
  libnl-genl-3-dev,
- deepin-desktop-schemas
+ deepin-desktop-schemas,
+ python3,
+ librsvg2-bin
 Standards-Version: 3.9.5
 Homepage: http://www.deepin.com
 
