@@ -35,6 +35,8 @@ class DockPluginsController : public QObject, PluginProxyInterface
 {
     Q_OBJECT
 
+    friend class DockItemController;
+
 public:
     explicit DockPluginsController(DockItemController *itemControllerInter = 0);
     ~DockPluginsController();
@@ -61,8 +63,6 @@ private:
     PluginsItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
 
 private:
-//    QList<PluginsItemInterface *> m_pluginsInterfaceList;
-//    QList<QPluginLoader *> m_pluginLoaderList;
     QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
     DockItemController *m_itemControllerInter;
 };

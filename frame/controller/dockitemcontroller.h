@@ -42,6 +42,7 @@ public:
     ~DockItemController();
 
     const QList<DockItem *> itemList() const;
+    const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
     bool itemIsInContainer(DockItem * const item) const;
     void setDropping(const bool dropping);

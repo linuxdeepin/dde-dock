@@ -113,6 +113,7 @@ private:
     QSize m_mainWindowSize;
 
     WhiteMenu m_settingsMenu;
+    WhiteMenu *m_hideSubMenu;
     QAction m_fashionModeAct;
     QAction m_efficientModeAct;
     QAction m_topPosAct;

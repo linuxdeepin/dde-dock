@@ -47,6 +47,7 @@ public:
     /// \return
     ///
     virtual const QString pluginName() const = 0;
+    virtual const QString pluginDisplayName() const { return QString(); }
     ///
     /// \brief init
     /// init your plugins, you need to save proxyInter to m_proxyInter
@@ -164,6 +165,10 @@ public:
     /// \param container
     ///
     virtual void setItemIsInContainer(const QString &itemKey, const bool container) {Q_UNUSED(itemKey); Q_UNUSED(container);}
+
+    virtual bool pluginIsAllowDisable() { return false; }
+    virtual bool pluginIsDisable() { return false; }
+    virtual void pluginStateSwitched() {}
 
     ///
     /// \brief displayModeChanged

@@ -36,9 +36,12 @@ public:
     explicit NetworkPlugin(QObject *parent = 0);
 
     const QString pluginName() const;
+    const QString pluginDisplayName() const;
     void init(PluginProxyInterface *proxyInter);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
     void refershIcon(const QString &itemKey);
+    bool pluginIsAllowDisable() { return true; }
+    bool pluginIsDisable();
     const QString itemCommand(const QString &itemKey);
     const QString itemContextMenu(const QString &itemKey);
     QWidget *itemWidget(const QString &itemKey);

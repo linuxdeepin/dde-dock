@@ -39,6 +39,11 @@ const QString NetworkPlugin::pluginName() const
     return "network";
 }
 
+const QString NetworkPlugin::pluginDisplayName() const
+{
+    return tr("Network");
+}
+
 void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
@@ -73,6 +78,11 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 
     for (auto *item : m_deviceItemList)
         item->refreshIcon();
+}
+
+bool NetworkPlugin::pluginIsDisable()
+{
+    return true;
 }
 
 const QString NetworkPlugin::itemCommand(const QString &itemKey)

@@ -110,10 +110,15 @@ DockSettings::DockSettings(QWidget *parent)
     QAction *statusSubMenuAct = new QAction(tr("Status"), this);
     statusSubMenuAct->setMenu(statusSubMenu);
 
+    m_hideSubMenu = new WhiteMenu(&m_settingsMenu);
+    QAction *hideSubMenuAct = new QAction(tr("Hide"), this);
+    hideSubMenuAct->setMenu(m_hideSubMenu);
+
     m_settingsMenu.addAction(modeSubMenuAct);
     m_settingsMenu.addAction(locationSubMenuAct);
     m_settingsMenu.addAction(sizeSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
+    m_settingsMenu.addAction(hideSubMenuAct);
     m_settingsMenu.setTitle("Settings Menu");
 
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
@@ -236,6 +241,24 @@ void DockSettings::showDockSettingsMenu()
 {
     m_autoHide = false;
 
+    qDeleteAll(m_hideSubMenu->actions());
+    for (auto *p : m_itemController->pluginList())
+    {
+        if (!p->pluginIsAllowDisable())
+            continue;
+
+        const bool enable = !p->pluginIsDisable();
+        const QString &name = p->pluginName();
+        const QString &display = p->pluginDisplayName();
+
+        QAction *act = new QAction(display, this);
+        act->setCheckable(true);
+        act->setChecked(enable);
+        act->setData(name);
+
+        m_hideSubMenu->addAction(act);
+    }
+
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
     m_topPosAct.setChecked(m_position == Top);
@@ -299,6 +322,16 @@ void DockSettings::menuActionClicked(QAction *action)
         return m_dockInter->setHideMode(KeepHidden);
     if (action == &m_smartHideAct)
         return m_dockInter->setHideMode(SmartHide);
+
+    // check plugin hide menu.
+    const QString &data = action->data().toString();
+    if (data.isEmpty())
+        return;
+    for (auto *p : m_itemController->pluginList())
+    {
+        if (p->pluginName() == data)
+            return p->pluginStateSwitched();
+    }
 }
 
 void DockSettings::onPositionChanged()
