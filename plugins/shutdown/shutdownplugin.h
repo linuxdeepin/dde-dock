@@ -41,15 +41,20 @@ class ShutdownPlugin : public QObject, PluginsItemInterface
 public:
     explicit ShutdownPlugin(QObject *parent = 0);
 
-    const QString pluginName() const;
-    void init(PluginProxyInterface *proxyInter);
+    const QString pluginName() const override;
+    const QString pluginDisplayName() const override;
+    void init(PluginProxyInterface *proxyInter) override;
 
-    QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
-    const QString itemCommand(const QString &itemKey);
-    const QString itemContextMenu(const QString &itemKey);
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
-    void displayModeChanged(const Dock::DisplayMode displayMode);
+    void pluginStateSwitched() override;
+    bool pluginIsAllowDisable() override { return true; }
+    bool pluginIsDisable() override;
+
+    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemTipsWidget(const QString &itemKey) override;
+    const QString itemCommand(const QString &itemKey) override;
+    const QString itemContextMenu(const QString &itemKey) override;
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
+    void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
 private:
     void updateBatteryVisible();
@@ -57,6 +62,7 @@ private:
     void delayLoader();
 
 private:
+    QSettings m_settings;
     PluginWidget *m_shutdownWidget;
     PowerStatusWidget *m_powerStatusWidget;
     QLabel *m_tipsLabel;

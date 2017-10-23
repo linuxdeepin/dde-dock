@@ -23,10 +23,14 @@
 #include "dbus/dbusaccount.h"
 
 #include <QIcon>
+#include <QSettings>
+
+#define PLUGIN_STATE_KEY    "enable"
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
+      m_settings("deepin", "dde-dock-power"),
       m_shutdownWidget(new PluginWidget),
       m_powerStatusWidget(new PowerStatusWidget),
       m_tipsLabel(new QLabel),
@@ -47,6 +51,11 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
 const QString ShutdownPlugin::pluginName() const
 {
     return "shutdown";
+}
+
+const QString ShutdownPlugin::pluginDisplayName() const
+{
+    return tr("Power");
 }
 
 QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
@@ -92,7 +101,27 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    delayLoader();
+    if (!pluginIsDisable())
+        delayLoader();
+}
+
+void ShutdownPlugin::pluginStateSwitched()
+{
+    m_settings.setValue(PLUGIN_STATE_KEY, !m_settings.value(PLUGIN_STATE_KEY, true).toBool());
+
+    if (pluginIsDisable())
+    {
+        m_proxyInter->itemRemoved(this, SHUTDOWN_KEY);
+        m_proxyInter->itemRemoved(this, POWER_KEY);
+    } else {
+        m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
+        updateBatteryVisible();
+    }
+}
+
+bool ShutdownPlugin::pluginIsDisable()
+{
+    return !m_settings.value(PLUGIN_STATE_KEY, true).toBool();
 }
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)
