@@ -25,10 +25,12 @@
 
 #define WIRED_ITEM      "wired"
 #define WIRELESS_ITEM   "wireless"
+#define STATE_KEY       "enabled"
 
 NetworkPlugin::NetworkPlugin(QObject *parent)
     : QObject(parent),
 
+      m_settings("deepin", "dde-dock-network"),
       m_networkManager(NetworkManager::instance(this)),
       m_refershTimer(new QTimer(this))
 {
@@ -82,14 +84,14 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 
 void NetworkPlugin::pluginStateSwitched()
 {
-    m_pluginEnabled = !m_pluginEnabled;
+    m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
 
     m_refershTimer->start();
 }
 
 bool NetworkPlugin::pluginIsDisable()
 {
-    return !m_pluginEnabled;
+    return !m_settings.value(STATE_KEY, true).toBool();
 }
 
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
@@ -194,7 +196,7 @@ void NetworkPlugin::refershDeviceItemVisible()
 
 //    qDebug() << hasWiredDevice << hasWirelessDevice;
 
-    if (m_pluginEnabled)
+    if (m_settings.value(STATE_KEY, true).toBool())
     {
         for (auto item : m_deviceItemList)
         {

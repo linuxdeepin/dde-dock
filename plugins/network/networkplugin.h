@@ -26,6 +26,8 @@
 #include "networkmanager.h"
 #include "item/deviceitem.h"
 
+#include <QSettings>
+
 class NetworkPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -58,7 +60,7 @@ private slots:
     void contextMenuRequested();
 
 private:
-    bool m_pluginEnabled;
+    QSettings m_settings;
     NetworkManager *m_networkManager;
     QTimer *m_refershTimer;
 
