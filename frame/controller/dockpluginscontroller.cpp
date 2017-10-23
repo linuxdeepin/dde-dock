@@ -27,6 +27,8 @@
 #include <QDebug>
 #include <QDir>
 
+#define API_VERSION "1.0"
+
 DockPluginsController::DockPluginsController(DockItemController *itemControllerInter)
     : QObject(itemControllerInter),
       m_itemControllerInter(itemControllerInter)
@@ -136,9 +138,14 @@ void DockPluginsController::positionChanged()
 
 void DockPluginsController::loadPlugin(const QString &pluginFile)
 {
-    qDebug() << "load plugin: " << pluginFile;
-
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile, this);
+    const auto meta = pluginLoader->metaData().value("MetaData").toObject();
+    if (!meta.contains("api") || meta["api"].toString() != API_VERSION)
+    {
+        qWarning() << "plugin api version not matched!" << pluginFile;
+        return;
+    }
+
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
     if (!interface)
     {
