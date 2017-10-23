@@ -4,8 +4,8 @@
         "Direction": "up",
         "Fingers": 3,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+Up"
+            "Type": "built-in",
+            "Action": "ToggleMaximize"
         }
     },
     {
@@ -13,8 +13,8 @@
         "Direction": "down",
         "Fingers": 3,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+Down"
+            "Type": "built-in",
+            "Action": "ToggleMaximize"
         }
     },
     {
@@ -22,8 +22,8 @@
         "Direction": "left",
         "Fingers": 3,
         "Action": {
-            "Type": "shortcut",
-            "Action": "alt+shift+Tab"
+            "Type": "built-in",
+            "Action": "ReverseSwitchApplication"
         }
     },
     {
@@ -31,8 +31,8 @@
         "Direction": "right",
         "Fingers": 3,
         "Action": {
-            "Type": "shortcut",
-            "Action": "alt+Tab"
+            "Type": "built-in",
+            "Action": "SwitchApplication"
         }
     },
     {
@@ -40,8 +40,8 @@
         "Direction": "in",
         "Fingers": 3,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+w"
+            "Type": "built-in",
+            "Action": "ShowWindow"
         }
     },
     {
@@ -49,8 +49,8 @@
         "Direction": "out",
         "Fingers": 3,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+w"
+            "Type": "built-in",
+            "Action": "ShowWindow"
         }
     },
     {
@@ -58,8 +58,8 @@
         "Direction": "up",
         "Fingers": 4,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+s"
+            "Type": "built-in",
+            "Action": "ShowWorkspace"
         }
     },
     {
@@ -67,8 +67,8 @@
         "Direction": "down",
         "Fingers": 4,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+s"
+            "Type": "built-in",
+            "Action": "ShowWorkspace"
         }
     },
     {
@@ -76,8 +76,8 @@
         "Direction": "left",
         "Fingers": 4,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+Left"
+            "Type": "built-in",
+            "Action": "ReverseSwitchWorkspace"
         }
     },
     {
@@ -85,8 +85,8 @@
         "Direction": "right",
         "Fingers": 4,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+Right"
+            "Type": "built-in",
+            "Action": "SwitchWorkspace"
         }
     },
     {
@@ -94,8 +94,8 @@
         "Direction": "in",
         "Fingers": 4,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super"
+            "Type": "commandline",
+            "Action": "dde-launcher"
         }
     },
     {
@@ -103,8 +103,8 @@
         "Direction": "out",
         "Fingers": 4,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+d"
+            "Type": "commandline",
+            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
         }
     },
     {
@@ -112,8 +112,8 @@
         "Direction": "up",
         "Fingers": 5,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+s"
+            "Type": "built-in",
+            "Action": "ShowWorkspace"
         }
     },
     {
@@ -121,8 +121,8 @@
         "Direction": "down",
         "Fingers": 5,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+s"
+            "Type": "built-in",
+            "Action": "ShowWorkspace"
         }
     },
     {
@@ -130,8 +130,8 @@
         "Direction": "left",
         "Fingers": 5,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+Left"
+            "Type": "built-in",
+            "Action": "ReverseSwitchWorkspace"
         }
     },
     {
@@ -139,8 +139,8 @@
         "Direction": "right",
         "Fingers": 5,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+Right"
+            "Type": "built-in",
+            "Action": "SwitchWorkspace"
         }
     },
     {
@@ -148,8 +148,8 @@
         "Direction": "in",
         "Fingers": 5,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super"
+            "Type": "commandline",
+            "Action": "dde-launcher"
         }
     },
     {
@@ -157,8 +157,8 @@
         "Direction": "out",
         "Fingers": 5,
         "Action": {
-            "Type": "shortcut",
-            "Action": "super+d"
+            "Type": "commandline",
+            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
         }
     }
 ]

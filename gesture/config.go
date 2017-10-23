@@ -34,6 +34,7 @@ import (
 const (
 	ActionTypeShortcut    string = "shortcut"
 	ActionTypeCommandline        = "commandline"
+	ActionTypeBuiltin            = "built-in"
 )
 
 var (
@@ -105,9 +106,22 @@ func (m *gestureManager) Exec(name, direction string, fingers int32) error {
 	}
 
 	var cmd = info.Action.Action
-	if info.Action.Type == ActionTypeShortcut {
+	switch info.Action.Type {
+	case ActionTypeCommandline:
+		break
+	case ActionTypeShortcut:
 		cmd = fmt.Sprintf("xdotool key %s", cmd)
+		break
+	case ActionTypeBuiltin:
+		f, ok := builtinSets[cmd]
+		if !ok {
+			return fmt.Errorf("Invalid built-in action: %s", cmd)
+		}
+		return f()
+	default:
+		return fmt.Errorf("Invalid action type: %s", info.Action.Type)
 	}
+
 	out, err := exec.Command("/bin/sh", "-c", cmd).CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("%s", string(out))
