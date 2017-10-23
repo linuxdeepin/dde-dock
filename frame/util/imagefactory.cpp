@@ -44,8 +44,14 @@ QPixmap ImageFactory::lighterEffect(const QPixmap pixmap, const int delta)
         for (int j(0); j != width; ++j)
         {
             QRgb &rgba = *(QRgb*)scanLine;
-            if (qAlpha(rgba) == 0xff && (qRed(rgba) || qGreen(rgba) || qBlue(rgba)))
-                rgba = QColor::fromRgba(rgba).lighter(delta).rgba();
+            if (qAlpha(rgba) == 0xff && (qRed(rgba) || qGreen(rgba) || qBlue(rgba))) {
+                const QColor hsv = QColor::fromRgba(rgba).toHsv();
+                // check brightness first, color with max brightness processed with lighter will
+                // become white like color which will ruin the whole image in general cases.
+                if (hsv.value() < 255) {
+                    rgba = QColor::fromRgba(rgba).lighter(delta).rgba();
+                }
+            }
             scanLine += bytesPerPixel;
         }
     }
