@@ -39,7 +39,12 @@ public:
     ~DatetimePlugin();
 
     const QString pluginName() const override;
+    const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
+
+    void pluginStateSwitched() override;
+    bool pluginIsAllowDisable() override { return true; }
+    bool pluginIsDisable() override;
 
     int itemSortKey(const QString &itemKey) override;
 

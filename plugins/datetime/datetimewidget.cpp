@@ -28,6 +28,8 @@
 #include <QSvgRenderer>
 #include <QMouseEvent>
 
+#define PLUGIN_STATE_KEY    "enable"
+
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent),
 
@@ -36,6 +38,16 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     m_24HourFormat(m_settings.value("24HourFormat", true).toBool())
 {
 
+}
+
+bool DatetimeWidget::enabled()
+{
+    return m_settings.value(PLUGIN_STATE_KEY, true).toBool();
+}
+
+void DatetimeWidget::setEnabled(const bool b)
+{
+    m_settings.setValue(PLUGIN_STATE_KEY, b);
 }
 
 void DatetimeWidget::toggleHourFormat()

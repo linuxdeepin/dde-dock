@@ -56,11 +56,32 @@ const QString DatetimePlugin::pluginName() const
     return "datetime";
 }
 
+const QString DatetimePlugin::pluginDisplayName() const
+{
+    return tr("Datetime");
+}
+
 void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_proxyInter->itemAdded(this, QString());
+    if (m_centralWidget->enabled())
+        m_proxyInter->itemAdded(this, QString());
+}
+
+void DatetimePlugin::pluginStateSwitched()
+{
+    m_centralWidget->setEnabled(!m_centralWidget->enabled());
+
+    if (m_centralWidget->enabled())
+        m_proxyInter->itemAdded(this, QString());
+    else
+        m_proxyInter->itemRemoved(this, QString());
+}
+
+bool DatetimePlugin::pluginIsDisable()
+{
+    return !m_centralWidget->enabled();
 }
 
 int DatetimePlugin::itemSortKey(const QString &itemKey)

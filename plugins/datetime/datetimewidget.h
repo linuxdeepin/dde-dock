@@ -33,6 +33,8 @@ public:
     explicit DatetimeWidget(QWidget *parent = 0);
 
     bool is24HourFormat() const { return m_24HourFormat; }
+    bool enabled();
+    void setEnabled(const bool b);
 
 signals:
     void requestUpdateGeometry() const;
