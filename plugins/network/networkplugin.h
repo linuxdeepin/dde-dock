@@ -40,6 +40,7 @@ public:
     void init(PluginProxyInterface *proxyInter);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
     void refershIcon(const QString &itemKey);
+    void pluginStateSwitched();
     bool pluginIsAllowDisable() { return true; }
     bool pluginIsDisable();
     const QString itemCommand(const QString &itemKey);
@@ -57,6 +58,7 @@ private slots:
     void contextMenuRequested();
 
 private:
+    bool m_pluginEnabled;
     NetworkManager *m_networkManager;
     QTimer *m_refershTimer;
 

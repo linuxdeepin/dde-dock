@@ -80,9 +80,16 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
         item->refreshIcon();
 }
 
+void NetworkPlugin::pluginStateSwitched()
+{
+    m_pluginEnabled = !m_pluginEnabled;
+
+    m_refershTimer->start();
+}
+
 bool NetworkPlugin::pluginIsDisable()
 {
-    return true;
+    return !m_pluginEnabled;
 }
 
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
@@ -187,24 +194,30 @@ void NetworkPlugin::refershDeviceItemVisible()
 
 //    qDebug() << hasWiredDevice << hasWirelessDevice;
 
-    for (auto item : m_deviceItemList)
+    if (m_pluginEnabled)
     {
-        switch (item->type())
+        for (auto item : m_deviceItemList)
         {
-        case NetworkDevice::Wireless:
-            m_proxyInter->itemAdded(this, item->path());
-            break;
-
-        case NetworkDevice::Wired:
-            if (hasWiredDevice && (item->state() == NetworkDevice::Activated || !hasWirelessDevice))
+            switch (item->type())
+            {
+            case NetworkDevice::Wireless:
                 m_proxyInter->itemAdded(this, item->path());
-            else
-                m_proxyInter->itemRemoved(this, item->path());
-            break;
+                break;
 
-        default:
-            Q_UNREACHABLE();
+            case NetworkDevice::Wired:
+                if (hasWiredDevice && (item->state() == NetworkDevice::Activated || !hasWirelessDevice))
+                    m_proxyInter->itemAdded(this, item->path());
+                else
+                    m_proxyInter->itemRemoved(this, item->path());
+                break;
+
+            default:
+                Q_UNREACHABLE();
+            }
         }
+    } else {
+        for (auto item : m_deviceItemList)
+            m_proxyInter->itemRemoved(this, item->path());
     }
 }
 

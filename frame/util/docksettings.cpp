@@ -253,7 +253,7 @@ void DockSettings::showDockSettingsMenu()
 
         QAction *act = new QAction(display, this);
         act->setCheckable(true);
-        act->setChecked(enable);
+        act->setChecked(!enable);
         act->setData(name);
 
         m_hideSubMenu->addAction(act);
