@@ -25,7 +25,7 @@
 #include "pluginsiteminterface.h"
 #include "sounditem.h"
 
-#include <QObject>
+#include <QSettings>
 
 class SoundPlugin : public QObject, PluginsItemInterface
 {
@@ -37,7 +37,11 @@ public:
     explicit SoundPlugin(QObject *parent = 0);
 
     const QString pluginName() const;
+    const QString pluginDisplayName() const;
     void init(PluginProxyInterface *proxyInter);
+    void pluginStateSwitched();
+    bool pluginIsAllowDisable() { return true; }
+    bool pluginIsDisable();
 
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);
@@ -47,6 +51,7 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
 
 private:
+    QSettings m_settings;
     SoundItem *m_soundItem;
 };
 

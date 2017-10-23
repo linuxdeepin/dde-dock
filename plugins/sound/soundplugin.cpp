@@ -21,6 +21,8 @@
 
 #include "soundplugin.h"
 
+#define STATE_KEY  "enable"
+
 SoundPlugin::SoundPlugin(QObject *parent)
     : QObject(parent),
       m_soundItem(nullptr)
@@ -33,6 +35,11 @@ const QString SoundPlugin::pluginName() const
     return "sound";
 }
 
+const QString SoundPlugin::pluginDisplayName() const
+{
+    return tr("Sound");
+}
+
 void SoundPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
@@ -40,7 +47,23 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     m_soundItem = new SoundItem;
     connect(m_soundItem, &SoundItem::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
 
-    m_proxyInter->itemAdded(this, QString());
+    if (m_settings.value(STATE_KEY).toBool())
+        m_proxyInter->itemAdded(this, QString());
+}
+
+void SoundPlugin::pluginStateSwitched()
+{
+    m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
+
+    if (m_settings.value(STATE_KEY).toBool())
+        m_proxyInter->itemAdded(this, QString());
+    else
+        m_proxyInter->itemRemoved(this, QString());
+}
+
+bool SoundPlugin::pluginIsDisable()
+{
+    return !m_settings.value(STATE_KEY, true).toBool();
 }
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
