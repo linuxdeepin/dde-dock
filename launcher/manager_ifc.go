@@ -162,6 +162,7 @@ func (m *Manager) RequestUninstall(id string, purge bool) {
 			return
 		}
 
+		m.removeAutostart(id)
 		logger.Infof("uninstall %q success", id)
 		dbus.Emit(m, "UninstallSuccess", id)
 	}()

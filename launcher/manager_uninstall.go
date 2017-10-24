@@ -54,6 +54,13 @@ func (m *Manager) uninstallDesktopFile(item *Item) error {
 	return err
 }
 
+func (m *Manager) removeAutostart(id string) {
+	name := filepath.Base(id) + desktopExt
+	file := filepath.Join(basedir.GetUserConfigDir(), "autostart", name)
+	logger.Debugf("removeAutostart id: %q, file: %q", id, file)
+	os.Remove(file)
+}
+
 func (m *Manager) notifyUninstallDone(item *Item, succeed bool) {
 	const icon = "deepin-appstore"
 	var msg string
