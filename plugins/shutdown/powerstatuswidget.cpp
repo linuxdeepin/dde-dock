@@ -47,9 +47,10 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     const QPixmap icon = getBatteryIcon();
+    const auto ratio = devicePixelRatioF();
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - icon.rect().center(), icon);
+    painter.drawPixmap(rect().center() - icon.rect().center() / ratio, icon);
 }
 
 void PowerStatusWidget::mousePressEvent(QMouseEvent *e)
