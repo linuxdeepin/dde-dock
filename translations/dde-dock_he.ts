@@ -1,18 +1,31 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="he" version="2.1">
 <context>
+    <name>ContainerItem</name>
+    <message>
+        <location filename="../frame/item/containeritem.cpp" line="33"/>
+        <source>Click to display hidden icon</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="104"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
+        <source>Datetime</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="106"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="112"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
         <source>Time Settings</source>
         <translation type="unfinished"/>
     </message>
@@ -38,12 +51,12 @@
 <context>
     <name>DiskControlItem</name>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="87"/>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="93"/>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
         <translation type="unfinished"/>
     </message>
@@ -51,17 +64,17 @@
 <context>
     <name>DiskMountPlugin</name>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="19"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
         <translation>כונן</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
         <translation>פתיחה</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
         <translation type="unfinished"/>
     </message>
@@ -148,6 +161,11 @@
         <source>Status</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location filename="../frame/util/docksettings.cpp" line="114"/>
+        <source>Plugins</source>
+        <translation>פלאגינים</translation>
+    </message>
 </context>
 <context>
     <name>LauncherItem</name>
@@ -158,29 +176,37 @@
     </message>
 </context>
 <context>
+    <name>NetworkPlugin</name>
+    <message>
+        <location filename="../plugins/network/networkplugin.cpp" line="46"/>
+        <source>Network</source>
+        <translation>רשת</translation>
+    </message>
+</context>
+<context>
     <name>PopupControlWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
-        <source>Empty</source>
-        <translation>פינוי</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
+        <source>Empty</source>
+        <translation>פינוי</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
         <translation>לא ניתן לשחזר פעולה זו</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="74"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="76"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
         <translation type="unfinished"/>
     </message>
@@ -188,53 +214,58 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="69"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="119"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Shut down</source>
         <translation>כיבוי</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="77"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
         <source>Remaining Capacity %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="83"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="85"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
         <source>Charging %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="125"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Restart</source>
         <translation>אתחול</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="137"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
         <source>Lock</source>
         <translation>נעילה</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Log out</source>
         <translation>התנתקות</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
         <source>Suspend</source>
         <translation>השהיה</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
+        <source>Power</source>
+        <translation>צריכת חשמל</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
         <source>Switch account</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
@@ -276,6 +307,14 @@
     </message>
 </context>
 <context>
+    <name>SoundPlugin</name>
+    <message>
+        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <source>Sound</source>
+        <translation>שמע</translation>
+    </message>
+</context>
+<context>
     <name>SystemTrayPlugin</name>
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
@@ -286,12 +325,12 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
         <translation type="unfinished"/>
     </message>
@@ -299,12 +338,12 @@
 <context>
     <name>TrashWidget</name>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="45"/>
+        <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
         <translation>פתיחה</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
+        <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
         <translation>פינוי</translation>
     </message>
@@ -358,17 +397,17 @@
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="169"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>
         <source>Wireless Network</source>
         <translation>רשת אלחוטית</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="171"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
         <source>Wireless Network %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="412"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"/>
     </message>
