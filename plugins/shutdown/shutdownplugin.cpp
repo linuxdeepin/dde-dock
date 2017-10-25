@@ -234,7 +234,7 @@ void ShutdownPlugin::updateBatteryVisible()
 
     if (!exist || displayMode() == Dock::Fashion)
         m_proxyInter->itemRemoved(this, POWER_KEY);
-    else if (exist)
+    else if (exist && !pluginIsDisable())
         m_proxyInter->itemAdded(this, POWER_KEY);
 }
 
