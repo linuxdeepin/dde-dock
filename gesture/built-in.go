@@ -43,40 +43,48 @@ var builtinSets = map[string]func() error{
 	"ReverseSwitchWorkspace":   doReverseSwitchWorkspace,
 }
 
-var wmHandler, _ = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+var _wmHandler *wm.Wm
+
+func getWmHandler() *wm.Wm {
+	if _wmHandler != nil {
+		return _wmHandler
+	}
+	_wmHandler, _ = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+	return _wmHandler
+}
 
 func doShowWorkspace() error {
-	return wmHandler.PerformAction(wmActionShowWorkspace)
+	return getWmHandler().PerformAction(wmActionShowWorkspace)
 }
 
 func doToggleMaximize() error {
-	return wmHandler.PerformAction(wmActionToggleMaximize)
+	return getWmHandler().PerformAction(wmActionToggleMaximize)
 }
 
 func doMinimize() error {
-	return wmHandler.PerformAction(wmActionMinimize)
+	return getWmHandler().PerformAction(wmActionMinimize)
 }
 
 func doShowWindow() error {
-	return wmHandler.PerformAction(wmActionShowWindow)
+	return getWmHandler().PerformAction(wmActionShowWindow)
 }
 
 func doShowAllWindow() error {
-	return wmHandler.PerformAction(wmActionShowAllWindow)
+	return getWmHandler().PerformAction(wmActionShowAllWindow)
 }
 
 func doSwitchApplication() error {
-	return wmHandler.SwitchApplication(false)
+	return getWmHandler().SwitchApplication(false)
 }
 
 func doReverseSwitchApplication() error {
-	return wmHandler.SwitchApplication(true)
+	return getWmHandler().SwitchApplication(true)
 }
 
 func doSwitchWorkspace() error {
-	return wmHandler.SwitchToWorkspace(false)
+	return getWmHandler().SwitchToWorkspace(false)
 }
 
 func doReverseSwitchWorkspace() error {
-	return wmHandler.SwitchToWorkspace(true)
+	return getWmHandler().SwitchToWorkspace(true)
 }
