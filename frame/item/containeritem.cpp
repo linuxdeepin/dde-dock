@@ -72,16 +72,19 @@ bool ContainerItem::contains(DockItem * const item)
 void ContainerItem::refershIcon()
 {
     QPixmap icon;
+    const auto ratio = devicePixelRatioF();
+    const QSize s = QSize(16, 16) * ratio;
     switch (DockPosition)
     {
-    case Top:       icon = QPixmap(":/icons/resources/arrow-down.svg");     break;
-    case Left:      icon = QPixmap(":/icons/resources/arrow-right.svg");    break;
-    case Bottom:    icon = QPixmap(":/icons/resources/arrow-up.svg");       break;
-    case Right:     icon = QPixmap(":/icons/resources/arrow-left.svg");     break;
+    case Top:       icon = QIcon(":/icons/resources/arrow-down.svg").pixmap(s);     break;
+    case Left:      icon = QIcon(":/icons/resources/arrow-right.svg").pixmap(s);    break;
+    case Bottom:    icon = QIcon(":/icons/resources/arrow-up.svg").pixmap(s);       break;
+    case Right:     icon = QIcon(":/icons/resources/arrow-left.svg").pixmap(s);     break;
     default:        Q_UNREACHABLE();
     }
 
     m_icon = icon;
+    m_icon.setDevicePixelRatio(ratio);
 }
 
 void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
@@ -105,7 +108,7 @@ void ContainerItem::paintEvent(QPaintEvent *e)
         return;
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
+    painter.drawPixmap(rect().center() - m_icon.rect().center() / m_icon.devicePixelRatioF(), m_icon);
 }
 
 void ContainerItem::mouseReleaseEvent(QMouseEvent *e)
