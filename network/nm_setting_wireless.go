@@ -181,10 +181,11 @@ func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_CHANNEL)
 		}
 	case nm.NM_SETTING_WIRELESS_MODE_AP:
-		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_BAND)
-		if isSettingWirelessBandExists(data) {
-			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_CHANNEL)
-		}
+		// nm unsupport 5G, so not show band
+		// keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_BAND)
+		// if isSettingWirelessBandExists(data) {
+		// 	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_CHANNEL)
+		// }
 	}
 	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_MAC_ADDRESS)
 	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_MTU)
