@@ -25,6 +25,7 @@
 
 SoundPlugin::SoundPlugin(QObject *parent)
     : QObject(parent),
+      m_settings("deepin", "dde-dock-sound"),
       m_soundItem(nullptr)
 {
 
@@ -47,7 +48,7 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     m_soundItem = new SoundItem;
     connect(m_soundItem, &SoundItem::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
 
-    if (m_settings.value(STATE_KEY).toBool())
+    if (m_settings.value(STATE_KEY, true).toBool())
         m_proxyInter->itemAdded(this, QString());
 }
 
