@@ -123,5 +123,8 @@ QSize ContainerItem::sizeHint() const
 
 QWidget *ContainerItem::popupTips()
 {
-    return m_popupTips;
+    if (m_containerWidget->itemCount())
+        return m_popupTips;
+    else
+        return nullptr;
 }
