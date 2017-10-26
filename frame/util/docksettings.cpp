@@ -111,7 +111,7 @@ DockSettings::DockSettings(QWidget *parent)
     statusSubMenuAct->setMenu(statusSubMenu);
 
     m_hideSubMenu = new WhiteMenu(&m_settingsMenu);
-    QAction *hideSubMenuAct = new QAction(tr("Hide"), this);
+    QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
     hideSubMenuAct->setMenu(m_hideSubMenu);
 
     m_settingsMenu.addAction(modeSubMenuAct);
@@ -253,7 +253,7 @@ void DockSettings::showDockSettingsMenu()
 
         QAction *act = new QAction(display, this);
         act->setCheckable(true);
-        act->setChecked(!enable);
+        act->setChecked(enable);
         act->setData(name);
 
         m_hideSubMenu->addAction(act);
