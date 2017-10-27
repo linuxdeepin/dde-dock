@@ -25,10 +25,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"pkg.deepin.io/dde/daemon/appinfo"
-	"pkg.deepin.io/lib/xdg/basedir"
 	"strings"
 	"time"
+
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 var xdgAutostartDirs []string
@@ -123,12 +123,4 @@ func copyFileContents(src, dst string) (err error) {
 
 func getCurrentTimestamp() uint32 {
 	return uint32(time.Now().Unix())
-}
-
-func recordFrequency(appId string) {
-	f, err := appinfo.GetFrequencyRecordFile()
-	if err == nil {
-		appinfo.SetFrequency(appId, appinfo.GetFrequency(appId, f)+1, f) // FIXME: DesktopID???
-		f.Free()
-	}
 }

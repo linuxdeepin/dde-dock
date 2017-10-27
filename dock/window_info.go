@@ -64,11 +64,12 @@ type WindowInfo struct {
 	wmClass           *icccm.WmClass
 	wmName            string
 
-	gtkAppId string
-	wmRole   string
-	pid      uint
-	process  *ProcessInfo
-	entry    *AppEntry
+	gtkAppId     string
+	flatpakAppID string
+	wmRole       string
+	pid          uint
+	process      *ProcessInfo
+	entry        *AppEntry
 
 	firstUpdate bool
 
@@ -343,6 +344,7 @@ func (winInfo *WindowInfo) update() {
 	winInfo.initProcessInfo()
 	winInfo.wmRole = getWmWindowRole(XU, win)
 	winInfo.gtkAppId = getWindowGtkApplicationId(XU, win)
+	winInfo.flatpakAppID = getWindowFlatpakAppID(XU, win)
 	winInfo.updateWmName()
 	winInfo.genInnerId()
 }

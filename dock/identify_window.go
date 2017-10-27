@@ -36,6 +36,7 @@ type _IdentifyWindowFunc func(*DockManager, *WindowInfo) (string, *AppInfo)
 func (m *DockManager) registerIdentifyWindowFuncs() {
 	m.registerIdentifyWindowFunc("PidEnv", identifyWindowByPidEnv)
 	m.registerIdentifyWindowFunc("Cmdline-XWalk", identifyWindowByCmdlineXWalk)
+	m.registerIdentifyWindowFunc("FlatpakAppID", identifyWindowByFlatpakAppID)
 	m.registerIdentifyWindowFunc("Rule", identifyWindowByRule)
 	m.registerIdentifyWindowFunc("Bamf", identifyWindowByBamf)
 	m.registerIdentifyWindowFunc("Pid", identifyWindowByPid)
@@ -127,6 +128,24 @@ func identifyWindowByGtkAppId(m *DockManager, winInfo *WindowInfo) (string, *App
 		if appInfo != nil {
 			// success
 			return appInfo.innerId, appInfo
+		}
+	}
+	// fail
+	return "", nil
+}
+
+func identifyWindowByFlatpakAppID(m *DockManager, winInfo *WindowInfo) (string, *AppInfo) {
+	flatpakRef := winInfo.flatpakAppID
+	logger.Debugf("identifyWindowByFlatpakAppID: flatpak ref is %q", flatpakRef)
+	if strings.HasPrefix(flatpakRef, "app/") {
+		parts := strings.Split(flatpakRef, "/")
+		if len(parts) > 1 {
+			appID := parts[1]
+			appInfo := NewAppInfo(appID)
+			if appInfo != nil {
+				// success
+				return appInfo.innerId, appInfo
+			}
 		}
 	}
 	// fail

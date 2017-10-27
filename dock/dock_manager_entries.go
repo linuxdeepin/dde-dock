@@ -38,6 +38,7 @@ func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
 		return
 	}
 	path := appInfo.GetFileName()
+	logger.Debug("markAppLaunched", path)
 	m.launchedRecorder.MarkLaunched(path)
 }
 

@@ -137,6 +137,11 @@ func getWindowGtkApplicationId(xu *xgbutil.XUtil, win xproto.Window) string {
 	return gtkAppId
 }
 
+func getWindowFlatpakAppID(xu *xgbutil.XUtil, win xproto.Window) string {
+	id, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "FLATPAK_APPID"))
+	return id
+}
+
 func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
 	role, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "WM_WINDOW_ROLE"))
 	return role
