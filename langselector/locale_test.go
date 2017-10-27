@@ -43,10 +43,11 @@ type localeDescTest struct {
 func (t *TestWrapper) TestGenerateLocaleEnvFile(c *C.C) {
 	example := `LANG=en_US.UTF-8
 LANGUAGE=en_US
-LC_TIME="zh_CN.UTF-8"`
+LC_TIME="zh_CN.UTF-8"
+`
 
-	c.Check(generateLocaleEnvFile("en_US.UTF-8",
-		"testdata/pam_environment"), C.Equals, example)
+	c.Check(string(generateLocaleEnvFile("en_US.UTF-8",
+		"testdata/pam_environment")), C.Equals, example)
 }
 
 func (t *TestWrapper) TestGetLocale(c *C.C) {

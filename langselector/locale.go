@@ -20,6 +20,7 @@
 package langselector
 
 import (
+	"bytes"
 	"dbus/com/deepin/api/localehelper"
 	libnetwork "dbus/com/deepin/daemon/network"
 	"dbus/org/freedesktop/notifications"
@@ -247,40 +248,35 @@ func writeUserLocale(locale string) error {
 
 func writeLocaleEnvFile(locale, filename string) error {
 	var content = generateLocaleEnvFile(locale, filename)
-	return ioutil.WriteFile(filename, []byte(content), 0644)
+	return ioutil.WriteFile(filename, content, 0644)
 }
 
-func generateLocaleEnvFile(locale, filename string) string {
+func generateLocaleEnvFile(locale, filename string) []byte {
 	var (
-		lFound   bool //LANG
-		lgFound  bool //LANGUAGE
-		content  string
-		infos, _ = readEnvFile(filename)
-		length   = len(infos)
-		lang     = strings.Split(locale, ".")[0]
+		langFound     bool
+		languageFound bool
+		infos, _      = readEnvFile(filename)
+		lang          = strings.Split(locale, ".")[0]
+		buf           bytes.Buffer
 	)
-	for i, info := range infos {
+	for _, info := range infos {
 		if info.key == "LANG" {
-			lFound = true
+			langFound = true
 			info.value = locale
 		} else if info.key == "LANGUAGE" {
-			lgFound = true
+			languageFound = true
 			info.value = lang
 		}
-		content += fmt.Sprintf("%s=%s", info.key, info.value)
-		if i != length-1 {
-			content += "\n"
-		}
+		buf.WriteString(fmt.Sprintf("%s=%s\n", info.key, info.value))
 	}
-	if !lFound {
-		content += fmt.Sprintf("LANG=%s", locale)
+	if !langFound {
+		buf.WriteString(fmt.Sprintf("LANG=%s\n", locale))
 	}
-	if !lgFound {
-		content += "\n"
-		content += fmt.Sprintf("LANGUAGE=%s", lang)
+	if !languageFound {
+		buf.WriteString(fmt.Sprintf("LANGUAGE=%s\n", lang))
 	}
 
-	return content
+	return buf.Bytes()
 }
 
 func getLocaleFromFile(filename string) (string, error) {
