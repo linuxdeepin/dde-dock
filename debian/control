@@ -38,9 +38,6 @@ Build-Depends: debhelper (>= 9), golang-go,
  deepin-gettext-tools,
  libnl-3-dev,
  libnl-genl-3-dev,
- libfprint0,
- libpam-fprintd,
- fprintd,
  deepin-desktop-schemas,
  python3,
  librsvg2-bin
@@ -69,6 +66,9 @@ Depends: ${shlibs:Depends},
  libpam0g,
  libnl-3-200,
  libnl-genl-3-200,
+ libfprint0,
+ libpam-fprintd,
+ fprintd,
  deepin-installer-timezones
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
