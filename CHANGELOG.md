@@ -1,5 +1,19 @@
 ## [Unreleased]
 
+##  [3.2.2] - 2017-10-27
+#### Features
+*   keybinding:  process grab pointer failed ([328aa07a](328aa07a))
+*   add fprintd module ([1469e2d4](1469e2d4))
+
+#### Bug Fixes
+*   fix fprint dependencies missing ([22dc0735](22dc0735))
+*   langselector:  write the configuration file wrong ([ee018ea2](ee018ea2))
+
+#### Changed
+*   network: remove band settings from hotspot
+*   add proxychains-ng as suggested dependency
+
+
 ## [3.2.1] - 2017-10-25
 #### Bug Fixes
 *   launcher: RequestUninstall does not remove desktop file in autostart directory ([24d1b698](24d1b698))
