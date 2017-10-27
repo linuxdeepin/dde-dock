@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:11+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -53,6 +53,18 @@ msgstr "Naudotojo vardas naudojamas sistemos."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "Naudotojo vardo ilgis viršija leidžiamą ribą"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -152,10 +164,6 @@ msgstr "_Nelaikyti prisegtą"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Visi langai"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "Norint keisti grub2 konfigūraciją, reikalingas tapatybės nustatymas"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -444,7 +452,7 @@ msgstr "Belaidis Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Belaidis Ap-Hotspot"
+msgstr "Belaidis Ap prieigos taškas"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
@@ -1526,7 +1534,7 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "AP-Hotspot"
-msgstr "AP-Saitvietė"
+msgstr "AP prieigos taškas"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
@@ -1913,7 +1921,7 @@ msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298

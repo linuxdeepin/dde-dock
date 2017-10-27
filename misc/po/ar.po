@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# ahmad nourallah <ahmadnurallah@gmail.com>, 2017
 # Khodr Abdallah <khodr000@gmail.com>, 2016
 # MUHAAB SHAAM <muhaab.org@gmail.com>, 2016-2017
-# عبدالله الشديدي <chadidi97@gmail.com>, 2017
+# Abdellah Chadidi <chadidi97@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:12+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -53,6 +54,18 @@ msgstr "اسم المستخدم مستخدم من قبل النظام."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "اسم المستخدم تجاوز طوله الحد الأقصى"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "عرض الشاشة"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -139,7 +152,7 @@ msgstr "إغلاق الكل"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_خروج بالقوة"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -152,10 +165,6 @@ msgstr "إلغاء الإرساء"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "كل النوافذ"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr " المصادقة مطلوبة لتغيير إعدادات grub2"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -357,7 +366,7 @@ msgstr "تشغيل برنامج"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "كلمة المرور مطلوبة للإتصال ب %q"
 
 #: ../../network/manager_active.go:327
 #: ../../network/nm_setting_wireless.go:210
@@ -1886,39 +1895,39 @@ msgstr "تم حذف الاتصال من اﻹعدادات"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "حاول تمكين نقطة الوصول"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "حاول الإتصال ب %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "تم تمكين مشاركة نقطة الاتصال"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q متصل"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "تم إيقاف مشاركة نقطة الاتصال"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q غير متصل"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "لا يمكن مشاركة نقطة الإتصال, رجاءً تأكد من إعدادات dnsmasq"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "خطأ في الإتصال, لا يمكن الإتصال ب %q, كلمة مرور خاطئة"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1974,20 +1983,20 @@ msgstr "الحاسوب سيكون في وضع اﻹسبات، يرجى وصل ق
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "المصادقة مطلوبة لضبط وقت النظام."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "المصادقة مطلوبة لضبط المنطقة الزمنية للنظام."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "المصادقة مطلوبة للتحكم بما إذا كان سيتم تمكين تزامن وقت الشبكة."

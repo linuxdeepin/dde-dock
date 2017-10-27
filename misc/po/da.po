@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:12+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -53,6 +53,18 @@ msgstr "Brugernavnet er blevet brugt af systemet."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "Brugernavnets længde overskrider grænsen"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "Skærmskalering"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -139,7 +151,7 @@ msgstr "_Luk alle"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Gennemtving afslut"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -152,10 +164,6 @@ msgstr "_Fjern fra dok"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Alle vinduer"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "Autentifikation kræves for at ændre grub2-konfigurationen"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -357,7 +365,7 @@ msgstr "Kør software"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Der kræves adgangskode for at oprette forbindelse til %q"
 
 #: ../../network/manager_active.go:327
 #: ../../network/nm_setting_wireless.go:210
@@ -444,7 +452,7 @@ msgstr "Trådløs Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Trådløs Ap-Hotspot"
+msgstr "Trådløs Ap-hotspot"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
@@ -970,7 +978,7 @@ msgstr "Anmod om en indre IP-adresse"
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
 msgid "Enforce UDP Encapsulation"
-msgstr "Gennemtving UDP-Indkapsling"
+msgstr "Gennemtving UDP-indkapsling"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
@@ -1526,7 +1534,7 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "AP-Hotspot"
-msgstr "AP-Hotspot"
+msgstr "AP-hotspot"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
@@ -1886,39 +1894,39 @@ msgstr "Forbindelsen blev slettet fra indstillingerne"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Prøv at aktivere hotspot"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Prøv at oprette forbindelse til %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Hotspotdeling aktiveret"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q tilsluttet"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Hotspotdeling slået fra"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q afbrudt"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Kan ikke dele hotspot, tjek venligst dnsmasq-indstillinger"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1974,20 +1982,20 @@ msgstr "Computeren vil være i dvaletilstand, du bedes aktivere den nu"
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Autentifikation kræves for at sætte systemets tid."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Autentifikation kræves for at sætte systemets tidszone."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Autentifikation kræves for at styre om RTC'en lagre den lokale tid eller UTC-tiden."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres."

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:11+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Uighur (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ug/)\n"
 "MIME-Version: 1.0\n"
@@ -51,6 +51,18 @@ msgstr "بۇ ئەزالىق نامى سىستېما تەرىپىدىن ئىشل�
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "ئەزالىق نامىنىڭ ئۇزۇنلۇقى ئېشىپ كەتتى"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -150,10 +162,6 @@ msgstr "_ۋەزىپە بالدىقىدىن ئاجرىتىش"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_بارلىق كۆزنەكلەر"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "دەلىللەش مەشغۇلاتى grub2 نى ئۆزگەرتىشنى تەلەپ قىلىدۇ"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -1911,7 +1919,7 @@ msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:12+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Czech (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -52,6 +52,18 @@ msgstr "Uživatelské jméno bylo použito systémem."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "Délka uživatelského jména překračuje omezení"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "Měřítko zobrazení"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -138,7 +150,7 @@ msgstr "_Zavřít vše"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Vynutit ukončení"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -151,10 +163,6 @@ msgstr "_Uvolnit z panelu"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Všechna okna"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "Pro změnu nastavení grub2 je požadováno ověření pravosti"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -356,7 +364,7 @@ msgstr "Spustit program"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Pro připojení %q požadováno heslo"
 
 #: ../../network/manager_active.go:327
 #: ../../network/nm_setting_wireless.go:210
@@ -1885,39 +1893,39 @@ msgstr "Spojení bylo odstraněno z nastavení"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Zkusit povolit činný bod"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Zkusit připojení %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Sdílení činného bodu povoleno"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr " %q připojeno"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Sdílení činného bodu vypnuto"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr " %q odpojeno"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Nelze sdílet činný bod. Prověřte, prosím, nastavení dnsmasq"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Připojení selhalo. Nelze připojit %q. Špatné heslo"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1973,20 +1981,20 @@ msgstr "Počítač přejde do úsporného režimu, prosím, ihned připojte kabe
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Pro nastavení systémového času je požadováno ověření pravosti."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Pro nastavení časového pásma systému je požadováno ověření pravosti."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Pro řízení toho, zda RTC ukládá místní nebo světový čas (UTC), je požadováno ověření pravosti."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Pro řízení toho, zda se má povolit seřízení se síťovým časem, je požadováno ověření pravosti."

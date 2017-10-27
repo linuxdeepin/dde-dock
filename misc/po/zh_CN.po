@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 09:33+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-26 01:13+0000\n"
 "Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -55,6 +55,18 @@ msgstr "此用户名已被系统使用"
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "用户名长度超过限制"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "屏幕缩放"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr "即将设置屏幕缩放"
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr "设置成功"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -154,10 +166,6 @@ msgstr "移除驻留(_U)"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "所有窗口(_A)"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "修改 grub2 配置需要授权"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -1915,7 +1923,7 @@ msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "无法共享热点，请检查dnsmasq 相关设置"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "未能加入%q，请尝试靠近无线路由器。"
 
 #: ../../network/state_handler.go:298

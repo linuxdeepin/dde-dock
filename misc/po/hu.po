@@ -6,14 +6,14 @@
 # Kiss Zoltan <atari@freemail.hu>, 2017
 # ddabrahim <ddabrahim@googlemail.com>, 2016-2017
 # Kiss Zoltan <atari@freemail.hu>, 2017
-# Kardos László <kardiweb@protonmail.ch>, 2017
+# Kardos László <lacesz@ox.io>, 2017
 # Reda Da <alex19930329@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:12+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -55,6 +55,18 @@ msgstr "A felhasználónév felhasználásra került a rendszer által."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "A felhasználónév hossza meghaladja a korlátot"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "Felbontás"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -141,7 +153,7 @@ msgstr "_Összes bezárása"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Erőltetett kilépés"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -154,10 +166,6 @@ msgstr "_Rögzítés feloldása"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Összes ablak"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "Hitelesítés szükséges a grub2 konfiguráció módosítához "
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -359,7 +367,7 @@ msgstr "Szoftver futtatása"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Jelszó szükséges a %q kapcsolódásához"
 
 #: ../../network/manager_active.go:327
 #: ../../network/nm_setting_wireless.go:210
@@ -1203,7 +1211,7 @@ msgstr "Másodlagos DNS"
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
 msgid "Only applied in corresponding resources"
-msgstr ""
+msgstr "Csak a megfelelő erőforrásban alkalmazható"
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
@@ -1888,39 +1896,39 @@ msgstr "A kapcsolat eltávolításra került a beállításokból"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Hotspot hozzáférés engedélyezése"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Kapcsolat használata %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Hotspot megosztás engedélyezése"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q kapcsolódva"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Hotspot megosztás kikapcsolva"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q szétkapcsolva"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Nem sikerült a hotspot megosztás, kérjük, ellenőrizze a netmasztk beállítást"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Nem sikerült csatlakoztatni a %q -hoz, kérem ellenőrizze a beírt jelszót."
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1976,20 +1984,20 @@ msgstr "A számítógép felfüggesztett állapotba kerül, kérem csatlakoztass
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Hitelesítés szükséges a rendszeridő beállításához."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Az időzóna beállításához hitelesítés szükséges"
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Hitelesítés szükséges az RTC ellenőrzéséhez és lokális idő mentéséhez."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Hitelesítés szükséges a hálózatról történő időszinkronizálás engedélyezéséhez"

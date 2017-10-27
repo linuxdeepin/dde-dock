@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 09:50+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 13:49+0000\n"
 "Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
 "Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -52,6 +52,18 @@ msgstr "L'username è utilizzata dal sistema."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "La lunghezza del nome utente è eccessiva"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "Scala di visualizzazione"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr "Imposta scala di visualizzazione"
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr "Modifica effettuata"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -151,10 +163,6 @@ msgstr "_Sblocca"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Tutte le finestre"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "Autentificazione necessaria per modificare la configurazione di Grub2"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -1912,8 +1920,8 @@ msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Impossibile condividere l'hotspot, controllare le impostazioni dnsmasq"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
-msgstr "Impossibile connettersi a %q, avvicinati al router wireless."
+msgid "Unable to connect %q, please keep closer to the wireless router"
+msgstr "Impossibile collegarsi a %q, avvicinati al router wireless"
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 09:24+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 13:13+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -53,6 +53,18 @@ msgstr "Это имя пользователя используется сист
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "Превышен лимит длинны имени пользователя"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "Масштабирование дисплея"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr "Настройка масштабирования дисплея"
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr "Задано успешно"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -152,10 +164,6 @@ msgstr "_Убрать из дока"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Все окна"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "Для изменения конфигурации grub2 требуется аутентификация"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -1913,7 +1921,7 @@ msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Не удалось предоставить точку доступа, проверьте настройки dnsmasq"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Не удалось соединить %q, пожалуйста держитесь ближе к беспроводному маршрутизатору."
 
 #: ../../network/state_handler.go:298

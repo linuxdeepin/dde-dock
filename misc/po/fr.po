@@ -4,16 +4,18 @@
 # 
 # Translators:
 # iderr, 2016
+# Charles Monzat <superboa@hotmail.fr>, 2017
 # iderr, 2016
 # lexross <its4moi@gmail.com>, 2016-2017
 # Quentin D <heziode@protonmail.com>, 2017
 # Sami G.-D. <samgd14@live.ca>, 2017
+# zwpwjwtz <zwpwjwtz@126.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-16 14:48+0800\n"
-"PO-Revision-Date: 2017-10-16 08:44+0000\n"
+"POT-Creation-Date: 2017-10-24 16:18+0800\n"
+"PO-Revision-Date: 2017-10-25 11:12+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -55,6 +57,18 @@ msgstr "Le nom d'utilisateur à été utilisé par le systeme."
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
 msgstr "La longueur du nom d'utilisateur dépasse la limite"
+
+#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+msgid "Display scaling"
+msgstr "Afficher le zoom"
+
+#: ../../appearance/scale.go:48
+msgid "Setting display scaling"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "Set successfully"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -141,7 +155,7 @@ msgstr "_Fermer tout"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Forcer à quitter"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -154,10 +168,6 @@ msgstr "_Détacher du dock"
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr "_Toutes les fenêtres"
-
-#: ../../grub2/utils.go:157
-msgid "Authentication is required to change the grub2 configuration"
-msgstr "L'authentification est nécessaire pour changer la configuration de grub2"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -359,7 +369,7 @@ msgstr "Lancer l'application"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Mot de passe requis pour connecter %q"
 
 #: ../../network/manager_active.go:327
 #: ../../network/nm_setting_wireless.go:210
@@ -1888,39 +1898,39 @@ msgstr "La connexion a été supprimée des paramètres"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Essayez d'activer un point d'accès"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Essayez de connecter% q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Partage de point d'accès activé"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q connecté"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Partage de point d'accès desactivé"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q déconnecté"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Impossible de partager le point d'accès, veuillez vérifier les paramètres de dnsmasq"
 
 #: ../../network/state_handler.go:295
-msgid "Unable to connect %q, please keep closer to the wireless router."
+msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Échec de la connexion, impossible de connecter %q, mot de passe incorrect"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1976,20 +1986,20 @@ msgstr "L'ordinateur se mettra en veille, veuillez le brancher maintenant"
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Authentification requise pour ajuster l'heure du système."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Authentification requise pour définir le fuseau horaire du système."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Authentification requise pour déterminer si le RTC corresponde à l'heure locale ou UTC."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Authentification requise pour déterminer si la synchronisation de l'heure réseau doit être activée."
