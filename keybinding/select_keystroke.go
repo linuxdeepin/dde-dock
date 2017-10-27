@@ -35,6 +35,7 @@ func (m *Manager) selectKeystroke() error {
 
 	err = grabKbdAndMouse(conn)
 	if err != nil {
+		logger.Warning("failed to grab keyboard and mouse:", err)
 		return err
 	}
 
@@ -78,7 +79,6 @@ loop:
 			break loop
 		case x.ButtonPressEventCode:
 			dbus.Emit(m, "KeyEvent", true, "")
-			break loop
 		case x.ButtonReleaseEventCode:
 			dbus.Emit(m, "KeyEvent", false, "")
 			break loop
@@ -87,6 +87,7 @@ loop:
 
 	ungrabKbdAndMouse(conn)
 	conn.Close()
+	logger.Debug("end selectKeystroke")
 	return nil
 }
 
@@ -99,7 +100,11 @@ func grabKbdAndMouse(conn *x.Conn) error {
 
 	// Ignore mouse grab error
 	const pointerEventMask = x.EventMaskButtonRelease | x.EventMaskButtonPress
-	mousebind.GrabPointer(conn, rootWin, pointerEventMask, x.None, x.None)
+	err = mousebind.GrabPointer(conn, rootWin, pointerEventMask, x.None, x.None)
+	if err != nil {
+		keybind.UngrabKeyboard(conn)
+		return err
+	}
 	return nil
 }
 
