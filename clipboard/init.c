@@ -18,7 +18,7 @@
  */
 
 #include <gtk/gtk.h>
-// copy frome gnome-settings-daemon
+// copied from gnome-settings-daemon
 #include "gsd-clipboard-manager.h"
 
 static GsdClipboardManager* clip_manager = NULL;
