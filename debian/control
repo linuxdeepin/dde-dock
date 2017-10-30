@@ -1,5 +1,5 @@
 Source: dde-dock
-Section: deepin
+Section: x11
 Priority: optional
 Maintainer: Deepin Sysdev <sysdev@deepin.com>
 Build-Depends: debhelper (>= 8.0.0), pkg-config,
