@@ -131,9 +131,8 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 //        painter.drawImage(p.x(), p.y(), m_image.scaled(iconSize, iconSize));
 //    }
     const auto ratio = devicePixelRatioF();
-    const int x = rect().center().x() - m_image.width() / 2 / ratio;
-    const int y = rect().center().y() - m_image.height() / 2 / ratio;
-    painter.drawImage(x, y, m_image);
+    const QPoint p = rect().center() - m_image.rect().center() / ratio;
+    painter.drawImage(p, m_image);
 
     painter.end();
 }
