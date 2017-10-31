@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-24 16:18+0800\n"
-"PO-Revision-Date: 2017-10-25 11:11+0000\n"
+"POT-Creation-Date: 2017-10-31 15:10+0800\n"
+"PO-Revision-Date: 2017-10-31 08:35+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Uighur (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ug/)\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "بۇ ئەزالىق نامى سىستېما تەرىپىدىن ئىشل�
 msgid "The username's length exceeds the limit"
 msgstr "ئەزالىق نامىنىڭ ئۇزۇنلۇقى ئېشىپ كەتتى"
 
-#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+#: ../../appearance/scale.go:47
 msgid "Display scaling"
 msgstr ""
 
@@ -60,8 +60,12 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:75
 msgid "Set successfully"
+msgstr ""
+
+#: ../../appearance/scale.go:76
+msgid "View by logging out after set display scaling"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
@@ -341,11 +345,11 @@ msgid ""
 "packages, please wait..."
 msgstr "سىستېما مۇناسىۋەتلىك تىل ھۆججەتلىرىنى چۈشۈرىۋاتىدۇ، سەل ساقلاپ تۇرۇڭ..."
 
-#: ../../launcher/manager_uninstall.go:61
+#: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
 msgstr "%q چىقىرىۋېتىش مۇۋەپپەقىيەتلىك بولدى"
 
-#: ../../launcher/manager_uninstall.go:63
+#: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
 msgstr "%q چىقىرىۋېتىش مەغلۇپ بولدى"
 
@@ -366,17 +370,17 @@ msgid "Password required to connect %q"
 msgstr ""
 
 #: ../../network/manager_active.go:327
-#: ../../network/nm_setting_wireless.go:210
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
 #: ../../network/manager_active.go:329
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:146
-#: ../../network/nm_setting_wireless.go:209
+#: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "ئاپتوماتىك"
 
@@ -1522,15 +1526,15 @@ msgstr "مۇلازىمىتېر (سۈكۈتتىكى)"
 msgid "DH Group 2"
 msgstr "DH گۇرۇپپا 2"
 
-#: ../../network/nm_setting_wireless.go:203
+#: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
 msgstr "نېگىزى"
 
-#: ../../network/nm_setting_wireless.go:204
+#: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:205
+#: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 

@@ -6,8 +6,8 @@
 # Alejandro Hamann <linkstat@gmail.com>, 2016
 # Alvaro Samudio <alvarosamudio1@gmail.com>, 2017
 # Alvaro Samudio <alvarosamudio1@gmail.com>, 2017
-# Deepin en Español <carlosmorenoe.cm@gmail.com>, 2017
-# Deepin en Español <carlosmorenoe.cm@gmail.com>, 2017
+# Deepin en Español, 2017
+# Deepin en Español, 2017
 # Diego Cornejo <diegof.cornejo@gmail.com>, 2016
 # Diego Sanguinetti, 2017
 # jhalo <jhalo@protonmail.com>, 2017
@@ -19,9 +19,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-24 16:18+0800\n"
-"PO-Revision-Date: 2017-10-26 06:06+0000\n"
-"Last-Translator: Deepin en Español <carlosmorenoe.cm@gmail.com>\n"
+"POT-Creation-Date: 2017-10-31 15:10+0800\n"
+"PO-Revision-Date: 2017-10-31 08:35+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,7 +63,7 @@ msgstr "El nombre de usuario ha sido usado por el sistema."
 msgid "The username's length exceeds the limit"
 msgstr "La longitud nombre de usuario supera el límite"
 
-#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+#: ../../appearance/scale.go:47
 msgid "Display scaling"
 msgstr "Escalar pantalla"
 
@@ -71,9 +71,13 @@ msgstr "Escalar pantalla"
 msgid "Setting display scaling"
 msgstr "Configurar escalado de pantalla"
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:75
 msgid "Set successfully"
 msgstr "Establecida con éxito"
+
+#: ../../appearance/scale.go:76
+msgid "View by logging out after set display scaling"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -336,7 +340,7 @@ msgstr "Se requiere autenticación para cambiar el idioma"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr "El cambio de idioma del sistema ha fallado, por favor intente después"
+msgstr "El cambio de idioma del sistema falló, por favor intenta más tarde"
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
@@ -350,13 +354,13 @@ msgstr "Se está cambiando el idioma del sistema. Por favor, espere."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "El idioma del sistema se está cambiando con una instalación en la que faltan paquetes de idiomas. Por favor, espere..."
+msgstr "El idioma del sistema cambiará al instalar un paquete faltante. Por favor, espere..."
 
-#: ../../launcher/manager_uninstall.go:61
+#: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
 msgstr "%q removido correctamente"
 
-#: ../../launcher/manager_uninstall.go:63
+#: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
 msgstr "Falló la desinstalación %q"
 
@@ -377,17 +381,17 @@ msgid "Password required to connect %q"
 msgstr "Contraseña requiere para conectar %q "
 
 #: ../../network/manager_active.go:327
-#: ../../network/nm_setting_wireless.go:210
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
 #: ../../network/manager_active.go:329
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:146
-#: ../../network/nm_setting_wireless.go:209
+#: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "Automático "
 
@@ -461,7 +465,7 @@ msgstr "Ad-Hoc inalámbrica"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Hotspot-Ap inalámbrico"
+msgstr "Ap-Hotspot inalámbrico"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
@@ -481,7 +485,7 @@ msgstr "Conexión móvil CDMA"
 
 #: ../../network/nm_custom_type.go:244
 msgid "VPN Connection"
-msgstr "Connexión VPN"
+msgstr "Conexión VPN"
 
 #: ../../network/nm_custom_type.go:246
 msgid "VPN L2TP"
@@ -836,19 +840,19 @@ msgstr "MPPE Stateful"
 #: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:386
 msgid "Refuse EAP Authentication"
-msgstr "Rechazar la autenticación EAP"
+msgstr "Autenticación EAP rechazada"
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Refuse PAP Authentication"
-msgstr "Negar autenticación PAP"
+msgstr "Autenticación PAP rechazada"
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse CHAP Authentication"
-msgstr "Negar autenticación CHAP"
+msgstr "Autenticación CHAP rechazada"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:265
@@ -1533,15 +1537,15 @@ msgstr "Servidor (por defecto)"
 msgid "DH Group 2"
 msgstr "DH Grupo 2"
 
-#: ../../network/nm_setting_wireless.go:203
+#: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
 msgstr "Infraestructura"
 
-#: ../../network/nm_setting_wireless.go:204
+#: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:205
+#: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
@@ -1650,7 +1654,7 @@ msgstr "El servicio PPP se cerro o falla inesperadamente"
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr "La computadora estará en modo de suspensión, por favor, conéctate ahora"
+msgstr "El servicio DHCP no se inició dentro del tiempo permitido"
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
@@ -1730,7 +1734,7 @@ msgstr "Error en la comprobación del PIN "
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr "El firmware necesario para el dispositivo puede estar errado."
+msgstr "El firmware necesario para el dispositivo podría no estar disponible."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
@@ -1750,15 +1754,15 @@ msgstr "Un usuario o cliente solicita desconexión"
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr "El operador/conexión del dispositivo a cambiado."
+msgstr "El operador/conexión del dispositivo ha cambiado."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr "La conexión existente del dispositivo se suponía"
+msgstr "La conexión existente del dispositivo fue asumida"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr "La petición 802.1X esta disponible ahora."
+msgstr "La petición 802.1X ya está disponible."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
@@ -1903,7 +1907,7 @@ msgstr "La conexión se ha eliminado de la configuración"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr "Intente habilitar hotspot"
+msgstr "Intenta activar la conexión compartida"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
@@ -1911,7 +1915,7 @@ msgstr "Intente conectar %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr "Se habilitó compartir el punto de acceso"
+msgstr "Permitir conexión compartida activada"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
@@ -1919,7 +1923,7 @@ msgstr "%q conectado"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr "Se deshabilitó compartir el punto de acceso"
+msgstr "Permitir conexión compartida desactivada"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
@@ -1927,7 +1931,7 @@ msgstr "%q desconectado"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "No se puede compartir el punto de acceso, compruebe la configuración de dnsmasq"
+msgstr "No es posible usar la conexión compartida, comprueba los ajustes de \"dnsmasq\""
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -1979,7 +1983,7 @@ msgstr "Batería crítica"
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
-msgstr "El equipo ha estado en modo de suspensión, por favor, conéctelo"
+msgstr "El equipo ha estado en modo de suspensión; por favor, conéctelo"
 
 #: ../../session/power/manager_events.go:134
 msgid "Battery Low"
@@ -1987,7 +1991,7 @@ msgstr "Batería baja"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr "El equipo estará en modo de suspensión, por favor, conéctate ahora"
+msgstr "El equipo estará en modo de suspensión; por favor, conéctalo ahora"
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."

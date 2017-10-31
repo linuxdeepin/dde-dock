@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-24 16:18+0800\n"
-"PO-Revision-Date: 2017-10-25 11:12+0000\n"
+"POT-Creation-Date: 2017-10-31 15:10+0800\n"
+"PO-Revision-Date: 2017-10-31 08:35+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -54,16 +54,20 @@ msgstr "Uporabniško ime je bilo uporabljeno v sistemu."
 msgid "The username's length exceeds the limit"
 msgstr "Uporabniško ime je daljše, kot je dovoljeno"
 
-#: ../../appearance/scale.go:47 ../../appearance/scale.go:75
+#: ../../appearance/scale.go:47
 msgid "Display scaling"
 msgstr "Spreminjanje velikosti prikaza"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Nastavljanje spreminjanja velikosti"
+
+#: ../../appearance/scale.go:75
+msgid "Set successfully"
+msgstr "Uspešno nastavljeno"
 
 #: ../../appearance/scale.go:76
-msgid "Set successfully"
+msgid "View by logging out after set display scaling"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
@@ -343,11 +347,11 @@ msgid ""
 "packages, please wait..."
 msgstr "Spreminjanje sistemskega jezika z namestitvijo manjkajočega jezikovnega paketa ..."
 
-#: ../../launcher/manager_uninstall.go:61
+#: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
 msgstr "%q je uspešno odstranjen"
 
-#: ../../launcher/manager_uninstall.go:63
+#: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
 msgstr "Ni uspelo odstraniti %q"
 
@@ -368,17 +372,17 @@ msgid "Password required to connect %q"
 msgstr "Za povezovanje %q je potrebno geslo"
 
 #: ../../network/manager_active.go:327
-#: ../../network/nm_setting_wireless.go:210
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
 #: ../../network/manager_active.go:329
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2,4 GHz)"
 
 #: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:146
-#: ../../network/nm_setting_wireless.go:209
+#: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "Samodejno"
 
@@ -1524,15 +1528,15 @@ msgstr "Strežnik (privzeto)"
 msgid "DH Group 2"
 msgstr "DH Skupina 2"
 
-#: ../../network/nm_setting_wireless.go:203
+#: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
 msgstr "Infrastruktura"
 
-#: ../../network/nm_setting_wireless.go:204
+#: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:205
+#: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
@@ -1922,7 +1926,7 @@ msgstr "Deljenje vroče točke ni uspelo, prosim preverite nastavitve dnsmasq"
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Ni mogoče povezati %q, prosimo približajte se brezžičnemu usmerjevalniku"
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
