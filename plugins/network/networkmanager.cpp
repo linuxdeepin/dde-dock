@@ -101,7 +101,7 @@ const QString NetworkManager::deviceHwAddr(const QString &path) const
     if (item == m_deviceSet.cend())
         return QString();
 
-    return item->hwAddress();
+    return item->usingHwAddr();
 }
 
 const QString NetworkManager::devicePath(const QString &path) const

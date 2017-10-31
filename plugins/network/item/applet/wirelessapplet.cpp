@@ -365,7 +365,7 @@ void WirelessList::activateAP(const QDBusObjectPath &apPath, const QString &ssid
         const QJsonObject obj = it.toObject();
         if (obj.value("Ssid").toString() != ssid)
             continue;
-        if (obj.value("HwAddress").toString() != m_device.hwAddress())
+        if (obj.value("HwAddress").toString() != m_device.usingHwAddr())
             continue;
 
         uuid = obj.value("Uuid").toString();
@@ -401,7 +401,7 @@ void WirelessList::needSecrets(const QString &info)
         connHwAddr = info["HwAddress"].toString();
         break;
     }
-    if (connHwAddr != m_device.hwAddress())
+    if (connHwAddr != m_device.usingHwAddr())
         return;
 
     m_lastConnPath = connPath;

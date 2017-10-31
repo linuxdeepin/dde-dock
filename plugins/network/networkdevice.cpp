@@ -61,9 +61,12 @@ const QDBusObjectPath NetworkDevice::dbusPath() const
     return QDBusObjectPath(m_devicePath);
 }
 
-const QString NetworkDevice::hwAddress() const
+const QString NetworkDevice::usingHwAddr() const
 {
-    return m_infoObj.value("HwAddress").toString();
+    const auto &hwAdr = m_infoObj.value("HwAddress").toString();
+    const auto &clonedAdr = m_infoObj.value("ClonedAddress").toString();
+
+    return clonedAdr.isEmpty() ? hwAdr : clonedAdr;
 }
 
 const QString NetworkDevice::vendor() const

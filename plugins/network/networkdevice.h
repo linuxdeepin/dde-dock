@@ -68,7 +68,7 @@ public:
     NetworkType type() const;
     const QString path() const;
     const QDBusObjectPath dbusPath() const;
-    const QString hwAddress() const;
+    const QString usingHwAddr() const;
     const QString vendor() const;
     const QString activeAp() const;
 
