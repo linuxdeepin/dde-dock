@@ -72,8 +72,8 @@ func doSetScaleFactor(scale float64) {
 	doScaleGreeter(scale)
 	go func() {
 		doScalePlymouth(uint32(tmp))
-		sendNotify(gettext.Tr("Display scaling"),
-			gettext.Tr("Set successfully"), "dialog-window-scale")
+		sendNotify(gettext.Tr("Set successfully"),
+			gettext.Tr("View by logging out after set display scaling"), "dialog-window-scale")
 		setScaleStatus(false)
 	}()
 }
