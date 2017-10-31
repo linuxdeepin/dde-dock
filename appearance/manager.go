@@ -35,6 +35,7 @@ import (
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/fsnotify"
 	dutils "pkg.deepin.io/lib/utils"
+	"strconv"
 	"time"
 )
 
@@ -220,6 +221,21 @@ func (m *Manager) init() {
 		// must be called after init finished
 		go m.handleThemeChanged()
 		m.listenGSettingChanged()
+
+		setDQtTheme(dQtFile, dQtSectionTheme,
+			[]string{
+				dQtKeyIcon,
+				dQtKeyFont,
+				dQtKeyFontSize},
+			[]string{
+				m.IconTheme.Get(),
+				m.StandardFont.Get(),
+				strconv.FormatFloat(m.FontSize.Get(), 'f', 1, 64)})
+		err := saveDQtTheme(dQtFile)
+		if err != nil {
+			logger.Warning("Failed to save qt theme:", err)
+			return
+		}
 	})
 
 	cur, err := user.Current()
@@ -304,7 +320,12 @@ func (m *Manager) doSetIconTheme(value string) error {
 		return fmt.Errorf("Invalid icon theme '%v'", value)
 	}
 
-	return subthemes.SetIconTheme(value)
+	err := subthemes.SetIconTheme(value)
+	if err != nil {
+		return err
+	}
+
+	return m.writeDQtTheme(dQtKeyIcon, value)
 }
 
 func (m *Manager) doSetCursorTheme(value string) error {
@@ -350,7 +371,11 @@ func (m *Manager) doSetStandardFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	return fonts.SetFamily(value, m.MonospaceFont.Get(), m.FontSize.Get())
+	err := fonts.SetFamily(value, m.MonospaceFont.Get(), m.FontSize.Get())
+	if err != nil {
+		return err
+	}
+	return m.writeDQtTheme(dQtKeyFont, value)
 }
 
 func (m *Manager) doSetMonnospaceFont(value string) error {
@@ -367,7 +392,12 @@ func (m *Manager) doSetFontSize(size float64) error {
 		return fmt.Errorf("Invalid font size '%v'", size)
 	}
 
-	return fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(), size)
+	err := fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(), size)
+	if err != nil {
+		return err
+	}
+
+	return m.writeDQtTheme(dQtKeyFontSize, strconv.FormatFloat(size, 'f', 1, 64))
 }
 
 func (*Manager) doShow(ifc interface{}) (string, error) {
@@ -399,4 +429,10 @@ func (m *Manager) getDefaultFonts() (standard string, monospace string) {
 		return defaultStandardFont, defaultMonospaceFont
 	}
 	return cfg.Get()
+}
+
+func (m *Manager) writeDQtTheme(key, value string) error {
+	setDQtTheme(dQtFile, dQtSectionTheme,
+		[]string{key}, []string{value})
+	return saveDQtTheme(dQtFile)
 }
