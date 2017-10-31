@@ -258,7 +258,7 @@ func writeFontConfig(content, file string) error {
 //
 //func configContent(standard, mono string, pixel float64) string {
 func configContent(standard, mono string) string {
-	return fmt.Sprintf(`<?xml version="2.0"?>
+	return fmt.Sprintf(`<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
     <match target="pattern">
