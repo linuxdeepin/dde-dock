@@ -76,7 +76,7 @@ QWidget *DeviceItem::itemPopup()
 void DeviceItem::invokeMenuItem(const QString &menuId)
 {
     if (menuId == "settings")
-        QProcess::startDetached("dde-control-center", QStringList() << "network");
+        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
     else if (menuId == "enable")
         setEnabled(!enabled());
 }

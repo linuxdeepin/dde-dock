@@ -206,7 +206,7 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(checked)
 
     if (menuId == "power")
-        QProcess::startDetached("dde-control-center", QStringList() << "power");
+        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
     else if (menuId == "Lock")
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
                                                            << "--dest=com.deepin.dde.lockFront"
