@@ -39,6 +39,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * libnl-genl-3.0
 * libfprint
 * fprintd
+* dnsmasq (for hotspot)
 
 ### Optional Dependencies
 
