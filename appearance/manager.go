@@ -226,10 +226,12 @@ func (m *Manager) init() {
 			[]string{
 				dQtKeyIcon,
 				dQtKeyFont,
+				dQtKeyMonoFont,
 				dQtKeyFontSize},
 			[]string{
 				m.IconTheme.Get(),
 				m.StandardFont.Get(),
+				m.MonospaceFont.Get(),
 				strconv.FormatFloat(m.FontSize.Get(), 'f', 1, 64)})
 		err := saveDQtTheme(dQtFile)
 		if err != nil {
@@ -383,7 +385,11 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	return fonts.SetFamily(m.StandardFont.Get(), value, m.FontSize.Get())
+	err := fonts.SetFamily(m.StandardFont.Get(), value, m.FontSize.Get())
+	if err != nil {
+		return err
+	}
+	return m.writeDQtTheme(dQtKeyMonoFont, value)
 }
 
 func (m *Manager) doSetFontSize(size float64) error {

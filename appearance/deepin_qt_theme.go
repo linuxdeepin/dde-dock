@@ -32,6 +32,7 @@ const (
 	dQtSectionTheme = "Theme"
 	dQtKeyIcon      = "IconThemeName"
 	dQtKeyFont      = "Font"
+	dQtKeyMonoFont  = "MonoFont"
 	dQtKeyFontSize  = "FontSize"
 )
 
