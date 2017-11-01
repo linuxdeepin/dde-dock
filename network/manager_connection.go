@@ -436,9 +436,46 @@ func (m *Manager) clearConnectionSessions() {
 	m.connectionSessions = nil
 }
 
+func (m *Manager) uninstallConnectionSession(uuid string) {
+	m.connectionSessionsLock.Lock()
+	defer m.connectionSessionsLock.Unlock()
+
+	var (
+		s   *ConnectionSession
+		idx int
+	)
+	for i, session := range m.connectionSessions {
+		if session.Uuid != uuid {
+			continue
+		}
+
+		s = session
+		idx = i
+		break
+	}
+
+	if s == nil {
+		logger.Warning("Failed to uninstall connection session: not found", uuid)
+		return
+	}
+
+	copy(m.connectionSessions[idx:], m.connectionSessions[idx+1:])
+	newlen := len(m.connectionSessions) - 1
+	m.connectionSessions[newlen] = nil
+	m.connectionSessions = m.connectionSessions[:newlen]
+
+	if s.Type == connectionWirelessHotspot {
+		// The device maybe not ready switch from AP mode, so reset managed
+		logger.Debug("[uninstallConnectionSession] Will uninstall hotspot connection, reset managed state:", s.devPath)
+		m.SetDeviceManaged(string(s.devPath), false)
+		m.SetDeviceManaged(string(s.devPath), true)
+	}
+	dbus.UnInstallObject(s)
+	s = nil
+}
+
 // DeleteConnection delete a connection through uuid.
 func (m *Manager) DeleteConnection(uuid string) (err error) {
-	// FIXME: uninstall ConnectionSession dbus object if under editing
 	cpath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
@@ -448,6 +485,10 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 		return
 	}
 	defer nmDestroySettingsConnection(nmConn)
+
+	// uninstall opened connection session
+	defer m.uninstallConnectionSession(uuid)
+
 	return nmConn.Delete()
 }
 
