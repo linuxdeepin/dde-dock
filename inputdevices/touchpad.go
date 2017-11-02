@@ -370,9 +370,14 @@ func (tpad *Touchpad) startSyndaemon() {
 	argsLen := len(args)
 	var cmd *exec.Cmd
 	if argsLen == 1 {
-		cmd = exec.Command(args[0], "-p", syndaemonPidFile)
+		// pidfile will be created only in daemon mode
+		cmd = exec.Command(args[0], "-d", "-p", syndaemonPidFile)
 	} else {
-		if !strv.Strv(args).Contains("-p") {
+		list := strv.Strv(args)
+		if !list.Contains("-p") {
+			if !list.Contains("-d") {
+				args = append(args, "-d")
+			}
 			args = append(args, "-p", syndaemonPidFile)
 		}
 		argsLen = len(args)
