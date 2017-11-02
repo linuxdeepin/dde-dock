@@ -14,7 +14,11 @@
         },
         {
             "Action": "/usr/bin/deepin-system-monitor",
-            "Key": "deepin-system-monitor"
+            "Key": "system-monitor"
+        },
+        {
+            "Action": "/usr/bin/deepin-picker",
+            "Key": "color-picker"
         },
         {
             "Action": "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show",

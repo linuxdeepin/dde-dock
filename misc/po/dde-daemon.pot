@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 13:16+0800\n"
+"POT-Creation-Date: 2017-11-02 14:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,98 +231,102 @@ msgid "Fast Screen Off"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
+msgid "System Monitor"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:50
+#: ../../keybinding/shortcuts/id_name_map.go:44
+msgid "Color Picker"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:69
+#: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:72
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:88
+#: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:97
+#: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:100
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:118
+#: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:143
+#: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
 msgstr ""
 
