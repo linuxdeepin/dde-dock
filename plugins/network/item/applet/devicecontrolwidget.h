@@ -26,8 +26,10 @@
 
 #include <QWidget>
 #include <QLabel>
-
+#include <dloadingindicator.h>
 #include <dswitchbutton.h>
+
+DWIDGET_USE_NAMESPACE
 
 class RefreshButton;
 class DeviceControlWidget : public QWidget
@@ -45,11 +47,16 @@ signals:
     void deviceEnableChanged(const bool enable) const;
     void requestRefresh() const;
 
+private slots:
+    void refreshNetwork();
+
 private:
     QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
     RefreshButton *m_refreshBtn;
+    QWidget *m_refreshView;
+    DLoadingIndicator *m_loadingIndicator;
 };
 
 #endif // DEVICECONTROLWIDGET_H
