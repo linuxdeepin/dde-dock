@@ -241,11 +241,12 @@ func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
 
 	logger.Debugf("handleKeyEvent ev: %#v", ev)
 	action := ev.Shortcut.GetAction()
+	logger.Debugf("shortcut id: %s, type: %v, action: %#v",
+		ev.Shortcut.GetId(), ev.Shortcut.GetType(), action)
 	if action == nil {
 		logger.Warning("action is nil")
 		return
 	}
-	logger.Debugf("shortcut action: %#v", action)
 	if handler := m.handlers[int(action.Type)]; handler != nil {
 		handler(ev)
 	} else {
