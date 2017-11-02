@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-31 15:10+0800\n"
-"PO-Revision-Date: 2017-10-31 08:35+0000\n"
+"POT-Creation-Date: 2017-11-02 15:12+0800\n"
+"PO-Revision-Date: 2017-11-02 07:15+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -59,19 +59,19 @@ msgstr "O comprimento do nome de utilizador excede o limite"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Escala de visualização"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "A definir escala de visualização"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "Definida com sucesso"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Depois de definir a escala de visualização faça sair para vê-la"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -158,7 +158,7 @@ msgstr "_Fechar Todos"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Forçar Desistir"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -197,8 +197,8 @@ msgid "Show/Hide the dock"
 msgstr "Mostrar/Esconder o dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Logout"
-msgstr "Terminar Sessão"
+msgid "Shutdown Interface"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -236,95 +236,103 @@ msgstr "Alternar efeitos visuais"
 msgid "Fast Screen Off"
 msgstr "Desligar ecrã"
 
-#: ../../keybinding/shortcuts/id_name_map.go:49
+#: ../../keybinding/shortcuts/id_name_map.go:43
+msgid "Deepin System Monitor"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:44
+msgid "Deepin Picker"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
 msgstr "Alterar Disposição"
 
-#: ../../keybinding/shortcuts/id_name_map.go:68
+#: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
 msgstr "Mudar para área de trabalho à esquerda"
 
-#: ../../keybinding/shortcuts/id_name_map.go:69
+#: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
 msgstr "Mudar para área de trabalho à direita"
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
 msgstr "Mudar para área de trabalho superior"
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
 msgstr "Mudar para área de trabalho abaixo"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
 msgstr "Alternar janelas semelhantes"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
 msgstr "Alter. inversamente janelas semelhantes"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
 msgstr "Alternar janelas"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
 msgstr "Alternar janelas em ordem inversa"
 
-#: ../../keybinding/shortcuts/id_name_map.go:87
+#: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
 msgstr "Mostrar Ambiente de Trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:96
+#: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
 msgstr "Maximizar Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:97
+#: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
 msgstr "Restaurar Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
 msgstr "Minimizar Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:100
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
 msgstr "Fechar Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
 msgstr "Mover Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
 msgstr "Redimensionar Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:117
+#: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
 msgstr "Mover para área de trabalho à esquerda"
 
-#: ../../keybinding/shortcuts/id_name_map.go:118
+#: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
 msgstr "Mover para área de trabalho à direita"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
 msgstr "Mover para área de trabalho superior"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
 msgstr "Mover para área de trabalho abaixo"
 
-#: ../../keybinding/shortcuts/id_name_map.go:142
+#: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
 msgstr "Mostrar janelas de todas as áreas de trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:143
+#: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
 msgstr "Mostrar janelas da atual área de trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
 msgstr "Mostrar área de trabalho virtual"
 
@@ -372,24 +380,24 @@ msgstr "Correr Programa"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Palavra-passe requerida para ligar %q"
 
-#: ../../network/manager_active.go:327
+#: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:329
+#: ../../network/manager_active.go:332
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "Automático"
 
-#: ../../network/manager_active.go:342 ../../network/manager_active.go:347
+#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -398,45 +406,45 @@ msgstr "Automático"
 msgid "None"
 msgstr "Nenhum"
 
-#: ../../network/manager_active.go:349
+#: ../../network/manager_active.go:352
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr "Chave WEP 40/128-bit"
 
-#: ../../network/manager_active.go:351
+#: ../../network/manager_active.go:354
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:361 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:363 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:365 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:367 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr "TLS Tunelado"
 
-#: ../../network/manager_active.go:369 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr "EAP Protegido"
@@ -1680,7 +1688,7 @@ msgstr "O serviço de AutoIP desistiu ou falhou inesperadamente"
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines"
-msgstr "A ligação falhou devido a linha ocupadas"
+msgstr "A ligação falhou devido a linhas ocupadas"
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone"
@@ -1704,11 +1712,11 @@ msgstr "Falha na inicialização do Modem"
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN"
-msgstr "Falha ao selecionar o APN GSM especificado"
+msgstr "Falha ao selecionar o GSM APN especificado."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr "Nenhuma rede encontrada"
+msgstr "Nenhumas redes procuradas"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"
@@ -1724,7 +1732,7 @@ msgstr "Falha de registo na rede GSM solicitada"
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed"
-msgstr "A verificação de PIN falhou"
+msgstr "A verificação do PIN falhou"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
@@ -1788,7 +1796,7 @@ msgstr "Dispositivo InfiniBand não suporta modo de ligação"
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr "Uma dependência de ligação falhada"
+msgstr "Uma dependência de ligação falhou"
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
@@ -1800,7 +1808,7 @@ msgstr "O ModemManager não foi executado ou fechou inesperadamente"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "Não foi possível encontrar a rede 802.11 Wi-Fi"
+msgstr "Não foi possível encontrar a rede Wi-Fi 802.11"
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
@@ -1901,39 +1909,39 @@ msgstr "A ligação foi apagada das definições"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Tentar ativar hotspot"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Tentar ligar %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Partilha de hotspot ativada"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q ligado"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Partilha de hotspot desligada"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q desligado"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Incapaz de partilhar hotspot, por favor verifique definições dnsmasq"
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Incapaz de ligar %q, por favor mantenha-se perto do router sem-fios"
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Ligação falhou, incapaz de ligar %q, palavra-passe errada"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1989,20 +1997,20 @@ msgstr "Computador estará em modo de suspensão, por favor ligue agora"
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Autenticação é requerida para definir hora do sistema."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Autenticação é requirida para definir a zona de fuso horário."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Autenticação é requirida para controlar se o RTC guarda UTC ou a hora local."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Autenticação é requirida para controlar se a sincronização da hora através da rede deverá estar ativada."

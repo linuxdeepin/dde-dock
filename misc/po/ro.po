@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-31 15:10+0800\n"
-"PO-Revision-Date: 2017-10-31 08:35+0000\n"
+"POT-Creation-Date: 2017-11-02 15:12+0800\n"
+"PO-Revision-Date: 2017-11-02 07:15+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -191,8 +191,8 @@ msgid "Show/Hide the dock"
 msgstr "Afișare/Ascundere bară"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Logout"
-msgstr "Deconectare"
+msgid "Shutdown Interface"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -230,95 +230,103 @@ msgstr "Comutare efecte fereastră"
 msgid "Fast Screen Off"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:49
+#: ../../keybinding/shortcuts/id_name_map.go:43
+msgid "Deepin System Monitor"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:44
+msgid "Deepin Picker"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
 msgstr "Schimbare aspectul  tastatura"
 
-#: ../../keybinding/shortcuts/id_name_map.go:68
+#: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
 msgstr "Comutare la spațiul de lucru din stânga"
 
-#: ../../keybinding/shortcuts/id_name_map.go:69
+#: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
 msgstr "Comutare la spațiul de lucru din dreapta"
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
 msgstr "Comutare la spațiul de lucru de deasupra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
 msgstr "Comutare la spațiul de lucru de dedesubt"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
 msgstr "Schimbă ferestre similare"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
 msgstr "Comutare ferestre similare în sens invers"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
 msgstr "Schimbă ferestrele"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
 msgstr "Comutare ferestre în sens invers"
 
-#: ../../keybinding/shortcuts/id_name_map.go:87
+#: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
 msgstr "Afişarea desktop"
 
-#: ../../keybinding/shortcuts/id_name_map.go:96
+#: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
 msgstr "Maximizare fereastră"
 
-#: ../../keybinding/shortcuts/id_name_map.go:97
+#: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
 msgstr "Restabilire fereastră"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
 msgstr "Minimizare fereastră"
 
-#: ../../keybinding/shortcuts/id_name_map.go:100
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
 msgstr "Închidere fereastră"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
 msgstr "Mutare fereastră"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
 msgstr "Redimensionare fereastră"
 
-#: ../../keybinding/shortcuts/id_name_map.go:117
+#: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
 msgstr "Trecerea la  spațiul de lucru din stânga"
 
-#: ../../keybinding/shortcuts/id_name_map.go:118
+#: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
 msgstr "Trecerea la  spațiul de lucru din dreapta"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
 msgstr "Trecerea la  spațiul de lucru de deasupra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
 msgstr "Trecerea la spațiul de lucru de dedesubt"
 
-#: ../../keybinding/shortcuts/id_name_map.go:142
+#: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
 msgstr "Afişaţi ferestrele tuturor spaţiilor de lucru"
 
-#: ../../keybinding/shortcuts/id_name_map.go:143
+#: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
 msgstr "Afişare ferestre ale spaţiului de lucru actual"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
 msgstr "Afișează spațiu de lucru"
 
@@ -368,22 +376,22 @@ msgstr "Rulare program"
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:327
+#: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:329
+#: ../../network/manager_active.go:332
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "Automat"
 
-#: ../../network/manager_active.go:342 ../../network/manager_active.go:347
+#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -392,45 +400,45 @@ msgstr "Automat"
 msgid "None"
 msgstr "Nici un"
 
-#: ../../network/manager_active.go:349
+#: ../../network/manager_active.go:352
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr "Cheie WEP 40/128-bit"
 
-#: ../../network/manager_active.go:351
+#: ../../network/manager_active.go:354
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:361 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:363 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:365 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:367 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr "TLS tunelizat"
 
-#: ../../network/manager_active.go:369 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr "EAP Protejat"
