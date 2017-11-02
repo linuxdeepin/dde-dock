@@ -1,68 +1,64 @@
 {
-	"Actions": [
-	{
-		"Key": "launcher",
-		"Action": "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
-	},
-	{
-		"Key": "terminal",
-		"Action": "/usr/lib/deepin-daemon/default-terminal"
-	},
-	{
-		"Key":"deepin-screen-recorder",
-		"Action":"/usr/bin/deepin-screen-recorder"
-	},
-	{
-		"Key": "lock-screen",
-		"Action": "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show"
-	},
-	{
-		"Key": "show-dock",
-		"Action": "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
-	},
-	{
-		"Key": "logout",
-		"Action": "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show"
-	},
-	{
-		"Key": "terminal-quake",
-		"Action": "deepin-terminal --quake-mode"
-	},
-	{
-		"Key": "screenshot",
-		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.StartScreenshot"
-	},
-	{
-		"Key": "screenshot-fullscreen",
-		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.FullscreenScreenshot"
-	},
-	{
-		"Key": "screenshot-window",
-		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.TopWindowScreenshot"
-	},
-	{
-		"Key": "screenshot-delayed",
-		"Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.DelayScreenshot int64:5"
-	},
-	{
-		"Key": "file-manager",
-		"Action": "/usr/lib/deepin-daemon/default-file-manager"
-	},
-	{
-		"Key": "disable-touchpad",
-		"Action": "gsettings set com.deepin.dde.touchpad touchpad-enabled false"
-	},
-	{
-		"Key": "wm-switcher",
-		"Action": "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM"
-	},
-	{
-		"Key": "turn-off-screen",
-		"Action": "sleep 0.5; xset dpms force off"
-	},
-	{
-		"Key": "switch-layout",
-		"Action": ""
-	}
-	]
+    "Actions": [
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle",
+            "Key": "launcher"
+        },
+        {
+            "Action": "/usr/lib/deepin-daemon/default-terminal",
+            "Key": "terminal"
+        },
+        {
+            "Action": "/usr/bin/deepin-screen-recorder",
+            "Key": "deepin-screen-recorder"
+        },
+        {
+            "Action": "/usr/bin/deepin-system-monitor",
+            "Key": "deepin-system-monitor"
+        },
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show",
+            "Key": "lock-screen"
+        },
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show",
+            "Key": "logout"
+        },
+        {
+            "Action": "deepin-terminal --quake-mode",
+            "Key": "terminal-quake"
+        },
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.StartScreenshot",
+            "Key": "screenshot"
+        },
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.FullscreenScreenshot",
+            "Key": "screenshot-fullscreen"
+        },
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.TopWindowScreenshot",
+            "Key": "screenshot-window"
+        },
+        {
+            "Action": "dbus-send --print-reply --dest=com.deepin.Screenshot /com/deepin/Screenshot com.deepin.Screenshot.DelayScreenshot int64:5",
+            "Key": "screenshot-delayed"
+        },
+        {
+            "Action": "/usr/lib/deepin-daemon/default-file-manager",
+            "Key": "file-manager"
+        },
+        {
+            "Action": "gsettings set com.deepin.dde.touchpad touchpad-enabled false",
+            "Key": "disable-touchpad"
+        },
+        {
+            "Action": "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM",
+            "Key": "wm-switcher"
+        },
+        {
+            "Action": "sleep 0.5; xset dpms force off",
+            "Key": "turn-off-screen"
+        }
+    ]
 }

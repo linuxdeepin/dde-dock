@@ -85,44 +85,27 @@ func getSystemActionCmd(id string) string {
 			return cmd
 		}
 	}
-	return getDefaultSysActionCmd(id)
+	return defaultSysActionCmdMap[id]
 }
 
-func getDefaultSysActionCmd(id string) string {
-	switch id {
-	case "launcher":
-		return "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
-	case "terminal":
-		return "/usr/lib/deepin-daemon/default-terminal"
-	case "lock-screen":
-		return "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show"
-	case "show-dock":
-		return "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
-	case "logout":
-		return "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show"
-	case "terminal-quake":
-		return "deepin-terminal --quake-mode"
-	case "deepin-screen-recorder":
-		return "/usr/bin/deepin-screen-recorder"
-		// screenshot actions:
-	case "screenshot":
-		return screenshotCmdPrefix + "StartScreenshot"
-	case "screenshot-fullscreen":
-		return screenshotCmdPrefix + "FullscreenScreenshot"
-	case "screenshot-window":
-		return screenshotCmdPrefix + "TopWindowScreenshot"
-	case "screenshot-delayed":
-		return screenshotCmdPrefix + "DelayScreenshot int64:5"
-
-	case "file-manager":
-		return "/usr/lib/deepin-daemon/default-file-manager"
-	case "disable-touchpad":
-		return "gsettings set com.deepin.dde.touchpad touchpad-enabled false"
-	case "wm-switcher":
-		return "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM"
-	}
-
-	return ""
+// key is id, value is commandline.
+var defaultSysActionCmdMap = map[string]string{
+	"launcher":               "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle",
+	"terminal":               "/usr/lib/deepin-daemon/default-terminal",
+	"terminal-quake":         "deepin-terminal --quake-mode",
+	"lock-screen":            "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show",
+	"logout":                 "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show",
+	"deepin-screen-recorder": "/usr/bin/deepin-screen-recorder",
+	"deepin-system-monitor":  "/usr/bin/deepin-system-monitor",
+	// screenshot actions:
+	"screenshot":            screenshotCmdPrefix + "StartScreenshot",
+	"screenshot-fullscreen": screenshotCmdPrefix + "FullscreenScreenshot",
+	"screenshot-window":     screenshotCmdPrefix + "TopWindowScreenshot",
+	"screenshot-delayed":    screenshotCmdPrefix + "DelayScreenshot int64:5",
+	"file-manager":          "/usr/lib/deepin-daemon/default-file-manager",
+	"disable-touchpad":      "gsettings set com.deepin.dde.touchpad touchpad-enabled false",
+	"wm-switcher":           "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM",
+	"turn-off-screen":       "sleep 0.5; xset dpms force off",
 }
 
 type actionHandler struct {
