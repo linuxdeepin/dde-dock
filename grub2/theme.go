@@ -24,10 +24,11 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	graphic "pkg.deepin.io/lib/gdkpixbuf"
-	"pkg.deepin.io/lib/utils"
 	"sync"
 	"text/template"
+
+	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/utils"
 )
 
 const DefaultThemeDir = "/boot/grub/themes/deepin"
@@ -40,7 +41,6 @@ var (
 	themeBgOrigSrcFile = themeDir + "/background_origin_source"
 	themeBgSrcFile     = themeDir + "/background_source"
 	themeBgFile        = themeDir + "/background.png"
-	themeBgThumbFile   = themeDir + "/background_thumb.png"
 )
 
 func SetDefaultThemeDir(dir string) {
@@ -51,7 +51,6 @@ func SetDefaultThemeDir(dir string) {
 	themeBgOrigSrcFile = themeDir + "/background_origin_source"
 	themeBgSrcFile = themeDir + "/background_source"
 	themeBgFile = themeDir + "/background.png"
-	themeBgThumbFile = themeDir + "/background_thumb.png"
 }
 
 // TplJSONData read JSON data from
@@ -82,9 +81,11 @@ type Theme struct {
 	Updating   bool
 	updateLock sync.Mutex
 
-	Background        string // background thumbnail, always equal with bgThumbFile, used by front-end
 	ItemColor         string
 	SelectedItemColor string
+
+	// Signal:
+	BackgroundChanged func()
 }
 
 // NewTheme create Theme object.
@@ -97,7 +98,6 @@ func NewTheme(grub2 *Grub2) *Theme {
 	theme.jsonFile = themeJSONFile
 	theme.bgSrcFile = themeBgSrcFile
 	theme.bgFile = themeBgFile
-	theme.bgThumbFile = themeBgThumbFile
 
 	return theme
 }
@@ -125,7 +125,6 @@ func (theme *Theme) initTheme() {
 	}
 
 	// init properties
-	theme.setPropBackground(theme.bgThumbFile)
 	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 }
@@ -145,8 +144,8 @@ func (theme *Theme) reset() {
 		resetThemeBackground()
 		screenWidth, screenHeight := theme.getScreenWidthHeight()
 		generateThemeBackground(screenWidth, screenHeight)
-		theme.setPropBackground(theme.bgThumbFile)
 		theme.setPropUpdating(false)
+		theme.emitSignalBackgroundChanged()
 	}()
 }
 
@@ -184,7 +183,6 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 
 	if needGenerate {
 		generateThemeBackground(wantWidth, wantHeight)
-		theme.setPropBackground(theme.bgThumbFile)
 		logger.Info("update theme background success")
 	}
 }
@@ -294,18 +292,7 @@ func generateThemeBackground(screenWidth, screenHeight uint16) (err error) {
 	}
 	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
 	logger.Infof("background size %dx%d", screenWidth, screenHeight)
-	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
-	if err != nil {
-		return err
-	}
-
-	// generate background thumbnail
-	err = graphic.ThumbnailImage(themeBgFile, themeBgThumbFile, 300, 300, graphic.GDK_INTERP_BILINEAR, graphic.FormatPng)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
 }
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
@@ -314,8 +301,8 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	theme.setPropUpdating(true)
 	screenWidth, screenHeight := theme.getScreenWidthHeight()
 	setThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
-	theme.setPropBackground(theme.bgThumbFile)
 	theme.setPropUpdating(false)
+	theme.emitSignalBackgroundChanged()
 
 	// set item color through background's dominant color
 	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)

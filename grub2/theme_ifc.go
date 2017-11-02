@@ -22,10 +22,11 @@ package grub2
 import (
 	"errors"
 	"fmt"
+	"regexp"
+
 	"pkg.deepin.io/lib/dbus"
 	graphic "pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/utils"
-	"regexp"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
@@ -88,6 +89,7 @@ func (theme *Theme) SetSelectedItemColor(dbusMsg dbus.DMessage, v string) (err e
 // generate the background to fit the screen resolution, support png
 // and jpeg image format.
 func (theme *Theme) SetBackgroundSourceFile(dbusMsg dbus.DMessage, imageFile string) (err error) {
+	logger.Debugf("SetBackgroundSourceFile: %q", imageFile)
 	err = checkAuth(dbusMsg)
 	if err != nil {
 		return
@@ -101,14 +103,17 @@ func (theme *Theme) SetBackgroundSourceFile(dbusMsg dbus.DMessage, imageFile str
 	return errors.New("unsupported image file")
 }
 
+func (theme *Theme) GetBackground() string {
+	return themeBgFile
+}
+
 func (theme *Theme) setPropUpdating(value bool) {
 	theme.Updating = value
 	dbus.NotifyChange(theme, "Updating")
 }
 
-func (theme *Theme) setPropBackground(value string) {
-	theme.Background = value
-	dbus.NotifyChange(theme, "Background")
+func (theme *Theme) emitSignalBackgroundChanged() {
+	dbus.Emit(theme, "BackgroundChanged")
 }
 
 func (theme *Theme) setPropItemColor(value string) {
