@@ -10,7 +10,7 @@
         },
         {
             "Action": "/usr/bin/deepin-screen-recorder",
-            "Key": "deepin-screen-recorder"
+            "Key": "dbus-send --print-reply --dest=com.deepin.ScreenRecorder /com/deepin/ScreenRecorder com.deepin.ScreenRecorder.Show"
         },
         {
             "Action": "/usr/bin/deepin-system-monitor",
@@ -18,7 +18,7 @@
         },
         {
             "Action": "/usr/bin/deepin-picker",
-            "Key": "color-picker"
+            "Key": "dbus-send --print-reply --dest=com.deepin.Picker /com/deepin/Picker com.deepin.Picker.Show"
         },
         {
             "Action": "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show",
