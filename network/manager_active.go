@@ -198,7 +198,8 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32, 
 	}
 
 	switch state {
-	case nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
+	case nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATING,
+		nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
 		// re-get all the active date especially vpn state for the
 		// new connection
 		aconn = m.newActiveConnection(apath)
