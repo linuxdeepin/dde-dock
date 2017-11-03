@@ -1,5 +1,29 @@
 ## [Unreleased]
 
+## [3.2.3] - 2017-11-3
+#### Features
+*   automatic switch port when card changed
+*   add shortcut for deepin-system-monitor and color-picker
+*   support deepin qt theme settings
+*   add touchpad tap gesture
+*   add flatpak app window identify method
+
+
+#### Bug Fixes
+*   fix gccgo compile failed
+*   fix syndaemon pid file not created
+*   fix wireless not work after multiple toggle hotspot
+*   fix active connections not updated when deleted the last connection
+*   update font config xml version
+
+
+#### Changed
+*   refactor grub theme dbus interface
+*   rename 'Logout' shortcut to 'Shutdown Interface'
+*   add dependency 'dnsmasq'
+*   update notifications for scale setting
+
+
 ##  [3.2.2] - 2017-10-27
 #### Features
 *   keybinding:  process grab pointer failed ([328aa07a](328aa07a))
