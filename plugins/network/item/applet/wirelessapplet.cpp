@@ -54,10 +54,14 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
 
     m_autoConnBox->setText(tr("Auto-connect"));
 
+    const auto ratio = qApp->devicePixelRatio();
+    QPixmap iconPix = QIcon::fromTheme("notification-network-wireless-full").pixmap(QSize(48, 48) * ratio);
+    iconPix.setDevicePixelRatio(ratio);
+
     m_pwdDialog->setTextEchoMode(QLineEdit::Password);
     m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Dialog);
     m_pwdDialog->setTextEchoMode(DLineEdit::Password);
-    m_pwdDialog->setIcon(QIcon::fromTheme("notification-network-wireless-full"));
+    m_pwdDialog->setIcon(iconPix);
     m_pwdDialog->addSpacing(10);
     m_pwdDialog->addContent(m_autoConnBox, Qt::AlignLeft);
     m_pwdDialog->setOkButtonText(tr("Connect"));
