@@ -1,3 +1,7 @@
+# 4.4.2
+    Network add connecting animation
+    Fix systemtray not align vertial center
+
 # 4.4.1
     Update translations
     Fix power icon auto-hide not work perfectly
