@@ -36,6 +36,8 @@ type Keystroke struct {
 	Keystr   string
 	Keysym   x.Keysym
 	Shortcut Shortcut
+
+	isKeystrAboveTab bool
 }
 
 func (ks *Keystroke) DebugString() string {
@@ -211,9 +213,16 @@ func ParseKeystroke(keystroke string) (*Keystroke, error) {
 
 	str := parts[len(parts)-1]
 	// check key valid
-	sym, ok := keysyms.StringToKeysym(str)
-	if !ok {
-		return nil, errors.New("bad key " + str)
+	var sym x.Keysym
+	var isKeystrAboveTab bool
+	if str == "Above_Tab" {
+		isKeystrAboveTab = true
+	} else {
+		var ok bool
+		sym, ok = keysyms.StringToKeysym(str)
+		if !ok {
+			return nil, errors.New("bad key " + str)
+		}
 	}
 
 	var mods Modifiers
@@ -233,9 +242,10 @@ func ParseKeystroke(keystroke string) (*Keystroke, error) {
 	}
 
 	return &Keystroke{
-		Mods:   mods,
-		Keystr: str,
-		Keysym: sym,
+		Mods:             mods,
+		Keystr:           str,
+		Keysym:           sym,
+		isKeystrAboveTab: isKeystrAboveTab,
 	}, nil
 }
 
