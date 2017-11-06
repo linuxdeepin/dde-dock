@@ -112,8 +112,6 @@ public:
     {
         const qreal scale = qApp->devicePixelRatio();
         DisplayRect dr = qvariant_cast< DisplayRect >(property("PrimaryRect"));
-        dr.x = qreal(dr.x) / scale;
-        dr.y = qreal(dr.y) / scale;
         dr.width = qreal(dr.width) / scale;
         dr.height = qreal(dr.height) / scale;
 
