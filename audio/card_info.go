@@ -137,7 +137,7 @@ func (infos CardInfos) delete(id uint32) (CardInfos, bool) {
 	return ret, deleted
 }
 
-func (infos CardInfos) getAvailablePort() (uint32, pulse.CardPortInfo) {
+func (infos CardInfos) getAvailablePort(direction int) (uint32, pulse.CardPortInfo) {
 	var (
 		idY   uint32
 		id    uint32
@@ -145,7 +145,7 @@ func (infos CardInfos) getAvailablePort() (uint32, pulse.CardPortInfo) {
 		port  pulse.CardPortInfo
 	)
 	for _, info := range infos {
-		v := hasPortAvailable(info.Ports, true)
+		v := hasPortAvailable(info.Ports, direction, true)
 		if v.Name != "" {
 			if v.Priority > portY.Priority {
 				portY = v
@@ -154,7 +154,7 @@ func (infos CardInfos) getAvailablePort() (uint32, pulse.CardPortInfo) {
 			continue
 		}
 
-		vv := hasPortAvailable(info.Ports, false)
+		vv := hasPortAvailable(info.Ports, direction, false)
 		if vv.Priority > port.Priority {
 			port = vv
 			id = info.Id
@@ -167,12 +167,16 @@ func (infos CardInfos) getAvailablePort() (uint32, pulse.CardPortInfo) {
 	return id, port
 }
 
-func hasPortAvailable(infos pulse.CardPortInfos, onlyYes bool) pulse.CardPortInfo {
+func hasPortAvailable(infos pulse.CardPortInfos, direction int, onlyYes bool) pulse.CardPortInfo {
 	var (
 		portY pulse.CardPortInfo // Yes state
 		portU pulse.CardPortInfo // Unknow state
 	)
 	for _, v := range infos {
+		if v.Direction != direction {
+			continue
+		}
+
 		if v.Available == pulse.AvailableTypeYes {
 			if portY.Priority < v.Priority {
 				portY = v

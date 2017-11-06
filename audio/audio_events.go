@@ -73,12 +73,18 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		time.AfterFunc(time.Millisecond*500, func() {
 			selectNewCardProfile(card)
 			logger.Debug("After select profile:", card.ActiveProfile.Name)
-			port := hasPortAvailable(card.Ports, true)
-			if port.Name == "" {
-				logger.Debug("New card, but no port available")
-				return
+			port := hasPortAvailable(card.Ports, pulse.DirectionSink, true)
+			if port.Name != "" {
+				logger.Debug("New card, found available sink port:", port)
+				a.handlePortChanged(card.Index, pulse.CardPortInfo{}, port)
+				time.Sleep(time.Millisecond * 300)
 			}
-			a.handlePortChanged(card.Index, pulse.CardPortInfo{}, port)
+			port = hasPortAvailable(card.Ports, pulse.DirectionSource, true)
+			if port.Name != "" {
+				logger.Debug("New card, found available source port:", port)
+				a.handlePortChanged(card.Index, pulse.CardPortInfo{}, port)
+				time.Sleep(time.Millisecond * 300)
+			}
 		})
 	case pulse.EventTypeRemove:
 		logger.Debugf("[Event] card #%d removed", idx)
@@ -117,7 +123,7 @@ func (a *Audio) handlePortChanged(cardId uint32, old, port pulse.CardPortInfo) {
 	} else if old.Available == pulse.AvailableTypeYes &&
 		port.Available == pulse.AvailableTypeNo {
 		// switch from port
-		id, p := a.cards.getAvailablePort()
+		id, p := a.cards.getAvailablePort(port.Direction)
 		if p.Name == "" {
 			logger.Warningf("Not found available port: %#v", a.cards)
 			return
