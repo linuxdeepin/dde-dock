@@ -54,7 +54,7 @@ def svg2png(svg_file):
         png_file =  os.path.join(output, "hicolor", size + "x" + size, directory, name+".png")
         print('Will convert file %s to %s' % (svg_file, png_file))
         os.makedirs( os.path.dirname(png_file), mode=0o755, exist_ok=True)
-        subprocess.run(['rsvg-convert', '-w', str(size), '-h', str(size), '-o', png_file, svg_file ])
+        subprocess.call(['rsvg-convert', '-w', str(size), '-h', str(size), '-o', png_file, svg_file ])
 
 def copy_svg_file(svg_file):
     target_file = os.path.join(output, "hicolor", "scalable", directory, os.path.basename(svg_file))
