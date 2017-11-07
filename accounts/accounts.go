@@ -27,9 +27,10 @@ import (
 )
 
 var (
-	_m     *Manager
-	_login *logined.Manager
-	logger = log.NewLogger("daemon/accounts")
+	_m         *Manager
+	_login     *logined.Manager
+	_imageBlur *ImageBlur
+	logger     = log.NewLogger("daemon/accounts")
 )
 
 type Daemon struct {
@@ -65,6 +66,14 @@ func (*Daemon) Start() error {
 
 	_m.installUsers()
 
+	_imageBlur = newImageBlur()
+	err = dbus.InstallOnSystem(_imageBlur)
+	if err != nil {
+		logger.Warning("failed to install ImageBlur on system DBus:", err)
+		_imageBlur = nil
+		return err
+	}
+
 	_login, err = logined.Register(logger)
 	if err != nil {
 		logger.Error("Failed to create logined manager:", err)
@@ -85,6 +94,11 @@ func (*Daemon) Stop() error {
 	if _m != nil {
 		_m.destroy()
 		_m = nil
+	}
+
+	if _imageBlur != nil {
+		dbus.UnInstallObject(_imageBlur)
+		_imageBlur = nil
 	}
 
 	if _login != nil {

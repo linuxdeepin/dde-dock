@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
@@ -392,34 +391,6 @@ func getTempFile() (string, error) {
 	name := tmpfile.Name()
 	tmpfile.Close()
 	return name, nil
-}
-
-var (
-	gaussianLocker sync.Mutex
-	gaussianTasks  = make(map[string]bool)
-)
-
-func genGaussianBlur(file string) {
-	gaussianLocker.Lock()
-	file = dutils.DecodeURI(file)
-	logger.Debug("[genGaussianBlur] task manager:", gaussianTasks)
-	_, ok := gaussianTasks[file]
-	if ok {
-		logger.Debug("[genGaussianBlur] tash exists:", file)
-		gaussianLocker.Unlock()
-		return
-	}
-	gaussianTasks[file] = true
-	gaussianLocker.Unlock()
-
-	go func() {
-		logger.Debug("[genGaussianBlur] will blur image:", file)
-		exec.Command("/usr/lib/deepin-api/image-blur-helper",
-			file).CombinedOutput()
-		gaussianLocker.Lock()
-		delete(gaussianTasks, file)
-		gaussianLocker.Unlock()
-	}()
 }
 
 func getSystemLayout(file string) (string, error) {
