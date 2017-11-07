@@ -459,7 +459,12 @@ void MainWindow::expand()
 //    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
-    if (m_mainPanel->pos() == finishPos && m_mainPanel->size() == this->size() && m_panelHideAni->state() == QPropertyAnimation::Stopped)
+    const int epsilon = std::round(devicePixelRatioF()) - 1;
+    const QSize s = size();
+    const QSize ps = m_mainPanel->size();
+
+    if (m_mainPanel->pos() == finishPos && m_panelHideAni->state() == QPropertyAnimation::Stopped &&
+        std::abs(ps.width() - s.width()) <= epsilon && std::abs(ps.height() - s.height()) <= epsilon)
         return;
     m_panelHideAni->stop();
 
@@ -520,7 +525,6 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     const Position position = m_settings->position();
     const QRect r(m_settings->windowRect(position));
 
-//    qDebug() << Q_FUNC_INFO << r;
     m_sizeChangeAni->setEndValue(r.size());
     m_mainPanel->setFixedSize(r.size());
     QWidget::setFixedSize(r.size());
