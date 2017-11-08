@@ -24,9 +24,11 @@ import (
 	"fmt"
 	"os"
 	"path"
+
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/graphic"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
@@ -312,8 +314,8 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
 		return nil
 	}
 
-	if !graphic.IsSupportedImage(iconFile) {
-		err := fmt.Errorf("This icon '%s' not a image", iconFile)
+	if !gdkpixbuf.IsSupportedImage(iconFile) {
+		err := fmt.Errorf("%q is not a image file", iconFile)
 		logger.Debug(err)
 		return err
 	}

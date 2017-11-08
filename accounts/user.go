@@ -25,15 +25,15 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/graphic"
-	"pkg.deepin.io/lib/strv"
-	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
-	"runtime/debug"
 	"strings"
 	"sync"
+
+	"pkg.deepin.io/dde/daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/strv"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -363,7 +363,7 @@ func getUidFromUserPath(userPath string) string {
 // ret1: scaled
 // ret2: error
 func scaleUserIcon(file string) (string, bool, error) {
-	w, h, err := graphic.GetImageSize(file)
+	w, h, err := gdkpixbuf.GetImageSize(file)
 	if err != nil {
 		return "", false, err
 	}
@@ -377,9 +377,12 @@ func scaleUserIcon(file string) (string, bool, error) {
 		return "", false, err
 	}
 
-	defer debug.FreeOSMemory()
-	return dest, true, graphic.ScaleImagePrefer(file, dest,
-		maxWidth, maxHeight, graphic.FormatPng)
+	err = gdkpixbuf.ScaleImagePrefer(file, dest, maxWidth, maxHeight, gdkpixbuf.GDK_INTERP_BILINEAR, gdkpixbuf.FormatPng)
+	if err != nil {
+		return "", false, err
+	}
+
+	return dest, true, nil
 }
 
 // return temp file path and error
