@@ -158,6 +158,14 @@ void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
 }
 
+void PluginsItem::showPopupWindow(QWidget * const content, const bool model)
+{
+    if (isInContainer())
+        return;
+
+    DockItem::showPopupWindow(content, model);
+}
+
 const QString PluginsItem::contextMenu() const
 {
     return m_pluginInter->itemContextMenu(m_itemKey);

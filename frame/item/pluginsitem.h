@@ -57,6 +57,7 @@ private:
     bool eventFilter(QObject *o, QEvent *e) override;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
+    void showPopupWindow(QWidget * const content, const bool model = false) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
 

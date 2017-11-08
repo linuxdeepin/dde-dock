@@ -77,7 +77,7 @@ protected:
     void hidePopup();
     void popupWindowAccept();
     void showPopupApplet(QWidget * const applet);
-    void showPopupWindow(QWidget * const content, const bool model = false);
+    virtual void showPopupWindow(QWidget * const content, const bool model = false);
     virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
