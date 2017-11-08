@@ -39,7 +39,6 @@ class DockItemController : public QObject
 
 public:
     static DockItemController *instance(QObject *parent);
-    ~DockItemController();
 
     const QList<DockItem *> itemList() const;
     const QList<PluginsItemInterface *> pluginList() const;

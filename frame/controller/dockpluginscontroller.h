@@ -39,7 +39,6 @@ class DockPluginsController : public QObject, PluginProxyInterface
 
 public:
     explicit DockPluginsController(DockItemController *itemControllerInter = 0);
-    ~DockPluginsController();
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);

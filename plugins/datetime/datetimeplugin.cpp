@@ -45,12 +45,6 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
 
-DatetimePlugin::~DatetimePlugin()
-{
-    delete m_centralWidget;
-    delete m_dateTipsLabel;
-}
-
 const QString DatetimePlugin::pluginName() const
 {
     return "datetime";

@@ -28,7 +28,7 @@
 
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
-std::unique_ptr<DockPopupWindow> DockItem::PopupWindow(nullptr);
+QPointer<DockPopupWindow> DockItem::PopupWindow(nullptr);
 
 DockItem::DockItem(QWidget *parent)
     : QWidget(parent),
@@ -40,7 +40,7 @@ DockItem::DockItem(QWidget *parent)
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
-    if (!PopupWindow.get())
+    if (PopupWindow.isNull())
     {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(20);
@@ -51,7 +51,7 @@ DockItem::DockItem(QWidget *parent)
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
-        PopupWindow.reset(arrowRectangle);
+        PopupWindow = arrowRectangle;
     }
 
     m_popupTipsDelayTimer->setInterval(500);
@@ -215,7 +215,7 @@ void DockItem::showPopupWindow(QWidget * const content, const bool model)
     if (model)
         emit requestWindowAutoHide(false);
 
-    DockPopupWindow *popup = PopupWindow.get();
+    DockPopupWindow *popup = PopupWindow.data();
     QWidget *lastContent = popup->getContent();
     if (lastContent)
         lastContent->setVisible(false);
@@ -244,7 +244,7 @@ void DockItem::popupWindowAccept()
     if (!PopupWindow->isVisible())
         return;
 
-    disconnect(PopupWindow.get(), &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
+    disconnect(PopupWindow.data(), &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 
     hidePopup();
 

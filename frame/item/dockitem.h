@@ -100,7 +100,7 @@ protected:
 
     static Position DockPosition;
     static DisplayMode DockDisplayMode;
-    static std::unique_ptr<DockPopupWindow> PopupWindow;
+    static QPointer<DockPopupWindow> PopupWindow;
 };
 
 #endif // DOCKITEM_H

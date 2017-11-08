@@ -36,7 +36,6 @@ class DatetimePlugin : public QObject, PluginsItemInterface
 
 public:
     explicit DatetimePlugin(QObject *parent = 0);
-    ~DatetimePlugin();
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -60,8 +59,8 @@ private slots:
     void updateCurrentTimeString();
 
 private:
-    DatetimeWidget *m_centralWidget;
-    QLabel *m_dateTipsLabel;
+    QPointer<DatetimeWidget> m_centralWidget;
+    QPointer<QLabel> m_dateTipsLabel;
 
     QTimer *m_refershTimer;
 

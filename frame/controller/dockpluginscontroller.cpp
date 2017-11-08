@@ -38,10 +38,6 @@ DockPluginsController::DockPluginsController(DockItemController *itemControllerI
     QTimer::singleShot(1, this, &DockPluginsController::startLoader);
 }
 
-DockPluginsController::~DockPluginsController()
-{
-}
-
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // check if same item added
@@ -80,7 +76,7 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     emit pluginItemRemoved(item);
 
     m_pluginList[itemInter].remove(itemKey);
-    QTimer::singleShot(1, item, &PluginsItem::deleteLater);
+    item->deleteLater();
 }
 
 //void DockPluginsController::requestRefershWindowVisible()
@@ -138,7 +134,7 @@ void DockPluginsController::positionChanged()
 
 void DockPluginsController::loadPlugin(const QString &pluginFile)
 {
-    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile, this);
+    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
     const auto meta = pluginLoader->metaData().value("MetaData").toObject();
     if (!meta.contains("api") || meta["api"].toString() != API_VERSION)
     {

@@ -38,11 +38,6 @@ DockItemController *DockItemController::instance(QObject *parent)
     return INSTANCE;
 }
 
-DockItemController::~DockItemController()
-{
-    qDeleteAll(m_itemList);
-}
-
 const QList<DockItem *> DockItemController::itemList() const
 {
     return m_itemList;
@@ -274,8 +269,8 @@ void DockItemController::appItemRemoved(const QString &appId)
 void DockItemController::appItemRemoved(AppItem *appItem)
 {
     emit itemRemoved(appItem);
-    appItem->deleteLater();
     m_itemList.removeOne(appItem);
+    appItem->deleteLater();
 }
 
 void DockItemController::pluginItemInserted(PluginsItem *item)
