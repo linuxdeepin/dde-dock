@@ -1,6 +1,20 @@
 ## [Unreleased]
 
-## [3.2.3] - 2017-11-3
+
+## [3.2.4] - 2017-11-09
+#### Features
+*   add com.deepin.daemon.ImageBlur interface
+
+#### Bug Fixes
+*   not show newly installed wechat in launcher
+*   failed to set some bmp image file as icon
+*   the Accels field of two shortcuts is empty
+
+#### Changed
+*   make `install_to_hicolor.py` compatibility with older python3
+
+
+## [3.2.3] - 2017-11-03
 #### Features
 *   automatic switch port when card changed
 *   add shortcut for deepin-system-monitor and color-picker
