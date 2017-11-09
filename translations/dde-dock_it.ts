@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation>Datetime</translation>
+        <translation>Orologio</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Plugin</translation>
     </message>
 </context>
 <context>

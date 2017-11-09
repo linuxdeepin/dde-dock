@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>日期時間</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>外掛程式</translation>
     </message>
 </context>
 <context>

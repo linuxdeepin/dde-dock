@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Datum/Zeit</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>

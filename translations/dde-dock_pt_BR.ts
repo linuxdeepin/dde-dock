@@ -376,7 +376,7 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation>Conexão Wi-Fi: %1 </translation>
+        <translation>Conexão wireless: %1 </translation>
     </message>
 </context>
 <context>
@@ -399,12 +399,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>
         <source>Wireless Network</source>
-        <translation>Rede Wi-Fi</translation>
+        <translation>Rede wireless</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
         <source>Wireless Network %1</source>
-        <translation>Rede Wi-Fi %1</translation>
+        <translation>Rede wireless %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>

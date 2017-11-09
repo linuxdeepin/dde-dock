@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Complementos</translation>
     </message>
 </context>
 <context>
@@ -332,7 +332,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation>Papelera - %1 archivo</translation>
+        <translation>Papelera - %1 archivos</translation>
     </message>
 </context>
 <context>
