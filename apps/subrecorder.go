@@ -51,35 +51,54 @@ type SubRecorder struct {
 func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder {
 	sr := &SubRecorder{
 		root:   root,
-		rootOk: false,
 		uids:   []int{uid}, // first uid
 		parent: parent,
 	}
 
 	sr.statusFile, sr.statusFileOwner = getStatusFileAndOwner(uid, home, root)
 	logger.Debugf("NewSubRecorder status file: %q, owner: %d", sr.statusFile, sr.statusFileOwner)
+	sr.initRoot()
 	return sr
+}
+
+func (sr *SubRecorder) initRoot() {
+	sr.rootOk = sr.getRootOk()
+	if !sr.rootOk {
+		return
+	}
+
+	subDirNames, apps := getDirsAndApps(sr.root)
+	if sr.initAppLaunchedMap(apps) {
+		MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, getDirPerm(sr.statusFileOwner))
+		sr.RequestSave()
+	}
+
+	for _, dirName := range subDirNames {
+		path := filepath.Join(sr.root, dirName)
+		sr.parent.watcher.add(path)
+	}
 }
 
 func (sr *SubRecorder) doCheck() {
 	rootOkChanged := sr.checkRoot()
 	if rootOkChanged {
 		if sr.rootOk {
-			logger.Debug("sr rootOk false => true")
+			logger.Debugf("sr root %q Ok false => true", sr.root)
 			// rootOk false => true
 			// do init
 			subDirNames, apps := getDirsAndApps(sr.root)
-			for _, dirName := range subDirNames {
-				sr.parent.watcher.add(filepath.Join(sr.root, dirName))
-			}
-
 			if sr.initAppLaunchedMap(apps) {
 				MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, getDirPerm(sr.statusFileOwner))
 				sr.RequestSave()
 			}
+
+			for _, dirName := range subDirNames {
+				path := filepath.Join(sr.root, dirName)
+				sr.parent.watcher.addRecursive(path, true)
+			}
 		} else {
 			// rootOk true => false
-			logger.Debug("sr rootOk true => false")
+			logger.Debugf("sr root %q Ok true => false", sr.root)
 		}
 	}
 
@@ -89,19 +108,23 @@ func (sr *SubRecorder) doCheck() {
 // return true if sr.rootOk changed
 func (sr *SubRecorder) checkRoot() bool {
 	oldRootOk := sr.rootOk
+	sr.rootOk = sr.getRootOk()
+	return oldRootOk != sr.rootOk
+}
+
+func (sr *SubRecorder) getRootOk() bool {
 	// rootOk: root exist and is dir
 	fileInfo, err := os.Stat(sr.root)
 	if err != nil {
-		sr.rootOk = false
-	} else {
-		if fileInfo.IsDir() {
-			sr.rootOk = true
-		} else {
-			logger.Warning(sr.root, "is not a direcotry")
-			sr.rootOk = false
-		}
+		return false
 	}
-	return oldRootOk != sr.rootOk
+
+	if fileInfo.IsDir() {
+		return true
+	}
+
+	logger.Warning(sr.root, "is not a direcotry")
+	return false
 }
 
 func (sr *SubRecorder) Destroy() {

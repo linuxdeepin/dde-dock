@@ -20,10 +20,10 @@
 package apps
 
 import (
-	"pkg.deepin.io/lib/fsnotify"
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/fsnotify"
 )
 
 const (
@@ -65,12 +65,9 @@ func (w *DFWatcher) listenEvents() {
 	for {
 		select {
 		case ev := <-w.fsWatcher.Event:
-			w.sem <- 1
-			go func(event *fsnotify.FileEvent) {
-				logger.Debug("event", event)
-				w.handleEvent(event)
-				<-w.sem
-			}(ev)
+			logger.Debug("event", ev)
+			w.handleEvent(ev)
+
 		case err := <-w.fsWatcher.Error:
 			logger.Warning("error", err)
 		}
