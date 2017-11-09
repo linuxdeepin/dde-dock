@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-11-03 12:07+0000\n"
+"Last-Translator: Galin Iskrenov <loot270@abv.bg>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,15 +55,15 @@ msgstr "Дължината на потребителското име е мак�
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Мащабиране на екрана"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Настройване мащабирането на екрана"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "Успешно настойване"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
@@ -194,7 +194,7 @@ msgstr "Покаж/Скрий докинг станцията"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "Интерфейс за изключване"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -234,7 +234,7 @@ msgstr "Fast Screen Off"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Deepin системен монитор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -376,7 +376,7 @@ msgstr "Стартирай Софтуер"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Нужна е парола за връзка с %q"
 
 #: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
@@ -1905,7 +1905,7 @@ msgstr "Връзката беше изтрита от настройките"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Опит за пускане на hotspot"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
