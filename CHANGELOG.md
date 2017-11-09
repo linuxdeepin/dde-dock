@@ -1,3 +1,7 @@
+# 4.4.3
+    Improve user experience.
+    Memory issue fixes.
+
 # 4.4.2
     Network add connecting animation
     Fix systemtray not align vertial center
