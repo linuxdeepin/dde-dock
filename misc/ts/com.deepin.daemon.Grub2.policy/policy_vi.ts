@@ -4,12 +4,12 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!message" line="0"/>
 			<source>Authentication is required to change the grub2 configuration</source>
-			<translation>Chứng thực được đòi hỏi để thay đổi cấu hình grub2</translation>
+			<translation>Cần có chứng nhận để thay đổi cấu hình grub2</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation type="unfinished"/>
+			<translation>Thay đổi cấu hình grub2</translation>
 		</message>
 	</context>
 </TS>

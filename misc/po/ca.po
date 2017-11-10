@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
+"PO-Revision-Date: 2017-11-15 17:47+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
-msgstr ""
+msgstr "El primer caràcter ha de ser en minúscules."
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
@@ -45,7 +45,7 @@ msgstr ""
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
-msgstr ""
+msgstr "El nom d'usuari l'ha usat el sistema."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
@@ -200,7 +200,7 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr ""
+msgstr "Captura de pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
@@ -366,7 +366,7 @@ msgstr "Nothing"
 
 #: ../../mime/media.go:76 ../../mime/media.go:77
 msgid "Open Folder"
-msgstr ""
+msgstr "Obre una carpeta"
 
 #: ../../mime/media.go:85 ../../mime/media.go:86
 msgid "Run Software"
@@ -1241,7 +1241,7 @@ msgstr "Personalitzat"
 #: ../../network/nm_setting_wireless.go:36
 #: ../../network/nm_setting_wireless.go:85
 msgid "Default"
-msgstr ""
+msgstr "Per defecte"
 
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip6_config.go:38

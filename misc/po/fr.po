@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-11-15 13:53+0000\n"
+"Last-Translator: zwpwjwtz <zwpwjwtz@126.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -60,19 +60,19 @@ msgstr "La longueur du nom d'utilisateur dépasse la limite"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr "Afficher le zoom"
+msgstr "Mise à l'échelle de l'affichage"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Ajustement de l'échelle pour l'écran."
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "L'échelle ajustée avec succès."
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Veuillez vous déconnecter et vous reconnecter après avoir ajusté l'échelle d'écran."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -199,7 +199,7 @@ msgstr "Afficher/Masquer le dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "L'interface de déconnexion"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -239,11 +239,11 @@ msgstr "Extinction rapide écran"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Moniteur système Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
@@ -1938,7 +1938,7 @@ msgstr "Impossible de partager le point d'accès, veuillez vérifier les paramè
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Impossible de se connecter à% q, veuillez vous rapprocher du routeur sans fil."
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2008,7 +2008,7 @@ msgstr "Authentification requise pour définir le fuseau horaire du système."
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Authentification requise pour déterminer si le RTC corresponde à l'heure locale ou UTC."
+msgstr "Authentification requise pour déterminer si le RTC correspond à l'heure locale ou UTC."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""

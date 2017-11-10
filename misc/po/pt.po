@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# António Ribeiro <contact@antonioribeiro.xyz>, 2017
+# Dickprince, 2017
 # Gabriel Vicente <gabrielvicent98@gmail.com>, 2017
 # Luís Lima <geral@liqensoft.com>, 2016
 # Luís Lima <geral@liqensoft.com>, 2017

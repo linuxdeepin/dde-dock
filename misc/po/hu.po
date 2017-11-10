@@ -6,15 +6,16 @@
 # Kiss Zoltan <atari@freemail.hu>, 2017
 # ddabrahim <ddabrahim@googlemail.com>, 2016-2017
 # Kiss Zoltan <atari@freemail.hu>, 2017
-# Kardos László <lacesz@ox.io>, 2017
+# Laszlo Espadas, 2017
 # Reda Da <alex19930329@gmail.com>, 2017
+# Walton Henry <waltonh@mail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-06 17:44+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-11-10 18:27+0000\n"
+"Last-Translator: Walton Henry <waltonh@mail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,15 +63,15 @@ msgstr "Felbontás"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Kijelző-méret beállítás"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "A beállítás sikerült"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "A beállított képernyőméret próbája."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -197,7 +198,7 @@ msgstr "Dokk mutatása / elrejtése"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "Az interface lekapcsolódott"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -237,11 +238,11 @@ msgstr "Gyorsképernyő kikapcsolás"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Deepin System Monitor"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
@@ -1936,7 +1937,7 @@ msgstr "Nem sikerült a hotspot megosztás, kérjük, ellenőrizze a netmasztk b
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Nem sikerült csatlakozni %q -hoz, próbáljon meg a router hatótávolságán belül kapcsolódni."
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"

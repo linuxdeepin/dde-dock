@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-03 12:15+0000\n"
+"PO-Revision-Date: 2017-11-15 13:14+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,7 @@ msgstr "Первый символ должен быть в нижнем реги
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
-msgstr "Имя пользователя уже существует!"
+msgstr "Имя пользователя уже существует."
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
@@ -199,7 +199,7 @@ msgstr "Интерфейс Выключения"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Запустить Quake-терминал"
+msgstr "Запустить Выпадающий Терминал"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
