@@ -174,6 +174,18 @@ func (infos Themes) Get(id string) *Theme {
 	return nil
 }
 
+func (infos Themes) ListGet(ids []string) Themes {
+	var ret Themes
+	for _, id := range ids {
+		info := infos.Get(id)
+		if info == nil {
+			continue
+		}
+		ret = append(ret, info)
+	}
+	return ret
+}
+
 func (infos Themes) Delete(id string) error {
 	info := infos.Get(id)
 	if info == nil {

@@ -20,18 +20,29 @@
 package fonts
 
 import (
+	"crypto/md5"
 	"fmt"
-	"io/ioutil"
-	"os"
+	"gir/gio-2.0"
 	"path"
+	"pkg.deepin.io/lib/strv"
+	"pkg.deepin.io/lib/xdg/basedir"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
-
-	"gir/gio-2.0"
-	"pkg.deepin.io/lib/strv"
-	"pkg.deepin.io/lib/xdg/basedir"
 )
+
+type Family struct {
+	Id   string
+	Name string
+
+	Styles []string
+
+	Monospace bool
+	Show      bool
+}
+
+type FamilyHashTable map[string]*Family
 
 const (
 	fallbackStandard  = "Noto Sans"
@@ -64,33 +75,12 @@ var stylePriorityList = []string{
 	"Thin",
 }
 
-type Family struct {
-	Id   string
-	Name string
-
-	Styles []string
-	//Files  []string
-}
-type Families []*Family
-
-func ListStandardFamily() Families {
-	return ListFont().ListStandard().convertToFamilies()
-}
-
-func ListMonospaceFamily() Families {
-	return ListFont().ListMonospace().convertToFamilies()
-}
-
-func ListAllFamily() Families {
-	return ListFont().convertToFamilies()
-}
-
 func IsFontFamily(value string) bool {
 	if isVirtualFont(value) {
 		return true
 	}
 
-	info := ListAllFamily().Get(value)
+	info := GetFamilyTable().GetFamily(value)
 	if info != nil {
 		return true
 	}
@@ -115,13 +105,13 @@ func SetFamily(standard, monospace string, size float64) error {
 		monospace = fcFontMatch(monospace)
 	}
 
-	families := ListAllFamily()
-	standInfo := families.Get(standard)
+	table := GetFamilyTable()
+	standInfo := table.GetFamily(standard)
 	if standInfo == nil {
 		return fmt.Errorf("Invalid standard id '%s'", standard)
 	}
 	standard += " " + standInfo.preferredStyle()
-	monoInfo := families.Get(monospace)
+	monoInfo := table.GetFamily(monospace)
 	if monoInfo == nil {
 		return fmt.Errorf("Invalid monospace id '%s'", monospace)
 	}
@@ -148,39 +138,52 @@ func GetFontSize() float64 {
 	return getFontSize(xsSetting)
 }
 
-func (infos Families) GetIds() []string {
+func (table FamilyHashTable) ListMonospace() []string {
 	var ids []string
-	for _, info := range infos {
+	for _, info := range table {
+		if !info.Monospace {
+			continue
+		}
 		ids = append(ids, info.Id)
 	}
+	sort.Strings(ids)
 	return ids
 }
 
-func (infos Families) Get(id string) *Family {
-	if id == "" {
-		return nil
-	}
-	if isVirtualFont(id) {
-		id = fcFontMatch(id)
-	}
-
-	for _, info := range infos {
-		if info.Id == id {
-			return info
+func (table FamilyHashTable) ListStandard() []string {
+	var ids []string
+	for _, info := range table {
+		if info.Monospace || !info.Show {
+			continue
 		}
+		ids = append(ids, info.Id)
 	}
-	return nil
+	sort.Strings(ids)
+	return ids
 }
 
-func (infos Families) add(info *Family) Families {
-	v := infos.Get(info.Id)
-	if v == nil {
-		infos = append(infos, info)
-		return infos
-	}
+func (table FamilyHashTable) Get(key string) *Family {
+	info, _ := table[key]
+	return info
+}
 
-	v.Styles = compositeList(v.Styles, info.Styles)
-	//v.Files = compositeList(v.Files, info.Files)
+func (table FamilyHashTable) GetFamily(id string) *Family {
+	info, ok := table[sumStrHash(id)]
+	if !ok {
+		return nil
+	}
+	return info
+}
+
+func (table FamilyHashTable) GetFamilies(ids []string) []*Family {
+	var infos []*Family
+	for _, id := range ids {
+		info, ok := table[sumStrHash(id)]
+		if !ok {
+			continue
+		}
+		infos = append(infos, info)
+	}
 	return infos
 }
 
@@ -226,124 +229,6 @@ func isVirtualFont(name string) bool {
 	return false
 }
 
-func compositeList(l1, l2 []string) []string {
-	for _, v := range l2 {
-		if isItemInList(v, l1) {
-			continue
-		}
-		l1 = append(l1, v)
-	}
-	return l1
-}
-
-func isItemInList(item string, list []string) bool {
-	for _, v := range list {
-		if item == v {
-			return true
-		}
-	}
-	return false
-}
-
-func writeFontConfig(content, file string) error {
-	err := os.MkdirAll(path.Dir(file), 0755)
-	if err != nil {
-		return err
-	}
-
-	return ioutil.WriteFile(file, []byte(content), 0644)
-}
-
-// If set pixelsize, wps-office-wps will not show some text.
-//
-//func configContent(standard, mono string, pixel float64) string {
-func configContent(standard, mono string) string {
-	return fmt.Sprintf(`<?xml version="1.0"?>
-<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig>
-    <match target="pattern">
-        <test qual="any" name="family">
-            <string>serif</string>
-        </test>
-        <edit name="family" mode="assign" binding="strong">
-            <string>%s</string>
-            <string>%s</string>
-        </edit>
-        <edit name="style" mode="assign" binding="strong">
-            <string>Regular</string>
-            <string>normal</string>
-            <string>Standard</string>
-            <string>Normale</string>
-            <string>Medium</string>
-            <string>Italic</string>
-            <string>Black</string>
-            <string>Light</string>
-            <string>Bold</string>
-            <string>BoldItalic</string>
-            <string>DemiLight</string>
-            <string>Thin</string>
-       </edit>
-    </match>
-
-    <match target="pattern">
-        <test qual="any" name="family">
-            <string>sans-serif</string>
-        </test>
-        <edit name="family" mode="assign" binding="strong">
-            <string>%s</string>
-            <string>%s</string>
-        </edit>
-        <edit name="style" mode="assign" binding="strong">
-            <string>Regular</string>
-            <string>normal</string>
-            <string>Standard</string>
-            <string>Normale</string>
-            <string>Medium</string>
-            <string>Italic</string>
-            <string>Black</string>
-            <string>Light</string>
-            <string>Bold</string>
-            <string>BoldItalic</string>
-            <string>DemiLight</string>
-            <string>Thin</string>
-       </edit>
-    </match>
-
-    <match target="pattern">
-        <test qual="any" name="family">
-            <string>monospace</string>
-        </test>
-        <edit name="family" mode="assign" binding="strong">
-            <string>%s</string>
-            <string>%s</string>
-        </edit>
-        <edit name="style" mode="assign" binding="strong">
-            <string>Regular</string>
-            <string>normal</string>
-            <string>Standard</string>
-            <string>Normale</string>
-            <string>Medium</string>
-            <string>Italic</string>
-            <string>Black</string>
-            <string>Light</string>
-            <string>Bold</string>
-            <string>BoldItalic</string>
-            <string>DemiLight</string>
-            <string>Thin</string>
-       </edit>
-    </match>
-
-    <match target="font">
-        <edit name="hinting"><bool>true</bool></edit>
-        <edit name="autohint"><bool>false</bool></edit>
-        <edit name="hintstyle"><const>hintfull</const></edit>
-        <edit name="rgba"><const>rgb</const></edit>
-        <edit name="lcdfilter"><const>lcddefault</const></edit>
-        <edit name="embeddedbitmap"><bool>false</bool></edit>
-        <edit name="embolden"><bool>false</bool></edit>
-    </match>
-
-</fontconfig>`, standard, fallbackStandard,
-		standard, fallbackStandard,
-		mono, fallbackMonospace)
+func sumStrHash(v string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(v)))
 }

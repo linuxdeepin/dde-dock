@@ -25,6 +25,7 @@ package fonts
 import "C"
 
 import (
+	"fmt"
 	"os"
 	"pkg.deepin.io/lib/strv"
 	"regexp"
@@ -43,8 +44,6 @@ var (
 	curLang string
 	home    = os.Getenv("HOME")
 	langReg = regexp.MustCompile("_")
-
-	cacheFonts Fonts
 )
 
 var familyBlacklist = strv.Strv([]string{
@@ -77,7 +76,14 @@ func fcFontMatch(family string) string {
 
 	// return font family id
 	name := strings.Split(tmp[1], "\"")[1]
-	for _, info := range ListAllFamily() {
+	table := GetFamilyTable()
+	key := sumStrHash(name)
+	info, ok := table[key]
+	if ok {
+		return info.Id
+	}
+
+	for _, info := range table {
 		if info.Name == name {
 			return info.Id
 		}
@@ -90,11 +96,30 @@ func isFcCacheUpdate() bool {
 	return (ret == 1)
 }
 
-func fcInfosToFonts() Fonts {
-	if len(cacheFonts) != 0 && !isFcCacheUpdate() {
-		return cacheFonts
+func GetFamilyTable() FamilyHashTable {
+	var (
+		table FamilyHashTable
+		err   error
+	)
+	if !isFcCacheUpdate() {
+		table = make(FamilyHashTable)
+		err = loadCacheFromFile(familyHashCacheFile, &table)
+		if err == nil {
+			return table
+		}
+		fmt.Println("Failed to load families cache:", err)
 	}
 
+	table = fcInfosToFamilyTable()
+	err = table.saveToFile()
+	if err != nil {
+		fmt.Println("Failed to save families cache:", err)
+	}
+	return table
+}
+
+func fcInfosToFamilyTable() FamilyHashTable {
+	var table = make(FamilyHashTable)
 	var num = C.int(0)
 	list := C.list_font_info(&num)
 	if num < 1 {
@@ -105,29 +130,33 @@ func fcInfosToFonts() Fonts {
 	listPtr := uintptr(unsafe.Pointer(list))
 	itemLen := unsafe.Sizeof(*list)
 
-	var infos Fonts
 	for i := C.int(0); i < num; i++ {
 		cItem := (*C.FcInfo)(unsafe.Pointer(
 			listPtr + uintptr(i)*itemLen))
 
-		info := fcInfoToFont(cItem)
-		if info != nil {
-			infos = append(infos, info)
+		info := fcInfoToFamily(cItem)
+		if info == nil {
+			continue
+		}
+
+		key := sumStrHash(info.Id)
+		_, ok := table[key]
+		if !ok {
+			table[key] = info
 		}
 	}
-	cacheFonts = infos
-	return infos
+	return table
 }
 
-func fcInfoToFont(cInfo *C.FcInfo) *Font {
-	var fullname = C.GoString(cInfo.fullname)
+func fcInfoToFamily(cInfo *C.FcInfo) *Family {
+	// var fullname = C.GoString(cInfo.fullname)
 	var familyname = C.GoString(cInfo.family)
-	if len(fullname) == 0 || len(familyname) == 0 {
+	if len(familyname) == 0 {
 		return nil
 	}
-	names := strings.Split(fullname, defaultNameDelim)
-	nameLang := strings.Split(C.GoString(cInfo.fullnamelang),
-		defaultNameDelim)
+	// names := strings.Split(fullname, defaultNameDelim)
+	// nameLang := strings.Split(C.GoString(cInfo.fullnamelang),
+	// 	defaultNameDelim)
 	families := strings.Split(familyname, defaultNameDelim)
 	familyLang := strings.Split(C.GoString(cInfo.familylang),
 		defaultNameDelim)
@@ -136,25 +165,15 @@ func fcInfoToFont(cInfo *C.FcInfo) *Font {
 		return nil
 	}
 
-	var info = Font{
-		Id: getItemByIndex(lastIndexOf(defaultLang,
-			nameLang), names),
-		Name: getItemByIndex(lastIndexOf(getCurLang(),
-			nameLang), names),
-		Family: family,
-		FamilyName: getItemByIndex(indexOf(getCurLang(),
-			familyLang), families),
-		File: C.GoString(cInfo.filename),
-		Styles: strings.Split(C.GoString(cInfo.style),
-			defaultNameDelim),
-		Lang: strings.Split(C.GoString(cInfo.lang),
-			defaultLangDelim),
+	// info.Deletable = isDeletable(info.File)
+	langs := strings.Split(C.GoString(cInfo.lang), defaultLangDelim)
+	return &Family{
+		Id:        family,
+		Name:      getItemByIndex(indexOf(getCurLang(), familyLang), families),
+		Styles:    strings.Split(C.GoString(cInfo.style), defaultNameDelim),
+		Monospace: isMonospace(family, C.GoString(cInfo.spacing)),
+		Show:      strv.Strv(langs).Contains(getCurLang()),
 	}
-	info.Monospace = isMonospace(info.Id,
-		C.GoString(cInfo.spacing))
-	info.Deletable = isDeletable(info.File)
-
-	return &info
 }
 
 func isMonospace(name, spacing string) bool {

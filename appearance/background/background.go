@@ -140,6 +140,18 @@ func (infos Backgrounds) Get(uri string) *Background {
 	return nil
 }
 
+func (infos Backgrounds) ListGet(uris []string) Backgrounds {
+	var ret Backgrounds
+	for _, uri := range uris {
+		v := infos.Get(uri)
+		if v == nil {
+			continue
+		}
+		ret = append(ret, v)
+	}
+	return ret
+}
+
 func (infos Backgrounds) Delete(uri string) error {
 	info := infos.Get(uri)
 	if info == nil {

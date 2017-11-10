@@ -216,7 +216,7 @@ func (m *Manager) init() {
 		subthemes.ListIconTheme()
 		subthemes.ListCursorTheme()
 		background.ListBackground()
-		fonts.ListStandardFamily()
+		fonts.GetFamilyTable()
 
 		// must be called after init finished
 		go m.handleThemeChanged()
@@ -273,8 +273,8 @@ func (m *Manager) correctFontName() {
 	defaultStandardFont, defaultMonospaceFont := m.getDefaultFonts()
 
 	var changed bool = false
-	families := fonts.ListAllFamily()
-	stand := families.Get(m.StandardFont.Get())
+	table := fonts.GetFamilyTable()
+	stand := table.GetFamily(m.StandardFont.Get())
 	if stand != nil {
 		// for virtual font
 		if stand.Id != m.StandardFont.Get() {
@@ -286,7 +286,7 @@ func (m *Manager) correctFontName() {
 		m.StandardFont.Set(defaultStandardFont)
 	}
 
-	mono := families.Get(m.MonospaceFont.Get())
+	mono := table.GetFamily(m.MonospaceFont.Get())
 	if mono != nil {
 		if mono.Id != m.MonospaceFont.Get() {
 			changed = true

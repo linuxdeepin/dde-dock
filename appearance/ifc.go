@@ -63,30 +63,28 @@ func (m *Manager) List(ty string) (string, error) {
 	case TypeBackground:
 		return m.doShow(background.ListBackground())
 	case TypeStandardFont:
-		return m.doShow(fonts.ListStandardFamily())
+		return m.doShow(fonts.GetFamilyTable().ListStandard())
 	case TypeMonospaceFont:
-		return m.doShow(fonts.ListMonospaceFamily())
+		return m.doShow(fonts.GetFamilyTable().ListMonospace())
 	}
 	return "", fmt.Errorf("Invalid type: %v", ty)
 }
 
-// Show show detail info for the special type
+// Show show detail infos for the special type
 // ret0: detail info, json format
-func (m *Manager) Show(ty, name string) (string, error) {
-	logger.Debugf("Show '%s' type '%s'", name, ty)
+func (m *Manager) Show(ty string, names []string) (string, error) {
+	logger.Debugf("Show '%s' type '%s'", names, ty)
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
-		return m.doShow(subthemes.ListGtkTheme().Get(name))
+		return m.doShow(subthemes.ListGtkTheme().ListGet(names))
 	case TypeIconTheme:
-		return m.doShow(subthemes.ListIconTheme().Get(name))
+		return m.doShow(subthemes.ListIconTheme().ListGet(names))
 	case TypeCursorTheme:
-		return m.doShow(subthemes.ListCursorTheme().Get(name))
+		return m.doShow(subthemes.ListCursorTheme().ListGet(names))
 	case TypeBackground:
-		return m.doShow(background.ListBackground().Get(name))
-	case TypeStandardFont:
-		return m.doShow(fonts.ListStandardFamily().Get(name))
-	case TypeMonospaceFont:
-		return m.doShow(fonts.ListMonospaceFamily().Get(name))
+		return m.doShow(background.ListBackground().ListGet(names))
+	case TypeStandardFont, TypeMonospaceFont:
+		return m.doShow(fonts.GetFamilyTable().GetFamilies(names))
 	}
 	return "", fmt.Errorf("Invalid type: %v", ty)
 }

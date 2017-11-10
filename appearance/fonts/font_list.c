@@ -54,10 +54,10 @@ list_font_info (int *num)
      FcObjectSet *os = FcObjectSetBuild(
           FC_FAMILY,
           FC_FAMILYLANG,
-          FC_FULLNAME,
-          FC_FULLNAMELANG,
+          /* FC_FULLNAME, */
+          /* FC_FULLNAMELANG, */
           FC_STYLE,
-          FC_FILE,
+          /* FC_FILE, */
           FC_LANG,
           FC_SPACING,
           FC_CHARSET,
@@ -171,10 +171,10 @@ append_font_info(FcInfo** list, FcPattern* pat, int idx)
 
      tmp[idx].family = (char*)FcPatternFormat(pat, (FcChar8*)"%{family}");
      tmp[idx].familylang = (char*)FcPatternFormat(pat, (FcChar8*)"%{familylang}");
-     tmp[idx].fullname = (char*)FcPatternFormat(pat, (FcChar8*)"%{fullname}");
-     tmp[idx].fullnamelang = (char*)FcPatternFormat(pat, (FcChar8*)"%{fullnamelang}");
+     /* tmp[idx].fullname = (char*)FcPatternFormat(pat, (FcChar8*)"%{fullname}"); */
+     /* tmp[idx].fullnamelang = (char*)FcPatternFormat(pat, (FcChar8*)"%{fullnamelang}"); */
      tmp[idx].style = (char*)FcPatternFormat(pat, (FcChar8*)"%{style}");
-     tmp[idx].filename = (char*)FcPatternFormat(pat, (FcChar8*)"%{file}");
+     /* tmp[idx].filename = (char*)FcPatternFormat(pat, (FcChar8*)"%{file}"); */
      tmp[idx].lang = (char*)FcPatternFormat(pat, (FcChar8*)"%{lang}");
      tmp[idx].spacing = (char*)FcPatternFormat(pat, (FcChar8*)"%{spacing}");
 
@@ -190,10 +190,10 @@ free_font_info(FcInfo *info)
 
      free(info->family);
      free(info->familylang);
-     free(info->fullname);
-     free(info->fullnamelang);
+     /* free(info->fullname); */
+     /* free(info->fullnamelang); */
      free(info->style);
      free(info->lang);
      free(info->spacing);
-     free(info->filename);
+     /* free(info->filename); */
 }
