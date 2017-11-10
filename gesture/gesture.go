@@ -71,7 +71,7 @@ func (*Daemon) Start() error {
 
 	_manager.handleGSettingsChanged()
 	gs.ConnectEvent(func(name, direction string, fingers int32) {
-		logger.Debug("[Event] recieved:", name, direction, fingers)
+		logger.Debug("[Event] received:", name, direction, fingers)
 		err := _manager.Exec(name, direction, fingers)
 		if err != nil {
 			logger.Error("Exec failed:", err)
