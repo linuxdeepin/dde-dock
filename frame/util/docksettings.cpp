@@ -58,6 +58,7 @@ DockSettings::DockSettings(QWidget *parent)
       m_itemController(DockItemController::instance(this))
 {
     m_primaryRect = m_displayInter->primaryRect();
+    m_primaryRawRect = m_displayInter->primaryRawRect();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
@@ -208,9 +209,9 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
         switch (position)
         {
         case Top:
-        case Bottom:    size.setHeight(1);      break;
+        case Bottom:    size.setHeight(2);      break;
         case Left:
-        case Right:     size.setWidth(1);       break;
+        case Right:     size.setWidth(2);       break;
         }
     }
 
@@ -413,6 +414,7 @@ void DockSettings::primaryScreenChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_primaryRect = m_displayInter->primaryRect();
+    m_primaryRawRect = m_displayInter->primaryRawRect();
 
     calculateWindowConfig();
 

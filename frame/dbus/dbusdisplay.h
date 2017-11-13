@@ -108,10 +108,14 @@ public:
     { return qvariant_cast< QString >(property("Primary")); }
 
     Q_PROPERTY(DisplayRect PrimaryRect READ primaryRect NOTIFY PrimaryRectChanged)
+    inline DisplayRect primaryRawRect() const {
+        return qvariant_cast< DisplayRect >(property("PrimaryRect"));
+    }
     inline DisplayRect primaryRect() const
     {
         const qreal scale = qApp->devicePixelRatio();
-        DisplayRect dr = qvariant_cast< DisplayRect >(property("PrimaryRect"));
+
+        DisplayRect dr = primaryRawRect();
         dr.width = qreal(dr.width) / scale;
         dr.height = qreal(dr.height) / scale;
 

@@ -70,6 +70,7 @@ public:
 
     bool autoHide() const;
     const QRect primaryRect() const;
+    const QRect primaryRawRect() const { return m_primaryRawRect; }
     const QSize windowSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
 
@@ -110,6 +111,7 @@ private:
     HideState m_hideState;
     DisplayMode m_displayMode;
     QRect m_primaryRect;
+    QRect m_primaryRawRect;
     QSize m_mainWindowSize;
 
     WhiteMenu m_settingsMenu;

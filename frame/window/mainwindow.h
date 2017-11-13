@@ -54,7 +54,7 @@ private:
     void dragEnterEvent(QDragEnterEvent *e);
 
     void setFixedSize(const QSize &size);
-    void internalMove(int x, int y);
+    void internalAnimationMove(int x, int y);
     void initComponents();
     void initConnections();
 
@@ -72,6 +72,8 @@ private slots:
     void clearStrutPartial();
     void setStrutPartial();
     void compositeChanged();
+    void interalMove() { interalMove(m_posChangeAni->currentValue().toPoint()); }
+    void interalMove(const QPoint &p);
 
     void expand();
     void narrow(const Position prevPos);
@@ -90,7 +92,7 @@ private:
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
     QVariantAnimation *m_sizeChangeAni;
-    QPropertyAnimation *m_posChangeAni;
+    QVariantAnimation *m_posChangeAni;
     QPropertyAnimation *m_panelShowAni;
     QPropertyAnimation *m_panelHideAni;
 
