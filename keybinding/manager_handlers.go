@@ -47,7 +47,7 @@ func (m *Manager) initHandlers() {
 		}
 
 		go func() {
-			err := execCmd(arg.Cmd)
+			err := m.execCmd(arg.Cmd)
 			if err != nil {
 				logger.Warning("execCmd error:", err)
 			}
@@ -103,7 +103,7 @@ func (m *Manager) initHandlers() {
 		}
 
 		go func() {
-			err := execCmd(queryCommandByMime(mimeType))
+			err := m.execCmd(queryCommandByMime(mimeType))
 			if err != nil {
 				logger.Warning("execCmd error:", err)
 			}

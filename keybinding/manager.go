@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"dbus/com/deepin/daemon/helper/backlight"
+	"dbus/com/deepin/sessionmanager"
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
@@ -79,6 +80,7 @@ type Manager struct {
 
 	customShortcutManager *shortcuts.CustomShortcutManager
 
+	startManager    *sessionmanager.StartManager
 	backlightHelper *backlight.Backlight
 	// controllers
 	audioController       *AudioController
@@ -176,6 +178,11 @@ func (m *Manager) init() {
 		logger.Warning("NewBacklight failed:", err)
 	}
 
+	m.startManager, err = sessionmanager.NewStartManager("com.deepin.SessionManager", "/com/deepin/StartManager")
+	if err != nil {
+		logger.Warning("NewStartManager failed:", err)
+	}
+
 	m.displayController, err = NewDisplayController(m.backlightHelper)
 	if err != nil {
 		logger.Warning("NewDisplayController failed:", err)
@@ -226,6 +233,11 @@ func (m *Manager) destroy() {
 	if m.touchpadController != nil {
 		m.touchpadController.Destroy()
 		m.touchpadController = nil
+	}
+
+	if m.startManager != nil {
+		sessionmanager.DestroyStartManager(m.startManager)
+		m.startManager = nil
 	}
 }
 
@@ -282,4 +294,13 @@ func (m *Manager) listenGSettingsChanged(gsettings *gio.Settings, type_ int32) {
 		m.shortcutManager.ModifyShortcutKeystrokes(shortcut, shortcuts.ParseKeystrokes(keystrokes))
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	})
+}
+
+func (m *Manager) execCmd(cmd string) error {
+	if len(cmd) == 0 {
+		logger.Debug("cmd is empty")
+		return nil
+	}
+
+	return m.startManager.RunCommand("sh", []string{"-c", cmd})
 }

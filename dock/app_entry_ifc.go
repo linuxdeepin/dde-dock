@@ -95,7 +95,7 @@ func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) {
 	logger.Debugf("handle drag drop files: %v, timestamp: %v", files, timestamp)
 	ai := entry.appInfo
 	if ai != nil {
-		entry.dockManager.launch(ai.GetFileName(), timestamp)
+		entry.dockManager.launch(ai.GetFileName(), timestamp, files)
 	} else {
 		logger.Warning("not supported")
 	}

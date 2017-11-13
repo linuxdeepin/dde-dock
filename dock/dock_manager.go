@@ -141,10 +141,10 @@ func (m *DockManager) destroy() {
 	dbus.UnInstallObject(m)
 }
 
-func (m *DockManager) launch(file string, timestamp uint32) {
-	_, err := m.startManager.LaunchWithTimestamp(file, timestamp)
+func (m *DockManager) launch(desktopFile string, timestamp uint32, files []string) {
+	err := m.startManager.LaunchApp(desktopFile, timestamp, files)
 	if err != nil {
-		logger.Warningf("launch %q failed: %v", file, err)
+		logger.Warningf("launch %q failed: %v", desktopFile, err)
 	}
 }
 

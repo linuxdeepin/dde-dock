@@ -19,19 +19,24 @@
 
 package main
 
-import "pkg.deepin.io/lib/log"
+import (
+	"os"
 
-import "pkg.deepin.io/lib"
-import "pkg.deepin.io/lib/dbus"
-import "os"
-import _ "pkg.deepin.io/dde/daemon/accounts"
-import _ "pkg.deepin.io/dde/daemon/system/power"
-import _ "pkg.deepin.io/dde/daemon/system/timedated"
-import _ "pkg.deepin.io/dde/daemon/system/gesture"
-import _ "pkg.deepin.io/dde/daemon/apps"
-import "pkg.deepin.io/dde/daemon/loader"
-import . "pkg.deepin.io/lib/gettext"
-import "gir/glib-2.0"
+	// modules:
+	_ "pkg.deepin.io/dde/daemon/accounts"
+	_ "pkg.deepin.io/dde/daemon/apps"
+	_ "pkg.deepin.io/dde/daemon/system/gesture"
+	_ "pkg.deepin.io/dde/daemon/system/power"
+	_ "pkg.deepin.io/dde/daemon/system/swapsched"
+	_ "pkg.deepin.io/dde/daemon/system/timedated"
+
+	"gir/glib-2.0"
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/log"
+)
 
 type Daemon struct{}
 
