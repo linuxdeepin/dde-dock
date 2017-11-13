@@ -33,6 +33,7 @@ const (
 	gsKeyFirstRun     = "first-run"
 	gsKeyInputVolume  = "input-volume"
 	gsKeyOutputVolume = "output-volume"
+	gsKeyAutoSwitch   = "auto-switch-port"
 
 	soundEffectSchema     = "com.deepin.dde.sound-effect"
 	soundEffectKeyEnabled = "enabled"
@@ -41,6 +42,7 @@ const (
 var (
 	defaultInputVolume  float64
 	defaultOutputVolume float64
+	autoSwitchPort      bool
 )
 
 type Audio struct {
@@ -87,6 +89,7 @@ func initDefaultVolume(audio *Audio) {
 	setting := gio.NewSettings(audioSchema)
 	defer setting.Unref()
 
+	autoSwitchPort = setting.GetBoolean(gsKeyAutoSwitch)
 	inVolumePer := float64(setting.GetInt(gsKeyInputVolume)) / 100.0
 	outVolumePer := float64(setting.GetInt(gsKeyOutputVolume)) / 100.0
 	defaultInputVolume = pulse.VolumeUIMax * inVolumePer

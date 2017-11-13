@@ -73,6 +73,10 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		time.AfterFunc(time.Millisecond*500, func() {
 			selectNewCardProfile(card)
 			logger.Debug("After select profile:", card.ActiveProfile.Name)
+
+			if !autoSwitchPort {
+				return
+			}
 			port := hasPortAvailable(card.Ports, pulse.DirectionSink, true)
 			if port.Name != "" {
 				logger.Debug("New card, found available sink port:", port)
@@ -105,6 +109,10 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		if info != nil {
 			info.update(card)
 			a.setPropCards(a.cards.string())
+
+			if !autoSwitchPort {
+				return
+			}
 			old, port := hasPortChanged(oldPorts, info.Ports)
 			if port.Name == "" {
 				logger.Debugf("No available port found, old: %#v, new: %#v", oldPorts, info.Ports)

@@ -102,6 +102,26 @@ func (a *Audio) applyConfig() {
 		a.core.SetDefaultSource(info.Source)
 		time.Sleep(time.Microsecond * 50)
 	}
+
+	if !autoSwitchPort || sinkValidity || sourceValidity {
+		return
+	}
+
+	logger.Debug("Audio config no invalid sink/source, auto switch")
+	id, p := a.cards.getAvailablePort(pulse.DirectionSink)
+	if p.Name == "" {
+		logger.Warningf("Not found available sink port: %#v", a.cards)
+		id, p = a.cards.getAvailablePort(pulse.DirectionSource)
+		if p.Name == "" {
+			logger.Warningf("Not found available source port, exit...")
+			return
+		}
+	}
+	logger.Debugf("Will switch to: %#v", p)
+	err = a.SetPort(id, p.Name, int32(p.Direction))
+	if err != nil {
+		logger.Warningf("Failed to switch to port: %#v, error: %v", p, err)
+	}
 }
 
 func (a *Audio) saveConfig() {

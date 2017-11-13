@@ -147,7 +147,7 @@ func (infos CardInfos) getAvailablePort(direction int) (uint32, pulse.CardPortIn
 	for _, info := range infos {
 		v := hasPortAvailable(info.Ports, direction, true)
 		if v.Name != "" {
-			if v.Priority > portY.Priority {
+			if portY.Priority < v.Priority || portY.Name == "" {
 				portY = v
 				idY = info.Id
 			}
@@ -155,7 +155,7 @@ func (infos CardInfos) getAvailablePort(direction int) (uint32, pulse.CardPortIn
 		}
 
 		vv := hasPortAvailable(info.Ports, direction, false)
-		if vv.Priority > port.Priority {
+		if port.Priority < vv.Priority || port.Name == "" {
 			port = vv
 			id = info.Id
 		}
@@ -178,11 +178,11 @@ func hasPortAvailable(infos pulse.CardPortInfos, direction int, onlyYes bool) pu
 		}
 
 		if v.Available == pulse.AvailableTypeYes {
-			if portY.Priority < v.Priority {
+			if portY.Priority < v.Priority || portY.Name == "" {
 				portY = v
 			}
 		} else if v.Available == pulse.AvailableTypeUnknow {
-			if portU.Priority < v.Priority {
+			if portU.Priority < v.Priority || portU.Name == "" {
 				portU = v
 			}
 		}
@@ -208,7 +208,7 @@ func hasPortChanged(oldInfos, newInfos pulse.CardPortInfos) (old, port pulse.Car
 			continue
 		}
 
-		if port.Priority < tmp.Priority {
+		if port.Priority < tmp.Priority || port.Name == "" {
 			old = v
 			port = tmp
 		}
