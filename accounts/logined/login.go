@@ -31,8 +31,9 @@ import (
 type Manager struct {
 	core   *login1.Manager
 	logger *log.Logger
-	users  UserInfos
-	locker sync.Mutex
+
+	userSessions map[uint32]SessionInfos
+	locker       sync.Mutex
 
 	UserList string
 }
@@ -50,8 +51,9 @@ func Register(logger *log.Logger) (*Manager, error) {
 	}
 
 	var m = &Manager{
-		core:   core,
-		logger: logger,
+		core:         core,
+		logger:       logger,
+		userSessions: make(map[uint32]SessionInfos),
 	}
 
 	go m.init()
@@ -68,105 +70,99 @@ func Unregister(m *Manager) {
 	if m.core != nil {
 		login1.DestroyManager(m.core)
 	}
+
+	if m.userSessions != nil {
+		m.userSessions = nil
+	}
+
+	m = nil
 }
 
 func (m *Manager) init() {
-	// the result struct: {uid, username, path}
-	list, err := m.core.ListUsers()
+	// the result struct: {id, uid, username, seat, path}
+	list, err := m.core.ListSessions()
 	if err != nil {
-		m.logger.Warning("Failed to list logined user:", err)
+		m.logger.Warning("Failed to list sessions:", err)
 		return
 	}
 
 	for _, value := range list {
-		if len(value) != 3 {
+		if len(value) != 5 {
 			continue
 		}
 
-		m.logger.Debug("Create user info for:", value[2].(dbus.ObjectPath))
-		info, err := newUserInfo(value[2].(dbus.ObjectPath))
-		if err != nil {
-			m.logger.Error("Failed to new user info:", err)
-			continue
-		}
-
-		m.locker.Lock()
-		m.users, _ = m.users.Add(info)
-		m.locker.Unlock()
+		m.addSession(value[4].(dbus.ObjectPath))
 	}
 	m.setPropUserList()
 }
 
 func (m *Manager) handleChanged() {
-	m.core.ConnectUserNew(func(uid uint32, userPath dbus.ObjectPath) {
-		m.logger.Debug("[Event] user new:", uid, userPath)
-		info, err := newUserInfo(userPath)
-		if err != nil {
-			m.logger.Error("Failed to new user info:", err)
-			return
-		}
-
-		m.locker.Lock()
-		var added = false
-		m.users, added = m.users.Add(info)
-		m.locker.Unlock()
+	m.core.ConnectSessionNew(func(id string, sessionPath dbus.ObjectPath) {
+		m.logger.Debug("[Event] session new:", id, sessionPath)
+		added := m.addSession(sessionPath)
 		if added {
 			m.setPropUserList()
 		}
 	})
-
-	m.core.ConnectUserRemoved(func(uid uint32, userPath dbus.ObjectPath) {
-		m.logger.Debug("[Event] user removed:", uid, userPath)
-		m.locker.Lock()
-		var deleted = false
-		m.users, deleted = m.users.Delete(uid)
-		m.locker.Unlock()
+	m.core.ConnectSessionRemoved(func(id string, sessionPath dbus.ObjectPath) {
+		m.logger.Debug("[Event] session remove:", id, sessionPath)
+		deleted := m.deleteSession(sessionPath)
 		if deleted {
 			m.setPropUserList()
 		}
 	})
+}
 
-	m.core.ConnectSessionNew(func(id string, sessionPath dbus.ObjectPath) {
-		m.logger.Debug("[Event] session new:", id, sessionPath)
-		session, err := login1.NewSession(dbusLogin1Dest, sessionPath)
-		if err != nil {
-			m.logger.Error("Failed to connect session:", err)
-			return
-		}
+func (m *Manager) addSession(sessionPath dbus.ObjectPath) bool {
+	m.logger.Debug("Create user session for:", sessionPath)
+	info, err := newSessionInfo(sessionPath)
+	if err != nil {
+		m.logger.Warning("Failed to add session:", sessionPath, err)
+		return false
+	}
 
-		list := session.User.Get()
-		login1.DestroySession(session)
-		if len(list) != 2 {
-			return
-		}
+	m.locker.Lock()
+	defer m.locker.Unlock()
+	infos, ok := m.userSessions[info.Uid]
+	if !ok {
+		m.userSessions[info.Uid] = SessionInfos{info}
+		return true
+	}
 
-		m.logger.Debug("Create user info for:", list[1].(dbus.ObjectPath))
-		info, err := newUserInfo(list[1].(dbus.ObjectPath))
-		if err != nil {
-			m.logger.Error("Failed to new user info:", err)
-			return
+	var added bool = false
+	infos, added = infos.Add(info)
+	m.userSessions[info.Uid] = infos
+	return added
+}
+
+func (m *Manager) deleteSession(sessionPath dbus.ObjectPath) bool {
+	m.logger.Debug("Delete user session for:", sessionPath)
+	m.locker.Lock()
+	defer m.locker.Unlock()
+	var deleted bool = false
+	for uid, infos := range m.userSessions {
+		tmp, ok := infos.Delete(sessionPath)
+		if !ok {
+			continue
 		}
-		m.locker.Lock()
-		var added = false
-		m.users, added = m.users.Add(info)
-		m.locker.Unlock()
-		if added {
-			m.setPropUserList()
-		}
-	})
+		deleted = true
+		m.userSessions[uid] = tmp
+		break
+	}
+	return deleted
 }
 
 func (m *Manager) setPropUserList() {
 	m.locker.Lock()
 	defer m.locker.Unlock()
 
-	if len(m.users) == 0 {
+	if len(m.userSessions) == 0 {
 		return
 	}
 
-	data, err := json.Marshal(m.users)
+	data, err := json.Marshal(m.userSessions)
 	if err != nil {
-		m.logger.Error("Failed to marshal users:", err)
+		m.logger.Error("Failed to marshal user sessions:", err)
 		return
 	}
 

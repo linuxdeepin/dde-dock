@@ -25,59 +25,45 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-// UserInfo Show logined user info, if type is tty or ssh, no desktop and display
-type UserInfo struct {
+// SessionInfo Show logined session info, if type is tty or ssh, no desktop and display
+type SessionInfo struct {
 	// Active  bool
-	UID     uint32
-	Name    string
+	Uid     uint32
 	Desktop string
 	Display string
 
-	userPath dbus.ObjectPath
+	sessionPath dbus.ObjectPath
 }
 
-// UserInfos Logined user list
-type UserInfos []*UserInfo
+// SessionInfos Logined session list
+type SessionInfos []*SessionInfo
 
-func newUserInfo(userPath dbus.ObjectPath) (*UserInfo, error) {
-	core, err := login1.NewUser(dbusLogin1Dest, userPath)
+func newSessionInfo(sessionPath dbus.ObjectPath) (*SessionInfo, error) {
+	core, err := login1.NewSession(dbusLogin1Dest, sessionPath)
 	if err != nil {
 		return nil, err
 	}
-	defer login1.DestroyUser(core)
+	defer login1.DestroySession(core)
 
-	var info = UserInfo{
-		UID:      core.UID.Get(),
-		Name:     core.Name.Get(),
-		userPath: userPath,
-	}
-
-	if info.Name == "" {
-		return nil, fmt.Errorf("Invalid user path: %s", userPath)
-	}
-
-	list := core.Display.Get()
+	list := core.User.Get()
 	if len(list) != 2 {
-		return &info, nil
+		return nil, fmt.Errorf("Invalid user path: %s", sessionPath)
 	}
 
-	session, err := login1.NewSession(dbusLogin1Dest, list[1].(dbus.ObjectPath))
-	if err != nil {
-		return &info, nil
+	var info = SessionInfo{
+		Uid:         list[0].(uint32),
+		Desktop:     core.Desktop.Get(),
+		Display:     core.Display.Get(),
+		sessionPath: sessionPath,
 	}
-	defer login1.DestroySession(session)
-
-	//info.Active = session.Active.Get()
-	info.Display = session.Display.Get()
-	info.Desktop = session.Desktop.Get()
 
 	return &info, nil
 }
 
 // Add Add user to list, if exist and equal, return false
 // else replace it, return true
-func (infos UserInfos) Add(info *UserInfo) (UserInfos, bool) {
-	idx := infos.Index(info.UID)
+func (infos SessionInfos) Add(info *SessionInfo) (SessionInfos, bool) {
+	idx := infos.Index(info.sessionPath)
 	if idx != -1 {
 		if infos[idx].Equal(info) {
 			return infos, false
@@ -90,9 +76,9 @@ func (infos UserInfos) Add(info *UserInfo) (UserInfos, bool) {
 }
 
 // Index Find the user position in list, if not found, return -1
-func (infos UserInfos) Index(uid uint32) int32 {
+func (infos SessionInfos) Index(p dbus.ObjectPath) int32 {
 	for i, v := range infos {
-		if v.UID != uid {
+		if v.sessionPath != p {
 			continue
 		}
 
@@ -102,14 +88,15 @@ func (infos UserInfos) Index(uid uint32) int32 {
 }
 
 // Delete Delete user from list, if deleted, return true
-func (infos UserInfos) Delete(uid uint32) (UserInfos, bool) {
+func (infos SessionInfos) Delete(p dbus.ObjectPath) (SessionInfos, bool) {
 	var (
-		tmp     UserInfos
+		tmp     SessionInfos
 		deleted = false
 	)
 	for _, v := range infos {
-		if v.UID == uid {
+		if v.sessionPath == p {
 			deleted = true
+			v = nil
 			continue
 		}
 		tmp = append(tmp, v)
@@ -118,8 +105,8 @@ func (infos UserInfos) Delete(uid uint32) (UserInfos, bool) {
 }
 
 // Equal Check whether equal with target
-func (info *UserInfo) Equal(target *UserInfo) bool {
-	if info.Name != target.Name || info.UID != target.UID ||
+func (info *SessionInfo) Equal(target *SessionInfo) bool {
+	if info.sessionPath != target.sessionPath || info.Uid != target.Uid ||
 		info.Desktop != target.Desktop || info.Display != target.Display {
 		return false
 	}
