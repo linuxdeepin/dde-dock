@@ -65,6 +65,8 @@ public:
     Position position() const;
     int screenHeight() const;
     int screenWidth() const;
+    const int screenRawHeight() const { return m_displayInter->screenRawHeight(); }
+    const int screenRawWidth() const { return m_displayInter->screenRawWidth(); }
     int expandTimeout() const;
     int narrowTimeout() const;
 

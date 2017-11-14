@@ -33,6 +33,22 @@
 #include <X11/X.h>
 #include <X11/Xutil.h>
 
+const QPoint rawXPosition(const QPoint &scaledPos)
+{
+    QRect g = qApp->primaryScreen()->geometry();
+    for (auto *screen : qApp->screens())
+    {
+        const QRect &sg = screen->geometry();
+        if (sg.contains(scaledPos))
+        {
+            g = sg;
+            break;
+        }
+    }
+
+    return g.topLeft() + (scaledPos - g.topLeft()) * qApp->devicePixelRatio();
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
 
@@ -206,14 +222,20 @@ void MainWindow::compositeChanged()
 void MainWindow::interalMove(const QPoint &p)
 {
     const auto ratio = devicePixelRatioF();
-    QPoint rp = p * ratio;
+    QPoint rp = rawXPosition(p);
 
     if (m_settings->hideMode() != HideMode::KeepShowing &&
         m_settings->hideState() == HideState::Hide &&
         m_posChangeAni->state() == QVariantAnimation::Stopped)
     {
         const QRect &r = m_settings->primaryRawRect();
-        rp.setY(r.bottom());
+        switch (m_settings->position())
+        {
+        case Left:      rp.setX(r.x() - 1);         break;
+        case Top:       rp.setY(r.y() - 1);         break;
+        case Right:     rp.setX(r.right() - 2);     break;
+        case Bottom:    rp.setY(r.bottom() - 2);    break;
+        }
     }
 
     int h;
@@ -391,62 +413,62 @@ void MainWindow::setStrutPartial()
     if (m_settings->hideMode() != Dock::KeepShowing)
         return;
 
+    const auto ratio = devicePixelRatioF();
+    const int maxScreenHeight = m_settings->screenRawHeight();
+    const int maxScreenWidth = m_settings->screenRawWidth();
     const Position side = m_settings->position();
-    const int maxScreenHeight = m_settings->screenHeight();
-    const int maxScreenWidth = m_settings->screenWidth();
+    const QPoint p = rawXPosition(m_posChangeAni->endValue().toPoint());
+    const QSize s = m_settings->windowSize();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
     uint strutStart = 0;
     uint strutEnd = 0;
 
-    const QPoint p = m_posChangeAni->endValue().toPoint();
-    const QRect r = QRect(p, m_settings->windowSize());
     QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
-
-    qDebug() << "screen info: " << r << p << strutArea;
-
     switch (side)
     {
     case Position::Top:
         orientation = XcbMisc::OrientationTop;
-        strut = r.bottom() + 1;
-        strutStart = r.left();
-        strutEnd = r.right();
+        strut = p.y() + s.height() * ratio;
+        strutStart = p.x();
+        strutEnd = p.x() + s.width() * ratio;
         strutArea.setLeft(strutStart);
         strutArea.setRight(strutEnd);
-        strutArea.setBottom(r.bottom());
+        strutArea.setBottom(strut);
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
         strut = maxScreenHeight - p.y();
-        strutStart = r.left();
-        strutEnd = r.right();
+        strutStart = p.x();
+        strutEnd = p.x() + s.width() * ratio;
         strutArea.setLeft(strutStart);
         strutArea.setRight(strutEnd);
         strutArea.setTop(p.y());
         break;
     case Position::Left:
         orientation = XcbMisc::OrientationLeft;
-        strut = r.right() + 1;
-        strutStart = r.top();
-        strutEnd = r.bottom();
-        strutArea.setTop(r.top());
-        strutArea.setBottom(r.bottom());
-        strutArea.setRight(r.right());
+        strut = p.x() + s.width() * ratio;
+        strutStart = p.y();
+        strutEnd = p.y() + s.height() * ratio;
+        strutArea.setTop(strutStart);
+        strutArea.setBottom(strutEnd);
+        strutArea.setRight(strut);
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = maxScreenWidth - r.left();
-        strutStart = r.top();
-        strutEnd = r.bottom();
-        strutArea.setTop(r.top());
-        strutArea.setBottom(r.bottom());
-        strutArea.setLeft(r.left());
+        strut = maxScreenWidth - p.x();
+        strutStart = p.y();
+        strutEnd = p.y() + s.height() * ratio;
+        strutArea.setTop(strutStart);
+        strutArea.setBottom(strutEnd);
+        strutArea.setLeft(p.x());
         break;
     default:
         Q_ASSERT(false);
     }
+
+    qDebug() << "screen info: " << p << strutArea;
 
     // pass if strut area is intersect with other screen
     int count = 0;
@@ -463,7 +485,7 @@ void MainWindow::setStrutPartial()
     if (count > 0)
         return;
 
-    m_xcbMisc->set_strut_partial(winId(), orientation, strut * qApp->devicePixelRatio(), strutStart, strutEnd);
+    m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
 }
 
 void MainWindow::expand()

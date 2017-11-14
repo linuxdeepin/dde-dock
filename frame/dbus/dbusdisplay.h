@@ -124,11 +124,15 @@ public:
 
     Q_PROPERTY(ushort ScreenHeight READ screenHeight NOTIFY ScreenHeightChanged)
     inline ushort screenHeight() const
-    { return qreal(qvariant_cast< ushort >(property("ScreenHeight"))) / qApp->devicePixelRatio(); }
+    { return screenRawHeight() / qApp->devicePixelRatio(); }
+    inline ushort screenRawHeight() const
+    { return qreal(qvariant_cast< ushort >(property("ScreenHeight"))); }
 
     Q_PROPERTY(ushort ScreenWidth READ screenWidth NOTIFY ScreenWidthChanged)
     inline ushort screenWidth() const
-    { return qreal(qvariant_cast< ushort >(property("ScreenWidth"))) / qApp->devicePixelRatio(); }
+    { return screenRawWidth() / qApp->devicePixelRatio(); }
+    inline ushort screenRawWidth() const
+    { return qreal(qvariant_cast< ushort >(property("ScreenWidth"))); }
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Apply()
