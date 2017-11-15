@@ -86,14 +86,13 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
+    hidePopup();
+
     if (e->button() == Qt::RightButton/* && !perfectIconRect().contains(e->pos())*/)
         return QWidget::mousePressEvent(e);
 
     if (e->button() != Qt::LeftButton)
         return;
-
-    // hide the tips window, because this window activate event will trigger dde-launcher auto-hide
-    hidePopup();
 
     QProcess *proc = new QProcess;
 

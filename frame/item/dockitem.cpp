@@ -304,5 +304,6 @@ void DockItem::hidePopup()
     m_popupShown = false;
     PopupWindow->hide();
 
+    emit PopupWindow->accept();
     emit requestWindowAutoHide(true);
 }
