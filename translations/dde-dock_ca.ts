@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Obre</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
@@ -293,7 +293,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
-        <translation type="unfinished"/>
+        <translation>Silencia</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="87"/>
@@ -340,7 +340,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Obre</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>

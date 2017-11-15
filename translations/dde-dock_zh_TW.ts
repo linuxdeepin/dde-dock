@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation>外掛程式</translation>
+        <translation>附加元件</translation>
     </message>
 </context>
 <context>

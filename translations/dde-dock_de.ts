@@ -311,7 +311,7 @@
     <message>
         <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
-        <translation>Ton</translation>
+        <translation>Sound</translation>
     </message>
 </context>
 <context>

@@ -376,7 +376,7 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation>Беспроводное Подключение к: %1</translation>
+        <translation>Беспроводное Подключение: %1</translation>
     </message>
 </context>
 <context>
