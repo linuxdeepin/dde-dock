@@ -90,20 +90,6 @@ func configContent(standard, mono string) string {
             <string>%s</string>
             <string>%s</string>
         </edit>
-        <edit name="style" mode="assign" binding="strong">
-            <string>Regular</string>
-            <string>normal</string>
-            <string>Standard</string>
-            <string>Normale</string>
-            <string>Medium</string>
-            <string>Italic</string>
-            <string>Black</string>
-            <string>Light</string>
-            <string>Bold</string>
-            <string>BoldItalic</string>
-            <string>DemiLight</string>
-            <string>Thin</string>
-       </edit>
     </match>
 
     <match target="pattern">
@@ -114,20 +100,6 @@ func configContent(standard, mono string) string {
             <string>%s</string>
             <string>%s</string>
         </edit>
-        <edit name="style" mode="assign" binding="strong">
-            <string>Regular</string>
-            <string>normal</string>
-            <string>Standard</string>
-            <string>Normale</string>
-            <string>Medium</string>
-            <string>Italic</string>
-            <string>Black</string>
-            <string>Light</string>
-            <string>Bold</string>
-            <string>BoldItalic</string>
-            <string>DemiLight</string>
-            <string>Thin</string>
-       </edit>
     </match>
 
     <match target="pattern">
@@ -138,30 +110,6 @@ func configContent(standard, mono string) string {
             <string>%s</string>
             <string>%s</string>
         </edit>
-        <edit name="style" mode="assign" binding="strong">
-            <string>Regular</string>
-            <string>normal</string>
-            <string>Standard</string>
-            <string>Normale</string>
-            <string>Medium</string>
-            <string>Italic</string>
-            <string>Black</string>
-            <string>Light</string>
-            <string>Bold</string>
-            <string>BoldItalic</string>
-            <string>DemiLight</string>
-            <string>Thin</string>
-       </edit>
-    </match>
-
-    <match target="font">
-        <edit name="hinting"><bool>true</bool></edit>
-        <edit name="autohint"><bool>false</bool></edit>
-        <edit name="hintstyle"><const>hintfull</const></edit>
-        <edit name="rgba"><const>rgb</const></edit>
-        <edit name="lcdfilter"><const>lcddefault</const></edit>
-        <edit name="embeddedbitmap"><bool>false</bool></edit>
-        <edit name="embolden"><bool>false</bool></edit>
     </match>
 
 </fontconfig>`, standard, fallbackStandard,

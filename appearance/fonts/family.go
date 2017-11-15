@@ -110,12 +110,12 @@ func SetFamily(standard, monospace string, size float64) error {
 	if standInfo == nil {
 		return fmt.Errorf("Invalid standard id '%s'", standard)
 	}
-	standard += " " + standInfo.preferredStyle()
+	// standard += " " + standInfo.preferredStyle()
 	monoInfo := table.GetFamily(monospace)
 	if monoInfo == nil {
 		return fmt.Errorf("Invalid monospace id '%s'", monospace)
 	}
-	monospace += " " + monoInfo.preferredStyle()
+	// monospace += " " + monoInfo.preferredStyle()
 
 	// fc-match can not real time update
 	/*
