@@ -30,7 +30,13 @@ func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
-	case nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_PPPOE_SETTING_NAME, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME, nm.NM_SETTING_VPN_SETTING_NAME:
+	case nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_PPPOE_SETTING_NAME, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME, nm.NM_SETTING_VPN_SETTING_NAME:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_AUTOCONNECT)
+	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
+		// remove autoconnect from hotspot, if it is true that will enable hotspot always
+		if getCustomConnectionType(data) == connectionWirelessHotspot {
+			return
+		}
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_AUTOCONNECT)
 	}
 

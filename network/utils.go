@@ -59,6 +59,18 @@ func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 	return
 }
 
+func removeStrArray(a1 []string, a2 ...string) (a []string) {
+	for _, s := range a2 {
+		for _, v := range a1 {
+			if v == s {
+				continue
+			}
+			a = append(a, v)
+		}
+	}
+	return
+}
+
 func isDBusPathInArray(path dbus.ObjectPath, pathList []dbus.ObjectPath) bool {
 	for _, i := range pathList {
 		if i == path {

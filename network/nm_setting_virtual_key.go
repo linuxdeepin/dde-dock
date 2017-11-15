@@ -255,6 +255,18 @@ func appendAvailableKeys(data connectionData, keys []string, section, key string
 	return
 }
 
+func removeAvailableKeys(keys []string, section, key string) (newKeys []string) {
+	newKeys = appendStrArrayUnique(keys)
+	relatedVks := getRelatedAvailableVkeys(section, key)
+	if len(relatedVks) == 0 {
+		newKeys = removeStrArray(newKeys, key)
+		return
+	}
+
+	newKeys = removeStrArray(newKeys, relatedVks...)
+	return
+}
+
 func getRelatedAvailableVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
 		if vk.relatedSection == section && isStringInArray(key, vk.relatedKeys) {
