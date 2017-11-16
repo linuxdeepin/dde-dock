@@ -1,3 +1,7 @@
+# 4.5.0
+    Improve HiDPI issues.
+    Opmitize memory usage.
+
 # 4.4.3
     Improve user experience.
     Memory issue fixes.
