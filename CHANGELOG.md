@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [3.2.6] - 2017-11-16
+*   add flatpak to recommends
+
 ## [3.2.5] - 2017-11-16
 *   audio: remove style in font config
 *   network: fix wireless disconnect when delete inactive hotspot
