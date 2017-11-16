@@ -163,7 +163,6 @@ void MainWindow::setFixedSize(const QSize &size)
     if (state == QPropertyAnimation::Running)
         return m_sizeChangeAni->setEndValue(size);
 
-
     qDebug() << Q_FUNC_INFO << size;
 
     m_sizeChangeAni->setStartValue(this->size());
@@ -231,22 +230,31 @@ void MainWindow::interalMove(const QPoint &p)
         const QRect &r = m_settings->primaryRawRect();
         switch (m_settings->position())
         {
-        case Left:      rp.setX(r.x() - 1);         break;
-        case Top:       rp.setY(r.y() - 1);         break;
-        case Right:     rp.setX(r.right() - 2);     break;
-        case Bottom:    rp.setY(r.bottom() - 2);    break;
+        case Left:      rp.setX(r.x());             break;
+        case Top:       rp.setY(r.y());             break;
+        case Right:     rp.setX(r.right() - 1);     break;
+        case Bottom:    rp.setY(r.bottom() - 1);    break;
         }
     }
 
-    int h;
+    int hx = 2, wx = 2;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
         m_settings->hideState() == HideState::Hide &&
         m_panelHideAni->state() == QVariantAnimation::Stopped)
-        h = 2;
-    else
-        h = height() * ratio;
+    {
+        switch (m_settings->position())
+        {
+        case Top:
+        case Bottom:
+            wx = width() * ratio;
+            break;
+        case Left:
+        case Right:
+            hx = height() * ratio;
+        }
+    }
 
-    windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), width() * ratio, h));
+    windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
 }
 
 void MainWindow::initConnections()
@@ -270,6 +278,7 @@ void MainWindow::initConnections()
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
     connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
     connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::interalMove));
+    connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::interalMove), Qt::QueuedConnection);
 
 //    // to fix qt animation bug, sometimes window size not change
     connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
