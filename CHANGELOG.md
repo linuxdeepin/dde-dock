@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+## [3.2.5] - 2017-11-16
+*   audio: remove style in font config
+*   network: fix wireless disconnect when delete inactive hotspot
+*   logined: update 'UserList' when session removed
+*   network: remove autoconnect from wireless hotspot
+*   appearance: fix fonts memory used large when loading
+*   audio: add switcher to decide whether auto switch port
+
 
 ## [3.2.4] - 2017-11-09
 #### Features
