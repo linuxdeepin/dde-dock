@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-10 22:35+0000\n"
+"PO-Revision-Date: 2017-11-26 15:10+0000\n"
 "Last-Translator: Diego Sanguinetti\n"
 "Language-Team: Spanish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -85,7 +85,7 @@ msgstr "Puerto serie"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr "Red Dial-Up"
+msgstr "Conexión Dial-Up"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
@@ -152,7 +152,7 @@ msgstr "La conexión Bluetooth ha fallado"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect %q, automatically ignored"
-msgstr "No se pudo conectar q %, automáticamente ignorado"
+msgstr "No se pudo conectar q %, ignorado automáticamente"
 
 #: ../../dock/app_entry_menu.go:107
 msgid "_Open"
@@ -180,7 +180,7 @@ msgstr "_Todas las ventanas"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Espacio en disco insuficiente, por favor, limpiar a tiempo!"
+msgstr "Espacio en disco insuficiente, ¡limpie a tiempo por favor!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -340,7 +340,7 @@ msgstr "Mostrar ventanas del espacio de trabajo actual"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Visualización del espacio de trabajo"
+msgstr "Mostrar espacio de trabajo"
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
@@ -832,7 +832,7 @@ msgstr "PPP"
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
 msgid "Use MPPE"
-msgstr "Utilice MPPE"
+msgstr "Usar MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"

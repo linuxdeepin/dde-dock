@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Deepin <justfortest16162215@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-12-20 02:58+0000\n"
+"Last-Translator: Deepin <justfortest16162215@gmail.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,106 +20,106 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "দয়া করে একটি পাসওয়ার্ড লিখুন যা ইংরেজি 8টি বা বাংলা ৮টি অক্ষরের কম নয়"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "পাসওয়ার্ডটিতে ইংরেজি অক্ষর (কেস-সংবেদনশীল), সংখ্যা বা বিশেষ চিহ্ন (~! @ # $% ^ & * () [] {} \\ | /?,। <>) থাকতে হবে"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
-msgstr ""
+msgstr "ব্যবহারকারীর নাম খালি হতে পারে না."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "ব্যবহারকারীর নাম অবশ্যই একটি ~ z, 0 ~ 9, - বা _ থাকতে হবে।"
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
-msgstr ""
+msgstr "প্রথম অক্ষরটি নিম্নতর ক্ষেত্রে হওয়া আবশ্যক।"
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
-msgstr ""
+msgstr "ব্যবহারকারী নাম বিদ্যমান।"
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
-msgstr ""
+msgstr "ব্যবহারকারীর নাম সিস্টেম দ্বারা ব্যবহৃত হয়েছে।"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "ব্যবহারকারীর নামটি দৈর্ঘ্য ছাড়িয়ে গেছে"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "প্রদর্শন স্কেলিং"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "প্রদর্শন স্কেলিং সেট"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "সফলভাবে সেট করা হয়েছে"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "লগ আউট দ্বারা সেট প্রদর্শন স্কেলিং পরে  দেখুন"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr ""
+msgstr "সিরিয়াল পোর্ট"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr ""
+msgstr "ডায়াল-আপ নেটওয়ার্কিং"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr ""
+msgstr "হাত-মুক্ত ডিভাইস"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr ""
+msgstr "হ্যান্ডস-ফ্রি ভয়েস গেটওয়ে"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr ""
+msgstr "হেডসেট ভয়েস গেটওয়ে"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr ""
+msgstr "অবজেক্ট পুশ"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr ""
+msgstr "ফাইল স্থানান্তর"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
-msgstr ""
+msgstr "সিংক্রোনাইজ"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr ""
+msgstr "ফোন বই অ্যাক্সেস"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr ""
+msgstr "ফোন বই অ্যাক্সেস ক্লায়েন্ট"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr ""
+msgstr "বার্তা অ্যাক্সেস"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr ""
+msgstr "বার্তা বিজ্ঞপ্তি"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
 msgid "Connected"
-msgstr ""
+msgstr "সংযুক্ত"
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
@@ -128,27 +129,27 @@ msgstr ""
 #: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
 #: ../../network/utils_notify.go:214
 msgid "Disconnected"
-msgstr ""
+msgstr "অসংযুক্ত"
 
 #: ../../bluetooth/utils_notify.go:62
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "নিশ্চিত করুন যে% q চালু এবং পরিসরের মধ্যে"
 
 #: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "ব্লুটুথ সংযোগ ব্যর্থ হয়েছে"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "% Q সংযোগ করতে ব্যর্থ, স্বয়ংক্রিয়ভাবে উপেক্ষা করা হয়েছে"
 
 #: ../../dock/app_entry_menu.go:107
 msgid "_Open"
-msgstr ""
+msgstr "_খোলা"
 
 #: ../../dock/app_entry_menu.go:114
 msgid "_Close All"
-msgstr ""
+msgstr "_সব বন্ধ করা"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
@@ -156,11 +157,11 @@ msgstr ""
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
-msgstr ""
+msgstr "_ডক"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "_Undock"
-msgstr ""
+msgstr "_ডকমুক্ত করুন"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
@@ -168,228 +169,228 @@ msgstr ""
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "অপর্যাপ্ত ডিস্ক স্থান, নির্দিষ্ট সময়ে পরিষ্কার করুন!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr ""
+msgstr "লঞ্চার"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr ""
+msgstr "প্রান্তিক"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "ডিপিন স্ক্রিন রেকর্ডার"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr ""
+msgstr "বন্ধ পর্দা"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr ""
+msgstr "ডক দেখান / লুকান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "শাটডাউন ইন্টারফেস"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "টার্মিনাল কোয়েক উইন্ডো"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr ""
+msgstr " স্ক্রিনশট"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr ""
+msgstr "সম্পূর্ণ স্ক্রিনশট"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr ""
+msgstr "উইন্ডো স্ক্রিনশট"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr ""
+msgstr "বিলম্ব স্ক্রিনশট"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr ""
+msgstr "ফাইল ব্যবস্থাপক"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr ""
+msgstr "টাচপ্যাড অক্ষম করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr ""
+msgstr "উইন্ডো প্রভাব সুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "দ্রুত স্ক্রিন বন্ধ"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "ডিপিন সিস্টেম মনিটর"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "ডিপিন পিকার"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr ""
+msgstr "বিন্যাস স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr ""
+msgstr "বাম কর্মক্ষেত্রে স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr ""
+msgstr "ডান কর্মক্ষেত্রে স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr ""
+msgstr "উপরের কাজস্থানে স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr ""
+msgstr "কম কর্মক্ষেত্রে স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
-msgstr ""
+msgstr "একই উইন্ডোগুলি পরিবর্তন করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "বিপরীত দিকে অনুরূপ উইন্ডোগুলি পরিবর্তন করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
-msgstr ""
+msgstr "উইন্ডোগুলি স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "বিপরীতগুলি মধ্যে উইন্ডোতে স্যুইচ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr ""
+msgstr "ডেস্কটপ দেখান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr ""
+msgstr "উইন্ডো বাড়ান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr ""
+msgstr "উইন্ডো পুনরুদ্ধার করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr ""
+msgstr "উইন্ডো ছোট করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
-msgstr ""
+msgstr "উইন্ডো বন্ধ করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
-msgstr ""
+msgstr "উইন্ডোটি সরান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr ""
+msgstr "উইন্ডো পুনরায় আকার দিন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr ""
+msgstr "বাম কর্মক্ষেত্রের দিকে সরান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr ""
+msgstr "ডান কর্মক্ষেত্রের দিকে যান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr ""
+msgstr "উপরের কাজস্থানে সরান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr ""
+msgstr "নিচের কাজস্থানে সরান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "সমস্ত কর্মক্ষেত্রের উইন্ডো প্রদর্শন করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "বর্তমান কর্মক্ষেত্রের উইন্ডো প্রদর্শন করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr ""
+msgstr "কর্মক্ষেত্র প্রদর্শন"
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "ভাষা পরিবর্তন করতে প্রমাণীকরণের প্রয়োজন"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "সিস্টেম ভাষা পরিবর্তন করতে ব্যর্থ হয়েছে, দয়া করে পরে চেষ্টা করুন"
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "সিস্টেম ভাষা পরিবর্তিত হয়েছে, লগ আউট করার পরে আবার লগ ইন করুন"
 
 #: ../../langselector/locale_ifc.go:60
 msgid "System language is being changed, please wait..."
-msgstr ""
+msgstr "সিস্টেম ভাষা পরিবর্তন করা হচ্ছে, দয়া করে অপেক্ষা করুন ..."
 
 #: ../../langselector/locale_ifc.go:66
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "সিস্টেম ভাষা অভাব ভাষা প্যাকেজ ইনস্টল করা সঙ্গে পরিবর্তিত হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন ..."
 
 #: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q সফলভাবে মুছে ফেলা হয়েছে"
 
 #: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "%q আনইনস্টল করতে ব্যর্থ হয়েছে"
 
 #: ../../mime/media.go:67 ../../mime/media.go:68
 msgid "Nothing"
-msgstr ""
+msgstr "কিছু না"
 
 #: ../../mime/media.go:76 ../../mime/media.go:77
 msgid "Open Folder"
-msgstr ""
+msgstr "ফোল্ডার খুলুন"
 
 #: ../../mime/media.go:85 ../../mime/media.go:86
 msgid "Run Software"
-msgstr ""
+msgstr "সফটওয়্যার চালান"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "% Q সংযুক্ত করতে পাসওয়ার্ড প্রয়োজন"
 
 #: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
-msgstr ""
+msgstr "A (5 GHz)"
 
 #: ../../network/manager_active.go:332
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
-msgstr ""
+msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
-msgstr ""
+msgstr "স্বয়ংক্রিয়"
 
 #: ../../network/manager_active.go:345 ../../network/manager_active.go:350
 #: ../../network/nm_setting_virtual_key.go:189
@@ -398,138 +399,138 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:250
 #: ../../network/nm_setting_vpn_vpnc.go:161
 msgid "None"
-msgstr ""
+msgstr "একটাও না"
 
 #: ../../network/manager_active.go:352
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "WEP 40/128-বিট কী"
 
 #: ../../network/manager_active.go:354
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "WPA / WPA2 ব্যক্তিগত"
 
 #: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
-msgstr ""
+msgstr "টিএলএস"
 
 #: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
-msgstr ""
+msgstr "লিপ"
 
 #: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
-msgstr ""
+msgstr "দ্রুত"
 
 #: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr ""
+msgstr "টানেলড টিএলএস"
 
 #: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
-msgstr ""
+msgstr "সুরক্ষিত EAP"
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
-msgstr ""
+msgstr "তারের সংযোগ"
 
 #: ../../network/nm_custom_type.go:226
 msgid "Connection"
-msgstr ""
+msgstr "সংযোগ"
 
 #: ../../network/nm_custom_type.go:230
 msgid "Wireless Connection"
-msgstr ""
+msgstr "তারবিহীন যোগাযোগ"
 
 #: ../../network/nm_custom_type.go:232
 msgid "Wireless Ad-Hoc"
-msgstr ""
+msgstr "ওয়্যারলেস অ্যাড-হক"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr "ওয়্যারলেস এপ-হটস্পট"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
-msgstr ""
+msgstr "PPPoE সংযোগ"
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
-msgstr ""
+msgstr "মোবাইল সংযোগ"
 
 #: ../../network/nm_custom_type.go:240
 msgid "Mobile GSM Connection"
-msgstr ""
+msgstr "মোবাইল জিএসএম সংযোগ"
 
 #: ../../network/nm_custom_type.go:242
 msgid "Mobile CDMA Connection"
-msgstr ""
+msgstr "মোবাইল সিডিএমএ সংযোগ"
 
 #: ../../network/nm_custom_type.go:244
 msgid "VPN Connection"
-msgstr ""
+msgstr "ভিপিএন সংযোগ"
 
 #: ../../network/nm_custom_type.go:246
 msgid "VPN L2TP"
-msgstr ""
+msgstr "ভিপিএন L2TP"
 
 #: ../../network/nm_custom_type.go:248
 msgid "VPN OpenConnect"
-msgstr ""
+msgstr "ভিপিএন উন্মুক্ত সংযোগ"
 
 #: ../../network/nm_custom_type.go:250
 msgid "VPN OpenVPN"
-msgstr ""
+msgstr "ভিপিএন উন্মুক্তভিপিএন"
 
 #: ../../network/nm_custom_type.go:252
 msgid "VPN PPTP"
-msgstr ""
+msgstr "ভিপিএন PPTP"
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "ভিপিএন স্ট্রংসওয়ান"
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
-msgstr ""
+msgstr "ভিপিএন ভিপিএনসি"
 
 #: ../../network/nm_setting_802_1x.go:34
 msgid "PAP"
-msgstr ""
+msgstr "PAP"
 
 #: ../../network/nm_setting_802_1x.go:35
 msgid "CHAP"
-msgstr ""
+msgstr "CHAP"
 
 #: ../../network/nm_setting_802_1x.go:36
 msgid "MSCHAP"
-msgstr ""
+msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:37
 msgid "MSCHAPV2"
-msgstr ""
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
-msgstr ""
+msgstr "GTC"
 
 #: ../../network/nm_setting_802_1x.go:39
 msgid "OTP"
-msgstr ""
+msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:139
 #: ../../network/nm_setting_ip4_config.go:42
@@ -539,27 +540,27 @@ msgstr "অক্ষম"
 
 #: ../../network/nm_setting_802_1x.go:140
 msgid "Anonymous"
-msgstr ""
+msgstr "নামবিহীন"
 
 #: ../../network/nm_setting_802_1x.go:141
 msgid "Authenticated"
-msgstr ""
+msgstr "প্রমাণীকৃত"
 
 #: ../../network/nm_setting_802_1x.go:142
 msgid "Both"
-msgstr ""
+msgstr "উভয়"
 
 #: ../../network/nm_setting_802_1x.go:147
 msgid "Version 0"
-msgstr ""
+msgstr "সংস্করণ 0"
 
 #: ../../network/nm_setting_802_1x.go:148
 msgid "Version 1"
-msgstr ""
+msgstr "সংস্করণ 1"
 
 #: ../../network/nm_setting_beans_gen.go:37
 msgid "General"
-msgstr ""
+msgstr "সাধারণ"
 
 #: ../../network/nm_setting_beans_gen.go:39
 msgid "Name"
@@ -567,71 +568,71 @@ msgstr "নাম "
 
 #: ../../network/nm_setting_beans_gen.go:40
 msgid "Automatically connect"
-msgstr ""
+msgstr "স্বয়ংক্রিয়ভাবে সংযোগ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "For All Users"
-msgstr ""
+msgstr "সকল ব্যবহারকারীর জন্য"
 
 #: ../../network/nm_setting_beans_gen.go:47
 msgid "Ethernet"
-msgstr ""
+msgstr "ইথারনেট"
 
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr ""
+msgstr "ডিভাইস ম্যাক Addr"
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr ""
+msgstr "ক্লোন ম্যাক Addr"
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr ""
+msgstr "MTU কে কাস্টমাইজ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
 #: ../../network/nm_setting_beans_gen.go:359
 msgid "MTU"
-msgstr ""
+msgstr "MTU "
 
 #: ../../network/nm_setting_beans_gen.go:58
 #: ../../network/nm_setting_beans_gen.go:80
 #: ../../network/nm_setting_beans_gen.go:94
 msgid "Mobile"
-msgstr ""
+msgstr "মোবাইল"
 
 #: ../../network/nm_setting_beans_gen.go:60
 msgid "Country or region"
-msgstr ""
+msgstr "দেশ বা অঞ্চল"
 
 #: ../../network/nm_setting_beans_gen.go:61
 msgid "Provider"
-msgstr ""
+msgstr "প্রদানকারী"
 
 #: ../../network/nm_setting_beans_gen.go:62
 msgid "Plan"
-msgstr ""
+msgstr "পরিকল্পনা"
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
-msgstr ""
+msgstr "সেবার ধরণ"
 
 #: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:65
 #: ../../network/nm_setting_beans_gen.go:82
 msgid "APN"
-msgstr ""
+msgstr "APN"
 
 #: ../../network/nm_setting_beans_gen.go:66
 #: ../../network/nm_setting_beans_gen.go:72
 #: ../../network/nm_setting_beans_gen.go:83
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Number"
-msgstr ""
+msgstr "সংখ্যা"
 
 #: ../../network/nm_setting_beans_gen.go:67
 #: ../../network/nm_setting_beans_gen.go:73
@@ -675,40 +676,40 @@ msgstr "পাসওয়ার্ড"
 #: ../../network/nm_setting_beans_gen.go:69
 #: ../../network/nm_setting_beans_gen.go:86
 msgid "Network ID"
-msgstr ""
+msgstr "নেটওয়ার্ক আইডি"
 
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr ""
+msgstr "শুধুমাত্র হোম নেটওয়ার্ক "
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
 msgid "PIN"
-msgstr ""
+msgstr "পিন"
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
 #: ../../network/nm_setting_beans_gen.go:260
 #: ../../network/nm_setting_beans_gen.go:384
 msgid "Security"
-msgstr ""
+msgstr "নিরাপত্তা"
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr ""
+msgstr "নিরাপত্তা প্রয়োজন"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
-msgstr ""
+msgstr "চাবি"
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
-msgstr ""
+msgstr "EAP Auth"
 
 #: ../../network/nm_setting_beans_gen.go:111
 msgid "Identity"
-msgstr ""
+msgstr "পরিচয়"
 
 #: ../../network/nm_setting_beans_gen.go:112
 #: ../../network/nm_setting_beans_gen.go:115
@@ -725,17 +726,17 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:421
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Ask for Pwd"
-msgstr ""
+msgstr "Pwd-এর জন্য জিজ্ঞাসা করুন"
 
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Anonymous ID"
-msgstr ""
+msgstr "নামহীন আইডি"
 
 #: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:199
 #: ../../network/nm_setting_beans_gen.go:304
 msgid "Private Pwd"
-msgstr ""
+msgstr "ব্যক্তিগত Pwd"
 
 #: ../../network/nm_setting_beans_gen.go:117
 #: ../../network/nm_setting_beans_gen.go:188
@@ -746,7 +747,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:407
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
-msgstr ""
+msgstr "ব্যক্তিগত কী"
 
 #: ../../network/nm_setting_beans_gen.go:118
 #: ../../network/nm_setting_beans_gen.go:183
@@ -756,7 +757,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:300
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "CA Cert"
-msgstr ""
+msgstr "CA সনদ"
 
 #: ../../network/nm_setting_beans_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:187
@@ -766,125 +767,125 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:301
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "User Cert"
-msgstr ""
+msgstr "ব্যবহারকারীর সনদ"
 
 #: ../../network/nm_setting_beans_gen.go:120
 msgid "Provisioning"
-msgstr ""
+msgstr "প্রভিশনিং"
 
 #: ../../network/nm_setting_beans_gen.go:121
 msgid "PAC file"
-msgstr ""
+msgstr "পিএসি ফাইল"
 
 #: ../../network/nm_setting_beans_gen.go:122
 msgid "PEAP Version"
-msgstr ""
+msgstr "PEAP সংস্করণ"
 
 #: ../../network/nm_setting_beans_gen.go:123
 msgid "Inner Auth"
-msgstr ""
+msgstr "ইনার Auth"
 
 #: ../../network/nm_setting_beans_gen.go:129
 msgid "Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi"
 
 #: ../../network/nm_setting_beans_gen.go:131
 msgid "SSID"
-msgstr ""
+msgstr "SSID"
 
 #: ../../network/nm_setting_beans_gen.go:132
 msgid "Mode"
-msgstr ""
+msgstr "মোড"
 
 #: ../../network/nm_setting_beans_gen.go:133
 msgid "Band"
-msgstr ""
+msgstr "দল"
 
 #: ../../network/nm_setting_beans_gen.go:134
 msgid "Channel"
-msgstr ""
+msgstr "চ্যানেল"
 
 #: ../../network/nm_setting_beans_gen.go:144
 msgid "PPPoE"
-msgstr ""
+msgstr "PPPoE"
 
 #: ../../network/nm_setting_beans_gen.go:147
 msgid "Service"
-msgstr ""
+msgstr "সেবা"
 
 #: ../../network/nm_setting_beans_gen.go:154
 msgid "PPP"
-msgstr ""
+msgstr "পিপিপি"
 
 #: ../../network/nm_setting_beans_gen.go:156
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
 msgid "Use MPPE"
-msgstr ""
+msgstr "এমপিপিই ব্যবহার করুন"
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"
-msgstr ""
+msgstr "128-বিট এমপিপিই"
 
 #: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:261
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Stateful MPPE"
-msgstr ""
+msgstr "Stateful MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:386
 msgid "Refuse EAP Authentication"
-msgstr ""
+msgstr "ইএপি প্রমাণীকরণ প্রত্যাখ্যান করুন"
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Refuse PAP Authentication"
-msgstr ""
+msgstr "পিএপি প্রমাণীকরণ প্রত্যাখ্যান করুন"
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse CHAP Authentication"
-msgstr ""
+msgstr "CHAP প্রমাণীকরণ প্রত্যাখ্যান করুন"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse MSCHAP Authentication"
-msgstr ""
+msgstr "MSCHAP প্রমাণীকরণ প্রত্যাখ্যান করুন"
 
 #: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:266
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr ""
+msgstr "MSCHAPv2 প্রমাণীকরণ প্রত্যাখ্যান করুন"
 
 #: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:267
 #: ../../network/nm_setting_beans_gen.go:391
 msgid "No BSD Data Compression"
-msgstr ""
+msgstr "কোন BSD ডাটা কম্প্রেশন"
 
 #: ../../network/nm_setting_beans_gen.go:165
 #: ../../network/nm_setting_beans_gen.go:268
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "No Deflate Data Compression"
-msgstr ""
+msgstr "কোন ডেফ্লেট ডেটা কম্প্রেশন"
 
 #: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:269
 #: ../../network/nm_setting_beans_gen.go:393
 msgid "No TCP Header Compression"
-msgstr ""
+msgstr "কোন টিসিপি হেডার কম্প্রেশন"
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:272
 #: ../../network/nm_setting_beans_gen.go:394
 msgid "Send PPP Echo Packets"
-msgstr ""
+msgstr "পিপিপি ইকো প্যাকেটগুলি পাঠান"
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
@@ -894,11 +895,11 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:417
 msgid "VPN"
-msgstr ""
+msgstr "VPN"
 
 #: ../../network/nm_setting_beans_gen.go:176
 msgid "Need VPN Plugin"
-msgstr ""
+msgstr "ভিপিএন প্লাগইন প্রয়োজন"
 
 #: ../../network/nm_setting_beans_gen.go:177
 #: ../../network/nm_setting_beans_gen.go:182
@@ -915,323 +916,323 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:454
 #: ../../network/nm_setting_beans_gen.go:468
 msgid "Gateway"
-msgstr ""
+msgstr "প্রবেশপথ"
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
 #: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "NT Domain"
-msgstr ""
+msgstr "এনটি ডোমেন"
 
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
 msgid "Proxy"
-msgstr ""
+msgstr "প্রক্সি"
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:283
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr ""
+msgstr "সিসকো সিকিউর ডেস্কটপ Trojan অনুমতি দিন"
 
 #: ../../network/nm_setting_beans_gen.go:186
 #: ../../network/nm_setting_beans_gen.go:284
 msgid "CSD Script"
-msgstr ""
+msgstr "সিএসডি স্ক্রিপ্ট"
 
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:287
 msgid "Use FSID for Key Passphrase"
-msgstr ""
+msgstr "কী পাসফ্রেজের জন্য FSID ব্যবহার করুন"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
 #: ../../network/nm_setting_beans_gen.go:296
 #: ../../network/nm_setting_beans_gen.go:404
 msgid "Auth Type"
-msgstr ""
+msgstr "AUTH প্রকার"
 
 #: ../../network/nm_setting_beans_gen.go:200
 #: ../../network/nm_setting_beans_gen.go:305
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
-msgstr ""
+msgstr "স্ট্যাটিক কী"
 
 #: ../../network/nm_setting_beans_gen.go:201
 #: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:329
 msgid "Customize Key Direction"
-msgstr ""
+msgstr "কী দিকনির্দেশনা কাস্টমাইজ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:202
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:330
 msgid "Key Direction"
-msgstr ""
+msgstr "কী দিকনির্দেশনা"
 
 #: ../../network/nm_setting_beans_gen.go:203
 #: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote IP"
-msgstr ""
+msgstr "দূরবর্তী আইপি"
 
 #: ../../network/nm_setting_beans_gen.go:204
 #: ../../network/nm_setting_beans_gen.go:309
 msgid "Local IP"
-msgstr ""
+msgstr "স্থানীয় আইপি"
 
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:409
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "একটি ইনার আইপি ঠিকানা অনুরোধ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "UDP Encapsulation প্রয়োগ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Use IP Compression"
-msgstr ""
+msgstr "আইপি কম্প্রেশন ব্যবহার করুন"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:422
 msgid "User Pwd"
-msgstr ""
+msgstr "ব্যবহারকারী Pwd"
 
 #: ../../network/nm_setting_beans_gen.go:224
 #: ../../network/nm_setting_beans_gen.go:249
 #: ../../network/nm_setting_beans_gen.go:423
 msgid "Group Name"
-msgstr ""
+msgstr "দলের নাম"
 
 #: ../../network/nm_setting_beans_gen.go:226
 #: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Pwd"
-msgstr ""
+msgstr "গ্রুপ Pwd"
 
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:426
 msgid "Use Hybrid Authentication"
-msgstr ""
+msgstr "হাইব্রীড প্রমাণীকরণ ব্যবহার করুন"
 
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:427
 msgid "CA File"
-msgstr ""
+msgstr "CA ফাইল"
 
 #: ../../network/nm_setting_beans_gen.go:246
 msgid "VPN IPsec"
-msgstr ""
+msgstr "ভিপিএন IPsec"
 
 #: ../../network/nm_setting_beans_gen.go:248
 msgid "Enable IPsec"
-msgstr ""
+msgstr "IPsec সক্ষম করুন"
 
 #: ../../network/nm_setting_beans_gen.go:250
 msgid "Group ID"
-msgstr ""
+msgstr "দলের আইডি"
 
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr ""
+msgstr "প্রাক-ভাগ করা কী"
 
 #: ../../network/nm_setting_beans_gen.go:257
 #: ../../network/nm_setting_beans_gen.go:381
 msgid "VPN PPP"
-msgstr ""
+msgstr "ভিপিএন পিপিপি"
 
 #: ../../network/nm_setting_beans_gen.go:270
 msgid "No Protocol Field Compression"
-msgstr ""
+msgstr "কোন প্রোটোকল ক্ষেত্র সংকোচন"
 
 #: ../../network/nm_setting_beans_gen.go:271
 msgid "No Address/Control Compression"
-msgstr ""
+msgstr "কোন ঠিকানা / কন্ট্রোল কম্প্রেশন"
 
 #: ../../network/nm_setting_beans_gen.go:315
 msgid "VPN Security"
-msgstr ""
+msgstr "ভিপিএন সিকিউরিটি"
 
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "Cipher"
-msgstr ""
+msgstr "গোল্লা"
 
 #: ../../network/nm_setting_beans_gen.go:318
 msgid "HMAC Auth"
-msgstr ""
+msgstr "HMAC Auth"
 
 #: ../../network/nm_setting_beans_gen.go:324
 msgid "VPN TLS Authentication"
-msgstr ""
+msgstr "ভিপিএন TLS প্রমাণীকরণ"
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "Subject Match"
-msgstr ""
+msgstr "বিষয় ম্যাচ"
 
 #: ../../network/nm_setting_beans_gen.go:327
 msgid "Remote Cert Type"
-msgstr ""
+msgstr "রিমোট সার্ট টাইপ"
 
 #: ../../network/nm_setting_beans_gen.go:328
 msgid "Key File"
-msgstr ""
+msgstr "কী ফাইল"
 
 #: ../../network/nm_setting_beans_gen.go:336
 msgid "VPN Proxies"
-msgstr ""
+msgstr "ভিপিএন প্রক্সি"
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
-msgstr ""
+msgstr "প্রক্সি প্রকার"
 
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Server IP"
-msgstr ""
+msgstr "সার্ভার আইপি"
 
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "Port"
-msgstr ""
+msgstr "পোর্ট"
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Retry Indefinitely When Failed"
-msgstr ""
+msgstr "ব্যর্থ হলে অনির্দিষ্টকালের জন্য পুনরায় চেষ্টা করুন "
 
 #: ../../network/nm_setting_beans_gen.go:349
 #: ../../network/nm_setting_beans_gen.go:433
 msgid "VPN Advanced"
-msgstr ""
+msgstr "ভিপিএন অ্যাডভান্সড"
 
 #: ../../network/nm_setting_beans_gen.go:351
 msgid "Customize Gateway Port"
-msgstr ""
+msgstr "গেটওয়ে পোর্ট কাস্টমাইজ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:352
 msgid "Gateway Port"
-msgstr ""
+msgstr "গেটওয়ে পোর্ট"
 
 #: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Renegotiation Interval"
-msgstr ""
+msgstr "পুনর্বিবেচনা বিরতি কাস্টমাইজ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:354
 msgid "Renegotiation Interval"
-msgstr ""
+msgstr "রেনগোটেশান বিরতি"
 
 #: ../../network/nm_setting_beans_gen.go:355
 msgid "Use LZO data compression"
-msgstr ""
+msgstr "LZO ডেটা কম্প্রেশন ব্যবহার করুন "
 
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "Use TCP connection"
-msgstr ""
+msgstr "TCP সংযোগ ব্যবহার করুন"
 
 #: ../../network/nm_setting_beans_gen.go:357
 msgid "Use TAP device"
-msgstr ""
+msgstr "ট্যাপ ডিভাইস ব্যবহার করুন"
 
 #: ../../network/nm_setting_beans_gen.go:358
 msgid "Customize Tunnel MTU"
-msgstr ""
+msgstr "এমটি টানেল কাস্টমাইজ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize UDP Fragment Size"
-msgstr ""
+msgstr "UDP ফ্র্যাগমেন্ট সাইজ কাস্টমাইজ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:361
 msgid "UDP Fragment Size"
-msgstr ""
+msgstr "UDP ফ্র্যাগমেন্ট সাইজ"
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Restrict Tunnel TCP MSS"
-msgstr ""
+msgstr "টানেল টিসিপি এমএসএস নিয়ন্ত্রণ করুন"
 
 #: ../../network/nm_setting_beans_gen.go:363
 msgid "Randomize Remote Hosts"
-msgstr ""
+msgstr "র্যান্ডমাইজ রিমোট হোস্ট"
 
 #: ../../network/nm_setting_beans_gen.go:435
 msgid "Domain"
-msgstr ""
+msgstr "ডোমেইন"
 
 #: ../../network/nm_setting_beans_gen.go:436
 msgid "Vendor"
-msgstr ""
+msgstr "বিক্রেতা"
 
 #: ../../network/nm_setting_beans_gen.go:437
 msgid "Version"
-msgstr ""
+msgstr "সংস্করণ"
 
 #: ../../network/nm_setting_beans_gen.go:438
 msgid "Encryption"
-msgstr ""
+msgstr "এনক্রিপশন"
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "NAT Traversal"
-msgstr ""
+msgstr "ন্যাট ট্রাভেরসাল"
 
 #: ../../network/nm_setting_beans_gen.go:440
 msgid "IKE DH Group"
-msgstr ""
+msgstr "IKE DH গ্রুপ"
 
 #: ../../network/nm_setting_beans_gen.go:441
 msgid "Forward Secrecy"
-msgstr ""
+msgstr "ফরওয়ার্ড গোপনীয়তা"
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "Local Port"
-msgstr ""
+msgstr "স্থানীয় পোর্ট"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Disable Dead Peer Detection"
-msgstr ""
+msgstr "মৃত পীর সনাক্তকরণ অক্ষম করুন"
 
 #: ../../network/nm_setting_beans_gen.go:449
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../../network/nm_setting_beans_gen.go:451
 #: ../../network/nm_setting_beans_gen.go:465
 msgid "Method"
-msgstr ""
+msgstr "পদ্ধতি"
 
 #: ../../network/nm_setting_beans_gen.go:452
 #: ../../network/nm_setting_beans_gen.go:466
 msgid "IP Address"
-msgstr ""
+msgstr "আইপি ঠিকানা"
 
 #: ../../network/nm_setting_beans_gen.go:453
 msgid "Netmask"
-msgstr ""
+msgstr "নেটমাস্ক"
 
 #: ../../network/nm_setting_beans_gen.go:455
 #: ../../network/nm_setting_beans_gen.go:469
 msgid "Primary DNS"
-msgstr ""
+msgstr "প্রাথমিক DNS"
 
 #: ../../network/nm_setting_beans_gen.go:456
 #: ../../network/nm_setting_beans_gen.go:470
 msgid "Secondary DNS"
-msgstr ""
+msgstr "সেকেন্ডারি DNS"
 
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
 msgid "Only applied in corresponding resources"
-msgstr ""
+msgstr "শুধুমাত্র সংশ্লিষ্ট সম্পদ প্রয়োগ"
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: ../../network/nm_setting_beans_gen.go:467
 msgid "Prefix"
-msgstr ""
+msgstr "উপসর্গ"
 
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "Custom"
-msgstr ""
+msgstr "প্রথা"
 
 #: ../../network/nm_setting_gsm.go:165
 #: ../../network/nm_setting_virtual_key.go:159
@@ -1241,105 +1242,105 @@ msgstr ""
 #: ../../network/nm_setting_wireless.go:36
 #: ../../network/nm_setting_wireless.go:85
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip6_config.go:38
 msgid "Auto"
-msgstr ""
+msgstr "অটো"
 
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip6_config.go:40
 msgid "Link-Local Only"
-msgstr ""
+msgstr " শুধুমাত্র লিংক-স্থানীয় "
 
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
 msgid "Manual"
-msgstr ""
+msgstr "ম্যানুয়াল"
 
 #: ../../network/nm_setting_ip4_config.go:41
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_wireless_security.go:81
 msgid "Shared"
-msgstr ""
+msgstr "ভাগ করা"
 
 #: ../../network/nm_setting_ip6_config.go:37
 msgid "Ignore"
-msgstr ""
+msgstr "উপেক্ষা করা"
 
 #: ../../network/nm_setting_ip6_config.go:39
 msgid "DHCP"
-msgstr ""
+msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:164
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "জিএসএম (জিপিআরএস, ইউএমটিএস)"
 
 #: ../../network/nm_setting_virtual_key.go:165
 msgid "CDMA (1xRTT, EVDO)"
-msgstr ""
+msgstr "সিডিএমএ (1xRTT, EVDO)"
 
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "L2TP"
-msgstr ""
+msgstr "L2TP"
 
 #: ../../network/nm_setting_virtual_key.go:173
 msgid "PPTP"
-msgstr ""
+msgstr "পিপিটিপি"
 
 #: ../../network/nm_setting_virtual_key.go:174
 msgid "OpenConnect"
-msgstr ""
+msgstr "OpenConnect"
 
 #: ../../network/nm_setting_virtual_key.go:175
 msgid "OpenVPN"
-msgstr ""
+msgstr "OpenVPN"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "VPNC"
-msgstr ""
+msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
-msgstr ""
+msgstr "WPA / WPA2 এন্টারপ্রাইজ"
 
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:215
 msgid "All Available (default)"
-msgstr ""
+msgstr "সব উপলব্ধ (ডিফল্ট)"
 
 #: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:216
 msgid "128-bit (most secure)"
-msgstr ""
+msgstr "128-বিট (সবচেয়ে নিরাপদ)"
 
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:217
 msgid "40-bit (less secure)"
-msgstr ""
+msgstr "40-বিট (কম নিরাপদ)"
 
 #: ../../network/nm_setting_virtual_key.go:224
 msgid "Secure (default)"
-msgstr ""
+msgstr "নিরাপদ (ডিফল্ট)"
 
 #: ../../network/nm_setting_virtual_key.go:225
 msgid "Weak"
-msgstr ""
+msgstr "দুর্বল"
 
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
 #: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
 msgid "Saved"
-msgstr ""
+msgstr "সংরক্ষিত"
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
 #: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
 msgid "Always Ask"
-msgstr ""
+msgstr "সবসময় জিজ্ঞাসা করুন"
 
 #: ../../network/nm_setting_vpn_l2tp.go:38
 #: ../../network/nm_setting_vpn_openvpn.go:35
@@ -1347,438 +1348,438 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:38
 #: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
 msgid "Not Required"
-msgstr ""
+msgstr "আবশ্যক না"
 
 #: ../../network/nm_setting_vpn_openvpn.go:113
 msgid "Certificates (TLS)"
-msgstr ""
+msgstr "সার্টিফিকেট (টিএলএস)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:115
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "পাসওয়ার্ড (TLS) সহ সার্টিফিকেট"
 
 #: ../../network/nm_setting_vpn_openvpn.go:120
 #: ../../network/nm_setting_vpn_openvpn.go:286
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../../network/nm_setting_vpn_openvpn.go:121
 #: ../../network/nm_setting_vpn_openvpn.go:287
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:230
 msgid "DES-CBC"
-msgstr ""
+msgstr "Des-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:231
 msgid "RC2-CBC"
-msgstr ""
+msgstr "RC2-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:232
 msgid "DES-EDE-CBC"
-msgstr ""
+msgstr "Des-Ede-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:233
 msgid "DES-EDE3-CBC"
-msgstr ""
+msgstr "Des-EDE3-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:234
 msgid "DESX-CBC"
-msgstr ""
+msgstr "DESX-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:235
 msgid "BF-CBC"
-msgstr ""
+msgstr "বিএফ-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:236
 msgid "RC2-40-CBC"
-msgstr ""
+msgstr "RC2-40-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:237
 msgid "CAST5-CBC"
-msgstr ""
+msgstr "CAST5-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:238
 msgid "RC2-64-CBC"
-msgstr ""
+msgstr "RC2-64-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:239
 msgid "AES-128-CBC"
-msgstr ""
+msgstr "AES-128-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:240
 msgid "AES-192-CBC"
-msgstr ""
+msgstr "AES-192-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:241
 msgid "AES-256-CBC"
-msgstr ""
+msgstr "AES-256-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:242
 msgid "CAMELLIA-128-CBC"
-msgstr ""
+msgstr "CAMELLIA-128-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:243
 msgid "CAMELLIA-192-CBC"
-msgstr ""
+msgstr "CAMELLIA-192-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:244
 msgid "CAMELLIA-256-CBC"
-msgstr ""
+msgstr "CAMELLIA-256-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:245
 msgid "SEED-CBC"
-msgstr ""
+msgstr "SEED-সিবিসি"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "RSA MD-4"
-msgstr ""
+msgstr "আরএসএ এমডি -4"
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "MD-5"
-msgstr ""
+msgstr "এমডি-5"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "SHA-1"
-msgstr ""
+msgstr "SHA-1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "SHA-224"
-msgstr ""
+msgstr "SHA-224"
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
 msgid "SHA-256"
-msgstr ""
+msgstr "SHA-256"
 
 #: ../../network/nm_setting_vpn_openvpn.go:256
 msgid "SHA-384"
-msgstr ""
+msgstr "SHA-384"
 
 #: ../../network/nm_setting_vpn_openvpn.go:257
 msgid "SHA-512"
-msgstr ""
+msgstr "SHA-512"
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 msgid "RIPEMD-160"
-msgstr ""
+msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:281
 msgid "Client"
-msgstr ""
+msgstr "খরিদ্দার"
 
 #: ../../network/nm_setting_vpn_openvpn.go:282
 msgid "Server"
-msgstr ""
+msgstr "সার্ভার"
 
 #: ../../network/nm_setting_vpn_openvpn.go:332
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ../../network/nm_setting_vpn_openvpn.go:333
 msgid "SOCKS"
-msgstr ""
+msgstr "সক্স"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr ""
+msgstr "এসএসএইচ এজেন্ট"
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
-msgstr ""
+msgstr "স্মার্টকার্ড"
 
 #: ../../network/nm_setting_vpn_strongswan.go:81
 msgid "EAP"
-msgstr ""
+msgstr "ইএপি"
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
-msgstr ""
+msgstr "সিসকো (ডিফল্ট)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:143
 msgid "Netscreen"
-msgstr ""
+msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "NAT-T When Available (default)"
-msgstr ""
+msgstr "NAT-T উপলভ্য হলে (ডিফল্ট)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "NAT-T Always"
-msgstr ""
+msgstr "NAT-T সর্বদা"
 
 #: ../../network/nm_setting_vpn_vpnc.go:149
 msgid "Cisco UDP"
-msgstr ""
+msgstr "সিসকো ইউডিপি"
 
 #: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:162
 msgid "DH Group 1"
-msgstr ""
+msgstr "DH গ্রুপ 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:155
 msgid "DH Group 2 (default)"
-msgstr ""
+msgstr "DH গ্রুপ 2 (ডিফল্ট)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:156
 #: ../../network/nm_setting_vpn_vpnc.go:164
 msgid "DH Group 5"
-msgstr ""
+msgstr "DH গ্রুপ 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:160
 msgid "Server (default)"
-msgstr ""
+msgstr "সার্ভার (ডিফল্ট)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:163
 msgid "DH Group 2"
-msgstr ""
+msgstr "DH গ্রুপ 2"
 
 #: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
-msgstr ""
+msgstr "ইনফ্রাস্ট্রাকচার"
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
-msgstr ""
+msgstr "অ্যাড-হক"
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
-msgstr ""
+msgstr "অফ হটস্পট"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
-msgstr ""
+msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:66
 msgid "Dynamic WEP"
-msgstr ""
+msgstr "ডায়নামিক WEP"
 
 #: ../../network/nm_setting_wireless_security.go:67
 msgid "Ad-Hoc WPA-PSK"
-msgstr ""
+msgstr "অ্যাড-হক WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:68
 msgid "WPA-PSK Infrastructure"
-msgstr ""
+msgstr "WPA-PSK অবকাঠামো"
 
 #: ../../network/nm_setting_wireless_security.go:69
 msgid "WPA Enterprise"
-msgstr ""
+msgstr "WPA এন্টারপ্রাইজ"
 
 #: ../../network/nm_setting_wireless_security.go:73
 msgid "WEP40"
-msgstr ""
+msgstr "WEP40"
 
 #: ../../network/nm_setting_wireless_security.go:74
 msgid "WEP104"
-msgstr ""
+msgstr "WEP104"
 
 #: ../../network/nm_setting_wireless_security.go:75
 msgid "TKIP"
-msgstr ""
+msgstr "TKIP"
 
 #: ../../network/nm_setting_wireless_security.go:76
 msgid "CCMP"
-msgstr ""
+msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:80
 msgid "Open"
-msgstr ""
+msgstr "খুলুন"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed"
-msgstr ""
+msgstr "ডিভাইসের অবস্থা পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason"
-msgstr ""
+msgstr "ডিভাইসের অবস্থা পরিবর্তীত হয়েছে, কারণ অজানা"
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed"
-msgstr ""
+msgstr "ডিভাইস এখন পরিচালিত হয়েছে"
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "ডিভাইস আর পরিচালিত হয় না"
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "ডিভাইসটি কনফিগারেশনের জন্য প্রস্তুত নয়"
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "আইপি কনফিগারেশন সংরক্ষিত করা যায়নি (কোনও উপলভ্য ঠিকানা, সময়সীমা, ইত্যাদি)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "IP কনফিগারেশনটি আর বৈধ নয়"
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "পাসওয়ার্ড প্রয়োজন কিন্তু সরবরাহ করা হয়নি"
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "অ্যাক্সেস পয়েন্ট বা প্রমাণীকরণ সার্ভার থেকে 802.1X supplicant সংযোগ বিচ্ছিন্ন হয়েছে"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "802.1X supplicant এর কনফিগারেশন ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "802.1X supplicant quitted বা ব্যর্থ হয়েছে অপ্রত্যাশিতভাবে"
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "802.1X supplicant প্রমাণীকরণের জন্য অনেক সময় নিয়েছে"
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "পিপিপি পরিষেবা অনুমোদিত সময়ের মধ্যে শুরু করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "পিপিপি পরিষেবা অপ্রত্যাশিতভাবে সংযোগ বিচ্ছিন্ন হল"
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "পিপিপি পরিষেবা quitted বা অপ্রত্যাশিতভাবে ব্যর্থ হল"
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "DHCP পরিষেবা অনুমোদিত সময়ের মধ্যে শুরু করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "DHCP পরিষেবা একটি অপ্রত্যাশিত ত্রুটি রিপোর্ট করল"
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "DHCP পরিষেবা quitted বা ব্যর্থ হল অপ্রত্যাশিতভাবে"
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "ভাগ করা সংযোগ পরিষেবা শুরু করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "ভাগ করে নেওয়া সংযোগ পরিষেবা অপ্রত্যাশিতভাবে নিখুঁত বা ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "অটোআইপি পরিষেবা শুরু করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "অটোআইপি পরিষেবা একটি অপ্রত্যাশিত ত্রুটি রিপোর্ট করেছে"
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "অটোআইপি পরিষেবা অনুপস্থিত বা ব্যর্থ হল অপ্রত্যাশিতভাবে"
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "ব্যাস্ত লাইনের কারণে ডায়ালিং ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "কোন ডায়াল টোন না থাকার কারণে ডায়ালিং ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "ক্যারিয়ারের কারণে ডায়ালিং ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out"
-msgstr ""
+msgstr "ডায়ালিং এর সময় শেষ হয়েছে"
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed"
-msgstr ""
+msgstr "ডায়ালিং ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "মডেম আরম্ভকরণ ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "নির্দিষ্ট জিএসএম এপিএন নির্বাচন করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr ""
+msgstr "কোনও নেটওয়ার্ক অনুসন্ধান করা হয়নি"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"
-msgstr ""
+msgstr "নেটওয়ার্ক রেজিস্ট্রেশন অস্বীকার করা হয়েছে"
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out"
-msgstr ""
+msgstr "নেটওয়ার্ক নিবন্ধনের সময় শেষ হয়েছে"
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed"
-msgstr ""
+msgstr "অনুরোধ করা জিএসএম নেটওয়ার্কে নিবন্ধন ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed"
-msgstr ""
+msgstr "PIN চেক ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "ডিভাইসের জন্য প্রয়োজনীয় ফার্মওয়্যার মিস করা যেতে পারে"
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
-msgstr ""
+msgstr "ডিভাইস সরানো হয়েছে"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "নেটওয়ার্কম্যানেজার ঘুমাতে গেলেন"
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "ডিভাইসের সক্রিয় সংযোগ সরানো হয়েছে বা অদৃশ্য হয়ে গেছে"
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "একটি ব্যবহারকারী বা ক্লায়েন্ট সংযোগ বিচ্ছিন্ন করার অনুরোধ জানালো"
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "ডিভাইসের ক্যারিয়ার / লিঙ্কটি পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "ডিভাইস এর বিদ্যমান সংযোগ অনুমান করা হয়েছিল"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "802.1x supplicant এখন উপলব্ধ"
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
-msgstr ""
+msgstr "মডেম পাওয়া যায়নি"
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "ব্লুটুথ সংযোগের সময় শেষ হয়েছে বা ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "জিএসএম মডেম এর সিম কার্ড ঢোকানো হয় নি"
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "জিএসএম মডেম এর সিম পিন প্রয়োজন"
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "জিএসএম মোডেমের সিম পিইউকে প্রয়োজন"
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"

@@ -9,7 +9,7 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation type="unfinished"/>
+			<translation>Промяна на grub2 конфигурация</translation>
 		</message>
 	</context>
 </TS>

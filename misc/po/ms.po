@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-10 16:43+0000\n"
+"PO-Revision-Date: 2017-11-26 05:12+0000\n"
 "Last-Translator: abuyop <abuyop@gmail.com>\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
@@ -66,7 +66,7 @@ msgstr "Berjaya ditetapkan"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Lihat dengan mendaftar keluar selepas tetapkan penskalaan paparan"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -237,7 +237,7 @@ msgstr "Pemantau Sistem Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Pemilih Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
@@ -1908,35 +1908,35 @@ msgstr "Cuba membenarkan hotspot"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Cuba bersambung dengan %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Perkongsian kawasan khas dibenarkan"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q bersambung"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Perkongsian kawasan panas dimatikan"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q terputus"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Tidak boleh berkongsi kawasan panas, sila periksa tetapan dnsmasq"
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -2002,10 +2002,10 @@ msgstr "Pengesahihan diperlukan untuk menetap zon waktu sistem."
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan."

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
+"PO-Revision-Date: 2017-12-02 10:28+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Esperanto (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/eo/)\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "La longo de la uzantnomo superas la limon"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Ekran-skalado"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
@@ -334,7 +334,7 @@ msgstr ""
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Aŭtentigo estas nepra por ŝanĝi lingvon"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"

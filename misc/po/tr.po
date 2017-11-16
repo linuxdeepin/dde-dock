@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-10 13:32+0000\n"
+"PO-Revision-Date: 2017-12-10 12:09+0000\n"
 "Last-Translator: Adem Çalışkan <ademcal@yahoo.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -74,7 +74,7 @@ msgstr "Görüntüyü ölçeklendirmeyi ayarladıktan sonra çıkış yaparak g�
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr "Seri port"
+msgstr "Seri bağlantı noktası"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
@@ -237,7 +237,7 @@ msgstr "Hızlı Ekran Kapalı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr "Deepin Sistem Yükleyici"
+msgstr "Deepin Sistem İzleyici"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -466,7 +466,7 @@ msgstr "Kablosuz Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Kablosuz Ap-Hotspot"
+msgstr "Kablosuz EN-Erişim Noktası"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
@@ -932,7 +932,7 @@ msgstr "NT Etki alanı"
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
 msgid "Proxy"
-msgstr "Vekil"
+msgstr "Vekil Sunucu"
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:283
@@ -1089,7 +1089,7 @@ msgstr "VPN Vekilleri"
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
-msgstr "Vekil Türü"
+msgstr "Vekil Sunucu Türü"
 
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Server IP"
@@ -1097,7 +1097,7 @@ msgstr "Sunucu IP"
 
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "Port"
-msgstr "Port"
+msgstr "Bağlantı Noktası"
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Retry Indefinitely When Failed"
@@ -1186,7 +1186,7 @@ msgstr "İletme Gizliliği"
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "Local Port"
-msgstr "Yerel Port"
+msgstr "Yerel Bağlantı Noktası"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Disable Dead Peer Detection"
@@ -1548,7 +1548,7 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
-msgstr "AP-Hotspot"
+msgstr "EN-Erişim Noktası"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
@@ -1908,7 +1908,7 @@ msgstr "Bu bağlantı ayarlardan silindi"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr "Hotspot'u etkinleştirmeyi deneyiniz"
+msgstr "Erişim noktasını etkinleştirmeyi deneyiniz"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
@@ -1916,7 +1916,7 @@ msgstr "%q bağlamayı deneyin"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr "Hotspot paylaşımı etkin"
+msgstr "Erişim noktası paylaşımı etkin"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
@@ -1924,7 +1924,7 @@ msgstr "%q bağlı"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr "Hotspot paylaşımı kapatıldı"
+msgstr "Erişim noktası paylaşımı kapatıldı"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
@@ -1932,7 +1932,7 @@ msgstr "%q bağlantı kesildi"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Hotspot paylaşılamadı, lütfen dnsmasq ayarlarını kontrol edin"
+msgstr "Erişim noktası paylaşımı etkin değil, lütfen dnsmasq ayarlarını kontrol ediniz"
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -1970,11 +1970,11 @@ msgstr "Kablosuz yerel ağ kartının donanım anahtarı kapalı, lütfen gerekt
 
 #: ../../network/utils_notify.go:112
 msgid "System proxy is set successfully."
-msgstr "Sistem vekili ayarlaması başarılı."
+msgstr "Sistem vekil sunucu ayarlaması başarılı."
 
 #: ../../network/utils_notify.go:115
 msgid "System proxy has been cancelled."
-msgstr "Sistem vekil iptal edildi."
+msgstr "Sistem vekil sunucu iptal edildi."
 
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128

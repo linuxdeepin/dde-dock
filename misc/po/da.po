@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-05 00:54+0000\n"
+"PO-Revision-Date: 2017-12-03 18:08+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr "Brugernavn må ikke være tomt."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Brugernavn må omfatte a~z, 0~9, - eller _."
+msgstr "Brugernavn skal består af a~z, 0~9, - eller _."
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -287,7 +287,7 @@ msgstr "Maksimer vindue"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr "Genskab vindue"
+msgstr "Gendan vindue"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
@@ -1229,7 +1229,7 @@ msgstr "IPv6"
 
 #: ../../network/nm_setting_beans_gen.go:467
 msgid "Prefix"
-msgstr "Præfix"
+msgstr "Præfiks"
 
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150

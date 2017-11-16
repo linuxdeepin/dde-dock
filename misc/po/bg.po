@@ -5,13 +5,14 @@
 # Translators:
 # Galin Iskrenov <loot270@abv.bg>, 2016-2017
 # Kiril Kirilov <cybercop_montana@abv.bg>, 2017
+# Tony Ivanov <duskull88@fastmail.fm>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-16 06:27+0000\n"
-"Last-Translator: Galin Iskrenov <loot270@abv.bg>\n"
+"PO-Revision-Date: 2017-12-07 22:05+0000\n"
+"Last-Translator: Tony Ivanov <duskull88@fastmail.fm>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -154,7 +155,7 @@ msgstr "_Close All"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Принудително Приключване"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -1913,7 +1914,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Хотспот споделяне включено"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"

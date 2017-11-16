@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
+# Marck Hrin <marck741@gmail.com>, 2017
 # Yevhenii Miziev <zmekinski@yahoo.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-07 10:07+0000\n"
-"Last-Translator: Yevhenii Miziev <zmekinski@yahoo.com>\n"
+"PO-Revision-Date: 2017-12-16 02:25+0000\n"
+"Last-Translator: Marck Hrin <marck741@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,13 +22,13 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr "Пароль має бути не менше 8 (восьми) символів"
+msgstr "Пароль має бути не менше 8 символів"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "Пароль повинен містити англійські літери (чутливі до регістру), цифри або спеціальні символи(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -55,19 +56,19 @@ msgstr "Ім’я користувача задовге"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Маштабування дисплею"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Налаштування масштабування зображення"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "Успішно встановлено"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Перегляд шляхом виходу з системи після масштабування екрану"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -154,7 +155,7 @@ msgstr "_Закрити все"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Примусово Вийти"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
@@ -166,11 +167,11 @@ msgstr "_Забрати з панелі"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
-msgstr ""
+msgstr "_Усі вікна"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Недостатньо вільного місця на диску, будь-ласка, прибирайте вчасно!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -182,7 +183,7 @@ msgstr "Термінал"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin Screen Recorder"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -194,7 +195,7 @@ msgstr "Показати/Приховати панель завдань"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "Інтерфейс завершення роботи"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -234,11 +235,11 @@ msgstr "Швидкий Screen Off"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Системний Монітор Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
@@ -334,15 +335,15 @@ msgstr "Показати робоче місце"
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Аутентифікація потрібна для перемикання мови"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "Системна мова не змінилася, спробуйте ще раз пізніше."
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "Мова системи була змінена , будь ласка, увійдіть знову після виходу з системи."
 
 #: ../../langselector/locale_ifc.go:60
 msgid "System language is being changed, please wait..."
@@ -356,11 +357,11 @@ msgstr "Мова системи змінюється зі встановленн
 
 #: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q успішно видалено"
 
 #: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Не вдалося встановити %q"
 
 #: ../../mime/media.go:67 ../../mime/media.go:68
 msgid "Nothing"
@@ -376,7 +377,7 @@ msgstr "Запустити програмне забезпечення"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Пароль, необхідний для підключення %q"
 
 #: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
@@ -503,7 +504,7 @@ msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
@@ -984,17 +985,17 @@ msgstr "Локальний IP"
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:409
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "Запит внутрішньої IP-адреси"
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "Забезпечити інкапсуляцію UDP"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Use IP Compression"
-msgstr ""
+msgstr "Використовуйте стиснення IP"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:422
@@ -1220,7 +1221,7 @@ msgstr "Додаткова зона DNS"
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
 msgid "Only applied in corresponding resources"
-msgstr ""
+msgstr "Використовується тільки у відповідних ресурсах"
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
@@ -1483,15 +1484,15 @@ msgstr "SOCKS-сервер"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr ""
+msgstr "SSH Агент"
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
-msgstr ""
+msgstr "Смарт-карта"
 
 #: ../../network/nm_setting_vpn_strongswan.go:81
 msgid "EAP"
-msgstr ""
+msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
@@ -1589,198 +1590,198 @@ msgstr "Відкрити"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed"
-msgstr ""
+msgstr "Стан пристрою змінено."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason"
-msgstr ""
+msgstr "Стан пристрою змінився з невідомої причини."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed"
-msgstr ""
+msgstr "Пристрій зараз управляється"
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Управління цим пристроєм більше не здійснюється."
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Пристрій не був готовий до конфігурації."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "Не вдалося зарезервувати IP-конфігурацію (немає доступної адреси, завершився час очікування тощо)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "IP-конфігурація більше недійсна."
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Паролі вимагались, але не були надані."
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "Запитувальний прилад 802.1x від'єднано від точки доступу або серверу аутентифікації."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Не вдалося виконати конфігурацію запитуючого пристрою 802.1X."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "Запитувальний пристрій 802.1X неочікувано вимкнувся або не відповідає."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "Запитувальний пристрій 802.1X надто довго очікував ідентифікації."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "Службу PPP не вдалося запустити протягом дозволеного часу."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "Службу PPP неочікувано відключено."
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Служба РРР раптово перестала працювати або дала збій."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "Сервісу DHCP не вдалось запуститись у відведений час."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "Служба DHCP повідомила про неочікувану помилку."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Служба DHCP припинила роботу або несподівано вийшла з ладу"
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Не вдалося запустити сервіс загального доступу."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Сервіс загального доступу несподівано припинив роботу."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "Не вдалося запустити сервіс AutoIP."
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "Служба AutoIP повідомила про неочікувану помилку."
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Служба AutoIP неочікувано вимкнулась або не відповідає."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "Не вдалося здійснити набір, оскільки лінії зайняті."
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "Не вдалося встановити з'єднання через відсутній гудок."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "Не вдалося набрати номер з вини провайдера."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Вийшов час набору."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed"
-msgstr ""
+msgstr "Не вдалося встановити з'єднання."
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Не вдалося запустити модем."
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "Не вдалося вибрати визначений GSM APN."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr ""
+msgstr "Не шукають жодних мереж"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Реєстрацію мережі відхилено."
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Час очікування реєстрації в мережі минув."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed"
-msgstr ""
+msgstr "Зареєструватися у запитуваній GSM-мережі не вдалося. "
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed"
-msgstr ""
+msgstr "Перевірити PIN-код не вдалося."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "Необхідна для пристрою мікропрограма може бути втрачена."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
-msgstr ""
+msgstr "Пристрій було видалено."
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "NetworkManager увійшов в режим сну"
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "Активний зв‘язок пристрою було видалено або він зник."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "Користувач або клієнт надіслав запит про відключення."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "Носій/посилання приладу змінилися."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "Передбачалося існуюче підключення пристрою."
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "Запитувальний прилад 802.1x тепер доступний."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
-msgstr ""
+msgstr "Не вдалося знайти модем."
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "Час Bluetooth-з'єднання минув або з'єднатися не вдалося."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "У GSM-модемі відсутня SIM-картка."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "Потрібен PIN-код SIM-картки GSM-модема."
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "Необхідо вказати PUK-код від GSM-модему."
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
@@ -1788,156 +1789,156 @@ msgstr "Невірна SIM-карта GSM-модему"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "Пристрій InfiniBand не підтримує режим з'єднання."
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr ""
+msgstr "Не вдалося встановити залежне з'єднання."
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
-msgstr ""
+msgstr "Проблема з RFC 2684 \nEthernet понад мостом ADSL."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "МодемМенеджер не запустився, або несподівано припинив роботу."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "Мережу Wi-Fi 802.11 не знайдено."
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "Другорядне підключення на основі базового не вдалося."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "Налаштувати DCB чи FCoE не вдалося."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "Помилка об’єднання мережевих карт."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "Модем не вдалося запустити, або він недоступний."
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Модем вже готовий та доступний."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "Неправильний SIM PIN"
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "Формується черга активації нового підключення."
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed"
-msgstr ""
+msgstr "Батьківський пристрій змінено."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Стан керування основним пристроєм змінився."
 
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "Мережевий кабель не підключено."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Переконайтеся, будь ласка, що SIM-карта встановлена з сигналом мобільної мережі."
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "Будь ласка, упевніться, що був обраний правильний тарифний план без заборгованості на SIM-картці."
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
-msgstr ""
+msgstr "Не вдалося активувати VPN-з'єднання, причина невідома."
 
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed"
-msgstr ""
+msgstr "Активувати VPN-з'єднання не вдалося."
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
+msgstr "Зв‘язок VPN змінив стан через від‘єднання з боку користувачів."
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
+msgstr "Змінився стан підключення VPN через відключення від пристроїв."
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
-msgstr ""
+msgstr "Сервіс VPN зупинено."
 
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "IP-конфігурація підключення VPN недійсна."
 
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Час, відведений на спробу підключення до служби VPN, вичерпано."
 
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "Вийшов час запуску служби VPN"
 
 #: ../../network/state_handler.go:114
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "Службу VPN не вдалося запустити."
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
+msgstr "Необхідний для VPN пароль не було надано."
 
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Аутентифікація при доступі до VPN-серверу не вдалася."
 
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "З'єднання було видалено з налаштувань."
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Спробуйте увімкнути точку доступу"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Спробуйте підключити %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Точка доступу включена"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q підключено"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Точка доступу вимкнена"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q відключено"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Неможливо поділитися точкою доступу, перевірте налаштування dnsmasq"
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Неможливо підключити %q, будь ласка, тримайтеся ближче до бездротового маршрутизатора"
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Помилка підключення, неможливо підключити %q, неправильний пароль"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1981,7 +1982,7 @@ msgstr "Батарея критично розряджена"
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
-msgstr ""
+msgstr "Комп'ютер в режимі очікування, будь ласка, підключіть його до мережі."
 
 #: ../../session/power/manager_events.go:134
 msgid "Battery Low"
@@ -1989,24 +1990,24 @@ msgstr "Низький заряд батареї"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
+msgstr "Комп'ютер перейде у режим очікування, будь ласка, підключіться зараз."
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Аутентифікація потрібна для встановлення системного часу."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Аутентифікація потрібна для встановлення системного часового поясу."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Аутентифікація необхідна для контролю того, чи зберігає RTC місцевий або UTC час ."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Аутентифікація необхідна для того, щоб контролювати, чи має бути включена синхронізація часу мережі."

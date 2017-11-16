@@ -9,14 +9,20 @@
 # Benjamin Perez Carrillo <benperezc@gmail.com>, 2016-2017
 # Deepin en Español, 2017
 # Deepin en Español, 2017
+# Deepin en Español, 2017
+# Diego Cornejo <diegof.cornejo@gmail.com>, 2016
+# Diego Sanguinetti, 2017
 # jhalo <jhalo@protonmail.com>, 2017
+# jhalo <jhalo@protonmail.com>, 2017
+# Luis Lazaro <luis_laz_zgz@hotmail.com>, 2016
+# Sigfrido MARTIN IGLESIAS, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-11-24 16:22+0000\n"
+"Last-Translator: Alvaro Samudio <alvarosamudio1@gmail.com>\n"
 "Language-Team: Spanish (Latin America) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es_419/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,13 +32,13 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr "Por favor, ingrese una contraseña de al menos 8 caracteres de longitud"
+msgstr "Por favor, ingrese una contraseña no menor de 8 caracteres"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "La contraseña puede contener letras (mayúsculas y minúsculas), números o símbolos especiales (~! @ # $% ^ & * () [] {} \\ | /?,. <>)"
+msgstr "La contraseña debe contener letras (mayúsculas y minúsculas), números o simbolos especiales  (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -40,11 +46,11 @@ msgstr "El nombre de usuario no puede estar vacío."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "El nombre de usuario debe contener caracteres a~z, 0~9, - o _."
+msgstr "El nombre de usuario debe incluir a~z, 0~9, - ó _."
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
-msgstr "El primer carácter debe estar en minúsculas."
+msgstr "El primer carácter debe estar en minúscula."
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
@@ -52,27 +58,27 @@ msgstr "El nombre de usuario ya existe."
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
-msgstr "El nombre de usuario está siendo utilizado por el sistema."
+msgstr "El nombre de usuario ha sido usado por el sistema."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
-msgstr "El nombre de usuario excede el límite de longitud"
+msgstr "La longitud nombre de usuario supera el límite"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr "Tamaño de la pantalla"
+msgstr "Escalar pantalla"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Configurar escalado de pantalla"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "Establecida con éxito"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Ver al cerrar la sesión después de establecer la escala de visualización"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -80,23 +86,23 @@ msgstr "Puerto serie"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr "Conexión de Red Telefonica"
+msgstr "Red Dial-Up"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr "Dispositivo Manos Libres "
+msgstr "Dispositivo de manos libres"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr "Acceso por voz con manos libres"
+msgstr "Protocolo de voz a manos libres"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr "Acceso por voz con audífonos"
+msgstr "Protocolo de voz por auricular"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr "Agregar objeto"
+msgstr "Carga de objetos"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
@@ -108,19 +114,19 @@ msgstr "Sincronización"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr "Acceso a la libreta de contactos"
+msgstr "Acceso a agenda telefónica"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr "Acceso a la libreta de contactos"
+msgstr "Cliente de acceso a agenda telefónica"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr "Mensaje de acceso"
+msgstr "Acceso a mensaje"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr "Mensaje de notificación"
+msgstr "Notificación de mensaje"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
@@ -139,15 +145,15 @@ msgstr "Desconectado"
 
 #: ../../bluetooth/utils_notify.go:62
 msgid "Make sure %q is turned on and in range"
-msgstr "Asegúrese de que %q esté encendido y dentro del rango"
+msgstr "Asegúrese de que %q está encendido y dentro del rango de alcance"
 
 #: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
 msgid "Bluetooth connection failed"
-msgstr "Error en la conexión Bluetooth"
+msgstr "La conexión Bluetooth ha fallado"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect %q, automatically ignored"
-msgstr "Error al conectar %q. Se omitió automáticamente"
+msgstr "No se pudo conectar q %, automáticamente ignorado"
 
 #: ../../dock/app_entry_menu.go:107
 msgid "_Open"
@@ -159,19 +165,19 @@ msgstr "_Cerrar todo"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Forzar cierre"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
-msgstr "_Acoplar"
+msgstr "Anclar (_D)"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "_Undock"
-msgstr "_Desanclar"
+msgstr "Desanclar (_U)"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
-msgstr "Tod_as las ventanas"
+msgstr "_Todas las ventanas"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
@@ -183,27 +189,27 @@ msgstr "Lanzador"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr "Terminal"
+msgstr "Terminal "
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Grabadora de pantalla Deepin"
+msgstr "Grabador de pantalla Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Bloquear la pantalla"
+msgstr "Bloquear pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Mostrar/Ocultar el panel"
+msgstr "Mostrar/Ocultar la barra de herramientas"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "Apagar Interfaz "
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Emulador de Terminal Quake"
+msgstr "Ventana de terminal Quake"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -219,43 +225,43 @@ msgstr "Captura de ventana"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Retrasar captura"
+msgstr "Retraso de captura de pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr "Administrador de archivos"
+msgstr "Gestor de ficheros"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Desactivar el panel táctil"
+msgstr "Desactivar panel táctil"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr "Cambiar efectos de ventana"
+msgstr "Cambiar efectos de ventana."
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr "Apagado rápido de pantalla "
+msgstr "Apagado de pantalla rápido"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Monitor del sistema Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Selector Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "Cambiar la distribución"
+msgstr "Cambiar distribución de teclado"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "Cambiar al espacio de trabajo de la izquierda"
+msgstr "Cambiar al espacio de trabajo izquierdo"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr "Cambiar al espacio de trabajo de la derecha"
+msgstr "Cambiar al espacio de trabajo derecho"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
@@ -263,7 +269,7 @@ msgstr "Cambiar al espacio de trabajo superior"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr "Cambiar al espacio de trabajo inferior"
+msgstr "Cambie para reducir el espacio de trabajo"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
@@ -283,11 +289,11 @@ msgstr "Cambiar ventanas en reversa"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Mostrar el escritorio"
+msgstr "Mostrar escritorio"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr "Maximizar ventana"
+msgstr "Maximizar ventana "
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
@@ -307,15 +313,15 @@ msgstr "Mover ventana"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr "Ajustar ventana"
+msgstr "Cambiar tamaño de ventana"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "Mover al espacio de trabajo de la izquierda"
+msgstr "Mover al espacio de trabajo izquierdo"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "Mover al espacio de trabajo de la derecha"
+msgstr "Mover al espacio de trabajo derecho"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
@@ -327,15 +333,15 @@ msgstr "Mover al espacio de trabajo inferior"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr "Mostrar ventanas en todos los espacios de trabajo"
+msgstr "Mostrar ventanas de todos los espacios de trabajo"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr "Mostrar ventanas en el espacio de trabajo actual"
+msgstr "Mostrar ventanas del espacio de trabajo actual"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Mostrar espacio de trabajo"
+msgstr "Visualización del espacio de trabajo"
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
@@ -343,7 +349,7 @@ msgstr "Se requiere autenticación para cambiar el idioma"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr "El cambio de idioma del sistema ha fallado, por favor intente después"
+msgstr "El cambio de idioma del sistema falló, por favor intenta más tarde"
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
@@ -351,13 +357,13 @@ msgstr "El idioma del sistema ha cambiado, por favor cierre su sesión e inicie 
 
 #: ../../langselector/locale_ifc.go:60
 msgid "System language is being changed, please wait..."
-msgstr "El idioma del sistema está siendo cambiado, por favor espere..."
+msgstr "Se está cambiando el idioma del sistema. Por favor, espere."
 
 #: ../../langselector/locale_ifc.go:66
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "El idioma del sistema está siendo cambiado con una instalación de paquetes faltantes, por favor espere..."
+msgstr "El idioma del sistema cambiará al instalar un paquete faltante. Por favor, espere..."
 
 #: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
@@ -381,22 +387,22 @@ msgstr "Ejecutar programa"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Contraseña requiere para conectar %q "
 
 #: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
-msgstr "A (5 Ghz)"
+msgstr "A (5 GHz)"
 
 #: ../../network/manager_active.go:332
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 Ghz)"
+msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
-msgstr "Automático"
+msgstr "Automático "
 
 #: ../../network/manager_active.go:345 ../../network/manager_active.go:350
 #: ../../network/nm_setting_virtual_key.go:189
@@ -411,7 +417,7 @@ msgstr "Ninguno"
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
-msgstr "Clave WEP 40/128-bit"
+msgstr "Clave WEP de 40/128-bit"
 
 #: ../../network/manager_active.go:354
 #: ../../network/nm_setting_virtual_key.go:191
@@ -443,12 +449,12 @@ msgstr "FAST"
 #: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr "TLS por túneles"
+msgstr "TLS tunelizado"
 
 #: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
-msgstr "EAP Protegido"
+msgstr "EAP protegido"
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
@@ -464,11 +470,11 @@ msgstr "Conexión inalámbrica"
 
 #: ../../network/nm_custom_type.go:232
 msgid "Wireless Ad-Hoc"
-msgstr "Red Inalámbrica Ad-Hoc"
+msgstr "Ad-Hoc inalámbrica"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Red inalámbrica con AP-Hostpot"
+msgstr "Ap-Hotspot inalámbrico"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
@@ -476,15 +482,15 @@ msgstr "Conexión PPPoE"
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
-msgstr "Conexión Móvil"
+msgstr "Conexión móvil"
 
 #: ../../network/nm_custom_type.go:240
 msgid "Mobile GSM Connection"
-msgstr "Conexión Móvil GSM"
+msgstr "Conexión móvil GSM"
 
 #: ../../network/nm_custom_type.go:242
 msgid "Mobile CDMA Connection"
-msgstr "Conexión Móvil CDMA"
+msgstr "Conexión móvil CDMA"
 
 #: ../../network/nm_custom_type.go:244
 msgid "VPN Connection"
@@ -528,7 +534,7 @@ msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:37
 msgid "MSCHAPV2"
-msgstr "MSCHAPv2"
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
@@ -542,7 +548,7 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_vpn_vpnc.go:150
 msgid "Disabled"
-msgstr "Desactivado"
+msgstr "Deshabilitado"
 
 #: ../../network/nm_setting_802_1x.go:140
 msgid "Anonymous"
@@ -582,22 +588,22 @@ msgstr "Para todos los usuarios"
 
 #: ../../network/nm_setting_beans_gen.go:47
 msgid "Ethernet"
-msgstr "Red ethernet"
+msgstr "Ethernet"
 
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr "Dirección MAC del Dispositivo"
+msgstr "Dirección MAC del dispositivo"
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr "Dirección MAC Clonada"
+msgstr "Dirección MAC clonada"
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr "Personalizar MTU"
+msgstr "Personalizar el MTU"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
@@ -625,7 +631,7 @@ msgstr "Plan"
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
-msgstr "Tipo de servicio"
+msgstr "Tipo de Servicio"
 
 #: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:65
@@ -682,12 +688,12 @@ msgstr "Contraseña"
 #: ../../network/nm_setting_beans_gen.go:69
 #: ../../network/nm_setting_beans_gen.go:86
 msgid "Network ID"
-msgstr "ID de red"
+msgstr "ID de Red"
 
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr "Sólo Red doméstica"
+msgstr "Solo red doméstica"
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
@@ -703,15 +709,15 @@ msgstr "Seguridad"
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr "Seguridad Requerida"
+msgstr "Seguridad requerida"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
-msgstr "Llave"
+msgstr "Clave"
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
-msgstr "Autorización EAP"
+msgstr "Autenticación EAP"
 
 #: ../../network/nm_setting_beans_gen.go:111
 msgid "Identity"
@@ -732,7 +738,7 @@ msgstr "Identidad"
 #: ../../network/nm_setting_beans_gen.go:421
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Ask for Pwd"
-msgstr "Pregunte por la contraseña"
+msgstr "Requerir contraseña"
 
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Anonymous ID"
@@ -763,7 +769,7 @@ msgstr "Clave privada"
 #: ../../network/nm_setting_beans_gen.go:300
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "CA Cert"
-msgstr "Certificado de CA"
+msgstr "Certificado CA"
 
 #: ../../network/nm_setting_beans_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:187
@@ -827,7 +833,7 @@ msgstr "PPP"
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
 msgid "Use MPPE"
-msgstr "Usar MPPE"
+msgstr "Utilice MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"
@@ -837,37 +843,37 @@ msgstr "128-bit MPPE"
 #: ../../network/nm_setting_beans_gen.go:261
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Stateful MPPE"
-msgstr "Estado MPPE"
+msgstr "MPPE Stateful"
 
 #: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:386
 msgid "Refuse EAP Authentication"
-msgstr "Rechazar autenticación EAP"
+msgstr "Autenticación EAP rechazada"
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Refuse PAP Authentication"
-msgstr "Rechazar autenticación PAP"
+msgstr "Autenticación PAP rechazada"
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse CHAP Authentication"
-msgstr "Rechazar autenticación CHAP"
+msgstr "Autenticación CHAP rechazada"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse MSCHAP Authentication"
-msgstr "Rechazar autenticación MSCHAP"
+msgstr "Negar autenticación MSCHAP"
 
 #: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:266
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "Rechazar autenticación MSCHAPv2"
+msgstr "Negar autenticación MSCHAPv2"
 
 #: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:267
@@ -879,19 +885,19 @@ msgstr "Sin compresión de datos BSD"
 #: ../../network/nm_setting_beans_gen.go:268
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "No Deflate Data Compression"
-msgstr "Sin compresión de datos Deflate"
+msgstr "No desinflar la compresión de datos"
 
 #: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:269
 #: ../../network/nm_setting_beans_gen.go:393
 msgid "No TCP Header Compression"
-msgstr "Sin compresión de encabezado TCP"
+msgstr "Sin compresión de cabecera TCP"
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:272
 #: ../../network/nm_setting_beans_gen.go:394
 msgid "Send PPP Echo Packets"
-msgstr "Enviar paquetes echo PPP"
+msgstr "Enviar paquetes PPP Echo"
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
@@ -905,7 +911,7 @@ msgstr "VPN"
 
 #: ../../network/nm_setting_beans_gen.go:176
 msgid "Need VPN Plugin"
-msgstr "Plugin necesario para VPN"
+msgstr "Se necesita el Plugin VPN"
 
 #: ../../network/nm_setting_beans_gen.go:177
 #: ../../network/nm_setting_beans_gen.go:182
@@ -934,12 +940,12 @@ msgstr "Dominio NT"
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
 msgid "Proxy"
-msgstr "Servidor proxy"
+msgstr "Proxy"
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:283
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr "Permitir escritorio troyano seguro de Cisco"
+msgstr "Permitir el troyano 'Cisco Secure Desktop'"
 
 #: ../../network/nm_setting_beans_gen.go:186
 #: ../../network/nm_setting_beans_gen.go:284
@@ -949,7 +955,7 @@ msgstr "Script CSD"
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:287
 msgid "Use FSID for Key Passphrase"
-msgstr "Usar FSID para llave de contraseña"
+msgstr "Usar FSID para la contraseña"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
@@ -962,19 +968,19 @@ msgstr "Tipo de autenticación"
 #: ../../network/nm_setting_beans_gen.go:305
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
-msgstr "LLave estática"
+msgstr "Clave estática"
 
 #: ../../network/nm_setting_beans_gen.go:201
 #: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:329
 msgid "Customize Key Direction"
-msgstr "Personalizar dirección de la llave"
+msgstr "Personalizar instrucción de claves"
 
 #: ../../network/nm_setting_beans_gen.go:202
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:330
 msgid "Key Direction"
-msgstr "Dirección de la llave"
+msgstr "Instrucción de claves"
 
 #: ../../network/nm_setting_beans_gen.go:203
 #: ../../network/nm_setting_beans_gen.go:308
@@ -994,12 +1000,12 @@ msgstr "Solicitar una dirección IP interna"
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
 msgid "Enforce UDP Encapsulation"
-msgstr "Hacer cumplir encapsulación UDP"
+msgstr "Forzar encapsulación UDP"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Use IP Compression"
-msgstr "Usar compresión de IP"
+msgstr "Usar compresión IP"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:422
@@ -1020,12 +1026,12 @@ msgstr "Contraseña de grupo"
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:426
 msgid "Use Hybrid Authentication"
-msgstr "Usar autorización híbrida"
+msgstr "Usar autenticación híbrida"
 
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:427
 msgid "CA File"
-msgstr "Archivo CA"
+msgstr "Fichero CA"
 
 #: ../../network/nm_setting_beans_gen.go:246
 msgid "VPN IPsec"
@@ -1037,12 +1043,12 @@ msgstr "Habilitar IPsec"
 
 #: ../../network/nm_setting_beans_gen.go:250
 msgid "Group ID"
-msgstr "ID de Grupo"
+msgstr "ID de grupo"
 
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr "Llave pre-compartida"
+msgstr "Clave precompartida"
 
 #: ../../network/nm_setting_beans_gen.go:257
 #: ../../network/nm_setting_beans_gen.go:381
@@ -1055,7 +1061,7 @@ msgstr "Sin compresión de protocolo de campo"
 
 #: ../../network/nm_setting_beans_gen.go:271
 msgid "No Address/Control Compression"
-msgstr "Sin compresión de dirección/control"
+msgstr "Sin compresión de dirección y control"
 
 #: ../../network/nm_setting_beans_gen.go:315
 msgid "VPN Security"
@@ -1063,19 +1069,19 @@ msgstr "Seguridad VPN"
 
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "Cipher"
-msgstr "Clave"
+msgstr "Cifrado"
 
 #: ../../network/nm_setting_beans_gen.go:318
 msgid "HMAC Auth"
-msgstr "Autorización HMAC"
+msgstr "Autenticación HMAC"
 
 #: ../../network/nm_setting_beans_gen.go:324
 msgid "VPN TLS Authentication"
-msgstr "Autorización VPN TLS"
+msgstr "Autenticación TLS VPN"
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "Subject Match"
-msgstr "Combinar temas"
+msgstr "Emparejar asuntos"
 
 #: ../../network/nm_setting_beans_gen.go:327
 msgid "Remote Cert Type"
@@ -1083,19 +1089,19 @@ msgstr "Tipo de certificado remoto"
 
 #: ../../network/nm_setting_beans_gen.go:328
 msgid "Key File"
-msgstr "Archivo de llaves"
+msgstr "Archivo de clave"
 
 #: ../../network/nm_setting_beans_gen.go:336
 msgid "VPN Proxies"
-msgstr "Servidores proxies VPN"
+msgstr "Proxies VPN"
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
-msgstr "Tipo Proxy"
+msgstr "Tipo de Proxy "
 
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Server IP"
-msgstr "IP del servidor"
+msgstr "Servidor IP"
 
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "Port"
@@ -1103,7 +1109,7 @@ msgstr "Puerto"
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Retry Indefinitely When Failed"
-msgstr "Reintentar indefinidamente cuando falla"
+msgstr "Reintentar indefinidamente cuando falle"
 
 #: ../../network/nm_setting_beans_gen.go:349
 #: ../../network/nm_setting_beans_gen.go:433
@@ -1112,11 +1118,11 @@ msgstr "VPN Avanzado"
 
 #: ../../network/nm_setting_beans_gen.go:351
 msgid "Customize Gateway Port"
-msgstr "Personalizar puerto de la Puerta de enlace"
+msgstr "Personalizar puerto de puerta de enlace"
 
 #: ../../network/nm_setting_beans_gen.go:352
 msgid "Gateway Port"
-msgstr "Puerto de la puerta de enlace"
+msgstr "Puerto de puerta de enlace"
 
 #: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Renegotiation Interval"
@@ -1128,7 +1134,7 @@ msgstr "Intervalo de renegociación"
 
 #: ../../network/nm_setting_beans_gen.go:355
 msgid "Use LZO data compression"
-msgstr "Usar compresión de datos LZO"
+msgstr "Utilizar compresión LZO"
 
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "Use TCP connection"
@@ -1144,7 +1150,7 @@ msgstr "Personalizar túnel MTU"
 
 #: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize UDP Fragment Size"
-msgstr "Personalizar tamaño de fragmento UDP"
+msgstr "Personalizar tamaño del fragmento UDP"
 
 #: ../../network/nm_setting_beans_gen.go:361
 msgid "UDP Fragment Size"
@@ -1152,11 +1158,11 @@ msgstr "Tamaño del fragmento UDP"
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Restrict Tunnel TCP MSS"
-msgstr "Restringir túnel TCP MSS"
+msgstr "Restringir el túnel TCP MSS"
 
 #: ../../network/nm_setting_beans_gen.go:363
 msgid "Randomize Remote Hosts"
-msgstr "Aleatorizar Hosts Remotos"
+msgstr "Aleatorizar hosts remotos"
 
 #: ../../network/nm_setting_beans_gen.go:435
 msgid "Domain"
@@ -1176,7 +1182,7 @@ msgstr "Cifrado"
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "NAT Traversal"
-msgstr "NAT Transversal"
+msgstr "Recorrido NAT"
 
 #: ../../network/nm_setting_beans_gen.go:440
 msgid "IKE DH Group"
@@ -1184,15 +1190,15 @@ msgstr "Grupo IKE DH"
 
 #: ../../network/nm_setting_beans_gen.go:441
 msgid "Forward Secrecy"
-msgstr "Avanzar con discreción"
+msgstr "Reenvíar secreto"
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "Local Port"
-msgstr "Puerto Local"
+msgstr "Puerto local"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Disable Dead Peer Detection"
-msgstr "Desactivar detección de punto muerto"
+msgstr "Deshabilitar detección de pares muertos"
 
 #: ../../network/nm_setting_beans_gen.go:449
 msgid "IPv4"
@@ -1225,7 +1231,7 @@ msgstr "DNS Secundario"
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
 msgid "Only applied in corresponding resources"
-msgstr "Sólo se aplica en los recursos correspondientes"
+msgstr "Solo aplicable en los recursos correspondientes"
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
@@ -1238,7 +1244,7 @@ msgstr "Prefijo"
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "Custom"
-msgstr "Personalizar"
+msgstr "Personailzar"
 
 #: ../../network/nm_setting_gsm.go:165
 #: ../../network/nm_setting_virtual_key.go:159
@@ -1248,7 +1254,7 @@ msgstr "Personalizar"
 #: ../../network/nm_setting_wireless.go:36
 #: ../../network/nm_setting_wireless.go:85
 msgid "Default"
-msgstr "Por defecto "
+msgstr "Por defecto"
 
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip6_config.go:38
@@ -1258,7 +1264,7 @@ msgstr "Automático"
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip6_config.go:40
 msgid "Link-Local Only"
-msgstr "Sólo conexión local"
+msgstr "Solo enlace local"
 
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
@@ -1297,11 +1303,11 @@ msgstr "PPTP"
 
 #: ../../network/nm_setting_virtual_key.go:174
 msgid "OpenConnect"
-msgstr "Activar conexión"
+msgstr "OpenConnect"
 
 #: ../../network/nm_setting_virtual_key.go:175
 msgid "OpenVPN"
-msgstr "Activar servidor VPN"
+msgstr "OpenVPN"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "VPNC"
@@ -1309,26 +1315,26 @@ msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Empresarial"
+msgstr "WPA/WPA2 Enterprise"
 
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:215
 msgid "All Available (default)"
-msgstr "Todo Disponible (Predeterminado)"
+msgstr "Todos disponibles (por defecto)"
 
 #: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:216
 msgid "128-bit (most secure)"
-msgstr "128-bit (más segura)"
+msgstr "128-bit (más seguro)"
 
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:217
 msgid "40-bit (less secure)"
-msgstr "40-bit (menos segura)"
+msgstr "40-bit (menos seguro)"
 
 #: ../../network/nm_setting_virtual_key.go:224
 msgid "Secure (default)"
-msgstr "Segura (Predeterminada)"
+msgstr "Seguro (por defecto)"
 
 #: ../../network/nm_setting_virtual_key.go:225
 msgid "Weak"
@@ -1346,7 +1352,7 @@ msgstr "Guardado"
 #: ../../network/nm_setting_vpn_pptp.go:37
 #: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
 msgid "Always Ask"
-msgstr "Preguntar siempre"
+msgstr "Siempre preguntar"
 
 #: ../../network/nm_setting_vpn_l2tp.go:38
 #: ../../network/nm_setting_vpn_openvpn.go:35
@@ -1354,7 +1360,7 @@ msgstr "Preguntar siempre"
 #: ../../network/nm_setting_vpn_pptp.go:38
 #: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
 msgid "Not Required"
-msgstr "No es requerido"
+msgstr "No requerido"
 
 #: ../../network/nm_setting_vpn_openvpn.go:113
 msgid "Certificates (TLS)"
@@ -1500,15 +1506,15 @@ msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
-msgstr "Cisco (Predeterminado)"
+msgstr "Cisco (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:143
 msgid "Netscreen"
-msgstr "Monitorear la red"
+msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T Cuando este Disponible (Predeterminado)"
+msgstr "NAT-T si está disponible (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "NAT-T Always"
@@ -1521,24 +1527,24 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:162
 msgid "DH Group 1"
-msgstr "Grupo DH 1"
+msgstr "DH Grupo 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:155
 msgid "DH Group 2 (default)"
-msgstr "Grupo DH 2 (Predeterminado)"
+msgstr "DH Grupo 2 (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:156
 #: ../../network/nm_setting_vpn_vpnc.go:164
 msgid "DH Group 5"
-msgstr "Grupo DH 5"
+msgstr "DH Grupo 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:160
 msgid "Server (default)"
-msgstr "Servidor (Predeterminado)"
+msgstr "Servidor (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:163
 msgid "DH Group 2"
-msgstr "Grupo DH 2"
+msgstr "DH Grupo 2"
 
 #: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
@@ -1550,7 +1556,7 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
-msgstr "Punto de acceso a red WIFI"
+msgstr "AP-Hotspot"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
@@ -1562,15 +1568,15 @@ msgstr "WEP Dinámica"
 
 #: ../../network/nm_setting_wireless_security.go:67
 msgid "Ad-Hoc WPA-PSK"
-msgstr "Ad-Hoc WPA-PSK"
+msgstr "WPA-PSK Ad-Hoc"
 
 #: ../../network/nm_setting_wireless_security.go:68
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infraestructura"
+msgstr "Infraestructura WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:69
 msgid "WPA Enterprise"
-msgstr "WPA Empresarial"
+msgstr "WPA Enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:73
 msgid "WEP40"
@@ -1590,7 +1596,7 @@ msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:80
 msgid "Open"
-msgstr "Abrir"
+msgstr "Abierta"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed"
@@ -1657,7 +1663,7 @@ msgstr "El servicio PPP se cerro o falla inesperadamente"
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr "La computadora estará en modo de suspensión, por favor, conéctate ahora"
+msgstr "El servicio DHCP no se inició dentro del tiempo permitido"
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
@@ -1737,7 +1743,7 @@ msgstr "Error en la comprobación del PIN "
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr "El firmware necesario para el dispositivo puede estar errado."
+msgstr "El firmware necesario para el dispositivo podría no estar disponible."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
@@ -1753,19 +1759,19 @@ msgstr "La conexión activa del dispositivo fue eliminada"
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect"
-msgstr "Un usuario o cliente requiere desconexion "
+msgstr "Un usuario o cliente solicita desconexión"
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr "El operador/conexión del dispositivo a cambiado."
+msgstr "El operador/conexión del dispositivo ha cambiado."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr "La conexión existente del dispositivo se suponía"
+msgstr "La conexión existente del dispositivo fue asumida"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr "La petición 802.1X esta disponible ahora."
+msgstr "La petición 802.1X ya está disponible."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
@@ -1789,7 +1795,7 @@ msgstr "PUK SIM de módem GSM es requerido"
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "La Tarjeta SIM del modem GSM es incorrecta."
+msgstr "SIM en módem GSM incorrecta."
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
@@ -1894,7 +1900,7 @@ msgstr "Se ha agotado el tiempo de espera del servicio VPN"
 
 #: ../../network/state_handler.go:114
 msgid "The VPN service failed to start"
-msgstr "No se pudo iniciar el servicio VPN"
+msgstr "Falló el inicio del servicio VPN"
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
@@ -1910,39 +1916,39 @@ msgstr "La conexión se ha eliminado de la configuración"
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Intenta activar la conexión compartida"
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Intente conectar %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Permitir conexión compartida activada"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q conectado"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Permitir conexión compartida desactivada"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q desconectado"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "No es posible usar la conexión compartida, comprueba los ajustes de \"dnsmasq\""
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "No se puede conectar %q, por favor manténgase cerca del enrutador inalámbrico"
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Error en la conexión, no se puede conectar %q, contraseña incorrecta"
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1950,15 +1956,15 @@ msgstr "Desconocido"
 
 #: ../../network/utils_notify.go:92
 msgid "You are now offline."
-msgstr "Ahora está desconectado."
+msgstr "Ahora está fuera de línea."
 
 #: ../../network/utils_notify.go:96
 msgid "Airplane mode enabled."
-msgstr "Modo avión habilitado."
+msgstr "Modo avión activado."
 
 #: ../../network/utils_notify.go:104
 msgid "Access Point mode is not supported by this device."
-msgstr "El modo Punto de Acceso no está soportado por este dispositivo."
+msgstr "El modo de punto de acceso no es compatible con este dispositivo."
 
 #: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
 #: ../../network/utils_notify.go:115
@@ -1968,25 +1974,25 @@ msgstr "Redes"
 #: ../../network/utils_notify.go:108
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "El interruptor de la Tarjeta WLAN está apagado, por favor enciéndalo si es necesario."
+msgstr "El interruptor físico de la tarjeta WLAN está en apagado, por favor enciéndalo cuando sea necesario."
 
 #: ../../network/utils_notify.go:112
 msgid "System proxy is set successfully."
-msgstr "El proxy del sistema se estableció correctamente."
+msgstr "El proxy del sistema fue configurado correctamente."
 
 #: ../../network/utils_notify.go:115
 msgid "System proxy has been cancelled."
-msgstr "El proxy del sistema fue cancelado."
+msgstr "El proxy del sistema ha sido cancelado."
 
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128
 msgid "Battery Critical Low"
-msgstr "Nivel de Batería Crítico"
+msgstr "Batería crítica"
 
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
-msgstr "El equipo ha estado en modo de suspensión, por favor, conéctelo"
+msgstr "El equipo ha estado en modo de suspensión; por favor, conéctelo"
 
 #: ../../session/power/manager_events.go:134
 msgid "Battery Low"
@@ -1994,24 +2000,24 @@ msgstr "Batería baja"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr "La computadora estará en modo de suspensión, por favor, conéctate ahora"
+msgstr "El equipo estará en modo de suspensión; por favor, conéctalo ahora"
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Se requiere autenticación para configurar la hora del sistema."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Se requiere autenticación para configurar la zona horaria del sistema."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Se requiere autenticación para controlar si el RTC almacena la hora local o UTC."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Se requiere autenticación para controlar la sincronización de la hora por red si está activada."

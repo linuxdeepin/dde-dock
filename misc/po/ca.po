@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Davidmp <medipas@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-15 17:47+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-12-19 17:38+0000\n"
+"Last-Translator: Davidmp <medipas@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,21 +20,21 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "Si us plau, escriviu una contrasenya d'un mínim de 8 caràcters."
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "La contrasenya ha de contenir lletres angleses (majúscules o minúscules), números o símbols especials (~!@#$%^&*()[]{}\\|/?,.<>)."
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
-msgstr "El nom d'usuari no pot ser buit"
+msgstr "El nom d'usuari no pot estar en blanc."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "El nom d'usuari ha de contenir lletres de la a a la z, números del 0 al 9, - o _."
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -41,7 +42,7 @@ msgstr "El primer caràcter ha de ser en minúscules."
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
-msgstr ""
+msgstr "El nom d'usuari ja existeix."
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
@@ -49,76 +50,76 @@ msgstr "El nom d'usuari l'ha usat el sistema."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "El nom d'usuari és massa llarg."
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Escalat de la pantalla"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Establiment de l'escalat de la pantalla"
 
 #: ../../appearance/scale.go:75
 msgid "Set successfully"
-msgstr ""
+msgstr "Establiment correcte"
 
 #: ../../appearance/scale.go:76
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Visualitzeu-ho sortint i tornant a entrar després d'establir l'escalat de la pantalla."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr ""
+msgstr "Port de sèrie"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr ""
+msgstr "Xarxa de marcatge"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr ""
+msgstr "Dispositiu de mans lliures"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr ""
+msgstr "Passarel·la de veu de mans lliures"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr ""
+msgstr "Passarel·la de veu d'auriculars"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr ""
+msgstr "Premuda d'objecte"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr ""
+msgstr "Transferència de fitxer"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
-msgstr ""
+msgstr "Sincronització"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr ""
+msgstr "Accés a l'agenda de telèfons"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr ""
+msgstr "Client d'accés a l'agenda de telèfons"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr ""
+msgstr "Accés a missatges"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr ""
+msgstr "Notificació de missatge"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
 msgid "Connected"
-msgstr ""
+msgstr "Connectat"
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
@@ -128,47 +129,47 @@ msgstr ""
 #: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
 #: ../../network/utils_notify.go:214
 msgid "Disconnected"
-msgstr ""
+msgstr "Desconnectat"
 
 #: ../../bluetooth/utils_notify.go:62
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Assegureu-vos que %q estigui activada i a l'abast."
 
 #: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "Ha fallat la connexió de Bluetooth."
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "Ha fallat connectar amb %q. S'ignora automàticament."
 
 #: ../../dock/app_entry_menu.go:107
 msgid "_Open"
-msgstr "_Obrir"
+msgstr "_Obre"
 
 #: ../../dock/app_entry_menu.go:114
 msgid "_Close All"
-msgstr ""
+msgstr "Tan_ca-ho tot"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Força'n la sortida"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
-msgstr ""
+msgstr "Aco_bla"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "_Undock"
-msgstr "_Treure del dock"
+msgstr "Desacob_la"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
-msgstr ""
+msgstr "_Totes les finestres"
 
 #: ../../housekeeping/init.go:83
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Espai de disc insuficient. Si us plau, feu-ne neteja!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -180,23 +181,23 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Gravador de pantalla del Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr ""
+msgstr "Bloqueja la pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr ""
+msgstr "Mostra / amaga l'acoblador"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "Atura la interfície"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "Finestra del terminal Quake"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -204,161 +205,161 @@ msgstr "Captura de pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr ""
+msgstr "Captura de pantalla completa"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr ""
+msgstr "Captura de la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr ""
+msgstr "Ajorna la captura"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr ""
+msgstr "Gestor de fitxers"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr ""
+msgstr "Inhabilita el ratolí tàctil"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr ""
+msgstr "Commuta els efectes de les finestres"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "Desactiva la pantalla ràpida"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Monitor de sistema del Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Selector del Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr ""
+msgstr "Commuta la disposició"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr ""
+msgstr "Ves a l'espai de treball de l'esquerra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr ""
+msgstr "Ves a l'espai de treball de la dreta"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr ""
+msgstr "Ves a l'espai de treball de dalt"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr ""
+msgstr "Ves a l'espai de treball de baix"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
-msgstr ""
+msgstr "Commuta finestres semblants"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "Commuta finestres semblants a la inversa"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
-msgstr ""
+msgstr "Commuta finestres"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "Commuta finestres a la inversa"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr ""
+msgstr "Mostra l'escriptori"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr ""
+msgstr "Maximitza la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr ""
+msgstr "Restaura la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr ""
+msgstr "Minimitza la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
-msgstr ""
+msgstr "Tanca la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
-msgstr ""
+msgstr "Mou la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr ""
+msgstr "Canvia la mida de la finestra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr ""
+msgstr "Mou a l'espai de treball de l'esquerra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr ""
+msgstr "Mou a l'espai de treball de la dreta"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr ""
+msgstr "Mou a l'espai de treball de dalt"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr ""
+msgstr "Mou a l'espai de treball de baix"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "Mostra les finestres de tots els espais de treball"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "Mostra les finestres de l'espai de treball actual"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr ""
+msgstr "Mostra l'espai de treball"
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Cal autenticació per canviar la llengua."
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més tard."
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "S'ha canviat la llengua del sistema. Si us plau, torneu a entrar a la sessió després de sortir-ne."
 
 #: ../../langselector/locale_ifc.go:60
 msgid "System language is being changed, please wait..."
-msgstr ""
+msgstr "Es canvia la llengua del sistema. Espereu, si us plau..."
 
 #: ../../langselector/locale_ifc.go:66
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "Es canvia la llengua del sistema amb la instal·lació de paquets de llengua nous. Espereu, si us plau..."
 
 #: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q eliminada correctament"
 
 #: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Ha fallat desinstal·lar %q."
 
 #: ../../mime/media.go:67 ../../mime/media.go:68
 msgid "Nothing"
@@ -370,26 +371,26 @@ msgstr "Obre una carpeta"
 
 #: ../../mime/media.go:85 ../../mime/media.go:86
 msgid "Run Software"
-msgstr ""
+msgstr "Executa el Programari"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Cal la contrasenya per connectar amb %q"
 
 #: ../../network/manager_active.go:330
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
-msgstr ""
+msgstr "A (5 GHz)"
 
 #: ../../network/manager_active.go:332
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
-msgstr ""
+msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
-msgstr ""
+msgstr "Automàtic"
 
 #: ../../network/manager_active.go:345 ../../network/manager_active.go:350
 #: ../../network/nm_setting_virtual_key.go:189
@@ -404,44 +405,44 @@ msgstr "Cap"
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "Clau WEP de 40/128 bits"
 
 #: ../../network/manager_active.go:354
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "WPA/WPA2 personal"
 
 #: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
-msgstr ""
+msgstr "Salt"
 
 #: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
-msgstr ""
+msgstr "Ràpid"
 
 #: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr ""
+msgstr "TLS per túnel"
 
 #: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
-msgstr ""
+msgstr "EAP protegit"
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
@@ -449,39 +450,39 @@ msgstr "Connexió per cable"
 
 #: ../../network/nm_custom_type.go:226
 msgid "Connection"
-msgstr ""
+msgstr "Connexió"
 
 #: ../../network/nm_custom_type.go:230
 msgid "Wireless Connection"
-msgstr ""
+msgstr "Connexió sense fil"
 
 #: ../../network/nm_custom_type.go:232
 msgid "Wireless Ad-Hoc"
-msgstr ""
+msgstr "Sense fil Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr "Sense fil Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
-msgstr ""
+msgstr "Connexió PPPoE"
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
-msgstr ""
+msgstr "Connexió de mòbil"
 
 #: ../../network/nm_custom_type.go:240
 msgid "Mobile GSM Connection"
-msgstr ""
+msgstr "Connexió de mòbil GSM"
 
 #: ../../network/nm_custom_type.go:242
 msgid "Mobile CDMA Connection"
-msgstr ""
+msgstr "Connexió de mòbil CDMA"
 
 #: ../../network/nm_custom_type.go:244
 msgid "VPN Connection"
-msgstr ""
+msgstr "Connexió VPN"
 
 #: ../../network/nm_custom_type.go:246
 msgid "VPN L2TP"
@@ -501,7 +502,7 @@ msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
@@ -509,57 +510,57 @@ msgstr "VPN VPNC"
 
 #: ../../network/nm_setting_802_1x.go:34
 msgid "PAP"
-msgstr ""
+msgstr "PAP"
 
 #: ../../network/nm_setting_802_1x.go:35
 msgid "CHAP"
-msgstr ""
+msgstr "CHAP"
 
 #: ../../network/nm_setting_802_1x.go:36
 msgid "MSCHAP"
-msgstr ""
+msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:37
 msgid "MSCHAPV2"
-msgstr ""
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
-msgstr ""
+msgstr "GTC"
 
 #: ../../network/nm_setting_802_1x.go:39
 msgid "OTP"
-msgstr ""
+msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:139
 #: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_vpn_vpnc.go:150
 msgid "Disabled"
-msgstr ""
+msgstr "Inhabilitat"
 
 #: ../../network/nm_setting_802_1x.go:140
 msgid "Anonymous"
-msgstr ""
+msgstr "Anònima"
 
 #: ../../network/nm_setting_802_1x.go:141
 msgid "Authenticated"
-msgstr ""
+msgstr "Autenticada"
 
 #: ../../network/nm_setting_802_1x.go:142
 msgid "Both"
-msgstr ""
+msgstr "Amdues"
 
 #: ../../network/nm_setting_802_1x.go:147
 msgid "Version 0"
-msgstr ""
+msgstr "Versió 0"
 
 #: ../../network/nm_setting_802_1x.go:148
 msgid "Version 1"
-msgstr ""
+msgstr "Versió 1"
 
 #: ../../network/nm_setting_beans_gen.go:37
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: ../../network/nm_setting_beans_gen.go:39
 msgid "Name"
@@ -567,11 +568,11 @@ msgstr "Nom"
 
 #: ../../network/nm_setting_beans_gen.go:40
 msgid "Automatically connect"
-msgstr "Connecta't automàticament"
+msgstr "Connecta-hi automàticament"
 
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "For All Users"
-msgstr ""
+msgstr "Per a tots els usuaris"
 
 #: ../../network/nm_setting_beans_gen.go:47
 msgid "Ethernet"
@@ -590,7 +591,7 @@ msgstr "Adreça MAC clonada"
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr "Personalitzar MTU"
+msgstr "Personalitza l'MTU"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
@@ -606,15 +607,15 @@ msgstr "Mòbil"
 
 #: ../../network/nm_setting_beans_gen.go:60
 msgid "Country or region"
-msgstr ""
+msgstr "País o regió"
 
 #: ../../network/nm_setting_beans_gen.go:61
 msgid "Provider"
-msgstr ""
+msgstr "Proveïdor"
 
 #: ../../network/nm_setting_beans_gen.go:62
 msgid "Plan"
-msgstr ""
+msgstr "Pla"
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
@@ -680,7 +681,7 @@ msgstr "ID de xarxa"
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr "Xarxa domèstica només"
+msgstr "Només xarxa domèstica"
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
@@ -696,7 +697,7 @@ msgstr "Seguretat"
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr "Seguretat requerida"
+msgstr "Cal seguretat"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
@@ -704,7 +705,7 @@ msgstr "Clau"
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
-msgstr ""
+msgstr "Autenticació EAP"
 
 #: ../../network/nm_setting_beans_gen.go:111
 msgid "Identity"
@@ -725,17 +726,17 @@ msgstr "Identitat"
 #: ../../network/nm_setting_beans_gen.go:421
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Ask for Pwd"
-msgstr "Ask for Pwd"
+msgstr "Demana la contrasenya"
 
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Anonymous ID"
-msgstr ""
+msgstr "ID anònim"
 
 #: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:199
 #: ../../network/nm_setting_beans_gen.go:304
 msgid "Private Pwd"
-msgstr ""
+msgstr "Contrasenya privada"
 
 #: ../../network/nm_setting_beans_gen.go:117
 #: ../../network/nm_setting_beans_gen.go:188
@@ -746,7 +747,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:407
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
-msgstr "Clau Privada"
+msgstr "Clau privada"
 
 #: ../../network/nm_setting_beans_gen.go:118
 #: ../../network/nm_setting_beans_gen.go:183
@@ -766,15 +767,15 @@ msgstr "Certificat CA"
 #: ../../network/nm_setting_beans_gen.go:301
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "User Cert"
-msgstr "Cert. d'usuari"
+msgstr "Certificat d'usuari"
 
 #: ../../network/nm_setting_beans_gen.go:120
 msgid "Provisioning"
-msgstr ""
+msgstr "Proveïment"
 
 #: ../../network/nm_setting_beans_gen.go:121
 msgid "PAC file"
-msgstr ""
+msgstr "Fitxer PAC"
 
 #: ../../network/nm_setting_beans_gen.go:122
 msgid "PEAP Version"
@@ -782,7 +783,7 @@ msgstr "Versió PEAP"
 
 #: ../../network/nm_setting_beans_gen.go:123
 msgid "Inner Auth"
-msgstr ""
+msgstr "Autenticació interna"
 
 #: ../../network/nm_setting_beans_gen.go:129
 msgid "Wi-Fi"
@@ -820,71 +821,71 @@ msgstr "PPP"
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
 msgid "Use MPPE"
-msgstr ""
+msgstr "Usa MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"
-msgstr "128-bit MPPE"
+msgstr "MPPE de 128 bits"
 
 #: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:261
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Stateful MPPE"
-msgstr ""
+msgstr "MPPE amb estat"
 
 #: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:386
 msgid "Refuse EAP Authentication"
-msgstr ""
+msgstr "Rebutja l'autenticació EAP"
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Refuse PAP Authentication"
-msgstr ""
+msgstr "Rebutja l'autenticació PAP"
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse CHAP Authentication"
-msgstr ""
+msgstr "Rebutja l'autenticació CHAP"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse MSCHAP Authentication"
-msgstr ""
+msgstr "Rebutja l'autenticació MSCHAP"
 
 #: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:266
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr ""
+msgstr "Rebutja l'autenticació MSCHAPv2"
 
 #: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:267
 #: ../../network/nm_setting_beans_gen.go:391
 msgid "No BSD Data Compression"
-msgstr ""
+msgstr "Sense compressió de dades BSD"
 
 #: ../../network/nm_setting_beans_gen.go:165
 #: ../../network/nm_setting_beans_gen.go:268
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "No Deflate Data Compression"
-msgstr ""
+msgstr "Sense deflació de compressió de dades"
 
 #: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:269
 #: ../../network/nm_setting_beans_gen.go:393
 msgid "No TCP Header Compression"
-msgstr ""
+msgstr "Sense compressió de capçalera TCP"
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:272
 #: ../../network/nm_setting_beans_gen.go:394
 msgid "Send PPP Echo Packets"
-msgstr ""
+msgstr "Envia paquets PPP Echo"
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
@@ -898,7 +899,7 @@ msgstr "VPN"
 
 #: ../../network/nm_setting_beans_gen.go:176
 msgid "Need VPN Plugin"
-msgstr "Necessita el plugin de la VPN"
+msgstr "Cal el connector de VPN"
 
 #: ../../network/nm_setting_beans_gen.go:177
 #: ../../network/nm_setting_beans_gen.go:182
@@ -915,41 +916,41 @@ msgstr "Necessita el plugin de la VPN"
 #: ../../network/nm_setting_beans_gen.go:454
 #: ../../network/nm_setting_beans_gen.go:468
 msgid "Gateway"
-msgstr "Pasarel·la"
+msgstr "Passarel·la"
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
 #: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "NT Domain"
-msgstr ""
+msgstr "Domini NT"
 
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
 msgid "Proxy"
-msgstr "Proxy"
+msgstr "Intermediari"
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:283
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr ""
+msgstr "Permet Cisco Secure Desktop Trojan"
 
 #: ../../network/nm_setting_beans_gen.go:186
 #: ../../network/nm_setting_beans_gen.go:284
 msgid "CSD Script"
-msgstr "Escriptura CSD"
+msgstr "Script CSD"
 
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:287
 msgid "Use FSID for Key Passphrase"
-msgstr ""
+msgstr "Usa FSID per a la contrasenya"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
 #: ../../network/nm_setting_beans_gen.go:296
 #: ../../network/nm_setting_beans_gen.go:404
 msgid "Auth Type"
-msgstr "Tipus d'autorització"
+msgstr "Tipus d'autenticació"
 
 #: ../../network/nm_setting_beans_gen.go:200
 #: ../../network/nm_setting_beans_gen.go:305
@@ -961,7 +962,7 @@ msgstr "Clau estàtica"
 #: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:329
 msgid "Customize Key Direction"
-msgstr ""
+msgstr "Personalitza la direcció de la clau"
 
 #: ../../network/nm_setting_beans_gen.go:202
 #: ../../network/nm_setting_beans_gen.go:307
@@ -982,22 +983,22 @@ msgstr "IP local"
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:409
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "Demana una adreça IP interna"
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "Força l'encapsulació d'UPD"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Use IP Compression"
-msgstr ""
+msgstr "Usa la compressió d'IP"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:422
 msgid "User Pwd"
-msgstr ""
+msgstr "Contrasenya de l'usuari"
 
 #: ../../network/nm_setting_beans_gen.go:224
 #: ../../network/nm_setting_beans_gen.go:249
@@ -1008,17 +1009,17 @@ msgstr "Nom del grup"
 #: ../../network/nm_setting_beans_gen.go:226
 #: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Pwd"
-msgstr ""
+msgstr "Contrasenya del grup"
 
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:426
 msgid "Use Hybrid Authentication"
-msgstr "Utilitzar l'autenticació híbrida"
+msgstr "Usa l'autenticació híbrida"
 
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:427
 msgid "CA File"
-msgstr ""
+msgstr "Fitxer CA"
 
 #: ../../network/nm_setting_beans_gen.go:246
 msgid "VPN IPsec"
@@ -1026,16 +1027,16 @@ msgstr "VPN IPsec"
 
 #: ../../network/nm_setting_beans_gen.go:248
 msgid "Enable IPsec"
-msgstr ""
+msgstr "Habilita IPsec"
 
 #: ../../network/nm_setting_beans_gen.go:250
 msgid "Group ID"
-msgstr "Group ID"
+msgstr "ID de grup"
 
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr ""
+msgstr "Clau precompartida"
 
 #: ../../network/nm_setting_beans_gen.go:257
 #: ../../network/nm_setting_beans_gen.go:381
@@ -1044,23 +1045,23 @@ msgstr "VPN PPP"
 
 #: ../../network/nm_setting_beans_gen.go:270
 msgid "No Protocol Field Compression"
-msgstr ""
+msgstr "Sense compressió de camp de protocol"
 
 #: ../../network/nm_setting_beans_gen.go:271
 msgid "No Address/Control Compression"
-msgstr ""
+msgstr "Sense compressió d'adreça / control"
 
 #: ../../network/nm_setting_beans_gen.go:315
 msgid "VPN Security"
-msgstr "Seguretat VPN"
+msgstr "Seguretat de la VPN"
 
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "Cipher"
-msgstr "Xifratge"
+msgstr "Encriptació"
 
 #: ../../network/nm_setting_beans_gen.go:318
 msgid "HMAC Auth"
-msgstr "HMAC Auth"
+msgstr "Autenticació HMAC"
 
 #: ../../network/nm_setting_beans_gen.go:324
 msgid "VPN TLS Authentication"
@@ -1068,19 +1069,19 @@ msgstr "Autenticació VPN TLS"
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "Subject Match"
-msgstr ""
+msgstr "Coincidència d'assumpte"
 
 #: ../../network/nm_setting_beans_gen.go:327
 msgid "Remote Cert Type"
-msgstr ""
+msgstr "Tipus de certificat remot"
 
 #: ../../network/nm_setting_beans_gen.go:328
 msgid "Key File"
-msgstr ""
+msgstr "Fitxer de clau"
 
 #: ../../network/nm_setting_beans_gen.go:336
 msgid "VPN Proxies"
-msgstr ""
+msgstr "Intermediaris de la VPN"
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
@@ -1096,60 +1097,60 @@ msgstr "Port"
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Retry Indefinitely When Failed"
-msgstr ""
+msgstr "Torna a intentar-ho indefinidament quan falli."
 
 #: ../../network/nm_setting_beans_gen.go:349
 #: ../../network/nm_setting_beans_gen.go:433
 msgid "VPN Advanced"
-msgstr ""
+msgstr "VPN avançada"
 
 #: ../../network/nm_setting_beans_gen.go:351
 msgid "Customize Gateway Port"
-msgstr ""
+msgstr "Personalitza el port de la passarel·la."
 
 #: ../../network/nm_setting_beans_gen.go:352
 msgid "Gateway Port"
-msgstr ""
+msgstr "Port de la passarel·la"
 
 #: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Renegotiation Interval"
-msgstr ""
+msgstr "Personalitza l'interval de renegociació."
 
 #: ../../network/nm_setting_beans_gen.go:354
 msgid "Renegotiation Interval"
-msgstr ""
+msgstr "Interval de renegociació"
 
 #: ../../network/nm_setting_beans_gen.go:355
 msgid "Use LZO data compression"
-msgstr ""
+msgstr "Usa compressió de dades LZO"
 
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "Use TCP connection"
-msgstr "Usa connexió TCP"
+msgstr "Usa una connexió TCP"
 
 #: ../../network/nm_setting_beans_gen.go:357
 msgid "Use TAP device"
-msgstr "Usa dispositiu TAP"
+msgstr "Usa un dispositiu TAP"
 
 #: ../../network/nm_setting_beans_gen.go:358
 msgid "Customize Tunnel MTU"
-msgstr ""
+msgstr "Personalitza el túnel d'MTU"
 
 #: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize UDP Fragment Size"
-msgstr ""
+msgstr "Personalitza la mida de fragment d'UPD"
 
 #: ../../network/nm_setting_beans_gen.go:361
 msgid "UDP Fragment Size"
-msgstr ""
+msgstr "Mida de fragment d'UPD"
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Restrict Tunnel TCP MSS"
-msgstr "Restringir túnel TCP MSS"
+msgstr "Restringeix el túnel TCP MSS"
 
 #: ../../network/nm_setting_beans_gen.go:363
 msgid "Randomize Remote Hosts"
-msgstr ""
+msgstr "Fes aleatoris els amfitrions remots"
 
 #: ../../network/nm_setting_beans_gen.go:435
 msgid "Domain"
@@ -1157,7 +1158,7 @@ msgstr "Domini"
 
 #: ../../network/nm_setting_beans_gen.go:436
 msgid "Vendor"
-msgstr "Venedor"
+msgstr "Proveïdor"
 
 #: ../../network/nm_setting_beans_gen.go:437
 msgid "Version"
@@ -1169,15 +1170,15 @@ msgstr "Encriptació"
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "NAT Traversal"
-msgstr ""
+msgstr "Travessada de NAT"
 
 #: ../../network/nm_setting_beans_gen.go:440
 msgid "IKE DH Group"
-msgstr ""
+msgstr "Grup IKE DH"
 
 #: ../../network/nm_setting_beans_gen.go:441
 msgid "Forward Secrecy"
-msgstr ""
+msgstr "Secretisme de reenviament"
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "Local Port"
@@ -1185,7 +1186,7 @@ msgstr "Port local"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Disable Dead Peer Detection"
-msgstr ""
+msgstr "Inhabilita la detecció de màquines mortes."
 
 #: ../../network/nm_setting_beans_gen.go:449
 msgid "IPv4"
@@ -1218,7 +1219,7 @@ msgstr "DNS secundari"
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
 msgid "Only applied in corresponding resources"
-msgstr ""
+msgstr "Només aplicat als recursos corresponents"
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
@@ -1251,7 +1252,7 @@ msgstr "Automàtic"
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip6_config.go:40
 msgid "Link-Local Only"
-msgstr ""
+msgstr "Només enllaç local"
 
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
@@ -1262,7 +1263,7 @@ msgstr "Manual"
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_wireless_security.go:81
 msgid "Shared"
-msgstr ""
+msgstr "Compartit"
 
 #: ../../network/nm_setting_ip6_config.go:37
 msgid "Ignore"
@@ -1270,15 +1271,15 @@ msgstr "Ignora"
 
 #: ../../network/nm_setting_ip6_config.go:39
 msgid "DHCP"
-msgstr ""
+msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:164
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)"
 
 #: ../../network/nm_setting_virtual_key.go:165
 msgid "CDMA (1xRTT, EVDO)"
-msgstr ""
+msgstr "CDMA (1xRTT, EVDO)"
 
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "L2TP"
@@ -1302,44 +1303,44 @@ msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
-msgstr ""
+msgstr "WPA/WPA2 d'empresa"
 
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:215
 msgid "All Available (default)"
-msgstr ""
+msgstr "Tot el disponible (per defecte)"
 
 #: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:216
 msgid "128-bit (most secure)"
-msgstr ""
+msgstr "128 bits (més segur)"
 
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:217
 msgid "40-bit (less secure)"
-msgstr ""
+msgstr "40 bits (menys segur)"
 
 #: ../../network/nm_setting_virtual_key.go:224
 msgid "Secure (default)"
-msgstr ""
+msgstr "Segur (per defecte)"
 
 #: ../../network/nm_setting_virtual_key.go:225
 msgid "Weak"
-msgstr ""
+msgstr "Dèbil"
 
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
 #: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
 msgid "Saved"
-msgstr ""
+msgstr "Desat"
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
 #: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
 msgid "Always Ask"
-msgstr ""
+msgstr "Demana-ho sempre"
 
 #: ../../network/nm_setting_vpn_l2tp.go:38
 #: ../../network/nm_setting_vpn_openvpn.go:35
@@ -1347,595 +1348,595 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:38
 #: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
 msgid "Not Required"
-msgstr ""
+msgstr "No cal"
 
 #: ../../network/nm_setting_vpn_openvpn.go:113
 msgid "Certificates (TLS)"
-msgstr ""
+msgstr "Certificats (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:115
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "Certificats amb contrasenya (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:120
 #: ../../network/nm_setting_vpn_openvpn.go:286
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../../network/nm_setting_vpn_openvpn.go:121
 #: ../../network/nm_setting_vpn_openvpn.go:287
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:230
 msgid "DES-CBC"
-msgstr ""
+msgstr "DES-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:231
 msgid "RC2-CBC"
-msgstr ""
+msgstr "RC2-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:232
 msgid "DES-EDE-CBC"
-msgstr ""
+msgstr "DES-EDE-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:233
 msgid "DES-EDE3-CBC"
-msgstr ""
+msgstr "DES-EDE3-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:234
 msgid "DESX-CBC"
-msgstr ""
+msgstr "DESX-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:235
 msgid "BF-CBC"
-msgstr ""
+msgstr "BF-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:236
 msgid "RC2-40-CBC"
-msgstr ""
+msgstr "RC2-40-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:237
 msgid "CAST5-CBC"
-msgstr ""
+msgstr "CAST5-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:238
 msgid "RC2-64-CBC"
-msgstr ""
+msgstr "RC2-64-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:239
 msgid "AES-128-CBC"
-msgstr ""
+msgstr "AES-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:240
 msgid "AES-192-CBC"
-msgstr ""
+msgstr "AES-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:241
 msgid "AES-256-CBC"
-msgstr ""
+msgstr "AES-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:242
 msgid "CAMELLIA-128-CBC"
-msgstr ""
+msgstr "CAMELLIA-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:243
 msgid "CAMELLIA-192-CBC"
-msgstr ""
+msgstr "CAMELLIA-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:244
 msgid "CAMELLIA-256-CBC"
-msgstr ""
+msgstr "CAMELLIA-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:245
 msgid "SEED-CBC"
-msgstr ""
+msgstr "SEED-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "RSA MD-4"
-msgstr ""
+msgstr "RSA MD-4"
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "MD-5"
-msgstr ""
+msgstr "MD-5"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "SHA-1"
-msgstr ""
+msgstr "SHA-1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "SHA-224"
-msgstr ""
+msgstr "SHA-224"
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
 msgid "SHA-256"
-msgstr ""
+msgstr "SHA-256"
 
 #: ../../network/nm_setting_vpn_openvpn.go:256
 msgid "SHA-384"
-msgstr ""
+msgstr "SHA-384"
 
 #: ../../network/nm_setting_vpn_openvpn.go:257
 msgid "SHA-512"
-msgstr ""
+msgstr "SHA-512"
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 msgid "RIPEMD-160"
-msgstr ""
+msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:281
 msgid "Client"
-msgstr ""
+msgstr "Client"
 
 #: ../../network/nm_setting_vpn_openvpn.go:282
 msgid "Server"
-msgstr ""
+msgstr "Servidor"
 
 #: ../../network/nm_setting_vpn_openvpn.go:332
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ../../network/nm_setting_vpn_openvpn.go:333
 msgid "SOCKS"
-msgstr ""
+msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr ""
+msgstr "Agent SSH"
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
-msgstr ""
+msgstr "Smartcard"
 
 #: ../../network/nm_setting_vpn_strongswan.go:81
 msgid "EAP"
-msgstr ""
+msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
-msgstr ""
+msgstr "Cisco (per defecte)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:143
 msgid "Netscreen"
-msgstr ""
+msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "NAT-T When Available (default)"
-msgstr ""
+msgstr "NAT-T quan estigui disponible (per defecte)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "NAT-T Always"
-msgstr ""
+msgstr "NAT-T sempre"
 
 #: ../../network/nm_setting_vpn_vpnc.go:149
 msgid "Cisco UDP"
-msgstr ""
+msgstr "Cisco UDP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:162
 msgid "DH Group 1"
-msgstr ""
+msgstr "DH grup 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:155
 msgid "DH Group 2 (default)"
-msgstr ""
+msgstr "DH grup 2 (per defecte)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:156
 #: ../../network/nm_setting_vpn_vpnc.go:164
 msgid "DH Group 5"
-msgstr ""
+msgstr "DH grup 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:160
 msgid "Server (default)"
-msgstr ""
+msgstr "Servidor (per defecte)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:163
 msgid "DH Group 2"
-msgstr ""
+msgstr "DH grup 2"
 
 #: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
-msgstr ""
+msgstr "Infraestructura"
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
-msgstr ""
+msgstr "Ad-hoc"
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
-msgstr ""
+msgstr "Punt d'accés - AP"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
-msgstr ""
+msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:66
 msgid "Dynamic WEP"
-msgstr ""
+msgstr "WEP dinàmic"
 
 #: ../../network/nm_setting_wireless_security.go:67
 msgid "Ad-Hoc WPA-PSK"
-msgstr ""
+msgstr "WPA-PSK ad-hoc"
 
 #: ../../network/nm_setting_wireless_security.go:68
 msgid "WPA-PSK Infrastructure"
-msgstr ""
+msgstr "Infraestructura WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:69
 msgid "WPA Enterprise"
-msgstr ""
+msgstr "WPA d'empresa"
 
 #: ../../network/nm_setting_wireless_security.go:73
 msgid "WEP40"
-msgstr ""
+msgstr "WEP40"
 
 #: ../../network/nm_setting_wireless_security.go:74
 msgid "WEP104"
-msgstr ""
+msgstr "WEP104"
 
 #: ../../network/nm_setting_wireless_security.go:75
 msgid "TKIP"
-msgstr ""
+msgstr "TKIP"
 
 #: ../../network/nm_setting_wireless_security.go:76
 msgid "CCMP"
-msgstr ""
+msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:80
 msgid "Open"
-msgstr ""
+msgstr "Obre"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed"
-msgstr ""
+msgstr "Ha canviat l'estat del dispositiu."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason"
-msgstr ""
+msgstr "Ha canviat l'estat del dispositiu, motiu desconegut."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed"
-msgstr ""
+msgstr "El dispositiu ara és gestionat."
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "El dispositiu ja no és gestionat."
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "El dispositiu no estava a punt per configurar."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "La configuració d'IP no s'ha pogut reservar (sense adreça disponible, temps d'espera, etc.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "La configuració d'IP ja no és vàlida."
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Les contrasenyes s'han demanat però no s'han proporcionat."
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "El 802.1X sol·licitant s'ha desconnectat del punt d'accés o del servidor d'autenticació."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Ha fallat la configuració del 802.1X sol·licitant."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "El 802.1X sol·licitant ha sortit o ha fallat inesperadament."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "El 802.1X sol·licitant ha trigat massa per a l'autenticació."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "El servei PPP ha fallat iniciar-se durant del temps permès."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "El servei PPP s'ha desconnectat inesperadament."
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "El servei PPP ha sortit o ha fallat inesperadament."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "El servei DHCP ha fallat iniciar-se durant del temps permès."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "El servei DHCP ha informat d'un error inesperat."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "El servei DHCP ha sortit o ha fallat inesperadament."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "El servei de connexió compartida ha fallat l'inici."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "El servei de connexió compartida ha sortit o ha fallat inesperadament."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "El servei AutoIP ha fallat l'inici."
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "El servei AutoIP ha informat d'un error inesperat."
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "El servei AutoIP ha sortit o ha fallat inesperadament."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "El marcatge ha fallat a causa de línies ocupades."
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "El marcatge ha fallat a causa de manca de to."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "El marcatge ha fallat a causa del proveïdor."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out"
-msgstr ""
+msgstr "El marcatge ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed"
-msgstr ""
+msgstr "El marcatge ha fallat."
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Ha fallat l'inici del mòdem."
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "Ha fallat seleccionar el GSM APN especificat."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr ""
+msgstr "No s'han cercat xarxes."
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"
-msgstr ""
+msgstr "S'ha denegat el registre de xarxa."
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out"
-msgstr ""
+msgstr "El registre de xarxa ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed"
-msgstr ""
+msgstr "Ha fallat el registre a la xarxa GSM demanada."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed"
-msgstr ""
+msgstr "Ha fallat la comprovació del PIN."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "El microprogramari necessari per al dispositiu pot mancar."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
-msgstr ""
+msgstr "El dispositiu s'ha extret."
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "El NetworkManager s'ha suspès."
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "La connexió activa del dispositiu s'ha eliminat o ha desaparegut."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "Un usuari o un client ha demanat desconnectar-se."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "Ha canviat el proveïdor / enllaç del dispositiu."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "S'ha assumit la connexió existent del dispostiu."
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "El 802.1X sol·licitant ara està disponible."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
-msgstr ""
+msgstr "No s'ha pogut trobar el mòdem."
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "La connexió de Bluetooth ha esgotat el temps d'espera o ha fallat."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "No s'ha inserit la targeta SIM del mòdem GSM."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "Cal el PIN de la SIM del mòdem GSM."
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "Cal el PUK de la SIM del mòdem GSM."
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr ""
+msgstr "SIM de mòdem GSM incorrecta"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "El dispositiu InfiniBand no admet el mode connectat."
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr ""
+msgstr "Ha fallat una dependència de connexió."
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
-msgstr ""
+msgstr "Problema amb RFC 2684 Ethernet sobre pont ADSL"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "El ModemManager no s'executava o ha sortit inesperadament."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "No s'ha pogut trobar la xarxa sense fil 802.11."
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "Ha fallat una connexió secundària de la connexió de base."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "Ha fallat la configuració de DCB o FCoE."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "Ha fallat el control de l'equip de xarxa."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "El mòdem ha fallat executar-se o no està disponible."
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "El mòdem ara està a punt i disponible."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "El PIN de la SIM no és correcte."
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "Activació de la nova connexió a la cua"
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed"
-msgstr ""
+msgstr "Ha canviat el dispostiu pare."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Ha canviat l'estat de gestió del dispositiu pare."
 
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "El cable de xarxa està desconnectat."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Si us plau, assegureu-vos que la targeta SIM estigui inserida i que tingui senyal de xarxa mòbil."
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "Si us plau, assegureu-vos que teniu una contractació correcta sense un reajustament de la targeta SIM."
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
-msgstr ""
+msgstr "Ha fallat l'activació de la connexió de VPN, motiu desconegut."
 
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed"
-msgstr ""
+msgstr "Ha fallat l'activació de la connexió de VPN."
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
+msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió d'usuaris."
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
+msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió de dispositius."
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
-msgstr ""
+msgstr "El servei VPN s'ha aturat."
 
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "La configuració d'IP de la connexió de VPN no és vàlida."
 
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "L'intent de connexió al servei de VPN ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "L'inici del servei de VPN ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:114
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "El servei de VPN ha fallat l'inici."
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
+msgstr "No s'ha proporcionat la contrasenya necessària per a la connexió de VPN."
 
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Ha fallat l'autenticació al servidor de VPN."
 
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "La connexió s'ha eliminat de la configuració."
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Intenteu habilitar el punt d'accés."
 
 #: ../../network/state_handler.go:222
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Intenteu connectar amb %q"
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Compartició de punt d'accés habilitada"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
-msgstr ""
+msgstr "%q connectada"
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Compartició de punt d'accés aturada"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q desconnectada"
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "No es pot compartir el punt d'accés. Si us plau, comproveu la configuració de dnsmasq."
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de l'encaminador."
 
 #: ../../network/state_handler.go:298
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Ha fallat la connexió. No es pot connectar amb %q. Contrasenya incorrecta."
 
 #: ../../network/utils_dbus_nm.go:332
 msgid "Unknown"
@@ -1943,15 +1944,15 @@ msgstr "Desconegut"
 
 #: ../../network/utils_notify.go:92
 msgid "You are now offline."
-msgstr ""
+msgstr "Ara esteu fora de línia."
 
 #: ../../network/utils_notify.go:96
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "Mode d'avió habilitat."
 
 #: ../../network/utils_notify.go:104
 msgid "Access Point mode is not supported by this device."
-msgstr ""
+msgstr "El mode de punt d'accés no l'admet aquest dispositiu."
 
 #: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
 #: ../../network/utils_notify.go:115
@@ -1961,50 +1962,50 @@ msgstr "Xarxa"
 #: ../../network/utils_notify.go:108
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "L'interruptor de la targeta WLAN està desactivat. Activeu-lo quan sigui necessari."
 
 #: ../../network/utils_notify.go:112
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "L'intermediari del sistema s'ha configurat correctament."
 
 #: ../../network/utils_notify.go:115
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "L'intermediari del sistema s'ha cancel·lat."
 
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128
 msgid "Battery Critical Low"
-msgstr ""
+msgstr "La bateria està críticament baixa."
 
 #: ../../session/power/manager_events.go:106
 #: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
-msgstr ""
+msgstr "L'ordinador ha estat en mode de suspensió. Si us plau, endolleu-lo."
 
 #: ../../session/power/manager_events.go:134
 msgid "Battery Low"
-msgstr ""
+msgstr "Bateria baixa"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
+msgstr "L'ordinador estatarà en mode de suspensió. Si us plau, endolleu-lo ara."
 
 #: ../../system/timedated/manager_ifc.go:30
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "Cal autenticació per establir l'hora del sistema."
 
 #: ../../system/timedated/manager_ifc.go:43
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Cal autenticació per establir la zona horària del sistema."
 
 #: ../../system/timedated/manager_ifc.go:59
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Cal autenticació per controlar si l'RTC desa l'hora local o l'hora UTC."
 
 #: ../../system/timedated/manager_ifc.go:74
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Cal autenticació per controlar si s'ha d'habilitar la sincronització amb l'hora de la xarxa."
