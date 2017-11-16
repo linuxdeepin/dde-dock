@@ -436,7 +436,7 @@ func (m *Manager) clearConnectionSessions() {
 	m.connectionSessions = nil
 }
 
-func (m *Manager) uninstallConnectionSession(uuid string) {
+func (m *Manager) uninstallConnectionSession(uuid string, activating bool) {
 	m.connectionSessionsLock.Lock()
 	defer m.connectionSessionsLock.Unlock()
 
@@ -464,7 +464,7 @@ func (m *Manager) uninstallConnectionSession(uuid string) {
 	m.connectionSessions[newlen] = nil
 	m.connectionSessions = m.connectionSessions[:newlen]
 
-	if s.Type == connectionWirelessHotspot {
+	if activating && s.Type == connectionWirelessHotspot {
 		// The device maybe not ready switch from AP mode, so reset managed
 		logger.Debug("[uninstallConnectionSession] Will uninstall hotspot connection, reset managed state:", s.devPath)
 		m.SetDeviceManaged(string(s.devPath), false)
@@ -480,6 +480,7 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	if err != nil {
 		return
 	}
+
 	nmConn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
 		return
@@ -487,7 +488,8 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	defer nmDestroySettingsConnection(nmConn)
 
 	// uninstall opened connection session
-	defer m.uninstallConnectionSession(uuid)
+	activating := isConnectionInActivating(uuid)
+	defer m.uninstallConnectionSession(uuid, activating)
 
 	return nmConn.Delete()
 }

@@ -131,6 +131,19 @@ func isConnectionStateDeactivate(state uint32) bool {
 	return false
 }
 
+func isConnectionInActivating(uuid string) bool {
+	apaths, err := nmGetActiveConnectionByUuid(uuid)
+	if err != nil || len(apaths) == 0 {
+		return false
+	}
+	for _, apath := range apaths {
+		if isConnectionStateInActivating(nmGetActiveConnectionState(apath)) {
+			return true
+		}
+	}
+	return false
+}
+
 // check if vpn connection activating or activated
 func isVpnConnectionStateInActivating(state uint32) bool {
 	if state >= nm.NM_VPN_CONNECTION_STATE_PREPARE &&
