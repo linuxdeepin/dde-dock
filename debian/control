@@ -74,7 +74,7 @@ Depends: ${shlibs:Depends},
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
-Recommends: proxychains-ng
+Recommends: proxychains-ng, flatpak
 Suggests:
  network-manager-pptp,
  network-manager-l2tp,
