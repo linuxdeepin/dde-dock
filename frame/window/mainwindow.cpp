@@ -237,7 +237,7 @@ void MainWindow::interalMove(const QPoint &p)
         }
     }
 
-    int hx = 2, wx = 2;
+    int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
         m_settings->hideState() == HideState::Hide &&
         m_panelHideAni->state() == QVariantAnimation::Stopped)
@@ -246,11 +246,11 @@ void MainWindow::interalMove(const QPoint &p)
         {
         case Top:
         case Bottom:
-            wx = width() * ratio;
+            hx = 2;
             break;
         case Left:
         case Right:
-            hx = height() * ratio;
+            wx = 2;
         }
     }
 
