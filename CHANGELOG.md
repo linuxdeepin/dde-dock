@@ -1,3 +1,6 @@
+# 4.5.1
+    Fix window size error when new item inserted.
+
 # 4.5.0
     Improve HiDPI issues.
     Opmitize memory usage.
