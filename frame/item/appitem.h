@@ -77,6 +77,7 @@ private slots:
     void refershIcon();
     void activeChanged();
     void showPreview();
+    void cancelAndHidePreview();
 
 private:
     QLabel *m_appNameTips;

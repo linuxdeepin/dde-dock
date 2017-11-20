@@ -110,8 +110,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, this, &AppItem::cancelAndHidePreview);
     connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntry, &DBusDockEntry::Check);
 
     updateTitle();
@@ -560,5 +559,11 @@ void AppItem::showPreview()
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
     showPopupWindow(m_appPreviewTips, true);
+}
+
+void AppItem::cancelAndHidePreview()
+{
+    hidePopup();
+    emit requestCancelPreview();
 }
 

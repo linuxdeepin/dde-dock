@@ -78,12 +78,8 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
     }
 
     if (m_snapshots.isEmpty())
-    {
-        emit requestCancelPreview();
-        emit requestHidePreview();
-    } else {
+        emit requestCancelAndHidePreview();
         adjustSize();
-    }
 }
 
 void PreviewContainer::updateSnapshots()
@@ -108,13 +104,12 @@ void PreviewContainer::checkMouseLeave()
 
     if (!hover)
     {
+        emit requestCancelAndHidePreview();
+
         m_floatingPreview->setVisible(false);
 
         if (!isVisible())
             return;
-
-        emit requestCancelPreview();
-        emit requestHidePreview();
 
         if (m_needActivate)
         {
@@ -165,8 +160,7 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     AppSnapshot *snap = new AppSnapshot(wid);
 
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestCancelPreview, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestHidePreview, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestCancelAndHidePreview, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows);
 
