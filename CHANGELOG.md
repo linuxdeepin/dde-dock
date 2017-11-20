@@ -1,3 +1,6 @@
+# 4.5.2
+    Improve popup auto hide algorithm
+
 # 4.5.1
     Fix window size error when new item inserted.
 
