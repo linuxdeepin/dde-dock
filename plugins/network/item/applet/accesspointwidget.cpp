@@ -25,6 +25,8 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
+#include <DSvgRenderer>
+
 DWIDGET_USE_NAMESPACE
 
 AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
@@ -38,27 +40,29 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
       m_securityIcon(new QLabel),
       m_strengthIcon(new QLabel)
 {
+    const auto ratio = devicePixelRatioF();
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_ssidBtn->setText(ap.ssid());
     m_ssidBtn->setObjectName("Ssid");
 
     m_disconnectBtn->setVisible(false);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/selected.png");
-    m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect.png");
-    m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_pressed.png");
+    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/select.svg");
+    m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect_hover.svg");
+    m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_press.svg");
 
-    QStringList indicatorList;
-    for (uint i(1); i != 91; ++i)
-        indicatorList << QString(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png").arg(i, 2, 10, QChar('0'));
-    m_indicator->setPictureSequence(indicatorList);
-    m_indicator->setFixedSize(14, 14);
+    m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2, true);
+    m_indicator->setFixedSize(QSize(14, 14) * ratio);
     m_indicator->setVisible(false);
 
     if (ap.secured())
-        m_securityIcon->setPixmap(QPixmap(":/wireless/resources/wireless/security.svg"));
+    {
+        QPixmap iconPix = DSvgRenderer::render(":/wireless/resources/wireless/security.svg", QSize(16, 16) * ratio);
+        iconPix.setDevicePixelRatio(ratio);
+        m_securityIcon->setPixmap(iconPix);
+    }
     else
     {
-        QPixmap pixmap(16, 16);
+        QPixmap pixmap(QSize(16, 16));
         pixmap.fill(Qt::transparent);
         m_securityIcon->setPixmap(pixmap);
     }
@@ -134,21 +138,28 @@ void AccessPointWidget::setActiveState(const NetworkDevice::NetworkState state)
 void AccessPointWidget::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/disconnect.png");
+    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/disconnect.svg");
 }
 
 void AccessPointWidget::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/selected.png");
+    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/select.svg");
 }
 
 void AccessPointWidget::setStrengthIcon(const int strength)
 {
-    if (strength == 100)
-        return m_strengthIcon->setPixmap(QPixmap(":/wireless/resources/wireless/wireless-8-symbolic.svg"));
+    QPixmap iconPix;
+    const auto ratio = devicePixelRatioF();
+    const QSize s = QSize(16, 16) * ratio;
 
-    m_strengthIcon->setPixmap(QPixmap(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(strength / 10 & ~0x1)));
+    if (strength == 100)
+        iconPix = DSvgRenderer::render(":/wireless/resources/wireless/wireless-8-symbolic.svg", s);
+    else
+        iconPix = DSvgRenderer::render(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(strength / 10 & ~0x1), s);
+    iconPix.setDevicePixelRatio(ratio);
+
+    m_strengthIcon->setPixmap(iconPix);
 }
 
 void AccessPointWidget::ssidClicked()

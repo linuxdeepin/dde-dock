@@ -27,12 +27,13 @@
         <file>resources/wireless/wireless-8-symbolic.svg</file>
         <file>resources/wireless/wireless-disconnect-symbolic.svg</file>
         <file>resources/wireless/security.svg</file>
-        <file>resources/wireless/disconnect_pressed.png</file>
-        <file>resources/wireless/disconnect.png</file>
-        <file>resources/wireless/selected.png</file>
         <file>resources/wireless/refresh_press.svg</file>
         <file>resources/wireless/refresh_normal.svg</file>
         <file>resources/wireless/refresh_hover.svg</file>
+        <file>resources/wireless/select.svg</file>
+        <file>resources/wireless/disconnect_hover.svg</file>
+        <file>resources/wireless/disconnect_press.svg</file>
+        <file>resources/wireless/disconnect.svg</file>
     </qresource>
     <qresource prefix="/wireless/indicator">
         <file>resources/wireless/spinner14/Spinner01.png</file>
