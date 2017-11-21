@@ -116,7 +116,7 @@ void FashionTrayItem::mousePressEvent(QMouseEvent *e)
     if (dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
         return QWidget::mousePressEvent(e);
 
-    if (e->button() != Qt::RightButton)
+//    if (e->button() != Qt::RightButton)
         QWidget::mousePressEvent(e);
 
     m_pressPoint = e->pos();

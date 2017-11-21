@@ -126,6 +126,7 @@ void SoundItem::mousePressEvent(QMouseEvent *e)
     const QPoint p(e->pos() - rect().center());
     if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
     {
+        e->accept();
         emit requestContextMenu();
         return;
     }

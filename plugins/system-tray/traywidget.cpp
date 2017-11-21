@@ -155,24 +155,21 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 
 void TrayWidget::mousePressEvent(QMouseEvent *e)
 {
+    e->accept();
     const QPoint point(e->pos() - rect().center());
     if (point.manhattanLength() > 24)
-        return QWidget::mousePressEvent(e);
+        e->ignore();
 
-    m_pressPoint = e->pos();
+    QWidget::mousePressEvent(e);
 }
 
 void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    QWidget::mouseReleaseEvent(e);
-
     const QPoint point(e->pos() - rect().center());
     if (point.manhattanLength() > 24)
         return;
 
-    const QPoint distance = e->pos() - m_pressPoint;
-    if (distance.manhattanLength() > DRAG_THRESHOLD)
-        return;
+    e->accept();
 
     QPoint globalPos = QCursor::pos();
     uint8_t buttonIndex = XCB_BUTTON_INDEX_1;

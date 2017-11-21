@@ -75,7 +75,13 @@ void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == FASHION_MODE_ITEM)
+    {
+        // refresh active tray
+        if (!m_fashionItem->activeTray())
+            m_fashionItem->setActiveTray(m_trayList.first());
+
         return m_fashionItem;
+    }
 
     const quint32 trayWinId = itemKey.toUInt();
 
@@ -210,8 +216,9 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
     if (m_trayApplet->isVisible())
         updateTipsContent();
 
-    if (m_fashionItem->activeTray() != widget)
+    if (m_fashionItem->activeTray() && m_fashionItem->activeTray() != widget)
         return;
+
     // reset active tray
     if (m_trayList.values().isEmpty())
     {

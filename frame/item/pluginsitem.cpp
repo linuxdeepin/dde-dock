@@ -112,10 +112,11 @@ void PluginsItem::refershIcon()
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
-    QWidget::mousePressEvent(e);
-
     if (e->button() == Qt::LeftButton)
         MousePressPoint = e->pos();
+    else if (e->button() == Qt::RightButton)
+        if (!PopupWindow->isModal() && PopupWindow->isVisible())
+            hidePopup();
 }
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)

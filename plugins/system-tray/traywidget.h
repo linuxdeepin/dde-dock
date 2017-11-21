@@ -69,7 +69,7 @@ private:
 
     QTimer *m_updateTimer;
     QTimer *m_ignoreRepeat;
-    QPoint m_pressPoint;
+//    QPoint m_pressPoint;
 };
 
 #endif // TRAYWIDGET_H

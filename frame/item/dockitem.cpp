@@ -201,6 +201,11 @@ void DockItem::showHoverTips()
     if (PopupWindow->isVisible() && PopupWindow->model())
         return;
 
+    // if not in geometry area
+    const QRect r(topleftPoint(), size());
+    if (!r.contains(QCursor::pos()))
+        return;
+
     QWidget * const content = popupTips();
     if (!content)
         return;
@@ -276,14 +281,9 @@ QWidget *DockItem::popupTips()
     return nullptr;
 }
 
-const QPoint DockItem::popupMarkPoint()
+const QPoint DockItem::popupMarkPoint() const
 {
-    QPoint p;
-    QWidget *w = this;
-    do {
-        p += w->pos();
-        w = qobject_cast<QWidget *>(w->parent());
-    } while (w);
+    QPoint p(topleftPoint());
 
     const QRect r = rect();
     const int offset = 2;
@@ -294,6 +294,18 @@ const QPoint DockItem::popupMarkPoint()
     case Left:      p += QPoint(r.width() + offset, r.height() / 2);      break;
     case Right:     p += QPoint(0 - offset, r.height() / 2);              break;
     }
+
+    return p;
+}
+
+const QPoint DockItem::topleftPoint() const
+{
+    QPoint p;
+    const QWidget *w = this;
+    do {
+        p += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    } while (w);
 
     return p;
 }
