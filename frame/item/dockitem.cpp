@@ -188,11 +188,16 @@ void DockItem::showContextMenu()
     DBusMenu *menuInter = new DBusMenu(path.path(), this);
 
     connect(menuInter, &DBusMenu::ItemInvoked, this, &DockItem::invokedMenuItem);
-    connect(menuInter, &DBusMenu::MenuUnregistered, this, &DockItem::requestRefershWindowVisible);
-    connect(menuInter, &DBusMenu::MenuUnregistered, menuInter, &DBusMenu::deleteLater, Qt::QueuedConnection);
+    connect(menuInter, &DBusMenu::MenuUnregistered, this, [=] {
+        emit requestRefershWindowVisible();
+        emit requestWindowAutoHide(true);
+        menuInter->deleteLater();
+    });
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
+
     hidePopup();
+    emit requestWindowAutoHide(false);
 }
 
 void DockItem::showHoverTips()
@@ -252,8 +257,6 @@ void DockItem::popupWindowAccept()
     disconnect(PopupWindow.data(), &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 
     hidePopup();
-
-    emit requestWindowAutoHide(true);
 }
 
 void DockItem::showPopupApplet(QWidget * const applet)
