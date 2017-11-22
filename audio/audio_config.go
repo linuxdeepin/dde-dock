@@ -33,6 +33,7 @@ func (a *Audio) applyConfig() {
 
 	if !a.isConfigValid(info) {
 		logger.Warning("Invalid config:", info.string())
+		a.trySelectBestPort()
 		return
 	}
 
@@ -108,6 +109,10 @@ func (a *Audio) applyConfig() {
 	}
 
 	logger.Debug("Audio config no invalid sink/source, auto switch")
+	a.trySelectBestPort()
+}
+
+func (a *Audio) trySelectBestPort() {
 	id, p := a.cards.getAvailablePort(pulse.DirectionSink)
 	if p.Name == "" {
 		logger.Warningf("Not found available sink port: %#v", a.cards)
@@ -118,7 +123,7 @@ func (a *Audio) applyConfig() {
 		}
 	}
 	logger.Debugf("Will switch to: %#v", p)
-	err = a.SetPort(id, p.Name, int32(p.Direction))
+	err := a.SetPort(id, p.Name, int32(p.Direction))
 	if err != nil {
 		logger.Warningf("Failed to switch to port: %#v, error: %v", p, err)
 	}
@@ -178,6 +183,10 @@ func (a *Audio) doSaveConfig() {
 }
 
 func (a *Audio) isConfigValid(cfg *configInfo) bool {
+	if len(cfg.Profiles) == 0 {
+		return false
+	}
+
 	// check cfg.Profiles
 	var validProfileCount int
 	for _, card := range a.core.GetCardList() {
