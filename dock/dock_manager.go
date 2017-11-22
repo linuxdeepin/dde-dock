@@ -46,7 +46,8 @@ type DockManager struct {
 	windowInfoMap      map[xproto.Window]*WindowInfo
 	windowInfoMapMutex sync.RWMutex
 
-	Entries AppEntries
+	Entries   AppEntries
+	entriesMu sync.Mutex
 
 	settings    *gio.Settings
 	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
@@ -275,15 +276,25 @@ func (m *DockManager) IsDocked(desktopFilePath string) (bool, error) {
 func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, error) {
 	appInfo := NewAppInfoFromFile(desktopFilePath)
 	if appInfo == nil {
-		return false, errors.New("Invalid desktopFilePath")
+		return false, errors.New("invalid desktopFilePath")
 	}
-	entry, isNewAdded := m.addAppEntry(appInfo.innerId, appInfo, int(index))
-	dockResult := m.dockEntry(entry)
-	if isNewAdded {
+	m.entriesMu.Lock()
+	entry := m.Entries.GetFirstByInnerId(appInfo.innerId)
+	m.entriesMu.Unlock()
+
+	if entry == nil {
+		entry = newAppEntry(m, appInfo.innerId, appInfo)
 		entry.updateName()
 		entry.updateIcon()
-		m.installAppEntry(entry)
+		err := m.installAppEntry(entry)
+		if err == nil {
+			m.entriesMu.Lock()
+			m.Entries = m.Entries.Insert(entry, -1)
+			m.emitEntryAdded(entry)
+			m.entriesMu.Unlock()
+		}
 	}
+	dockResult := m.dockEntry(entry)
 	return dockResult, nil
 }
 
