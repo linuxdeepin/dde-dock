@@ -220,21 +220,22 @@ void MainWindow::compositeChanged()
 
 void MainWindow::internalMove(const QPoint &p)
 {
-    const auto ratio = devicePixelRatioF();
-    QPoint rp = rawXPosition(p);
+    const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
+                             m_settings->hideState() == HideState::Hide &&
+                             m_posChangeAni->state() == QVariantAnimation::Stopped;
+    if (!pos_adjust)
+        return QWidget::move(p);
 
-    if (m_settings->hideMode() != HideMode::KeepShowing &&
-        m_settings->hideState() == HideState::Hide &&
-        m_posChangeAni->state() == QVariantAnimation::Stopped)
+    QPoint rp = rawXPosition(p);
+    const auto ratio = devicePixelRatioF();
+
+    const QRect &r = m_settings->primaryRawRect();
+    switch (m_settings->position())
     {
-        const QRect &r = m_settings->primaryRawRect();
-        switch (m_settings->position())
-        {
-        case Left:      rp.setX(r.x());             break;
-        case Top:       rp.setY(r.y());             break;
-        case Right:     rp.setX(r.right() - 1);     break;
-        case Bottom:    rp.setY(r.bottom() - 1);    break;
-        }
+    case Left:      rp.setX(r.x());             break;
+    case Top:       rp.setY(r.y());             break;
+    case Right:     rp.setX(r.right() - 1);     break;
+    case Bottom:    rp.setY(r.bottom() - 1);    break;
     }
 
     int hx = height() * ratio, wx = width() * ratio;
