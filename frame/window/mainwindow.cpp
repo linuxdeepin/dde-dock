@@ -218,7 +218,7 @@ void MainWindow::compositeChanged()
     m_positionUpdateTimer->start();
 }
 
-void MainWindow::interalMove(const QPoint &p)
+void MainWindow::internalMove(const QPoint &p)
 {
     const auto ratio = devicePixelRatioF();
     QPoint rp = rawXPosition(p);
@@ -277,8 +277,8 @@ void MainWindow::initConnections()
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
     connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
-    connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::interalMove));
-    connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::interalMove), Qt::QueuedConnection);
+    connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
+    connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
 //    // to fix qt animation bug, sometimes window size not change
     connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
@@ -400,7 +400,7 @@ void MainWindow::updateGeometry()
     if (animation)
         internalAnimationMove(windowRect.x(), windowRect.y());
     else
-        interalMove(windowRect.topLeft());
+        internalMove(windowRect.topLeft());
 
     m_mainPanel->update();
 }

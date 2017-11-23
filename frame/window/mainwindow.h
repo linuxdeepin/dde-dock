@@ -72,8 +72,8 @@ private slots:
     void clearStrutPartial();
     void setStrutPartial();
     void compositeChanged();
-    void interalMove() { interalMove(m_posChangeAni->currentValue().toPoint()); }
-    void interalMove(const QPoint &p);
+    void internalMove() { internalMove(m_posChangeAni->currentValue().toPoint()); }
+    void internalMove(const QPoint &p);
 
     void expand();
     void narrow(const Position prevPos);
