@@ -112,19 +112,16 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
 
 void FashionTrayItem::mousePressEvent(QMouseEvent *e)
 {
-    const QPoint dis = e->pos() - rect().center();
-    if (dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
-        return QWidget::mousePressEvent(e);
-
-//    if (e->button() != Qt::RightButton)
-        QWidget::mousePressEvent(e);
+    QWidget::mousePressEvent(e);
 
     m_pressPoint = e->pos();
 }
 
 void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    QWidget::mouseReleaseEvent(e);
+    const QPoint dis = e->pos() - rect().center();
+    if (dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
+        return QWidget::mouseReleaseEvent(e);
 
     const QPoint point = e->pos() - m_pressPoint;
 
