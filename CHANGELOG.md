@@ -1,3 +1,6 @@
+# 4.5.3
+    Minor bug fixes.
+
 # 4.5.2
     Improve popup auto hide algorithm
 
