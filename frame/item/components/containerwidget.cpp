@@ -89,3 +89,8 @@ void ContainerWidget::dragEnterEvent(QDragEnterEvent *e)
     if (allowDragEnter(e))
         return e->accept();
 }
+
+void ContainerWidget::mousePressEvent(QMouseEvent *e)
+{
+    e->ignore();
+}

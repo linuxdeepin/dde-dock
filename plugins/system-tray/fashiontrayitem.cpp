@@ -120,18 +120,14 @@ void FashionTrayItem::mousePressEvent(QMouseEvent *e)
 void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
 {
     const QPoint dis = e->pos() - rect().center();
-    if (dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
+    if (!m_enableMouseEvent || dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
         return QWidget::mouseReleaseEvent(e);
 
     const QPoint point = e->pos() - m_pressPoint;
-
     if (point.manhattanLength() > DRAG_THRESHOLD)
         return;
 
     if (!m_activeTray)
-        return;
-
-    if (!m_enableMouseEvent)
         return;
 
     QPoint globalPos = QCursor::pos();

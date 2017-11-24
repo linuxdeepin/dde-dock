@@ -41,6 +41,7 @@ public:
 
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     QHBoxLayout *m_centralLayout;
