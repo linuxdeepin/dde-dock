@@ -1,7 +1,7 @@
 {
 	"DefaultApps":[
 		{
-			"AppId":"org.gnome.Nautilus.desktop",
+			"AppId":["org.gnome.Nautilus.desktop"],
 			"AppType":"file-manager",
 			"SupportedType":[
 				"inode/directory",
@@ -9,7 +9,7 @@
 			]
 		},
 		{
-			"AppId":"org.gnome.gedit.desktop",
+			"AppId":["org.gnome.gedit.desktop"],
 			"AppType":"editor",
 			"SupportedType":[
 				"text/plain"

@@ -29,7 +29,7 @@ type defaultAppTable struct {
 }
 
 type defaultAppInfo struct {
-	AppId   string   `json:"AppId"`
+	AppId   []string `json:"AppId"`
 	AppType string   `json:"AppType"`
 	Types   []string `json:"SupportedType"`
 }
@@ -66,11 +66,22 @@ func genMimeAppsFile(data string) error {
 	}
 
 	for _, info := range table.Apps {
+		var validId = ""
 		for _, ty := range info.Types {
-			err := SetAppInfo(ty, info.AppId)
-			if err != nil {
-				logger.Warningf("[genMimeAppsFile] set '%s' to parse '%s' failed: %v\n",
-					info.AppId, ty, err)
+			if validId != "" {
+				SetAppInfo(ty, validId)
+				continue
+			}
+
+			for _, id := range info.AppId {
+				err := SetAppInfo(ty, id)
+				if err != nil {
+					logger.Warningf("[genMimeAppsFile] set '%s' to parse '%s' failed: %v\n",
+						info.AppId, ty, err)
+					continue
+				}
+				validId = id
+				break
 			}
 		}
 	}

@@ -49,14 +49,14 @@ func TestUnmarshal(t *testing.T) {
 		So(err, ShouldBeNil)
 		So(len(table.Apps), ShouldEqual, 2)
 
-		So(table.Apps[0].AppId, ShouldEqual, "org.gnome.Nautilus.desktop")
+		So(table.Apps[0].AppId, ShouldResemble, []string{"org.gnome.Nautilus.desktop"})
 		So(table.Apps[0].AppType, ShouldEqual, "file-manager")
 		So(table.Apps[0].Types, ShouldResemble, []string{
 			"inode/directory",
 			"application/x-gnome-saved-search",
 		})
 
-		So(table.Apps[1].AppId, ShouldEqual, "org.gnome.gedit.desktop")
+		So(table.Apps[1].AppId, ShouldResemble, []string{"org.gnome.gedit.desktop"})
 		So(table.Apps[1].AppType, ShouldEqual, "editor")
 		So(table.Apps[1].Types, ShouldResemble, []string{
 			"text/plain",
