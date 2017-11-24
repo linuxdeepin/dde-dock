@@ -1,4 +1,7 @@
 # 4.5.3
+    Fix dock crash if system tray' app is quit.
+
+# 4.5.3
     Minor bug fixes.
 
 # 4.5.2
