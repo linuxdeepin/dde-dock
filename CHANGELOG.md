@@ -1,3 +1,6 @@
+# 4.5.5
+    Forbid using theme icon in network plugin.
+
 # 4.5.4
     Fix dock crash if system tray' app is quit.
 
