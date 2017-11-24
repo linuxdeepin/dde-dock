@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os/exec"
 	"pkg.deepin.io/lib/keyfile"
+	"strings"
 	"sync"
 )
 
@@ -46,14 +47,20 @@ func (*Daemon) ScalePlymouth(scale uint32) error {
 		if theme == "deepin-logo" || theme == "deepin-ssd-logo" {
 			return nil
 		}
-		out, err = exec.Command("plymouth-set-default-theme",
-			"deepin-logo").CombinedOutput()
+		var name = "deepin-logo"
+		if isSSD() {
+			name = "deepin-ssd-logo"
+		}
+		out, err = exec.Command("plymouth-set-default-theme", name).CombinedOutput()
 	case 2:
 		if theme == "deepin-hidpi-logo" {
 			return nil
 		}
-		out, err = exec.Command("plymouth-set-default-theme",
-			"deepin-hidpi-logo").CombinedOutput()
+		var name = "deepin-hidpi-logo"
+		if isSSD() {
+			name = "deepin-hidpi-ssd-logo"
+		}
+		out, err = exec.Command("plymouth-set-default-theme", name).CombinedOutput()
 	default:
 		return fmt.Errorf("Invalid scale value: %d", scale)
 	}
@@ -83,4 +90,36 @@ func getPlymouthTheme(file string) (string, error) {
 	}
 
 	return kf.GetString("Daemon", "Theme")
+}
+
+var _ssd = -1
+
+func isSSD() bool {
+	if _ssd != -1 {
+		return (_ssd == 1)
+	}
+
+	outputs, err := exec.Command("/bin/lsblk",
+		"-P", "-o", "MOUNTPOINT,ROTA").CombinedOutput()
+	if err != nil {
+		logger.Warning("Failed to check ssd:", string(outputs), err)
+		_ssd = -1
+		return false
+	}
+
+	lines := strings.Split(string(outputs), "\n")
+	for _, line := range lines {
+		if !strings.Contains(line, "MOUNTPOINT=\"/\"") {
+			continue
+		}
+
+		// ssd: ROTA="0"
+		if strings.Contains(line, "ROTA=\"0\"") {
+			_ssd = 1
+		} else {
+			_ssd = 0
+		}
+		break
+	}
+	return (_ssd == 1)
 }
