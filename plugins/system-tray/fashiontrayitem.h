@@ -23,6 +23,7 @@
 #define FASHIONTRAYITEM_H
 
 #include <QWidget>
+#include <QPointer>
 
 #include <traywidget.h>
 
@@ -51,7 +52,7 @@ private:
 private:
     bool m_enableMouseEvent;
 
-    TrayWidget *m_activeTray;
+    QPointer<TrayWidget> m_activeTray;
 
     QPixmap m_backgroundPixmap;
     QPoint m_pressPoint;

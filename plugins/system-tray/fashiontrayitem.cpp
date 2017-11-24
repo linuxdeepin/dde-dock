@@ -56,7 +56,7 @@ void FashionTrayItem::setMouseEnable(const bool enable)
 
 void FashionTrayItem::setActiveTray(TrayWidget *tray)
 {
-    if (m_activeTray)
+    if (!m_activeTray.isNull())
     {
         m_activeTray->setActive(false);
         disconnect(m_activeTray, &TrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));

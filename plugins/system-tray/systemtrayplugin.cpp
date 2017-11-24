@@ -75,13 +75,7 @@ void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == FASHION_MODE_ITEM)
-    {
-        // refresh active tray
-        if (!m_fashionItem->activeTray())
-            m_fashionItem->setActiveTray(m_trayList.first());
-
         return m_fashionItem;
-    }
 
     const quint32 trayWinId = itemKey.toUInt();
 
@@ -194,6 +188,8 @@ void SystemTrayPlugin::trayAdded(const quint32 winId)
     m_trayList[winId] = trayWidget;
 
     m_fashionItem->setMouseEnable(m_trayList.size() == 1);
+    if (!m_fashionItem->activeTray())
+        m_fashionItem->setActiveTray(trayWidget);
 
     if (displayMode() == Dock::Efficient)
         m_proxyInter->itemAdded(this, QString::number(winId));
@@ -207,8 +203,8 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
         return;
 
     TrayWidget *widget = m_trayList[winId];
-    m_proxyInter->itemRemoved(this, QString::number(winId));
     m_trayList.remove(winId);
+    m_proxyInter->itemRemoved(this, QString::number(winId));
     widget->deleteLater();
 
     m_fashionItem->setMouseEnable(m_trayList.size() == 1);
