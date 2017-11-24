@@ -1,4 +1,4 @@
-# 4.5.3
+# 4.5.4
     Fix dock crash if system tray' app is quit.
 
 # 4.5.3
