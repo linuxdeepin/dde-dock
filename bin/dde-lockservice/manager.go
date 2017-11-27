@@ -34,7 +34,7 @@ const (
 	ErrorMsg
 	TextInfo
 	Failure
-	Successed
+	Success
 )
 
 type Manager struct {
@@ -234,8 +234,8 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
 		fmt.Println("Failed to authenticate:", err)
 		m.sendEvent(Failure, pid, username, err.Error())
 	} else {
-		fmt.Println("-------Authenticate successed")
-		m.sendEvent(Successed, pid, username, "Authenticated")
+		fmt.Println("-------Authenticate success")
+		m.sendEvent(Success, pid, username, "Authenticated")
 	}
 	handler = nil
 	debug.FreeOSMemory()
