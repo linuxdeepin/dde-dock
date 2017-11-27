@@ -187,8 +187,8 @@ const QPixmap WirelessItem::backgroundPix(const int size)
 const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 {
     if (!m_icons.contains(key))
-        m_icons.insert(key, QIcon(":/wireless/resources/wireless/" + key + ".svg").pixmap(size));
-//    m_icons.insert(key, QIcon::fromTheme(key).pixmap(QSize(96, 96)));
+        m_icons.insert(key, QIcon::fromTheme(key + ".svg",
+                                             QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
 
     return m_icons.value(key);
 }
