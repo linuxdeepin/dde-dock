@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+
+## [3.2.7] - 2017-11-28
+*   gesture: check keyboard grab status before do action
+*   mime: add multi default app id
+*   audio: select best port if config non-exist
+*   plymouth: support ssd theme checker
+*   dock: fix index in signal EntryAdded is wrong
+
+
 ## [3.2.6] - 2017-11-16
 *   add flatpak to recommends
 
