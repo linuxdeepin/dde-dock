@@ -436,8 +436,8 @@ void DockSettings::calculateWindowConfig()
 {
 //    qDebug() << Q_FUNC_INFO;
     const auto ratio = qApp->devicePixelRatio();
-    const int defaultHeight = AppItem::itemBaseHeight() / ratio;
-    const int defaultWidth = AppItem::itemBaseWidth() / ratio;
+    const int defaultHeight = std::round(AppItem::itemBaseHeight() / ratio);
+    const int defaultWidth = std::round(AppItem::itemBaseWidth() / ratio);
 
     if (m_displayMode == Dock::Efficient)
     {

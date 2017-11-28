@@ -427,8 +427,9 @@ void MainWindow::setStrutPartial()
     const int maxScreenHeight = m_settings->screenRawHeight();
     const int maxScreenWidth = m_settings->screenRawWidth();
     const Position side = m_settings->position();
-    const QPoint p = rawXPosition(m_posChangeAni->endValue().toPoint());
-    const QSize s = m_settings->windowSize();
+    const QPoint &p = rawXPosition(m_posChangeAni->endValue().toPoint());
+    const QSize &s = m_settings->windowSize();
+    const QRect &primaryRawRect = m_settings->primaryRawRect();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
@@ -442,7 +443,7 @@ void MainWindow::setStrutPartial()
         orientation = XcbMisc::OrientationTop;
         strut = p.y() + s.height() * ratio;
         strutStart = p.x();
-        strutEnd = p.x() + s.width() * ratio;
+        strutEnd = qMin(qRound(p.x() + s.width() * ratio), primaryRawRect.right());
         strutArea.setLeft(strutStart);
         strutArea.setRight(strutEnd);
         strutArea.setBottom(strut);
@@ -451,7 +452,7 @@ void MainWindow::setStrutPartial()
         orientation = XcbMisc::OrientationBottom;
         strut = maxScreenHeight - p.y();
         strutStart = p.x();
-        strutEnd = p.x() + s.width() * ratio;
+        strutEnd = qMin(qRound(p.x() + s.width() * ratio), primaryRawRect.right());
         strutArea.setLeft(strutStart);
         strutArea.setRight(strutEnd);
         strutArea.setTop(p.y());
@@ -460,7 +461,7 @@ void MainWindow::setStrutPartial()
         orientation = XcbMisc::OrientationLeft;
         strut = p.x() + s.width() * ratio;
         strutStart = p.y();
-        strutEnd = p.y() + s.height() * ratio;
+        strutEnd = qMin(qRound(p.y() + s.height() * ratio), primaryRawRect.bottom());
         strutArea.setTop(strutStart);
         strutArea.setBottom(strutEnd);
         strutArea.setRight(strut);
@@ -469,7 +470,7 @@ void MainWindow::setStrutPartial()
         orientation = XcbMisc::OrientationRight;
         strut = maxScreenWidth - p.x();
         strutStart = p.y();
-        strutEnd = p.y() + s.height() * ratio;
+        strutEnd = qMin(qRound(p.y() + s.height() * ratio), primaryRawRect.bottom());
         strutArea.setTop(strutStart);
         strutArea.setBottom(strutEnd);
         strutArea.setLeft(p.x());
@@ -493,7 +494,11 @@ void MainWindow::setStrutPartial()
             ++count;
     }
     if (count > 0)
+    {
+        qWarning() << "strutArea is intersects with another screen.";
+        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
         return;
+    }
 
     m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
 }

@@ -116,8 +116,8 @@ public:
         const qreal scale = qApp->devicePixelRatio();
 
         DisplayRect dr = primaryRawRect();
-        dr.width = qreal(dr.width) / scale;
-        dr.height = qreal(dr.height) / scale;
+        dr.width = std::round(qreal(dr.width) / scale);
+        dr.height = std::round(qreal(dr.height) / scale);
 
         return dr;
     }
