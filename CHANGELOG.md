@@ -1,3 +1,6 @@
+# 4.5.6
+    Fix dock position error in multi screen
+
 # 4.5.5
     Forbid using theme icon in network plugin.
 
