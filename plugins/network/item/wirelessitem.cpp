@@ -167,9 +167,11 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
         }
 
         if (strength == 100)
-            type = "8";
+            type = "80";
+        else if (strength == 0)
+            type = "0";
         else
-            type = QString::number(strength / 10 & ~0x1);
+            type = QString::number(strength / 10 & ~0x1) + "0";
     }
 
     const QString key = QString("wireless-%1%2")
@@ -187,7 +189,7 @@ const QPixmap WirelessItem::backgroundPix(const int size)
 const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 {
     if (!m_icons.contains(key))
-        m_icons.insert(key, QIcon::fromTheme(key + ".svg",
+        m_icons.insert(key, QIcon::fromTheme(key,
                                              QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
 
     return m_icons.value(key);

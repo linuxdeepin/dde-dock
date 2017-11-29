@@ -14,17 +14,17 @@
     </qresource>
     <qresource prefix="/wireless">
         <file>resources/wireless/wireless-0.svg</file>
-        <file>resources/wireless/wireless-2.svg</file>
-        <file>resources/wireless/wireless-4.svg</file>
-        <file>resources/wireless/wireless-6.svg</file>
-        <file>resources/wireless/wireless-8.svg</file>
+        <file>resources/wireless/wireless-20.svg</file>
+        <file>resources/wireless/wireless-40.svg</file>
+        <file>resources/wireless/wireless-60.svg</file>
+        <file>resources/wireless/wireless-80.svg</file>
         <file>resources/wireless/wireless-background.svg</file>
         <file>resources/wireless/wireless-disconnect.svg</file>
         <file>resources/wireless/wireless-0-symbolic.svg</file>
-        <file>resources/wireless/wireless-2-symbolic.svg</file>
-        <file>resources/wireless/wireless-4-symbolic.svg</file>
-        <file>resources/wireless/wireless-6-symbolic.svg</file>
-        <file>resources/wireless/wireless-8-symbolic.svg</file>
+        <file>resources/wireless/wireless-20-symbolic.svg</file>
+        <file>resources/wireless/wireless-40-symbolic.svg</file>
+        <file>resources/wireless/wireless-60-symbolic.svg</file>
+        <file>resources/wireless/wireless-80-symbolic.svg</file>
         <file>resources/wireless/wireless-disconnect-symbolic.svg</file>
         <file>resources/wireless/security.svg</file>
         <file>resources/wireless/refresh_press.svg</file>
