@@ -1,3 +1,6 @@
+# 4.5.7
+    Using system theme icon in network plugin
+
 # 4.5.6
     Fix dock position error in multi screen
 
