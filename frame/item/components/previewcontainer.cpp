@@ -102,20 +102,17 @@ void PreviewContainer::checkMouseLeave()
 {
     const bool hover = underMouse();
 
-    if (!hover)
+    if (hover)
+        return;
+
+    emit requestCancelAndHidePreview();
+
+    m_floatingPreview->setVisible(false);
+
+    if (m_needActivate)
     {
-        emit requestCancelAndHidePreview();
-
-        m_floatingPreview->setVisible(false);
-
-        if (!isVisible())
-            return;
-
-        if (m_needActivate)
-        {
-            m_needActivate = false;
-            emit requestActivateWindow(m_floatingPreview->trackedWid());
-        }
+        m_needActivate = false;
+        emit requestActivateWindow(m_floatingPreview->trackedWid());
     }
 }
 
