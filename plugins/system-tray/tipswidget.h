@@ -34,7 +34,7 @@ public:
     explicit TrayApplet(QWidget *parent = 0);
 
     void clear();
-    void addWidgets(QList<TrayWidget *> widgets);
+    void addWidgets(QList<TrayWidget *> &widgets);
 
 private:
     QBoxLayout *m_mainLayout;

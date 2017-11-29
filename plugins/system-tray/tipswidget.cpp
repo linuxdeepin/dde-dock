@@ -44,7 +44,7 @@ void TrayApplet::clear()
     }
 }
 
-void TrayApplet::addWidgets(QList<TrayWidget *> widgets)
+void TrayApplet::addWidgets(QList<TrayWidget *> &widgets)
 {
     for (auto w : widgets)
     {
