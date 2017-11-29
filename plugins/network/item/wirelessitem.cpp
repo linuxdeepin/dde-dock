@@ -168,7 +168,7 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
 
         if (strength == 100)
             type = "80";
-        else if (strength == 0)
+        else if (strength < 20)
             type = "0";
         else
             type = QString::number(strength / 10 & ~0x1) + "0";
