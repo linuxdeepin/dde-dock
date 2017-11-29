@@ -79,7 +79,7 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 
     const quint32 trayWinId = itemKey.toUInt();
 
-    return m_trayList[trayWinId];
+    return m_trayList.value(trayWinId);
 }
 
 QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
@@ -185,7 +185,7 @@ void SystemTrayPlugin::trayAdded(const quint32 winId)
 
     TrayWidget *trayWidget = new TrayWidget(winId);
 
-    m_trayList[winId] = trayWidget;
+    m_trayList.insert(winId, trayWidget);
 
     m_fashionItem->setMouseEnable(m_trayList.size() == 1);
     if (!m_fashionItem->activeTray())
@@ -202,8 +202,7 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
     if (!m_trayList.contains(winId))
         return;
 
-    TrayWidget *widget = m_trayList[winId];
-    m_trayList.remove(winId);
+    TrayWidget *widget = m_trayList.take(winId);
     m_proxyInter->itemRemoved(this, QString::number(winId));
     widget->deleteLater();
 
@@ -229,7 +228,7 @@ void SystemTrayPlugin::trayChanged(const quint32 winId)
     if (!m_trayList.contains(winId))
         return;
 
-    m_trayList[winId]->updateIcon();
+    m_trayList.value(winId)->updateIcon();
     m_fashionItem->setActiveTray(m_trayList[winId]);
 
     if (m_trayApplet->isVisible())
