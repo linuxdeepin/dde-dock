@@ -60,9 +60,11 @@ void ContainerItem::removeItem(DockItem * const item)
 
 bool ContainerItem::contains(DockItem * const item)
 {
-    if (m_containerWidget->itemList().contains(item))
+    if (m_containerWidget->contains(item))
     {
-        item->setParent(m_containerWidget);
+        // reset parent to container.
+        if (item->parent() != m_containerWidget)
+            item->setParent(m_containerWidget);
         return true;
     }
 

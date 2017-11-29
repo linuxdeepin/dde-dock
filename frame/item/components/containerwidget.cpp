@@ -67,11 +67,6 @@ int ContainerWidget::itemCount() const
     return m_itemList.count();
 }
 
-const QList<QWidget *> ContainerWidget::itemList() const
-{
-    return m_itemList;
-}
-
 bool ContainerWidget::allowDragEnter(QDragEnterEvent *e)
 {
     if (!e->mimeData()->hasFormat(DOCK_PLUGIN_MIME))

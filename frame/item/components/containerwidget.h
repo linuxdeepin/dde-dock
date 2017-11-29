@@ -35,8 +35,8 @@ public:
     void addWidget(QWidget * const w);
     void removeWidget(QWidget * const w);
     int itemCount() const;
-    const QList<QWidget *> itemList() const;
 
+    inline bool contains(QWidget *w) const { return m_itemList.contains(w); }
     bool allowDragEnter(QDragEnterEvent *e);
 
 protected:
