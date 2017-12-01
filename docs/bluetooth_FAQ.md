@@ -56,3 +56,5 @@
 
 蓝牙音箱如果断开，先按照蓝牙耳机的方法试一下。如果不是，那就考虑是不是电脑的蓝牙不支持蓝牙高保真输出，因为 `deepin` 默认开启高保真。
 试着安装 `pavucontrol` 将蓝牙的 `profile(配置)` 切换为其它的，不过这样会导致音效很差，建议换掉电脑的蓝牙设备吧。
+
+若日志里看到 `a2dp-sink profile connect failed for XXX: Protocol not available` 之类的错误信息，可以试着修改 `/etc/pulse/daemon.conf` 文件，将 `exit-idle-time` 改为 `-1`。
