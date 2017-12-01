@@ -79,6 +79,7 @@ func NewAudio(core *pulse.Context) *Audio {
 		if a.DefaultSink != nil {
 			_prevSinkActivePort = a.DefaultSink.ActivePort
 		}
+		a.updateProps()
 		a.initEventHandlers()
 		a.sinkInputPoller()
 	}()

@@ -149,13 +149,13 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		logger.Debugf("[Event] sink #%d added", idx)
 		sinfo, _ := a.core.GetServer()
 		if sinfo != nil {
-			a.updateDefaultSink(sinfo.DefaultSinkName)
+			a.updateDefaultSink(sinfo.DefaultSinkName, false)
 		}
 	case pulse.EventTypeRemove:
 		logger.Debugf("[Event] sink #%d removed", idx)
 		sinfo, _ := a.core.GetServer()
 		if sinfo != nil {
-			a.updateDefaultSink(sinfo.DefaultSinkName)
+			a.updateDefaultSink(sinfo.DefaultSinkName, false)
 		}
 	case pulse.EventTypeChange:
 		logger.Debugf("[Event] sink #%d changed", idx)
@@ -229,13 +229,13 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 		logger.Debugf("[Event] source #%d added", idx)
 		sinfo, _ := a.core.GetServer()
 		if sinfo != nil {
-			a.updateDefaultSource(sinfo.DefaultSourceName)
+			a.updateDefaultSource(sinfo.DefaultSourceName, false)
 		}
 	case pulse.EventTypeRemove:
 		logger.Debugf("[Event] source #%d removed", idx)
 		sinfo, _ := a.core.GetServer()
 		if sinfo != nil {
-			a.updateDefaultSource(sinfo.DefaultSourceName)
+			a.updateDefaultSource(sinfo.DefaultSourceName, false)
 		}
 	case pulse.EventTypeChange:
 		logger.Debugf("[Event] source #%d changed", idx)
@@ -262,6 +262,6 @@ func (a *Audio) handleServerEvent() {
 	}
 
 	logger.Debug("[Event] server changed:", sinfo.DefaultSinkName, sinfo.DefaultSourceName)
-	a.updateDefaultSink(sinfo.DefaultSinkName)
-	a.updateDefaultSource(sinfo.DefaultSourceName)
+	a.updateDefaultSink(sinfo.DefaultSinkName, true)
+	a.updateDefaultSource(sinfo.DefaultSourceName, true)
 }

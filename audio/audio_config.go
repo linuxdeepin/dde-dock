@@ -59,7 +59,7 @@ func (a *Audio) applyConfig() {
 			port := pulse.PortInfos(s.Ports).Get(info.SinkPort)
 			// if port invalid, nothing to do.
 			// TODO: some device port can play sound when state is 'NO', how to fix?
-			if port == nil || port.Available == pulse.AvailableTypeNo {
+			if port == nil || (autoSwitchPort && port.Available == pulse.AvailableTypeNo) {
 				sinkValidity = false
 				break
 			}
@@ -73,6 +73,7 @@ func (a *Audio) applyConfig() {
 			break
 		}
 	}
+	logger.Debug("Audio config sink validity:", sinkValidity, info.Sink)
 	if sinkValidity {
 		a.core.SetDefaultSink(info.Sink)
 		time.Sleep(time.Microsecond * 50)
@@ -86,7 +87,7 @@ func (a *Audio) applyConfig() {
 				continue
 			}
 			port := pulse.PortInfos(s.Ports).Get(info.SourcePort)
-			if port == nil || port.Available == pulse.AvailableTypeNo {
+			if port == nil || (autoSwitchPort && port.Available == pulse.AvailableTypeNo) {
 				sourceValidity = false
 				continue
 			}
@@ -99,6 +100,7 @@ func (a *Audio) applyConfig() {
 			break
 		}
 	}
+	logger.Debug("Audio config source validity:", sourceValidity, info.Source)
 	if sourceValidity {
 		a.core.SetDefaultSource(info.Source)
 		time.Sleep(time.Microsecond * 50)
@@ -113,19 +115,32 @@ func (a *Audio) applyConfig() {
 }
 
 func (a *Audio) trySelectBestPort() {
-	id, p := a.cards.getAvailablePort(pulse.DirectionSink)
-	if p.Name == "" {
-		logger.Warningf("Not found available sink port: %#v", a.cards)
-		id, p = a.cards.getAvailablePort(pulse.DirectionSource)
-		if p.Name == "" {
-			logger.Warningf("Not found available source port, exit...")
-			return
+	sinkId, sinkPort := a.cards.getAvailablePort(pulse.DirectionSink)
+	if sinkPort.Name != "" {
+		logger.Debugf("Will switch to sink: %#v", sinkPort)
+		err := a.SetPort(sinkId, sinkPort.Name, int32(sinkPort.Direction))
+		if err != nil {
+			logger.Warningf("Failed to switch to sink port: %#v, error: %v", sinkPort, err)
 		}
 	}
-	logger.Debugf("Will switch to: %#v", p)
-	err := a.SetPort(id, p.Name, int32(p.Direction))
-	if err != nil {
-		logger.Warningf("Failed to switch to port: %#v, error: %v", p, err)
+
+	sourceId, sourcePort := a.cards.getAvailablePort(pulse.DirectionSource)
+	if sourcePort.Name != "" && sourceId == sinkId {
+		logger.Debugf("Will switch to source: %#v", sourcePort)
+		err := a.SetPort(sourceId, sourcePort.Name, int32(sourcePort.Direction))
+		if err != nil {
+			logger.Warningf("Failed to switch to source port: %#v, error: %v", sourcePort, err)
+		}
+	}
+}
+
+func (a *Audio) updateProps() {
+	a.cards = newCardInfos(a.core.GetCardList())
+	a.setPropCards(a.cards.string())
+	sinfo, _ := a.core.GetServer()
+	if sinfo != nil {
+		a.updateDefaultSink(sinfo.DefaultSinkName, true)
+		a.updateDefaultSource(sinfo.DefaultSourceName, true)
 	}
 }
 

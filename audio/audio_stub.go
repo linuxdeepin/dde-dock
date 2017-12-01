@@ -124,8 +124,8 @@ func (a *Audio) update() {
 	logger.Debug("Audio.update")
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
-		a.updateDefaultSink(sinfo.DefaultSinkName)
-		a.updateDefaultSource(sinfo.DefaultSourceName)
+		a.updateDefaultSink(sinfo.DefaultSinkName, true)
+		a.updateDefaultSource(sinfo.DefaultSourceName, true)
 	}
 
 	a.rebuildSinkInputList()
@@ -136,9 +136,10 @@ func (a *Audio) update() {
 	}
 }
 
-func (a *Audio) updateDefaultSink(name string) {
-	if a.DefaultSink != nil && a.DefaultSink.Name == name {
+func (a *Audio) updateDefaultSink(name string, force bool) {
+	if !force && a.DefaultSink != nil && a.DefaultSink.Name == name {
 		// default source no changed
+		a.DefaultSink.update()
 		return
 	}
 	// default sink changed
@@ -158,9 +159,10 @@ func (a *Audio) updateDefaultSink(name string) {
 	}
 }
 
-func (a *Audio) updateDefaultSource(name string) {
-	if a.DefaultSource != nil && a.DefaultSource.Name == name {
+func (a *Audio) updateDefaultSource(name string, force bool) {
+	if !force && a.DefaultSource != nil && a.DefaultSource.Name == name {
 		// default source no changed
+		a.DefaultSource.update()
 		return
 	}
 	// default source changed
