@@ -153,10 +153,15 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     const auto ratio = devicePixelRatioF();
     const QSize s = QSize(16, 16) * ratio;
 
+    QString type;
     if (strength == 100)
-        iconPix = DSvgRenderer::render(":/wireless/resources/wireless/wireless-8-symbolic.svg", s);
+        type = "80";
+    else if (strength < 20)
+        type = "0";
     else
-        iconPix = DSvgRenderer::render(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(strength / 10 & ~0x1), s);
+        type = QString::number(strength / 10 & ~0x1) + "0";
+
+    iconPix = DSvgRenderer::render(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
     iconPix.setDevicePixelRatio(ratio);
 
     m_strengthIcon->setPixmap(iconPix);
