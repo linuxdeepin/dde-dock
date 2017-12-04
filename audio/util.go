@@ -41,7 +41,7 @@ func playFeedback() {
 }
 
 func playFeedbackWithDevice(device string) {
-	soundutils.PlaySystemSound(soundutils.EventVolumeChanged, device, false)
+	go soundutils.PlaySystemSound(soundutils.EventAudioVolumeChanged, device)
 }
 
 func toJSON(v interface{}) string {

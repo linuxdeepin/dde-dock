@@ -39,6 +39,11 @@ func (*Audio) GetDBusInfo() dbus.DBusInfo {
 }
 
 func filterSinkInput(c *pulse.SinkInput) bool {
+	appName := c.PropList[pulse.PA_PROP_APPLICATION_NAME]
+	if appName == "com.deepin.SoundEffect" {
+		return true
+	}
+
 	switch c.PropList[pulse.PA_PROP_MEDIA_ROLE] {
 	case "video", "music", "game":
 		return false

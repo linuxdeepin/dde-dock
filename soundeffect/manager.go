@@ -70,7 +70,7 @@ func (m *Manager) PlaySystemSound(event string) {
 		logger.Debug("start", m.count)
 		m.mutex.Unlock()
 
-		err := soundutils.PlaySystemSound(event, "", true)
+		err := soundutils.PlaySystemSound(event, "")
 		if err != nil {
 			logger.Error(err)
 		}

@@ -170,5 +170,5 @@ func (m *Manager) sendNotify(icon, summary, body string) {
 
 func playSound(name string) {
 	logger.Debug("play system sound", name)
-	soundutils.PlaySystemSound(name, "", false)
+	go soundutils.PlaySystemSound(name, "")
 }

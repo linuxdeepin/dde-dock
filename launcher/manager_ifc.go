@@ -141,7 +141,7 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
 		return false, err
 	}
 	// success
-	soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "", false)
+	go soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "")
 	return true, nil
 }
 
