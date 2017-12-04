@@ -444,12 +444,12 @@ void MainPanel::adjustItemSize()
     case Top:
     case Bottom:
         itemSize.setHeight(height() - PANEL_BORDER);
-        itemSize.setWidth(AppItem::itemBaseWidth() / ratio);
+        itemSize.setWidth(std::round(qreal(AppItem::itemBaseWidth()) / ratio));
         break;
 
     case Left:
     case Right:
-        itemSize.setHeight(AppItem::itemBaseHeight() / ratio);
+        itemSize.setHeight(std::round(qreal(AppItem::itemBaseHeight()) / ratio));
         itemSize.setWidth(width() - PANEL_BORDER);
         break;
 
