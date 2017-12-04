@@ -154,8 +154,14 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
     for (auto item : itemList)
     {
         // we need to hide container item at fashion mode.
-        if (item->itemType() == DockItem::Container)
+        switch (item->itemType())
+        {
+        case DockItem::Container:
+        case DockItem::Stretch:
             item->setVisible(displayMode == Dock::Efficient);
+            break;
+        default:;
+        }
     }
 
     // reload qss
@@ -460,9 +466,11 @@ void MainPanel::adjustItemSize()
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
+        const auto itemType = item->itemType();
         if (m_itemController->itemIsInContainer(item))
             continue;
-        if (m_displayMode == Fashion && item->itemType() == DockItem::Container)
+        if (m_displayMode == Fashion &&
+            (itemType == DockItem::Container || itemType == DockItem::Stretch))
             continue;
 
         QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
