@@ -43,6 +43,7 @@ public:
         Stretch,
         Plugins,
         Container,
+        Placeholder,
     };
 
 public:

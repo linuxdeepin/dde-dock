@@ -76,12 +76,12 @@ MainWindow::MainWindow(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setAcceptDrops(true);
 
-    m_platformWindowHandle.setShadowRadius(0);
     m_platformWindowHandle.setEnableBlurWindow(false);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
     m_platformWindowHandle.setBorderWidth(0);
     m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
+    m_platformWindowHandle.setShadowRadius(0);
 
     m_settings = new DockSettings(this);
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
@@ -673,8 +673,8 @@ void MainWindow::adjustShadowMask()
         m_panelShowAni->state() == QPauseAnimation::Running ||
         !m_wmHelper->hasComposite())
     {
-        m_platformWindowHandle.setShadowRadius(0);
         m_platformWindowHandle.setClipPath(QPainterPath());
+        m_platformWindowHandle.setShadowRadius(0);
         return;
     }
 
@@ -703,6 +703,6 @@ void MainWindow::adjustShadowMask()
         path.addRect(r);
     }
 
-    m_platformWindowHandle.setShadowRadius(60);
     m_platformWindowHandle.setClipPath(path);
+    m_platformWindowHandle.setShadowRadius(60);
 }

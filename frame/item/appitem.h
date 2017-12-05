@@ -45,7 +45,7 @@ public:
     static int itemBaseHeight();
     static int itemBaseWidth();
 
-    inline ItemType itemType() const {return App;}
+    inline ItemType itemType() const { return App; }
 
 signals:
     void requestActivateWindow(const WId wid) const;

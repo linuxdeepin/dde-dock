@@ -31,8 +31,7 @@ class PlaceholderItem : public DockItem
 public:
     explicit PlaceholderItem(QWidget *parent = 0);
 
-    // fake as app item
-    inline ItemType itemType() const {return App;}
+    inline ItemType itemType() const { return Placeholder; }
 };
 
 #endif // PLACEHOLDERITEM_H
