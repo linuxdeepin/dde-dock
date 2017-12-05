@@ -470,6 +470,7 @@ void DockSettings::calculateWindowConfig()
             case DockItem::Launcher:
             case DockItem::App:
             case DockItem::Plugins:
+            case DockItem::Placeholder:
                 ++visibleItemCount;
                 break;
             default:;

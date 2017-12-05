@@ -477,6 +477,7 @@ void MainPanel::adjustItemSize()
 
         switch (item->itemType())
         {
+        case DockItem::Placeholder:
         case DockItem::App:
         case DockItem::Launcher:
             item->setFixedSize(itemSize);
