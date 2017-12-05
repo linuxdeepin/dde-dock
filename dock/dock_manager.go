@@ -289,7 +289,7 @@ func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, er
 		err := m.installAppEntry(entry)
 		if err == nil {
 			m.entriesMu.Lock()
-			m.Entries = m.Entries.Insert(entry, -1)
+			m.Entries = m.Entries.Insert(entry, int(index))
 			m.emitEntryAdded(entry)
 			m.entriesMu.Unlock()
 		}
