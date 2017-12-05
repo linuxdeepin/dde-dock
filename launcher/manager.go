@@ -22,6 +22,7 @@ package launcher
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
@@ -37,6 +38,7 @@ import (
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/notify"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -52,11 +54,12 @@ const (
 	AppStatusDeleted  = "deleted"
 	lastoreDBusDest   = "com.deepin.lastore"
 
-	gsSchemaLauncher  = "com.deepin.dde.launcher"
-	gsKeyDisplayMode  = "display-mode"
-	gsKeyFullscreen   = "fullscreen"
-	gsKeyAppsUseProxy = "apps-use-proxy"
-	gsKeyAppsHidden   = "apps-hidden"
+	gsSchemaLauncher        = "com.deepin.dde.launcher"
+	gsKeyDisplayMode        = "display-mode"
+	gsKeyFullscreen         = "fullscreen"
+	gsKeyAppsUseProxy       = "apps-use-proxy"
+	gsKeyAppsDisableScaling = "apps-disable-scaling"
+	gsKeyAppsHidden         = "apps-hidden"
 )
 
 type Manager struct {
@@ -359,4 +362,38 @@ func (m *Manager) emitSearchDone(result MatchResults) {
 	}
 	dbus.Emit(m, "SearchDone", ids)
 	logger.Debug("emit SearchDone", ids)
+}
+
+func (m *Manager) getUseFeature(key, id string) (bool, error) {
+	item := m.getItemById(id)
+	if item == nil {
+		return false, errorInvalidID
+	}
+	apps := strv.Strv(m.settings.GetStrv(key))
+	return apps.Contains(id), nil
+}
+
+func (m *Manager) setUseFeature(key, id string, val bool) error {
+	item := m.getItemById(id)
+	if item == nil {
+		return errorInvalidID
+	}
+	apps := strv.Strv(m.settings.GetStrv(key))
+
+	var changed bool
+	if val {
+		apps, changed = apps.Add(id)
+	} else {
+		apps, changed = apps.Delete(id)
+	}
+
+	if !changed {
+		return nil
+	}
+
+	ok := m.settings.SetStrv(key, []string(apps))
+	if !ok {
+		return fmt.Errorf("gsettings set %s failed", key)
+	}
+	return nil
 }

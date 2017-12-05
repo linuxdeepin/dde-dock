@@ -28,7 +28,6 @@ import (
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/keyfile"
-	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -187,36 +186,17 @@ func (m *Manager) Search(key string) {
 }
 
 func (m *Manager) GetUseProxy(id string) (bool, error) {
-	item := m.getItemById(id)
-	if item == nil {
-		return false, errorInvalidID
-	}
-	appsUseProxy := strv.Strv(m.settings.GetStrv(gsKeyAppsUseProxy))
-	return appsUseProxy.Contains(item.Path), nil
+	return m.getUseFeature(gsKeyAppsUseProxy, id)
 }
 
-func (m *Manager) SetUseProxy(id string, use bool) error {
-	item := m.getItemById(id)
-	if item == nil {
-		return errorInvalidID
-	}
+func (m *Manager) SetUseProxy(id string, val bool) error {
+	return m.setUseFeature(gsKeyAppsUseProxy, id, val)
+}
 
-	appsUseProxy := strv.Strv(m.settings.GetStrv(gsKeyAppsUseProxy))
+func (m *Manager) GetDisableScaling(id string) (bool, error) {
+	return m.getUseFeature(gsKeyAppsDisableScaling, id)
+}
 
-	var changed bool
-	if use {
-		appsUseProxy, changed = appsUseProxy.Add(item.Path)
-	} else {
-		appsUseProxy, changed = appsUseProxy.Delete(item.Path)
-	}
-
-	if !changed {
-		return nil
-	}
-
-	ok := m.settings.SetStrv(gsKeyAppsUseProxy, []string(appsUseProxy))
-	if !ok {
-		return errors.New("gsettings set apps-use-proxy failed")
-	}
-	return nil
+func (m *Manager) SetDisableScaling(id string, val bool) error {
+	return m.setUseFeature(gsKeyAppsDisableScaling, id, val)
 }
