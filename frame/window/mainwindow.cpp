@@ -52,7 +52,8 @@ const QPoint rawXPosition(const QPoint &scaledPos)
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
 
-      m_updatePanelVisible(true),
+      m_launched(false),
+      m_updatePanelVisible(false),
 
       m_mainPanel(new MainPanel(this)),
 
@@ -61,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
+      m_shadowMaskOptimizeTimer(new QTimer(this)),
+
       m_sizeChangeAni(new QVariantAnimation(this)),
       m_posChangeAni(new QVariantAnimation(this)),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
@@ -73,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setAcceptDrops(true);
 
+    m_platformWindowHandle.setShadowRadius(0);
     m_platformWindowHandle.setEnableBlurWindow(false);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
@@ -86,8 +90,6 @@ MainWindow::MainWindow(QWidget *parent)
     initConnections();
 
     m_mainPanel->setFixedSize(m_settings->windowSize());
-
-    updatePanelVisible();
 }
 
 MainWindow::~MainWindow()
@@ -100,6 +102,32 @@ QRect MainWindow::panelGeometry()
     QRect rect = m_mainPanel->geometry();
     rect.moveTopLeft(m_mainPanel->mapToGlobal(QPoint(0,0)));
     return rect;
+}
+
+void MainWindow::launch()
+{
+    narrow(m_settings->position());
+
+    QTimer::singleShot(400, this, [&] {
+        m_launched = true;
+        resetPanelEnvironment(false);
+        updateGeometry();
+        expand();
+    });
+
+    // set strut
+    QTimer::singleShot(600, this, [&] {
+        setStrutPartial();
+    });
+
+    // reset to right environment when animation finished
+    QTimer::singleShot(800, this, [&] {
+        m_updatePanelVisible = true;
+        updatePanelVisible();
+    });
+
+    qApp->processEvents();
+    QTimer::singleShot(1, this, &MainWindow::show);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -196,6 +224,9 @@ void MainWindow::initComponents()
     m_expandDelayTimer->setSingleShot(true);
     m_expandDelayTimer->setInterval(m_settings->expandTimeout());
 
+    m_shadowMaskOptimizeTimer->setSingleShot(true);
+    m_shadowMaskOptimizeTimer->setInterval(100);
+
     m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
     m_posChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
     m_panelShowAni->setEasingCurve(QEasingCurve::InOutCubic);
@@ -274,6 +305,7 @@ void MainWindow::initConnections()
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
+    connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
@@ -564,6 +596,9 @@ void MainWindow::narrow(const Position prevPos)
 
 void MainWindow::resetPanelEnvironment(const bool visible)
 {
+    if (!m_launched)
+        return;
+
     // reset environment
     m_sizeChangeAni->stop();
     m_posChangeAni->stop();
@@ -626,7 +661,13 @@ void MainWindow::updatePanelVisible()
 
 void MainWindow::adjustShadowMask()
 {
-//    qDebug() << Q_FUNC_INFO << m_mainPanel->pos() << m_panelHideAni->state() << m_panelShowAni->state() << m_wmHelper->hasComposite();
+    if (!m_launched)
+        return;
+
+    if (m_shadowMaskOptimizeTimer->isActive())
+        return;
+    m_shadowMaskOptimizeTimer->start();
+
     if (m_mainPanel->pos() != QPoint(0, 0) ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running ||

@@ -45,7 +45,11 @@ public:
     ~MainWindow();
     QRect panelGeometry();
 
+public slots:
+    void launch();
+
 private:
+    using QWidget::show;
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
@@ -83,6 +87,7 @@ private slots:
     void adjustShadowMask();
 
 private:
+    bool m_launched;
     bool m_updatePanelVisible;
     MainPanel *m_mainPanel;
 
@@ -91,6 +96,7 @@ private:
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
+    QTimer *m_shadowMaskOptimizeTimer;
     QVariantAnimation *m_sizeChangeAni;
     QVariantAnimation *m_posChangeAni;
     QPropertyAnimation *m_panelShowAni;
