@@ -59,6 +59,9 @@ func doSetScaleFactor(scale float64) {
 		logger.Warning("Failed to set qt scale factor:", err)
 	}
 
+	// for java
+	doSetJAVAScale(scale)
+
 	// if 1.7 < scale < 2, window scale = 2
 	tmp := int32(math.Trunc((scale+0.3)*10) / 10)
 	if tmp < 1 {
@@ -105,6 +108,26 @@ func doScalePlymouth(scale uint32) {
 		logger.Warning("Failed to scale plymouth:", err)
 	}
 	setter = nil
+}
+
+func doSetJAVAScale(scale float64) {
+	var envName = "_JAVA_OPTIONS"
+	var scaleKey = "-Dswt.autoScale="
+
+	value := os.Getenv(envName)
+	if strings.Contains(value, scaleKey) {
+		list1 := strings.Split(value, scaleKey)
+		value = list1[0]
+
+		list2 := strings.Split(list1[1], " ")
+		value += strings.Join(list2[1:], " ")
+	}
+
+	value += fmt.Sprintf(" %s%d", scaleKey, int(scale*100))
+	err := writeKeyToEnvFile(envName, value, pamEnvFile)
+	if err != nil {
+		logger.Warning("Failed to set java scale:", value, err)
+	}
 }
 
 func writeKeyToEnvFile(key, value, filename string) error {
