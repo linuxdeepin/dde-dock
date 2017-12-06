@@ -1,3 +1,7 @@
+# 4.5.7.1
+    Fix dock system tray disappear
+    Fix WiFi indicator too large
+
 # 4.5.7
     Using system theme icon in network plugin
 
