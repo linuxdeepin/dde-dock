@@ -77,11 +77,10 @@ type Manager struct {
 
 	searchTaskStack *searchTaskStack
 
-	// TODO
-	itemChanged    bool
-	searchKeyMutex sync.Mutex
-	currentRunes   []rune
-	popPushOpChan  chan *popPushOp
+	itemsChangedHit uint32
+	searchMu        sync.Mutex
+	currentRunes    []rune
+	popPushOpChan   chan *popPushOp
 
 	systemDBusConn *dbus.Conn
 

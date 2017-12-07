@@ -22,6 +22,7 @@ package launcher
 import (
 	"os"
 	"path/filepath"
+	"sync/atomic"
 	"time"
 
 	"gir/gio-2.0"
@@ -262,7 +263,7 @@ func (m *Manager) retryAddItem(appInfo *desktopappinfo.DesktopAppInfo, item *Ite
 }
 
 func (m *Manager) emitItemChanged(item *Item, status string) {
-	m.itemChanged = true
+	atomic.StoreUint32(&m.itemsChangedHit, 1)
 	itemInfo := item.newItemInfo()
 	logger.Debugf("emit signal ItemChanged status: %v, itemInfo: %v", status, itemInfo)
 	dbus.Emit(m, "ItemChanged", status, itemInfo, itemInfo.CategoryID)

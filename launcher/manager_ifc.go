@@ -24,6 +24,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
@@ -167,22 +168,34 @@ func (m *Manager) RequestUninstall(id string, purge bool) {
 	}()
 }
 
+func (m *Manager) isItemsChanged() bool {
+	old := atomic.SwapUint32(&m.itemsChangedHit, 0)
+	return old > 0
+}
+
 func (m *Manager) Search(key string) {
 	key = strings.ToLower(key)
 	logger.Debug("Search key:", key)
 
 	keyRunes := []rune(key)
-	m.searchKeyMutex.Lock()
-	defer m.searchKeyMutex.Unlock()
 
-	currentRunes := m.currentRunes
-	popCount, runesPush := runeSliceDiff(keyRunes, currentRunes)
+	m.searchMu.Lock()
 
-	logger.Debugf("runeSliceDiff key %v, current %v", keyRunes, currentRunes)
+	if m.isItemsChanged() {
+		// clear search cache
+		m.popPushOpChan <- &popPushOp{popCount: len(m.currentRunes)}
+		m.currentRunes = nil
+	}
+
+	popCount, runesPush := runeSliceDiff(keyRunes, m.currentRunes)
+
+	logger.Debugf("runeSliceDiff key %v, current %v", keyRunes, m.currentRunes)
 	logger.Debugf("runeSliceDiff popCount %v, runesPush %v", popCount, runesPush)
 
 	m.popPushOpChan <- &popPushOp{popCount, runesPush}
 	m.currentRunes = keyRunes
+
+	m.searchMu.Unlock()
 }
 
 func (m *Manager) GetUseProxy(id string) (bool, error) {
