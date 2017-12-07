@@ -132,7 +132,7 @@ func doSetJAVAScale(scale float64) {
 
 func writeKeyToEnvFile(key, value, filename string) error {
 	if !utils.IsFileExist(filename) {
-		return ioutil.WriteFile(filename, []byte(key+"="+value), 0644)
+		return ioutil.WriteFile(filename, []byte(key+"="+value+"\n"), 0644)
 	}
 
 	content, err := ioutil.ReadFile(filename)
@@ -161,7 +161,12 @@ func writeKeyToEnvFile(key, value, filename string) error {
 	if idx != -1 {
 		lines[idx] = key + "=" + value
 	} else {
-		lines[len(lines)-1] = key + "=" + value
+		if lines[len(lines)-1] == "" {
+			lines[len(lines)-1] = key + "=" + value
+		} else {
+			lines = append(lines, key+"="+value)
+		}
+		lines = append(lines, "")
 	}
 	return ioutil.WriteFile(filename, []byte(strings.Join(lines, "\n")), 0644)
 }
