@@ -23,6 +23,7 @@
 #include "panel/mainpanel.h"
 
 #include <QDebug>
+#include <QEvent>
 #include <QResizeEvent>
 #include <QScreen>
 #include <QGuiApplication>
@@ -128,6 +129,20 @@ void MainWindow::launch()
 
     qApp->processEvents();
     QTimer::singleShot(1, this, &MainWindow::show);
+}
+
+bool MainWindow::event(QEvent *e)
+{
+    switch (e->type())
+    {
+    case QEvent::Move:
+        if (!e->spontaneous())
+            QTimer::singleShot(1, this, &MainWindow::positionCheck);
+        break;
+    default:;
+    }
+
+    return QWidget::event(e);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -292,8 +307,8 @@ void MainWindow::internalMove(const QPoint &p)
 void MainWindow::initConnections()
 {
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
+    connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
@@ -430,6 +445,8 @@ void MainWindow::updateGeometry()
     }
 
     const QRect windowRect = m_settings->windowRect(position, m_settings->hideState() == Hide);
+    qDebug() << Q_FUNC_INFO << windowRect;
+
     if (animation)
         internalAnimationMove(windowRect.x(), windowRect.y());
     else
@@ -705,4 +722,15 @@ void MainWindow::adjustShadowMask()
 
     m_platformWindowHandle.setClipPath(path);
     m_platformWindowHandle.setShadowRadius(60);
+}
+
+void MainWindow::positionCheck()
+{
+    if (m_posChangeAni->state() == QPropertyAnimation::Running)
+        return;
+    if (m_positionUpdateTimer->isActive())
+        return;
+
+    qDebug() << "welcome to position check point!";
+    qDebug() << pos() << m_settings->windowRect(m_settings->position(), false);
 }
