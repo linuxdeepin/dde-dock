@@ -30,7 +30,7 @@ DWIDGET_USE_NAMESPACE
 const QPixmap getIconFromTheme(const QString &name, const QSize &size)
 {
     const auto ratio = qApp->devicePixelRatio();
-    QPixmap ret = QIcon::fromTheme(name).pixmap(size * ratio);
+    QPixmap ret = QIcon::fromTheme(name, QIcon::fromTheme("application-x-desktop")).pixmap(size * ratio);
     ret.setDevicePixelRatio(ratio);
 
     return ret;
