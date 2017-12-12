@@ -104,13 +104,13 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
     connect(m_updateEffectTimer, &QTimer::timeout, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, m_updateEffectTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
 
     m_updateEffectTimer->setSingleShot(true);
-    m_updateEffectTimer->setInterval(10);
+    m_updateEffectTimer->setInterval(1000 / 25);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -157,7 +157,6 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
         switch (item->itemType())
         {
         case DockItem::Container:
-        case DockItem::Stretch:
             item->setVisible(displayMode == Dock::Efficient);
             break;
         default:;
@@ -380,6 +379,10 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
 void MainPanel::updateBlurEffect() const
 {
+    Q_ASSERT(sender() == m_updateEffectTimer);
+
+    qApp->processEvents();
+
     if (m_displayMode == Efficient || !m_wmHelper->hasComposite()) {
         m_effectWidget->setBlurRectXRadius(0);
         m_effectWidget->setBlurRectYRadius(0);
@@ -470,7 +473,7 @@ void MainPanel::adjustItemSize()
         if (m_itemController->itemIsInContainer(item))
             continue;
         if (m_displayMode == Fashion &&
-            (itemType == DockItem::Container || itemType == DockItem::Stretch))
+            itemType == DockItem::Container)
             continue;
 
         QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));

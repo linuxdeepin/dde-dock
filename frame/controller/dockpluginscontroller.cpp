@@ -35,7 +35,7 @@ DockPluginsController::DockPluginsController(DockItemController *itemControllerI
 {
     qApp->installEventFilter(this);
 
-    QTimer::singleShot(1, this, &DockPluginsController::startLoader);
+    QTimer::singleShot(2000, this, &DockPluginsController::startLoader);
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)

@@ -107,7 +107,10 @@ QRect MainWindow::panelGeometry()
 
 void MainWindow::launch()
 {
+    setVisible(true);
+    m_updatePanelVisible = false;
     narrow(m_settings->position());
+    setVisible(false);
 
     QTimer::singleShot(400, this, [&] {
         m_launched = true;
@@ -590,7 +593,7 @@ void MainWindow::expand()
 void MainWindow::narrow(const Position prevPos)
 {
 //    qDebug() << "narrow" << prevPos;
-    //    const QSize size = m_settings->windowSize();
+//    const QSize size = m_settings->windowSize();
     const QSize size = m_mainPanel->size();
 
     QPoint finishPos(0, 0);
@@ -684,44 +687,47 @@ void MainWindow::adjustShadowMask()
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
     m_shadowMaskOptimizeTimer->start();
+    qApp->processEvents();
 
     if (m_mainPanel->pos() != QPoint(0, 0) ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running ||
         !m_wmHelper->hasComposite())
     {
-        m_platformWindowHandle.setClipPath(QPainterPath());
+//        m_platformWindowHandle.setClipPath(QPainterPath());
         m_platformWindowHandle.setShadowRadius(0);
-        return;
-    }
-
-    const QRect r = QRect(QPoint(), rect().size());
-    const int radius = 5;
-
-    QPainterPath path;
-    if (m_settings->displayMode() == DisplayMode::Fashion)
-    {
-        switch (m_settings->position())
-        {
-        case Top:
-            path.addRoundedRect(0, -radius, r.width(), r.height() + radius, radius, radius);
-            break;
-        case Bottom:
-            path.addRoundedRect(0, 0, r.width(), r.height() + radius, radius, radius);
-            break;
-        case Left:
-            path.addRoundedRect(-radius, 0, r.width() + radius, r.height(), radius, radius);
-            break;
-        case Right:
-            path.addRoundedRect(0, 0, r.width() + radius, r.height(), radius, radius);
-        default:;
-        }
+//        return;
     } else {
-        path.addRect(r);
+        m_platformWindowHandle.setShadowRadius(60);
     }
 
-    m_platformWindowHandle.setClipPath(path);
-    m_platformWindowHandle.setShadowRadius(60);
+//    const QRect r = QRect(QPoint(), rect().size());
+//    const int radius = 5;
+
+//    QPainterPath path;
+//    if (m_settings->displayMode() == DisplayMode::Fashion)
+//    {
+//        switch (m_settings->position())
+//        {
+//        case Top:
+//            path.addRoundedRect(0, -radius, r.width(), r.height() + radius, radius, radius);
+//            break;
+//        case Bottom:
+//            path.addRoundedRect(0, 0, r.width(), r.height() + radius, radius, radius);
+//            break;
+//        case Left:
+//            path.addRoundedRect(-radius, 0, r.width() + radius, r.height(), radius, radius);
+//            break;
+//        case Right:
+//            path.addRoundedRect(0, 0, r.width() + radius, r.height(), radius, radius);
+//        default:;
+//        }
+//    } else {
+//        path.addRect(r);
+//    }
+
+//    m_platformWindowHandle.setClipPath(path);
+//    m_platformWindowHandle.setShadowRadius(60);
 }
 
 void MainWindow::positionCheck()
