@@ -69,7 +69,7 @@ Depends: ${shlibs:Depends},
  libpam-fprintd,
  fprintd,
  dnsmasq,
- cgroup-tools,
+ cgroup-tools, imwheel,
  deepin-installer-timezones
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration

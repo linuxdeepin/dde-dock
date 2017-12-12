@@ -20,12 +20,22 @@
 package inputdevices
 
 import (
+	"sync"
+
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/dxinput"
-	"sync"
 )
 
 var gsLocker sync.Mutex
+
+func (m *Manager) handleGSettings() {
+	m.settings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case gsKeyWheelSpeed:
+			m.setWheelSpeed(false)
+		}
+	})
+}
 
 func (kbd *Keyboard) handleGSettings() {
 	kbd.setting.Connect("changed", func(s *gio.Settings, key string) {
