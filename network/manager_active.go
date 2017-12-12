@@ -76,32 +76,35 @@ func (m *Manager) initActiveConnectionManage() {
 	// custom dbus watcher to catch all signals about active
 	// connection, including vpn connection
 	senderNm := "org.freedesktop.NetworkManager"
-	interfaceDbusProperties := "org.freedesktop.DBus.Properties"
+	pathNm := "/org/freedesktop/NetworkManager"
+	interfaceNm := senderNm
 	interfaceActive := "org.freedesktop.NetworkManager.Connection.Active"
 	interfaceVpn := "org.freedesktop.NetworkManager.VPN.Connection"
 	memberProperties := "PropertiesChanged"
 	memberStateChanged := "StateChanged"
 	memberVpnState := "VpnStateChanged"
-	m.dbusWatcher.watch("type=signal,sender=" + senderNm + ",interface=" + interfaceDbusProperties + ",member=" + memberProperties)
+	m.dbusWatcher.watch("type=signal," + "path=" + pathNm + ",interface=" + interfaceNm + ",member=" + memberProperties)
 	m.dbusWatcher.watch("type=signal,sender=" + senderNm + ",interface=" + interfaceActive + ",member=" + memberStateChanged)
 	m.dbusWatcher.watch("type=signal,sender=" + senderNm + ",interface=" + interfaceVpn + ",member=" + memberVpnState)
 
 	// update active connection properties
 	m.dbusWatcher.connect(func(s *dbus.Signal) {
-		var (
-			state uint32 = nm.NM_ACTIVE_CONNECTION_STATE_UNKNOWN
-			props map[string]dbus.Variant
-		)
-		if s.Name == interfaceDbusProperties+"."+memberProperties && len(s.Body) >= 2 {
-			// compatible with old dbus signal
-			if realName, ok := s.Body[0].(string); ok &&
-				realName == interfaceActive {
-				props, _ = s.Body[1].(map[string]dbus.Variant)
+		if s.Name == interfaceNm+"."+memberProperties && len(s.Body) == 1 {
+			var props = make(map[string]dbus.Variant)
+			props, _ = s.Body[0].(map[string]dbus.Variant)
+			for prop, value := range props {
+				if prop == "ActiveConnections" {
+					// rebuild ActiveConnections prop
+					m.rebuildActiveConnections(value.Value().([]dbus.ObjectPath))
+				}
 			}
-		} else if s.Name == interfaceActive+"."+memberStateChanged && len(s.Body) >= 2 {
-			state, _ = s.Body[0].(uint32)
+			return
 		}
-		m.doUpdateActiveConnection(s.Path, state, props)
+
+		if s.Name == interfaceActive+"."+memberStateChanged && len(s.Body) >= 2 {
+			state, _ := s.Body[0].(uint32)
+			m.doUpdateActiveConnection(s.Path, state)
+		}
 	})
 
 	// handle notification for vpn connections
@@ -161,40 +164,25 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 		delete(m.activeConnections, apath)
 	}
 }
-func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32, props map[string]dbus.Variant) {
+func (m *Manager) rebuildActiveConnections(apaths []dbus.ObjectPath) {
+	m.clearActiveConnections()
+
+	m.activeConnectionsLock.Lock()
+	defer m.activeConnectionsLock.Unlock()
+	for _, apath := range apaths {
+		aconn := m.newActiveConnection(apath)
+		m.activeConnections[apath] = aconn
+	}
+
+	m.setPropActiveConnections()
+}
+func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32) {
 	m.activeConnectionsLock.Lock()
 	defer m.activeConnectionsLock.Unlock()
 
 	aconn, ok := m.activeConnections[apath]
 	if !ok {
-		aconn = &activeConnection{path: apath}
-	}
-
-	var needUpdated = false
-	for k, vv := range props {
-		if k == "Devices" {
-			devices, _ := vv.Value().([]dbus.ObjectPath)
-			// newValue := make([]dbus.ObjectPath, 0)
-			aconn.Devices = append(devices)
-			needUpdated = true
-		} else if k == "Uuid" {
-			aconn.Uuid, _ = vv.Value().(string)
-			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
-				aconn.Id = nmGetConnectionId(cpath)
-				needUpdated = true
-			}
-		} else if k == "Id" {
-			aconn.Id = vv.Value().(string)
-			needUpdated = true
-		} else if k == "Vpn" {
-			aconn.Vpn, _ = vv.Value().(bool)
-			needUpdated = true
-		} else if k == "Connection" { // ignore
-		} else if k == "SpecificObject" { // ignore
-		} else if k == "Default" { // ignore
-		} else if k == "Default6" { // ignore
-		} else if k == "Master" { // ignore
-		}
+		return
 	}
 
 	switch state {
@@ -205,21 +193,19 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32, 
 		aconn = m.newActiveConnection(apath)
 		logger.Infof("add active connection %#v", aconn)
 		m.activeConnections[apath] = aconn
-		needUpdated = true
 	case nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATING,
 		nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
+		// nothing to do
 		logger.Infof("remove active connection %#v", aconn)
 		// vpn's active connection will be removed after giving a
 		// notification
-		if !aconn.Vpn {
-			delete(m.activeConnections, apath)
-			needUpdated = true
-		}
+		//if !aconn.Vpn {
+		//delete(m.activeConnections, apath)
+		//needUpdated = true
+		//}
 	}
 
-	if needUpdated {
-		m.setPropActiveConnections()
-	}
+	m.setPropActiveConnections()
 }
 
 func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnection) {
