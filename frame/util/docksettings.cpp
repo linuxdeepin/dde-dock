@@ -27,6 +27,7 @@
 #include <QX11Info>
 
 #include <DApplication>
+#include <QScreen>
 
 #define ICON_SIZE_LARGE         48
 #define ICON_SIZE_MEDIUM        36
@@ -59,6 +60,8 @@ DockSettings::DockSettings(QWidget *parent)
 {
     m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
+    m_screenRawHeight = m_displayInter->screenRawHeight();
+    m_screenRawWidth = m_displayInter->screenRawWidth();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
@@ -143,6 +146,7 @@ DockSettings::DockSettings(QWidget *parent)
     }
 
     calculateWindowConfig();
+    updateForbidPostions();
     resetFrontendGeometry();
 }
 
@@ -233,8 +237,6 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     default:Q_UNREACHABLE();
     }
 
-//    qDebug() << Q_FUNC_INFO << m_mainWindowSize << primaryRect << p << size;
-
     return QRect(primaryRect.topLeft() + p, size);
 }
 
@@ -263,15 +265,20 @@ void DockSettings::showDockSettingsMenu()
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
     m_topPosAct.setChecked(m_position == Top);
+    m_topPosAct.setEnabled(!m_forbidPositions.contains(Top));
     m_bottomPosAct.setChecked(m_position == Bottom);
+    m_bottomPosAct.setEnabled(!m_forbidPositions.contains(Bottom));
     m_leftPosAct.setChecked(m_position == Left);
+    m_leftPosAct.setEnabled(!m_forbidPositions.contains(Left));
     m_rightPosAct.setChecked(m_position == Right);
+    m_rightPosAct.setEnabled(!m_forbidPositions.contains(Right));
     m_largeSizeAct.setChecked(m_iconSize == ICON_SIZE_LARGE);
     m_mediumSizeAct.setChecked(m_iconSize == ICON_SIZE_MEDIUM);
     m_smallSizeAct.setChecked(m_iconSize == ICON_SIZE_SMALL);
     m_keepShownAct.setChecked(m_hideMode == KeepShowing);
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
+
 
     m_settingsMenu.exec(QCursor::pos());
 
@@ -415,8 +422,11 @@ void DockSettings::primaryScreenChanged()
 //    qDebug() << Q_FUNC_INFO;
     m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
+    m_screenRawHeight = m_displayInter->screenRawHeight();
+    m_screenRawWidth = m_displayInter->screenRawWidth();
 
     calculateWindowConfig();
+    updateForbidPostions();
 
     emit dataChanged();
 }
@@ -424,12 +434,85 @@ void DockSettings::primaryScreenChanged()
 void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
-    qDebug() << Q_FUNC_INFO << r;
 
     const qreal ratio = qApp->devicePixelRatio();
 
-    m_dockInter->SetFrontendWindowRect(r.x() * ratio, r.y() * ratio,
-                                       r.width() * ratio, r.height() * ratio);
+    const int x = r.x();
+    const int y = r.y();
+    const uint w = r.width() * ratio;
+    const uint h = r.height() * ratio;
+
+    m_frontendRect = QRect(x, y, w, h);
+    m_dockInter->SetFrontendWindowRect(x, y, w, h);
+}
+
+bool DockSettings::test(const Position pos, const QList<QRect> &otherScreens) const
+{
+    QRect maxStrut(0, 0, m_screenRawWidth, m_screenRawHeight);
+    switch (pos)
+    {
+    case Top:
+        maxStrut.setBottom(m_primaryRawRect.top() - 1);
+        maxStrut.setLeft(m_primaryRawRect.left());
+        maxStrut.setRight(m_primaryRawRect.right());
+        break;
+    case Bottom:
+        maxStrut.setTop(m_primaryRawRect.bottom() + 1);
+        maxStrut.setLeft(m_primaryRawRect.left());
+        maxStrut.setRight(m_primaryRawRect.right());
+        break;
+    case Left:
+        maxStrut.setRight(m_primaryRawRect.left() - 1);
+        maxStrut.setTop(m_primaryRawRect.top());
+        maxStrut.setBottom(m_primaryRawRect.bottom());
+        break;
+    case Right:
+        maxStrut.setLeft(m_primaryRawRect.right() + 1);
+        maxStrut.setTop(m_primaryRawRect.top());
+        maxStrut.setBottom(m_primaryRawRect.bottom());
+        break;
+    default:;
+    }
+
+    if (maxStrut.width() == 0 || maxStrut.height() == 0)
+        return true;
+
+    for (const auto &r : otherScreens)
+        if (maxStrut.intersects(r))
+            return false;
+
+    return true;
+}
+
+void DockSettings::updateForbidPostions()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    const auto &screens = qApp->screens();
+    if (screens.size() < 2)
+        return m_forbidPositions.clear();
+
+    QSet<Position> forbids;
+    QList<QRect> rawScreenRects;
+    for (auto *s : screens)
+    {
+        if (s == qApp->primaryScreen())
+            continue;
+
+        const QRect &g = s->geometry();
+        rawScreenRects << QRect(g.topLeft(), g.size() * s->devicePixelRatio());
+    }
+
+    if (!test(Top, rawScreenRects))
+        forbids << Top;
+    if (!test(Bottom, rawScreenRects))
+        forbids << Bottom;
+    if (!test(Left, rawScreenRects))
+        forbids << Left;
+    if (!test(Right, rawScreenRects))
+        forbids << Right;
+
+    m_forbidPositions = std::move(forbids);
 }
 
 void DockSettings::calculateWindowConfig()

@@ -737,6 +737,6 @@ void MainWindow::positionCheck()
     if (m_positionUpdateTimer->isActive())
         return;
 
-    qDebug() << "welcome to position check point!";
-    qDebug() << pos() << m_settings->windowRect(m_settings->position(), false);
+//    if (pos() != m_settings->window)
+//    qDebug() << pos() << m_settings->windowRect(m_settings->position(), false);
 }

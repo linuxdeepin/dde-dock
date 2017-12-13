@@ -65,8 +65,8 @@ public:
     Position position() const;
     int screenHeight() const;
     int screenWidth() const;
-    int screenRawHeight() const { return m_displayInter->screenRawHeight(); }
-    int screenRawWidth() const { return m_displayInter->screenRawWidth(); }
+    int screenRawHeight() const { return m_screenRawHeight; }
+    int screenRawWidth() const { return m_screenRawWidth; }
     int expandTimeout() const;
     int narrowTimeout() const;
 
@@ -100,20 +100,26 @@ private slots:
     void dockItemCountChanged();
     void primaryScreenChanged();
     void resetFrontendGeometry();
+    void updateForbidPostions();
 
 private:
+    bool test(const Position pos, const QList<QRect> &otherScreens) const;
     void calculateWindowConfig();
     void gtkIconThemeChanged();
 
 private:
     int m_iconSize;
     bool m_autoHide;
+    int m_screenRawHeight;
+    int m_screenRawWidth;
+    QSet<Position> m_forbidPositions;
     Position m_position;
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
     QRect m_primaryRect;
     QRect m_primaryRawRect;
+    QRect m_frontendRect;
     QSize m_mainWindowSize;
 
     WhiteMenu m_settingsMenu;
