@@ -19,11 +19,14 @@
 
 package main
 
-import "os"
-import . "pkg.deepin.io/dde/daemon/langselector"
-import "pkg.deepin.io/lib/gettext"
-import "pkg.deepin.io/lib/dbus"
-import "time"
+import (
+	"os"
+	"time"
+
+	. "pkg.deepin.io/dde/daemon/langselector"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gettext"
+)
 
 func main() {
 	gettext.InitI18n()

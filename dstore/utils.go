@@ -20,11 +20,13 @@
 package dstore
 
 import (
-	"dbus/com/deepin/lastore"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
 	"sync"
 	"time"
+
+	"dbus/com/deepin/lastore"
+
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
@@ -104,7 +106,14 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 				return
 			}
 
-			finishJob(nil)
+			if jobType == jobTypeInstall {
+				progress := job.Progress.Get()
+				if progress == 1 {
+					finishJob(nil)
+				}
+			} else {
+				finishJob(nil)
+			}
 			return
 		case JobStatusFailed:
 			if isQuit() {

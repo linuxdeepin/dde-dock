@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
@@ -80,7 +81,7 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 		lang.logger.Warningf("remove font config file %q failed: %v", fontCfgFile, err)
 	}
 
-	err = installI18nDependent(lang.CurrentLocale)
+	err = installLangSupportPackages(lang.CurrentLocale)
 	if err != nil {
 		lang.logger.Warning(err)
 	}
