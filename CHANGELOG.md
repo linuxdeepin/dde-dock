@@ -1,3 +1,6 @@
+# 4.5.8
+    Improve dock startup animation.
+
 # 4.5.7
     Using system theme icon in network plugin
 
