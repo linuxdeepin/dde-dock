@@ -737,6 +737,9 @@ void MainWindow::positionCheck()
     if (m_positionUpdateTimer->isActive())
         return;
 
-//    if (pos() != m_settings->window)
-//    qDebug() << pos() << m_settings->windowRect(m_settings->position(), false);
+    if (pos() == m_settings->frontendWindowRect().topLeft())
+        return;
+
+    qWarning() << "Dock position may error!!!!!";
+    qDebug() << pos() << m_settings->frontendWindowRect() << m_settings->windowRect(m_settings->position(), false);
 }

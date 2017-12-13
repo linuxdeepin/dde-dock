@@ -73,6 +73,7 @@ public:
     bool autoHide() const;
     const QRect primaryRect() const;
     const QRect primaryRawRect() const { return m_primaryRawRect; }
+    const QRect frontendWindowRect() const { return m_frontendRect; }
     const QSize windowSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
 
