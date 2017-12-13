@@ -1,5 +1,18 @@
 ## [Unreleased]
 
+## [3.2.8] - 2017-12-13
+*   add moudle swapsched
+*   doc: update bluetooth faq
+*   audio: fix update props after config applied
+*   dock: fix method RequestDock ignore param index
+*   launcher: add methods GetDisableScaling and SetDisableScaling
+*   audio: filter out sound effect sink input
+*   launcher: fix can not search for newly installed apps
+*   appearance: support java scale
+*   appearance: fix pam environment settings be override
+*   support networkmanager 1.10
+*   session/power: set dpms off before suspend
+*   makefile GOLDFLAGS remove libcanberra, debian/control depends remove libcanberra-dev
 
 ## [3.2.7] - 2017-11-28
 *   gesture: check keyboard grab status before do action
