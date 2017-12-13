@@ -107,13 +107,14 @@ QRect MainWindow::panelGeometry()
 
 void MainWindow::launch()
 {
-    setVisible(true);
     m_updatePanelVisible = false;
-    narrow(m_settings->position());
+    m_mainPanel->setVisible(false);
+    resetPanelEnvironment(false);
     setVisible(false);
 
     QTimer::singleShot(400, this, [&] {
         m_launched = true;
+        m_mainPanel->setVisible(true);
         resetPanelEnvironment(false);
         updateGeometry();
         expand();
@@ -257,7 +258,7 @@ void MainWindow::compositeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
 
-    const int duration = m_wmHelper->hasComposite() ? 200 : 0;
+    const int duration = m_wmHelper->hasComposite() ? 300 : 0;
 
     m_sizeChangeAni->setDuration(duration);
     m_posChangeAni->setDuration(duration);
