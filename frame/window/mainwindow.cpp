@@ -153,7 +153,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
 
-    adjustShadowMask();
+    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
@@ -324,11 +324,11 @@ void MainWindow::initConnections()
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
-    connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask);
+    connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
-    connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
-    connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
+    connect(m_panelHideAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_panelShowAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
@@ -341,7 +341,7 @@ void MainWindow::initConnections()
     });
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
-    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
+    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -558,7 +558,7 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-//    qDebug() << "expand";
+    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
     const int epsilon = std::round(devicePixelRatioF()) - 1;
@@ -612,7 +612,7 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->start();
 
     // clear shadow
-    adjustShadowMask();
+    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::resetPanelEnvironment(const bool visible)
@@ -646,6 +646,7 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     }
 
     m_mainPanel->move(finishPos);
+    qDebug() << Q_FUNC_INFO << m_mainPanel->isVisible() << m_mainPanel->pos() << finishPos;
 }
 
 void MainWindow::updatePanelVisible()
@@ -685,10 +686,9 @@ void MainWindow::adjustShadowMask()
     if (!m_launched)
         return;
 
+    qApp->processEvents();
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
-    m_shadowMaskOptimizeTimer->start();
-    qApp->processEvents();
 
     if (m_mainPanel->pos() != QPoint(0, 0) ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
@@ -701,6 +701,8 @@ void MainWindow::adjustShadowMask()
     } else {
         m_platformWindowHandle.setShadowRadius(60);
     }
+
+    qDebug() << Q_FUNC_INFO;
 
 //    const QRect r = QRect(QPoint(), rect().size());
 //    const int radius = 5;
