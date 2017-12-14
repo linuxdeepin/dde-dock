@@ -1,9 +1,9 @@
 Source: dde-dock
 Section: x11
 Priority: optional
-Maintainer: Deepin Sysdev <sysdev@deepin.com>
-Build-Depends: debhelper (>= 8.0.0), pkg-config,
- qt5-qmake, qt5-default,
+Maintainer: Deepin Packages Builder <packages@deepin.com>
+Build-Depends: debhelper (>= 9.0.0), pkg-config,
+ qt5-qmake,
  libxcb-image0-dev, libxcb-composite0-dev,
  libxcb-ewmh-dev, libqt5x11extras5-dev,
  libxcb-damage0-dev, libqt5svg5-dev,
@@ -14,7 +14,7 @@ Build-Depends: debhelper (>= 8.0.0), pkg-config,
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
  clang [mipsel mips64el]
-Standards-Version: 3.9.4
+Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
 Package: dde-dock

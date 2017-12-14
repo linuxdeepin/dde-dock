@@ -1,4 +1,4 @@
-dde-dock (3.0.12) unstable; urgency=low
+dde-dock (3.0.12-1) unstable; urgency=low
 
   * Autobuild Tag 3.0.12 
 
@@ -132,6 +132,6 @@ dde-dock (2.90.1-1) stable; urgency=low
 
 dde-dock (0.0~git20150824-1) unstable; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release
 
  -- Deepin Packages Builder <packages@linuxdeepin.com>  Mon, 24 Aug 2015 19:03:01 +0800
