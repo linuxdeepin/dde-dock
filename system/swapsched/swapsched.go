@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
 
 	"dbus/org/freedesktop/login1"
 
@@ -43,7 +44,7 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() error {
-	logger.Debug("swapsched start")
+	logger.Debug("swap sched helper start")
 	sw := newHelper()
 	sw.init()
 	d.sessionWatcher = sw
@@ -131,14 +132,17 @@ func (sw *Helper) getSessionUsername(sessionID0 string) (string, error) {
 func (sw *Helper) init() {
 	sw.loginManager.ConnectSessionRemoved(func(sessionID string, sessionObjPath dbus.ObjectPath) {
 		logger.Debug("session removed", sessionID, sessionObjPath)
-		_, err := os.Stat(filepath.Join(cGroupRoot, "memory", sessionID+"@dde"))
-		if err == nil {
-			// path exist
-			err = deleteCGroup(sessionID)
-			if err != nil {
-				logger.Warning("failed to delete cgroup:", err)
+		go func() {
+			time.Sleep(time.Second * 10)
+			_, err := os.Stat(filepath.Join(cGroupRoot, "memory", sessionID+"@dde"))
+			if err == nil {
+				// path exist
+				err = deleteCGroup(sessionID)
+				if err != nil {
+					logger.Warning("failed to delete cgroup:", err)
+				}
 			}
-		}
+		}()
 	})
 }
 
@@ -147,12 +151,22 @@ func createCGroup(username, sessionID string) error {
 	path := sessionID + "@dde/uiapps"
 	cmdline := fmt.Sprintf("cgcreate -t %s -a %s -g %s:%s", user, user, cGroupControllers, path)
 	logger.Debug("exec cmd:", cmdline)
-	return exec.Command("cgcreate", "-t", user, "-a", user, "-g", cGroupControllers+":"+path).Run()
+	cmd := exec.Command("cgcreate", "-t", user, "-a", user, "-g", cGroupControllers+":"+path)
+	out, err := cmd.CombinedOutput()
+	if len(out) > 0 {
+		logger.Debugf("cgcreate output: %s", out)
+	}
+	return err
 }
 
 func deleteCGroup(sessionID string) error {
 	path := sessionID + "@dde"
 	cmdline := fmt.Sprintf("cgdelete -r -g %s:%s", cGroupControllers, path)
 	logger.Debug("exec cmd:", cmdline)
-	return exec.Command("cgdelete", "-r", "-g", cGroupControllers+":"+path).Run()
+	cmd := exec.Command("cgdelete", "-r", "-g", cGroupControllers+":"+path)
+	out, err := cmd.CombinedOutput()
+	if len(out) > 0 {
+		logger.Debugf("cgdelete output: %s", out)
+	}
+	return err
 }
