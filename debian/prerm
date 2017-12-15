@@ -4,3 +4,5 @@ set -e
 if [ "$1" = "remove" ];then
     update-alternatives --remove x-terminal-emulator /usr/lib/deepin-daemon/default-terminal
 fi
+
+#DEBHELPER#
