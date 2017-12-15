@@ -28,6 +28,7 @@ dbus_type_name_map = {
     'ay': 'ktypeArrayByte',           # byte array
     'a{ss}': 'ktypeDictStringString', # dict of string to string
     'a{sv}': 'ktypeUnknown',          # vardict
+    'aa{sv}': 'ktypeUnknown',          # vardict
     'aau': 'ktypeArrayArrayUint32',   # array of array of uint32
     'aay': 'ktypeArrayArrayByte',     # array of byte array
     'a(ayuay)': 'ktypeIpv6Addresses', # array of legacy IPv6 address struct
@@ -163,6 +164,10 @@ for settingxml in settings:
 
             value_type = get_prop_type(setting, pspec, propxml)
             default_value = get_default_value(setting, pspec, propxml)
+
+        # ignore unknown type
+        if value_type == "ktypeUnknown":
+            continue
 
         key_name = "%s_%s" % (setting_name_prefix, prop.upper().replace('-', '_'))
         outfile.write("    - KeyName: %s\n" % key_name)
