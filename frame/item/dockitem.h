@@ -67,7 +67,6 @@ signals:
 protected:
     void paintEvent(QPaintEvent *e);
     void moveEvent(QMoveEvent *e);
-//    void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
@@ -77,6 +76,7 @@ protected:
     const QPoint topleftPoint() const;
 
     void hidePopup();
+    void hideNonModel();
     void popupWindowAccept();
     void showPopupApplet(QWidget * const applet);
     virtual void showPopupWindow(QWidget * const content, const bool model = false);

@@ -111,13 +111,15 @@ void PluginWidget::mousePressEvent(QMouseEvent *e)
     return QWidget::mousePressEvent(e);
 }
 
-void PluginWidget::enterEvent(QEvent *)
+void PluginWidget::enterEvent(QEvent *e)
 {
+    e->accept();
     m_hover = true;
 }
 
-void PluginWidget::leaveEvent(QEvent *)
+void PluginWidget::leaveEvent(QEvent *e)
 {
+    e->accept();
     m_hover = false;
 }
 

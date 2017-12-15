@@ -46,7 +46,6 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     setBackgroundColor(DBlurEffectWidget::DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_InputMethodEnabled, false);
-    setFocusPolicy(Qt::StrongFocus);
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
@@ -107,24 +106,14 @@ void DockPopupWindow::showEvent(QShowEvent *e)
 {
     DArrowRectangle::showEvent(e);
 
-    QTimer::singleShot(1, this, [&] {
-        raise();
-        if (!m_model)
-            return;
-        activateWindow();
-        setFocus(Qt::ActiveWindowFocusReason);
-    });
+    QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
 }
 
 void DockPopupWindow::enterEvent(QEvent *e)
 {
     DArrowRectangle::enterEvent(e);
 
-    raise();
-    if (!m_model)
-        return;
-    activateWindow();
-    setFocus(Qt::ActiveWindowFocusReason);
+    QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
 }
 
 bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
@@ -158,4 +147,10 @@ void DockPopupWindow::compositeChanged()
         setBorderColor(QColor(255, 255, 255, 255 * 0.05));
     else
         setBorderColor(QColor("#2C3238"));
+}
+
+void DockPopupWindow::ensureRaised()
+{
+    if (isVisible())
+        raise();
 }

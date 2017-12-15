@@ -558,7 +558,7 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-    qDebug() << "expand";
+//    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
     const int epsilon = std::round(devicePixelRatioF()) - 1;
@@ -651,16 +651,12 @@ void MainWindow::resetPanelEnvironment(const bool visible)
 
 void MainWindow::updatePanelVisible()
 {
-//    qDebug() << m_updatePanelVisible;
-
     if (!m_updatePanelVisible)
         return;
     if (m_settings->hideMode() == KeepShowing)
         return expand();
 
     const Dock::HideState state = m_settings->hideState();
-
-//    qDebug() << state;
 
     do
     {
@@ -695,42 +691,10 @@ void MainWindow::adjustShadowMask()
         m_panelShowAni->state() == QPauseAnimation::Running ||
         !m_wmHelper->hasComposite())
     {
-//        m_platformWindowHandle.setClipPath(QPainterPath());
         m_platformWindowHandle.setShadowRadius(0);
-//        return;
     } else {
         m_platformWindowHandle.setShadowRadius(60);
     }
-
-    qDebug() << Q_FUNC_INFO;
-
-//    const QRect r = QRect(QPoint(), rect().size());
-//    const int radius = 5;
-
-//    QPainterPath path;
-//    if (m_settings->displayMode() == DisplayMode::Fashion)
-//    {
-//        switch (m_settings->position())
-//        {
-//        case Top:
-//            path.addRoundedRect(0, -radius, r.width(), r.height() + radius, radius, radius);
-//            break;
-//        case Bottom:
-//            path.addRoundedRect(0, 0, r.width(), r.height() + radius, radius, radius);
-//            break;
-//        case Left:
-//            path.addRoundedRect(-radius, 0, r.width() + radius, r.height(), radius, radius);
-//            break;
-//        case Right:
-//            path.addRoundedRect(0, 0, r.width() + radius, r.height(), radius, radius);
-//        default:;
-//        }
-//    } else {
-//        path.addRect(r);
-//    }
-
-//    m_platformWindowHandle.setClipPath(path);
-//    m_platformWindowHandle.setShadowRadius(60);
 }
 
 void MainWindow::positionCheck()

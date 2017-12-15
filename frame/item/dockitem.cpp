@@ -103,15 +103,11 @@ void DockItem::moveEvent(QMoveEvent *e)
     m_popupAdjustDelayTimer->start();
 }
 
-//void DockItem::mouseMoveEvent(QMouseEvent *e)
-//{
-//    QWidget::mouseMoveEvent(e);
-
-//    m_popupTipsDelayTimer->start();
-//}
-
 void DockItem::mousePressEvent(QMouseEvent *e)
 {
+    m_popupTipsDelayTimer->stop();
+    hideNonModel();
+
     if (e->button() == Qt::RightButton)
         return showContextMenu();
 }
@@ -321,4 +317,11 @@ void DockItem::hidePopup()
 
     emit PopupWindow->accept();
     emit requestWindowAutoHide(true);
+}
+
+void DockItem::hideNonModel()
+{
+    // auto hide if popup is not model window
+    if (m_popupShown && !PopupWindow->model())
+        hidePopup();
 }
