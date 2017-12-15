@@ -36,6 +36,8 @@
 
 DWIDGET_USE_NAMESPACE
 
+extern const QPoint rawXPosition(const QPoint &scaledPos);
+
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent),
 
@@ -434,16 +436,13 @@ void DockSettings::primaryScreenChanged()
 void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
-
     const qreal ratio = qApp->devicePixelRatio();
-
-    const int x = r.x();
-    const int y = r.y();
+    const QPoint p = rawXPosition(r.topLeft());
     const uint w = r.width() * ratio;
     const uint h = r.height() * ratio;
 
-    m_frontendRect = QRect(x, y, w, h);
-    m_dockInter->SetFrontendWindowRect(x, y, w, h);
+    m_frontendRect = QRect(p.x(), p.y(), w, h);
+    m_dockInter->SetFrontendWindowRect(p.x(), p.y(), w, h);
 }
 
 bool DockSettings::test(const Position pos, const QList<QRect> &otherScreens) const
