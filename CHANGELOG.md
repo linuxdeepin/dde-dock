@@ -1,3 +1,6 @@
+# 4.5.9
+    Fix frontend rect error.
+
 # 4.5.8
     Improve dock startup animation.
 
