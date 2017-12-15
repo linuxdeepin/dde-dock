@@ -349,6 +349,7 @@ const (
 	passTypeWifiWepKey        = "wifi-wep-key"
 	passTypeWifiWepPassphrase = "wifi-wep-passphrase"
 	passTypeWifiWpaPsk        = "wifi-wpa-psk"
+	passTypeWifiWpaEap        = "wifi-wpa-eap"
 )
 
 func getSettingPassKeyType(data connectionData, settingName string) (passType string) {
@@ -364,6 +365,8 @@ func getSettingPassKeyType(data connectionData, settingName string) (passType st
 			}
 		case "wpa-psk":
 			passType = passTypeWifiWpaPsk
+		case "wpa-eap":
+			passType = passTypeWifiWpaEap
 		}
 	default:
 		passType = passTypeGeneral
