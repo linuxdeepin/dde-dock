@@ -304,3 +304,15 @@ func (m *Manager) execCmd(cmd string) error {
 
 	return m.startManager.RunCommand("sh", []string{"-c", cmd})
 }
+
+func (m *Manager) eliminateKeystrokeConflict() {
+	for _, ks := range m.shortcutManager.ConflictingKeystrokes {
+		shortcut := ks.Shortcut
+		logger.Infof("eliminate conflict shortcut: %s keystroke: %s",
+			ks.Shortcut.GetUid(), ks)
+		m.DeleteShortcutKeystroke(shortcut.GetId(), shortcut.GetType(), ks.String())
+	}
+
+	m.shortcutManager.ConflictingKeystrokes = nil
+	m.shortcutManager.EliminateConflictDone = true
+}

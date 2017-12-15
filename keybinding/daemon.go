@@ -81,6 +81,7 @@ func (daemon *Daemon) Start() error {
 		daemon.manager.listenGSettingsChanged(daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
 		daemon.manager.listenGSettingsChanged(daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
 
+		daemon.manager.eliminateKeystrokeConflict()
 		daemon.manager.shortcutManager.EventLoop()
 	}()
 

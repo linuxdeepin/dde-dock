@@ -61,6 +61,9 @@ type ShortcutManager struct {
 	xRecordEventHandler *XRecordEventHandler
 	eventCb             KeyEventFunc
 	eventCbMu           sync.Mutex
+
+	ConflictingKeystrokes []*Keystroke
+	EliminateConflictDone bool
 }
 
 type KeyEvent struct {
@@ -232,6 +235,10 @@ func (sm *ShortcutManager) ListByType(type0 int32) (list []Shortcut) {
 	return
 }
 
+func (sm *ShortcutManager) storeConflictingKeystroke(ks *Keystroke) {
+	sm.ConflictingKeystrokes = append(sm.ConflictingKeystrokes, ks)
+}
+
 func (sm *ShortcutManager) grabKeystroke(shortcut Shortcut, ks *Keystroke, dummy bool) {
 	key, err := ks.ToKey(sm.keySymbols)
 	if err != nil {
@@ -243,6 +250,9 @@ func (sm *ShortcutManager) grabKeystroke(shortcut Shortcut, ks *Keystroke, dummy
 	if conflictKeystroke, ok := sm.keyKeystrokeMap[key]; ok {
 		// conflict
 		logger.Debugf("key %v is grabed by %v", key, conflictKeystroke.Shortcut.GetId())
+		if !sm.EliminateConflictDone {
+			sm.storeConflictingKeystroke(ks)
+		}
 		return
 	}
 
