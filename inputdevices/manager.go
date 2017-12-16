@@ -131,7 +131,7 @@ func controlImWheel(speed uint32) error {
 func writeImWheelConfig(file string, speed uint32) error {
 	logger.Debugf("writeImWheelConfig file:%q, speed: %d", file, speed)
 
-	const header = `# written by` + dbusDest + `
+	const header = `# written by ` + dbusDest + `
 ".*"
 Control_L,Up,Control_L|Button4
 Control_R,Up,Control_R|Button4
