@@ -47,7 +47,7 @@ type Manager struct {
 	Infos             devicePathInfos
 	settings          *gio.Settings
 	imWheelConfigFile string
-	WheelSpeed        *property.GSettingsUintProperty
+	WheelSpeed        *property.GSettingsUintProperty `access:"readwrite"`
 
 	kbd        *Keyboard
 	mouse      *Mouse
