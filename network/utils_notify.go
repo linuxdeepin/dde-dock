@@ -20,16 +20,12 @@
 package network
 
 import (
-	"dbus/org/freedesktop/notifications"
+	"time"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
-	"time"
-)
-
-const (
-	dbusNotifyDest = "org.freedesktop.Notifications"
-	dbusNotifyPath = "/org/freedesktop/Notifications"
+	libnotify "pkg.deepin.io/lib/notify"
 )
 
 const (
@@ -61,6 +57,7 @@ const (
 
 var (
 	notifyEnabled = true
+	notification  = libnotify.NewNotification("", "", "")
 )
 
 func enableNotify() {
@@ -74,18 +71,9 @@ func disableNotify() {
 }
 
 func notify(icon, summary, body string) {
-	notifier, err := notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	logger.Info("notify", icon, summary, body)
-	// use goroutine to fix dbus cycle call issue
-	go func() {
-		notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
-		notifications.DestroyNotifier(notifier)
-	}()
-	return
+	logger.Debugf("notify icon: %q, summary: %q, body: %q", icon, summary, body)
+	notification.Update(summary, body, icon)
+	go notification.Show()
 }
 
 func notifyNetworkOffline() {
