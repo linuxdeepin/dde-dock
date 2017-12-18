@@ -53,33 +53,32 @@ const (
 )
 
 const (
-	confGroupUser            string = "User"
-	confKeyXSession                 = "XSession"
-	confKeySystemAccount            = "SystemAccount"
-	confKeyIcon                     = "Icon"
-	confKeyCustomIcon               = "CustomIcon"
-	confKeyLocale                   = "Locale"
-	confKeyLayout                   = "Layout"
-	confKeyBackground               = "Background"
-	confKeyGreeterBackground        = "GreeterBackground"
-	confKeyHistoryIcons             = "HistoryIcons"
-	confKeyHistoryLayout            = "HistoryLayout"
+	confGroupUser             = "User"
+	confKeyXSession           = "XSession"
+	confKeySystemAccount      = "SystemAccount"
+	confKeyIcon               = "Icon"
+	confKeyCustomIcon         = "CustomIcon"
+	confKeyLocale             = "Locale"
+	confKeyLayout             = "Layout"
+	confKeyDesktopBackgrounds = "DesktopBackgrounds"
+	confKeyGreeterBackground  = "GreeterBackground"
+	confKeyHistoryLayout      = "HistoryLayout"
 )
 
 type User struct {
-	UserName          string
-	FullName          string
-	Uid               string
-	Gid               string
-	HomeDir           string
-	Shell             string
-	Locale            string
-	Layout            string
-	IconFile          string
-	customIcon        string
-	BackgroundFile    string
-	GreeterBackground string
-	XSession          string
+	UserName           string
+	FullName           string
+	Uid                string
+	Gid                string
+	HomeDir            string
+	Shell              string
+	Locale             string
+	Layout             string
+	IconFile           string
+	customIcon         string
+	DesktopBackgrounds []string
+	GreeterBackground  string
+	XSession           string
 
 	// 用户是否被禁用
 	Locked bool
@@ -116,7 +115,7 @@ func NewUser(userPath string) (*User, error) {
 	u.setPropString(&u.HomeDir, "HomeDir", info.Home)
 	u.setPropString(&u.Shell, "Shell", info.Shell)
 	u.setPropString(&u.IconFile, "IconFile", "")
-	u.setPropString(&u.BackgroundFile, "BackgroundFile", "")
+	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, nil)
 
 	u.setPropBool(&u.AutomaticLogin, "AutomaticLogin",
 		users.IsAutoLoginUser(info.Name))
@@ -135,7 +134,8 @@ func NewUser(userPath string) (*User, error) {
 		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
 		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
-		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
+		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds,
+			[]string{defaultUserBackground})
 		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
 		u.writeUserConfig()
 		return u, nil
@@ -188,12 +188,14 @@ func NewUser(userPath string) (*User, error) {
 
 	u.updateIconList()
 
-	bg, _ := kFile.GetString(confGroupUser, confKeyBackground)
-	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
-	if len(bg) == 0 {
-		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
+	_, desktopBgs, _ := kFile.GetStringList(confGroupUser, confKeyDesktopBackgrounds)
+	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, desktopBgs)
+	if len(desktopBgs) == 0 {
+		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds,
+			[]string{defaultUserBackground})
 		isSave = true
 	}
+
 	greeterBg, _ := kFile.GetString(confGroupUser, confKeyGreeterBackground)
 	u.setPropString(&u.GreeterBackground, "GreeterBackground", greeterBg)
 	if len(greeterBg) == 0 {
@@ -284,7 +286,7 @@ func (u *User) writeUserConfig() error {
 	kFile.SetString(confGroupUser, confKeyLocale, u.Locale)
 	kFile.SetString(confGroupUser, confKeyIcon, u.IconFile)
 	kFile.SetString(confGroupUser, confKeyCustomIcon, u.customIcon)
-	kFile.SetString(confGroupUser, confKeyBackground, u.BackgroundFile)
+	kFile.SetStringList(confGroupUser, confKeyDesktopBackgrounds, u.DesktopBackgrounds)
 	kFile.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
 	kFile.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
 	_, err = kFile.SaveToFile(config)

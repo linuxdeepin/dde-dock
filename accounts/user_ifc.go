@@ -400,37 +400,45 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
 	return nil
 }
 
-func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
-	logger.Debug("[SetBackgroundFile] new background:", bg)
+func (u *User) SetDesktopBackgrounds(dbusMsg dbus.DMessage, val []string) error {
+	logger.Debugf("[SetDesktopBackgrounds] val: %#v", val)
 	pid := dbusMsg.GetSenderPID()
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
-			logger.Debug("[SetBackgroundFile] access denied:", err)
+			logger.Debug("[SetDesktopBackgrounds] access denied:", err)
 			return err
 		}
 	}
-	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
-	if bg == u.BackgroundFile {
-		genGaussianBlur(bg)
+
+	if len(val) == 0 {
+		return errors.New("val is empty")
+	}
+
+	var newVal = make([]string, len(val))
+	for idx, file := range val {
+		newVal[idx] = dutils.EncodeURI(file, dutils.SCHEME_FILE)
+	}
+
+	if strv.Strv(u.DesktopBackgrounds).Equal(newVal) {
 		return nil
 	}
 
-	if !isBackgroundValid(bg) {
-		err := ErrInvalidBackground{bg}
-		logger.Warning(err)
-		return err
+	for _, uri := range newVal {
+		if !isBackgroundValid(uri) {
+			err := ErrInvalidBackground{uri}
+			logger.Warning(err)
+			return err
+		}
 	}
 
-	oldBackgroundFile := u.BackgroundFile
-	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
+	oldVal := u.DesktopBackgrounds
+	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, newVal)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
-		u.setPropString(&u.BackgroundFile, "BackgroundFile", oldBackgroundFile)
+		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, oldVal)
 		return err
 	}
-
-	genGaussianBlur(bg)
 	return nil
 }
 

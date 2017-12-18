@@ -20,13 +20,17 @@
 package appearance
 
 import (
-	"dbus/com/deepin/daemon/accounts"
-	"dbus/com/deepin/wm"
 	"encoding/json"
 	"fmt"
-	"gir/gio-2.0"
 	"io/ioutil"
 	"os/user"
+	"strconv"
+	"time"
+
+	"dbus/com/deepin/daemon/accounts"
+	"dbus/com/deepin/wm"
+
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
@@ -35,8 +39,6 @@ import (
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/fsnotify"
 	dutils "pkg.deepin.io/lib/utils"
-	"strconv"
-	"time"
 )
 
 // The supported types
@@ -88,7 +90,8 @@ type Manager struct {
 	// Theme list refreshed
 	Refreshed func(_type string)
 
-	userObj *accounts.User
+	userObj   *accounts.User
+	imageBlur *accounts.ImageBlur
 
 	setting        *gio.Settings
 	wrapBgSetting  *gio.Settings
@@ -163,6 +166,11 @@ func (m *Manager) destroy() {
 	if m.userObj != nil {
 		ddbus.DestroyUser(m.userObj)
 		m.userObj = nil
+	}
+
+	if m.imageBlur != nil {
+		accounts.DestroyImageBlur(m.imageBlur)
+		m.imageBlur = nil
 	}
 
 	if m.watcher != nil {
@@ -249,6 +257,12 @@ func (m *Manager) init() {
 			logger.Warning("New user object failed:", cur.Name, err)
 			m.userObj = nil
 		}
+	}
+
+	m.imageBlur, err = accounts.NewImageBlur("com.deepin.daemon.Accounts",
+		"/com/deepin/daemon/ImageBlur")
+	if err != nil {
+		logger.Warning("new imageBlur failed:", err)
 	}
 
 	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
@@ -354,8 +368,12 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 		m.wm.ChangeCurrentWorkspaceBackground(uri)
 	}
 
-	if m.userObj != nil {
-		m.userObj.SetBackgroundFile(uri)
+	if m.imageBlur != nil {
+		file := dutils.DecodeURI(uri)
+		_, err = m.imageBlur.Get(file)
+		if err != nil {
+			logger.Warning("call imageBlur.Get err:", err)
+		}
 	}
 	return uri, nil
 }
@@ -441,4 +459,13 @@ func (m *Manager) writeDQtTheme(key, value string) error {
 	setDQtTheme(dQtFile, dQtSectionTheme,
 		[]string{key}, []string{value})
 	return saveDQtTheme(dQtFile)
+}
+
+func (m *Manager) setDesktopBackgrounds(val []string) {
+	if m.userObj != nil {
+		err := m.userObj.SetDesktopBackgrounds(val)
+		if err != nil {
+			logger.Warning("call userObj.SetDesktopBackgrounds err:", err)
+		}
+	}
 }

@@ -21,10 +21,11 @@ package appearance
 
 import (
 	"fmt"
+	"time"
+
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/lib/dbus"
-	"time"
 )
 
 func (m *Manager) listenGSettingChanged() {
@@ -64,6 +65,9 @@ func (m *Manager) listenGSettingChanged() {
 			size := m.setting.GetDouble(key)
 			value = fmt.Sprint(size)
 			err = m.doSetFontSize(size)
+		case gsKeyBackgroundURIs:
+			bgs := m.setting.GetStrv(key)
+			m.setDesktopBackgrounds(bgs)
 		default:
 			return
 		}
