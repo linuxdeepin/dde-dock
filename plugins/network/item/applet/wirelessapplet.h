@@ -84,6 +84,7 @@ private:
 
     QString m_lastConnPath;
     QString m_lastConnSecurity;
+    QString m_lastConnSecurityType;
 
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;

@@ -348,7 +348,22 @@ void WirelessList::pwdDialogCanceled()
 void WirelessList::onPwdDialogTextChanged(const QString &text)
 {
     m_pwdDialog->setTextAlert(false);
-    m_pwdDialog->setOkButtonEnabled(!text.isEmpty());
+
+    do {
+        if (text.isEmpty())
+            break;
+        const int len = text.length();
+
+        // in wpa, password length must >= 8
+        if (len < 8 && m_lastConnSecurityType.startsWith("wifi-wpa"))
+            break;
+        if (!(len == 5 || len == 13 || len == 16) && m_lastConnSecurityType.startsWith("wifi-wep"))
+            break;
+
+        return m_pwdDialog->setOkButtonEnabled(true);
+    } while (false);
+
+    m_pwdDialog->setOkButtonEnabled(false);
 }
 
 void WirelessList::deviceEnabled(const QString &devPath, const bool enable)
@@ -391,6 +406,7 @@ void WirelessList::needSecrets(const QString &info)
     const QJsonObject infoObject = QJsonDocument::fromJson(info.toUtf8()).object();
     const QString connPath = infoObject.value("ConnectionPath").toString();
     const QString security = infoObject.value("SettingName").toString();
+    const QString securityType = infoObject.value("KeyType").toString();
     const QString ssid = infoObject.value("ConnectionId").toString();
     const bool defaultAutoConnect = infoObject.value("AutoConnect").toBool();
 
@@ -410,6 +426,7 @@ void WirelessList::needSecrets(const QString &info)
 
     m_lastConnPath = connPath;
     m_lastConnSecurity = security;
+    m_lastConnSecurityType = securityType;
 
     m_autoConnBox->setChecked(defaultAutoConnect);
     m_pwdDialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
