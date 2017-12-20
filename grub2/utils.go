@@ -21,41 +21,16 @@ package grub2
 
 import (
 	"crypto/md5"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/polkit"
 	"strconv"
 	"strings"
+
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/polkit"
 )
-
-func loadJSON(file string, v interface{}) error {
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(content, v)
-}
-
-func saveJSON(file string, v interface{}) error {
-	const dirMode = 0755
-	const fileMode = 0644
-	err := os.MkdirAll(filepath.Dir(file), dirMode)
-	if err != nil {
-		return err
-	}
-
-	content, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-	return ioutil.WriteFile(file, content, fileMode)
-}
 
 func quoteString(str string) string {
 	return strconv.Quote(str)
@@ -175,6 +150,10 @@ func checkAuth(dbusMsg dbus.DMessage) error {
 		return errAuthFailed
 	}
 	return nil
+}
+
+func getBytesMD5Sum(b []byte) string {
+	return fmt.Sprintf("%x", md5.Sum(b))
 }
 
 func getFileMD5sum(file string) (string, error) {

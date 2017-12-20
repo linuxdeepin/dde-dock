@@ -23,11 +23,12 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
+
 	"pkg.deepin.io/dde/daemon/grub2"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
-	"time"
 )
 
 var logger = log.NewLogger("daemon/grub2")

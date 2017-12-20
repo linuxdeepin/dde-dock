@@ -23,8 +23,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
+
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
@@ -83,22 +84,21 @@ func (g *Grub2) SetDefaultEntry(dbusMsg dbus.DMessage, v string) (err error) {
 		return
 	}
 
-	var titles []string
-	titles, err = g.GetSimpleEntryTitles()
-	if err != nil {
-		return
-	}
-
-	if !isStringInArray(v, titles) {
-		return fmt.Errorf("invalid entry %q", v)
-	}
+	g.setPropMu.Lock()
+	defer g.setPropMu.Unlock()
 
 	if g.DefaultEntry == v {
 		return
 	}
+
+	idx := g.defaultEntryStr2Idx(v)
+	if idx == -1 {
+		return errors.New("invalid entry")
+	}
+
 	g.DefaultEntry = v
-	dbus.NotifyChange(g, "DefaultEntry")
-	g.saveConfig()
+	dbus.NotifyChange(g, propNameDefaultEntry)
+	g.modifyFuncChan <- getModifyFuncDefaultEntry(idx)
 	return
 }
 
@@ -108,12 +108,15 @@ func (g *Grub2) SetEnableTheme(dbusMsg dbus.DMessage, v bool) (err error) {
 		return
 	}
 
+	g.setPropMu.Lock()
+	defer g.setPropMu.Unlock()
+
 	if g.EnableTheme == v {
 		return
 	}
 	g.EnableTheme = v
-	dbus.NotifyChange(g, "EnableTheme")
-	g.saveConfig()
+	dbus.NotifyChange(g, propNameEnableTheme)
+	g.modifyFuncChan <- getModifyFuncEnableTheme(v)
 	return
 }
 
@@ -122,6 +125,9 @@ func (g *Grub2) SetResolution(dbusMsg dbus.DMessage, v string) (err error) {
 	if err != nil {
 		return
 	}
+
+	g.setPropMu.Lock()
+	defer g.setPropMu.Unlock()
 
 	err = checkResolution(v)
 	if err != nil {
@@ -132,8 +138,8 @@ func (g *Grub2) SetResolution(dbusMsg dbus.DMessage, v string) (err error) {
 		return
 	}
 	g.Resolution = v
-	dbus.NotifyChange(g, "Resolution")
-	g.saveConfig()
+	dbus.NotifyChange(g, propNameResolution)
+	g.modifyFuncChan <- getModifyFuncResolution(v)
 	return
 }
 
@@ -143,6 +149,9 @@ func (g *Grub2) SetTimeout(dbusMsg dbus.DMessage, v uint32) (err error) {
 		return
 	}
 
+	g.setPropMu.Lock()
+	defer g.setPropMu.Unlock()
+
 	if v > timeoutMax {
 		return errors.New("exceeded the maximum value 10")
 	}
@@ -151,46 +160,55 @@ func (g *Grub2) SetTimeout(dbusMsg dbus.DMessage, v uint32) (err error) {
 		return
 	}
 	g.Timeout = v
-	dbus.NotifyChange(g, "Timeout")
-	g.saveConfig()
+	dbus.NotifyChange(g, propNameTimeout)
+	g.modifyFuncChan <- getModifyFuncTimeout(v)
 	return
 }
 
-// Reset reset all configuretion.
-func (g *Grub2) Reset() {
+// Reset reset all configuration.
+func (g *Grub2) Reset(dbusMsg dbus.DMessage) (err error) {
+	const defaultEnableTheme = true
+
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	g.setPropMu.Lock()
+	defer g.setPropMu.Unlock()
+
 	g.theme.reset()
 
-	config := NewConfig()
-	config.UseDefault()
+	var modifyFuncs []ModifyFunc
+	if g.Timeout != defaultGrubTimeoutInt {
+		g.Timeout = defaultGrubTimeoutInt
+		dbus.NotifyChange(g, propNameTimeout)
 
-	var changed bool
-	if g.Timeout != config.Timeout {
-		changed = true
-		g.Timeout = config.Timeout
-		dbus.NotifyChange(g, "Timeout")
+		modifyFuncs = append(modifyFuncs, getModifyFuncTimeout(g.Timeout))
+	}
+	if g.EnableTheme != defaultEnableTheme {
+		g.EnableTheme = defaultEnableTheme
+		dbus.NotifyChange(g, propNameEnableTheme)
+
+		modifyFuncs = append(modifyFuncs, getModifyFuncEnableTheme(g.EnableTheme))
 	}
 
-	if g.EnableTheme != config.EnableTheme {
-		changed = true
-		g.EnableTheme = config.EnableTheme
-		dbus.NotifyChange(g, "EnableTheme")
-	}
-
-	if g.Resolution != config.Resolution {
-		changed = true
-		g.Resolution = config.Resolution
-		dbus.NotifyChange(g, "Resolution")
-	}
-
-	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(config.DefaultEntry)
+	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(defaultGrubDefaultInt)
 	if g.DefaultEntry != cfgDefaultEntry {
-		changed = true
 		g.DefaultEntry = cfgDefaultEntry
-		dbus.NotifyChange(g, "DefaultEntry")
+		dbus.NotifyChange(g, propNameDefaultEntry)
+
+		modifyFuncs = append(modifyFuncs, getModifyFuncDefaultEntry(defaultGrubDefaultInt))
 	}
 
-	if changed {
-		g.saveConfig()
+	if len(modifyFuncs) > 0 {
+		compoundModifyFunc := func(params map[string]string) {
+			for _, fn := range modifyFuncs {
+				fn(params)
+			}
+		}
+		g.modifyFuncChan <- compoundModifyFunc
 	}
 
+	return
 }

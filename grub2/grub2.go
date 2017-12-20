@@ -24,11 +24,14 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"regexp"
+	"strconv"
+	"strings"
+	"sync"
+	"unicode"
+
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
-	"regexp"
-	"strings"
-	"unicode"
 )
 
 var logger *log.Logger
@@ -38,10 +41,11 @@ func SetLogger(v *log.Logger) {
 }
 
 type Grub2 struct {
-	configSaveChan  chan int
+	modifyFuncChan  chan ModifyFunc
 	mkconfigManager *MkconfigManager
 	entries         []Entry
 	theme           *Theme
+	setPropMu       sync.Mutex
 
 	// props:
 	DefaultEntry string
@@ -52,23 +56,13 @@ type Grub2 struct {
 	Updating bool
 }
 
-func (g *Grub2) saveLoop() {
-	for {
-		select {
-		case <-g.configSaveChan:
-			cfg := g.newConfig()
-			err := cfg.Save()
-			if err != nil {
-				logger.Warning(err)
-			}
-			g.mkconfigManager.Change(cfg)
-		}
-	}
-}
-
-func (g *Grub2) saveConfig() {
-	g.configSaveChan <- 1
-}
+const (
+	propNameDefaultEntry = "DefaultEntry"
+	propNameEnableTheme  = "EnableTheme"
+	propNameResolution   = "Resolution"
+	propNameTimeout      = "Timeout"
+	propNameUpdating     = "Updating"
+)
 
 // return -1 for failed
 func (g *Grub2) defaultEntryStr2Idx(str string) int {
@@ -89,63 +83,75 @@ func (g *Grub2) defaultEntryIdx2Str(idx int) (string, error) {
 	}
 }
 
-// Config >>> Props
-func (g *Grub2) applyConfig(c *Config) {
-	g.DefaultEntry, _ = g.defaultEntryIdx2Str(c.DefaultEntry)
-	g.EnableTheme = c.EnableTheme
-	g.Resolution = c.Resolution
-	g.Timeout = c.Timeout
-}
+func (g *Grub2) applyParams(params map[string]string) {
+	//timeout
+	timeout := getTimeout(params)
+	if timeout < 0 {
+		timeout = 999
+	}
+	g.Timeout = uint32(timeout)
 
-// Props >>> Config
-func (g *Grub2) newConfig() *Config {
-	c := NewConfig()
-	c.DefaultEntry = g.defaultEntryStr2Idx(g.DefaultEntry)
-	c.EnableTheme = g.EnableTheme
-	c.Resolution = g.Resolution
-	c.Timeout = g.Timeout
-	return c
-}
+	// enable theme
+	var enableTheme bool
+	theme := getTheme(params)
+	if theme != "" {
+		enableTheme = true
+	}
+	g.EnableTheme = enableTheme
 
-func loadConfig() (config *Config, saveCfg bool) {
-	// read config file
-	config = NewConfig()
-	err := config.Load()
-	if err != nil {
-		saveCfg = true
-		// try load old config
-		c0 := NewConfigV0()
-		err = c0.Load()
-		if err == nil {
-			config = c0.Upgrade()
+	// resolution
+	g.Resolution = getGfxMode(params)
+
+	// default entry
+	defaultEntry := getDefaultEntry(params)
+
+	defaultEntryIdx, err := strconv.Atoi(defaultEntry)
+	if err == nil {
+		// is a num
+		g.DefaultEntry, _ = g.defaultEntryIdx2Str(defaultEntryIdx)
+	} else {
+		// not a num
+		if defaultEntry == "saved" {
+			// TODO saved
+			g.DefaultEntry, _ = g.defaultEntryIdx2Str(0)
 		} else {
-			// load old config failed
-			config.UseDefault()
+			g.DefaultEntry = defaultEntry
 		}
 	}
-	logger.Debugf("loadConfig: %#v, saveCfg: %v", config, saveCfg)
-	return
 }
 
-func (g *Grub2) fixConfig(config *Config) (saveCfg bool) {
-	// fix config.DefaultEntry
-	_, err := g.defaultEntryIdx2Str(config.DefaultEntry)
-	if err != nil {
-		logger.Warningf("config default entry %d is invalid", config.DefaultEntry)
-		config.DefaultEntry = 0
-		saveCfg = true
-	}
+type ModifyFunc func(map[string]string)
 
-	// fix config.Resolution
-	err = checkResolution(config.Resolution)
-	if err != nil {
-		logger.Warningf("config resolution %q is invalid", config.Resolution)
-		config.Resolution = defaultResolution
-		saveCfg = true
+func getModifyFuncEnableTheme(enable bool) ModifyFunc {
+	if enable {
+		return func(params map[string]string) {
+			params[grubTheme] = quoteString(defaultGrubTheme)
+			params[grubBackground] = quoteString(defaultGrubBackground)
+		}
+	} else {
+		return func(params map[string]string) {
+			delete(params, grubTheme)
+			delete(params, grubBackground)
+		}
 	}
-	// no fix config.Timeout
-	// no fix config.EnableTheme
-	return
+}
+
+func getModifyFuncTimeout(timeout uint32) ModifyFunc {
+	return func(params map[string]string) {
+		params[grubTimeout] = strconv.Itoa(int(timeout))
+	}
+}
+
+func getModifyFuncResolution(val string) ModifyFunc {
+	return func(params map[string]string) {
+		params[grubGfxMode] = quoteString(val)
+	}
+}
+
+func getModifyFuncDefaultEntry(idx int) ModifyFunc {
+	return func(params map[string]string) {
+		params[grubDefault] = strconv.Itoa(idx)
+	}
 }
 
 func New() *Grub2 {
@@ -153,44 +159,45 @@ func New() *Grub2 {
 
 	g.readEntries()
 
-	config, saveCfg := loadConfig()
-	saveCfg = g.fixConfig(config)
-
-	// check log
-	l, err := loadLog()
+	params, err := loadGrubParams()
 	if err != nil {
-		logger.Warning("loadLog failed:", err)
-		saveCfg = true
+		logger.Warning(err)
+	}
+	paramsMD5Sum := getGrubParamsMD5Sum(params)
+	logger.Debug("paramsHash:", paramsMD5Sum)
+
+	var needCallMkconfig bool
+	if mkconfigLog, err := loadLog(); err != nil {
+		needCallMkconfig = true
 	} else {
-		// load log success
-		logger.Debugf("log: %#v", l)
-		if ok, _ := l.Verify(config); !ok {
-			logger.Warning("log verify failed")
-			saveCfg = true
+		ok, _ := mkconfigLog.Verify(paramsMD5Sum)
+		if !ok {
+			needCallMkconfig = true
 		}
 	}
 
-	g.applyConfig(config)
-
-	g.configSaveChan = make(chan int)
-	go g.saveLoop()
-
-	g.mkconfigManager = newMkconfigManager(func(running bool) {
+	g.applyParams(params)
+	g.modifyFuncChan = make(chan ModifyFunc)
+	g.mkconfigManager = newMkconfigManager(g.modifyFuncChan, func(running bool) {
 		// state change callback
 		if g.Updating != running {
 			g.Updating = running
-			dbus.NotifyChange(g, "Updating")
+			dbus.NotifyChange(g, propNameUpdating)
 		}
 	})
+	go g.mkconfigManager.loop()
 
 	// init theme
 	g.theme = NewTheme(g)
 	g.theme.initTheme()
 	go g.theme.regenerateBackgroundIfNeed()
 
-	if saveCfg {
-		g.saveConfig()
+	if needCallMkconfig {
+		g.modifyFuncChan <- func(_ map[string]string) {
+			// NoOp
+		}
 	}
+
 	return g
 }
 
@@ -323,7 +330,7 @@ func (g *Grub2) getScreenWidthHeight() (w, h uint16, err error) {
 
 func (g *Grub2) canSafelyExit() bool {
 	logger.Debug("call canSafelyExit")
-	if g.Updating || g.theme.Updating {
+	if g.mkconfigManager.IsRunning() || g.theme.Updating {
 		return false
 	}
 	return true

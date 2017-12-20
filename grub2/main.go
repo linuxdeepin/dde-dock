@@ -40,42 +40,40 @@ func CanSafelyExit() bool {
 	return _g.canSafelyExit()
 }
 
-// write default config
 // write default /etc/default/grub
 // generate theme background image file
-// call from deepin-installer hooks/in_chroot/50_setup_bootloader_x86.job
+// call from deepin-installer hooks/in_chroot/*_setup_bootloader_x86.job
 func Setup(resolution string) error {
-	config := NewConfig()
-	config.UseDefault()
-
+	params := getDefaultGrubParams()
+	params[grubGfxMode] = resolution
+	_, err := writeGrubParams(params)
+	if err != nil {
+		return err
+	}
 	w, h, err := parseResolution(resolution)
 	if err != nil {
-		return err
+		logger.Warning(err)
+		// fallback to 1024x768
+		w = 1024
+		h = 768
 	}
-
-	config.Resolution = resolution
-	err = config.Save()
-	if err != nil {
-		return err
-	}
-
-	err = writeGrubParams(config)
-	if err != nil {
-		return err
-	}
-
 	return generateThemeBackground(w, h)
 	// no run update-grub
 }
 
 // call from grub-themes-deepin debian/postinst
 func SetupTheme() error {
-	config, _ := loadConfig()
-	w, h, err := parseResolution(config.Resolution)
+	params, err := loadGrubParams()
 	if err != nil {
-		// keep background image size
-		return nil
+		logger.Warning(err)
 	}
-
+	resolution := getGfxMode(params)
+	w, h, err := parseResolution(resolution)
+	if err != nil {
+		logger.Warning(err)
+		// fallback to 1024x768
+		w = 1024
+		h = 768
+	}
 	return generateThemeBackground(w, h)
 }

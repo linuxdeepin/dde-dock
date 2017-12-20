@@ -20,7 +20,6 @@
 package grub2
 
 import (
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"sync"
@@ -28,7 +27,6 @@ import (
 
 const (
 	grubMkconfigCmd = "grub-mkconfig"
-	grubParamsFile  = "/etc/default/grub"
 )
 
 func init() {
@@ -40,16 +38,18 @@ func init() {
 }
 
 type MkconfigManager struct {
-	current     *Config
-	future      *Config
+	ch          chan ModifyFunc
+	modifyFuncs []ModifyFunc
+
 	running     bool
 	stateChange func(running bool)
 
 	mu sync.Mutex
 }
 
-func newMkconfigManager(stateChange func(bool)) *MkconfigManager {
+func newMkconfigManager(ch chan ModifyFunc, stateChange func(bool)) *MkconfigManager {
 	m := &MkconfigManager{
+		ch:          ch,
 		stateChange: stateChange,
 	}
 	return m
@@ -61,37 +61,55 @@ func (m *MkconfigManager) notifyStateChange() {
 	}
 }
 
-func (m *MkconfigManager) Change(c *Config) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+func (m *MkconfigManager) loop() {
+	for {
+		select {
+		case f, ok := <-m.ch:
+			if !ok {
+				return
+			}
+			logger.Debug("mkconfigManager.loop receive f")
+			m.mu.Lock()
 
-	if m.running {
-		m.future = c
-	} else {
-		m.start(c)
+			if m.running {
+				m.modifyFuncs = append(m.modifyFuncs, f)
+			} else {
+				m.start(f)
+			}
+
+			m.mu.Unlock()
+		}
 	}
 }
 
-func (m *MkconfigManager) start(c *Config) {
-	logger.Infof("mkconfig start %s", c)
-	m.running = true
-	m.notifyStateChange()
-	m.future = nil
-	m.current = c
+func (m *MkconfigManager) start(funcs ...ModifyFunc) {
+	logger.Infof("mkconfig start")
+	defer logger.Infof("mkconfig start return")
 
-	writeGrubParams(c)
+	params, _ := loadGrubParams()
+
+	logger.Debug("mkconfigManager.start len(funcs):", len(funcs))
+	for _, fn := range funcs {
+		fn(params)
+	}
+	paramsHash, err := writeGrubParams(params)
+	if err != nil {
+		logger.Warning("failed to write grub params:", err)
+		return
+	}
+
 	cmd := exec.Command(grubMkconfigCmd, "-o", grubScriptFile)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	logStart(c)
-	err := cmd.Start()
+	logStart(paramsHash)
+	err = cmd.Start()
 	if err != nil {
 		logger.Warning("start grubMkconfigCmd failed:", err)
-		m.running = false
-		m.notifyStateChange()
 		return
 	}
 	go m.wait(cmd)
+	m.running = true
+	m.notifyStateChange()
 }
 
 func (m *MkconfigManager) wait(cmd *exec.Cmd) {
@@ -105,18 +123,22 @@ func (m *MkconfigManager) wait(cmd *exec.Cmd) {
 	logger.Info("mkconfig end")
 
 	m.mu.Lock()
-	defer m.mu.Unlock()
 
-	if m.future != nil && !m.future.Equal(m.current) {
-		m.start(m.future)
+	if len(m.modifyFuncs) > 0 {
+		m.start(m.modifyFuncs...)
+		m.modifyFuncs = nil
 	} else {
 		// loop end
 		m.running = false
 		m.notifyStateChange()
 	}
+
+	m.mu.Unlock()
 }
 
-func writeGrubParams(c *Config) error {
-	content := c.GetGrubParamsContent()
-	return ioutil.WriteFile(grubParamsFile, content, 0644)
+func (m *MkconfigManager) IsRunning() bool {
+	m.mu.Lock()
+	running := m.running
+	m.mu.Unlock()
+	return running
 }

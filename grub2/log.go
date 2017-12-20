@@ -23,12 +23,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"pkg.deepin.io/lib/encoding/kv"
 	"time"
+
+	"pkg.deepin.io/lib/encoding/kv"
 )
 
 const (
 	grubScriptFile = "/boot/grub/grub.cfg"
+	dataDir        = "/var/cache/deepin"
 	logFile        = dataDir + "/grub2.log"
 	logFileMode    = 0644
 )
@@ -39,10 +41,10 @@ func getGrubScriptMD5sum() (string, error) {
 
 // write text:
 // start= now
-// configHash=
-func logStart(c *Config) {
+// paramsMD5Sum=
+func logStart(paramHash string) {
 	content := fmt.Sprintf("%s=%s\n%s=%s\n", logKeyStart, time.Now(),
-		logKeyConfigHash, c.Hash())
+		logKeyParamsMD5Sum, paramHash)
 	err := ioutil.WriteFile(logFile, []byte(content), logFileMode)
 	if err != nil {
 		logger.Warning("logStart write failed:", err)
@@ -69,8 +71,8 @@ func logAppendText(text string) {
 }
 
 // append text:
+// scriptMD5Sum=
 // end= now
-// scriptMD5sum=
 func logEnd() {
 	sum, err := getGrubScriptMD5sum()
 	if err != nil {
@@ -78,23 +80,23 @@ func logEnd() {
 		return
 	}
 
-	logAppendText(fmt.Sprintf("%s=%s\n%s=%s\n", logKeyScriptMD5sum, sum,
+	logAppendText(fmt.Sprintf("%s=%s\n%s=%s\n", logKeyScriptMD5Sum, sum,
 		logKeyEnd, time.Now()))
 }
 
 type Log struct {
 	hasStart       bool
 	hasEnd         bool
-	configHash     string
-	scriptMD5sum   string
+	paramsMD5Sum   string
+	scriptMD5Sum   string
 	mkconfigFailed bool
 }
 
 const (
 	logKeyStart          = "start"
 	logKeyEnd            = "end"
-	logKeyConfigHash     = "configHash"
-	logKeyScriptMD5sum   = "scriptMD5sum"
+	logKeyParamsMD5Sum   = "paramsMD5Sum"
+	logKeyScriptMD5Sum   = "scriptMD5Sum"
 	logKeyMkconfigFailed = "mkconfigFailed"
 )
 
@@ -125,8 +127,8 @@ func loadLog() (*Log, error) {
 		l.hasEnd = true
 	}
 
-	l.configHash = dict[logKeyConfigHash]
-	l.scriptMD5sum = dict[logKeyScriptMD5sum]
+	l.paramsMD5Sum = dict[logKeyParamsMD5Sum]
+	l.scriptMD5Sum = dict[logKeyScriptMD5Sum]
 
 	if dict[logKeyMkconfigFailed] == "1" {
 		l.mkconfigFailed = true
@@ -134,7 +136,7 @@ func loadLog() (*Log, error) {
 	return l, nil
 }
 
-func (l *Log) Verify(c *Config) (ok bool, err error) {
+func (l *Log) Verify(paramsMD5Sum string) (ok bool, err error) {
 	// check start and end
 	if !l.hasStart || !l.hasEnd {
 		return false, nil
@@ -145,8 +147,7 @@ func (l *Log) Verify(c *Config) (ok bool, err error) {
 	}
 
 	// check configHash
-	cfgHash := c.Hash()
-	if cfgHash != l.configHash {
+	if paramsMD5Sum != l.paramsMD5Sum {
 		return false, nil
 	}
 
@@ -156,5 +157,5 @@ func (l *Log) Verify(c *Config) (ok bool, err error) {
 		return false, err
 	}
 
-	return scriptMD5sum == l.scriptMD5sum, nil
+	return scriptMD5sum == l.scriptMD5Sum, nil
 }
