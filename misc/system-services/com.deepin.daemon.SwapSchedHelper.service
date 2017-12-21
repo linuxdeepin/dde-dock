@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.deepin.daemon.SwapSchedHelper
+Exec=/usr/lib/deepin-daemon/dde-system-daemon
+User=root

@@ -54,6 +54,7 @@ func (d *Daemon) Start() error {
 		logger.Warning(err)
 		return err
 	}
+	dbus.DealWithUnhandledMessage()
 	return nil
 }
 
