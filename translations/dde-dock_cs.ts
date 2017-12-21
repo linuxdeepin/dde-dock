@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Klepněte pr zobrazení skryté ikony</translation>
     </message>
 </context>
 <context>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
@@ -257,7 +257,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
         <source>Power</source>
-        <translation>Energie</translation>
+        <translation>Napájení</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>

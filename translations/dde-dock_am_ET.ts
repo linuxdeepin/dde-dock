@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>ይጫኑ የ ተደበቁ ምልክቶች ለ ማሳየት</translation>
     </message>
 </context>
 <context>
@@ -12,17 +12,17 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>ቀን እና ሰአት</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 ሰአት ጊዜ</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 ሰአት ጊዜ</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>

@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>খুলুন</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="88"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>মোড</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="96"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
-        <translation type="unfinished"/>
+        <translation>লঞ্চার</translation>
     </message>
 </context>
 <context>
@@ -217,7 +217,7 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Shut down</source>
-        <translation type="unfinished"/>
+        <translation>বন্ধ করুন</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
@@ -340,7 +340,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>খুলুন</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>

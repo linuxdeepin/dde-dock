@@ -99,7 +99,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
-        <translation>Knap</translation>
+        <translation>Nederst</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>

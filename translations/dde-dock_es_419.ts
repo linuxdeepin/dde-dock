@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Haga clic para mostrar el icono oculto</translation>
     </message>
 </context>
 <context>
@@ -12,17 +12,17 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Fecha y hora</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
-        <translation>Tiempo en 12 horas</translation>
+        <translation>Horario de 12 horas</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
-        <translation>Tiempo en 24 horas</translation>
+        <translation>Horario de 24 horas</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
@@ -45,7 +45,7 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
-        <translation>Configuraciones de red</translation>
+        <translation>Ajustes de red</translation>
     </message>
 </context>
 <context>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
-        <translation>Abajo</translation>
+        <translation>Inferior</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
-        <translation>Intermedio</translation>
+        <translation>Mediano</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
@@ -139,7 +139,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
-        <translation>Ocultar automáticamente</translation>
+        <translation>Ocultado inteligente</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="88"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Complementos</translation>
     </message>
 </context>
 <context>
@@ -180,7 +180,7 @@
     <message>
         <location filename="../plugins/network/networkplugin.cpp" line="46"/>
         <source>Network</source>
-        <translation>Redes e Internet</translation>
+        <translation>Redes</translation>
     </message>
 </context>
 <context>
@@ -193,22 +193,22 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Empty</source>
-        <translation>Vacío</translation>
+        <translation>Vaciar</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
-        <translation>Esta acción no se puede restaurar</translation>
+        <translation>Esta acción no puede ser restaurada</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>¿Eliminar definitivamente 1 elemento?</translation>
+        <translation>¿Está seguro de vaciar 1 elemento?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>¿Eliminar definitivamente los %1 elementos?</translation>
+        <translation>¿Está seguro de vaciar %1 elementos?</translation>
     </message>
 </context>
 <context>
@@ -227,7 +227,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
-        <translation>Cargada %1</translation>
+        <translation>Cargado %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Log out</source>
-        <translation>Salir</translation>
+        <translation>Cerrar sesión</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
@@ -262,12 +262,12 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
         <source>Switch account</source>
-        <translation>Cambiar de cuenta</translation>
+        <translation>Cambiar cuenta</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
-        <translation>Ajustes de encendido</translation>
+        <translation>Ajustes energía</translation>
     </message>
 </context>
 <context>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation>Desactivar silenciar</translation>
+        <translation>Activar sonido</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="81"/>
@@ -298,7 +298,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation>Configuraciones de audio</translation>
+        <translation>Ajustes audio</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="214"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
         <source>System Tray</source>
-        <translation>Bandeja de Sistema</translation>
+        <translation>Bandeja de sistema</translation>
     </message>
 </context>
 <context>
@@ -327,12 +327,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation>Papelera - %1 file</translation>
+        <translation>Papelera - %1 archivo</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation>Papelera - %1 files</translation>
+        <translation>Papelera - %1 archivos</translation>
     </message>
 </context>
 <context>
@@ -345,7 +345,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
-        <translation>Vacío</translation>
+        <translation>Vaciar</translation>
     </message>
 </context>
 <context>
@@ -363,7 +363,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation>Conexión cableada: %1</translation>
+        <translation>Conexión por cable: %1</translation>
     </message>
 </context>
 <context>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Conectar Automáticamente</translation>
+        <translation>Autoconectar</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
@@ -409,7 +409,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Se requiere una contraseña para conectar a &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <translation>Se requiere una contraseña para conectar con &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
 </context>
 </TS>

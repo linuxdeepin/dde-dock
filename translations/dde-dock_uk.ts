@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Натисніть, щоб відобразити прихований значок</translation>
     </message>
 </context>
 <context>
@@ -12,17 +12,17 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Дата, час</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 Годинний Час</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 Годинний Час</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
@@ -58,7 +58,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Невідомий том</translation>
     </message>
 </context>
 <context>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>Модний режим</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим ефективності</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="45"/>
@@ -129,17 +129,17 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>Показувати постійно</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Приховувати</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>Розумне приховування</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="88"/>
@@ -203,12 +203,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation type="unfinished"/>
+        <translation>Ви впевнені, що хочете очистити 1 обєкт?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation type="unfinished"/>
+        <translation>Ви впевнені, що хочете очистити %1 обєкти ?</translation>
     </message>
 </context>
 <context>
@@ -222,7 +222,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
         <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Залишкова Ємність %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
@@ -257,7 +257,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
         <source>Power</source>
-        <translation>Потужність</translation>
+        <translation>Акумулятор</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>

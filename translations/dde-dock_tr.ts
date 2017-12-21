@@ -188,7 +188,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation>İptal et</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
@@ -394,7 +394,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation>İptal et</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>

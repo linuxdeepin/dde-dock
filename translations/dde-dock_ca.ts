@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Cliqueu per veure la icona amagada</translation>
     </message>
 </context>
 <context>
@@ -12,22 +12,22 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Dia i hora</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 hores</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 hores</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuració del dia i l&apos;hora</translation>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>Habilita la xarxa</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>Inhabilita la xarxa</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuració de la xarxa</translation>
     </message>
 </context>
 <context>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Dispositiu desconegut</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Volum desconegut</translation>
     </message>
 </context>
 <context>
@@ -76,7 +76,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>Desmunta-ho tot</translation>
     </message>
 </context>
 <context>
@@ -84,62 +84,62 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode de moda</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode eficient</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="45"/>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>A dalt</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>A baix</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Left</source>
-        <translation>Esquerra</translation>
+        <translation>A l&apos;esquerra</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Right</source>
-        <translation>Dreta</translation>
+        <translation>A la dreta</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>Gros</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
-        <translation type="unfinished"/>
+        <translation>Mitjà</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Small</source>
-        <translation type="unfinished"/>
+        <translation>Petit</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>Mantén visible</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Mantén ocult</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>Ocultació intel·ligent</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="88"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Location</source>
-        <translation type="unfinished"/>
+        <translation>Ubicació</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="103"/>
@@ -159,12 +159,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="110"/>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>Estat</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Connectors</translation>
     </message>
 </context>
 <context>
@@ -193,22 +193,22 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Empty</source>
-        <translation type="unfinished"/>
+        <translation>Buit</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
-        <translation>Aquesta acció es podra desfer</translation>
+        <translation>Aquesta acció es pot desfer.</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation type="unfinished"/>
+        <translation>Segur que voleu eliminar 1 element?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation type="unfinished"/>
+        <translation>Segur que voleu eliminar %1 elements?</translation>
     </message>
 </context>
 <context>
@@ -217,42 +217,42 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Shut down</source>
-        <translation>Apagar</translation>
+        <translation>Atura</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
         <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Capacitat restant %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>Càrrega: %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
         <source>Charging %1</source>
-        <translation type="unfinished"/>
+        <translation>Carregant: %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Restart</source>
-        <translation>Reiniciar</translation>
+        <translation>Reinicia</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
         <source>Lock</source>
-        <translation>Bloquejar</translation>
+        <translation>Bloqueja</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Log out</source>
-        <translation>Tancar sessió</translation>
+        <translation>Surt de la sessió</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
         <source>Suspend</source>
-        <translation>Suspendre</translation>
+        <translation>Suspèn</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
@@ -262,12 +262,12 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>Canvi de compte</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuració de l&apos;energia</translation>
     </message>
 </context>
 <context>
@@ -280,7 +280,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>Aplicació</translation>
     </message>
 </context>
 <context>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>Activa el so</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="81"/>
@@ -298,12 +298,12 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuració de l&apos;àudio</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="214"/>
         <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Volum actual: %1</translation>
     </message>
 </context>
 <context>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
         <source>System Tray</source>
-        <translation type="unfinished"/>
+        <translation>Safata del sistema</translation>
     </message>
 </context>
 <context>
@@ -327,12 +327,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Paperera: %1 fitxer</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Paperera: %1 fitxers</translation>
     </message>
 </context>
 <context>
@@ -345,7 +345,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
-        <translation type="unfinished"/>
+        <translation>Buida</translation>
     </message>
 </context>
 <context>
@@ -353,17 +353,17 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknow</source>
-        <translation type="unfinished"/>
+        <translation>Desconegut</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>Sense xarxa</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Connexió amb fil: %1</translation>
     </message>
 </context>
 <context>
@@ -371,12 +371,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>Sense xarxa</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Connexió sense fil: %1</translation>
     </message>
 </context>
 <context>
@@ -384,12 +384,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Auto connectar</translation>
+        <translation>Connexió automàtica</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
         <source>Connect</source>
-        <translation>Connectar</translation>
+        <translation>Connecta</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
@@ -404,12 +404,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Xarxa sense fil: %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Cal una contrasenya per connectar amb &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;.</translation>
     </message>
 </context>
 </TS>

@@ -27,7 +27,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>Hor-agordoj</translation>
     </message>
 </context>
 <context>
