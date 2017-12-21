@@ -424,14 +424,6 @@ func (u *User) SetDesktopBackgrounds(dbusMsg dbus.DMessage, val []string) error 
 		return nil
 	}
 
-	for _, uri := range newVal {
-		if !isBackgroundValid(uri) {
-			err := ErrInvalidBackground{uri}
-			logger.Warning(err)
-			return err
-		}
-	}
-
 	oldVal := u.DesktopBackgrounds
 	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, newVal)
 	if err := u.writeUserConfig(); err != nil {
