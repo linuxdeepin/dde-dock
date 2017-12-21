@@ -49,7 +49,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_regionInter, &DRegionMonitor::buttonRelease, this, &DockPopupWindow::onGlobMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
