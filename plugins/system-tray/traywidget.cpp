@@ -74,12 +74,16 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
     m_updateTimer->setInterval(100);
     m_updateTimer->setSingleShot(true);
 
-    m_ignoreRepeat = new QTimer(this);
-    m_ignoreRepeat->setInterval(100);
-    m_ignoreRepeat->setSingleShot(true);
+    m_sendHoverEvent = new QTimer(this);
+    m_sendHoverEvent->setInterval(100);
+    m_sendHoverEvent->setSingleShot(true);
 
     connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::refershIconImage);
+#ifdef DOCK_TRAY_USE_NATIVE_POPUP
+    connect(m_sendHoverEvent, &QTimer::timeout, this, &TrayWidget::sendHoverEvent);
+#endif
 
+    setMouseTracking(true);
     setFixedSize(26, 26);
     m_updateTimer->start();
 }
@@ -103,22 +107,6 @@ void TrayWidget::showEvent(QShowEvent *e)
     QWidget::showEvent(e);
 
     m_updateTimer->start();
-//    configContainerPosition();
-//    setX11PassMouseEvent(false);
-
-//    auto c = QX11Info::connection();
-//    QPoint globalPos = mapToGlobal(QPoint(0, 0));
-//    const uint32_t windowMoveConfigVals[2] = { uint32_t(globalPos.x()), uint32_t(globalPos.y()) };
-//    xcb_configure_window(c, m_containerWid,
-//                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
-//                         windowMoveConfigVals);
-}
-
-void TrayWidget::hideEvent(QHideEvent *e)
-{
-    QWidget::hideEvent(e);
-
-//    setX11PassMouseEvent(true);
 }
 
 void TrayWidget::paintEvent(QPaintEvent *e)
@@ -127,8 +115,6 @@ void TrayWidget::paintEvent(QPaintEvent *e)
     if (m_image.isNull())
         return m_updateTimer->start();
 
-//    const QPoint p(width() / 2 - iconSize / 2, height() / 2 - iconSize / 2);
-
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -136,17 +122,6 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 //    painter.fillRect(rect(), Qt::red);
 #endif
 
-//    m_image = getImageNonComposite();
-//    if (!m_image.isNull()) {
-//        if (true) {
-//            QPainterPath path;
-//            path.addRoundedRect(p.x(), p.y(), iconSize, iconSize, iconSize / 2, iconSize / 2);
-
-//            painter.setClipPath(path);
-//        }
-
-//        painter.drawImage(p.x(), p.y(), m_image.scaled(iconSize, iconSize));
-//    }
     const QPoint p = rect().center() - m_image.rect().center() / m_image.devicePixelRatioF();
     painter.drawImage(p, m_image);
 
@@ -188,33 +163,11 @@ void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
     sendClick(buttonIndex, globalPos.x(), globalPos.y());
 }
 
-void TrayWidget::moveEvent(QMoveEvent *e)
+void TrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    QWidget::moveEvent(e);
+    QWidget::mouseMoveEvent(e);
 
-//    configContainerPosition();
-}
-
-void TrayWidget::enterEvent(QEvent *e)
-{
-    QWidget::enterEvent(e);
-
-    if (m_ignoreRepeat->isActive())
-        return;
-    m_ignoreRepeat->start();
-
-//    qDebug() << Q_FUNC_INFO;
-
-    // fake enter event
-    const QPoint p(rawXPosition(QCursor::pos()));
-    configContainerPosition();
-    setX11PassMouseEvent(false);
-    setWindowOnTop(true);
-    XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
-    setX11PassMouseEvent(true);
-//    setWindowOnTop(false);
-
-//    configContainerPosition();
+    m_sendHoverEvent->start();
 }
 
 void TrayWidget::configContainerPosition()
@@ -329,25 +282,22 @@ void TrayWidget::wrapWindow()
     setX11PassMouseEvent(true);
 }
 
+void TrayWidget::sendHoverEvent()
+{
+    // fake enter event
+    const QPoint p(rawXPosition(QCursor::pos()));
+    configContainerPosition();
+    setX11PassMouseEvent(false);
+    setWindowOnTop(true);
+    XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
+    XFlush(QX11Info::display());
+    QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
+}
+
 void TrayWidget::updateIcon()
 {
-    if (!isVisible() && !m_active) return;
-
-//    auto c = QX11Info::connection();
-
-//    const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};
-//    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
-
-//    QPoint globalPos = mapToGlobal(QPoint(0, 0));
-//    const uint32_t windowMoveConfigVals[2] = { uint32_t(globalPos.x()), uint32_t(globalPos.y()) };
-//    xcb_configure_window(c, m_containerWid,
-//                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
-//                         windowMoveConfigVals);
-
-//    const uint32_t windowResizeConfigVals[2] = { iconSize, iconSize };
-//    xcb_configure_window(c, m_windowId,
-//                         XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
-//                         windowResizeConfigVals);
+    if (!isVisible() && !m_active)
+        return;
 
     m_updateTimer->start();
 }
@@ -372,8 +322,7 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     if (isBadWindow())
         return;
 
-//    qDebug() << Q_FUNC_INFO;
-    m_ignoreRepeat->start();
+    m_sendHoverEvent->stop();
 
     const QPoint p(rawXPosition(QPoint(x, y)));
     configContainerPosition();
@@ -385,102 +334,7 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     XFlush(QX11Info::display());
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);
     XFlush(QX11Info::display());
-//    XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
-//    setX11PassMouseEvent(true);
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
-//    setWindowOnTop(false);
-
-    return;
-    //it's best not to look at this code
-    //GTK doesn't like send_events and double checks the mouse position matches where the window is and is top level
-    //in order to solve this we move the embed container over to where the mouse is then replay the event using send_event
-    //if patching, test with xchat + xchat context menus
-
-    //note x,y are not actually where the mouse is, but the plasmoid
-    //ideally we should make this match the plasmoid hit area
-
-    auto c = QX11Info::connection();
-
-    auto cookieSize = xcb_get_geometry(c, m_windowId);
-    QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookieSize, Q_NULLPTR));
-
-    auto cookie = xcb_query_pointer(c, m_windowId);
-    QScopedPointer<xcb_query_pointer_reply_t> pointer(xcb_query_pointer_reply(c, cookie, Q_NULLPTR));
-
-//    qDebug() << pointer->root_x << pointer->root_y << x << y << clientGeom->width << clientGeom->height;
-
-    //move our window so the mouse is within its geometry
-    uint32_t configVals[2] = {0, 0};
-    if (mouseButton >= XCB_BUTTON_INDEX_4) {
-        //scroll event, take pointer position
-        configVals[0] = pointer->root_x;
-        configVals[1] = pointer->root_y;
-    } else {
-        if (pointer->root_x > x + clientGeom->width)
-            configVals[0] = pointer->root_x - clientGeom->width + 1;
-        else
-            configVals[0] = static_cast<uint32_t>(x);
-        if (pointer->root_y > y + clientGeom->height)
-            configVals[1] = pointer->root_y - clientGeom->height + 1;
-        else
-            configVals[1] = static_cast<uint32_t>(y);
-    }
-    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y, configVals);
-
-    //pull window up
-//    const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};
-//    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
-
-//    system(QString("xdotool click --window %1 %2").arg(m_windowId).arg(mouseButton).toLatin1());
-
-    setX11PassMouseEvent(false);
-    //mouse down
-    {
-        xcb_button_press_event_t* event = new xcb_button_press_event_t;
-        memset(event, 0x00, sizeof(xcb_button_press_event_t));
-        event->response_type = XCB_BUTTON_PRESS;
-        event->event = m_windowId;
-        event->time = QX11Info::getTimestamp();
-        event->same_screen = 1;
-        event->root = QX11Info::appRootWindow();
-        event->root_x = x;
-        event->root_y = y;
-        event->event_x = 0;
-        event->event_y = 0;
-        event->child = 0;
-        event->state = 0;
-        event->detail = mouseButton;
-
-        xcb_send_event(c, false, m_windowId, XCB_EVENT_MASK_BUTTON_PRESS, (char *) event);
-//        free(event);
-        delete event;
-    }
-
-    //mouse up
-    {
-        xcb_button_release_event_t* event = new xcb_button_release_event_t;
-        memset(event, 0x00, sizeof(xcb_button_release_event_t));
-        event->response_type = XCB_BUTTON_RELEASE;
-        event->event = m_windowId;
-        event->time = QX11Info::getTimestamp();
-        event->same_screen = 1;
-        event->root = QX11Info::appRootWindow();
-        event->root_x = x;
-        event->root_y = y;
-        event->event_x = 0;
-        event->event_y = 0;
-        event->child = 0;
-        event->state = 0;
-        event->detail = mouseButton;
-
-        xcb_send_event(c, false, m_windowId, XCB_EVENT_MASK_BUTTON_RELEASE, (char *) event);
-//        free(event);
-        delete event;
-    }
-    setX11PassMouseEvent(true);
-
-//    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
-    //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
 }
 
 void TrayWidget::setActive(const bool active)
@@ -524,8 +378,6 @@ void TrayWidget::refershIconImage()
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)
 {
-//    qDebug() << Q_FUNC_INFO << pass;
-
     if (pass)
     {
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeBounding, 0, 0, nullptr, 0, ShapeSet, YXBanded);

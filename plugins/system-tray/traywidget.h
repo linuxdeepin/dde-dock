@@ -44,15 +44,14 @@ signals:
 private:
     QSize sizeHint() const;
     void showEvent(QShowEvent *e);
-    void hideEvent(QHideEvent *e);
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
-    void moveEvent(QMoveEvent *e);
-    void enterEvent(QEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
     void configContainerPosition();
 
     void wrapWindow();
+    void sendHoverEvent();
 //    void hideIcon();
     void refershIconImage();
 
@@ -68,8 +67,7 @@ private:
     QImage m_image;
 
     QTimer *m_updateTimer;
-    QTimer *m_ignoreRepeat;
-//    QPoint m_pressPoint;
+    QTimer *m_sendHoverEvent;
 };
 
 #endif // TRAYWIDGET_H

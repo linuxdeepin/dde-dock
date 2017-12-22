@@ -86,7 +86,11 @@ QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
+#ifdef DOCK_TRAY_USE_NATIVE_POPUP
+    return nullptr;
+#else
     return m_tipsLabel;
+#endif
 }
 
 QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
