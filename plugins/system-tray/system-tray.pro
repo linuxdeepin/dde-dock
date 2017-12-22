@@ -10,6 +10,10 @@ TARGET          = $$qtLibraryTarget(system-tray)
 DESTDIR          = $$_PRO_FILE_PWD_/../
 DISTFILES       += system-tray.json
 
+isEqual(DOCK_TRAY_USE_NATIVE_POPUP, YES) {
+    DEFINES += DOCK_TRAY_USE_NATIVE_POPUP
+}
+
 HEADERS += \
     systemtrayplugin.h \
     dbus/dbustraymanager.h \

@@ -68,7 +68,6 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
       m_windowId(winId)
 {
     wrapWindow();
-    updateIcon();
 
     m_updateTimer = new QTimer(this);
     m_updateTimer->setInterval(100);
@@ -363,7 +362,8 @@ void TrayWidget::refershIconImage()
     xcb_flush(c);
 
     xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
-    Q_ASSERT_X(image, Q_FUNC_INFO, "image is null");
+    if (!image)
+        return;
 
     QImage qimage(image->data, image->width, image->height, image->stride, QImage::Format_ARGB32, sni_cleanup_xcb_image, image);
     if (qimage.isNull())
