@@ -190,6 +190,16 @@ func checkSettingProxyValues(data connectionData) (err sectionErrors) {
 	return
 }
 
+func getSettingTCConfigAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingTCConfigAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingTCConfigValues(data connectionData) (err sectionErrors) {
+	return
+}
+
 func getSettingTeamAvailableKeys(data connectionData) (keys []string) {
 	return
 }
