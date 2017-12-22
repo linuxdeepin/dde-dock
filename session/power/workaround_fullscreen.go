@@ -21,16 +21,17 @@ package power
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"io/ioutil"
-	"strings"
-	"sync"
-	"time"
 )
 
 func init() {
@@ -78,7 +79,7 @@ func (wa *fullScreenWorkaround) detect() {
 	wa.enableMutex.Lock()
 
 	if !wa.enable {
-		logger.Debug("disabled")
+		//logger.Debug("disabled")
 		wa.enableMutex.Unlock()
 		return
 	}
@@ -91,7 +92,7 @@ func (wa *fullScreenWorkaround) detect() {
 		if wa.isFullscreenFocused(activeWin) {
 			wa.tryInhibit(activeWin)
 		} else {
-			logger.Debug("Try uninhibit")
+			//logger.Debug("Try uninhibit")
 			wa.uninhibit()
 		}
 		wa.enableMutex.Lock()
@@ -114,7 +115,7 @@ func (wa *fullScreenWorkaround) uninhibit() {
 		}
 		wa.idleId = 0
 	} else {
-		logger.Debug("wa.idleId == 0")
+		//logger.Debug("wa.idleId == 0")
 	}
 }
 
@@ -164,7 +165,7 @@ func (wa *fullScreenWorkaround) isFullscreenFocused(xid xproto.Window) bool {
 	xu := wa.manager.helper.xu
 	states, _ := ewmh.WmStateGet(xu, xid)
 	found := 0
-	logger.Debug("window states:", states)
+	//logger.Debug("window states:", states)
 	for _, s := range states {
 		if s == "_NET_WM_STATE_FULLSCREEN" {
 			found++
@@ -189,7 +190,7 @@ func (wa *fullScreenWorkaround) Start() error {
 		for {
 			select {
 			case <-wa.ticker.C:
-				logger.Debug("Loop detect tick")
+				//logger.Debug("Loop detect tick")
 				wa.detect()
 			case <-wa.exit:
 				wa.exit = nil
@@ -203,8 +204,8 @@ func (wa *fullScreenWorkaround) Start() error {
 	root := xwindow.New(xu, xu.RootWin())
 	root.Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		atomName, _ := xprop.AtomName(XU, ev.Atom)
-		logger.Debugf("signal %v %s", ev.Atom, atomName)
+		//atomName, _ := xprop.AtomName(XU, ev.Atom)
+		//logger.Debugf("signal %v %s", ev.Atom, atomName)
 		for _, atom := range wa.keyEventAtomList {
 			if ev.Atom == atom {
 				wa.detect()
