@@ -91,7 +91,7 @@ func (sw *Helper) Prepare(sessionID string) error {
 		return err
 	}
 
-	err = createCGroup(username, sessionID)
+	err = createDDECGroups(username, sessionID)
 	if err != nil {
 		logger.Warning("failed to create cgroup:", err)
 		return err
@@ -138,7 +138,7 @@ func (sw *Helper) init() {
 			_, err := os.Stat(filepath.Join(cGroupRoot, "memory", sessionID+"@dde"))
 			if err == nil {
 				// path exist
-				err = deleteCGroup(sessionID)
+				err = deleteDDECGroups(sessionID)
 				if err != nil {
 					logger.Warning("failed to delete cgroup:", err)
 				}
@@ -147,9 +147,23 @@ func (sw *Helper) init() {
 	})
 }
 
-func createCGroup(username, sessionID string) error {
+func createDDECGroups(username, sessionID string) error {
 	user := username + ":" + username
-	path := sessionID + "@dde/uiapps"
+	dir := sessionID + "@dde/"
+
+	err := createCGroup(user, dir+"uiapps")
+	if err != nil {
+		return err
+	}
+
+	err = createCGroup(user, dir+"DE")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func createCGroup(user, path string) error {
 	cmdline := fmt.Sprintf("cgcreate -t %s -a %s -g %s:%s", user, user, cGroupControllers, path)
 	logger.Debug("exec cmd:", cmdline)
 	cmd := exec.Command("cgcreate", "-t", user, "-a", user, "-g", cGroupControllers+":"+path)
@@ -160,7 +174,7 @@ func createCGroup(username, sessionID string) error {
 	return err
 }
 
-func deleteCGroup(sessionID string) error {
+func deleteDDECGroups(sessionID string) error {
 	path := sessionID + "@dde"
 	cmdline := fmt.Sprintf("cgdelete -r -g %s:%s", cGroupControllers, path)
 	logger.Debug("exec cmd:", cmdline)
