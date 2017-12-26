@@ -106,19 +106,12 @@ MainWindow::MainWindow(QWidget *parent)
     initComponents();
     initConnections();
 
-    m_mainPanel->setFixedSize(m_settings->windowSize());
+    m_mainPanel->setFixedSize(m_settings->panelSize());
 }
 
 MainWindow::~MainWindow()
 {
     delete m_xcbMisc;
-}
-
-QRect MainWindow::panelGeometry()
-{
-    QRect rect = m_mainPanel->geometry();
-    rect.moveTopLeft(m_mainPanel->mapToGlobal(QPoint(0,0)));
-    return rect;
 }
 
 void MainWindow::launch()
@@ -353,7 +346,6 @@ void MainWindow::initConnections()
         const QSize size = m_sizeChangeAni->currentValue().toSize();
 
         QWidget::setFixedSize(size);
-        m_mainPanel->setFixedSize(size);
     });
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
@@ -436,9 +428,7 @@ void MainWindow::updateGeometry()
     const Position position = m_settings->position();
     QSize size = m_settings->windowSize();
 
-//    qDebug() << Q_FUNC_INFO << position << size;
-
-    m_mainPanel->setFixedSize(size);
+    m_mainPanel->setFixedSize(m_settings->panelSize());
     m_mainPanel->updateDockPosition(position);
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
@@ -465,7 +455,6 @@ void MainWindow::updateGeometry()
     }
 
     const QRect windowRect = m_settings->windowRect(position, m_settings->hideState() == Hide);
-    qDebug() << Q_FUNC_INFO << windowRect;
 
     if (animation)
         internalAnimationMove(windowRect.x(), windowRect.y());
@@ -574,8 +563,13 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-//    qDebug() << "expand";
-    const QPoint finishPos(0, 0);
+    QPoint finishPos(0, 0);
+    switch (m_settings->position())
+    {
+    case Left:  finishPos.setX(WINDOW_OVERFLOW);    break;
+    case Top:   finishPos.setY(WINDOW_OVERFLOW);    break;
+    default:;
+    }
 
     const int epsilon = std::round(devicePixelRatioF()) - 1;
     const QSize s = size();
@@ -609,16 +603,14 @@ void MainWindow::expand()
 
 void MainWindow::narrow(const Position prevPos)
 {
-//    qDebug() << "narrow" << prevPos;
-//    const QSize size = m_settings->windowSize();
-    const QSize size = m_mainPanel->size();
+    const QSize size = m_settings->panelSize();
 
     QPoint finishPos(0, 0);
     switch (prevPos)
     {
-    case Top:       finishPos.setY(-size.height());     break;
+    case Top:       finishPos.setY(-size.height() + WINDOW_OVERFLOW);     break;
     case Bottom:    finishPos.setY(size.height());      break;
-    case Left:      finishPos.setX(-size.width());      break;
+    case Left:      finishPos.setX(-size.width() + WINDOW_OVERFLOW);      break;
     case Right:     finishPos.setX(size.width());       break;
     }
 
@@ -644,25 +636,22 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     const QRect r(m_settings->windowRect(position));
 
     m_sizeChangeAni->setEndValue(r.size());
-    m_mainPanel->setFixedSize(r.size());
+    m_mainPanel->setFixedSize(m_settings->panelSize());
     QWidget::setFixedSize(r.size());
     m_posChangeAni->setEndValue(r.topLeft());
     QWidget::move(r.topLeft());
 
     QPoint finishPos(0, 0);
-    if (!visible)
+
+    switch (position)
     {
-        switch (position)
-        {
-        case Top:       finishPos.setY(-r.height());     break;
-        case Bottom:    finishPos.setY(r.height());      break;
-        case Left:      finishPos.setX(-r.width());      break;
-        case Right:     finishPos.setX(r.width());       break;
-        }
+    case Top:       finishPos.setY((visible ? 0 : -r.height()) + WINDOW_OVERFLOW);     break;
+    case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
+    case Left:      finishPos.setX((visible ? 0 :-r.width()) + WINDOW_OVERFLOW);       break;
+    case Right:     finishPos.setX(visible ? 0 : r.width());       break;
     }
 
     m_mainPanel->move(finishPos);
-    qDebug() << Q_FUNC_INFO << m_mainPanel->isVisible() << m_mainPanel->pos() << finishPos;
 }
 
 void MainWindow::updatePanelVisible()
@@ -702,14 +691,16 @@ void MainWindow::adjustShadowMask()
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
 
-    if (m_mainPanel->pos() != QPoint(0, 0) ||
+    if (m_mainPanel->pos().manhattanLength() > WINDOW_OVERFLOW ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running ||
         !m_wmHelper->hasComposite())
     {
         m_platformWindowHandle.setShadowRadius(0);
+        m_platformWindowHandle.setWindowRadius(0);
     } else {
         m_platformWindowHandle.setShadowRadius(60);
+        m_platformWindowHandle.setWindowRadius(5);
     }
 }
 

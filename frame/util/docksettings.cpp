@@ -152,59 +152,19 @@ DockSettings::DockSettings(QWidget *parent)
     resetFrontendGeometry();
 }
 
-DisplayMode DockSettings::displayMode() const
+const QSize DockSettings::panelSize() const
 {
-    return m_displayMode;
-}
+    switch (m_position)
+    {
+    case Top:
+    case Bottom:
+        return m_mainWindowSize - QSize(0, WINDOW_OVERFLOW);
+    case Left:
+    case Right:
+        return m_mainWindowSize - QSize(WINDOW_OVERFLOW, 0);
+    }
 
-HideMode DockSettings::hideMode() const
-{
-    return m_hideMode;
-}
-
-Position DockSettings::position() const
-{
-    return m_position;
-}
-
-int DockSettings::screenHeight() const
-{
-    return m_displayInter->screenHeight();
-}
-
-int DockSettings::screenWidth() const
-{
-    return m_displayInter->screenWidth();
-}
-
-int DockSettings::expandTimeout() const
-{
-    return m_dockInter->showTimeout();
-}
-
-int DockSettings::narrowTimeout() const
-{
-    return 0;
-}
-
-bool DockSettings::autoHide() const
-{
-    return m_autoHide;
-}
-
-HideState DockSettings::hideState() const
-{
-    return m_hideState;
-}
-
-const QRect DockSettings::primaryRect() const
-{
-    return m_primaryRect;
-}
-
-const QSize DockSettings::windowSize() const
-{
-    return m_mainWindowSize;
+    Q_UNREACHABLE();
 }
 
 const QRect DockSettings::windowRect(const Position position, const bool hide) const
@@ -229,13 +189,13 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     switch (position)
     {
     case Top:
-        p = QPoint(offsetX, 0);                                     break;
+        p = QPoint(offsetX, -WINDOW_OVERFLOW);                                        break;
     case Left:
-        p = QPoint(0, offsetY);                                     break;
+        p = QPoint(-WINDOW_OVERFLOW, offsetY);                                        break;
     case Right:
-        p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
+        p = QPoint(primaryRect.width() - size.width() + WINDOW_OVERFLOW, offsetY);    break;
     case Bottom:
-        p = QPoint(offsetX, primaryRect.height() - size.height());  break;
+        p = QPoint(offsetX, primaryRect.height() - size.height() + WINDOW_OVERFLOW);  break;
     default:Q_UNREACHABLE();
     }
 
@@ -526,14 +486,14 @@ void DockSettings::calculateWindowConfig()
         {
         case Top:
         case Bottom:
-            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
+            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER + WINDOW_OVERFLOW);
             m_mainWindowSize.setWidth(m_primaryRect.width());
             break;
 
         case Left:
         case Right:
             m_mainWindowSize.setHeight(m_primaryRect.height());
-            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
+            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER + WINDOW_OVERFLOW);
             break;
 
         default:
@@ -558,8 +518,8 @@ void DockSettings::calculateWindowConfig()
             }
         }
 
-        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2;
-        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2;
+        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + WINDOW_OVERFLOW;
+        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + WINDOW_OVERFLOW;
         const int calcWidth = qMin(m_primaryRect.width() - FASHION_MODE_PADDING * 2, perfectWidth);
         const int calcHeight = qMin(m_primaryRect.height() - FASHION_MODE_PADDING * 2, perfectHeight);
         switch (m_position)

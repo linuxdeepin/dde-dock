@@ -41,6 +41,6 @@ MainWindow *DBusDockAdaptors::parent() const
 
 QRect DBusDockAdaptors::geometry() const
 {
-    return parent()->panelGeometry();
+    return parent()->geometry();
 }
 

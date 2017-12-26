@@ -46,6 +46,8 @@ MainPanel::MainPanel(QWidget *parent)
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
+    m_effectWidget->setBlurRectXRadius(0);
+    m_effectWidget->setBlurRectYRadius(0);
     m_effectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
     m_effectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
     m_effectWidget->setDisabled(true);
@@ -384,19 +386,14 @@ void MainPanel::updateBlurEffect() const
     qApp->processEvents();
 
     if (m_displayMode == Efficient || !m_wmHelper->hasComposite()) {
-        m_effectWidget->setBlurRectXRadius(0);
-        m_effectWidget->setBlurRectYRadius(0);
         m_effectWidget->move(pos());
         m_effectWidget->resize(size());
     } else {
-        const int expandSize = 10;
+        const int expandSize = 5;
         int width = this->width();
         int height = this->height();
         const int x = pos().x();
         const int y = pos().y();
-
-        m_effectWidget->setBlurRectXRadius(5);
-        m_effectWidget->setBlurRectYRadius(5);
 
         switch (m_position)
         {

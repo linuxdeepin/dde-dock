@@ -59,22 +59,23 @@ class DockSettings : public QObject
 public:
     explicit DockSettings(QWidget *parent = 0);
 
-    DisplayMode displayMode() const;
-    HideMode hideMode() const;
-    HideState hideState() const;
-    Position position() const;
-    int screenHeight() const;
-    int screenWidth() const;
-    int screenRawHeight() const { return m_screenRawHeight; }
-    int screenRawWidth() const { return m_screenRawWidth; }
-    int expandTimeout() const;
-    int narrowTimeout() const;
+    inline DisplayMode displayMode() const { return m_displayMode; }
+    inline HideMode hideMode() const { return m_hideMode; }
+    inline HideState hideState() const { return m_hideState; }
+    inline Position position() const { return m_position; }
+    inline int screenHeight() const { return m_displayInter->screenHeight(); }
+    inline int screenWidth() const { return m_displayInter->screenWidth(); }
+    inline int screenRawHeight() const { return m_screenRawHeight; }
+    inline int screenRawWidth() const { return m_screenRawWidth; }
+    inline int expandTimeout() const { return m_dockInter->showTimeout(); }
+    inline int narrowTimeout() const { return 0; }
+    inline bool autoHide() const { return m_autoHide; }
+    inline const QRect primaryRect() const { return m_primaryRect; }
+    inline const QRect primaryRawRect() const { return m_primaryRawRect; }
+    inline const QRect frontendWindowRect() const { return m_frontendRect; }
+    inline const QSize windowSize() const { return m_mainWindowSize; }
 
-    bool autoHide() const;
-    const QRect primaryRect() const;
-    const QRect primaryRawRect() const { return m_primaryRawRect; }
-    const QRect frontendWindowRect() const { return m_frontendRect; }
-    const QSize windowSize() const;
+    const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
 
     void showDockSettingsMenu();
