@@ -43,7 +43,6 @@ class MainWindow : public QWidget
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    QRect panelGeometry();
 
 public slots:
     void launch();
