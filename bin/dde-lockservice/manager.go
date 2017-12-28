@@ -21,11 +21,13 @@ package main
 
 import (
 	"fmt"
+	"runtime/debug"
+	"sync"
+	"time"
+
 	"github.com/msteinert/pam"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
-	"runtime/debug"
-	"sync"
 )
 
 const (
@@ -57,7 +59,7 @@ var _m *Manager
 
 func main() {
 	if !lib.UniqueOnSystem(dbusDest) {
-		fmt.Println("The lock service has been running")
+		fmt.Println("The lock service has been running, or you're no a priviledged user.")
 		return
 	}
 
@@ -68,6 +70,9 @@ func main() {
 		return
 	}
 	dbus.DealWithUnhandledMessage()
+	dbus.SetAutoDestroyHandler(time.Minute*2, func() bool {
+		return len(_m.authUserTable) == 0
+	})
 
 	err = dbus.Wait()
 	if err != nil {
@@ -220,6 +225,7 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
 	}
 
 	err = handler.Authenticate(pam.DisallowNullAuthtok)
+
 	m.authLocker.Lock()
 	id := fmt.Sprintf("%d%s", pid, username)
 	v, ok := m.authUserTable[id]
