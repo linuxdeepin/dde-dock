@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QPointer>
 
-#include <traywidget.h>
+#include <abstracttraywidget.h>
 
 class FashionTrayItem : public QWidget
 {
@@ -34,12 +34,12 @@ class FashionTrayItem : public QWidget
 public:
     explicit FashionTrayItem(QWidget *parent = 0);
 
-    TrayWidget *activeTray();
+    AbstractTrayWidget *activeTray() const;
 
     void setMouseEnable(const bool enable);
 
 public slots:
-    void setActiveTray(TrayWidget *tray);
+    void setActiveTray(AbstractTrayWidget *tray);
 
 private:
     void resizeEvent(QResizeEvent *e);
@@ -52,7 +52,7 @@ private:
 private:
     bool m_enableMouseEvent;
 
-    QPointer<TrayWidget> m_activeTray;
+    QPointer<AbstractTrayWidget> m_activeTray;
 
     QPixmap m_backgroundPixmap;
     QPoint m_pressPoint;

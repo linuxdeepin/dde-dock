@@ -25,29 +25,31 @@
 #include <QWidget>
 #include <QTimer>
 
-class TrayWidget : public QWidget
+#include <abstracttraywidget.h>
+
+class XWindowTrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
 
 public:
-    explicit TrayWidget(quint32 winId, QWidget *parent = 0);
-    ~TrayWidget();
+    explicit XWindowTrayWidget(quint32 winId, QWidget *parent = 0);
+    ~XWindowTrayWidget();
 
-    void updateIcon();
-    const QImage trayImage();
-    void sendClick(uint8_t mouseButton, int x, int y);
-    void setActive(const bool active);
+    void updateIcon() Q_DECL_OVERRIDE;
+    void setActive(const bool active) Q_DECL_OVERRIDE;
+    const QImage trayImage() Q_DECL_OVERRIDE;
+    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
 
-signals:
-    void iconChanged();
+    static QString toTrayWidgetId(quint32 winId) { return QString("window:%1").arg(winId); }
+    static bool isWinIdKey(const QString &itemKey) { return itemKey.startsWith("window:"); }
+    static quint32 toWinId(QString itemKey) { return itemKey.remove("window:").toUInt() ; }
 
 private:
-    QSize sizeHint() const;
-    void showEvent(QShowEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void configContainerPosition();
 
     void wrapWindow();

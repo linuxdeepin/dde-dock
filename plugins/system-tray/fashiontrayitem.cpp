@@ -44,7 +44,7 @@ FashionTrayItem::FashionTrayItem(QWidget *parent)
 
 }
 
-TrayWidget *FashionTrayItem::activeTray()
+AbstractTrayWidget *FashionTrayItem::activeTray() const
 {
     return m_activeTray;
 }
@@ -54,18 +54,18 @@ void FashionTrayItem::setMouseEnable(const bool enable)
     m_enableMouseEvent = enable;
 }
 
-void FashionTrayItem::setActiveTray(TrayWidget *tray)
+void FashionTrayItem::setActiveTray(AbstractTrayWidget *tray)
 {
     if (!m_activeTray.isNull())
     {
         m_activeTray->setActive(false);
-        disconnect(m_activeTray, &TrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
+        disconnect(m_activeTray, &AbstractTrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
     }
 
     if (tray)
     {
         tray->setActive(true);
-        connect(tray, &TrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
+        connect(tray, &AbstractTrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
     }
 
     m_activeTray = tray;

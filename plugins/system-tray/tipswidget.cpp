@@ -20,7 +20,7 @@
  */
 
 #include "tipswidget.h"
-#include "traywidget.h"
+#include "abstracttraywidget.h"
 
 TrayApplet::TrayApplet(QWidget *parent)
     : QWidget(parent),
@@ -44,7 +44,7 @@ void TrayApplet::clear()
     }
 }
 
-void TrayApplet::addWidgets(QList<TrayWidget *> &widgets)
+void TrayApplet::addWidgets(QList<AbstractTrayWidget *> &widgets)
 {
     for (auto w : widgets)
     {

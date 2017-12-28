@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QBoxLayout>
 
-class TrayWidget;
+class AbstractTrayWidget;
 class TrayApplet : public QWidget
 {
     Q_OBJECT
@@ -34,7 +34,7 @@ public:
     explicit TrayApplet(QWidget *parent = 0);
 
     void clear();
-    void addWidgets(QList<TrayWidget *> &widgets);
+    void addWidgets(QList<AbstractTrayWidget *> &widgets);
 
 private:
     QBoxLayout *m_mainLayout;

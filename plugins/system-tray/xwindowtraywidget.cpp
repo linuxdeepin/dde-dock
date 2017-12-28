@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "traywidget.h"
+#include "xwindowtraywidget.h"
 
 #include <QWindow>
 #include <QPainter>
@@ -63,8 +63,8 @@ void sni_cleanup_xcb_image(void *data)
     xcb_image_destroy(static_cast<xcb_image_t*>(data));
 }
 
-TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
-    : QWidget(parent),
+XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
+    : AbstractTrayWidget(parent),
       m_windowId(winId)
 {
     wrapWindow();
@@ -77,7 +77,7 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
     m_sendHoverEvent->setInterval(100);
     m_sendHoverEvent->setSingleShot(true);
 
-    connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::refershIconImage);
+    connect(m_updateTimer, &QTimer::timeout, this, &XWindowTrayWidget::refershIconImage);
 #ifdef DOCK_TRAY_USE_NATIVE_POPUP
     connect(m_sendHoverEvent, &QTimer::timeout, this, &TrayWidget::sendHoverEvent);
 #endif
@@ -87,28 +87,28 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
     m_updateTimer->start();
 }
 
-TrayWidget::~TrayWidget()
+XWindowTrayWidget::~XWindowTrayWidget()
 {
 }
 
-const QImage TrayWidget::trayImage()
+const QImage XWindowTrayWidget::trayImage()
 {
     return m_image;
 }
 
-QSize TrayWidget::sizeHint() const
+QSize XWindowTrayWidget::sizeHint() const
 {
     return QSize(26, 26);
 }
 
-void TrayWidget::showEvent(QShowEvent *e)
+void XWindowTrayWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
     m_updateTimer->start();
 }
 
-void TrayWidget::paintEvent(QPaintEvent *e)
+void XWindowTrayWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
     if (m_image.isNull())
@@ -127,7 +127,7 @@ void TrayWidget::paintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void TrayWidget::mousePressEvent(QMouseEvent *e)
+void XWindowTrayWidget::mousePressEvent(QMouseEvent *e)
 {
     e->accept();
     const QPoint point(e->pos() - rect().center());
@@ -137,39 +137,14 @@ void TrayWidget::mousePressEvent(QMouseEvent *e)
     QWidget::mousePressEvent(e);
 }
 
-void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
-{
-    const QPoint point(e->pos() - rect().center());
-    if (point.manhattanLength() > 24)
-        return;
-
-    e->accept();
-
-    QPoint globalPos = QCursor::pos();
-    uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
-
-    switch (e->button()) {
-    case Qt:: MiddleButton:
-        buttonIndex = XCB_BUTTON_INDEX_2;
-        break;
-    case Qt::RightButton:
-        buttonIndex = XCB_BUTTON_INDEX_3;
-        break;
-    default:
-        break;
-    }
-
-    sendClick(buttonIndex, globalPos.x(), globalPos.y());
-}
-
-void TrayWidget::mouseMoveEvent(QMouseEvent *e)
+void XWindowTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
     QWidget::mouseMoveEvent(e);
 
     m_sendHoverEvent->start();
 }
 
-void TrayWidget::configContainerPosition()
+void XWindowTrayWidget::configContainerPosition()
 {
     auto c = QX11Info::connection();
 
@@ -182,7 +157,7 @@ void TrayWidget::configContainerPosition()
     xcb_flush(c);
 }
 
-void TrayWidget::wrapWindow()
+void XWindowTrayWidget::wrapWindow()
 {
     auto c = QX11Info::connection();
 
@@ -281,7 +256,7 @@ void TrayWidget::wrapWindow()
     setX11PassMouseEvent(true);
 }
 
-void TrayWidget::sendHoverEvent()
+void XWindowTrayWidget::sendHoverEvent()
 {
     // fake enter event
     const QPoint p(rawXPosition(QCursor::pos()));
@@ -293,7 +268,7 @@ void TrayWidget::sendHoverEvent()
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
-void TrayWidget::updateIcon()
+void XWindowTrayWidget::updateIcon()
 {
     if (!isVisible() && !m_active)
         return;
@@ -316,7 +291,7 @@ void TrayWidget::updateIcon()
 //    hide();
 //}
 
-void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
+void XWindowTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     if (isBadWindow())
         return;
@@ -336,13 +311,13 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
-void TrayWidget::setActive(const bool active)
+void XWindowTrayWidget::setActive(const bool active)
 {
     m_active = active;
     m_updateTimer->start();
 }
 
-void TrayWidget::refershIconImage()
+void XWindowTrayWidget::refershIconImage()
 {
     const auto ratio = devicePixelRatioF();
     auto c = QX11Info::connection();
@@ -376,7 +351,7 @@ void TrayWidget::refershIconImage()
     emit iconChanged();
 }
 
-void TrayWidget::setX11PassMouseEvent(const bool pass)
+void XWindowTrayWidget::setX11PassMouseEvent(const bool pass)
 {
     if (pass)
     {
@@ -398,7 +373,7 @@ void TrayWidget::setX11PassMouseEvent(const bool pass)
     XFlush(QX11Info::display());
 }
 
-void TrayWidget::setWindowOnTop(const bool top)
+void XWindowTrayWidget::setWindowOnTop(const bool top)
 {
     auto c = QX11Info::connection();
     const uint32_t stackAboveData[] = {top ? XCB_STACK_MODE_ABOVE : XCB_STACK_MODE_BELOW};
@@ -406,7 +381,7 @@ void TrayWidget::setWindowOnTop(const bool top)
     xcb_flush(c);
 }
 
-bool TrayWidget::isBadWindow()
+bool XWindowTrayWidget::isBadWindow()
 {
     auto c = QX11Info::connection();
 

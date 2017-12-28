@@ -23,9 +23,11 @@
 #define SYSTEMTRAYPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "traywidget.h"
 #include "tipswidget.h"
 #include "dbus/dbustraymanager.h"
+
+#include "xwindowtraywidget.h"
+#include "indicatortraywidget.h"
 
 #include <QSettings>
 #include <QLabel>
@@ -40,34 +42,35 @@ class SystemTrayPlugin : public QObject, PluginsItemInterface
 public:
     explicit SystemTrayPlugin(QObject *parent = 0);
 
-    const QString pluginName() const;
-    void init(PluginProxyInterface *proxyInter);
-    void displayModeChanged(const Dock::DisplayMode mode);
+    const QString pluginName() const Q_DECL_OVERRIDE;
+    void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
+    void displayModeChanged(const Dock::DisplayMode mode) Q_DECL_OVERRIDE;
 
-    QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
-    QWidget *itemPopupApplet(const QString &itemKey);
+    QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
+    QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
+    QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
 
-    bool itemAllowContainer(const QString &itemKey);
-    bool itemIsInContainer(const QString &itemKey);
-    int itemSortKey(const QString &itemKey);
-    void setItemIsInContainer(const QString &itemKey, const bool container);
+    bool itemAllowContainer(const QString &itemKey) Q_DECL_OVERRIDE;
+    bool itemIsInContainer(const QString &itemKey) Q_DECL_OVERRIDE;
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setItemIsInContainer(const QString &itemKey, const bool container) Q_DECL_OVERRIDE;
 
 private:
+    void loadIndicator();
     void updateTipsContent();
     const QString getWindowClass(quint32 winId);
 
 private slots:
     void trayListChanged();
-    void trayAdded(const quint32 winId);
-    void trayRemoved(const quint32 winId);
-    void trayChanged(const quint32 winId);
+    void trayAdded(const QString itemKey);
+    void trayRemoved(const QString itemKey);
+    void trayChanged(quint32 winId);
     void switchToMode(const Dock::DisplayMode mode);
 
 private:
     DBusTrayManager *m_trayInter;
     FashionTrayItem *m_fashionItem;
-    QMap<quint32, TrayWidget *> m_trayList;
+    QMap<QString, AbstractTrayWidget *> m_trayList;
 
     TrayApplet *m_trayApplet;
     QLabel *m_tipsLabel;
