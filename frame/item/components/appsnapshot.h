@@ -32,6 +32,9 @@
 
 DWIDGET_USE_NAMESPACE
 
+#define SNAP_WIDTH       200
+#define SNAP_HEIGHT      130
+
 class AppSnapshot : public QWidget
 {
     Q_OBJECT

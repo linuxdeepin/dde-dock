@@ -33,9 +33,6 @@
 
 #include <DWindowManagerHelper>
 
-#define SNAP_WIDTH       200
-#define SNAP_HEIGHT      130
-
 DWIDGET_USE_NAMESPACE
 
 class PreviewContainer : public QWidget
