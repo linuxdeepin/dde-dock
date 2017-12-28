@@ -79,7 +79,8 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
 
     if (m_snapshots.isEmpty())
         emit requestCancelAndHidePreview();
-        adjustSize();
+
+    adjustSize();
 }
 
 void PreviewContainer::updateSnapshots()

@@ -42,9 +42,9 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
       m_wmHelper(DWindowManagerHelper::instance())
 {
     m_closeBtn->setFixedSize(24, 24);
-    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.png");
-    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.png");
-    m_closeBtn->setPressPic(":/icons/resources/close_round_press.png");
+    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.svg");
+    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.svg");
+    m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
     m_closeBtn->setVisible(false);
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
@@ -55,7 +55,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     setLayout(centralLayout);
     setAcceptDrops(true);
-    setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
+    resize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_closeBtn, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
