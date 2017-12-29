@@ -27,7 +27,10 @@ public:
     void initDBus(const QString &indicatorKey);
 
     template<typename Func>
-    void featData(const QString &key, const QJsonObject &data, Func const &lambda)
+    void featData(const QString &key,
+                  const QJsonObject &data,
+                  const char *propertyChangedSlot,
+                  Func const &callback)
     {
         Q_Q(IndicatorTrayWidget);
         auto dataConfig = data.value(key).toObject();
@@ -41,45 +44,46 @@ public:
 
         if (dataConfig.contains("dbus_method")) {
             QString methodName = dataConfig.value("dbus_method").toString();
-            qDebug() << methodName << dataConfig;
             QDBusReply<QByteArray> reply = interface.call(methodName.toStdString().c_str());
-            lambda(reply.value());
+            callback(reply.value());
         }
 
         if (dataConfig.contains("dbus_properties")) {
             auto propertyName = dataConfig.value("dbus_properties").toString().toStdString();
             propertyInterfaceNames.insert(key, dbusInterface);
-            lambda(interface.property(propertyName.c_str()));
+            propertyNames.insert(key, QString::fromStdString(propertyName));
+            callback(interface.property(propertyName.c_str()));
             QDBusConnection::sessionBus().connect(dbusService,
                                                   dbusPath,
                                                   "org.freedesktop.DBus.Properties",
                                                   "PropertiesChanged",
                                                   "sa{sv}as",
                                                   q,
-                                                  SLOT(iconPropertyChanged(QDBusMessage)));
+                                                  propertyChangedSlot);
         }
     }
 
     template<typename Func>
-    void propertyChanged(const QString &propertyName, const QDBusMessage &msg, Func const &lambda)
+    void propertyChanged(const QString &key, const QDBusMessage &msg, Func const &callback)
     {
         QList<QVariant> arguments = msg.arguments();
         if (3 != arguments.count()) {
+            qWarning() << "arguments count must be 3";
             return;
         }
         QString interfaceName = msg.arguments().at(0).toString();
-        if (interfaceName != propertyInterfaceNames.value(propertyName)) {
+        if (interfaceName != propertyInterfaceNames.value(key)) {
+            qWarning() << "interfaceName mismatch" << interfaceName << propertyInterfaceNames.value(key) << key;
             return;
         }
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-        foreach (const QString &prop, changedProps.keys()) {
-            if (propertyName == prop) {
-                lambda(changedProps.value(prop));
-            }
+        if (changedProps.contains(propertyNames.value(key))) {
+            callback(changedProps.value(propertyNames.value(key)));
         }
     }
 
     QLabel                  *label = Q_NULLPTR;
+    QMap<QString, QString>  propertyNames;
     QMap<QString, QString>  propertyInterfaceNames;
 
     IndicatorTrayWidget *q_ptr;
@@ -185,7 +189,7 @@ void IndicatorTrayWidget::iconPropertyChanged(const QDBusMessage &msg)
 void IndicatorTrayWidget::textPropertyChanged(const QDBusMessage &msg)
 {
     Q_D(IndicatorTrayWidget);
-    d->propertyChanged("icon", msg, [ = ](QVariant v) {
+    d->propertyChanged("text", msg, [ = ](QVariant v) {
         setText(v.toString());
     });
 }
@@ -213,12 +217,12 @@ void IndicatorTrayWidgetPrivate::initDBus(const QString &indicatorKey)
     auto data = config.value("data").toObject();
 
     if (data.contains("text")) {
-        featData("text", data, [ = ](QVariant v) {
+        featData("text", data, SLOT(textPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
             q->setText(v.toString());
         });
     }
     if (data.contains("icon")) {
-        featData("icon", data, [ = ](QVariant v) {
+        featData("icon", data, SLOT(iconPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
             q->setPixmapData(v.toByteArray());
         });
     }
