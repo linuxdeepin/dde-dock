@@ -410,7 +410,6 @@ void DockSettings::hideStateChanged()
 
 void DockSettings::dockItemCountChanged()
 {
-//    qDebug() << Q_FUNC_INFO;
     if (m_displayMode == Dock::Efficient)
         return;
 

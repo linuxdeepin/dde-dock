@@ -50,6 +50,22 @@ const QPoint rawXPosition(const QPoint &scaledPos)
     return g.topLeft() + (scaledPos - g.topLeft()) * qApp->devicePixelRatio();
 }
 
+const QPoint scaledPos(const QPoint &rawXPos)
+{
+    QRect g = qApp->primaryScreen()->geometry();
+    for (auto *screen : qApp->screens())
+    {
+        const QRect &sg = screen->geometry();
+        if (sg.contains(rawXPos))
+        {
+            g = sg;
+            break;
+        }
+    }
+
+    return g.topLeft() + (rawXPos - g.topLeft()) / qApp->devicePixelRatio();
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
 
@@ -704,9 +720,13 @@ void MainWindow::positionCheck()
     if (m_positionUpdateTimer->isActive())
         return;
 
-    if (pos() == m_settings->frontendWindowRect().topLeft())
+    const QPoint scaledFrontPos = scaledPos(m_settings->frontendWindowRect().topLeft());
+
+    if (QPoint(pos() - scaledFrontPos).manhattanLength() < 2)
         return;
 
     qWarning() << "Dock position may error!!!!!";
     qDebug() << pos() << m_settings->frontendWindowRect() << m_settings->windowRect(m_settings->position(), false);
+
+    internalMove();
 }
