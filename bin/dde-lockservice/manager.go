@@ -71,7 +71,10 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 	dbus.SetAutoDestroyHandler(time.Minute*2, func() bool {
-		return len(_m.authUserTable) == 0
+		_m.authLocker.Lock()
+		canQuit := len(_m.authUserTable) == 0
+		_m.authLocker.Unlock()
+		return canQuit
 	})
 
 	err = dbus.Wait()
