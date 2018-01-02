@@ -79,6 +79,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
+      m_leaveDelayTimer(new QTimer(this)),
       m_shadowMaskOptimizeTimer(new QTimer(this)),
 
       m_sizeChangeAni(new QVariantAnimation(this)),
@@ -188,7 +189,8 @@ void MainWindow::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    if (m_settings->hideState() != Show)
+    m_leaveDelayTimer->stop();
+    if (m_settings->hideState() != Show && m_panelShowAni->state() != QPropertyAnimation::Running)
         m_expandDelayTimer->start();
 }
 
@@ -197,7 +199,7 @@ void MainWindow::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_expandDelayTimer->stop();
-    updatePanelVisible();
+    m_leaveDelayTimer->start();
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -212,14 +214,11 @@ void MainWindow::setFixedSize(const QSize &size)
 {
     const QPropertyAnimation::State state = m_sizeChangeAni->state();
 
-//    qDebug() << state;
     if (state == QPropertyAnimation::Stopped && this->size() == size)
         return;
 
     if (state == QPropertyAnimation::Running)
         return m_sizeChangeAni->setEndValue(size);
-
-    qDebug() << Q_FUNC_INFO << size;
 
     m_sizeChangeAni->setStartValue(this->size());
     m_sizeChangeAni->setEndValue(size);
@@ -252,6 +251,9 @@ void MainWindow::initComponents()
     m_expandDelayTimer->setSingleShot(true);
     m_expandDelayTimer->setInterval(m_settings->expandTimeout());
 
+    m_leaveDelayTimer->setSingleShot(true);
+    m_leaveDelayTimer->setInterval(m_settings->narrowTimeout());
+
     m_shadowMaskOptimizeTimer->setSingleShot(true);
     m_shadowMaskOptimizeTimer->setInterval(100);
 
@@ -265,8 +267,6 @@ void MainWindow::initComponents()
 
 void MainWindow::compositeChanged()
 {
-//    qDebug() << Q_FUNC_INFO;
-
     const int duration = m_wmHelper->hasComposite() ? 300 : 0;
 
     m_sizeChangeAni->setDuration(duration);
@@ -300,7 +300,8 @@ void MainWindow::internalMove(const QPoint &p)
     int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
         m_settings->hideState() == HideState::Hide &&
-        m_panelHideAni->state() == QVariantAnimation::Stopped)
+        m_panelHideAni->state() == QVariantAnimation::Stopped &&
+        m_panelShowAni->state() == QVariantAnimation::Stopped)
     {
         switch (m_settings->position())
         {
@@ -333,6 +334,7 @@ void MainWindow::initConnections()
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
+    connect(m_leaveDelayTimer, &QTimer::timeout, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
@@ -411,7 +413,6 @@ void MainWindow::positionChanged(const Position prevPos)
 
 void MainWindow::updatePosition()
 {
-//    qDebug() << Q_FUNC_INFO;
     // all update operation need pass by timer
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
@@ -471,7 +472,6 @@ void MainWindow::clearStrutPartial()
 
 void MainWindow::setStrutPartial()
 {
-//    qDebug() << Q_FUNC_INFO;
     // first, clear old strut partial
     clearStrutPartial();
 
@@ -563,6 +563,11 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
+    qApp->processEvents();
+
+    const auto showAniState = m_panelShowAni->state();
+    m_panelHideAni->stop();
+
     QPoint finishPos(0, 0);
     switch (m_settings->position())
     {
@@ -571,34 +576,24 @@ void MainWindow::expand()
     default:;
     }
 
-    const int epsilon = std::round(devicePixelRatioF()) - 1;
-    const QSize s = size();
-    const QSize ps = m_mainPanel->size();
+    resetPanelEnvironment(true, false);
 
-    if (m_mainPanel->pos() == finishPos && m_panelHideAni->state() == QPropertyAnimation::Stopped &&
-        std::abs(ps.width() - s.width()) <= epsilon && std::abs(ps.height() - s.height()) <= epsilon)
-        return;
-    m_panelHideAni->stop();
-
-    resetPanelEnvironment(true);
-
-    if (m_panelShowAni->state() != QPropertyAnimation::Running)
+    if (showAniState != QPropertyAnimation::Running && m_mainPanel->pos() != m_panelShowAni->currentValue())
     {
         QPoint startPos(0, 0);
         const QSize &size = m_settings->windowSize();
         switch (m_settings->position())
         {
-        case Top:       startPos.setY(-size.height());     break;
+        case Top:       startPos.setY(-size.height() + WINDOW_OVERFLOW);     break;
         case Bottom:    startPos.setY(size.height());      break;
-        case Left:      startPos.setX(-size.width());      break;
+        case Left:      startPos.setX(-size.width() + WINDOW_OVERFLOW);      break;
         case Right:     startPos.setX(size.width());       break;
         }
 
         m_panelShowAni->setStartValue(startPos);
+        m_panelShowAni->setEndValue(finishPos);
+        m_panelShowAni->start();
     }
-
-    m_panelShowAni->setEndValue(finishPos);
-    m_panelShowAni->start();
 }
 
 void MainWindow::narrow(const Position prevPos)
@@ -623,7 +618,7 @@ void MainWindow::narrow(const Position prevPos)
     m_shadowMaskOptimizeTimer->start();
 }
 
-void MainWindow::resetPanelEnvironment(const bool visible)
+void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosition)
 {
     if (!m_launched)
         return;
@@ -641,13 +636,14 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     m_posChangeAni->setEndValue(r.topLeft());
     QWidget::move(r.topLeft());
 
+    if (!resetPosition)
+        return;
     QPoint finishPos(0, 0);
-
     switch (position)
     {
-    case Top:       finishPos.setY((visible ? 0 : -r.height()) + WINDOW_OVERFLOW);     break;
+    case Top:       finishPos.setY((visible ? WINDOW_OVERFLOW : -r.height()));     break;
     case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
-    case Left:      finishPos.setX((visible ? 0 :-r.width()) + WINDOW_OVERFLOW);       break;
+    case Left:      finishPos.setX((visible ? WINDOW_OVERFLOW : -r.width()));       break;
     case Right:     finishPos.setX(visible ? 0 : r.width());       break;
     }
 
@@ -691,8 +687,7 @@ void MainWindow::adjustShadowMask()
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
 
-    if (m_mainPanel->pos().manhattanLength() > WINDOW_OVERFLOW ||
-        m_panelHideAni->state() == QPropertyAnimation::Running ||
+    if (m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running ||
         !m_wmHelper->hasComposite())
     {

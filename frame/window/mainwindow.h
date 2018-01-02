@@ -81,7 +81,7 @@ private slots:
 
     void expand();
     void narrow(const Position prevPos);
-    void resetPanelEnvironment(const bool visible);
+    void resetPanelEnvironment(const bool visible, const bool resetPosition = true);
     void updatePanelVisible();
 
     void adjustShadowMask();
@@ -97,6 +97,7 @@ private:
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
+    QTimer *m_leaveDelayTimer;
     QTimer *m_shadowMaskOptimizeTimer;
     QVariantAnimation *m_sizeChangeAni;
     QVariantAnimation *m_posChangeAni;
