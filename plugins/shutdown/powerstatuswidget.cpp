@@ -92,14 +92,9 @@ QPixmap PowerStatusWidget::getBatteryIcon()
         percentageStr = "000";
     }
 
-    QString iconStr;
-
-    if (plugged) {
-        iconStr = "battery-charged-symbolic";
-    } else {
-        iconStr = QString("battery-%1-symbolic").arg(percentageStr);
-    }
-
+    const QString iconStr = QString("battery-%1-%2")
+                                .arg(percentageStr)
+                                .arg(plugged ? "plugged-symbolic" : "symbolic");
     const auto ratio = devicePixelRatioF();
     QPixmap pix = QIcon::fromTheme(iconStr).pixmap(QSize(16, 16) * ratio);
     pix.setDevicePixelRatio(ratio);
