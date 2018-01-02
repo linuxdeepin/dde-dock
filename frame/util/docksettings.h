@@ -68,7 +68,7 @@ public:
     inline int screenRawHeight() const { return m_screenRawHeight; }
     inline int screenRawWidth() const { return m_screenRawWidth; }
     inline int expandTimeout() const { return m_dockInter->showTimeout(); }
-    inline int narrowTimeout() const { return 0; }
+    inline int narrowTimeout() const { return 100; }
     inline bool autoHide() const { return m_autoHide; }
     inline const QRect primaryRect() const { return m_primaryRect; }
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
