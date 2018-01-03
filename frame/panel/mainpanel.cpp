@@ -39,7 +39,6 @@ MainPanel::MainPanel(QWidget *parent)
       m_itemAdjustTimer(new QTimer(this)),
       m_itemController(DockItemController::instance(this)),
 
-      m_updateEffectTimer(new QTimer(this)),
       m_effectWidget(new DBlurEffectWidget(this)),
       m_wmHelper(DWindowManagerHelper::instance())
 {
@@ -51,6 +50,7 @@ MainPanel::MainPanel(QWidget *parent)
     m_effectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
     m_effectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
     m_effectWidget->setDisabled(true);
+    m_effectWidget->move(0, 0);
 
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
@@ -105,14 +105,9 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
-    connect(m_updateEffectTimer, &QTimer::timeout, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, m_updateEffectTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
-
-    m_updateEffectTimer->setSingleShot(true);
-    m_updateEffectTimer->setInterval(1000 / 25);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -141,7 +136,6 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     }
 
     m_itemAdjustTimer->start();
-    m_updateEffectTimer->start();
 }
 
 ///
@@ -167,8 +161,6 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 
     // reload qss
     setStyleSheet(styleSheet());
-
-    m_updateEffectTimer->start();
 }
 
 ///
@@ -192,8 +184,6 @@ int MainPanel::position() const
 void MainPanel::moveEvent(QMoveEvent* e)
 {
     QFrame::moveEvent(e);
-
-    m_updateEffectTimer->start();
 
     emit geometryChanged();
 }
@@ -235,7 +225,7 @@ void MainPanel::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     m_itemAdjustTimer->start();
-    m_updateEffectTimer->start();
+    m_effectWidget->resize(e->size());
 
     emit geometryChanged();
 }
@@ -377,54 +367,6 @@ DockItem *MainPanel::itemAt(const QPoint &point)
     }
 
     return nullptr;
-}
-
-void MainPanel::updateBlurEffect() const
-{
-    Q_ASSERT(sender() == m_updateEffectTimer);
-
-    qApp->processEvents();
-
-    if (m_displayMode == Efficient || !m_wmHelper->hasComposite()) {
-        m_effectWidget->move(pos());
-        m_effectWidget->resize(size());
-    } else {
-        const int expandSize = 5;
-        int width = this->width();
-        int height = this->height();
-        const int x = pos().x();
-        const int y = pos().y();
-
-        switch (m_position)
-        {
-        case Top: {
-            height += expandSize;
-            m_effectWidget->move(x, y - expandSize);
-            m_effectWidget->resize(width, height);
-            break;
-        }
-        case Bottom:
-            height += expandSize;
-            m_effectWidget->move(x, y);
-            m_effectWidget->resize(width, height);
-            break;
-        case Left: {
-            width += expandSize;
-            m_effectWidget->move(x - expandSize, y);
-            m_effectWidget->resize(width, height);
-            break;
-        }
-        case Right: {
-            width += expandSize;
-            m_effectWidget->move(x, y);
-            m_effectWidget->resize(width, height);
-            break;
-        }
-
-        default:
-            Q_ASSERT(false);
-        }
-    }
 }
 
 ///

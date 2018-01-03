@@ -393,8 +393,8 @@ void MainWindow::positionChanged(const Position prevPos)
     narrow(prevPos);
 
     // reset position & layout and slide out
-    QTimer::singleShot(200, this, [&] {
-        resetPanelEnvironment(false);
+    QTimer::singleShot(100, this, [&] {
+        resetPanelEnvironment(false, true);
         updateGeometry();
         expand();
     });
@@ -613,9 +613,6 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->setStartValue(m_mainPanel->pos());
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
-
-    // clear shadow
-    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosition)
@@ -687,7 +684,8 @@ void MainWindow::adjustShadowMask()
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
 
-    if (m_panelHideAni->state() == QPropertyAnimation::Running ||
+    if (m_settings->displayMode() == Efficient ||
+        m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running ||
         !m_wmHelper->hasComposite())
     {
