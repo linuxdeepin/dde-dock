@@ -71,8 +71,6 @@ private:
     void manageItem(DockItem *item);
     DockItem *itemAt(const QPoint &point);
 
-    void updateBlurEffect() const;
-
 private slots:
     void adjustItemSize();
     void itemInserted(const int index, DockItem *item);
@@ -89,7 +87,6 @@ private:
     QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
 
-    QTimer *m_updateEffectTimer;
     DBlurEffectWidget *m_effectWidget;
     DWindowManagerHelper *m_wmHelper;
 
