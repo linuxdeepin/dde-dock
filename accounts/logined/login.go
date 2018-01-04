@@ -22,6 +22,7 @@ package logined
 import (
 	"dbus/org/freedesktop/login1"
 	"encoding/json"
+	"fmt"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"sync"
@@ -129,7 +130,7 @@ func (m *Manager) addSession(sessionPath dbus.ObjectPath) bool {
 		return true
 	}
 
-	var added bool = false
+	var added = false
 	infos, added = infos.Add(info)
 	m.userSessions[info.Uid] = infos
 	return added
@@ -139,14 +140,18 @@ func (m *Manager) deleteSession(sessionPath dbus.ObjectPath) bool {
 	m.logger.Debug("Delete user session for:", sessionPath)
 	m.locker.Lock()
 	defer m.locker.Unlock()
-	var deleted bool = false
+	var deleted = false
 	for uid, infos := range m.userSessions {
 		tmp, ok := infos.Delete(sessionPath)
 		if !ok {
 			continue
 		}
 		deleted = true
-		m.userSessions[uid] = tmp
+		if len(tmp) == 0 {
+			delete(m.userSessions, uid)
+		} else {
+			m.userSessions[uid] = tmp
+		}
 		break
 	}
 	return deleted
@@ -160,17 +165,32 @@ func (m *Manager) setPropUserList() {
 		return
 	}
 
-	data, err := json.Marshal(m.userSessions)
-	if err != nil {
-		m.logger.Error("Failed to marshal user sessions:", err)
-		return
-	}
-
+	data := m.marshalUserSessions()
 	if m.UserList == string(data) {
 		return
 	}
 	m.UserList = string(data)
 	dbus.NotifyChange(m, "UserList")
+}
+
+func (m *Manager) marshalUserSessions() string {
+	if len(m.userSessions) == 0 {
+		return ""
+	}
+
+	var ret = "{"
+	for k, v := range m.userSessions {
+		data, err := json.Marshal(v)
+		if err != nil {
+			m.logger.Warning("Failed to marshal:", v, err)
+			continue
+		}
+		ret += fmt.Sprintf("\"%v\":%s,", k, string(data))
+	}
+
+	v := []byte(ret)
+	v[len(v)-1] = '}'
+	return string(v)
 }
 
 // GetDBusInfo dbus session interface
