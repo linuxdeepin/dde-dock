@@ -44,39 +44,18 @@ MainPanel::MainPanel(QWidget *parent)
 
     setBlurRectXRadius(0);
     setBlurRectYRadius(0);
-    setMaskColor(QColor(0, 0, 0, 255 * 0.2));
+    setMaskColor(QColor(0, 0, 0, 255 * 0.4));
     setBlendMode(BehindWindowBlend);
 
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
-//                  "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
 //                  "background-color:rgba(10, 10, 10, .6);"
                   "}"
-                  "QWidget #MainPanel[displayMode='1'] {"
-                  "border:none;"
-                  "}"
-                  // Top
-                  "QWidget #MainPanel[displayMode='0'][position='0'] {"
-//                  "border-bottom-left-radius:5px;"
-//                  "border-bottom-right-radius:5px;"
-                  "}"
-                  // Right
-                  "QWidget #MainPanel[displayMode='0'][position='1'] {"
-//                  "border-top-left-radius:5px;"
-//                  "border-bottom-left-radius:5px;"
-                  "}"
-                  // Bottom
-                  "QWidget #MainPanel[displayMode='0'][position='2'] {"
-//                  "border-top-left-radius:6px;"
-//                  "border-top-right-radius:6px;"
-                  "}"
-                  // Left
-                  "QWidget #MainPanel[displayMode='0'][position='3'] {"
-//                  "border-top-right-radius:5px;"
-//                  "border-bottom-right-radius:5px;"
-                  "}"
+//                  "QWidget #MainPanel[displayMode='1'] {"
+//                  "border:none;"
+//                  "}"
                   "QWidget #MainPanel[position='0'] {"
                   "padding:0 " xstr(PANEL_PADDING) "px;"
                   "border-top:none;"

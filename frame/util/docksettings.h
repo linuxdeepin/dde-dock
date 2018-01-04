@@ -84,6 +84,7 @@ signals:
     void dataChanged() const;
     void positionChanged(const Position prevPosition) const;
     void autoHideChanged(const bool autoHide) const;
+    void displayModeChanegd() const;
     void windowVisibleChanged() const;
     void windowHideModeChanged() const;
     void windowGeometryChanged() const;
@@ -96,7 +97,7 @@ private slots:
     void menuActionClicked(QAction *action);
     void onPositionChanged();
     void iconSizeChanged();
-    void displayModeChanged();
+    void onDisplayModeChanged();
     void hideModeChanged();
     void hideStateChanged();
     void dockItemCountChanged();

@@ -130,7 +130,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
-    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
+    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::onDisplayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
@@ -313,15 +313,17 @@ void DockSettings::onPositionChanged()
     if (prevPos == nextPos)
         return;
 
-    m_position = nextPos;
-    DockItem::setDockPosition(m_position);
-    qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
-
-    calculateWindowConfig();
-
     emit positionChanged(prevPos);
 
-    m_itemController->refershItemsIcon();
+    QTimer::singleShot(200, this, [=] {
+        m_position = nextPos;
+        DockItem::setDockPosition(m_position);
+        qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
+
+        calculateWindowConfig();
+
+        m_itemController->refershItemsIcon();
+    });
 }
 
 void DockSettings::iconSizeChanged()
@@ -335,7 +337,7 @@ void DockSettings::iconSizeChanged()
     emit dataChanged();
 }
 
-void DockSettings::displayModeChanged()
+void DockSettings::onDisplayModeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
@@ -345,6 +347,7 @@ void DockSettings::displayModeChanged()
     calculateWindowConfig();
 
     emit dataChanged();
+    emit displayModeChanegd();
 }
 
 void DockSettings::hideModeChanged()

@@ -333,6 +333,7 @@ void MainWindow::initConnections()
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
     connect(m_panelHideAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_panelShowAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_settings, &DockSettings::displayModeChanegd, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
@@ -386,7 +387,7 @@ void MainWindow::positionChanged(const Position prevPos)
     narrow(prevPos);
 
     // reset position & layout and slide out
-    QTimer::singleShot(100, this, [&] {
+    QTimer::singleShot(200, this, [&] {
         resetPanelEnvironment(false, true);
         updateGeometry();
         expand();
@@ -680,11 +681,12 @@ void MainWindow::adjustShadowMask()
         return;
 
     const bool composite = m_wmHelper->hasComposite();
-    const bool animationRunning = m_panelShowAni->state() == QPropertyAnimation::Running ||
-                                  m_panelHideAni->state() == QPropertyAnimation::Running;
+    const bool isFasion = m_settings->displayMode() == Fashion;
+//    const bool animationRunning = m_panelShowAni->state() == QPropertyAnimation::Running ||
+//                                  m_panelHideAni->state() == QPropertyAnimation::Running;
 
-    m_platformWindowHandle.setWindowRadius(composite ? 5 : 0);
-    m_platformWindowHandle.setShadowRadius(!animationRunning && composite ? 60 : 0);
+    m_platformWindowHandle.setWindowRadius(composite && isFasion ? 5 : 0);
+//    m_platformWindowHandle.setShadowRadius(!animationRunning && composite ? 60 : 0);
 }
 
 void MainWindow::positionCheck()
