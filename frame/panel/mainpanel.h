@@ -40,7 +40,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class MainPanel : public QFrame
+class MainPanel : public DBlurEffectWidget
 {
     Q_OBJECT
     Q_PROPERTY(int displayMode READ displayMode DESIGNABLE true)
@@ -61,7 +61,6 @@ signals:
 
 private:
     void moveEvent(QMoveEvent *e);
-    void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
@@ -86,9 +85,6 @@ private:
 
     QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
-
-    DBlurEffectWidget *m_effectWidget;
-    DWindowManagerHelper *m_wmHelper;
 
     static DockItem *DragingItem;
     static PlaceholderItem *RequestDockItem;

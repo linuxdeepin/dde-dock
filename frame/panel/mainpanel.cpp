@@ -31,26 +31,21 @@ PlaceholderItem *MainPanel::RequestDockItem = nullptr;
 const char *RequestDockKey = "RequestDock";
 
 MainPanel::MainPanel(QWidget *parent)
-    : QFrame(parent),
+    : DBlurEffectWidget(parent),
       m_position(Dock::Top),
       m_displayMode(Dock::Fashion),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
 
       m_itemAdjustTimer(new QTimer(this)),
-      m_itemController(DockItemController::instance(this)),
-
-      m_effectWidget(new DBlurEffectWidget(this)),
-      m_wmHelper(DWindowManagerHelper::instance())
+      m_itemController(DockItemController::instance(this))
 {
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_effectWidget->setBlurRectXRadius(0);
-    m_effectWidget->setBlurRectYRadius(0);
-    m_effectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
-    m_effectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
-    m_effectWidget->setDisabled(true);
-    m_effectWidget->move(0, 0);
+    setBlurRectXRadius(0);
+    setBlurRectYRadius(0);
+    setMaskColor(QColor(0, 0, 0, 255 * 0.2));
+    setBlendMode(BehindWindowBlend);
 
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
@@ -183,49 +178,17 @@ int MainPanel::position() const
 
 void MainPanel::moveEvent(QMoveEvent* e)
 {
-    QFrame::moveEvent(e);
+    DBlurEffectWidget::moveEvent(e);
 
     emit geometryChanged();
 }
 
-void MainPanel::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
-
-//    QPainter p(this);
-//    p.setRenderHint(QPainter::Antialiasing);
-
-//    if (m_displayMode == Dock::Fashion && m_wmHelper->hasComposite()) {
-//        QPen pen;
-//        pen.setWidth(1);
-//        pen.setColor(QColor(162, 162, 162, 255 * 0.2));
-
-//        const QRect r = rect();
-//        // border radius
-//        const int br = 8;
-
-//        // draw border
-//        QRect borderRect = r;
-//        switch (m_position)
-//        {
-//        case Top:       borderRect.setTop(-br);                  break;
-//        case Bottom:    borderRect.setBottom(r.bottom() + br);   break;
-//        case Left:      borderRect.setLeft(-br);                 break;
-//        case Right:     borderRect.setRight(r.right() + br);     break;
-//        }
-
-//        p.setPen(pen);
-//        p.setBrush(Qt::transparent);
-//        p.drawRoundedRect(borderRect, br, br);
-//    }
-}
-
 void MainPanel::resizeEvent(QResizeEvent *e)
 {
-    QWidget::resizeEvent(e);
+    DBlurEffectWidget::resizeEvent(e);
 
     m_itemAdjustTimer->start();
-    m_effectWidget->resize(e->size());
+//    m_effectWidget->resize(e->size());
 
     emit geometryChanged();
 }
