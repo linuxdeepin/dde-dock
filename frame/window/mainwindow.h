@@ -50,7 +50,6 @@ public slots:
 private:
     using QWidget::show;
     bool event(QEvent *e);
-    void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void enterEvent(QEvent *e);

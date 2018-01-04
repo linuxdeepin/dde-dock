@@ -159,13 +159,6 @@ bool MainWindow::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void MainWindow::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-
-    m_shadowMaskOptimizeTimer->start();
-}
-
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
@@ -593,6 +586,8 @@ void MainWindow::expand()
         m_panelShowAni->setStartValue(startPos);
         m_panelShowAni->setEndValue(finishPos);
         m_panelShowAni->start();
+        m_shadowMaskOptimizeTimer->start();
+        m_platformWindowHandle.setShadowRadius(0);
     }
 }
 
@@ -613,6 +608,7 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->setStartValue(m_mainPanel->pos());
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
+    m_platformWindowHandle.setShadowRadius(0);
 }
 
 void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosition)
@@ -680,21 +676,15 @@ void MainWindow::adjustShadowMask()
     if (!m_launched)
         return;
 
-    qApp->processEvents();
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
 
-    if (m_settings->displayMode() == Efficient ||
-        m_panelHideAni->state() == QPropertyAnimation::Running ||
-        m_panelShowAni->state() == QPauseAnimation::Running ||
-        !m_wmHelper->hasComposite())
-    {
-        m_platformWindowHandle.setShadowRadius(0);
-        m_platformWindowHandle.setWindowRadius(0);
-    } else {
-        m_platformWindowHandle.setShadowRadius(60);
-        m_platformWindowHandle.setWindowRadius(5);
-    }
+    const bool composite = m_wmHelper->hasComposite();
+    const bool animationRunning = m_panelShowAni->state() == QPropertyAnimation::Running ||
+                                  m_panelHideAni->state() == QPropertyAnimation::Running;
+
+    m_platformWindowHandle.setWindowRadius(composite ? 5 : 0);
+    m_platformWindowHandle.setShadowRadius(!animationRunning && composite ? 60 : 0);
 }
 
 void MainWindow::positionCheck()
