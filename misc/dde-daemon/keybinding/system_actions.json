@@ -57,7 +57,7 @@
             "Key": "disable-touchpad"
         },
         {
-            "Action": "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM",
+            "Action": "dbus-send --type=method_call --dest=com.deepin.WMSwitcher /com/deepin/WMSwitcher com.deepin.WMSwitcher.RequestSwitchWM",
             "Key": "wm-switcher"
         },
         {
