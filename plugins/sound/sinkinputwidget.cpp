@@ -24,6 +24,7 @@
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QApplication>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -83,7 +84,7 @@ void SinkInputWidget::setMuteIcon()
 {
     if (m_inputInter->mute()) {
         const auto ratio = devicePixelRatioF();
-        QPixmap muteIcon(QString(":/icons/image/audio-volume-muted-symbolic.svg"));
+        QPixmap muteIcon = DHiDPIHelper::loadNxPixmap(":/icons/image/audio-volume-muted-symbolic.svg");
         QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
 
         QPixmap temp(appIconSource.size());
