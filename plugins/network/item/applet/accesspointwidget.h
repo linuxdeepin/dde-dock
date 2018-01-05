@@ -31,7 +31,6 @@
 #include <QDBusObjectPath>
 
 #include <dimagebutton.h>
-#include <dpicturesequenceview.h>
 
 class AccessPointWidget : public QFrame
 {
@@ -39,7 +38,10 @@ class AccessPointWidget : public QFrame
     Q_PROPERTY(bool active READ active DESIGNABLE true)
 
 public:
-    explicit AccessPointWidget(const AccessPoint &ap);
+    explicit AccessPointWidget();
+
+    const AccessPoint ap() const { return m_ap; }
+    void updateAP(const AccessPoint &ap);
 
     bool active() const;
     void setActiveState(const NetworkDevice::NetworkState state);
@@ -47,6 +49,7 @@ public:
 signals:
     void requestActiveAP(const QDBusObjectPath &apPath, const QString &ssid) const;
     void requestDeactiveAP(const AccessPoint &ap) const;
+    void clicked() const;
 
 private:
     void enterEvent(QEvent *e);
@@ -62,7 +65,6 @@ private:
 
     AccessPoint m_ap;
     QPushButton *m_ssidBtn;
-    Dtk::Widget::DPictureSequenceView *m_indicator;
     Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityIcon;
     QLabel *m_strengthIcon;

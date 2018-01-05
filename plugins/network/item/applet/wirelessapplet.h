@@ -32,9 +32,12 @@
 #include <QList>
 #include <QTimer>
 #include <QCheckBox>
-
+#include <dpicturesequenceview.h>
 #include <dinputdialog.h>
 
+DWIDGET_USE_NAMESPACE
+
+class AccessPointWidget;
 class WirelessList : public QScrollArea
 {
     Q_OBJECT
@@ -71,16 +74,22 @@ private slots:
     void activateAP(const QDBusObjectPath &apPath, const QString &ssid);
     void deactiveAP();
     void needSecrets(const QString &info);
+    void updateIndicatorPos();
+
 
 private:
     NetworkDevice m_device;
 
     AccessPoint m_activeAP;
     QList<AccessPoint> m_apList;
+    QList<AccessPointWidget*> m_apwList;
 
     QTimer *m_updateAPTimer;
     Dtk::Widget::DInputDialog *m_pwdDialog;
     QCheckBox *m_autoConnBox;
+    Dtk::Widget::DPictureSequenceView *m_indicator;
+    AccessPointWidget *m_currentClickAPW;
+    AccessPoint m_currentClickAP;
 
     QString m_lastConnPath;
     QString m_lastConnSecurity;
@@ -91,6 +100,7 @@ private:
     DeviceControlWidget *m_controlPanel;
     DBusNetwork *m_networkInter;
     bool m_deviceEnabled;
+
 };
 
 #endif // WIRELESSAPPLET_H
