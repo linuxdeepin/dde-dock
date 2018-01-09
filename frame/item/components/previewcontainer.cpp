@@ -165,6 +165,10 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     m_windowListLayout->addWidget(snap);
 
     m_snapshots.insert(wid, snap);
+
+    // refresh if visible
+    if (isVisible())
+        snap->fetchSnapshot();
 }
 
 void PreviewContainer::enterEvent(QEvent *e)
