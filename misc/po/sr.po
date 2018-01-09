@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-02 07:15+0000\n"
+"PO-Revision-Date: 2018-01-09 19:44+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgstr "Дужина корисничког имена прелази дозво
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Скалирање екрана"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
@@ -1085,7 +1085,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
-msgstr ""
+msgstr "Тип Посредника"
 
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Server IP"
@@ -1227,7 +1227,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:467
 msgid "Prefix"
-msgstr ""
+msgstr "Префикс"
 
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150
@@ -1263,7 +1263,7 @@ msgstr "Ручно"
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_wireless_security.go:81
 msgid "Shared"
-msgstr ""
+msgstr "Дељено"
 
 #: ../../network/nm_setting_ip6_config.go:37
 msgid "Ignore"

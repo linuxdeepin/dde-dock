@@ -5,13 +5,13 @@
 # Translators:
 # Jonas Motiejūnas <exjonas@gmail.com>, 2016
 # Lukas Zemeckis <nekaip3@gmail.com>, 2016
-# Moo, 2016-2017
+# Moo, 2016-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-04 18:21+0000\n"
+"PO-Revision-Date: 2018-01-05 23:51+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -1265,7 +1265,7 @@ msgstr "Rankinis"
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_wireless_security.go:81
 msgid "Shared"
-msgstr ""
+msgstr "Bendrinamas"
 
 #: ../../network/nm_setting_ip6_config.go:37
 msgid "Ignore"
@@ -1914,7 +1914,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:230
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Prieigos taško bendrinimas įjungtas"
 
 #: ../../network/state_handler.go:232
 msgid "%q connected"
@@ -1922,7 +1922,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:285
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Prieigos taško bendrinimas išjungtas"
 
 #: ../../network/state_handler.go:287 ../../network/state_handler.go:300
 msgid "%q disconnected"
@@ -1930,7 +1930,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:293
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Nepavyko bendrinti prieigos taško, patikrinkite dnsmasq nustatymus"
 
 #: ../../network/state_handler.go:295
 msgid "Unable to connect %q, please keep closer to the wireless router"

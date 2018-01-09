@@ -6,7 +6,7 @@
 # Dickprince, 2017
 # Gabriel Vicente <gabrielvicent98@gmail.com>, 2017
 # Luís Lima <geral@liqensoft.com>, 2016
-# Luís Lima <geral@liqensoft.com>, 2017
+# Luís Lima <geral@liqensoft.com>, 2017-2018
 # Manuela Silva <manuela.silva@sky.com>, 2017
 # Ricardo Simões <xmcorporation@gmail.com>, 2016-2017
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-12-01 12:06+0000\n"
+"PO-Revision-Date: 2018-01-05 17:19+0000\n"
 "Last-Translator: Luís Lima <geral@liqensoft.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -186,7 +186,7 @@ msgstr "Abrir Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Gravador de Ecrã Deepin"
+msgstr "Deepin Screen Recorder"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -238,7 +238,7 @@ msgstr "Desligar ecrã"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr "Monitor de Sistema Deepin"
+msgstr "Deepin System Monitor"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
