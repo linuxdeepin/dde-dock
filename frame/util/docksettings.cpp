@@ -521,8 +521,8 @@ void DockSettings::calculateWindowConfig()
             }
         }
 
-        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + WINDOW_OVERFLOW;
-        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + WINDOW_OVERFLOW;
+        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2;
+        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2;
         const int calcWidth = qMin(m_primaryRect.width() - FASHION_MODE_PADDING * 2, perfectWidth);
         const int calcHeight = qMin(m_primaryRect.height() - FASHION_MODE_PADDING * 2, perfectHeight);
         switch (m_position)

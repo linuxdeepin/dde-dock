@@ -27,6 +27,7 @@ StretchItem::StretchItem(QWidget *parent)
     : DockItem(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setMinimumSize(0, 0);
 }
 
 void StretchItem::mousePressEvent(QMouseEvent *e)

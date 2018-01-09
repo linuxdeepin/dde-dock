@@ -417,11 +417,11 @@ void MainPanel::adjustItemSize()
     {
     case Dock::Top:
     case Dock::Bottom:
-        containsCompletely = totalWidth <= w;     break;
+        containsCompletely = totalWidth <= w;   break;
 
     case Dock::Left:
     case Dock::Right:
-        containsCompletely = totalHeight <= h;   break;
+        containsCompletely = totalHeight <= h;  break;
 
     default:
         Q_ASSERT(false);
@@ -436,13 +436,11 @@ void MainPanel::adjustItemSize()
     int base;
     if (m_position == Dock::Top || m_position == Dock::Bottom)
     {
-//        qDebug() << "width: " << totalWidth << width();
         overflow = totalWidth;
         base = w;
     }
     else
     {
-//        qDebug() << "height: " << totalHeight << height();
         overflow = totalHeight;
         base = h;
     }
@@ -482,8 +480,6 @@ void MainPanel::adjustItemSize()
 
     // ensure all extra space assigned
     Q_ASSERT(extraDecrease == 0);
-
-    update();
 }
 
 ///
