@@ -36,11 +36,11 @@ func quoteString(str string) string {
 	return strconv.Quote(str)
 }
 
-type InvalidResoultionError struct {
+type InvalidResolutionError struct {
 	Resolution string
 }
 
-func (err InvalidResoultionError) Error() string {
+func (err InvalidResolutionError) Error() string {
 	return fmt.Sprintf("invalid resolution %q", err.Resolution)
 }
 
@@ -52,20 +52,20 @@ func parseResolution(v string) (w, h uint16, err error) {
 
 	arr := strings.Split(v, "x")
 	if len(arr) != 2 {
-		err = InvalidResoultionError{v}
+		err = InvalidResolutionError{v}
 		return
 	}
 	// parse width
 	tmpw, err := strconv.ParseUint(arr[0], 10, 16)
 	if err != nil {
-		err = InvalidResoultionError{v}
+		err = InvalidResolutionError{v}
 		return
 	}
 
 	// parse height
 	tmph, err := strconv.ParseUint(arr[1], 10, 16)
 	if err != nil {
-		err = InvalidResoultionError{v}
+		err = InvalidResolutionError{v}
 		return
 	}
 
@@ -73,7 +73,7 @@ func parseResolution(v string) (w, h uint16, err error) {
 	h = uint16(tmph)
 
 	if w == 0 || h == 0 {
-		err = InvalidResoultionError{v}
+		err = InvalidResolutionError{v}
 		return
 	}
 
