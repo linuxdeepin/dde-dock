@@ -247,7 +247,13 @@ func getLangFromLocale(locale string) string {
 		return ""
 	}
 
-	locale = strings.ToLower(strings.Split(locale, ".")[0])
+	locale = strings.ToLower(locale)
+	if strings.Contains(locale, ".") {
+		locale = strings.Split(locale, ".")[0]
+	}
+	if strings.Contains(locale, ":") {
+		locale = strings.Split(locale, ":")[0]
+	}
 	var lang string
 	switch locale {
 	case "zh_hk":
