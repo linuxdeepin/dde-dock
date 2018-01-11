@@ -44,7 +44,8 @@ public:
 
         if (dataConfig.contains("dbus_method")) {
             QString methodName = dataConfig.value("dbus_method").toString();
-            QDBusReply<QByteArray> reply = interface.call(methodName.toStdString().c_str());
+            auto ratio = q->devicePixelRatioF();
+            QDBusReply<QByteArray> reply = interface.call(methodName.toStdString().c_str(), ratio);
             callback(reply.value());
         }
 
@@ -104,6 +105,7 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorKey, QWidget *p
 
     QPalette p = palette();
     p.setColor(QPalette::Foreground, Qt::white);
+    p.setColor(QPalette::Background, Qt::red);
     d->label->setPalette(p);
 
     layout->addWidget(d->label, 0, Qt::AlignCenter);
@@ -119,10 +121,6 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorKey, QWidget *p
                               QDBusConnection::ExportScriptableSlots);
 
     d->initDBus(indicatorKey);
-
-    //p.setColor(QPalette::Background, Qt::yellow);
-    //setAutoFillBackground(true);
-    //setPalette(p);
 }
 
 IndicatorTrayWidget::~IndicatorTrayWidget()
@@ -160,7 +158,9 @@ QSize IndicatorTrayWidget::sizeHint() const
 void IndicatorTrayWidget::setPixmapData(const QByteArray &data)
 {
     Q_D(IndicatorTrayWidget);
-    d->label->setPixmap(QPixmap::fromImage(QImage::fromData(data)));
+    auto rawPixmap = QPixmap::fromImage(QImage::fromData(data));
+    rawPixmap.setDevicePixelRatio(devicePixelRatioF());
+    d->label->setPixmap(rawPixmap);
     d->updateContent();
 }
 
@@ -214,30 +214,41 @@ void IndicatorTrayWidgetPrivate::initDBus(const QString &indicatorKey)
     QJsonDocument doc = QJsonDocument::fromJson(confFile.readAll());
     confFile.close();
     auto config = doc.object();
-    auto data = config.value("data").toObject();
 
-    if (data.contains("text")) {
-        featData("text", data, SLOT(textPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
-            q->setText(v.toString());
+    auto delay = config.value("delay").toInt(0);
+
+    qDebug() << "delay load" << delay << indicatorKey << q;
+
+    q->hide();
+    QTimer::singleShot(delay, [ = ]() {
+        auto data = config.value("data").toObject();
+
+        if (data.contains("text")) {
+            featData("text", data, SLOT(textPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
+                q->setText(v.toString());
+            });
+        }
+        if (data.contains("icon")) {
+            featData("icon", data, SLOT(iconPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
+                q->setPixmapData(v.toByteArray());
+            });
+        }
+
+        auto action = config.value("action").toObject();
+        q->connect(q, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t /*button_index*/, int /*x*/, int /*y*/) {
+            auto triggerConfig = action.value("trigger").toObject();
+            auto dbusService = triggerConfig.value("dbus_service").toString();
+            auto dbusPath = triggerConfig.value("dbus_path").toString();
+            auto dbusInterface = triggerConfig.value("dbus_interface").toString();
+            auto methodName = triggerConfig.value("dbus_method").toString();
+            auto isSystemBus = triggerConfig.value("system_dbus").toBool(false);
+            auto bus = isSystemBus ? QDBusConnection::systemBus() : QDBusConnection::sessionBus();
+
+            QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus, q);
+            interface.asyncCall(methodName);
         });
-    }
-    if (data.contains("icon")) {
-        featData("icon", data, SLOT(iconPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
-            q->setPixmapData(v.toByteArray());
-        });
-    }
 
-    auto action = config.value("action").toObject();
-    q->connect(q, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t /*button_index*/, int /*x*/, int /*y*/) {
-        auto triggerConfig = action.value("trigger").toObject();
-        auto dbusService = triggerConfig.value("dbus_service").toString();
-        auto dbusPath = triggerConfig.value("dbus_path").toString();
-        auto dbusInterface = triggerConfig.value("dbus_interface").toString();
-        auto methodName = triggerConfig.value("dbus_method").toString();
-        auto isSystemBus = triggerConfig.value("system_dbus").toBool(false);
-        auto bus = isSystemBus ? QDBusConnection::systemBus() : QDBusConnection::sessionBus();
-
-        QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus, q);
-        interface.asyncCall(methodName);
+        q->show();
+        Q_EMIT q->delayLoaded();
     });
 }

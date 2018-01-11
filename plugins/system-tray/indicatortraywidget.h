@@ -32,6 +32,7 @@ public Q_SLOTS:
     void textPropertyChanged(const QDBusMessage &msg);
 
 Q_SIGNALS:
+    void delayLoaded();
     void clicked(uint8_t, int, int);
 
 private:

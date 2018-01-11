@@ -66,6 +66,7 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
     switchToMode(displayMode());
 
     QTimer::singleShot(1, this, &SystemTrayPlugin::trayListChanged);
+    QTimer::singleShot(2, this, &SystemTrayPlugin::loadIndicator);
 }
 
 void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
@@ -192,7 +193,6 @@ void SystemTrayPlugin::trayListChanged()
         trayAdded(tray);
     }
 
-    loadIndicator();
 }
 
 void SystemTrayPlugin::trayAdded(const QString itemKey)
@@ -201,30 +201,36 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
         return;
     }
 
-    AbstractTrayWidget *trayWidget = nullptr;
+    auto addTrayWidget = [ = ](AbstractTrayWidget * trayWidget) {
+        if (trayWidget) {
+            m_trayList.insert(itemKey, trayWidget);
+            m_fashionItem->setMouseEnable(m_trayList.size() == 1);
+            if (!m_fashionItem->activeTray()) {
+                m_fashionItem->setActiveTray(trayWidget);
+            }
+
+            if (displayMode() == Dock::Efficient) {
+                m_proxyInter->itemAdded(this, itemKey);
+            } else {
+                m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
+            }
+        }
+    };
+
     if (XWindowTrayWidget::isWinIdKey(itemKey)) {
         auto winId = XWindowTrayWidget::toWinId(itemKey);
         getWindowClass(winId);
-        trayWidget = new XWindowTrayWidget(winId);
+        AbstractTrayWidget *trayWidget = new XWindowTrayWidget(winId);
+        addTrayWidget(trayWidget);
     }
 
     if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
         QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
-        trayWidget = new IndicatorTrayWidget(indicatorKey);
-    }
-
-    if (trayWidget) {
-        m_trayList.insert(itemKey, trayWidget);
-        m_fashionItem->setMouseEnable(m_trayList.size() == 1);
-        if (!m_fashionItem->activeTray()) {
-            m_fashionItem->setActiveTray(trayWidget);
-        }
-
-        if (displayMode() == Dock::Efficient) {
-            m_proxyInter->itemAdded(this, itemKey);
-        } else {
-            m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
-        }
+        auto trayWidget = new IndicatorTrayWidget(indicatorKey);
+        connect(trayWidget, &IndicatorTrayWidget::delayLoaded,
+        trayWidget, [ = ]() {
+            addTrayWidget(trayWidget);
+        });
     }
 }
 
@@ -295,7 +301,7 @@ void SystemTrayPlugin::loadIndicator()
 {
     QDir indicatorConfDir("/etc/dde-dock/indicator");
 
-    for (auto fileInfo : indicatorConfDir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
+    for (auto fileInfo : indicatorConfDir.entryInfoList({"*.json"}, QDir::Files | QDir::NoDotAndDotDot)) {
         trayAdded(IndicatorTrayWidget::toTrayWidgetId(fileInfo.baseName()));
     }
 }
