@@ -44,7 +44,6 @@ MainPanel::MainPanel(QWidget *parent)
 
     setBlurRectXRadius(0);
     setBlurRectYRadius(0);
-    setMaskColor(QColor(0, 0, 0, 255 * 0.4));
     setBlendMode(BehindWindowBlend);
 
     setAcceptDrops(true);
@@ -153,6 +152,14 @@ int MainPanel::displayMode() const
 int MainPanel::position() const
 {
     return int(m_position);
+}
+
+void MainPanel::setEffectEnabled(const bool enabled)
+{
+    if (enabled)
+        setMaskColor(QColor(0, 0, 0, 255 * 0.4));
+    else
+        setMaskColor(QColor(55, 63, 71));
 }
 
 void MainPanel::moveEvent(QMoveEvent* e)

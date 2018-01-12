@@ -54,6 +54,8 @@ public:
     int displayMode() const;
     int position() const;
 
+    void setEffectEnabled(const bool enabled);
+
 signals:
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;

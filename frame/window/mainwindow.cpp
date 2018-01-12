@@ -260,14 +260,16 @@ void MainWindow::initComponents()
 
 void MainWindow::compositeChanged()
 {
-    const int duration = m_wmHelper->hasComposite() ? 300 : 0;
+    const bool composite = m_wmHelper->hasComposite();
+    const int duration = composite ? 300 : 0;
 
     m_sizeChangeAni->setDuration(duration);
     m_posChangeAni->setDuration(duration);
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
+    m_mainPanel->setEffectEnabled(composite);
 
-    m_positionUpdateTimer->start();
+    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::internalMove(const QPoint &p)
