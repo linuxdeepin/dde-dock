@@ -188,6 +188,9 @@ void PreviewContainer::leaveEvent(QEvent *e)
 
 void PreviewContainer::dragEnterEvent(QDragEnterEvent *e)
 {
+    if (!m_wmHelper->hasComposite())
+        return;
+
     e->accept();
 
     m_needActivate = false;
