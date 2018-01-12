@@ -248,7 +248,6 @@ void IndicatorTrayWidgetPrivate::initDBus(const QString &indicatorKey)
             interface.asyncCall(methodName);
         });
 
-        q->show();
         Q_EMIT q->delayLoaded();
     });
 }
