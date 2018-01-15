@@ -153,32 +153,30 @@ func (theme *Theme) reset() {
 // 1024x768 if updating grub-themes-deepin package lonely
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
+
 	wantWidth, wantHeight := theme.getScreenWidthHeight()
-	bgw, bgh, _ := graphic.GetImageSize(theme.bgFile)
-	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
+	bgWidth, bgHeight, _ := graphic.GetImageSize(theme.bgFile)
+	srcBgWidth, srcBgHeight, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needGenerate := false
+
 	logger.Debugf("expected size: %dx%d, source background: %dx%d, background: %dx%d",
-		wantWidth, wantHeight, srcbgw, srcbgh, bgw, bgh)
-	if srcbgw >= int(wantWidth) && srcbgh >= int(wantHeight) {
+		wantWidth, wantHeight, srcBgWidth, srcBgHeight, bgWidth, bgHeight)
+
+	if srcBgWidth >= int(wantWidth) && srcBgHeight >= int(wantHeight) {
 		// if source background is bigger than expected size, the size
 		// of background should equal with it
-		if delta(float64(bgw), float64(wantWidth)) > 5 ||
-			delta(float64(bgh), float64(wantHeight)) > 5 {
+		if delta(float64(bgWidth), float64(wantWidth)) > 5 ||
+			delta(float64(bgHeight), float64(wantHeight)) > 5 {
 			needGenerate = true
 		}
 	} else {
 		// if source background is smaller than expected size, the
 		// scale of backgound should equle with it
-		scalebg := float64(bgw) / float64(bgh)
+		scalebg := float64(bgWidth) / float64(bgHeight)
 		scaleScreen := float64(wantWidth) / float64(wantHeight)
 		if delta(scalebg, scaleScreen) > 0.1 {
 			needGenerate = true
 		}
-	}
-
-	// regenerate theme background if thumbnail not exists
-	if !utils.IsFileExist(theme.bgThumbFile) {
-		needGenerate = true
 	}
 
 	if needGenerate {
