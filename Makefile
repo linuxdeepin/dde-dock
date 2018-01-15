@@ -1,23 +1,18 @@
 PREFIX = /usr
 GOPATH_DIR = gopath
 GOPKG_PREFIX = pkg.deepin.io/dde/daemon
+GOBUILD = go build
 
-ifndef USE_GCCGO
-	GOLDFLAGS = -ldflags '-s -w'
-else
-	GOLDFLAGS = -s -w  -Os -O2 -mieee
-endif
+ARCH=$(shell uname -m)
 
-ifdef GODEBUG
-	GOLDFLAGS =
-endif
-
-ifndef USE_GCCGO
-	GOBUILD = go build ${GOLDFLAGS}
-else
+ifdef USE_GCCGO
+	GOLDFLAGS = -ldflags -Os -O2
+	ifeq ($(ARCH), sw_64)
+		GOLDFLAGS += -mieee
+	endif
 	GOLDFLAGS += $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libpulse-simple alsa libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 fontconfig librsvg-2.0 gudev-1.0 libinput xcb xcb-record libnl-genl-3.0 )
 	GOLDFLAGS += -lcrypt -lpam -lm
-	GOBUILD = go build -compiler gccgo -gccgoflags "${GOLDFLAGS}"
+	GOBUILD += -compiler gccgo -gccgoflags "${GOLDFLAGS}"
 endif
 
 BINARIES =  \
