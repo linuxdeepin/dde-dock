@@ -20,9 +20,10 @@
 package power
 
 import (
-	"gir/gio-2.0"
 	"sync"
 	"time"
+
+	"gir/gio-2.0"
 )
 
 const submodulePSP = "PowerSavePlan"
@@ -202,11 +203,13 @@ func (psp *powerSavePlan) resetBrightness() {
 func (psp *powerSavePlan) screenBlack() {
 	manager := psp.manager
 	logger.Info("Start screen black")
-	psp.saveCurrentBrightness()
 	psp.tasks = make(TimeAfterTasks, 0)
 
-	// half black
-	{
+	adjustBrightnessEnabled := manager.settings.GetBoolean(settingKeyAdjustBrightnessEnabled)
+
+	if adjustBrightnessEnabled {
+		psp.saveCurrentBrightness()
+		// half black
 		brightnessTable := make(map[string]float64)
 		brightnessRatio := 0.5
 		logger.Debug("brightnessRatio:", brightnessRatio)
@@ -214,6 +217,8 @@ func (psp *powerSavePlan) screenBlack() {
 			brightnessTable[output] = oldBrightness * brightnessRatio
 		}
 		manager.setDisplayBrightness(brightnessTable)
+	} else {
+		logger.Debug("adjust brightness disabled")
 	}
 
 	// full black
@@ -223,12 +228,15 @@ func (psp *powerSavePlan) screenBlack() {
 		if manager.ScreenBlackLock.Get() {
 			manager.lockWaitShow(2 * time.Second)
 		}
-		// set min brightness for all outputs
-		brightnessTable := make(map[string]float64)
-		for output, _ := range psp.oldBrightnessTable {
-			brightnessTable[output] = 0.02
+
+		if adjustBrightnessEnabled {
+			// set min brightness for all outputs
+			brightnessTable := make(map[string]float64)
+			for output, _ := range psp.oldBrightnessTable {
+				brightnessTable[output] = 0.02
+			}
+			manager.setDisplayBrightness(brightnessTable)
 		}
-		manager.setDisplayBrightness(brightnessTable)
 		manager.setDPMSModeOff()
 
 	})
