@@ -6,7 +6,7 @@ GOBUILD = go build
 ARCH=$(shell uname -m)
 
 ifdef USE_GCCGO
-	GOLDFLAGS = -ldflags -Os -O2
+	GOLDFLAGS = -Os -O2
 	ifeq ($(ARCH), sw_64)
 		GOLDFLAGS += -mieee
 	endif
