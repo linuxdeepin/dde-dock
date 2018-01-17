@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sync"
+	"syscall"
+	"time"
 
 	"pkg.deepin.io/lib/dbus"
 	dutils "pkg.deepin.io/lib/utils"
@@ -33,23 +35,49 @@ func (ib *ImageBlur) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (ib *ImageBlur) Get(file string) string {
+func (ib *ImageBlur) Get(file string) (string, error) {
 	ib.mu.Lock()
 	_, ok := ib.tasks[file]
 	ib.mu.Unlock()
 
 	if ok {
 		// generating
-		return ""
+		return "", nil
 	}
 
 	blurFile := getImageBlurFile(file)
-	if dutils.IsFileExist(blurFile) {
-		return blurFile
+
+	fileInfo, err := os.Stat(file)
+	if err != nil {
+		logger.Warning(err)
+		if os.IsNotExist(err) {
+			// source file not exist
+			os.Remove(blurFile)
+		}
+		return "", err
+	}
+
+	blurFileInfo, err := os.Stat(blurFile)
+	if err == nil {
+		fileChangeTime := getChangeTime(fileInfo)
+		blurFileChangeTime := getChangeTime(blurFileInfo)
+
+		if fileChangeTime.Before(blurFileChangeTime) {
+			return blurFile, nil
+		} else {
+			// delete old, generate new
+			os.Remove(blurFile)
+		}
 	}
 
 	ib.gen(file)
-	return ""
+	return "", nil
+}
+
+// getChangeTime get time when file status was last changed.
+func getChangeTime(fileInfo os.FileInfo) time.Time {
+	stat := fileInfo.Sys().(*syscall.Stat_t)
+	return time.Unix(int64(stat.Ctim.Sec), int64(stat.Ctim.Nsec))
 }
 
 func (ib *ImageBlur) Delete(file string) error {
@@ -92,7 +120,9 @@ func (ib *ImageBlur) gen(file string) {
 	go func() {
 		logger.Debug("ImageBlur.gen will blur image:", file)
 		output, err := exec.Command("/usr/lib/deepin-api/image-blur-helper", file).CombinedOutput()
-		logger.Debugf("image-blur-helper output: %s", output)
+		if len(output) > 0 {
+			logger.Debugf("image-blur-helper output: %s", output)
+		}
 		if err != nil {
 			logger.Warningf("failed to blur image %q: %v", file, err)
 		}
