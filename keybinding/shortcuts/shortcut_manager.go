@@ -51,10 +51,11 @@ type ShortcutManager struct {
 	conn     *x.Conn
 	dataConn *x.Conn // conn for receive record event
 
-	idShortcutMap   map[string]Shortcut
-	keyKeystrokeMap map[Key]*Keystroke
-	keySymbols      *keysyms.KeySymbols
-	ewmhConn        *ewmh.Conn
+	idShortcutMap     map[string]Shortcut
+	keyKeystrokeMap   map[Key]*Keystroke
+	keyKeystrokeMapMu sync.Mutex
+	keySymbols        *keysyms.KeySymbols
+	ewmhConn          *ewmh.Conn
 
 	recordEnable        bool
 	recordContext       record.Context
@@ -247,7 +248,11 @@ func (sm *ShortcutManager) grabKeystroke(shortcut Shortcut, ks *Keystroke, dummy
 	}
 	//logger.Debugf("grabKeystroke shortcut: %s, ks: %s, key: %s, dummy: %v", shortcut.GetId(), ks, key, dummy)
 
-	if conflictKeystroke, ok := sm.keyKeystrokeMap[key]; ok {
+	sm.keyKeystrokeMapMu.Lock()
+	conflictKeystroke, ok := sm.keyKeystrokeMap[key]
+	sm.keyKeystrokeMapMu.Unlock()
+
+	if ok {
 		// conflict
 		logger.Debugf("key %v is grabed by %v", key, conflictKeystroke.Shortcut.GetId())
 		if !sm.EliminateConflictDone {
@@ -264,7 +269,9 @@ func (sm *ShortcutManager) grabKeystroke(shortcut Shortcut, ks *Keystroke, dummy
 			return
 		}
 	}
+	sm.keyKeystrokeMapMu.Lock()
 	sm.keyKeystrokeMap[key] = ks
+	sm.keyKeystrokeMapMu.Unlock()
 }
 
 func (sm *ShortcutManager) ungrabKeystroke(ks *Keystroke, dummy bool) {
@@ -274,7 +281,9 @@ func (sm *ShortcutManager) ungrabKeystroke(ks *Keystroke, dummy bool) {
 		return
 	}
 
+	sm.keyKeystrokeMapMu.Lock()
 	delete(sm.keyKeystrokeMap, key)
+	sm.keyKeystrokeMapMu.Unlock()
 	if !dummy {
 		key.Ungrab(sm.conn)
 	}
@@ -358,6 +367,7 @@ func dummyGrab(shortcut Shortcut, ks *Keystroke) bool {
 }
 
 func (sm *ShortcutManager) UngrabAll() {
+	sm.keyKeystrokeMapMu.Lock()
 	// ungrab all grabed keys
 	for key, keystroke := range sm.keyKeystrokeMap {
 		dummy := dummyGrab(keystroke.Shortcut, keystroke)
@@ -368,6 +378,7 @@ func (sm *ShortcutManager) UngrabAll() {
 	// new map
 	count := len(sm.keyKeystrokeMap)
 	sm.keyKeystrokeMap = make(map[Key]*Keystroke, count)
+	sm.keyKeystrokeMapMu.Unlock()
 }
 
 func (sm *ShortcutManager) GrabAll() {
@@ -449,7 +460,9 @@ func (sm *ShortcutManager) emitFakeKeyEvent(action *Action) {
 }
 
 func (sm *ShortcutManager) emitKeyEvent(mods Modifiers, key Key) {
+	sm.keyKeystrokeMapMu.Lock()
 	keystroke, ok := sm.keyKeystrokeMap[key]
+	sm.keyKeystrokeMapMu.Unlock()
 	if ok {
 		logger.Debugf("emitKeyEvent keystroke: %#v", keystroke)
 		keyEvent := &KeyEvent{
@@ -509,7 +522,9 @@ func (sm *ShortcutManager) handleXRecordKeyEvent(pressed bool, code uint8, state
 	if pressed {
 		// Special handling screenshot* shortcuts
 		key := combineStateCode2Key(state, code)
+		sm.keyKeystrokeMapMu.Lock()
 		keystroke, ok := sm.keyKeystrokeMap[key]
+		sm.keyKeystrokeMapMu.Unlock()
 		if ok {
 			shortcut := keystroke.Shortcut
 			if shortcut != nil && shortcut.GetType() == ShortcutTypeSystem &&
@@ -590,7 +605,9 @@ func (sm *ShortcutManager) FindConflictingKeystroke(ks *Keystroke) (*Keystroke, 
 	logger.Debug("ShortcutManager.FindConflictingKeystroke", ks.DebugString())
 	logger.Debug("key:", key)
 
+	sm.keyKeystrokeMapMu.Lock()
 	ks1, ok := sm.keyKeystrokeMap[key]
+	sm.keyKeystrokeMapMu.Unlock()
 	if ok {
 		return ks1, nil
 	}
