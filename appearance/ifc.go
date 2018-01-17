@@ -176,7 +176,12 @@ func (m *Manager) Delete(ty, name string) error {
 	case TypeCursorTheme:
 		return subthemes.ListCursorTheme().Delete(name)
 	case TypeBackground:
-		return background.ListBackground().Delete(name)
+		return background.ListBackground().Delete(name, func(filename string) {
+			err := m.imageBlur.Delete(filename)
+			if err != nil {
+				logger.Warningf("imageBlur.Delete err:", err)
+			}
+		})
 		//case TypeStandardFont:
 		//case TypeMonospaceFont:
 	}

@@ -1,6 +1,8 @@
 package accounts
 
 import (
+	"errors"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"sync"
@@ -48,6 +50,24 @@ func (ib *ImageBlur) Get(file string) string {
 
 	ib.gen(file)
 	return ""
+}
+
+func (ib *ImageBlur) Delete(file string) error {
+	ib.mu.Lock()
+	_, ok := ib.tasks[file]
+	ib.mu.Unlock()
+
+	if ok {
+		return errors.New("generation task is in progress")
+	}
+
+	blurFile := getImageBlurFile(file)
+	err := os.Remove(blurFile)
+	logger.Debugf("delete blur: %q, source: %q", blurFile, file)
+	if os.IsNotExist(err) {
+		err = nil
+	}
+	return err
 }
 
 const imageBlurDir = "/var/cache/image-blur"

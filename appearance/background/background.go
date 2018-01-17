@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"sync"
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/thumbnails/images"
@@ -30,7 +31,6 @@ import (
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/userdir"
-	"sync"
 )
 
 const (
@@ -152,13 +152,13 @@ func (infos Backgrounds) ListGet(uris []string) Backgrounds {
 	return ret
 }
 
-func (infos Backgrounds) Delete(uri string) error {
+func (infos Backgrounds) Delete(uri string, cb func(filename string)) error {
 	info := infos.Get(uri)
 	if info == nil {
 		return fmt.Errorf("Not found '%s'", uri)
 	}
 
-	return info.Delete()
+	return info.Delete(cb)
 }
 
 func (infos Backgrounds) Thumbnail(uri string) (string, error) {
@@ -170,12 +170,15 @@ func (infos Backgrounds) Thumbnail(uri string) (string, error) {
 	return info.Thumbnail()
 }
 
-func (info *Background) Delete() error {
+func (info *Background) Delete(cb func(filename string)) error {
 	if !info.Deletable {
 		return fmt.Errorf("Permission Denied")
 	}
 
-	return os.Remove(dutils.DecodeURI(info.Id))
+	file := dutils.DecodeURI(info.Id)
+	err := os.Remove(file)
+	cb(file)
+	return err
 }
 
 func (info *Background) Thumbnail() (string, error) {
