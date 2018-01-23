@@ -21,33 +21,41 @@ package mime
 
 import (
 	"fmt"
-	"gir/gio-2.0"
 	"strings"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
-	terminalSchema = "com.deepin.desktop.default-applications.terminal"
-	gsKeyExec      = "exec"
-	gsKeyExecArg   = "exec-arg"
+	gsSchemaDefaultTerminal = "com.deepin.desktop.default-applications.terminal"
+	gsKeyExec               = "exec"
+	gsKeyExecArg            = "exec-arg"
+	gsKeyAppId              = "app-id"
 
-	cateKeyTerminal  = "TerminalEmulator"
-	execKeyXTerminal = "x-terminal-emulator"
+	categoryTerminalEmulator = "TerminalEmulator"
+	execXTerminalEmulator    = "x-terminal-emulator"
+	desktopExt               = ".desktop"
 )
 
 // ignore quake-style terminal emulator
-var termBlackList = []string{
-	"guake.desktop",
-	"tilda.desktop",
-	"org.kde.yakuake.desktop",
-	"qterminal_drop.desktop",
-	"Terminal.desktop",
+var termBlackList = strv.Strv{
+	"guake",
+	"tilda",
+	"org.kde.yakuake",
+	"qterminal_drop",
+	"Terminal",
 }
 
 func resetTerminal() {
-	s := gio.NewSettings(terminalSchema)
-	defer s.Unref()
+	settings := gio.NewSettings(gsSchemaDefaultTerminal)
 
-	s.Reset(gsKeyExec)
+	settings.Reset(gsKeyExec)
+	settings.Reset(gsKeyExecArg)
+	settings.Reset(gsKeyAppId)
+
+	settings.Unref()
 }
 
 // readonly
@@ -84,78 +92,76 @@ func getExecArg(exec string) string {
 }
 
 func setDefaultTerminal(id string) error {
-	s := gio.NewSettings(terminalSchema)
-	defer s.Unref()
+	settings := gio.NewSettings(gsSchemaDefaultTerminal)
+	defer settings.Unref()
 
 	for _, info := range getTerminalInfos() {
 		if info.Id == id {
 			exec := strings.Split(info.Exec, " ")[0]
-			s.SetString(gsKeyExec, exec)
-			s.SetString(gsKeyExecArg, getExecArg(exec))
+			settings.SetString(gsKeyExec, exec)
+			settings.SetString(gsKeyExecArg, getExecArg(exec))
+
+			id = strings.TrimSuffix(id, desktopExt)
+			settings.SetString(gsKeyAppId, id)
 			return nil
 		}
 	}
-	return fmt.Errorf("Invalid terminal id '%s'", id)
+	return fmt.Errorf("invalid terminal id '%s'", id)
 }
 
 func getDefaultTerminal() (*AppInfo, error) {
-	s := gio.NewSettings(terminalSchema)
-	defer s.Unref()
-
-	exec := s.GetString(gsKeyExec)
+	settings := gio.NewSettings(gsSchemaDefaultTerminal)
+	appId := settings.GetString(gsKeyAppId)
+	// add suffix .desktop
+	if !strings.HasSuffix(appId, desktopExt) {
+		appId = appId + desktopExt
+	}
+	settings.Unref()
 	for _, info := range getTerminalInfos() {
-		if exec == strings.Split(info.Exec, " ")[0] {
+		if info.Id == appId {
 			return info, nil
 		}
 	}
 
-	return nil, fmt.Errorf("Not found app id for '%s'", exec)
+	return nil, fmt.Errorf("not found app id for %q", appId)
 }
 
 func getTerminalInfos() AppInfos {
-	infos := gio.AppInfoGetAll()
-	defer unrefAppInfos(infos)
+	appInfoList := desktopappinfo.GetAll(nil)
 
 	var list AppInfos
-	for _, info := range infos {
-		if !isTerminalApp(info.GetId()) {
+	for _, appInfo := range appInfoList {
+		if !isTerminalApp(appInfo) {
 			continue
 		}
 
 		var tmp = &AppInfo{
-			Id:          info.GetId(),
-			Name:        info.GetName(),
-			DisplayName: info.GetDisplayName(),
-			Description: info.GetDescription(),
-			Exec:        info.GetCommandline(),
-		}
-		iconObj := info.GetIcon()
-		if iconObj != nil {
-			tmp.Icon = iconObj.ToString()
-			iconObj.Unref()
+			Id:          appInfo.GetId() + desktopExt,
+			Name:        appInfo.GetName(),
+			DisplayName: appInfo.GetDisplayName(),
+			Description: appInfo.GetComment(),
+			Exec:        appInfo.GetCommandline(),
+			Icon:        appInfo.GetIcon(),
 		}
 		list = append(list, tmp)
 	}
 	return list
 }
 
-func isTerminalApp(id string) bool {
-	if isStrInList(id, termBlackList) {
+func isTerminalApp(appInfo *desktopappinfo.DesktopAppInfo) bool {
+	if termBlackList.Contains(appInfo.GetId()) {
 		return false
 	}
 
-	ginfo := gio.NewDesktopAppInfo(id)
-	defer ginfo.Unref()
-	cates := ginfo.GetCategories()
-	if !strings.Contains(cates, cateKeyTerminal) {
+	categories := appInfo.GetCategories()
+	if !strv.Strv(categories).Contains(categoryTerminalEmulator) {
 		return false
 	}
 
-	exec := ginfo.GetCommandline()
-	if strings.Contains(exec, execKeyXTerminal) {
+	exec := appInfo.GetCommandline()
+	if strings.Contains(exec, execXTerminalEmulator) {
 		return false
 	}
-
 	return true
 }
 
@@ -167,10 +173,4 @@ func isStrInList(s string, list []string) bool {
 	}
 
 	return false
-}
-
-func unrefAppInfos(infos []*gio.AppInfo) {
-	for _, info := range infos {
-		info.Unref()
-	}
 }

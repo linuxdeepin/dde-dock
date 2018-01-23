@@ -26,6 +26,7 @@ BINARIES =  \
 	    langselector \
 	    soundeffect \
 	    dde-lockservice \
+	    default-terminal \
 	    dde-greeter-setter
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
@@ -41,9 +42,6 @@ prepare:
 
 out/bin/%:
 	env GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
-
-out/bin/default-terminal: bin/default-terminal/default-terminal.c
-	gcc $^ $(shell pkg-config --cflags --libs gio-unix-2.0) -o $@
 
 out/bin/default-file-manager: bin/default-file-manager/main.c
 	gcc $^ $(shell pkg-config --cflags --libs gio-unix-2.0) -o $@
