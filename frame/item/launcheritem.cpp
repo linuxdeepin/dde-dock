@@ -70,11 +70,7 @@ void LauncherItem::paintEvent(QPaintEvent *e)
     const int iconX = rect().center().x() - pixmap.rect().center().x() / ratio;
     const int iconY = rect().center().y() - pixmap.rect().center().y() / ratio;
 
-    // draw ligher/normal icon
-    if (!m_hover)
-        painter.drawPixmap(iconX, iconY, pixmap);
-    else
-        painter.drawPixmap(iconX, iconY, ImageFactory::lighterEffect(pixmap));
+    painter.drawPixmap(iconX, iconY, pixmap);
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)

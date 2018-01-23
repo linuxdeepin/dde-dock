@@ -39,7 +39,8 @@ SOURCES += main.cpp \
     dbus/dbusdockadaptors.cpp \
     item/components/appsnapshot.cpp \
     item/components/floatingpreview.cpp \
-    item/components/previewcontainer.cpp
+    item/components/previewcontainer.cpp \
+    item/components/hoverhighlighteffect.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -69,7 +70,8 @@ HEADERS  += \
     dbus/dbusdockadaptors.h \
     item/components/appsnapshot.h \
     item/components/floatingpreview.h \
-    item/components/previewcontainer.h
+    item/components/previewcontainer.h \
+    item/components/hoverhighlighteffect.h
 
 dbus_service.files += com.deepin.dde.Dock.service
 dbus_service.path = /usr/share/dbus-1/services

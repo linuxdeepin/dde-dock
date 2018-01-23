@@ -280,11 +280,7 @@ void AppItem::paintEvent(QPaintEvent *e)
     const int iconX = itemRect.center().x() - pixmap.rect().center().x() / ratio;
     const int iconY = itemRect.center().y() - pixmap.rect().center().y() / ratio;
 
-    // draw ligher/normal icon
-    if (!m_hover)
-        painter.drawPixmap(iconX, iconY, pixmap);
-    else
-        painter.drawPixmap(iconX, iconY, ImageFactory::lighterEffect(pixmap));
+    painter.drawPixmap(iconX, iconY, pixmap);
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)

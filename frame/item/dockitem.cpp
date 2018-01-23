@@ -22,6 +22,7 @@
 #include "dockitem.h"
 #include "dbus/dbusmenu.h"
 #include "dbus/dbusmenumanager.h"
+#include "components/hoverhighlighteffect.h"
 
 #include <QMouseEvent>
 #include <QJsonObject>
@@ -57,6 +58,9 @@ DockItem::DockItem(QWidget *parent)
 
     m_popupAdjustDelayTimer->setInterval(100);
     m_popupAdjustDelayTimer->setSingleShot(true);
+
+    setGraphicsEffect(new HoverHighlightEffect(this));
+    graphicsEffect()->setEnabled(false);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition);
@@ -114,6 +118,7 @@ void DockItem::enterEvent(QEvent *e)
 {
     m_hover = true;
     m_popupTipsDelayTimer->start();
+    graphicsEffect()->setEnabled(true);
 
     update();
 
@@ -126,6 +131,7 @@ void DockItem::leaveEvent(QEvent *e)
 
     m_hover = false;
     m_popupTipsDelayTimer->stop();
+    graphicsEffect()->setEnabled(false);
 
     // auto hide if popup is not model window
     if (m_popupShown && !PopupWindow->model())
