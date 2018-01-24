@@ -21,9 +21,10 @@ package main
 
 import (
 	"fmt"
+	"sync"
+
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/loader"
-	"sync"
 
 	// sort modules
 	_ "pkg.deepin.io/dde/daemon/network"
@@ -35,6 +36,8 @@ import (
 
 	// depends: screensaver, sessionwatcher
 	_ "pkg.deepin.io/dde/daemon/session/power"
+
+	_ "pkg.deepin.io/dde/daemon/service_trigger"
 
 	_ "pkg.deepin.io/dde/daemon/clipboard"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
