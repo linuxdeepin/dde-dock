@@ -24,8 +24,10 @@
 
 #include "constants.h"
 #include "util/dockpopupwindow.h"
+#include "components/hoverhighlighteffect.h"
 
 #include <QFrame>
+#include <QPointer>
 
 #include <memory>
 
@@ -94,6 +96,8 @@ private:
 protected:
     bool m_hover;
     bool m_popupShown;
+
+    QPointer<HoverHighlightEffect> m_hoverEffect;
 
     QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;

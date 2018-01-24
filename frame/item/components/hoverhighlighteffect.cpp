@@ -6,6 +6,8 @@
 
 HoverHighlightEffect::HoverHighlightEffect(QObject *parent)
     : QGraphicsEffect(parent)
+
+    , m_highlighting(false)
 {
 
 }
@@ -14,7 +16,7 @@ void HoverHighlightEffect::draw(QPainter *painter)
 {
     const QPixmap pix = sourcePixmap(Qt::DeviceCoordinates);
 
-    if (isEnabled())
+    if (m_highlighting)
     {
         painter->drawPixmap(0, 0, ImageFactory::lighterEffect(pix));
     } else {
