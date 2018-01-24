@@ -1,5 +1,19 @@
 ## [Unreleased]
 
+## [3.2.9] - 2018-01-24
+*   inputdevices: use imwheel to speed up scrolling
+*   langselector: use new lib `language_support`
+*   dstore: fix waitJobDone for install job
+*   swapsched: fix exec cgdelete error
+*   keybinding: eliminate keystroke conflict during startup
+*   fix: Adapt lintian
+*   inputdevices: fix typo in write imwheel config file
+*   network: fix nm code generate failure
+*   network: add wifi security type 'wpa-eap'
+*   inputdevices: fix property WheelSpeed is not writeable
+*   network: optimize the method of updating active connections
+*   accounts: add DesktopBackgrounds property for user
+
 ## [3.2.8] - 2017-12-13
 *   add moudle swapsched
 *   doc: update bluetooth faq
