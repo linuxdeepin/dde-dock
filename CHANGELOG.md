@@ -13,6 +13,33 @@
 *   inputdevices: fix property WheelSpeed is not writeable
 *   network: optimize the method of updating active connections
 *   accounts: add DesktopBackgrounds property for user
+*   network: use lib notify
+*   swapsched: fix missing service file
+*   grub2: no json config file
+*   accounts: do not verify desktop background file
+*   keybinding: run cmd begin with dbus-send directly
+*   session/power: remove too much debug print
+*   swapsched: create cgroup sessionID@dde/DE
+*   dde-session-init: add module `x_event_monitor`
+*   lockservice: auto quit to release resources
+*   lockservice: fix access m.authUserTable without lock
+*   auto sync po files from transifex
+*   network: add new empty functions for NM 1.10.2
+*   keybinding: update wm switch interface
+*   keybinding: update `system_actions.json`
+*   logind: fix json marshal failed in shenwei
+*   appearance: fix font filter wrong in arm
+*   swapsched: use lib cgroup
+*   grub2: fix always call generateThemeBackground
+*   session/power: adjust brightness function can be controlled by gsettings
+*   modify ldfflags args, fix debug version not work
+*   grub2: fix typo error
+*   fix compile failed using gccgo
+*   keybinding: fix ShortcutManager.keyKeystrokeMap concurrent read and write
+*   appearance: delete background also delete blurred
+*   accounts: generate new blur image if source file new then blurred
+*   auto sync po files from transifex
+*   launch default terminal via desktop
 
 ## [3.2.8] - 2017-12-13
 *   add moudle swapsched
