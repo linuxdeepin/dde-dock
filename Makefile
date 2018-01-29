@@ -60,9 +60,11 @@ pot:
 
 ts:
 	deepin-policy-ts-convert policy2ts misc/polkit-action/com.deepin.daemon.Grub2.policy.in misc/ts/com.deepin.daemon.Grub2.policy
+	deepin-policy-ts-convert policy2ts misc/polkit-action/com.deepin.daemon.accounts.policy.in misc/ts/com.deepin.daemon.accounts.policy
 
 ts_to_policy:
 	deepin-policy-ts-convert ts2policy misc/polkit-action/com.deepin.daemon.Grub2.policy.in misc/ts/com.deepin.daemon.Grub2.policy misc/polkit-action/com.deepin.daemon.Grub2.policy
+	deepin-policy-ts-convert ts2policy misc/polkit-action/com.deepin.daemon.accounts.policy.in misc/ts/com.deepin.daemon.accounts.policy misc/polkit-action/com.deepin.daemon.accounts.policy
 
 build: prepare out/bin/default-terminal out/bin/default-file-manager out/bin/desktop-toggle $(addprefix out/bin/, ${BINARIES}) ts_to_policy
 
