@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"os/exec"
 
 	"dbus/com/deepin/sessionmanager"
@@ -12,41 +13,70 @@ import (
 
 var logger = log.NewLogger("cmd/default-terminal")
 
+var launchAppFlag bool
+
 const (
 	gsSchemaDefaultTerminal = "com.deepin.desktop.default-applications.terminal"
 	gsKeyAppId              = "app-id"
+	gsKeyExec               = "exec"
 )
 
+func init() {
+	flag.BoolVar(&launchAppFlag, "launch-app", false,
+		"launch via startdde LaunchApp")
+}
+
 func main() {
+	flag.Parse()
+
 	settings := gio.NewSettings(gsSchemaDefaultTerminal)
 	defer settings.Unref()
 
-	appId := settings.GetString(gsKeyAppId)
-	appInfo := desktopappinfo.NewDesktopAppInfo(appId)
+	if launchAppFlag {
+		appId := settings.GetString(gsKeyAppId)
+		appInfo := desktopappinfo.NewDesktopAppInfo(appId)
 
-	if appInfo != nil {
-		startManager, err := sessionmanager.NewStartManager("com.deepin.SessionManager",
-			"/com/deepin/StartManager")
-		if err != nil {
-			panic(err)
-		}
-		filename := appInfo.GetFileName()
-		err = startManager.LaunchApp(filename, 0, nil)
-		sessionmanager.DestroyStartManager(startManager)
+		if appInfo != nil {
+			startManager, err := sessionmanager.NewStartManager("com.deepin.SessionManager",
+				"/com/deepin/StartManager")
+			if err != nil {
+				panic(err)
+			}
+			filename := appInfo.GetFileName()
+			err = startManager.LaunchApp(filename, 0, nil)
+			sessionmanager.DestroyStartManager(startManager)
 
-		if err != nil {
-			logger.Warning(err)
+			if err != nil {
+				logger.Warning(err)
+			}
+		} else {
+			runFallbackTerm()
 		}
+
 	} else {
-		termPath := getTerminalPath()
-		if termPath == "" {
-			logger.Warning("failed to get terminal path")
-			return
+		termExec := settings.GetString(gsKeyExec)
+		termPath, _ := exec.LookPath(termExec)
+		if termPath != "" {
+			err := exec.Command(termPath).Run()
+			if err != nil {
+				logger.Warning(err)
+			}
+
+		} else {
+			runFallbackTerm()
 		}
-		err := exec.Command(termPath).Run()
-		if err != nil {
-			logger.Warning(err)
-		}
+	}
+}
+
+func runFallbackTerm() {
+	termPath := getTerminalPath()
+	if termPath == "" {
+		logger.Warning("failed to get terminal path")
+		return
+	}
+	err := exec.Command(termPath).Run()
+	if err != nil {
+		logger.Warning(err)
 	}
 }
 
