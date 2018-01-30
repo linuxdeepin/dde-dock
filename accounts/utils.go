@@ -25,20 +25,24 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"pkg.deepin.io/lib/encoding/kv"
-	"pkg.deepin.io/lib/graphic"
-	"pkg.deepin.io/lib/procfs"
-	"pkg.deepin.io/lib/utils"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	"pkg.deepin.io/lib/encoding/kv"
+	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/procfs"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (
-	polkitManagerUser    = "com.deepin.daemon.accounts.user-administration"
-	polkitChangeOwnData  = "com.deepin.daemon.accounts.change-own-user-data"
-	polkitSetLoginOption = "com.deepin.daemon.accounts.set-login-option"
+	polkitManagerUser          = "com.deepin.daemon.accounts.user-administration"
+	polkitChangeOwnData        = "com.deepin.daemon.accounts.change-own-user-data"
+	polkitEnableAutoLogin      = "com.deepin.daemon.accounts.enable-auto-login"
+	polkitDisableAutoLogin     = "com.deepin.daemon.accounts.disable-auto-login"
+	polkitEnableNoPasswdLogin  = "com.deepin.daemon.accounts.enable-nopass-login"
+	polkitDisableNoPasswdLogin = "com.deepin.daemon.accounts.disable-nopass-login"
 )
 
 type ErrCodeType int32
@@ -138,8 +142,20 @@ func polkitAuthChangeOwnData(user, uid string, pid uint32) error {
 	return polkitAuthentication(polkitChangeOwnData, user, uid, pid)
 }
 
-func polkitAuthLogin(pid uint32) error {
-	return polkitAuthentication(polkitSetLoginOption, "", "", pid)
+func polkitAuthAutoLogin(pid uint32, enable bool) error {
+	if enable {
+		return polkitAuthentication(polkitEnableAutoLogin, "", "", pid)
+	}
+
+	return polkitAuthentication(polkitDisableAutoLogin, "", "", pid)
+}
+
+func polkitAuthNoPasswdLogin(pid uint32, enable bool) error {
+	if enable {
+		return polkitAuthentication(polkitEnableNoPasswdLogin, "", "", pid)
+	}
+
+	return polkitAuthentication(polkitDisableNoPasswdLogin, "", "", pid)
 }
 
 func polkitAuthentication(action, user, uid string, pid uint32) error {

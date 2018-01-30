@@ -24,13 +24,43 @@
 			<translation type="unfinished" />
 		</message>
 		<message>
-			<location filename="com.deepin.daemon.accounts.set-login-option!message" line="0" />
-			<source>Authentication is required to change the login screen configuration</source>
+			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0" />
+			<source>Authentication is required to enable auto login</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
-			<location filename="com.deepin.daemon.accounts.set-login-option!description" line="0" />
-			<source>Change the login screen configuration</source>
+			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0" />
+			<source>Enable auto-login</source>
+			<translation type="unfinished" />
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0" />
+			<source>Authentication is required to disable auto login</source>
+			<translation type="unfinished" />
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0" />
+			<source>Disable auto-login</source>
+			<translation type="unfinished" />
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0" />
+			<source>Authentication is required to enable no password login</source>
+			<translation type="unfinished" />
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0" />
+			<source>Enable no password login</source>
+			<translation type="unfinished" />
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0" />
+			<source>Authentication is required to disable no password login</source>
+			<translation type="unfinished" />
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0" />
+			<source>Disable no password login</source>
 			<translation type="unfinished" />
 		</message>
 	</context>

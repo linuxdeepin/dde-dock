@@ -22,8 +22,10 @@ package accounts
 import (
 	"dbus/org/freedesktop/policykit1"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
+
 	"strconv"
+
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
