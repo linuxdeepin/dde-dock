@@ -644,6 +644,7 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     }
 
     m_mainPanel->move(finishPos);
+    m_mainPanel->updateDockPosition(position);
 }
 
 void MainWindow::updatePanelVisible()
