@@ -306,7 +306,6 @@ void DockSettings::menuActionClicked(QAction *action)
 
 void DockSettings::onPositionChanged()
 {
-//    qDebug() << Q_FUNC_INFO;
     const Position prevPos = m_position;
     const Position nextPos = Dock::Position(m_dockInter->position());
 
@@ -315,10 +314,10 @@ void DockSettings::onPositionChanged()
 
     emit positionChanged(prevPos);
 
-    QTimer::singleShot(200, this, [=] {
+    QTimer::singleShot(200, this, [this, nextPos] {
         m_position = nextPos;
-        DockItem::setDockPosition(m_position);
-        qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
+        DockItem::setDockPosition(nextPos);
+        qApp->setProperty(PROP_POSITION, QVariant::fromValue(nextPos));
 
         calculateWindowConfig();
 
