@@ -234,19 +234,20 @@ void IndicatorTrayWidgetPrivate::initDBus(const QString &indicatorKey)
             });
         }
 
-        auto action = config.value("action").toObject();
-        q->connect(q, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t /*button_index*/, int /*x*/, int /*y*/) {
-            auto triggerConfig = action.value("trigger").toObject();
-            auto dbusService = triggerConfig.value("dbus_service").toString();
-            auto dbusPath = triggerConfig.value("dbus_path").toString();
-            auto dbusInterface = triggerConfig.value("dbus_interface").toString();
-            auto methodName = triggerConfig.value("dbus_method").toString();
-            auto isSystemBus = triggerConfig.value("system_dbus").toBool(false);
-            auto bus = isSystemBus ? QDBusConnection::systemBus() : QDBusConnection::sessionBus();
+        const QJsonObject action = config.value("action").toObject();
+        if (!action.isEmpty())
+            q->connect(q, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t /*button_index*/, int /*x*/, int /*y*/) {
+                auto triggerConfig = action.value("trigger").toObject();
+                auto dbusService = triggerConfig.value("dbus_service").toString();
+                auto dbusPath = triggerConfig.value("dbus_path").toString();
+                auto dbusInterface = triggerConfig.value("dbus_interface").toString();
+                auto methodName = triggerConfig.value("dbus_method").toString();
+                auto isSystemBus = triggerConfig.value("system_dbus").toBool(false);
+                auto bus = isSystemBus ? QDBusConnection::systemBus() : QDBusConnection::sessionBus();
 
-            QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus, q);
-            interface.asyncCall(methodName);
-        });
+                QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus, q);
+                interface.asyncCall(methodName);
+            });
 
         Q_EMIT q->delayLoaded();
     });
