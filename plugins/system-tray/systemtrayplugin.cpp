@@ -115,21 +115,16 @@ bool SystemTrayPlugin::itemAllowContainer(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
-        return false;
-    }
-
     return true;
 }
 
 bool SystemTrayPlugin::itemIsInContainer(const QString &itemKey)
 {
     const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
-    if (widKey.isEmpty()) {
-        return false;
-    }
-
-    return m_containerSettings->value(widKey, false).toBool();
+    if (!widKey.isEmpty())
+        return m_containerSettings->value(widKey, false).toBool();
+    else
+        return m_containerSettings->value(itemKey, false).toBool();
 }
 
 int SystemTrayPlugin::itemSortKey(const QString &itemKey)
@@ -141,8 +136,11 @@ int SystemTrayPlugin::itemSortKey(const QString &itemKey)
 
 void SystemTrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
 {
-//    qDebug() << getWindowClass(itemKey.toInt());
-    m_containerSettings->setValue(getWindowClass(XWindowTrayWidget::toWinId(itemKey)), container);
+    const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
+    if (widKey.isEmpty())
+        m_containerSettings->setValue(itemKey, container);
+    else
+        m_containerSettings->setValue(widKey, container);
 }
 
 void SystemTrayPlugin::updateTipsContent()
