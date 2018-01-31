@@ -226,10 +226,6 @@ func (m *Manager) init() {
 		background.ListBackground()
 		fonts.GetFamilyTable()
 
-		// must be called after init finished
-		go m.handleThemeChanged()
-		m.listenGSettingChanged()
-
 		setDQtTheme(dQtFile, dQtSectionTheme,
 			[]string{
 				dQtKeyIcon,

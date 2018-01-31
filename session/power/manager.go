@@ -87,17 +87,6 @@ func NewManager() (*Manager, error) {
 		return nil, err
 	}
 
-	logger.Info("NewManager done")
-	return m, nil
-}
-
-func (m *Manager) init() {
-	// init sleep inhibitor
-	m.inhibitor = newSleepInhibitor(m.helper.Login1Manager)
-	m.inhibitor.OnBeforeSuspend = m.handleBeforeSuspend
-	m.inhibitor.OnWakeup = m.handleWakeup
-	m.inhibitor.block()
-
 	m.LinePowerScreenBlackDelay = property.NewGSettingsIntProperty(m, "LinePowerScreenBlackDelay", m.settings, settingKeyLinePowerScreenBlackDelay)
 	m.LinePowerSleepDelay = property.NewGSettingsIntProperty(m, "LinePowerSleepDelay", m.settings, settingKeyLinePowerSleepDelay)
 	m.BatteryScreenBlackDelay = property.NewGSettingsIntProperty(m, "BatteryScreenBlackDelay", m.settings, settingKeyBatteryScreenBlackDelay)
@@ -117,6 +106,18 @@ func (m *Manager) init() {
 	m.BatteryIsPresent = make(map[string]bool)
 	m.BatteryPercentage = make(map[string]float64)
 	m.BatteryState = make(map[string]uint32)
+
+	logger.Info("NewManager done")
+	return m, nil
+}
+
+func (m *Manager) init() {
+	// init sleep inhibitor
+	m.inhibitor = newSleepInhibitor(m.helper.Login1Manager)
+	m.inhibitor.OnBeforeSuspend = m.handleBeforeSuspend
+	m.inhibitor.OnWakeup = m.handleWakeup
+	m.inhibitor.block()
+
 	m.handleBatteryDisplayUpdate()
 	m.initBatteryDisplayUpdateHandler()
 

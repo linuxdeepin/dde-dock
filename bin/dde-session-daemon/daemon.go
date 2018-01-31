@@ -43,14 +43,16 @@ func runMainLoop() {
 	session.Register()
 	dbus.DealWithUnhandledMessage()
 	listenDaemonSettings()
-	go glib.StartLoop()
 
-	if err := dbus.Wait(); err != nil {
-		logger.Errorf("Lost dbus: %v", err)
-		os.Exit(-1)
-	}
+	go func() {
+		if err := dbus.Wait(); err != nil {
+			logger.Errorf("Lost dbus: %v", err)
+			os.Exit(-1)
+		}
+	}()
 
-	logger.Info("dbus connection is closed by user")
+	glib.StartLoop()
+	logger.Info("Loop has been terminated!")
 	os.Exit(0)
 }
 
