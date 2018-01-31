@@ -20,13 +20,14 @@
 package dock
 
 import (
+	"sort"
+	"time"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"sort"
-	"time"
 )
 
 func (m *DockManager) registerWindow(win xproto.Window) {
@@ -90,13 +91,18 @@ func (m *DockManager) handleActiveWindowChanged() {
 		logger.Warning(err)
 		return
 	}
+	m.activeWindowMu.Lock()
 	if m.activeWindow == activeWindow {
+		m.activeWindowMu.Unlock()
 		logger.Debug("Active window no change")
 		return
 	}
-
-	logger.Debug("Active window changed window:", activeWindow)
+	// try handle activeWindow == 0
+	m.activeWindowOld = m.activeWindow
 	m.activeWindow = activeWindow
+	m.activeWindowMu.Unlock()
+
+	logger.Debug("Active window changed", activeWindow)
 
 	for _, entry := range m.Entries {
 		winInfo, ok := entry.windows[activeWindow]
@@ -110,7 +116,7 @@ func (m *DockManager) handleActiveWindowChanged() {
 		}
 	}
 
-	m.updateHideStateWithDelay()
+	m.updateHideState(true)
 }
 
 func (m *DockManager) listenRootWindowPropertyChange() {
@@ -123,7 +129,7 @@ func (m *DockManager) listenRootWindowPropertyChange() {
 		case _NET_ACTIVE_WINDOW:
 			m.handleActiveWindowChanged()
 		case _NET_SHOWING_DESKTOP:
-			m.updateHideStateWithoutDelay()
+			m.updateHideState(false)
 		}
 	}).Connect(XU, rootWin)
 
@@ -216,11 +222,8 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 				isXYWHChange = true
 			}
 			logger.Debug("isXYWHChange", isXYWHChange)
-			if isXYWHChange {
-				m.updateHideStateWithoutDelay()
-			} else {
-				m.updateHideStateWithDelay()
-			}
+			// if xywh changed ,update hide state without delay
+			m.updateHideState(!isXYWHChange)
 		})
 	}
 }

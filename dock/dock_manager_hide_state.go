@@ -21,12 +21,13 @@ package dock
 
 import (
 	"errors"
+	"time"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
-	"time"
 )
 
 func max(a, b int) int {
@@ -57,8 +58,9 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 	return ax < bx && ay < by
 }
 
-func (m *DockManager) getActiveWinGroup() (ret []xproto.Window) {
-	ret = []xproto.Window{m.activeWindow}
+func (m *DockManager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Window) {
+
+	ret = []xproto.Window{activeWin}
 	list, err := ewmh.ClientListStackingGet(XU)
 	if err != nil {
 		logger.Warning(err)
@@ -67,7 +69,7 @@ func (m *DockManager) getActiveWinGroup() (ret []xproto.Window) {
 
 	idx := -1
 	for i, win := range list {
-		if win == m.activeWindow {
+		if win == activeWin {
 			idx = i
 			break
 		}
@@ -79,9 +81,9 @@ func (m *DockManager) getActiveWinGroup() (ret []xproto.Window) {
 		return
 	}
 
-	aPid := getWmPid(XU, m.activeWindow)
-	aWmClass, _ := icccm.WmClassGet(XU, m.activeWindow)
-	aLeaderWin, _ := getWmClientLeader(XU, m.activeWindow)
+	aPid := getWmPid(XU, activeWin)
+	aWmClass, _ := icccm.WmClassGet(XU, activeWin)
+	aLeaderWin, _ := getWmClientLeader(XU, activeWin)
 
 	for i := idx - 1; i >= 0; i-- {
 		win := list[i]
@@ -158,35 +160,58 @@ func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 }
 
 const (
-	DDELauncher = "dde-launcher"
+	ddeLauncherWMClass = "dde-launcher"
 )
 
-func (m *DockManager) isDeepinLauncherShown() bool {
-	winClass, err := icccm.WmClassGet(XU, m.activeWindow)
+func isDDELauncher(win xproto.Window) (bool, error) {
+	winClass, err := icccm.WmClassGet(XU, win)
 	if err != nil {
-		logger.Debug(err)
-		return false
+		return false, err
 	}
-	return winClass.Instance == DDELauncher
+	return winClass.Instance == ddeLauncherWMClass, nil
+}
+
+func (m *DockManager) getActiveWindow() (activeWin xproto.Window) {
+	m.activeWindowMu.Lock()
+	if m.activeWindow == 0 {
+		activeWin = m.activeWindowOld
+	} else {
+		activeWin = m.activeWindow
+	}
+	m.activeWindowMu.Unlock()
+	return
 }
 
 func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
-	if m.activeWindow == 0 {
+	activeWin := m.getActiveWindow()
+	if activeWin == 0 {
 		logger.Debug("shouldHideOnSmartHideMode: activeWindow is 0")
 		return false, errors.New("activeWindow is 0")
 	}
-	if m.isDeepinLauncherShown() {
-		logger.Debug("launcher is shown")
+	if m.isDDELauncherVisible() {
+		logger.Debug("shouldHideOnSmartHideMode: dde launcher is visible")
 		return false, nil
 	}
-	list := m.getActiveWinGroup()
-	logger.Debug("activeWinGroup:", list)
+
+	isLauncher, err := isDDELauncher(activeWin)
+	if err != nil {
+		return false, err
+	}
+
+	if isLauncher {
+		// dde launcher is invisible, but it is still active window
+		logger.Debug("shouldHideOnSmartHideMode: active window is dde launcher")
+		return false, nil
+	}
+
+	list := m.getActiveWinGroup(activeWin)
+	logger.Debug("shouldHideOnSmartHideMode: activeWinGroup is", list)
 	for _, win := range list {
 		over, err := m.isWindowDockOverlap(win)
 		if err != nil {
 			return false, err
 		}
-		logger.Debugf("win %d dock overlap %v", win, over)
+		logger.Debugf("shouldHideOnSmartHideMode: win %d dock overlap %v", win, over)
 		if over {
 			return true, nil
 		}
@@ -227,8 +252,8 @@ func (m *DockManager) cancelSmartHideModeTimer() {
 }
 
 func (m *DockManager) updateHideState(delay bool) {
-	if m.isDeepinLauncherShown() {
-		logger.Debug("updateHideState: launcher is shown, show dock")
+	if m.isDDELauncherVisible() {
+		logger.Debug("updateHideState: dde launcher is visible, show dock")
 		m.setPropHideState(HideStateShow)
 		return
 	}
@@ -244,19 +269,11 @@ func (m *DockManager) updateHideState(delay bool) {
 
 	case HideModeSmartHide:
 		if delay {
-			m.resetSmartHideModeTimer(time.Millisecond * 500)
+			m.resetSmartHideModeTimer(time.Millisecond * 400)
 		} else {
 			m.resetSmartHideModeTimer(0)
 		}
 	}
-}
-
-func (m *DockManager) updateHideStateWithDelay() {
-	m.updateHideState(true)
-}
-
-func (m *DockManager) updateHideStateWithoutDelay() {
-	m.updateHideState(false)
 }
 
 func (m *DockManager) setPropHideState(hideState HideStateType) {

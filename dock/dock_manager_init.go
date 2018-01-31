@@ -25,6 +25,7 @@ import (
 	// dbus interfaces
 	libApps "dbus/com/deepin/daemon/apps"
 	"dbus/com/deepin/dde/daemon/launcher"
+	libDDELauncher "dbus/com/deepin/dde/launcher"
 	"dbus/com/deepin/sessionmanager"
 	"dbus/com/deepin/wm"
 
@@ -37,10 +38,13 @@ import (
 )
 
 const (
-	ddeDataDir         = "/usr/share/dde/data"
-	windowPatternsFile = ddeDataDir + "/window_patterns.json"
-	launcherDest       = "com.deepin.dde.daemon.Launcher"
-	launcherObjPath    = "/com/deepin/dde/daemon/Launcher"
+	ddeDataDir           = "/usr/share/dde/data"
+	windowPatternsFile   = ddeDataDir + "/window_patterns.json"
+	launcherDest         = "com.deepin.dde.daemon.Launcher"
+	launcherObjPath      = "/com/deepin/dde/daemon/Launcher"
+	ddeLauncherDest      = "com.deepin.dde.Launcher"
+	ddeLauncherInterface = ddeLauncherDest
+	ddeLauncherObjPath   = "/com/deepin/dde/Launcher"
 )
 
 func (m *DockManager) initEntries() {
@@ -57,7 +61,7 @@ func (m *DockManager) listenSettingsChanged() {
 	m.connectSettingKeyChanged(settingKeyHideMode, func(g *gio.Settings, key string) {
 		mode := HideModeType(g.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
-		m.updateHideStateWithoutDelay()
+		m.updateHideState(false)
 	})
 
 	// listen display mode change
@@ -104,6 +108,22 @@ func (m *DockManager) listenLauncherSignal() {
 			}
 		}
 	})
+
+	m.ddeLauncher.ConnectVisibleChanged(func(visible bool) {
+		logger.Debug("dde launcher visible changed", visible)
+		m.ddeLauncherVisibleMu.Lock()
+		m.ddeLauncherVisible = visible
+		m.ddeLauncherVisibleMu.Unlock()
+
+		m.updateHideState(false)
+	})
+}
+
+func (m *DockManager) isDDELauncherVisible() bool {
+	m.ddeLauncherVisibleMu.Lock()
+	result := m.ddeLauncherVisible
+	m.ddeLauncherVisibleMu.Unlock()
+	return result
 }
 
 func (m *DockManager) getWinIconPreferredApps() []string {
@@ -149,6 +169,10 @@ func (m *DockManager) init() error {
 	}
 
 	m.launcher, err = launcher.NewLauncher(launcherDest, launcherObjPath)
+	if err != nil {
+		return err
+	}
+	m.ddeLauncher, err = libDDELauncher.NewLauncher(ddeLauncherDest, ddeLauncherObjPath)
 	if err != nil {
 		return err
 	}

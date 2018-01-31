@@ -21,6 +21,7 @@ package dock
 
 import (
 	"errors"
+
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"pkg.deepin.io/lib/dbus"
@@ -39,7 +40,7 @@ func (entry *AppEntry) Activate(timestamp uint32) error {
 	m := entry.dockManager
 	if HideModeType(m.HideMode.Get()) == HideModeSmartHide {
 		m.setPropHideState(HideStateShow)
-		m.updateHideStateWithDelay()
+		m.updateHideState(true)
 	}
 
 	if !entry.hasWindow() {
@@ -71,7 +72,7 @@ func (entry *AppEntry) Activate(timestamp uint32) error {
 		case icccm.StateNormal:
 			if len(entry.windows) == 1 {
 				iconifyWindow(win)
-			} else if entry.dockManager.activeWindow == win {
+			} else if entry.dockManager.getActiveWindow() == win {
 				nextWin := entry.findNextLeader()
 				activateWindow(nextWin)
 			}

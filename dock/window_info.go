@@ -23,16 +23,17 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
-	"github.com/BurntSushi/xgbutil/xevent"
-	"github.com/BurntSushi/xgbutil/xprop"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 	"unicode/utf8"
+
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/icccm"
+	"github.com/BurntSushi/xgbutil/xevent"
+	"github.com/BurntSushi/xgbutil/xprop"
 )
 
 const windowHashPrefix = "w:"
@@ -420,7 +421,7 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManag
 				needUpdate = true
 			}
 		}
-		logger.Debugf("propertyNotifyAtomTable win %v atom: %v", winInfo.window, atomNames)
+		//logger.Debugf("propertyNotifyAtomTable win %v atom: %v", winInfo.window, atomNames)
 
 		if needUpdate {
 			dockManager.attachOrDetachWindow(winInfo)

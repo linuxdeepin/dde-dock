@@ -20,10 +20,11 @@
 package dock
 
 import (
-	"github.com/BurntSushi/xgb/xproto"
-	"pkg.deepin.io/lib/dbus"
 	"sort"
 	"sync"
+
+	"github.com/BurntSushi/xgb/xproto"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
@@ -194,7 +195,7 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	entry.updateWindowTitles()
 	entry.updateIsActive()
 
-	if (entry.dockManager != nil && win == entry.dockManager.activeWindow) ||
+	if (entry.dockManager != nil && win == entry.dockManager.getActiveWindow()) ||
 		entry.current == nil {
 		entry.setCurrentWindowInfo(winInfo)
 		entry.updateIcon()
@@ -324,6 +325,6 @@ func (e *AppEntry) updateIsActive() {
 	if e.dockManager == nil {
 		return
 	}
-	_, ok := e.windows[e.dockManager.activeWindow]
+	_, ok := e.windows[e.dockManager.getActiveWindow()]
 	e.setIsActive(ok)
 }

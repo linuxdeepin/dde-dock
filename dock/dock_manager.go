@@ -28,8 +28,10 @@ import (
 	// dbus interfaces:
 	libApps "dbus/com/deepin/daemon/apps"
 	"dbus/com/deepin/dde/daemon/launcher"
+	libDDELauncher "dbus/com/deepin/dde/launcher"
 	"dbus/com/deepin/sessionmanager"
 	"dbus/com/deepin/wm"
+
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 
 	"gir/gio-2.0"
@@ -58,7 +60,12 @@ type DockManager struct {
 	HideTimeout *property.GSettingsUintProperty `access:"readwrite"`
 	DockedApps  *property.GSettingsStrvProperty
 
-	activeWindow xproto.Window
+	activeWindow    xproto.Window
+	activeWindowOld xproto.Window
+	activeWindowMu  sync.Mutex
+
+	ddeLauncherVisible   bool
+	ddeLauncherVisibleMu sync.Mutex
 
 	HideState HideStateType
 
@@ -74,6 +81,7 @@ type DockManager struct {
 
 	// dbus objects:
 	launcher         *launcher.Launcher
+	ddeLauncher      *libDDELauncher.Launcher
 	wm               *wm.Wm
 	launchedRecorder *libApps.LaunchedRecorder
 	startManager     *sessionmanager.StartManager
@@ -262,7 +270,7 @@ func (m *DockManager) SetFrontendWindowRect(x, y int32, width, height uint32) {
 	m.FrontendWindowRect.Width = width
 	m.FrontendWindowRect.Height = height
 	dbus.NotifyChange(m, "FrontendWindowRect")
-	m.updateHideStateWithoutDelay()
+	m.updateHideState(false)
 }
 
 func (m *DockManager) IsDocked(desktopFilePath string) (bool, error) {
