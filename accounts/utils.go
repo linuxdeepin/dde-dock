@@ -131,15 +131,19 @@ func isStrvEqual(l1, l2 []string) bool {
 }
 
 func polkitAuthManagerUser(pid uint32) error {
-	return polkitAuthentication(polkitManagerUser, pid)
+	return polkitAuthentication(polkitManagerUser, "", "", pid)
 }
 
-func polkitAuthChangeOwnData(pid uint32) error {
-	return polkitAuthentication(polkitChangeOwnData, pid)
+func polkitAuthChangeOwnData(user, uid string, pid uint32) error {
+	return polkitAuthentication(polkitChangeOwnData, user, uid, pid)
 }
 
-func polkitAuthentication(action string, pid uint32) error {
-	success, err := polkitAuthWithPid(action, pid)
+func polkitAuthLogin(pid uint32) error {
+	return polkitAuthentication(polkitSetLoginOption, "", "", pid)
+}
+
+func polkitAuthentication(action, user, uid string, pid uint32) error {
+	success, err := polkitAuthWithPid(action, user, uid, pid)
 	if err != nil {
 		return err
 	}

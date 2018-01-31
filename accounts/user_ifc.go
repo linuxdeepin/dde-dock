@@ -40,7 +40,7 @@ func (u *User) SetFullName(dbusMsg dbus.DMessage, name string) error {
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, false); err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetFullName] access denied:", err)
 		return err
 	}
@@ -64,7 +64,7 @@ func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) error {
 	}
 
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, false); err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetHomeDir] access denied:", err)
 		return err
 	}
@@ -117,7 +117,7 @@ func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) error {
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, false); err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetPassword] access denied:", err)
 		return err
 	}
@@ -161,7 +161,7 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) error {
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, false); err != nil {
+	if err := polkitAuthLogin(pid); err != nil {
 		logger.Debug("[SetLocked] access denied:", err)
 		return err
 	}
@@ -184,7 +184,7 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
-	if err := polkitAuthManagerUser(pid); err != nil {
+	if err := polkitAuthLogin(pid); err != nil {
 		logger.Debug("[SetAutomaticLogin] access denied:", err)
 		return err
 	}
@@ -217,7 +217,7 @@ func (u *User) EnableNoPasswdLogin(dbusMsg dbus.DMessage, enabled bool) error {
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
-	if err := polkitAuthManagerUser(pid); err != nil {
+	if err := polkitAuthLogin(pid); err != nil {
 		logger.Debug("[EnableNoPasswdLogin] access denied:", err)
 		return err
 	}

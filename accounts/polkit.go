@@ -23,6 +23,7 @@ import (
 	"dbus/org/freedesktop/policykit1"
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
+	"strconv"
 )
 
 const (
@@ -45,7 +46,7 @@ type polkitSubject struct {
 	SubjectDetails map[string]dbus.Variant
 }
 
-func polkitAuthWithPid(actionId string, pid uint32) (bool, error) {
+func polkitAuthWithPid(actionId, user, uid string, pid uint32) (bool, error) {
 	polkit, err := policykit1.NewAuthority(polkitSender,
 		polkitPath)
 	if err != nil {
@@ -57,6 +58,15 @@ func polkitAuthWithPid(actionId string, pid uint32) (bool, error) {
 	subject.SubjectDetails = make(map[string]dbus.Variant)
 	subject.SubjectDetails["pid"] = dbus.MakeVariant(uint32(pid))
 	subject.SubjectDetails["start-time"] = dbus.MakeVariant(uint64(0))
+	if user != "" {
+		subject.SubjectDetails["user"] = dbus.MakeVariant(user)
+	}
+	if uid != "" {
+		v, err := strconv.ParseUint(uid, 10, 32)
+		if err == nil {
+			subject.SubjectDetails["uid"] = dbus.MakeVariant(uint32(v))
+		}
+	}
 
 	var details = make(map[string]string)
 	details[""] = ""
