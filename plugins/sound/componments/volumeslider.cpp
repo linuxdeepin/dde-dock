@@ -86,18 +86,20 @@ void VolumeSlider::mousePressEvent(QMouseEvent *e)
 void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
 {
     const int value = minimum() + (double((maximum()) - minimum()) * e->x() / rect().width());
+    const int normalized = std::max(std::min(1000, value), 0);
 
-    QSlider::setValue(std::max(std::min(1000, value), 0));
-    emit valueChanged(std::max(std::min(1000, value), 0));
+    QSlider::setValue(normalized);
+
+    emit valueChanged(normalized);
 }
 
 void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton)
+    {
         m_pressed = false;
         emit requestPlaySoundEffect();
     }
-    //        QTimer::singleShot(100, [this] {m_pressed = false;});
 }
 
 void VolumeSlider::wheelEvent(QWheelEvent *e)

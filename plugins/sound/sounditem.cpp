@@ -101,7 +101,7 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
     Q_UNUSED(checked);
 
     if (menuId == MUTE)
-        m_sinkInter->SetMute(!m_sinkInter->mute());
+        m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
     else if (menuId == SETTINS)
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:sound\"");
 }

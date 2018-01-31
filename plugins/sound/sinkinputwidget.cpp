@@ -49,7 +49,6 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
     m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24)));
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
-    m_volumeSlider->setValue(m_inputInter->volume() * 1000);
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_volumeIcon);
@@ -62,6 +61,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
     connect(m_volumeIcon, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
+    connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [=] { m_volumeSlider->setValue(m_inputInter->volume() * 1000); });
 
     setLayout(centralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -72,12 +72,12 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 
 void SinkInputWidget::setVolume(const int value)
 {
-    m_inputInter->SetVolume(double(value) / 1000.0, false);
+    m_inputInter->SetVolumeQueued(double(value) / 1000.0, false);
 }
 
 void SinkInputWidget::setMute()
 {
-    m_inputInter->SetMute(!m_inputInter->mute());
+    m_inputInter->SetMuteQueued(!m_inputInter->mute());
 }
 
 void SinkInputWidget::setMuteIcon()
@@ -110,5 +110,5 @@ void SinkInputWidget::setMuteIcon()
 void SinkInputWidget::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
-    m_inputInter->SetMute(false);
+    m_inputInter->SetMuteQueued(false);
 }

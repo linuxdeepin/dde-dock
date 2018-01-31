@@ -179,7 +179,7 @@ void SoundApplet::volumeSliderValueChanged()
     //Keep the same units. slider is 1000.0f, maxVolue need multiplication 10.
     float m_maxVolume = std::min(1000, m_gsetting->get("output-volume-max").toInt() * 10);
 
-    m_defSinkInter->SetVolume(m_volumeSlider->value() / 1000.0f * (m_maxVolume / 1000.0f), false);
+    m_defSinkInter->SetVolumeQueued(m_volumeSlider->value() / 1000.0f * (m_maxVolume / 1000.0f), false);
 }
 
 void SoundApplet::sinkInputsChanged()
@@ -208,7 +208,7 @@ void SoundApplet::sinkInputsChanged()
 
 void SoundApplet::toggleMute()
 {
-    m_defSinkInter->SetMute(!m_defSinkInter->mute());
+    m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
 }
 
 void SoundApplet::delayLoad()
@@ -231,5 +231,5 @@ void SoundApplet::delayLoad()
 void SoundApplet::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
-    m_defSinkInter->SetMute(false);
+    m_defSinkInter->SetMuteQueued(false);
 }

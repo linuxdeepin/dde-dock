@@ -119,6 +119,14 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SetMute"), argumentList);
     }
 
+    inline void SetMuteQueued(bool in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+
+        CallQueued("SetMute", argumentList);
+    }
+
     inline QDBusPendingReply<> SetPort(const QString &in0)
     {
         QList<QVariant> argumentList;
@@ -133,6 +141,53 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SetVolume"), argumentList);
     }
 
+    inline void SetVolumeQueued(double volume, bool feedBack)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(volume) << QVariant::fromValue(feedBack);
+
+        CallQueued("SetVolume", argumentList);
+    }
+
+private:
+    inline void CallQueued(const QString &callName, const QList<QVariant> &args)
+    {
+        if (m_waittingCalls.contains(callName))
+        {
+            m_waittingCalls[callName] = args;
+            return;
+        }
+
+        if (m_processingCalls.contains(callName))
+        {
+            m_waittingCalls.insert(callName, args);
+        } else {
+            QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(asyncCallWithArgumentList(callName, args));
+            connect(watcher, &QDBusPendingCallWatcher::finished, this, &DBusSink::onPendingCallFinished);
+
+            m_processingCalls.insert(callName, watcher);
+        }
+    }
+
+private slots:
+    void onPendingCallFinished(QDBusPendingCallWatcher *w)
+    {
+        w->deleteLater();
+
+        const auto callName = m_processingCalls.key(w);
+        Q_ASSERT(!callName.isEmpty());
+        if (callName.isEmpty())
+            return;
+
+        m_processingCalls.remove(callName);
+
+        if (!m_waittingCalls.contains(callName))
+            return;
+
+        const auto args = m_waittingCalls.take(callName);
+        CallQueued(callName, args);
+    }
+
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
 void BalanceChanged();
@@ -144,6 +199,10 @@ void NameChanged();
 void SupportBalanceChanged();
 void SupportFadeChanged();
 void VolumeChanged();
+
+private:
+    QMap<QString, QDBusPendingCallWatcher *> m_processingCalls;
+    QMap<QString, QList<QVariant>> m_waittingCalls;
 };
 
 namespace com {
