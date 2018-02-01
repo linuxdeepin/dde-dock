@@ -28,13 +28,14 @@ import (
 	// "gopkg.in/alecthomas/kingpin.v2"
 	"os"
 	"os/user"
+	"runtime"
+
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
 	"pkg.deepin.io/lib/utils"
-	"runtime"
 )
 
 var logger = log.NewLogger("daemon/dde-session-daemon")

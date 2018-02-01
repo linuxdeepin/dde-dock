@@ -78,9 +78,9 @@ func (daemon *Daemon) Start() error {
 		m.initHandlers()
 
 		// listen gsettings changed event
-		m.listenGSettingsChanged(daemon.manager.gsSystem, shortcuts.ShortcutTypeSystem)
-		m.listenGSettingsChanged(daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
-		m.listenGSettingsChanged(daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
+		m.listenGSettingsChanged(gsSchemaSystem, daemon.manager.gsSystem, shortcuts.ShortcutTypeSystem)
+		m.listenGSettingsChanged(gsSchemaMediaKey, daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
+		m.listenGSettingsChanged(gsSchemaGnomeWM, daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
 
 		m.eliminateKeystrokeConflict()
 		m.shortcutManager.EventLoop()

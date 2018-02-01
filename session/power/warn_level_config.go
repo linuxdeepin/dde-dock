@@ -22,6 +22,8 @@ package power
 import (
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gsettings"
+
 	"time"
 )
 
@@ -57,9 +59,9 @@ func (c *WarnLevelConfig) connectSettings(s *gio.Settings) {
 	c.ActionTime = uint64(s.GetInt(settingKeyActionTime))
 	c.connectSettingsChange()
 }
-func (c *WarnLevelConfig) connectSettingsKeyChange(key string, handler func(*gio.Settings, string)) {
+func (c *WarnLevelConfig) connectSettingsKeyChange(key string, handler func(key string)) {
 	logger.Debug("connect change", key)
-	c.settings.Connect("changed::"+key, handler)
+	gsettings.ConnectChanged(gsSchemaPower, key, handler)
 }
 
 func (c *WarnLevelConfig) delayCheckValid() {
@@ -85,10 +87,10 @@ func (c *WarnLevelConfig) notifyChange(propName string) {
 	dbus.NotifyChange(c, propName)
 }
 
-func (c *WarnLevelConfig) getChangeHandlerFloat64(propName string, propRef *float64) func(*gio.Settings, string) {
-	return func(s *gio.Settings, key string) {
+func (c *WarnLevelConfig) getChangeHandlerFloat64(propName string, propRef *float64) func(string) {
+	return func(key string) {
 		logger.Debug("change key", key)
-		newVal := float64(s.GetInt(key))
+		newVal := float64(c.settings.GetInt(key))
 		if newVal != *propRef {
 			*propRef = newVal
 			c.notifyChange(propName)
@@ -96,10 +98,10 @@ func (c *WarnLevelConfig) getChangeHandlerFloat64(propName string, propRef *floa
 	}
 }
 
-func (c *WarnLevelConfig) getChangeHandlerUInt64(propName string, propRef *uint64) func(*gio.Settings, string) {
-	return func(s *gio.Settings, key string) {
+func (c *WarnLevelConfig) getChangeHandlerUInt64(propName string, propRef *uint64) func(string) {
+	return func(key string) {
 		logger.Debug("change key", key)
-		newVal := uint64(s.GetInt(key))
+		newVal := uint64(c.settings.GetInt(key))
 		if newVal != *propRef {
 			*propRef = newVal
 			c.notifyChange(propName)
@@ -107,10 +109,10 @@ func (c *WarnLevelConfig) getChangeHandlerUInt64(propName string, propRef *uint6
 	}
 }
 
-func (c *WarnLevelConfig) getChangeHandlerBoolean(propName string, propRef *bool) func(*gio.Settings, string) {
-	return func(s *gio.Settings, key string) {
+func (c *WarnLevelConfig) getChangeHandlerBoolean(propName string, propRef *bool) func(string) {
+	return func(key string) {
 		logger.Debug("change key", key)
-		newVal := s.GetBoolean(key)
+		newVal := c.settings.GetBoolean(key)
 		if newVal != *propRef {
 			*propRef = newVal
 			c.notifyChange(propName)

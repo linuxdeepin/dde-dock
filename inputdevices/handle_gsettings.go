@@ -22,23 +22,20 @@ package inputdevices
 import (
 	"sync"
 
-	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/dxinput"
+	"pkg.deepin.io/lib/gsettings"
 )
 
 var gsLocker sync.Mutex
 
 func (m *Manager) handleGSettings() {
-	m.settings.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case gsKeyWheelSpeed:
-			m.setWheelSpeed(false)
-		}
+	gsettings.ConnectChanged(gsSchemaInputDevices, gsKeyWheelSpeed, func(key string) {
+		m.setWheelSpeed(false)
 	})
 }
 
 func (kbd *Keyboard) handleGSettings() {
-	kbd.setting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(kbdSchema, "*", func(key string) {
 		switch key {
 		case kbdKeyRepeatEnable, kbdKeyRepeatDelay,
 			kbdKeyRepeatInterval:
@@ -56,7 +53,7 @@ func (kbd *Keyboard) handleGSettings() {
 }
 
 func (m *Mouse) handleGSettings() {
-	m.setting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(mouseSchema, "*", func(key string) {
 		switch key {
 		case mouseKeyLeftHanded:
 			m.enableLeftHanded()
@@ -81,7 +78,7 @@ func (m *Mouse) handleGSettings() {
 }
 
 func (tp *TrackPoint) handleGSettings() {
-	tp.setting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(trackPointSchema, "*", func(key string) {
 		switch key {
 		case trackPointKeyMidButton:
 			tp.enableMiddleButton()
@@ -108,7 +105,7 @@ func (tp *TrackPoint) handleGSettings() {
 }
 
 func (tpad *Touchpad) handleGSettings() {
-	tpad.setting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(tpadSchema, "*", func(key string) {
 		switch key {
 		case tpadKeyEnabled:
 			tpad.enable(tpad.TPadEnable.Get())
@@ -142,7 +139,7 @@ func (tpad *Touchpad) handleGSettings() {
 }
 
 func (w *Wacom) handleGSettings() {
-	w.setting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(wacomSchema, "*", func(key string) {
 		logger.Debugf("wacom gsettings changed %v", key)
 		switch key {
 		case wacomKeyLeftHanded:
@@ -156,7 +153,7 @@ func (w *Wacom) handleGSettings() {
 		}
 	})
 
-	w.stylusSetting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(wacomStylusSchema, "*", func(key string) {
 		logger.Debugf("wacom.stylus gsettings changed %v", key)
 		switch key {
 		case wacomKeyPressureSensitive:
@@ -172,7 +169,7 @@ func (w *Wacom) handleGSettings() {
 		}
 	})
 
-	w.eraserSetting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(wacomEraserSchema, "*", func(key string) {
 		logger.Debugf("wacom.eraser gsettings changed %v", key)
 		switch key {
 		case wacomKeyPressureSensitive:

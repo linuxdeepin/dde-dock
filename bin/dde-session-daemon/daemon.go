@@ -31,6 +31,7 @@ import (
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -40,6 +41,11 @@ const (
 )
 
 func runMainLoop() {
+	err := gsettings.StartMonitor()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
 	session.Register()
 	dbus.DealWithUnhandledMessage()
 	listenDaemonSettings()

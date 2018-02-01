@@ -33,6 +33,7 @@ import (
 	"pkg.deepin.io/lib/appinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/gsettings"
 
 	"github.com/BurntSushi/xgb/xproto"
 )
@@ -52,27 +53,27 @@ func (m *DockManager) initEntries() {
 	m.initClientList()
 }
 
-func (m *DockManager) connectSettingKeyChanged(key string, handler func(*gio.Settings, string)) {
-	m.settings.Connect("changed::"+key, handler)
+func (m *DockManager) connectSettingKeyChanged(key string, handler func(key string)) {
+	gsettings.ConnectChanged(dockSchema, key, handler)
 }
 
 func (m *DockManager) listenSettingsChanged() {
 	// listen hide mode change
-	m.connectSettingKeyChanged(settingKeyHideMode, func(g *gio.Settings, key string) {
-		mode := HideModeType(g.GetEnum(key))
+	m.connectSettingKeyChanged(settingKeyHideMode, func(key string) {
+		mode := HideModeType(m.settings.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
 		m.updateHideState(false)
 	})
 
 	// listen display mode change
-	m.connectSettingKeyChanged(settingKeyDisplayMode, func(g *gio.Settings, key string) {
-		mode := DisplayModeType(g.GetEnum(key))
+	m.connectSettingKeyChanged(settingKeyDisplayMode, func(key string) {
+		mode := DisplayModeType(m.settings.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
 	})
 
 	// listen position change
-	m.connectSettingKeyChanged(settingKeyPosition, func(g *gio.Settings, key string) {
-		position := positionType(g.GetEnum(key))
+	m.connectSettingKeyChanged(settingKeyPosition, func(key string) {
+		position := positionType(m.settings.GetEnum(key))
 		logger.Debug(key, "changed to", position)
 	})
 }

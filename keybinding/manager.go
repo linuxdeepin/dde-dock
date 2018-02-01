@@ -33,6 +33,7 @@ import (
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/xdg/basedir"
 
 	x "github.com/linuxdeepin/go-x11-client"
@@ -303,18 +304,18 @@ func (m *Manager) enableListenGSettingsChanged(val bool) {
 	m.enableListenGSettings = val
 }
 
-func (m *Manager) listenGSettingsChanged(gsettings *gio.Settings, type_ int32) {
-	gsettings.Connect("changed", func(s *gio.Settings, key string) {
+func (m *Manager) listenGSettingsChanged(schema string, settings *gio.Settings, type0 int32) {
+	gsettings.ConnectChanged(schema, "*", func(key string) {
 		if !m.enableListenGSettings {
 			return
 		}
 
-		shortcut := m.shortcutManager.GetByIdType(key, type_)
+		shortcut := m.shortcutManager.GetByIdType(key, type0)
 		if shortcut == nil {
 			return
 		}
 
-		keystrokes := gsettings.GetStrv(key)
+		keystrokes := settings.GetStrv(key)
 		m.shortcutManager.ModifyShortcutKeystrokes(shortcut, shortcuts.ParseKeystrokes(keystrokes))
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	})

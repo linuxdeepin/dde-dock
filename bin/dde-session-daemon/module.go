@@ -25,6 +25,7 @@ import (
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/gsettings"
 
 	// sort modules
 	_ "pkg.deepin.io/dde/daemon/network"
@@ -64,11 +65,12 @@ import (
 
 var (
 	moduleLocker   sync.Mutex
-	daemonSettings = gio.NewSettings("com.deepin.dde.daemon")
+	daemonSchema   = "com.deepin.dde.daemon"
+	daemonSettings = gio.NewSettings(daemonSchema)
 )
 
 func listenDaemonSettings() {
-	daemonSettings.Connect("changed", func(s *gio.Settings, name string) {
+	gsettings.ConnectChanged(daemonSchema, "*", func(name string) {
 		// gsettings key names must keep consistent with module names
 		moduleLocker.Lock()
 		defer moduleLocker.Unlock()
@@ -91,7 +93,6 @@ func listenDaemonSettings() {
 			return
 		}
 	})
-	daemonSettings.GetBoolean("audio")
 }
 
 func checkDependencies(s *gio.Settings, module loader.Module, enabled bool) error {

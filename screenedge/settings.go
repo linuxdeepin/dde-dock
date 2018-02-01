@@ -33,12 +33,6 @@ func NewSettings() *Settings {
 	return s
 }
 
-func (s *Settings) ConnectChanged(handler func(string)) {
-	s.gsettings.Connect("changed", func(s *gio.Settings, key string) {
-		handler(key)
-	})
-}
-
 func (s *Settings) GetDelay() int32 {
 	return s.gsettings.GetInt("delay")
 }

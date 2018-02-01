@@ -25,9 +25,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gsettings"
 )
 
 const (
@@ -49,7 +49,7 @@ func isDirectory(path string) (bool, error) {
 }
 
 func (m *Manager) listenSettingsChanged() {
-	m.settings.Connect("changed::"+gsKeyAppsHidden, func(g *gio.Settings, key string) {
+	gsettings.ConnectChanged(gsSchemaLauncher, gsKeyAppsHidden, func(key string) {
 		m.appsHiddenMu.Lock()
 		defer m.appsHiddenMu.Unlock()
 

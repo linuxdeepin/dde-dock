@@ -22,13 +22,15 @@ package gesture
 import (
 	"encoding/json"
 	"fmt"
-	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
-	dutils "pkg.deepin.io/lib/utils"
 	"sync"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/gsettings"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -149,11 +151,8 @@ func (m *gestureManager) Write() error {
 }
 
 func (m *gestureManager) handleGSettingsChanged() {
-	m.setting.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case gsKeyEnabled:
-			m.enabled = m.setting.GetBoolean(key)
-		}
+	gsettings.ConnectChanged(gestureSchemaId, gsKeyEnabled, func(key string) {
+		m.enabled = m.setting.GetBoolean(key)
 	})
 }
 

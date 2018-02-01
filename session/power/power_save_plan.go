@@ -23,7 +23,7 @@ import (
 	"sync"
 	"time"
 
-	"gir/gio-2.0"
+	"pkg.deepin.io/lib/gsettings"
 )
 
 const submodulePSP = "PowerSavePlan"
@@ -52,7 +52,7 @@ func newPowerSavePlan(manager *Manager) (string, submodule, error) {
 // 监听 GSettings 值改变, 更新节电计划
 func (psp *powerSavePlan) initSettingsChangedHandler() {
 	m := psp.manager
-	m.settings.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(gsSchemaPower, "*", func(key string) {
 		logger.Debug("setting changed", key)
 		if key == settingKeyLinePowerScreenBlackDelay ||
 			key == settingKeyLinePowerSleepDelay {

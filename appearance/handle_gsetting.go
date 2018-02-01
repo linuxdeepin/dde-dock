@@ -23,13 +23,14 @@ import (
 	"fmt"
 	"time"
 
-	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/lib/dbus"
+
+	"pkg.deepin.io/lib/gsettings"
 )
 
 func (m *Manager) listenGSettingChanged() {
-	m.setting.Connect("changed", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(appearanceSchema, "*", func(key string) {
 		if m.setting == nil {
 			return
 		}
@@ -77,13 +78,12 @@ func (m *Manager) listenGSettingChanged() {
 		}
 		dbus.Emit(m, "Changed", ty, value)
 	})
-	m.setting.GetDouble(gsKeyFontSize)
 
 	m.listenBgGSettings()
 }
 
 func (m *Manager) listenBgGSettings() {
-	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(wrapBgSchema, "picture-uri", func(key string) {
 		if m.wrapBgSetting == nil {
 			return
 		}
@@ -101,12 +101,11 @@ func (m *Manager) listenBgGSettings() {
 		}
 		dbus.Emit(m, "Changed", TypeBackground, uri)
 	})
-	m.wrapBgSetting.GetString(gsKeyBackground)
 
 	if m.gnomeBgSetting == nil {
 		return
 	}
-	m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+	gsettings.ConnectChanged(gnomeBgSchema, "picture-uri", func(key string) {
 		if m.gnomeBgSetting == nil {
 			return
 		}
@@ -135,5 +134,4 @@ func (m *Manager) listenBgGSettings() {
 		}
 		logger.Debug("[Gnome background] sync wrap bg OVER ENDDDDDDDD:", uri)
 	})
-	m.gnomeBgSetting.GetString(gsKeyBackground)
 }

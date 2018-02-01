@@ -25,6 +25,10 @@ import (
 	"pkg.deepin.io/lib/dbus/property"
 )
 
+const (
+	gsSchemaPower = "com.deepin.dde.power"
+)
+
 type Manager struct {
 	helper               *Helper
 	settings             *gio.Settings
@@ -76,7 +80,7 @@ func NewManager() (*Manager, error) {
 	}
 	m.helper = helper
 
-	m.settings = gio.NewSettings("com.deepin.dde.power")
+	m.settings = gio.NewSettings(gsSchemaPower)
 
 	// warn level config
 	m.warnLevelConfig = NewWarnLevelConfig()

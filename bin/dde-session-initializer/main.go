@@ -36,6 +36,7 @@ import (
 	"pkg.deepin.io/lib/app"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
 	"pkg.deepin.io/lib/utils"
@@ -47,6 +48,11 @@ import (
 var logger = log.NewLogger("daemon/initializer")
 
 func runMainLoop() {
+	err := gsettings.StartMonitor()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
 	logger.Info("register session")
 	startTime := time.Now()
 	session.Register()
