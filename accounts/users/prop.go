@@ -120,7 +120,7 @@ func ModifyPasswd(words, username string) error {
 		return errInvalidParam
 	}
 
-	return updatePasswd(EncodePasswd(words), username)
+	return updatePasswd(words, username)
 }
 
 // passwd -S username
