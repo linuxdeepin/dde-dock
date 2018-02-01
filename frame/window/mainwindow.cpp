@@ -159,6 +159,15 @@ bool MainWindow::event(QEvent *e)
     return QWidget::event(e);
 }
 
+void MainWindow::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+
+    m_platformWindowHandle.setEnableBlurWindow(false);
+    m_platformWindowHandle.setShadowOffset(QPoint());
+    m_platformWindowHandle.setShadowRadius(0);
+}
+
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
