@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"dbus/com/deepin/daemon/helper/backlight"
+	"dbus/com/deepin/daemon/inputdevices"
 	"dbus/com/deepin/sessionmanager"
 
 	"gir/gio-2.0"
@@ -84,6 +85,9 @@ type Manager struct {
 
 	startManager    *sessionmanager.StartManager
 	backlightHelper *backlight.Backlight
+	keyboard        *inputdevices.Keyboard
+	keyboardLayout  string
+
 	// controllers
 	audioController       *AudioController
 	mediaPlayerController *MediaPlayerController
@@ -185,6 +189,19 @@ func (m *Manager) init() {
 		logger.Warning("NewStartManager failed:", err)
 	}
 
+	m.keyboard, err = inputdevices.NewKeyboard("com.deepin.daemon.InputDevices",
+		"/com/deepin/daemon/InputDevice/Keyboard")
+
+	m.keyboard.CurrentLayout.ConnectChanged(func() {
+		layout := m.keyboard.CurrentLayout.Get()
+
+		if m.keyboardLayout != layout {
+			m.keyboardLayout = layout
+			logger.Debug("keyboard layout changed:", layout)
+			m.shortcutManager.NotifyLayoutChanged()
+		}
+	})
+
 	m.displayController, err = NewDisplayController(m.backlightHelper)
 	if err != nil {
 		logger.Warning("NewDisplayController failed:", err)
@@ -240,6 +257,11 @@ func (m *Manager) destroy() {
 	if m.startManager != nil {
 		sessionmanager.DestroyStartManager(m.startManager)
 		m.startManager = nil
+	}
+
+	if m.keyboard != nil {
+		inputdevices.DestroyKeyboard(m.keyboard)
+		m.keyboard = nil
 	}
 }
 

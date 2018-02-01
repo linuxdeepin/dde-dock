@@ -22,6 +22,7 @@ package shortcuts
 import (
 	"strings"
 	"sync"
+	"time"
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/log"
@@ -62,6 +63,7 @@ type ShortcutManager struct {
 	xRecordEventHandler *XRecordEventHandler
 	eventCb             KeyEventFunc
 	eventCbMu           sync.Mutex
+	layoutChanged       chan struct{}
 
 	ConflictingKeystrokes []*Keystroke
 	EliminateConflictDone bool
@@ -81,6 +83,7 @@ func NewShortcutManager(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb Ke
 		keySymbols:      keySymbols,
 		recordEnable:    true,
 		keyKeystrokeMap: make(map[Key]*Keystroke),
+		layoutChanged:   make(chan struct{}),
 	}
 
 	ss.ewmhConn, _ = ewmh.NewConn(conn)
@@ -213,6 +216,10 @@ func (sm *ShortcutManager) initRecord() error {
 
 func (sm *ShortcutManager) EnableRecord(val bool) {
 	sm.recordEnable = val
+}
+
+func (sm *ShortcutManager) NotifyLayoutChanged() {
+	sm.layoutChanged <- struct{}{}
 }
 
 func (sm *ShortcutManager) Destroy() {
@@ -561,7 +568,14 @@ func (sm *ShortcutManager) EventLoop() {
 			event, _ := x.NewMappingNotifyEvent(ev)
 			logger.Debug(event)
 			if sm.keySymbols.RefreshKeyboardMapping(event) {
-				sm.regrabAll()
+				go func() {
+					select {
+					case <-sm.layoutChanged:
+						sm.regrabAll()
+					case <-time.After(3 * time.Second):
+						logger.Debug("layout not changed")
+					}
+				}()
 			}
 		}
 	}

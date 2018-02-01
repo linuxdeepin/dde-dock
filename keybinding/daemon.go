@@ -72,17 +72,18 @@ func (daemon *Daemon) Start() error {
 	}
 
 	go func() {
-		daemon.manager.init()
+		m := daemon.manager
+		m.init()
 
-		daemon.manager.initHandlers()
+		m.initHandlers()
 
-		// listen gsetting changed event
-		daemon.manager.listenGSettingsChanged(daemon.manager.gsSystem, shortcuts.ShortcutTypeSystem)
-		daemon.manager.listenGSettingsChanged(daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
-		daemon.manager.listenGSettingsChanged(daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
+		// listen gsettings changed event
+		m.listenGSettingsChanged(daemon.manager.gsSystem, shortcuts.ShortcutTypeSystem)
+		m.listenGSettingsChanged(daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
+		m.listenGSettingsChanged(daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
 
-		daemon.manager.eliminateKeystrokeConflict()
-		daemon.manager.shortcutManager.EventLoop()
+		m.eliminateKeystrokeConflict()
+		m.shortcutManager.EventLoop()
 	}()
 
 	return nil
