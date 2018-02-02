@@ -131,10 +131,10 @@ func (m *Manager) init() {
 	m.initSubmodules()
 	m.startSubmodules()
 
-	m.StartupNotify()
+	m.startupNotify()
 }
 
-func (m *Manager) StartupNotify() {
+func (m *Manager) startupNotify() {
 	props := []string{"BatteryIsPresent", "BatteryPercentage", "BatteryState",
 		"WarnLevel", "OnBattery", "LidIsPresent"}
 	for _, propName := range props {
