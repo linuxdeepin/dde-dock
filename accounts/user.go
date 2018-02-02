@@ -125,7 +125,10 @@ func NewUser(userPath string) (*User, error) {
 	u.updatePropAccountType()
 	u.updateIconList()
 
-	kFile, err := dutils.NewKeyFileFromFile(
+	// TODO: deleted
+	updateConfigPath(info.Name)
+
+	kf, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
 		xsession, _ := users.GetDefaultXSession()
@@ -140,42 +143,42 @@ func NewUser(userPath string) (*User, error) {
 		u.writeUserConfig()
 		return u, nil
 	}
-	defer kFile.Free()
+	defer kf.Free()
 
 	var isSave bool = false
-	xsession, _ := kFile.GetString(confGroupUser, confKeyXSession)
+	xsession, _ := kf.GetString(confGroupUser, confKeyXSession)
 	u.setPropString(&u.XSession, "XSession", xsession)
 	if u.XSession == "" {
 		xsession, _ = users.GetDefaultXSession()
 		u.setPropString(&u.XSession, "XSession", xsession)
 		isSave = true
 	}
-	_, err = kFile.GetBoolean(confGroupUser, confKeySystemAccount)
+	_, err = kf.GetBoolean(confGroupUser, confKeySystemAccount)
 	// only show non system account
 	u.setPropBool(&u.SystemAccount, "SystemAccount", false)
 	if err != nil {
 		isSave = true
 	}
-	locale, _ := kFile.GetString(confGroupUser, confKeyLocale)
+	locale, _ := kf.GetString(confGroupUser, confKeyLocale)
 	u.setPropString(&u.Locale, "Locale", locale)
 	if len(locale) == 0 {
 		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
 		isSave = true
 	}
-	layout, _ := kFile.GetString(confGroupUser, confKeyLayout)
+	layout, _ := kf.GetString(confGroupUser, confKeyLayout)
 	u.setPropString(&u.Layout, "Layout", layout)
 	if len(layout) == 0 {
 		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
 		isSave = true
 	}
-	icon, _ := kFile.GetString(confGroupUser, confKeyIcon)
+	icon, _ := kf.GetString(confGroupUser, confKeyIcon)
 	u.setPropString(&u.IconFile, "IconFile", icon)
 	if len(u.IconFile) == 0 {
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		isSave = true
 	}
 
-	u.customIcon, _ = kFile.GetString(confGroupUser, confKeyCustomIcon)
+	u.customIcon, _ = kf.GetString(confGroupUser, confKeyCustomIcon)
 
 	// CustomInfo is the newly added field in the configuration file
 	if u.customIcon == "" {
@@ -188,7 +191,7 @@ func NewUser(userPath string) (*User, error) {
 
 	u.updateIconList()
 
-	_, desktopBgs, _ := kFile.GetStringList(confGroupUser, confKeyDesktopBackgrounds)
+	_, desktopBgs, _ := kf.GetStringList(confGroupUser, confKeyDesktopBackgrounds)
 	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, desktopBgs)
 	if len(desktopBgs) == 0 {
 		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds,
@@ -196,14 +199,14 @@ func NewUser(userPath string) (*User, error) {
 		isSave = true
 	}
 
-	greeterBg, _ := kFile.GetString(confGroupUser, confKeyGreeterBackground)
+	greeterBg, _ := kf.GetString(confGroupUser, confKeyGreeterBackground)
 	u.setPropString(&u.GreeterBackground, "GreeterBackground", greeterBg)
 	if len(greeterBg) == 0 {
 		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
 		isSave = true
 	}
 
-	_, hisLayout, _ := kFile.GetStringList(confGroupUser, confKeyHistoryLayout)
+	_, hisLayout, _ := kf.GetStringList(confGroupUser, confKeyHistoryLayout)
 	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", hisLayout)
 
 	if isSave {
@@ -265,6 +268,11 @@ func (u *User) writeUserConfig() error {
 	u.configLocker.Lock()
 	defer u.configLocker.Unlock()
 
+	err := os.MkdirAll(userConfigDir, 0755)
+	if err != nil {
+		return err
+	}
+
 	config := path.Join(userConfigDir, u.UserName)
 	if !dutils.IsFileExist(config) {
 		err := dutils.CreateFile(config)
@@ -273,23 +281,23 @@ func (u *User) writeUserConfig() error {
 		}
 	}
 
-	kFile, err := dutils.NewKeyFileFromFile(config)
+	kf, err := dutils.NewKeyFileFromFile(config)
 	if err != nil {
 		logger.Warningf("Load %s config file failed: %v", u.UserName, err)
 		return err
 	}
-	defer kFile.Free()
+	defer kf.Free()
 
-	kFile.SetString(confGroupUser, confKeyXSession, u.XSession)
-	kFile.SetBoolean(confGroupUser, confKeySystemAccount, u.SystemAccount)
-	kFile.SetString(confGroupUser, confKeyLayout, u.Layout)
-	kFile.SetString(confGroupUser, confKeyLocale, u.Locale)
-	kFile.SetString(confGroupUser, confKeyIcon, u.IconFile)
-	kFile.SetString(confGroupUser, confKeyCustomIcon, u.customIcon)
-	kFile.SetStringList(confGroupUser, confKeyDesktopBackgrounds, u.DesktopBackgrounds)
-	kFile.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
-	kFile.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
-	_, err = kFile.SaveToFile(config)
+	kf.SetString(confGroupUser, confKeyXSession, u.XSession)
+	kf.SetBoolean(confGroupUser, confKeySystemAccount, u.SystemAccount)
+	kf.SetString(confGroupUser, confKeyLayout, u.Layout)
+	kf.SetString(confGroupUser, confKeyLocale, u.Locale)
+	kf.SetString(confGroupUser, confKeyIcon, u.IconFile)
+	kf.SetString(confGroupUser, confKeyCustomIcon, u.customIcon)
+	kf.SetStringList(confGroupUser, confKeyDesktopBackgrounds, u.DesktopBackgrounds)
+	kf.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
+	kf.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
+	_, err = kf.SaveToFile(config)
 	if err != nil {
 		logger.Warningf("Save %s config file failed: %v", u.UserName, err)
 	}
@@ -485,4 +493,23 @@ func getSessionList() []string {
 		sessions = append(sessions, finfo.Name())
 	}
 	return sessions
+}
+
+func updateConfigPath(username string) {
+	config := path.Join(userConfigDir, username)
+	if dutils.IsFileExist(config) {
+		return
+	}
+
+	err := os.MkdirAll(userConfigDir, 0755)
+	if err != nil {
+		logger.Warning("Failed to mkdir for user config:", err)
+		return
+	}
+
+	oldConfig := path.Join(actConfigDir, "users", username)
+	err = dutils.CopyFile(oldConfig, config)
+	if err != nil {
+		logger.Warning("Failed to update config:", username)
+	}
 }

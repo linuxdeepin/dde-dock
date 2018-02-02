@@ -28,12 +28,13 @@ import (
 )
 
 const (
-	userConfigDir      = "/var/lib/AccountsService/users"
-	userIconsDir       = "/var/lib/AccountsService/icons"
-	userCustomIconsDir = "/var/lib/AccountsService/icons/local"
+	actConfigDir       = "/var/lib/AccountsService"
+	userConfigDir      = actConfigDir + "/deepin/users"
+	userIconsDir       = actConfigDir + "/icons"
+	userCustomIconsDir = actConfigDir + "/icons/local"
 
-	userIconGuest       = "/var/lib/AccountsService/icons/guest.png"
-	actConfigFile       = "/var/lib/AccountsService/accounts.ini"
+	userIconGuest       = actConfigDir + "/icons/guest.png"
+	actConfigFile       = actConfigDir + "/accounts.ini"
 	actConfigGroupGroup = "Accounts"
 	actConfigKeyGuest   = "AllowGuest"
 )
