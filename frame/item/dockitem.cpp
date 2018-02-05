@@ -58,13 +58,13 @@ DockItem::DockItem(QWidget *parent)
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
 
-    m_popupAdjustDelayTimer->setInterval(100);
+    m_popupAdjustDelayTimer->setInterval(10);
     m_popupAdjustDelayTimer->setSingleShot(true);
 
     setGraphicsEffect(m_hoverEffect);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
-    connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition);
+    connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
 }
 
 DockItem::~DockItem()
@@ -83,6 +83,23 @@ void DockItem::setDockDisplayMode(const DisplayMode mode)
     DockDisplayMode = mode;
 }
 
+bool DockItem::event(QEvent *event)
+{
+    if (m_popupShown)
+    {
+        switch (event->type())
+        {
+        case QEvent::Paint:
+            if (!m_popupAdjustDelayTimer->isActive())
+                m_popupAdjustDelayTimer->start();
+            break;
+        default:;
+        }
+    }
+
+    return QWidget::event(event);
+}
+
 void DockItem::updatePopupPosition()
 {
     Q_ASSERT(sender() == m_popupAdjustDelayTimer);
@@ -97,13 +114,6 @@ void DockItem::updatePopupPosition()
 void DockItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
-}
-
-void DockItem::moveEvent(QMoveEvent *e)
-{
-    QWidget::moveEvent(e);
-
-    m_popupAdjustDelayTimer->start();
 }
 
 void DockItem::mousePressEvent(QMouseEvent *e)

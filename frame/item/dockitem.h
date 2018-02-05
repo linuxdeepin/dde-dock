@@ -67,8 +67,8 @@ signals:
     void requestRefershWindowVisible() const;
 
 protected:
+    bool event(QEvent *event);
     void paintEvent(QPaintEvent *e);
-    void moveEvent(QMoveEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
