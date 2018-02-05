@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"errors"
 	"sync"
+	"time"
 
 	"pkg.deepin.io/lib/dbus"
 
@@ -44,6 +45,8 @@ type TrayManager struct {
 	icons  map[x.Window]*TrayIcon
 	mutex  sync.Mutex
 
+	damageNotifyEventHandler DamageNotifyEventHandler
+
 	// 目前已有系统托盘窗口的id。
 	TrayIcons []uint32
 
@@ -58,6 +61,44 @@ type TrayManager struct {
 	Inited func()
 }
 
+type DamageNotifyEventHandler struct {
+	mu           sync.Mutex
+	queuedWinIds []x.Window
+	timer        *time.Timer
+	timerStarted bool
+	manager      *TrayManager
+}
+
+func (handler *DamageNotifyEventHandler) process(winId x.Window) {
+	handler.mu.Lock()
+	var found bool
+	for _, winId0 := range handler.queuedWinIds {
+		if winId0 == winId {
+			found = true
+		}
+	}
+	if !found {
+		handler.queuedWinIds = append(handler.queuedWinIds, winId)
+	}
+
+	if !handler.timerStarted {
+		handler.timerStarted = true
+
+		handler.timer = time.AfterFunc(60*time.Millisecond, func() {
+			handler.mu.Lock()
+			m := handler.manager
+			for _, winId := range handler.queuedWinIds {
+				m.handleDamageNotifyEvent(winId)
+			}
+			handler.queuedWinIds = nil
+			handler.timerStarted = false
+			handler.mu.Unlock()
+		})
+	}
+
+	handler.mu.Unlock()
+}
+
 func NewTrayManager() *TrayManager {
 	visualId := findRGBAVisualID()
 
@@ -65,8 +106,8 @@ func NewTrayManager() *TrayManager {
 		visual: visualId,
 		icons:  make(map[x.Window]*TrayIcon),
 	}
+	m.damageNotifyEventHandler.manager = m
 	err := m.init()
-	// TODO
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -263,7 +304,7 @@ func (m *TrayManager) eventHandleLoop() {
 			}
 		case damage.NotifyEventCode + damageFirstEvent:
 			event, _ := damage.NewNotifyEvent(ev)
-			m.handleDamageNotifyEvent(x.Window(event.Drawable))
+			m.damageNotifyEventHandler.process(x.Window(event.Drawable))
 		case x.MapNotifyEventCode:
 			event, _ := x.NewMapNotifyEvent(ev)
 			logger.Debug("MapNotifyEvent", event.Window)
