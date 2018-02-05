@@ -279,6 +279,7 @@ void MainWindow::compositeChanged()
     m_mainPanel->setEffectEnabled(composite);
 
     m_shadowMaskOptimizeTimer->start();
+    m_positionUpdateTimer->start();
 }
 
 void MainWindow::internalMove(const QPoint &p)

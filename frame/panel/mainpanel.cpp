@@ -160,6 +160,8 @@ void MainPanel::setEffectEnabled(const bool enabled)
         setMaskColor(QColor(0, 0, 0, 255 * 0.4));
     else
         setMaskColor(QColor(55, 63, 71));
+
+    m_itemAdjustTimer->start();
 }
 
 void MainPanel::moveEvent(QMoveEvent* e)
