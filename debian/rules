@@ -3,7 +3,7 @@
 export GOPATH := /usr/share/gocode
 
 %:
-	dh $@
+	dh $@ --with systemd
 
 ifdef USE_GCCGO
 override_dh_strip:
@@ -46,6 +46,8 @@ override_dh_auto_configure:
 
 override_dh_auto_install:
 	dh_auto_install
+	dh_systemd_enable || true
+	dh_systemd_start || true
 	install -d debian/dde-daemon/lib/systemd/system-sleep/
 	install misc/scripts/dde-system-daemon-power-refresh.sh debian/dde-daemon/lib/systemd/system-sleep/
 

@@ -1,0 +1,25 @@
+[Unit]
+Description=Accounts Service
+
+# In order to avoid races with identity-providing services like SSSD or
+# winbind, we need to ensure that Accounts Service starts after
+# nss-user-lookup.target
+After=nss-user-lookup.target
+Wants=nss-user-lookup.target
+
+[Service]
+Type=dbus
+BusName=com.deepin.daemon.Accounts
+ExecStart=/usr/lib/deepin-daemon/dde-system-daemon
+ExecStop=/bin/sh -c "killall dde-system-daemon"
+StandardOutput=syslog
+Environment=GVFS_DISABLE_FUSE=1
+Environment=GIO_USE_VFS=local
+Environment=GVFS_REMOTE_VOLUME_MONITOR_IGNORE=1
+
+[Install]
+# We pull this in by graphical.target instead of waiting for the bus
+# activation, to speed things up a little: gdm uses this anyway so it is nice
+# if it is already around when gdm wants to use it and doesn't have to wait for
+# it.
+WantedBy=graphical.target
