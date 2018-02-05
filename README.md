@@ -22,7 +22,6 @@ DDE Daemon is a daemon for handling  the deepin session settings
 
 * upower
 * udisks2
-* bluez
 * systemd
 * pulseaudio
 * network-manager
@@ -38,7 +37,6 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * libnl-3.0
 * libnl-genl-3.0
 * libfprint
-* fprintd
 * dnsmasq (for hotspot)
 
 ### Optional Dependencies
@@ -53,6 +51,8 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * mobile-broadband-provider-info
 * xserver-xorg-input-synaptics (provide mode features, such as disable touchpad when typing ...)
 * [miraclecast](https://github.com/derekdai/miraclecast) (provide WIFI Direct)
+* bluez
+* fprintd
 
 ## Installation
 
