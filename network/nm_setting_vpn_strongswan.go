@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     jouyouyun <jouyouwen717@gmail.com>
  *             Xu FaSheng <fasheng.xu@gmail.com>

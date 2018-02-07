@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2014 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     jouyouyun <jouyouwen717@gmail.com>
  *
@@ -22,8 +22,8 @@ package mime
 import (
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
-	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/fsnotify"
+	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
 	"strings"
 	"time"

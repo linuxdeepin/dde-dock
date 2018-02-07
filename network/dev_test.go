@@ -1,7 +1,7 @@
 //+build dev
 
 /*
- * Copyright (C) 2014 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2014 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     jouyouyun <jouyouwen717@gmail.com>
  *

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2014 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     jouyouyun <jouyouwen717@gmail.com>
  *
@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	distroFileLSB    = "/etc/lsb-release"
+	distroFileLSB = "/etc/lsb-release"
 
 	distroIdKeyLSB   = "DISTRIB_ID"
 	distroDescKeyLSB = "DISTRIB_DESCRIPTION"
@@ -57,8 +57,8 @@ func getDistroFromLSB(file string) (string, string, string, error) {
 		return "", "", "", fmt.Errorf("Cannot find the key '%s'", distroDescKeyLSB)
 	}
 
-	if distroDesc[0] == '"' && distroDesc[len(distroDesc) - 1] == '"' {
-		distroDesc = distroDesc[1:len(distroDesc) - 1]
+	if distroDesc[0] == '"' && distroDesc[len(distroDesc)-1] == '"' {
+		distroDesc = distroDesc[1 : len(distroDesc)-1]
 	}
 
 	distroVer, ok := ret[distroVerKeyLSB]

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     jouyouyun <jouyouwen717@gmail.com>
  *
@@ -20,8 +20,8 @@
 package apps
 
 import (
-	"pkg.deepin.io/lib/fsnotify"
 	"os"
+	"pkg.deepin.io/lib/fsnotify"
 )
 
 type FileEvent struct {
