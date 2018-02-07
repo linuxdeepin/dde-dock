@@ -115,6 +115,14 @@ func (winInfo *WindowInfo) updateWmState() {
 	if err != nil {
 		logger.Debug(err)
 	}
+	entry := winInfo.entry
+	if entry != nil {
+		entry.updateWindowInfos()
+	}
+}
+
+func (winInfo *WindowInfo) hasWmStateDemandsAttention() bool {
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_DEMANDS_ATTENTION")
 }
 
 func (winInfo *WindowInfo) hasWmStateSkipTaskbar() bool {
@@ -186,7 +194,7 @@ func (winInfo *WindowInfo) updateWmName() {
 	winInfo.Title = winInfo.getTitle()
 	entry := winInfo.entry
 	if entry != nil {
-		entry.updateWindowTitles()
+		entry.updateWindowInfos()
 	}
 }
 

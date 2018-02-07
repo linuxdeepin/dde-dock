@@ -21,10 +21,11 @@ package dock
 
 import (
 	"fmt"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"pkg.deepin.io/lib/dbus"
 	"sort"
 	"time"
+
+	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *DockManager) allocEntryId() string {
@@ -198,7 +199,7 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	if !detached {
 		return
 	}
-	entry.updateWindowTitles()
+	entry.updateWindowInfos()
 	if !entry.hasWindow() && !entry.IsDocked {
 		m.removeAppEntry(entry)
 		return

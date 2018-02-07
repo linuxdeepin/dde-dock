@@ -23,13 +23,18 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 )
 
-type windowTitlesType map[xproto.Window]string
-
-func newWindowTitles() windowTitlesType {
-	return make(windowTitlesType)
+type ExportWindowInfo struct {
+	Title string
+	Flash bool
 }
 
-func (a windowTitlesType) Equal(b windowTitlesType) bool {
+type windowInfosType map[xproto.Window]ExportWindowInfo
+
+func newWindowInfos() windowInfosType {
+	return make(windowInfosType)
+}
+
+func (a windowInfosType) Equal(b windowInfosType) bool {
 	if len(a) != len(b) {
 		return false
 	}

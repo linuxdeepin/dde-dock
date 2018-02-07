@@ -20,42 +20,50 @@
 package dock
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
-func Test_windowTitlesTypeEqual(t *testing.T) {
-	Convey("windowTitlesType Equal", t, func() {
-		a := windowTitlesType{
-			0: "a",
-			1: "b",
-			2: "c",
+func Test_windowInfosTypeEqual(t *testing.T) {
+	Convey("windowInfosType Equal", t, func() {
+		a := windowInfosType{
+			0: {"a", false},
+			1: {"b", false},
+			2: {"c", true},
 		}
-		b := windowTitlesType{
-			2: "c",
-			1: "b",
-			0: "a",
+		b := windowInfosType{
+			2: {"c", true},
+			1: {"b", false},
+			0: {"a", false},
 		}
 		So(a.Equal(b), ShouldBeTrue)
 
-		c := windowTitlesType{
-			1: "b",
-			2: "c",
+		c := windowInfosType{
+			1: {"b", false},
+			2: {"c", false},
 		}
 		So(c.Equal(a), ShouldBeFalse)
 
-		d := windowTitlesType{
-			0: "aa",
-			1: "b",
-			2: "c",
+		d := windowInfosType{
+			0: {"aa", false},
+			1: {"b", false},
+			2: {"c", false},
 		}
 		So(d.Equal(a), ShouldBeFalse)
 
-		e := windowTitlesType{
-			0: "a",
-			1: "b",
-			3: "c",
+		e := windowInfosType{
+			0: {"a", false},
+			1: {"b", false},
+			3: {"c", false},
 		}
 		So(e.Equal(a), ShouldBeFalse)
+
+		f := windowInfosType{
+			0: {"a", false},
+			1: {"b", false},
+			2: {"c", false},
+		}
+		So(f.Equal(a), ShouldBeFalse)
 	})
 }

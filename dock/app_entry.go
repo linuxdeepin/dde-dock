@@ -44,8 +44,8 @@ type AppEntry struct {
 	Menu        string
 	DesktopFile string
 
-	WindowTitles windowTitlesType
-	windows      map[xproto.Window]*WindowInfo
+	WindowInfos windowInfosType
+	windows     map[xproto.Window]*WindowInfo
 
 	current       *WindowInfo
 	CurrentWindow xproto.Window
@@ -60,11 +60,10 @@ type AppEntry struct {
 
 func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
 	entry := &AppEntry{
-		dockManager:  dockManager,
-		Id:           dockManager.allocEntryId(),
-		innerId:      id,
-		WindowTitles: newWindowTitles(),
-		windows:      make(map[xproto.Window]*WindowInfo),
+		dockManager: dockManager,
+		Id:          dockManager.allocEntryId(),
+		innerId:     id,
+		windows:     make(map[xproto.Window]*WindowInfo),
 	}
 	entry.setAppInfo(appInfo)
 	return entry
@@ -192,7 +191,7 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	}
 
 	entry.windows[win] = winInfo
-	entry.updateWindowTitles()
+	entry.updateWindowInfos()
 	entry.updateIsActive()
 
 	if (entry.dockManager != nil && win == entry.dockManager.getActiveWindow()) ||
@@ -310,14 +309,17 @@ func (entry *AppEntry) getIcon() string {
 	return ""
 }
 
-func (e *AppEntry) updateWindowTitles() {
-	windowTitles := newWindowTitles()
+func (e *AppEntry) updateWindowInfos() {
+	windowInfos := newWindowInfos()
 	for win, winInfo := range e.windows {
-		windowTitles[win] = winInfo.Title
+		windowInfos[win] = ExportWindowInfo{
+			Title: winInfo.Title,
+			Flash: winInfo.hasWmStateDemandsAttention(),
+		}
 	}
-	if !e.WindowTitles.Equal(windowTitles) {
-		e.WindowTitles = windowTitles
-		dbus.NotifyChange(e, "WindowTitles")
+	if !e.WindowInfos.Equal(windowInfos) {
+		e.WindowInfos = windowInfos
+		dbus.NotifyChange(e, "WindowInfos")
 	}
 }
 
