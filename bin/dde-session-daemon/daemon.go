@@ -28,6 +28,7 @@ import (
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/session"
+	"pkg.deepin.io/dde/daemon/calltrace"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
@@ -198,6 +199,16 @@ func (s *SessionDaemon) ListModule(name string) error {
 		fmt.Println(m)
 	}
 
+	return nil
+}
+
+func (s *SessionDaemon) CallTrace(times, seconds uint32) error {
+	ct, err := calltrace.Start(seconds/times, logger)
+	if err != nil {
+		logger.Warning("Failed to start calltrace:", err)
+		return err
+	}
+	ct.SetAutoDestroy(seconds)
 	return nil
 }
 
