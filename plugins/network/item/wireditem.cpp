@@ -65,7 +65,7 @@ NetworkDevice::NetworkState WiredItem::state() const
 
 QWidget *WiredItem::itemPopup()
 {
-    m_itemTips->setText(tr("Unknow"));
+    m_itemTips->setText(tr("Unknown"));
 
     do {
         if (!m_connected)
