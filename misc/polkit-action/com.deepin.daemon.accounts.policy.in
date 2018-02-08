@@ -27,7 +27,7 @@
   </action>
 
   <action id="com.deepin.daemon.accounts.enable-auto-login">
-    <description>Enable auto-login</description>
+    <description>Enable Auto Login</description>
     <message>Authentication is required to enable auto login</message>
     <defaults>
       <allow_any>no</allow_any>
@@ -37,7 +37,7 @@
   </action>
 
     <action id="com.deepin.daemon.accounts.disable-auto-login">
-    <description>Disable auto-login</description>
+    <description>Disable Auto Login</description>
     <message>Authentication is required to disable auto login</message>
     <defaults>
       <allow_any>no</allow_any>
@@ -47,8 +47,8 @@
   </action>
 
     <action id="com.deepin.daemon.accounts.enable-nopass-login">
-    <description>Enable no password login</description>
-    <message>Authentication is required to enable no password login</message>
+    <description>Enable Login without password</description>
+    <message>Authentication is required to enable login without password</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
@@ -57,8 +57,8 @@
   </action>
 
     <action id="com.deepin.daemon.accounts.disable-nopass-login">
-    <description>Disable no password login</description>
-    <message>Authentication is required to disable no password login</message>
+    <description>Disable Login without password</description>
+    <message>Authentication is required to disable login without password</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
