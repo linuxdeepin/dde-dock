@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 15:12+0800\n"
+"POT-Creation-Date: 2018-02-08 14:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,11 +59,11 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:75
+#: ../../appearance/scale.go:78
 msgid "Set successfully"
 msgstr ""
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -116,17 +116,17 @@ msgid "Message notification"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
-#: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
+#: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:96
-#: ../../network/utils_notify.go:100 ../../network/utils_notify.go:104
-#: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
-#: ../../network/utils_notify.go:214
+#: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:88 ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
+#: ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr ""
 
@@ -142,27 +142,27 @@ msgstr ""
 msgid "Failed to connect %q, automatically ignored"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:104
 msgid "_Open"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:114
+#: ../../dock/app_entry_menu.go:111
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
 msgstr ""
 
@@ -330,15 +330,15 @@ msgstr ""
 msgid "Display workspace"
 msgstr ""
 
-#: ../../langselector/handle_event.go:34
+#: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
 msgstr ""
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:45
 msgid "System language failed to change, please try later"
 msgstr ""
 
-#: ../../langselector/handle_event.go:56
+#: ../../langselector/handle_event.go:57
 msgid "System language has been changed, please log in again after logged out"
 msgstr ""
 
@@ -376,20 +376,20 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:330 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr ""
 
-#: ../../network/manager_active.go:332 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr ""
 
-#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:321 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr ""
 
-#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:337
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -398,45 +398,45 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: ../../network/manager_active.go:352
+#: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
-#: ../../network/manager_active.go:354
+#: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
-#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr ""
 
-#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr ""
 
-#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr ""
 
-#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr ""
 
-#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr ""
 
-#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr ""
@@ -1328,14 +1328,14 @@ msgstr ""
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
-#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
+#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
-#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
+#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
 msgstr ""
 
@@ -1343,7 +1343,7 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:35
 #: ../../network/nm_setting_vpn_openvpn.go:331
 #: ../../network/nm_setting_vpn_pptp.go:38
-#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
+#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
 msgstr ""
 
@@ -1779,7 +1779,7 @@ msgid "GSM Modem's SIM PUK required"
 msgstr ""
 
 #: ../../network/state_handler.go:82
-msgid "Wrong GSM Modem's SIM"
+msgid "SIM card error in GSM Modem"
 msgstr ""
 
 #: ../../network/state_handler.go:83
@@ -1791,7 +1791,7 @@ msgid "A connection dependency failed"
 msgstr ""
 
 #: ../../network/state_handler.go:85
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
+msgid "RFC 2684 Ethernet bridging error to ADSL"
 msgstr ""
 
 #: ../../network/state_handler.go:86
@@ -1935,54 +1935,54 @@ msgstr ""
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:332
+#: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
 msgstr ""
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:80
 msgid "You are now offline."
 msgstr ""
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
 msgstr ""
 
-#: ../../network/utils_notify.go:104
+#: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
 msgstr ""
 
-#: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:103
 msgid "Network"
 msgstr ""
 
-#: ../../network/utils_notify.go:108
+#: ../../network/utils_notify.go:96
 msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
-#: ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
 msgstr ""
 
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Battery Critical Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Battery Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""
 
