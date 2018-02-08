@@ -167,7 +167,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
             const int tips_height = tips_width / 2;
 
             QPixmap tips;
-            if (current.time().hour() > 12)
+            if (current.time().hour() > 11)
                 tips = loadSvg(":/icons/resources/icons/tips-pm.svg", QSize(tips_width, tips_height));
             else
                 tips = loadSvg(":/icons/resources/icons/tips-am.svg", QSize(tips_width, tips_height));
