@@ -329,6 +329,9 @@ void MainPanel::adjustItemSize()
 {
     Q_ASSERT(sender() == m_itemAdjustTimer);
 
+    // ensure all item is update, whatever layout is changed
+    QTimer::singleShot(1, this, static_cast<void (MainPanel::*)()>(&MainPanel::update));
+
     const auto ratio = devicePixelRatioF();
 
     QSize itemSize;
