@@ -30,7 +30,7 @@
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0" />
-			<source>Enable auto-login</source>
+			<source>Enable Auto Login</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
@@ -40,27 +40,27 @@
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0" />
-			<source>Disable auto-login</source>
+			<source>Disable Auto Login</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0" />
-			<source>Authentication is required to enable no password login</source>
+			<source>Authentication is required to enable login without password</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0" />
-			<source>Enable no password login</source>
+			<source>Enable Login without password</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0" />
-			<source>Authentication is required to disable no password login</source>
+			<source>Authentication is required to disable login without password</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0" />
-			<source>Disable no password login</source>
+			<source>Disable Login without password</source>
 			<translation type="unfinished" />
 		</message>
 	</context>
