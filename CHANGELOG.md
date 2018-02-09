@@ -1,3 +1,6 @@
+# 4.5.12
+    Fix item not update when wm changed
+
 # 4.5.11
     UI improve
 
