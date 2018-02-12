@@ -21,13 +21,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
 	"strconv"
 	"strings"
 	"time"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
@@ -41,48 +43,51 @@ const (
 	KeyboardBacklight
 )
 
-var logger = log.NewLogger("backlight_helper")
-
-type Manager struct{}
-
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+type Manager struct {
+	service *dbusutil.Service
+	methods *struct {
+		SetBrightness func() `in:"type,name,value"`
 	}
 }
 
-func (m *Manager) SetBrightness(type_ byte, name string, value int32) error {
-	filename, err := getBrightnessFilename(type_, name)
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusIFC,
+	}
+}
+
+func (m *Manager) SetBrightness(type0 byte, name string, value int32) *dbus.Error {
+	m.service.DelayAutoQuit()
+	filename, err := getBrightnessFilename(type0, name)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	fh, err := os.OpenFile(filename, os.O_WRONLY, 0666)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	defer fh.Close()
 
 	_, err = fh.WriteString(strconv.Itoa(int(value)))
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	return nil
 }
 
-func getBrightnessFilename(type_ byte, name string) (string, error) {
-	// check type_
+func getBrightnessFilename(type0 byte, name string) (string, error) {
+	// check type0
 	var subsystem string
-	switch type_ {
+	switch type0 {
 	case DisplayBacklight:
 		subsystem = "backlight"
 	case KeyboardBacklight:
 		subsystem = "leds"
 	default:
-		return "", fmt.Errorf("invalid type %d", type_)
+		return "", fmt.Errorf("invalid type %d", type0)
 	}
 
 	// check name
@@ -95,18 +100,24 @@ func getBrightnessFilename(type_ byte, name string) (string, error) {
 }
 
 func main() {
-	m := &Manager{}
-	err := dbus.InstallOnSystem(m)
+	service, err := dbusutil.NewSystemService()
 	if err != nil {
-		logger.Error("Install session bus failed:", err)
-		return
+		log.Fatal("failed to new system service:", err)
 	}
-	dbus.SetAutoDestroyHandler(time.Second*10, nil)
-	dbus.DealWithUnhandledMessage()
-	err = dbus.Wait()
+
+	m := &Manager{
+		service: service,
+	}
+	err = service.Export(m)
 	if err != nil {
-		logger.Error("Lost dbus connection:", err)
-		os.Exit(-1)
+		log.Fatal("failed to export:", err)
 	}
-	os.Exit(0)
+
+	err = service.RequestName(dbusDest)
+	if err != nil {
+		log.Fatal("failed to request name:", err)
+	}
+
+	service.SetAutoQuitHandler(time.Second*10, nil)
+	service.Wait()
 }
