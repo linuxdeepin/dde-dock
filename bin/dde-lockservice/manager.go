@@ -21,13 +21,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"runtime/debug"
+	"strconv"
 	"sync"
 	"time"
 
 	"github.com/msteinert/pam"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
@@ -40,75 +42,99 @@ const (
 )
 
 type Manager struct {
+	service       *dbusutil.Service
 	authLocker    sync.Mutex
-	authUserTable map[string]chan string // 'pid+user': 'passwd'
+	authUserTable map[string]chan string // 'pid+user': 'password'
 
-	// evenType, pid, username, message
-	Event func(uint32, uint32, string, string)
-	// username
-	UserChanged func(string)
+	methods *struct {
+		CurrentUser      func() `out:"username"`
+		IsLiveCD         func() `in:"username" out:"result"`
+		SwitchToUser     func() `in:"username"`
+		AuthenticateUser func() `in:"username"`
+		UnlockCheck      func() `in:"username,password"`
+	}
+
+	signals *struct {
+		Event struct {
+			eventType uint32
+			pid       uint32
+			username  string
+			message   string
+		}
+
+		UserChanged struct {
+			username string
+		}
+	}
 }
 
 const (
-	dbusDest = "com.deepin.dde.LockService"
-	dbusPath = "/com/deepin/dde/LockService"
-	dbusIFC  = "com.deepin.dde.LockService"
+	dbusServiceName = "com.deepin.dde.LockService"
+	dbusPath        = "/com/deepin/dde/LockService"
+	dbusInterface   = "com.deepin.dde.LockService"
 )
 
 var _m *Manager
 
+func init() {
+	log.SetFlags(log.Lshortfile)
+}
+
 func main() {
-	if !lib.UniqueOnSystem(dbusDest) {
-		fmt.Println("The lock service has been running, or you're no a priviledged user.")
-		return
+	service, err := dbusutil.NewSystemService()
+	if err != nil {
+		log.Fatal("failed to new system service:", err)
 	}
 
-	_m = newManager()
-	err := dbus.InstallOnSystem(_m)
+	_m = newManager(service)
+	err = service.Export(_m)
 	if err != nil {
-		fmt.Println("Failed to install dbus:", err)
-		return
+		log.Fatal("failed to export:", err)
 	}
-	dbus.DealWithUnhandledMessage()
-	dbus.SetAutoDestroyHandler(time.Minute*2, func() bool {
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		log.Fatal("failed to request name:", err)
+	}
+
+	service.SetAutoQuitHandler(time.Minute*2, func() bool {
 		_m.authLocker.Lock()
 		canQuit := len(_m.authUserTable) == 0
 		_m.authLocker.Unlock()
 		return canQuit
 	})
-
-	err = dbus.Wait()
-	if err != nil {
-		fmt.Println("Failed to wait dbus:", err)
-	}
-	return
+	service.Wait()
 }
 
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusInterface,
 	}
 }
 
-func newManager() *Manager {
+func newManager(service *dbusutil.Service) *Manager {
 	var m = Manager{
 		authUserTable: make(map[string]chan string),
+		service:       service,
 	}
 
 	return &m
 }
 
-func (m *Manager) CurrentUser() (string, error) {
-	return getGreeterUser(greeterUserConfig)
+func (m *Manager) CurrentUser() (string, *dbus.Error) {
+	username, err := getGreeterUser(greeterUserConfig)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return username, nil
 }
 
-func (m *Manager) IsLiveCD(username string) bool {
-	return isInLiveCD(username)
+func (m *Manager) IsLiveCD(username string) (bool, *dbus.Error) {
+	return isInLiveCD(username), nil
 }
 
-func (m *Manager) SwitchToUser(username string) error {
+func (m *Manager) SwitchToUser(username string) *dbus.Error {
 	current, _ := getGreeterUser(greeterUserConfig)
 	if current == username {
 		return nil
@@ -116,22 +142,26 @@ func (m *Manager) SwitchToUser(username string) error {
 
 	err := setGreeterUser(greeterUserConfig, username)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	if current != "" {
-		dbus.Emit(m, "UserChanged", username)
+		m.service.Emit(m, "UserChanged", username)
 	}
 	return nil
 }
 
-func (m *Manager) AuthenticateUser(dmsg dbus.DMessage, username string) error {
+func (m *Manager) AuthenticateUser(sender dbus.Sender, username string) *dbus.Error {
 	if username == "" {
-		return fmt.Errorf("No user to authenticate")
+		return dbusutil.ToError(fmt.Errorf("no user to authenticate"))
 	}
 
 	m.authLocker.Lock()
-	pid := dmsg.GetSenderPID()
-	id := fmt.Sprintf("%d%s", pid, username)
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	id := getId(pid, username)
 	_, ok := m.authUserTable[id]
 	if ok {
 		m.authLocker.Unlock()
@@ -144,30 +174,38 @@ func (m *Manager) AuthenticateUser(dmsg dbus.DMessage, username string) error {
 	return nil
 }
 
-func (m *Manager) UnlockCheck(dmsg dbus.DMessage, username, passwd string) error {
+func (m *Manager) UnlockCheck(sender dbus.Sender, username, password string) *dbus.Error {
 	if username == "" {
-		return fmt.Errorf("No user to authenticate")
+		return dbusutil.ToError(fmt.Errorf("no user to authenticate"))
 	}
 
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	id := getId(pid, username)
+
 	m.authLocker.Lock()
-	pid := dmsg.GetSenderPID()
-	id := fmt.Sprintf("%d%s", pid, username)
 	v, ok := m.authUserTable[id]
 	m.authLocker.Unlock()
 	if ok && v != nil {
-		fmt.Println("-------In authenticating:", id)
+		log.Println("In authenticating:", id)
 		// in authenticate
-		if passwd != "" {
-			v <- passwd
+		if password != "" {
+			v <- password
 		}
 		return nil
 	}
 
-	go m.doAuthenticate(username, passwd, pid)
+	go m.doAuthenticate(username, password, pid)
 	return nil
 }
 
-func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
+func getId(pid uint32, username string) string {
+	return strconv.Itoa(int(pid)) + username
+}
+
+func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 	handler, err := pam.StartFunc("lightdm", username, func(style pam.Style, msg string) (string, error) {
 		switch style {
 		// case pam.PromptEchoOn:
@@ -180,57 +218,57 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
 		case pam.PromptEchoOff, pam.PromptEchoOn:
 			if msg != "" {
 				if style == pam.PromptEchoOff {
-					fmt.Println("Echo off:", msg)
+					log.Println("Echo off:", msg)
 					m.sendEvent(PromptSecret, pid, username, msg)
 				} else {
-					fmt.Println("Echo on:", msg)
+					log.Println("Echo on:", msg)
 					m.sendEvent(PromptQuestion, pid, username, msg)
 				}
 			}
 
-			if passwd != "" {
-				tmp := passwd
-				passwd = ""
+			if password != "" {
+				tmp := password
+				password = ""
 				return tmp, nil
 			}
 
+			id := getId(pid, username)
 			m.authLocker.Lock()
-			id := fmt.Sprintf("%d%s", pid, username)
 			v, ok := m.authUserTable[id]
 			m.authLocker.Unlock()
 			if !ok || v == nil {
-				return "", fmt.Errorf("No passwd channel found for %s", username)
+				return "", fmt.Errorf("no passwd channel found for %s", username)
 			}
-			fmt.Println("-----Join select:", id)
+			log.Println("Join select:", id)
 			select {
 			case tmp := <-v:
 				return tmp, nil
 			}
 		case pam.ErrorMsg:
 			if msg != "" {
-				fmt.Println("ShowError:", msg)
+				log.Println("ShowError:", msg)
 				m.sendEvent(ErrorMsg, pid, username, msg)
 			}
 			return "", nil
 		case pam.TextInfo:
 			if msg != "" {
-				fmt.Println("Text info:", msg)
+				log.Println("Text info:", msg)
 				m.sendEvent(TextInfo, pid, username, msg)
 			}
 			return "", nil
 		}
-		return "", fmt.Errorf("Unexpected style: %v", style)
+		return "", fmt.Errorf("unexpected style: %v", style)
 	})
 	if err != nil {
-		fmt.Println("Failed to start pam:", err)
+		log.Println("Failed to start pam:", err)
 		m.sendEvent(Failure, pid, username, err.Error())
 		return
 	}
 
 	err = handler.Authenticate(pam.DisallowNullAuthtok)
 
+	id := getId(pid, username)
 	m.authLocker.Lock()
-	id := fmt.Sprintf("%d%s", pid, username)
 	v, ok := m.authUserTable[id]
 	if ok {
 		if v != nil {
@@ -240,10 +278,10 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
 	}
 	m.authLocker.Unlock()
 	if err != nil {
-		fmt.Println("Failed to authenticate:", err)
+		log.Println("Failed to authenticate:", err)
 		m.sendEvent(Failure, pid, username, err.Error())
 	} else {
-		fmt.Println("-------Authenticate success")
+		log.Println("Authenticate success")
 		m.sendEvent(Success, pid, username, "Authenticated")
 	}
 	handler = nil
@@ -251,8 +289,8 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
 }
 
 func (m *Manager) sendEvent(ty, pid uint32, username, msg string) {
-	err := dbus.Emit(m, "Event", ty, pid, username, msg)
+	err := m.service.Emit(m, "Event", ty, pid, username, msg)
 	if err != nil {
-		fmt.Println("Failed to emit event:", ty, pid, username, msg)
+		log.Println("Failed to emit event:", ty, pid, username, msg)
 	}
 }
