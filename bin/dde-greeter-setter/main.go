@@ -20,34 +20,38 @@
 package main
 
 import (
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
 	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 var logger = log.NewLogger("GreeterSetter")
 
 func main() {
-	if !lib.UniqueOnSystem(dbusDest) {
-		logger.Error("There already has a greeter daemon running.")
+	service, err := dbusutil.NewSystemService()
+	if err != nil {
+		logger.Errorf("failed to new system service")
 		return
 	}
 
-	var m = &Manager{quit: false}
-	err := dbus.InstallOnSystem(m)
+	var m = &Manager{
+		service: service,
+		quit:    true,
+	}
+
+	err = service.Export(m)
 	if err != nil {
-		logger.Error("Failed to insatll on dbus:", err)
+		logger.Errorf("failed to export:", err)
 		return
 	}
 
-	dbus.DealWithUnhandledMessage()
-	dbus.SetAutoDestroyHandler(time.Second*30, m.canQuit)
-
-	err = dbus.Wait()
+	err = service.RequestName(dbusDest)
 	if err != nil {
-		logger.Error("Lost dbus connection, exit")
+		logger.Errorf("failed to request name:", err)
+		return
 	}
-
+	service.SetAutoQuitHandler(time.Second*30, m.canQuit)
+	service.Wait()
 	return
 }

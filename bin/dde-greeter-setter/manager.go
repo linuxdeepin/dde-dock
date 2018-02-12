@@ -20,10 +20,12 @@
 package main
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"sync"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/utils"
-	"sync"
 )
 
 const (
@@ -37,17 +39,24 @@ const (
 )
 
 type Manager struct {
-	quit   bool
-	locker sync.Mutex
+	service *dbusutil.Service
+	quit    bool
+	locker  sync.Mutex
+
+	methods *struct {
+		SetScaleFactor func() `in:"factor"`
+		GetScaleFactor func() `out:"factor"`
+	}
 }
 
-func (m *Manager) SetScaleFactor(scale float64) error {
+func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
 	m.setQuitFlag(false)
 	defer m.setQuitFlag(true)
+	m.service.DelayAutoQuit()
 
 	kf, err := newKeyfile(greeterConfigFile)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	value, err := kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
@@ -55,26 +64,31 @@ func (m *Manager) SetScaleFactor(scale float64) error {
 		return nil
 	}
 	kf.SetFloat64(kfGroupGeneral, kfKeyScaleFactor, scale)
-	return kf.SaveToFile(greeterConfigFile)
+	err = kf.SaveToFile(greeterConfigFile)
+	return dbusutil.ToError(err)
 }
 
-func (m *Manager) GetScaleFactor() (float64, error) {
+func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
 	m.setQuitFlag(false)
 	defer m.setQuitFlag(true)
+	m.service.DelayAutoQuit()
 
 	kf, err := newKeyfile(greeterConfigFile)
 	if err != nil {
-		return 0, err
+		return 0, dbusutil.ToError(err)
 	}
 
-	return kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
+	value, err := kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
+	if err != nil {
+		return 0, dbusutil.ToError(err)
+	}
+	return value, nil
 }
 
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusIFC,
 	}
 }
 
