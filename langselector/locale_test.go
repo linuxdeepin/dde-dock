@@ -20,9 +20,10 @@
 package langselector
 
 import (
-	C "gopkg.in/check.v1"
 	"os"
 	"testing"
+
+	C "gopkg.in/check.v1"
 )
 
 func Test(t *testing.T) {
@@ -33,11 +34,6 @@ type TestWrapper struct{}
 
 func init() {
 	C.Suite(&TestWrapper{})
-}
-
-type localeDescTest struct {
-	locale string
-	ret    bool
 }
 
 func (t *TestWrapper) TestGenerateLocaleEnvFile(c *C.C) {

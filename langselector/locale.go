@@ -21,16 +21,20 @@ package langselector
 
 import (
 	"bytes"
-	"dbus/com/deepin/api/localehelper"
-	libnetwork "dbus/com/deepin/daemon/network"
-	"dbus/org/freedesktop/notifications"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.deepin.io/dde/api/lang_info"
-	"pkg.deepin.io/lib/log"
 	"strings"
+	"sync"
+
+	"dbus/com/deepin/api/localehelper"
+	libnetwork "dbus/com/deepin/daemon/network"
+	"dbus/org/freedesktop/notifications"
+
+	"pkg.deepin.io/dde/api/lang_info"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 const (
@@ -68,18 +72,30 @@ var (
 	ErrLocaleChangeFailed = fmt.Errorf("Changing locale failed")
 )
 
+//go:generate dbusutil-gen -type LangSelector locale.go
 type LangSelector struct {
+	service      *dbusutil.Service
+	logger       *log.Logger
+	helper       *localehelper.LocaleHelper
+	localesCache LocaleInfos
+
+	PropsMu sync.RWMutex
 	// The current locale
 	CurrentLocale string
-	// Signal: will be emited if locale changed
-	Changed func(locale string)
-
 	// Store locale changed state
 	LocaleState int32
 
-	logger       *log.Logger
-	lhelper      *localehelper.LocaleHelper
-	localesCache LocaleInfos
+	methods *struct {
+		SetLocale            func() `in:"locale"`
+		GetLocaleList        func() `out:"locales"`
+		GetLocaleDescription func() `in:"locale" out:"description"`
+	}
+
+	signals *struct {
+		Changed struct {
+			locale string
+		}
+	}
 }
 
 type envInfo struct {
@@ -106,17 +122,15 @@ func (infos LocaleInfos) Get(locale string) (LocaleInfo, error) {
 	return LocaleInfo{}, fmt.Errorf("invalid locale %q", locale)
 }
 
-func newLangSelector(l *log.Logger) *LangSelector {
-	lang := LangSelector{LocaleState: LocaleStateChanged}
-
-	if l != nil {
-		lang.logger = l
-	} else {
-		lang.logger = log.NewLogger("daemon/langselector")
+func newLangSelector(service *dbusutil.Service) *LangSelector {
+	lang := LangSelector{
+		service:     service,
+		LocaleState: LocaleStateChanged,
+		logger:      logger,
 	}
 
 	var err error
-	lang.lhelper, err = localehelper.NewLocaleHelper(
+	lang.helper, err = localehelper.NewLocaleHelper(
 		"com.deepin.api.LocaleHelper",
 		"/com/deepin/api/LocaleHelper")
 	if err != nil {
@@ -129,8 +143,7 @@ func newLangSelector(l *log.Logger) *LangSelector {
 		logger.Warningf("newLangSelector: get invalid locale %q", locale)
 		locale = defaultLocale
 	}
-	lang.setPropCurrentLocale(locale)
-
+	lang.CurrentLocale = locale
 	return &lang
 }
 
@@ -165,15 +178,6 @@ func (ls *LangSelector) isSupportedLocale(locale string) bool {
 	infos := ls.getCachedLocales()
 	_, err := infos.Get(locale)
 	return err == nil
-}
-
-func (lang *LangSelector) Destroy() {
-	if lang.lhelper == nil {
-		return
-	}
-
-	localehelper.DestroyLocaleHelper(lang.lhelper)
-	lang.lhelper = nil
 }
 
 func sendNotify(icon, summary, body string) error {

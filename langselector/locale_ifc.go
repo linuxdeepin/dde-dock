@@ -21,14 +21,27 @@ package langselector
 
 import (
 	"fmt"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )
 
 const (
+	dbusPath      = "/com/deepin/daemon/LangSelector"
+	dbusInterface = "com.deepin.daemon.LangSelector"
+
 	localeIconStart    = "notification-change-language-start"
 	localeIconFailed   = "notification-change-language-failed"
 	localeIconFinished = "notification-change-language-finished"
 )
+
+func (lang *LangSelector) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Interface: dbusInterface,
+		Path:      dbusPath,
+	}
+}
 
 // Set user desktop environment locale, the new locale will work after relogin.
 // (Notice: this locale is only for the current user.)
@@ -36,25 +49,26 @@ const (
 // 设置用户会话的 locale，注销后生效，此改变只对当前用户生效。
 //
 // locale: see '/etc/locale.gen'
-func (lang *LangSelector) SetLocale(locale string) error {
-	if lang.LocaleState == LocaleStateChanging {
+func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
+	lang.service.DelayAutoQuit()
+	if lang.getPropLocaleState() == LocaleStateChanging {
 		return nil
 	}
 
 	if len(locale) == 0 || !lang.isSupportedLocale(locale) {
-		return fmt.Errorf("Invalid locale: %v", locale)
+		return dbusutil.ToError(fmt.Errorf("invalid locale: %v", locale))
 	}
-	if lang.lhelper == nil {
-		return fmt.Errorf("LocaleHelper object is nil")
+	if lang.helper == nil {
+		return dbusutil.ToError(fmt.Errorf("LocaleHelper object is nil"))
 	}
 
-	if lang.CurrentLocale == locale {
+	if lang.getPropCurrentLocale() == locale {
 		return nil
 	}
 
 	go func() {
-		lang.LocaleState = LocaleStateChanging
-		lang.setPropCurrentLocale(locale)
+		lang.setPropLocaleState(lang.service, LocaleStateChanging)
+		lang.setPropCurrentLocale(lang.service, locale)
 		if ok, _ := isNetworkEnable(); !ok {
 			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed, please wait..."))
@@ -68,10 +82,10 @@ func (lang *LangSelector) SetLocale(locale string) error {
 				lang.logger.Warning("sendNotify failed:", err)
 			}
 		}
-		err := lang.lhelper.GenerateLocale(locale)
+		err := lang.helper.GenerateLocale(locale)
 		if err != nil {
 			lang.logger.Warning("GenerateLocale failed:", err)
-			lang.LocaleState = LocaleStateChanged
+			lang.setPropLocaleState(lang.service, LocaleStateChanged)
 		}
 	}()
 
@@ -81,24 +95,29 @@ func (lang *LangSelector) SetLocale(locale string) error {
 // Get locale info list that deepin supported
 //
 // 得到系统支持的 locale 信息列表
-func (lang *LangSelector) GetLocaleList() []LocaleInfo {
-	return lang.getCachedLocales()
+func (lang *LangSelector) GetLocaleList() ([]LocaleInfo, *dbus.Error) {
+	lang.service.DelayAutoQuit()
+	return lang.getCachedLocales(), nil
 }
 
-func (lang *LangSelector) GetLocaleDescription(locale string) (string, error) {
+func (lang *LangSelector) GetLocaleDescription(locale string) (string, *dbus.Error) {
+	lang.service.DelayAutoQuit()
+
 	infos := lang.getCachedLocales()
 	info, err := infos.Get(locale)
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 	return info.Desc, nil
 }
 
 // Reset set user desktop environment locale to system default locale
-func (lang *LangSelector) Reset() error {
+func (lang *LangSelector) Reset() *dbus.Error {
+	lang.service.DelayAutoQuit()
+
 	locale, err := getLocaleFromFile(systemLocaleFile)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	return lang.SetLocale(locale)
 }

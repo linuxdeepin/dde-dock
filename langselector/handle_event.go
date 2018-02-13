@@ -25,7 +25,6 @@ import (
 	"path/filepath"
 
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
@@ -35,39 +34,39 @@ var (
 	_ = Tr("Authentication is required to switch language")
 )
 
-func (lang *LangSelector) onLocaleSuccess() {
-	lang.lhelper.ConnectSuccess(func(ok bool, reason string) {
+func (lang *LangSelector) listenHelperSignal() {
+	lang.helper.ConnectSuccess(func(ok bool, reason string) {
 		err := lang.handleLocaleChanged(ok, reason)
 		if err != nil {
 			lang.logger.Warning(err)
-			lang.setPropCurrentLocale(getCurrentUserLocale())
-			e := sendNotify(localeIconFailed, "",
+			lang.setPropCurrentLocale(lang.service, getCurrentUserLocale())
+			err := sendNotify(localeIconFailed, "",
 				Tr("System language failed to change, please try later"))
-			if e != nil {
-				lang.logger.Warning("sendNotify failed:", e)
+			if err != nil {
+				lang.logger.Warning("sendNotify failed:", err)
 			}
-			e = syncUserLocale(lang.CurrentLocale)
-			if e != nil {
-				lang.logger.Warning("Sync user object locale failed:", e)
+			err = syncUserLocale(lang.CurrentLocale)
+			if err != nil {
+				lang.logger.Warning("Sync user object locale failed:", err)
 			}
-			lang.LocaleState = LocaleStateChanged
+			lang.setPropLocaleState(lang.service, LocaleStateChanged)
 			return
 		}
-		e := sendNotify(localeIconFinished, "",
+		err = sendNotify(localeIconFinished, "",
 			Tr("System language has been changed, please log in again after logged out"))
-		if e != nil {
-			lang.logger.Warning("sendNotify failed:", e)
+		if err != nil {
+			lang.logger.Warning("sendNotify failed:", err)
 		}
-		e = syncUserLocale(lang.CurrentLocale)
-		if e != nil {
-			lang.logger.Warning("Sync user object locale failed:", e)
+		err = syncUserLocale(lang.CurrentLocale)
+		if err != nil {
+			lang.logger.Warning("Sync user object locale failed:", err)
 		}
-		lang.LocaleState = LocaleStateChanged
+		lang.setPropLocaleState(lang.service, LocaleStateChanged)
 	})
 }
 
 func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
-	if !ok || lang.LocaleState != LocaleStateChanging {
+	if !ok || lang.getPropLocaleState() != LocaleStateChanging {
 		return ErrLocaleChangeFailed
 	}
 
@@ -85,7 +84,7 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 	if err != nil {
 		lang.logger.Warning(err)
 	}
-	dbus.Emit(lang, "Changed", lang.CurrentLocale)
+	lang.service.Emit(lang, "Changed", lang.getPropCurrentLocale())
 
 	return nil
 }

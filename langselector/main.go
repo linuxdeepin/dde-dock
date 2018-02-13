@@ -20,8 +20,9 @@
 package langselector
 
 import (
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
+	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -30,42 +31,36 @@ const (
 )
 
 var (
-	_lang  *LangSelector
 	logger = log.NewLogger("daemon/langselector")
 )
 
-func Start() *LangSelector {
-	if !lib.UniqueOnSession(dbusSender) {
-		logger.Warning("There is a LangSelector running...")
-		return nil
-	}
-
+func Run() {
 	logger.BeginTracing()
 
-	_lang = newLangSelector(logger)
-	if _lang == nil {
-		logger.Error("Create LangSelector Failed")
-		return nil
-	}
-
-	err := dbus.InstallOnSession(_lang)
+	service, err := dbusutil.NewSessionService()
 	if err != nil {
-		logger.Error("Install Session DBus Failed:", err)
-		Stop()
-		return nil
+		logger.Fatal("failed to new session service:", err)
 	}
 
-	_lang.onLocaleSuccess()
-
-	return _lang
-}
-
-func Stop() {
-	if _lang == nil {
-		return
+	lang := newLangSelector(service)
+	err = service.Export(lang)
+	if err != nil {
+		logger.Fatal("failed to export:", err)
 	}
 
-	_lang.Destroy()
-	_lang.logger.EndTracing()
-	_lang = nil
+	lang.listenHelperSignal()
+
+	err = service.RequestName(dbusSender)
+	if err != nil {
+		logger.Fatal("failed to request name:", err)
+	}
+
+	service.SetAutoQuitHandler(time.Minute*5, func() bool {
+		if lang.getPropLocaleState() == LocaleStateChanging {
+			return false
+		} else {
+			return true
+		}
+	})
+	service.Wait()
 }

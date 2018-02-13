@@ -20,38 +20,12 @@
 package main
 
 import (
-	"os"
-	"time"
-
-	. "pkg.deepin.io/dde/daemon/langselector"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/dde/daemon/langselector"
 	"pkg.deepin.io/lib/gettext"
 )
 
 func main() {
 	gettext.InitI18n()
 	gettext.Textdomain("dde-daemon")
-
-	lang := Start()
-	if lang == nil {
-		return
-	}
-
-	dbus.DealWithUnhandledMessage()
-
-	dbus.SetAutoDestroyHandler(time.Minute*5, func() bool {
-		if lang.LocaleState == LocaleStateChanging {
-			return false
-		} else {
-			return true
-		}
-	})
-
-	if err := dbus.Wait(); err != nil {
-		Stop()
-		os.Exit(-1)
-	}
-
-	Stop()
-	os.Exit(0)
+	langselector.Run()
 }
