@@ -22,32 +22,32 @@ package grub2
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strings"
 
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	DBusDest      = "com.deepin.daemon.Grub2"
-	DBusObjPath   = "/com/deepin/daemon/Grub2"
-	DBusInterface = "com.deepin.daemon.Grub2"
+	DBusServiceName = "com.deepin.daemon.Grub2"
+	DBusObjPath     = "/com/deepin/daemon/Grub2"
+	DBusInterface   = "com.deepin.daemon.Grub2"
 
 	timeoutMax = 10
 )
 
-// GetDBusInfo implements interface of dbus.DBusObject.
-func (_ *Grub2) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       DBusDest,
-		ObjectPath: DBusObjPath,
-		Interface:  DBusInterface,
+func (*Grub2) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      DBusObjPath,
+		Interface: DBusInterface,
 	}
 }
 
 // GetSimpleEntryTitles return entry titles only in level one and will
 // filter out some useless entries such as sub-menus and "memtest86+".
-func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
+func (grub *Grub2) GetSimpleEntryTitles() ([]string, *dbus.Error) {
+	grub.service.DelayAutoQuit()
+
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
 		if entry.parentSubMenu == nil && entry.entryType == MENUENTRY {
@@ -58,13 +58,13 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		}
 	}
 	if len(entryTitles) == 0 {
-		err := fmt.Errorf("there is no menu entry in %s", grubScriptFile)
-		return entryTitles, err
+		logger.Warningf("there is no menu entry in %q", grubScriptFile)
 	}
 	return entryTitles, nil
 }
 
-func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
+func (grub *Grub2) GetAvailableResolutions() (modeJSON string, err *dbus.Error) {
+	grub.service.DelayAutoQuit()
 	// TODO
 	type mode struct {
 		Text, Value string
@@ -73,131 +73,103 @@ func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
 	modes = append(modes, mode{Text: "Auto", Value: "auto"})
 	modes = append(modes, mode{Text: "1024x768", Value: "1024x768"})
 	modes = append(modes, mode{Text: "800x600", Value: "800x600"})
-	data, err := json.Marshal(modes)
-	modesJSON = string(data)
-	return
+	data, _ := json.Marshal(modes)
+	return string(data), nil
 }
 
-func (g *Grub2) SetDefaultEntry(dbusMsg dbus.DMessage, v string) (err error) {
-	err = checkAuth(dbusMsg)
+func (g *Grub2) SetDefaultEntry(sender dbus.Sender, entry string) *dbus.Error {
+	g.service.DelayAutoQuit()
+
+	err := g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	g.setPropMu.Lock()
-	defer g.setPropMu.Unlock()
-
-	if g.DefaultEntry == v {
-		return
-	}
-
-	idx := g.defaultEntryStr2Idx(v)
+	idx := g.defaultEntryStr2Idx(entry)
 	if idx == -1 {
-		return errors.New("invalid entry")
+		return dbusutil.ToError(errors.New("invalid entry"))
 	}
 
-	g.DefaultEntry = v
-	dbus.NotifyChange(g, propNameDefaultEntry)
-	g.modifyFuncChan <- getModifyFuncDefaultEntry(idx)
-	return
+	if g.setPropDefaultEntry(g.service, entry) {
+		g.modifyFuncChan <- getModifyFuncDefaultEntry(idx)
+	}
+	return nil
 }
 
-func (g *Grub2) SetEnableTheme(dbusMsg dbus.DMessage, v bool) (err error) {
-	err = checkAuth(dbusMsg)
+func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
+	g.service.DelayAutoQuit()
+
+	err := g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	g.setPropMu.Lock()
-	defer g.setPropMu.Unlock()
-
-	if g.EnableTheme == v {
-		return
+	if g.setPropEnableTheme(g.service, enabled) {
+		g.modifyFuncChan <- getModifyFuncEnableTheme(enabled)
 	}
-	g.EnableTheme = v
-	dbus.NotifyChange(g, propNameEnableTheme)
-	g.modifyFuncChan <- getModifyFuncEnableTheme(v)
-	return
+	return nil
 }
 
-func (g *Grub2) SetResolution(dbusMsg dbus.DMessage, v string) (err error) {
-	err = checkAuth(dbusMsg)
+func (g *Grub2) SetResolution(sender dbus.Sender, resolution string) *dbus.Error {
+	g.service.DelayAutoQuit()
+
+	err := g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	g.setPropMu.Lock()
-	defer g.setPropMu.Unlock()
-
-	err = checkResolution(v)
+	err = checkResolution(resolution)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	if g.Resolution == v {
-		return
+	if g.setPropResolution(g.service, resolution) {
+		g.modifyFuncChan <- getModifyFuncResolution(resolution)
 	}
-	g.Resolution = v
-	dbus.NotifyChange(g, propNameResolution)
-	g.modifyFuncChan <- getModifyFuncResolution(v)
-	return
+	return nil
 }
 
-func (g *Grub2) SetTimeout(dbusMsg dbus.DMessage, v uint32) (err error) {
-	err = checkAuth(dbusMsg)
+func (g *Grub2) SetTimeout(sender dbus.Sender, timeout uint32) *dbus.Error {
+	g.service.DelayAutoQuit()
+
+	err := g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	g.setPropMu.Lock()
-	defer g.setPropMu.Unlock()
-
-	if v > timeoutMax {
-		return errors.New("exceeded the maximum value 10")
+	if timeout > timeoutMax {
+		return dbusutil.ToError(errors.New("exceeded the maximum value"))
 	}
 
-	if g.Timeout == v {
-		return
+	if g.setPropTimeout(g.service, timeout) {
+		g.modifyFuncChan <- getModifyFuncTimeout(timeout)
 	}
-	g.Timeout = v
-	dbus.NotifyChange(g, propNameTimeout)
-	g.modifyFuncChan <- getModifyFuncTimeout(v)
-	return
+	return nil
 }
 
 // Reset reset all configuration.
-func (g *Grub2) Reset(dbusMsg dbus.DMessage) (err error) {
+func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
+	g.service.DelayAutoQuit()
+
 	const defaultEnableTheme = true
 
-	err = checkAuth(dbusMsg)
+	err := g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
-
-	g.setPropMu.Lock()
-	defer g.setPropMu.Unlock()
-
-	g.theme.reset()
 
 	var modifyFuncs []ModifyFunc
-	if g.Timeout != defaultGrubTimeoutInt {
-		g.Timeout = defaultGrubTimeoutInt
-		dbus.NotifyChange(g, propNameTimeout)
 
-		modifyFuncs = append(modifyFuncs, getModifyFuncTimeout(g.Timeout))
+	if g.setPropTimeout(g.service, defaultGrubTimeoutInt) {
+		modifyFuncs = append(modifyFuncs, getModifyFuncTimeout(defaultGrubTimeoutInt))
 	}
-	if g.EnableTheme != defaultEnableTheme {
-		g.EnableTheme = defaultEnableTheme
-		dbus.NotifyChange(g, propNameEnableTheme)
 
-		modifyFuncs = append(modifyFuncs, getModifyFuncEnableTheme(g.EnableTheme))
+	if g.setPropEnableTheme(g.service, defaultEnableTheme) {
+		modifyFuncs = append(modifyFuncs, getModifyFuncEnableTheme(defaultEnableTheme))
 	}
 
 	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(defaultGrubDefaultInt)
-	if g.DefaultEntry != cfgDefaultEntry {
-		g.DefaultEntry = cfgDefaultEntry
-		dbus.NotifyChange(g, propNameDefaultEntry)
-
+	if g.setPropDefaultEntry(g.service, cfgDefaultEntry) {
 		modifyFuncs = append(modifyFuncs, getModifyFuncDefaultEntry(defaultGrubDefaultInt))
 	}
 
@@ -210,5 +182,9 @@ func (g *Grub2) Reset(dbusMsg dbus.DMessage) (err error) {
 		g.modifyFuncChan <- compoundModifyFunc
 	}
 
-	return
+	err = g.theme.reset()
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
 }

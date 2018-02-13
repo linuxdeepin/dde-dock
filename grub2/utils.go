@@ -28,7 +28,6 @@ import (
 	"strconv"
 	"strings"
 
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/polkit"
 )
 
@@ -98,15 +97,6 @@ func getStringIndexInArray(a string, list []string) int {
 	return -1
 }
 
-func isStringInArray(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
-}
-
 var noCheckAuth bool
 
 func initPolkit() {
@@ -122,7 +112,7 @@ func checkAuthWithPid(pid uint32) (bool, error) {
 	subject := polkit.NewSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
 	subject.SetDetail("start-time", uint64(0))
-	const actionId = DBusDest
+	const actionId = DBusServiceName
 	details := make(map[string]string)
 	result, err := polkit.CheckAuthorization(subject, actionId, details,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
@@ -134,23 +124,6 @@ func checkAuthWithPid(pid uint32) (bool, error) {
 }
 
 var errAuthFailed = errors.New("authentication failed")
-
-func checkAuth(dbusMsg dbus.DMessage) error {
-	if noCheckAuth {
-		logger.Warning("check auth disabled")
-		return nil
-	}
-
-	pid := dbusMsg.GetSenderPID()
-	isAuthorized, err := checkAuthWithPid(pid)
-	if err != nil {
-		return err
-	}
-	if !isAuthorized {
-		return errAuthFailed
-	}
-	return nil
-}
 
 func getBytesMD5Sum(b []byte) string {
 	return fmt.Sprintf("%x", md5.Sum(b))

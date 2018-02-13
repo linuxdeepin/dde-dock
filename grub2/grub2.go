@@ -30,7 +30,8 @@ import (
 	"sync"
 	"unicode"
 
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -40,29 +41,32 @@ func SetLogger(v *log.Logger) {
 	logger = v
 }
 
+//go:generate dbusutil-gen -type Grub2,Theme grub2.go theme.go
 type Grub2 struct {
+	service         *dbusutil.Service
 	modifyFuncChan  chan ModifyFunc
 	mkconfigManager *MkconfigManager
 	entries         []Entry
 	theme           *Theme
 	setPropMu       sync.Mutex
 
+	PropsMu sync.RWMutex
 	// props:
 	DefaultEntry string
 	EnableTheme  bool
 	Resolution   string
 	Timeout      uint32
+	Updating     bool
 
-	Updating bool
+	methods *struct {
+		GetSimpleEntryTitles    func() `out:"titles"` // ([]string, *dbus.Error) {
+		GetAvailableResolutions func() `out:"modeJSON"`
+		SetDefaultEntry         func() `in:"entry"`
+		SetEnableTheme          func() `in:"enabled"`
+		SetResolution           func() `in:"resolution"`
+		SetTimeout              func() `in:"timeout"`
+	}
 }
-
-const (
-	propNameDefaultEntry = "DefaultEntry"
-	propNameEnableTheme  = "EnableTheme"
-	propNameResolution   = "Resolution"
-	propNameTimeout      = "Timeout"
-	propNameUpdating     = "Updating"
-)
 
 // return -1 for failed
 func (g *Grub2) defaultEntryStr2Idx(str string) int {
@@ -154,8 +158,10 @@ func getModifyFuncDefaultEntry(idx int) ModifyFunc {
 	}
 }
 
-func New() *Grub2 {
-	g := &Grub2{}
+func New(service *dbusutil.Service) *Grub2 {
+	g := &Grub2{
+		service: service,
+	}
 
 	g.readEntries()
 
@@ -180,10 +186,7 @@ func New() *Grub2 {
 	g.modifyFuncChan = make(chan ModifyFunc)
 	g.mkconfigManager = newMkconfigManager(g.modifyFuncChan, func(running bool) {
 		// state change callback
-		if g.Updating != running {
-			g.Updating = running
-			dbus.NotifyChange(g, propNameUpdating)
-		}
+		g.setPropUpdating(g.service, running)
 	})
 	go g.mkconfigManager.loop()
 
@@ -330,8 +333,25 @@ func (g *Grub2) getScreenWidthHeight() (w, h uint16, err error) {
 
 func (g *Grub2) canSafelyExit() bool {
 	logger.Debug("call canSafelyExit")
-	if g.mkconfigManager.IsRunning() || g.theme.Updating {
+	if g.mkconfigManager.IsRunning() || g.theme.getPropUpdating() {
 		return false
 	}
 	return true
+}
+
+func (g *Grub2) checkAuth(sender dbus.Sender) error {
+	if noCheckAuth {
+		logger.Warning("check auth disabled")
+		return nil
+	}
+
+	pid, err := g.service.GetConnPID(string(sender))
+	isAuthorized, err := checkAuthWithPid(pid)
+	if err != nil {
+		return err
+	}
+	if !isAuthorized {
+		return errAuthFailed
+	}
+	return nil
 }

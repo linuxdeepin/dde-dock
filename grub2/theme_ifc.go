@@ -24,17 +24,16 @@ import (
 	"fmt"
 	"regexp"
 
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	graphic "pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/utils"
 )
 
-// GetDBusInfo implements interface of dbus.DBusObject.
-func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       DBusDest,
-		ObjectPath: DBusObjPath + "/Theme",
-		Interface:  DBusInterface + ".Theme",
+func (theme *Theme) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      DBusObjPath + "/Theme",
+		Interface: DBusInterface + ".Theme",
 	}
 }
 
@@ -47,93 +46,75 @@ func checkColor(v string) error {
 	return fmt.Errorf("invalid color %q", v)
 }
 
-func (theme *Theme) SetItemColor(dbusMsg dbus.DMessage, v string) (err error) {
-	err = checkAuth(dbusMsg)
+func (theme *Theme) SetItemColor(sender dbus.Sender, color string) *dbus.Error {
+	theme.g.service.DelayAutoQuit()
+
+	err := theme.g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	err = checkColor(v)
+	err = checkColor(color)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	if theme.ItemColor == v {
-		return
+	if theme.setPropItemColor(theme.g.service, color) {
+		err = theme.setCustomTheme()
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
 	}
-	theme.setPropItemColor(v)
-	theme.setCustomTheme()
-	return
+	return nil
 }
 
-func (theme *Theme) SetSelectedItemColor(dbusMsg dbus.DMessage, v string) (err error) {
-	err = checkAuth(dbusMsg)
+func (theme *Theme) SetSelectedItemColor(sender dbus.Sender, color string) *dbus.Error {
+	theme.g.service.DelayAutoQuit()
+
+	err := theme.g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	err = checkColor(v)
+	err = checkColor(color)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	if theme.SelectedItemColor == v {
-		return
+	if theme.setPropSelectedItemColor(theme.g.service, color) {
+		err = theme.setCustomTheme()
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
 	}
-	theme.setPropSelectedItemColor(v)
-	theme.setCustomTheme()
-	return
+	return nil
 }
 
 // SetBackgroundSourceFile setup the background source file, then
 // generate the background to fit the screen resolution, support png
 // and jpeg image format.
-func (theme *Theme) SetBackgroundSourceFile(dbusMsg dbus.DMessage, imageFile string) (err error) {
-	logger.Debugf("SetBackgroundSourceFile: %q", imageFile)
-	err = checkAuth(dbusMsg)
+func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string) *dbus.Error {
+	theme.g.service.DelayAutoQuit()
+
+	logger.Debugf("SetBackgroundSourceFile: %q", filename)
+	err := theme.g.checkAuth(sender)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 
-	imageFile = utils.DecodeURI(imageFile)
-	if graphic.IsSupportedImage(imageFile) {
-		go theme.doSetBackgroundSourceFile(imageFile)
-		return
+	filename = utils.DecodeURI(filename)
+	if graphic.IsSupportedImage(filename) {
+		go theme.doSetBackgroundSourceFile(filename)
+		return nil
 	}
-	return errors.New("unsupported image file")
+	return dbusutil.ToError(errors.New("unsupported image file"))
 }
 
-func (theme *Theme) GetBackground() string {
-	return themeBgFile
-}
-
-func (theme *Theme) setPropUpdating(value bool) {
-	theme.Updating = value
-	dbus.NotifyChange(theme, "Updating")
+func (theme *Theme) GetBackground() (string, *dbus.Error) {
+	theme.g.service.DelayAutoQuit()
+	return theme.bgFile, nil
 }
 
 func (theme *Theme) emitSignalBackgroundChanged() {
-	dbus.Emit(theme, "BackgroundChanged")
-}
-
-func (theme *Theme) setPropItemColor(value string) {
-	itemColor := value
-	if len(itemColor) == 0 {
-		// set a default value to avoid empty string
-		itemColor = theme.tplJSONData.DarkScheme.ItemColor
-	}
-	theme.ItemColor = itemColor
-	theme.tplJSONData.CurrentScheme.ItemColor = itemColor
-	dbus.NotifyChange(theme, "ItemColor")
-}
-
-func (theme *Theme) setPropSelectedItemColor(value string) {
-	selectedItemColor := value
-	if len(selectedItemColor) == 0 {
-		// set a default value to avoid empty string
-		selectedItemColor = theme.tplJSONData.DarkScheme.SelectedItemColor
-	}
-	theme.SelectedItemColor = selectedItemColor
-	theme.tplJSONData.CurrentScheme.SelectedItemColor = selectedItemColor
-	dbus.NotifyChange(theme, "SelectedItemColor")
+	theme.g.service.Emit(theme, "BackgroundChanged")
 }

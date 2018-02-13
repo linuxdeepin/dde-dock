@@ -68,7 +68,7 @@ type ThemeScheme struct {
 // Theme is a dbus object which provide properties and methods to
 // setup deepin grub2 theme.
 type Theme struct {
-	grub2       *Grub2
+	g           *Grub2
 	themeDir    string
 	mainFile    string
 	tplFile     string
@@ -77,21 +77,29 @@ type Theme struct {
 	bgFile      string
 	bgThumbFile string
 	tplJSONData *TplJSONData
+	setThemeMu  sync.Mutex
 
-	Updating   bool
-	updateLock sync.Mutex
-
+	PropsMu           sync.RWMutex
+	Updating          bool
 	ItemColor         string
 	SelectedItemColor string
 
-	// Signal:
-	BackgroundChanged func()
+	methods *struct {
+		SetItemColor            func() `in:"color"`
+		SetSelectedItemColor    func() `in:"color"`
+		SetBackgroundSourceFile func() `in:"filename"`
+		GetBackground           func() `out:"background"`
+	}
+
+	signals *struct {
+		BackgroundChanged struct{}
+	}
 }
 
 // NewTheme create Theme object.
-func NewTheme(grub2 *Grub2) *Theme {
+func NewTheme(g *Grub2) *Theme {
 	theme := &Theme{}
-	theme.grub2 = grub2
+	theme.g = g
 	theme.themeDir = themeDir
 	theme.mainFile = themeMainFile
 	theme.tplFile = themeTplFile
@@ -109,7 +117,7 @@ func newTplJSONData() (d *TplJSONData) {
 
 func (theme *Theme) getScreenWidthHeight() (w, h uint16) {
 	var err error
-	w, h, err = theme.grub2.getScreenWidthHeight()
+	w, h, err = theme.g.getScreenWidthHeight()
 	if err != nil {
 		return 1024, 768
 	}
@@ -125,28 +133,32 @@ func (theme *Theme) initTheme() {
 	}
 
 	// init properties
-	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.ItemColor = theme.tplJSONData.CurrentScheme.ItemColor
+	theme.SelectedItemColor = theme.tplJSONData.CurrentScheme.ItemColor
 }
 
 // reset to default configuration
-func (theme *Theme) reset() {
-	theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
-	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
-	theme.setCustomTheme()
+func (theme *Theme) reset() error {
+	service := theme.g.service
+	// reset scheme to dark scheme
+	defaultScheme := theme.tplJSONData.DarkScheme
+	theme.tplJSONData.CurrentScheme = defaultScheme
+	theme.setPropItemColor(service, defaultScheme.ItemColor)
+	theme.setPropSelectedItemColor(service, defaultScheme.SelectedItemColor)
+	err := theme.setCustomTheme()
+	if err != nil {
+		return err
+	}
 
 	// reset theme background
 	go func() {
-		theme.updateLock.Lock()
-		defer theme.updateLock.Unlock()
-		theme.setPropUpdating(true)
 		resetThemeBackground()
 		screenWidth, screenHeight := theme.getScreenWidthHeight()
-		generateThemeBackground(screenWidth, screenHeight)
-		theme.setPropUpdating(false)
+		theme.generateBackground(screenWidth, screenHeight)
 		theme.emitSignalBackgroundChanged()
 	}()
+
+	return nil
 }
 
 // Fix issue that the theme background will keep default size as
@@ -210,48 +222,49 @@ func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
 	return tplJSONData, nil
 }
 
-func (theme *Theme) setCustomTheme() {
+func (theme *Theme) setCustomTheme() error {
+	theme.setThemeMu.Lock()
+	defer theme.setThemeMu.Unlock()
+
+	theme.tplJSONData.CurrentScheme.ItemColor = theme.getPropItemColor()
+	theme.tplJSONData.CurrentScheme.SelectedItemColor = theme.getPropSelectedItemColor()
 	logger.Debugf("set custom theme: %v", theme.tplJSONData.CurrentScheme)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
 	if err != nil {
-		logger.Error(err)
-		return
+		return err
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJSONData.CurrentScheme)
 	if err != nil {
-		logger.Error(err)
-		return
+		return err
 	}
 	if len(themeFileContent) == 0 {
-		logger.Error("theme content is empty")
+		logger.Warning("setCustomTheme: theme file content is empty")
 	}
 
 	err = writeThemeMainFile(themeFileContent)
 	if err != nil {
-		logger.Warning(err)
-		return
+		return err
 	}
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(theme.tplJSONData)
 	if err != nil {
-		return
+		return err
 	}
 
-	writeThemeTplFile(jsonContent)
+	return writeThemeTplFile(jsonContent)
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
-	templator := template.New("theme-templator")
-	tpl, err := templator.Parse(string(fileContent))
+	tpl, err := template.New("theme").Parse(string(fileContent))
 	if err != nil {
 		return []byte(""), err
 	}
 
-	buf := bytes.NewBufferString("")
-	err = tpl.Execute(buf, tplData)
+	var buf bytes.Buffer
+	err = tpl.Execute(&buf, tplData)
 	if err != nil {
 		return []byte(""), err
 	}
@@ -293,13 +306,9 @@ func generateThemeBackground(screenWidth, screenHeight uint16) (err error) {
 	return graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
 }
 
-func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
-	theme.updateLock.Lock()
-	defer theme.updateLock.Unlock()
-	theme.setPropUpdating(true)
+func (theme *Theme) doSetBackgroundSourceFile(imageFile string) {
 	screenWidth, screenHeight := theme.getScreenWidthHeight()
-	setThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
-	theme.setPropUpdating(false)
+	theme.setThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 	theme.emitSignalBackgroundChanged()
 
 	// set item color through background's dominant color
@@ -313,18 +322,22 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
 		logger.Info("background is bright, so use the bright theme scheme")
 	}
-	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
-	theme.setCustomTheme()
+	service := theme.g.service
+	theme.setPropItemColor(service, theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setPropSelectedItemColor(service, theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	err := theme.setCustomTheme()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 
-	logger.Info("update background sucess")
-	return true
+	logger.Info("update background success")
 }
 
 // setup a new background source file
 // for deepin grub2 theme, and then generate the background depends on
 // screen resolution.
-func setThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) (err error) {
+func (theme *Theme) setThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) (err error) {
 	// if background source file is a symlink, just delete it
 	if utils.IsSymlink(themeBgSrcFile) {
 		os.Remove(themeBgSrcFile)
@@ -337,5 +350,13 @@ func setThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight ui
 	}
 
 	// generate a new background
-	return generateThemeBackground(screenWidth, screenHeight)
+	return theme.generateBackground(screenWidth, screenHeight)
+}
+
+func (theme *Theme) generateBackground(screenWidth, screenHeight uint16) error {
+	service := theme.g.service
+	theme.setPropUpdating(service, true)
+	err := generateThemeBackground(screenWidth, screenHeight)
+	theme.setPropUpdating(service, false)
+	return err
 }

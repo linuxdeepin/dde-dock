@@ -20,24 +20,38 @@
 package grub2
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 var _g *Grub2
 
-func Start() error {
+func RunAsDaemon() {
 	initPolkit()
-	_g = New()
-	err := dbus.InstallOnSystem(_g)
+	service, err := dbusutil.NewSystemService()
 	if err != nil {
-		return err
+		logger.Fatal("failed to new system service", err)
+	}
+	_g = New(service)
+
+	err = service.Export(_g)
+	if err != nil {
+		logger.Fatal("failed to export grub2:", err)
 	}
 
-	return dbus.InstallOnSystem(_g.theme)
-}
+	err = service.Export(_g.theme)
+	if err != nil {
+		logger.Fatal("failed to export grub2 theme:", err)
+	}
 
-func CanSafelyExit() bool {
-	return _g.canSafelyExit()
+	err = service.RequestName(DBusServiceName)
+	if err != nil {
+		logger.Fatal("failed to request name:", err)
+	}
+
+	service.SetAutoQuitHandler(5*time.Minute, _g.canSafelyExit)
+	service.Wait()
 }
 
 // write default /etc/default/grub

@@ -23,11 +23,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"time"
 
 	"pkg.deepin.io/dde/daemon/grub2"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -76,27 +73,6 @@ func main() {
 		}
 	} else {
 		fmt.Println("mode: daemon")
-		runAsDaemon()
-	}
-}
-
-func runAsDaemon() {
-	if !lib.UniqueOnSystem(grub2.DBusDest) {
-		logger.Warning("There already has an Grub2 daemon running.")
-		return
-	}
-
-	err := grub2.Start()
-	if err != nil {
-		logger.Warning("start failed:", err)
-		os.Exit(3)
-	}
-
-	dbus.SetAutoDestroyHandler(5*time.Minute, grub2.CanSafelyExit)
-	dbus.DealWithUnhandledMessage()
-
-	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session:", err)
-		os.Exit(4)
+		grub2.RunAsDaemon()
 	}
 }
