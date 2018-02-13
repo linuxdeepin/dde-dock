@@ -21,12 +21,23 @@ package main
 
 import (
 	"path"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pinyin"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
-func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {
-	datas := []dataInfo{}
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusInterface,
+	}
+}
+
+func (m *Manager) NewSearchWithStrList(list []string) (string, bool, *dbus.Error) {
+	m.service.DelayAutoQuit()
+	var datas []dataInfo
 	strs := ""
 
 	for _, v := range list {
@@ -48,13 +59,13 @@ func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {
 	md5Str, ok := dutils.SumStrMd5(strs)
 	if !ok {
 		logger.Warning("Sum MD5 Failed")
-		return "", false
+		return "", false, nil
 	}
 
 	cachePath, ok1 := getCachePath()
 	if !ok1 {
 		logger.Warning("Get Cache Path Failed")
-		return "", false
+		return "", false, nil
 	}
 
 	filename := path.Join(cachePath, md5Str)
@@ -66,11 +77,13 @@ func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {
 		m.writeStart = false
 	}()
 
-	return md5Str, true
+	return md5Str, true, nil
 }
 
-func (m *Manager) NewSearchWithStrDict(dict map[string]string) (string, bool) {
-	datas := []dataInfo{}
+func (m *Manager) NewSearchWithStrDict(dict map[string]string) (string, bool, *dbus.Error) {
+	m.service.DelayAutoQuit()
+
+	var datas []dataInfo
 	strs := ""
 
 	for k, v := range dict {
@@ -93,13 +106,13 @@ func (m *Manager) NewSearchWithStrDict(dict map[string]string) (string, bool) {
 	md5Str, ok := dutils.SumStrMd5(strs)
 	if !ok {
 		logger.Warning("Sum MD5 Failed")
-		return "", false
+		return "", false, nil
 	}
 
 	cachePath, ok1 := getCachePath()
 	if !ok1 {
 		logger.Warning("Get Cache Path Failed")
-		return "", false
+		return "", false, nil
 	}
 
 	filename := path.Join(cachePath, md5Str)
@@ -111,41 +124,45 @@ func (m *Manager) NewSearchWithStrDict(dict map[string]string) (string, bool) {
 		m.writeStart = false
 	}()
 
-	return md5Str, true
+	return md5Str, true, nil
 }
 
-func (m *Manager) SearchString(str, md5 string) []string {
-	list := []string{}
+func (m *Manager) SearchString(str, md5 string) ([]string, *dbus.Error) {
+	m.service.DelayAutoQuit()
+
+	var list []string
 	if len(str) < 1 || len(md5) < 1 {
-		return list
+		return list, nil
 	}
 
 	list = searchString(str, md5)
-	tmp := []string{}
+	var tmp []string
 	for _, v := range list {
 		if !strIsInList(v, tmp) {
 			tmp = append(tmp, v)
 		}
 	}
 
-	return tmp
+	return tmp, nil
 }
 
-func (m *Manager) SearchStartWithString(str, md5 string) []string {
-	list := []string{}
+func (m *Manager) SearchStartWithString(str, md5 string) ([]string, *dbus.Error) {
+	m.service.DelayAutoQuit()
+
+	var list []string
 	if len(str) < 1 || len(md5) < 1 {
-		return list
+		return list, nil
 	}
 
 	list = searchStartWithString(str, md5)
-	tmp := []string{}
+	var tmp []string
 	for _, v := range list {
 		if !strIsInList(v, tmp) {
 			tmp = append(tmp, v)
 		}
 	}
 
-	return tmp
+	return tmp, nil
 }
 
 func strIsInList(str string, list []string) bool {

@@ -20,77 +20,74 @@
 package main
 
 import (
-	"os"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
 	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 type Manager struct {
+	service    *dbusutil.Service
 	writeStart bool
 	writeEnd   chan bool
+
+	methods *struct {
+		NewSearchWithStrList  func() `in:"list" out:"md5sum,ok"`
+		NewSearchWithStrDict  func() `in:"dict" out:"md5sum,ok"`
+		SearchString          func() `in:"str,md5sum" out:"result"`
+		SearchStartWithString func() `in:"str,md5sum" out:"result"`
+	}
 }
 
 const (
-	DBUS_DEST = "com.deepin.daemon.Search"
-	DBUS_PATH = "/com/deepin/daemon/Search"
-	DBUS_IFC  = "com.deepin.daemon.Search"
+	dbusServiceName = "com.deepin.daemon.Search"
+	dbusPath        = "/com/deepin/daemon/Search"
+	dbusInterface   = "com.deepin.daemon.Search"
 )
 
 var (
 	logger = log.NewLogger("daemon/search")
 )
 
-func newManager() *Manager {
-	m := Manager{}
+func newManager(service *dbusutil.Service) *Manager {
+	m := Manager{
+		service: service,
+	}
 
 	m.writeStart = false
 
 	return &m
 }
 
-var _manager *Manager
-
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = newManager()
-	}
-
-	return _manager
-}
-
 func main() {
-	if !lib.UniqueOnSession(DBUS_DEST) {
-		logger.Warning("There is an Search running")
-		return
-	}
-
 	logger.BeginTracing()
 	defer logger.EndTracing()
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/search")
 
-	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		logger.Fatal("Search Install DBus Failed:", err)
-		return
+	service, err := dbusutil.NewSessionService()
+	if err != nil {
+		logger.Fatal("failed to new session service:", err)
 	}
-	dbus.DealWithUnhandledMessage()
 
-	dbus.SetAutoDestroyHandler(time.Second*5, func() bool {
-		if GetManager().writeStart {
+	m := newManager(service)
+	err = service.Export(m)
+	if err != nil {
+		logger.Fatal("failed to export:", err)
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		logger.Fatal("failed to request name:", err)
+	}
+
+	service.SetAutoQuitHandler(time.Second*5, func() bool {
+		if m.writeStart {
 			select {
-			case <-GetManager().writeEnd:
+			case <-m.writeEnd:
 				return true
 			}
 		}
-
 		return true
 	})
-
-	if err := dbus.Wait(); err != nil {
-		logger.Warning("Search lost dbus:", err)
-		os.Exit(-1)
-	} else {
-		os.Exit(0)
-	}
+	service.Wait()
 }
