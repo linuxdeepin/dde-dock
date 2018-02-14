@@ -20,38 +20,36 @@
 package soundeffect
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
 )
 
 var logger = log.NewLogger("daemon/soundeffect")
-var manager *Manager
 
-func Start() error {
-	if manager != nil {
-		return nil
-	}
-	logger.BeginTracing()
-	manager = NewManager()
-	err := dbus.InstallOnSession(manager)
+func Run() {
+	service, err := dbusutil.NewSessionService()
 	if err != nil {
-		logger.Error("Install session bus failed:", err)
-		return err
+		logger.Fatal("failed to new session service:", err)
 	}
-	return nil
-}
+	m := NewManager(service)
 
-func IsPlaying() bool {
-	return manager.count > 0
-}
-
-func Stop() error {
-	if manager == nil {
-		return nil
+	err = service.Export(m)
+	if err != nil {
+		logger.Fatal("failed to export:", err)
 	}
 
-	manager.setting.Unref()
-	manager = nil
-	logger.EndTracing()
-	return nil
+	err = gsettings.StartMonitor()
+	if err != nil {
+		logger.Fatal("failed to start monitor gsettings changed:", err)
+	}
+	err = service.RequestName(DBusServiceName)
+	if err != nil {
+		logger.Fatal("failed to request name:", err)
+	}
+
+	service.SetAutoQuitHandler(30*time.Second, m.canQuit)
+	service.Wait()
 }

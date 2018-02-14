@@ -20,35 +20,9 @@
 package main
 
 import (
-	"os"
 	"pkg.deepin.io/dde/daemon/soundeffect"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
-	"time"
 )
 
 func main() {
-	logger := log.NewLogger("daemon/soundeffect-runner")
-	logger.BeginTracing()
-	defer logger.EndTracing()
-
-	if !lib.UniqueOnSession(soundeffect.DBusDest) {
-		logger.Error("dbus not unique:", soundeffect.DBusDest)
-		return
-	}
-
-	dbus.SetAutoDestroyHandler(5*time.Second, func() bool {
-		return !soundeffect.IsPlaying()
-	})
-
-	soundeffect.Start()
-	dbus.DealWithUnhandledMessage()
-	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session:", err)
-		soundeffect.Stop()
-		os.Exit(1)
-	}
-	soundeffect.Stop()
-	os.Exit(0)
+	soundeffect.Run()
 }
