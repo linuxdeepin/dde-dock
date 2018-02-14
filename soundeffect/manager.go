@@ -44,7 +44,7 @@ type Manager struct {
 	count   int
 	countMu sync.Mutex
 
-	Enable *gsprop.Bool `prop:"access:rw"`
+	Enabled *gsprop.Bool `prop:"access:rw"`
 
 	methods *struct {
 		PlaySystemSound func() `in:"event"`
@@ -56,7 +56,7 @@ func NewManager(service *dbusutil.Service) *Manager {
 
 	m.service = service
 	m.setting = gio.NewSettings(soundEffectSchema)
-	m.Enable = gsprop.NewBool(m.setting, settingKeyEnabled)
+	m.Enabled = gsprop.NewBool(m.setting, settingKeyEnabled)
 	return m
 }
 
