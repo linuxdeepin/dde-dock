@@ -10,13 +10,19 @@ import (
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/cgroup"
-	"pkg.deepin.io/lib/dbus"
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
 const (
-	loginDest    = "org.freedesktop.login1"
-	loginObjPath = "/org/freedesktop/login1"
+	loginServiceName = "org.freedesktop.login1"
+	loginObjPath     = "/org/freedesktop/login1"
+
+	dbusServiceName = "com.deepin.daemon.SwapSchedHelper"
+	dbusPath        = "/com/deepin/daemon/SwapSchedHelper"
+	dbusInterface   = dbusServiceName
 )
 
 var logger = log.NewLogger("daemon/system/swapsched")
@@ -51,12 +57,17 @@ func (d *Daemon) Start() error {
 	sw.init()
 	d.sessionWatcher = sw
 
-	err = dbus.InstallOnSystem(sw)
+	service := loader.GetService()
+	err = service.Export(sw)
 	if err != nil {
-		logger.Warning(err)
 		return err
 	}
-	dbus.DealWithUnhandledMessage()
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -67,18 +78,21 @@ func (d *Daemon) Stop() error {
 
 type Helper struct {
 	loginManager *login1.Manager
+
+	methods *struct {
+		Prepare func() `in:"sessionID"`
+	}
 }
 
-func (sw *Helper) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.SwapSchedHelper",
-		ObjectPath: "/com/deepin/daemon/SwapSchedHelper",
-		Interface:  "com.deepin.daemon.SwapSchedHelper",
+func (sw *Helper) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusInterface,
 	}
 }
 
 func newHelper() *Helper {
-	loginManager, err := login1.NewManager(loginDest, loginObjPath)
+	loginManager, err := login1.NewManager(loginServiceName, loginObjPath)
 	if err != nil {
 		panic(err)
 	}
@@ -87,16 +101,16 @@ func newHelper() *Helper {
 	}
 }
 
-func (sw *Helper) Prepare(sessionID string) error {
+func (sw *Helper) Prepare(sessionID string) *dbus.Error {
 	uid, err := sw.getSessionUid(sessionID)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	err = createDDECGroups(uid, sessionID)
 	if err != nil {
 		logger.Warning("failed to create cgroup:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	return nil
@@ -133,7 +147,7 @@ func (sw *Helper) getSessionUid(sessionID0 string) (uint32, error) {
 }
 
 func (sw *Helper) init() {
-	sw.loginManager.ConnectSessionRemoved(func(sessionID string, sessionObjPath dbus.ObjectPath) {
+	sw.loginManager.ConnectSessionRemoved(func(sessionID string, sessionObjPath oldDBusLib.ObjectPath) {
 		logger.Debug("session removed", sessionID, sessionObjPath)
 		memMountPoint := cgroup.GetSubSysMountPoint(cgroup.Memory)
 		_, err := os.Stat(filepath.Join(memMountPoint, sessionID+"@dde"))

@@ -27,14 +27,14 @@ import "C"
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
 const (
-	dbusDest = "com.deepin.daemon.Gesture"
-	dbusPath = "/com/deepin/daemon/Gesture"
-	dbusIFC  = "com.deepin.daemon.Gesture"
+	dbusServiceName = "com.deepin.daemon.Gesture"
+	dbusPath        = "/com/deepin/daemon/Gesture"
+	dbusIFC         = "com.deepin.daemon.Gesture"
 )
 
 type GestureType int32
@@ -80,13 +80,19 @@ func (t GestureType) String() string {
 }
 
 type Manager struct {
-	// name, direction, fingers
-	Event func(string, string, int32)
+	service *dbusutil.Service
+	signals *struct {
+		Event struct {
+			name      string
+			direction string
+			fingers   int32
+		}
+	}
 }
 
 var (
 	_m     *Manager
-	logger = log.NewLogger(dbusDest)
+	logger = log.NewLogger(dbusServiceName)
 )
 
 type Daemon struct {
@@ -107,11 +113,10 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusIFC,
 	}
 }
 
@@ -120,7 +125,7 @@ func handleGestureEvent(ty, direction, fingers C.int) {
 	logger.Debug("Emit gesture event:", GestureType(ty).String(),
 		GestureType(direction).String(),
 		int32(fingers))
-	dbus.Emit(_m, "Event", GestureType(ty).String(),
+	_m.service.Emit(_m, "Event", GestureType(ty).String(),
 		GestureType(direction).String(),
 		int32(fingers))
 }
@@ -128,13 +133,19 @@ func handleGestureEvent(ty, direction, fingers C.int) {
 func (*Daemon) Start() error {
 	logger.BeginTracing()
 	logger.Info("Start gesture daemon")
-	_m = &Manager{}
-	err := dbus.InstallOnSystem(_m)
+	service := loader.GetService()
+	_m = &Manager{
+		service: service,
+	}
+	err := service.Export(_m)
 	if err != nil {
-		logger.Fatal("Install system bus failed:", err)
 		return err
 	}
-	dbus.DealWithUnhandledMessage()
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
 
 	// TODO: debug level
 	go C.start_loop()
@@ -146,7 +157,12 @@ func (*Daemon) Stop() error {
 		return nil
 	}
 	C.quit_loop()
-	dbus.UnInstallObject(_m)
+	service := loader.GetService()
+	err := service.StopExport(_m.GetDBusExportInfo())
+	if err != nil {
+		return err
+	}
+
 	_m = nil
 	return nil
 }

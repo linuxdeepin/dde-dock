@@ -21,7 +21,6 @@ package power
 
 import (
 	"pkg.deepin.io/lib/arch"
-	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *Manager) initLidSwitch() {
@@ -36,9 +35,9 @@ func (m *Manager) initLidSwitch() {
 func (m *Manager) handleLidSwitchEvent(closed bool) {
 	if closed {
 		logger.Info("Lid Closed")
-		dbus.Emit(m, "LidClosed")
+		m.service.Emit(m, "LidClosed")
 	} else {
 		logger.Info("Lid Opened")
-		dbus.Emit(m, "LidOpened")
+		m.service.Emit(m, "LidOpened")
 	}
 }

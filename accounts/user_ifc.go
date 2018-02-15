@@ -27,170 +27,186 @@ import (
 
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/graphic"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
-func (u *User) SetFullName(dbusMsg dbus.DMessage, name string) error {
+const (
+	userDBusPath = "/com/deepin/daemon/Accounts/User"
+	userDBusIFC  = "com.deepin.daemon.Accounts.User"
+)
+
+func (u *User) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      userDBusPath + u.Uid,
+		Interface: userDBusIFC,
+	}
+}
+
+func (u *User) SetFullName(sender dbus.Sender, name string) *dbus.Error {
 	logger.Debugf("[SetFullName] new name: %q", name)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
+	if err := u.accessAuthentication(sender, true); err != nil {
 		logger.Debug("[SetFullName] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.ModifyFullName(name, u.UserName); err != nil {
 		logger.Warning("DoAction: modify full name failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
-	u.setPropString(&u.FullName, "FullName", name)
+	u.setPropFullName(name)
 	return nil
 }
 
-func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) error {
+func (u *User) SetHomeDir(sender dbus.Sender, home string) *dbus.Error {
 	logger.Debug("[SetHomeDir] new home:", home)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	if !dutils.IsFileExist(home) {
-		err := fmt.Errorf("Not found the home path: %s", home)
-		return err
+	if dutils.IsFileExist(home) {
+		// if new home already exists, the `usermod -m -d` command will fail.
+		return dbusutil.ToError(errors.New("new home already exists"))
 	}
 
-	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
+	if err := u.accessAuthentication(sender, true); err != nil {
 		logger.Debug("[SetHomeDir] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.ModifyHome(home, u.UserName); err != nil {
 		logger.Warning("DoAction: modify home failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	u.setPropString(&u.HomeDir, "HomeDir", home)
+	u.setPropHomeDir(home)
 	return nil
 }
 
-func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) error {
+func (u *User) SetShell(sender dbus.Sender, shell string) *dbus.Error {
 	logger.Debug("[SetShell] new shell:", shell)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
 	shells := getAvailableShells("/etc/shells")
 	if len(shells) == 0 {
-		err := fmt.Errorf("No available shell found")
+		err := fmt.Errorf("no available shell found")
 		logger.Error("[SetShell] failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if !strv.Strv(shells).Contains(shell) {
-		err := fmt.Errorf("Not found the shell: %s", shell)
+		err := fmt.Errorf("not found the shell: %s", shell)
 		logger.Warning("[SetShell] failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
+	if err := u.accessAuthentication(sender, true); err != nil {
 		logger.Debug("[SetShell] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.ModifyShell(shell, u.UserName); err != nil {
 		logger.Warning("DoAction: modify shell failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	u.setPropString(&u.Shell, "Shell", shell)
+	u.setPropShell(shell)
 	return nil
 }
 
-func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) error {
+func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 	logger.Debug("[SetPassword] start ...")
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
+	if err := u.accessAuthentication(sender, true); err != nil {
 		logger.Debug("[SetPassword] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	if err := users.ModifyPasswd(words, u.UserName); err != nil {
-		logger.Warning("DoAction: modify passwd failed:", err)
-		return err
+	if err := users.ModifyPasswd(password, u.UserName); err != nil {
+		logger.Warning("DoAction: modify password failed:", err)
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.LockedUser(false, u.UserName); err != nil {
 		logger.Warning("DoAction: unlock user failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
-	u.setPropBool(&u.Locked, "Locked", false)
+	u.setPropLocked(false)
 	return nil
 }
 
-func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) error {
+func (u *User) SetAccountType(sender dbus.Sender, ty int32) *dbus.Error {
 	logger.Debug("[SetAccountType] type:", ty)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, false); err != nil {
+	if err := u.accessAuthentication(sender, false); err != nil {
 		logger.Debug("[SetAccountType] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.SetUserType(ty, u.UserName); err != nil {
 		logger.Warning("DoAction: set user type failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	u.setPropInt32(&u.AccountType, "AccountType", ty)
+	u.setPropAccountType(ty)
 	return nil
 }
 
-func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) error {
-	logger.Debug("[SetLocked] locaked:", locked)
+func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
+	logger.Debug("[SetLocked] locked:", locked)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
 	if err := polkitAuthChangeOwnData("", "", pid); err != nil {
 		logger.Debug("[SetLocked] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.LockedUser(locked, u.UserName); err != nil {
 		logger.Warning("DoAction: locked user failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if locked && u.AutomaticLogin {
 		users.SetAutoLoginUser("", "")
 	}
-	u.setPropBool(&u.Locked, "Locked", locked)
+	u.setPropLocked(locked)
 	return nil
 }
 
-func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
+func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
 	logger.Debug("[SetAutomaticLogin] auto", auto)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
 	if err := polkitAuthAutoLogin(pid, auto); err != nil {
 		logger.Debug("[SetAutomaticLogin] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if u.Locked {
-		return fmt.Errorf("user %s has been locked", u.UserName)
+		return dbusutil.ToError(fmt.Errorf("user %s has been locked", u.UserName))
 	}
 
 	var name = u.UserName
@@ -204,26 +220,30 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 	}
 	if err := users.SetAutoLoginUser(name, session); err != nil {
 		logger.Warning("DoAction: set auto login failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	u.setPropBool(&u.AutomaticLogin, "AutomaticLogin", auto)
+	u.setPropAutomaticLogin(auto)
 	return nil
 }
 
-func (u *User) EnableNoPasswdLogin(dbusMsg dbus.DMessage, enabled bool) error {
+func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error {
 	logger.Debug("[EnableNoPasswdLogin] enabled:", enabled)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
 	if err := polkitAuthNoPasswdLogin(pid, enabled); err != nil {
 		logger.Debug("[EnableNoPasswdLogin] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if u.Locked {
-		return fmt.Errorf("user %s has been locked", u.UserName)
+		return dbusutil.ToError(fmt.Errorf("user %s has been locked", u.UserName))
 	}
 
 	if u.NoPasswdLogin == enabled {
@@ -231,22 +251,26 @@ func (u *User) EnableNoPasswdLogin(dbusMsg dbus.DMessage, enabled bool) error {
 	}
 
 	if err := users.EnableNoPasswdLogin(u.UserName, enabled); err != nil {
-		logger.Warning("DoAction: enable nopasswdlogin failed:", err)
-		return err
+		logger.Warning("DoAction: enable no password login failed:", err)
+		return dbusutil.ToError(err)
 	}
 
-	u.setPropBool(&u.NoPasswdLogin, "NoPasswdLogin", users.CanNoPasswdLogin(u.UserName))
+	u.setPropNoPasswdLogin(enabled)
 	return nil
 }
 
-func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
+func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 	logger.Debug("[SetLocale] locale:", locale)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[SetLocale] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 
@@ -255,30 +279,30 @@ func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
 	}
 
 	if !lang_info.IsSupportedLocale(locale) {
-		err := fmt.Errorf("Invalid locale %q", locale)
+		err := fmt.Errorf("invalid locale %q", locale)
 		logger.Debug("[SetLocale]", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	oldLocale := u.Locale
-	u.setPropString(&u.Locale, "Locale", locale)
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("[SetLocale]", err)
-		u.setPropString(&u.Locale, "Locale", oldLocale)
-		return err
+	err = u.writeUserConfigWithChange(confKeyLocale, locale)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
-
+	u.setPropLocale(locale)
 	return nil
 }
 
-func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
+func (u *User) SetLayout(sender dbus.Sender, layout string) *dbus.Error {
 	logger.Debug("[SetLayout] new layout:", layout)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[SetLayout] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 
@@ -287,132 +311,133 @@ func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
 	}
 
 	// TODO: check layout validity
-	oldLayout := u.Layout
-	u.setPropString(&u.Layout, "Layout", layout)
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("Write user config failed:", err)
-		u.setPropString(&u.Layout, "Layout", oldLayout)
-		return err
+	err = u.writeUserConfigWithChange(confKeyLayout, layout)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
+	u.setPropLayout(layout)
 	return nil
 }
 
-func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
+func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 	logger.Debug("[SetIconFile] new icon:", iconURI)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[SetIconFile] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 
 	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
 	iconFile := dutils.DecodeURI(iconURI)
-	if u.IconFile == iconURI {
+
+	currentIconFile := u.getPropIconFile()
+	if currentIconFile == iconURI {
 		return nil
 	}
 
 	if !gdkpixbuf.IsSupportedImage(iconFile) {
 		err := fmt.Errorf("%q is not a image file", iconFile)
 		logger.Debug(err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	newIconURI, added, err := u.setIconFile(iconURI)
 	if err != nil {
 		logger.Warning("Set icon failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
-
-	oldIconURI := u.IconFile
-	oldCustomIcon := u.customIcon
-	u.setPropIconFile(newIconURI)
-
-	// Whether we need to remove the old custom icon
-	var removeOld bool
 
 	if added {
 		// newIconURI should be custom icon if added is true
-		u.customIcon = newIconURI
-		if isUserCustomIconURI(oldIconURI, u.UserName) {
-			// old and new icons are custom icon, we need remove the old custom icon
-			removeOld = true
-		}
-	}
-
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("Write user config failed:", err)
-		// recover
-		u.setPropIconFile(oldIconURI)
-		u.customIcon = oldCustomIcon
-		removeOld = false
-		return err
-	}
-
-	if removeOld {
-		logger.Debugf("remove old custom icon %q", oldIconURI)
-		err := os.Remove(dutils.DecodeURI(oldIconURI))
+		err = u.writeUserConfigWithChanges([]configChange{
+			{confKeyCustomIcon, newIconURI},
+			{confKeyIcon, newIconURI},
+		})
 		if err != nil {
-			logger.Warning(err)
+			return dbusutil.ToError(err)
+		}
+
+		// remove old custom icon
+		if u.customIcon != "" {
+			logger.Debugf("remove old custom icon %q", u.customIcon)
+			err := os.Remove(dutils.DecodeURI(u.customIcon))
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
+		u.customIcon = newIconURI
+		u.updateIconList()
+	} else {
+		err = u.writeUserConfigWithChange(confKeyIcon, newIconURI)
+		if err != nil {
+			return dbusutil.ToError(err)
 		}
 	}
 
-	if added {
-		u.updateIconList()
-	}
+	u.setPropIconFile(newIconURI)
 	return nil
 }
 
-func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
+// 只能删除不是用户当前图标的自定义图标
+func (u *User) DeleteIconFile(sender dbus.Sender, icon string) *dbus.Error {
 	logger.Debug("[DeleteIconFile] icon:", icon)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[DeleteIconFile] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 
 	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	if !u.IsIconDeletable(icon) {
-		err := errors.New("This icon is not allowed to be deleted!")
+		err := errors.New("this icon is not allowed to be deleted")
 		logger.Warning(err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	iconPath := dutils.DecodeURI(icon)
 	if err := os.Remove(iconPath); err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	oldCustomIcon := u.customIcon
-	u.customIcon = ""
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("Write user config failed:", err)
-		// recover
-		u.customIcon = oldCustomIcon
-		return err
+	// set custom icon to empty
+	err = u.writeUserConfigWithChange(confKeyCustomIcon, "")
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
+	u.customIcon = ""
+
 	u.updateIconList()
 	return nil
 }
 
-func (u *User) SetDesktopBackgrounds(dbusMsg dbus.DMessage, val []string) error {
+func (u *User) SetDesktopBackgrounds(sender dbus.Sender, val []string) *dbus.Error {
 	logger.Debugf("[SetDesktopBackgrounds] val: %#v", val)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[SetDesktopBackgrounds] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 
 	if len(val) == 0 {
-		return errors.New("val is empty")
+		return dbusutil.ToError(errors.New("val is empty"))
 	}
 
 	var newVal = make([]string, len(val))
@@ -424,24 +449,26 @@ func (u *User) SetDesktopBackgrounds(dbusMsg dbus.DMessage, val []string) error 
 		return nil
 	}
 
-	oldVal := u.DesktopBackgrounds
-	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, newVal)
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("Write user config failed:", err)
-		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, oldVal)
-		return err
+	err = u.writeUserConfigWithChange(confKeyDesktopBackgrounds, newVal)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
+
+	u.setPropDesktopBackgrounds(newVal)
 	return nil
 }
 
-func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
+func (u *User) SetGreeterBackground(sender dbus.Sender, bg string) *dbus.Error {
 	logger.Debug("[SetGreeterBackground] new background:", bg)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[SetGreeterBackground] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
@@ -453,29 +480,30 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 	if !isBackgroundValid(bg) {
 		err := ErrInvalidBackground{bg}
 		logger.Warning(err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
-	oldGreeterBackground := u.GreeterBackground
-	u.setPropString(&u.GreeterBackground, "GreeterBackground", bg)
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("Write user config failed:", err)
-		u.setPropString(&u.GreeterBackground, "GreeterBackground", oldGreeterBackground)
-		return err
+	err = u.writeUserConfigWithChange(confKeyGreeterBackground, bg)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
+	u.setPropGreeterBackground(bg)
 
 	genGaussianBlur(bg)
 	return nil
 }
 
-func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
+func (u *User) SetHistoryLayout(sender dbus.Sender, list []string) *dbus.Error {
 	logger.Debug("[SetHistoryLayout] new history layout:", list)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if !u.isSelf(pid) {
 		err := polkitAuthManagerUser(pid)
 		if err != nil {
 			logger.Debug("[SetHistoryLayout] access denied:", err)
-			return err
+			return dbusutil.ToError(err)
 		}
 	}
 
@@ -484,12 +512,12 @@ func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
 	}
 
 	// TODO: check layout list whether validity
-	oldHistoryLayout := u.HistoryLayout
-	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", list)
-	if err := u.writeUserConfig(); err != nil {
-		logger.Warning("Write user config failed:", err)
-		u.setPropStrv(&u.HistoryLayout, "HistoryLayout", oldHistoryLayout)
+	err = u.writeUserConfigWithChange(confKeyHistoryLayout, list)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
+	u.setPropHistoryLayout(list)
+
 	return nil
 }
 

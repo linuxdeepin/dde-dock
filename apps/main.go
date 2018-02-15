@@ -21,7 +21,6 @@ package apps
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -44,8 +43,9 @@ func NewDaemon(logger *log.Logger) *Daemon {
 }
 
 func (d *Daemon) Start() error {
+	service := loader.GetService()
 	logger.Debug("apps daemon start")
-	if watcher, err := NewDFWachter(); err != nil {
+	if watcher, err := NewDFWachter(service); err != nil {
 		return err
 	} else {
 		d.watcher = watcher
@@ -53,14 +53,21 @@ func (d *Daemon) Start() error {
 
 	d.recorder = NewALRecorder(d.watcher)
 
-	// install recorder and watcher
-	if err := dbus.InstallOnSystem(d.recorder); err != nil {
-		return err
-	}
-	if err := dbus.InstallOnSystem(d.watcher); err != nil {
+	// export recorder and watcher
+	err := service.Export(d.recorder)
+	if err != nil {
 		return err
 	}
 
+	err = service.Export(d.watcher)
+	if err != nil {
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
 	d.recorder.emitServiceRestarted()
 
 	return nil

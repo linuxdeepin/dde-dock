@@ -23,15 +23,18 @@ import (
 	"dbus/org/freedesktop/login1"
 	"encoding/json"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
 	"sync"
+
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 // Manager manager logined user list
 type Manager struct {
-	core   *login1.Manager
-	logger *log.Logger
+	service *dbusutil.Service
+	core    *login1.Manager
+	logger  *log.Logger
 
 	userSessions map[uint32]SessionInfos
 	locker       sync.Mutex
@@ -45,13 +48,14 @@ const (
 )
 
 // Register register and install loginedManager on dbus
-func Register(logger *log.Logger) (*Manager, error) {
+func Register(logger *log.Logger, service *dbusutil.Service) (*Manager, error) {
 	core, err := login1.NewManager(dbusLogin1Dest, dbusLogin1Path)
 	if err != nil {
 		return nil, err
 	}
 
 	var m = &Manager{
+		service:      service,
 		core:         core,
 		logger:       logger,
 		userSessions: make(map[uint32]SessionInfos),
@@ -170,7 +174,7 @@ func (m *Manager) setPropUserList() {
 		return
 	}
 	m.UserList = string(data)
-	dbus.NotifyChange(m, "UserList")
+	m.service.EmitPropertyChanged(m, "UserList", m.UserList)
 }
 
 func (m *Manager) marshalUserSessions() string {
@@ -194,10 +198,9 @@ func (m *Manager) marshalUserSessions() string {
 }
 
 // GetDBusInfo dbus session interface
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Accounts",
-		ObjectPath: "/com/deepin/daemon/Logined",
-		Interface:  "com.deepin.daemon.Logined",
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      "/com/deepin/daemon/Logined",
+		Interface: "com.deepin.daemon.Logined",
 	}
 }

@@ -23,14 +23,28 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"time"
+
 	"pkg.deepin.io/dde/daemon/accounts/checkers"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	dutils "pkg.deepin.io/lib/utils"
-	"time"
 )
 
-const nilObjPath = dbus.ObjectPath("/")
+const (
+	nilObjPath      = dbus.ObjectPath("/")
+	dbusServiceName = "com.deepin.daemon.Accounts"
+	dbusPath        = "/com/deepin/daemon/Accounts"
+	dbusInterface   = "com.deepin.daemon.Accounts"
+)
+
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusInterface,
+	}
+}
 
 // Create new user.
 //
@@ -38,59 +52,63 @@ const nilObjPath = dbus.ObjectPath("/")
 //
 // name: 用户名
 //
-// fullname: 全名，可以为空
+// fullName: 全名，可以为空
 //
 // ty: 用户类型，0 为普通用户，1 为管理员
 
-func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
-	name, fullname string, ty int32) (dbus.ObjectPath, error) {
+func (m *Manager) CreateUser(sender dbus.Sender,
+	name, fullName string, ty int32) (dbus.ObjectPath, *dbus.Error) {
 
-	logger.Debug("[CreateUser] new user:", name, fullname, ty)
-	pid := dbusMsg.GetSenderPID()
+	logger.Debug("[CreateUser] new user:", name, fullName, ty)
+
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return nilObjPath, dbusutil.ToError(err)
+	}
 	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[CreateUser] access denied:", err)
-		return nilObjPath, err
+		return nilObjPath, dbusutil.ToError(err)
 	}
 
 	ch := make(chan string)
-	m.mapLocker.Lock()
-	m.userAddedChans[name] = ch
-	m.mapLocker.Unlock()
+	m.usersMapMu.Lock()
+	m.userAddedChanMap[name] = ch
+	m.usersMapMu.Unlock()
 	defer func() {
-		m.mapLocker.Lock()
-		delete(m.userAddedChans, name)
-		m.mapLocker.Unlock()
+		m.usersMapMu.Lock()
+		delete(m.userAddedChanMap, name)
+		m.usersMapMu.Unlock()
 		close(ch)
 	}()
 
-	if err := users.CreateUser(name, fullname, "", ty); err != nil {
+	if err := users.CreateUser(name, fullName, "", ty); err != nil {
 		logger.Warningf("DoAction: create user '%s' failed: %v\n",
 			name, err)
-		return nilObjPath, err
+		return nilObjPath, dbusutil.ToError(err)
 	}
 
 	if err := users.SetUserType(ty, name); err != nil {
 		logger.Warningf("DoAction: set user type '%s' failed: %v\n",
 			name, err)
-		return nilObjPath, err
+		return nilObjPath, dbusutil.ToError(err)
 	}
 
 	// create user success
 	select {
 	case userPath, ok := <-ch:
 		if !ok {
-			return nilObjPath, errors.New("invalid user path event")
+			return nilObjPath, dbusutil.ToError(errors.New("invalid user path event"))
 		}
 
 		logger.Debug("receive user path", userPath)
 		if userPath == "" {
-			return nilObjPath, errors.New("failed to install user on session bus")
+			return nilObjPath, dbusutil.ToError(errors.New("failed to install user on session bus"))
 		}
 		return dbus.ObjectPath(userPath), nil
 	case <-time.After(time.Second * 60):
 		err := errors.New("wait timeout exceeded")
 		logger.Warning(err)
-		return nilObjPath, err
+		return nilObjPath, dbusutil.ToError(err)
 	}
 }
 
@@ -99,27 +117,30 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 // name: 用户名
 //
 // rmFiles: 是否删除用户数据
-func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
-	name string, rmFiles bool) error {
+func (m *Manager) DeleteUser(sender dbus.Sender,
+	name string, rmFiles bool) *dbus.Error {
 
 	logger.Debug("[DeleteUser] user:", name, rmFiles)
-	pid := dbusMsg.GetSenderPID()
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[DeleteUser] access denied:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	user := m.getUserByName(name)
 	if user == nil {
 		err := fmt.Errorf("user %q not found", name)
 		logger.Warning(err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if err := users.DeleteUser(rmFiles, name); err != nil {
 		logger.Warningf("DoAction: delete user '%s' failed: %v\n",
 			name, err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if users.IsAutoLoginUser(name) {
@@ -133,7 +154,7 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 	return nil
 }
 
-func (m *Manager) FindUserById(uid string) (string, error) {
+func (m *Manager) FindUserById(uid string) (string, *dbus.Error) {
 	userPath := userDBusPath + uid
 	for _, v := range m.UserList {
 		if v == userPath {
@@ -141,13 +162,13 @@ func (m *Manager) FindUserById(uid string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("Invalid uid: %s", uid)
+	return "", dbusutil.ToError(fmt.Errorf("Invalid uid: %s", uid))
 }
 
-func (m *Manager) FindUserByName(name string) (string, error) {
+func (m *Manager) FindUserByName(name string) (string, *dbus.Error) {
 	info, err := users.GetUserInfoByName(name)
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
 	return m.FindUserById(info.Uid)
@@ -156,10 +177,10 @@ func (m *Manager) FindUserByName(name string) (string, error) {
 // 随机得到一个用户头像
 //
 // ret0：头像路径，为空则表示获取失败
-func (m *Manager) RandUserIcon() (string, error) {
+func (m *Manager) RandUserIcon() (string, *dbus.Error) {
 	icons := getUserStandardIcons()
 	if len(icons) == 0 {
-		return "", errors.New("Did not find any user icons")
+		return "", dbusutil.ToError(errors.New("Did not find any user icons"))
 	}
 
 	rand.Seed(time.Now().UnixNano())
@@ -174,13 +195,13 @@ func (m *Manager) RandUserIcon() (string, error) {
 // ret1: 不合法原因
 //
 // ret2: 不合法代码
-func (m *Manager) IsUsernameValid(name string) (bool, string, int32) {
+func (m *Manager) IsUsernameValid(name string) (bool, string, int32, *dbus.Error) {
 	info := checkers.CheckUsernameValid(name)
 	if info == nil {
-		return true, "", 0
+		return true, "", 0, nil
 	}
 
-	return false, info.Error.Error(), int32(info.Code)
+	return false, info.Error.Error(), int32(info.Code), nil
 }
 
 // 检测密码是否有效
@@ -190,17 +211,20 @@ func (m *Manager) IsUsernameValid(name string) (bool, string, int32) {
 // ret1: 提示信息
 //
 // ret2: 不合法代码
-func (m *Manager) IsPasswordValid(passwd string) (bool, string, int32) {
+func (m *Manager) IsPasswordValid(password string) (bool, string, int32, *dbus.Error) {
 	releaseType := getDeepinReleaseType()
 	logger.Infof("release type %q", releaseType)
-	errCode := checkers.CheckPasswordValid(releaseType, passwd)
-	return errCode.IsOk(), errCode.Prompt(), int32(errCode)
+	errCode := checkers.CheckPasswordValid(releaseType, password)
+	return errCode.IsOk(), errCode.Prompt(), int32(errCode), nil
 }
 
-func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
-	pid := dbusMsg.GetSenderPID()
+func (m *Manager) AllowGuestAccount(sender dbus.Sender, allow bool) *dbus.Error {
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	if err := polkitAuthManagerUser(pid); err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if allow == isGuestUserEnabled() {
@@ -210,27 +234,30 @@ func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 	success := dutils.WriteKeyToKeyFile(actConfigFile,
 		actConfigGroupGroup, actConfigKeyGuest, allow)
 	if !success {
-		return errors.New("Enable guest user failed")
+		return dbusutil.ToError(errors.New("Enable guest user failed"))
 	}
 	m.setPropAllowGuest(allow)
 
 	return nil
 }
 
-func (m *Manager) CreateGuestAccount(dbusMsg dbus.DMessage) (string, error) {
-	pid := dbusMsg.GetSenderPID()
+func (m *Manager) CreateGuestAccount(sender dbus.Sender) (string, *dbus.Error) {
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
 	if err := polkitAuthManagerUser(pid); err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
 	name, err := users.CreateGuestUser()
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
 	info, err := users.GetUserInfoByName(name)
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
 	return userDBusPath + info.Uid, nil

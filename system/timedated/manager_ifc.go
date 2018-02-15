@@ -20,57 +20,62 @@
 package timedated
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 // SetTime set the current time and date,
 // pass a value of microseconds since 1 Jan 1970 UTC
-func (m *Manager) SetTime(dmsg dbus.DMessage, usec int64, relative bool, msg string) error {
-	err := m.checkAuthorization("SetTime", msg, dmsg.GetSenderPID())
+func (m *Manager) SetTime(sender dbus.Sender, usec int64, relative bool, msg string) *dbus.Error {
+	err := m.checkAuthorization("SetTime", msg, sender)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	// TODO: check usec validity
-	return m.core.SetTime(usec, relative, false)
+	err = m.core.SetTime(usec, relative, false)
+	return dbusutil.ToError(err)
 }
 
 // SetTimezone set the system time zone, the value from /usr/share/zoneinfo/zone.tab
-func (m *Manager) SetTimezone(dmsg dbus.DMessage, timezone, msg string) error {
-	err := m.checkAuthorization("SetTimezone", msg, dmsg.GetSenderPID())
+func (m *Manager) SetTimezone(sender dbus.Sender, timezone, msg string) *dbus.Error {
+	err := m.checkAuthorization("SetTimezone", msg, sender)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	// TODO: check timezone validity
 	if m.core.Timezone.Get() == timezone {
 		return nil
 	}
-	return m.core.SetTimezone(timezone, false)
+	err = m.core.SetTimezone(timezone, false)
+	return dbusutil.ToError(err)
 }
 
 // SetLocalRTC to control whether the RTC is the local time or UTC.
-func (m *Manager) SetLocalRTC(dmsg dbus.DMessage, enabled bool, fixSystem bool, msg string) error {
-	err := m.checkAuthorization("SetLocalRTC", msg, dmsg.GetSenderPID())
+func (m *Manager) SetLocalRTC(sender dbus.Sender, enabled bool, fixSystem bool, msg string) *dbus.Error {
+	err := m.checkAuthorization("SetLocalRTC", msg, sender)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if m.core.LocalRTC.Get() == enabled {
 		return nil
 	}
-	return m.core.SetLocalRTC(enabled, fixSystem, false)
+	err = m.core.SetLocalRTC(enabled, fixSystem, false)
+	return dbusutil.ToError(err)
 }
 
 // SetNTP to control whether the system clock is synchronized with the network
-func (m *Manager) SetNTP(dmsg dbus.DMessage, enabled bool, msg string) error {
-	err := m.checkAuthorization("SetNTP", msg, dmsg.GetSenderPID())
+func (m *Manager) SetNTP(sender dbus.Sender, enabled bool, msg string) *dbus.Error {
+	err := m.checkAuthorization("SetNTP", msg, sender)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if m.core.NTP.Get() == enabled {
 		return nil
 	}
-	return m.core.SetNTP(enabled, false)
+	err = m.core.SetNTP(enabled, false)
+	return dbusutil.ToError(err)
 }

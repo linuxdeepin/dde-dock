@@ -22,24 +22,31 @@ package apps
 import (
 	"os"
 	"path/filepath"
-	"pkg.deepin.io/lib/dbus"
+
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/fsnotify"
 )
 
 const (
-	DFWatcherDBusInterface = AppsDBusDest + ".DesktopFileWatcher"
+	dfWatcherDBusInterface = dbusServiceName + ".DesktopFileWatcher"
 )
 
 // desktop file watcher
 type DFWatcher struct {
+	service   *dbusutil.Service
 	fsWatcher *fsnotify.Watcher
 	sem       chan int
 	eventChan chan *FileEvent
-	// signal:
-	Event func(name string, op uint32)
+
+	signals *struct {
+		Event struct {
+			name string
+			op   uint32
+		}
+	}
 }
 
-func NewDFWachter() (*DFWatcher, error) {
+func NewDFWachter(service *dbusutil.Service) (*DFWatcher, error) {
 	w := new(DFWatcher)
 	if fsWatcher, err := fsnotify.NewWatcher(); err != nil {
 		return nil, err
@@ -47,17 +54,17 @@ func NewDFWachter() (*DFWatcher, error) {
 		w.fsWatcher = fsWatcher
 	}
 
+	w.service = service
 	w.sem = make(chan int, 4)
 	w.eventChan = make(chan *FileEvent, 10)
 	go w.listenEvents()
 	return w, nil
 }
 
-func (w *DFWatcher) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       AppsDBusDest,
-		ObjectPath: AppsObjectPath,
-		Interface:  DFWatcherDBusInterface,
+func (*DFWatcher) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dfWatcherDBusInterface,
 	}
 }
 
@@ -93,7 +100,10 @@ func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
 
 func (w *DFWatcher) notifyEvent(ev *FileEvent) {
 	logger.Debugf("notifyEvent %q", ev.Name)
-	dbus.Emit(w, "Event", ev.Name, uint32(0))
+	err := w.service.Emit(w, "Event", ev.Name, uint32(0))
+	if err != nil {
+		logger.Warning(err)
+	}
 	w.eventChan <- ev
 }
 

@@ -21,7 +21,6 @@ package timedated
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -54,17 +53,23 @@ func (*Daemon) Start() error {
 	}
 
 	var err error
-	_manager, err = NewManager()
+	service := loader.GetService()
+	_manager, err = NewManager(service)
 	if err != nil {
 		logger.Error("Failed to new timedated manager:", err)
 		return err
 	}
 
-	err = dbus.InstallOnSystem(_manager)
+	err = service.Export(_manager)
 	if err != nil {
-		logger.Error("Failed to install system dbus:", err)
 		return err
 	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

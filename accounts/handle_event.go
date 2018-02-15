@@ -20,11 +20,10 @@
 package accounts
 
 import (
-	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/fsnotify"
-	"strings"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/accounts/users"
+	"pkg.deepin.io/lib/fsnotify"
 )
 
 const (
@@ -36,8 +35,6 @@ const (
 	lightdmConfig = "/etc/lightdm/lightdm.conf"
 	kdmConfig     = "/usr/share/config/kdm/kdmrc"
 	gdmConfig     = "/etc/gdm/custom.conf"
-
-	permModeDir = 0755
 )
 
 const (
@@ -52,7 +49,7 @@ const (
 )
 
 const (
-	userListNotChange int = iota + 1
+	userListNotChange = iota + 1
 	userListAdded
 	userListDeleted
 )
@@ -76,23 +73,21 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 
 	logger.Debug("File changed:", ev)
 	var err error
-	switch {
-	case strings.Contains(ev.Name, userFilePasswd):
-		if task, _ := m.delayTasker.GetTask(taskNamePasswd); task != nil {
+	switch ev.Name {
+	case userFilePasswd:
+		if task, _ := m.delayTaskManager.GetTask(taskNamePasswd); task != nil {
 			err = task.Start()
 		}
-	case strings.Contains(ev.Name, userFileGroup), strings.Contains(ev.Name, userFileSudoers):
-		if task, _ := m.delayTasker.GetTask(taskNameGroup); task != nil {
+	case userFileGroup, userFileSudoers:
+		if task, _ := m.delayTaskManager.GetTask(taskNameGroup); task != nil {
 			err = task.Start()
 		}
-	case strings.Contains(ev.Name, userFileShadow):
-		if task, _ := m.delayTasker.GetTask(taskNameShadow); task != nil {
+	case userFileShadow:
+		if task, _ := m.delayTaskManager.GetTask(taskNameShadow); task != nil {
 			err = task.Start()
 		}
-	case strings.Contains(ev.Name, lightdmConfig),
-		strings.Contains(ev.Name, kdmConfig),
-		strings.Contains(ev.Name, gdmConfig):
-		if task, _ := m.delayTasker.GetTask(taskNameDM); task != nil {
+	case lightdmConfig, kdmConfig, gdmConfig:
+		if task, _ := m.delayTaskManager.GetTask(taskNameDM); task != nil {
 			err = task.Start()
 		}
 	default:
@@ -118,18 +113,18 @@ func (m *Manager) handleFilePasswdChanged() {
 }
 
 func (m *Manager) handleFileGroupChanged() {
-	m.mapLocker.Lock()
-	defer m.mapLocker.Unlock()
+	m.usersMapMu.Lock()
+	defer m.usersMapMu.Unlock()
 	for _, u := range m.usersMap {
 		u.updatePropAccountType()
-		u.setPropBool(&u.NoPasswdLogin, "NoPasswdLogin", users.CanNoPasswdLogin(u.UserName))
+		u.setPropNoPasswdLogin(users.CanNoPasswdLogin(u.UserName))
 	}
 }
 
 func (m *Manager) handleFileShadowChanged() {
 	//Update the property 'Locked'
-	m.mapLocker.Lock()
-	defer m.mapLocker.Unlock()
+	m.usersMapMu.Lock()
+	defer m.usersMapMu.Unlock()
 	for _, u := range m.usersMap {
 		u.updatePropLocked()
 	}
@@ -137,14 +132,12 @@ func (m *Manager) handleFileShadowChanged() {
 
 func (m *Manager) handleDMConfigChanged() {
 	for _, u := range m.usersMap {
-		u.setPropBool(&u.AutomaticLogin, "AutomaticLogin",
-			users.IsAutoLoginUser(u.UserName))
+		u.setPropAutomaticLogin(users.IsAutoLoginUser(u.UserName))
 	}
 }
 
 func (m *Manager) refreshUserList() bool {
-	m.userListMutex.Lock()
-	defer m.userListMutex.Unlock()
+	m.UserListMu.Lock()
 
 	var freshed bool
 	ret, status := compareUserList(m.UserList, getUserPaths())
@@ -156,35 +149,39 @@ func (m *Manager) refreshUserList() bool {
 		freshed = true
 		m.handleUserDeleted(ret)
 	}
+
+	defer m.UserListMu.Unlock()
 	return freshed
 }
 
 func (m *Manager) handleUserAdded(list []string) {
-	var paths = m.UserList
+	var userList = m.UserList
 	for _, p := range list {
-		err := m.installUserByPath(p)
+		err := m.exportUserByPath(p)
 		if err != nil {
 			logger.Errorf("Install user '%s' failed: %v", p, err)
 			continue
 		}
 
-		paths = append(paths, p)
-		dbus.Emit(m, "UserAdded", p)
+		userList = append(userList, p)
+		m.service.Emit(m, "UserAdded", p)
 		m.copyUserDatas(p)
 	}
 
-	m.setPropUserList(paths)
+	m.UserList = userList
+	m.service.EmitPropertyChanged(m, "UserList", userList)
 }
 
 func (m *Manager) handleUserDeleted(list []string) {
-	var paths = m.UserList
+	var userList = m.UserList
 	for _, p := range list {
-		m.uninstallUser(p)
-		paths = deleteStrFromList(p, paths)
-		dbus.Emit(m, "UserDeleted", p)
+		m.stopExportUser(p)
+		userList = deleteStrFromList(p, userList)
+		m.service.Emit(m, "UserDeleted", p)
 	}
 
-	m.setPropUserList(paths)
+	m.UserList = userList
+	m.service.EmitPropertyChanged(m, "UserList", userList)
 }
 
 func compareUserList(oldList, newList []string) ([]string, int) {

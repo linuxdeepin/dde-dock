@@ -32,8 +32,7 @@ import (
 
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 )
@@ -41,9 +40,9 @@ import (
 type Daemon struct{}
 
 const (
-	dbusDest = "com.deepin.daemon.Daemon"
-	dbusPath = "/com/deepin/daemon/Daemon"
-	dbusIFC  = dbusDest
+	dbusServiceName = "com.deepin.daemon.Daemon"
+	dbusPath        = "/com/deepin/daemon/Daemon"
+	dbusInterface   = dbusServiceName
 )
 
 var logger = log.NewLogger("daemon/dde-system-daemon")
@@ -53,9 +52,17 @@ func main() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
-	if !lib.UniqueOnSystem(dbusDest) {
-		logger.Warning("There already has an dde daemon running.")
-		return
+	service, err := dbusutil.NewSystemService()
+	if err != nil {
+		logger.Fatal("failed to new system service", err)
+	}
+
+	hasOwner, err := service.NameHasOwner(dbusServiceName)
+	if err != nil {
+		logger.Fatal("failed to call NameHasOwner:", err)
+	}
+	if hasOwner {
+		logger.Fatalf("name %q already has the owner", dbusServiceName)
 	}
 
 	// fix no PATH when was launched by dbus
@@ -70,31 +77,29 @@ func main() {
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-system-daemon")
 
 	_daemon = &Daemon{}
-	err := dbus.InstallOnSystem(_daemon)
+	err = service.Export(_daemon)
 	if err != nil {
-		logger.Error("Failed to install daemon bus:", err)
-		return
+		logger.Fatal("failed to export:", err)
 	}
-	dbus.DealWithUnhandledMessage()
 
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		logger.Fatal("failed to request name:", err)
+	}
+
+	loader.SetService(service)
 	loader.StartAll()
 	defer loader.StopAll()
 
 	// NOTE: system/power module requires glib loop
 	go glib.StartLoop()
 
-	if err := dbus.Wait(); err != nil {
-		logger.Errorf("Lost dbus: %v", err)
-		os.Exit(-1)
-	} else {
-		os.Exit(0)
-	}
+	service.Wait()
 }
 
-func (*Daemon) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+func (*Daemon) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusInterface,
 	}
 }

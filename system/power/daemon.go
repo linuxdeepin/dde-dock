@@ -46,13 +46,27 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() (err error) {
-	logger.BeginTracing()
-	d.manager, err = NewManager()
+	service := loader.GetService()
+	d.manager, err = newManager(service)
 	if err != nil {
-		logger.Error(err)
-		logger.EndTracing()
 		return
 	}
+
+	d.manager.batteriesMu.Lock()
+	for _, bat := range d.manager.batteries {
+		err := service.Export(bat)
+		if err != nil {
+			logger.Warning("failed to export battery:", err)
+		}
+	}
+	d.manager.batteriesMu.Unlock()
+
+	err = service.Export(d.manager)
+	if err != nil {
+		return
+	}
+
+	err = service.RequestName(dbusServiceName)
 	return
 }
 
@@ -60,8 +74,23 @@ func (d *Daemon) Stop() error {
 	if d.manager == nil {
 		return nil
 	}
+	service := loader.GetService()
+
+	d.manager.batteriesMu.Lock()
+	for _, bat := range d.manager.batteries {
+		err := service.StopExport(bat.GetDBusExportInfo())
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+	d.manager.batteriesMu.Unlock()
+
+	err := service.StopExport(d.manager.GetDBusExportInfo())
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	d.manager.destroy()
 	d.manager = nil
-	logger.EndTracing()
 	return nil
 }

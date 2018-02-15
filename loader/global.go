@@ -20,8 +20,10 @@
 package loader
 
 import (
-	"pkg.deepin.io/lib/log"
 	"sync"
+
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 var loaderInitializer sync.Once
@@ -38,6 +40,15 @@ var getLoader = func() func() *Loader {
 		return loader
 	}
 }()
+
+func SetService(s *dbusutil.Service) {
+	l := getLoader()
+	l.service = s
+}
+
+func GetService() *dbusutil.Service {
+	return getLoader().service
+}
 
 func Register(m Module) {
 	loader := getLoader()

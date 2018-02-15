@@ -99,16 +99,6 @@ func getNewUserCustomIconDest(username string) string {
 	return filepath.Join(userCustomIconsDir, base)
 }
 
-func isUserCustomIconURI(iconURI string, username string) bool {
-	iconFile := utils.DecodeURI(iconURI)
-	iconFilePrefix := filepath.Join(userCustomIconsDir, username+"-")
-	if strings.HasPrefix(iconFile, iconFilePrefix) &&
-		len(iconFile) > len(iconFilePrefix) {
-		return true
-	}
-	return false
-}
-
 func isStrInArray(str string, array []string) bool {
 	for _, v := range array {
 		if v == str {

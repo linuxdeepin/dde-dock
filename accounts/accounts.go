@@ -22,19 +22,23 @@ package accounts
 import (
 	"pkg.deepin.io/dde/daemon/accounts/logined"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
 var (
-	_m         *Manager
-	_login     *logined.Manager
 	_imageBlur *ImageBlur
 	logger     = log.NewLogger("daemon/accounts")
 )
 
+func init() {
+	loader.Register(NewDaemon())
+}
+
 type Daemon struct {
 	*loader.ModuleBase
+	manager        *Manager
+	loginedManager *logined.Manager
+	imageBlur      *ImageBlur
 }
 
 func NewDaemon() *Daemon {
@@ -47,63 +51,69 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Daemon) Start() error {
-	if _m != nil {
+func (d *Daemon) Start() error {
+	if d.manager != nil {
 		return nil
 	}
 
-	logger.BeginTracing()
-	_m = NewManager()
-	err := dbus.InstallOnSystem(_m)
+	service := loader.GetService()
+	d.manager = NewManager(service)
+
+	err := service.Export(d.manager)
 	if err != nil {
-		logger.Error("Install manager dbus failed:", err)
-		if _m.watcher != nil {
-			_m.watcher.EndWatch()
-			_m.watcher = nil
+		if d.manager.watcher != nil {
+			d.manager.watcher.EndWatch()
+			d.manager.watcher = nil
 		}
 		return err
 	}
 
-	_m.installUsers()
+	d.manager.exportUsers()
 
-	_imageBlur = newImageBlur()
-	err = dbus.InstallOnSystem(_imageBlur)
+	d.imageBlur = newImageBlur(service)
+	_imageBlur = d.imageBlur
+	err = service.Export(d.imageBlur)
 	if err != nil {
-		logger.Warning("failed to install ImageBlur on system DBus:", err)
-		_imageBlur = nil
+		d.imageBlur = nil
 		return err
 	}
 
-	_login, err = logined.Register(logger)
+	d.loginedManager, err = logined.Register(logger, service)
 	if err != nil {
 		logger.Error("Failed to create logined manager:", err)
 		return err
 	}
-	err = dbus.InstallOnSystem(_login)
+	err = service.Export(d.loginedManager)
 	if err != nil {
-		logined.Unregister(_login)
-		_login = nil
-		logger.Error("Failed to install logined bus:", err)
+		logined.Unregister(d.loginedManager)
+		d.loginedManager = nil
 		return err
 	}
 
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-func (*Daemon) Stop() error {
-	if _m != nil {
-		_m.destroy()
-		_m = nil
+func (d *Daemon) Stop() error {
+	if d.manager != nil {
+		d.manager.destroy()
+		d.manager = nil
 	}
 
-	if _imageBlur != nil {
-		dbus.UnInstallObject(_imageBlur)
+	service := loader.GetService()
+
+	if d.imageBlur != nil {
+		service.StopExport(d.imageBlur.GetDBusExportInfo())
+		d.imageBlur = nil
 		_imageBlur = nil
 	}
 
-	if _login != nil {
-		logined.Unregister(_login)
-		_login = nil
+	if d.loginedManager != nil {
+		service.StopExport(d.loginedManager.GetDBusExportInfo())
+		d.loginedManager = nil
 	}
 
 	return nil

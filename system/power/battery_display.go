@@ -20,14 +20,19 @@
 package power
 
 import (
-	"pkg.deepin.io/dde/api/powersupply/battery"
-	"pkg.deepin.io/lib/dbus"
 	"time"
+
+	"pkg.deepin.io/dde/api/powersupply/battery"
 )
 
 func (m *Manager) refreshBatteryDisplay() {
 	logger.Debug("refreshBatteryDisplay")
-	defer dbus.Emit(m, "BatteryDisplayUpdate", time.Now().Unix())
+	m.batteriesMu.Lock()
+	defer func() {
+		m.batteriesMu.Unlock()
+		timestamp := time.Now().Unix()
+		m.service.Emit(m, "BatteryDisplayUpdate", timestamp)
+	}()
 
 	var percentage float64
 	var status battery.Status
@@ -97,16 +102,8 @@ func (m *Manager) refreshBatteryDisplay() {
 		timeToFull)
 }
 
-func _getBatteryDisplayStatus(batteries []*Battery) battery.Status {
-	var statusSlice []battery.Status
-	for _, bat := range batteries {
-		statusSlice = append(statusSlice, bat.Status)
-	}
-	return battery.GetDisplayStatus(statusSlice)
-}
-
 func (m *Manager) getBatteryDisplayStatus() battery.Status {
-	return _getBatteryDisplayStatus(m.GetBatteries())
+	return battery.GetDisplayStatus(m.getBatteriesStatus())
 }
 
 func (m *Manager) resetBatteryDisplay() {

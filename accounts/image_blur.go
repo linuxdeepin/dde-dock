@@ -9,33 +9,45 @@ import (
 	"syscall"
 	"time"
 
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
 type ImageBlur struct {
-	mu    sync.Mutex
-	tasks map[string]struct{}
+	service *dbusutil.Service
+	mu      sync.Mutex
+	tasks   map[string]struct{}
 
-	// signal:
-	BlurDone func(imgFile, imgBlurFile string, ok bool)
+	signals *struct {
+		BlurDone struct {
+			imgFile     string
+			imgBlurFile string
+			ok          bool
+		}
+	}
+
+	methods *struct {
+		Get    func() `in:"source" out:"blurred"`
+		Delete func() `in:"file"`
+	}
 }
 
-func newImageBlur() *ImageBlur {
+func newImageBlur(service *dbusutil.Service) *ImageBlur {
 	return &ImageBlur{
-		tasks: make(map[string]struct{}),
+		service: service,
+		tasks:   make(map[string]struct{}),
 	}
 }
 
-func (ib *ImageBlur) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: "/com/deepin/daemon/ImageBlur",
-		Interface:  "com.deepin.daemon.ImageBlur",
+func (ib *ImageBlur) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      "/com/deepin/daemon/ImageBlur",
+		Interface: "com.deepin.daemon.ImageBlur",
 	}
 }
 
-func (ib *ImageBlur) Get(file string) (string, error) {
+func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
 	ib.mu.Lock()
 	_, ok := ib.tasks[file]
 	ib.mu.Unlock()
@@ -54,7 +66,7 @@ func (ib *ImageBlur) Get(file string) (string, error) {
 			// source file not exist
 			os.Remove(blurFile)
 		}
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
 	blurFileInfo, err := os.Stat(blurFile)
@@ -80,13 +92,13 @@ func getChangeTime(fileInfo os.FileInfo) time.Time {
 	return time.Unix(int64(stat.Ctim.Sec), int64(stat.Ctim.Nsec))
 }
 
-func (ib *ImageBlur) Delete(file string) error {
+func (ib *ImageBlur) Delete(file string) *dbus.Error {
 	ib.mu.Lock()
 	_, ok := ib.tasks[file]
 	ib.mu.Unlock()
 
 	if ok {
-		return errors.New("generation task is in progress")
+		return dbusutil.ToError(errors.New("generation task is in progress"))
 	}
 
 	blurFile := getImageBlurFile(file)
@@ -95,7 +107,7 @@ func (ib *ImageBlur) Delete(file string) error {
 	if os.IsNotExist(err) {
 		err = nil
 	}
-	return err
+	return dbusutil.ToError(err)
 }
 
 const imageBlurDir = "/var/cache/image-blur"
@@ -126,7 +138,7 @@ func (ib *ImageBlur) gen(file string) {
 		if err != nil {
 			logger.Warningf("failed to blur image %q: %v", file, err)
 		}
-		dbus.Emit(ib, "BlurDone", file, getImageBlurFile(file), err == nil)
+		ib.emitBlurDone(file, err == nil)
 
 		ib.mu.Lock()
 		delete(ib.tasks, file)
@@ -134,10 +146,17 @@ func (ib *ImageBlur) gen(file string) {
 	}()
 }
 
+func (ib *ImageBlur) emitBlurDone(file string, ok bool) {
+	err := ib.service.Emit(ib, "BlurDone", file, getImageBlurFile(file), ok)
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
 func genGaussianBlur(file string) {
 	file = dutils.DecodeURI(file)
 	if _imageBlur != nil {
-		_imageBlur.gen(file)
+		_imageBlur.Get(file)
 	} else {
 		logger.Warning("_imageBlur is nil")
 	}

@@ -19,42 +19,69 @@
 
 package power
 
-const (
-	dbusDest = "com.deepin.system.Power"
-	dbusPath = "/com/deepin/system/Power"
-	dbusIFC  = dbusDest
+import (
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (m *Manager) GetBatteries() []*Battery {
-	ret := make([]*Battery, 0, len(m.batteries))
-	for _, bat := range m.batteries {
-		ret = append(ret, bat)
+const (
+	dbusServiceName = "com.deepin.system.Power"
+	dbusPath        = "/com/deepin/system/Power"
+	dbusIFC         = dbusServiceName
+)
+
+func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusIFC,
 	}
-	return ret
 }
 
-func (m *Manager) RefreshBatteries() {
+func (m *Manager) GetBatteries() ([]dbus.ObjectPath, *dbus.Error) {
+	m.batteriesMu.Lock()
+
+	result := make([]dbus.ObjectPath, len(m.batteries))
+	idx := 0
+	for _, bat := range m.batteries {
+		result[idx] = dbus.ObjectPath(bat.GetDBusExportInfo().Path)
+		idx++
+	}
+
+	m.batteriesMu.Unlock()
+	return result, nil
+}
+
+func (m *Manager) refreshBatteries() {
 	logger.Debug("RefreshBatteries")
+	m.batteriesMu.Lock()
 	for _, bat := range m.batteries {
 		bat.Refresh()
 	}
+	m.batteriesMu.Unlock()
 }
 
-func (m *Manager) RefreshMains() {
+func (m *Manager) RefreshBatteries() *dbus.Error {
+	m.refreshBatteries()
+	return nil
+}
+
+func (m *Manager) RefreshMains() *dbus.Error {
 	logger.Debug("RefreshMains")
 	if m.ac == nil {
-		return
+		return nil
 	}
 
 	device := m.ac.newDevice()
 	if device == nil {
 		logger.Warning("RefreshMains: ac.newDevice failed")
-		return
+		return nil
 	}
 	m.refreshAC(device)
+	return nil
 }
 
-func (m *Manager) Refresh() {
+func (m *Manager) Refresh() *dbus.Error {
 	m.RefreshMains()
 	m.RefreshBatteries()
+	return nil
 }

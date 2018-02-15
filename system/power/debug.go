@@ -22,16 +22,19 @@
 package power
 
 import (
+	"time"
+
 	"gir/gudev-1.0"
+	"pkg.deepin.io/lib/dbus1"
 )
 
-func (m *Manager) Debug(cmd string) {
+func (m *Manager) Debug(cmd string) *dbus.Error {
 	logger.Debug("Debug", cmd)
 	switch cmd {
 	case "init-batteries":
 		devices := m.gudevClient.QueryBySubsystem("power_supply")
 		for _, dev := range devices {
-			m.addBattery(dev)
+			m.addAndExportBattery(dev)
 		}
 		logger.Debug("initBatteries done")
 		for _, dev := range devices {
@@ -40,9 +43,11 @@ func (m *Manager) Debug(cmd string) {
 
 	case "remove-all-batteries":
 		var devices []*gudev.Device
+		m.batteriesMu.Lock()
 		for _, bat := range m.batteries {
 			devices = append(devices, bat.newDevice())
 		}
+		m.batteriesMu.Unlock()
 
 		for _, dev := range devices {
 			m.removeBattery(dev)
@@ -55,4 +60,22 @@ func (m *Manager) Debug(cmd string) {
 	default:
 		logger.Warning("Command not support")
 	}
+	return nil
+}
+
+func (bat *Battery) Debug(cmd string) *dbus.Error {
+	dev := bat.newDevice()
+	if dev != nil {
+		defer dev.Unref()
+
+		switch cmd {
+		case "reset-update-interval1":
+			bat.resetUpdateInterval(1 * time.Second)
+		case "reset-update-interval3":
+			bat.resetUpdateInterval(3 * time.Second)
+		default:
+			logger.Info("Command no support")
+		}
+	}
+	return nil
 }

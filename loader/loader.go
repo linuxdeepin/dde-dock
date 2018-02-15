@@ -21,9 +21,11 @@ package loader
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/log"
 	"sync"
 	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 type EnableFlag int
@@ -73,6 +75,7 @@ type Loader struct {
 	modules Modules
 	log     *log.Logger
 	lock    sync.Mutex
+	service *dbusutil.Service
 }
 
 func (l *Loader) SetLogLevel(pri log.Priority) {

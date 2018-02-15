@@ -21,6 +21,7 @@ package accounts
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -30,7 +31,8 @@ import (
 	"sync"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
@@ -66,16 +68,19 @@ const (
 )
 
 type User struct {
-	UserName           string
-	FullName           string
-	Uid                string
-	Gid                string
-	HomeDir            string
-	Shell              string
-	Locale             string
-	Layout             string
-	IconFile           string
-	customIcon         string
+	service     *dbusutil.Service
+	PropsMaster dbusutil.PropsMaster
+	UserName    string
+	FullName    string
+	Uid         string
+	Gid         string
+	HomeDir     string
+	Shell       string
+	Locale      string
+	Layout      string
+	IconFile    string
+	customIcon  string
+	// dbusutil-gen: equal=nil
 	DesktopBackgrounds []string
 	GreeterBackground  string
 	XSession           string
@@ -91,96 +96,111 @@ type User struct {
 	AccountType int32
 	LoginTime   uint64
 
-	IconList      []string
+	// dbusutil-gen: equal=nil
+	IconList []string
+	// dbusutil-gen: equal=nil
 	HistoryLayout []string
 
 	syncLocker   sync.Mutex
 	configLocker sync.Mutex
+
+	methods *struct {
+		SetFullName           func() `in:"name"`
+		SetHomeDir            func() `in:"home"`
+		SetShell              func() `in:"shell"`
+		SetPassword           func() `in:"password"`
+		SetAccountType        func() `in:"accountType"`
+		SetLocked             func() `in:"locked"`
+		SetAutomaticLogin     func() `in:"auto"`
+		EnableNoPasswdLogin   func() `in:"enabled"`
+		SetLocale             func() `in:"locale"`
+		SetLayout             func() `in:"layout"`
+		SetIconFile           func() `in:"iconFile"`
+		DeleteIconFile        func() `in:"iconFile"`
+		SetDesktopBackgrounds func() `in:"backgrounds"`
+		SetGreeterBackground  func() `in:"background"`
+		SetHistoryLayout      func() `in:"layouts"`
+		IsIconDeletable       func() `in:"icon"`
+		GetLargeIcon          func() `out:"icon"`
+	}
 }
 
-func NewUser(userPath string) (*User, error) {
-	info, err := users.GetUserInfoByUid(getUidFromUserPath(userPath))
+func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
+	userInfo, err := users.GetUserInfoByUid(getUidFromUserPath(userPath))
 	if err != nil {
 		return nil, err
 	}
 
-	var u = &User{}
-	u.setPropString(&u.UserName, "UserName", info.Name)
+	var u = &User{
+		service:        service,
+		UserName:       userInfo.Name,
+		FullName:       userInfo.Comment().FullName(),
+		Uid:            userInfo.Uid,
+		Gid:            userInfo.Gid,
+		HomeDir:        userInfo.Home,
+		Shell:          userInfo.Shell,
+		AutomaticLogin: users.IsAutoLoginUser(userInfo.Name),
+		NoPasswdLogin:  users.CanNoPasswdLogin(userInfo.Name),
+		Locked:         users.IsUserLocked(userInfo.Name),
+	}
 
-	comment := info.Comment()
-	u.setPropString(&u.FullName, "FullName", comment.FullName())
+	u.AccountType = u.getAccountType()
+	u.IconList = u.getAllIcons()
 
-	u.setPropString(&u.Uid, "Uid", info.Uid)
-	u.setPropString(&u.Gid, "Gid", info.Gid)
-	u.setPropString(&u.HomeDir, "HomeDir", info.Home)
-	u.setPropString(&u.Shell, "Shell", info.Shell)
-	u.setPropString(&u.IconFile, "IconFile", "")
-	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, nil)
-
-	u.setPropBool(&u.AutomaticLogin, "AutomaticLogin",
-		users.IsAutoLoginUser(info.Name))
-	u.setPropBool(&u.NoPasswdLogin, "NoPasswdLogin", users.CanNoPasswdLogin(u.UserName))
-
-	u.updatePropLocked()
-	u.updatePropAccountType()
-	u.updateIconList()
-
-	// TODO: deleted
-	updateConfigPath(info.Name)
+	updateConfigPath(userInfo.Name)
 
 	kf, err := dutils.NewKeyFileFromFile(
-		path.Join(userConfigDir, info.Name))
+		path.Join(userConfigDir, userInfo.Name))
 	if err != nil {
-		xsession, _ := users.GetDefaultXSession()
-		u.setPropString(&u.XSession, "XSession", xsession)
-		u.setPropBool(&u.SystemAccount, "SystemAccount", false)
-		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
-		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
-		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
-		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds,
-			[]string{defaultUserBackground})
-		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
+		xSession, _ := users.GetDefaultXSession()
+		u.XSession = xSession
+		u.SystemAccount = false
+		u.Layout = u.getDefaultLayout()
+		u.Locale = getLocaleFromFile(defaultLayoutFile)
+		u.IconFile = defaultUserIcon
+		u.DesktopBackgrounds = []string{defaultUserBackground}
+		u.GreeterBackground = defaultUserBackground
 		u.writeUserConfig()
 		return u, nil
 	}
 	defer kf.Free()
 
-	var isSave bool = false
-	xsession, _ := kf.GetString(confGroupUser, confKeyXSession)
-	u.setPropString(&u.XSession, "XSession", xsession)
+	var isSave = false
+	xSession, _ := kf.GetString(confGroupUser, confKeyXSession)
+	u.XSession = xSession
 	if u.XSession == "" {
-		xsession, _ = users.GetDefaultXSession()
-		u.setPropString(&u.XSession, "XSession", xsession)
+		xSession, _ = users.GetDefaultXSession()
+		u.XSession = xSession
 		isSave = true
 	}
 	_, err = kf.GetBoolean(confGroupUser, confKeySystemAccount)
 	// only show non system account
-	u.setPropBool(&u.SystemAccount, "SystemAccount", false)
+	u.SystemAccount = false
 	if err != nil {
 		isSave = true
 	}
 	locale, _ := kf.GetString(confGroupUser, confKeyLocale)
-	u.setPropString(&u.Locale, "Locale", locale)
-	if len(locale) == 0 {
-		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
+	u.Locale = locale
+	if locale == "" {
+		u.Locale = getLocaleFromFile(defaultLocaleFile)
 		isSave = true
 	}
 	layout, _ := kf.GetString(confGroupUser, confKeyLayout)
-	u.setPropString(&u.Layout, "Layout", layout)
-	if len(layout) == 0 {
-		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
+	u.Layout = layout
+	if layout == "" {
+		u.Layout = u.getDefaultLayout()
 		isSave = true
 	}
 	icon, _ := kf.GetString(confGroupUser, confKeyIcon)
-	u.setPropString(&u.IconFile, "IconFile", icon)
-	if len(u.IconFile) == 0 {
-		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
+	u.IconFile = icon
+	if u.IconFile == "" {
+		u.IconFile = defaultUserIcon
 		isSave = true
 	}
 
 	u.customIcon, _ = kf.GetString(confGroupUser, confKeyCustomIcon)
 
-	// CustomInfo is the newly added field in the configuration file
+	// CustomIcon is the newly added field in the configuration file
 	if u.customIcon == "" {
 		if u.IconFile != defaultUserIcon && !isStrInArray(u.IconFile, u.IconList) {
 			// u.IconFile is a custom icon, not a standard icon
@@ -189,25 +209,23 @@ func NewUser(userPath string) (*User, error) {
 		}
 	}
 
-	u.updateIconList()
+	u.IconList = u.getAllIcons()
 
 	_, desktopBgs, _ := kf.GetStringList(confGroupUser, confKeyDesktopBackgrounds)
-	u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds, desktopBgs)
+	u.DesktopBackgrounds = desktopBgs
 	if len(desktopBgs) == 0 {
-		u.setPropStrv(&u.DesktopBackgrounds, confKeyDesktopBackgrounds,
-			[]string{defaultUserBackground})
+		u.DesktopBackgrounds = []string{defaultUserBackground}
 		isSave = true
 	}
 
 	greeterBg, _ := kf.GetString(confGroupUser, confKeyGreeterBackground)
-	u.setPropString(&u.GreeterBackground, "GreeterBackground", greeterBg)
-	if len(greeterBg) == 0 {
-		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
+	u.GreeterBackground = greeterBg
+	if greeterBg == "" {
+		u.GreeterBackground = defaultUserBackground
 		isSave = true
 	}
 
-	_, hisLayout, _ := kf.GetStringList(confGroupUser, confKeyHistoryLayout)
-	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", hisLayout)
+	_, u.HistoryLayout, _ = kf.GetStringList(confGroupUser, confKeyHistoryLayout)
 
 	if isSave {
 		u.writeUserConfig()
@@ -218,11 +236,11 @@ func NewUser(userPath string) (*User, error) {
 }
 
 func (u *User) destroy() {
-	dbus.UnInstallObject(u)
+	u.service.StopExport(u.GetDBusExportInfo())
 }
 
 func (u *User) updateIconList() {
-	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+	u.setPropIconList(u.getAllIcons())
 }
 
 func (u *User) getAllIcons() []string {
@@ -264,7 +282,12 @@ func (u *User) setIconFile(iconURI string) (string, bool, error) {
 	return dutils.EncodeURI(dest, dutils.SCHEME_FILE), true, nil
 }
 
-func (u *User) writeUserConfig() error {
+type configChange struct {
+	key   string
+	value interface{} // allowed type are bool, string, []string
+}
+
+func (u *User) writeUserConfigWithChanges(changes []configChange) error {
 	u.configLocker.Lock()
 	defer u.configLocker.Unlock()
 
@@ -297,6 +320,20 @@ func (u *User) writeUserConfig() error {
 	kf.SetStringList(confGroupUser, confKeyDesktopBackgrounds, u.DesktopBackgrounds)
 	kf.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
 	kf.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
+
+	for _, change := range changes {
+		switch val := change.value.(type) {
+		case bool:
+			kf.SetBoolean(confGroupUser, change.key, val)
+		case string:
+			kf.SetString(confGroupUser, change.key, val)
+		case []string:
+			kf.SetStringList(confGroupUser, change.key, val)
+		default:
+			return errors.New("unsupported value type")
+		}
+	}
+
 	_, err = kf.SaveToFile(config)
 	if err != nil {
 		logger.Warningf("Save %s config file failed: %v", u.UserName, err)
@@ -304,20 +341,37 @@ func (u *User) writeUserConfig() error {
 	return err
 }
 
+func (u *User) writeUserConfigWithChange(confKey string, value interface{}) error {
+	return u.writeUserConfigWithChanges([]configChange{
+		{confKey, value},
+	})
+}
+
+func (u *User) writeUserConfig() error {
+	return u.writeUserConfigWithChanges(nil)
+}
+
 func (u *User) updatePropLocked() {
-	u.setPropBool(&u.Locked, "Locked", users.IsUserLocked(u.UserName))
+	u.setPropLocked(users.IsUserLocked(u.UserName))
 }
 
 func (u *User) updatePropAccountType() {
-	if users.IsAdminUser(u.UserName) {
-		u.setPropInt32(&u.AccountType, "AccountType", UserTypeAdmin)
-	} else {
-		u.setPropInt32(&u.AccountType, "AccountType", UserTypeStandard)
-	}
+	u.setPropAccountType(u.getAccountType())
 }
 
-func (u *User) accessAuthentication(pid uint32, check bool) error {
-	var err error
+func (u *User) getAccountType() int32 {
+	if users.IsAdminUser(u.UserName) {
+		return UserTypeAdmin
+	}
+	return UserTypeStandard
+}
+
+func (u *User) accessAuthentication(sender dbus.Sender, check bool) error {
+	pid, err := u.service.GetConnPID(string(sender))
+	if err != nil {
+		return err
+	}
+
 	if check && u.isSelf(pid) {
 		err = polkitAuthChangeOwnData(u.UserName, u.Uid, pid)
 	} else {
@@ -480,21 +534,22 @@ func getUserSession(homeDir string) string {
 }
 
 func getSessionList() []string {
-	finfos, err := ioutil.ReadDir("/usr/share/xsessions")
+	fileInfoList, err := ioutil.ReadDir("/usr/share/xsessions")
 	if err != nil {
 		return nil
 	}
 
 	var sessions []string
-	for _, finfo := range finfos {
-		if finfo.IsDir() || !strings.Contains(finfo.Name(), ".desktop") {
+	for _, fileInfo := range fileInfoList {
+		if fileInfo.IsDir() || !strings.Contains(fileInfo.Name(), ".desktop") {
 			continue
 		}
-		sessions = append(sessions, finfo.Name())
+		sessions = append(sessions, fileInfo.Name())
 	}
 	return sessions
 }
 
+// 迁移配置文件，复制文件从 $actConfigDir/users/$username 到 $userConfigDir/$username
 func updateConfigPath(username string) {
 	config := path.Join(userConfigDir, username)
 	if dutils.IsFileExist(config) {

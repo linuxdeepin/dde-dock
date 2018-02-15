@@ -20,21 +20,27 @@
 package power
 
 import (
-	"gir/gudev-1.0"
-	"pkg.deepin.io/dde/api/powersupply/battery"
-	"pkg.deepin.io/lib/dbus"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
+
+	"gir/gudev-1.0"
+	"pkg.deepin.io/dde/api/powersupply/battery"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 type Battery struct {
-	exit  chan struct{}
-	mutex sync.Mutex
+	service *dbusutil.Service
+	exit    chan struct{}
+	mutex   sync.Mutex
 
 	gudevClient       *gudev.Client
 	changedProperties []string
-	SysfsPath         string
-	IsPresent         bool
+
+	PropsMaster dbusutil.PropsMaster
+	SysfsPath   string
+	IsPresent   bool
 
 	Manufacturer string
 	ModelName    string
@@ -56,9 +62,13 @@ type Battery struct {
 	UpdateTime  int64
 
 	refreshDone func()
+
+	methods *struct {
+		Debug func() `in:"cmd"`
+	}
 }
 
-func NewBattery(manager *Manager, device *gudev.Device) *Battery {
+func newBattery(manager *Manager, device *gudev.Device) *Battery {
 	sysfsPath := device.GetSysfsPath()
 	logger.Debugf("NewBattery sysfsPath: %q", sysfsPath)
 	if manager == nil || manager.gudevClient == nil ||
@@ -66,6 +76,7 @@ func NewBattery(manager *Manager, device *gudev.Device) *Battery {
 		return nil
 	}
 	bat := &Battery{
+		service:     manager.service,
 		gudevClient: manager.gudevClient,
 		SysfsPath:   sysfsPath,
 	}
@@ -74,29 +85,31 @@ func NewBattery(manager *Manager, device *gudev.Device) *Battery {
 	return bat
 }
 
+const (
+	batteryDBusIFC = dbusIFC + ".Battery"
+)
+
+func (bat *Battery) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath + "/battery_" + getValidName(filepath.Base(bat.SysfsPath)),
+		Interface: batteryDBusIFC,
+	}
+}
+
+func getValidName(n string) string {
+	// dbus objpath 0-9 a-z A-Z _
+	n = strings.Replace(n, "-", "_x0", -1)
+	n = strings.Replace(n, ".", "_x1", -1)
+	n = strings.Replace(n, ":", "_x2", -1)
+	return n
+}
+
 func (bat *Battery) setRefreshDoneCallback(fn func()) {
 	bat.refreshDone = fn
 }
 
 func (bat *Battery) newDevice() *gudev.Device {
 	return bat.gudevClient.QueryBySysfsPath(bat.SysfsPath)
-}
-
-func (bat *Battery) notifyChangeStart() {
-	if bat.changedProperties != nil &&
-		len(bat.changedProperties) > 0 {
-		logger.Warning("some properties change notify may lose")
-	}
-	bat.changedProperties = make([]string, 0, 5)
-}
-
-func (bat *Battery) notifyChangeEnd() {
-	logger.Debugf("changed props len: %v , %v",
-		len(bat.changedProperties), bat.changedProperties)
-	for _, propName := range bat.changedProperties {
-		dbus.NotifyChange(bat, propName)
-	}
-	bat.changedProperties = nil
 }
 
 func (bat *Battery) notifyChange(propNames ...string) {
@@ -128,10 +141,10 @@ func (bat *Battery) resetValues() {
 }
 
 func (bat *Battery) refresh(dev *gudev.Device) {
-	bat.notifyChangeStart()
 	batInfo := battery.GetBatteryInfo(dev)
+	bat.PropsMaster.Begin()
 	bat._refresh(batInfo)
-	bat.notifyChangeEnd()
+	bat.PropsMaster.End(bat, bat.service)
 }
 
 func (bat *Battery) _refresh(info *battery.BatteryInfo) {
@@ -140,7 +153,7 @@ func (bat *Battery) _refresh(info *battery.BatteryInfo) {
 	defer func() {
 		logger.Debugf("Refresh %v done", bat.Name)
 		if bat.refreshDone != nil {
-			bat.refreshDone()
+			go bat.refreshDone()
 		}
 	}()
 
@@ -246,22 +259,5 @@ func (bat *Battery) destroy() {
 	if bat.exit != nil {
 		close(bat.exit)
 		bat.exit = nil
-	}
-}
-
-// 仅用于调试
-func (bat *Battery) Debug(cmd string) {
-	dev := bat.newDevice()
-	if dev != nil {
-		defer dev.Unref()
-
-		switch cmd {
-		case "reset-update-interval1":
-			bat.resetUpdateInterval(1 * time.Second)
-		case "reset-update-interval3":
-			bat.resetUpdateInterval(3 * time.Second)
-		default:
-			logger.Info("Command no support")
-		}
 	}
 }

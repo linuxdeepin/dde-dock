@@ -20,11 +20,12 @@
 package accounts
 
 import (
+	"sync"
+
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/tasker"
 	dutils "pkg.deepin.io/lib/utils"
-	"sync"
 )
 
 const (
@@ -39,43 +40,70 @@ const (
 	actConfigKeyGuest   = "AllowGuest"
 )
 
+//go:generate dbusutil-gen -type Manager,User manager.go user.go
+
 type Manager struct {
-	// 用户 ObjectPath 列表
-	UserList      []string
-	userListMutex sync.Mutex
-	GuestIcon     string
-	AllowGuest    bool
+	service     *dbusutil.Service
+	PropsMaster dbusutil.PropsMaster
 
-	watcher   *dutils.WatchProxy
-	usersMap  map[string]*User
-	mapLocker sync.Mutex
+	UserList   []string
+	UserListMu sync.RWMutex
 
-	delayTasker *tasker.DelayTaskManager
+	// dbusutil-gen: ignore
+	GuestIcon  string
+	AllowGuest bool
 
-	// Signals:
-	UserAdded   func(string)
-	UserDeleted func(string)
+	watcher    *dutils.WatchProxy
+	usersMap   map[string]*User
+	usersMapMu sync.Mutex
 
-	userAddedChans map[string]chan string // key: user name
+	delayTaskManager *tasker.DelayTaskManager
+
+	userAddedChanMap map[string]chan string
+	//                    ^ username
+
+	signals *struct {
+		UserAdded struct {
+			objPath string
+		}
+
+		UserDeleted struct {
+			objPath string
+		}
+	}
+
+	methods *struct {
+		CreateUser         func() `in:"name,fullName,type" out:"user"`
+		DeleteUser         func() `in:"name,rmFiles"`
+		FindUserById       func() `in:"uid" out:"user"`
+		FindUserByName     func() `in:"name" out:"user"`
+		RandUserIcon       func() `out:"iconFile"`
+		IsUsernameValid    func() `in:"name" out:"ok,errReason,errCode"`
+		IsPasswordValid    func() `in:"password" out:"ok,errReason,errCode"`
+		AllowGuestAccount  func() `in:"allow"`
+		CreateGuestAccount func() `out:"user"`
+	}
 }
 
-func NewManager() *Manager {
-	var m = &Manager{}
+func NewManager(service *dbusutil.Service) *Manager {
+	var m = &Manager{
+		service: service,
+	}
 
 	m.usersMap = make(map[string]*User)
-	m.userAddedChans = make(map[string]chan string)
+	m.userAddedChanMap = make(map[string]chan string)
 
-	m.setPropGuestIcon(userIconGuest)
-	m.setPropAllowGuest(isGuestUserEnabled())
-	m.newUsers(getUserPaths())
+	m.GuestIcon = userIconGuest
+	m.AllowGuest = isGuestUserEnabled()
+	m.initUsers(getUserPaths())
 
 	m.watcher = dutils.NewWatchProxy()
 	if m.watcher != nil {
-		m.delayTasker = tasker.NewDelayTaskManager()
-		m.delayTasker.AddTask(taskNamePasswd, fileEventDelay, m.handleFilePasswdChanged)
-		m.delayTasker.AddTask(taskNameGroup, fileEventDelay, m.handleFileGroupChanged)
-		m.delayTasker.AddTask(taskNameShadow, fileEventDelay, m.handleFileShadowChanged)
-		m.delayTasker.AddTask(taskNameDM, fileEventDelay, m.handleDMConfigChanged)
+		m.delayTaskManager = tasker.NewDelayTaskManager()
+		m.delayTaskManager.AddTask(taskNamePasswd, fileEventDelay, m.handleFilePasswdChanged)
+		m.delayTaskManager.AddTask(taskNameGroup, fileEventDelay, m.handleFileGroupChanged)
+		m.delayTaskManager.AddTask(taskNameShadow, fileEventDelay, m.handleFileShadowChanged)
+		m.delayTaskManager.AddTask(taskNameDM, fileEventDelay, m.handleDMConfigChanged)
 
 		m.watcher.SetFileList(m.getWatchFiles())
 		m.watcher.SetEventHandler(m.handleFileChanged)
@@ -91,59 +119,62 @@ func (m *Manager) destroy() {
 		m.watcher = nil
 	}
 
-	m.uninstallUsers(m.UserList)
-	dbus.UnInstallObject(m)
+	m.stopExportUsers(m.UserList)
+	m.service.StopExport(m.GetDBusExportInfo())
 }
 
-func (m *Manager) newUsers(list []string) {
-	var paths []string
+func (m *Manager) initUsers(list []string) {
+	var userList []string
 	for _, p := range list {
-		u, err := NewUser(p)
+		u, err := NewUser(p, m.service)
 		if err != nil {
 			logger.Errorf("New user '%s' failed: %v", p, err)
 			continue
 		}
 
-		paths = append(paths, p)
+		userList = append(userList, p)
 
-		m.mapLocker.Lock()
+		m.usersMapMu.Lock()
 		m.usersMap[p] = u
-		m.mapLocker.Unlock()
+		m.usersMapMu.Unlock()
 	}
-	m.setPropUserList(paths)
+	m.UserList = userList
 }
 
-func (m *Manager) installUsers() {
-	m.mapLocker.Lock()
-	defer m.mapLocker.Unlock()
+func (m *Manager) exportUsers() {
+	m.usersMapMu.Lock()
+
 	for _, u := range m.usersMap {
-		err := dbus.InstallOnSystem(u)
+		err := m.service.Export(u)
 		if err != nil {
-			logger.Errorf("Install user '%s' failed: %v",
+			logger.Errorf("failed to export user %q: %v",
 				u.Uid, err)
 			continue
 		}
+
 	}
+
+	m.usersMapMu.Unlock()
 }
 
-func (m *Manager) uninstallUsers(list []string) {
+func (m *Manager) stopExportUsers(list []string) {
 	for _, p := range list {
-		m.uninstallUser(p)
+		m.stopExportUser(p)
 	}
 }
 
-func (m *Manager) installUserByPath(userPath string) error {
-	u, err := NewUser(userPath)
+func (m *Manager) exportUserByPath(userPath string) error {
+	u, err := NewUser(userPath, m.service)
 	if err != nil {
 		return err
 	}
 
-	m.mapLocker.Lock()
-	ch := m.userAddedChans[u.UserName]
-	m.mapLocker.Unlock()
+	m.usersMapMu.Lock()
+	ch := m.userAddedChanMap[u.UserName]
+	m.usersMapMu.Unlock()
 
-	err = dbus.InstallOnSystem(u)
-	logger.Debugf("install user %q err: %v", userPath, err)
+	err = m.service.Export(u)
+	logger.Debugf("export user %q err: %v", userPath, err)
 	if ch != nil {
 		if err != nil {
 			ch <- ""
@@ -157,16 +188,16 @@ func (m *Manager) installUserByPath(userPath string) error {
 		return err
 	}
 
-	m.mapLocker.Lock()
+	m.usersMapMu.Lock()
 	m.usersMap[userPath] = u
-	m.mapLocker.Unlock()
+	m.usersMapMu.Unlock()
 
 	return nil
 }
 
-func (m *Manager) uninstallUser(userPath string) {
-	m.mapLocker.Lock()
-	defer m.mapLocker.Unlock()
+func (m *Manager) stopExportUser(userPath string) {
+	m.usersMapMu.Lock()
+	defer m.usersMapMu.Unlock()
 	u, ok := m.usersMap[userPath]
 	if !ok {
 		logger.Debug("Invalid user path:", userPath)
@@ -178,8 +209,8 @@ func (m *Manager) uninstallUser(userPath string) {
 }
 
 func (m *Manager) getUserByName(name string) *User {
-	m.mapLocker.Lock()
-	defer m.mapLocker.Unlock()
+	m.usersMapMu.Lock()
+	defer m.usersMapMu.Unlock()
 
 	for _, user := range m.usersMap {
 		if user.UserName == name {

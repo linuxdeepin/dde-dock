@@ -20,25 +20,36 @@
 package timedated
 
 import (
-	"dbus/org/freedesktop/timedate1"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
+
+	"dbus/org/freedesktop/timedate1"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/polkit"
 )
 
 type Manager struct {
-	core *timedate1.Timedate1
+	core    *timedate1.Timedate1
+	service *dbusutil.Service
+
+	methods *struct {
+		SetTime     func() `in:"usec,relative,message"`
+		SetTimezone func() `in:"timezone,message"`
+		SetLocalRTC func() `in:"enabled,fixSystem,message"`
+		SetNTP      func() `in:"enabled,message"`
+	}
 }
 
 const (
-	dbusDest = "com.deepin.daemon.Timedated"
-	dbusPath = "/com/deepin/daemon/Timedated"
-	dbusIFC  = dbusDest
+	dbusServiceName = "com.deepin.daemon.Timedated"
+	dbusPath        = "/com/deepin/daemon/Timedated"
+	dbusInterface   = dbusServiceName
 
 	timedate1ActionId = "org.freedesktop.timedate1.set-time"
 )
 
-func NewManager() (*Manager, error) {
+func NewManager(service *dbusutil.Service) (*Manager, error) {
 	core, err := timedate1.NewTimedate1("org.freedesktop.timedate1",
 		"/org/freedesktop/timedate1")
 	if err != nil {
@@ -47,15 +58,15 @@ func NewManager() (*Manager, error) {
 
 	polkit.Init()
 	return &Manager{
-		core: core,
+		core:    core,
+		service: service,
 	}, nil
 }
 
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusPath,
+		Interface: dbusInterface,
 	}
 }
 
@@ -67,10 +78,15 @@ func (m *Manager) destroy() {
 	m.core = nil
 }
 
-func (m *Manager) checkAuthorization(method, msg string, pid uint32) error {
+func (m *Manager) checkAuthorization(method, msg string, sender dbus.Sender) error {
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return err
+	}
+
 	isAuthorized, err := doAuthorized(msg, pid)
 	if err != nil {
-		logger.Warning("Has error occured in doAuthorized:", err)
+		logger.Warning("Has error occurred in doAuthorized:", err)
 		return err
 	}
 	if !isAuthorized {

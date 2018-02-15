@@ -21,31 +21,37 @@ package power
 
 import (
 	"errors"
+	"sync"
+	"time"
+
 	"gir/gudev-1.0"
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
 	"pkg.deepin.io/lib/arch"
-	"pkg.deepin.io/lib/dbus"
-	"sync"
-	"time"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-var no_uevent bool
+var noUEvent bool
 
 func init() {
 	if arch.Get() == arch.Sunway {
-		no_uevent = true
+		noUEvent = true
 	}
 }
 
+//go:generate dbusutil-gen -type Manager,Battery -import pkg.deepin.io/dde/api/powersupply/battery manager.go battery.go
+
 // https://www.kernel.org/doc/Documentation/power/power_supply_class.txt
 type Manager struct {
-	OnBattery   bool
+	service     *dbusutil.Service
 	batteries   map[string]*Battery
+	batteriesMu sync.Mutex
 	ac          *AC
 	gudevClient *gudev.Client
-	mutex       sync.Mutex
 
+	PropsMaster  dbusutil.PropsMaster
+	OnBattery    bool
+	HasLidSwitch bool
 	// battery display properties:
 	HasBattery         bool
 	BatteryPercentage  float64
@@ -53,18 +59,33 @@ type Manager struct {
 	BatteryTimeToEmpty uint64
 	BatteryTimeToFull  uint64
 
-	HasLidSwitch bool
+	methods *struct {
+		GetBatteries func() `out:"batteries"`
+		Debug        func() `in:"cmd"`
+	}
 
-	// Signals:
-	BatteryDisplayUpdate func(timestamp int64)
-	BatteryAdded         func(objpath string)
-	BatteryRemoved       func(objpath string)
-	LidClosed            func()
-	LidOpened            func()
+	signals *struct {
+		BatteryDisplayUpdate struct {
+			timestamp int64
+		}
+
+		BatteryAdded struct {
+			objPath string
+		}
+
+		BatteryRemoved struct {
+			objPath string
+		}
+
+		LidClosed struct{}
+		LidOpened struct{}
+	}
 }
 
-func NewManager() (*Manager, error) {
-	m := &Manager{}
+func newManager(service *dbusutil.Service) (*Manager, error) {
+	m := &Manager{
+		service: service,
+	}
 	err := m.init()
 	if err != nil {
 		m.destroy()
@@ -78,7 +99,7 @@ type AC struct {
 	sysfsPath   string
 }
 
-func NewAC(manager *Manager, device *gudev.Device) *AC {
+func newAC(manager *Manager, device *gudev.Device) *AC {
 	sysfsPath := device.GetSysfsPath()
 	return &AC{
 		gudevClient: manager.gudevClient,
@@ -106,9 +127,9 @@ func (m *Manager) initAC(devices []*gudev.Device) {
 	}
 	if ac != nil {
 		m.refreshAC(ac)
-		m.ac = NewAC(m, ac)
+		m.ac = newAC(m, ac)
 
-		if no_uevent {
+		if noUEvent {
 			go func() {
 				c := time.Tick(2 * time.Second)
 				for {
@@ -143,13 +164,6 @@ func (m *Manager) init() error {
 	}
 
 	m.gudevClient.Connect("uevent", m.handleUEvent)
-
-	err := dbus.InstallOnSystem(m)
-	if err != nil {
-		logger.Warning("Install manager failed:", err)
-		return err
-	}
-
 	return nil
 }
 
@@ -161,7 +175,7 @@ func (m *Manager) handleUEvent(client *gudev.Client, action string, device *gude
 	case "change":
 		if powersupply.IsMains(device) {
 			if m.ac == nil {
-				m.ac = NewAC(m, device)
+				m.ac = newAC(m, device)
 			} else if m.ac.sysfsPath != device.GetSysfsPath() {
 				logger.Warning("found another AC", device.GetSysfsPath())
 				return
@@ -169,14 +183,15 @@ func (m *Manager) handleUEvent(client *gudev.Client, action string, device *gude
 
 			// now m.ac != nil, and sysfsPath equal
 			m.refreshAC(device)
-			time.AfterFunc(1*time.Second, m.RefreshBatteries)
-			time.AfterFunc(3*time.Second, m.RefreshBatteries)
+			time.AfterFunc(1*time.Second, m.refreshBatteries)
+			time.AfterFunc(3*time.Second, m.refreshBatteries)
+
 		} else if powersupply.IsSystemBattery(device) {
-			m.addBattery(device)
+			m.addAndExportBattery(device)
 		}
 	case "add":
 		if powersupply.IsSystemBattery(device) {
-			m.addBattery(device)
+			m.addAndExportBattery(device)
 		}
 		// ignore add mains
 
@@ -194,10 +209,19 @@ func (m *Manager) initBatteries(devices []*gudev.Device) {
 	logger.Debugf("initBatteries done %#v", m.batteries)
 }
 
-func (m *Manager) addBattery(dev *gudev.Device) (*Battery, bool) {
-	m.mutex.Lock()
-	defer m.mutex.Unlock()
+func (m *Manager) addAndExportBattery(dev *gudev.Device) {
+	bat, added := m.addBattery(dev)
+	if added {
+		err := m.service.Export(bat)
+		if err == nil {
+			m.emitBatteryAdded(bat)
+		} else {
+			logger.Warning("failed to export battery:", err)
+		}
+	}
+}
 
+func (m *Manager) addBattery(dev *gudev.Device) (*Battery, bool) {
 	logger.Debug("addBattery dev:", dev)
 	if !powersupply.IsSystemBattery(dev) {
 		return nil, false
@@ -205,63 +229,91 @@ func (m *Manager) addBattery(dev *gudev.Device) (*Battery, bool) {
 
 	sysfsPath := dev.GetSysfsPath()
 	logger.Debug(sysfsPath)
-	bat0, ok := m.batteries[sysfsPath]
+
+	m.batteriesMu.Lock()
+	bat, ok := m.batteries[sysfsPath]
+	m.batteriesMu.Unlock()
 	if ok {
 		logger.Debugf("add battery failed , sysfsPath exists %q", sysfsPath)
-		bat0.Refresh()
-		return bat0, false
+		bat.Refresh()
+		return bat, false
 	}
 
-	bat := NewBattery(m, dev)
+	bat = newBattery(m, dev)
 	if bat == nil {
-		logger.Warning("add batteries failed, sysfsPath %q, new batttery failed", sysfsPath)
-		return nil, false
-	}
-	err := dbus.InstallOnSystem(bat)
-	if err != nil {
-		logger.Warning("Install battery failed:", err)
-		bat.destroy()
+		logger.Warningf("add batteries failed, sysfsPath %q, new battery failed", sysfsPath)
 		return nil, false
 	}
 
+	m.batteriesMu.Lock()
 	m.batteries[sysfsPath] = bat
+	m.batteriesMu.Unlock()
 	m.refreshBatteryDisplay()
 	bat.setRefreshDoneCallback(m.refreshBatteryDisplay)
-	// signal BatteryAdded
-	logger.Debug("before emit BatteryAdded")
-	dbus.Emit(m, "BatteryAdded", string(bat.GetDBusInfo().ObjectPath))
-	logger.Debug("after emit BatteryAdded")
 	return bat, true
 }
 
+// removeBattery remove the battery from Manager.batteries, and stop export it.
 func (m *Manager) removeBattery(dev *gudev.Device) {
-	m.mutex.Lock()
-	defer m.mutex.Unlock()
-
 	sysfsPath := dev.GetSysfsPath()
+
+	m.batteriesMu.Lock()
 	bat, ok := m.batteries[sysfsPath]
+	m.batteriesMu.Unlock()
+
 	if ok {
 		logger.Info("removeBattery", sysfsPath)
-		dbus.UnInstallObject(bat)
-		bat.destroy()
+		m.batteriesMu.Lock()
 		delete(m.batteries, sysfsPath)
+		m.batteriesMu.Unlock()
+
 		m.refreshBatteryDisplay()
-		// signal BatteryRemoved
-		dbus.Emit(m, "BatteryRemoved", string(bat.GetDBusInfo().ObjectPath))
+
+		err := m.service.StopExport(bat.GetDBusExportInfo())
+		if err != nil {
+			logger.Warning(err)
+		}
+		m.emitBatteryRemoved(bat)
+
+		bat.destroy()
 	} else {
 		logger.Warning("removeBattery failed: invalid sysfsPath ", sysfsPath)
 	}
 }
 
+func (m *Manager) emitBatteryAdded(bat *Battery) {
+	m.service.Emit(m, "BatteryAdded", bat.GetDBusExportInfo().Path)
+}
+
+func (m *Manager) emitBatteryRemoved(bat *Battery) {
+	m.service.Emit(m, "BatteryRemoved", bat.GetDBusExportInfo().Path)
+}
+
 func (m *Manager) destroy() {
 	logger.Debug("destroy")
+	m.batteriesMu.Lock()
 	for _, bat := range m.batteries {
 		bat.destroy()
 	}
 	m.batteries = nil
+	m.batteriesMu.Unlock()
 
 	if m.gudevClient != nil {
 		m.gudevClient.Unref()
 		m.gudevClient = nil
 	}
+}
+
+func (m *Manager) getBatteriesStatus() []battery.Status {
+	m.batteriesMu.Lock()
+
+	result := make([]battery.Status, len(m.batteries))
+	idx := 0
+	for _, bat := range m.batteries {
+		result[idx] = bat.Status
+		idx++
+	}
+
+	m.batteriesMu.Unlock()
+	return result
 }
