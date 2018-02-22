@@ -36,10 +36,70 @@
 #include <QGraphicsScene>
 #include <QGraphicsItemAnimation>
 #include <QTimeLine>
+#include <QX11Info>
 
 #define APP_DRAG_THRESHOLD      20
 
-const static qreal Frames[] = { 0, 0.327013, 0.987033, 1.77584, 2.61157, 3.45043, 4.26461, 5.03411, 5.74306, 6.37782, 6.92583, 7.37484, 7.71245, 7.92557, 8, 7.86164, 7.43184, 6.69344, 5.64142, 4.2916, 2.68986, 0.91694, -0.91694, -2.68986, -4.2916, -5.64142, -6.69344, -7.43184, -7.86164, -8, -7.86164, -7.43184, -6.69344, -5.64142, -4.2916, -2.68986, -0.91694, 0.91694, 2.68986, 4.2916, 5.64142, 6.69344, 7.43184, 7.86164, 8, 7.93082, 7.71592, 7.34672, 6.82071, 6.1458, 5.34493, 4.45847, 3.54153, 2.65507, 1.8542, 1.17929, 0.653279, 0.28408, 0.0691776, 0 };
+const static qreal Frames[] = { 0,
+                                0.327013,
+                                0.987033,
+                                1.77584,
+                                2.61157,
+                                3.45043,
+                                4.26461,
+                                5.03411,
+                                5.74306,
+                                6.37782,
+                                6.92583,
+                                7.37484,
+                                7.71245,
+                                7.92557,
+                                8, 7.86164,
+                                7.43184,
+                                6.69344,
+                                5.64142,
+                                4.2916,
+                                2.68986,
+                                0.91694,
+                                -0.91694,
+                                -2.68986,
+                                -4.2916,
+                                -5.64142,
+                                -6.69344,
+                                -7.43184,
+                                -7.86164,
+                                -8,
+                                -7.86164,
+                                -7.43184,
+                                -6.69344,
+                                -5.64142,
+                                -4.2916,
+                                -2.68986,
+                                -0.91694,
+                                0.91694,
+                                2.68986,
+                                4.2916,
+                                5.64142,
+                                6.69344,
+                                7.43184,
+                                7.86164,
+                                8,
+                                7.93082,
+                                7.71592,
+                                7.34672,
+                                6.82071,
+                                6.1458,
+                                5.34493,
+                                4.45847,
+                                3.54153,
+                                2.65507,
+                                1.8542,
+                                1.17929,
+                                0.653279,
+                                0.28408,
+                                0.0691776,
+                                0,
+                              };
 
 int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
@@ -48,7 +108,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent),
       m_appNameTips(new QLabel(this)),
       m_appPreviewTips(new PreviewContainer(this)),
-      m_itemEntry(new DBusDockEntry(entry.path(), this)),
+      m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this)),
 
       m_itemView(new QGraphicsView(this)),
       m_itemScene(new QGraphicsScene(this)),
@@ -71,9 +131,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
-    setAccessibleName(m_itemEntry->name());
+    setAccessibleName(m_itemEntryInter->name());
     setAcceptDrops(true);
-//    setMouseTracking(true);
     setLayout(centralLayout);
 
     m_itemView->setScene(m_itemScene);
@@ -86,11 +145,11 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_itemView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_id = m_itemEntry->id();
-    m_active = m_itemEntry->active();
+    m_id = m_itemEntryInter->id();
+    m_active = m_itemEntryInter->isActive();
 
-    m_appNameTips->setObjectName(m_itemEntry->name());
-    m_appNameTips->setAccessibleName(m_itemEntry->name() + "-tips");
+    m_appNameTips->setObjectName(m_itemEntryInter->name());
+    m_appNameTips->setAccessibleName(m_itemEntryInter->name() + "-tips");
     m_appNameTips->setVisible(false);
     m_appNameTips->setStyleSheet("color:white;"
                                  "padding:0px 3px;");
@@ -100,19 +159,19 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_appPreviewTips->setVisible(false);
 
-    connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
-    connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle, Qt::QueuedConnection);
-    connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
-    connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+    connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
+    connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+    connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
+    connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refershIcon);
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, this, &AppItem::cancelAndHidePreview);
-    connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntry, &DBusDockEntry::Check);
+    connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
-    updateTitle();
+    updateWindowInfos();
     refershIcon();
 }
 
@@ -136,7 +195,7 @@ void AppItem::updateWindowIconGeometries()
                   mapToGlobal(QPoint(width(),height())));
     auto *xcb_misc = XcbMisc::instance();
 
-    for (auto it(m_titles.cbegin()); it != m_titles.cend(); ++it)
+    for (auto it(m_windowInfos.cbegin()); it != m_windowInfos.cend(); ++it)
         xcb_misc->set_window_icon_geometry(it.key(), r);
 }
 
@@ -223,14 +282,14 @@ void AppItem::paintEvent(QPaintEvent *e)
 
             painter.fillRect(activeRect, QColor(44, 167, 248, 255));
         }
-        else if (!m_titles.isEmpty())
+        else if (!m_windowInfos.isEmpty())
             painter.fillRect(backgroundRect, QColor(255, 255, 255, 255 * 0.2));
     //    else
     //        painter.fillRect(backgroundRect, Qt::gray);
     }
     else
     {
-        if (!m_titles.isEmpty())
+        if (!m_windowInfos.isEmpty())
         {
             QPoint p;
             QPixmap pixmap;
@@ -286,12 +345,12 @@ void AppItem::paintEvent(QPaintEvent *e)
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MiddleButton) {
-        m_itemEntry->NewInstance();
+        m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
     } else if (e->button() == Qt::LeftButton) {
 
-        m_itemEntry->Activate();
+        m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
-        if (!m_titles.isEmpty())
+        if (!m_windowInfos.isEmpty())
             return;
 
         // start launching effects
@@ -383,7 +442,7 @@ void AppItem::wheelEvent(QWheelEvent *e)
 {
     QWidget::wheelEvent(e);
 
-    m_itemEntry->PresentWindows();
+    m_itemEntryInter->PresentWindows();
 }
 
 void AppItem::resizeEvent(QResizeEvent *e)
@@ -410,7 +469,7 @@ void AppItem::dragMoveEvent(QDragMoveEvent *e)
 {
     DockItem::dragMoveEvent(e);
 
-    if (m_titles.isEmpty())
+    if (m_windowInfos.isEmpty())
         return;
 
     if (!PopupWindow->isVisible() || PopupWindow->getContent() != m_appPreviewTips)
@@ -425,7 +484,7 @@ void AppItem::dropEvent(QDropEvent *e)
     }
 
     qDebug() << "accept drop event with URIs: " << uriList;
-    m_itemEntry->HandleDragDrop(uriList);
+    m_itemEntryInter->HandleDragDrop(QX11Info::getTimestamp(), uriList);
 }
 
 void AppItem::leaveEvent(QEvent *e)
@@ -438,7 +497,7 @@ void AppItem::leaveEvent(QEvent *e)
 
 void AppItem::showHoverTips()
 {
-    if (!m_titles.isEmpty())
+    if (!m_windowInfos.isEmpty())
         return showPreview();
 
     DockItem::showHoverTips();
@@ -448,12 +507,12 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(checked);
 
-    m_itemEntry->HandleMenuItem(itemId);
+    m_itemEntryInter->HandleMenuItem(QX11Info::getTimestamp(), itemId);
 }
 
 const QString AppItem::contextMenu() const
 {
-    return m_itemEntry->menu();
+    return m_itemEntryInter->menu();
 }
 
 QWidget *AppItem::popupTips()
@@ -461,13 +520,13 @@ QWidget *AppItem::popupTips()
     if (m_draging)
         return nullptr;
 
-    if (!m_titles.isEmpty())
+    if (!m_windowInfos.isEmpty())
     {
-        const quint32 currentWindow = m_itemEntry->currentWindow();
-        Q_ASSERT(m_titles.contains(currentWindow));
-        m_appNameTips->setText(m_titles[currentWindow]);
+        const quint32 currentWindow = m_itemEntryInter->currentWindow();
+        Q_ASSERT(m_windowInfos.contains(currentWindow));
+        m_appNameTips->setText(m_windowInfos[currentWindow].m_windowTitle);
     } else {
-        m_appNameTips->setText(m_itemEntry->name());
+        m_appNameTips->setText(m_itemEntryInter->name());
     }
 
     return m_appNameTips;
@@ -491,17 +550,17 @@ void AppItem::startDrag()
 
     // drag out of dock panel
     if (!drag->target())
-        m_itemEntry->RequestUndock();
+        m_itemEntryInter->RequestUndock();
 
     m_draging = false;
     setVisible(true);
     update();
 }
 
-void AppItem::updateTitle()
+void AppItem::updateWindowInfos()
 {
-    m_titles = m_itemEntry->titles();
-    m_appPreviewTips->setWindowInfos(m_titles);
+    m_windowInfos = m_itemEntryInter->windowInfos();
+    m_appPreviewTips->setWindowInfos(m_windowInfos);
     m_updateIconGeometryTimer->start();
 
     update();
@@ -509,7 +568,7 @@ void AppItem::updateTitle()
 
 void AppItem::refershIcon()
 {
-    const QString icon = m_itemEntry->icon();
+    const QString icon = m_itemEntryInter->icon();
     const int iconSize = qMin(width(), height());
 
     if (DockDisplayMode == Efficient)
@@ -529,7 +588,7 @@ void AppItem::activeChanged()
 
 void AppItem::showPreview()
 {
-    if (m_titles.isEmpty())
+    if (m_windowInfos.isEmpty())
         return;
 
     // test cursor position
@@ -545,7 +604,7 @@ void AppItem::showPreview()
 //    default:        return;
 //    }
 
-    m_appPreviewTips->setWindowInfos(m_titles);
+    m_appPreviewTips->setWindowInfos(m_windowInfos);
     m_appPreviewTips->updateSnapshots();
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 

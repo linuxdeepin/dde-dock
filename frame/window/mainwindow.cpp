@@ -27,6 +27,7 @@
 #include <QResizeEvent>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QX11Info>
 #include <qpa/qplatformwindow.h>
 
 #include <DPlatformWindowHandle>

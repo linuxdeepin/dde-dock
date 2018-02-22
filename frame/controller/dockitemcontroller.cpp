@@ -20,7 +20,6 @@
  */
 
 #include "dockitemcontroller.h"
-#include "dbus/dbusdockentry.h"
 #include "item/appitem.h"
 #include "item/stretchitem.h"
 #include "item/launcheritem.h"

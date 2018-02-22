@@ -26,10 +26,11 @@
 #include <QBoxLayout>
 #include <QTimer>
 
-#include "dbus/dbusdockentry.h"
 #include "constants.h"
 #include "appsnapshot.h"
 #include "floatingpreview.h"
+
+#include <com_deepin_dde_daemon_dock_entry.h>
 
 #include <DWindowManagerHelper>
 
@@ -49,7 +50,7 @@ signals:
     void requestCancelAndHidePreview() const;
 
 public:
-    void setWindowInfos(const WindowDict &infos);
+    void setWindowInfos(const WindowInfoMap &infos);
     void updateSnapshots();
 
 public slots:

@@ -24,11 +24,14 @@
 
 #include "dockitem.h"
 #include "components/previewcontainer.h"
-#include "dbus/dbusdockentry.h"
 #include "dbus/dbusclientmanager.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
+
+#include <com_deepin_dde_daemon_dock_entry.h>
+
+using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 
 class AppItem : public DockItem
 {
@@ -73,7 +76,7 @@ private:
     void startDrag();
 
 private slots:
-    void updateTitle();
+    void updateWindowInfos();
     void refershIcon();
     void activeChanged();
     void showPreview();
@@ -82,14 +85,14 @@ private slots:
 private:
     QLabel *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
-    DBusDockEntry *m_itemEntry;
+    DockEntryInter *m_itemEntryInter;
 
     QGraphicsView *m_itemView;
     QGraphicsScene *m_itemScene;
 
     bool m_draging;
     bool m_active;
-    WindowDict m_titles;
+    WindowInfoMap m_windowInfos;
     QString m_id;
     QPixmap m_appIcon;
     QPixmap m_horizontalIndicator;

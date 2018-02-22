@@ -55,7 +55,7 @@ PreviewContainer::PreviewContainer(QWidget *parent)
     connect(m_floatingPreview, &FloatingPreview::requestMove, this, &PreviewContainer::moveFloatingPreview);
 }
 
-void PreviewContainer::setWindowInfos(const WindowDict &infos)
+void PreviewContainer::setWindowInfos(const WindowInfoMap &infos)
 {
     // check removed window
     for (auto it(m_snapshots.begin()); it != m_snapshots.end();)
@@ -74,7 +74,7 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
     {
         if (!m_snapshots.contains(it.key()))
             appendSnapWidget(it.key());
-        m_snapshots[it.key()]->setWindowTitle(it.value());
+        m_snapshots[it.key()]->setWindowTitle(it.value().m_windowTitle);
     }
 
     if (m_snapshots.isEmpty())

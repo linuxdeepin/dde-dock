@@ -8,7 +8,7 @@ DESTDIR         = $$_PRO_FILE_PWD_/../
 TEMPLATE        = app
 CONFIG         += c++11 link_pkgconfig
 
-PKGCONFIG += xcb-ewmh dtkwidget x11
+PKGCONFIG += xcb-ewmh dtkwidget x11 dframeworkdbus
 LIBS += -lgomp
 
 SOURCES += main.cpp \
@@ -17,7 +17,6 @@ SOURCES += main.cpp \
     item/dockitem.cpp \
     panel/mainpanel.cpp \
     controller/dockitemcontroller.cpp \
-    dbus/dbusdockentry.cpp \
     dbus/dbusdisplay.cpp \
     item/appitem.cpp \
     util/docksettings.cpp \
@@ -48,7 +47,6 @@ HEADERS  += \
     item/dockitem.h \
     panel/mainpanel.h \
     controller/dockitemcontroller.h \
-    dbus/dbusdockentry.h \
     dbus/dbusdisplay.h \
     item/appitem.h \
     util/docksettings.h \
