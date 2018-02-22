@@ -158,6 +158,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setSingleShot(true);
 
     m_appPreviewTips->setVisible(false);
+    m_itemEntryInter->setSync(false);
 
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
@@ -171,7 +172,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, this, &AppItem::cancelAndHidePreview);
     connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
-    updateWindowInfos();
+    updateWindowInfos(m_itemEntryInter->windowInfos());
     refershIcon();
 }
 
@@ -283,9 +284,12 @@ void AppItem::paintEvent(QPaintEvent *e)
             painter.fillRect(activeRect, QColor(44, 167, 248, 255));
         }
         else if (!m_windowInfos.isEmpty())
-            painter.fillRect(backgroundRect, QColor(255, 255, 255, 255 * 0.2));
-    //    else
-    //        painter.fillRect(backgroundRect, Qt::gray);
+        {
+            if (hasAttention())
+                painter.fillRect(backgroundRect, QColor(241, 138, 46, 255 * .8));
+            else
+                painter.fillRect(backgroundRect, QColor(255, 255, 255, 255 * 0.2));
+        }
     }
     else
     {
@@ -524,7 +528,7 @@ QWidget *AppItem::popupTips()
     {
         const quint32 currentWindow = m_itemEntryInter->currentWindow();
         Q_ASSERT(m_windowInfos.contains(currentWindow));
-        m_appNameTips->setText(m_windowInfos[currentWindow].m_windowTitle);
+        m_appNameTips->setText(m_windowInfos[currentWindow].title);
     } else {
         m_appNameTips->setText(m_itemEntryInter->name());
     }
@@ -557,9 +561,17 @@ void AppItem::startDrag()
     update();
 }
 
-void AppItem::updateWindowInfos()
+bool AppItem::hasAttention() const
 {
-    m_windowInfos = m_itemEntryInter->windowInfos();
+    for (const auto &info : m_windowInfos)
+        if (info.attention)
+            return true;
+    return false;
+}
+
+void AppItem::updateWindowInfos(const WindowInfoMap &info)
+{
+    m_windowInfos = info;
     m_appPreviewTips->setWindowInfos(m_windowInfos);
     m_updateIconGeometryTimer->start();
 

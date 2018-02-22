@@ -87,12 +87,13 @@ void AppSnapshot::compositeChanged() const
     const bool composite = m_wmHelper->hasComposite();
 
     m_title->setVisible(!composite);
-//    m_closeBtn->setVisible(!composite);
 }
 
-void AppSnapshot::setWindowTitle(const QString &title)
+void AppSnapshot::setWindowInfo(const WindowInfo &info)
 {
-    m_title->setText(title);
+    m_windowInfo = info;
+
+    m_title->setText(m_windowInfo.title);
 }
 
 void AppSnapshot::dragEnterEvent(QDragEnterEvent *e)
@@ -181,6 +182,7 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     if (!m_wmHelper->hasComposite())
     {
@@ -195,9 +197,15 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
     const auto ratio = devicePixelRatioF();
 
+    // draw attention background
+    if (m_windowInfo.attention)
+    {
+        painter.setBrush(QColor(241, 138, 46, 255 * .8));
+        painter.setPen(Qt::NoPen);
+        painter.drawRoundedRect(rect(), 5, 5);
+    }
+
     // draw image
-//    QImage im = m_snapshot.scaled(r.size() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//    im.setDevicePixelRatio(ratio);
     const QImage &im = m_snapshot;
 
     const QRect ir = im.rect();

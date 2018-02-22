@@ -74,7 +74,7 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos)
     {
         if (!m_snapshots.contains(it.key()))
             appendSnapWidget(it.key());
-        m_snapshots[it.key()]->setWindowTitle(it.value().m_windowTitle);
+        m_snapshots[it.key()]->setWindowInfo(it.value());
     }
 
     if (m_snapshots.isEmpty())

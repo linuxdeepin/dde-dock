@@ -74,9 +74,10 @@ private:
     QWidget *popupTips();
 
     void startDrag();
+    bool hasAttention() const;
 
 private slots:
-    void updateWindowInfos();
+    void updateWindowInfos(const WindowInfoMap &info);
     void refershIcon();
     void activeChanged();
     void showPreview();

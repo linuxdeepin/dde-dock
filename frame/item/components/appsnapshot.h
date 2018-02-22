@@ -30,6 +30,8 @@
 #include <dimagebutton.h>
 #include <DWindowManagerHelper>
 
+#include <com_deepin_dde_daemon_dock_entry.h>
+
 DWIDGET_USE_NAMESPACE
 
 #define SNAP_WIDTH       200
@@ -43,8 +45,9 @@ public:
     explicit AppSnapshot(const WId wid, QWidget *parent = 0);
 
     WId wid() const { return m_wid; }
+    bool attentioned() const { return m_windowInfo.attention; }
     const QImage snapshot() const { return m_snapshot; }
-    const QString title() const { return m_title->text(); }
+    const QString title() const { return m_windowInfo.title; }
 
 signals:
     void entered(const WId wid) const;
@@ -55,7 +58,7 @@ public slots:
     void fetchSnapshot();
     void closeWindow() const;
     void compositeChanged() const;
-    void setWindowTitle(const QString &title);
+    void setWindowInfo(const WindowInfo &info);
 
 private:
     void dragEnterEvent(QDragEnterEvent *e);
@@ -67,6 +70,7 @@ private:
 private:
     const WId m_wid;
 
+    WindowInfo m_windowInfo;
     QImage m_snapshot;
     QLabel *m_title;
     DImageButton *m_closeBtn;
