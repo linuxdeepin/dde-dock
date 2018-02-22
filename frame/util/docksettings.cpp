@@ -206,7 +206,8 @@ void DockSettings::showDockSettingsMenu()
 {
     m_autoHide = false;
 
-    qDeleteAll(m_hideSubMenu->actions());
+    // create actions
+    QList<QAction *> actions;
     for (auto *p : m_itemController->pluginList())
     {
         if (!p->pluginIsAllowDisable())
@@ -221,8 +222,18 @@ void DockSettings::showDockSettingsMenu()
         act->setChecked(enable);
         act->setData(name);
 
-        m_hideSubMenu->addAction(act);
+        actions << act;
     }
+
+    // sort by name
+    std::sort(actions.begin(), actions.end(), [] (QAction *a, QAction *b) -> bool {
+        return a->data().toString() > b->data().toString();
+    });
+
+    // add actions
+    qDeleteAll(m_hideSubMenu->actions());
+    for (auto act : actions)
+        m_hideSubMenu->addAction(act);
 
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
@@ -240,7 +251,6 @@ void DockSettings::showDockSettingsMenu()
     m_keepShownAct.setChecked(m_hideMode == KeepShowing);
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
-
 
     m_settingsMenu.exec(QCursor::pos());
 
