@@ -65,6 +65,7 @@ private:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
 private:

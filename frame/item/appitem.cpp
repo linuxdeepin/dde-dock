@@ -616,11 +616,11 @@ void AppItem::showPreview()
 //    default:        return;
 //    }
 
+    showPopupWindow(m_appPreviewTips, true);
+
     m_appPreviewTips->setWindowInfos(m_windowInfos);
     m_appPreviewTips->updateSnapshots();
     m_appPreviewTips->updateLayoutDirection(DockPosition);
-
-    showPopupWindow(m_appPreviewTips, true);
 }
 
 void AppItem::cancelAndHidePreview()

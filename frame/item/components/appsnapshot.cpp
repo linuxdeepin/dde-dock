@@ -87,6 +87,8 @@ void AppSnapshot::compositeChanged() const
     const bool composite = m_wmHelper->hasComposite();
 
     m_title->setVisible(!composite);
+
+    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
 }
 
 void AppSnapshot::setWindowInfo(const WindowInfo &info)
@@ -212,6 +214,13 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     const int offset_x = r.x() + r.width() / 2 - ir.width() / ratio / 2;
     const int offset_y = r.y() + r.height() / 2 - ir.height() / ratio / 2;
     painter.drawImage(offset_x, offset_y, im);
+}
+
+void AppSnapshot::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+
+    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
 }
 
 void AppSnapshot::mousePressEvent(QMouseEvent *e)
