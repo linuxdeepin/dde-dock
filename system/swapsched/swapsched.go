@@ -182,5 +182,6 @@ func newCgroup(name string) *cgroup.Cgroup {
 	cg := cgroup.NewCgroup(name)
 	cg.AddController(cgroup.Memory)
 	cg.AddController(cgroup.Freezer)
+	cg.AddController(cgroup.Blkio)
 	return cg
 }
