@@ -107,7 +107,12 @@ func (m *Manager) handleFileEvents() {
 	defer watcher.Close()
 	for {
 		select {
-		case event := <-watcher.Event:
+		case event, ok := <-watcher.Event:
+			if !ok {
+				logger.Error("Invalid watcher event:", event)
+				return
+			}
+
 			logger.Debug("event:", event)
 			base := filepath.Base(event.Name)
 			if base == "mimeinfo.cache" || base == "mimeapps.list" {
@@ -116,7 +121,7 @@ func (m *Manager) handleFileEvents() {
 
 		case err := <-watcher.Error:
 			logger.Warning("error:", err)
-
+			return
 		case <-m.done:
 			return
 		}

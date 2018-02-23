@@ -113,7 +113,12 @@ func (m *Manager) initAC(devices []*gudev.Device) {
 				c := time.Tick(2 * time.Second)
 				for {
 					select {
-					case <-c:
+					case _, ok := <-c:
+						if !ok {
+							logger.Error("Invalid ticker event")
+							return
+						}
+
 						m.RefreshMains()
 					}
 				}

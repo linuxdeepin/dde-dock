@@ -220,7 +220,12 @@ func (bat *Battery) startLoopUpdate(d time.Duration) chan struct{} {
 		defer ticker.Stop()
 		for {
 			select {
-			case <-ticker.C:
+			case _, ok := <-ticker.C:
+				if !ok {
+					logger.Error("Invalid ticker event")
+					return
+				}
+
 				bat.Refresh()
 			case <-done:
 				return

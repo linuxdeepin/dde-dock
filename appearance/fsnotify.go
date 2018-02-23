@@ -54,7 +54,12 @@ func (m *Manager) handleThemeChanged() {
 		case err := <-m.watcher.Error:
 			logger.Warning("Receive file watcher error:", err)
 			return
-		case ev := <-m.watcher.Event:
+		case ev, ok := <-m.watcher.Event:
+			if !ok {
+				logger.Error("Invalid event:", ev)
+				return
+			}
+
 			timestamp := time.Now().UnixNano()
 			tmp := timestamp - prevTimestamp
 			logger.Debug("[Fsnotify] timestamp:", prevTimestamp, timestamp, tmp, ev)

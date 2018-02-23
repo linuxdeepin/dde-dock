@@ -57,7 +57,12 @@ func (m *Meter) tryQuit() {
 
 	for {
 		select {
-		case <-time.After(time.Second * 10):
+		case _, ok := <-time.After(time.Second * 10):
+			if !ok {
+				logger.Error("Invalid time event")
+				return
+			}
+
 			if !m.hasTick {
 				return
 			}

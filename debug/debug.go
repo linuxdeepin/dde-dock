@@ -89,7 +89,11 @@ func (d *Daemon) loop() {
 	ticker := time.NewTicker(time.Second * 30)
 	for {
 		select {
-		case <-ticker.C:
+		case _, ok := <-ticker.C:
+			if !ok {
+				logger.Error("Invaild ticker event, exit loop!")
+				return
+			}
 			d.handleProcessStat(cpuPercentage, memUsage, duration)
 		case <-d.quit:
 			ticker.Stop()

@@ -96,7 +96,12 @@ func (ct *CallTrace) loop() {
 	var ticker = time.NewTicker(time.Second * time.Duration(ct.duration))
 	for {
 		select {
-		case <-ticker.C:
+		case _, ok := <-ticker.C:
+			if !ok {
+				ct.logger.Error("Invalid ticker event")
+				return
+			}
+
 			ct.writeHeap()
 			ct.recordStack()
 		case <-ct.quit:

@@ -48,7 +48,12 @@ func (t *countTicker) Reset() {
 	go func() {
 		for {
 			select {
-			case <-t.ticker.C:
+			case _, ok := <-t.ticker.C:
+				if !ok {
+					logger.Error("Invalid ticker event")
+					return
+				}
+
 				t.count++
 				logger.Debug("tick", t.count)
 				t.action(t.count)

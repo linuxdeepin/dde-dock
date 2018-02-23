@@ -55,7 +55,12 @@ func (m *Manager) waitWindowViewable(wminstance, wmclass string, timeout time.Du
 	timer := time.NewTimer(timeout)
 	for {
 		select {
-		case <-ticker.C:
+		case _, ok := <-ticker.C:
+			if !ok {
+				logger.Error("Invalid ticker event")
+				return
+			}
+
 			logger.Debug("waitWindowViewable tick")
 			win := m.findWindow(wminstance, wmclass)
 			if win == 0 {

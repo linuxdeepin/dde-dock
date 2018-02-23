@@ -310,7 +310,12 @@ func (w *Wacom) checkLoop() {
 	ticker := time.NewTicker(time.Second)
 	for {
 		select {
-		case <-ticker.C:
+		case _, ok := <-ticker.C:
+			if !ok {
+				logger.Error("Invalid ticker event")
+				return
+			}
+
 			if !w.Exist {
 				// logger.Debug("tick no wacom device")
 				continue

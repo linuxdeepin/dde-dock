@@ -68,7 +68,12 @@ func (d *Daemon) Start() error {
 	go func() {
 		for {
 			select {
-			case <-d.ticker.C:
+			case _, ok := <-d.ticker.C:
+				if !ok {
+					logger.Error("Invalid ticker event")
+					return
+				}
+
 				fs, err := utils.QueryFilesytemInfo(os.Getenv("HOME"))
 				if err != nil {
 					logger.Error("Failed to get filesystem info:", err)

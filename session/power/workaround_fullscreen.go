@@ -189,7 +189,12 @@ func (wa *fullScreenWorkaround) Start() error {
 	go func() {
 		for {
 			select {
-			case <-wa.ticker.C:
+			case _, ok := <-wa.ticker.C:
+				if !ok {
+					logger.Error("Invalid ticker event")
+					return
+				}
+
 				//logger.Debug("Loop detect tick")
 				wa.detect()
 			case <-wa.exit:

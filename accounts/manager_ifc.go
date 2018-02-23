@@ -77,7 +77,11 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 
 	// create user success
 	select {
-	case userPath := <-ch:
+	case userPath, ok := <-ch:
+		if !ok {
+			return nilObjPath, errors.New("invalid user path event")
+		}
+
 		logger.Debug("receive user path", userPath)
 		if userPath == "" {
 			return nilObjPath, errors.New("failed to install user on session bus")

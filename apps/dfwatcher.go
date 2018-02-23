@@ -64,12 +64,18 @@ func (w *DFWatcher) GetDBusInfo() dbus.DBusInfo {
 func (w *DFWatcher) listenEvents() {
 	for {
 		select {
-		case ev := <-w.fsWatcher.Event:
+		case ev, ok := <-w.fsWatcher.Event:
+			if !ok {
+				logger.Error("Invalid event:", ev)
+				return
+			}
+
 			logger.Debug("event", ev)
 			w.handleEvent(ev)
 
 		case err := <-w.fsWatcher.Error:
 			logger.Warning("error", err)
+			return
 		}
 	}
 }

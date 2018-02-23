@@ -570,9 +570,19 @@ func (sm *ShortcutManager) EventLoop() {
 			if sm.keySymbols.RefreshKeyboardMapping(event) {
 				go func() {
 					select {
-					case <-sm.layoutChanged:
+					case _, ok := <-sm.layoutChanged:
+						if !ok {
+							logger.Error("Invalid layout changed event")
+							return
+						}
+
 						sm.regrabAll()
-					case <-time.After(3 * time.Second):
+					case _, ok := <-time.After(3 * time.Second):
+						if !ok {
+							logger.Error("Invalid time event")
+							return
+						}
+
 						logger.Debug("layout not changed")
 					}
 				}()

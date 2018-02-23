@@ -195,7 +195,12 @@ func (m *Manager) sklWait() {
 	select {
 	case <-m.sklWaitQuit:
 		return
-	case <-timer.C:
+	case _, ok := <-timer.C:
+		if !ok {
+			logger.Error("Invalid ticker event")
+			return
+		}
+
 		logger.Debug("timer fired")
 		if m.switchKbdLayoutState == SKLStateWait {
 			m.switchKbdLayoutState = SKLStateOSDShown
