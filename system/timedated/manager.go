@@ -86,7 +86,6 @@ func doAuthorized(msg string, pid uint32) (bool, error) {
 	var t = uint64(0)
 	subject.SetDetail("start-time", t)
 	var detail = make(map[string]string)
-	detail["polkit.gettext_domain"] = "dde-daemon"
 	detail["polkit.message"] = msg
 	var cancelId string
 	ret, err := polkit.CheckAuthorization(subject, timedate1ActionId,

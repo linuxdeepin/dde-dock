@@ -25,10 +25,8 @@ import (
 
 // SetTime set the current time and date,
 // pass a value of microseconds since 1 Jan 1970 UTC
-func (m *Manager) SetTime(dmsg dbus.DMessage, usec int64, relative bool) error {
-	err := m.checkAuthorization("SetTime",
-		Tr("Authentication is required to set the system time."),
-		dmsg.GetSenderPID())
+func (m *Manager) SetTime(dmsg dbus.DMessage, usec int64, relative bool, msg string) error {
+	err := m.checkAuthorization("SetTime", msg, dmsg.GetSenderPID())
 	if err != nil {
 		return err
 	}
@@ -38,10 +36,8 @@ func (m *Manager) SetTime(dmsg dbus.DMessage, usec int64, relative bool) error {
 }
 
 // SetTimezone set the system time zone, the value from /usr/share/zoneinfo/zone.tab
-func (m *Manager) SetTimezone(dmsg dbus.DMessage, timezone string) error {
-	err := m.checkAuthorization("SetTimezone",
-		Tr("Authentication is required to set the system timezone."),
-		dmsg.GetSenderPID())
+func (m *Manager) SetTimezone(dmsg dbus.DMessage, timezone, msg string) error {
+	err := m.checkAuthorization("SetTimezone", msg, dmsg.GetSenderPID())
 	if err != nil {
 		return err
 	}
@@ -54,10 +50,8 @@ func (m *Manager) SetTimezone(dmsg dbus.DMessage, timezone string) error {
 }
 
 // SetLocalRTC to control whether the RTC is the local time or UTC.
-func (m *Manager) SetLocalRTC(dmsg dbus.DMessage, enabled bool, fixSystem bool) error {
-	err := m.checkAuthorization("SetLocalRTC",
-		Tr("Authentication is required to control whether the RTC stores the local or UTC time."),
-		dmsg.GetSenderPID())
+func (m *Manager) SetLocalRTC(dmsg dbus.DMessage, enabled bool, fixSystem bool, msg string) error {
+	err := m.checkAuthorization("SetLocalRTC", msg, dmsg.GetSenderPID())
 	if err != nil {
 		return err
 	}
@@ -69,10 +63,8 @@ func (m *Manager) SetLocalRTC(dmsg dbus.DMessage, enabled bool, fixSystem bool) 
 }
 
 // SetNTP to control whether the system clock is synchronized with the network
-func (m *Manager) SetNTP(dmsg dbus.DMessage, enabled bool) error {
-	err := m.checkAuthorization("SetNTP",
-		Tr("Authentication is required to control whether network time synchronization shall be enabled."),
-		dmsg.GetSenderPID())
+func (m *Manager) SetNTP(dmsg dbus.DMessage, enabled bool, msg string) error {
+	err := m.checkAuthorization("SetNTP", msg, dmsg.GetSenderPID())
 	if err != nil {
 		return err
 	}
@@ -81,8 +73,4 @@ func (m *Manager) SetNTP(dmsg dbus.DMessage, enabled bool) error {
 		return nil
 	}
 	return m.core.SetNTP(enabled, false)
-}
-
-func Tr(str string) string {
-	return str
 }
