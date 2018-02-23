@@ -158,7 +158,6 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setSingleShot(true);
 
     m_appPreviewTips->setVisible(false);
-    m_itemEntryInter->setSync(false);
 
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
