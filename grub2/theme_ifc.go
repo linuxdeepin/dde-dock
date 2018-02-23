@@ -47,7 +47,7 @@ func checkColor(v string) error {
 }
 
 func (theme *Theme) SetItemColor(sender dbus.Sender, color string) *dbus.Error {
-	theme.g.service.DelayAutoQuit()
+	theme.service.DelayAutoQuit()
 
 	err := theme.g.checkAuth(sender)
 	if err != nil {
@@ -59,7 +59,7 @@ func (theme *Theme) SetItemColor(sender dbus.Sender, color string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	if theme.setPropItemColor(theme.g.service, color) {
+	if theme.setPropItemColor(color) {
 		err = theme.setCustomTheme()
 		if err != nil {
 			return dbusutil.ToError(err)
@@ -69,7 +69,7 @@ func (theme *Theme) SetItemColor(sender dbus.Sender, color string) *dbus.Error {
 }
 
 func (theme *Theme) SetSelectedItemColor(sender dbus.Sender, color string) *dbus.Error {
-	theme.g.service.DelayAutoQuit()
+	theme.service.DelayAutoQuit()
 
 	err := theme.g.checkAuth(sender)
 	if err != nil {
@@ -81,7 +81,7 @@ func (theme *Theme) SetSelectedItemColor(sender dbus.Sender, color string) *dbus
 		return dbusutil.ToError(err)
 	}
 
-	if theme.setPropSelectedItemColor(theme.g.service, color) {
+	if theme.setPropSelectedItemColor(color) {
 		err = theme.setCustomTheme()
 		if err != nil {
 			return dbusutil.ToError(err)
@@ -94,7 +94,7 @@ func (theme *Theme) SetSelectedItemColor(sender dbus.Sender, color string) *dbus
 // generate the background to fit the screen resolution, support png
 // and jpeg image format.
 func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string) *dbus.Error {
-	theme.g.service.DelayAutoQuit()
+	theme.service.DelayAutoQuit()
 
 	logger.Debugf("SetBackgroundSourceFile: %q", filename)
 	err := theme.g.checkAuth(sender)
@@ -111,10 +111,10 @@ func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string)
 }
 
 func (theme *Theme) GetBackground() (string, *dbus.Error) {
-	theme.g.service.DelayAutoQuit()
+	theme.service.DelayAutoQuit()
 	return theme.bgFile, nil
 }
 
 func (theme *Theme) emitSignalBackgroundChanged() {
-	theme.g.service.Emit(theme, "BackgroundChanged")
+	theme.service.Emit(theme, "BackgroundChanged")
 }

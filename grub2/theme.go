@@ -27,6 +27,7 @@ import (
 	"sync"
 	"text/template"
 
+	"pkg.deepin.io/lib/dbusutil"
 	graphic "pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/utils"
 )
@@ -69,6 +70,7 @@ type ThemeScheme struct {
 // setup deepin grub2 theme.
 type Theme struct {
 	g           *Grub2
+	service     *dbusutil.Service
 	themeDir    string
 	mainFile    string
 	tplFile     string
@@ -79,7 +81,7 @@ type Theme struct {
 	tplJSONData *TplJSONData
 	setThemeMu  sync.Mutex
 
-	PropsMu           sync.RWMutex
+	PropsMaster       dbusutil.PropsMaster
 	Updating          bool
 	ItemColor         string
 	SelectedItemColor string
@@ -100,6 +102,7 @@ type Theme struct {
 func NewTheme(g *Grub2) *Theme {
 	theme := &Theme{}
 	theme.g = g
+	theme.service = g.service
 	theme.themeDir = themeDir
 	theme.mainFile = themeMainFile
 	theme.tplFile = themeTplFile
@@ -139,12 +142,11 @@ func (theme *Theme) initTheme() {
 
 // reset to default configuration
 func (theme *Theme) reset() error {
-	service := theme.g.service
 	// reset scheme to dark scheme
 	defaultScheme := theme.tplJSONData.DarkScheme
 	theme.tplJSONData.CurrentScheme = defaultScheme
-	theme.setPropItemColor(service, defaultScheme.ItemColor)
-	theme.setPropSelectedItemColor(service, defaultScheme.SelectedItemColor)
+	theme.setPropItemColor(defaultScheme.ItemColor)
+	theme.setPropSelectedItemColor(defaultScheme.SelectedItemColor)
 	err := theme.setCustomTheme()
 	if err != nil {
 		return err
@@ -322,9 +324,8 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) {
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
 		logger.Info("background is bright, so use the bright theme scheme")
 	}
-	service := theme.g.service
-	theme.setPropItemColor(service, theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setPropSelectedItemColor(service, theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	err := theme.setCustomTheme()
 	if err != nil {
 		logger.Warning(err)
@@ -354,9 +355,8 @@ func (theme *Theme) setThemeBackgroundSourceFile(imageFile string, screenWidth, 
 }
 
 func (theme *Theme) generateBackground(screenWidth, screenHeight uint16) error {
-	service := theme.g.service
-	theme.setPropUpdating(service, true)
+	theme.setPropUpdating(true)
 	err := generateThemeBackground(screenWidth, screenHeight)
-	theme.setPropUpdating(service, false)
+	theme.setPropUpdating(false)
 	return err
 }

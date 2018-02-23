@@ -50,7 +50,7 @@ type Grub2 struct {
 	theme           *Theme
 	setPropMu       sync.Mutex
 
-	PropsMu sync.RWMutex
+	PropsMaster dbusutil.PropsMaster
 	// props:
 	DefaultEntry string
 	EnableTheme  bool
@@ -186,7 +186,7 @@ func New(service *dbusutil.Service) *Grub2 {
 	g.modifyFuncChan = make(chan ModifyFunc)
 	g.mkconfigManager = newMkconfigManager(g.modifyFuncChan, func(running bool) {
 		// state change callback
-		g.setPropUpdating(g.service, running)
+		g.setPropUpdating(running)
 	})
 	go g.mkconfigManager.loop()
 

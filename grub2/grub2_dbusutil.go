@@ -1,165 +1,161 @@
 package grub2
 
-import (
-	"pkg.deepin.io/lib/dbusutil"
-)
-
-func (v *Grub2) setPropDefaultEntry(service *dbusutil.Service, value string) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Grub2) setPropDefaultEntry(value string) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.DefaultEntry != value {
 		v.DefaultEntry = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "DefaultEntry", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "DefaultEntry", value)
 	}
 	return
 }
 
 func (v *Grub2) getPropDefaultEntry() string {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.DefaultEntry
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Grub2) setPropEnableTheme(service *dbusutil.Service, value bool) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Grub2) setPropEnableTheme(value bool) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.EnableTheme != value {
 		v.EnableTheme = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "EnableTheme", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "EnableTheme", value)
 	}
 	return
 }
 
 func (v *Grub2) getPropEnableTheme() bool {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.EnableTheme
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Grub2) setPropResolution(service *dbusutil.Service, value string) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Grub2) setPropResolution(value string) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.Resolution != value {
 		v.Resolution = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "Resolution", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "Resolution", value)
 	}
 	return
 }
 
 func (v *Grub2) getPropResolution() string {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.Resolution
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Grub2) setPropTimeout(service *dbusutil.Service, value uint32) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Grub2) setPropTimeout(value uint32) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.Timeout != value {
 		v.Timeout = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "Timeout", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "Timeout", value)
 	}
 	return
 }
 
 func (v *Grub2) getPropTimeout() uint32 {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.Timeout
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Grub2) setPropUpdating(service *dbusutil.Service, value bool) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Grub2) setPropUpdating(value bool) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.Updating != value {
 		v.Updating = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "Updating", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "Updating", value)
 	}
 	return
 }
 
 func (v *Grub2) getPropUpdating() bool {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.Updating
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Theme) setPropUpdating(service *dbusutil.Service, value bool) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Theme) setPropUpdating(value bool) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.Updating != value {
 		v.Updating = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "Updating", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "Updating", value)
 	}
 	return
 }
 
 func (v *Theme) getPropUpdating() bool {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.Updating
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Theme) setPropItemColor(service *dbusutil.Service, value string) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Theme) setPropItemColor(value string) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.ItemColor != value {
 		v.ItemColor = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "ItemColor", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "ItemColor", value)
 	}
 	return
 }
 
 func (v *Theme) getPropItemColor() string {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.ItemColor
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
 
-func (v *Theme) setPropSelectedItemColor(service *dbusutil.Service, value string) (changed bool) {
-	v.PropsMu.Lock()
+func (v *Theme) setPropSelectedItemColor(value string) (changed bool) {
+	v.PropsMaster.Lock()
 	if v.SelectedItemColor != value {
 		v.SelectedItemColor = value
 		changed = true
 	}
-	v.PropsMu.Unlock()
-	if service != nil && changed {
-		service.EmitPropertyChanged(v, "SelectedItemColor", value)
+	v.PropsMaster.Unlock()
+	if v.service != nil && changed {
+		v.PropsMaster.NotifyChanged(v, v.service, "SelectedItemColor", value)
 	}
 	return
 }
 
 func (v *Theme) getPropSelectedItemColor() string {
-	v.PropsMu.RLock()
+	v.PropsMaster.RLock()
 	value := v.SelectedItemColor
-	v.PropsMu.RUnlock()
+	v.PropsMaster.RUnlock()
 	return value
 }
