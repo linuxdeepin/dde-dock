@@ -26,7 +26,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"sync"
 
 	"dbus/com/deepin/api/localehelper"
 	libnetwork "dbus/com/deepin/daemon/network"
@@ -79,7 +78,7 @@ type LangSelector struct {
 	helper       *localehelper.LocaleHelper
 	localesCache LocaleInfos
 
-	PropsMu sync.RWMutex
+	PropsMaster dbusutil.PropsMaster
 	// The current locale
 	CurrentLocale string
 	// Store locale changed state

@@ -39,7 +39,7 @@ func (lang *LangSelector) listenHelperSignal() {
 		err := lang.handleLocaleChanged(ok, reason)
 		if err != nil {
 			lang.logger.Warning(err)
-			lang.setPropCurrentLocale(lang.service, getCurrentUserLocale())
+			lang.setPropCurrentLocale(getCurrentUserLocale())
 			err := sendNotify(localeIconFailed, "",
 				Tr("System language failed to change, please try later"))
 			if err != nil {
@@ -49,7 +49,7 @@ func (lang *LangSelector) listenHelperSignal() {
 			if err != nil {
 				lang.logger.Warning("Sync user object locale failed:", err)
 			}
-			lang.setPropLocaleState(lang.service, LocaleStateChanged)
+			lang.setPropLocaleState(LocaleStateChanged)
 			return
 		}
 		err = sendNotify(localeIconFinished, "",
@@ -61,7 +61,7 @@ func (lang *LangSelector) listenHelperSignal() {
 		if err != nil {
 			lang.logger.Warning("Sync user object locale failed:", err)
 		}
-		lang.setPropLocaleState(lang.service, LocaleStateChanged)
+		lang.setPropLocaleState(LocaleStateChanged)
 	})
 }
 

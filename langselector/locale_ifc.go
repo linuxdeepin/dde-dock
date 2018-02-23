@@ -67,8 +67,8 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 	}
 
 	go func() {
-		lang.setPropLocaleState(lang.service, LocaleStateChanging)
-		lang.setPropCurrentLocale(lang.service, locale)
+		lang.setPropLocaleState(LocaleStateChanging)
+		lang.setPropCurrentLocale(locale)
 		if ok, _ := isNetworkEnable(); !ok {
 			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed, please wait..."))
@@ -85,7 +85,7 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 		err := lang.helper.GenerateLocale(locale)
 		if err != nil {
 			lang.logger.Warning("GenerateLocale failed:", err)
-			lang.setPropLocaleState(lang.service, LocaleStateChanged)
+			lang.setPropLocaleState(LocaleStateChanged)
 		}
 	}()
 
