@@ -14,16 +14,19 @@ import (
 var logger = log.NewLogger("cmd/default-terminal")
 
 var launchAppFlag bool
+var executeFlag string
 
 const (
 	gsSchemaDefaultTerminal = "com.deepin.desktop.default-applications.terminal"
 	gsKeyAppId              = "app-id"
 	gsKeyExec               = "exec"
+	gsKeyExecArg            = "exec-arg"
 )
 
 func init() {
 	flag.BoolVar(&launchAppFlag, "launch-app", false,
 		"launch via startdde LaunchApp")
+	flag.StringVar(&executeFlag, "e", "", "run a program in the terminal")
 }
 
 func main() {
@@ -55,15 +58,25 @@ func main() {
 
 	} else {
 		termExec := settings.GetString(gsKeyExec)
+		termExecArg := settings.GetString(gsKeyExecArg)
 		termPath, _ := exec.LookPath(termExec)
-		if termPath != "" {
-			err := exec.Command(termPath).Run()
-			if err != nil {
-				logger.Warning(err)
+		if termPath == "" {
+			// try again
+			termExecArg = "-e"
+			termPath = getTerminalPath()
+			if termPath == "" {
+				logger.Fatal("failed to get terminal path")
 			}
+		}
 
-		} else {
-			runFallbackTerm()
+		var args []string
+		if executeFlag != "" {
+			args = []string{termExecArg, executeFlag}
+		}
+
+		err := exec.Command(termPath, args...).Run()
+		if err != nil {
+			logger.Warning(err)
 		}
 	}
 }
