@@ -10,22 +10,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
         <translation>Дата, час</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
         <source>12 Hour Time</source>
         <translation>12 Годинний Час</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
         <source>24 Hour Time</source>
         <translation>24 Годинний Час</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>Time Settings</source>
         <translation>Налаштування Часу</translation>
     </message>
@@ -82,87 +82,87 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="43"/>
+        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
         <translation>Модний режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="44"/>
+        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
         <translation>Режим ефективності</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="45"/>
+        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Top</source>
         <translation>Верх</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="46"/>
+        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Bottom</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="47"/>
+        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Left</source>
         <translation>Ліворуч</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="48"/>
+        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Right</source>
         <translation>Праворуч</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="49"/>
+        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Large</source>
         <translation>Великий</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="50"/>
+        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Medium</source>
         <translation>Середній</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="51"/>
+        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Small</source>
         <translation>Маленький</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="52"/>
+        <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
         <translation>Показувати постійно</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="53"/>
+        <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
         <translation>Приховувати</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="54"/>
+        <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
         <translation>Розумне приховування</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="88"/>
+        <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="96"/>
+        <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
         <translation>Місце знаходження</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="103"/>
+        <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="110"/>
+        <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="114"/>
+        <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
         <translation>Плагіни</translation>
     </message>
@@ -301,7 +301,7 @@
         <translation>Налаштування аудіо</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="215"/>
         <source>Current Volume %1</source>
         <translation>Поточна гучність %1</translation>
     </message>
@@ -309,7 +309,7 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
         <translation>Звук</translation>
     </message>
@@ -317,7 +317,7 @@
 <context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
         <source>System Tray</source>
         <translation>Системний трей</translation>
     </message>
@@ -352,7 +352,7 @@
     <name>WiredItem</name>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
-        <source>Unknow</source>
+        <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
@@ -387,27 +387,27 @@
         <translation>Автоматичне підключення</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
         <source>Connect</source>
         <translation>Підключитися</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
         <source>Wireless Network</source>
         <translation>Бездротова мережа</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
         <source>Wireless Network %1</source>
         <translation>Бездротова мережа %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>Потрібен пароль для підключення до &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>

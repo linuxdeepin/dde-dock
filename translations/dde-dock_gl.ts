@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl" version="2.1">
 <context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation>Cliquer pour afficher les icônes cachées</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12,22 +12,22 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
-        <translation>Date et heure</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
         <source>12 Hour Time</source>
-        <translation>12 Heures</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
         <source>24 Hour Time</source>
-        <translation>24 Heures</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>Time Settings</source>
-        <translation>Réglages de l&apos;heure</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
-        <translation>Activer le réseau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
-        <translation>Désactiver le réseau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
-        <translation>Paramètres du réseau</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation>Périphérique inconnu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation>Partition inconnue</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -66,17 +66,17 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
-        <translation>Disque</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation>Tout démonter </translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -84,87 +84,87 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
-        <translation>Mode dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
-        <translation>Mode étendu </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Top</source>
-        <translation>Haut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Bottom</source>
-        <translation>Bas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Left</source>
-        <translation>Gauche</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Right</source>
-        <translation>Droite</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Large</source>
-        <translation>Grand</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Medium</source>
-        <translation>Moyen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Small</source>
-        <translation>Petit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
-        <translation>Maintenir affiché</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
-        <translation>Maintenir caché</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
-        <translation>Masquer intelligemment</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
-        <translation>Emplacement</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
-        <translation>Taille</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
-        <translation>Status </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
-        <translation>Extensions</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
-        <translation>Lanceur</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -180,7 +180,7 @@
     <message>
         <location filename="../plugins/network/networkplugin.cpp" line="46"/>
         <source>Network</source>
-        <translation>Réseau</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -188,27 +188,27 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Empty</source>
-        <translation>Vider</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
-        <translation>Cette action ne peut être restaurée</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Êtes-vous sûr de vider 1 élément ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Êtes-vous sûr de vider %1 éléments ?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -217,57 +217,57 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Shut down</source>
-        <translation>Arrêter</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
         <source>Remaining Capacity %1</source>
-        <translation>Charge disponible %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
-        <translation>Chargé à %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
         <source>Charging %1</source>
-        <translation>En charge %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Restart</source>
-        <translation>Redémarrer</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
         <source>Lock</source>
-        <translation>Verrouiller</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Log out</source>
-        <translation>Déconnexion</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
         <source>Suspend</source>
-        <translation>Mettre en veille </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
         <source>Power</source>
-        <translation>Alimentation</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
         <source>Switch account</source>
-        <translation>Changer de compte</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
-        <translation>Options d&apos;alimentation</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -275,12 +275,12 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
-        <translation>Périphérique</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation>Applications</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -288,22 +288,22 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation>Réactiver le son</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
-        <translation>Muet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation>Paramètres audio</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="215"/>
         <source>Current Volume %1</source>
-        <translation>Volume actuel %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../plugins/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
-        <translation>Son</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
         <source>System Tray</source>
-        <translation>Zone de notification</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -327,12 +327,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation>Corbeille - %1 fichier</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation>Corbeille - %1 fichiers</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -340,12 +340,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
-        <translation>Vider</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -353,17 +353,17 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknown</source>
-        <translation>Inconnu</translation>
+        <translation>Descoñecido</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
-        <translation>Pas de réseau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -371,12 +371,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation>Pas de réseau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation>Connexion sans fil: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -384,32 +384,32 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Connection automatique</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
         <source>Connect</source>
-        <translation>Se connecter</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
         <source>Wireless Network</source>
-        <translation>Réseau sans fil</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
         <source>Wireless Network %1</source>
-        <translation>Réseau sans fil %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Mot de passe requis pour se connecter à &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -10,22 +10,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
         <translation>Orologio</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
         <source>12 Hour Time</source>
-        <translation>12 ore</translation>
+        <translation>Formato 12 ore</translation>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
+        <source>24 Hour Time</source>
+        <translation>Formato 24 ore</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
-        <source>24 Hour Time</source>
-        <translation>24 ore</translation>
-    </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
         <source>Time Settings</source>
         <translation>Impostazioni orarie</translation>
     </message>
@@ -82,87 +82,87 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="43"/>
+        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
         <translation>Fashion</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="44"/>
+        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
         <translation>Efficient</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="45"/>
+        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Top</source>
         <translation>Sopra</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="46"/>
+        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Bottom</source>
         <translation>Sotto</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="47"/>
+        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Left</source>
         <translation>Sinistra</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="48"/>
+        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Right</source>
         <translation>Destra</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="49"/>
+        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Large</source>
         <translation>Larga</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="50"/>
+        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Medium</source>
         <translation>Media</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="51"/>
+        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Small</source>
         <translation>Piccola</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="52"/>
+        <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
         <translation>Mostra sempre</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="53"/>
+        <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
         <translation>Lascia nascosta</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="54"/>
+        <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
         <translation>Nascondi automaticamente</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="88"/>
+        <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
         <translation>Modalità</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="96"/>
+        <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
         <translation>Posizione</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="103"/>
+        <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
         <translation>Dimensioni</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="110"/>
+        <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
         <translation>Comportamento</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="114"/>
+        <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
         <translation>Plugin</translation>
     </message>
@@ -188,7 +188,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
@@ -301,7 +301,7 @@
         <translation>Impostazioni Audio</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="215"/>
         <source>Current Volume %1</source>
         <translation>Volume attuale %1</translation>
     </message>
@@ -309,7 +309,7 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
         <translation>Audio</translation>
     </message>
@@ -317,7 +317,7 @@
 <context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
         <source>System Tray</source>
         <translation>Tray di Sistema</translation>
     </message>
@@ -332,7 +332,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation>Cestino - %1 files</translation>
+        <translation>Cestino - %1 file</translation>
     </message>
 </context>
 <context>
@@ -352,7 +352,7 @@
     <name>WiredItem</name>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
-        <source>Unknow</source>
+        <source>Unknown</source>
         <translation>Sconosciuto</translation>
     </message>
     <message>
@@ -387,27 +387,27 @@
         <translation>Auto-connetti</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
         <source>Wireless Network</source>
         <translation>WiFi</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
         <source>Wireless Network %1</source>
         <translation>Rete wireless %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>Password richiesta per connettersi a &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
