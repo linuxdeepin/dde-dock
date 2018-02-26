@@ -203,7 +203,7 @@ func (s *SessionDaemon) ListModule(name string) error {
 }
 
 func (s *SessionDaemon) CallTrace(times, seconds uint32) error {
-	ct, err := calltrace.Start(seconds/times, logger)
+	ct, err := calltrace.NewManager(seconds / times)
 	if err != nil {
 		logger.Warning("Failed to start calltrace:", err)
 		return err

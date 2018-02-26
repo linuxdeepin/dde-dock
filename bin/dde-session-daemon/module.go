@@ -60,6 +60,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/miracast"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 
+	_ "pkg.deepin.io/dde/daemon/calltrace"
 	_ "pkg.deepin.io/dde/daemon/debug"
 )
 

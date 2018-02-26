@@ -1,161 +1,119 @@
+/*
+ * Copyright (C) 2018 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     jouyouyun <jouyouwen717@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package calltrace
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
-	"pkg.deepin.io/lib/xdg/basedir"
-	"runtime/pprof"
 	"time"
 )
 
-type CallTrace struct {
-	cpuFile   *os.File
-	stackFile *os.File
+var (
+	logger = log.NewLogger("daemon/calltrace")
+)
 
-	duration uint32
+type Daemon struct {
+	ct   *Manager
+	quit chan bool
+	*loader.ModuleBase
+}
 
-	quit   chan bool
-	logger *log.Logger
+func init() {
+	loader.Register(NewDaemon())
+}
+
+func NewDaemon() *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = loader.NewModuleBase("calltrace", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
 }
 
 // Start launch calltrace module
-func Start(duration uint32, l *log.Logger) (*CallTrace, error) {
-	dir, err := ensureDirExist()
-	if err != nil {
-		return nil, err
+func (d *Daemon) Start() error {
+	if d.quit != nil {
+		return nil
 	}
 
-	timestamp := time.Now().UnixNano()
-	cpu, err := os.Create(filepath.Join(dir,
-		fmt.Sprintf("cpu_%v.prof", timestamp)))
-	if err != nil {
-		return nil, err
-	}
-
-	stack, err := os.OpenFile(filepath.Join(dir,
-		fmt.Sprintf("stack_%v.log", timestamp)),
-		os.O_CREATE|os.O_RDWR|os.O_APPEND, 0644)
-	if err != nil {
-		cpu.Close()
-		return nil, err
-	}
-
-	ct := new(CallTrace)
-	ct.cpuFile = cpu
-	ct.stackFile = stack
-	ct.logger = l
-	ct.quit = make(chan bool)
-	ct.duration = duration
-
-	err = pprof.StartCPUProfile(ct.cpuFile)
-	if err != nil {
-		ct.logger.Warning("Failed to start cpu profile:", err)
-		ct.cpuFile.Close()
-		ct.cpuFile = nil
-	}
-
-	ct.logger.Infof("[CallTrace] Will record profiles, once per %d second", ct.duration)
-	ct.writeHeap()
-	ct.recordStack()
-	go ct.loop()
-
-	return ct, nil
-}
-
-func (ct *CallTrace) SetAutoDestroy(seconds uint32) {
-	if seconds == 0 {
-		return
-	}
-
-	go func() {
-		time.Sleep(time.Second * time.Duration(seconds))
-		ct.stop()
-	}()
+	d.quit = make(chan bool)
+	go d.loop()
+	return nil
 }
 
 // Stop terminate calltrace module
-func (ct *CallTrace) stop() {
-	if ct.quit != nil {
-		ct.quit <- true
-	}
-	if ct.cpuFile != nil {
-		pprof.StopCPUProfile()
-		ct.cpuFile.Close()
+func (d *Daemon) Stop() error {
+	if d.quit == nil {
+		return nil
 	}
 
-	if ct.stackFile != nil {
-		ct.stackFile.Close()
+	d.quit <- true
+	if d.ct != nil {
+		d.ct.SetAutoDestroy(1)
 	}
-	ct.logger.Info("[CallTrace] Terminated!")
-	ct = nil
+	logger.Info("--------Terminate calltrace loop")
+	return nil
 }
 
-func (ct *CallTrace) loop() {
-	var ticker = time.NewTicker(time.Second * time.Duration(ct.duration))
+func (d *Daemon) loop() {
+	s := gio.NewSettings("com.deepin.dde.calltrace")
+	cpuPercentage := s.GetInt("cpu-percentage")
+	memUsage := s.GetInt("mem-usage")
+	duration := s.GetInt("duration")
+	s.Unref()
+
+	logger.Info("--------Start calltrace loop")
+	d.handleProcessStat(cpuPercentage, memUsage, duration)
+	ticker := time.NewTicker(time.Second * 30)
 	for {
 		select {
 		case _, ok := <-ticker.C:
 			if !ok {
-				ct.logger.Error("Invalid ticker event")
+				logger.Error("Invaild ticker event, exit loop!")
 				return
 			}
-
-			ct.writeHeap()
-			ct.recordStack()
-		case <-ct.quit:
+			d.handleProcessStat(cpuPercentage, memUsage, duration)
+		case <-d.quit:
 			ticker.Stop()
-			close(ct.quit)
-			ct.quit = nil
+			close(d.quit)
+			d.quit = nil
 			return
 		}
 	}
 }
 
-func (ct *CallTrace) writeHeap() {
-	dir, _ := ensureDirExist()
-	mem, err := os.Create(filepath.Join(dir,
-		fmt.Sprintf("memory_%v.prof", time.Now().UnixNano())))
-	if err != nil {
-		ct.logger.Warning("Failed to create memory file:", err)
-		return
+func (d *Daemon) handleProcessStat(cpuPercentage, memUsage, duration int32) {
+	cpu, _ := getCPUPercentage()
+	mem, _ := getMemoryUsage()
+	logger.Debugf("-----------Handle process stat, cpu: %#v, mem: %#v, ct: %p", cpu, mem, d.ct)
+	if cpu > float64(cpuPercentage) || mem > int64(memUsage)*1024 {
+		if d.ct == nil {
+			d.ct, _ = NewManager(uint32(duration))
+		}
+	} else {
+		if d.ct == nil {
+			return
+		}
+		d.ct.SetAutoDestroy(1)
 	}
-
-	err = pprof.WriteHeapProfile(mem)
-	mem.Close()
-	if err != nil {
-		ct.logger.Warning("Failed to write head profile:", err)
-	}
-	return
-}
-
-func (ct *CallTrace) recordStack() {
-	_, err := ct.stackFile.WriteString("=== BEGIN " + time.Now().String() + " ===\n")
-	if err != nil {
-		ct.logger.Warning("Failed to start record stack:", err)
-		return
-	}
-	ct.stackFile.WriteString("--- DUMP [goroutine] ---\n")
-	pprof.Lookup("goroutine").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [heap] ---\n")
-	pprof.Lookup("heap").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [threadcreate] ---\n")
-	pprof.Lookup("threadcreate").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [block] ---\n")
-	pprof.Lookup("block").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [mutex] ---\n")
-	pprof.Lookup("mutex").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("=== END " + time.Now().String() + " ===\n\n\n")
-	ct.stackFile.Sync()
-}
-
-func ensureDirExist() (string, error) {
-	dir := filepath.Join(basedir.GetUserCacheDir(),
-		"deepin", "dde-daemon", "calltrace")
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		return "", err
-	}
-	return dir, nil
 }
