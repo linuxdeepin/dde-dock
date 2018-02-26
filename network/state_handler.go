@@ -291,8 +291,10 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				case nm.NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE:
 					if dsi.connectionType == connectionWirelessHotspot {
 						msg = Tr("Unable to share hotspot, please check dnsmasq settings")
-					} else {
+					} else if dsi.connectionType == connectionWireless {
 						msg = fmt.Sprintf(Tr("Unable to connect %q, please keep closer to the wireless router"), dsi.aconnId)
+					} else if dsi.connectionType == connectionWired {
+						msg = fmt.Sprintf(Tr("Unable to connect %q, please check your router or net cable."), dsi.aconnId)
 					}
 				case nm.NM_DEVICE_STATE_REASON_NO_SECRETS:
 					msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
