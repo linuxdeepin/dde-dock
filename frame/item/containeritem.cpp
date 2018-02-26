@@ -40,8 +40,8 @@ void ContainerItem::setDropping(const bool dropping)
 {
     if (dropping)
         showPopupApplet(m_containerWidget);
-    else
-        hidePopup();
+//    else
+//        hidePopup();
 
     m_dropping = dropping;
     update();
