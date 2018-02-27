@@ -381,10 +381,10 @@ func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 			setSettingConnectionId(s.data, decodeSsid(getSettingWirelessSsid(s.data)))
 		}
 
-		switch connectionType {
-		case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		// wired, wireless, wireless-adhoc, wireless-hotspot should auto activated if available
+		if activated {
 			_, _, err = nmAddAndActivateConnection(s.data, s.devPath, true)
-		default:
+		} else {
 			_, err = nmAddConnection(s.data)
 		}
 		if err != nil {
