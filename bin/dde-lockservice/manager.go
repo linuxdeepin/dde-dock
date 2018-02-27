@@ -164,6 +164,7 @@ func (m *Manager) AuthenticateUser(sender dbus.Sender, username string) *dbus.Er
 	id := getId(pid, username)
 	_, ok := m.authUserTable[id]
 	if ok {
+		log.Println("In authenticating:", id)
 		m.authLocker.Unlock()
 		return nil
 	}
@@ -216,6 +217,12 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 		// 	// TODO: read data from input
 		// 	return "", nil
 		case pam.PromptEchoOff, pam.PromptEchoOn:
+			if password != "" {
+				tmp := password
+				password = ""
+				return tmp, nil
+			}
+
 			if msg != "" {
 				if style == pam.PromptEchoOff {
 					log.Println("Echo off:", msg)
@@ -224,12 +231,6 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 					log.Println("Echo on:", msg)
 					m.sendEvent(PromptQuestion, pid, username, msg)
 				}
-			}
-
-			if password != "" {
-				tmp := password
-				password = ""
-				return tmp, nil
 			}
 
 			id := getId(pid, username)
@@ -241,7 +242,17 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 			}
 			log.Println("Join select:", id)
 			select {
-			case tmp := <-v:
+			case tmp, ok := <-v:
+				if !ok {
+					log.Println("Invalid select channel")
+					return "", nil
+				}
+
+				m.authLocker.Lock()
+				delete(m.authUserTable, id)
+				m.authLocker.Unlock()
+				close(v)
+				v = nil
 				return tmp, nil
 			}
 		case pam.ErrorMsg:
@@ -273,6 +284,7 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 	if ok {
 		if v != nil {
 			close(v)
+			v = nil
 		}
 		delete(m.authUserTable, id)
 	}
