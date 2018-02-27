@@ -68,6 +68,8 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     setFixedHeight(30);
 
     setMuteIcon();
+
+    emit m_inputInter->VolumeChanged();
 }
 
 void SinkInputWidget::setVolume(const int value)
