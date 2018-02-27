@@ -110,7 +110,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_appPreviewTips(new PreviewContainer(this)),
       m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this)),
 
-      m_itemView(new QGraphicsView(this)),
+      m_swingEffectView(new QGraphicsView(this)),
       m_itemScene(new QGraphicsScene(this)),
 
       m_draging(false),
@@ -127,7 +127,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_largeWatcher(new QFutureWatcher<QPixmap>(this))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addWidget(m_itemView);
+    centralLayout->addWidget(m_swingEffectView);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
@@ -135,15 +135,15 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     setAcceptDrops(true);
     setLayout(centralLayout);
 
-    m_itemView->setScene(m_itemScene);
-    m_itemView->setAlignment(Qt::AlignCenter);
-    m_itemView->setVisible(false);
-    m_itemView->setFrameStyle(QFrame::NoFrame);
-    m_itemView->setContentsMargins(0, 0, 0, 0);
-    m_itemView->setRenderHints(QPainter::SmoothPixmapTransform);
-    m_itemView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    m_itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_itemView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_swingEffectView->setScene(m_itemScene);
+    m_swingEffectView->setAlignment(Qt::AlignCenter);
+    m_swingEffectView->setVisible(false);
+    m_swingEffectView->setFrameStyle(QFrame::NoFrame);
+    m_swingEffectView->setContentsMargins(0, 0, 0, 0);
+    m_swingEffectView->setRenderHints(QPainter::SmoothPixmapTransform);
+    m_swingEffectView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    m_swingEffectView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_swingEffectView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
@@ -236,7 +236,7 @@ void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (m_draging || m_itemView->isVisible())
+    if (m_draging || (m_swingEffectView->isVisible() && DockDisplayMode != Fashion))
         return;
 
     QPainter painter(this);
@@ -249,23 +249,11 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     // draw background
     QRectF backgroundRect = itemRect;
-    if (DockDisplayMode == Efficient)
-    {
-        switch (DockPosition)
-        {
-        case Top:
-        case Bottom:
-//            backgroundRect = itemRect;//.marginsRemoved(QMargins(2, 0, 2, 0));
-//            backgroundRect = itemRect.marginsRemoved(QMargins(0, 1, 0, 1));
-        case Left:
-        case Right:
-            backgroundRect = itemRect.marginsRemoved(QMargins(1, 1, 1, 1));
-//            backgroundRect = itemRect.marginsRemoved(QMargins(1, 0, 1, 0));
-        }
-    }
 
     if (DockDisplayMode == Efficient)
     {
+        backgroundRect = itemRect.marginsRemoved(QMargins(1, 1, 1, 1));
+
         if (m_active)
         {
             painter.fillRect(backgroundRect, QColor(44, 167, 248, 255 * 0.3));
@@ -332,6 +320,9 @@ void AppItem::paintEvent(QPaintEvent *e)
         }
     }
 
+    if (m_swingEffectView->isVisible())
+        return;
+
     // icon
     const QPixmap &pixmap = m_appIcon;
     if (pixmap.isNull())
@@ -353,50 +344,9 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
-        if (!m_windowInfos.isEmpty())
-            return;
-
-        // start launching effects
-        m_itemScene->clear();
-        const auto ratio = qApp->devicePixelRatio();
-        const QRect r = rect();
-        const QPixmap &icon = m_appIcon;
-        QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
-        item->setTransformationMode(Qt::SmoothTransformation);
-        item->setPos(QPointF(r.center()) - QPointF(icon.rect().center()) / ratio);
-        m_itemScene->setSceneRect(r);
-        m_itemView->setSceneRect(r);
-        m_itemView->setFixedSize(r.size());
-//        m_itemView->setSceneRect((r.width() - icon.width()) / 2, (r.height() - icon.height()) / 2, r.width(), r.height());
-
-        QTimeLine *tl = new QTimeLine;
-        tl->setDuration(1200);
-        tl->setFrameRange(0, 60);
-        tl->setLoopCount(1);
-        tl->setEasingCurve(QEasingCurve::Linear);
-        tl->setStartFrame(0);
-        tl->start();
-
-        QGraphicsItemAnimation *ani = new QGraphicsItemAnimation;
-        ani->setItem(item);
-        ani->setTimeLine(tl);
-
-        const int px = qreal(-icon.rect().center().x()) / ratio;
-        const int py = qreal(-icon.rect().center().y()) / ratio - 18.;
-        const QPoint pos = r.center() + QPoint(0, 18);
-        for (int i(0); i != 60; ++i)
-        {
-            ani->setPosAt(i / 60.0, pos);
-            ani->setTranslationAt(i / 60.0, px, py);
-            ani->setRotationAt(i / 60.0, Frames[i]);
-        }
-
-        connect(tl, &QTimeLine::finished, tl, &QTimeLine::deleteLater);
-        connect(tl, &QTimeLine::finished, ani, &QGraphicsItemAnimation::deleteLater);
-        connect(tl, &QTimeLine::finished, m_itemScene, &QGraphicsScene::clear);
-        connect(tl, &QTimeLine::finished, m_itemView, &QGraphicsView::hide);
-
-        m_itemView->setVisible(true);
+        // play launch effect
+        if (m_windowInfos.isEmpty())
+            playSwingEffect();
     }
 }
 
@@ -574,6 +524,16 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
     m_appPreviewTips->setWindowInfos(m_windowInfos);
     m_updateIconGeometryTimer->start();
 
+    // process attention effect
+    if (hasAttention())
+    {
+        if (DockDisplayMode == DisplayMode::Fashion)
+            playSwingEffect();
+    } else {
+        // stop swing effect
+        m_swingEffectView->setVisible(false);
+    }
+
     update();
 }
 
@@ -626,5 +586,60 @@ void AppItem::cancelAndHidePreview()
 {
     hidePopup();
     emit requestCancelPreview();
+}
+
+void AppItem::playSwingEffect()
+{
+    m_itemScene->clear();
+
+    const auto ratio = qApp->devicePixelRatio();
+    const QRect r = rect();
+    const QPixmap &icon = m_appIcon;
+
+    QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
+    item->setTransformationMode(Qt::SmoothTransformation);
+    item->setPos(QPointF(r.center()) - QPointF(icon.rect().center()) / ratio);
+
+    m_itemScene->setSceneRect(r);
+    m_swingEffectView->setSceneRect(r);
+    m_swingEffectView->setFixedSize(r.size());
+
+    QTimeLine *tl = new QTimeLine;
+    tl->setDuration(1200);
+    tl->setFrameRange(0, 60);
+    tl->setLoopCount(1);
+    tl->setEasingCurve(QEasingCurve::Linear);
+    tl->setStartFrame(0);
+    tl->start();
+
+    QGraphicsItemAnimation *ani = new QGraphicsItemAnimation;
+    ani->setItem(item);
+    ani->setTimeLine(tl);
+
+    const int px = qreal(-icon.rect().center().x()) / ratio;
+    const int py = qreal(-icon.rect().center().y()) / ratio - 18.;
+    const QPoint pos = r.center() + QPoint(0, 18);
+    for (int i(0); i != 60; ++i)
+    {
+        ani->setPosAt(i / 60.0, pos);
+        ani->setTranslationAt(i / 60.0, px, py);
+        ani->setRotationAt(i / 60.0, Frames[i]);
+    }
+
+    connect(tl, &QTimeLine::finished, tl, &QTimeLine::deleteLater);
+    connect(tl, &QTimeLine::finished, ani, &QGraphicsItemAnimation::deleteLater);
+    connect(tl, &QTimeLine::finished, m_itemScene, &QGraphicsScene::clear);
+    connect(tl, &QTimeLine::finished, m_swingEffectView, &QGraphicsView::hide);
+    connect(tl, &QTimeLine::finished, this, &AppItem::checkAttentionEffect);
+
+    m_swingEffectView->setVisible(true);
+}
+
+void AppItem::checkAttentionEffect()
+{
+    QTimer::singleShot(1000, this, [=] {
+        if (DockDisplayMode == DisplayMode::Fashion && hasAttention())
+            playSwingEffect();
+    });
 }
 

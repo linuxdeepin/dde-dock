@@ -82,13 +82,15 @@ private slots:
     void activeChanged();
     void showPreview();
     void cancelAndHidePreview();
+    void playSwingEffect();
+    void checkAttentionEffect();
 
 private:
     QLabel *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
     DockEntryInter *m_itemEntryInter;
 
-    QGraphicsView *m_itemView;
+    QGraphicsView *m_swingEffectView;
     QGraphicsScene *m_itemScene;
 
     bool m_draging;
