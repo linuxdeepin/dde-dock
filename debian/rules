@@ -8,13 +8,19 @@ export QT_SELECT=5
 %:
 	dh $@ --parallel
 
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		DOCK_TRAY_USE_NATIVE_POPUP=YES
+
 ifeq ($(DEB_BUILD_ARCH), mips64el)
 override_dh_auto_configure:
-	dh_auto_configure -- QMAKE_CC=clang QMAKE_CXX=clang++ 
+	dh_auto_configure -- QMAKE_CC=clang QMAKE_CXX=clang++ \
+		DOCK_TRAY_USE_NATIVE_POPUP=YES
 endif
 
 ifeq ($(DEB_BUILD_ARCH), mipsel)
 override_dh_auto_configure:
-	dh_auto_configure -- QMAKE_CC=clang QMAKE_CXX=clang++ 
+	dh_auto_configure -- QMAKE_CC=clang QMAKE_CXX=clang++ \
+		DOCK_TRAY_USE_NATIVE_POPUP=YES
 endif
 

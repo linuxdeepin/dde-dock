@@ -79,7 +79,7 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
 
     connect(m_updateTimer, &QTimer::timeout, this, &XWindowTrayWidget::refershIconImage);
 #ifdef DOCK_TRAY_USE_NATIVE_POPUP
-    connect(m_sendHoverEvent, &QTimer::timeout, this, &TrayWidget::sendHoverEvent);
+    connect(m_sendHoverEvent, &QTimer::timeout, this, &XWindowTrayWidget::sendHoverEvent);
 #endif
 
     setMouseTracking(true);
