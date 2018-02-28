@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-03 16:15+0000\n"
-"Last-Translator: Marek Bujko <marek.bujko@gmail.com>\n"
+"POT-Creation-Date: 2018-02-26 15:32+0800\n"
+"PO-Revision-Date: 2018-02-27 03:12+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,11 +61,11 @@ msgstr "Zobrazenie mierky displeja"
 msgid "Setting display scaling"
 msgstr "Nastavenie mierky zobrazenia"
 
-#: ../../appearance/scale.go:75
+#: ../../appearance/scale.go:78
 msgid "Set successfully"
 msgstr "Úspešne nastavené"
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
 msgstr "Zobraziť po odhlásení, po nastavení mierky zobrazenia"
 
@@ -118,17 +118,17 @@ msgid "Message notification"
 msgstr "Upozornenie na správy"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
-#: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
+#: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "Pripojené"
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:96
-#: ../../network/utils_notify.go:100 ../../network/utils_notify.go:104
-#: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
-#: ../../network/utils_notify.go:214
+#: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:88 ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
+#: ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr "Odpojené"
 
@@ -144,31 +144,31 @@ msgstr "Pripojenie bluetooth zlyhalo"
 msgid "Failed to connect %q, automatically ignored"
 msgstr "Nedá sa pripojiť %q, automaticky ignorované"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:104
 msgid "_Open"
 msgstr "_Otvoriť"
 
-#: ../../dock/app_entry_menu.go:114
+#: ../../dock/app_entry_menu.go:111
 msgid "_Close All"
 msgstr "_Zatvoriť všetko"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
 msgstr "_Vynútené ukončenie"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
 msgstr "_Dock"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
 msgstr "_Odstrániť z docku"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
 msgstr "_Všetky okná"
 
-#: ../../housekeeping/init.go:83
+#: ../../housekeeping/init.go:88
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Nedostatok miesta na disku, prosím uvoľníte viac miesta!"
 
@@ -344,11 +344,11 @@ msgstr "Jazyk systému sa nezmenil, skúste to prosím neskôr"
 msgid "System language has been changed, please log in again after logged out"
 msgstr "Systémový jazyk bol zmenený, po odhlásení sa znovu prihláste"
 
-#: ../../langselector/locale_ifc.go:60
+#: ../../langselector/locale_ifc.go:74
 msgid "System language is being changed, please wait..."
 msgstr "Dochádza k zmene systémového jazyka, prosím čakajte..."
 
-#: ../../langselector/locale_ifc.go:66
+#: ../../langselector/locale_ifc.go:80
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
@@ -378,22 +378,22 @@ msgstr "Spustiť softvér"
 msgid "Password required to connect %q"
 msgstr "Na pripojenie %q je vyžadované heslo"
 
-#: ../../network/manager_active.go:330
+#: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:332
+#: ../../network/manager_active.go:319
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
-#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:321 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:337
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -402,45 +402,45 @@ msgstr "Automaticky"
 msgid "None"
 msgstr "Žiadne"
 
-#: ../../network/manager_active.go:352
+#: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit kľúč"
 
-#: ../../network/manager_active.go:354
+#: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr "Tunelované TLS"
 
-#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr "Chránené EAP"
@@ -1332,14 +1332,14 @@ msgstr "Slabé"
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
-#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
+#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
 msgstr "Uložené"
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
-#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
+#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
 msgstr "Vždy sa pýtať"
 
@@ -1347,7 +1347,7 @@ msgstr "Vždy sa pýtať"
 #: ../../network/nm_setting_vpn_openvpn.go:35
 #: ../../network/nm_setting_vpn_openvpn.go:331
 #: ../../network/nm_setting_vpn_pptp.go:38
-#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
+#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
 msgstr "Nie je požadované"
 
@@ -1783,8 +1783,8 @@ msgid "GSM Modem's SIM PUK required"
 msgstr "GSM SIM modem vyžaduje PUK"
 
 #: ../../network/state_handler.go:82
-msgid "Wrong GSM Modem's SIM"
-msgstr "Chybná SIM GSM modemu"
+msgid "SIM card error in GSM Modem"
+msgstr ""
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
@@ -1795,8 +1795,8 @@ msgid "A connection dependency failed"
 msgstr "Závislosť na pripojení zlyhala"
 
 #: ../../network/state_handler.go:85
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
-msgstr "Problém s RFC 2684 Ethernet cez ADSL most"
+msgid "RFC 2684 Ethernet bridging error to ADSL"
+msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
@@ -1923,7 +1923,7 @@ msgstr "%q pripojený"
 msgid "Hotspot share turned off"
 msgstr "Zdieľanie hotspotu je vypnuté"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:300
+#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
 msgid "%q disconnected"
 msgstr "%q odpojený"
 
@@ -1935,78 +1935,82 @@ msgstr "Nepodarilo sa zdieľať hotspot, skontrolujte nastavenia dnsmasq"
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôtovému smerovaču"
 
-#: ../../network/state_handler.go:298
+#: ../../network/state_handler.go:297
+msgid "Unable to connect %q, please check your router or net cable."
+msgstr ""
+
+#: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Pripojenie zlyhalo, nemôžem pripojiť %q, nesprávne heslo"
 
-#: ../../network/utils_dbus_nm.go:332
+#: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
 msgstr "Neznámy"
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:80
 msgid "You are now offline."
 msgstr "Teraz ste offline. "
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
 msgstr "Režim lietadla povolený."
 
-#: ../../network/utils_notify.go:104
+#: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
 msgstr "Prístupový bod nie je podporovaný týmto zariadením. "
 
-#: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:103
 msgid "Network"
 msgstr "Sieť"
 
-#: ../../network/utils_notify.go:108
+#: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Hardvérový vypínač WLAN karty je vypnutý, prosím zapnite ho. "
 
-#: ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
 msgstr "System proxy úspešne nastavené. "
 
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
 msgstr "System proxy bolo zrušené. "
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Battery Critical Low"
 msgstr "Kritická úroveň batérie"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "Počítač bol v režime pozastavenia, prosím pripojte sa"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Battery Low"
 msgstr "Nízka úroveň batérie"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "Počítač sa ocitne v pozastavenom režime, prihláste sa teraz prosím"
 
-#: ../../system/timedated/manager_ifc.go:30
+#: ../../timedate/manager_ifc.go:54
 msgid "Authentication is required to set the system time."
 msgstr "Na nastavenie systémového času je potrebné overenie."
 
-#: ../../system/timedated/manager_ifc.go:43
-msgid "Authentication is required to set the system timezone."
-msgstr "Na nastavenie časového pásma systému je potrebné overenie."
+#: ../../timedate/manager_ifc.go:67
+msgid ""
+"Authentication is required to control whether network time synchronization "
+"shall be enabled."
+msgstr "Je potrebné overiť, či je zapnutá synchronizácia času v sieti."
 
-#: ../../system/timedated/manager_ifc.go:59
+#: ../../timedate/manager_ifc.go:87
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "Autentifikácia je potrebná na kontrolu, či RTC ukladá miestny čas alebo čas UTC."
 
-#: ../../system/timedated/manager_ifc.go:74
-msgid ""
-"Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "Je potrebné overiť, či je zapnutá synchronizácia času v sieti."
+#: ../../timedate/manager_ifc.go:106
+msgid "Authentication is required to set the system timezone."
+msgstr "Na nastavenie časového pásma systému je potrebné overenie."

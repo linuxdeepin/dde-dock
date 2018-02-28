@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-24 16:22+0000\n"
-"Last-Translator: Alvaro Samudio <alvarosamudio1@gmail.com>\n"
+"POT-Creation-Date: 2018-02-26 15:32+0800\n"
+"PO-Revision-Date: 2018-02-27 03:12+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Spanish (Latin America) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es_419/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,11 +72,11 @@ msgstr "Escalar pantalla"
 msgid "Setting display scaling"
 msgstr "Configurar escalado de pantalla"
 
-#: ../../appearance/scale.go:75
+#: ../../appearance/scale.go:78
 msgid "Set successfully"
 msgstr "Establecida con éxito"
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
 msgstr "Ver al cerrar la sesión después de establecer la escala de visualización"
 
@@ -129,17 +129,17 @@ msgid "Message notification"
 msgstr "Notificación de mensaje"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
-#: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
+#: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "Conectado"
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:96
-#: ../../network/utils_notify.go:100 ../../network/utils_notify.go:104
-#: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
-#: ../../network/utils_notify.go:214
+#: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:88 ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
+#: ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -155,31 +155,31 @@ msgstr "La conexión Bluetooth ha fallado"
 msgid "Failed to connect %q, automatically ignored"
 msgstr "No se pudo conectar q %, automáticamente ignorado"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:104
 msgid "_Open"
 msgstr "_Abrir"
 
-#: ../../dock/app_entry_menu.go:114
+#: ../../dock/app_entry_menu.go:111
 msgid "_Close All"
 msgstr "_Cerrar todo"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
 msgstr "_Forzar cierre"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
 msgstr "Anclar (_D)"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
 msgstr "Desanclar (_U)"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
 msgstr "_Todas las ventanas"
 
-#: ../../housekeeping/init.go:83
+#: ../../housekeeping/init.go:88
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Espacio en disco insuficiente, por favor, limpiar a tiempo!"
 
@@ -355,11 +355,11 @@ msgstr "El cambio de idioma del sistema falló, por favor intenta más tarde"
 msgid "System language has been changed, please log in again after logged out"
 msgstr "El idioma del sistema ha cambiado, por favor cierre su sesión e inicie nuevamente"
 
-#: ../../langselector/locale_ifc.go:60
+#: ../../langselector/locale_ifc.go:74
 msgid "System language is being changed, please wait..."
 msgstr "Se está cambiando el idioma del sistema. Por favor, espere."
 
-#: ../../langselector/locale_ifc.go:66
+#: ../../langselector/locale_ifc.go:80
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
@@ -389,22 +389,22 @@ msgstr "Ejecutar programa"
 msgid "Password required to connect %q"
 msgstr "Contraseña requiere para conectar %q "
 
-#: ../../network/manager_active.go:330
+#: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:332
+#: ../../network/manager_active.go:319
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
-#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:321 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "Automático "
 
-#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:337
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -413,45 +413,45 @@ msgstr "Automático "
 msgid "None"
 msgstr "Ninguno"
 
-#: ../../network/manager_active.go:352
+#: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr "Clave WEP de 40/128-bit"
 
-#: ../../network/manager_active.go:354
+#: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr "TLS tunelizado"
 
-#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr "EAP protegido"
@@ -1343,14 +1343,14 @@ msgstr "Débil"
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
-#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
+#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
 msgstr "Guardado"
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
-#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
+#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
 msgstr "Siempre preguntar"
 
@@ -1358,7 +1358,7 @@ msgstr "Siempre preguntar"
 #: ../../network/nm_setting_vpn_openvpn.go:35
 #: ../../network/nm_setting_vpn_openvpn.go:331
 #: ../../network/nm_setting_vpn_pptp.go:38
-#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
+#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
 msgstr "No requerido"
 
@@ -1794,8 +1794,8 @@ msgid "GSM Modem's SIM PUK required"
 msgstr "PUK SIM de módem GSM es requerido"
 
 #: ../../network/state_handler.go:82
-msgid "Wrong GSM Modem's SIM"
-msgstr "SIM en módem GSM incorrecta."
+msgid "SIM card error in GSM Modem"
+msgstr ""
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
@@ -1806,8 +1806,8 @@ msgid "A connection dependency failed"
 msgstr "Una dependencia de la conexión falló."
 
 #: ../../network/state_handler.go:85
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
-msgstr "Problema con la Ethernet RFC 2684 sobre el puente ADSL."
+msgid "RFC 2684 Ethernet bridging error to ADSL"
+msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
@@ -1934,7 +1934,7 @@ msgstr "%q conectado"
 msgid "Hotspot share turned off"
 msgstr "Permitir conexión compartida desactivada"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:300
+#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
 msgid "%q disconnected"
 msgstr "%q desconectado"
 
@@ -1946,78 +1946,82 @@ msgstr "No es posible usar la conexión compartida, comprueba los ajustes de \"d
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "No se puede conectar %q, por favor manténgase cerca del enrutador inalámbrico"
 
-#: ../../network/state_handler.go:298
+#: ../../network/state_handler.go:297
+msgid "Unable to connect %q, please check your router or net cable."
+msgstr ""
+
+#: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Error en la conexión, no se puede conectar %q, contraseña incorrecta"
 
-#: ../../network/utils_dbus_nm.go:332
+#: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:80
 msgid "You are now offline."
 msgstr "Ahora está fuera de línea."
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
 msgstr "Modo avión activado."
 
-#: ../../network/utils_notify.go:104
+#: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
 msgstr "El modo de punto de acceso no es compatible con este dispositivo."
 
-#: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:103
 msgid "Network"
 msgstr "Redes"
 
-#: ../../network/utils_notify.go:108
+#: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "El interruptor físico de la tarjeta WLAN está en apagado, por favor enciéndalo cuando sea necesario."
 
-#: ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
 msgstr "El proxy del sistema fue configurado correctamente."
 
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
 msgstr "El proxy del sistema ha sido cancelado."
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Battery Critical Low"
 msgstr "Batería crítica"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "El equipo ha estado en modo de suspensión; por favor, conéctelo"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Battery Low"
 msgstr "Batería baja"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "El equipo estará en modo de suspensión; por favor, conéctalo ahora"
 
-#: ../../system/timedated/manager_ifc.go:30
+#: ../../timedate/manager_ifc.go:54
 msgid "Authentication is required to set the system time."
 msgstr "Se requiere autenticación para configurar la hora del sistema."
 
-#: ../../system/timedated/manager_ifc.go:43
-msgid "Authentication is required to set the system timezone."
-msgstr "Se requiere autenticación para configurar la zona horaria del sistema."
+#: ../../timedate/manager_ifc.go:67
+msgid ""
+"Authentication is required to control whether network time synchronization "
+"shall be enabled."
+msgstr "Se requiere autenticación para controlar la sincronización de la hora por red si está activada."
 
-#: ../../system/timedated/manager_ifc.go:59
+#: ../../timedate/manager_ifc.go:87
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "Se requiere autenticación para controlar si el RTC almacena la hora local o UTC."
 
-#: ../../system/timedated/manager_ifc.go:74
-msgid ""
-"Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "Se requiere autenticación para controlar la sincronización de la hora por red si está activada."
+#: ../../timedate/manager_ifc.go:106
+msgid "Authentication is required to set the system timezone."
+msgstr "Se requiere autenticación para configurar la zona horaria del sistema."

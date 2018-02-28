@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2018-01-15 14:26+0000\n"
-"Last-Translator: MUHAAB SHAAM <muhaab.org@gmail.com>\n"
+"POT-Creation-Date: 2018-02-26 15:32+0800\n"
+"PO-Revision-Date: 2018-02-27 03:12+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,11 +63,11 @@ msgstr "عرض الشاشة"
 msgid "Setting display scaling"
 msgstr "إعدادات تحجيم العرض"
 
-#: ../../appearance/scale.go:75
+#: ../../appearance/scale.go:78
 msgid "Set successfully"
 msgstr "تم اﻹعداد بنجاح"
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -120,17 +120,17 @@ msgid "Message notification"
 msgstr "إشعار الرسائل"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
-#: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
+#: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "متصل"
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:96
-#: ../../network/utils_notify.go:100 ../../network/utils_notify.go:104
-#: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
-#: ../../network/utils_notify.go:214
+#: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:88 ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
+#: ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr "غير متصل"
 
@@ -146,31 +146,31 @@ msgstr "فشل الاتصال بالبلوتوث"
 msgid "Failed to connect %q, automatically ignored"
 msgstr "فشل الاتصال بـ  %q ، تجاهل تلقائياً"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:104
 msgid "_Open"
 msgstr "فتح"
 
-#: ../../dock/app_entry_menu.go:114
+#: ../../dock/app_entry_menu.go:111
 msgid "_Close All"
 msgstr "إغلاق الكل"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
 msgstr "_خروج بالقوة"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
 msgstr "إرساء"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
 msgstr "إلغاء الإرساء"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
 msgstr "كل النوافذ"
 
-#: ../../housekeeping/init.go:83
+#: ../../housekeeping/init.go:88
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "مساحة القرص غير كافية، يرجى التنظيف في الوقت المناسب"
 
@@ -346,11 +346,11 @@ msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة ل�
 msgid "System language has been changed, please log in again after logged out"
 msgstr "تم تغيير لغة النظام، يرجى تسجيل الدخول مرة أخرى بعد تسجيل الخروج."
 
-#: ../../langselector/locale_ifc.go:60
+#: ../../langselector/locale_ifc.go:74
 msgid "System language is being changed, please wait..."
 msgstr "يتم تغيير لغة النظام، يرجى الانتظار ..."
 
-#: ../../langselector/locale_ifc.go:66
+#: ../../langselector/locale_ifc.go:80
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
@@ -380,22 +380,22 @@ msgstr "تشغيل برنامج"
 msgid "Password required to connect %q"
 msgstr "كلمة المرور مطلوبة للإتصال ب %q"
 
-#: ../../network/manager_active.go:330
+#: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:332
+#: ../../network/manager_active.go:319
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
-#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:321 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "تلقائي"
 
-#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:337
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -404,45 +404,45 @@ msgstr "تلقائي"
 msgid "None"
 msgstr "لا شيء"
 
-#: ../../network/manager_active.go:352
+#: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_active.go:354
+#: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr "MD5 "
 
-#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr "نفق TLS"
 
-#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr "EAP محمي"
@@ -1334,14 +1334,14 @@ msgstr "ضعيف"
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
-#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
+#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
 msgstr "تم الحفظ"
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
-#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
+#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
 msgstr "السؤال دائماً"
 
@@ -1349,7 +1349,7 @@ msgstr "السؤال دائماً"
 #: ../../network/nm_setting_vpn_openvpn.go:35
 #: ../../network/nm_setting_vpn_openvpn.go:331
 #: ../../network/nm_setting_vpn_pptp.go:38
-#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
+#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
 msgstr "غير مطلوب"
 
@@ -1785,8 +1785,8 @@ msgid "GSM Modem's SIM PUK required"
 msgstr "مطلوب رمز   PUK للبطاقة SIM للمودم GSM."
 
 #: ../../network/state_handler.go:82
-msgid "Wrong GSM Modem's SIM"
-msgstr "خطأ في بطاقة \"SIM\" الخاصة بمودم الاتصال GSM"
+msgid "SIM card error in GSM Modem"
+msgstr ""
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
@@ -1797,8 +1797,8 @@ msgid "A connection dependency failed"
 msgstr "تعذر اعتماد الاتصال."
 
 #: ../../network/state_handler.go:85
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
-msgstr "توجد مشكلة بالإيثرنت RFC 2684 عبر جسر الـ ADSL."
+msgid "RFC 2684 Ethernet bridging error to ADSL"
+msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
@@ -1925,7 +1925,7 @@ msgstr "%q متصل"
 msgid "Hotspot share turned off"
 msgstr "تم إيقاف مشاركة نقطة الاتصال"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:300
+#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
 msgid "%q disconnected"
 msgstr "%q غير متصل"
 
@@ -1937,78 +1937,82 @@ msgstr "لا يمكن مشاركة نقطة الإتصال, رجاءً تأكد 
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
-#: ../../network/state_handler.go:298
+#: ../../network/state_handler.go:297
+msgid "Unable to connect %q, please check your router or net cable."
+msgstr ""
+
+#: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "خطأ في الإتصال, لا يمكن الإتصال ب %q, كلمة مرور خاطئة"
 
-#: ../../network/utils_dbus_nm.go:332
+#: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:80
 msgid "You are now offline."
 msgstr "أنت اﻵن غير متصل"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
 msgstr "تم تفعيل وضع الطيران"
 
-#: ../../network/utils_notify.go:104
+#: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
 msgstr "نقطة الوصول غير معتمدة من طرف هذا الجهاز"
 
-#: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:103
 msgid "Network"
 msgstr "الشبكة"
 
-#: ../../network/utils_notify.go:108
+#: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "مبدل الجهاز لبطاقة الشبكة \"متوقف\" ، يرجى التبديل على حسب الضرورة ."
 
-#: ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
 msgstr "تم تعيين وكيل النظام بنجاح"
 
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
 msgstr "تم إلغاء وكيل النظام"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Battery Critical Low"
 msgstr "انخفاض حاد في طاقة البطارية"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "الحاسوب في وضع اﻹسبات ، يرجى وصل قابس الطاقة."
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Battery Low"
 msgstr "طاقة البطارية منخفضة"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "الحاسوب سيكون في وضع اﻹسبات، يرجى وصل قابس الطاقة الآن."
 
-#: ../../system/timedated/manager_ifc.go:30
+#: ../../timedate/manager_ifc.go:54
 msgid "Authentication is required to set the system time."
 msgstr "المصادقة مطلوبة لضبط وقت النظام."
 
-#: ../../system/timedated/manager_ifc.go:43
-msgid "Authentication is required to set the system timezone."
-msgstr "المصادقة مطلوبة لضبط المنطقة الزمنية للنظام."
+#: ../../timedate/manager_ifc.go:67
+msgid ""
+"Authentication is required to control whether network time synchronization "
+"shall be enabled."
+msgstr "المصادقة مطلوبة للتحكم بما إذا كان سيتم تمكين تزامن وقت الشبكة."
 
-#: ../../system/timedated/manager_ifc.go:59
+#: ../../timedate/manager_ifc.go:87
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق."
 
-#: ../../system/timedated/manager_ifc.go:74
-msgid ""
-"Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "المصادقة مطلوبة للتحكم بما إذا كان سيتم تمكين تزامن وقت الشبكة."
+#: ../../timedate/manager_ifc.go:106
+msgid "Authentication is required to set the system timezone."
+msgstr "المصادقة مطلوبة لضبط المنطقة الزمنية للنظام."

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Cindy0514 <zhuxiujuan@deepin.com>, 2018
 # deepin_transifex <xiabin@linuxdeepin.com>, 2017
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
@@ -13,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-02 15:12+0800\n"
-"PO-Revision-Date: 2017-11-24 03:36+0000\n"
-"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"POT-Creation-Date: 2018-02-26 15:32+0800\n"
+"PO-Revision-Date: 2018-02-27 06:40+0000\n"
+"Last-Translator: Cindy0514 <zhuxiujuan@deepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -65,11 +66,11 @@ msgstr "屏幕缩放"
 msgid "Setting display scaling"
 msgstr "即将设置屏幕缩放"
 
-#: ../../appearance/scale.go:75
+#: ../../appearance/scale.go:78
 msgid "Set successfully"
 msgstr "设置成功"
 
-#: ../../appearance/scale.go:76
+#: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
 msgstr "设置屏幕缩放后请注销用户再查看"
 
@@ -122,17 +123,17 @@ msgid "Message notification"
 msgstr "消息通知"
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
-#: ../../network/dev_test.go:132 ../../network/utils_notify.go:119
+#: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "已连接"
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:96
-#: ../../network/utils_notify.go:100 ../../network/utils_notify.go:104
-#: ../../network/utils_notify.go:122 ../../network/utils_notify.go:125
-#: ../../network/utils_notify.go:214
+#: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:88 ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
+#: ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr "断开"
 
@@ -148,31 +149,31 @@ msgstr "蓝牙连接失败"
 msgid "Failed to connect %q, automatically ignored"
 msgstr "连接%q失败，已自动忽略此设备"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:104
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: ../../dock/app_entry_menu.go:114
+#: ../../dock/app_entry_menu.go:111
 msgid "_Close All"
 msgstr "关闭所有(_C)"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
 msgstr "强制退出"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
 msgstr "驻留(_D)"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
 msgstr "移除驻留(_U)"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
 msgstr "所有窗口(_A)"
 
-#: ../../housekeeping/init.go:83
+#: ../../housekeeping/init.go:88
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "系统磁盘空间不足，请及时清理！"
 
@@ -348,11 +349,11 @@ msgstr "系统语言切换失败，请稍后重试"
 msgid "System language has been changed, please log in again after logged out"
 msgstr "语言切换成功，请注销后重新登录"
 
-#: ../../langselector/locale_ifc.go:60
+#: ../../langselector/locale_ifc.go:74
 msgid "System language is being changed, please wait..."
 msgstr "正在切换系统语言，请稍后…"
 
-#: ../../langselector/locale_ifc.go:66
+#: ../../langselector/locale_ifc.go:80
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
@@ -382,22 +383,22 @@ msgstr "运行软件"
 msgid "Password required to connect %q"
 msgstr "连接%q需要密码"
 
-#: ../../network/manager_active.go:330
+#: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A（5 GHz）"
 
-#: ../../network/manager_active.go:332
+#: ../../network/manager_active.go:319
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG（2.4 GHz）"
 
-#: ../../network/manager_active.go:334 ../../network/nm_setting_802_1x.go:146
+#: ../../network/manager_active.go:321 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
 msgstr "自动"
 
-#: ../../network/manager_active.go:345 ../../network/manager_active.go:350
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:337
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -406,45 +407,45 @@ msgstr "自动"
 msgid "None"
 msgstr "无"
 
-#: ../../network/manager_active.go:352
+#: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr "WEP40/128位密钥"
 
-#: ../../network/manager_active.go:354
+#: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2个人版"
 
-#: ../../network/manager_active.go:362 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:364 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:366 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:368 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:370 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr "隧道TLS"
 
-#: ../../network/manager_active.go:372 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr "受保护的EAP"
@@ -1336,14 +1337,14 @@ msgstr "弱"
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
-#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:165
+#: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
 msgstr "已保存的"
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
-#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:167
+#: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
 msgstr "总是询问"
 
@@ -1351,7 +1352,7 @@ msgstr "总是询问"
 #: ../../network/nm_setting_vpn_openvpn.go:35
 #: ../../network/nm_setting_vpn_openvpn.go:331
 #: ../../network/nm_setting_vpn_pptp.go:38
-#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:168
+#: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
 msgstr "不要求"
 
@@ -1787,8 +1788,8 @@ msgid "GSM Modem's SIM PUK required"
 msgstr "需要GSM调制解调器SIM卡PUK码"
 
 #: ../../network/state_handler.go:82
-msgid "Wrong GSM Modem's SIM"
-msgstr "GSM调制解调器SIM卡错误 "
+msgid "SIM card error in GSM Modem"
+msgstr "GSM调制解调器SIM卡错误"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
@@ -1799,7 +1800,7 @@ msgid "A connection dependency failed"
 msgstr "连接依赖失败"
 
 #: ../../network/state_handler.go:85
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
+msgid "RFC 2684 Ethernet bridging error to ADSL"
 msgstr "RFC 2684以太网桥接到ADSL上错误"
 
 #: ../../network/state_handler.go:86
@@ -1873,7 +1874,7 @@ msgstr "用户断开致使VPN连接状态改变"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr "用户断开致使VPN连接状态改变"
+msgstr "设备断开致使VPN连接状态改变"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1927,7 +1928,7 @@ msgstr "已连接%q"
 msgid "Hotspot share turned off"
 msgstr "热点共享已关闭"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:300
+#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
 msgid "%q disconnected"
 msgstr "%q已断开"
 
@@ -1939,78 +1940,82 @@ msgstr "无法共享热点，请检查dnsmasq 相关设置"
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "未能加入%q，请尝试靠近无线路由器。"
 
-#: ../../network/state_handler.go:298
+#: ../../network/state_handler.go:297
+msgid "Unable to connect %q, please check your router or net cable."
+msgstr "未能加入“%1”，请检查路由器或网线。"
+
+#: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "连接失败 未能加入%q，密码不正确"
 
-#: ../../network/utils_dbus_nm.go:332
+#: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
 msgstr "未知"
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:80
 msgid "You are now offline."
 msgstr "当前已离线。"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
 msgstr "飞行模式已启用"
 
-#: ../../network/utils_notify.go:104
+#: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式。"
 
-#: ../../network/utils_notify.go:108 ../../network/utils_notify.go:112
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:103
 msgid "Network"
 msgstr "网络"
 
-#: ../../network/utils_notify.go:108
+#: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
 
-#: ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
 msgstr "设置系统代理成功。"
 
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
 msgstr "系统代理已取消。"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Battery Critical Low"
 msgstr "电池电量耗尽"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:108
+#: ../../session/power/manager_events.go:130
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "计算机进入待机状态，请连接电源"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Battery Low"
 msgstr "电池电量低"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:136
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "计算机将要进入待机状态，请连接电源"
 
-#: ../../system/timedated/manager_ifc.go:30
+#: ../../timedate/manager_ifc.go:54
 msgid "Authentication is required to set the system time."
 msgstr "设置系统时间需要认证。"
 
-#: ../../system/timedated/manager_ifc.go:43
-msgid "Authentication is required to set the system timezone."
-msgstr "设置系统时区需要认证。"
+#: ../../timedate/manager_ifc.go:67
+msgid ""
+"Authentication is required to control whether network time synchronization "
+"shall be enabled."
+msgstr "打开或关闭网络时间同步需要认证。"
 
-#: ../../system/timedated/manager_ifc.go:59
+#: ../../timedate/manager_ifc.go:87
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "设置硬件时钟使用本地时间或 UTC 需要认证。"
 
-#: ../../system/timedated/manager_ifc.go:74
-msgid ""
-"Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "打开或关闭网络时间同步需要认证。"
+#: ../../timedate/manager_ifc.go:106
+msgid "Authentication is required to set the system timezone."
+msgstr "设置系统时区需要认证。"
