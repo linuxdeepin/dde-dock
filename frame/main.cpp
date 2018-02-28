@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     RegisterDdeSession();
 
-    QTimer::singleShot(500, &mw, &MainWindow::launch);
+    QTimer::singleShot(1, &mw, &MainWindow::launch);
 
     return app.exec();
 }
