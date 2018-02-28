@@ -23,8 +23,7 @@ HEADERS += \
     item/applet/devicecontrolwidget.h \
     item/applet/accesspoint.h \
     item/applet/accesspointwidget.h \
-    item/applet/horizontalseperator.h \
-    item/applet/refreshbutton.h
+    item/applet/horizontalseperator.h
 
 SOURCES += \
     networkplugin.cpp \
@@ -39,8 +38,7 @@ SOURCES += \
     item/applet/devicecontrolwidget.cpp \
     item/applet/accesspoint.cpp \
     item/applet/accesspointwidget.cpp \
-    item/applet/horizontalseperator.cpp \
-    item/applet/refreshbutton.cpp
+    item/applet/horizontalseperator.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

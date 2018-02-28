@@ -31,7 +31,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-class RefreshButton;
 class DeviceControlWidget : public QWidget
 {
     Q_OBJECT
@@ -47,6 +46,9 @@ signals:
     void deviceEnableChanged(const bool enable) const;
     void requestRefresh() const;
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void refreshNetwork();
 
@@ -54,8 +56,6 @@ private:
     QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
-    RefreshButton *m_refreshBtn;
-    QWidget *m_refreshView;
     DLoadingIndicator *m_loadingIndicator;
 };
 
