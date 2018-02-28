@@ -48,6 +48,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     m_loadingIndicator->setAniDuration(1000);
     m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
     m_loadingIndicator->installEventFilter(this);
+    m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
@@ -84,6 +85,7 @@ void DeviceControlWidget::setDeviceEnabled(const bool enable)
 {
     m_switchBtn->blockSignals(true);
     m_switchBtn->setChecked(enable);
+    m_loadingIndicator->setVisible(enable);
     m_switchBtn->blockSignals(false);
 }
 
