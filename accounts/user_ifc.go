@@ -49,50 +49,62 @@ func (u *User) GetDBusExportInfo() dbusutil.ExportInfo {
 
 func (u *User) SetFullName(sender dbus.Sender, name string) *dbus.Error {
 	logger.Debugf("[SetFullName] new name: %q", name)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
 
 	if err := u.accessAuthentication(sender, true); err != nil {
 		logger.Debug("[SetFullName] access denied:", err)
 		return dbusutil.ToError(err)
 	}
 
-	if err := users.ModifyFullName(name, u.UserName); err != nil {
-		logger.Warning("DoAction: modify full name failed:", err)
-		return dbusutil.ToError(err)
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if u.FullName != name {
+		if err := users.ModifyFullName(name, u.UserName); err != nil {
+			logger.Warning("DoAction: modify full name failed:", err)
+			return dbusutil.ToError(err)
+		}
+
+		u.FullName = name
+		u.emitPropChangedFullName(name)
 	}
-	u.setPropFullName(name)
+
 	return nil
 }
 
 func (u *User) SetHomeDir(sender dbus.Sender, home string) *dbus.Error {
 	logger.Debug("[SetHomeDir] new home:", home)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
+	if err := u.accessAuthentication(sender, true); err != nil {
+		logger.Debug("[SetHomeDir] access denied:", err)
+		return dbusutil.ToError(err)
+	}
 
 	if dutils.IsFileExist(home) {
 		// if new home already exists, the `usermod -m -d` command will fail.
 		return dbusutil.ToError(errors.New("new home already exists"))
 	}
 
-	if err := u.accessAuthentication(sender, true); err != nil {
-		logger.Debug("[SetHomeDir] access denied:", err)
-		return dbusutil.ToError(err)
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if u.HomeDir != home {
+		if err := users.ModifyHome(home, u.UserName); err != nil {
+			logger.Warning("DoAction: modify home failed:", err)
+			return dbusutil.ToError(err)
+		}
+		u.HomeDir = home
+		u.emitPropChangedHomeDir(home)
 	}
 
-	if err := users.ModifyHome(home, u.UserName); err != nil {
-		logger.Warning("DoAction: modify home failed:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.setPropHomeDir(home)
 	return nil
 }
 
 func (u *User) SetShell(sender dbus.Sender, shell string) *dbus.Error {
 	logger.Debug("[SetShell] new shell:", shell)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
+
+	if err := u.accessAuthentication(sender, true); err != nil {
+		logger.Debug("[SetShell] access denied:", err)
+		return dbusutil.ToError(err)
+	}
 
 	shells := getAvailableShells("/etc/shells")
 	if len(shells) == 0 {
@@ -107,24 +119,23 @@ func (u *User) SetShell(sender dbus.Sender, shell string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	if err := u.accessAuthentication(sender, true); err != nil {
-		logger.Debug("[SetShell] access denied:", err)
-		return dbusutil.ToError(err)
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if u.Shell != shell {
+		if err := users.ModifyShell(shell, u.UserName); err != nil {
+			logger.Warning("DoAction: modify shell failed:", err)
+			return dbusutil.ToError(err)
+		}
+		u.Shell = shell
+		u.emitPropChangedShell(shell)
 	}
 
-	if err := users.ModifyShell(shell, u.UserName); err != nil {
-		logger.Warning("DoAction: modify shell failed:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.setPropShell(shell)
 	return nil
 }
 
 func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 	logger.Debug("[SetPassword] start ...")
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
 
 	if err := u.accessAuthentication(sender, true); err != nil {
 		logger.Debug("[SetPassword] access denied:", err)
@@ -136,37 +147,44 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	if err := users.LockedUser(false, u.UserName); err != nil {
-		logger.Warning("DoAction: unlock user failed:", err)
-		return dbusutil.ToError(err)
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if u.Locked != false {
+		if err := users.LockedUser(false, u.UserName); err != nil {
+			logger.Warning("DoAction: unlock user failed:", err)
+			return dbusutil.ToError(err)
+		}
+		u.Locked = false
+		u.emitPropChangedLocked(false)
 	}
-	u.setPropLocked(false)
 	return nil
 }
 
 func (u *User) SetAccountType(sender dbus.Sender, ty int32) *dbus.Error {
 	logger.Debug("[SetAccountType] type:", ty)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
 
 	if err := u.accessAuthentication(sender, false); err != nil {
 		logger.Debug("[SetAccountType] access denied:", err)
 		return dbusutil.ToError(err)
 	}
 
-	if err := users.SetUserType(ty, u.UserName); err != nil {
-		logger.Warning("DoAction: set user type failed:", err)
-		return dbusutil.ToError(err)
-	}
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
 
-	u.setPropAccountType(ty)
+	if u.AccountType != ty {
+		if err := users.SetUserType(ty, u.UserName); err != nil {
+			logger.Warning("DoAction: set user type failed:", err)
+			return dbusutil.ToError(err)
+		}
+		u.AccountType = ty
+		u.emitPropChangedAccountType(ty)
+	}
 	return nil
 }
 
 func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 	logger.Debug("[SetLocked] locked:", locked)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
 
 	pid, err := u.service.GetConnPID(string(sender))
 	if err != nil {
@@ -178,22 +196,32 @@ func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	if err := users.LockedUser(locked, u.UserName); err != nil {
-		logger.Warning("DoAction: locked user failed:", err)
-		return dbusutil.ToError(err)
-	}
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
 
-	if locked && u.AutomaticLogin {
-		users.SetAutoLoginUser("", "")
+	if u.Locked != locked {
+		if err := users.LockedUser(locked, u.UserName); err != nil {
+			logger.Warning("DoAction: locked user failed:", err)
+			return dbusutil.ToError(err)
+		}
+
+		u.Locked = locked
+		u.emitPropChangedLocked(locked)
+
+		if locked && u.AutomaticLogin {
+			if err := users.SetAutoLoginUser("", ""); err != nil {
+				logger.Warning("failed to clear auto login user:", err)
+				return dbusutil.ToError(err)
+			}
+			u.AutomaticLogin = false
+			u.emitPropChangedAutomaticLogin(false)
+		}
 	}
-	u.setPropLocked(locked)
 	return nil
 }
 
 func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
 	logger.Debug("[SetAutomaticLogin] auto", auto)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
 
 	pid, err := u.service.GetConnPID(string(sender))
 	if err != nil {
@@ -205,8 +233,15 @@ func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
 	if u.Locked {
 		return dbusutil.ToError(fmt.Errorf("user %s has been locked", u.UserName))
+	}
+
+	if u.AutomaticLogin == auto {
+		return nil
 	}
 
 	var name = u.UserName
@@ -223,14 +258,13 @@ func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	u.setPropAutomaticLogin(auto)
+	u.AutomaticLogin = auto
+	u.emitPropChangedAutomaticLogin(auto)
 	return nil
 }
 
 func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error {
 	logger.Debug("[EnableNoPasswdLogin] enabled:", enabled)
-	u.syncLocker.Lock()
-	defer u.syncLocker.Unlock()
 
 	pid, err := u.service.GetConnPID(string(sender))
 	if err != nil {
@@ -241,6 +275,9 @@ func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error
 		logger.Debug("[EnableNoPasswdLogin] access denied:", err)
 		return dbusutil.ToError(err)
 	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
 
 	if u.Locked {
 		return dbusutil.ToError(fmt.Errorf("user %s has been locked", u.UserName))
@@ -255,7 +292,8 @@ func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error
 		return dbusutil.ToError(err)
 	}
 
-	u.setPropNoPasswdLogin(enabled)
+	u.NoPasswdLogin = enabled
+	u.emitPropChangedNoPasswdLogin(enabled)
 	return nil
 }
 
@@ -274,21 +312,25 @@ func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 		}
 	}
 
-	if u.Locale == locale {
-		return nil
-	}
-
 	if !lang_info.IsSupportedLocale(locale) {
 		err := fmt.Errorf("invalid locale %q", locale)
 		logger.Debug("[SetLocale]", err)
 		return dbusutil.ToError(err)
 	}
 
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if u.Locale == locale {
+		return nil
+	}
+
 	err = u.writeUserConfigWithChange(confKeyLocale, locale)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	u.setPropLocale(locale)
+	u.Locale = locale
+	u.emitPropChangedLocale(locale)
 	return nil
 }
 
@@ -306,16 +348,21 @@ func (u *User) SetLayout(sender dbus.Sender, layout string) *dbus.Error {
 		}
 	}
 
+	// TODO: check layout validity
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
 	if u.Layout == layout {
 		return nil
 	}
 
-	// TODO: check layout validity
 	err = u.writeUserConfigWithChange(confKeyLayout, layout)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	u.setPropLayout(layout)
+	u.Layout = layout
+	u.emitPropChangedLayout(layout)
 	return nil
 }
 
@@ -336,15 +383,17 @@ func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
 	iconFile := dutils.DecodeURI(iconURI)
 
-	currentIconFile := u.getPropIconFile()
-	if currentIconFile == iconURI {
-		return nil
-	}
-
 	if !gdkpixbuf.IsSupportedImage(iconFile) {
 		err := fmt.Errorf("%q is not a image file", iconFile)
 		logger.Debug(err)
 		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if u.IconFile == iconURI {
+		return nil
 	}
 
 	newIconURI, added, err := u.setIconFile(iconURI)
@@ -380,7 +429,8 @@ func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 		}
 	}
 
-	u.setPropIconFile(newIconURI)
+	u.IconFile = newIconURI
+	u.emitPropChangedIconFile(newIconURI)
 	return nil
 }
 
@@ -411,13 +461,15 @@ func (u *User) DeleteIconFile(sender dbus.Sender, icon string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
 	// set custom icon to empty
 	err = u.writeUserConfigWithChange(confKeyCustomIcon, "")
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
 	u.customIcon = ""
-
 	u.updateIconList()
 	return nil
 }
@@ -445,6 +497,9 @@ func (u *User) SetDesktopBackgrounds(sender dbus.Sender, val []string) *dbus.Err
 		newVal[idx] = dutils.EncodeURI(file, dutils.SCHEME_FILE)
 	}
 
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
 	if strv.Strv(u.DesktopBackgrounds).Equal(newVal) {
 		return nil
 	}
@@ -454,7 +509,8 @@ func (u *User) SetDesktopBackgrounds(sender dbus.Sender, val []string) *dbus.Err
 		return dbusutil.ToError(err)
 	}
 
-	u.setPropDesktopBackgrounds(newVal)
+	u.DesktopBackgrounds = newVal
+	u.emitPropChangedDesktopBackgrounds(newVal)
 	return nil
 }
 
@@ -472,10 +528,6 @@ func (u *User) SetGreeterBackground(sender dbus.Sender, bg string) *dbus.Error {
 		}
 	}
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
-	if u.GreeterBackground == bg {
-		genGaussianBlur(bg)
-		return nil
-	}
 
 	if !isBackgroundValid(bg) {
 		err := ErrInvalidBackground{bg}
@@ -483,13 +535,22 @@ func (u *User) SetGreeterBackground(sender dbus.Sender, bg string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	u.PropsMu.Lock()
+	defer func() {
+		u.PropsMu.Unlock()
+		genGaussianBlur(bg)
+	}()
+
+	if u.GreeterBackground == bg {
+		return nil
+	}
+
 	err = u.writeUserConfigWithChange(confKeyGreeterBackground, bg)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	u.setPropGreeterBackground(bg)
-
-	genGaussianBlur(bg)
+	u.GreeterBackground = bg
+	u.emitPropChangedGreeterBackground(bg)
 	return nil
 }
 
@@ -507,21 +568,28 @@ func (u *User) SetHistoryLayout(sender dbus.Sender, list []string) *dbus.Error {
 		}
 	}
 
+	// TODO: check layout list whether validity
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
 	if isStrvEqual(u.HistoryLayout, list) {
 		return nil
 	}
 
-	// TODO: check layout list whether validity
 	err = u.writeUserConfigWithChange(confKeyHistoryLayout, list)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	u.setPropHistoryLayout(list)
-
+	u.HistoryLayout = list
+	u.emitPropChangedHistoryLayout(list)
 	return nil
 }
 
 func (u *User) IsIconDeletable(iconURI string) bool {
+	u.PropsMu.RLock()
+	defer u.PropsMu.RUnlock()
+
 	if iconURI != u.IconFile && iconURI == u.customIcon {
 		// iconURI is custom icon, and not current icon
 		return true
@@ -531,8 +599,10 @@ func (u *User) IsIconDeletable(iconURI string) bool {
 
 // 获取当前头像的大图标
 func (u *User) GetLargeIcon() string {
+	u.PropsMu.RLock()
 	baseName := path.Base(u.IconFile)
 	dir := path.Dir(dutils.DecodeURI(u.IconFile))
+	u.PropsMu.RUnlock()
 
 	filename := path.Join(dir, "bigger", baseName)
 	if !dutils.IsFileExist(filename) {

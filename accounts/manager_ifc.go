@@ -227,17 +227,21 @@ func (m *Manager) AllowGuestAccount(sender dbus.Sender, allow bool) *dbus.Error 
 		return dbusutil.ToError(err)
 	}
 
-	if allow == isGuestUserEnabled() {
+	m.PropsMu.Lock()
+	defer m.PropsMu.Unlock()
+
+	if m.AllowGuest == allow {
 		return nil
 	}
 
 	success := dutils.WriteKeyToKeyFile(actConfigFile,
 		actConfigGroupGroup, actConfigKeyGuest, allow)
 	if !success {
-		return dbusutil.ToError(errors.New("Enable guest user failed"))
+		return dbusutil.ToError(errors.New("enable guest user failed"))
 	}
-	m.setPropAllowGuest(allow)
 
+	m.AllowGuest = allow
+	m.emitPropChangedAllowGuest(allow)
 	return nil
 }
 

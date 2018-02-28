@@ -48,9 +48,7 @@ type Grub2 struct {
 	mkconfigManager *MkconfigManager
 	entries         []Entry
 	theme           *Theme
-	setPropMu       sync.Mutex
-
-	PropsMaster dbusutil.PropsMaster
+	PropsMu         sync.RWMutex
 	// props:
 	DefaultEntry string
 	EnableTheme  bool
@@ -333,7 +331,7 @@ func (g *Grub2) getScreenWidthHeight() (w, h uint16, err error) {
 
 func (g *Grub2) canSafelyExit() bool {
 	logger.Debug("call canSafelyExit")
-	if g.mkconfigManager.IsRunning() || g.theme.getPropUpdating() {
+	if g.mkconfigManager.IsRunning() || g.theme.isUpdating() {
 		return false
 	}
 	return true

@@ -56,11 +56,10 @@ func Run() {
 	}
 
 	service.SetAutoQuitHandler(time.Minute*5, func() bool {
-		if lang.getPropLocaleState() == LocaleStateChanging {
-			return false
-		} else {
-			return true
-		}
+		lang.PropsMu.RLock()
+		canQuit := lang.LocaleState != LocaleStateChanging
+		lang.PropsMu.RUnlock()
+		return canQuit
 	})
 	service.Wait()
 }

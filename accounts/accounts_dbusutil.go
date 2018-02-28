@@ -1,409 +1,262 @@
 package accounts
 
 func (v *Manager) setPropAllowGuest(value bool) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.AllowGuest != value {
 		v.AllowGuest = value
-		changed = true
+		v.emitPropChangedAllowGuest(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "AllowGuest", value)
-	}
-	return
+	return false
 }
 
-func (v *Manager) getPropAllowGuest() bool {
-	v.PropsMaster.RLock()
-	value := v.AllowGuest
-	v.PropsMaster.RUnlock()
-	return value
+func (v *Manager) emitPropChangedAllowGuest(value bool) error {
+	return v.service.EmitPropertyChanged(v, "AllowGuest", value)
 }
 
 func (v *User) setPropUserName(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.UserName != value {
 		v.UserName = value
-		changed = true
+		v.emitPropChangedUserName(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "UserName", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropUserName() string {
-	v.PropsMaster.RLock()
-	value := v.UserName
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedUserName(value string) error {
+	return v.service.EmitPropertyChanged(v, "UserName", value)
 }
 
 func (v *User) setPropFullName(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.FullName != value {
 		v.FullName = value
-		changed = true
+		v.emitPropChangedFullName(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "FullName", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropFullName() string {
-	v.PropsMaster.RLock()
-	value := v.FullName
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedFullName(value string) error {
+	return v.service.EmitPropertyChanged(v, "FullName", value)
 }
 
 func (v *User) setPropUid(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.Uid != value {
 		v.Uid = value
-		changed = true
+		v.emitPropChangedUid(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "Uid", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropUid() string {
-	v.PropsMaster.RLock()
-	value := v.Uid
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedUid(value string) error {
+	return v.service.EmitPropertyChanged(v, "Uid", value)
 }
 
 func (v *User) setPropGid(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.Gid != value {
 		v.Gid = value
-		changed = true
+		v.emitPropChangedGid(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "Gid", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropGid() string {
-	v.PropsMaster.RLock()
-	value := v.Gid
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedGid(value string) error {
+	return v.service.EmitPropertyChanged(v, "Gid", value)
 }
 
 func (v *User) setPropHomeDir(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.HomeDir != value {
 		v.HomeDir = value
-		changed = true
+		v.emitPropChangedHomeDir(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "HomeDir", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropHomeDir() string {
-	v.PropsMaster.RLock()
-	value := v.HomeDir
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedHomeDir(value string) error {
+	return v.service.EmitPropertyChanged(v, "HomeDir", value)
 }
 
 func (v *User) setPropShell(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.Shell != value {
 		v.Shell = value
-		changed = true
+		v.emitPropChangedShell(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "Shell", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropShell() string {
-	v.PropsMaster.RLock()
-	value := v.Shell
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedShell(value string) error {
+	return v.service.EmitPropertyChanged(v, "Shell", value)
 }
 
 func (v *User) setPropLocale(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.Locale != value {
 		v.Locale = value
-		changed = true
+		v.emitPropChangedLocale(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "Locale", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropLocale() string {
-	v.PropsMaster.RLock()
-	value := v.Locale
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedLocale(value string) error {
+	return v.service.EmitPropertyChanged(v, "Locale", value)
 }
 
 func (v *User) setPropLayout(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.Layout != value {
 		v.Layout = value
-		changed = true
+		v.emitPropChangedLayout(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "Layout", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropLayout() string {
-	v.PropsMaster.RLock()
-	value := v.Layout
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedLayout(value string) error {
+	return v.service.EmitPropertyChanged(v, "Layout", value)
 }
 
 func (v *User) setPropIconFile(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.IconFile != value {
 		v.IconFile = value
-		changed = true
+		v.emitPropChangedIconFile(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "IconFile", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropIconFile() string {
-	v.PropsMaster.RLock()
-	value := v.IconFile
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedIconFile(value string) error {
+	return v.service.EmitPropertyChanged(v, "IconFile", value)
 }
 
 func (v *User) setPropDesktopBackgrounds(value []string) {
-	v.PropsMaster.Lock()
 	v.DesktopBackgrounds = value
-	v.PropsMaster.Unlock()
-	if v.service != nil {
-		v.PropsMaster.NotifyChanged(v, v.service, "DesktopBackgrounds", value)
-	}
+	v.emitPropChangedDesktopBackgrounds(value)
 }
 
-func (v *User) getPropDesktopBackgrounds() []string {
-	v.PropsMaster.RLock()
-	value := v.DesktopBackgrounds
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedDesktopBackgrounds(value []string) error {
+	return v.service.EmitPropertyChanged(v, "DesktopBackgrounds", value)
 }
 
 func (v *User) setPropGreeterBackground(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.GreeterBackground != value {
 		v.GreeterBackground = value
-		changed = true
+		v.emitPropChangedGreeterBackground(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "GreeterBackground", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropGreeterBackground() string {
-	v.PropsMaster.RLock()
-	value := v.GreeterBackground
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedGreeterBackground(value string) error {
+	return v.service.EmitPropertyChanged(v, "GreeterBackground", value)
 }
 
 func (v *User) setPropXSession(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.XSession != value {
 		v.XSession = value
-		changed = true
+		v.emitPropChangedXSession(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "XSession", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropXSession() string {
-	v.PropsMaster.RLock()
-	value := v.XSession
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedXSession(value string) error {
+	return v.service.EmitPropertyChanged(v, "XSession", value)
 }
 
 func (v *User) setPropLocked(value bool) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.Locked != value {
 		v.Locked = value
-		changed = true
+		v.emitPropChangedLocked(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "Locked", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropLocked() bool {
-	v.PropsMaster.RLock()
-	value := v.Locked
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedLocked(value bool) error {
+	return v.service.EmitPropertyChanged(v, "Locked", value)
 }
 
 func (v *User) setPropAutomaticLogin(value bool) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.AutomaticLogin != value {
 		v.AutomaticLogin = value
-		changed = true
+		v.emitPropChangedAutomaticLogin(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "AutomaticLogin", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropAutomaticLogin() bool {
-	v.PropsMaster.RLock()
-	value := v.AutomaticLogin
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedAutomaticLogin(value bool) error {
+	return v.service.EmitPropertyChanged(v, "AutomaticLogin", value)
 }
 
 func (v *User) setPropSystemAccount(value bool) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.SystemAccount != value {
 		v.SystemAccount = value
-		changed = true
+		v.emitPropChangedSystemAccount(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "SystemAccount", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropSystemAccount() bool {
-	v.PropsMaster.RLock()
-	value := v.SystemAccount
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedSystemAccount(value bool) error {
+	return v.service.EmitPropertyChanged(v, "SystemAccount", value)
 }
 
 func (v *User) setPropNoPasswdLogin(value bool) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.NoPasswdLogin != value {
 		v.NoPasswdLogin = value
-		changed = true
+		v.emitPropChangedNoPasswdLogin(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "NoPasswdLogin", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropNoPasswdLogin() bool {
-	v.PropsMaster.RLock()
-	value := v.NoPasswdLogin
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedNoPasswdLogin(value bool) error {
+	return v.service.EmitPropertyChanged(v, "NoPasswdLogin", value)
 }
 
 func (v *User) setPropAccountType(value int32) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.AccountType != value {
 		v.AccountType = value
-		changed = true
+		v.emitPropChangedAccountType(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "AccountType", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropAccountType() int32 {
-	v.PropsMaster.RLock()
-	value := v.AccountType
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedAccountType(value int32) error {
+	return v.service.EmitPropertyChanged(v, "AccountType", value)
 }
 
 func (v *User) setPropLoginTime(value uint64) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.LoginTime != value {
 		v.LoginTime = value
-		changed = true
+		v.emitPropChangedLoginTime(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "LoginTime", value)
-	}
-	return
+	return false
 }
 
-func (v *User) getPropLoginTime() uint64 {
-	v.PropsMaster.RLock()
-	value := v.LoginTime
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedLoginTime(value uint64) error {
+	return v.service.EmitPropertyChanged(v, "LoginTime", value)
 }
 
 func (v *User) setPropIconList(value []string) {
-	v.PropsMaster.Lock()
 	v.IconList = value
-	v.PropsMaster.Unlock()
-	if v.service != nil {
-		v.PropsMaster.NotifyChanged(v, v.service, "IconList", value)
-	}
+	v.emitPropChangedIconList(value)
 }
 
-func (v *User) getPropIconList() []string {
-	v.PropsMaster.RLock()
-	value := v.IconList
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedIconList(value []string) error {
+	return v.service.EmitPropertyChanged(v, "IconList", value)
 }
 
 func (v *User) setPropHistoryLayout(value []string) {
-	v.PropsMaster.Lock()
 	v.HistoryLayout = value
-	v.PropsMaster.Unlock()
-	if v.service != nil {
-		v.PropsMaster.NotifyChanged(v, v.service, "HistoryLayout", value)
-	}
+	v.emitPropChangedHistoryLayout(value)
 }
 
-func (v *User) getPropHistoryLayout() []string {
-	v.PropsMaster.RLock()
-	value := v.HistoryLayout
-	v.PropsMaster.RUnlock()
-	return value
+func (v *User) emitPropChangedHistoryLayout(value []string) error {
+	return v.service.EmitPropertyChanged(v, "HistoryLayout", value)
 }

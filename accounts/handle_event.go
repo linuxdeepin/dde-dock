@@ -117,7 +117,7 @@ func (m *Manager) handleFileGroupChanged() {
 	defer m.usersMapMu.Unlock()
 	for _, u := range m.usersMap {
 		u.updatePropAccountType()
-		u.setPropNoPasswdLogin(users.CanNoPasswdLogin(u.UserName))
+		u.updatePropCanNoPasswdLogin()
 	}
 }
 
@@ -132,7 +132,7 @@ func (m *Manager) handleFileShadowChanged() {
 
 func (m *Manager) handleDMConfigChanged() {
 	for _, u := range m.usersMap {
-		u.setPropAutomaticLogin(users.IsAutoLoginUser(u.UserName))
+		u.updatePropAutomaticLogin()
 	}
 }
 

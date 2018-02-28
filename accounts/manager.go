@@ -43,8 +43,8 @@ const (
 //go:generate dbusutil-gen -type Manager,User manager.go user.go
 
 type Manager struct {
-	service     *dbusutil.Service
-	PropsMaster dbusutil.PropsMaster
+	service *dbusutil.Service
+	PropsMu sync.RWMutex
 
 	UserList   []string
 	UserListMu sync.RWMutex

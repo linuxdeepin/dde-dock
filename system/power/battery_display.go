@@ -27,9 +27,7 @@ import (
 
 func (m *Manager) refreshBatteryDisplay() {
 	logger.Debug("refreshBatteryDisplay")
-	m.batteriesMu.Lock()
 	defer func() {
-		m.batteriesMu.Unlock()
 		timestamp := time.Now().Unix()
 		m.service.Emit(m, "BatteryDisplayUpdate", timestamp)
 	}()
@@ -50,23 +48,29 @@ func (m *Manager) refreshBatteryDisplay() {
 		}
 
 		// copy from bat0
+		bat0.PropsMu.RLock()
 		percentage = bat0.Percentage
 		status = bat0.Status
 		timeToEmpty = bat0.TimeToEmpty
 		timeToFull = bat0.TimeToFull
+		bat0.PropsMu.RUnlock()
 	} else {
 		var energyTotal, energyFullTotal, energyRateTotal float64
+		statusSlice := make([]battery.Status, 0, batteryCount)
 		for _, bat := range m.batteries {
+			bat.PropsMu.RLock()
 			energyTotal += bat.Energy
 			energyFullTotal += bat.EnergyFull
 			energyRateTotal += bat.EnergyRate
+			statusSlice = append(statusSlice, bat.Status)
+			bat.PropsMu.RUnlock()
 		}
 		logger.Debugf("energyTotal: %v", energyTotal)
 		logger.Debugf("energyFullTotal: %v", energyFullTotal)
 		logger.Debugf("energyRateTotal: %v", energyRateTotal)
 
 		percentage = rightPercentage(energyTotal / energyFullTotal * 100.0)
-		status = m.getBatteryDisplayStatus()
+		status = battery.GetDisplayStatus(statusSlice)
 
 		if energyRateTotal > 0 {
 			if status == battery.StatusDischarging {
@@ -87,11 +91,13 @@ func (m *Manager) refreshBatteryDisplay() {
 	}
 
 	// report
+	m.PropsMu.Lock()
 	m.setPropHasBattery(true)
 	m.setPropBatteryPercentage(percentage)
 	m.setPropBatteryStatus(status)
 	m.setPropBatteryTimeToEmpty(timeToEmpty)
 	m.setPropBatteryTimeToFull(timeToFull)
+	m.PropsMu.Unlock()
 
 	logger.Debugf("percentage: %.1f%%", percentage)
 	logger.Debug("status:", status, uint32(status))
@@ -102,16 +108,14 @@ func (m *Manager) refreshBatteryDisplay() {
 		timeToFull)
 }
 
-func (m *Manager) getBatteryDisplayStatus() battery.Status {
-	return battery.GetDisplayStatus(m.getBatteriesStatus())
-}
-
 func (m *Manager) resetBatteryDisplay() {
+	m.PropsMu.Lock()
 	m.setPropHasBattery(false)
 	m.setPropBatteryPercentage(0)
-	m.setPropBatteryTimeToFull(0)
-	m.setPropBatteryTimeToEmpty(0)
 	m.setPropBatteryStatus(battery.StatusUnknown)
+	m.setPropBatteryTimeToEmpty(0)
+	m.setPropBatteryTimeToFull(0)
+	m.PropsMu.Unlock()
 }
 
 func rightPercentage(val float64) float64 {

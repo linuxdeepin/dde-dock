@@ -38,9 +38,9 @@ type Battery struct {
 	gudevClient       *gudev.Client
 	changedProperties []string
 
-	PropsMaster dbusutil.PropsMaster
-	SysfsPath   string
-	IsPresent   bool
+	PropsMu   sync.RWMutex
+	SysfsPath string
+	IsPresent bool
 
 	Manufacturer string
 	ModelName    string
@@ -116,104 +116,71 @@ func (bat *Battery) notifyChange(propNames ...string) {
 	bat.changedProperties = append(bat.changedProperties, propNames...)
 }
 
-func (bat *Battery) resetValues() {
-	logger.Debug("resetValues")
-	bat.setPropIsPresent(false)
-	bat.setPropUpdateTime(0)
-
-	bat.setPropManufacturer("")
-	bat.setPropModelName("")
-	bat.setPropSerialNumber("")
-	bat.setPropName("")
-	bat.setPropTechnology("")
-
-	bat.setPropEnergy(0)
-	bat.setPropEnergyFull(0)
-	bat.setPropEnergyFullDesign(0)
-	bat.setPropEnergyRate(0)
-
-	bat.setPropVoltage(0)
-	bat.setPropPercentage(0)
-	bat.setPropCapacity(0)
-	bat.setPropStatus(battery.StatusUnknown)
-	bat.setPropTimeToEmpty(0)
-	bat.setPropTimeToFull(0)
-}
-
 func (bat *Battery) refresh(dev *gudev.Device) {
+	endDelay := bat.service.DelayEmitPropertyChanged(bat)
 	batInfo := battery.GetBatteryInfo(dev)
-	bat.PropsMaster.Begin()
 	bat._refresh(batInfo)
-	bat.PropsMaster.End(bat, bat.service)
+	if endDelay != nil {
+		endDelay()
+	}
 }
 
 func (bat *Battery) _refresh(info *battery.BatteryInfo) {
 	logger.Debug("Refresh", bat.Name)
-
-	defer func() {
-		logger.Debugf("Refresh %v done", bat.Name)
-		if bat.refreshDone != nil {
-			go bat.refreshDone()
-		}
-	}()
-
+	isPresent := true
+	var updateTime int64
 	if info == nil {
-		bat.resetValues()
-		return
+		isPresent = false
+		info = &battery.BatteryInfo{}
+	} else {
+		now := time.Now()
+		updateTime = now.Unix()
+		logger.Debugf("now %v updateTime %v", now, updateTime)
 	}
-	bat.setPropIsPresent(true)
-	now := time.Now()
-	updateTime := now.Unix()
-	logger.Debugf("now %v updateTime %v", now, updateTime)
-	bat.setPropUpdateTime(updateTime)
 
 	logger.Debug("Name", info.Name)
-	bat.setPropName(info.Name)
-
 	logger.Debug("Technology", info.Technology)
-	bat.setPropTechnology(info.Technology)
-
 	logger.Debug("Manufacturer", info.Manufacturer)
-	bat.setPropManufacturer(info.Manufacturer)
-
 	logger.Debug("ModelName", info.ModelName)
-	bat.setPropModelName(info.ModelName)
-
 	logger.Debug("SerialNumber", info.SerialNumber)
-	bat.setPropSerialNumber(info.SerialNumber)
-
 	logger.Debugf("energy %v", info.Energy)
-	bat.setPropEnergy(info.Energy)
-
 	logger.Debugf("energyFull %v", info.EnergyFull)
-	bat.setPropEnergyFull(info.EnergyFull)
-
 	logger.Debugf("EnergyFullDesign %v", info.EnergyFullDesign)
-	bat.setPropEnergyFullDesign(info.EnergyFullDesign)
-
 	logger.Debugf("EnergyRate %v", info.EnergyRate)
-	bat.setPropEnergyRate(info.EnergyRate)
-
 	logger.Debugf("voltage %v", info.Voltage)
-	bat.setPropVoltage(info.Voltage)
-
 	logger.Debugf("percentage %.4f%%", info.Percentage)
-	bat.setPropPercentage(info.Percentage)
-
 	logger.Debugf("capacity %.4f%%", info.Capacity)
-	bat.setPropCapacity(info.Capacity)
-
 	logger.Debug("status", info.Status)
-	bat.setPropStatus(info.Status)
-
 	logger.Debugf("timeToEmpty %v (%vs), timeToFull %v (%vs)",
 		time.Duration(info.TimeToEmpty)*time.Second,
 		info.TimeToEmpty,
 		time.Duration(info.TimeToFull)*time.Second,
 		info.TimeToFull)
 
+	bat.PropsMu.Lock()
+	bat.setPropIsPresent(isPresent)
+	bat.setPropUpdateTime(updateTime)
+	bat.setPropName(info.Name)
+	bat.setPropTechnology(info.Technology)
+	bat.setPropManufacturer(info.Manufacturer)
+	bat.setPropModelName(info.ModelName)
+	bat.setPropSerialNumber(info.SerialNumber)
+	bat.setPropEnergy(info.Energy)
+	bat.setPropEnergyFull(info.EnergyFull)
+	bat.setPropEnergyFullDesign(info.EnergyFullDesign)
+	bat.setPropEnergyRate(info.EnergyRate)
+	bat.setPropVoltage(info.Voltage)
+	bat.setPropPercentage(info.Percentage)
+	bat.setPropCapacity(info.Capacity)
+	bat.setPropStatus(info.Status)
 	bat.setPropTimeToEmpty(info.TimeToEmpty)
 	bat.setPropTimeToFull(info.TimeToFull)
+	bat.PropsMu.Unlock()
+
+	logger.Debugf("Refresh %v done", bat.Name)
+	if bat.refreshDone != nil {
+		bat.refreshDone()
+	}
 }
 
 func (bat *Battery) Refresh() {

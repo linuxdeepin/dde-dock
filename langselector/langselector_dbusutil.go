@@ -1,41 +1,27 @@
 package langselector
 
 func (v *LangSelector) setPropCurrentLocale(value string) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.CurrentLocale != value {
 		v.CurrentLocale = value
-		changed = true
+		v.emitPropChangedCurrentLocale(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "CurrentLocale", value)
-	}
-	return
+	return false
 }
 
-func (v *LangSelector) getPropCurrentLocale() string {
-	v.PropsMaster.RLock()
-	value := v.CurrentLocale
-	v.PropsMaster.RUnlock()
-	return value
+func (v *LangSelector) emitPropChangedCurrentLocale(value string) error {
+	return v.service.EmitPropertyChanged(v, "CurrentLocale", value)
 }
 
 func (v *LangSelector) setPropLocaleState(value int32) (changed bool) {
-	v.PropsMaster.Lock()
 	if v.LocaleState != value {
 		v.LocaleState = value
-		changed = true
+		v.emitPropChangedLocaleState(value)
+		return true
 	}
-	v.PropsMaster.Unlock()
-	if v.service != nil && changed {
-		v.PropsMaster.NotifyChanged(v, v.service, "LocaleState", value)
-	}
-	return
+	return false
 }
 
-func (v *LangSelector) getPropLocaleState() int32 {
-	v.PropsMaster.RLock()
-	value := v.LocaleState
-	v.PropsMaster.RUnlock()
-	return value
+func (v *LangSelector) emitPropChangedLocaleState(value int32) error {
+	return v.service.EmitPropertyChanged(v, "LocaleState", value)
 }

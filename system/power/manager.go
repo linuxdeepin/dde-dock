@@ -49,7 +49,7 @@ type Manager struct {
 	ac          *AC
 	gudevClient *gudev.Client
 
-	PropsMaster  dbusutil.PropsMaster
+	PropsMu      sync.RWMutex
 	OnBattery    bool
 	HasLidSwitch bool
 	// battery display properties:
@@ -114,7 +114,11 @@ func (ac *AC) newDevice() *gudev.Device {
 func (m *Manager) refreshAC(ac *gudev.Device) {
 	online := ac.GetPropertyAsBoolean("POWER_SUPPLY_ONLINE")
 	logger.Debug("ac online:", online)
-	m.setPropOnBattery(!online)
+	onBattery := !online
+
+	m.PropsMu.Lock()
+	m.setPropOnBattery(onBattery)
+	m.PropsMu.Unlock()
 }
 
 func (m *Manager) initAC(devices []*gudev.Device) {
@@ -247,8 +251,8 @@ func (m *Manager) addBattery(dev *gudev.Device) (*Battery, bool) {
 
 	m.batteriesMu.Lock()
 	m.batteries[sysfsPath] = bat
-	m.batteriesMu.Unlock()
 	m.refreshBatteryDisplay()
+	m.batteriesMu.Unlock()
 	bat.setRefreshDoneCallback(m.refreshBatteryDisplay)
 	return bat, true
 }
@@ -265,9 +269,8 @@ func (m *Manager) removeBattery(dev *gudev.Device) {
 		logger.Info("removeBattery", sysfsPath)
 		m.batteriesMu.Lock()
 		delete(m.batteries, sysfsPath)
-		m.batteriesMu.Unlock()
-
 		m.refreshBatteryDisplay()
+		m.batteriesMu.Unlock()
 
 		err := m.service.StopExport(bat.GetDBusExportInfo())
 		if err != nil {
@@ -302,18 +305,4 @@ func (m *Manager) destroy() {
 		m.gudevClient.Unref()
 		m.gudevClient = nil
 	}
-}
-
-func (m *Manager) getBatteriesStatus() []battery.Status {
-	m.batteriesMu.Lock()
-
-	result := make([]battery.Status, len(m.batteries))
-	idx := 0
-	for _, bat := range m.batteries {
-		result[idx] = bat.Status
-		idx++
-	}
-
-	m.batteriesMu.Unlock()
-	return result
 }

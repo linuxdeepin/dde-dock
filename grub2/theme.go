@@ -79,9 +79,8 @@ type Theme struct {
 	bgFile      string
 	bgThumbFile string
 	tplJSONData *TplJSONData
-	setThemeMu  sync.Mutex
 
-	PropsMaster       dbusutil.PropsMaster
+	PropsMu           sync.RWMutex
 	Updating          bool
 	ItemColor         string
 	SelectedItemColor string
@@ -145,9 +144,11 @@ func (theme *Theme) reset() error {
 	// reset scheme to dark scheme
 	defaultScheme := theme.tplJSONData.DarkScheme
 	theme.tplJSONData.CurrentScheme = defaultScheme
+	theme.PropsMu.Lock()
 	theme.setPropItemColor(defaultScheme.ItemColor)
 	theme.setPropSelectedItemColor(defaultScheme.SelectedItemColor)
 	err := theme.setCustomTheme()
+	theme.PropsMu.Unlock()
 	if err != nil {
 		return err
 	}
@@ -225,11 +226,8 @@ func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
 }
 
 func (theme *Theme) setCustomTheme() error {
-	theme.setThemeMu.Lock()
-	defer theme.setThemeMu.Unlock()
-
-	theme.tplJSONData.CurrentScheme.ItemColor = theme.getPropItemColor()
-	theme.tplJSONData.CurrentScheme.SelectedItemColor = theme.getPropSelectedItemColor()
+	theme.tplJSONData.CurrentScheme.ItemColor = theme.ItemColor
+	theme.tplJSONData.CurrentScheme.SelectedItemColor = theme.SelectedItemColor
 	logger.Debugf("set custom theme: %v", theme.tplJSONData.CurrentScheme)
 
 	// generate a new theme.txt from template
@@ -324,9 +322,12 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) {
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
 		logger.Info("background is bright, so use the bright theme scheme")
 	}
+	theme.PropsMu.Lock()
 	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	err := theme.setCustomTheme()
+	theme.PropsMu.Unlock()
+
 	if err != nil {
 		logger.Warning(err)
 		return
@@ -355,8 +356,22 @@ func (theme *Theme) setThemeBackgroundSourceFile(imageFile string, screenWidth, 
 }
 
 func (theme *Theme) generateBackground(screenWidth, screenHeight uint16) error {
+	theme.PropsMu.Lock()
 	theme.setPropUpdating(true)
+	theme.PropsMu.Unlock()
+
 	err := generateThemeBackground(screenWidth, screenHeight)
+
+	theme.PropsMu.Lock()
 	theme.setPropUpdating(false)
+	theme.PropsMu.Unlock()
+
 	return err
+}
+
+func (theme *Theme) isUpdating() bool {
+	theme.PropsMu.RLock()
+	v := theme.Updating
+	theme.PropsMu.RUnlock()
+	return v
 }

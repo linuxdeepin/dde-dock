@@ -59,6 +59,9 @@ func (theme *Theme) SetItemColor(sender dbus.Sender, color string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	theme.PropsMu.Lock()
+	defer theme.PropsMu.Unlock()
+
 	if theme.setPropItemColor(color) {
 		err = theme.setCustomTheme()
 		if err != nil {
@@ -80,6 +83,9 @@ func (theme *Theme) SetSelectedItemColor(sender dbus.Sender, color string) *dbus
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
+
+	theme.PropsMu.Lock()
+	defer theme.PropsMu.Unlock()
 
 	if theme.setPropSelectedItemColor(color) {
 		err = theme.setCustomTheme()

@@ -39,7 +39,6 @@ func (lang *LangSelector) listenHelperSignal() {
 		err := lang.handleLocaleChanged(ok, reason)
 		if err != nil {
 			lang.logger.Warning(err)
-			lang.setPropCurrentLocale(getCurrentUserLocale())
 			err := sendNotify(localeIconFailed, "",
 				Tr("System language failed to change, please try later"))
 			if err != nil {
@@ -49,7 +48,12 @@ func (lang *LangSelector) listenHelperSignal() {
 			if err != nil {
 				lang.logger.Warning("Sync user object locale failed:", err)
 			}
+
+			// recover lang.CurrentLocale
+			lang.PropsMu.Lock()
+			lang.setPropCurrentLocale(getCurrentUserLocale())
 			lang.setPropLocaleState(LocaleStateChanged)
+			lang.PropsMu.Unlock()
 			return
 		}
 		err = sendNotify(localeIconFinished, "",
@@ -57,20 +61,34 @@ func (lang *LangSelector) listenHelperSignal() {
 		if err != nil {
 			lang.logger.Warning("sendNotify failed:", err)
 		}
+
+		lang.PropsMu.Lock()
+		defer lang.PropsMu.Unlock()
+
 		err = syncUserLocale(lang.CurrentLocale)
 		if err != nil {
 			lang.logger.Warning("Sync user object locale failed:", err)
 		}
+
 		lang.setPropLocaleState(LocaleStateChanged)
 	})
 }
 
 func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
-	if !ok || lang.getPropLocaleState() != LocaleStateChanging {
+	if !ok {
 		return ErrLocaleChangeFailed
 	}
 
-	err := writeUserLocale(lang.CurrentLocale)
+	lang.PropsMu.RLock()
+	if lang.LocaleState != LocaleStateChanging {
+		lang.PropsMu.RUnlock()
+		return ErrLocaleChangeFailed
+	}
+
+	currentLocale := lang.CurrentLocale
+	lang.PropsMu.RUnlock()
+
+	err := writeUserLocale(currentLocale)
 	if err != nil {
 		return err
 	}
@@ -80,11 +98,11 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 		lang.logger.Warningf("remove font config file %q failed: %v", fontCfgFile, err)
 	}
 
-	err = installLangSupportPackages(lang.CurrentLocale)
+	err = installLangSupportPackages(currentLocale)
 	if err != nil {
 		lang.logger.Warning(err)
 	}
-	lang.service.Emit(lang, "Changed", lang.getPropCurrentLocale())
+	lang.service.Emit(lang, "Changed", currentLocale)
 
 	return nil
 }

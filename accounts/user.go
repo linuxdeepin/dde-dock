@@ -68,18 +68,18 @@ const (
 )
 
 type User struct {
-	service     *dbusutil.Service
-	PropsMaster dbusutil.PropsMaster
-	UserName    string
-	FullName    string
-	Uid         string
-	Gid         string
-	HomeDir     string
-	Shell       string
-	Locale      string
-	Layout      string
-	IconFile    string
-	customIcon  string
+	service    *dbusutil.Service
+	PropsMu    sync.RWMutex
+	UserName   string
+	FullName   string
+	Uid        string
+	Gid        string
+	HomeDir    string
+	Shell      string
+	Locale     string
+	Layout     string
+	IconFile   string
+	customIcon string
 	// dbusutil-gen: equal=nil
 	DesktopBackgrounds []string
 	GreeterBackground  string
@@ -240,7 +240,8 @@ func (u *User) destroy() {
 }
 
 func (u *User) updateIconList() {
-	u.setPropIconList(u.getAllIcons())
+	u.IconList = u.getAllIcons()
+	u.emitPropChangedIconList(u.IconList)
 }
 
 func (u *User) getAllIcons() []string {
@@ -352,11 +353,31 @@ func (u *User) writeUserConfig() error {
 }
 
 func (u *User) updatePropLocked() {
-	u.setPropLocked(users.IsUserLocked(u.UserName))
+	newVal := users.IsUserLocked(u.UserName)
+	u.PropsMu.Lock()
+	u.setPropLocked(newVal)
+	u.PropsMu.Unlock()
 }
 
 func (u *User) updatePropAccountType() {
-	u.setPropAccountType(u.getAccountType())
+	newVal := u.getAccountType()
+	u.PropsMu.Lock()
+	u.setPropAccountType(newVal)
+	u.PropsMu.Unlock()
+}
+
+func (u *User) updatePropCanNoPasswdLogin() {
+	newVal := users.CanNoPasswdLogin(u.UserName)
+	u.PropsMu.Lock()
+	u.setPropNoPasswdLogin(newVal)
+	u.PropsMu.Unlock()
+}
+
+func (u *User) updatePropAutomaticLogin() {
+	newVal := users.IsAutoLoginUser(u.UserName)
+	u.PropsMu.Lock()
+	u.setPropAutomaticLogin(newVal)
+	u.PropsMu.Unlock()
 }
 
 func (u *User) getAccountType() int32 {

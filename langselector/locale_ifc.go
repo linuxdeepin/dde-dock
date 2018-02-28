@@ -51,9 +51,6 @@ func (lang *LangSelector) GetDBusExportInfo() dbusutil.ExportInfo {
 // locale: see '/etc/locale.gen'
 func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 	lang.service.DelayAutoQuit()
-	if lang.getPropLocaleState() == LocaleStateChanging {
-		return nil
-	}
 
 	if len(locale) == 0 || !lang.isSupportedLocale(locale) {
 		return dbusutil.ToError(fmt.Errorf("invalid locale: %v", locale))
@@ -62,13 +59,19 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 		return dbusutil.ToError(fmt.Errorf("LocaleHelper object is nil"))
 	}
 
-	if lang.getPropCurrentLocale() == locale {
+	lang.PropsMu.Lock()
+	defer lang.PropsMu.Unlock()
+
+	if lang.LocaleState == LocaleStateChanging {
+		return nil
+	}
+
+	if lang.CurrentLocale == locale {
 		return nil
 	}
 
 	go func() {
-		lang.setPropLocaleState(LocaleStateChanging)
-		lang.setPropCurrentLocale(locale)
+		// send notification
 		if ok, _ := isNetworkEnable(); !ok {
 			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed, please wait..."))
@@ -82,11 +85,21 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 				lang.logger.Warning("sendNotify failed:", err)
 			}
 		}
+
+		lang.PropsMu.Lock()
+		lang.setPropLocaleState(LocaleStateChanging)
+		lang.setPropCurrentLocale(locale)
+		lang.PropsMu.Unlock()
+
 		err := lang.helper.GenerateLocale(locale)
 		if err != nil {
 			lang.logger.Warning("GenerateLocale failed:", err)
+
+			lang.PropsMu.Lock()
 			lang.setPropLocaleState(LocaleStateChanged)
+			lang.PropsMu.Unlock()
 		}
+
 	}()
 
 	return nil

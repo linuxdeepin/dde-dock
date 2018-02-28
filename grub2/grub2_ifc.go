@@ -90,9 +90,11 @@ func (g *Grub2) SetDefaultEntry(sender dbus.Sender, entry string) *dbus.Error {
 		return dbusutil.ToError(errors.New("invalid entry"))
 	}
 
+	g.PropsMu.Lock()
 	if g.setPropDefaultEntry(entry) {
 		g.modifyFuncChan <- getModifyFuncDefaultEntry(idx)
 	}
+	g.PropsMu.Unlock()
 	return nil
 }
 
@@ -104,9 +106,11 @@ func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	g.PropsMu.Lock()
 	if g.setPropEnableTheme(enabled) {
 		g.modifyFuncChan <- getModifyFuncEnableTheme(enabled)
 	}
+	g.PropsMu.Unlock()
 	return nil
 }
 
@@ -123,9 +127,11 @@ func (g *Grub2) SetResolution(sender dbus.Sender, resolution string) *dbus.Error
 		return dbusutil.ToError(err)
 	}
 
+	g.PropsMu.Lock()
 	if g.setPropResolution(resolution) {
 		g.modifyFuncChan <- getModifyFuncResolution(resolution)
 	}
+	g.PropsMu.Unlock()
 	return nil
 }
 
@@ -141,9 +147,11 @@ func (g *Grub2) SetTimeout(sender dbus.Sender, timeout uint32) *dbus.Error {
 		return dbusutil.ToError(errors.New("exceeded the maximum value"))
 	}
 
+	g.PropsMu.Lock()
 	if g.setPropTimeout(timeout) {
 		g.modifyFuncChan <- getModifyFuncTimeout(timeout)
 	}
+	g.PropsMu.Unlock()
 	return nil
 }
 
@@ -160,6 +168,7 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 
 	var modifyFuncs []ModifyFunc
 
+	g.PropsMu.Lock()
 	if g.setPropTimeout(defaultGrubTimeoutInt) {
 		modifyFuncs = append(modifyFuncs, getModifyFuncTimeout(defaultGrubTimeoutInt))
 	}
@@ -172,6 +181,7 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 	if g.setPropDefaultEntry(cfgDefaultEntry) {
 		modifyFuncs = append(modifyFuncs, getModifyFuncDefaultEntry(defaultGrubDefaultInt))
 	}
+	g.PropsMu.Unlock()
 
 	if len(modifyFuncs) > 0 {
 		compoundModifyFunc := func(params map[string]string) {
