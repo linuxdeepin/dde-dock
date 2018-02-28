@@ -44,6 +44,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     m_loadingIndicator = new DLoadingIndicator;
     m_loadingIndicator->setImageSource(pixmap);
     m_loadingIndicator->setLoading(false);
+    m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);
     m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
     m_loadingIndicator->installEventFilter(this);
