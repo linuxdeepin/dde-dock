@@ -361,7 +361,18 @@ func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err er
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	return m.switchHandler.enableDevice(devPath, enabled)
+	err = m.switchHandler.enableDevice(devPath, enabled)
+	if err != nil {
+		return
+	}
+	m.stateHandler.locker.Lock()
+	defer m.stateHandler.locker.Unlock()
+	dsi, ok := m.stateHandler.devices[devPath]
+	if !ok {
+		return
+	}
+	dsi.enabled = enabled
+	return
 }
 
 // SetDeviceManaged set target device managed or unmnaged from

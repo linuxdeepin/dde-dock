@@ -120,18 +120,22 @@ func initNmStateReasons() {
 type stateHandler struct {
 	devices map[dbus.ObjectPath]*deviceStateInfo
 	locker  sync.Mutex
+
+	conf *config
 }
 type deviceStateInfo struct {
 	nmDev          *nmdbus.Device
+	enabled        bool
 	devUdi         string
 	devType        uint32
 	aconnId        string
 	connectionType string
 }
 
-func newStateHandler() (sh *stateHandler) {
+func newStateHandler(c *config) (sh *stateHandler) {
 	sh = &stateHandler{}
 	sh.devices = make(map[dbus.ObjectPath]*deviceStateInfo)
+	sh.conf = c
 
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		sh.remove(path)
@@ -188,6 +192,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 	sh.devices[path] = &deviceStateInfo{nmDev: nmDev}
 	sh.devices[path].devType = nmDev.DeviceType.Get()
 	sh.devices[path].devUdi = nmDev.Udi.Get()
+	sh.devices[path].enabled = sh.conf.getDeviceEnabled(path)
 	if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 		// remember active connection id and type if exists
 		sh.devices[path].aconnId = getSettingConnectionId(data)
@@ -248,6 +253,11 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 
 			// notify only when network enabled
 			if !nmGetNetworkEnabled() {
+				return
+			}
+
+			// notify only when device enabled
+			if oldState == nm.NM_DEVICE_STATE_DISCONNECTED && !dsi.enabled {
 				return
 			}
 

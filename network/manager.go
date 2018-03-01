@@ -133,7 +133,7 @@ func (m *Manager) initManager() {
 	m.config = newConfig()
 	m.switchHandler = newSwitchHandler(m.config)
 	m.dbusWatcher = newDbusWatcher(true)
-	m.stateHandler = newStateHandler()
+	m.stateHandler = newStateHandler(m.config)
 	m.agent = newAgent()
 
 	// initialize device and connection handlers
