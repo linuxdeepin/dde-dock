@@ -199,16 +199,19 @@ void DockItem::showContextMenu()
     DBusMenu *menuInter = new DBusMenu(path.path(), this);
 
     connect(menuInter, &DBusMenu::ItemInvoked, this, &DockItem::invokedMenuItem);
-    connect(menuInter, &DBusMenu::MenuUnregistered, this, [=] {
-        emit requestRefershWindowVisible();
-        emit requestWindowAutoHide(true);
-        menuInter->deleteLater();
-    });
+    connect(menuInter, &DBusMenu::ItemInvoked, menuInter, &DBusMenu::deleteLater);
+    connect(menuInter, &DBusMenu::MenuUnregistered, this, &DockItem::onContextMenuAccepted, Qt::QueuedConnection);
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
 
     hidePopup();
     emit requestWindowAutoHide(false);
+}
+
+void DockItem::onContextMenuAccepted()
+{
+    emit requestRefershWindowVisible();
+    emit requestWindowAutoHide(true);
 }
 
 void DockItem::showHoverTips()

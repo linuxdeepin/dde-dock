@@ -89,6 +89,7 @@ protected:
 
 protected slots:
     void showContextMenu();
+    void onContextMenuAccepted();
 
 private:
     void updatePopupPosition();
