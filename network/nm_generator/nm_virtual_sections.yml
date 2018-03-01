@@ -785,6 +785,14 @@
     Section: alias-vpn-l2tp-ipsec
     DisplayName: Pre-Shared Key
     WidgetType: EditLinePasswordInput
+  - KeyValue: ipsec-ike
+    Section: alias-vpn-l2tp-ipsec
+    DisplayName: Phase1 Algorithms
+    WidgetType: EditLineTextInput
+  - KeyValue: ipsec-esp
+    Section: alias-vpn-l2tp-ipsec
+    DisplayName: Phase2 Algorithms
+    WidgetType: EditLineTextInput
 - VirtaulSectionName: NM_SETTING_VS_VPN_L2TP_PPP
   Value: vs-vpn-l2tp-ppp
   DisplayName: VPN PPP

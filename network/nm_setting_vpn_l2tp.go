@@ -127,6 +127,8 @@ func getSettingVpnL2tpIpsecAvailableKeys(data connectionData) (keys []string) {
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME, nm.NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME, nm.NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME, nm.NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME, nm.NM_SETTING_VPN_L2TP_KEY_IPSEC_IKE)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME, nm.NM_SETTING_VPN_L2TP_KEY_IPSEC_ESP)
 	}
 	return
 }

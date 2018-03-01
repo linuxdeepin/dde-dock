@@ -117,6 +117,14 @@
     Value: "ipsec-psk"
     CapcaseName: SettingVpnL2tpKeyIpsecPsk
     Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_IPSEC_IKE
+    Value: "ipsec-ike"
+    CapcaseName: SettingVpnL2tpKeyIpsecIke
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_IPSEC_ESP
+    Value: "ipsec-esp"
+    CapcaseName: SettingVpnL2tpKeyIpsecEsp
+    Type: ktypeString
 - SettingClass: SettingVpnOpenconnect
   Name: NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
   RealSettingName: NM_SETTING_VPN_SETTING_NAME

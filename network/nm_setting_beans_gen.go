@@ -249,6 +249,8 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-group-name", Name: Tr("Group Name"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-gateway-id", Name: Tr("Group ID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-psk", Name: Tr("Pre-Shared Key"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-ike", Name: Tr("Phase1 Algorithms"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-esp", Name: Tr("Phase2 Algorithms"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
 	virtualSections["vs-vpn-l2tp-ppp"] = VsectionInfo{
@@ -1486,6 +1488,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "forward-delay":
 			return true
+		case "group-forward-mask":
+			return true
 		case "hello-time":
 			return true
 		case "mac-address":
@@ -1523,6 +1527,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		}
 	case "connection":
 		switch key {
+		case "auth-retries":
+			return true
 		case "autoconnect":
 			return true
 		case "autoconnect-priority":
@@ -1594,6 +1600,9 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "priority-traffic-class":
 			return true
+		}
+	case "dummy":
+		switch key {
 		}
 	case "generic":
 		switch key {
@@ -1678,6 +1687,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "route-metric":
 			return true
+		case "route-table":
+			return true
 		case "routes":
 			return true
 		}
@@ -1718,6 +1729,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "never-default":
 			return true
 		case "route-metric":
+			return true
+		case "route-table":
 			return true
 		case "routes":
 			return true
@@ -1790,6 +1803,42 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "ssid":
 			return true
 		}
+	case "ovs-bridge":
+		switch key {
+		case "fail-mode":
+			return true
+		case "mcast-snooping-enable":
+			return true
+		case "rstp-enable":
+			return true
+		case "stp-enable":
+			return true
+		}
+	case "ovs-interface":
+		switch key {
+		case "type":
+			return true
+		}
+	case "ovs-patch":
+		switch key {
+		case "peer":
+			return true
+		}
+	case "ovs-port":
+		switch key {
+		case "bond-downdelay":
+			return true
+		case "bond-mode":
+			return true
+		case "bond-updelay":
+			return true
+		case "lacp":
+			return true
+		case "tag":
+			return true
+		case "vlan-mode":
+			return true
+		}
 	case "ppp":
 		switch key {
 		case "baud":
@@ -1831,6 +1880,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		}
 	case "pppoe":
 		switch key {
+		case "parent":
+			return true
 		case "password":
 			return true
 		case "password-flags":
@@ -1864,14 +1915,55 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "stopbits":
 			return true
 		}
+	case "tc":
+		switch key {
+		}
 	case "team":
 		switch key {
 		case "config":
+			return true
+		case "mcast-rejoin-count":
+			return true
+		case "mcast-rejoin-interval":
+			return true
+		case "notify-peers-count":
+			return true
+		case "notify-peers-interval":
+			return true
+		case "runner":
+			return true
+		case "runner-active":
+			return true
+		case "runner-agg-select-policy":
+			return true
+		case "runner-fast-rate":
+			return true
+		case "runner-hwaddr-policy":
+			return true
+		case "runner-min-ports":
+			return true
+		case "runner-sys-prio":
+			return true
+		case "runner-tx-balancer":
+			return true
+		case "runner-tx-balancer-interval":
+			return true
+		case "runner-tx-hash":
 			return true
 		}
 	case "team-port":
 		switch key {
 		case "config":
+			return true
+		case "lacp-key":
+			return true
+		case "lacp-prio":
+			return true
+		case "prio":
+			return true
+		case "queue-id":
+			return true
+		case "sticky":
 			return true
 		}
 	case "tun":
@@ -1887,6 +1979,11 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "pi":
 			return true
 		case "vnet-hdr":
+			return true
+		}
+	case "user":
+		switch key {
+		case "data":
 			return true
 		}
 	case "vlan":
@@ -2041,6 +2138,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "pairwise":
 			return true
+		case "pmf":
+			return true
 		case "proto":
 			return true
 		case "psk":
@@ -2060,6 +2159,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "wep-key3":
 			return true
 		case "wep-tx-keyidx":
+			return true
+		case "wps-method":
 			return true
 		}
 	case "alias-vpn-l2tp":
@@ -2119,6 +2220,10 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "ipsec-gateway-id":
 			return true
 		case "ipsec-psk":
+			return true
+		case "ipsec-ike":
+			return true
+		case "ipsec-esp":
 			return true
 		}
 	case "alias-vpn-openconnect":
@@ -2507,6 +2612,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeUint32
 		case "forward-delay":
 			t = ktypeUint32
+		case "group-forward-mask":
+			t = ktypeUint32
 		case "hello-time":
 			t = ktypeUint32
 		case "mac-address":
@@ -2550,6 +2657,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		switch key {
 		default:
 			t = ktypeUnknown
+		case "auth-retries":
+			t = ktypeInt32
 		case "autoconnect":
 			t = ktypeBoolean
 		case "autoconnect-priority":
@@ -2623,6 +2732,11 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeArrayUint32
 		case "priority-traffic-class":
 			t = ktypeArrayUint32
+		}
+	case "dummy":
+		switch key {
+		default:
+			t = ktypeUnknown
 		}
 	case "generic":
 		switch key {
@@ -2715,6 +2829,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeBoolean
 		case "route-metric":
 			t = ktypeInt64
+		case "route-table":
+			t = ktypeUint32
 		case "routes":
 			t = ktypeWrapperIpv4Routes
 		}
@@ -2758,6 +2874,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeBoolean
 		case "route-metric":
 			t = ktypeInt64
+		case "route-table":
+			t = ktypeUint32
 		case "routes":
 			t = ktypeWrapperIpv6Routes
 		case "token":
@@ -2837,6 +2955,50 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "ssid":
 			t = ktypeArrayByte
 		}
+	case "ovs-bridge":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "fail-mode":
+			t = ktypeString
+		case "mcast-snooping-enable":
+			t = ktypeBoolean
+		case "rstp-enable":
+			t = ktypeBoolean
+		case "stp-enable":
+			t = ktypeBoolean
+		}
+	case "ovs-interface":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "type":
+			t = ktypeString
+		}
+	case "ovs-patch":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "peer":
+			t = ktypeString
+		}
+	case "ovs-port":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "bond-downdelay":
+			t = ktypeUint32
+		case "bond-mode":
+			t = ktypeString
+		case "bond-updelay":
+			t = ktypeUint32
+		case "lacp":
+			t = ktypeString
+		case "tag":
+			t = ktypeUint32
+		case "vlan-mode":
+			t = ktypeString
+		}
 	case "ppp":
 		switch key {
 		default:
@@ -2882,6 +3044,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		switch key {
 		default:
 			t = ktypeUnknown
+		case "parent":
+			t = ktypeString
 		case "password":
 			t = ktypeString
 		case "password-flags":
@@ -2919,12 +3083,45 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "stopbits":
 			t = ktypeUint32
 		}
+	case "tc":
+		switch key {
+		default:
+			t = ktypeUnknown
+		}
 	case "team":
 		switch key {
 		default:
 			t = ktypeUnknown
 		case "config":
 			t = ktypeString
+		case "mcast-rejoin-count":
+			t = ktypeInt32
+		case "mcast-rejoin-interval":
+			t = ktypeInt32
+		case "notify-peers-count":
+			t = ktypeInt32
+		case "notify-peers-interval":
+			t = ktypeInt32
+		case "runner":
+			t = ktypeString
+		case "runner-active":
+			t = ktypeBoolean
+		case "runner-agg-select-policy":
+			t = ktypeString
+		case "runner-fast-rate":
+			t = ktypeBoolean
+		case "runner-hwaddr-policy":
+			t = ktypeString
+		case "runner-min-ports":
+			t = ktypeInt32
+		case "runner-sys-prio":
+			t = ktypeInt32
+		case "runner-tx-balancer":
+			t = ktypeString
+		case "runner-tx-balancer-interval":
+			t = ktypeInt32
+		case "runner-tx-hash":
+			t = ktypeArrayString
 		}
 	case "team-port":
 		switch key {
@@ -2932,6 +3129,16 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeUnknown
 		case "config":
 			t = ktypeString
+		case "lacp-key":
+			t = ktypeInt32
+		case "lacp-prio":
+			t = ktypeInt32
+		case "prio":
+			t = ktypeInt32
+		case "queue-id":
+			t = ktypeInt32
+		case "sticky":
+			t = ktypeBoolean
 		}
 	case "tun":
 		switch key {
@@ -2949,6 +3156,13 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeBoolean
 		case "vnet-hdr":
 			t = ktypeBoolean
+		}
+	case "user":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "data":
+			t = ktypeDictStringString
 		}
 	case "vlan":
 		switch key {
@@ -3116,6 +3330,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeString
 		case "pairwise":
 			t = ktypeArrayString
+		case "pmf":
+			t = ktypeInt32
 		case "proto":
 			t = ktypeArrayString
 		case "psk":
@@ -3135,6 +3351,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "wep-key3":
 			t = ktypeString
 		case "wep-tx-keyidx":
+			t = ktypeUint32
+		case "wps-method":
 			t = ktypeUint32
 		}
 	case "alias-vpn-l2tp":
@@ -3200,6 +3418,10 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "ipsec-gateway-id":
 			t = ktypeString
 		case "ipsec-psk":
+			t = ktypeString
+		case "ipsec-ike":
+			t = ktypeString
+		case "ipsec-esp":
 			t = ktypeString
 		}
 	case "alias-vpn-openconnect":
@@ -3490,6 +3712,8 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingConnectionAvailableKeys(data)
 	case "dcb":
 		keys = getSettingDcbAvailableKeys(data)
+	case "dummy":
+		keys = getSettingDummyAvailableKeys(data)
 	case "generic":
 		keys = getSettingGenericAvailableKeys(data)
 	case "gsm":
@@ -3508,6 +3732,14 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingMacvlanAvailableKeys(data)
 	case "802-11-olpc-mesh":
 		keys = getSettingOlpcMeshAvailableKeys(data)
+	case "ovs-bridge":
+		keys = getSettingOvsBridgeAvailableKeys(data)
+	case "ovs-interface":
+		keys = getSettingOvsInterfaceAvailableKeys(data)
+	case "ovs-patch":
+		keys = getSettingOvsPatchAvailableKeys(data)
+	case "ovs-port":
+		keys = getSettingOvsPortAvailableKeys(data)
 	case "ppp":
 		keys = getSettingPppAvailableKeys(data)
 	case "pppoe":
@@ -3516,12 +3748,16 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingProxyAvailableKeys(data)
 	case "serial":
 		keys = getSettingSerialAvailableKeys(data)
+	case "tc":
+		keys = getSettingTCConfigAvailableKeys(data)
 	case "team":
 		keys = getSettingTeamAvailableKeys(data)
 	case "team-port":
 		keys = getSettingTeamPortAvailableKeys(data)
 	case "tun":
 		keys = getSettingTunAvailableKeys(data)
+	case "user":
+		keys = getSettingUserAvailableKeys(data)
 	case "vlan":
 		keys = getSettingVlanAvailableKeys(data)
 	case "vpn":
@@ -3593,6 +3829,8 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingConnectionAvailableValues(data, key)
 	case "dcb":
 		values = getSettingDcbAvailableValues(data, key)
+	case "dummy":
+		values = getSettingDummyAvailableValues(data, key)
 	case "generic":
 		values = getSettingGenericAvailableValues(data, key)
 	case "gsm":
@@ -3611,6 +3849,14 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingMacvlanAvailableValues(data, key)
 	case "802-11-olpc-mesh":
 		values = getSettingOlpcMeshAvailableValues(data, key)
+	case "ovs-bridge":
+		values = getSettingOvsBridgeAvailableValues(data, key)
+	case "ovs-interface":
+		values = getSettingOvsInterfaceAvailableValues(data, key)
+	case "ovs-patch":
+		values = getSettingOvsPatchAvailableValues(data, key)
+	case "ovs-port":
+		values = getSettingOvsPortAvailableValues(data, key)
 	case "ppp":
 		values = getSettingPppAvailableValues(data, key)
 	case "pppoe":
@@ -3619,12 +3865,16 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingProxyAvailableValues(data, key)
 	case "serial":
 		values = getSettingSerialAvailableValues(data, key)
+	case "tc":
+		values = getSettingTCConfigAvailableValues(data, key)
 	case "team":
 		values = getSettingTeamAvailableValues(data, key)
 	case "team-port":
 		values = getSettingTeamPortAvailableValues(data, key)
 	case "tun":
 		values = getSettingTunAvailableValues(data, key)
+	case "user":
+		values = getSettingUserAvailableValues(data, key)
 	case "vlan":
 		values = getSettingVlanAvailableValues(data, key)
 	case "vpn":
@@ -3695,6 +3945,8 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingConnectionValues(data)
 	case "dcb":
 		errs = checkSettingDcbValues(data)
+	case "dummy":
+		errs = checkSettingDummyValues(data)
 	case "generic":
 		errs = checkSettingGenericValues(data)
 	case "gsm":
@@ -3713,6 +3965,14 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingMacvlanValues(data)
 	case "802-11-olpc-mesh":
 		errs = checkSettingOlpcMeshValues(data)
+	case "ovs-bridge":
+		errs = checkSettingOvsBridgeValues(data)
+	case "ovs-interface":
+		errs = checkSettingOvsInterfaceValues(data)
+	case "ovs-patch":
+		errs = checkSettingOvsPatchValues(data)
+	case "ovs-port":
+		errs = checkSettingOvsPortValues(data)
 	case "ppp":
 		errs = checkSettingPppValues(data)
 	case "pppoe":
@@ -3721,12 +3981,16 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingProxyValues(data)
 	case "serial":
 		errs = checkSettingSerialValues(data)
+	case "tc":
+		errs = checkSettingTCConfigValues(data)
 	case "team":
 		errs = checkSettingTeamValues(data)
 	case "team-port":
 		errs = checkSettingTeamPortValues(data)
 	case "tun":
 		errs = checkSettingTunValues(data)
+	case "user":
+		errs = checkSettingUserValues(data)
 	case "vlan":
 		errs = checkSettingVlanValues(data)
 	case "vpn":
@@ -3914,6 +4178,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = uint32(0x12c)
 		case "forward-delay":
 			defvalue = uint32(0xf)
+		case "group-forward-mask":
+			defvalue = uint32(0x0)
 		case "hello-time":
 			defvalue = uint32(0x2)
 		case "mac-address":
@@ -3957,6 +4223,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		switch key {
 		default:
 			logger.Error("invalid key:", setting, key)
+		case "auth-retries":
+			defvalue = int32(-1)
 		case "autoconnect":
 			defvalue = true
 		case "autoconnect-priority":
@@ -4030,6 +4298,11 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = []uint32{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
 		case "priority-traffic-class":
 			defvalue = []uint32{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+		}
+	case "dummy":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
 		}
 	case "generic":
 		switch key {
@@ -4122,6 +4395,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = false
 		case "route-metric":
 			defvalue = int64(-1)
+		case "route-table":
+			defvalue = uint32(0x0)
 		case "routes":
 			defvalue = [][]uint32{}
 		}
@@ -4165,6 +4440,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = false
 		case "route-metric":
 			defvalue = int64(-1)
+		case "route-table":
+			defvalue = uint32(0x0)
 		case "routes":
 			defvalue = make(ipv6Routes, 0)
 		case "token":
@@ -4244,6 +4521,50 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		case "ssid":
 			defvalue = []byte{}
 		}
+	case "ovs-bridge":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "fail-mode":
+			defvalue = ""
+		case "mcast-snooping-enable":
+			defvalue = false
+		case "rstp-enable":
+			defvalue = false
+		case "stp-enable":
+			defvalue = false
+		}
+	case "ovs-interface":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "type":
+			defvalue = ""
+		}
+	case "ovs-patch":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "peer":
+			defvalue = ""
+		}
+	case "ovs-port":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "bond-downdelay":
+			defvalue = uint32(0x0)
+		case "bond-mode":
+			defvalue = ""
+		case "bond-updelay":
+			defvalue = uint32(0x0)
+		case "lacp":
+			defvalue = ""
+		case "tag":
+			defvalue = uint32(0x0)
+		case "vlan-mode":
+			defvalue = ""
+		}
 	case "ppp":
 		switch key {
 		default:
@@ -4289,6 +4610,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		switch key {
 		default:
 			logger.Error("invalid key:", setting, key)
+		case "parent":
+			defvalue = ""
 		case "password":
 			defvalue = ""
 		case "password-flags":
@@ -4326,12 +4649,45 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		case "stopbits":
 			defvalue = uint32(0x1)
 		}
+	case "tc":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		}
 	case "team":
 		switch key {
 		default:
 			logger.Error("invalid key:", setting, key)
 		case "config":
 			defvalue = ""
+		case "mcast-rejoin-count":
+			defvalue = int32(0)
+		case "mcast-rejoin-interval":
+			defvalue = int32(0)
+		case "notify-peers-count":
+			defvalue = int32(0)
+		case "notify-peers-interval":
+			defvalue = int32(0)
+		case "runner":
+			defvalue = "roundrobin"
+		case "runner-active":
+			defvalue = false
+		case "runner-agg-select-policy":
+			defvalue = ""
+		case "runner-fast-rate":
+			defvalue = false
+		case "runner-hwaddr-policy":
+			defvalue = ""
+		case "runner-min-ports":
+			defvalue = int32(-1)
+		case "runner-sys-prio":
+			defvalue = int32(-1)
+		case "runner-tx-balancer":
+			defvalue = ""
+		case "runner-tx-balancer-interval":
+			defvalue = int32(-1)
+		case "runner-tx-hash":
+			defvalue = []string{}
 		}
 	case "team-port":
 		switch key {
@@ -4339,6 +4695,16 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			logger.Error("invalid key:", setting, key)
 		case "config":
 			defvalue = ""
+		case "lacp-key":
+			defvalue = int32(0)
+		case "lacp-prio":
+			defvalue = int32(255)
+		case "prio":
+			defvalue = int32(0)
+		case "queue-id":
+			defvalue = int32(-1)
+		case "sticky":
+			defvalue = false
 		}
 	case "tun":
 		switch key {
@@ -4356,6 +4722,13 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = false
 		case "vnet-hdr":
 			defvalue = false
+		}
+	case "user":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "data":
+			defvalue = map[string]string{}
 		}
 	case "vlan":
 		switch key {
@@ -4523,6 +4896,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = ""
 		case "pairwise":
 			defvalue = []string{}
+		case "pmf":
+			defvalue = int32(0)
 		case "proto":
 			defvalue = []string{}
 		case "psk":
@@ -4542,6 +4917,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		case "wep-key3":
 			defvalue = ""
 		case "wep-tx-keyidx":
+			defvalue = uint32(0x0)
+		case "wps-method":
 			defvalue = uint32(0x0)
 		}
 	case "alias-vpn-l2tp":
@@ -4607,6 +4984,10 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		case "ipsec-gateway-id":
 			defvalue = ""
 		case "ipsec-psk":
+			defvalue = ""
+		case "ipsec-ike":
+			defvalue = ""
+		case "ipsec-esp":
 			defvalue = ""
 		}
 	case "alias-vpn-openconnect":
@@ -5017,6 +5398,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingBridgeAgeingTimeJSON(data)
 		case "forward-delay":
 			valueJSON = getSettingBridgeForwardDelayJSON(data)
+		case "group-forward-mask":
+			valueJSON = getSettingBridgeGroupForwardMaskJSON(data)
 		case "hello-time":
 			valueJSON = getSettingBridgeHelloTimeJSON(data)
 		case "mac-address":
@@ -5060,6 +5443,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		switch key {
 		default:
 			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "auth-retries":
+			valueJSON = getSettingConnectionAuthRetriesJSON(data)
 		case "autoconnect":
 			valueJSON = getSettingConnectionAutoconnectJSON(data)
 		case "autoconnect-priority":
@@ -5133,6 +5518,11 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingDcbPriorityStrictBandwidthJSON(data)
 		case "priority-traffic-class":
 			valueJSON = getSettingDcbPriorityTrafficClassJSON(data)
+		}
+	case "dummy":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
 		}
 	case "generic":
 		switch key {
@@ -5225,6 +5615,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingIP4ConfigNeverDefaultJSON(data)
 		case "route-metric":
 			valueJSON = getSettingIP4ConfigRouteMetricJSON(data)
+		case "route-table":
+			valueJSON = getSettingIP4ConfigRouteTableJSON(data)
 		case "routes":
 			valueJSON = getSettingIP4ConfigRoutesJSON(data)
 		}
@@ -5268,6 +5660,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingIP6ConfigNeverDefaultJSON(data)
 		case "route-metric":
 			valueJSON = getSettingIP6ConfigRouteMetricJSON(data)
+		case "route-table":
+			valueJSON = getSettingIP6ConfigRouteTableJSON(data)
 		case "routes":
 			valueJSON = getSettingIP6ConfigRoutesJSON(data)
 		case "token":
@@ -5347,6 +5741,50 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		case "ssid":
 			valueJSON = getSettingOlpcMeshSsidJSON(data)
 		}
+	case "ovs-bridge":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "fail-mode":
+			valueJSON = getSettingOvsBridgeFailModeJSON(data)
+		case "mcast-snooping-enable":
+			valueJSON = getSettingOvsBridgeMcastSnoopingEnableJSON(data)
+		case "rstp-enable":
+			valueJSON = getSettingOvsBridgeRstpEnableJSON(data)
+		case "stp-enable":
+			valueJSON = getSettingOvsBridgeStpEnableJSON(data)
+		}
+	case "ovs-interface":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "type":
+			valueJSON = getSettingOvsInterfaceTypeJSON(data)
+		}
+	case "ovs-patch":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "peer":
+			valueJSON = getSettingOvsPatchPeerJSON(data)
+		}
+	case "ovs-port":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "bond-downdelay":
+			valueJSON = getSettingOvsPortBondDowndelayJSON(data)
+		case "bond-mode":
+			valueJSON = getSettingOvsPortBondModeJSON(data)
+		case "bond-updelay":
+			valueJSON = getSettingOvsPortBondUpdelayJSON(data)
+		case "lacp":
+			valueJSON = getSettingOvsPortLacpJSON(data)
+		case "tag":
+			valueJSON = getSettingOvsPortTagJSON(data)
+		case "vlan-mode":
+			valueJSON = getSettingOvsPortVlanModeJSON(data)
+		}
 	case "ppp":
 		switch key {
 		default:
@@ -5392,6 +5830,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		switch key {
 		default:
 			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "parent":
+			valueJSON = getSettingPppoeParentJSON(data)
 		case "password":
 			valueJSON = getSettingPppoePasswordJSON(data)
 		case "password-flags":
@@ -5429,12 +5869,45 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		case "stopbits":
 			valueJSON = getSettingSerialStopbitsJSON(data)
 		}
+	case "tc":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		}
 	case "team":
 		switch key {
 		default:
 			logger.Error("getSettingKeyJSON: invalide key", section, key)
 		case "config":
 			valueJSON = getSettingTeamConfigJSON(data)
+		case "mcast-rejoin-count":
+			valueJSON = getSettingTeamMcastRejoinCountJSON(data)
+		case "mcast-rejoin-interval":
+			valueJSON = getSettingTeamMcastRejoinIntervalJSON(data)
+		case "notify-peers-count":
+			valueJSON = getSettingTeamNotifyPeersCountJSON(data)
+		case "notify-peers-interval":
+			valueJSON = getSettingTeamNotifyPeersIntervalJSON(data)
+		case "runner":
+			valueJSON = getSettingTeamRunnerJSON(data)
+		case "runner-active":
+			valueJSON = getSettingTeamRunnerActiveJSON(data)
+		case "runner-agg-select-policy":
+			valueJSON = getSettingTeamRunnerAggSelectPolicyJSON(data)
+		case "runner-fast-rate":
+			valueJSON = getSettingTeamRunnerFastRateJSON(data)
+		case "runner-hwaddr-policy":
+			valueJSON = getSettingTeamRunnerHwaddrPolicyJSON(data)
+		case "runner-min-ports":
+			valueJSON = getSettingTeamRunnerMinPortsJSON(data)
+		case "runner-sys-prio":
+			valueJSON = getSettingTeamRunnerSysPrioJSON(data)
+		case "runner-tx-balancer":
+			valueJSON = getSettingTeamRunnerTxBalancerJSON(data)
+		case "runner-tx-balancer-interval":
+			valueJSON = getSettingTeamRunnerTxBalancerIntervalJSON(data)
+		case "runner-tx-hash":
+			valueJSON = getSettingTeamRunnerTxHashJSON(data)
 		}
 	case "team-port":
 		switch key {
@@ -5442,6 +5915,16 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			logger.Error("getSettingKeyJSON: invalide key", section, key)
 		case "config":
 			valueJSON = getSettingTeamPortConfigJSON(data)
+		case "lacp-key":
+			valueJSON = getSettingTeamPortLacpKeyJSON(data)
+		case "lacp-prio":
+			valueJSON = getSettingTeamPortLacpPrioJSON(data)
+		case "prio":
+			valueJSON = getSettingTeamPortPrioJSON(data)
+		case "queue-id":
+			valueJSON = getSettingTeamPortQueueIdJSON(data)
+		case "sticky":
+			valueJSON = getSettingTeamPortStickyJSON(data)
 		}
 	case "tun":
 		switch key {
@@ -5459,6 +5942,13 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingTunPiJSON(data)
 		case "vnet-hdr":
 			valueJSON = getSettingTunVnetHdrJSON(data)
+		}
+	case "user":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "data":
+			valueJSON = getSettingUserDataJSON(data)
 		}
 	case "vlan":
 		switch key {
@@ -5626,6 +6116,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingWirelessSecurityLeapUsernameJSON(data)
 		case "pairwise":
 			valueJSON = getSettingWirelessSecurityPairwiseJSON(data)
+		case "pmf":
+			valueJSON = getSettingWirelessSecurityPmfJSON(data)
 		case "proto":
 			valueJSON = getSettingWirelessSecurityProtoJSON(data)
 		case "psk":
@@ -5646,6 +6138,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingWirelessSecurityWepKey3JSON(data)
 		case "wep-tx-keyidx":
 			valueJSON = getSettingWirelessSecurityWepTxKeyidxJSON(data)
+		case "wps-method":
+			valueJSON = getSettingWirelessSecurityWpsMethodJSON(data)
 		}
 	case "alias-vpn-l2tp":
 		switch key {
@@ -5711,6 +6205,10 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingVpnL2tpKeyIpsecGatewayIdJSON(data)
 		case "ipsec-psk":
 			valueJSON = getSettingVpnL2tpKeyIpsecPskJSON(data)
+		case "ipsec-ike":
+			valueJSON = getSettingVpnL2tpKeyIpsecIkeJSON(data)
+		case "ipsec-esp":
+			valueJSON = getSettingVpnL2tpKeyIpsecEspJSON(data)
 		}
 	case "alias-vpn-openconnect":
 		switch key {
@@ -6126,6 +6624,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingBridgeAgeingTimeJSON(data, valueJSON)
 		case "forward-delay":
 			err = setSettingBridgeForwardDelayJSON(data, valueJSON)
+		case "group-forward-mask":
+			err = setSettingBridgeGroupForwardMaskJSON(data, valueJSON)
 		case "hello-time":
 			err = setSettingBridgeHelloTimeJSON(data, valueJSON)
 		case "mac-address":
@@ -6172,6 +6672,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		default:
 			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
 			logger.Error(err)
+		case "auth-retries":
+			err = setSettingConnectionAuthRetriesJSON(data, valueJSON)
 		case "autoconnect":
 			err = setSettingConnectionAutoconnectJSON(data, valueJSON)
 		case "autoconnect-priority":
@@ -6246,6 +6748,12 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingDcbPriorityStrictBandwidthJSON(data, valueJSON)
 		case "priority-traffic-class":
 			err = setSettingDcbPriorityTrafficClassJSON(data, valueJSON)
+		}
+	case "dummy":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
 		}
 	case "generic":
 		switch key {
@@ -6342,6 +6850,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingIP4ConfigNeverDefaultJSON(data, valueJSON)
 		case "route-metric":
 			err = setSettingIP4ConfigRouteMetricJSON(data, valueJSON)
+		case "route-table":
+			err = setSettingIP4ConfigRouteTableJSON(data, valueJSON)
 		case "routes":
 			err = setSettingIP4ConfigRoutesJSON(data, valueJSON)
 		}
@@ -6386,6 +6896,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingIP6ConfigNeverDefaultJSON(data, valueJSON)
 		case "route-metric":
 			err = setSettingIP6ConfigRouteMetricJSON(data, valueJSON)
+		case "route-table":
+			err = setSettingIP6ConfigRouteTableJSON(data, valueJSON)
 		case "routes":
 			err = setSettingIP6ConfigRoutesJSON(data, valueJSON)
 		case "token":
@@ -6469,6 +6981,54 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		case "ssid":
 			err = setSettingOlpcMeshSsidJSON(data, valueJSON)
 		}
+	case "ovs-bridge":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "fail-mode":
+			err = setSettingOvsBridgeFailModeJSON(data, valueJSON)
+		case "mcast-snooping-enable":
+			err = setSettingOvsBridgeMcastSnoopingEnableJSON(data, valueJSON)
+		case "rstp-enable":
+			err = setSettingOvsBridgeRstpEnableJSON(data, valueJSON)
+		case "stp-enable":
+			err = setSettingOvsBridgeStpEnableJSON(data, valueJSON)
+		}
+	case "ovs-interface":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "type":
+			err = setSettingOvsInterfaceTypeJSON(data, valueJSON)
+		}
+	case "ovs-patch":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "peer":
+			err = setSettingOvsPatchPeerJSON(data, valueJSON)
+		}
+	case "ovs-port":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "bond-downdelay":
+			err = setSettingOvsPortBondDowndelayJSON(data, valueJSON)
+		case "bond-mode":
+			err = setSettingOvsPortBondModeJSON(data, valueJSON)
+		case "bond-updelay":
+			err = setSettingOvsPortBondUpdelayJSON(data, valueJSON)
+		case "lacp":
+			err = setSettingOvsPortLacpJSON(data, valueJSON)
+		case "tag":
+			err = setSettingOvsPortTagJSON(data, valueJSON)
+		case "vlan-mode":
+			err = setSettingOvsPortVlanModeJSON(data, valueJSON)
+		}
 	case "ppp":
 		switch key {
 		default:
@@ -6516,6 +7076,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		default:
 			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
 			logger.Error(err)
+		case "parent":
+			err = setSettingPppoeParentJSON(data, valueJSON)
 		case "password":
 			err = setSettingPppoePasswordJSON(data, valueJSON)
 		case "password-flags":
@@ -6555,6 +7117,12 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		case "stopbits":
 			err = setSettingSerialStopbitsJSON(data, valueJSON)
 		}
+	case "tc":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		}
 	case "team":
 		switch key {
 		default:
@@ -6562,6 +7130,34 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			logger.Error(err)
 		case "config":
 			err = setSettingTeamConfigJSON(data, valueJSON)
+		case "mcast-rejoin-count":
+			err = setSettingTeamMcastRejoinCountJSON(data, valueJSON)
+		case "mcast-rejoin-interval":
+			err = setSettingTeamMcastRejoinIntervalJSON(data, valueJSON)
+		case "notify-peers-count":
+			err = setSettingTeamNotifyPeersCountJSON(data, valueJSON)
+		case "notify-peers-interval":
+			err = setSettingTeamNotifyPeersIntervalJSON(data, valueJSON)
+		case "runner":
+			err = setSettingTeamRunnerJSON(data, valueJSON)
+		case "runner-active":
+			err = setSettingTeamRunnerActiveJSON(data, valueJSON)
+		case "runner-agg-select-policy":
+			err = setSettingTeamRunnerAggSelectPolicyJSON(data, valueJSON)
+		case "runner-fast-rate":
+			err = setSettingTeamRunnerFastRateJSON(data, valueJSON)
+		case "runner-hwaddr-policy":
+			err = setSettingTeamRunnerHwaddrPolicyJSON(data, valueJSON)
+		case "runner-min-ports":
+			err = setSettingTeamRunnerMinPortsJSON(data, valueJSON)
+		case "runner-sys-prio":
+			err = setSettingTeamRunnerSysPrioJSON(data, valueJSON)
+		case "runner-tx-balancer":
+			err = setSettingTeamRunnerTxBalancerJSON(data, valueJSON)
+		case "runner-tx-balancer-interval":
+			err = setSettingTeamRunnerTxBalancerIntervalJSON(data, valueJSON)
+		case "runner-tx-hash":
+			err = setSettingTeamRunnerTxHashJSON(data, valueJSON)
 		}
 	case "team-port":
 		switch key {
@@ -6570,6 +7166,16 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			logger.Error(err)
 		case "config":
 			err = setSettingTeamPortConfigJSON(data, valueJSON)
+		case "lacp-key":
+			err = setSettingTeamPortLacpKeyJSON(data, valueJSON)
+		case "lacp-prio":
+			err = setSettingTeamPortLacpPrioJSON(data, valueJSON)
+		case "prio":
+			err = setSettingTeamPortPrioJSON(data, valueJSON)
+		case "queue-id":
+			err = setSettingTeamPortQueueIdJSON(data, valueJSON)
+		case "sticky":
+			err = setSettingTeamPortStickyJSON(data, valueJSON)
 		}
 	case "tun":
 		switch key {
@@ -6588,6 +7194,14 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingTunPiJSON(data, valueJSON)
 		case "vnet-hdr":
 			err = setSettingTunVnetHdrJSON(data, valueJSON)
+		}
+	case "user":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "data":
+			err = setSettingUserDataJSON(data, valueJSON)
 		}
 	case "vlan":
 		switch key {
@@ -6680,8 +7294,6 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWiredAutoNegotiateJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWiredClonedMacAddressJSON(data, valueJSON)
-		case "assigned-mac-address":
-			err = setSettingWiredAssignedMacAddressJSON(data, valueJSON)
 		case "duplex":
 			err = setSettingWiredDuplexJSON(data, valueJSON)
 		case "generate-mac-address-mask":
@@ -6720,8 +7332,6 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWirelessChannelJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWirelessClonedMacAddressJSON(data, valueJSON)
-		case "assigned-mac-address":
-			err = setSettingWirelessAssignedMacAddressJSON(data, valueJSON)
 		case "generate-mac-address-mask":
 			err = setSettingWirelessGenerateMacAddressMaskJSON(data, valueJSON)
 		case "hidden":
@@ -6766,6 +7376,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWirelessSecurityLeapUsernameJSON(data, valueJSON)
 		case "pairwise":
 			err = setSettingWirelessSecurityPairwiseJSON(data, valueJSON)
+		case "pmf":
+			err = setSettingWirelessSecurityPmfJSON(data, valueJSON)
 		case "proto":
 			err = setSettingWirelessSecurityProtoJSON(data, valueJSON)
 		case "psk":
@@ -6786,6 +7398,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWirelessSecurityWepKey3JSON(data, valueJSON)
 		case "wep-tx-keyidx":
 			err = setSettingWirelessSecurityWepTxKeyidxJSON(data, valueJSON)
+		case "wps-method":
+			err = setSettingWirelessSecurityWpsMethodJSON(data, valueJSON)
 		}
 	case "alias-vpn-l2tp":
 		switch key {
@@ -6854,6 +7468,10 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingVpnL2tpKeyIpsecGatewayIdJSON(data, valueJSON)
 		case "ipsec-psk":
 			err = setSettingVpnL2tpKeyIpsecPskJSON(data, valueJSON)
+		case "ipsec-ike":
+			err = setSettingVpnL2tpKeyIpsecIkeJSON(data, valueJSON)
+		case "ipsec-esp":
+			err = setSettingVpnL2tpKeyIpsecEspJSON(data, valueJSON)
 		}
 	case "alias-vpn-openconnect":
 		switch key {
@@ -7611,6 +8229,11 @@ func ensureSettingBridgeForwardDelayNoEmpty(data connectionData, errs sectionErr
 		rememberError(errs, "bridge", "forward-delay", nmKeyErrorMissingValue)
 	}
 }
+func ensureSettingBridgeGroupForwardMaskNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingBridgeGroupForwardMaskExists(data) {
+		rememberError(errs, "bridge", "group-forward-mask", nmKeyErrorMissingValue)
+	}
+}
 func ensureSettingBridgeHelloTimeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingBridgeHelloTimeExists(data) {
 		rememberError(errs, "bridge", "hello-time", nmKeyErrorMissingValue)
@@ -7722,6 +8345,11 @@ func ensureSectionSettingConnectionExists(data connectionData, errs sectionError
 	sectionData, _ := data["connection"]
 	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, "connection", fmt.Sprintf(nmKeyErrorEmptySection, "connection"))
+	}
+}
+func ensureSettingConnectionAuthRetriesNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingConnectionAuthRetriesExists(data) {
+		rememberError(errs, "connection", "auth-retries", nmKeyErrorMissingValue)
 	}
 }
 func ensureSettingConnectionAutoconnectNoEmpty(data connectionData, errs sectionErrors) {
@@ -7969,6 +8597,15 @@ func ensureSettingDcbPriorityTrafficClassNoEmpty(data connectionData, errs secti
 	value := getSettingDcbPriorityTrafficClass(data)
 	if len(value) == 0 {
 		rememberError(errs, "dcb", "priority-traffic-class", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSectionSettingDummyExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "dummy") {
+		rememberError(errs, relatedKey, "dummy", fmt.Sprintf(nmKeyErrorMissingSection, "dummy"))
+	}
+	sectionData, _ := data["dummy"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "dummy", fmt.Sprintf(nmKeyErrorEmptySection, "dummy"))
 	}
 }
 func ensureSectionSettingGenericExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -8271,6 +8908,11 @@ func ensureSettingIP4ConfigRouteMetricNoEmpty(data connectionData, errs sectionE
 		rememberError(errs, "ipv4", "route-metric", nmKeyErrorMissingValue)
 	}
 }
+func ensureSettingIP4ConfigRouteTableNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIP4ConfigRouteTableExists(data) {
+		rememberError(errs, "ipv4", "route-table", nmKeyErrorMissingValue)
+	}
+}
 func ensureSettingIP4ConfigRoutesNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingIP4ConfigRoutesExists(data) {
 		rememberError(errs, "ipv4", "routes", nmKeyErrorMissingValue)
@@ -8405,6 +9047,11 @@ func ensureSettingIP6ConfigNeverDefaultNoEmpty(data connectionData, errs section
 func ensureSettingIP6ConfigRouteMetricNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingIP6ConfigRouteMetricExists(data) {
 		rememberError(errs, "ipv6", "route-metric", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingIP6ConfigRouteTableNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIP6ConfigRouteTableExists(data) {
+		rememberError(errs, "ipv6", "route-table", nmKeyErrorMissingValue)
 	}
 }
 func ensureSettingIP6ConfigRoutesNoEmpty(data connectionData, errs sectionErrors) {
@@ -8640,6 +9287,126 @@ func ensureSettingOlpcMeshSsidNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, "802-11-olpc-mesh", "ssid", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSectionSettingOvsBridgeExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "ovs-bridge") {
+		rememberError(errs, relatedKey, "ovs-bridge", fmt.Sprintf(nmKeyErrorMissingSection, "ovs-bridge"))
+	}
+	sectionData, _ := data["ovs-bridge"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "ovs-bridge", fmt.Sprintf(nmKeyErrorEmptySection, "ovs-bridge"))
+	}
+}
+func ensureSettingOvsBridgeFailModeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsBridgeFailModeExists(data) {
+		rememberError(errs, "ovs-bridge", "fail-mode", nmKeyErrorMissingValue)
+	}
+	value := getSettingOvsBridgeFailMode(data)
+	if len(value) == 0 {
+		rememberError(errs, "ovs-bridge", "fail-mode", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingOvsBridgeMcastSnoopingEnableNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsBridgeMcastSnoopingEnableExists(data) {
+		rememberError(errs, "ovs-bridge", "mcast-snooping-enable", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingOvsBridgeRstpEnableNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsBridgeRstpEnableExists(data) {
+		rememberError(errs, "ovs-bridge", "rstp-enable", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingOvsBridgeStpEnableNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsBridgeStpEnableExists(data) {
+		rememberError(errs, "ovs-bridge", "stp-enable", nmKeyErrorMissingValue)
+	}
+}
+func ensureSectionSettingOvsInterfaceExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "ovs-interface") {
+		rememberError(errs, relatedKey, "ovs-interface", fmt.Sprintf(nmKeyErrorMissingSection, "ovs-interface"))
+	}
+	sectionData, _ := data["ovs-interface"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "ovs-interface", fmt.Sprintf(nmKeyErrorEmptySection, "ovs-interface"))
+	}
+}
+func ensureSettingOvsInterfaceTypeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsInterfaceTypeExists(data) {
+		rememberError(errs, "ovs-interface", "type", nmKeyErrorMissingValue)
+	}
+	value := getSettingOvsInterfaceType(data)
+	if len(value) == 0 {
+		rememberError(errs, "ovs-interface", "type", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSectionSettingOvsPatchExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "ovs-patch") {
+		rememberError(errs, relatedKey, "ovs-patch", fmt.Sprintf(nmKeyErrorMissingSection, "ovs-patch"))
+	}
+	sectionData, _ := data["ovs-patch"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "ovs-patch", fmt.Sprintf(nmKeyErrorEmptySection, "ovs-patch"))
+	}
+}
+func ensureSettingOvsPatchPeerNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPatchPeerExists(data) {
+		rememberError(errs, "ovs-patch", "peer", nmKeyErrorMissingValue)
+	}
+	value := getSettingOvsPatchPeer(data)
+	if len(value) == 0 {
+		rememberError(errs, "ovs-patch", "peer", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSectionSettingOvsPortExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "ovs-port") {
+		rememberError(errs, relatedKey, "ovs-port", fmt.Sprintf(nmKeyErrorMissingSection, "ovs-port"))
+	}
+	sectionData, _ := data["ovs-port"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "ovs-port", fmt.Sprintf(nmKeyErrorEmptySection, "ovs-port"))
+	}
+}
+func ensureSettingOvsPortBondDowndelayNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPortBondDowndelayExists(data) {
+		rememberError(errs, "ovs-port", "bond-downdelay", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingOvsPortBondModeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPortBondModeExists(data) {
+		rememberError(errs, "ovs-port", "bond-mode", nmKeyErrorMissingValue)
+	}
+	value := getSettingOvsPortBondMode(data)
+	if len(value) == 0 {
+		rememberError(errs, "ovs-port", "bond-mode", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingOvsPortBondUpdelayNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPortBondUpdelayExists(data) {
+		rememberError(errs, "ovs-port", "bond-updelay", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingOvsPortLacpNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPortLacpExists(data) {
+		rememberError(errs, "ovs-port", "lacp", nmKeyErrorMissingValue)
+	}
+	value := getSettingOvsPortLacp(data)
+	if len(value) == 0 {
+		rememberError(errs, "ovs-port", "lacp", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingOvsPortTagNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPortTagExists(data) {
+		rememberError(errs, "ovs-port", "tag", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingOvsPortVlanModeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingOvsPortVlanModeExists(data) {
+		rememberError(errs, "ovs-port", "vlan-mode", nmKeyErrorMissingValue)
+	}
+	value := getSettingOvsPortVlanMode(data)
+	if len(value) == 0 {
+		rememberError(errs, "ovs-port", "vlan-mode", nmKeyErrorEmptyValue)
+	}
+}
 func ensureSectionSettingPppExists(data connectionData, errs sectionErrors, relatedKey string) {
 	if !isSettingExists(data, "ppp") {
 		rememberError(errs, relatedKey, "ppp", fmt.Sprintf(nmKeyErrorMissingSection, "ppp"))
@@ -8748,6 +9515,15 @@ func ensureSectionSettingPppoeExists(data connectionData, errs sectionErrors, re
 		rememberError(errs, relatedKey, "pppoe", fmt.Sprintf(nmKeyErrorEmptySection, "pppoe"))
 	}
 }
+func ensureSettingPppoeParentNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingPppoeParentExists(data) {
+		rememberError(errs, "pppoe", "parent", nmKeyErrorMissingValue)
+	}
+	value := getSettingPppoeParent(data)
+	if len(value) == 0 {
+		rememberError(errs, "pppoe", "parent", nmKeyErrorEmptyValue)
+	}
+}
 func ensureSettingPppoePasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingPppoePasswordExists(data) {
 		rememberError(errs, "pppoe", "password", nmKeyErrorMissingValue)
@@ -8851,6 +9627,15 @@ func ensureSettingSerialStopbitsNoEmpty(data connectionData, errs sectionErrors)
 		rememberError(errs, "serial", "stopbits", nmKeyErrorMissingValue)
 	}
 }
+func ensureSectionSettingTCConfigExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "tc") {
+		rememberError(errs, relatedKey, "tc", fmt.Sprintf(nmKeyErrorMissingSection, "tc"))
+	}
+	sectionData, _ := data["tc"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "tc", fmt.Sprintf(nmKeyErrorEmptySection, "tc"))
+	}
+}
 func ensureSectionSettingTeamExists(data connectionData, errs sectionErrors, relatedKey string) {
 	if !isSettingExists(data, "team") {
 		rememberError(errs, relatedKey, "team", fmt.Sprintf(nmKeyErrorMissingSection, "team"))
@@ -8869,6 +9654,96 @@ func ensureSettingTeamConfigNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, "team", "config", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSettingTeamMcastRejoinCountNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamMcastRejoinCountExists(data) {
+		rememberError(errs, "team", "mcast-rejoin-count", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamMcastRejoinIntervalNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamMcastRejoinIntervalExists(data) {
+		rememberError(errs, "team", "mcast-rejoin-interval", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamNotifyPeersCountNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamNotifyPeersCountExists(data) {
+		rememberError(errs, "team", "notify-peers-count", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamNotifyPeersIntervalNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamNotifyPeersIntervalExists(data) {
+		rememberError(errs, "team", "notify-peers-interval", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamRunnerNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerExists(data) {
+		rememberError(errs, "team", "runner", nmKeyErrorMissingValue)
+	}
+	value := getSettingTeamRunner(data)
+	if len(value) == 0 {
+		rememberError(errs, "team", "runner", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingTeamRunnerActiveNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerActiveExists(data) {
+		rememberError(errs, "team", "runner-active", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamRunnerAggSelectPolicyNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerAggSelectPolicyExists(data) {
+		rememberError(errs, "team", "runner-agg-select-policy", nmKeyErrorMissingValue)
+	}
+	value := getSettingTeamRunnerAggSelectPolicy(data)
+	if len(value) == 0 {
+		rememberError(errs, "team", "runner-agg-select-policy", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingTeamRunnerFastRateNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerFastRateExists(data) {
+		rememberError(errs, "team", "runner-fast-rate", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamRunnerHwaddrPolicyNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerHwaddrPolicyExists(data) {
+		rememberError(errs, "team", "runner-hwaddr-policy", nmKeyErrorMissingValue)
+	}
+	value := getSettingTeamRunnerHwaddrPolicy(data)
+	if len(value) == 0 {
+		rememberError(errs, "team", "runner-hwaddr-policy", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingTeamRunnerMinPortsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerMinPortsExists(data) {
+		rememberError(errs, "team", "runner-min-ports", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamRunnerSysPrioNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerSysPrioExists(data) {
+		rememberError(errs, "team", "runner-sys-prio", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamRunnerTxBalancerNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerTxBalancerExists(data) {
+		rememberError(errs, "team", "runner-tx-balancer", nmKeyErrorMissingValue)
+	}
+	value := getSettingTeamRunnerTxBalancer(data)
+	if len(value) == 0 {
+		rememberError(errs, "team", "runner-tx-balancer", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingTeamRunnerTxBalancerIntervalNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerTxBalancerIntervalExists(data) {
+		rememberError(errs, "team", "runner-tx-balancer-interval", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamRunnerTxHashNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamRunnerTxHashExists(data) {
+		rememberError(errs, "team", "runner-tx-hash", nmKeyErrorMissingValue)
+	}
+	value := getSettingTeamRunnerTxHash(data)
+	if len(value) == 0 {
+		rememberError(errs, "team", "runner-tx-hash", nmKeyErrorEmptyValue)
+	}
+}
 func ensureSectionSettingTeamPortExists(data connectionData, errs sectionErrors, relatedKey string) {
 	if !isSettingExists(data, "team-port") {
 		rememberError(errs, relatedKey, "team-port", fmt.Sprintf(nmKeyErrorMissingSection, "team-port"))
@@ -8885,6 +9760,31 @@ func ensureSettingTeamPortConfigNoEmpty(data connectionData, errs sectionErrors)
 	value := getSettingTeamPortConfig(data)
 	if len(value) == 0 {
 		rememberError(errs, "team-port", "config", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingTeamPortLacpKeyNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamPortLacpKeyExists(data) {
+		rememberError(errs, "team-port", "lacp-key", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamPortLacpPrioNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamPortLacpPrioExists(data) {
+		rememberError(errs, "team-port", "lacp-prio", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamPortPrioNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamPortPrioExists(data) {
+		rememberError(errs, "team-port", "prio", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamPortQueueIdNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamPortQueueIdExists(data) {
+		rememberError(errs, "team-port", "queue-id", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingTeamPortStickyNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingTeamPortStickyExists(data) {
+		rememberError(errs, "team-port", "sticky", nmKeyErrorMissingValue)
 	}
 }
 func ensureSectionSettingTunExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -8932,6 +9832,24 @@ func ensureSettingTunPiNoEmpty(data connectionData, errs sectionErrors) {
 func ensureSettingTunVnetHdrNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingTunVnetHdrExists(data) {
 		rememberError(errs, "tun", "vnet-hdr", nmKeyErrorMissingValue)
+	}
+}
+func ensureSectionSettingUserExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "user") {
+		rememberError(errs, relatedKey, "user", fmt.Sprintf(nmKeyErrorMissingSection, "user"))
+	}
+	sectionData, _ := data["user"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "user", fmt.Sprintf(nmKeyErrorEmptySection, "user"))
+	}
+}
+func ensureSettingUserDataNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingUserDataExists(data) {
+		rememberError(errs, "user", "data", nmKeyErrorMissingValue)
+	}
+	value := getSettingUserData(data)
+	if len(value) == 0 {
+		rememberError(errs, "user", "data", nmKeyErrorEmptyValue)
 	}
 }
 func ensureSectionSettingVlanExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -9475,6 +10393,11 @@ func ensureSettingWirelessSecurityPairwiseNoEmpty(data connectionData, errs sect
 		rememberError(errs, "802-11-wireless-security", "pairwise", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSettingWirelessSecurityPmfNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingWirelessSecurityPmfExists(data) {
+		rememberError(errs, "802-11-wireless-security", "pmf", nmKeyErrorMissingValue)
+	}
+}
 func ensureSettingWirelessSecurityProtoNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityProtoExists(data) {
 		rememberError(errs, "802-11-wireless-security", "proto", nmKeyErrorMissingValue)
@@ -9547,6 +10470,11 @@ func ensureSettingWirelessSecurityWepKey3NoEmpty(data connectionData, errs secti
 func ensureSettingWirelessSecurityWepTxKeyidxNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepTxKeyidxExists(data) {
 		rememberError(errs, "802-11-wireless-security", "wep-tx-keyidx", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingWirelessSecurityWpsMethodNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingWirelessSecurityWpsMethodExists(data) {
+		rememberError(errs, "802-11-wireless-security", "wps-method", nmKeyErrorMissingValue)
 	}
 }
 func ensureSectionSettingVpnL2tpExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -9727,6 +10655,24 @@ func ensureSettingVpnL2tpKeyIpsecPskNoEmpty(data connectionData, errs sectionErr
 	value := getSettingVpnL2tpKeyIpsecPsk(data)
 	if len(value) == 0 {
 		rememberError(errs, "alias-vpn-l2tp-ipsec", "ipsec-psk", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingVpnL2tpKeyIpsecIkeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnL2tpKeyIpsecIkeExists(data) {
+		rememberError(errs, "alias-vpn-l2tp-ipsec", "ipsec-ike", nmKeyErrorMissingValue)
+	}
+	value := getSettingVpnL2tpKeyIpsecIke(data)
+	if len(value) == 0 {
+		rememberError(errs, "alias-vpn-l2tp-ipsec", "ipsec-ike", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingVpnL2tpKeyIpsecEspNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnL2tpKeyIpsecEspExists(data) {
+		rememberError(errs, "alias-vpn-l2tp-ipsec", "ipsec-esp", nmKeyErrorMissingValue)
+	}
+	value := getSettingVpnL2tpKeyIpsecEsp(data)
+	if len(value) == 0 {
+		rememberError(errs, "alias-vpn-l2tp-ipsec", "ipsec-esp", nmKeyErrorEmptyValue)
 	}
 }
 func ensureSectionSettingVpnOpenconnectExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -10740,6 +11686,9 @@ func isSettingBridgeAgeingTimeExists(data connectionData) bool {
 func isSettingBridgeForwardDelayExists(data connectionData) bool {
 	return isSettingKeyExists(data, "bridge", "forward-delay")
 }
+func isSettingBridgeGroupForwardMaskExists(data connectionData) bool {
+	return isSettingKeyExists(data, "bridge", "group-forward-mask")
+}
 func isSettingBridgeHelloTimeExists(data connectionData) bool {
 	return isSettingKeyExists(data, "bridge", "hello-time")
 }
@@ -10781,6 +11730,9 @@ func isSettingCdmaPasswordFlagsExists(data connectionData) bool {
 }
 func isSettingCdmaUsernameExists(data connectionData) bool {
 	return isSettingKeyExists(data, "cdma", "username")
+}
+func isSettingConnectionAuthRetriesExists(data connectionData) bool {
+	return isSettingKeyExists(data, "connection", "auth-retries")
 }
 func isSettingConnectionAutoconnectExists(data connectionData) bool {
 	return isSettingKeyExists(data, "connection", "autoconnect")
@@ -10992,6 +11944,9 @@ func isSettingIP4ConfigNeverDefaultExists(data connectionData) bool {
 func isSettingIP4ConfigRouteMetricExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ipv4", "route-metric")
 }
+func isSettingIP4ConfigRouteTableExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ipv4", "route-table")
+}
 func isSettingIP4ConfigRoutesExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ipv4", "routes")
 }
@@ -11048,6 +12003,9 @@ func isSettingIP6ConfigNeverDefaultExists(data connectionData) bool {
 }
 func isSettingIP6ConfigRouteMetricExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ipv6", "route-metric")
+}
+func isSettingIP6ConfigRouteTableExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ipv6", "route-table")
 }
 func isSettingIP6ConfigRoutesExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ipv6", "routes")
@@ -11136,6 +12094,42 @@ func isSettingOlpcMeshDhcpAnycastAddressExists(data connectionData) bool {
 func isSettingOlpcMeshSsidExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-11-olpc-mesh", "ssid")
 }
+func isSettingOvsBridgeFailModeExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-bridge", "fail-mode")
+}
+func isSettingOvsBridgeMcastSnoopingEnableExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-bridge", "mcast-snooping-enable")
+}
+func isSettingOvsBridgeRstpEnableExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-bridge", "rstp-enable")
+}
+func isSettingOvsBridgeStpEnableExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-bridge", "stp-enable")
+}
+func isSettingOvsInterfaceTypeExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-interface", "type")
+}
+func isSettingOvsPatchPeerExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-patch", "peer")
+}
+func isSettingOvsPortBondDowndelayExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-port", "bond-downdelay")
+}
+func isSettingOvsPortBondModeExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-port", "bond-mode")
+}
+func isSettingOvsPortBondUpdelayExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-port", "bond-updelay")
+}
+func isSettingOvsPortLacpExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-port", "lacp")
+}
+func isSettingOvsPortTagExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-port", "tag")
+}
+func isSettingOvsPortVlanModeExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ovs-port", "vlan-mode")
+}
 func isSettingPppBaudExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ppp", "baud")
 }
@@ -11190,6 +12184,9 @@ func isSettingPppRequireMppeExists(data connectionData) bool {
 func isSettingPppRequireMppe128Exists(data connectionData) bool {
 	return isSettingKeyExists(data, "ppp", "require-mppe-128")
 }
+func isSettingPppoeParentExists(data connectionData) bool {
+	return isSettingKeyExists(data, "pppoe", "parent")
+}
 func isSettingPppoePasswordExists(data connectionData) bool {
 	return isSettingKeyExists(data, "pppoe", "password")
 }
@@ -11232,8 +12229,65 @@ func isSettingSerialStopbitsExists(data connectionData) bool {
 func isSettingTeamConfigExists(data connectionData) bool {
 	return isSettingKeyExists(data, "team", "config")
 }
+func isSettingTeamMcastRejoinCountExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "mcast-rejoin-count")
+}
+func isSettingTeamMcastRejoinIntervalExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "mcast-rejoin-interval")
+}
+func isSettingTeamNotifyPeersCountExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "notify-peers-count")
+}
+func isSettingTeamNotifyPeersIntervalExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "notify-peers-interval")
+}
+func isSettingTeamRunnerExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner")
+}
+func isSettingTeamRunnerActiveExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-active")
+}
+func isSettingTeamRunnerAggSelectPolicyExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-agg-select-policy")
+}
+func isSettingTeamRunnerFastRateExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-fast-rate")
+}
+func isSettingTeamRunnerHwaddrPolicyExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-hwaddr-policy")
+}
+func isSettingTeamRunnerMinPortsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-min-ports")
+}
+func isSettingTeamRunnerSysPrioExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-sys-prio")
+}
+func isSettingTeamRunnerTxBalancerExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-tx-balancer")
+}
+func isSettingTeamRunnerTxBalancerIntervalExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-tx-balancer-interval")
+}
+func isSettingTeamRunnerTxHashExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team", "runner-tx-hash")
+}
 func isSettingTeamPortConfigExists(data connectionData) bool {
 	return isSettingKeyExists(data, "team-port", "config")
+}
+func isSettingTeamPortLacpKeyExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team-port", "lacp-key")
+}
+func isSettingTeamPortLacpPrioExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team-port", "lacp-prio")
+}
+func isSettingTeamPortPrioExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team-port", "prio")
+}
+func isSettingTeamPortQueueIdExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team-port", "queue-id")
+}
+func isSettingTeamPortStickyExists(data connectionData) bool {
+	return isSettingKeyExists(data, "team-port", "sticky")
 }
 func isSettingTunGroupExists(data connectionData) bool {
 	return isSettingKeyExists(data, "tun", "group")
@@ -11252,6 +12306,9 @@ func isSettingTunPiExists(data connectionData) bool {
 }
 func isSettingTunVnetHdrExists(data connectionData) bool {
 	return isSettingKeyExists(data, "tun", "vnet-hdr")
+}
+func isSettingUserDataExists(data connectionData) bool {
+	return isSettingKeyExists(data, "user", "data")
 }
 func isSettingVlanEgressPriorityMapExists(data connectionData) bool {
 	return isSettingKeyExists(data, "vlan", "egress-priority-map")
@@ -11451,6 +12508,9 @@ func isSettingWirelessSecurityLeapUsernameExists(data connectionData) bool {
 func isSettingWirelessSecurityPairwiseExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-11-wireless-security", "pairwise")
 }
+func isSettingWirelessSecurityPmfExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-11-wireless-security", "pmf")
+}
 func isSettingWirelessSecurityProtoExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-11-wireless-security", "proto")
 }
@@ -11480,6 +12540,9 @@ func isSettingWirelessSecurityWepKey3Exists(data connectionData) bool {
 }
 func isSettingWirelessSecurityWepTxKeyidxExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-11-wireless-security", "wep-tx-keyidx")
+}
+func isSettingWirelessSecurityWpsMethodExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-11-wireless-security", "wps-method")
 }
 func isSettingVpnL2tpKeyGatewayExists(data connectionData) bool {
 	return isSettingKeyExists(data, "alias-vpn-l2tp", "gateway")
@@ -11555,6 +12618,12 @@ func isSettingVpnL2tpKeyIpsecGatewayIdExists(data connectionData) bool {
 }
 func isSettingVpnL2tpKeyIpsecPskExists(data connectionData) bool {
 	return isSettingKeyExists(data, "alias-vpn-l2tp-ipsec", "ipsec-psk")
+}
+func isSettingVpnL2tpKeyIpsecIkeExists(data connectionData) bool {
+	return isSettingKeyExists(data, "alias-vpn-l2tp-ipsec", "ipsec-ike")
+}
+func isSettingVpnL2tpKeyIpsecEspExists(data connectionData) bool {
+	return isSettingKeyExists(data, "alias-vpn-l2tp-ipsec", "ipsec-esp")
 }
 func isSettingVpnOpenconnectKeyGatewayExists(data connectionData) bool {
 	return isSettingKeyExists(data, "alias-vpn-openconnect", "gateway")
@@ -12144,6 +13213,11 @@ func getSettingBridgeForwardDelay(data connectionData) (value uint32) {
 	value = interfaceToUint32(ivalue)
 	return
 }
+func getSettingBridgeGroupForwardMask(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "bridge", "group-forward-mask")
+	value = interfaceToUint32(ivalue)
+	return
+}
 func getSettingBridgeHelloTime(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, "bridge", "hello-time")
 	value = interfaceToUint32(ivalue)
@@ -12212,6 +13286,11 @@ func getSettingCdmaPasswordFlags(data connectionData) (value uint32) {
 func getSettingCdmaUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "cdma", "username")
 	value = interfaceToString(ivalue)
+	return
+}
+func getSettingConnectionAuthRetries(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "connection", "auth-retries")
+	value = interfaceToInt32(ivalue)
 	return
 }
 func getSettingConnectionAutoconnect(data connectionData) (value bool) {
@@ -12564,6 +13643,11 @@ func getSettingIP4ConfigRouteMetric(data connectionData) (value int64) {
 	value = interfaceToInt64(ivalue)
 	return
 }
+func getSettingIP4ConfigRouteTable(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "ipv4", "route-table")
+	value = interfaceToUint32(ivalue)
+	return
+}
 func getSettingIP4ConfigRoutes(data connectionData) (value [][]uint32) {
 	ivalue := getSettingKey(data, "ipv4", "routes")
 	value = interfaceToArrayArrayUint32(ivalue)
@@ -12657,6 +13741,11 @@ func getSettingIP6ConfigNeverDefault(data connectionData) (value bool) {
 func getSettingIP6ConfigRouteMetric(data connectionData) (value int64) {
 	ivalue := getSettingKey(data, "ipv6", "route-metric")
 	value = interfaceToInt64(ivalue)
+	return
+}
+func getSettingIP6ConfigRouteTable(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "ipv6", "route-table")
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingIP6ConfigRoutes(data connectionData) (value ipv6Routes) {
@@ -12804,6 +13893,66 @@ func getSettingOlpcMeshSsid(data connectionData) (value []byte) {
 	value = interfaceToArrayByte(ivalue)
 	return
 }
+func getSettingOvsBridgeFailMode(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ovs-bridge", "fail-mode")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingOvsBridgeMcastSnoopingEnable(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "ovs-bridge", "mcast-snooping-enable")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingOvsBridgeRstpEnable(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "ovs-bridge", "rstp-enable")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingOvsBridgeStpEnable(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "ovs-bridge", "stp-enable")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingOvsInterfaceType(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ovs-interface", "type")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingOvsPatchPeer(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ovs-patch", "peer")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingOvsPortBondDowndelay(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "ovs-port", "bond-downdelay")
+	value = interfaceToUint32(ivalue)
+	return
+}
+func getSettingOvsPortBondMode(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ovs-port", "bond-mode")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingOvsPortBondUpdelay(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "ovs-port", "bond-updelay")
+	value = interfaceToUint32(ivalue)
+	return
+}
+func getSettingOvsPortLacp(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ovs-port", "lacp")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingOvsPortTag(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "ovs-port", "tag")
+	value = interfaceToUint32(ivalue)
+	return
+}
+func getSettingOvsPortVlanMode(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ovs-port", "vlan-mode")
+	value = interfaceToString(ivalue)
+	return
+}
 func getSettingPppBaud(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, "ppp", "baud")
 	value = interfaceToUint32(ivalue)
@@ -12894,6 +14043,11 @@ func getSettingPppRequireMppe128(data connectionData) (value bool) {
 	value = interfaceToBoolean(ivalue)
 	return
 }
+func getSettingPppoeParent(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "pppoe", "parent")
+	value = interfaceToString(ivalue)
+	return
+}
 func getSettingPppoePassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "pppoe", "password")
 	value = interfaceToString(ivalue)
@@ -12964,9 +14118,104 @@ func getSettingTeamConfig(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
+func getSettingTeamMcastRejoinCount(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "mcast-rejoin-count")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamMcastRejoinInterval(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "mcast-rejoin-interval")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamNotifyPeersCount(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "notify-peers-count")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamNotifyPeersInterval(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "notify-peers-interval")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamRunner(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "team", "runner")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingTeamRunnerActive(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "team", "runner-active")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingTeamRunnerAggSelectPolicy(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "team", "runner-agg-select-policy")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingTeamRunnerFastRate(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "team", "runner-fast-rate")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingTeamRunnerHwaddrPolicy(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "team", "runner-hwaddr-policy")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingTeamRunnerMinPorts(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "runner-min-ports")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamRunnerSysPrio(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "runner-sys-prio")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamRunnerTxBalancer(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "team", "runner-tx-balancer")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingTeamRunnerTxBalancerInterval(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team", "runner-tx-balancer-interval")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamRunnerTxHash(data connectionData) (value []string) {
+	ivalue := getSettingKey(data, "team", "runner-tx-hash")
+	value = interfaceToArrayString(ivalue)
+	return
+}
 func getSettingTeamPortConfig(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "team-port", "config")
 	value = interfaceToString(ivalue)
+	return
+}
+func getSettingTeamPortLacpKey(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team-port", "lacp-key")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamPortLacpPrio(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team-port", "lacp-prio")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamPortPrio(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team-port", "prio")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamPortQueueId(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "team-port", "queue-id")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingTeamPortSticky(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "team-port", "sticky")
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingTunGroup(data connectionData) (value string) {
@@ -12997,6 +14246,11 @@ func getSettingTunPi(data connectionData) (value bool) {
 func getSettingTunVnetHdr(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, "tun", "vnet-hdr")
 	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingUserData(data connectionData) (value map[string]string) {
+	ivalue := getSettingKey(data, "user", "data")
+	value = interfaceToDictStringString(ivalue)
 	return
 }
 func getSettingVlanEgressPriorityMap(data connectionData) (value []string) {
@@ -13329,6 +14583,11 @@ func getSettingWirelessSecurityPairwise(data connectionData) (value []string) {
 	value = interfaceToArrayString(ivalue)
 	return
 }
+func getSettingWirelessSecurityPmf(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "802-11-wireless-security", "pmf")
+	value = interfaceToInt32(ivalue)
+	return
+}
 func getSettingWirelessSecurityProto(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, "802-11-wireless-security", "proto")
 	value = interfaceToArrayString(ivalue)
@@ -13376,6 +14635,11 @@ func getSettingWirelessSecurityWepKey3(data connectionData) (value string) {
 }
 func getSettingWirelessSecurityWepTxKeyidx(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, "802-11-wireless-security", "wep-tx-keyidx")
+	value = interfaceToUint32(ivalue)
+	return
+}
+func getSettingWirelessSecurityWpsMethod(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "802-11-wireless-security", "wps-method")
 	value = interfaceToUint32(ivalue)
 	return
 }
@@ -13501,6 +14765,16 @@ func getSettingVpnL2tpKeyIpsecGatewayId(data connectionData) (value string) {
 }
 func getSettingVpnL2tpKeyIpsecPsk(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-psk")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnL2tpKeyIpsecIke(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-ike")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnL2tpKeyIpsecEsp(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-esp")
 	value = interfaceToString(ivalue)
 	return
 }
@@ -14184,6 +15458,9 @@ func setSettingBridgeAgeingTime(data connectionData, value uint32) {
 func setSettingBridgeForwardDelay(data connectionData, value uint32) {
 	setSettingKey(data, "bridge", "forward-delay", value)
 }
+func setSettingBridgeGroupForwardMask(data connectionData, value uint32) {
+	setSettingKey(data, "bridge", "group-forward-mask", value)
+}
 func setSettingBridgeHelloTime(data connectionData, value uint32) {
 	setSettingKey(data, "bridge", "hello-time", value)
 }
@@ -14225,6 +15502,9 @@ func setSettingCdmaPasswordFlags(data connectionData, value uint32) {
 }
 func setSettingCdmaUsername(data connectionData, value string) {
 	setSettingKey(data, "cdma", "username", value)
+}
+func setSettingConnectionAuthRetries(data connectionData, value int32) {
+	setSettingKey(data, "connection", "auth-retries", value)
 }
 func setSettingConnectionAutoconnect(data connectionData, value bool) {
 	setSettingKey(data, "connection", "autoconnect", value)
@@ -14436,6 +15716,9 @@ func setSettingIP4ConfigNeverDefault(data connectionData, value bool) {
 func setSettingIP4ConfigRouteMetric(data connectionData, value int64) {
 	setSettingKey(data, "ipv4", "route-metric", value)
 }
+func setSettingIP4ConfigRouteTable(data connectionData, value uint32) {
+	setSettingKey(data, "ipv4", "route-table", value)
+}
 func setSettingIP4ConfigRoutes(data connectionData, value [][]uint32) {
 	setSettingKey(data, "ipv4", "routes", value)
 }
@@ -14492,6 +15775,9 @@ func setSettingIP6ConfigNeverDefault(data connectionData, value bool) {
 }
 func setSettingIP6ConfigRouteMetric(data connectionData, value int64) {
 	setSettingKey(data, "ipv6", "route-metric", value)
+}
+func setSettingIP6ConfigRouteTable(data connectionData, value uint32) {
+	setSettingKey(data, "ipv6", "route-table", value)
 }
 func setSettingIP6ConfigRoutes(data connectionData, value ipv6Routes) {
 	setSettingKey(data, "ipv6", "routes", value)
@@ -14580,6 +15866,42 @@ func setSettingOlpcMeshDhcpAnycastAddress(data connectionData, value []byte) {
 func setSettingOlpcMeshSsid(data connectionData, value []byte) {
 	setSettingKey(data, "802-11-olpc-mesh", "ssid", value)
 }
+func setSettingOvsBridgeFailMode(data connectionData, value string) {
+	setSettingKey(data, "ovs-bridge", "fail-mode", value)
+}
+func setSettingOvsBridgeMcastSnoopingEnable(data connectionData, value bool) {
+	setSettingKey(data, "ovs-bridge", "mcast-snooping-enable", value)
+}
+func setSettingOvsBridgeRstpEnable(data connectionData, value bool) {
+	setSettingKey(data, "ovs-bridge", "rstp-enable", value)
+}
+func setSettingOvsBridgeStpEnable(data connectionData, value bool) {
+	setSettingKey(data, "ovs-bridge", "stp-enable", value)
+}
+func setSettingOvsInterfaceType(data connectionData, value string) {
+	setSettingKey(data, "ovs-interface", "type", value)
+}
+func setSettingOvsPatchPeer(data connectionData, value string) {
+	setSettingKey(data, "ovs-patch", "peer", value)
+}
+func setSettingOvsPortBondDowndelay(data connectionData, value uint32) {
+	setSettingKey(data, "ovs-port", "bond-downdelay", value)
+}
+func setSettingOvsPortBondMode(data connectionData, value string) {
+	setSettingKey(data, "ovs-port", "bond-mode", value)
+}
+func setSettingOvsPortBondUpdelay(data connectionData, value uint32) {
+	setSettingKey(data, "ovs-port", "bond-updelay", value)
+}
+func setSettingOvsPortLacp(data connectionData, value string) {
+	setSettingKey(data, "ovs-port", "lacp", value)
+}
+func setSettingOvsPortTag(data connectionData, value uint32) {
+	setSettingKey(data, "ovs-port", "tag", value)
+}
+func setSettingOvsPortVlanMode(data connectionData, value string) {
+	setSettingKey(data, "ovs-port", "vlan-mode", value)
+}
 func setSettingPppBaud(data connectionData, value uint32) {
 	setSettingKey(data, "ppp", "baud", value)
 }
@@ -14634,6 +15956,9 @@ func setSettingPppRequireMppe(data connectionData, value bool) {
 func setSettingPppRequireMppe128(data connectionData, value bool) {
 	setSettingKey(data, "ppp", "require-mppe-128", value)
 }
+func setSettingPppoeParent(data connectionData, value string) {
+	setSettingKey(data, "pppoe", "parent", value)
+}
 func setSettingPppoePassword(data connectionData, value string) {
 	setSettingKey(data, "pppoe", "password", value)
 }
@@ -14676,8 +16001,65 @@ func setSettingSerialStopbits(data connectionData, value uint32) {
 func setSettingTeamConfig(data connectionData, value string) {
 	setSettingKey(data, "team", "config", value)
 }
+func setSettingTeamMcastRejoinCount(data connectionData, value int32) {
+	setSettingKey(data, "team", "mcast-rejoin-count", value)
+}
+func setSettingTeamMcastRejoinInterval(data connectionData, value int32) {
+	setSettingKey(data, "team", "mcast-rejoin-interval", value)
+}
+func setSettingTeamNotifyPeersCount(data connectionData, value int32) {
+	setSettingKey(data, "team", "notify-peers-count", value)
+}
+func setSettingTeamNotifyPeersInterval(data connectionData, value int32) {
+	setSettingKey(data, "team", "notify-peers-interval", value)
+}
+func setSettingTeamRunner(data connectionData, value string) {
+	setSettingKey(data, "team", "runner", value)
+}
+func setSettingTeamRunnerActive(data connectionData, value bool) {
+	setSettingKey(data, "team", "runner-active", value)
+}
+func setSettingTeamRunnerAggSelectPolicy(data connectionData, value string) {
+	setSettingKey(data, "team", "runner-agg-select-policy", value)
+}
+func setSettingTeamRunnerFastRate(data connectionData, value bool) {
+	setSettingKey(data, "team", "runner-fast-rate", value)
+}
+func setSettingTeamRunnerHwaddrPolicy(data connectionData, value string) {
+	setSettingKey(data, "team", "runner-hwaddr-policy", value)
+}
+func setSettingTeamRunnerMinPorts(data connectionData, value int32) {
+	setSettingKey(data, "team", "runner-min-ports", value)
+}
+func setSettingTeamRunnerSysPrio(data connectionData, value int32) {
+	setSettingKey(data, "team", "runner-sys-prio", value)
+}
+func setSettingTeamRunnerTxBalancer(data connectionData, value string) {
+	setSettingKey(data, "team", "runner-tx-balancer", value)
+}
+func setSettingTeamRunnerTxBalancerInterval(data connectionData, value int32) {
+	setSettingKey(data, "team", "runner-tx-balancer-interval", value)
+}
+func setSettingTeamRunnerTxHash(data connectionData, value []string) {
+	setSettingKey(data, "team", "runner-tx-hash", value)
+}
 func setSettingTeamPortConfig(data connectionData, value string) {
 	setSettingKey(data, "team-port", "config", value)
+}
+func setSettingTeamPortLacpKey(data connectionData, value int32) {
+	setSettingKey(data, "team-port", "lacp-key", value)
+}
+func setSettingTeamPortLacpPrio(data connectionData, value int32) {
+	setSettingKey(data, "team-port", "lacp-prio", value)
+}
+func setSettingTeamPortPrio(data connectionData, value int32) {
+	setSettingKey(data, "team-port", "prio", value)
+}
+func setSettingTeamPortQueueId(data connectionData, value int32) {
+	setSettingKey(data, "team-port", "queue-id", value)
+}
+func setSettingTeamPortSticky(data connectionData, value bool) {
+	setSettingKey(data, "team-port", "sticky", value)
 }
 func setSettingTunGroup(data connectionData, value string) {
 	setSettingKey(data, "tun", "group", value)
@@ -14696,6 +16078,9 @@ func setSettingTunPi(data connectionData, value bool) {
 }
 func setSettingTunVnetHdr(data connectionData, value bool) {
 	setSettingKey(data, "tun", "vnet-hdr", value)
+}
+func setSettingUserData(data connectionData, value map[string]string) {
+	setSettingKey(data, "user", "data", value)
 }
 func setSettingVlanEgressPriorityMap(data connectionData, value []string) {
 	setSettingKey(data, "vlan", "egress-priority-map", value)
@@ -14895,6 +16280,9 @@ func setSettingWirelessSecurityLeapUsername(data connectionData, value string) {
 func setSettingWirelessSecurityPairwise(data connectionData, value []string) {
 	setSettingKey(data, "802-11-wireless-security", "pairwise", value)
 }
+func setSettingWirelessSecurityPmf(data connectionData, value int32) {
+	setSettingKey(data, "802-11-wireless-security", "pmf", value)
+}
 func setSettingWirelessSecurityProto(data connectionData, value []string) {
 	setSettingKey(data, "802-11-wireless-security", "proto", value)
 }
@@ -14924,6 +16312,9 @@ func setSettingWirelessSecurityWepKey3(data connectionData, value string) {
 }
 func setSettingWirelessSecurityWepTxKeyidx(data connectionData, value uint32) {
 	setSettingKey(data, "802-11-wireless-security", "wep-tx-keyidx", value)
+}
+func setSettingWirelessSecurityWpsMethod(data connectionData, value uint32) {
+	setSettingKey(data, "802-11-wireless-security", "wps-method", value)
 }
 func setSettingVpnL2tpKeyGateway(data connectionData, value string) {
 	setSettingKey(data, "alias-vpn-l2tp", "gateway", value)
@@ -14999,6 +16390,12 @@ func setSettingVpnL2tpKeyIpsecGatewayId(data connectionData, value string) {
 }
 func setSettingVpnL2tpKeyIpsecPsk(data connectionData, value string) {
 	setSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-psk", value)
+}
+func setSettingVpnL2tpKeyIpsecIke(data connectionData, value string) {
+	setSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-ike", value)
+}
+func setSettingVpnL2tpKeyIpsecEsp(data connectionData, value string) {
+	setSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-esp", value)
 }
 func setSettingVpnOpenconnectKeyGateway(data connectionData, value string) {
 	setSettingKey(data, "alias-vpn-openconnect", "gateway", value)
@@ -15532,6 +16929,10 @@ func getSettingBridgeForwardDelayJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "bridge", "forward-delay", ktypeUint32)
 	return
 }
+func getSettingBridgeGroupForwardMaskJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "bridge", "group-forward-mask", ktypeUint32)
+	return
+}
 func getSettingBridgeHelloTimeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "bridge", "hello-time", ktypeUint32)
 	return
@@ -15586,6 +16987,10 @@ func getSettingCdmaPasswordFlagsJSON(data connectionData) (valueJSON string) {
 }
 func getSettingCdmaUsernameJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "cdma", "username", ktypeString)
+	return
+}
+func getSettingConnectionAuthRetriesJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "connection", "auth-retries", ktypeInt32)
 	return
 }
 func getSettingConnectionAutoconnectJSON(data connectionData) (valueJSON string) {
@@ -15868,6 +17273,10 @@ func getSettingIP4ConfigRouteMetricJSON(data connectionData) (valueJSON string) 
 	valueJSON = getSettingKeyJSON(data, "ipv4", "route-metric", ktypeInt64)
 	return
 }
+func getSettingIP4ConfigRouteTableJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ipv4", "route-table", ktypeUint32)
+	return
+}
 func getSettingIP4ConfigRoutesJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "ipv4", "routes", ktypeWrapperIpv4Routes)
 	return
@@ -15942,6 +17351,10 @@ func getSettingIP6ConfigNeverDefaultJSON(data connectionData) (valueJSON string)
 }
 func getSettingIP6ConfigRouteMetricJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "ipv6", "route-metric", ktypeInt64)
+	return
+}
+func getSettingIP6ConfigRouteTableJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ipv6", "route-table", ktypeUint32)
 	return
 }
 func getSettingIP6ConfigRoutesJSON(data connectionData) (valueJSON string) {
@@ -16060,6 +17473,54 @@ func getSettingOlpcMeshSsidJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-11-olpc-mesh", "ssid", ktypeArrayByte)
 	return
 }
+func getSettingOvsBridgeFailModeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-bridge", "fail-mode", ktypeString)
+	return
+}
+func getSettingOvsBridgeMcastSnoopingEnableJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-bridge", "mcast-snooping-enable", ktypeBoolean)
+	return
+}
+func getSettingOvsBridgeRstpEnableJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-bridge", "rstp-enable", ktypeBoolean)
+	return
+}
+func getSettingOvsBridgeStpEnableJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-bridge", "stp-enable", ktypeBoolean)
+	return
+}
+func getSettingOvsInterfaceTypeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-interface", "type", ktypeString)
+	return
+}
+func getSettingOvsPatchPeerJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-patch", "peer", ktypeString)
+	return
+}
+func getSettingOvsPortBondDowndelayJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-port", "bond-downdelay", ktypeUint32)
+	return
+}
+func getSettingOvsPortBondModeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-port", "bond-mode", ktypeString)
+	return
+}
+func getSettingOvsPortBondUpdelayJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-port", "bond-updelay", ktypeUint32)
+	return
+}
+func getSettingOvsPortLacpJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-port", "lacp", ktypeString)
+	return
+}
+func getSettingOvsPortTagJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-port", "tag", ktypeUint32)
+	return
+}
+func getSettingOvsPortVlanModeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ovs-port", "vlan-mode", ktypeString)
+	return
+}
 func getSettingPppBaudJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "ppp", "baud", ktypeUint32)
 	return
@@ -16132,6 +17593,10 @@ func getSettingPppRequireMppe128JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "ppp", "require-mppe-128", ktypeBoolean)
 	return
 }
+func getSettingPppoeParentJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "pppoe", "parent", ktypeString)
+	return
+}
 func getSettingPppoePasswordJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "pppoe", "password", ktypeString)
 	return
@@ -16188,8 +17653,84 @@ func getSettingTeamConfigJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "team", "config", ktypeString)
 	return
 }
+func getSettingTeamMcastRejoinCountJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "mcast-rejoin-count", ktypeInt32)
+	return
+}
+func getSettingTeamMcastRejoinIntervalJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "mcast-rejoin-interval", ktypeInt32)
+	return
+}
+func getSettingTeamNotifyPeersCountJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "notify-peers-count", ktypeInt32)
+	return
+}
+func getSettingTeamNotifyPeersIntervalJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "notify-peers-interval", ktypeInt32)
+	return
+}
+func getSettingTeamRunnerJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner", ktypeString)
+	return
+}
+func getSettingTeamRunnerActiveJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-active", ktypeBoolean)
+	return
+}
+func getSettingTeamRunnerAggSelectPolicyJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-agg-select-policy", ktypeString)
+	return
+}
+func getSettingTeamRunnerFastRateJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-fast-rate", ktypeBoolean)
+	return
+}
+func getSettingTeamRunnerHwaddrPolicyJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-hwaddr-policy", ktypeString)
+	return
+}
+func getSettingTeamRunnerMinPortsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-min-ports", ktypeInt32)
+	return
+}
+func getSettingTeamRunnerSysPrioJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-sys-prio", ktypeInt32)
+	return
+}
+func getSettingTeamRunnerTxBalancerJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-tx-balancer", ktypeString)
+	return
+}
+func getSettingTeamRunnerTxBalancerIntervalJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-tx-balancer-interval", ktypeInt32)
+	return
+}
+func getSettingTeamRunnerTxHashJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team", "runner-tx-hash", ktypeArrayString)
+	return
+}
 func getSettingTeamPortConfigJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "team-port", "config", ktypeString)
+	return
+}
+func getSettingTeamPortLacpKeyJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team-port", "lacp-key", ktypeInt32)
+	return
+}
+func getSettingTeamPortLacpPrioJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team-port", "lacp-prio", ktypeInt32)
+	return
+}
+func getSettingTeamPortPrioJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team-port", "prio", ktypeInt32)
+	return
+}
+func getSettingTeamPortQueueIdJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team-port", "queue-id", ktypeInt32)
+	return
+}
+func getSettingTeamPortStickyJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "team-port", "sticky", ktypeBoolean)
 	return
 }
 func getSettingTunGroupJSON(data connectionData) (valueJSON string) {
@@ -16214,6 +17755,10 @@ func getSettingTunPiJSON(data connectionData) (valueJSON string) {
 }
 func getSettingTunVnetHdrJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "tun", "vnet-hdr", ktypeBoolean)
+	return
+}
+func getSettingUserDataJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "user", "data", ktypeDictStringString)
 	return
 }
 func getSettingVlanEgressPriorityMapJSON(data connectionData) (valueJSON string) {
@@ -16480,6 +18025,10 @@ func getSettingWirelessSecurityPairwiseJSON(data connectionData) (valueJSON stri
 	valueJSON = getSettingKeyJSON(data, "802-11-wireless-security", "pairwise", ktypeArrayString)
 	return
 }
+func getSettingWirelessSecurityPmfJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-11-wireless-security", "pmf", ktypeInt32)
+	return
+}
 func getSettingWirelessSecurityProtoJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-11-wireless-security", "proto", ktypeArrayString)
 	return
@@ -16518,6 +18067,10 @@ func getSettingWirelessSecurityWepKey3JSON(data connectionData) (valueJSON strin
 }
 func getSettingWirelessSecurityWepTxKeyidxJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-11-wireless-security", "wep-tx-keyidx", ktypeUint32)
+	return
+}
+func getSettingWirelessSecurityWpsMethodJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-11-wireless-security", "wps-method", ktypeUint32)
 	return
 }
 func getSettingVpnL2tpKeyGatewayJSON(data connectionData) (valueJSON string) {
@@ -16618,6 +18171,14 @@ func getSettingVpnL2tpKeyIpsecGatewayIdJSON(data connectionData) (valueJSON stri
 }
 func getSettingVpnL2tpKeyIpsecPskJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "alias-vpn-l2tp-ipsec", "ipsec-psk", ktypeString)
+	return
+}
+func getSettingVpnL2tpKeyIpsecIkeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "alias-vpn-l2tp-ipsec", "ipsec-ike", ktypeString)
+	return
+}
+func getSettingVpnL2tpKeyIpsecEspJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "alias-vpn-l2tp-ipsec", "ipsec-esp", ktypeString)
 	return
 }
 func getSettingVpnOpenconnectKeyGatewayJSON(data connectionData) (valueJSON string) {
@@ -17198,6 +18759,9 @@ func setSettingBridgeAgeingTimeJSON(data connectionData, valueJSON string) (err 
 func setSettingBridgeForwardDelayJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "bridge", "forward-delay", valueJSON, ktypeUint32)
 }
+func setSettingBridgeGroupForwardMaskJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "bridge", "group-forward-mask", valueJSON, ktypeUint32)
+}
 func setSettingBridgeHelloTimeJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "bridge", "hello-time", valueJSON, ktypeUint32)
 }
@@ -17239,6 +18803,9 @@ func setSettingCdmaPasswordFlagsJSON(data connectionData, valueJSON string) (err
 }
 func setSettingCdmaUsernameJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "cdma", "username", valueJSON, ktypeString)
+}
+func setSettingConnectionAuthRetriesJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "connection", "auth-retries", valueJSON, ktypeInt32)
 }
 func setSettingConnectionAutoconnectJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "connection", "autoconnect", valueJSON, ktypeBoolean)
@@ -17450,6 +19017,9 @@ func setSettingIP4ConfigNeverDefaultJSON(data connectionData, valueJSON string) 
 func setSettingIP4ConfigRouteMetricJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ipv4", "route-metric", valueJSON, ktypeInt64)
 }
+func setSettingIP4ConfigRouteTableJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ipv4", "route-table", valueJSON, ktypeUint32)
+}
 func setSettingIP4ConfigRoutesJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ipv4", "routes", valueJSON, ktypeWrapperIpv4Routes)
 }
@@ -17506,6 +19076,9 @@ func setSettingIP6ConfigNeverDefaultJSON(data connectionData, valueJSON string) 
 }
 func setSettingIP6ConfigRouteMetricJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ipv6", "route-metric", valueJSON, ktypeInt64)
+}
+func setSettingIP6ConfigRouteTableJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ipv6", "route-table", valueJSON, ktypeUint32)
 }
 func setSettingIP6ConfigRoutesJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ipv6", "routes", valueJSON, ktypeWrapperIpv6Routes)
@@ -17594,6 +19167,42 @@ func setSettingOlpcMeshDhcpAnycastAddressJSON(data connectionData, valueJSON str
 func setSettingOlpcMeshSsidJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-olpc-mesh", "ssid", valueJSON, ktypeArrayByte)
 }
+func setSettingOvsBridgeFailModeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-bridge", "fail-mode", valueJSON, ktypeString)
+}
+func setSettingOvsBridgeMcastSnoopingEnableJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-bridge", "mcast-snooping-enable", valueJSON, ktypeBoolean)
+}
+func setSettingOvsBridgeRstpEnableJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-bridge", "rstp-enable", valueJSON, ktypeBoolean)
+}
+func setSettingOvsBridgeStpEnableJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-bridge", "stp-enable", valueJSON, ktypeBoolean)
+}
+func setSettingOvsInterfaceTypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-interface", "type", valueJSON, ktypeString)
+}
+func setSettingOvsPatchPeerJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-patch", "peer", valueJSON, ktypeString)
+}
+func setSettingOvsPortBondDowndelayJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-port", "bond-downdelay", valueJSON, ktypeUint32)
+}
+func setSettingOvsPortBondModeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-port", "bond-mode", valueJSON, ktypeString)
+}
+func setSettingOvsPortBondUpdelayJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-port", "bond-updelay", valueJSON, ktypeUint32)
+}
+func setSettingOvsPortLacpJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-port", "lacp", valueJSON, ktypeString)
+}
+func setSettingOvsPortTagJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-port", "tag", valueJSON, ktypeUint32)
+}
+func setSettingOvsPortVlanModeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ovs-port", "vlan-mode", valueJSON, ktypeString)
+}
 func setSettingPppBaudJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ppp", "baud", valueJSON, ktypeUint32)
 }
@@ -17648,6 +19257,9 @@ func setSettingPppRequireMppeJSON(data connectionData, valueJSON string) (err er
 func setSettingPppRequireMppe128JSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ppp", "require-mppe-128", valueJSON, ktypeBoolean)
 }
+func setSettingPppoeParentJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "pppoe", "parent", valueJSON, ktypeString)
+}
 func setSettingPppoePasswordJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "pppoe", "password", valueJSON, ktypeString)
 }
@@ -17690,8 +19302,65 @@ func setSettingSerialStopbitsJSON(data connectionData, valueJSON string) (err er
 func setSettingTeamConfigJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "team", "config", valueJSON, ktypeString)
 }
+func setSettingTeamMcastRejoinCountJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "mcast-rejoin-count", valueJSON, ktypeInt32)
+}
+func setSettingTeamMcastRejoinIntervalJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "mcast-rejoin-interval", valueJSON, ktypeInt32)
+}
+func setSettingTeamNotifyPeersCountJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "notify-peers-count", valueJSON, ktypeInt32)
+}
+func setSettingTeamNotifyPeersIntervalJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "notify-peers-interval", valueJSON, ktypeInt32)
+}
+func setSettingTeamRunnerJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner", valueJSON, ktypeString)
+}
+func setSettingTeamRunnerActiveJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-active", valueJSON, ktypeBoolean)
+}
+func setSettingTeamRunnerAggSelectPolicyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-agg-select-policy", valueJSON, ktypeString)
+}
+func setSettingTeamRunnerFastRateJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-fast-rate", valueJSON, ktypeBoolean)
+}
+func setSettingTeamRunnerHwaddrPolicyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-hwaddr-policy", valueJSON, ktypeString)
+}
+func setSettingTeamRunnerMinPortsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-min-ports", valueJSON, ktypeInt32)
+}
+func setSettingTeamRunnerSysPrioJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-sys-prio", valueJSON, ktypeInt32)
+}
+func setSettingTeamRunnerTxBalancerJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-tx-balancer", valueJSON, ktypeString)
+}
+func setSettingTeamRunnerTxBalancerIntervalJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-tx-balancer-interval", valueJSON, ktypeInt32)
+}
+func setSettingTeamRunnerTxHashJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team", "runner-tx-hash", valueJSON, ktypeArrayString)
+}
 func setSettingTeamPortConfigJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "team-port", "config", valueJSON, ktypeString)
+}
+func setSettingTeamPortLacpKeyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team-port", "lacp-key", valueJSON, ktypeInt32)
+}
+func setSettingTeamPortLacpPrioJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team-port", "lacp-prio", valueJSON, ktypeInt32)
+}
+func setSettingTeamPortPrioJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team-port", "prio", valueJSON, ktypeInt32)
+}
+func setSettingTeamPortQueueIdJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team-port", "queue-id", valueJSON, ktypeInt32)
+}
+func setSettingTeamPortStickyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "team-port", "sticky", valueJSON, ktypeBoolean)
 }
 func setSettingTunGroupJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "tun", "group", valueJSON, ktypeString)
@@ -17710,6 +19379,9 @@ func setSettingTunPiJSON(data connectionData, valueJSON string) (err error) {
 }
 func setSettingTunVnetHdrJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "tun", "vnet-hdr", valueJSON, ktypeBoolean)
+}
+func setSettingUserDataJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "user", "data", valueJSON, ktypeDictStringString)
 }
 func setSettingVlanEgressPriorityMapJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "vlan", "egress-priority-map", valueJSON, ktypeArrayString)
@@ -17804,9 +19476,6 @@ func setSettingWiredAutoNegotiateJSON(data connectionData, valueJSON string) (er
 func setSettingWiredClonedMacAddressJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-3-ethernet", "cloned-mac-address", valueJSON, ktypeWrapperMacAddress)
 }
-func setSettingWiredAssignedMacAddressJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, "802-3-ethernet", "assigned-mac-address", valueJSON, ktypeWrapperString)
-}
 func setSettingWiredDuplexJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-3-ethernet", "duplex", valueJSON, ktypeString)
 }
@@ -17854,9 +19523,6 @@ func setSettingWirelessChannelJSON(data connectionData, valueJSON string) (err e
 }
 func setSettingWirelessClonedMacAddressJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless", "cloned-mac-address", valueJSON, ktypeWrapperMacAddress)
-}
-func setSettingWirelessAssignedMacAddressJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, "802-11-wireless", "assigned-mac-address", valueJSON, ktypeWrapperString)
 }
 func setSettingWirelessGenerateMacAddressMaskJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless", "generate-mac-address-mask", valueJSON, ktypeString)
@@ -17915,6 +19581,9 @@ func setSettingWirelessSecurityLeapUsernameJSON(data connectionData, valueJSON s
 func setSettingWirelessSecurityPairwiseJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless-security", "pairwise", valueJSON, ktypeArrayString)
 }
+func setSettingWirelessSecurityPmfJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-11-wireless-security", "pmf", valueJSON, ktypeInt32)
+}
 func setSettingWirelessSecurityProtoJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless-security", "proto", valueJSON, ktypeArrayString)
 }
@@ -17944,6 +19613,9 @@ func setSettingWirelessSecurityWepKey3JSON(data connectionData, valueJSON string
 }
 func setSettingWirelessSecurityWepTxKeyidxJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless-security", "wep-tx-keyidx", valueJSON, ktypeUint32)
+}
+func setSettingWirelessSecurityWpsMethodJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-11-wireless-security", "wps-method", valueJSON, ktypeUint32)
 }
 func setSettingVpnL2tpKeyGatewayJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "alias-vpn-l2tp", "gateway", valueJSON, ktypeString)
@@ -18019,6 +19691,12 @@ func setSettingVpnL2tpKeyIpsecGatewayIdJSON(data connectionData, valueJSON strin
 }
 func setSettingVpnL2tpKeyIpsecPskJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "alias-vpn-l2tp-ipsec", "ipsec-psk", valueJSON, ktypeString)
+}
+func setSettingVpnL2tpKeyIpsecIkeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "alias-vpn-l2tp-ipsec", "ipsec-ike", valueJSON, ktypeString)
+}
+func setSettingVpnL2tpKeyIpsecEspJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "alias-vpn-l2tp-ipsec", "ipsec-esp", valueJSON, ktypeString)
 }
 func setSettingVpnOpenconnectKeyGatewayJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "alias-vpn-openconnect", "gateway", valueJSON, ktypeString)
@@ -18707,6 +20385,9 @@ func removeSettingBridgeAgeingTime(data connectionData) {
 func removeSettingBridgeForwardDelay(data connectionData) {
 	removeSettingKey(data, "bridge", "forward-delay")
 }
+func removeSettingBridgeGroupForwardMask(data connectionData) {
+	removeSettingKey(data, "bridge", "group-forward-mask")
+}
 func removeSettingBridgeHelloTime(data connectionData) {
 	removeSettingKey(data, "bridge", "hello-time")
 }
@@ -18748,6 +20429,9 @@ func removeSettingCdmaPasswordFlags(data connectionData) {
 }
 func removeSettingCdmaUsername(data connectionData) {
 	removeSettingKey(data, "cdma", "username")
+}
+func removeSettingConnectionAuthRetries(data connectionData) {
+	removeSettingKey(data, "connection", "auth-retries")
 }
 func removeSettingConnectionAutoconnect(data connectionData) {
 	removeSettingKey(data, "connection", "autoconnect")
@@ -18959,6 +20643,9 @@ func removeSettingIP4ConfigNeverDefault(data connectionData) {
 func removeSettingIP4ConfigRouteMetric(data connectionData) {
 	removeSettingKey(data, "ipv4", "route-metric")
 }
+func removeSettingIP4ConfigRouteTable(data connectionData) {
+	removeSettingKey(data, "ipv4", "route-table")
+}
 func removeSettingIP4ConfigRoutes(data connectionData) {
 	removeSettingKey(data, "ipv4", "routes")
 }
@@ -19015,6 +20702,9 @@ func removeSettingIP6ConfigNeverDefault(data connectionData) {
 }
 func removeSettingIP6ConfigRouteMetric(data connectionData) {
 	removeSettingKey(data, "ipv6", "route-metric")
+}
+func removeSettingIP6ConfigRouteTable(data connectionData) {
+	removeSettingKey(data, "ipv6", "route-table")
 }
 func removeSettingIP6ConfigRoutes(data connectionData) {
 	removeSettingKey(data, "ipv6", "routes")
@@ -19103,6 +20793,42 @@ func removeSettingOlpcMeshDhcpAnycastAddress(data connectionData) {
 func removeSettingOlpcMeshSsid(data connectionData) {
 	removeSettingKey(data, "802-11-olpc-mesh", "ssid")
 }
+func removeSettingOvsBridgeFailMode(data connectionData) {
+	removeSettingKey(data, "ovs-bridge", "fail-mode")
+}
+func removeSettingOvsBridgeMcastSnoopingEnable(data connectionData) {
+	removeSettingKey(data, "ovs-bridge", "mcast-snooping-enable")
+}
+func removeSettingOvsBridgeRstpEnable(data connectionData) {
+	removeSettingKey(data, "ovs-bridge", "rstp-enable")
+}
+func removeSettingOvsBridgeStpEnable(data connectionData) {
+	removeSettingKey(data, "ovs-bridge", "stp-enable")
+}
+func removeSettingOvsInterfaceType(data connectionData) {
+	removeSettingKey(data, "ovs-interface", "type")
+}
+func removeSettingOvsPatchPeer(data connectionData) {
+	removeSettingKey(data, "ovs-patch", "peer")
+}
+func removeSettingOvsPortBondDowndelay(data connectionData) {
+	removeSettingKey(data, "ovs-port", "bond-downdelay")
+}
+func removeSettingOvsPortBondMode(data connectionData) {
+	removeSettingKey(data, "ovs-port", "bond-mode")
+}
+func removeSettingOvsPortBondUpdelay(data connectionData) {
+	removeSettingKey(data, "ovs-port", "bond-updelay")
+}
+func removeSettingOvsPortLacp(data connectionData) {
+	removeSettingKey(data, "ovs-port", "lacp")
+}
+func removeSettingOvsPortTag(data connectionData) {
+	removeSettingKey(data, "ovs-port", "tag")
+}
+func removeSettingOvsPortVlanMode(data connectionData) {
+	removeSettingKey(data, "ovs-port", "vlan-mode")
+}
 func removeSettingPppBaud(data connectionData) {
 	removeSettingKey(data, "ppp", "baud")
 }
@@ -19157,6 +20883,9 @@ func removeSettingPppRequireMppe(data connectionData) {
 func removeSettingPppRequireMppe128(data connectionData) {
 	removeSettingKey(data, "ppp", "require-mppe-128")
 }
+func removeSettingPppoeParent(data connectionData) {
+	removeSettingKey(data, "pppoe", "parent")
+}
 func removeSettingPppoePassword(data connectionData) {
 	removeSettingKey(data, "pppoe", "password")
 }
@@ -19199,8 +20928,65 @@ func removeSettingSerialStopbits(data connectionData) {
 func removeSettingTeamConfig(data connectionData) {
 	removeSettingKey(data, "team", "config")
 }
+func removeSettingTeamMcastRejoinCount(data connectionData) {
+	removeSettingKey(data, "team", "mcast-rejoin-count")
+}
+func removeSettingTeamMcastRejoinInterval(data connectionData) {
+	removeSettingKey(data, "team", "mcast-rejoin-interval")
+}
+func removeSettingTeamNotifyPeersCount(data connectionData) {
+	removeSettingKey(data, "team", "notify-peers-count")
+}
+func removeSettingTeamNotifyPeersInterval(data connectionData) {
+	removeSettingKey(data, "team", "notify-peers-interval")
+}
+func removeSettingTeamRunner(data connectionData) {
+	removeSettingKey(data, "team", "runner")
+}
+func removeSettingTeamRunnerActive(data connectionData) {
+	removeSettingKey(data, "team", "runner-active")
+}
+func removeSettingTeamRunnerAggSelectPolicy(data connectionData) {
+	removeSettingKey(data, "team", "runner-agg-select-policy")
+}
+func removeSettingTeamRunnerFastRate(data connectionData) {
+	removeSettingKey(data, "team", "runner-fast-rate")
+}
+func removeSettingTeamRunnerHwaddrPolicy(data connectionData) {
+	removeSettingKey(data, "team", "runner-hwaddr-policy")
+}
+func removeSettingTeamRunnerMinPorts(data connectionData) {
+	removeSettingKey(data, "team", "runner-min-ports")
+}
+func removeSettingTeamRunnerSysPrio(data connectionData) {
+	removeSettingKey(data, "team", "runner-sys-prio")
+}
+func removeSettingTeamRunnerTxBalancer(data connectionData) {
+	removeSettingKey(data, "team", "runner-tx-balancer")
+}
+func removeSettingTeamRunnerTxBalancerInterval(data connectionData) {
+	removeSettingKey(data, "team", "runner-tx-balancer-interval")
+}
+func removeSettingTeamRunnerTxHash(data connectionData) {
+	removeSettingKey(data, "team", "runner-tx-hash")
+}
 func removeSettingTeamPortConfig(data connectionData) {
 	removeSettingKey(data, "team-port", "config")
+}
+func removeSettingTeamPortLacpKey(data connectionData) {
+	removeSettingKey(data, "team-port", "lacp-key")
+}
+func removeSettingTeamPortLacpPrio(data connectionData) {
+	removeSettingKey(data, "team-port", "lacp-prio")
+}
+func removeSettingTeamPortPrio(data connectionData) {
+	removeSettingKey(data, "team-port", "prio")
+}
+func removeSettingTeamPortQueueId(data connectionData) {
+	removeSettingKey(data, "team-port", "queue-id")
+}
+func removeSettingTeamPortSticky(data connectionData) {
+	removeSettingKey(data, "team-port", "sticky")
 }
 func removeSettingTunGroup(data connectionData) {
 	removeSettingKey(data, "tun", "group")
@@ -19219,6 +21005,9 @@ func removeSettingTunPi(data connectionData) {
 }
 func removeSettingTunVnetHdr(data connectionData) {
 	removeSettingKey(data, "tun", "vnet-hdr")
+}
+func removeSettingUserData(data connectionData) {
+	removeSettingKey(data, "user", "data")
 }
 func removeSettingVlanEgressPriorityMap(data connectionData) {
 	removeSettingKey(data, "vlan", "egress-priority-map")
@@ -19418,6 +21207,9 @@ func removeSettingWirelessSecurityLeapUsername(data connectionData) {
 func removeSettingWirelessSecurityPairwise(data connectionData) {
 	removeSettingKey(data, "802-11-wireless-security", "pairwise")
 }
+func removeSettingWirelessSecurityPmf(data connectionData) {
+	removeSettingKey(data, "802-11-wireless-security", "pmf")
+}
 func removeSettingWirelessSecurityProto(data connectionData) {
 	removeSettingKey(data, "802-11-wireless-security", "proto")
 }
@@ -19447,6 +21239,9 @@ func removeSettingWirelessSecurityWepKey3(data connectionData) {
 }
 func removeSettingWirelessSecurityWepTxKeyidx(data connectionData) {
 	removeSettingKey(data, "802-11-wireless-security", "wep-tx-keyidx")
+}
+func removeSettingWirelessSecurityWpsMethod(data connectionData) {
+	removeSettingKey(data, "802-11-wireless-security", "wps-method")
 }
 func removeSettingVpnL2tpKeyGateway(data connectionData) {
 	removeSettingKey(data, "alias-vpn-l2tp", "gateway")
@@ -19522,6 +21317,12 @@ func removeSettingVpnL2tpKeyIpsecGatewayId(data connectionData) {
 }
 func removeSettingVpnL2tpKeyIpsecPsk(data connectionData) {
 	removeSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-psk")
+}
+func removeSettingVpnL2tpKeyIpsecIke(data connectionData) {
+	removeSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-ike")
+}
+func removeSettingVpnL2tpKeyIpsecEsp(data connectionData) {
+	removeSettingKey(data, "alias-vpn-l2tp-ipsec", "ipsec-esp")
 }
 func removeSettingVpnOpenconnectKeyGateway(data connectionData) {
 	removeSettingKey(data, "alias-vpn-openconnect", "gateway")

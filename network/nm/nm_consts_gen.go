@@ -116,6 +116,25 @@ const (
 	NM_ACTIVE_CONNECTION_STATE_DEACTIVATED  = 4
 )
 
+// Enum ActiveConnectionStateReason
+const (
+	NM_ACTIVE_CONNECTION_STATE_REASON_UNKNOWN               = 0
+	NM_ACTIVE_CONNECTION_STATE_REASON_NONE                  = 1
+	NM_ACTIVE_CONNECTION_STATE_REASON_USER_DISCONNECTED     = 2
+	NM_ACTIVE_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED   = 3
+	NM_ACTIVE_CONNECTION_STATE_REASON_SERVICE_STOPPED       = 4
+	NM_ACTIVE_CONNECTION_STATE_REASON_IP_CONFIG_INVALID     = 5
+	NM_ACTIVE_CONNECTION_STATE_REASON_CONNECT_TIMEOUT       = 6
+	NM_ACTIVE_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT = 7
+	NM_ACTIVE_CONNECTION_STATE_REASON_SERVICE_START_FAILED  = 8
+	NM_ACTIVE_CONNECTION_STATE_REASON_NO_SECRETS            = 9
+	NM_ACTIVE_CONNECTION_STATE_REASON_LOGIN_FAILED          = 10
+	NM_ACTIVE_CONNECTION_STATE_REASON_CONNECTION_REMOVED    = 11
+	NM_ACTIVE_CONNECTION_STATE_REASON_DEPENDENCY_FAILED     = 12
+	NM_ACTIVE_CONNECTION_STATE_REASON_DEVICE_REALIZE_FAILED = 13
+	NM_ACTIVE_CONNECTION_STATE_REASON_DEVICE_REMOVED        = 14
+)
+
 // Enum AgentManagerError
 const (
 	NM_AGENT_MANAGER_ERROR_FAILED             = 0
@@ -148,23 +167,24 @@ const (
 
 // Enum ClientPermission
 const (
-	NM_CLIENT_PERMISSION_NONE                       = 0
-	NM_CLIENT_PERMISSION_ENABLE_DISABLE_NETWORK     = 1
-	NM_CLIENT_PERMISSION_ENABLE_DISABLE_WIFI        = 2
-	NM_CLIENT_PERMISSION_ENABLE_DISABLE_WWAN        = 3
-	NM_CLIENT_PERMISSION_ENABLE_DISABLE_WIMAX       = 4
-	NM_CLIENT_PERMISSION_SLEEP_WAKE                 = 5
-	NM_CLIENT_PERMISSION_NETWORK_CONTROL            = 6
-	NM_CLIENT_PERMISSION_WIFI_SHARE_PROTECTED       = 7
-	NM_CLIENT_PERMISSION_WIFI_SHARE_OPEN            = 8
-	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_SYSTEM     = 9
-	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_OWN        = 10
-	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_HOSTNAME   = 11
-	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_GLOBAL_DNS = 12
-	NM_CLIENT_PERMISSION_RELOAD                     = 13
-	NM_CLIENT_PERMISSION_CHECKPOINT_ROLLBACK        = 14
-	NM_CLIENT_PERMISSION_ENABLE_DISABLE_STATISTICS  = 15
-	NM_CLIENT_PERMISSION_LAST                       = 15
+	NM_CLIENT_PERMISSION_NONE                              = 0
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_NETWORK            = 1
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_WIFI               = 2
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_WWAN               = 3
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_WIMAX              = 4
+	NM_CLIENT_PERMISSION_SLEEP_WAKE                        = 5
+	NM_CLIENT_PERMISSION_NETWORK_CONTROL                   = 6
+	NM_CLIENT_PERMISSION_WIFI_SHARE_PROTECTED              = 7
+	NM_CLIENT_PERMISSION_WIFI_SHARE_OPEN                   = 8
+	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_SYSTEM            = 9
+	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_OWN               = 10
+	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_HOSTNAME          = 11
+	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_GLOBAL_DNS        = 12
+	NM_CLIENT_PERMISSION_RELOAD                            = 13
+	NM_CLIENT_PERMISSION_CHECKPOINT_ROLLBACK               = 14
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_STATISTICS         = 15
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_CONNECTIVITY_CHECK = 16
+	NM_CLIENT_PERMISSION_LAST                              = 16
 )
 
 // Enum ClientPermissionResult
@@ -217,6 +237,7 @@ const (
 	NM_DEVICE_ERROR_NOT_ALLOWED               = 6
 	NM_DEVICE_ERROR_SPECIFIC_OBJECT_NOT_FOUND = 7
 	NM_DEVICE_ERROR_VERSION_ID_MISMATCH       = 8
+	NM_DEVICE_ERROR_MISSING_DEPENDENCIES      = 9
 )
 
 // Enum DeviceState
@@ -301,32 +322,40 @@ const (
 	NM_DEVICE_STATE_REASON_NEW_ACTIVATION                 = 60
 	NM_DEVICE_STATE_REASON_PARENT_CHANGED                 = 61
 	NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED         = 62
+	NM_DEVICE_STATE_REASON_OVSDB_FAILED                   = 63
+	NM_DEVICE_STATE_REASON_IP_ADDRESS_DUPLICATE           = 64
+	NM_DEVICE_STATE_REASON_IP_METHOD_UNSUPPORTED          = 65
 )
 
 // Enum DeviceType
 const (
-	NM_DEVICE_TYPE_UNKNOWN    = 0
-	NM_DEVICE_TYPE_ETHERNET   = 1
-	NM_DEVICE_TYPE_WIFI       = 2
-	NM_DEVICE_TYPE_UNUSED1    = 3
-	NM_DEVICE_TYPE_UNUSED2    = 4
-	NM_DEVICE_TYPE_BT         = 5
-	NM_DEVICE_TYPE_OLPC_MESH  = 6
-	NM_DEVICE_TYPE_WIMAX      = 7
-	NM_DEVICE_TYPE_MODEM      = 8
-	NM_DEVICE_TYPE_INFINIBAND = 9
-	NM_DEVICE_TYPE_BOND       = 10
-	NM_DEVICE_TYPE_VLAN       = 11
-	NM_DEVICE_TYPE_ADSL       = 12
-	NM_DEVICE_TYPE_BRIDGE     = 13
-	NM_DEVICE_TYPE_GENERIC    = 14
-	NM_DEVICE_TYPE_TEAM       = 15
-	NM_DEVICE_TYPE_TUN        = 16
-	NM_DEVICE_TYPE_IP_TUNNEL  = 17
-	NM_DEVICE_TYPE_MACVLAN    = 18
-	NM_DEVICE_TYPE_VXLAN      = 19
-	NM_DEVICE_TYPE_VETH       = 20
-	NM_DEVICE_TYPE_MACSEC     = 21
+	NM_DEVICE_TYPE_UNKNOWN       = 0
+	NM_DEVICE_TYPE_ETHERNET      = 1
+	NM_DEVICE_TYPE_WIFI          = 2
+	NM_DEVICE_TYPE_UNUSED1       = 3
+	NM_DEVICE_TYPE_UNUSED2       = 4
+	NM_DEVICE_TYPE_BT            = 5
+	NM_DEVICE_TYPE_OLPC_MESH     = 6
+	NM_DEVICE_TYPE_WIMAX         = 7
+	NM_DEVICE_TYPE_MODEM         = 8
+	NM_DEVICE_TYPE_INFINIBAND    = 9
+	NM_DEVICE_TYPE_BOND          = 10
+	NM_DEVICE_TYPE_VLAN          = 11
+	NM_DEVICE_TYPE_ADSL          = 12
+	NM_DEVICE_TYPE_BRIDGE        = 13
+	NM_DEVICE_TYPE_GENERIC       = 14
+	NM_DEVICE_TYPE_TEAM          = 15
+	NM_DEVICE_TYPE_TUN           = 16
+	NM_DEVICE_TYPE_IP_TUNNEL     = 17
+	NM_DEVICE_TYPE_MACVLAN       = 18
+	NM_DEVICE_TYPE_VXLAN         = 19
+	NM_DEVICE_TYPE_VETH          = 20
+	NM_DEVICE_TYPE_MACSEC        = 21
+	NM_DEVICE_TYPE_DUMMY         = 22
+	NM_DEVICE_TYPE_PPP           = 23
+	NM_DEVICE_TYPE_OVS_INTERFACE = 24
+	NM_DEVICE_TYPE_OVS_PORT      = 25
+	NM_DEVICE_TYPE_OVS_BRIDGE    = 26
 )
 
 // Enum IPTunnelMode
@@ -512,6 +541,23 @@ const (
 	NM_SETTING_WIRELESS_POWERSAVE_ENABLE  = 3
 )
 
+// Enum SettingWirelessSecurityPmf
+const (
+	NM_SETTING_WIRELESS_SECURITY_PMF_DEFAULT  = 0
+	NM_SETTING_WIRELESS_SECURITY_PMF_DISABLE  = 1
+	NM_SETTING_WIRELESS_SECURITY_PMF_OPTIONAL = 2
+	NM_SETTING_WIRELESS_SECURITY_PMF_REQUIRED = 3
+)
+
+// Enum SettingWirelessSecurityWpsMethod
+const (
+	NM_SETTING_WIRELESS_SECURITY_WPS_METHOD_DEFAULT  = 0
+	NM_SETTING_WIRELESS_SECURITY_WPS_METHOD_DISABLED = 1
+	NM_SETTING_WIRELESS_SECURITY_WPS_METHOD_AUTO     = 2
+	NM_SETTING_WIRELESS_SECURITY_WPS_METHOD_PBC      = 4
+	NM_SETTING_WIRELESS_SECURITY_WPS_METHOD_PIN      = 8
+)
+
 // Enum SettingsError
 const (
 	NM_SETTINGS_ERROR_FAILED               = 0
@@ -521,6 +567,7 @@ const (
 	NM_SETTINGS_ERROR_READ_ONLY_CONNECTION = 4
 	NM_SETTINGS_ERROR_UUID_EXISTS          = 5
 	NM_SETTINGS_ERROR_INVALID_HOSTNAME     = 6
+	NM_SETTINGS_ERROR_INVALID_ARGUMENTS    = 7
 )
 
 // Enum State
@@ -619,7 +666,6 @@ const (
 	NM_WEP_KEY_TYPE_UNKNOWN    = 0
 	NM_WEP_KEY_TYPE_KEY        = 1
 	NM_WEP_KEY_TYPE_PASSPHRASE = 2
-	NM_WEP_KEY_TYPE_LAST       = 2
 )
 
 // Enum WimaxNspNetworkType
@@ -634,6 +680,9 @@ const (
 const (
 	NM_802_11_AP_FLAGS_NONE    = 0
 	NM_802_11_AP_FLAGS_PRIVACY = 1
+	NM_802_11_AP_FLAGS_WPS     = 2
+	NM_802_11_AP_FLAGS_WPS_PBC = 4
+	NM_802_11_AP_FLAGS_WPS_PIN = 8
 )
 
 // Enum 80211ApSecurityFlags
@@ -649,6 +698,17 @@ const (
 	NM_802_11_AP_SEC_GROUP_CCMP      = 128
 	NM_802_11_AP_SEC_KEY_MGMT_PSK    = 256
 	NM_802_11_AP_SEC_KEY_MGMT_802_1X = 512
+)
+
+// Enum ActivationStateFlags
+const (
+	NM_ACTIVATION_STATE_FLAG_NONE              = 0
+	NM_ACTIVATION_STATE_FLAG_IS_MASTER         = 1
+	NM_ACTIVATION_STATE_FLAG_IS_SLAVE          = 2
+	NM_ACTIVATION_STATE_FLAG_LAYER2_READY      = 4
+	NM_ACTIVATION_STATE_FLAG_IP4_READY         = 8
+	NM_ACTIVATION_STATE_FLAG_IP6_READY         = 16
+	NM_ACTIVATION_STATE_FLAG_MASTER_HAS_SLAVES = 32
 )
 
 // Enum BluetoothCapabilities
@@ -671,6 +731,7 @@ const (
 	NM_DEVICE_CAP_NM_SUPPORTED   = 1
 	NM_DEVICE_CAP_CARRIER_DETECT = 2
 	NM_DEVICE_CAP_IS_SOFTWARE    = 4
+	NM_DEVICE_CAP_SRIOV          = 8
 )
 
 // Enum DeviceModemCapabilities
@@ -711,8 +772,18 @@ const (
 	NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION = 1
 	NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW       = 2
 	NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED    = 4
+	NM_SECRET_AGENT_GET_SECRETS_FLAG_WPS_PBC_ACTIVE    = 8
 	NM_SECRET_AGENT_GET_SECRETS_FLAG_ONLY_SYSTEM       = 2147483648
 	NM_SECRET_AGENT_GET_SECRETS_FLAG_NO_ERRORS         = 1073741824
+)
+
+// Enum Setting8021xAuthFlags
+const (
+	NM_SETTING_802_1X_AUTH_FLAGS_NONE            = 0
+	NM_SETTING_802_1X_AUTH_FLAGS_TLS_1_0_DISABLE = 1
+	NM_SETTING_802_1X_AUTH_FLAGS_TLS_1_1_DISABLE = 2
+	NM_SETTING_802_1X_AUTH_FLAGS_TLS_1_2_DISABLE = 4
+	NM_SETTING_802_1X_AUTH_FLAGS_ALL             = 7
 )
 
 // Enum SettingDcbFlags
@@ -743,6 +814,24 @@ const (
 	NM_SETTING_WIRED_WAKE_ON_LAN_IGNORE    = 32768
 )
 
+// Enum SettingsUpdate2Flags
+const (
+	NM_SETTINGS_UPDATE2_FLAG_NONE               = 0
+	NM_SETTINGS_UPDATE2_FLAG_TO_DISK            = 1
+	NM_SETTINGS_UPDATE2_FLAG_IN_MEMORY          = 2
+	NM_SETTINGS_UPDATE2_FLAG_IN_MEMORY_DETACHED = 4
+	NM_SETTINGS_UPDATE2_FLAG_IN_MEMORY_ONLY     = 8
+	NM_SETTINGS_UPDATE2_FLAG_VOLATILE           = 16
+	NM_SETTINGS_UPDATE2_FLAG_BLOCK_AUTOCONNECT  = 32
+)
+
+// Enum TeamLinkWatcherArpPingFlags
+const (
+	NM_TEAM_LINK_WATCHER_ARP_PING_FLAG_VALIDATE_ACTIVE   = 2
+	NM_TEAM_LINK_WATCHER_ARP_PING_FLAG_VALIDATE_INACTIVE = 4
+	NM_TEAM_LINK_WATCHER_ARP_PING_FLAG_SEND_ALWAYS       = 8
+)
+
 // Enum VlanFlags
 const (
 	NM_VLAN_FLAG_REORDER_HEADERS = 1
@@ -761,409 +850,450 @@ const (
 
 // Enum StringConstants
 const (
-	NM_ACCESS_POINT_BSSID                           = "bssid"
-	NM_ACCESS_POINT_FLAGS                           = "flags"
-	NM_ACCESS_POINT_FREQUENCY                       = "frequency"
-	NM_ACCESS_POINT_HW_ADDRESS                      = "hw-address"
-	NM_ACCESS_POINT_LAST_SEEN                       = "last-seen"
-	NM_ACCESS_POINT_MAX_BITRATE                     = "max-bitrate"
-	NM_ACCESS_POINT_MODE                            = "mode"
-	NM_ACCESS_POINT_RSN_FLAGS                       = "rsn-flags"
-	NM_ACCESS_POINT_SSID                            = "ssid"
-	NM_ACCESS_POINT_STRENGTH                        = "strength"
-	NM_ACCESS_POINT_WPA_FLAGS                       = "wpa-flags"
-	NM_ACTIVE_CONNECTION_CONNECTION                 = "connection"
-	NM_ACTIVE_CONNECTION_DEFAULT                    = "default"
-	NM_ACTIVE_CONNECTION_DEFAULT6                   = "default6"
-	NM_ACTIVE_CONNECTION_DEVICES                    = "devices"
-	NM_ACTIVE_CONNECTION_DHCP4_CONFIG               = "dhcp4-config"
-	NM_ACTIVE_CONNECTION_DHCP6_CONFIG               = "dhcp6-config"
-	NM_ACTIVE_CONNECTION_ID                         = "id"
-	NM_ACTIVE_CONNECTION_IP4_CONFIG                 = "ip4-config"
-	NM_ACTIVE_CONNECTION_IP6_CONFIG                 = "ip6-config"
-	NM_ACTIVE_CONNECTION_MASTER                     = "master"
-	NM_ACTIVE_CONNECTION_SPECIFIC_OBJECT_PATH       = "specific-object-path"
-	NM_ACTIVE_CONNECTION_STATE                      = "state"
-	NM_ACTIVE_CONNECTION_TYPE                       = "type"
-	NM_ACTIVE_CONNECTION_UUID                       = "uuid"
-	NM_ACTIVE_CONNECTION_VPN                        = "vpn"
-	NM_CLIENT_ACTIVATING_CONNECTION                 = "activating-connection"
-	NM_CLIENT_ACTIVE_CONNECTIONS                    = "active-connections"
-	NM_CLIENT_ACTIVE_CONNECTION_ADDED               = "active-connection-added"
-	NM_CLIENT_ACTIVE_CONNECTION_REMOVED             = "active-connection-removed"
-	NM_CLIENT_ALL_DEVICES                           = "all-devices"
-	NM_CLIENT_ANY_DEVICE_ADDED                      = "any-device-added"
-	NM_CLIENT_ANY_DEVICE_REMOVED                    = "any-device-removed"
-	NM_CLIENT_CAN_MODIFY                            = "can-modify"
-	NM_CLIENT_CONNECTIONS                           = "connections"
-	NM_CLIENT_CONNECTION_ADDED                      = "connection-added"
-	NM_CLIENT_CONNECTION_REMOVED                    = "connection-removed"
-	NM_CLIENT_CONNECTIVITY                          = "connectivity"
-	NM_CLIENT_DEVICES                               = "devices"
-	NM_CLIENT_DEVICE_ADDED                          = "device-added"
-	NM_CLIENT_DEVICE_REMOVED                        = "device-removed"
-	NM_CLIENT_DNS_CONFIGURATION                     = "dns-configuration"
-	NM_CLIENT_DNS_MODE                              = "dns-mode"
-	NM_CLIENT_DNS_RC_MANAGER                        = "dns-rc-manager"
-	NM_CLIENT_HOSTNAME                              = "hostname"
-	NM_CLIENT_METERED                               = "metered"
-	NM_CLIENT_NETWORKING_ENABLED                    = "networking-enabled"
-	NM_CLIENT_NM_RUNNING                            = "nm-running"
-	NM_CLIENT_PERMISSION_CHANGED                    = "permission-changed"
-	NM_CLIENT_PRIMARY_CONNECTION                    = "primary-connection"
-	NM_CLIENT_STARTUP                               = "startup"
-	NM_CLIENT_STATE                                 = "state"
-	NM_CLIENT_VERSION                               = "version"
-	NM_CLIENT_WIMAX_ENABLED                         = "wimax-enabled"
-	NM_CLIENT_WIMAX_HARDWARE_ENABLED                = "wimax-hardware-enabled"
-	NM_CLIENT_WIRELESS_ENABLED                      = "wireless-enabled"
-	NM_CLIENT_WIRELESS_HARDWARE_ENABLED             = "wireless-hardware-enabled"
-	NM_CLIENT_WWAN_ENABLED                          = "wwan-enabled"
-	NM_CLIENT_WWAN_HARDWARE_ENABLED                 = "wwan-hardware-enabled"
-	NM_CONNECTION_CHANGED                           = "changed"
-	NM_CONNECTION_NORMALIZE_PARAM_IP6_CONFIG_METHOD = "ip6-config-method"
-	NM_CONNECTION_SECRETS_CLEARED                   = "secrets-cleared"
-	NM_CONNECTION_SECRETS_UPDATED                   = "secrets-updated"
-	NM_DBUS_INTERFACE                               = "org.freedesktop.NetworkManager"
-	NM_DBUS_INTERFACE_DNS_MANAGER                   = "org.freedesktop.NetworkManager.DnsManager"
-	NM_DBUS_INTERFACE_SETTINGS                      = "org.freedesktop.NetworkManager.Settings"
-	NM_DBUS_INTERFACE_SETTINGS_CONNECTION           = "org.freedesktop.NetworkManager.Settings.Connection"
-	NM_DBUS_INTERFACE_SETTINGS_CONNECTION_SECRETS   = "org.freedesktop.NetworkManager.Settings.Connection.Secrets"
-	NM_DBUS_INTERFACE_VPN                           = "org.freedesktop.NetworkManager.VPN.Manager"
-	NM_DBUS_INTERFACE_VPN_CONNECTION                = "org.freedesktop.NetworkManager.VPN.Connection"
-	NM_DBUS_INVALID_VPN_CONNECTION                  = "org.freedesktop.NetworkManager.VPNConnections.InvalidVPNConnection"
-	NM_DBUS_NO_ACTIVE_VPN_CONNECTION                = "org.freedesktop.NetworkManager.VPNConnections.NoActiveVPNConnection"
-	NM_DBUS_NO_VPN_CONNECTIONS                      = "org.freedesktop.NetworkManager.VPNConnections.NoVPNConnections"
-	NM_DBUS_PATH                                    = "/org/freedesktop/NetworkManager"
-	NM_DBUS_PATH_AGENT_MANAGER                      = "/org/freedesktop/NetworkManager/AgentManager"
-	NM_DBUS_PATH_DNS_MANAGER                        = "/org/freedesktop/NetworkManager/DnsManager"
-	NM_DBUS_PATH_SECRET_AGENT                       = "/org/freedesktop/NetworkManager/SecretAgent"
-	NM_DBUS_PATH_SETTINGS                           = "/org/freedesktop/NetworkManager/Settings"
-	NM_DBUS_PATH_SETTINGS_CONNECTION                = "/org/freedesktop/NetworkManager/Settings/Connection"
-	NM_DBUS_PATH_VPN                                = "/org/freedesktop/NetworkManager/VPN/Manager"
-	NM_DBUS_PATH_VPN_CONNECTION                     = "/org/freedesktop/NetworkManager/VPN/Connection"
-	NM_DBUS_SERVICE                                 = "org.freedesktop.NetworkManager"
-	NM_DBUS_VPN_ALREADY_STARTED                     = "AlreadyStarted"
-	NM_DBUS_VPN_ALREADY_STOPPED                     = "AlreadyStopped"
-	NM_DBUS_VPN_BAD_ARGUMENTS                       = "BadArguments"
-	NM_DBUS_VPN_ERROR_PREFIX                        = "org.freedesktop.NetworkManager.VPN.Error"
-	NM_DBUS_VPN_INTERACTIVE_NOT_SUPPORTED           = "InteractiveNotSupported"
-	NM_DBUS_VPN_SIGNAL_CONNECT_FAILED               = "ConnectFailed"
-	NM_DBUS_VPN_SIGNAL_IP4_CONFIG                   = "IP4Config"
-	NM_DBUS_VPN_SIGNAL_IP_CONFIG_BAD                = "IPConfigBad"
-	NM_DBUS_VPN_SIGNAL_LAUNCH_FAILED                = "LaunchFailed"
-	NM_DBUS_VPN_SIGNAL_LOGIN_BANNER                 = "LoginBanner"
-	NM_DBUS_VPN_SIGNAL_LOGIN_FAILED                 = "LoginFailed"
-	NM_DBUS_VPN_SIGNAL_STATE_CHANGE                 = "StateChange"
-	NM_DBUS_VPN_SIGNAL_VPN_CONFIG_BAD               = "VPNConfigBad"
-	NM_DBUS_VPN_STARTING_IN_PROGRESS                = "StartingInProgress"
-	NM_DBUS_VPN_STOPPING_IN_PROGRESS                = "StoppingInProgress"
-	NM_DBUS_VPN_WRONG_STATE                         = "WrongState"
-	NM_DEVICE_ACTIVE_CONNECTION                     = "active-connection"
-	NM_DEVICE_ADSL_CARRIER                          = "carrier"
-	NM_DEVICE_AUTOCONNECT                           = "autoconnect"
-	NM_DEVICE_AVAILABLE_CONNECTIONS                 = "available-connections"
-	NM_DEVICE_BOND_CARRIER                          = "carrier"
-	NM_DEVICE_BOND_HW_ADDRESS                       = "hw-address"
-	NM_DEVICE_BOND_SLAVES                           = "slaves"
-	NM_DEVICE_BRIDGE_CARRIER                        = "carrier"
-	NM_DEVICE_BRIDGE_HW_ADDRESS                     = "hw-address"
-	NM_DEVICE_BRIDGE_SLAVES                         = "slaves"
-	NM_DEVICE_BT_CAPABILITIES                       = "bt-capabilities"
-	NM_DEVICE_BT_HW_ADDRESS                         = "hw-address"
-	NM_DEVICE_BT_NAME                               = "name"
-	NM_DEVICE_CAPABILITIES                          = "capabilities"
-	NM_DEVICE_DEVICE_TYPE                           = "device-type"
-	NM_DEVICE_DHCP4_CONFIG                          = "dhcp4-config"
-	NM_DEVICE_DHCP6_CONFIG                          = "dhcp6-config"
-	NM_DEVICE_DRIVER                                = "driver"
-	NM_DEVICE_DRIVER_VERSION                        = "driver-version"
-	NM_DEVICE_ETHERNET_CARRIER                      = "carrier"
-	NM_DEVICE_ETHERNET_HW_ADDRESS                   = "hw-address"
-	NM_DEVICE_ETHERNET_PERMANENT_HW_ADDRESS         = "perm-hw-address"
-	NM_DEVICE_ETHERNET_S390_SUBCHANNELS             = "s390-subchannels"
-	NM_DEVICE_ETHERNET_SPEED                        = "speed"
-	NM_DEVICE_FIRMWARE_MISSING                      = "firmware-missing"
-	NM_DEVICE_FIRMWARE_VERSION                      = "firmware-version"
-	NM_DEVICE_GENERIC_HW_ADDRESS                    = "hw-address"
-	NM_DEVICE_GENERIC_TYPE_DESCRIPTION              = "type-description"
-	NM_DEVICE_INFINIBAND_CARRIER                    = "carrier"
-	NM_DEVICE_INFINIBAND_HW_ADDRESS                 = "hw-address"
-	NM_DEVICE_INTERFACE                             = "interface"
-	NM_DEVICE_IP4_CONFIG                            = "ip4-config"
-	NM_DEVICE_IP6_CONFIG                            = "ip6-config"
-	NM_DEVICE_IP_INTERFACE                          = "ip-interface"
-	NM_DEVICE_IP_TUNNEL_ENCAPSULATION_LIMIT         = "encapsulation-limit"
-	NM_DEVICE_IP_TUNNEL_FLOW_LABEL                  = "flow-label"
-	NM_DEVICE_IP_TUNNEL_INPUT_KEY                   = "input-key"
-	NM_DEVICE_IP_TUNNEL_LOCAL                       = "local"
-	NM_DEVICE_IP_TUNNEL_MODE                        = "mode"
-	NM_DEVICE_IP_TUNNEL_OUTPUT_KEY                  = "output-key"
-	NM_DEVICE_IP_TUNNEL_PARENT                      = "parent"
-	NM_DEVICE_IP_TUNNEL_PATH_MTU_DISCOVERY          = "path-mtu-discovery"
-	NM_DEVICE_IP_TUNNEL_REMOTE                      = "remote"
-	NM_DEVICE_IP_TUNNEL_TOS                         = "tos"
-	NM_DEVICE_IP_TUNNEL_TTL                         = "ttl"
-	NM_DEVICE_LLDP_NEIGHBORS                        = "lldp-neighbors"
-	NM_DEVICE_MACSEC_CIPHER_SUITE                   = "cipher-suite"
-	NM_DEVICE_MACSEC_ENCODING_SA                    = "encoding-sa"
-	NM_DEVICE_MACSEC_ENCRYPT                        = "encrypt"
-	NM_DEVICE_MACSEC_ES                             = "es"
-	NM_DEVICE_MACSEC_HW_ADDRESS                     = "hw-address"
-	NM_DEVICE_MACSEC_ICV_LENGTH                     = "icv-length"
-	NM_DEVICE_MACSEC_INCLUDE_SCI                    = "include-sci"
-	NM_DEVICE_MACSEC_PARENT                         = "parent"
-	NM_DEVICE_MACSEC_PROTECT                        = "protect"
-	NM_DEVICE_MACSEC_REPLAY_PROTECT                 = "replay-protect"
-	NM_DEVICE_MACSEC_SCB                            = "scb"
-	NM_DEVICE_MACSEC_SCI                            = "sci"
-	NM_DEVICE_MACSEC_VALIDATION                     = "validation"
-	NM_DEVICE_MACSEC_WINDOW                         = "window"
-	NM_DEVICE_MACVLAN_HW_ADDRESS                    = "hw-address"
-	NM_DEVICE_MACVLAN_MODE                          = "mode"
-	NM_DEVICE_MACVLAN_NO_PROMISC                    = "no-promisc"
-	NM_DEVICE_MACVLAN_PARENT                        = "parent"
-	NM_DEVICE_MACVLAN_TAP                           = "tap"
-	NM_DEVICE_MANAGED                               = "managed"
-	NM_DEVICE_METERED                               = "metered"
-	NM_DEVICE_MODEM_CURRENT_CAPABILITIES            = "current-capabilities"
-	NM_DEVICE_MODEM_MODEM_CAPABILITIES              = "modem-capabilities"
-	NM_DEVICE_MTU                                   = "mtu"
-	NM_DEVICE_NM_PLUGIN_MISSING                     = "nm-plugin-missing"
-	NM_DEVICE_OLPC_MESH_ACTIVE_CHANNEL              = "active-channel"
-	NM_DEVICE_OLPC_MESH_COMPANION                   = "companion"
-	NM_DEVICE_OLPC_MESH_HW_ADDRESS                  = "hw-address"
-	NM_DEVICE_PHYSICAL_PORT_ID                      = "physical-port-id"
-	NM_DEVICE_PRODUCT                               = "product"
-	NM_DEVICE_REAL                                  = "real"
-	NM_DEVICE_STATE                                 = "state"
-	NM_DEVICE_STATE_REASON                          = "state-reason"
-	NM_DEVICE_TEAM_CARRIER                          = "carrier"
-	NM_DEVICE_TEAM_CONFIG                           = "config"
-	NM_DEVICE_TEAM_HW_ADDRESS                       = "hw-address"
-	NM_DEVICE_TEAM_SLAVES                           = "slaves"
-	NM_DEVICE_TUN_GROUP                             = "group"
-	NM_DEVICE_TUN_HW_ADDRESS                        = "hw-address"
-	NM_DEVICE_TUN_MODE                              = "mode"
-	NM_DEVICE_TUN_MULTI_QUEUE                       = "multi-queue"
-	NM_DEVICE_TUN_NO_PI                             = "no-pi"
-	NM_DEVICE_TUN_OWNER                             = "owner"
-	NM_DEVICE_TUN_VNET_HDR                          = "vnet-hdr"
-	NM_DEVICE_UDI                                   = "udi"
-	NM_DEVICE_VENDOR                                = "vendor"
-	NM_DEVICE_VLAN_CARRIER                          = "carrier"
-	NM_DEVICE_VLAN_HW_ADDRESS                       = "hw-address"
-	NM_DEVICE_VLAN_PARENT                           = "parent"
-	NM_DEVICE_VLAN_VLAN_ID                          = "vlan-id"
-	NM_DEVICE_VXLAN_AGEING                          = "ageing"
-	NM_DEVICE_VXLAN_CARRIER                         = "carrier"
-	NM_DEVICE_VXLAN_DST_PORT                        = "dst-port"
-	NM_DEVICE_VXLAN_GROUP                           = "group"
-	NM_DEVICE_VXLAN_HW_ADDRESS                      = "hw-address"
-	NM_DEVICE_VXLAN_ID                              = "id"
-	NM_DEVICE_VXLAN_L2MISS                          = "l2miss"
-	NM_DEVICE_VXLAN_L3MISS                          = "l3miss"
-	NM_DEVICE_VXLAN_LEARNING                        = "learning"
-	NM_DEVICE_VXLAN_LIMIT                           = "limit"
-	NM_DEVICE_VXLAN_LOCAL                           = "local"
-	NM_DEVICE_VXLAN_PARENT                          = "parent"
-	NM_DEVICE_VXLAN_PROXY                           = "proxy"
-	NM_DEVICE_VXLAN_RSC                             = "rsc"
-	NM_DEVICE_VXLAN_SRC_PORT_MAX                    = "src-port-max"
-	NM_DEVICE_VXLAN_SRC_PORT_MIN                    = "src-port-min"
-	NM_DEVICE_VXLAN_TOS                             = "tos"
-	NM_DEVICE_VXLAN_TTL                             = "ttl"
-	NM_DEVICE_WIFI_ACCESS_POINTS                    = "access-points"
-	NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT              = "active-access-point"
-	NM_DEVICE_WIFI_BITRATE                          = "bitrate"
-	NM_DEVICE_WIFI_CAPABILITIES                     = "wireless-capabilities"
-	NM_DEVICE_WIFI_HW_ADDRESS                       = "hw-address"
-	NM_DEVICE_WIFI_MODE                             = "mode"
-	NM_DEVICE_WIFI_PERMANENT_HW_ADDRESS             = "perm-hw-address"
-	NM_DEVICE_WIMAX_ACTIVE_NSP                      = "active-nsp"
-	NM_DEVICE_WIMAX_BSID                            = "bsid"
-	NM_DEVICE_WIMAX_CENTER_FREQUENCY                = "center-frequency"
-	NM_DEVICE_WIMAX_CINR                            = "cinr"
-	NM_DEVICE_WIMAX_HW_ADDRESS                      = "hw-address"
-	NM_DEVICE_WIMAX_NSPS                            = "nsps"
-	NM_DEVICE_WIMAX_RSSI                            = "rssi"
-	NM_DEVICE_WIMAX_TX_POWER                        = "tx-power"
-	NM_DHCP_CONFIG_FAMILY                           = "family"
-	NM_DHCP_CONFIG_OPTIONS                          = "options"
-	NM_IP_CONFIG_ADDRESSES                          = "addresses"
-	NM_IP_CONFIG_DOMAINS                            = "domains"
-	NM_IP_CONFIG_FAMILY                             = "family"
-	NM_IP_CONFIG_GATEWAY                            = "gateway"
-	NM_IP_CONFIG_NAMESERVERS                        = "nameservers"
-	NM_IP_CONFIG_ROUTES                             = "routes"
-	NM_IP_CONFIG_SEARCHES                           = "searches"
-	NM_IP_CONFIG_WINS_SERVERS                       = "wins-servers"
-	NM_LLDP_ATTR_CHASSIS_ID                         = "chassis-id"
-	NM_LLDP_ATTR_CHASSIS_ID_TYPE                    = "chassis-id-type"
-	NM_LLDP_ATTR_DESTINATION                        = "destination"
-	NM_LLDP_ATTR_IEEE_802_1_PPVID                   = "ieee-802-1-ppvid"
-	NM_LLDP_ATTR_IEEE_802_1_PPVID_FLAGS             = "ieee-802-1-ppvid-flags"
-	NM_LLDP_ATTR_IEEE_802_1_PVID                    = "ieee-802-1-pvid"
-	NM_LLDP_ATTR_IEEE_802_1_VID                     = "ieee-802-1-vid"
-	NM_LLDP_ATTR_IEEE_802_1_VLAN_NAME               = "ieee-802-1-vlan-name"
-	NM_LLDP_ATTR_PORT_DESCRIPTION                   = "port-description"
-	NM_LLDP_ATTR_PORT_ID                            = "port-id"
-	NM_LLDP_ATTR_PORT_ID_TYPE                       = "port-id-type"
-	NM_LLDP_ATTR_SYSTEM_CAPABILITIES                = "system-capabilities"
-	NM_LLDP_ATTR_SYSTEM_DESCRIPTION                 = "system-description"
-	NM_LLDP_ATTR_SYSTEM_NAME                        = "system-name"
-	NM_LLDP_DEST_NEAREST_BRIDGE                     = "nearest-bridge"
-	NM_LLDP_DEST_NEAREST_CUSTOMER_BRIDGE            = "nearest-customer-bridge"
-	NM_LLDP_DEST_NEAREST_NON_TPMR_BRIDGE            = "nearest-non-tpmr-bridge"
-	NM_OBJECT_DBUS_CONNECTION                       = "dbus-connection"
-	NM_OBJECT_DBUS_OBJECT                           = "dbus-object"
-	NM_OBJECT_DBUS_OBJECT_MANAGER                   = "dbus-object-manager"
-	NM_OBJECT_PATH                                  = "path"
-	NM_REMOTE_CONNECTION_DBUS_CONNECTION            = "dbus-connection"
-	NM_REMOTE_CONNECTION_PATH                       = "path"
-	NM_REMOTE_CONNECTION_UNSAVED                    = "unsaved"
-	NM_REMOTE_CONNECTION_VISIBLE                    = "visible"
-	NM_SECRET_AGENT_OLD_AUTO_REGISTER               = "auto-register"
-	NM_SECRET_AGENT_OLD_CAPABILITIES                = "capabilities"
-	NM_SECRET_AGENT_OLD_IDENTIFIER                  = "identifier"
-	NM_SECRET_AGENT_OLD_REGISTERED                  = "registered"
-	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PATH       = "file://"
-	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PKCS11     = "pkcs11:"
-	NM_SETTING_ADSL_ENCAPSULATION_LLC               = "llc"
-	NM_SETTING_ADSL_ENCAPSULATION_VCMUX             = "vcmux"
-	NM_SETTING_ADSL_PROTOCOL_IPOATM                 = "ipoatm"
-	NM_SETTING_ADSL_PROTOCOL_PPPOA                  = "pppoa"
-	NM_SETTING_ADSL_PROTOCOL_PPPOE                  = "pppoe"
-	NM_SETTING_BLUETOOTH_TYPE_DUN                   = "dun"
-	NM_SETTING_BLUETOOTH_TYPE_PANU                  = "panu"
-	NM_SETTING_BOND_OPTION_ACTIVE_SLAVE             = "active_slave"
-	NM_SETTING_BOND_OPTION_AD_ACTOR_SYSTEM          = "ad_actor_system"
-	NM_SETTING_BOND_OPTION_AD_ACTOR_SYS_PRIO        = "ad_actor_sys_prio"
-	NM_SETTING_BOND_OPTION_AD_SELECT                = "ad_select"
-	NM_SETTING_BOND_OPTION_AD_USER_PORT_KEY         = "ad_user_port_key"
-	NM_SETTING_BOND_OPTION_ALL_SLAVES_ACTIVE        = "all_slaves_active"
-	NM_SETTING_BOND_OPTION_ARP_ALL_TARGETS          = "arp_all_targets"
-	NM_SETTING_BOND_OPTION_ARP_INTERVAL             = "arp_interval"
-	NM_SETTING_BOND_OPTION_ARP_IP_TARGET            = "arp_ip_target"
-	NM_SETTING_BOND_OPTION_ARP_VALIDATE             = "arp_validate"
-	NM_SETTING_BOND_OPTION_DOWNDELAY                = "downdelay"
-	NM_SETTING_BOND_OPTION_FAIL_OVER_MAC            = "fail_over_mac"
-	NM_SETTING_BOND_OPTION_LACP_RATE                = "lacp_rate"
-	NM_SETTING_BOND_OPTION_LP_INTERVAL              = "lp_interval"
-	NM_SETTING_BOND_OPTION_MIIMON                   = "miimon"
-	NM_SETTING_BOND_OPTION_MIN_LINKS                = "min_links"
-	NM_SETTING_BOND_OPTION_MODE                     = "mode"
-	NM_SETTING_BOND_OPTION_NUM_GRAT_ARP             = "num_grat_arp"
-	NM_SETTING_BOND_OPTION_NUM_UNSOL_NA             = "num_unsol_na"
-	NM_SETTING_BOND_OPTION_PACKETS_PER_SLAVE        = "packets_per_slave"
-	NM_SETTING_BOND_OPTION_PRIMARY                  = "primary"
-	NM_SETTING_BOND_OPTION_PRIMARY_RESELECT         = "primary_reselect"
-	NM_SETTING_BOND_OPTION_RESEND_IGMP              = "resend_igmp"
-	NM_SETTING_BOND_OPTION_TLB_DYNAMIC_LB           = "tlb_dynamic_lb"
-	NM_SETTING_BOND_OPTION_UPDELAY                  = "updelay"
-	NM_SETTING_BOND_OPTION_USE_CARRIER              = "use_carrier"
-	NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY         = "xmit_hash_policy"
-	NM_SETTING_DCB_FCOE_MODE_FABRIC                 = "fabric"
-	NM_SETTING_DCB_FCOE_MODE_VN2VN                  = "vn2vn"
-	NM_SETTING_DNS_OPTION_ATTEMPTS                  = "attempts"
-	NM_SETTING_DNS_OPTION_DEBUG                     = "debug"
-	NM_SETTING_DNS_OPTION_EDNS0                     = "edns0"
-	NM_SETTING_DNS_OPTION_INET6                     = "inet6"
-	NM_SETTING_DNS_OPTION_IP6_BYTESTRING            = "ip6-bytestring"
-	NM_SETTING_DNS_OPTION_IP6_DOTINT                = "ip6-dotint"
-	NM_SETTING_DNS_OPTION_NDOTS                     = "ndots"
-	NM_SETTING_DNS_OPTION_NO_CHECK_NAMES            = "no-check-names"
-	NM_SETTING_DNS_OPTION_NO_IP6_DOTINT             = "no-ip6-dotint"
-	NM_SETTING_DNS_OPTION_NO_TLD_QUERY              = "no-tld-query"
-	NM_SETTING_DNS_OPTION_ROTATE                    = "rotate"
-	NM_SETTING_DNS_OPTION_SINGLE_REQUEST            = "single-request"
-	NM_SETTING_DNS_OPTION_SINGLE_REQUEST_REOPEN     = "single-request-reopen"
-	NM_SETTING_DNS_OPTION_TIMEOUT                   = "timeout"
-	NM_SETTING_DNS_OPTION_USE_VC                    = "use-vc"
-	NM_SETTING_IP4_CONFIG_METHOD_AUTO               = "auto"
-	NM_SETTING_IP4_CONFIG_METHOD_DISABLED           = "disabled"
-	NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL         = "link-local"
-	NM_SETTING_IP4_CONFIG_METHOD_MANUAL             = "manual"
-	NM_SETTING_IP4_CONFIG_METHOD_SHARED             = "shared"
-	NM_SETTING_IP6_CONFIG_METHOD_AUTO               = "auto"
-	NM_SETTING_IP6_CONFIG_METHOD_DHCP               = "dhcp"
-	NM_SETTING_IP6_CONFIG_METHOD_IGNORE             = "ignore"
-	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL         = "link-local"
-	NM_SETTING_IP6_CONFIG_METHOD_MANUAL             = "manual"
-	NM_SETTING_IP6_CONFIG_METHOD_SHARED             = "shared"
-	NM_SETTING_IP_CONFIG_ADDRESSES                  = "addresses"
-	NM_SETTING_IP_CONFIG_DAD_TIMEOUT                = "dad-timeout"
-	NM_SETTING_IP_CONFIG_DHCP_HOSTNAME              = "dhcp-hostname"
-	NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME         = "dhcp-send-hostname"
-	NM_SETTING_IP_CONFIG_DHCP_TIMEOUT               = "dhcp-timeout"
-	NM_SETTING_IP_CONFIG_DNS                        = "dns"
-	NM_SETTING_IP_CONFIG_DNS_OPTIONS                = "dns-options"
-	NM_SETTING_IP_CONFIG_DNS_PRIORITY               = "dns-priority"
-	NM_SETTING_IP_CONFIG_DNS_SEARCH                 = "dns-search"
-	NM_SETTING_IP_CONFIG_GATEWAY                    = "gateway"
-	NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS            = "ignore-auto-dns"
-	NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES         = "ignore-auto-routes"
-	NM_SETTING_IP_CONFIG_MAY_FAIL                   = "may-fail"
-	NM_SETTING_IP_CONFIG_METHOD                     = "method"
-	NM_SETTING_IP_CONFIG_NEVER_DEFAULT              = "never-default"
-	NM_SETTING_IP_CONFIG_ROUTES                     = "routes"
-	NM_SETTING_IP_CONFIG_ROUTE_METRIC               = "route-metric"
-	NM_SETTING_NAME                                 = "name"
-	NM_SETTING_WIRELESS_MODE_ADHOC                  = "adhoc"
-	NM_SETTING_WIRELESS_MODE_AP                     = "ap"
-	NM_SETTING_WIRELESS_MODE_INFRA                  = "infrastructure"
-	NM_VPN_CONNECTION_BANNER                        = "banner"
-	NM_VPN_CONNECTION_VPN_STATE                     = "vpn-state"
-	NM_VPN_DBUS_PLUGIN_INTERFACE                    = "org.freedesktop.NetworkManager.VPN.Plugin"
-	NM_VPN_DBUS_PLUGIN_PATH                         = "/org/freedesktop/NetworkManager/VPN/Plugin"
-	NM_VPN_EDITOR_PLUGIN_DESCRIPTION                = "description"
-	NM_VPN_EDITOR_PLUGIN_NAME                       = "name"
-	NM_VPN_EDITOR_PLUGIN_SERVICE                    = "service"
-	NM_VPN_PLUGIN_CAN_PERSIST                       = "can-persist"
-	NM_VPN_PLUGIN_CONFIG_BANNER                     = "banner"
-	NM_VPN_PLUGIN_CONFIG_EXT_GATEWAY                = "gateway"
-	NM_VPN_PLUGIN_CONFIG_HAS_IP4                    = "has-ip4"
-	NM_VPN_PLUGIN_CONFIG_HAS_IP6                    = "has-ip6"
-	NM_VPN_PLUGIN_CONFIG_MTU                        = "mtu"
-	NM_VPN_PLUGIN_CONFIG_PROXY_PAC                  = "pac"
-	NM_VPN_PLUGIN_CONFIG_TUNDEV                     = "tundev"
-	NM_VPN_PLUGIN_INFO_FILENAME                     = "filename"
-	NM_VPN_PLUGIN_INFO_KEYFILE                      = "keyfile"
-	NM_VPN_PLUGIN_INFO_KF_GROUP_CONNECTION          = "VPN Connection"
-	NM_VPN_PLUGIN_INFO_KF_GROUP_GNOME               = "GNOME"
-	NM_VPN_PLUGIN_INFO_KF_GROUP_LIBNM               = "libnm"
-	NM_VPN_PLUGIN_INFO_NAME                         = "name"
-	NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS                = "address"
-	NM_VPN_PLUGIN_IP4_CONFIG_DNS                    = "dns"
-	NM_VPN_PLUGIN_IP4_CONFIG_DOMAIN                 = "domain"
-	NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS                = "domains"
-	NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY            = "internal-gateway"
-	NM_VPN_PLUGIN_IP4_CONFIG_MSS                    = "mss"
-	NM_VPN_PLUGIN_IP4_CONFIG_NBNS                   = "nbns"
-	NM_VPN_PLUGIN_IP4_CONFIG_NEVER_DEFAULT          = "never-default"
-	NM_VPN_PLUGIN_IP4_CONFIG_PREFIX                 = "prefix"
-	NM_VPN_PLUGIN_IP4_CONFIG_PRESERVE_ROUTES        = "preserve-routes"
-	NM_VPN_PLUGIN_IP4_CONFIG_PTP                    = "ptp"
-	NM_VPN_PLUGIN_IP4_CONFIG_ROUTES                 = "routes"
-	NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS                = "address"
-	NM_VPN_PLUGIN_IP6_CONFIG_DNS                    = "dns"
-	NM_VPN_PLUGIN_IP6_CONFIG_DOMAIN                 = "domain"
-	NM_VPN_PLUGIN_IP6_CONFIG_DOMAINS                = "domains"
-	NM_VPN_PLUGIN_IP6_CONFIG_INT_GATEWAY            = "internal-gateway"
-	NM_VPN_PLUGIN_IP6_CONFIG_MSS                    = "mss"
-	NM_VPN_PLUGIN_IP6_CONFIG_NEVER_DEFAULT          = "never-default"
-	NM_VPN_PLUGIN_IP6_CONFIG_PREFIX                 = "prefix"
-	NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES        = "preserve-routes"
-	NM_VPN_PLUGIN_IP6_CONFIG_PTP                    = "ptp"
-	NM_VPN_PLUGIN_IP6_CONFIG_ROUTES                 = "routes"
-	NM_VPN_PLUGIN_OLD_DBUS_SERVICE_NAME             = "service-name"
-	NM_VPN_PLUGIN_OLD_STATE                         = "state"
-	NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME         = "service-name"
-	NM_VPN_SERVICE_PLUGIN_DBUS_WATCH_PEER           = "watch-peer"
-	NM_VPN_SERVICE_PLUGIN_STATE                     = "state"
-	NM_WIMAX_NSP_NAME                               = "name"
-	NM_WIMAX_NSP_NETWORK_TYPE                       = "network-type"
-	NM_WIMAX_NSP_SIGNAL_QUALITY                     = "signal-quality"
+	NM_ACCESS_POINT_BSSID                                     = "bssid"
+	NM_ACCESS_POINT_FLAGS                                     = "flags"
+	NM_ACCESS_POINT_FREQUENCY                                 = "frequency"
+	NM_ACCESS_POINT_HW_ADDRESS                                = "hw-address"
+	NM_ACCESS_POINT_LAST_SEEN                                 = "last-seen"
+	NM_ACCESS_POINT_MAX_BITRATE                               = "max-bitrate"
+	NM_ACCESS_POINT_MODE                                      = "mode"
+	NM_ACCESS_POINT_RSN_FLAGS                                 = "rsn-flags"
+	NM_ACCESS_POINT_SSID                                      = "ssid"
+	NM_ACCESS_POINT_STRENGTH                                  = "strength"
+	NM_ACCESS_POINT_WPA_FLAGS                                 = "wpa-flags"
+	NM_ACTIVE_CONNECTION_CONNECTION                           = "connection"
+	NM_ACTIVE_CONNECTION_DEFAULT                              = "default"
+	NM_ACTIVE_CONNECTION_DEFAULT6                             = "default6"
+	NM_ACTIVE_CONNECTION_DEVICES                              = "devices"
+	NM_ACTIVE_CONNECTION_DHCP4_CONFIG                         = "dhcp4-config"
+	NM_ACTIVE_CONNECTION_DHCP6_CONFIG                         = "dhcp6-config"
+	NM_ACTIVE_CONNECTION_ID                                   = "id"
+	NM_ACTIVE_CONNECTION_IP4_CONFIG                           = "ip4-config"
+	NM_ACTIVE_CONNECTION_IP6_CONFIG                           = "ip6-config"
+	NM_ACTIVE_CONNECTION_MASTER                               = "master"
+	NM_ACTIVE_CONNECTION_SPECIFIC_OBJECT_PATH                 = "specific-object-path"
+	NM_ACTIVE_CONNECTION_STATE                                = "state"
+	NM_ACTIVE_CONNECTION_STATE_FLAGS                          = "state-flags"
+	NM_ACTIVE_CONNECTION_TYPE                                 = "type"
+	NM_ACTIVE_CONNECTION_UUID                                 = "uuid"
+	NM_ACTIVE_CONNECTION_VPN                                  = "vpn"
+	NM_CLIENT_ACTIVATING_CONNECTION                           = "activating-connection"
+	NM_CLIENT_ACTIVE_CONNECTIONS                              = "active-connections"
+	NM_CLIENT_ACTIVE_CONNECTION_ADDED                         = "active-connection-added"
+	NM_CLIENT_ACTIVE_CONNECTION_REMOVED                       = "active-connection-removed"
+	NM_CLIENT_ALL_DEVICES                                     = "all-devices"
+	NM_CLIENT_ANY_DEVICE_ADDED                                = "any-device-added"
+	NM_CLIENT_ANY_DEVICE_REMOVED                              = "any-device-removed"
+	NM_CLIENT_CAN_MODIFY                                      = "can-modify"
+	NM_CLIENT_CONNECTIONS                                     = "connections"
+	NM_CLIENT_CONNECTION_ADDED                                = "connection-added"
+	NM_CLIENT_CONNECTION_REMOVED                              = "connection-removed"
+	NM_CLIENT_CONNECTIVITY                                    = "connectivity"
+	NM_CLIENT_CONNECTIVITY_CHECK_AVAILABLE                    = "connectivity-check-available"
+	NM_CLIENT_CONNECTIVITY_CHECK_ENABLED                      = "connectivity-check-enabled"
+	NM_CLIENT_DEVICES                                         = "devices"
+	NM_CLIENT_DEVICE_ADDED                                    = "device-added"
+	NM_CLIENT_DEVICE_REMOVED                                  = "device-removed"
+	NM_CLIENT_DNS_CONFIGURATION                               = "dns-configuration"
+	NM_CLIENT_DNS_MODE                                        = "dns-mode"
+	NM_CLIENT_DNS_RC_MANAGER                                  = "dns-rc-manager"
+	NM_CLIENT_HOSTNAME                                        = "hostname"
+	NM_CLIENT_METERED                                         = "metered"
+	NM_CLIENT_NETWORKING_ENABLED                              = "networking-enabled"
+	NM_CLIENT_NM_RUNNING                                      = "nm-running"
+	NM_CLIENT_PERMISSION_CHANGED                              = "permission-changed"
+	NM_CLIENT_PRIMARY_CONNECTION                              = "primary-connection"
+	NM_CLIENT_STARTUP                                         = "startup"
+	NM_CLIENT_STATE                                           = "state"
+	NM_CLIENT_VERSION                                         = "version"
+	NM_CLIENT_WIMAX_ENABLED                                   = "wimax-enabled"
+	NM_CLIENT_WIMAX_HARDWARE_ENABLED                          = "wimax-hardware-enabled"
+	NM_CLIENT_WIRELESS_ENABLED                                = "wireless-enabled"
+	NM_CLIENT_WIRELESS_HARDWARE_ENABLED                       = "wireless-hardware-enabled"
+	NM_CLIENT_WWAN_ENABLED                                    = "wwan-enabled"
+	NM_CLIENT_WWAN_HARDWARE_ENABLED                           = "wwan-hardware-enabled"
+	NM_CONNECTION_CHANGED                                     = "changed"
+	NM_CONNECTION_NORMALIZE_PARAM_IP6_CONFIG_METHOD           = "ip6-config-method"
+	NM_CONNECTION_SECRETS_CLEARED                             = "secrets-cleared"
+	NM_CONNECTION_SECRETS_UPDATED                             = "secrets-updated"
+	NM_DBUS_INTERFACE                                         = "org.freedesktop.NetworkManager"
+	NM_DBUS_INTERFACE_DNS_MANAGER                             = "org.freedesktop.NetworkManager.DnsManager"
+	NM_DBUS_INTERFACE_SETTINGS                                = "org.freedesktop.NetworkManager.Settings"
+	NM_DBUS_INTERFACE_SETTINGS_CONNECTION                     = "org.freedesktop.NetworkManager.Settings.Connection"
+	NM_DBUS_INTERFACE_SETTINGS_CONNECTION_SECRETS             = "org.freedesktop.NetworkManager.Settings.Connection.Secrets"
+	NM_DBUS_INTERFACE_VPN                                     = "org.freedesktop.NetworkManager.VPN.Manager"
+	NM_DBUS_INTERFACE_VPN_CONNECTION                          = "org.freedesktop.NetworkManager.VPN.Connection"
+	NM_DBUS_INVALID_VPN_CONNECTION                            = "org.freedesktop.NetworkManager.VPNConnections.InvalidVPNConnection"
+	NM_DBUS_NO_ACTIVE_VPN_CONNECTION                          = "org.freedesktop.NetworkManager.VPNConnections.NoActiveVPNConnection"
+	NM_DBUS_NO_VPN_CONNECTIONS                                = "org.freedesktop.NetworkManager.VPNConnections.NoVPNConnections"
+	NM_DBUS_PATH                                              = "/org/freedesktop/NetworkManager"
+	NM_DBUS_PATH_AGENT_MANAGER                                = "/org/freedesktop/NetworkManager/AgentManager"
+	NM_DBUS_PATH_DNS_MANAGER                                  = "/org/freedesktop/NetworkManager/DnsManager"
+	NM_DBUS_PATH_SECRET_AGENT                                 = "/org/freedesktop/NetworkManager/SecretAgent"
+	NM_DBUS_PATH_SETTINGS                                     = "/org/freedesktop/NetworkManager/Settings"
+	NM_DBUS_PATH_SETTINGS_CONNECTION                          = "/org/freedesktop/NetworkManager/Settings/Connection"
+	NM_DBUS_PATH_VPN                                          = "/org/freedesktop/NetworkManager/VPN/Manager"
+	NM_DBUS_PATH_VPN_CONNECTION                               = "/org/freedesktop/NetworkManager/VPN/Connection"
+	NM_DBUS_SERVICE                                           = "org.freedesktop.NetworkManager"
+	NM_DBUS_VPN_ALREADY_STARTED                               = "AlreadyStarted"
+	NM_DBUS_VPN_ALREADY_STOPPED                               = "AlreadyStopped"
+	NM_DBUS_VPN_BAD_ARGUMENTS                                 = "BadArguments"
+	NM_DBUS_VPN_ERROR_PREFIX                                  = "org.freedesktop.NetworkManager.VPN.Error"
+	NM_DBUS_VPN_INTERACTIVE_NOT_SUPPORTED                     = "InteractiveNotSupported"
+	NM_DBUS_VPN_SIGNAL_CONNECT_FAILED                         = "ConnectFailed"
+	NM_DBUS_VPN_SIGNAL_IP4_CONFIG                             = "IP4Config"
+	NM_DBUS_VPN_SIGNAL_IP_CONFIG_BAD                          = "IPConfigBad"
+	NM_DBUS_VPN_SIGNAL_LAUNCH_FAILED                          = "LaunchFailed"
+	NM_DBUS_VPN_SIGNAL_LOGIN_BANNER                           = "LoginBanner"
+	NM_DBUS_VPN_SIGNAL_LOGIN_FAILED                           = "LoginFailed"
+	NM_DBUS_VPN_SIGNAL_STATE_CHANGE                           = "StateChange"
+	NM_DBUS_VPN_SIGNAL_VPN_CONFIG_BAD                         = "VPNConfigBad"
+	NM_DBUS_VPN_STARTING_IN_PROGRESS                          = "StartingInProgress"
+	NM_DBUS_VPN_STOPPING_IN_PROGRESS                          = "StoppingInProgress"
+	NM_DBUS_VPN_WRONG_STATE                                   = "WrongState"
+	NM_DEVICE_ACTIVE_CONNECTION                               = "active-connection"
+	NM_DEVICE_ADSL_CARRIER                                    = "carrier"
+	NM_DEVICE_AUTOCONNECT                                     = "autoconnect"
+	NM_DEVICE_AVAILABLE_CONNECTIONS                           = "available-connections"
+	NM_DEVICE_BOND_CARRIER                                    = "carrier"
+	NM_DEVICE_BOND_HW_ADDRESS                                 = "hw-address"
+	NM_DEVICE_BOND_SLAVES                                     = "slaves"
+	NM_DEVICE_BRIDGE_CARRIER                                  = "carrier"
+	NM_DEVICE_BRIDGE_HW_ADDRESS                               = "hw-address"
+	NM_DEVICE_BRIDGE_SLAVES                                   = "slaves"
+	NM_DEVICE_BT_CAPABILITIES                                 = "bt-capabilities"
+	NM_DEVICE_BT_HW_ADDRESS                                   = "hw-address"
+	NM_DEVICE_BT_NAME                                         = "name"
+	NM_DEVICE_CAPABILITIES                                    = "capabilities"
+	NM_DEVICE_DEVICE_TYPE                                     = "device-type"
+	NM_DEVICE_DHCP4_CONFIG                                    = "dhcp4-config"
+	NM_DEVICE_DHCP6_CONFIG                                    = "dhcp6-config"
+	NM_DEVICE_DRIVER                                          = "driver"
+	NM_DEVICE_DRIVER_VERSION                                  = "driver-version"
+	NM_DEVICE_DUMMY_HW_ADDRESS                                = "hw-address"
+	NM_DEVICE_ETHERNET_CARRIER                                = "carrier"
+	NM_DEVICE_ETHERNET_HW_ADDRESS                             = "hw-address"
+	NM_DEVICE_ETHERNET_PERMANENT_HW_ADDRESS                   = "perm-hw-address"
+	NM_DEVICE_ETHERNET_S390_SUBCHANNELS                       = "s390-subchannels"
+	NM_DEVICE_ETHERNET_SPEED                                  = "speed"
+	NM_DEVICE_FIRMWARE_MISSING                                = "firmware-missing"
+	NM_DEVICE_FIRMWARE_VERSION                                = "firmware-version"
+	NM_DEVICE_GENERIC_HW_ADDRESS                              = "hw-address"
+	NM_DEVICE_GENERIC_TYPE_DESCRIPTION                        = "type-description"
+	NM_DEVICE_INFINIBAND_CARRIER                              = "carrier"
+	NM_DEVICE_INFINIBAND_HW_ADDRESS                           = "hw-address"
+	NM_DEVICE_INTERFACE                                       = "interface"
+	NM_DEVICE_IP4_CONFIG                                      = "ip4-config"
+	NM_DEVICE_IP6_CONFIG                                      = "ip6-config"
+	NM_DEVICE_IP_INTERFACE                                    = "ip-interface"
+	NM_DEVICE_IP_TUNNEL_ENCAPSULATION_LIMIT                   = "encapsulation-limit"
+	NM_DEVICE_IP_TUNNEL_FLOW_LABEL                            = "flow-label"
+	NM_DEVICE_IP_TUNNEL_INPUT_KEY                             = "input-key"
+	NM_DEVICE_IP_TUNNEL_LOCAL                                 = "local"
+	NM_DEVICE_IP_TUNNEL_MODE                                  = "mode"
+	NM_DEVICE_IP_TUNNEL_OUTPUT_KEY                            = "output-key"
+	NM_DEVICE_IP_TUNNEL_PARENT                                = "parent"
+	NM_DEVICE_IP_TUNNEL_PATH_MTU_DISCOVERY                    = "path-mtu-discovery"
+	NM_DEVICE_IP_TUNNEL_REMOTE                                = "remote"
+	NM_DEVICE_IP_TUNNEL_TOS                                   = "tos"
+	NM_DEVICE_IP_TUNNEL_TTL                                   = "ttl"
+	NM_DEVICE_LLDP_NEIGHBORS                                  = "lldp-neighbors"
+	NM_DEVICE_MACSEC_CIPHER_SUITE                             = "cipher-suite"
+	NM_DEVICE_MACSEC_ENCODING_SA                              = "encoding-sa"
+	NM_DEVICE_MACSEC_ENCRYPT                                  = "encrypt"
+	NM_DEVICE_MACSEC_ES                                       = "es"
+	NM_DEVICE_MACSEC_HW_ADDRESS                               = "hw-address"
+	NM_DEVICE_MACSEC_ICV_LENGTH                               = "icv-length"
+	NM_DEVICE_MACSEC_INCLUDE_SCI                              = "include-sci"
+	NM_DEVICE_MACSEC_PARENT                                   = "parent"
+	NM_DEVICE_MACSEC_PROTECT                                  = "protect"
+	NM_DEVICE_MACSEC_REPLAY_PROTECT                           = "replay-protect"
+	NM_DEVICE_MACSEC_SCB                                      = "scb"
+	NM_DEVICE_MACSEC_SCI                                      = "sci"
+	NM_DEVICE_MACSEC_VALIDATION                               = "validation"
+	NM_DEVICE_MACSEC_WINDOW                                   = "window"
+	NM_DEVICE_MACVLAN_HW_ADDRESS                              = "hw-address"
+	NM_DEVICE_MACVLAN_MODE                                    = "mode"
+	NM_DEVICE_MACVLAN_NO_PROMISC                              = "no-promisc"
+	NM_DEVICE_MACVLAN_PARENT                                  = "parent"
+	NM_DEVICE_MACVLAN_TAP                                     = "tap"
+	NM_DEVICE_MANAGED                                         = "managed"
+	NM_DEVICE_METERED                                         = "metered"
+	NM_DEVICE_MODEM_CURRENT_CAPABILITIES                      = "current-capabilities"
+	NM_DEVICE_MODEM_MODEM_CAPABILITIES                        = "modem-capabilities"
+	NM_DEVICE_MTU                                             = "mtu"
+	NM_DEVICE_NM_PLUGIN_MISSING                               = "nm-plugin-missing"
+	NM_DEVICE_OLPC_MESH_ACTIVE_CHANNEL                        = "active-channel"
+	NM_DEVICE_OLPC_MESH_COMPANION                             = "companion"
+	NM_DEVICE_OLPC_MESH_HW_ADDRESS                            = "hw-address"
+	NM_DEVICE_PHYSICAL_PORT_ID                                = "physical-port-id"
+	NM_DEVICE_PRODUCT                                         = "product"
+	NM_DEVICE_REAL                                            = "real"
+	NM_DEVICE_STATE                                           = "state"
+	NM_DEVICE_STATE_REASON                                    = "state-reason"
+	NM_DEVICE_TEAM_CARRIER                                    = "carrier"
+	NM_DEVICE_TEAM_CONFIG                                     = "config"
+	NM_DEVICE_TEAM_HW_ADDRESS                                 = "hw-address"
+	NM_DEVICE_TEAM_SLAVES                                     = "slaves"
+	NM_DEVICE_TUN_GROUP                                       = "group"
+	NM_DEVICE_TUN_HW_ADDRESS                                  = "hw-address"
+	NM_DEVICE_TUN_MODE                                        = "mode"
+	NM_DEVICE_TUN_MULTI_QUEUE                                 = "multi-queue"
+	NM_DEVICE_TUN_NO_PI                                       = "no-pi"
+	NM_DEVICE_TUN_OWNER                                       = "owner"
+	NM_DEVICE_TUN_VNET_HDR                                    = "vnet-hdr"
+	NM_DEVICE_UDI                                             = "udi"
+	NM_DEVICE_VENDOR                                          = "vendor"
+	NM_DEVICE_VLAN_CARRIER                                    = "carrier"
+	NM_DEVICE_VLAN_HW_ADDRESS                                 = "hw-address"
+	NM_DEVICE_VLAN_PARENT                                     = "parent"
+	NM_DEVICE_VLAN_VLAN_ID                                    = "vlan-id"
+	NM_DEVICE_VXLAN_AGEING                                    = "ageing"
+	NM_DEVICE_VXLAN_CARRIER                                   = "carrier"
+	NM_DEVICE_VXLAN_DST_PORT                                  = "dst-port"
+	NM_DEVICE_VXLAN_GROUP                                     = "group"
+	NM_DEVICE_VXLAN_HW_ADDRESS                                = "hw-address"
+	NM_DEVICE_VXLAN_ID                                        = "id"
+	NM_DEVICE_VXLAN_L2MISS                                    = "l2miss"
+	NM_DEVICE_VXLAN_L3MISS                                    = "l3miss"
+	NM_DEVICE_VXLAN_LEARNING                                  = "learning"
+	NM_DEVICE_VXLAN_LIMIT                                     = "limit"
+	NM_DEVICE_VXLAN_LOCAL                                     = "local"
+	NM_DEVICE_VXLAN_PARENT                                    = "parent"
+	NM_DEVICE_VXLAN_PROXY                                     = "proxy"
+	NM_DEVICE_VXLAN_RSC                                       = "rsc"
+	NM_DEVICE_VXLAN_SRC_PORT_MAX                              = "src-port-max"
+	NM_DEVICE_VXLAN_SRC_PORT_MIN                              = "src-port-min"
+	NM_DEVICE_VXLAN_TOS                                       = "tos"
+	NM_DEVICE_VXLAN_TTL                                       = "ttl"
+	NM_DEVICE_WIFI_ACCESS_POINTS                              = "access-points"
+	NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT                        = "active-access-point"
+	NM_DEVICE_WIFI_BITRATE                                    = "bitrate"
+	NM_DEVICE_WIFI_CAPABILITIES                               = "wireless-capabilities"
+	NM_DEVICE_WIFI_HW_ADDRESS                                 = "hw-address"
+	NM_DEVICE_WIFI_MODE                                       = "mode"
+	NM_DEVICE_WIFI_PERMANENT_HW_ADDRESS                       = "perm-hw-address"
+	NM_DEVICE_WIMAX_ACTIVE_NSP                                = "active-nsp"
+	NM_DEVICE_WIMAX_BSID                                      = "bsid"
+	NM_DEVICE_WIMAX_CENTER_FREQUENCY                          = "center-frequency"
+	NM_DEVICE_WIMAX_CINR                                      = "cinr"
+	NM_DEVICE_WIMAX_HW_ADDRESS                                = "hw-address"
+	NM_DEVICE_WIMAX_NSPS                                      = "nsps"
+	NM_DEVICE_WIMAX_RSSI                                      = "rssi"
+	NM_DEVICE_WIMAX_TX_POWER                                  = "tx-power"
+	NM_DHCP_CONFIG_FAMILY                                     = "family"
+	NM_DHCP_CONFIG_OPTIONS                                    = "options"
+	NM_IP_CONFIG_ADDRESSES                                    = "addresses"
+	NM_IP_CONFIG_DOMAINS                                      = "domains"
+	NM_IP_CONFIG_FAMILY                                       = "family"
+	NM_IP_CONFIG_GATEWAY                                      = "gateway"
+	NM_IP_CONFIG_NAMESERVERS                                  = "nameservers"
+	NM_IP_CONFIG_ROUTES                                       = "routes"
+	NM_IP_CONFIG_SEARCHES                                     = "searches"
+	NM_IP_CONFIG_WINS_SERVERS                                 = "wins-servers"
+	NM_IP_ROUTE_ATTRIBUTE_CWND                                = "cwnd"
+	NM_IP_ROUTE_ATTRIBUTE_FROM                                = "from"
+	NM_IP_ROUTE_ATTRIBUTE_INITCWND                            = "initcwnd"
+	NM_IP_ROUTE_ATTRIBUTE_INITRWND                            = "initrwnd"
+	NM_IP_ROUTE_ATTRIBUTE_LOCK_CWND                           = "lock-cwnd"
+	NM_IP_ROUTE_ATTRIBUTE_LOCK_INITCWND                       = "lock-initcwnd"
+	NM_IP_ROUTE_ATTRIBUTE_LOCK_INITRWND                       = "lock-initrwnd"
+	NM_IP_ROUTE_ATTRIBUTE_LOCK_MTU                            = "lock-mtu"
+	NM_IP_ROUTE_ATTRIBUTE_LOCK_WINDOW                         = "lock-window"
+	NM_IP_ROUTE_ATTRIBUTE_MTU                                 = "mtu"
+	NM_IP_ROUTE_ATTRIBUTE_ONLINK                              = "onlink"
+	NM_IP_ROUTE_ATTRIBUTE_SRC                                 = "src"
+	NM_IP_ROUTE_ATTRIBUTE_TABLE                               = "table"
+	NM_IP_ROUTE_ATTRIBUTE_TOS                                 = "tos"
+	NM_IP_ROUTE_ATTRIBUTE_WINDOW                              = "window"
+	NM_LLDP_ATTR_CHASSIS_ID                                   = "chassis-id"
+	NM_LLDP_ATTR_CHASSIS_ID_TYPE                              = "chassis-id-type"
+	NM_LLDP_ATTR_DESTINATION                                  = "destination"
+	NM_LLDP_ATTR_IEEE_802_1_PPVID                             = "ieee-802-1-ppvid"
+	NM_LLDP_ATTR_IEEE_802_1_PPVID_FLAGS                       = "ieee-802-1-ppvid-flags"
+	NM_LLDP_ATTR_IEEE_802_1_PVID                              = "ieee-802-1-pvid"
+	NM_LLDP_ATTR_IEEE_802_1_VID                               = "ieee-802-1-vid"
+	NM_LLDP_ATTR_IEEE_802_1_VLAN_NAME                         = "ieee-802-1-vlan-name"
+	NM_LLDP_ATTR_PORT_DESCRIPTION                             = "port-description"
+	NM_LLDP_ATTR_PORT_ID                                      = "port-id"
+	NM_LLDP_ATTR_PORT_ID_TYPE                                 = "port-id-type"
+	NM_LLDP_ATTR_SYSTEM_CAPABILITIES                          = "system-capabilities"
+	NM_LLDP_ATTR_SYSTEM_DESCRIPTION                           = "system-description"
+	NM_LLDP_ATTR_SYSTEM_NAME                                  = "system-name"
+	NM_LLDP_DEST_NEAREST_BRIDGE                               = "nearest-bridge"
+	NM_LLDP_DEST_NEAREST_CUSTOMER_BRIDGE                      = "nearest-customer-bridge"
+	NM_LLDP_DEST_NEAREST_NON_TPMR_BRIDGE                      = "nearest-non-tpmr-bridge"
+	NM_OBJECT_DBUS_CONNECTION                                 = "dbus-connection"
+	NM_OBJECT_DBUS_OBJECT                                     = "dbus-object"
+	NM_OBJECT_DBUS_OBJECT_MANAGER                             = "dbus-object-manager"
+	NM_OBJECT_PATH                                            = "path"
+	NM_REMOTE_CONNECTION_DBUS_CONNECTION                      = "dbus-connection"
+	NM_REMOTE_CONNECTION_PATH                                 = "path"
+	NM_REMOTE_CONNECTION_UNSAVED                              = "unsaved"
+	NM_REMOTE_CONNECTION_VISIBLE                              = "visible"
+	NM_SECRET_AGENT_OLD_AUTO_REGISTER                         = "auto-register"
+	NM_SECRET_AGENT_OLD_CAPABILITIES                          = "capabilities"
+	NM_SECRET_AGENT_OLD_IDENTIFIER                            = "identifier"
+	NM_SECRET_AGENT_OLD_REGISTERED                            = "registered"
+	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PATH                 = "file://"
+	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PKCS11               = "pkcs11:"
+	NM_SETTING_ADSL_ENCAPSULATION_LLC                         = "llc"
+	NM_SETTING_ADSL_ENCAPSULATION_VCMUX                       = "vcmux"
+	NM_SETTING_ADSL_PROTOCOL_IPOATM                           = "ipoatm"
+	NM_SETTING_ADSL_PROTOCOL_PPPOA                            = "pppoa"
+	NM_SETTING_ADSL_PROTOCOL_PPPOE                            = "pppoe"
+	NM_SETTING_BLUETOOTH_TYPE_DUN                             = "dun"
+	NM_SETTING_BLUETOOTH_TYPE_NAP                             = "nap"
+	NM_SETTING_BLUETOOTH_TYPE_PANU                            = "panu"
+	NM_SETTING_BOND_OPTION_ACTIVE_SLAVE                       = "active_slave"
+	NM_SETTING_BOND_OPTION_AD_ACTOR_SYSTEM                    = "ad_actor_system"
+	NM_SETTING_BOND_OPTION_AD_ACTOR_SYS_PRIO                  = "ad_actor_sys_prio"
+	NM_SETTING_BOND_OPTION_AD_SELECT                          = "ad_select"
+	NM_SETTING_BOND_OPTION_AD_USER_PORT_KEY                   = "ad_user_port_key"
+	NM_SETTING_BOND_OPTION_ALL_SLAVES_ACTIVE                  = "all_slaves_active"
+	NM_SETTING_BOND_OPTION_ARP_ALL_TARGETS                    = "arp_all_targets"
+	NM_SETTING_BOND_OPTION_ARP_INTERVAL                       = "arp_interval"
+	NM_SETTING_BOND_OPTION_ARP_IP_TARGET                      = "arp_ip_target"
+	NM_SETTING_BOND_OPTION_ARP_VALIDATE                       = "arp_validate"
+	NM_SETTING_BOND_OPTION_DOWNDELAY                          = "downdelay"
+	NM_SETTING_BOND_OPTION_FAIL_OVER_MAC                      = "fail_over_mac"
+	NM_SETTING_BOND_OPTION_LACP_RATE                          = "lacp_rate"
+	NM_SETTING_BOND_OPTION_LP_INTERVAL                        = "lp_interval"
+	NM_SETTING_BOND_OPTION_MIIMON                             = "miimon"
+	NM_SETTING_BOND_OPTION_MIN_LINKS                          = "min_links"
+	NM_SETTING_BOND_OPTION_MODE                               = "mode"
+	NM_SETTING_BOND_OPTION_NUM_GRAT_ARP                       = "num_grat_arp"
+	NM_SETTING_BOND_OPTION_NUM_UNSOL_NA                       = "num_unsol_na"
+	NM_SETTING_BOND_OPTION_PACKETS_PER_SLAVE                  = "packets_per_slave"
+	NM_SETTING_BOND_OPTION_PRIMARY                            = "primary"
+	NM_SETTING_BOND_OPTION_PRIMARY_RESELECT                   = "primary_reselect"
+	NM_SETTING_BOND_OPTION_RESEND_IGMP                        = "resend_igmp"
+	NM_SETTING_BOND_OPTION_TLB_DYNAMIC_LB                     = "tlb_dynamic_lb"
+	NM_SETTING_BOND_OPTION_UPDELAY                            = "updelay"
+	NM_SETTING_BOND_OPTION_USE_CARRIER                        = "use_carrier"
+	NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY                   = "xmit_hash_policy"
+	NM_SETTING_DCB_FCOE_MODE_FABRIC                           = "fabric"
+	NM_SETTING_DCB_FCOE_MODE_VN2VN                            = "vn2vn"
+	NM_SETTING_DNS_OPTION_ATTEMPTS                            = "attempts"
+	NM_SETTING_DNS_OPTION_DEBUG                               = "debug"
+	NM_SETTING_DNS_OPTION_EDNS0                               = "edns0"
+	NM_SETTING_DNS_OPTION_INET6                               = "inet6"
+	NM_SETTING_DNS_OPTION_IP6_BYTESTRING                      = "ip6-bytestring"
+	NM_SETTING_DNS_OPTION_IP6_DOTINT                          = "ip6-dotint"
+	NM_SETTING_DNS_OPTION_NDOTS                               = "ndots"
+	NM_SETTING_DNS_OPTION_NO_CHECK_NAMES                      = "no-check-names"
+	NM_SETTING_DNS_OPTION_NO_IP6_DOTINT                       = "no-ip6-dotint"
+	NM_SETTING_DNS_OPTION_NO_TLD_QUERY                        = "no-tld-query"
+	NM_SETTING_DNS_OPTION_ROTATE                              = "rotate"
+	NM_SETTING_DNS_OPTION_SINGLE_REQUEST                      = "single-request"
+	NM_SETTING_DNS_OPTION_SINGLE_REQUEST_REOPEN               = "single-request-reopen"
+	NM_SETTING_DNS_OPTION_TIMEOUT                             = "timeout"
+	NM_SETTING_DNS_OPTION_USE_VC                              = "use-vc"
+	NM_SETTING_IP4_CONFIG_METHOD_AUTO                         = "auto"
+	NM_SETTING_IP4_CONFIG_METHOD_DISABLED                     = "disabled"
+	NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL                   = "link-local"
+	NM_SETTING_IP4_CONFIG_METHOD_MANUAL                       = "manual"
+	NM_SETTING_IP4_CONFIG_METHOD_SHARED                       = "shared"
+	NM_SETTING_IP6_CONFIG_METHOD_AUTO                         = "auto"
+	NM_SETTING_IP6_CONFIG_METHOD_DHCP                         = "dhcp"
+	NM_SETTING_IP6_CONFIG_METHOD_IGNORE                       = "ignore"
+	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL                   = "link-local"
+	NM_SETTING_IP6_CONFIG_METHOD_MANUAL                       = "manual"
+	NM_SETTING_IP6_CONFIG_METHOD_SHARED                       = "shared"
+	NM_SETTING_IP_CONFIG_ADDRESSES                            = "addresses"
+	NM_SETTING_IP_CONFIG_DAD_TIMEOUT                          = "dad-timeout"
+	NM_SETTING_IP_CONFIG_DHCP_HOSTNAME                        = "dhcp-hostname"
+	NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME                   = "dhcp-send-hostname"
+	NM_SETTING_IP_CONFIG_DHCP_TIMEOUT                         = "dhcp-timeout"
+	NM_SETTING_IP_CONFIG_DNS                                  = "dns"
+	NM_SETTING_IP_CONFIG_DNS_OPTIONS                          = "dns-options"
+	NM_SETTING_IP_CONFIG_DNS_PRIORITY                         = "dns-priority"
+	NM_SETTING_IP_CONFIG_DNS_SEARCH                           = "dns-search"
+	NM_SETTING_IP_CONFIG_GATEWAY                              = "gateway"
+	NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS                      = "ignore-auto-dns"
+	NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES                   = "ignore-auto-routes"
+	NM_SETTING_IP_CONFIG_MAY_FAIL                             = "may-fail"
+	NM_SETTING_IP_CONFIG_METHOD                               = "method"
+	NM_SETTING_IP_CONFIG_NEVER_DEFAULT                        = "never-default"
+	NM_SETTING_IP_CONFIG_ROUTES                               = "routes"
+	NM_SETTING_IP_CONFIG_ROUTE_METRIC                         = "route-metric"
+	NM_SETTING_IP_CONFIG_ROUTE_TABLE                          = "route-table"
+	NM_SETTING_NAME                                           = "name"
+	NM_SETTING_TC_CONFIG_QDISCS                               = "qdiscs"
+	NM_SETTING_TC_CONFIG_TFILTERS                             = "tfilters"
+	NM_SETTING_TEAM_LINK_WATCHERS                             = "link-watchers"
+	NM_SETTING_TEAM_PORT_LINK_WATCHERS                        = "link-watchers"
+	NM_SETTING_TEAM_RUNNER_ACTIVEBACKUP                       = "activebackup"
+	NM_SETTING_TEAM_RUNNER_AGG_SELECT_POLICY_BANDWIDTH        = "bandwidth"
+	NM_SETTING_TEAM_RUNNER_AGG_SELECT_POLICY_COUNT            = "count"
+	NM_SETTING_TEAM_RUNNER_AGG_SELECT_POLICY_LACP_PRIO        = "lacp_prio"
+	NM_SETTING_TEAM_RUNNER_AGG_SELECT_POLICY_LACP_PRIO_STABLE = "lacp_prio_stable"
+	NM_SETTING_TEAM_RUNNER_AGG_SELECT_POLICY_PORT_CONFIG      = "port_config"
+	NM_SETTING_TEAM_RUNNER_BROADCAST                          = "broadcast"
+	NM_SETTING_TEAM_RUNNER_HWADDR_POLICY_BY_ACTIVE            = "by_active"
+	NM_SETTING_TEAM_RUNNER_HWADDR_POLICY_ONLY_ACTIVE          = "only_active"
+	NM_SETTING_TEAM_RUNNER_HWADDR_POLICY_SAME_ALL             = "same_all"
+	NM_SETTING_TEAM_RUNNER_LACP                               = "lacp"
+	NM_SETTING_TEAM_RUNNER_LOADBALANCE                        = "loadbalance"
+	NM_SETTING_TEAM_RUNNER_ROUNDROBIN                         = "roundrobin"
+	NM_SETTING_WIRELESS_MODE_ADHOC                            = "adhoc"
+	NM_SETTING_WIRELESS_MODE_AP                               = "ap"
+	NM_SETTING_WIRELESS_MODE_INFRA                            = "infrastructure"
+	NM_TEAM_LINK_WATCHER_ARP_PING                             = "arp_ping"
+	NM_TEAM_LINK_WATCHER_ETHTOOL                              = "ethtool"
+	NM_TEAM_LINK_WATCHER_NSNA_PING                            = "nsna_ping"
+	NM_VPN_CONNECTION_BANNER                                  = "banner"
+	NM_VPN_CONNECTION_VPN_STATE                               = "vpn-state"
+	NM_VPN_DBUS_PLUGIN_INTERFACE                              = "org.freedesktop.NetworkManager.VPN.Plugin"
+	NM_VPN_DBUS_PLUGIN_PATH                                   = "/org/freedesktop/NetworkManager/VPN/Plugin"
+	NM_VPN_EDITOR_PLUGIN_DESCRIPTION                          = "description"
+	NM_VPN_EDITOR_PLUGIN_NAME                                 = "name"
+	NM_VPN_EDITOR_PLUGIN_SERVICE                              = "service"
+	NM_VPN_PLUGIN_CAN_PERSIST                                 = "can-persist"
+	NM_VPN_PLUGIN_CONFIG_BANNER                               = "banner"
+	NM_VPN_PLUGIN_CONFIG_EXT_GATEWAY                          = "gateway"
+	NM_VPN_PLUGIN_CONFIG_HAS_IP4                              = "has-ip4"
+	NM_VPN_PLUGIN_CONFIG_HAS_IP6                              = "has-ip6"
+	NM_VPN_PLUGIN_CONFIG_MTU                                  = "mtu"
+	NM_VPN_PLUGIN_CONFIG_PROXY_PAC                            = "pac"
+	NM_VPN_PLUGIN_CONFIG_TUNDEV                               = "tundev"
+	NM_VPN_PLUGIN_INFO_FILENAME                               = "filename"
+	NM_VPN_PLUGIN_INFO_KEYFILE                                = "keyfile"
+	NM_VPN_PLUGIN_INFO_KF_GROUP_CONNECTION                    = "VPN Connection"
+	NM_VPN_PLUGIN_INFO_KF_GROUP_GNOME                         = "GNOME"
+	NM_VPN_PLUGIN_INFO_KF_GROUP_LIBNM                         = "libnm"
+	NM_VPN_PLUGIN_INFO_NAME                                   = "name"
+	NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS                          = "address"
+	NM_VPN_PLUGIN_IP4_CONFIG_DNS                              = "dns"
+	NM_VPN_PLUGIN_IP4_CONFIG_DOMAIN                           = "domain"
+	NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS                          = "domains"
+	NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY                      = "internal-gateway"
+	NM_VPN_PLUGIN_IP4_CONFIG_MSS                              = "mss"
+	NM_VPN_PLUGIN_IP4_CONFIG_NBNS                             = "nbns"
+	NM_VPN_PLUGIN_IP4_CONFIG_NEVER_DEFAULT                    = "never-default"
+	NM_VPN_PLUGIN_IP4_CONFIG_PREFIX                           = "prefix"
+	NM_VPN_PLUGIN_IP4_CONFIG_PRESERVE_ROUTES                  = "preserve-routes"
+	NM_VPN_PLUGIN_IP4_CONFIG_PTP                              = "ptp"
+	NM_VPN_PLUGIN_IP4_CONFIG_ROUTES                           = "routes"
+	NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS                          = "address"
+	NM_VPN_PLUGIN_IP6_CONFIG_DNS                              = "dns"
+	NM_VPN_PLUGIN_IP6_CONFIG_DOMAIN                           = "domain"
+	NM_VPN_PLUGIN_IP6_CONFIG_DOMAINS                          = "domains"
+	NM_VPN_PLUGIN_IP6_CONFIG_INT_GATEWAY                      = "internal-gateway"
+	NM_VPN_PLUGIN_IP6_CONFIG_MSS                              = "mss"
+	NM_VPN_PLUGIN_IP6_CONFIG_NEVER_DEFAULT                    = "never-default"
+	NM_VPN_PLUGIN_IP6_CONFIG_PREFIX                           = "prefix"
+	NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES                  = "preserve-routes"
+	NM_VPN_PLUGIN_IP6_CONFIG_PTP                              = "ptp"
+	NM_VPN_PLUGIN_IP6_CONFIG_ROUTES                           = "routes"
+	NM_VPN_PLUGIN_OLD_DBUS_SERVICE_NAME                       = "service-name"
+	NM_VPN_PLUGIN_OLD_STATE                                   = "state"
+	NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME                   = "service-name"
+	NM_VPN_SERVICE_PLUGIN_DBUS_WATCH_PEER                     = "watch-peer"
+	NM_VPN_SERVICE_PLUGIN_STATE                               = "state"
+	NM_WIMAX_NSP_NAME                                         = "name"
+	NM_WIMAX_NSP_NETWORK_TYPE                                 = "network-type"
+	NM_WIMAX_NSP_SIGNAL_QUALITY                               = "signal-quality"
 )
 
 // Setting Setting8021x
@@ -1245,6 +1375,7 @@ const NM_SETTING_BRIDGE_SETTING_NAME = "bridge"
 const (
 	NM_SETTING_BRIDGE_AGEING_TIME        = "ageing-time"
 	NM_SETTING_BRIDGE_FORWARD_DELAY      = "forward-delay"
+	NM_SETTING_BRIDGE_GROUP_FORWARD_MASK = "group-forward-mask"
 	NM_SETTING_BRIDGE_HELLO_TIME         = "hello-time"
 	NM_SETTING_BRIDGE_MAC_ADDRESS        = "mac-address"
 	NM_SETTING_BRIDGE_MAX_AGE            = "max-age"
@@ -1274,6 +1405,7 @@ const (
 // Setting SettingConnection
 const NM_SETTING_CONNECTION_SETTING_NAME = "connection"
 const (
+	NM_SETTING_CONNECTION_AUTH_RETRIES         = "auth-retries"
 	NM_SETTING_CONNECTION_AUTOCONNECT          = "autoconnect"
 	NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY = "autoconnect-priority"
 	NM_SETTING_CONNECTION_AUTOCONNECT_RETRIES  = "autoconnect-retries"
@@ -1314,6 +1446,10 @@ const (
 	NM_SETTING_DCB_PRIORITY_STRICT_BANDWIDTH   = "priority-strict-bandwidth"
 	NM_SETTING_DCB_PRIORITY_TRAFFIC_CLASS      = "priority-traffic-class"
 )
+
+// Setting SettingDummy
+const NM_SETTING_DUMMY_SETTING_NAME = "dummy"
+const ()
 
 // Setting SettingGeneric
 const NM_SETTING_GENERIC_SETTING_NAME = "generic"
@@ -1368,6 +1504,7 @@ const (
 	NM_SETTING_IP4_CONFIG_METHOD             = "method"
 	NM_SETTING_IP4_CONFIG_NEVER_DEFAULT      = "never-default"
 	NM_SETTING_IP4_CONFIG_ROUTE_METRIC       = "route-metric"
+	NM_SETTING_IP4_CONFIG_ROUTE_TABLE        = "route-table"
 	NM_SETTING_IP4_CONFIG_ROUTES             = "routes"
 )
 
@@ -1392,6 +1529,7 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD             = "method"
 	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = "never-default"
 	NM_SETTING_IP6_CONFIG_ROUTE_METRIC       = "route-metric"
+	NM_SETTING_IP6_CONFIG_ROUTE_TABLE        = "route-table"
 	NM_SETTING_IP6_CONFIG_ROUTES             = "routes"
 	NM_SETTING_IP6_CONFIG_TOKEN              = "token"
 )
@@ -1443,6 +1581,38 @@ const (
 	NM_SETTING_OLPC_MESH_SSID                 = "ssid"
 )
 
+// Setting SettingOvsBridge
+const NM_SETTING_OVS_BRIDGE_SETTING_NAME = "ovs-bridge"
+const (
+	NM_SETTING_OVS_BRIDGE_FAIL_MODE             = "fail-mode"
+	NM_SETTING_OVS_BRIDGE_MCAST_SNOOPING_ENABLE = "mcast-snooping-enable"
+	NM_SETTING_OVS_BRIDGE_RSTP_ENABLE           = "rstp-enable"
+	NM_SETTING_OVS_BRIDGE_STP_ENABLE            = "stp-enable"
+)
+
+// Setting SettingOvsInterface
+const NM_SETTING_OVS_INTERFACE_SETTING_NAME = "ovs-interface"
+const (
+	NM_SETTING_OVS_INTERFACE_TYPE = "type"
+)
+
+// Setting SettingOvsPatch
+const NM_SETTING_OVS_PATCH_SETTING_NAME = "ovs-patch"
+const (
+	NM_SETTING_OVS_PATCH_PEER = "peer"
+)
+
+// Setting SettingOvsPort
+const NM_SETTING_OVS_PORT_SETTING_NAME = "ovs-port"
+const (
+	NM_SETTING_OVS_PORT_BOND_DOWNDELAY = "bond-downdelay"
+	NM_SETTING_OVS_PORT_BOND_MODE      = "bond-mode"
+	NM_SETTING_OVS_PORT_BOND_UPDELAY   = "bond-updelay"
+	NM_SETTING_OVS_PORT_LACP           = "lacp"
+	NM_SETTING_OVS_PORT_TAG            = "tag"
+	NM_SETTING_OVS_PORT_VLAN_MODE      = "vlan-mode"
+)
+
 // Setting SettingPpp
 const NM_SETTING_PPP_SETTING_NAME = "ppp"
 const (
@@ -1469,6 +1639,7 @@ const (
 // Setting SettingPppoe
 const NM_SETTING_PPPOE_SETTING_NAME = "pppoe"
 const (
+	NM_SETTING_PPPOE_PARENT         = "parent"
 	NM_SETTING_PPPOE_PASSWORD       = "password"
 	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
 	NM_SETTING_PPPOE_SERVICE        = "service"
@@ -1494,16 +1665,39 @@ const (
 	NM_SETTING_SERIAL_STOPBITS   = "stopbits"
 )
 
+// Setting SettingTCConfig
+const NM_SETTING_TC_CONFIG_SETTING_NAME = "tc"
+const ()
+
 // Setting SettingTeam
 const NM_SETTING_TEAM_SETTING_NAME = "team"
 const (
-	NM_SETTING_TEAM_CONFIG = "config"
+	NM_SETTING_TEAM_CONFIG                      = "config"
+	NM_SETTING_TEAM_MCAST_REJOIN_COUNT          = "mcast-rejoin-count"
+	NM_SETTING_TEAM_MCAST_REJOIN_INTERVAL       = "mcast-rejoin-interval"
+	NM_SETTING_TEAM_NOTIFY_PEERS_COUNT          = "notify-peers-count"
+	NM_SETTING_TEAM_NOTIFY_PEERS_INTERVAL       = "notify-peers-interval"
+	NM_SETTING_TEAM_RUNNER                      = "runner"
+	NM_SETTING_TEAM_RUNNER_ACTIVE               = "runner-active"
+	NM_SETTING_TEAM_RUNNER_AGG_SELECT_POLICY    = "runner-agg-select-policy"
+	NM_SETTING_TEAM_RUNNER_FAST_RATE            = "runner-fast-rate"
+	NM_SETTING_TEAM_RUNNER_HWADDR_POLICY        = "runner-hwaddr-policy"
+	NM_SETTING_TEAM_RUNNER_MIN_PORTS            = "runner-min-ports"
+	NM_SETTING_TEAM_RUNNER_SYS_PRIO             = "runner-sys-prio"
+	NM_SETTING_TEAM_RUNNER_TX_BALANCER          = "runner-tx-balancer"
+	NM_SETTING_TEAM_RUNNER_TX_BALANCER_INTERVAL = "runner-tx-balancer-interval"
+	NM_SETTING_TEAM_RUNNER_TX_HASH              = "runner-tx-hash"
 )
 
 // Setting SettingTeamPort
 const NM_SETTING_TEAM_PORT_SETTING_NAME = "team-port"
 const (
-	NM_SETTING_TEAM_PORT_CONFIG = "config"
+	NM_SETTING_TEAM_PORT_CONFIG    = "config"
+	NM_SETTING_TEAM_PORT_LACP_KEY  = "lacp-key"
+	NM_SETTING_TEAM_PORT_LACP_PRIO = "lacp-prio"
+	NM_SETTING_TEAM_PORT_PRIO      = "prio"
+	NM_SETTING_TEAM_PORT_QUEUE_ID  = "queue-id"
+	NM_SETTING_TEAM_PORT_STICKY    = "sticky"
 )
 
 // Setting SettingTun
@@ -1515,6 +1709,12 @@ const (
 	NM_SETTING_TUN_OWNER       = "owner"
 	NM_SETTING_TUN_PI          = "pi"
 	NM_SETTING_TUN_VNET_HDR    = "vnet-hdr"
+)
+
+// Setting SettingUser
+const NM_SETTING_USER_SETTING_NAME = "user"
+const (
+	NM_SETTING_USER_DATA = "data"
 )
 
 // Setting SettingVlan
@@ -1616,6 +1816,7 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS = "leap-password-flags"
 	NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME       = "leap-username"
 	NM_SETTING_WIRELESS_SECURITY_PAIRWISE            = "pairwise"
+	NM_SETTING_WIRELESS_SECURITY_PMF                 = "pmf"
 	NM_SETTING_WIRELESS_SECURITY_PROTO               = "proto"
 	NM_SETTING_WIRELESS_SECURITY_PSK                 = "psk"
 	NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS           = "psk-flags"
@@ -1626,6 +1827,7 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_WEP_KEY2            = "wep-key2"
 	NM_SETTING_WIRELESS_SECURITY_WEP_KEY3            = "wep-key3"
 	NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX       = "wep-tx-keyidx"
+	NM_SETTING_WIRELESS_SECURITY_WPS_METHOD          = "wps-method"
 )
 
 // Setting SettingVpnL2tp
@@ -1666,6 +1868,8 @@ const (
 	NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME = "ipsec-group-name"
 	NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID = "ipsec-gateway-id"
 	NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK        = "ipsec-psk"
+	NM_SETTING_VPN_L2TP_KEY_IPSEC_IKE        = "ipsec-ike"
+	NM_SETTING_VPN_L2TP_KEY_IPSEC_ESP        = "ipsec-esp"
 )
 
 // Setting SettingVpnOpenconnect
