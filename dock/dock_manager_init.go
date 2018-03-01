@@ -30,34 +30,44 @@ import (
 	"dbus/com/deepin/wm"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/appinfo"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gsettings"
 
 	"github.com/BurntSushi/xgb/xproto"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
 const (
-	ddeDataDir           = "/usr/share/dde/data"
-	windowPatternsFile   = ddeDataDir + "/window_patterns.json"
-	launcherDest         = "com.deepin.dde.daemon.Launcher"
-	launcherObjPath      = "/com/deepin/dde/daemon/Launcher"
-	ddeLauncherDest      = "com.deepin.dde.Launcher"
-	ddeLauncherInterface = ddeLauncherDest
-	ddeLauncherObjPath   = "/com/deepin/dde/Launcher"
+	ddeDataDir                = "/usr/share/dde/data"
+	windowPatternsFile        = ddeDataDir + "/window_patterns.json"
+	daemonLauncherServiceName = "com.deepin.dde.daemon.Launcher"
+	daemonLauncherObjPath     = "/com/deepin/dde/daemon/Launcher"
+	ddeLauncherServiceName    = "com.deepin.dde.Launcher"
+	ddeLauncherObjPath        = "/com/deepin/dde/Launcher"
 )
 
-func (m *DockManager) initEntries() {
+func (m *Manager) initEntries() {
 	m.initDockedApps()
+	m.Entries.insertCb = func(entry *AppEntry, index int) {
+		entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + entry.Id)
+		logger.Debug("entry added", entry.Id, index)
+		m.service.Emit(m, "EntryAdded", entryObjPath, int32(index))
+	}
+	m.Entries.removeCb = func(entry *AppEntry) {
+		m.service.Emit(m, "EntryRemoved", entry.Id)
+		go func() {
+			time.Sleep(time.Second)
+			m.service.StopExport(entry.GetDBusExportInfo())
+		}()
+	}
 	m.initClientList()
 }
 
-func (m *DockManager) connectSettingKeyChanged(key string, handler func(key string)) {
+func (m *Manager) connectSettingKeyChanged(key string, handler func(key string)) {
 	gsettings.ConnectChanged(dockSchema, key, handler)
 }
 
-func (m *DockManager) listenSettingsChanged() {
+func (m *Manager) listenSettingsChanged() {
 	// listen hide mode change
 	m.connectSettingKeyChanged(settingKeyHideMode, func(key string) {
 		mode := HideModeType(m.settings.GetEnum(key))
@@ -78,7 +88,7 @@ func (m *DockManager) listenSettingsChanged() {
 	})
 }
 
-func (m *DockManager) listenLauncherSignal() {
+func (m *Manager) listenLauncherSignal() {
 	m.launcher.ConnectItemChanged(func(status string, itemInfo []interface{}, cid int64) {
 		if len(itemInfo) > 2 && status == "deleted" {
 			logger.Debugf("launcher item deleted %#v", itemInfo)
@@ -103,7 +113,7 @@ func (m *DockManager) listenLauncherSignal() {
 				logger.Warning("get item app id failed")
 				return
 			}
-			entry := dockedEntries.GetByAppId(appId)
+			entry := getByAppId(dockedEntries, appId)
 			if entry != nil {
 				m.undockEntry(entry)
 			}
@@ -120,30 +130,27 @@ func (m *DockManager) listenLauncherSignal() {
 	})
 }
 
-func (m *DockManager) isDDELauncherVisible() bool {
+func (m *Manager) isDDELauncherVisible() bool {
 	m.ddeLauncherVisibleMu.Lock()
 	result := m.ddeLauncherVisible
 	m.ddeLauncherVisibleMu.Unlock()
 	return result
 }
 
-func (m *DockManager) getWinIconPreferredApps() []string {
+func (m *Manager) getWinIconPreferredApps() []string {
 	return m.settings.GetStrv(settingKeyWinIconPreferredApps)
 }
 
-func (m *DockManager) init() error {
+func (m *Manager) init() error {
 	var err error
-
-	m.launchContext = appinfo.NewAppLaunchContext(XU)
 	m.settings = gio.NewSettings(dockSchema)
-
-	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, settingKeyHideMode)
-	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, settingKeyDisplayMode)
-	m.Position = property.NewGSettingsEnumProperty(m, "Position", m.settings, settingKeyPosition)
-	m.IconSize = property.NewGSettingsUintProperty(m, "IconSize", m.settings, settingKeyIconSize)
-	m.ShowTimeout = property.NewGSettingsUintProperty(m, "ShowTimeout", m.settings, settingKeyShowTimeout)
-	m.HideTimeout = property.NewGSettingsUintProperty(m, "HideTimeout", m.settings, settingKeyHideTimeout)
-	m.DockedApps = property.NewGSettingsStrvProperty(m, "DockedApps", m.settings, settingKeyDockedApps)
+	m.HideMode = gsprop.NewEnum(m.settings, settingKeyHideMode)
+	m.DisplayMode = gsprop.NewEnum(m.settings, settingKeyDisplayMode)
+	m.Position = gsprop.NewEnum(m.settings, settingKeyPosition)
+	m.IconSize = gsprop.NewUint(m.settings, settingKeyIconSize)
+	m.ShowTimeout = gsprop.NewUint(m.settings, settingKeyShowTimeout)
+	m.HideTimeout = gsprop.NewUint(m.settings, settingKeyHideTimeout)
+	m.DockedApps = gsprop.NewStrv(m.settings, settingKeyDockedApps)
 
 	m.FrontendWindowRect = NewRect()
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
@@ -169,11 +176,11 @@ func (m *DockManager) init() error {
 		return err
 	}
 
-	m.launcher, err = launcher.NewLauncher(launcherDest, launcherObjPath)
+	m.launcher, err = launcher.NewLauncher(daemonLauncherServiceName, daemonLauncherObjPath)
 	if err != nil {
 		return err
 	}
-	m.ddeLauncher, err = libDDELauncher.NewLauncher(ddeLauncherDest, ddeLauncherObjPath)
+	m.ddeLauncher, err = libDDELauncher.NewLauncher(ddeLauncherServiceName, ddeLauncherObjPath)
 	if err != nil {
 		return err
 	}
@@ -184,7 +191,7 @@ func (m *DockManager) init() error {
 		return err
 	}
 
-	err = dbus.InstallOnSession(m)
+	err = m.service.Export(m)
 	if err != nil {
 		return err
 	}

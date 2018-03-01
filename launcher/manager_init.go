@@ -23,10 +23,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/notify"
 )
 
@@ -37,17 +34,13 @@ const (
 
 func (m *Manager) init() {
 	m.noPkgItemIDs = make(map[string]int)
-	m.settings = gio.NewSettings(gsSchemaLauncher)
 
 	m.appsHidden = m.settings.GetStrv(gsKeyAppsHidden)
 	logger.Debug("appsHidden: ", m.appsHidden)
 	m.listenSettingsChanged()
 
-	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, gsKeyDisplayMode)
-	m.Fullscreen = property.NewGSettingsBoolProperty(m, "Fullscreen", m.settings, gsKeyFullscreen)
-
 	// init notification
-	notify.Init(dbusDest)
+	notify.Init(dbusServiceName)
 	m.notification = notify.NewNotification("", "", "")
 
 	m.appDirs = getAppDirs()
@@ -122,7 +115,7 @@ func (m *Manager) init() {
 		if item == nil {
 			return
 		}
-		dbus.Emit(m, "NewAppLaunched", item.ID)
+		m.service.Emit(m, "NewAppLaunched", item.ID)
 	})
 }
 
@@ -160,7 +153,7 @@ func (m *Manager) handlePopPushOps() {
 			top := stack.topTask()
 			if top == nil {
 				logger.Debug("emit SearchDone []")
-				dbus.Emit(m, "SearchDone", []string{})
+				m.service.Emit(m, "SearchDone", []string{})
 			} else {
 				top.emitResult()
 			}

@@ -21,29 +21,31 @@ package dock
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"strconv"
 )
 
-// json sample
-// {
-//    "checkableMenu" : false,
-//    "items" : [
-//       {
-//          "itemText" : "item 1",
-//          "isActive" : true,
-//          "itemSubMenu" : nil,
-//          "itemId" : "2",
-//          "itemIconInactive" : "",
-//          "checked" : false,
-//          "itemIconHover" : "",
-//          "itemIcon" : "",
-//          "showCheckMark" : false,
-//          "isCheckable" : false
-//       },
-//    ],
-//    "singleCheck" : false
-// }
+/*
+json sample
+{
+   "checkableMenu" : false,
+   "items" : [
+      {
+         "itemText" : "item 1",
+         "isActive" : true,
+         "itemSubMenu" : nil,
+         "itemId" : "2",
+         "itemIconInactive" : "",
+         "checked" : false,
+         "itemIconHover" : "",
+         "itemIcon" : "",
+         "showCheckMark" : false,
+         "isCheckable" : false
+      },
+   ],
+   "singleCheck" : false
+}
+*/
 
 type MenuItem struct {
 	Id            string `json:"itemId"`
@@ -80,28 +82,29 @@ func NewMenu() *Menu {
 	return &Menu{}
 }
 
-func (menu *Menu) allocId() string {
-	idStr := strconv.FormatInt(menu.itemCount, 10)
-	menu.itemCount++
+func (m *Menu) allocateId() string {
+	idStr := strconv.FormatInt(m.itemCount, 10)
+	m.itemCount++
 	return idStr
 }
 
 func (m *Menu) AppendItem(items ...*MenuItem) {
 	for _, item := range items {
 		if item.Text != "" {
-			item.Id = m.allocId()
+			item.Id = m.allocateId()
 			m.Items = append(m.Items, item)
 		}
 	}
 }
 
-func (m *Menu) HandleAction(id string, timestamp uint32) {
+func (m *Menu) HandleAction(id string, timestamp uint32) error {
 	for _, item := range m.Items {
-		if id == item.Id && item.IsActive {
-			fmt.Println(id)
+		if id == item.Id {
 			item.action(timestamp)
+			return nil
 		}
 	}
+	return errors.New("invalid item id")
 }
 
 func (m *Menu) GenerateJSON() string {

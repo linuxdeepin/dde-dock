@@ -22,19 +22,18 @@ package dock
 import (
 	"fmt"
 	"sort"
-	"time"
 
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
-func (m *DockManager) allocEntryId() string {
+func (m *Manager) allocEntryId() string {
 	num := m.entryCount
 	m.entryCount++
 	return fmt.Sprintf("e%dT%x", num, getCurrentTimestamp())
 }
 
-func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
+func (m *Manager) markAppLaunched(appInfo *AppInfo) {
 	if appInfo == nil || m.launchedRecorder == nil {
 		return
 	}
@@ -43,7 +42,7 @@ func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
 	m.launchedRecorder.MarkLaunched(path)
 }
 
-func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
+func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 	win := winInfo.window
 	showOnDock := m.isWindowRegistered(win) && m.clientList.Contains(win) &&
 		isGoodWindow(win) && winInfo.canShowOnDock()
@@ -68,7 +67,7 @@ func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
 	}
 }
 
-func (m *DockManager) initClientList() {
+func (m *Manager) initClientList() {
 	clientList, err := ewmh.ClientListGet(XU)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
@@ -82,7 +81,7 @@ func (m *DockManager) initClientList() {
 	}
 }
 
-func (m *DockManager) initDockedApps() {
+func (m *Manager) initDockedApps() {
 	dockedApps := uniqStrSlice(m.DockedApps.Get())
 	for _, app := range dockedApps {
 		m.appendDockedApp(app)
@@ -90,9 +89,9 @@ func (m *DockManager) initDockedApps() {
 	m.saveDockedApps()
 }
 
-func (m *DockManager) installAppEntry(e *AppEntry) error {
+func (m *Manager) installAppEntry(e *AppEntry) error {
 	// install entry on session bus
-	err := dbus.InstallOnSession(e)
+	err := m.service.Export(e)
 	if err != nil {
 		logger.Warning("Install AppEntry to dbus failed:", err)
 		return err
@@ -100,18 +99,18 @@ func (m *DockManager) installAppEntry(e *AppEntry) error {
 	return nil
 }
 
-func (m *DockManager) emitEntryAdded(e *AppEntry) {
+func (m *Manager) emitEntryAdded(e *AppEntry) {
 	entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + e.Id)
-	logger.Debugf("insertAndInstallAppEntry %v", entryObjPath)
 	index := m.Entries.IndexOf(e)
+	logger.Debug("entry added", entryObjPath, index)
 	if index >= 0 {
-		dbus.Emit(m, "EntryAdded", entryObjPath, int32(index))
+		m.service.Emit(m, "EntryAdded", entryObjPath, int32(index))
 	} else {
 		logger.Warningf("emitEntryAdded index %d < 0", index)
 	}
 }
 
-func (m *DockManager) appendDockedApp(app string) {
+func (m *Manager) appendDockedApp(app string) {
 	logger.Debugf("appendDockedApp %q", app)
 	appInfo := NewDockedAppInfo(app)
 	if appInfo == nil {
@@ -122,49 +121,29 @@ func (m *DockManager) appendDockedApp(app string) {
 	entry := m.Entries.GetFirstByInnerId(appInfo.innerId)
 	if entry != nil {
 		// existed
-		entry.setIsDocked(true)
+		entry.setPropIsDocked(true)
 		entry.updateMenu()
 	} else {
 		logger.Debug("entry not existed, newAppEntry")
 		entry = newAppEntry(m, appInfo.innerId, appInfo)
 		entry.updateName()
 		entry.updateIcon()
-		entry.setIsDocked(true)
+		entry.setPropIsDocked(true)
 		entry.updateMenu()
 		err := m.installAppEntry(entry)
 		if err == nil {
-			m.Entries = m.Entries.Insert(entry, -1)
-			m.emitEntryAdded(entry)
+			m.Entries.Insert(entry, -1)
 		}
 	}
 }
 
-func (m *DockManager) removeAppEntry(e *AppEntry) {
-	m.entriesMu.Lock()
-	defer m.entriesMu.Unlock()
-
-	for _, entry := range m.Entries {
-		if entry == e {
-
-			entryId := entry.Id
-			logger.Info("removeAppEntry id:", entryId)
-			m.Entries = m.Entries.Remove(e)
-			dbus.Emit(m, "EntryRemoved", entryId)
-
-			go func() {
-				time.Sleep(time.Second)
-				dbus.UnInstallObject(e)
-			}()
-			return
-		}
-	}
-	logger.Warning("removeAppEntry failed, entry not found")
+func (m *Manager) removeAppEntry(e *AppEntry) {
+	logger.Info("removeAppEntry id:", e.Id)
+	m.Entries.Remove(e)
 }
 
-func (m *DockManager) attachWindow(winInfo *WindowInfo) {
-	m.entriesMu.Lock()
+func (m *Manager) attachWindow(winInfo *WindowInfo) {
 	entry := m.Entries.GetFirstByInnerId(winInfo.entryInnerId)
-	m.entriesMu.Unlock()
 
 	if entry != nil {
 		// existed
@@ -178,22 +157,19 @@ func (m *DockManager) attachWindow(winInfo *WindowInfo) {
 		entry.updateMenu()
 		err := m.installAppEntry(entry)
 		if err == nil {
-			m.entriesMu.Lock()
-			m.Entries = m.Entries.Insert(entry, -1)
-			m.emitEntryAdded(entry)
-			m.entriesMu.Unlock()
+			m.Entries.Insert(entry, -1)
 		}
 	}
 }
 
-func (m *DockManager) detachWindow(winInfo *WindowInfo) {
+func (m *Manager) detachWindow(winInfo *WindowInfo) {
 	entry := winInfo.entry
 	if entry == nil {
 		return
 	}
 	winInfo.entry = nil
-	entry.windowMutex.Lock()
-	defer entry.windowMutex.Unlock()
+	entry.PropsMu.Lock()
+	defer entry.PropsMu.Unlock()
 
 	detached := entry.detachWindow(winInfo)
 	if !detached {

@@ -405,7 +405,7 @@ func (winInfo *WindowInfo) genInnerId() {
 	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
 }
 
-func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManager) {
+func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *Manager) {
 	if winInfo.propertyNotifyTimer != nil {
 		return
 	}
@@ -413,7 +413,7 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManag
 	winInfo.propertyNotifyAtomTable = make(map[xproto.Atom]bool)
 	winInfo.propertyNotifyEnabled = false
 	// simulate first property notify event
-	winInfo.propertyNotifyAtomTable[ATOM_WINDOW_STATE] = true
+	winInfo.propertyNotifyAtomTable[atomNetWMState] = true
 
 	winInfo.propertyNotifyTimer = time.AfterFunc(300*time.Millisecond, func() {
 		var atomNames []string
@@ -454,23 +454,23 @@ func (winInfo *WindowInfo) handlePropertyNotifyEvent(ev xevent.PropertyNotifyEve
 
 func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
 	switch atom {
-	case ATOM_WINDOW_STATE:
+	case atomNetWMState:
 		winInfo.updateWmState()
 		return true
 
-	case ATOM_WINDOW_TYPE:
+	case atomNetWMWindowType:
 		winInfo.updateWmWindowType()
 		return true
 
-	case ATOM_XEMBED_INFO:
+	case atomXEmbedInfo:
 		winInfo.updateHasXEmbedInfo()
 		return true
 
-	case ATOM_WINDOW_NAME:
+	case atomNetWMName:
 		winInfo.updateWmName()
 		return false
 
-	case ATOM_WINDOW_ICON:
+	case atomNetWMIcon:
 		//  update icon cache
 		winInfo.Icon = getIconFromWindow(XU, winInfo.window)
 		entry := winInfo.entry

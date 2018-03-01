@@ -33,8 +33,9 @@ import (
 	libLastore "dbus/com/deepin/lastore"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/notify"
@@ -63,6 +64,7 @@ const (
 )
 
 type Manager struct {
+	service    *dbusutil.Service
 	items      map[string]*Item
 	itemsMutex sync.Mutex
 
@@ -82,8 +84,6 @@ type Manager struct {
 	currentRunes    []rune
 	popPushOpChan   chan *popPushOp
 
-	systemDBusConn *dbus.Conn
-
 	noPkgItemIDs       map[string]int
 	appDirs            []string
 	fsWatcher          *fsnotify.Watcher
@@ -93,22 +93,58 @@ type Manager struct {
 	appsHidden         []string
 	appsHiddenMu       sync.Mutex
 	// Properties:
-	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
-	Fullscreen  *property.GSettingsBoolProperty `access:"readwrite"`
+	DisplayMode *gsprop.Enum `prop:"access:rw"`
+	Fullscreen  *gsprop.Bool `prop:"access:rw"`
 
-	// Signals:
-	// SearchDone 返回搜索结果列表
-	SearchDone     func([]string)
-	ItemChanged    func(status string, itemInfo ItemInfo, categoryID CategoryID)
-	NewAppLaunched func(string)
-	// UninstallSuccess在卸载程序成功后触发。
-	UninstallSuccess func(string)
-	// UninstallFailed在卸载程序失败后触发。
-	UninstallFailed func(string, string)
+	signals *struct {
+		// SearchDone 返回搜索结果列表
+		SearchDone struct {
+			apps []string
+		}
+
+		ItemChanged struct {
+			status     string
+			itemInfo   ItemInfo
+			categoryID CategoryID
+		}
+
+		NewAppLaunched struct {
+			appID string
+		}
+
+		// UninstallSuccess在卸载程序成功后触发。
+		UninstallSuccess struct {
+			appID string
+		}
+
+		// UninstallFailed在卸载程序失败后触发。
+		UninstallFailed struct {
+			appId  string
+			errMsg string
+		}
+	}
+
+	methods *struct {
+		GetAllItemInfos          func() `out:"itemInfoList"`
+		GetItemInfo              func() `in:"id" out:"itemInfo"`
+		GetAllNewInstalledApps   func() `out:"apps"`
+		IsItemOnDesktop          func() `in:"id" out:"result"`
+		RequestRemoveFromDesktop func() `in:"id" out:"ok"`
+		RequestSendToDesktop     func() `in:"id" out:"ok"`
+		MarkLaunched             func() `in:"id"`
+		RequestUninstall         func() `in:"id,purge"`
+		Search                   func() `in:"key"`
+		GetUseProxy              func() `in:"id" out:"value"`
+		SetUseProxy              func() `in:"id,value"`
+		GetDisableScaling        func() `in:"id" out:"value"`
+		SetDisableScaling        func() `in:"id,value"`
+	}
 }
 
-func NewManager() (*Manager, error) {
-	m := &Manager{}
+func NewManager(service *dbusutil.Service) (*Manager, error) {
+	m := &Manager{
+		service: service,
+	}
 
 	var err error
 	// init launchedRecorder
@@ -119,13 +155,6 @@ func NewManager() (*Manager, error) {
 
 	// init desktopFileWatcher
 	m.desktopFileWatcher, err = libApps.NewDesktopFileWatcher(appsDBusDest, appsDBusObjectPath)
-	if err != nil {
-		m.destroy()
-		return nil, err
-	}
-
-	// init system dbus conn
-	m.systemDBusConn, err = dbus.SystemBus()
 	if err != nil {
 		m.destroy()
 		return nil, err
@@ -153,6 +182,10 @@ func NewManager() (*Manager, error) {
 		m.destroy()
 		return nil, err
 	}
+
+	m.settings = gio.NewSettings(gsSchemaLauncher)
+	m.DisplayMode = gsprop.NewEnum(m.settings, gsKeyDisplayMode)
+	m.Fullscreen = gsprop.NewBool(m.settings, gsKeyFullscreen)
 
 	return m, nil
 }
@@ -359,23 +392,23 @@ func (m *Manager) emitSearchDone(result MatchResults) {
 	if result != nil {
 		ids = result.Copy().GetTruncatedOrderedIDs()
 	}
-	dbus.Emit(m, "SearchDone", ids)
+	m.service.Emit(m, "SearchDone", ids)
 	logger.Debug("emit SearchDone", ids)
 }
 
-func (m *Manager) getUseFeature(key, id string) (bool, error) {
+func (m *Manager) getUseFeature(key, id string) (bool, *dbus.Error) {
 	item := m.getItemById(id)
 	if item == nil {
-		return false, errorInvalidID
+		return false, dbusutil.ToError(errorInvalidID)
 	}
 	apps := strv.Strv(m.settings.GetStrv(key))
 	return apps.Contains(id), nil
 }
 
-func (m *Manager) setUseFeature(key, id string, val bool) error {
+func (m *Manager) setUseFeature(key, id string, val bool) *dbus.Error {
 	item := m.getItemById(id)
 	if item == nil {
-		return errorInvalidID
+		return dbusutil.ToError(errorInvalidID)
 	}
 	apps := strv.Strv(m.settings.GetStrv(key))
 
@@ -392,7 +425,7 @@ func (m *Manager) setUseFeature(key, id string, val bool) error {
 
 	ok := m.settings.SetStrv(key, []string(apps))
 	if !ok {
-		return fmt.Errorf("gsettings set %s failed", key)
+		return dbusutil.ToError(fmt.Errorf("gsettings set %s failed", key))
 	}
 	return nil
 }

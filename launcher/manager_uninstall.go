@@ -31,7 +31,8 @@ import (
 	"strings"
 
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
@@ -242,41 +243,36 @@ func (m *Manager) uninstallSystemPackage(jobName, pkg string) error {
 	if err != nil {
 		return err
 	}
-	return m.waitJobDone(jobPath)
+	return m.waitJobDone(string(jobPath))
 }
 
-func (m *Manager) waitJobDone(jobPath dbus.ObjectPath) error {
+func (m *Manager) waitJobDone(jobPath string) error {
 	logger.Debug("waitJobDone", jobPath)
 	defer logger.Debug("waitJobDone end")
-	done := make(chan error)
-	go m.monitorJobStatusChange(jobPath, done)
-	return <-done
+	return m.monitorJobStatusChange(jobPath)
 }
 
-func (m *Manager) monitorJobStatusChange(jobPath dbus.ObjectPath, done chan error) {
-	con := m.systemDBusConn
-	if con == nil {
-		err := errors.New("SystemDBusConn is nil")
-		logger.Warning(err)
-		done <- err
-		return
-	}
-	ch := con.Signal()
-
-	// add match rule
-	matchRule := fmt.Sprintf(
-		"type='signal',interface='org.freedesktop.DBus.Properties',sender='%s',member='PropertiesChanged',path='%s'", lastoreDBusDest, jobPath)
-	logger.Debug("AddMatch", matchRule)
-	err := con.BusObject().Call("org.freedesktop.DBus.AddMatch", 0, matchRule).Store()
+func (m *Manager) monitorJobStatusChange(jobPath string) error {
+	sysBus, err := dbus.SystemBus()
 	if err != nil {
-		logger.Warning("AddMatch failed:", err)
-		done <- err
-		return
+		return err
 	}
 
-	// remove match rule
+	rule := dbusutil.NewMatchRuleBuilder().ExtPropertiesChanged(dbusutil.ExportInfo{
+		Path:      jobPath,
+		Interface: "com.deepin.lastore.Job",
+	}).Sender(lastoreDBusDest).Build()
+	err = rule.AddTo(sysBus)
+	if err != nil {
+		return err
+	}
+
+	ch := make(chan *dbus.Signal, 10)
+	sysBus.Signal(ch)
+
 	defer func() {
-		err := con.BusObject().Call("org.freedesktop.DBus.RemoveMatch", 0, matchRule).Store()
+		sysBus.RemoveSignal(ch)
+		err := rule.RemoveFrom(sysBus)
 		if err != nil {
 			logger.Warning("RemoveMatch failed:", err)
 		}
@@ -284,33 +280,25 @@ func (m *Manager) monitorJobStatusChange(jobPath dbus.ObjectPath, done chan erro
 	}()
 
 	for v := range ch {
-		if v.Name == "org.freedesktop.DBus.Properties.PropertiesChanged" &&
-			v.Path == jobPath {
-			if len(v.Body) != 3 {
-				continue
-			}
+		if len(v.Body) != 3 {
+			continue
+		}
 
-			ifc, _ := v.Body[0].(string)
-			if ifc != "com.deepin.lastore.Job" {
-				continue
-			}
-			props, _ := v.Body[1].(map[string]dbus.Variant)
-			status, ok := props["Status"]
-			if !ok {
-				continue
-			}
-			statusStr, _ := status.Value().(string)
-			logger.Debug("job status changed", statusStr)
-			switch statusStr {
-			case JobStatusSucceed:
-				done <- nil
-				return
-			case JobStatusFailed:
-				done <- errors.New("Job Failed")
-				return
-			case JobStatusEnd:
-				return
-			}
+		props, _ := v.Body[1].(map[string]dbus.Variant)
+		status, ok := props["Status"]
+		if !ok {
+			continue
+		}
+		statusStr, _ := status.Value().(string)
+		logger.Debug("job status changed", statusStr)
+		switch statusStr {
+		case JobStatusSucceed:
+			return nil
+		case JobStatusFailed:
+			return errors.New("job Failed")
+		case JobStatusEnd:
+			return nil
 		}
 	}
+	return nil
 }

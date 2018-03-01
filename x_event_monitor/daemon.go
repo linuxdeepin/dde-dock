@@ -21,15 +21,14 @@ package x_event_monitor
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
 const (
-	dbusDest      = "com.deepin.api.XEventMonitor"
-	dbusObjPath   = "/com/deepin/api/XEventMonitor"
-	dbusInterface = dbusDest
-	moduleName    = "x_event_monitor"
+	dbusServiceName = "com.deepin.api.XEventMonitor"
+	dbusObjPath     = "/com/deepin/api/XEventMonitor"
+	dbusInterface   = dbusServiceName
+	moduleName      = "x_event_monitor"
 )
 
 var (
@@ -59,22 +58,27 @@ func (d *Daemon) Name() string {
 }
 
 func (d *Daemon) Start() error {
-	logger.BeginTracing()
-	m := newManager()
+	service := loader.GetService()
+
+	m := newManager(service)
 	rawEventCallback = m.handleRawEvent
 	go startListen()
 
-	err := dbus.InstallOnSession(m)
+	err := service.Export(m)
 	if err != nil {
 		return err
 	}
 
-	dbus.DealWithUnhandledMessage()
-	dbus.Emit(m, "CancelAllArea")
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
+	service.Emit(m, "CancelAllArea")
+
 	return nil
 }
 
 func (d *Daemon) Stop() error {
-	logger.EndTracing()
 	return nil
 }

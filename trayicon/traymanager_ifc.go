@@ -20,48 +20,56 @@
 package trayicon
 
 import (
+	"errors"
+
 	x "github.com/linuxdeepin/go-x11-client"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (*TrayManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.dde.TrayManager",
-		ObjectPath: "/com/deepin/dde/TrayManager",
-		Interface:  "com.deepin.dde.TrayManager",
+const dbusServiceName = "com.deepin.dde.TrayManager"
+
+func (*TrayManager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      "/com/deepin/dde/TrayManager",
+		Interface: dbusServiceName,
 	}
 }
 
 // Manage方法获取系统托盘图标的管理权。
-func (m *TrayManager) Manage() bool {
+func (m *TrayManager) Manage() (bool, *dbus.Error) {
 	logger.Debug("call Manage by dbus")
 
 	err := m.sendClientMsgMANAGER()
 	if err != nil {
 		logger.Warning(err)
-		return false
+		return false, dbusutil.ToError(err)
 	}
-	return true
+	return true, nil
 }
 
 // GetName返回传入的系统图标的窗口id的窗口名。
-func (m *TrayManager) GetName(win uint32) string {
+func (m *TrayManager) GetName(win uint32) (string, *dbus.Error) {
 	m.mutex.Lock()
 	icon, ok := m.icons[x.Window(win)]
 	m.mutex.Unlock()
 	if !ok {
-		return ""
+		return "", dbusutil.ToError(errors.New("icon not found"))
 	}
-	return icon.getName()
+	return icon.getName(), nil
 }
 
 // EnableNotification设置对应id的窗口是否可以通知。
-func (m *TrayManager) EnableNotification(win uint32, enable bool) {
+func (m *TrayManager) EnableNotification(win uint32, enable bool) *dbus.Error {
 	m.mutex.Lock()
 	icon, ok := m.icons[x.Window(win)]
 	m.mutex.Unlock()
 	if !ok {
-		return
+		return dbusutil.ToError(errors.New("icon not found"))
 	}
+
+	icon.mu.Lock()
 	icon.notify = enable
+	icon.mu.Unlock()
+	return nil
 }

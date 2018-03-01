@@ -24,46 +24,53 @@ import (
 	"sync"
 
 	"github.com/BurntSushi/xgb/xproto"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	entryDBusObjPathPrefix = dockManagerDBusObjPath + "/entries/"
-	entryDBusInterface     = dockManagerDBusInterface + ".Entry"
+	entryDBusObjPathPrefix = dbusObjPath + "/entries/"
+	entryDBusInterface     = dbusInterface + ".Entry"
 )
 
+//go:generate dbusutil-gen -type AppEntry -import=github.com/BurntSushi/xgb/xproto app_entry.go
+
 type AppEntry struct {
-	dockManager *DockManager
-
-	Id      string
-	innerId string
-
-	IsActive    bool
-	Name        string
-	Icon        string
-	Menu        string
-	DesktopFile string
-
-	WindowInfos windowInfosType
-	windows     map[xproto.Window]*WindowInfo
-
-	current       *WindowInfo
+	PropsMu       sync.RWMutex
+	Id            string
+	IsActive      bool
+	Name          string
+	Icon          string
+	Menu          string
+	DesktopFile   string
 	CurrentWindow xproto.Window
-	windowMutex   sync.Mutex
+	IsDocked      bool
+	// dbusutil-gen: equal=method:Equal
+	WindowInfos windowInfosType
 
+	service          *dbusutil.Service
+	manager          *Manager
+	innerId          string
+	windows          map[xproto.Window]*WindowInfo
+	current          *WindowInfo
 	coreMenu         *Menu
 	appInfo          *AppInfo
-	IsDocked         bool
-	dockMutex        sync.Mutex
 	winIconPreferred bool
+
+	methods *struct {
+		Activate       func() `in:"timestamp"`
+		HandleMenuItem func() `in:"timestamp,id"`
+		HandleDragDrop func() `in:"timestamp,files"`
+		NewInstance    func() `in:"timestamp"`
+	}
 }
 
-func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
+func newAppEntry(dockManager *Manager, id string, appInfo *AppInfo) *AppEntry {
 	entry := &AppEntry{
-		dockManager: dockManager,
-		Id:          dockManager.allocEntryId(),
-		innerId:     id,
-		windows:     make(map[xproto.Window]*WindowInfo),
+		manager: dockManager,
+		service: dockManager.service,
+		Id:      dockManager.allocEntryId(),
+		innerId: id,
+		windows: make(map[xproto.Window]*WindowInfo),
 	}
 	entry.setAppInfo(appInfo)
 	return entry
@@ -78,13 +85,13 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 
 	if newAppInfo == nil {
 		entry.winIconPreferred = true
-		entry.setDesktopFile("")
+		entry.setPropDesktopFile("")
 	} else {
 		entry.winIconPreferred = false
-		entry.setDesktopFile(newAppInfo.GetFileName())
-		if entry.dockManager != nil {
+		entry.setPropDesktopFile(newAppInfo.GetFileName())
+		if entry.manager != nil {
 			id := newAppInfo.GetId()
-			if strSliceContains(entry.dockManager.getWinIconPreferredApps(), id) {
+			if strSliceContains(entry.manager.getWinIconPreferredApps(), id) {
 				entry.winIconPreferred = true
 				return
 			}
@@ -134,20 +141,12 @@ func (entry *AppEntry) getDisplayName() string {
 	return ""
 }
 
-func (e *AppEntry) setCurrentWindow(win xproto.Window) {
-	if e.CurrentWindow != win {
-		e.CurrentWindow = win
-		logger.Debug("setCurrentWindow", win)
-		dbus.NotifyChange(e, "CurrentWindow")
-	}
-}
-
 func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
 	entry.current = winInfo
 	if winInfo == nil {
-		entry.setCurrentWindow(0)
+		entry.setPropCurrentWindow(0)
 	} else {
-		entry.setCurrentWindow(winInfo.window)
+		entry.setPropCurrentWindow(winInfo.window)
 	}
 }
 
@@ -194,7 +193,7 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	entry.updateWindowInfos()
 	entry.updateIsActive()
 
-	if (entry.dockManager != nil && win == entry.dockManager.getActiveWindow()) ||
+	if (entry.manager != nil && win == entry.manager.getActiveWindow()) ||
 		entry.current == nil {
 		entry.setCurrentWindowInfo(winInfo)
 		entry.updateIcon()
@@ -222,41 +221,6 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
 	return false
 }
 
-func (e *AppEntry) setName(name string) {
-	if e.Name != name {
-		e.Name = name
-		dbus.NotifyChange(e, "Name")
-	}
-}
-
-func (e *AppEntry) setIcon(icon string) {
-	if e.Icon != icon {
-		e.Icon = icon
-		dbus.NotifyChange(e, "Icon")
-	}
-}
-
-func (e *AppEntry) setIsActive(isActive bool) {
-	if e.IsActive != isActive {
-		e.IsActive = isActive
-		dbus.NotifyChange(e, "IsActive")
-	}
-}
-
-func (e *AppEntry) setIsDocked(isDocked bool) {
-	if e.IsDocked != isDocked {
-		e.IsDocked = isDocked
-		dbus.NotifyChange(e, "IsDocked")
-	}
-}
-
-func (e *AppEntry) setDesktopFile(v string) {
-	if e.DesktopFile != v {
-		e.DesktopFile = v
-		dbus.NotifyChange(e, "DesktopFile")
-	}
-}
-
 func (entry *AppEntry) updateName() {
 	var name string
 	if entry.appInfo != nil {
@@ -267,12 +231,12 @@ func (entry *AppEntry) updateName() {
 		logger.Debug("updateName failed")
 		return
 	}
-	entry.setName(name)
+	entry.setPropName(name)
 }
 
 func (entry *AppEntry) updateIcon() {
 	icon := entry.getIcon()
-	entry.setIcon(icon)
+	entry.setPropIcon(icon)
 }
 
 func (entry *AppEntry) getIcon() string {
@@ -317,16 +281,13 @@ func (e *AppEntry) updateWindowInfos() {
 			Flash: winInfo.hasWmStateDemandsAttention(),
 		}
 	}
-	if !e.WindowInfos.Equal(windowInfos) {
-		e.WindowInfos = windowInfos
-		dbus.NotifyChange(e, "WindowInfos")
-	}
+	e.setPropWindowInfos(windowInfos)
 }
 
 func (e *AppEntry) updateIsActive() {
-	if e.dockManager == nil {
+	if e.manager == nil {
 		return
 	}
-	_, ok := e.windows[e.dockManager.getActiveWindow()]
-	e.setIsActive(ok)
+	_, ok := e.windows[e.manager.getActiveWindow()]
+	e.setPropIsActive(ok)
 }

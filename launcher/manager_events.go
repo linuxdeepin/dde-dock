@@ -26,7 +26,6 @@ import (
 	"time"
 
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gsettings"
 )
 
@@ -272,5 +271,5 @@ func (m *Manager) emitItemChanged(item *Item, status string) {
 	atomic.StoreUint32(&m.itemsChangedHit, 1)
 	itemInfo := item.newItemInfo()
 	logger.Debugf("emit signal ItemChanged status: %v, itemInfo: %v", status, itemInfo)
-	dbus.Emit(m, "ItemChanged", status, itemInfo, itemInfo.CategoryID)
+	m.service.Emit(m, "ItemChanged", status, itemInfo, itemInfo.CategoryID)
 }

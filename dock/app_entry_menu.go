@@ -22,18 +22,13 @@ package dock
 import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
 
 func (e *AppEntry) setMenu(menu *Menu) {
 	e.coreMenu = menu
 	menuJSON := menu.GenerateJSON()
-	// set menu JSON
-	if e.Menu != menuJSON {
-		e.Menu = menuJSON
-		dbus.NotifyChange(e, "Menu")
-	}
+	e.setPropMenu(menuJSON)
 }
 
 func (entry *AppEntry) updateMenu() {
@@ -71,7 +66,7 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 	launchAction := func(action desktopappinfo.DesktopAction) func(timestamp uint32) {
 		return func(timestamp uint32) {
 			logger.Debugf("launch action %+v", action)
-			err := entry.dockManager.startManager.LaunchAppAction(ai.GetFileName(), action.Section, timestamp)
+			err := entry.manager.startManager.LaunchAppAction(ai.GetFileName(), action.Section, timestamp)
 			if err != nil {
 				logger.Warning("launchAppAction failed:", err)
 			}
@@ -89,7 +84,7 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 	logger.Debug("launchApp timestamp:", timestamp)
 	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
-		entry.dockManager.launch(entry.appInfo.GetFileName(), timestamp, nil)
+		entry.manager.launch(entry.appInfo.GetFileName(), timestamp, nil)
 	} else {
 		// TODO
 		logger.Debug("not supported")

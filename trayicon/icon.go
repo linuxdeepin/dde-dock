@@ -22,6 +22,8 @@ package trayicon
 import (
 	"fmt"
 
+	"sync"
+
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
@@ -32,6 +34,7 @@ type TrayIcon struct {
 	notify bool
 	data   []byte // window pixmap data
 	damage damage.Damage
+	mu     sync.Mutex
 }
 
 func NewTrayIcon(win x.Window) *TrayIcon {

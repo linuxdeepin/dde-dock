@@ -20,10 +20,11 @@
 package dock
 
 import (
+	"path/filepath"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
-	"path/filepath"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/xdg/basedir"
@@ -37,23 +38,18 @@ var (
 	logger      = log.NewLogger("daemon/dock")
 	homeDir     string
 	scratchDir  string
-	dockManager *DockManager
+	dockManager *Manager
 
 	XU *xgbutil.XUtil
 
-	//There variable must be initialized after the Xu/TrayXU has been
-	//created.
-	_NET_SHOWING_DESKTOP    xproto.Atom
-	_NET_CLIENT_LIST        xproto.Atom
-	_NET_ACTIVE_WINDOW      xproto.Atom
-	ATOM_WINDOW_ICON        xproto.Atom
-	ATOM_WINDOW_NAME        xproto.Atom
-	ATOM_WINDOW_STATE       xproto.Atom
-	ATOM_WINDOW_TYPE        xproto.Atom
-	ATOM_DOCK_APP_ID        xproto.Atom
-	_NET_SYSTEM_TRAY_S0     xproto.Atom
-	_NET_SYSTEM_TRAY_OPCODE xproto.Atom
-	ATOM_XEMBED_INFO        xproto.Atom
+	atomNetShowingDesktop xproto.Atom
+	atomNetClientList     xproto.Atom
+	atomNetActiveWindow   xproto.Atom
+	atomNetWMIcon         xproto.Atom
+	atomNetWMName         xproto.Atom
+	atomNetWMState        xproto.Atom
+	atomNetWMWindowType   xproto.Atom
+	atomXEmbedInfo        xproto.Atom
 )
 
 func initDir() {
@@ -63,12 +59,12 @@ func initDir() {
 }
 
 func initAtom() {
-	_NET_SHOWING_DESKTOP, _ = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
-	_NET_CLIENT_LIST, _ = xprop.Atm(XU, "_NET_CLIENT_LIST")
-	_NET_ACTIVE_WINDOW, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
-	ATOM_WINDOW_ICON, _ = xprop.Atm(XU, "_NET_WM_ICON")
-	ATOM_WINDOW_NAME, _ = xprop.Atm(XU, "_NET_WM_NAME")
-	ATOM_WINDOW_STATE, _ = xprop.Atm(XU, "_NET_WM_STATE")
-	ATOM_WINDOW_TYPE, _ = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
-	ATOM_XEMBED_INFO, _ = xprop.Atm(XU, "_XEMBED_INFO")
+	atomNetShowingDesktop, _ = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
+	atomNetClientList, _ = xprop.Atm(XU, "_NET_CLIENT_LIST")
+	atomNetActiveWindow, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	atomNetWMIcon, _ = xprop.Atm(XU, "_NET_WM_ICON")
+	atomNetWMName, _ = xprop.Atm(XU, "_NET_WM_NAME")
+	atomNetWMState, _ = xprop.Atm(XU, "_NET_WM_STATE")
+	atomNetWMWindowType, _ = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
+	atomXEmbedInfo, _ = xprop.Atm(XU, "_XEMBED_INFO")
 }

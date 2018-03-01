@@ -30,7 +30,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xwindow"
 )
 
-func (m *DockManager) registerWindow(win xproto.Window) {
+func (m *Manager) registerWindow(win xproto.Window) {
 
 	logger.Debug("register window", win)
 	registered := m.isWindowRegistered(win)
@@ -47,14 +47,14 @@ func (m *DockManager) registerWindow(win xproto.Window) {
 	m.windowInfoMapMutex.Unlock()
 }
 
-func (m *DockManager) isWindowRegistered(win xproto.Window) bool {
+func (m *Manager) isWindowRegistered(win xproto.Window) bool {
 	m.windowInfoMapMutex.RLock()
 	_, ok := m.windowInfoMap[win]
 	m.windowInfoMapMutex.RUnlock()
 	return ok
 }
 
-func (m *DockManager) unregisterWindow(win xproto.Window) {
+func (m *Manager) unregisterWindow(win xproto.Window) {
 	logger.Debugf("unregister window %v", win)
 	xevent.Detach(XU, win)
 	m.windowInfoMapMutex.Lock()
@@ -62,7 +62,7 @@ func (m *DockManager) unregisterWindow(win xproto.Window) {
 	m.windowInfoMapMutex.Unlock()
 }
 
-func (m *DockManager) handleClientListChanged() {
+func (m *Manager) handleClientListChanged() {
 	clientList, err := ewmh.ClientListGet(XU)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
@@ -85,7 +85,7 @@ func (m *DockManager) handleClientListChanged() {
 	m.clientList = newClientList
 }
 
-func (m *DockManager) handleActiveWindowChanged() {
+func (m *Manager) handleActiveWindowChanged() {
 	activeWindow, err := ewmh.ActiveWindowGet(XU)
 	if err != nil {
 		logger.Warning(err)
@@ -104,31 +104,33 @@ func (m *DockManager) handleActiveWindowChanged() {
 
 	logger.Debug("Active window changed", activeWindow)
 
-	for _, entry := range m.Entries {
+	m.Entries.mu.RLock()
+	for _, entry := range m.Entries.items {
 		winInfo, ok := entry.windows[activeWindow]
 		if ok {
-			entry.setIsActive(true)
+			entry.setPropIsActive(true)
 			entry.setCurrentWindowInfo(winInfo)
 			entry.current.updateWmName()
 			entry.updateIcon()
 		} else {
-			entry.setIsActive(false)
+			entry.setPropIsActive(false)
 		}
 	}
+	m.Entries.mu.RUnlock()
 
 	m.updateHideState(true)
 }
 
-func (m *DockManager) listenRootWindowPropertyChange() {
+func (m *Manager) listenRootWindowPropertyChange() {
 	rootWin := XU.RootWin()
 	xwindow.New(XU, rootWin).Listen(xproto.EventMaskPropertyChange | xproto.EventMaskSubstructureNotify)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		switch ev.Atom {
-		case _NET_CLIENT_LIST:
+		case atomNetClientList:
 			m.handleClientListChanged()
-		case _NET_ACTIVE_WINDOW:
+		case atomNetActiveWindow:
 			m.handleActiveWindowChanged()
-		case _NET_SHOWING_DESKTOP:
+		case atomNetShowingDesktop:
 			m.updateHideState(false)
 		}
 	}).Connect(XU, rootWin)
@@ -144,7 +146,7 @@ func (m *DockManager) listenRootWindowPropertyChange() {
 	m.handleClientListChanged()
 }
 
-func (m *DockManager) listenWindowXEvent(winInfo *WindowInfo) {
+func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
 	win := winInfo.window
 	logger.Debugf("start listen window %v x event", win)
 	xwin := xwindow.New(XU, win)
@@ -177,12 +179,12 @@ func (m *DockManager) listenWindowXEvent(winInfo *WindowInfo) {
 	}).Connect(XU, win)
 }
 
-func (m *DockManager) handleVisibilityNotifyEvent(winInfo *WindowInfo, ev xevent.VisibilityNotifyEvent) {
+func (m *Manager) handleVisibilityNotifyEvent(winInfo *WindowInfo, ev xevent.VisibilityNotifyEvent) {
 	logger.Debug(ev)
 	winInfo.updateMapState()
 }
 
-func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
+func (m *Manager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
 	if HideModeType(m.HideMode.Get()) != HideModeSmartHide {
 		return
 	}
@@ -228,13 +230,13 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 	}
 }
 
-func (m *DockManager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
+func (m *Manager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
 	logger.Debug(ev)
 	m.unregisterWindow(winInfo.window)
 	m.detachWindow(winInfo)
 }
 
-func (m *DockManager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {
+func (m *Manager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {
 	logger.Debug(ev)
 	winInfo.updateMapState()
 }

@@ -19,18 +19,19 @@
 
 package dock
 
-import "pkg.deepin.io/lib/dbus"
-
-const (
-	dockManagerDBusDest      = "com.deepin.dde.daemon.Dock"
-	dockManagerDBusObjPath   = "/com/deepin/dde/daemon/Dock"
-	dockManagerDBusInterface = dockManagerDBusDest
+import (
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (m *DockManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dockManagerDBusDest,
-		ObjectPath: dockManagerDBusObjPath,
-		Interface:  dockManagerDBusInterface,
+const (
+	dbusServiceName = "com.deepin.dde.daemon.Dock"
+	dbusObjPath     = "/com/deepin/dde/daemon/Dock"
+	dbusInterface   = dbusServiceName
+)
+
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusObjPath,
+		Interface: dbusInterface,
 	}
 }

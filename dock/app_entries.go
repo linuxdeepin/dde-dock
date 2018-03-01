@@ -22,41 +22,87 @@ package dock
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"strings"
+
+	"sync"
+
+	"pkg.deepin.io/lib/dbus1"
 )
 
-type AppEntries []*AppEntry
+type AppEntries struct {
+	items []*AppEntry
+	mu    sync.RWMutex
 
-func (entries AppEntries) GetFirstByInnerId(id string) *AppEntry {
-	for _, entry := range entries {
+	insertCb func(entry *AppEntry, index int)
+	removeCb func(entry *AppEntry)
+}
+
+func (entries *AppEntries) GetValue() (val interface{}, err *dbus.Error) {
+	entries.mu.RLock()
+	result := make([]dbus.ObjectPath, len(entries.items))
+	for idx, entry := range entries.items {
+		result[idx] = dbus.ObjectPath(entryDBusObjPathPrefix + entry.Id)
+	}
+	entries.mu.RUnlock()
+	return result, nil
+}
+
+func (entries *AppEntries) SetNotifyChangedFunc(func(val interface{})) {
+}
+
+func (entries *AppEntries) SetValue(val interface{}) (changed bool, err *dbus.Error) {
+	// readonly
+	return
+}
+
+func (entries *AppEntries) GetType() reflect.Type {
+	return reflect.TypeOf([]dbus.ObjectPath{})
+}
+
+func (entries *AppEntries) GetFirstByInnerId(id string) *AppEntry {
+	entries.mu.RLock()
+	for _, entry := range entries.items {
 		if entry.innerId == id {
+			entries.mu.RUnlock()
 			return entry
 		}
 	}
+	entries.mu.RUnlock()
 	return nil
 }
 
-func (entries AppEntries) Insert(entry *AppEntry, index int) AppEntries {
-	// append
-	if index < 0 || index >= len(entries) {
-		return append(entries, entry)
+func (entries *AppEntries) Insert(entry *AppEntry, index int) {
+	entries.mu.Lock()
+	if index < 0 || index >= len(entries.items) {
+		// append
+		index = len(entries.items)
+		entries.items = append(entries.items, entry)
+	} else {
+		// insert
+		entries.items = append(entries.items[:index],
+			append([]*AppEntry{entry}, entries.items[index:]...)...)
 	}
-	// insert
-	return append(entries[:index],
-		append([]*AppEntry{entry}, entries[index:]...)...)
+
+	if entries.insertCb != nil {
+		entries.insertCb(entry, index)
+	}
+	entries.mu.Unlock()
 }
 
-func (entries AppEntries) Remove(entry *AppEntry) AppEntries {
-	index := entries.IndexOf(entry)
+func (entries *AppEntries) Remove(entry *AppEntry) {
+	entries.mu.Lock()
+	index := entries.indexOf(entry)
 	if index != -1 {
-		return append(entries[:index], entries[index+1:]...)
+		entries.items = append(entries.items[:index], entries.items[index+1:]...)
+		entries.removeCb(entry)
 	}
-	return entries
+	entries.mu.Unlock()
 }
 
-func (entries AppEntries) IndexOf(entry *AppEntry) int {
-	var index int = -1
-	for i, v := range entries {
+func (entries *AppEntries) indexOf(entry *AppEntry) int {
+	index := -1
+	for i, v := range entries.items {
 		if v.Id == entry.Id {
 			index = i
 		}
@@ -64,51 +110,71 @@ func (entries AppEntries) IndexOf(entry *AppEntry) int {
 	return index
 }
 
-func (entries AppEntries) Move(index, newIndex int) (AppEntries, error) {
+func (entries *AppEntries) IndexOf(entry *AppEntry) int {
+	entries.mu.RLock()
+	idx := entries.indexOf(entry)
+	entries.mu.RUnlock()
+	return idx
+}
+
+func (entries AppEntries) Move(index, newIndex int) error {
 	if index == newIndex {
-		return nil, errors.New("index == newIndex")
+		return errors.New("index == newIndex")
 	}
 
-	entriesLength := len(entries)
+	entries.mu.Lock()
+
+	entriesLength := len(entries.items)
 	if 0 <= index && index < entriesLength &&
 		0 <= newIndex && newIndex < entriesLength {
 
-		entry := entries[index]
+		entry := entries.items[index]
 		// remove entry at index
-		removed := append(entries[:index], entries[index+1:]...)
+		removed := append(entries.items[:index], entries.items[index+1:]...)
 		// insert entry at newIndex
-		return append(removed[:newIndex],
-			append([]*AppEntry{entry}, removed[newIndex:]...)...), nil
+		entries.items = append(removed[:newIndex],
+			append([]*AppEntry{entry}, removed[newIndex:]...)...)
+
+		entries.mu.Unlock()
+		return nil
 	}
-	return nil, fmt.Errorf("Index out of bounds, index: %v, newIndex: %v, len: %v", index, newIndex, entriesLength)
+	entries.mu.Unlock()
+	return fmt.Errorf("index out of bounds, index: %v, newIndex: %v, len: %v", index, newIndex, entriesLength)
 }
 
-func (entries AppEntries) FilterDocked() AppEntries {
-	var dockedEntries AppEntries
-	for _, entry := range entries {
+func (entries AppEntries) FilterDocked() (dockedEntries []*AppEntry) {
+	entries.mu.RLock()
+	for _, entry := range entries.items {
 		if entry.appInfo != nil && entry.IsDocked == true {
 			dockedEntries = append(dockedEntries, entry)
 		}
 	}
+	entries.mu.RUnlock()
 	return dockedEntries
 }
 
 func (entries AppEntries) GetByWindowPid(pid uint) *AppEntry {
-	for _, entry := range entries {
+	entries.mu.RLock()
+
+	for _, entry := range entries.items {
 		for _, winInfo := range entry.windows {
 			if winInfo.pid == pid {
+				entries.mu.RUnlock()
 				return entry
 			}
 		}
 	}
+
+	entries.mu.RUnlock()
 	return nil
 }
 
-func (entries AppEntries) GetByAppId(id string) *AppEntry {
-	for _, entry := range entries {
+func getByAppId(items []*AppEntry, id string) *AppEntry {
+	for _, entry := range items {
 		if entry.appInfo == nil {
 			continue
 		}
+
 		eAppId := entry.appInfo.GetId()
 		if strings.EqualFold(id, eAppId) {
 			return entry
@@ -117,9 +183,16 @@ func (entries AppEntries) GetByAppId(id string) *AppEntry {
 	return nil
 }
 
-func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
+func (entries AppEntries) GetByAppId(id string) *AppEntry {
+	entries.mu.RLock()
+	e := getByAppId(entries.items, id)
+	entries.mu.RUnlock()
+	return e
+}
+
+func getByDesktopFilePath(entriesItems []*AppEntry, desktopFilePath string) (*AppEntry, error) {
 	// same file
-	for _, entry := range entries {
+	for _, entry := range entriesItems {
 		if entry.appInfo == nil {
 			continue
 		}
@@ -132,10 +205,10 @@ func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntr
 	// hash equal
 	appInfo := NewAppInfoFromFile(desktopFilePath)
 	if appInfo == nil {
-		return nil, errors.New("Invalid desktopFilePath")
+		return nil, errors.New("invalid desktopFilePath")
 	}
 	hash := appInfo.innerId
-	for _, entry := range entries {
+	for _, entry := range entriesItems {
 		if entry.appInfo == nil {
 			continue
 		}
@@ -144,4 +217,11 @@ func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntr
 		}
 	}
 	return nil, nil
+}
+
+func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
+	entries.mu.RLock()
+	e, err := getByDesktopFilePath(entries.items, desktopFilePath)
+	entries.mu.RUnlock()
+	return e, err
 }

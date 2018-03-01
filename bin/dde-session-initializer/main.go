@@ -32,9 +32,7 @@ import (
 	"pkg.deepin.io/dde/daemon/loader"
 	_ "pkg.deepin.io/dde/daemon/trayicon"
 	_ "pkg.deepin.io/dde/daemon/x_event_monitor"
-	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/app"
-	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
@@ -43,6 +41,8 @@ import (
 
 	"os"
 	"time"
+
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 var logger = log.NewLogger("daemon/initializer")
@@ -60,39 +60,22 @@ func runMainLoop() {
 
 	logger.Info("DealWithUnhandledMessage")
 	startTime = time.Now()
-	dbus.DealWithUnhandledMessage()
 	logger.Info("DealWithUnhandledMessage done, cost", time.Now().Sub(startTime))
 	go glib.StartLoop()
 
 	logger.Info("initialize done")
-	if err := dbus.Wait(); err != nil {
-		logger.Errorf("Lost dbus: %v", err)
-		os.Exit(-1)
-	}
-
-	logger.Info("dbus connection is closed by user")
-	os.Exit(0)
 }
 
-type Initializer struct {
-}
-
-func (*Initializer) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Initializer",
-		ObjectPath: "/com/deepin/daemon/Initializer",
-		Interface:  "com.deepin.daemon.Initializer",
-	}
-}
+const dbusServiceName = "com.deepin.daemon.Initializer"
 
 func main() {
-	sessionInitializer := new(Initializer)
-	if !lib.UniqueOnSession(sessionInitializer.GetDBusInfo().Dest) {
-		logger.Warning("There's a dde-session-initializer instance running.")
-		os.Exit(0)
+	service, err := dbusutil.NewSessionService()
+	if err != nil {
+		logger.Fatal(err)
 	}
+	loader.SetService(service)
 
-	err := dbus.InstallOnSession(sessionInitializer)
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -122,6 +105,6 @@ func main() {
 	}
 
 	loader.EnableModules([]string{"dock", "launcher", "trayicon", "x_event_monitor"}, nil, loader.EnableFlagIgnoreMissingModule)
-
 	runMainLoop()
+	service.Wait()
 }

@@ -21,7 +21,6 @@ package launcher
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -47,30 +46,27 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() (err error) {
-	logger.BeginTracing()
-	d.manager, err = NewManager()
+	service := loader.GetService()
+
+	d.manager, err = NewManager(service)
 	if err != nil {
-		logger.Error("Failed to new manager:", err)
-		logger.EndTracing()
 		return
 	}
-	err = dbus.InstallOnSession(d.manager)
+
+	err = service.Export(d.manager)
 	if err != nil {
-		logger.Error("Failed to install dbus:", err)
-		logger.EndTracing()
-		d.manager.destroy()
 		return
 	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return
+	}
+
 	go d.manager.init()
 	return
 }
 
 func (d *Daemon) Stop() error {
-	if d.manager == nil {
-		return nil
-	}
-	d.manager.destroy()
-	d.manager = nil
-	logger.EndTracing()
 	return nil
 }

@@ -25,11 +25,10 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/dbus"
-
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
@@ -38,27 +37,39 @@ const (
 	OpcodeSystemTrayCancelMessage
 )
 
+//go:generate dbusutil-gen -type TrayManager traymanager.go
+
 // TrayManager为系统托盘的管理器。
 type TrayManager struct {
-	owner  x.Window // the manager selection owner window
-	visual x.VisualID
-	icons  map[x.Window]*TrayIcon
-	mutex  sync.Mutex
+	service *dbusutil.Service
+	owner   x.Window // the manager selection owner window
+	visual  x.VisualID
+	icons   map[x.Window]*TrayIcon
+	mutex   sync.Mutex
 
 	damageNotifyEventHandler DamageNotifyEventHandler
 
 	// 目前已有系统托盘窗口的id。
+	PropsMu sync.RWMutex
+	// dbusutil-gen: equal=nil
 	TrayIcons []uint32
 
-	// Signals:
-	// Removed信号会在系统过盘图标被移除时被触发。
-	Removed func(id uint32)
-	// Added信号会在系统过盘图标增加时被触发。
-	Added func(id uint32)
-	// Changed信号会在系统托盘图标改变后被触发。
-	Changed func(id uint32)
-	// Inited when tray manager is initialized.
-	Inited func()
+	signals *struct {
+		// Inited when tray manager is initialized.
+		Inited struct{}
+		// Added信号会在系统过盘图标增加时被触发。
+		// Removed信号会在系统过盘图标被移除时被触发。
+		// Changed信号会在系统托盘图标改变后被触发。
+		Added, Removed, Changed struct {
+			id uint32
+		}
+	}
+
+	methods *struct {
+		Manage             func() `out:"ok"`
+		GetName            func() `in:"win" out:"name"`
+		EnableNotification func() `in:"win,enabled"`
+	}
 }
 
 type DamageNotifyEventHandler struct {
@@ -99,12 +110,13 @@ func (handler *DamageNotifyEventHandler) process(winId x.Window) {
 	handler.mu.Unlock()
 }
 
-func NewTrayManager() *TrayManager {
+func NewTrayManager(service *dbusutil.Service) *TrayManager {
 	visualId := findRGBAVisualID()
 
 	m := &TrayManager{
-		visual: visualId,
-		icons:  make(map[x.Window]*TrayIcon),
+		service: service,
+		visual:  visualId,
+		icons:   make(map[x.Window]*TrayIcon),
 	}
 	m.damageNotifyEventHandler.manager = m
 	err := m.init()
@@ -126,12 +138,8 @@ func (m *TrayManager) init() error {
 		return err
 	}
 
-	m.sendClientMsgMANAGER()
-
 	go m.eventHandleLoop()
 
-	dbus.InstallOnSession(m)
-	dbus.Emit(m, "Inited")
 	return nil
 }
 
@@ -158,10 +166,13 @@ func (m *TrayManager) handleDamageNotifyEvent(xid x.Window) {
 		return
 	}
 
+	icon.mu.Lock()
 	if !icon.notify {
 		// ignore event
+		icon.mu.Unlock()
 		return
 	}
+	icon.mu.Unlock()
 
 	newData, err := icon.getPixmapData()
 	if err != nil {
@@ -170,7 +181,7 @@ func (m *TrayManager) handleDamageNotifyEvent(xid x.Window) {
 	}
 	if !bytes.Equal(icon.data, newData) {
 		icon.data = newData
-		dbus.Emit(m, "Changed", uint32(xid))
+		m.service.Emit(m, "Changed", uint32(xid))
 		logger.Debugf("handleDamageNotifyEvent %v changed", xid)
 	} else {
 		logger.Debugf("handleDamageNotifyEvent %v no changed", xid)
@@ -359,7 +370,7 @@ func (m *TrayManager) addIcon(win x.Window) {
 
 	x.ChangeWindowAttributes(XConn, win, valueMask, valueList)
 
-	dbus.Emit(m, "Added", uint32(win))
+	m.service.Emit(m, "Added", uint32(win))
 	logger.Infof("Add tray icon %v name: %q", win, icon.getName())
 	m.icons[win] = icon
 	m.updateTrayIcons()
@@ -375,7 +386,7 @@ func (m *TrayManager) removeIcon(win x.Window) {
 		return
 	}
 	delete(m.icons, win)
-	dbus.Emit(m, "Removed", uint32(win))
+	m.service.Emit(m, "Removed", uint32(win))
 	logger.Debugf("remove tray icon %v", win)
 	m.updateTrayIcons()
 }
@@ -385,6 +396,7 @@ func (m *TrayManager) updateTrayIcons() {
 	for _, icon := range m.icons {
 		icons = append(icons, uint32(icon.win))
 	}
-	m.TrayIcons = icons
-	dbus.NotifyChange(m, "TrayIcons")
+	m.PropsMu.Lock()
+	m.setPropTrayIcons(icons)
+	m.PropsMu.Unlock()
 }

@@ -27,7 +27,6 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xrect"
-	"pkg.deepin.io/lib/dbus"
 )
 
 func max(a, b int) int {
@@ -58,7 +57,7 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 	return ax < bx && ay < by
 }
 
-func (m *DockManager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Window) {
+func (m *Manager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Window) {
 
 	ret = []xproto.Window{activeWin}
 	list, err := ewmh.ClientListStackingGet(XU)
@@ -127,7 +126,7 @@ func (m *DockManager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.W
 	return
 }
 
-func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
+func (m *Manager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 	// overlap condition:
 	// window type is not desktop
 	// window opacity is not zero
@@ -171,7 +170,7 @@ func isDDELauncher(win xproto.Window) (bool, error) {
 	return winClass.Instance == ddeLauncherWMClass, nil
 }
 
-func (m *DockManager) getActiveWindow() (activeWin xproto.Window) {
+func (m *Manager) getActiveWindow() (activeWin xproto.Window) {
 	m.activeWindowMu.Lock()
 	if m.activeWindow == 0 {
 		activeWin = m.activeWindowOld
@@ -182,7 +181,7 @@ func (m *DockManager) getActiveWindow() (activeWin xproto.Window) {
 	return
 }
 
-func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
+func (m *Manager) shouldHideOnSmartHideMode() (bool, error) {
 	activeWin := m.getActiveWindow()
 	if activeWin == 0 {
 		logger.Debug("shouldHideOnSmartHideMode: activeWindow is 0")
@@ -219,7 +218,7 @@ func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
 	return false, nil
 }
 
-func (m *DockManager) smartHideModeTimerExpired() {
+func (m *Manager) smartHideModeTimerExpired() {
 	logger.Debug("smartHideModeTimer expired!")
 	shouldHide, err := m.shouldHideOnSmartHideMode()
 	if err != nil {
@@ -235,7 +234,7 @@ func (m *DockManager) smartHideModeTimerExpired() {
 	}
 }
 
-func (m *DockManager) resetSmartHideModeTimer(delay time.Duration) {
+func (m *Manager) resetSmartHideModeTimer(delay time.Duration) {
 	m.smartHideModeMutex.Lock()
 	defer m.smartHideModeMutex.Unlock()
 
@@ -243,7 +242,7 @@ func (m *DockManager) resetSmartHideModeTimer(delay time.Duration) {
 	logger.Debug("reset smart hide mode timer ", delay)
 }
 
-func (m *DockManager) cancelSmartHideModeTimer() {
+func (m *Manager) cancelSmartHideModeTimer() {
 	m.smartHideModeMutex.Lock()
 	defer m.smartHideModeMutex.Unlock()
 
@@ -251,7 +250,7 @@ func (m *DockManager) cancelSmartHideModeTimer() {
 	logger.Debug("cancel smart hide mode timer ")
 }
 
-func (m *DockManager) updateHideState(delay bool) {
+func (m *Manager) updateHideState(delay bool) {
 	if m.isDDELauncherVisible() {
 		logger.Debug("updateHideState: dde launcher is visible, show dock")
 		m.setPropHideState(HideStateShow)
@@ -276,16 +275,18 @@ func (m *DockManager) updateHideState(delay bool) {
 	}
 }
 
-func (m *DockManager) setPropHideState(hideState HideStateType) {
+func (m *Manager) setPropHideState(hideState HideStateType) {
 	logger.Debug("setPropHideState", hideState)
 	if hideState == HideStateUnknown {
 		logger.Warning("try setPropHideState to Unknown")
 		return
 	}
 
+	m.PropsMu.Lock()
 	if m.HideState != hideState {
 		logger.Debugf("HideState %v => %v", m.HideState, hideState)
 		m.HideState = hideState
-		dbus.NotifyChange(m, "HideState")
+		m.service.EmitPropertyChanged(m, "HideState", m.HideState)
 	}
+	m.PropsMu.Unlock()
 }

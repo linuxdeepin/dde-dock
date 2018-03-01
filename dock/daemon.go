@@ -23,7 +23,6 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -31,9 +30,11 @@ type Daemon struct {
 	*loader.ModuleBase
 }
 
+const moduleName = "dock"
+
 func NewDaemon(logger *log.Logger) *Daemon {
 	daemon := new(Daemon)
-	daemon.ModuleBase = loader.NewModuleBase("dock", daemon, logger)
+	daemon.ModuleBase = loader.NewModuleBase(moduleName, daemon, logger)
 	return daemon
 }
 
@@ -48,12 +49,10 @@ func (d *Daemon) Stop() error {
 		XU = nil
 	}
 
-	logger.EndTracing()
 	return nil
 }
 
-func (d *Daemon) startFailed(args ...interface{}) {
-	logger.Error(args...)
+func (d *Daemon) startFailed() {
 	d.Stop()
 }
 
@@ -61,13 +60,12 @@ func (d *Daemon) Start() error {
 	if dockManager != nil {
 		return nil
 	}
-	logger.BeginTracing()
 
 	var err error
 	// init x conn
 	XU, err = xgbutil.NewConn()
 	if err != nil {
-		d.startFailed(err)
+		d.startFailed()
 		return err
 	}
 
@@ -75,16 +73,24 @@ func (d *Daemon) Start() error {
 	initDir()
 	initPathDirCodeMap()
 
-	dockManager, err = NewDockManager()
+	service := loader.GetService()
+
+	dockManager, err = newManager(service)
 	if err != nil {
-		d.startFailed(err)
+		d.startFailed()
 		return err
 	}
 
 	dockManager.listenRootWindowPropertyChange()
 	go xevent.Main(XU)
 
-	dbus.Emit(dockManager, "ServiceRestarted")
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		d.startFailed()
+		return err
+	}
+
+	service.Emit(dockManager, "ServiceRestarted")
 	return nil
 }
 
@@ -93,5 +99,5 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Name() string {
-	return "dock"
+	return moduleName
 }

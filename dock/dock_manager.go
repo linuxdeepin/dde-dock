@@ -35,30 +35,32 @@ import (
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/appinfo"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbus1"
 
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
-type DockManager struct {
+type Manager struct {
+	PropsMu            sync.RWMutex
+	Entries            AppEntries
+	HideMode           *gsprop.Enum `prop:"access:rw"`
+	DisplayMode        *gsprop.Enum `prop:"access:rw"`
+	Position           *gsprop.Enum `prop:"access:rw"`
+	IconSize           *gsprop.Uint `prop:"access:rw"`
+	ShowTimeout        *gsprop.Uint `prop:"access:rw"`
+	HideTimeout        *gsprop.Uint `prop:"access:rw"`
+	DockedApps         *gsprop.Strv
+	HideState          HideStateType
+	FrontendWindowRect *Rect
+
+	service            *dbusutil.Service
 	clientList         windowSlice
 	windowInfoMap      map[xproto.Window]*WindowInfo
 	windowInfoMapMutex sync.RWMutex
-
-	Entries   AppEntries
-	entriesMu sync.Mutex
-
-	settings    *gio.Settings
-	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
-	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
-	Position    *property.GSettingsEnumProperty `access:"readwrite"`
-	IconSize    *property.GSettingsUintProperty `access:"readwrite"`
-	ShowTimeout *property.GSettingsUintProperty `access:"readwrite"`
-	HideTimeout *property.GSettingsUintProperty `access:"readwrite"`
-	DockedApps  *property.GSettingsStrvProperty
+	settings           *gio.Settings
 
 	activeWindow    xproto.Window
 	activeWindowOld xproto.Window
@@ -67,15 +69,10 @@ type DockManager struct {
 	ddeLauncherVisible   bool
 	ddeLauncherVisibleMu sync.Mutex
 
-	HideState HideStateType
-
-	// TODO remove launchContext
-	launchContext      *appinfo.AppLaunchContext
 	smartHideModeTimer *time.Timer
 	smartHideModeMutex sync.Mutex
 
 	entryCount         uint
-	FrontendWindowRect *Rect
 	identifyWindowFuns []*IdentifyWindowFunc
 	windowPatterns     WindowPatterns
 
@@ -86,10 +83,35 @@ type DockManager struct {
 	launchedRecorder *libApps.LaunchedRecorder
 	startManager     *sessionmanager.StartManager
 
-	// Signals
-	ServiceRestarted func()
-	EntryAdded       func(dbus.ObjectPath, int32)
-	EntryRemoved     func(string)
+	signals *struct {
+		ServiceRestarted struct{}
+		EntryAdded       struct {
+			path  dbus.ObjectPath
+			index int32
+		}
+
+		EntryRemoved struct {
+			entryId string
+		}
+	}
+
+	methods *struct {
+		ActivateWindow            func() `in:"win"`
+		CloseWindow               func() `in:"win"`
+		MaximizeWindow            func() `in:"win"`
+		MinimizeWindow            func() `in:"win"`
+		MakeWindowAbove           func() `in:"win"`
+		MoveWindow                func() `in:"win"`
+		PreviewWindow             func() `in:"win"`
+		GetEntryIDs               func() `out:"list"`
+		SetFrontendWindowRect     func() `in:"x,y,width,height"`
+		IsDocked                  func() `in:"desktopFile" out:"value"`
+		RequestDock               func() `in:"desktopFile,index" out:"ok"`
+		RequestUndock             func() `in:"desktopFile" out:"ok"`
+		MoveEntry                 func() `in:"index,newIndex"`
+		IsOnDock                  func() `in:"desktopFile" out:"value"`
+		QueryWindowIdentifyMethod func() `in:"win" out:"identifyMethod"`
+	}
 }
 
 const (
@@ -106,8 +128,9 @@ const (
 	frontendWindowWmClass = "dde-dock"
 )
 
-func NewDockManager() (*DockManager, error) {
-	m := new(DockManager)
+func newManager(service *dbusutil.Service) (*Manager, error) {
+	m := new(Manager)
+	m.service = service
 	err := m.init()
 	if err != nil {
 		return nil, err
@@ -115,7 +138,7 @@ func NewDockManager() (*DockManager, error) {
 	return m, nil
 }
 
-func (m *DockManager) destroy() {
+func (m *Manager) destroy() {
 	if m.smartHideModeTimer != nil {
 		m.smartHideModeTimer.Stop()
 		m.smartHideModeTimer = nil
@@ -146,10 +169,10 @@ func (m *DockManager) destroy() {
 		m.startManager = nil
 	}
 
-	dbus.UnInstallObject(m)
+	m.service.StopExport(m.GetDBusExportInfo())
 }
 
-func (m *DockManager) launch(desktopFile string, timestamp uint32, files []string) {
+func (m *Manager) launch(desktopFile string, timestamp uint32, files []string) {
 	err := m.startManager.LaunchApp(desktopFile, timestamp, files)
 	if err != nil {
 		logger.Warningf("launch %q failed: %v", desktopFile, err)
@@ -157,95 +180,99 @@ func (m *DockManager) launch(desktopFile string, timestamp uint32, files []strin
 }
 
 // ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
-func (m *DockManager) ActivateWindow(win uint32) error {
+func (m *Manager) ActivateWindow(win uint32) *dbus.Error {
 	err := activateWindow(xproto.Window(win))
 	if err != nil {
 		logger.Warning("Activate window failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	return nil
 }
 
 // CloseWindow会将传入id的窗口关闭。
-func (m *DockManager) CloseWindow(win uint32) error {
+func (m *Manager) CloseWindow(win uint32) *dbus.Error {
 	err := ewmh.CloseWindow(XU, xproto.Window(win))
 	if err != nil {
 		logger.Warning("Close window failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	return nil
 }
 
-func (m *DockManager) MaximizeWindow(win uint32) error {
+func (m *Manager) MaximizeWindow(win uint32) *dbus.Error {
 	err := m.ActivateWindow(win)
 	if err != nil {
 		return err
 	}
-	err = maximizeWindow(XU, xproto.Window(win))
-	if err != nil {
+	err1 := maximizeWindow(XU, xproto.Window(win))
+	if err1 != nil {
 		logger.Warning("maximize window failed:", err)
-		return err
+		return dbusutil.ToError(err1)
 	}
 	return nil
 }
 
-func (m *DockManager) MinimizeWindow(win uint32) error {
+func (m *Manager) MinimizeWindow(win uint32) *dbus.Error {
 	err := minimizeWindow(XU, xproto.Window(win))
 	if err != nil {
 		logger.Warning("minimize window failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	return nil
 }
 
-func (m *DockManager) MakeWindowAbove(win uint32) error {
+func (m *Manager) MakeWindowAbove(win uint32) *dbus.Error {
 	err := m.ActivateWindow(win)
 	if err != nil {
 		return err
 	}
 
-	err = makeWindowAbove(XU, xproto.Window(win))
-	if err != nil {
+	err1 := makeWindowAbove(XU, xproto.Window(win))
+	if err1 != nil {
 		logger.Warning("make window above failed:", err)
-		return err
+		return dbusutil.ToError(err1)
 	}
 	return nil
 }
 
-func (m *DockManager) MoveWindow(win uint32) error {
+func (m *Manager) MoveWindow(win uint32) *dbus.Error {
 	err := m.ActivateWindow(win)
 	if err != nil {
 		return err
 	}
 
-	err = moveWindow(XU, xproto.Window(win))
-	if err != nil {
+	err1 := moveWindow(XU, xproto.Window(win))
+	if err1 != nil {
 		logger.Warning("move window failed:", err)
-		return err
+		return dbusutil.ToError(err1)
 	}
 	return nil
 }
 
-func (m *DockManager) PreviewWindow(win uint32) error {
+func (m *Manager) PreviewWindow(win uint32) *dbus.Error {
 	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
 		logger.Warning("Deepin window manager not running, unsupported this operation")
 		return nil
 	}
-	return m.wm.PreviewWindow(win)
+	err := m.wm.PreviewWindow(win)
+	return dbusutil.ToError(err)
 }
 
-func (m *DockManager) CancelPreviewWindow() error {
+func (m *Manager) CancelPreviewWindow() *dbus.Error {
 	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
 		logger.Warning("Deepin window manager not running, unsupported this operation")
 		return nil
 	}
-	return m.wm.CancelPreviewWindow()
+	err := m.wm.CancelPreviewWindow()
+	return dbusutil.ToError(err)
 }
 
 // for debug
-func (m *DockManager) GetEntryIDs() []string {
-	list := make([]string, 0, len(m.Entries))
-	for _, entry := range m.Entries {
+func (m *Manager) GetEntryIDs() ([]string, *dbus.Error) {
+	entries := m.Entries
+	entries.mu.RLock()
+	list := make([]string, 0, len(entries.items))
+	for _, entry := range entries.items {
 		var appId string
 		if entry.appInfo != nil {
 			appId = entry.appInfo.GetId()
@@ -254,41 +281,41 @@ func (m *DockManager) GetEntryIDs() []string {
 		}
 		list = append(list, appId)
 	}
-	return list
+	entries.mu.RUnlock()
+	return list, nil
 }
 
-func (m *DockManager) SetFrontendWindowRect(x, y int32, width, height uint32) {
+func (m *Manager) SetFrontendWindowRect(x, y int32, width, height uint32) *dbus.Error {
 	if m.FrontendWindowRect.X == x &&
 		m.FrontendWindowRect.Y == y &&
 		m.FrontendWindowRect.Width == width &&
 		m.FrontendWindowRect.Height == height {
 		logger.Debug("SetFrontendWindowRect no changed")
-		return
+		return nil
 	}
 	m.FrontendWindowRect.X = x
 	m.FrontendWindowRect.Y = y
 	m.FrontendWindowRect.Width = width
 	m.FrontendWindowRect.Height = height
-	dbus.NotifyChange(m, "FrontendWindowRect")
+	m.service.EmitPropertyChanged(m, "FrontendWindowRect", m.FrontendWindowRect)
 	m.updateHideState(false)
+	return nil
 }
 
-func (m *DockManager) IsDocked(desktopFilePath string) (bool, error) {
+func (m *Manager) IsDocked(desktopFilePath string) (bool, *dbus.Error) {
 	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
 	if err != nil {
-		return false, err
+		return false, dbusutil.ToError(err)
 	}
 	return entry != nil, nil
 }
 
-func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, error) {
+func (m *Manager) RequestDock(desktopFilePath string, index int32) (bool, *dbus.Error) {
 	appInfo := NewAppInfoFromFile(desktopFilePath)
 	if appInfo == nil {
-		return false, errors.New("invalid desktopFilePath")
+		return false, dbusutil.ToError(errors.New("invalid desktopFilePath"))
 	}
-	m.entriesMu.Lock()
 	entry := m.Entries.GetFirstByInnerId(appInfo.innerId)
-	m.entriesMu.Unlock()
 
 	if entry == nil {
 		entry = newAppEntry(m, appInfo.innerId, appInfo)
@@ -296,20 +323,17 @@ func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, er
 		entry.updateIcon()
 		err := m.installAppEntry(entry)
 		if err == nil {
-			m.entriesMu.Lock()
-			m.Entries = m.Entries.Insert(entry, int(index))
-			m.emitEntryAdded(entry)
-			m.entriesMu.Unlock()
+			m.Entries.Insert(entry, int(index))
 		}
 	}
 	dockResult := m.dockEntry(entry)
 	return dockResult, nil
 }
 
-func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {
+func (m *Manager) RequestUndock(desktopFilePath string) (bool, *dbus.Error) {
 	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
 	if err != nil {
-		return false, err
+		return false, dbusutil.ToError(err)
 	}
 	if entry == nil {
 		return false, nil
@@ -318,28 +342,30 @@ func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {
 	return true, nil
 }
 
-func (m *DockManager) MoveEntry(index, newIndex int32) error {
-	entries, err := m.Entries.Move(int(index), int(newIndex))
+func (m *Manager) MoveEntry(index, newIndex int32) *dbus.Error {
+	err := m.Entries.Move(int(index), int(newIndex))
 	if err != nil {
 		logger.Warning("MoveEntry failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	logger.Debug("MoveEntry ok")
-	m.Entries = entries
 	m.saveDockedApps()
 	return nil
 }
 
-func (m *DockManager) IsOnDock(desktopFilePath string) (bool, error) {
+func (m *Manager) IsOnDock(desktopFilePath string) (bool, *dbus.Error) {
 	entry, err := m.Entries.GetByDesktopFilePath(desktopFilePath)
 	if err != nil {
-		return false, err
+		return false, dbusutil.ToError(err)
 	}
 	return entry != nil, nil
 }
 
-func (m *DockManager) QueryWindowIdentifyMethod(wid uint32) (string, error) {
-	for _, entry := range m.Entries {
+func (m *Manager) QueryWindowIdentifyMethod(wid uint32) (string, *dbus.Error) {
+	m.Entries.mu.RLock()
+	defer m.Entries.mu.RUnlock()
+
+	for _, entry := range m.Entries.items {
 		winInfo, ok := entry.windows[xproto.Window(wid)]
 		if ok {
 			if winInfo.appInfo != nil {
@@ -349,5 +375,5 @@ func (m *DockManager) QueryWindowIdentifyMethod(wid uint32) (string, error) {
 			}
 		}
 	}
-	return "", fmt.Errorf("window %d not found", wid)
+	return "", dbusutil.ToError(fmt.Errorf("window %d not found", wid))
 }

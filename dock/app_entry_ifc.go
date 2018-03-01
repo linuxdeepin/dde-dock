@@ -24,20 +24,20 @@ import (
 
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dockManagerDBusDest,
-		ObjectPath: entryDBusObjPathPrefix + e.Id,
-		Interface:  entryDBusInterface,
+func (e *AppEntry) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      entryDBusObjPathPrefix + e.Id,
+		Interface: entryDBusInterface,
 	}
 }
 
-func (entry *AppEntry) Activate(timestamp uint32) error {
+func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 	logger.Debug("Activate timestamp:", timestamp)
-	m := entry.dockManager
+	m := entry.manager
 	if HideModeType(m.HideMode.Get()) == HideModeSmartHide {
 		m.setPropHideState(HideStateShow)
 		m.updateHideState(true)
@@ -51,20 +51,20 @@ func (entry *AppEntry) Activate(timestamp uint32) error {
 	if entry.current == nil {
 		err := errors.New("entry.current is nil")
 		logger.Warning(err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	win := entry.current.window
 	state, err := ewmh.WmStateGet(XU, win)
 	if err != nil {
 		logger.Warning("Get ewmh wmState failed win:", win)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	if strSliceContains(state, "_NET_WM_STATE_FOCUSED") {
 		s, err := icccm.WmStateGet(XU, win)
 		if err != nil {
 			logger.Warning("Get icccm WmState failed win:", win)
-			return err
+			return dbusutil.ToError(err)
 		}
 		switch s.State {
 		case icccm.StateIconic:
@@ -72,7 +72,7 @@ func (entry *AppEntry) Activate(timestamp uint32) error {
 		case icccm.StateNormal:
 			if len(entry.windows) == 1 {
 				iconifyWindow(win)
-			} else if entry.dockManager.getActiveWindow() == win {
+			} else if entry.manager.getActiveWindow() == win {
 				nextWin := entry.findNextLeader()
 				activateWindow(nextWin)
 			}
@@ -83,61 +83,69 @@ func (entry *AppEntry) Activate(timestamp uint32) error {
 	return nil
 }
 
-func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) {
+func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) *dbus.Error {
 	logger.Debugf("HandleMenuItem id: %q timestamp: %v", id, timestamp)
 	if e.coreMenu != nil {
-		e.coreMenu.HandleAction(id, timestamp)
-	} else {
-		logger.Warning("HandleMenuItem failed: entry.coreMenu is nil")
+		err := e.coreMenu.HandleAction(id, timestamp)
+		return dbusutil.ToError(err)
 	}
+	logger.Warning("HandleMenuItem failed: entry.coreMenu is nil")
+	return nil
 }
 
-func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) {
+func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) *dbus.Error {
 	logger.Debugf("handle drag drop files: %v, timestamp: %v", files, timestamp)
 	ai := entry.appInfo
 	if ai != nil {
-		entry.dockManager.launch(ai.GetFileName(), timestamp, files)
+		entry.manager.launch(ai.GetFileName(), timestamp, files)
 	} else {
 		logger.Warning("not supported")
 	}
+	return nil
 }
 
 // RequestDock 驻留
-func (entry *AppEntry) RequestDock() {
-	if entry.dockManager != nil {
-		entry.dockManager.dockEntry(entry)
+func (entry *AppEntry) RequestDock() *dbus.Error {
+	if entry.manager != nil {
+		entry.manager.dockEntry(entry)
 	}
+	return nil
 }
 
 // RequestUndock 取消驻留
-func (entry *AppEntry) RequestUndock() {
-	if entry.dockManager != nil {
-		entry.dockManager.undockEntry(entry)
+func (entry *AppEntry) RequestUndock() *dbus.Error {
+	if entry.manager != nil {
+		entry.manager.undockEntry(entry)
 	}
+	return nil
 }
 
-func (entry *AppEntry) PresentWindows() {
-	if entry.dockManager != nil {
+func (entry *AppEntry) PresentWindows() *dbus.Error {
+	if entry.manager != nil {
 		windowIds := entry.getWindowIds()
 		if len(windowIds) == 0 {
-			return
+			return nil
 		}
-		entry.dockManager.wm.PresentWindows(windowIds)
+		entry.manager.wm.PresentWindows(windowIds)
 	}
+	return nil
 }
 
-func (entry *AppEntry) NewInstance(timestamp uint32) {
+func (entry *AppEntry) NewInstance(timestamp uint32) *dbus.Error {
 	entry.launchApp(timestamp)
+	return nil
 }
 
-func (entry *AppEntry) Check() {
+func (entry *AppEntry) Check() *dbus.Error {
 	for _, winInfo := range entry.windows {
-		entry.dockManager.attachOrDetachWindow(winInfo)
+		entry.manager.attachOrDetachWindow(winInfo)
 	}
+	return nil
 }
 
-func (entry *AppEntry) ForceQuit() {
+func (entry *AppEntry) ForceQuit() *dbus.Error {
 	for _, winInfo := range entry.windows {
 		killClient(winInfo.window)
 	}
+	return nil
 }

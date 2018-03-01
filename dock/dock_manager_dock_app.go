@@ -24,9 +24,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	dutils "pkg.deepin.io/lib/utils"
 	"strings"
 	"text/template"
+
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const dockedItemTemplate string = `[Desktop Entry]
@@ -128,11 +129,11 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) (string, error) {
 	return file, nil
 }
 
-func (m *DockManager) getDockedAppEntryByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
-	return m.Entries.FilterDocked().GetByDesktopFilePath(desktopFilePath)
+func (m *Manager) getDockedAppEntryByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
+	return getByDesktopFilePath(m.Entries.FilterDocked(), desktopFilePath)
 }
 
-func (m *DockManager) saveDockedApps() {
+func (m *Manager) saveDockedApps() {
 	var list []string
 	for _, entry := range m.Entries.FilterDocked() {
 		path := entry.appInfo.GetFileName()
@@ -159,9 +160,9 @@ func needScratchDesktop(appInfo *AppInfo) bool {
 	return true
 }
 
-func (m *DockManager) dockEntry(entry *AppEntry) bool {
-	entry.dockMutex.Lock()
-	defer entry.dockMutex.Unlock()
+func (m *Manager) dockEntry(entry *AppEntry) bool {
+	entry.PropsMu.Lock()
+	defer entry.PropsMu.Unlock()
 
 	if entry.IsDocked {
 		logger.Warningf("dockEntry failed: entry %v is docked", entry.Id)
@@ -181,7 +182,7 @@ func (m *DockManager) dockEntry(entry *AppEntry) bool {
 		}
 	}
 
-	entry.setIsDocked(true)
+	entry.setPropIsDocked(true)
 	entry.updateMenu()
 	m.saveDockedApps()
 	return true
@@ -192,9 +193,9 @@ func isFileInDir(file, dir string) bool {
 	return fileDir == dir
 }
 
-func (m *DockManager) undockEntry(entry *AppEntry) {
-	entry.dockMutex.Lock()
-	defer entry.dockMutex.Unlock()
+func (m *Manager) undockEntry(entry *AppEntry) {
+	entry.PropsMu.Lock()
+	defer entry.PropsMu.Unlock()
 
 	if !entry.IsDocked {
 		logger.Warningf("undockEntry failed: entry %v is not docked", entry.Id)
@@ -231,7 +232,7 @@ func (m *DockManager) undockEntry(entry *AppEntry) {
 			}
 		}
 		entry.updateIcon()
-		entry.setIsDocked(false)
+		entry.setPropIsDocked(false)
 		entry.updateName()
 		entry.updateMenu()
 	}

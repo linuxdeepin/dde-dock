@@ -32,9 +32,11 @@ type Daemon struct {
 	manager *TrayManager
 }
 
+const moduleName = "trayicon"
+
 func NewDaemon(logger *log.Logger) *Daemon {
 	daemon := new(Daemon)
-	daemon.ModuleBase = loader.NewModuleBase("trayicon", daemon, logger)
+	daemon.ModuleBase = loader.NewModuleBase(moduleName, daemon, logger)
 	return daemon
 }
 
@@ -43,54 +45,47 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Name() string {
-	return "trayicon"
+	return moduleName
 }
 
 func (d *Daemon) Start() error {
-	logger.BeginTracing()
-
 	var err error
 	// init x conn
 	XConn, err = x.NewConn()
 	if err != nil {
-		d.startFailed(err)
 		return err
 	}
 
 	ewmhConn, err = ewmh.NewConn(XConn)
 	if err != nil {
-		d.startFailed(err)
 		return err
 	}
 
 	icccmConn, err = icccm.NewConn(XConn)
 	if err != nil {
-		d.startFailed(err)
 		return err
 	}
 
 	initX()
-	d.manager = NewTrayManager()
+	service := loader.GetService()
+	d.manager = NewTrayManager(service)
+
+	err = service.Export(d.manager)
+	if err != nil {
+		return err
+	}
+
+	d.manager.sendClientMsgMANAGER()
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+	service.Emit(d.manager, "Inited")
 
 	return nil
 }
 
 func (d *Daemon) Stop() error {
-	if XConn != nil {
-		XConn.Close()
-		XConn = nil
-	}
-
-	if d.manager != nil {
-		d.manager.destroy()
-		d.manager = nil
-	}
-
-	logger.EndTracing()
 	return nil
-}
-
-func (d *Daemon) startFailed(args ...interface{}) {
-	logger.Error(args...)
-	d.Stop()
 }

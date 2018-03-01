@@ -27,48 +27,48 @@ import (
 	"sync/atomic"
 
 	"pkg.deepin.io/dde/api/soundutils"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
 )
 
 const (
-	dbusDest           = "com.deepin.dde.daemon.Launcher"
+	dbusServiceName    = "com.deepin.dde.daemon.Launcher"
 	dbusObjPath        = "/com/deepin/dde/daemon/Launcher"
-	dbusIFC            = dbusDest
+	dbusInterface      = dbusServiceName
 	desktopMainSection = "Desktop Entry"
 )
 
-var errorInvalidID = errors.New("Invalid ID")
+var errorInvalidID = errors.New("invalid ID")
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusObjPath,
-		Interface:  dbusIFC,
+func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
+	return dbusutil.ExportInfo{
+		Path:      dbusObjPath,
+		Interface: dbusInterface,
 	}
 }
 
-func (m *Manager) GetAllItemInfos() []ItemInfo {
+func (m *Manager) GetAllItemInfos() ([]ItemInfo, *dbus.Error) {
 	list := make([]ItemInfo, 0, len(m.items))
 	for _, item := range m.items {
 		list = append(list, item.newItemInfo())
 	}
 	logger.Debug("GetAllItemInfos list length:", len(list))
-	return list
+	return list, nil
 }
 
-func (m *Manager) GetItemInfo(id string) (ItemInfo, error) {
+func (m *Manager) GetItemInfo(id string) (ItemInfo, *dbus.Error) {
 	item := m.getItemById(id)
 	if item == nil {
-		return ItemInfo{}, errorInvalidID
+		return ItemInfo{}, dbusutil.ToError(errorInvalidID)
 	}
 	return item.newItemInfo(), nil
 }
 
-func (m *Manager) GetAllNewInstalledApps() ([]string, error) {
+func (m *Manager) GetAllNewInstalledApps() ([]string, *dbus.Error) {
 	newApps, err := m.launchedRecorder.GetNew()
 	if err != nil {
-		return nil, err
+		return nil, dbusutil.ToError(err)
 	}
 	var ids []string
 	// newApps type is map[string][]string
@@ -83,10 +83,10 @@ func (m *Manager) GetAllNewInstalledApps() ([]string, error) {
 	return ids, nil
 }
 
-func (m *Manager) IsItemOnDesktop(id string) (bool, error) {
+func (m *Manager) IsItemOnDesktop(id string) (bool, *dbus.Error) {
 	item := m.getItemById(id)
 	if item == nil {
-		return false, errorInvalidID
+		return false, dbusutil.ToError(errorInvalidID)
 	}
 	file := appInDesktop(m.getAppIdByFilePath(item.Path))
 	if _, err := os.Stat(file); err != nil {
@@ -94,7 +94,7 @@ func (m *Manager) IsItemOnDesktop(id string) (bool, error) {
 			// not exist
 			return false, nil
 		} else {
-			return false, err
+			return false, dbusutil.ToError(err)
 		}
 	} else {
 		// exist
@@ -102,44 +102,44 @@ func (m *Manager) IsItemOnDesktop(id string) (bool, error) {
 	}
 }
 
-func (m *Manager) RequestRemoveFromDesktop(id string) (bool, error) {
+func (m *Manager) RequestRemoveFromDesktop(id string) (bool, *dbus.Error) {
 	item := m.getItemById(id)
 	if item == nil {
-		return false, errorInvalidID
+		return false, dbusutil.ToError(errorInvalidID)
 	}
 	file := appInDesktop(m.getAppIdByFilePath(item.Path))
 	err := os.Remove(file)
-	return err == nil, err
+	return err == nil, dbusutil.ToError(err)
 }
 
-func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
+func (m *Manager) RequestSendToDesktop(id string) (bool, *dbus.Error) {
 	item := m.getItemById(id)
 	if item == nil {
-		return false, errorInvalidID
+		return false, dbusutil.ToError(errorInvalidID)
 	}
 	dest := appInDesktop(m.getAppIdByFilePath(item.Path))
 	_, err := os.Stat(dest)
 	if err != nil {
 		if !os.IsNotExist(err) {
-			return false, err
+			return false, dbusutil.ToError(err)
 		}
 		// dest file not exist
 	} else {
 		// dest file exist
-		return false, os.ErrExist
+		return false, dbusutil.ToError(os.ErrExist)
 	}
 
 	kf := keyfile.NewKeyFile()
 	if err := kf.LoadFromFile(item.Path); err != nil {
 		logger.Warning(err)
-		return false, err
+		return false, dbusutil.ToError(err)
 	}
-	kf.SetString(desktopMainSection, "X-Deepin-CreatedBy", dbusDest)
+	kf.SetString(desktopMainSection, "X-Deepin-CreatedBy", dbusServiceName)
 	kf.SetString(desktopMainSection, "X-Deepin-AppID", id)
 	// Desktop files in user desktop direcotry do not require executable permission
 	if err := kf.SaveToFile(dest); err != nil {
 		logger.Warning("save new desktop file failed:", err)
-		return false, err
+		return false, dbusutil.ToError(err)
 	}
 	// success
 	go soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "")
@@ -147,25 +147,26 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
 }
 
 // MarkLaunched 废弃
-func (m *Manager) MarkLaunched(id string) error {
+func (m *Manager) MarkLaunched(id string) *dbus.Error {
 	return nil
 }
 
 // purge is useless
-func (m *Manager) RequestUninstall(id string, purge bool) {
+func (m *Manager) RequestUninstall(id string, purge bool) *dbus.Error {
 	go func() {
 		logger.Infof("RequestUninstall id: %q", id)
 		err := m.uninstall(id)
 		if err != nil {
 			logger.Warningf("uninstall %q failed: %v", id, err)
-			dbus.Emit(m, "UninstallFailed", id, err.Error())
+			m.service.Emit(m, "UninstallFailed", id, err.Error())
 			return
 		}
 
 		m.removeAutostart(id)
 		logger.Infof("uninstall %q success", id)
-		dbus.Emit(m, "UninstallSuccess", id)
+		m.service.Emit(m, "UninstallSuccess", id)
 	}()
+	return nil
 }
 
 func (m *Manager) isItemsChanged() bool {
@@ -173,7 +174,7 @@ func (m *Manager) isItemsChanged() bool {
 	return old > 0
 }
 
-func (m *Manager) Search(key string) {
+func (m *Manager) Search(key string) *dbus.Error {
 	key = strings.ToLower(key)
 	logger.Debug("Search key:", key)
 
@@ -196,20 +197,21 @@ func (m *Manager) Search(key string) {
 	m.currentRunes = keyRunes
 
 	m.searchMu.Unlock()
+	return nil
 }
 
-func (m *Manager) GetUseProxy(id string) (bool, error) {
+func (m *Manager) GetUseProxy(id string) (bool, *dbus.Error) {
 	return m.getUseFeature(gsKeyAppsUseProxy, id)
 }
 
-func (m *Manager) SetUseProxy(id string, val bool) error {
+func (m *Manager) SetUseProxy(id string, val bool) *dbus.Error {
 	return m.setUseFeature(gsKeyAppsUseProxy, id, val)
 }
 
-func (m *Manager) GetDisableScaling(id string) (bool, error) {
+func (m *Manager) GetDisableScaling(id string) (bool, *dbus.Error) {
 	return m.getUseFeature(gsKeyAppsDisableScaling, id)
 }
 
-func (m *Manager) SetDisableScaling(id string, val bool) error {
+func (m *Manager) SetDisableScaling(id string, val bool) *dbus.Error {
 	return m.setUseFeature(gsKeyAppsDisableScaling, id, val)
 }

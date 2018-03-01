@@ -31,7 +31,7 @@ func Test(t *testing.T) {
 }
 
 func init() {
-	C.Suite(newManager())
+	C.Suite(newManager(nil))
 }
 
 func (m *Manager) TestUtils(c *C.C) {

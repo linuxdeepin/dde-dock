@@ -21,25 +21,26 @@ package dock
 
 import (
 	"github.com/BurntSushi/xgb/xproto"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 const (
-	bamfDBusDest          = "org.ayatana.bamf"
+	bamfDBusServiceName   = "org.ayatana.bamf"
 	bamfDBusObjPathPrefix = "/org/ayatana/bamf"
 	bamfMatcherObjPath    = bamfDBusObjPathPrefix + "/matcher"
-	bamfMatcherIfc        = bamfDBusDest + ".matcher"
-	bamfAppIfc            = bamfDBusDest + ".application"
+	bamfMatcherInterface  = bamfDBusServiceName + ".matcher"
+	bamfAppInterface      = bamfDBusServiceName + ".application"
 )
 
-func _getDestkopFromWindowByBamf(xid uint32) (string, error) {
+func getDesktopFromWindowByBamf(win xproto.Window) (string, error) {
 	bus, err := dbus.SessionBus()
 	if err != nil {
 		return "", err
 	}
-	matcher := bus.Object(bamfDBusDest, bamfMatcherObjPath)
+	matcher := bus.Object(bamfDBusServiceName, bamfMatcherObjPath)
 	var applicationObjPathStr string
-	err = matcher.Call(bamfMatcherIfc+".ApplicationForXid", 0, xid).Store(&applicationObjPathStr)
+	err = matcher.Call(bamfMatcherInterface+".ApplicationForXid", 0,
+		uint32(win)).Store(&applicationObjPathStr)
 	if err != nil {
 		return "", err
 	}
@@ -47,20 +48,11 @@ func _getDestkopFromWindowByBamf(xid uint32) (string, error) {
 	if !applicationObjPath.IsValid() {
 		return "", nil
 	}
-	application := bus.Object(bamfDBusDest, applicationObjPath)
+	application := bus.Object(bamfDBusServiceName, applicationObjPath)
 	var desktopFile string
-	err = application.Call(bamfAppIfc+".DesktopFile", 0).Store(&desktopFile)
+	err = application.Call(bamfAppInterface+".DesktopFile", 0).Store(&desktopFile)
 	if err != nil {
 		return "", err
 	}
 	return desktopFile, nil
-}
-
-func getDesktopFromWindowByBamf(win xproto.Window) string {
-	desktopFile, err := _getDestkopFromWindowByBamf(uint32(win))
-	if err != nil {
-		logger.Warning(err)
-		return ""
-	}
-	return desktopFile
 }
