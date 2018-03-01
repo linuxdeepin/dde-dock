@@ -47,14 +47,12 @@ func (m *Manager) handleBeforeSuspend() {
 		m.setDPMSModeOn()
 		m.lockWaitShow(4 * time.Second)
 	}
-	m.setDPMSModeOff()
 }
 
 func (m *Manager) handleWakeup() {
 	logger.Debug("wakeup")
 	m.helper.Power.RefreshBatteries()
 	playSound(soundutils.EventWakeup)
-	m.setDPMSModeOn()
 }
 
 func (m *Manager) initBatteryDisplayUpdateHandler() {
