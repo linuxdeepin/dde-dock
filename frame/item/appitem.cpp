@@ -610,9 +610,8 @@ void AppItem::playSwingEffect()
     tl->setLoopCount(1);
     tl->setEasingCurve(QEasingCurve::Linear);
     tl->setStartFrame(0);
-    tl->start();
 
-    QGraphicsItemAnimation *ani = new QGraphicsItemAnimation;
+    QGraphicsItemAnimation *ani = new QGraphicsItemAnimation(tl);
     ani->setItem(item);
     ani->setTimeLine(tl);
 
@@ -627,11 +626,10 @@ void AppItem::playSwingEffect()
     }
 
     connect(tl, &QTimeLine::finished, tl, &QTimeLine::deleteLater);
-    connect(tl, &QTimeLine::finished, ani, &QGraphicsItemAnimation::deleteLater);
-    connect(tl, &QTimeLine::finished, m_itemScene, &QGraphicsScene::clear);
     connect(tl, &QTimeLine::finished, m_swingEffectView, &QGraphicsView::hide);
     connect(tl, &QTimeLine::finished, this, &AppItem::checkAttentionEffect);
 
+    tl->start();
     m_swingEffectView->setVisible(true);
 }
 
