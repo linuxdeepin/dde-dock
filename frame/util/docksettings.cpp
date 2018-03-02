@@ -355,7 +355,6 @@ void DockSettings::onDisplayModeChanged()
 
     calculateWindowConfig();
 
-    emit dataChanged();
     emit displayModeChanegd();
 }
 
