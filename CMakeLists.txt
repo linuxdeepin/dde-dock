@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.7)
 
 set(VERSION 4.0)
 
+project(dde-dock)
+
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -27,7 +29,7 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
-# qm files
+## qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
         DESTINATION share/dde-dock/translations)
@@ -35,3 +37,7 @@ install(FILES ${QM_FILES}
 ## dev files
 install (FILES ${INTERFACES}
          DESTINATION include/dde-dock)
+
+## services files
+install(FILES frame/com.deepin.dde.Dock.service
+     DESTINATION /usr/share/dbus-1/services)

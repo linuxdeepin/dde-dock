@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(dde-dock
-        VERSION ${VERSION})
-
 set(BIN_NAME dde-dock)
 
 configure_file(environments.h.in environments.h @ONLY)
