@@ -37,7 +37,11 @@ import (
 	"pkg.deepin.io/lib/log"
 )
 
-type Daemon struct{}
+type Daemon struct {
+	methods *struct {
+		ScalePlymouth func() `in:"scale"`
+	}
+}
 
 const (
 	dbusServiceName = "com.deepin.daemon.Daemon"

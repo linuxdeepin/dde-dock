@@ -22,16 +22,19 @@ package main
 import (
 	"fmt"
 	"os/exec"
-	"pkg.deepin.io/lib/keyfile"
 	"strings"
 	"sync"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/keyfile"
 )
 
 const plymouthConfig = "/etc/plymouth/plymouthd.conf"
 
 var plymouthLocker sync.Mutex
 
-func (*Daemon) ScalePlymouth(scale uint32) error {
+func (*Daemon) ScalePlymouth(scale uint32) *dbus.Error {
 	plymouthLocker.Lock()
 	defer plymouthLocker.Unlock()
 	var (
@@ -62,12 +65,12 @@ func (*Daemon) ScalePlymouth(scale uint32) error {
 		}
 		out, err = exec.Command("plymouth-set-default-theme", name).CombinedOutput()
 	default:
-		return fmt.Errorf("Invalid scale value: %d", scale)
+		return dbusutil.ToError(fmt.Errorf("invalid scale value: %d", scale))
 	}
 
 	if err != nil {
 		logger.Error("Failed to set plymouth theme:", string(out), err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	kernel, _ := exec.Command("uname", "-r").CombinedOutput()
@@ -76,7 +79,7 @@ func (*Daemon) ScalePlymouth(scale uint32) error {
 		"-u", "-k", string(kernel[:len(kernel)-1])).CombinedOutput()
 	if err != nil {
 		logger.Error("Failed to update initramfs:", string(out), err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	logger.Debug("Plymouth update result:", string(out))
 	return nil
@@ -96,7 +99,7 @@ var _ssd = -1
 
 func isSSD() bool {
 	if _ssd != -1 {
-		return (_ssd == 1)
+		return _ssd == 1
 	}
 
 	outputs, err := exec.Command("/bin/lsblk",
@@ -121,5 +124,5 @@ func isSSD() bool {
 		}
 		break
 	}
-	return (_ssd == 1)
+	return _ssd == 1
 }
