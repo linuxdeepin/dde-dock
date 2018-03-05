@@ -25,7 +25,6 @@
 #include <QString>
 #include <QDataStream>
 #include <QDebug>
-#include <QtDBus>
 
 class DiskInfo
 {

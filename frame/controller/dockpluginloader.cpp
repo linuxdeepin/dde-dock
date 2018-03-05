@@ -33,7 +33,7 @@ DockPluginLoader::DockPluginLoader(QObject *parent)
 void DockPluginLoader::run()
 {
 #ifdef QT_DEBUG
-    const QDir pluginsDir("plugins");
+    const QDir pluginsDir("../plugins");
 #else
     const QDir pluginsDir("../lib/dde-dock/plugins");
 #endif
