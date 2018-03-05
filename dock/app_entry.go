@@ -64,15 +64,17 @@ type AppEntry struct {
 	}
 }
 
-func newAppEntry(dockManager *Manager, id string, appInfo *AppInfo) *AppEntry {
+func newAppEntry(dockManager *Manager, innerId string, appInfo *AppInfo) *AppEntry {
 	entry := &AppEntry{
 		manager: dockManager,
 		service: dockManager.service,
 		Id:      dockManager.allocEntryId(),
-		innerId: id,
+		innerId: innerId,
 		windows: make(map[xproto.Window]*WindowInfo),
 	}
 	entry.setAppInfo(appInfo)
+	entry.Name = entry.getName()
+	entry.Icon = entry.getIcon()
 	return entry
 }
 
@@ -89,12 +91,10 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 	} else {
 		entry.winIconPreferred = false
 		entry.setPropDesktopFile(newAppInfo.GetFileName())
-		if entry.manager != nil {
-			id := newAppInfo.GetId()
-			if strSliceContains(entry.manager.getWinIconPreferredApps(), id) {
-				entry.winIconPreferred = true
-				return
-			}
+		id := newAppInfo.GetId()
+		if strSliceContains(entry.manager.getWinIconPreferredApps(), id) {
+			entry.winIconPreferred = true
+			return
 		}
 
 		icon := newAppInfo.GetIcon()
@@ -114,6 +114,14 @@ func (entry *AppEntry) getWindowIds() []uint32 {
 		list = append(list, uint32(winInfo.window))
 	}
 	return list
+}
+
+func (entry *AppEntry) getWindowInfoSlice() []*WindowInfo {
+	winInfoSlice := make([]*WindowInfo, 0, len(entry.windows))
+	for _, winInfo := range entry.windows {
+		winInfoSlice = append(winInfoSlice, winInfo)
+	}
+	return winInfoSlice
 }
 
 func (entry *AppEntry) getExec(oneLine bool) string {
@@ -179,58 +187,71 @@ func (entry *AppEntry) findNextLeader() xproto.Window {
 	return winSlice[nextIndex]
 }
 
-func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
+func (entry *AppEntry) attachWindow(winInfo *WindowInfo) bool {
 	win := winInfo.window
 	logger.Debugf("attach win %v to entry", win)
 
 	winInfo.entry = entry
+
+	entry.PropsMu.Lock()
+	defer entry.PropsMu.Unlock()
+
 	if _, ok := entry.windows[win]; ok {
 		logger.Debugf("win %v is already attach to entry", win)
-		return
+		return false
 	}
 
 	entry.windows[win] = winInfo
 	entry.updateWindowInfos()
 	entry.updateIsActive()
 
-	if (entry.manager != nil && win == entry.manager.getActiveWindow()) ||
-		entry.current == nil {
+	if entry.current == nil {
+		// from no window to has window
 		entry.setCurrentWindowInfo(winInfo)
-		entry.updateIcon()
-		winInfo.updateWmName()
 	}
+	entry.updateIcon()
+	entry.updateMenu()
+	return true
 }
 
-// return is detached
+// return need remove?
 func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
+	winInfo.entry = nil
 	win := winInfo.window
 	logger.Debug("detach window ", win)
-	if _, ok := entry.windows[win]; ok {
-		delete(entry.windows, win)
-		if len(entry.windows) == 0 {
-			return true
-		}
-		for _, winInfo := range entry.windows {
-			// select first
-			entry.setCurrentWindowInfo(winInfo)
-			break
-		}
+
+	entry.PropsMu.Lock()
+	defer entry.PropsMu.Unlock()
+
+	delete(entry.windows, win)
+	if len(entry.windows) == 0 && !entry.IsDocked {
+		// no window and not docked
 		return true
 	}
-	logger.Debug("detachWindow failed: window not attach with entry")
+
+	for _, winInfo := range entry.windows {
+		// select first
+		entry.setCurrentWindowInfo(winInfo)
+		break
+	}
+	entry.updateWindowInfos()
+	entry.updateIcon()
+	entry.updateIsActive()
+	entry.updateMenu()
 	return false
 }
 
-func (entry *AppEntry) updateName() {
-	var name string
+func (entry *AppEntry) getName() (name string) {
 	if entry.appInfo != nil {
 		name = entry.appInfo.GetDisplayName()
 	} else if entry.current != nil {
 		name = entry.current.getDisplayName()
-	} else {
-		logger.Debug("updateName failed")
-		return
 	}
+	return
+}
+
+func (entry *AppEntry) updateName() {
+	name := entry.getName()
 	entry.setPropName(name)
 }
 
@@ -285,9 +306,6 @@ func (e *AppEntry) updateWindowInfos() {
 }
 
 func (e *AppEntry) updateIsActive() {
-	if e.manager == nil {
-		return
-	}
 	_, ok := e.windows[e.manager.getActiveWindow()]
 	e.setPropIsActive(ok)
 }

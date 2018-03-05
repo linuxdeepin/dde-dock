@@ -24,12 +24,16 @@ import (
 	"sort"
 
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) allocEntryId() string {
+	m.PropsMu.Lock()
+
 	num := m.entryCount
 	m.entryCount++
+
+	m.PropsMu.Unlock()
+
 	return fmt.Sprintf("e%dT%x", num, getCurrentTimestamp())
 }
 
@@ -37,15 +41,28 @@ func (m *Manager) markAppLaunched(appInfo *AppInfo) {
 	if appInfo == nil || m.launchedRecorder == nil {
 		return
 	}
-	path := appInfo.GetFileName()
-	logger.Debug("markAppLaunched", path)
-	m.launchedRecorder.MarkLaunched(path)
+	file := appInfo.GetFileName()
+	logger.Debug("markAppLaunched", file)
+
+	go func() {
+		err := m.launchedRecorder.MarkLaunched(file)
+		if err != nil {
+			logger.Debug(err)
+		}
+	}()
 }
 
 func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 	win := winInfo.window
-	showOnDock := m.isWindowRegistered(win) && m.clientList.Contains(win) &&
-		isGoodWindow(win) && winInfo.canShowOnDock()
+
+	isReg := m.isWindowRegistered(win)
+	clientListContains := m.clientList.Contains(win)
+	winInfoCanShow := winInfo.canShowOnDock()
+	isGood := isGoodWindow(win)
+	logger.Debugf("isReg: %v, client list contains: %v, winInfo can show: %v, isGood: %v",
+		isReg, clientListContains, winInfoCanShow, isGood)
+
+	showOnDock := isReg && clientListContains && isGood && winInfoCanShow
 	logger.Debugf("win %v showOnDock? %v", win, showOnDock)
 	entry := winInfo.entry
 	if entry != nil {
@@ -56,7 +73,7 @@ func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 
 		if winInfo.entryInnerId == "" {
 			winInfo.entryInnerId, winInfo.appInfo = m.identifyWindow(winInfo)
-			go m.markAppLaunched(winInfo.appInfo)
+			m.markAppLaunched(winInfo.appInfo)
 		} else {
 			logger.Debugf("win %v identified", win)
 		}
@@ -89,25 +106,13 @@ func (m *Manager) initDockedApps() {
 	m.saveDockedApps()
 }
 
-func (m *Manager) installAppEntry(e *AppEntry) error {
-	// install entry on session bus
+func (m *Manager) exportAppEntry(e *AppEntry) error {
 	err := m.service.Export(e)
 	if err != nil {
-		logger.Warning("Install AppEntry to dbus failed:", err)
+		logger.Warning("failed to export AppEntry:", err)
 		return err
 	}
 	return nil
-}
-
-func (m *Manager) emitEntryAdded(e *AppEntry) {
-	entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + e.Id)
-	index := m.Entries.IndexOf(e)
-	logger.Debug("entry added", entryObjPath, index)
-	if index >= 0 {
-		m.service.Emit(m, "EntryAdded", entryObjPath, int32(index))
-	} else {
-		logger.Warningf("emitEntryAdded index %d < 0", index)
-	}
 }
 
 func (m *Manager) appendDockedApp(app string) {
@@ -118,22 +123,12 @@ func (m *Manager) appendDockedApp(app string) {
 		return
 	}
 
-	entry := m.Entries.GetFirstByInnerId(appInfo.innerId)
-	if entry != nil {
-		// existed
-		entry.setPropIsDocked(true)
-		entry.updateMenu()
-	} else {
-		logger.Debug("entry not existed, newAppEntry")
-		entry = newAppEntry(m, appInfo.innerId, appInfo)
-		entry.updateName()
-		entry.updateIcon()
-		entry.setPropIsDocked(true)
-		entry.updateMenu()
-		err := m.installAppEntry(entry)
-		if err == nil {
-			m.Entries.Insert(entry, -1)
-		}
+	entry := newAppEntry(m, appInfo.innerId, appInfo)
+	entry.setPropIsDocked(true)
+	entry.updateMenu()
+	err := m.exportAppEntry(entry)
+	if err == nil {
+		m.Entries.Append(entry)
 	}
 }
 
@@ -143,44 +138,30 @@ func (m *Manager) removeAppEntry(e *AppEntry) {
 }
 
 func (m *Manager) attachWindow(winInfo *WindowInfo) {
-	entry := m.Entries.GetFirstByInnerId(winInfo.entryInnerId)
+	entry := m.Entries.GetByInnerId(winInfo.entryInnerId)
 
 	if entry != nil {
 		// existed
 		entry.attachWindow(winInfo)
-		entry.updateMenu()
 	} else {
 		entry = newAppEntry(m, winInfo.entryInnerId, winInfo.appInfo)
-		entry.updateName()
-		entry.updateIcon()
-		entry.attachWindow(winInfo)
-		entry.updateMenu()
-		err := m.installAppEntry(entry)
-		if err == nil {
-			m.Entries.Insert(entry, -1)
+		ok := entry.attachWindow(winInfo)
+		if ok {
+			err := m.exportAppEntry(entry)
+			if err == nil {
+				m.Entries.Append(entry)
+			}
 		}
 	}
 }
 
 func (m *Manager) detachWindow(winInfo *WindowInfo) {
-	entry := winInfo.entry
+	entry := m.Entries.getByWindowId(winInfo.window)
 	if entry == nil {
 		return
 	}
-	winInfo.entry = nil
-	entry.PropsMu.Lock()
-	defer entry.PropsMu.Unlock()
-
-	detached := entry.detachWindow(winInfo)
-	if !detached {
-		return
-	}
-	entry.updateWindowInfos()
-	if !entry.hasWindow() && !entry.IsDocked {
+	needRemove := entry.detachWindow(winInfo)
+	if needRemove {
 		m.removeAppEntry(entry)
-		return
 	}
-	entry.updateIcon()
-	entry.updateMenu()
-	entry.updateIsActive()
 }

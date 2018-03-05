@@ -27,6 +27,7 @@ import (
 
 	"sync"
 
+	"github.com/BurntSushi/xgb/xproto"
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -60,7 +61,7 @@ func (entries *AppEntries) GetType() reflect.Type {
 	return reflect.TypeOf([]dbus.ObjectPath{})
 }
 
-func (entries *AppEntries) GetFirstByInnerId(id string) *AppEntry {
+func (entries *AppEntries) GetByInnerId(id string) *AppEntry {
 	entries.mu.RLock()
 	for _, entry := range entries.items {
 		if entry.innerId == id {
@@ -70,6 +71,10 @@ func (entries *AppEntries) GetFirstByInnerId(id string) *AppEntry {
 	}
 	entries.mu.RUnlock()
 	return nil
+}
+
+func (entries *AppEntries) Append(entry *AppEntry) {
+	entries.Insert(entry, -1)
 }
 
 func (entries *AppEntries) Insert(entry *AppEntry, index int) {
@@ -166,6 +171,23 @@ func (entries AppEntries) GetByWindowPid(pid uint) *AppEntry {
 	}
 
 	entries.mu.RUnlock()
+	return nil
+}
+
+func (entries AppEntries) getByWindowId(winId xproto.Window) *AppEntry {
+	entries.mu.RLock()
+	for _, entry := range entries.items {
+		entry.PropsMu.RLock()
+		_, ok := entry.windows[winId]
+		entry.PropsMu.RUnlock()
+		if ok {
+			entries.mu.RUnlock()
+			return entry
+		}
+	}
+
+	entries.mu.RUnlock()
+	// not found
 	return nil
 }
 

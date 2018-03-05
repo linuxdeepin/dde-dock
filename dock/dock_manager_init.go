@@ -163,8 +163,6 @@ func (m *Manager) init() error {
 	if err != nil {
 		logger.Warning("loadWindowPatterns failed:", err)
 	}
-	m.registerIdentifyWindowFuncs()
-	m.initEntries()
 
 	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
 	if err != nil {
@@ -190,6 +188,9 @@ func (m *Manager) init() error {
 	if err != nil {
 		return err
 	}
+
+	m.registerIdentifyWindowFuncs()
+	m.initEntries()
 
 	err = m.service.Export(m)
 	if err != nil {

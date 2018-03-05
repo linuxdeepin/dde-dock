@@ -43,7 +43,11 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 		m.updateHideState(true)
 	}
 
-	if !entry.hasWindow() {
+	entry.PropsMu.RLock()
+	hasWindow := entry.hasWindow()
+	entry.PropsMu.RUnlock()
+
+	if !hasWindow {
 		entry.launchApp(timestamp)
 		return nil
 	}
@@ -71,7 +75,7 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 			activateWindow(win)
 		case icccm.StateNormal:
 			if len(entry.windows) == 1 {
-				iconifyWindow(win)
+				minimizeWindow(XU, win)
 			} else if entry.manager.getActiveWindow() == win {
 				nextWin := entry.findNextLeader()
 				activateWindow(nextWin)
@@ -85,19 +89,25 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 
 func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) *dbus.Error {
 	logger.Debugf("HandleMenuItem id: %q timestamp: %v", id, timestamp)
-	if e.coreMenu != nil {
-		err := e.coreMenu.HandleAction(id, timestamp)
+
+	e.PropsMu.RLock()
+	menu := e.coreMenu
+	e.PropsMu.RUnlock()
+
+	if menu != nil {
+		err := menu.HandleAction(id, timestamp)
 		return dbusutil.ToError(err)
 	}
 	logger.Warning("HandleMenuItem failed: entry.coreMenu is nil")
 	return nil
 }
 
-func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) *dbus.Error {
+func (e *AppEntry) HandleDragDrop(timestamp uint32, files []string) *dbus.Error {
 	logger.Debugf("handle drag drop files: %v, timestamp: %v", files, timestamp)
-	ai := entry.appInfo
+
+	ai := e.appInfo
 	if ai != nil {
-		entry.manager.launch(ai.GetFileName(), timestamp, files)
+		e.manager.launch(ai.GetFileName(), timestamp, files)
 	} else {
 		logger.Warning("not supported")
 	}
@@ -106,26 +116,21 @@ func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) *dbus.Er
 
 // RequestDock 驻留
 func (entry *AppEntry) RequestDock() *dbus.Error {
-	if entry.manager != nil {
-		entry.manager.dockEntry(entry)
-	}
+	entry.manager.dockEntry(entry)
 	return nil
 }
 
 // RequestUndock 取消驻留
 func (entry *AppEntry) RequestUndock() *dbus.Error {
-	if entry.manager != nil {
-		entry.manager.undockEntry(entry)
-	}
+	entry.manager.undockEntry(entry)
 	return nil
 }
 
 func (entry *AppEntry) PresentWindows() *dbus.Error {
-	if entry.manager != nil {
-		windowIds := entry.getWindowIds()
-		if len(windowIds) == 0 {
-			return nil
-		}
+	entry.PropsMu.RLock()
+	windowIds := entry.getWindowIds()
+	entry.PropsMu.RUnlock()
+	if len(windowIds) > 0 {
 		entry.manager.wm.PresentWindows(windowIds)
 	}
 	return nil
@@ -137,14 +142,22 @@ func (entry *AppEntry) NewInstance(timestamp uint32) *dbus.Error {
 }
 
 func (entry *AppEntry) Check() *dbus.Error {
-	for _, winInfo := range entry.windows {
+	entry.PropsMu.RLock()
+	winInfoSlice := entry.getWindowInfoSlice()
+	entry.PropsMu.RUnlock()
+
+	for _, winInfo := range winInfoSlice {
 		entry.manager.attachOrDetachWindow(winInfo)
 	}
 	return nil
 }
 
 func (entry *AppEntry) ForceQuit() *dbus.Error {
-	for _, winInfo := range entry.windows {
+	entry.PropsMu.RLock()
+	winInfoSlice := entry.getWindowInfoSlice()
+	entry.PropsMu.RUnlock()
+
+	for _, winInfo := range winInfoSlice {
 		killClient(winInfo.window)
 	}
 	return nil

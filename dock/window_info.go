@@ -61,7 +61,6 @@ type WindowInfo struct {
 	wmAllowedActions  []string
 	hasXEmbedInfo     bool
 	hasWmTransientFor bool
-	mapState          byte
 	wmClass           *icccm.WmClass
 	wmName            string
 
@@ -80,8 +79,7 @@ type WindowInfo struct {
 
 func NewWindowInfo(win xproto.Window) *WindowInfo {
 	winInfo := &WindowInfo{
-		window:   win,
-		mapState: xproto.MapStateUnmapped,
+		window: win,
 	}
 	return winInfo
 }
@@ -103,10 +101,6 @@ func (winInfo *WindowInfo) updateWmAllowedActions() {
 		logger.Debug(err)
 	}
 }
-func (winInfo *WindowInfo) isActionMinimizeAllowed() bool {
-	logger.Debugf("wmAllowedActions: %#v", winInfo.wmAllowedActions)
-	return strSliceContains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
-}
 
 // wm state
 func (winInfo *WindowInfo) updateWmState() {
@@ -115,42 +109,6 @@ func (winInfo *WindowInfo) updateWmState() {
 	if err != nil {
 		logger.Debug(err)
 	}
-	entry := winInfo.entry
-	if entry != nil {
-		entry.updateWindowInfos()
-	}
-}
-
-func (winInfo *WindowInfo) hasWmStateDemandsAttention() bool {
-	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_DEMANDS_ATTENTION")
-}
-
-func (winInfo *WindowInfo) hasWmStateSkipTaskbar() bool {
-	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
-}
-
-func (winInfo *WindowInfo) hasWmStateModal() bool {
-	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_MODAL")
-}
-
-func (winInfo *WindowInfo) isValidModal() bool {
-	return winInfo.hasWmTransientFor && winInfo.hasWmStateModal()
-}
-
-// map state
-func (winInfo *WindowInfo) updateMapState() {
-	windowAttributes, err := xproto.GetWindowAttributes(XU.Conn(), winInfo.window).Reply()
-	if err != nil {
-		logger.Debug(err)
-		return
-	}
-	winInfo.mapState = windowAttributes.MapState
-	logger.Debug("update map state:", winInfo.mapState)
-}
-
-func (winInfo *WindowInfo) isMapStateViewable() bool {
-	logger.Debugf("mapState: %v", winInfo.mapState)
-	return winInfo.mapState == xproto.MapStateViewable
 }
 
 // wm class
@@ -160,6 +118,50 @@ func (winInfo *WindowInfo) updateWmClass() {
 	if err != nil {
 		logger.Debug(err)
 	}
+}
+
+// wm name
+func (winInfo *WindowInfo) updateWmName() {
+	winInfo.wmName = getWmName(XU, winInfo.window)
+	winInfo.Title = winInfo.getTitle()
+}
+
+func (winInfo *WindowInfo) updateIcon() {
+	winInfo.Icon = getIconFromWindow(XU, winInfo.window)
+}
+
+// XEmbed info
+// 一般 tray icon 会带有 _XEMBED_INFO 属性
+func (winInfo *WindowInfo) updateHasXEmbedInfo() {
+	_, err := xprop.GetProperty(XU, winInfo.window, "_XEMBED_INFO")
+	winInfo.hasXEmbedInfo = err == nil
+}
+
+// WM_TRANSIENT_FOR
+func (winInfo *WindowInfo) updateHasWmTransientFor() {
+	_, err := xprop.GetProperty(XU, winInfo.window, "WM_TRANSIENT_FOR")
+	winInfo.hasWmTransientFor = err == nil
+}
+
+func (winInfo *WindowInfo) isActionMinimizeAllowed() bool {
+	logger.Debugf("wmAllowedActions: %#v", winInfo.wmAllowedActions)
+	return strSliceContains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
+}
+
+func (winInfo *WindowInfo) hasWmStateDemandsAttention() bool {
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_DEMANDS_ATTENTION")
+}
+
+func (winInfo *WindowInfo) hasWmStateSkipTaskBar() bool {
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
+}
+
+func (winInfo *WindowInfo) hasWmStateModal() bool {
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_MODAL")
+}
+
+func (winInfo *WindowInfo) isValidModal() bool {
+	return winInfo.hasWmTransientFor && winInfo.hasWmStateModal()
 }
 
 // 通过 wmClass 判断是否需要隐藏此窗口
@@ -175,34 +177,11 @@ func (winInfo *WindowInfo) isWmClassOk() bool {
 	return true
 }
 
-// xembed info
-// 一般 trayicon 会带有 _XEMBED_INFO 属性
-func (winInfo *WindowInfo) updateHasXEmbedInfo() {
-	_, err := xprop.GetProperty(XU, winInfo.window, "_XEMBED_INFO")
-	winInfo.hasXEmbedInfo = (err == nil)
-}
-
-// WM_TRANSIENT_FOR
-func (winInfo *WindowInfo) updateHasWmTransientFor() {
-	_, err := xprop.GetProperty(XU, winInfo.window, "WM_TRANSIENT_FOR")
-	winInfo.hasWmTransientFor = (err == nil)
-}
-
-// wm name
-func (winInfo *WindowInfo) updateWmName() {
-	winInfo.wmName = getWmName(XU, winInfo.window)
-	winInfo.Title = winInfo.getTitle()
-	entry := winInfo.entry
-	if entry != nil {
-		entry.updateWindowInfos()
-	}
-}
-
 func (winInfo *WindowInfo) getDisplayName() string {
-	return strings.Title(winInfo._getDisplayName())
+	return strings.Title(winInfo.getDisplayName0())
 }
 
-func (winInfo *WindowInfo) _getDisplayName() string {
+func (winInfo *WindowInfo) getDisplayName0() string {
 	win := winInfo.window
 	role := winInfo.wmRole
 	if !utf8.ValidString(role) {
@@ -238,9 +217,9 @@ func (winInfo *WindowInfo) _getDisplayName() string {
 	wmName := winInfo.wmName
 	if wmName != "" {
 		var shortWmName string
-		rindex := strings.LastIndex(wmName, "-")
-		if rindex > 0 {
-			shortWmName = wmName[rindex:]
+		lastIndex := strings.LastIndex(wmName, "-")
+		if lastIndex > 0 {
+			shortWmName = wmName[lastIndex:]
 			if shortWmName != "" && utf8.ValidString(shortWmName) {
 				return shortWmName
 			}
@@ -260,13 +239,6 @@ func (winInfo *WindowInfo) _getDisplayName() string {
 func (winInfo *WindowInfo) getTitle() string {
 	wmName := winInfo.wmName
 	if wmName == "" || !utf8.ValidString(wmName) {
-		if winInfo.entry != nil {
-			appInfo := winInfo.entry.appInfo
-			if appInfo != nil {
-				return appInfo.GetDisplayName()
-			}
-		}
-		// winInfo.entry is nil
 		return winInfo.getDisplayName()
 	}
 	return wmName
@@ -280,7 +252,7 @@ func (winInfo *WindowInfo) getIcon() string {
 	return winInfo.Icon
 }
 
-var skipTaskbarWindowTypes []string = []string{
+var skipTaskBarWindowTypes = []string{
 	"_NET_WM_WINDOW_TYPE_UTILITY",
 	"_NET_WM_WINDOW_TYPE_COMBO",
 	"_NET_WM_WINDOW_TYPE_DESKTOP",
@@ -306,7 +278,7 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 	logger.Debugf("wmWindowType: %#v", winInfo.wmWindowType)
 	logger.Debugf("wmState: %#v", winInfo.wmState)
 
-	if winInfo.hasWmStateSkipTaskbar() || winInfo.isValidModal() ||
+	if winInfo.hasWmStateSkipTaskBar() || winInfo.isValidModal() ||
 		winInfo.hasXEmbedInfo || !winInfo.isWmClassOk() {
 		return false
 	}
@@ -315,7 +287,7 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 		if winType == "_NET_WM_WINDOW_TYPE_DIALOG" &&
 			!winInfo.isActionMinimizeAllowed() {
 			return false
-		} else if strSliceContains(skipTaskbarWindowTypes, winType) {
+		} else if strSliceContains(skipTaskBarWindowTypes, winType) {
 			return false
 		}
 	}
@@ -341,7 +313,6 @@ func (winInfo *WindowInfo) initProcessInfo() {
 func (winInfo *WindowInfo) update() {
 	win := winInfo.window
 	logger.Debugf("update window %v info", win)
-	winInfo.updateMapState()
 	winInfo.updateWmClass()
 	winInfo.updateWmState()
 	winInfo.updateWmWindowType()
@@ -358,7 +329,7 @@ func (winInfo *WindowInfo) update() {
 	winInfo.genInnerId()
 }
 
-func _filterFilePath(args []string) string {
+func filterFilePath(args []string) string {
 	var filtered []string
 	for _, arg := range args {
 		if strings.Contains(arg, "/") || arg == "." || arg == ".." {
@@ -382,9 +353,9 @@ func (winInfo *WindowInfo) genInnerId() {
 	var args string
 	if winInfo.process != nil {
 		exe = winInfo.process.exe
-		args = _filterFilePath(winInfo.process.args)
+		args = filterFilePath(winInfo.process.args)
 	}
-	hasPid := (winInfo.pid != 0)
+	hasPid := winInfo.pid != 0
 
 	var str string
 	// NOTE: 不要使用 wmRole，有些程序总会改变这个值比如 GVim
@@ -399,86 +370,8 @@ func (winInfo *WindowInfo) genInnerId() {
 			wmInstance, wmClass, exe, args, hasPid, winInfo.gtkAppId)
 	}
 
-	hasher := md5.New()
-	hasher.Write([]byte(str))
-	winInfo.innerId = windowHashPrefix + hex.EncodeToString(hasher.Sum(nil))
+	md5hash := md5.New()
+	md5hash.Write([]byte(str))
+	winInfo.innerId = windowHashPrefix + hex.EncodeToString(md5hash.Sum(nil))
 	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
-}
-
-func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *Manager) {
-	if winInfo.propertyNotifyTimer != nil {
-		return
-	}
-
-	winInfo.propertyNotifyAtomTable = make(map[xproto.Atom]bool)
-	winInfo.propertyNotifyEnabled = false
-	// simulate first property notify event
-	winInfo.propertyNotifyAtomTable[atomNetWMState] = true
-
-	winInfo.propertyNotifyTimer = time.AfterFunc(300*time.Millisecond, func() {
-		var atomNames []string
-		var needUpdate bool
-		winInfo.propertyNotifyAtomTableMutex.Lock()
-		defer winInfo.propertyNotifyAtomTableMutex.Unlock()
-
-		for atom, _ := range winInfo.propertyNotifyAtomTable {
-			atomName, _ := xprop.AtomName(XU, atom)
-			atomNames = append(atomNames, atomName)
-			if winInfo.handlePropertyNotifyAtom(atom) {
-				// may changed
-				needUpdate = true
-			}
-		}
-		//logger.Debugf("propertyNotifyAtomTable win %v atom: %v", winInfo.window, atomNames)
-
-		if needUpdate {
-			dockManager.attachOrDetachWindow(winInfo)
-		}
-
-		// end
-		winInfo.propertyNotifyAtomTable = make(map[xproto.Atom]bool)
-		winInfo.propertyNotifyEnabled = true
-	})
-}
-
-func (winInfo *WindowInfo) handlePropertyNotifyEvent(ev xevent.PropertyNotifyEvent) {
-	winInfo.propertyNotifyAtomTableMutex.Lock()
-	winInfo.propertyNotifyAtomTable[ev.Atom] = true
-	winInfo.propertyNotifyAtomTableMutex.Unlock()
-
-	if winInfo.propertyNotifyEnabled {
-		winInfo.propertyNotifyTimer.Reset(300 * time.Millisecond)
-		winInfo.propertyNotifyEnabled = false
-	}
-}
-
-func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
-	switch atom {
-	case atomNetWMState:
-		winInfo.updateWmState()
-		return true
-
-	case atomNetWMWindowType:
-		winInfo.updateWmWindowType()
-		return true
-
-	case atomXEmbedInfo:
-		winInfo.updateHasXEmbedInfo()
-		return true
-
-	case atomNetWMName:
-		winInfo.updateWmName()
-		return false
-
-	case atomNetWMIcon:
-		//  update icon cache
-		winInfo.Icon = getIconFromWindow(XU, winInfo.window)
-		entry := winInfo.entry
-		if entry != nil && entry.current == winInfo {
-			entry.updateIcon()
-		}
-		return false
-	default:
-		return false
-	}
 }

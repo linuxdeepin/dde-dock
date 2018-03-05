@@ -31,20 +31,25 @@ import (
 )
 
 func (m *Manager) registerWindow(win xproto.Window) {
-
 	logger.Debug("register window", win)
-	registered := m.isWindowRegistered(win)
-	if registered {
+
+	m.windowInfoMapMutex.RLock()
+	winInfo, ok := m.windowInfoMap[win]
+	m.windowInfoMapMutex.RUnlock()
+	if ok {
 		logger.Debugf("register window %v failed, window existed", win)
+		m.attachOrDetachWindow(winInfo)
 		return
 	}
 
-	winInfo := NewWindowInfo(win)
+	winInfo = NewWindowInfo(win)
 	m.listenWindowXEvent(winInfo)
 
 	m.windowInfoMapMutex.Lock()
 	m.windowInfoMap[win] = winInfo
 	m.windowInfoMapMutex.Unlock()
+
+	m.attachOrDetachWindow(winInfo)
 }
 
 func (m *Manager) isWindowRegistered(win xproto.Window) bool {
@@ -70,8 +75,9 @@ func (m *Manager) handleClientListChanged() {
 	}
 	newClientList := windowSlice(clientList)
 	sort.Sort(newClientList)
-
 	add, remove := diffSortedWindowSlice(m.clientList, newClientList)
+	m.clientList = newClientList
+
 	if len(add) > 0 {
 		logger.Debug("client list add:", add)
 		for _, win := range add {
@@ -81,8 +87,16 @@ func (m *Manager) handleClientListChanged() {
 
 	if len(remove) > 0 {
 		logger.Debug("client list remove:", remove)
+		for _, win := range remove {
+
+			m.windowInfoMapMutex.RLock()
+			winInfo := m.windowInfoMap[win]
+			m.windowInfoMapMutex.RUnlock()
+			if winInfo != nil {
+				m.detachWindow(winInfo)
+			}
+		}
 	}
-	m.clientList = newClientList
 }
 
 func (m *Manager) handleActiveWindowChanged() {
@@ -106,15 +120,19 @@ func (m *Manager) handleActiveWindowChanged() {
 
 	m.Entries.mu.RLock()
 	for _, entry := range m.Entries.items {
+		entry.PropsMu.Lock()
+
 		winInfo, ok := entry.windows[activeWindow]
 		if ok {
 			entry.setPropIsActive(true)
 			entry.setCurrentWindowInfo(winInfo)
-			entry.current.updateWmName()
+			entry.updateName()
 			entry.updateIcon()
 		} else {
 			entry.setPropIsActive(false)
 		}
+
+		entry.PropsMu.Unlock()
 	}
 	m.Entries.mu.RUnlock()
 
@@ -153,15 +171,9 @@ func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
 
 	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
 
-	// need listen EventMaskVisibilityChange
-	xevent.VisibilityNotifyFun(func(XU *xgbutil.XUtil, ev xevent.VisibilityNotifyEvent) {
-		m.handleVisibilityNotifyEvent(winInfo, ev)
-	}).Connect(XU, win)
-
-	winInfo.initPropertyNotifyEventHandler(m)
 	// need listen EventMaskPropertyChange
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		winInfo.handlePropertyNotifyEvent(ev)
+		m.handlePropertyNotifyEvent(winInfo, ev)
 	}).Connect(XU, win)
 
 	// need listen EventMaskStructureNotify
@@ -173,15 +185,43 @@ func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
 	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
 		m.handleDestroyNotifyEvent(winInfo, ev)
 	}).Connect(XU, win)
-
-	xevent.UnmapNotifyFun(func(XU *xgbutil.XUtil, ev xevent.UnmapNotifyEvent) {
-		m.handleUnmapNotifyEvent(winInfo, ev)
-	}).Connect(XU, win)
 }
 
-func (m *Manager) handleVisibilityNotifyEvent(winInfo *WindowInfo, ev xevent.VisibilityNotifyEvent) {
-	logger.Debug(ev)
-	winInfo.updateMapState()
+func (m *Manager) handlePropertyNotifyEvent(winInfo *WindowInfo, ev xevent.PropertyNotifyEvent) {
+	switch ev.Atom {
+	case atomNetWMState:
+		winInfo.updateWmState()
+
+	case atomNetWMName:
+		winInfo.updateWmName()
+
+	case atomNetWMIcon:
+		winInfo.updateIcon()
+	}
+
+	entry := m.Entries.getByWindowId(ev.Window)
+	if entry == nil {
+		return
+	}
+
+	entry.PropsMu.Lock()
+	defer entry.PropsMu.Unlock()
+
+	switch ev.Atom {
+	case atomNetWMState:
+		entry.updateWindowInfos()
+
+	case atomNetWMIcon:
+		if entry.current == winInfo {
+			entry.updateIcon()
+		}
+
+	case atomNetWMName:
+		if entry.current == winInfo {
+			entry.updateName()
+		}
+		entry.updateWindowInfos()
+	}
 }
 
 func (m *Manager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
@@ -234,9 +274,4 @@ func (m *Manager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.Destro
 	logger.Debug(ev)
 	m.unregisterWindow(winInfo.window)
 	m.detachWindow(winInfo)
-}
-
-func (m *Manager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {
-	logger.Debug(ev)
-	winInfo.updateMapState()
 }

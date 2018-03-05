@@ -23,6 +23,10 @@ import (
 	"bytes"
 	"encoding/base64"
 	"errors"
+	"image"
+	"image/png"
+	"strings"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -32,23 +36,14 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"github.com/nfnt/resize"
-	"image"
-	"image/png"
-	"strings"
 )
-
-// no use
-func iconifyWindow(win xproto.Window) {
-	logger.Debug("iconifyWindow", win)
-	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
-}
 
 func maximizeWindow(xu *xgbutil.XUtil, win xproto.Window) error {
 	return ewmh.WmStateReqExtra(xu, win, ewmh.StateAdd, "_NET_WM_STATE_MAXIMIZED_VERT", "_NET_WM_STATE_MAXIMIZED_HORZ", 2)
 }
 
 func minimizeWindow(xu *xgbutil.XUtil, win xproto.Window) error {
-	return ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
+	return ewmh.ClientEvent(xu, win, "WM_CHANGE_STATE", icccm.StateIconic)
 }
 
 func makeWindowAbove(xu *xgbutil.XUtil, win xproto.Window) error {
@@ -182,8 +177,8 @@ func findIconEwmh(xu *xgbutil.XUtil, win xproto.Window) (image.Image, error) {
 }
 
 // findIconIcccm helps FindIcon by trying to return an icccm-style icon.
-func findIconIcccm(X *xgbutil.XUtil, wid xproto.Window) (image.Image, error) {
-	hints, err := icccm.WmHintsGet(X, wid)
+func findIconIcccm(xu *xgbutil.XUtil, wid xproto.Window) (image.Image, error) {
+	hints, err := icccm.WmHintsGet(xu, wid)
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +191,7 @@ func findIconIcccm(X *xgbutil.XUtil, wid xproto.Window) (image.Image, error) {
 		return nil, errors.New("No icon found in WM_HINTS.")
 	}
 
-	return xgraphics.NewIcccmIcon(X, hints.IconPixmap, hints.IconMask)
+	return xgraphics.NewIcccmIcon(xu, hints.IconPixmap, hints.IconMask)
 }
 
 func getBestEwmhIcon(xu *xgbutil.XUtil, win xproto.Window) (*ewmh.WmIcon, error) {

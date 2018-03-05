@@ -315,13 +315,11 @@ func (m *Manager) RequestDock(desktopFilePath string, index int32) (bool, *dbus.
 	if appInfo == nil {
 		return false, dbusutil.ToError(errors.New("invalid desktopFilePath"))
 	}
-	entry := m.Entries.GetFirstByInnerId(appInfo.innerId)
+	entry := m.Entries.GetByInnerId(appInfo.innerId)
 
 	if entry == nil {
 		entry = newAppEntry(m, appInfo.innerId, appInfo)
-		entry.updateName()
-		entry.updateIcon()
-		err := m.installAppEntry(entry)
+		err := m.exportAppEntry(entry)
 		if err == nil {
 			m.Entries.Insert(entry, int(index))
 		}

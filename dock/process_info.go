@@ -23,9 +23,10 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"pkg.deepin.io/lib/procfs"
 	"strconv"
 	"strings"
+
+	"pkg.deepin.io/lib/procfs"
 )
 
 type ProcessInfo struct {
@@ -140,7 +141,7 @@ func (p *ProcessInfo) getJoinedExeArgs() string {
 	var cmdline string
 	cmdline = strconv.Quote(p.exe)
 	for _, arg := range p.args {
-		cmdline += (" " + strconv.Quote(arg))
+		cmdline += " " + strconv.Quote(arg)
 	}
 	return cmdline + " $@"
 }
