@@ -228,6 +228,18 @@ void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
     updateBatteryVisible();
 }
 
+int ShutdownPlugin::itemSortKey(const QString &itemKey)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    return m_settings.value(key, 0).toInt();
+}
+
+void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    m_settings.setValue(key, order);
+}
+
 void ShutdownPlugin::updateBatteryVisible()
 {
     const bool exist = !m_powerInter->batteryPercentage().isEmpty();

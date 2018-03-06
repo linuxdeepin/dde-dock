@@ -51,6 +51,9 @@ public:
     QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
+    int itemSortKey(const QString &itemKey);
+    void setSortKey(const QString &itemKey, const int order);
+
 private slots:
     void deviceAdded(const NetworkDevice &device);
     void deviceRemoved(const NetworkDevice &device);

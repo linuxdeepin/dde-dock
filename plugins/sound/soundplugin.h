@@ -50,6 +50,9 @@ public:
     const QString itemContextMenu(const QString &itemKey);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
 
+    int itemSortKey(const QString &itemKey);
+    void setSortKey(const QString &itemKey, const int order);
+
 private:
     QSettings m_settings;
     SoundItem *m_soundItem;

@@ -20,6 +20,7 @@
  */
 
 #include "soundplugin.h"
+#include <QDebug>
 
 #define STATE_KEY  "enable"
 
@@ -28,7 +29,6 @@ SoundPlugin::SoundPlugin(QObject *parent)
       m_settings("deepin", "dde-dock-sound"),
       m_soundItem(nullptr)
 {
-
 }
 
 const QString SoundPlugin::pluginName() const
@@ -100,4 +100,20 @@ void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
     Q_UNUSED(itemKey);
 
     m_soundItem->invokeMenuItem(menuId, checked);
+}
+
+int SoundPlugin::itemSortKey(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    const QString key = QString("pos_%1").arg(displayMode());
+    return m_settings.value(key, 0).toInt();
+}
+
+void SoundPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    Q_UNUSED(itemKey);
+
+    const QString key = QString("pos_%1").arg(displayMode());
+    m_settings.setValue(key, order);
 }

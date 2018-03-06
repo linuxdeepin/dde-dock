@@ -37,7 +37,7 @@ public:
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
 
-    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);
 
 private:

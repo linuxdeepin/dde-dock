@@ -308,15 +308,15 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
     else
     {
         insertIndex = m_itemList.size();
-        for (int i(firstPluginPosition); i != m_itemList.size(); ++i)
+        for (int i(firstPluginPosition + 1); i != m_itemList.size() + 1; ++i)
         {
-            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i]);
+            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i - 1]);
             Q_ASSERT(pItem);
 
             const int sortKey = pItem->itemSortKey();
             if (sortKey != -1 && itemSortKey > sortKey)
                 continue;
-            insertIndex = i;
+            insertIndex = i - 1;
             break;
         }
     }

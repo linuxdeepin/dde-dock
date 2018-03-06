@@ -53,6 +53,7 @@ public:
     bool itemAllowContainer(const QString &itemKey) Q_DECL_OVERRIDE;
     bool itemIsInContainer(const QString &itemKey) Q_DECL_OVERRIDE;
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order);
     void setItemIsInContainer(const QString &itemKey, const bool container) Q_DECL_OVERRIDE;
 
 private:

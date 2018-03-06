@@ -56,6 +56,9 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
+    int itemSortKey(const QString &itemKey);
+    void setSortKey(const QString &itemKey, const int order);
+
 private:
     void updateBatteryVisible();
     void requestContextMenu(const QString &itemKey);

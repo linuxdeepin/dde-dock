@@ -143,6 +143,18 @@ QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
     return nullptr;
 }
 
+int NetworkPlugin::itemSortKey(const QString &itemKey)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    return m_settings.value(key, 0).toInt();
+}
+
+void NetworkPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    m_settings.setValue(key, order);
+}
+
 void NetworkPlugin::deviceAdded(const NetworkDevice &device)
 {
     DeviceItem *item = nullptr;
