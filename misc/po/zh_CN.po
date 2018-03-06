@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 06:40+0000\n"
+"PO-Revision-Date: 2018-03-06 05:22+0000\n"
 "Last-Translator: Cindy0514 <zhuxiujuan@deepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -1942,7 +1942,7 @@ msgstr "未能加入%q，请尝试靠近无线路由器。"
 
 #: ../../network/state_handler.go:297
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "未能加入“%1”，请检查路由器或网线。"
+msgstr "未能加入%q，请检查路由器或网线。"
 
 #: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"

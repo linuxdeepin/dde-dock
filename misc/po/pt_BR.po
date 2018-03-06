@@ -17,6 +17,7 @@
 # marcelo oliveira <marcelinuz@hotmail.com>, 2017
 # Marco Araujo <marco.araujo.junior@gmail.com>, 2017
 # Matheus Campagnol <mate175@gmail.com>, 2017
+# Peterson SB <manitiolo@outlook.com>, 2018
 # Rafael Ramos <rbr.ramos@gmail.com>, 2017
 # Raphael Miquelis <raphaelmiquelis@gmail.com>, 2016-2017
 # Raphael Pereira <raphaelmatheus.exp@gmail.com>, 2018
@@ -25,8 +26,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 17:54+0000\n"
-"Last-Translator: Raphael Pereira <raphaelmatheus.exp@gmail.com>\n"
+"PO-Revision-Date: 2018-03-01 18:55+0000\n"
+"Last-Translator: Peterson SB <manitiolo@outlook.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1811,7 +1812,7 @@ msgstr "Uma dependência da conexão falhou."
 
 #: ../../network/state_handler.go:85
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgstr "Erro de ponte de rede RFC 2684 para ADSL"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"

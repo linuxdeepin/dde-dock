@@ -4,13 +4,14 @@
 # 
 # Translators:
 # kolera <koleramilan@gmail.com>, 2017
+# Један Пријатељ <3acejax@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-03-05 10:18+0000\n"
+"Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,11 +59,11 @@ msgstr "Скалирање екрана"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Подешавање салираног приказа"
 
 #: ../../appearance/scale.go:78
 msgid "Set successfully"
-msgstr ""
+msgstr "Успешно подешено"
 
 #: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
