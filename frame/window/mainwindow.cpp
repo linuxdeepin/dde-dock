@@ -327,12 +327,13 @@ void MainWindow::internalMove(const QPoint &p)
 void MainWindow::initConnections()
 {
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
+    connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
+    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
-    connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
+    connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_mainPanel, &MainPanel::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
@@ -346,7 +347,6 @@ void MainWindow::initConnections()
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
     connect(m_panelHideAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_panelShowAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::displayModeChanegd, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
@@ -470,6 +470,7 @@ void MainWindow::updateGeometry()
         internalMove(windowRect.topLeft());
 
     m_mainPanel->update();
+    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::clearStrutPartial()
@@ -696,11 +697,8 @@ void MainWindow::adjustShadowMask()
 
     const bool composite = m_wmHelper->hasComposite();
     const bool isFasion = m_settings->displayMode() == Fashion;
-//    const bool animationRunning = m_panelShowAni->state() == QPropertyAnimation::Running ||
-//                                  m_panelHideAni->state() == QPropertyAnimation::Running;
 
     m_platformWindowHandle.setWindowRadius(composite && isFasion ? 5 : 0);
-//    m_platformWindowHandle.setShadowRadius(!animationRunning && composite ? 60 : 0);
 }
 
 void MainWindow::positionCheck()
