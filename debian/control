@@ -13,7 +13,7 @@ Build-Depends: debhelper (>= 8.0.0), pkg-config,
  qtbase5-private-dev,
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
- clang
+ cmake, clang
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
