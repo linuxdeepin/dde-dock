@@ -9,10 +9,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_FLAGS -Wall)
+set(CMAKE_CXX_FLAGS "-g -Wall")
 
 if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 
     # generate qm
     execute_process(COMMAND bash "translate_generation.sh"
