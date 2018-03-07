@@ -1,5 +1,58 @@
 ## [Unreleased]
 
+[3.2.10] 2018-03-07
+*   auto sync po files from transifex
+*   refactor(dock): optimize design
+*   fix(accounts): replace plaintext with ciphertext when set passwd
+*   fix(system-daemon): missing the method ScalePlymouth
+*   chore: only enable systemd service
+*   fix(lockservice): fix event crash after the frequent unlocking
+*   feat(session-init): use newly lib dbusutil
+*   refactor: remove dbusutil.PropsMaster
+*   feat(network): add l2tp ipsec ike/esp settings
+*   Revert "feat(session/power): set dpms off before suspend"
+*   auto sync po files from transifex
+*   fix(network): fix add connection failed if no activated
+*   fix(network): correct wired ip unavailable notification
+*   feat: make calltrace as module
+*   feat(system-daemon): use newly lib dbusutil
+*   fix(default-terminal): can not handle the -e option
+*   feat(langselector): replace PropsMu with PropsMaster
+*   feat(grub2): replace PropsMu with PropsMaster
+*   fix(timedate): fix polkit message untranslated
+*   fix: optimize channel statements
+*   feat(swapsched): add blkio controller
+*   feat(dock): window flash supported
+*   refactor(debug): watch cpu/mem anormaly
+*   fix(soundeffect): property name Enabled typo
+*   feat(soundeffect): use newly lib dbusutil
+*   feat(search): use newly lib dbusutil
+*   feat(langselector): use newly lib dbusutil
+*   feat(grub2): use newly lib dbusutil
+*   feat(dde-lockservice): use newly lib dbusutil
+*   feat(dde-greeter-setter): use newly lib dbusutil
+*   feat(`backlight_helper`): use newly lib dbusutil
+*   feat: add calltrace to dump runtime stack
+*   chore(translations): update translation source
+*   chore(accounts): correct policy translations
+*   chore: correct network translations
+*   chore: update license
+*   chore: add accounts systemd service file
+*   chore: move bluez and fprintd to optional dependencies
+*   feat(trayicon): merge damage notify events
+*   fix(session/power): method StartupNotify appears in the DBus interface
+*   fix(accounts): change user config path
+*   feat: use new lib gsettings
+*   feat(keybinding): regrabAll only after keyboard layout changed
+*   fix(dock): dock not show if launcher shown
+*   fix: optimize appearance gsettings signal
+*   refactor(accounts): elaborate login related action
+*   feat(accounts): improve user auth action
+*   fix: terminal opened by dde-file-manager work dir is wrong
+*   feat: use tool deepin-policy-ts-convert to handle the
+*   docs: `add service_trigger.md`
+*   feat: dde-session-daemon add new module `service_trigger`
+
 ## [3.2.9] - 2018-01-24
 *   inputdevices: use imwheel to speed up scrolling
 *   langselector: use new lib `language_support`
