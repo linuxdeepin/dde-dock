@@ -348,3 +348,38 @@ void DockItemController::reloadAppItems()
     for (auto path : m_appInter->entries())
         appItemAdded(path, -1);
 }
+
+void DockItemController::sortPluginItems()
+{
+    int firstPluginIndex = -1;
+    for (int i(0); i != m_itemList.size(); ++i)
+    {
+        if (m_itemList[i]->itemType() == DockItem::Plugins)
+        {
+            firstPluginIndex = i;
+            break;
+        }
+    }
+
+    if (firstPluginIndex == -1)
+        return;
+
+    std::sort(m_itemList.begin() + firstPluginIndex, m_itemList.end(), [](DockItem *a, DockItem *b) -> bool {
+        PluginsItem *pa = static_cast<PluginsItem *>(a);
+        PluginsItem *pb = static_cast<PluginsItem *>(b);
+
+        const int aKey = pa->itemSortKey();
+        const int bKey = pb->itemSortKey();
+
+        if (bKey == -1)
+            return true;
+        if (aKey == -1)
+            return false;
+
+        return aKey < bKey;
+    });
+
+    // reset order
+    for (int i(firstPluginIndex); i != m_itemList.size(); ++i)
+        emit itemMoved(m_itemList[i], i);
+}

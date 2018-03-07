@@ -55,6 +55,7 @@ signals:
 
 public slots:
     void refershItemsIcon();
+    void sortPluginItems();
     void updatePluginsItemOrderKey();
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
     void itemDroppedIntoContainer(DockItem * const item);
