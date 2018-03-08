@@ -372,6 +372,7 @@ void WirelessList::deviceEnabled(const QString &devPath, const bool enable)
         return;
 
     m_controlPanel->setDeviceEnabled(enable);
+    m_updateAPTimer->start();
 }
 
 void WirelessList::activateAP(const QDBusObjectPath &apPath, const QString &ssid)
