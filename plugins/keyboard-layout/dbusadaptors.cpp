@@ -18,11 +18,18 @@
  */
 
 #include "dbusadaptors.h"
+#include <QDebug>
 
 DBusAdaptors::DBusAdaptors(QObject *parent)
-    : QDBusAbstractAdaptor(parent)
+    : QDBusAbstractAdaptor(parent),
+      m_keyboard(new Keyboard("com.deepin.daemon.InputDevices",
+                              "/com/deepin/daemon/InputDevice/Keyboard",
+                              QDBusConnection::sessionBus(), this))
 {
-
+    connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this,
+            [=] {
+                emit layoutChanged(layout());
+            });
 }
 
 DBusAdaptors::~DBusAdaptors()
@@ -31,5 +38,5 @@ DBusAdaptors::~DBusAdaptors()
 
 QString DBusAdaptors::layout() const
 {
-    return "aaaaaa";
+    return QString(m_keyboard->currentLayout()).split(';').first();
 }

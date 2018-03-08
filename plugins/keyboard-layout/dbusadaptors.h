@@ -21,6 +21,9 @@
 #define DBUSADAPTORS_H
 
 #include <QtDBus/QtDBus>
+#include <com_deepin_daemon_inputdevice_keyboard.h>
+
+using Keyboard = com::deepin::daemon::inputdevice::Keyboard;
 
 class DBusAdaptors : public QDBusAbstractAdaptor
 {
@@ -45,6 +48,9 @@ public:
 
 signals:
     void layoutChanged(QString text);
+
+private:
+    Keyboard *m_keyboard;
 };
 
 #endif

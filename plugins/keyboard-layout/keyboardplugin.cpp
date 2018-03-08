@@ -22,7 +22,6 @@
 KeyboardPlugin::KeyboardPlugin(QObject *parent)
     : QObject(parent)
 {
-
 }
 
 KeyboardPlugin::~KeyboardPlugin()

@@ -71,15 +71,26 @@ public:
         }
 
         if (dataConfig.contains("dbus_properties")) {
-            auto propertyName = dataConfig.value("dbus_properties").toString().toStdString();
+            auto propertyName = dataConfig.value("dbus_properties").toString();
+            auto propertyNameCStr = propertyName.toStdString();
             propertyInterfaceNames.insert(key, dbusInterface);
-            propertyNames.insert(key, QString::fromStdString(propertyName));
-            callback(interface.property(propertyName.c_str()));
+            propertyNames.insert(key, QString::fromStdString(propertyNameCStr));
+            callback(interface.property(propertyNameCStr.c_str()));
             QDBusConnection::sessionBus().connect(dbusService,
                                                   dbusPath,
                                                   "org.freedesktop.DBus.Properties",
                                                   "PropertiesChanged",
                                                   "sa{sv}as",
+                                                  q,
+                                                  propertyChangedSlot);
+
+            // FIXME(sbw): hack for qt dbus propery changed signal.
+            // see: https://bugreports.qt.io/browse/QTBUG-48008
+            QDBusConnection::sessionBus().connect(dbusService,
+                                                  dbusPath,
+                                                  dbusInterface,
+                                                  QString("%1Changed").arg(propertyName),
+                                                  "s",
                                                   q,
                                                   propertyChangedSlot);
         }
@@ -89,10 +100,16 @@ public:
     void propertyChanged(const QString &key, const QDBusMessage &msg, Func const &callback)
     {
         QList<QVariant> arguments = msg.arguments();
-        if (3 != arguments.count()) {
+        if (1 == arguments.count())
+        {
+            const QString &v = msg.arguments().at(0).toString();
+            callback(v);
+            return;
+        } else if (3 != arguments.count()) {
             qWarning() << "arguments count must be 3";
             return;
         }
+
         QString interfaceName = msg.arguments().at(0).toString();
         if (interfaceName != propertyInterfaceNames.value(key)) {
             qWarning() << "interfaceName mismatch" << interfaceName << propertyInterfaceNames.value(key) << key;

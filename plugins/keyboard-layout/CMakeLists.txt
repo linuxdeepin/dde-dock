@@ -10,6 +10,8 @@ find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(DtkWidget REQUIRED)
+find_package(Qt5DBus REQUIRED)
+find_package(DFrameworkdbus REQUIRED)
 
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
@@ -27,6 +29,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${Qt5DBus_LIBRARIES}
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
