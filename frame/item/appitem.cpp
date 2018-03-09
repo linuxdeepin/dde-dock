@@ -34,7 +34,6 @@
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QGraphicsScene>
-#include <QGraphicsItemAnimation>
 #include <QTimeLine>
 #include <QX11Info>
 
@@ -590,6 +589,14 @@ void AppItem::cancelAndHidePreview()
 
 void AppItem::playSwingEffect()
 {
+    if (m_itemAnimation.timeLine())
+    {
+        m_itemAnimation.timeLine()->stop();
+        m_itemAnimation.clear();
+    } else {
+        m_itemAnimation.setTimeLine(new QTimeLine);
+    }
+
     m_itemScene->clear();
 
     const auto ratio = qApp->devicePixelRatio();
@@ -600,32 +607,28 @@ void AppItem::playSwingEffect()
     item->setTransformationMode(Qt::SmoothTransformation);
     item->setPos(QPointF(r.center()) - QPointF(icon.rect().center()) / ratio);
 
+    m_itemAnimation.setItem(item);
     m_itemScene->setSceneRect(r);
     m_swingEffectView->setSceneRect(r);
     m_swingEffectView->setFixedSize(r.size());
 
-    QTimeLine *tl = new QTimeLine;
+    QTimeLine *tl = m_itemAnimation.timeLine();
     tl->setDuration(1200);
     tl->setFrameRange(0, 60);
     tl->setLoopCount(1);
     tl->setEasingCurve(QEasingCurve::Linear);
     tl->setStartFrame(0);
 
-    QGraphicsItemAnimation *ani = new QGraphicsItemAnimation(tl);
-    ani->setItem(item);
-    ani->setTimeLine(tl);
-
     const int px = qreal(-icon.rect().center().x()) / ratio;
     const int py = qreal(-icon.rect().center().y()) / ratio - 18.;
     const QPoint pos = r.center() + QPoint(0, 18);
     for (int i(0); i != 60; ++i)
     {
-        ani->setPosAt(i / 60.0, pos);
-        ani->setTranslationAt(i / 60.0, px, py);
-        ani->setRotationAt(i / 60.0, Frames[i]);
+        m_itemAnimation.setPosAt(i / 60.0, pos);
+        m_itemAnimation.setTranslationAt(i / 60.0, px, py);
+        m_itemAnimation.setRotationAt(i / 60.0, Frames[i]);
     }
 
-    connect(tl, &QTimeLine::finished, tl, &QTimeLine::deleteLater);
     connect(tl, &QTimeLine::finished, m_swingEffectView, &QGraphicsView::hide);
     connect(tl, &QTimeLine::finished, this, &AppItem::checkAttentionEffect);
 

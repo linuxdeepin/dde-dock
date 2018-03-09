@@ -28,6 +28,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QGraphicsItemAnimation>
 
 #include <com_deepin_dde_daemon_dock_entry.h>
 
@@ -92,6 +93,7 @@ private:
 
     QGraphicsView *m_swingEffectView;
     QGraphicsScene *m_itemScene;
+    QGraphicsItemAnimation m_itemAnimation;
 
     bool m_draging;
     bool m_active;
