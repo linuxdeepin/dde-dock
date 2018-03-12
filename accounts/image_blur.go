@@ -14,6 +14,11 @@ import (
 	dutils "pkg.deepin.io/lib/utils"
 )
 
+const (
+	imageBlurDBusPath      = "/com/deepin/daemon/ImageBlur"
+	imageBlurDBusInterface = "com.deepin.daemon.ImageBlur"
+)
+
 type ImageBlur struct {
 	service *dbusutil.Service
 	mu      sync.Mutex
@@ -40,11 +45,8 @@ func newImageBlur(service *dbusutil.Service) *ImageBlur {
 	}
 }
 
-func (ib *ImageBlur) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      "/com/deepin/daemon/ImageBlur",
-		Interface: "com.deepin.daemon.ImageBlur",
-	}
+func (ib *ImageBlur) GetInterfaceName() string {
+	return imageBlurDBusInterface
 }
 
 func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {

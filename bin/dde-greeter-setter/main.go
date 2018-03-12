@@ -40,13 +40,13 @@ func main() {
 		quit:    true,
 	}
 
-	err = service.Export(m)
+	err = service.Export(dbusPath, m)
 	if err != nil {
 		logger.Errorf("failed to export:", err)
 		return
 	}
 
-	err = service.RequestName(dbusDest)
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		logger.Errorf("failed to request name:", err)
 		return

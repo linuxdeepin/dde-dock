@@ -23,6 +23,7 @@ import (
 	"sync"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/tasker"
 	dutils "pkg.deepin.io/lib/utils"
@@ -120,7 +121,7 @@ func (m *Manager) destroy() {
 	}
 
 	m.stopExportUsers(m.UserList)
-	m.service.StopExport(m.GetDBusExportInfo())
+	m.service.StopExport(m)
 }
 
 func (m *Manager) initUsers(list []string) {
@@ -145,7 +146,7 @@ func (m *Manager) exportUsers() {
 	m.usersMapMu.Lock()
 
 	for _, u := range m.usersMap {
-		err := m.service.Export(u)
+		err := m.service.Export(dbus.ObjectPath(userDBusPathPrefix+u.Uid), u)
 		if err != nil {
 			logger.Errorf("failed to export user %q: %v",
 				u.Uid, err)
@@ -173,7 +174,7 @@ func (m *Manager) exportUserByPath(userPath string) error {
 	ch := m.userAddedChanMap[u.UserName]
 	m.usersMapMu.Unlock()
 
-	err = m.service.Export(u)
+	err = m.service.Export(dbus.ObjectPath(userPath), u)
 	logger.Debugf("export user %q err: %v", userPath, err)
 	if ch != nil {
 		if err != nil {
@@ -205,7 +206,7 @@ func (m *Manager) stopExportUser(userPath string) {
 	}
 
 	delete(m.usersMap, userPath)
-	u.destroy()
+	m.service.StopExport(u)
 }
 
 func (m *Manager) getUserByName(name string) *User {
@@ -228,7 +229,7 @@ func getUserPaths() []string {
 
 	var paths []string
 	for _, info := range infos {
-		paths = append(paths, userDBusPath+info.Uid)
+		paths = append(paths, userDBusPathPrefix+info.Uid)
 	}
 
 	return paths

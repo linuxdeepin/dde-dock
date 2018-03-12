@@ -41,11 +41,8 @@ const (
 
 var errorInvalidID = errors.New("invalid ID")
 
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusObjPath,
-		Interface: dbusInterface,
-	}
+func (m *Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) GetAllItemInfos() ([]ItemInfo, *dbus.Error) {

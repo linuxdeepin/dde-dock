@@ -59,7 +59,7 @@ func (d *Daemon) Start() error {
 	service := loader.GetService()
 	d.manager = NewManager(service)
 
-	err := service.Export(d.manager)
+	err := service.Export(dbusPath, d.manager)
 	if err != nil {
 		if d.manager.watcher != nil {
 			d.manager.watcher.EndWatch()
@@ -72,7 +72,7 @@ func (d *Daemon) Start() error {
 
 	d.imageBlur = newImageBlur(service)
 	_imageBlur = d.imageBlur
-	err = service.Export(d.imageBlur)
+	err = service.Export(imageBlurDBusPath, d.imageBlur)
 	if err != nil {
 		d.imageBlur = nil
 		return err
@@ -83,7 +83,7 @@ func (d *Daemon) Start() error {
 		logger.Error("Failed to create logined manager:", err)
 		return err
 	}
-	err = service.Export(d.loginedManager)
+	err = service.Export(logined.DBusPath, d.loginedManager)
 	if err != nil {
 		logined.Unregister(d.loginedManager)
 		d.loginedManager = nil
@@ -106,13 +106,13 @@ func (d *Daemon) Stop() error {
 	service := loader.GetService()
 
 	if d.imageBlur != nil {
-		service.StopExport(d.imageBlur.GetDBusExportInfo())
+		service.StopExport(d.imageBlur)
 		d.imageBlur = nil
 		_imageBlur = nil
 	}
 
 	if d.loginedManager != nil {
-		service.StopExport(d.loginedManager.GetDBusExportInfo())
+		service.StopExport(d.loginedManager)
 		d.loginedManager = nil
 	}
 

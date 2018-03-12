@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	entryDBusObjPathPrefix = dbusObjPath + "/entries/"
+	entryDBusObjPathPrefix = dbusPath + "/entries/"
 	entryDBusInterface     = dbusInterface + ".Entry"
 )
 

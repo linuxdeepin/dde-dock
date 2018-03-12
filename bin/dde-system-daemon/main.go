@@ -81,7 +81,7 @@ func main() {
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-system-daemon")
 
 	_daemon = &Daemon{}
-	err = service.Export(_daemon)
+	err = service.Export(dbusPath, _daemon)
 	if err != nil {
 		logger.Fatal("failed to export:", err)
 	}
@@ -101,9 +101,6 @@ func main() {
 	service.Wait()
 }
 
-func (*Daemon) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusInterface,
-	}
+func (*Daemon) GetInterfaceName() string {
+	return dbusInterface
 }

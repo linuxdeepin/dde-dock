@@ -29,18 +29,15 @@ import (
 )
 
 const (
-	DBusServiceName = "com.deepin.daemon.Grub2"
-	DBusObjPath     = "/com/deepin/daemon/Grub2"
-	DBusInterface   = "com.deepin.daemon.Grub2"
+	dbusServiceName = "com.deepin.daemon.Grub2"
+	dbusPath        = "/com/deepin/daemon/Grub2"
+	dbusInterface   = "com.deepin.daemon.Grub2"
 
 	timeoutMax = 10
 )
 
-func (*Grub2) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      DBusObjPath,
-		Interface: DBusInterface,
-	}
+func (*Grub2) GetInterfaceName() string {
+	return dbusInterface
 }
 
 // GetSimpleEntryTitles return entry titles only in level one and will

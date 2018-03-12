@@ -58,7 +58,7 @@ func (d *Daemon) Start() error {
 	d.sessionWatcher = sw
 
 	service := loader.GetService()
-	err = service.Export(sw)
+	err = service.Export(dbusPath, sw)
 	if err != nil {
 		return err
 	}
@@ -84,11 +84,8 @@ type Helper struct {
 	}
 }
 
-func (sw *Helper) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusInterface,
-	}
+func (*Helper) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func newHelper() *Helper {

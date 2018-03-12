@@ -20,13 +20,15 @@
 package power
 
 import (
-	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
+	"path/filepath"
+
 	"gir/gudev-1.0"
 	"pkg.deepin.io/dde/api/powersupply/battery"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -86,14 +88,15 @@ func newBattery(manager *Manager, device *gudev.Device) *Battery {
 }
 
 const (
-	batteryDBusIFC = dbusIFC + ".Battery"
+	batteryDBusInterface = dbusInterface + ".Battery"
 )
 
-func (bat *Battery) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath + "/battery_" + getValidName(filepath.Base(bat.SysfsPath)),
-		Interface: batteryDBusIFC,
-	}
+func (*Battery) GetInterfaceName() string {
+	return batteryDBusInterface
+}
+
+func (bat *Battery) getObjPath() dbus.ObjectPath {
+	return dbus.ObjectPath(dbusPath + "/battery_" + getValidName(filepath.Base(bat.SysfsPath)))
 }
 
 func getValidName(n string) string {

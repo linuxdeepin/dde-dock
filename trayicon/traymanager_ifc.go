@@ -27,13 +27,14 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 )
 
-const dbusServiceName = "com.deepin.dde.TrayManager"
+const (
+	dbusServiceName = "com.deepin.dde.TrayManager"
+	dbusInterface   = dbusServiceName
+	dbusPath        = "/com/deepin/dde/TrayManager"
+)
 
-func (*TrayManager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      "/com/deepin/dde/TrayManager",
-		Interface: dbusServiceName,
-	}
+func (*TrayManager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 // Manage方法获取系统托盘图标的管理权。

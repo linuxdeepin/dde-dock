@@ -21,20 +21,16 @@ package power
 
 import (
 	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
 	dbusServiceName = "com.deepin.system.Power"
 	dbusPath        = "/com/deepin/system/Power"
-	dbusIFC         = dbusServiceName
+	dbusInterface   = dbusServiceName
 )
 
-func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) GetBatteries() ([]dbus.ObjectPath, *dbus.Error) {
@@ -43,7 +39,7 @@ func (m *Manager) GetBatteries() ([]dbus.ObjectPath, *dbus.Error) {
 	result := make([]dbus.ObjectPath, len(m.batteries))
 	idx := 0
 	for _, bat := range m.batteries {
-		result[idx] = dbus.ObjectPath(bat.GetDBusExportInfo().Path)
+		result[idx] = bat.getObjPath()
 		idx++
 	}
 

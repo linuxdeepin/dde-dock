@@ -87,7 +87,7 @@ func main() {
 	}
 
 	_m = newManager(service)
-	err = service.Export(_m)
+	err = service.Export(dbusPath, _m)
 	if err != nil {
 		log.Fatal("failed to export:", err)
 	}
@@ -106,11 +106,8 @@ func main() {
 	service.Wait()
 }
 
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusInterface,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func newManager(service *dbusutil.Service) *Manager {

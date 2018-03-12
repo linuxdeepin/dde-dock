@@ -63,11 +63,8 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	}, nil
 }
 
-func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusInterface,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) destroy() {

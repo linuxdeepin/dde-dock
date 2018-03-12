@@ -39,7 +39,7 @@ type SessionInfo struct {
 type SessionInfos []*SessionInfo
 
 func newSessionInfo(sessionPath dbus.ObjectPath) (*SessionInfo, error) {
-	core, err := login1.NewSession(dbusLogin1Dest, sessionPath)
+	core, err := login1.NewSession(login1DBusServiceName, sessionPath)
 	if err != nil {
 		return nil, err
 	}

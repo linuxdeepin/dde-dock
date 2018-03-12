@@ -30,11 +30,13 @@ import (
 	"pkg.deepin.io/lib/utils"
 )
 
-func (theme *Theme) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      DBusObjPath + "/Theme",
-		Interface: DBusInterface + ".Theme",
-	}
+const (
+	themeDBusPath      = dbusPath + "/Theme"
+	themeDBusInterface = dbusInterface + ".Theme"
+)
+
+func (*Theme) GetInterfaceName() string {
+	return themeDBusInterface
 }
 
 var colorReg = regexp.MustCompile(`^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$`)

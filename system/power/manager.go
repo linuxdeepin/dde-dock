@@ -28,6 +28,7 @@ import (
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
 	"pkg.deepin.io/lib/arch"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -70,11 +71,11 @@ type Manager struct {
 		}
 
 		BatteryAdded struct {
-			objPath string
+			path dbus.ObjectPath
 		}
 
 		BatteryRemoved struct {
-			objPath string
+			path dbus.ObjectPath
 		}
 
 		LidClosed struct{}
@@ -216,7 +217,7 @@ func (m *Manager) initBatteries(devices []*gudev.Device) {
 func (m *Manager) addAndExportBattery(dev *gudev.Device) {
 	bat, added := m.addBattery(dev)
 	if added {
-		err := m.service.Export(bat)
+		err := m.service.Export(bat.getObjPath(), bat)
 		if err == nil {
 			m.emitBatteryAdded(bat)
 		} else {
@@ -272,7 +273,7 @@ func (m *Manager) removeBattery(dev *gudev.Device) {
 		m.refreshBatteryDisplay()
 		m.batteriesMu.Unlock()
 
-		err := m.service.StopExport(bat.GetDBusExportInfo())
+		err := m.service.StopExport(bat)
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -285,11 +286,11 @@ func (m *Manager) removeBattery(dev *gudev.Device) {
 }
 
 func (m *Manager) emitBatteryAdded(bat *Battery) {
-	m.service.Emit(m, "BatteryAdded", bat.GetDBusExportInfo().Path)
+	m.service.Emit(m, "BatteryAdded", bat.getObjPath())
 }
 
 func (m *Manager) emitBatteryRemoved(bat *Battery) {
-	m.service.Emit(m, "BatteryRemoved", bat.GetDBusExportInfo().Path)
+	m.service.Emit(m, "BatteryRemoved", bat.getObjPath())
 }
 
 func (m *Manager) destroy() {

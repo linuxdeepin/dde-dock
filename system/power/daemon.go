@@ -54,14 +54,14 @@ func (d *Daemon) Start() (err error) {
 
 	d.manager.batteriesMu.Lock()
 	for _, bat := range d.manager.batteries {
-		err := service.Export(bat)
+		err := service.Export(bat.getObjPath(), bat)
 		if err != nil {
 			logger.Warning("failed to export battery:", err)
 		}
 	}
 	d.manager.batteriesMu.Unlock()
 
-	err = service.Export(d.manager)
+	err = service.Export(dbusPath, d.manager)
 	if err != nil {
 		return
 	}
@@ -78,14 +78,14 @@ func (d *Daemon) Stop() error {
 
 	d.manager.batteriesMu.Lock()
 	for _, bat := range d.manager.batteries {
-		err := service.StopExport(bat.GetDBusExportInfo())
+		err := service.StopExport(bat)
 		if err != nil {
 			logger.Warning(err)
 		}
 	}
 	d.manager.batteriesMu.Unlock()
 
-	err := service.StopExport(d.manager.GetDBusExportInfo())
+	err := service.StopExport(d.manager)
 	if err != nil {
 		logger.Warning(err)
 	}

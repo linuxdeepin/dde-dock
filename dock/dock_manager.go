@@ -46,13 +46,13 @@ import (
 type Manager struct {
 	PropsMu            sync.RWMutex
 	Entries            AppEntries
-	HideMode           *gsprop.Enum `prop:"access:rw"`
-	DisplayMode        *gsprop.Enum `prop:"access:rw"`
-	Position           *gsprop.Enum `prop:"access:rw"`
-	IconSize           *gsprop.Uint `prop:"access:rw"`
-	ShowTimeout        *gsprop.Uint `prop:"access:rw"`
-	HideTimeout        *gsprop.Uint `prop:"access:rw"`
-	DockedApps         *gsprop.Strv
+	HideMode           gsprop.Enum `prop:"access:rw"`
+	DisplayMode        gsprop.Enum `prop:"access:rw"`
+	Position           gsprop.Enum `prop:"access:rw"`
+	IconSize           gsprop.Uint `prop:"access:rw"`
+	ShowTimeout        gsprop.Uint `prop:"access:rw"`
+	HideTimeout        gsprop.Uint `prop:"access:rw"`
+	DockedApps         gsprop.Strv
 	HideState          HideStateType
 	FrontendWindowRect *Rect
 
@@ -126,6 +126,10 @@ const (
 	settingKeyWinIconPreferredApps = "win-icon-preferred-apps"
 
 	frontendWindowWmClass = "dde-dock"
+
+	dbusServiceName = "com.deepin.dde.daemon.Dock"
+	dbusPath        = "/com/deepin/dde/daemon/Dock"
+	dbusInterface   = dbusServiceName
 )
 
 func newManager(service *dbusutil.Service) (*Manager, error) {
@@ -136,6 +140,10 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+func (m *Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) destroy() {
@@ -169,7 +177,7 @@ func (m *Manager) destroy() {
 		m.startManager = nil
 	}
 
-	m.service.StopExport(m.GetDBusExportInfo())
+	m.service.StopExport(m)
 }
 
 func (m *Manager) launch(desktopFile string, timestamp uint32, files []string) {

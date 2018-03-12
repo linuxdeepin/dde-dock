@@ -26,7 +26,7 @@ import (
 
 const (
 	dbusServiceName = "com.deepin.api.XEventMonitor"
-	dbusObjPath     = "/com/deepin/api/XEventMonitor"
+	dbusPath        = "/com/deepin/api/XEventMonitor"
 	dbusInterface   = dbusServiceName
 	moduleName      = "x_event_monitor"
 )
@@ -64,7 +64,7 @@ func (d *Daemon) Start() error {
 	rawEventCallback = m.handleRawEvent
 	go startListen()
 
-	err := service.Export(m)
+	err := service.Export(dbusPath, m)
 	if err != nil {
 		return err
 	}

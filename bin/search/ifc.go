@@ -23,16 +23,12 @@ import (
 	"path"
 
 	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pinyin"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusInterface,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) NewSearchWithStrList(list []string) (string, bool, *dbus.Error) {

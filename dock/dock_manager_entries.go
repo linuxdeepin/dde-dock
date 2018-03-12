@@ -24,6 +24,7 @@ import (
 	"sort"
 
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) allocEntryId() string {
@@ -107,7 +108,7 @@ func (m *Manager) initDockedApps() {
 }
 
 func (m *Manager) exportAppEntry(e *AppEntry) error {
-	err := m.service.Export(e)
+	err := m.service.Export(dbus.ObjectPath(entryDBusObjPathPrefix+e.Id), e)
 	if err != nil {
 		logger.Warning("failed to export AppEntry:", err)
 		return err

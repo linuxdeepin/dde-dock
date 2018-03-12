@@ -43,7 +43,7 @@ func Run() {
 	}
 
 	lang := newLangSelector(service)
-	err = service.Export(lang)
+	err = service.Export(dbusPath, lang)
 	if err != nil {
 		logger.Fatal("failed to export:", err)
 	}

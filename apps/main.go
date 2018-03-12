@@ -54,12 +54,7 @@ func (d *Daemon) Start() error {
 	d.recorder = NewALRecorder(d.watcher)
 
 	// export recorder and watcher
-	err := service.Export(d.recorder)
-	if err != nil {
-		return err
-	}
-
-	err = service.Export(d.watcher)
+	err := service.Export(dbusPath, d.recorder, d.watcher)
 	if err != nil {
 		return err
 	}

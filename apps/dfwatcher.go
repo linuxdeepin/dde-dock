@@ -61,11 +61,8 @@ func NewDFWachter(service *dbusutil.Service) (*DFWatcher, error) {
 	return w, nil
 }
 
-func (*DFWatcher) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dfWatcherDBusInterface,
-	}
+func (*DFWatcher) GetInterfaceName() string {
+	return dfWatcherDBusInterface
 }
 
 func (w *DFWatcher) listenEvents() {

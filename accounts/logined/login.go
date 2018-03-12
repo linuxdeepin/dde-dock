@@ -43,13 +43,15 @@ type Manager struct {
 }
 
 const (
-	dbusLogin1Dest = "org.freedesktop.login1"
-	dbusLogin1Path = "/org/freedesktop/login1"
+	login1DBusServiceName = "org.freedesktop.login1"
+	login1DBusPath        = "/org/freedesktop/login1"
+
+	DBusPath = "/com/deepin/daemon/Logined"
 )
 
 // Register register and install loginedManager on dbus
 func Register(logger *log.Logger, service *dbusutil.Service) (*Manager, error) {
-	core, err := login1.NewManager(dbusLogin1Dest, dbusLogin1Path)
+	core, err := login1.NewManager(login1DBusServiceName, login1DBusPath)
 	if err != nil {
 		return nil, err
 	}
@@ -197,10 +199,6 @@ func (m *Manager) marshalUserSessions() string {
 	return string(v)
 }
 
-// GetDBusInfo dbus session interface
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      "/com/deepin/daemon/Logined",
-		Interface: "com.deepin.daemon.Logined",
-	}
+func (*Manager) GetInterfaceName() string {
+	return "com.deepin.daemon.Logined"
 }

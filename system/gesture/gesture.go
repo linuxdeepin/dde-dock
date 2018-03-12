@@ -34,7 +34,7 @@ import (
 const (
 	dbusServiceName = "com.deepin.daemon.Gesture"
 	dbusPath        = "/com/deepin/daemon/Gesture"
-	dbusIFC         = "com.deepin.daemon.Gesture"
+	dbusInterface   = "com.deepin.daemon.Gesture"
 )
 
 type GestureType int32
@@ -113,11 +113,8 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 //export handleGestureEvent
@@ -137,7 +134,7 @@ func (*Daemon) Start() error {
 	_m = &Manager{
 		service: service,
 	}
-	err := service.Export(_m)
+	err := service.Export(dbusPath, _m)
 	if err != nil {
 		return err
 	}
@@ -158,7 +155,7 @@ func (*Daemon) Stop() error {
 	}
 	C.quit_loop()
 	service := loader.GetService()
-	err := service.StopExport(_m.GetDBusExportInfo())
+	err := service.StopExport(_m)
 	if err != nil {
 		return err
 	}

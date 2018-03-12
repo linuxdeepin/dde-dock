@@ -33,9 +33,9 @@ import (
 )
 
 const (
-	dbusDest = "com.deepin.daemon.helper.Backlight"
-	dbusPath = "/com/deepin/daemon/helper/Backlight"
-	dbusIFC  = "com.deepin.daemon.helper.Backlight"
+	dbusServiceName = "com.deepin.daemon.helper.Backlight"
+	dbusPath        = "/com/deepin/daemon/helper/Backlight"
+	dbusInterface   = "com.deepin.daemon.helper.Backlight"
 )
 
 const (
@@ -50,11 +50,8 @@ type Manager struct {
 	}
 }
 
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) SetBrightness(type0 byte, name string, value int32) *dbus.Error {
@@ -108,12 +105,12 @@ func main() {
 	m := &Manager{
 		service: service,
 	}
-	err = service.Export(m)
+	err = service.Export(dbusPath, m)
 	if err != nil {
 		log.Fatal("failed to export:", err)
 	}
 
-	err = service.RequestName(dbusDest)
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		log.Fatal("failed to request name:", err)
 	}

@@ -70,7 +70,7 @@ func (d *Daemon) Start() error {
 	service := loader.GetService()
 	d.manager = NewTrayManager(service)
 
-	err = service.Export(d.manager)
+	err = service.Export(dbusPath, d.manager)
 	if err != nil {
 		return err
 	}

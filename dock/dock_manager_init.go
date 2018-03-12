@@ -34,7 +34,6 @@ import (
 
 	"github.com/BurntSushi/xgb/xproto"
 	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
 const (
@@ -57,7 +56,7 @@ func (m *Manager) initEntries() {
 		m.service.Emit(m, "EntryRemoved", entry.Id)
 		go func() {
 			time.Sleep(time.Second)
-			m.service.StopExport(entry.GetDBusExportInfo())
+			m.service.StopExport(entry)
 		}()
 	}
 	m.initClientList()
@@ -144,13 +143,13 @@ func (m *Manager) getWinIconPreferredApps() []string {
 func (m *Manager) init() error {
 	var err error
 	m.settings = gio.NewSettings(dockSchema)
-	m.HideMode = gsprop.NewEnum(m.settings, settingKeyHideMode)
-	m.DisplayMode = gsprop.NewEnum(m.settings, settingKeyDisplayMode)
-	m.Position = gsprop.NewEnum(m.settings, settingKeyPosition)
-	m.IconSize = gsprop.NewUint(m.settings, settingKeyIconSize)
-	m.ShowTimeout = gsprop.NewUint(m.settings, settingKeyShowTimeout)
-	m.HideTimeout = gsprop.NewUint(m.settings, settingKeyHideTimeout)
-	m.DockedApps = gsprop.NewStrv(m.settings, settingKeyDockedApps)
+	m.HideMode.Bind(m.settings, settingKeyHideMode)
+	m.DisplayMode.Bind(m.settings, settingKeyDisplayMode)
+	m.Position.Bind(m.settings, settingKeyPosition)
+	m.IconSize.Bind(m.settings, settingKeyIconSize)
+	m.ShowTimeout.Bind(m.settings, settingKeyShowTimeout)
+	m.HideTimeout.Bind(m.settings, settingKeyHideTimeout)
+	m.DockedApps.Bind(m.settings, settingKeyDockedApps)
 
 	m.FrontendWindowRect = NewRect()
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
@@ -192,7 +191,7 @@ func (m *Manager) init() error {
 	m.registerIdentifyWindowFuncs()
 	m.initEntries()
 
-	err = m.service.Export(m)
+	err = m.service.Export(dbusPath, m)
 	if err != nil {
 		return err
 	}

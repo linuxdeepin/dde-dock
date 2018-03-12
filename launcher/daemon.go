@@ -53,7 +53,7 @@ func (d *Daemon) Start() (err error) {
 		return
 	}
 
-	err = service.Export(d.manager)
+	err = service.Export(dbusObjPath, d.manager)
 	if err != nil {
 		return
 	}

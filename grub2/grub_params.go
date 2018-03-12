@@ -116,7 +116,7 @@ func getGrubParamsContent(params map[string]string) []byte {
 
 	// write buf
 	var buf bytes.Buffer
-	buf.WriteString("# Written by " + DBusServiceName + "\n")
+	buf.WriteString("# Written by " + dbusServiceName + "\n")
 	for _, k := range keys {
 		buf.WriteString(k + "=" + params[k] + "\n")
 	}

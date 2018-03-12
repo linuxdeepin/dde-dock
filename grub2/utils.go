@@ -112,7 +112,7 @@ func checkAuthWithPid(pid uint32) (bool, error) {
 	subject := polkit.NewSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
 	subject.SetDetail("start-time", uint64(0))
-	const actionId = DBusServiceName
+	const actionId = dbusServiceName
 	details := make(map[string]string)
 	result, err := polkit.CheckAuthorization(subject, actionId, details,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")

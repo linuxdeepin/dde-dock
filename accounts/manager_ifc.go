@@ -39,11 +39,8 @@ const (
 	dbusInterface   = "com.deepin.daemon.Accounts"
 )
 
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusInterface,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 // Create new user.
@@ -155,7 +152,7 @@ func (m *Manager) DeleteUser(sender dbus.Sender,
 }
 
 func (m *Manager) FindUserById(uid string) (string, *dbus.Error) {
-	userPath := userDBusPath + uid
+	userPath := userDBusPathPrefix + uid
 	for _, v := range m.UserList {
 		if v == userPath {
 			return v, nil
@@ -264,5 +261,5 @@ func (m *Manager) CreateGuestAccount(sender dbus.Sender) (string, *dbus.Error) {
 		return "", dbusutil.ToError(err)
 	}
 
-	return userDBusPath + info.Uid, nil
+	return userDBusPathPrefix + info.Uid, nil
 }

@@ -36,11 +36,8 @@ const (
 	localeIconFinished = "notification-change-language-finished"
 )
 
-func (lang *LangSelector) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Interface: dbusInterface,
-		Path:      dbusPath,
-	}
+func (*LangSelector) GetInterfaceName() string {
+	return dbusInterface
 }
 
 // Set user desktop environment locale, the new locale will work after relogin.

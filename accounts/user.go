@@ -235,10 +235,6 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	return u, nil
 }
 
-func (u *User) destroy() {
-	u.service.StopExport(u.GetDBusExportInfo())
-}
-
 func (u *User) updateIconList() {
 	u.IconList = u.getAllIcons()
 	u.emitPropChangedIconList(u.IconList)
@@ -439,7 +435,7 @@ func (u *User) getDefaultLayout() string {
 
 // userPath must be composed with 'userDBusPath + uid'
 func getUidFromUserPath(userPath string) string {
-	items := strings.Split(userPath, userDBusPath)
+	items := strings.Split(userPath, userDBusPathPrefix)
 
 	return items[1]
 }

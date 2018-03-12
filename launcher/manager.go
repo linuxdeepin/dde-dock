@@ -93,8 +93,8 @@ type Manager struct {
 	appsHidden         []string
 	appsHiddenMu       sync.Mutex
 	// Properties:
-	DisplayMode *gsprop.Enum `prop:"access:rw"`
-	Fullscreen  *gsprop.Bool `prop:"access:rw"`
+	DisplayMode gsprop.Enum `prop:"access:rw"`
+	Fullscreen  gsprop.Bool `prop:"access:rw"`
 
 	signals *struct {
 		// SearchDone 返回搜索结果列表
@@ -184,8 +184,8 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	}
 
 	m.settings = gio.NewSettings(gsSchemaLauncher)
-	m.DisplayMode = gsprop.NewEnum(m.settings, gsKeyDisplayMode)
-	m.Fullscreen = gsprop.NewBool(m.settings, gsKeyFullscreen)
+	m.DisplayMode.Bind(m.settings, gsKeyDisplayMode)
+	m.Fullscreen.Bind(m.settings, gsKeyFullscreen)
 
 	return m, nil
 }

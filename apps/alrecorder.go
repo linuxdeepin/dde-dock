@@ -112,11 +112,8 @@ func (r *ALRecorder) checkLoop() {
 	}
 }
 
-func (r *ALRecorder) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: alRecorderDBusInterface,
-	}
+func (*ALRecorder) GetInterfaceName() string {
+	return alRecorderDBusInterface
 }
 
 func (r *ALRecorder) Service() *dbusutil.Service {

@@ -35,17 +35,17 @@ func RunAsDaemon() {
 	}
 	_g = New(service)
 
-	err = service.Export(_g)
+	err = service.Export(dbusPath, _g)
 	if err != nil {
 		logger.Fatal("failed to export grub2:", err)
 	}
 
-	err = service.Export(_g.theme)
+	err = service.Export(themeDBusPath, _g.theme)
 	if err != nil {
 		logger.Fatal("failed to export grub2 theme:", err)
 	}
 
-	err = service.RequestName(DBusServiceName)
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		logger.Fatal("failed to request name:", err)
 	}

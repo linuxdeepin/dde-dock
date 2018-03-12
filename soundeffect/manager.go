@@ -35,7 +35,7 @@ const (
 
 	DBusServiceName = "com.deepin.daemon.SoundEffect"
 	dbusPath        = "/com/deepin/daemon/SoundEffect"
-	dbusIFC         = DBusServiceName
+	dbusInterface   = DBusServiceName
 )
 
 type Manager struct {
@@ -44,7 +44,7 @@ type Manager struct {
 	count   int
 	countMu sync.Mutex
 
-	Enabled *gsprop.Bool `prop:"access:rw"`
+	Enabled gsprop.Bool `prop:"access:rw"`
 
 	methods *struct {
 		PlaySystemSound func() `in:"event"`
@@ -56,15 +56,12 @@ func NewManager(service *dbusutil.Service) *Manager {
 
 	m.service = service
 	m.setting = gio.NewSettings(soundEffectSchema)
-	m.Enabled = gsprop.NewBool(m.setting, settingKeyEnabled)
+	m.Enabled.Bind(m.setting, settingKeyEnabled)
 	return m
 }
 
-func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) PlaySystemSound(event string) *dbus.Error {

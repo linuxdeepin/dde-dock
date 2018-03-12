@@ -29,9 +29,9 @@ import (
 )
 
 const (
-	dbusDest = "com.deepin.daemon.Greeter"
-	dbusPath = "/com/deepin/daemon/Greeter"
-	dbusIFC  = dbusDest
+	dbusServiceName = "com.deepin.daemon.Greeter"
+	dbusPath        = "/com/deepin/daemon/Greeter"
+	dbusInterface   = dbusServiceName
 
 	greeterConfigFile = "/etc/lightdm/lightdm-deepin-greeter.conf"
 	kfGroupGeneral    = "General"
@@ -85,11 +85,8 @@ func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
 	return value, nil
 }
 
-func (*Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusPath,
-		Interface: dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) setQuitFlag(v bool) {

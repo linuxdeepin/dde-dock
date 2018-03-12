@@ -349,11 +349,8 @@ func (m *Manager) getIdList(x, y int32) ([]string, []string) {
 	return inList, outList
 }
 
-func (m *Manager) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      dbusObjPath,
-		Interface: dbusInterface,
-	}
+func (m *Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) sumAreasMd5(areas []coordinateRange, flag int32) (md5Str string, ok bool) {

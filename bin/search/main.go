@@ -70,7 +70,7 @@ func main() {
 	}
 
 	m := newManager(service)
-	err = service.Export(m)
+	err = service.Export(dbusPath, m)
 	if err != nil {
 		logger.Fatal("failed to export:", err)
 	}

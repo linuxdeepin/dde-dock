@@ -36,15 +36,12 @@ import (
 )
 
 const (
-	userDBusPath = "/com/deepin/daemon/Accounts/User"
-	userDBusIFC  = "com.deepin.daemon.Accounts.User"
+	userDBusPathPrefix = "/com/deepin/daemon/Accounts/User"
+	userDBusInterface  = "com.deepin.daemon.Accounts.User"
 )
 
-func (u *User) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      userDBusPath + u.Uid,
-		Interface: userDBusIFC,
-	}
+func (*User) GetInterfaceName() string {
+	return userDBusInterface
 }
 
 func (u *User) SetFullName(sender dbus.Sender, name string) *dbus.Error {

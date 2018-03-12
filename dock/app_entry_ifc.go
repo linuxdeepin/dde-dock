@@ -28,11 +28,8 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (e *AppEntry) GetDBusExportInfo() dbusutil.ExportInfo {
-	return dbusutil.ExportInfo{
-		Path:      entryDBusObjPathPrefix + e.Id,
-		Interface: entryDBusInterface,
-	}
+func (e *AppEntry) GetInterfaceName() string {
+	return entryDBusInterface
 }
 
 func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
