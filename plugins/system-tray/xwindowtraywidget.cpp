@@ -83,7 +83,7 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
 #endif
 
     setMouseTracking(true);
-    setFixedSize(26, 26);
+
     m_updateTimer->start();
 }
 
