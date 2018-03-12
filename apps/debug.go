@@ -22,10 +22,15 @@
 package apps
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (r *ALRecorder) DebugUserRemoved(dMsg dbus.DMessage) {
-	uid := int(dMsg.GetSenderUID())
-	r.handleUserRemoved(uid)
+func (r *ALRecorder) DebugUserRemoved(sender dbus.Sender) *dbus.Error {
+	uid, err := r.Service().GetConnUID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	r.handleUserRemoved(int(uid))
+	return nil
 }

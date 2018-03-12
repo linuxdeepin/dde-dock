@@ -20,47 +20,35 @@
 package power
 
 import (
+	"sync"
+
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
-const (
-	gsSchemaPower = "com.deepin.dde.power"
-)
-
+//go:generate dbusutil-gen -type Manager manager.go
 type Manager struct {
+	service              *dbusutil.Service
 	helper               *Helper
 	settings             *gio.Settings
 	isSuspending         bool
 	warnLevelCountTicker *countTicker
-	warnLevelConfig      *WarnLevelConfig
+	warnLevelConfig      *WarnLevelConfigManager
 	submodules           map[string]submodule
 	inhibitor            *sleepInhibitor
 
-	// 接通电源时，不做任何操作，到关闭屏幕需要的时间
-	LinePowerScreenBlackDelay *property.GSettingsIntProperty `access:"readwrite"`
-	// 接通电源时，不做任何操作，从黑屏到睡眠的时间
-	LinePowerSleepDelay *property.GSettingsIntProperty `access:"readwrite"`
-
-	// 使用电池时，不做任何操作，到关闭屏幕需要的时间
-	BatteryScreenBlackDelay *property.GSettingsIntProperty `access:"readwrite"`
-	// 使用电池时，不做任何操作，从黑屏到睡眠的时间
-	BatterySleepDelay *property.GSettingsIntProperty `access:"readwrite"`
-
-	// 关闭显示器前是否锁定
-	ScreenBlackLock *property.GSettingsBoolProperty `access:"readwrite"`
-	// 睡眠前是否锁定
-	SleepLock *property.GSettingsBoolProperty `access:"readwrite"`
-
-	// 笔记本电脑盖上盖子后是否睡眠
-	LidClosedSleep *property.GSettingsBoolProperty `access:"readwrite"`
-
+	PropsMu sync.RWMutex
 	// 是否有盖子，一般笔记本电脑才有
 	LidIsPresent bool
 	// 是否使用电池, 接通电源时为 false, 使用电池时为 true
 	OnBattery bool
 
+	// 警告级别
+	WarnLevel WarnLevel
+
+	// dbusutil-gen: ignore-below
 	// 电池是否可用，是否存在
 	BatteryIsPresent map[string]bool
 	// 电池电量百分比
@@ -68,12 +56,29 @@ type Manager struct {
 	// 电池状态
 	BatteryState map[string]uint32
 
-	// 警告级别
-	WarnLevel WarnLevel
+	// 接通电源时，不做任何操作，到关闭屏幕需要的时间
+	LinePowerScreenBlackDelay gsprop.Int `prop:"access:rw"`
+	// 接通电源时，不做任何操作，从黑屏到睡眠的时间
+	LinePowerSleepDelay gsprop.Int `prop:"access:rw"`
+
+	// 使用电池时，不做任何操作，到关闭屏幕需要的时间
+	BatteryScreenBlackDelay gsprop.Int `prop:"access:rw"`
+	// 使用电池时，不做任何操作，从黑屏到睡眠的时间
+	BatterySleepDelay gsprop.Int `prop:"access:rw"`
+
+	// 关闭显示器前是否锁定
+	ScreenBlackLock gsprop.Bool `prop:"access:rw"`
+	// 睡眠前是否锁定
+	SleepLock gsprop.Bool `prop:"access:rw"`
+
+	// 笔记本电脑盖上盖子后是否睡眠
+	LidClosedSleep gsprop.Bool `prop:"access:rw"`
 }
 
-func NewManager() (*Manager, error) {
-	m := &Manager{}
+func NewManager(service *dbusutil.Service) (*Manager, error) {
+	m := &Manager{
+		service: service,
+	}
 	helper, err := NewHelper()
 	if err != nil {
 		return nil, err
@@ -81,25 +86,15 @@ func NewManager() (*Manager, error) {
 	m.helper = helper
 
 	m.settings = gio.NewSettings(gsSchemaPower)
+	m.warnLevelConfig = NewWarnLevelConfigManager(m.settings)
 
-	// warn level config
-	m.warnLevelConfig = NewWarnLevelConfig()
-	m.warnLevelConfig.connectSettings(m.settings)
-	err = dbus.InstallOnSession(m.warnLevelConfig)
-	if err != nil {
-		m.destroy()
-		return nil, err
-	}
-
-	m.LinePowerScreenBlackDelay = property.NewGSettingsIntProperty(m, "LinePowerScreenBlackDelay", m.settings, settingKeyLinePowerScreenBlackDelay)
-	m.LinePowerSleepDelay = property.NewGSettingsIntProperty(m, "LinePowerSleepDelay", m.settings, settingKeyLinePowerSleepDelay)
-	m.BatteryScreenBlackDelay = property.NewGSettingsIntProperty(m, "BatteryScreenBlackDelay", m.settings, settingKeyBatteryScreenBlackDelay)
-	m.BatterySleepDelay = property.NewGSettingsIntProperty(m, "BatterySleepDelay", m.settings, settingKeyBatterySleepDelay)
-
-	m.ScreenBlackLock = property.NewGSettingsBoolProperty(m, "ScreenBlackLock", m.settings, settingKeyScreenBlackLock)
-	m.SleepLock = property.NewGSettingsBoolProperty(m, "SleepLock", m.settings, settingKeySleepLock)
-
-	m.LidClosedSleep = property.NewGSettingsBoolProperty(m, "LidClosedSleep", m.settings, settingKeyLidClosedSleep)
+	m.LinePowerScreenBlackDelay.Bind(m.settings, settingKeyLinePowerScreenBlackDelay)
+	m.LinePowerSleepDelay.Bind(m.settings, settingKeyLinePowerSleepDelay)
+	m.BatteryScreenBlackDelay.Bind(m.settings, settingKeyBatteryScreenBlackDelay)
+	m.BatterySleepDelay.Bind(m.settings, settingKeyBatterySleepDelay)
+	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)
+	m.SleepLock.Bind(m.settings, settingKeySleepLock)
+	m.LidClosedSleep.Bind(m.settings, settingKeyLidClosedSleep)
 
 	power := m.helper.Power
 	m.LidIsPresent = power.HasLidSwitch.Get()
@@ -111,7 +106,6 @@ func NewManager() (*Manager, error) {
 	m.BatteryPercentage = make(map[string]float64)
 	m.BatteryState = make(map[string]uint32)
 
-	logger.Info("NewManager done")
 	return m, nil
 }
 
@@ -123,28 +117,24 @@ func (m *Manager) init() {
 	m.inhibitor.block()
 
 	m.handleBatteryDisplayUpdate()
-	m.initBatteryDisplayUpdateHandler()
+	power := m.helper.Power
+	power.ConnectBatteryDisplayUpdate(func(timestamp int64) {
+		logger.Debug("BatteryDisplayUpdate", timestamp)
+		m.handleBatteryDisplayUpdate()
+	})
+
+	m.warnLevelConfig.setChangeCallback(m.handleBatteryDisplayUpdate)
 
 	m.initPowerModule()
 
 	m.initOnBatteryChangedHandler()
 	m.initSubmodules()
 	m.startSubmodules()
-
-	m.startupNotify()
-}
-
-func (m *Manager) startupNotify() {
-	props := []string{"BatteryIsPresent", "BatteryPercentage", "BatteryState",
-		"WarnLevel", "OnBattery", "LidIsPresent"}
-	for _, propName := range props {
-		dbus.NotifyChange(m, propName)
-	}
 }
 
 func (m *Manager) initPowerModule() {
-	inited := m.settings.GetBoolean(settingKeyPowerModuleInitialized)
-	if !inited {
+	init := m.settings.GetBoolean(settingKeyPowerModuleInitialized)
+	if !init {
 		// TODO: 也许有更好的判断台式机的方法
 		power := m.helper.Power
 		if !power.HasBattery.Get() {
@@ -167,14 +157,34 @@ func (m *Manager) destroy() {
 		m.helper.Destroy()
 		m.helper = nil
 	}
-	if m.warnLevelConfig != nil {
-		dbus.UnInstallObject(m.warnLevelConfig)
-		m.warnLevelConfig = nil
-	}
 
 	if m.inhibitor != nil {
 		m.inhibitor.unblock()
 		m.inhibitor = nil
 	}
-	dbus.UnInstallObject(m)
+	m.service.StopExport(m)
+}
+
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
+}
+
+func (m *Manager) Reset() *dbus.Error {
+	logger.Debug("Reset settings")
+
+	var settingKeys = []string{
+		settingKeyLinePowerScreenBlackDelay,
+		settingKeyLinePowerSleepDelay,
+		settingKeyBatteryScreenBlackDelay,
+		settingKeyBatterySleepDelay,
+		settingKeyScreenBlackLock,
+		settingKeySleepLock,
+		settingKeyLidClosedSleep,
+		settingKeyPowerButtonPressedExec,
+	}
+	for _, key := range settingKeys {
+		logger.Debug("reset setting", key)
+		m.settings.Reset(key)
+	}
+	return nil
 }

@@ -20,137 +20,25 @@
 package power
 
 import (
-	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/gsettings"
-
 	"time"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/gsettings"
 )
 
-type WarnLevelConfig struct {
-	UsePercentageForPolicy                              bool
-	LowTime, CriticalTime, ActionTime                   uint64
-	LowPercentage, CriticalPercentage, ActionPercentage float64
-
-	settings    *gio.Settings
-	changeTimer *time.Timer
-	changeCb    func()
+type warnLevelConfig struct {
+	UsePercentageForPolicy bool
+	LowTime                uint64
+	CriticalTime           uint64
+	ActionTime             uint64
+	LowPercentage          float64
+	CriticalPercentage     float64
+	ActionPercentage       float64
 }
 
-func NewWarnLevelConfig() *WarnLevelConfig {
-	c := &WarnLevelConfig{}
-	return c
-}
-
-func (c *WarnLevelConfig) setChangeCallback(fn func()) {
-	c.changeCb = fn
-}
-
-func (c *WarnLevelConfig) connectSettings(s *gio.Settings) {
-	c.settings = s
-	c.UsePercentageForPolicy = s.GetBoolean(settingKeyUsePercentageForPolicy)
-
-	c.LowPercentage = float64(s.GetInt(settingKeyLowPercentage))
-	c.CriticalPercentage = float64(s.GetInt(settingKeyCriticalPercentage))
-	c.ActionPercentage = float64(s.GetInt(settingKeyActionPercentage))
-
-	c.LowTime = uint64(s.GetInt(settingKeyLowTime))
-	c.CriticalTime = uint64(s.GetInt(settingKeyCriticalTime))
-	c.ActionTime = uint64(s.GetInt(settingKeyActionTime))
-	c.connectSettingsChange()
-}
-func (c *WarnLevelConfig) connectSettingsKeyChange(key string, handler func(key string)) {
-	logger.Debug("connect change", key)
-	gsettings.ConnectChanged(gsSchemaPower, key, handler)
-}
-
-func (c *WarnLevelConfig) delayCheckValid() {
-	logger.Debug("delayCheckValid")
-	if c.changeTimer != nil {
-		c.changeTimer.Stop()
-	}
-	c.changeTimer = time.AfterFunc(20*time.Second, func() {
-		logger.Debug("checkValid")
-		if !c.isValid() {
-			logger.Info("Warn level config is invalid, reset")
-			c.Reset()
-		}
-	})
-}
-
-func (c *WarnLevelConfig) notifyChange(propName string) {
-	if c.changeCb != nil {
-		logger.Debug("WarnLevelConfig change")
-		c.changeCb()
-	}
-	c.delayCheckValid()
-	dbus.NotifyChange(c, propName)
-}
-
-func (c *WarnLevelConfig) getChangeHandlerFloat64(propName string, propRef *float64) func(string) {
-	return func(key string) {
-		logger.Debug("change key", key)
-		newVal := float64(c.settings.GetInt(key))
-		if newVal != *propRef {
-			*propRef = newVal
-			c.notifyChange(propName)
-		}
-	}
-}
-
-func (c *WarnLevelConfig) getChangeHandlerUInt64(propName string, propRef *uint64) func(string) {
-	return func(key string) {
-		logger.Debug("change key", key)
-		newVal := uint64(c.settings.GetInt(key))
-		if newVal != *propRef {
-			*propRef = newVal
-			c.notifyChange(propName)
-		}
-	}
-}
-
-func (c *WarnLevelConfig) getChangeHandlerBoolean(propName string, propRef *bool) func(string) {
-	return func(key string) {
-		logger.Debug("change key", key)
-		newVal := c.settings.GetBoolean(key)
-		if newVal != *propRef {
-			*propRef = newVal
-			c.notifyChange(propName)
-		}
-	}
-}
-
-func (c *WarnLevelConfig) connectSettingsChange() {
-	c.connectSettingsKeyChange(settingKeyUsePercentageForPolicy, c.getChangeHandlerBoolean("UsePercentageForPolicy", &c.UsePercentageForPolicy))
-	c.connectSettingsKeyChange(settingKeyLowPercentage, c.getChangeHandlerFloat64("LowPercentage", &c.LowPercentage))
-	c.connectSettingsKeyChange(settingKeyCriticalPercentage, c.getChangeHandlerFloat64("CriticalPercentage", &c.CriticalPercentage))
-	c.connectSettingsKeyChange(settingKeyActionPercentage, c.getChangeHandlerFloat64("ActionPercentage", &c.ActionPercentage))
-
-	c.connectSettingsKeyChange(settingKeyLowTime, c.getChangeHandlerUInt64("LowTime", &c.LowTime))
-	c.connectSettingsKeyChange(settingKeyCriticalTime, c.getChangeHandlerUInt64("CriticalTime", &c.CriticalTime))
-	c.connectSettingsKeyChange(settingKeyActionTime, c.getChangeHandlerUInt64("ActionTime", &c.ActionTime))
-}
-
-func (c *WarnLevelConfig) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC + ".WarnLevelConfig",
-	}
-}
-
-func (c *WarnLevelConfig) Reset() {
-	s := c.settings
-	s.Reset(settingKeyUsePercentageForPolicy)
-	s.Reset(settingKeyLowPercentage)
-	s.Reset(settingKeyCriticalPercentage)
-	s.Reset(settingKeyActionPercentage)
-	s.Reset(settingKeyLowTime)
-	s.Reset(settingKeyCriticalTime)
-	s.Reset(settingKeyActionTime)
-}
-
-func (c *WarnLevelConfig) isValid() bool {
+func (c *warnLevelConfig) isValid() bool {
 	if c.LowTime > c.CriticalTime &&
 		c.CriticalTime > c.ActionTime &&
 
@@ -159,4 +47,114 @@ func (c *WarnLevelConfig) isValid() bool {
 		return true
 	}
 	return false
+}
+
+type WarnLevelConfigManager struct {
+	UsePercentageForPolicy gsprop.Bool `prop:"access:rw"`
+
+	LowTime      gsprop.Int `prop:"access:rw"`
+	CriticalTime gsprop.Int `prop:"access:rw"`
+	ActionTime   gsprop.Int `prop:"access:rw"`
+
+	LowPercentage      gsprop.Int `prop:"access:rw"`
+	CriticalPercentage gsprop.Int `prop:"access:rw"`
+	ActionPercentage   gsprop.Int `prop:"access:rw"`
+
+	settings    *gio.Settings
+	changeTimer *time.Timer
+	changeCb    func()
+}
+
+func NewWarnLevelConfigManager(gs *gio.Settings) *WarnLevelConfigManager {
+
+	m := &WarnLevelConfigManager{
+		settings: gs,
+	}
+
+	m.UsePercentageForPolicy.Bind(gs, settingKeyUsePercentageForPolicy)
+	m.LowTime.Bind(gs, settingKeyLowTime)
+	m.CriticalTime.Bind(gs, settingKeyCriticalTime)
+	m.ActionTime.Bind(gs, settingKeyActionTime)
+
+	m.LowPercentage.Bind(gs, settingKeyLowPercentage)
+	m.CriticalPercentage.Bind(gs, settingKeyCriticalPercentage)
+	m.ActionPercentage.Bind(gs, settingKeyActionPercentage)
+
+	m.connectSettingsChanged()
+	return m
+}
+
+func (m *WarnLevelConfigManager) getWarnLevelConfig() *warnLevelConfig {
+	return &warnLevelConfig{
+		UsePercentageForPolicy: m.UsePercentageForPolicy.Get(),
+		LowTime:                uint64(m.LowTime.Get()),
+		CriticalTime:           uint64(m.CriticalTime.Get()),
+		ActionTime:             uint64(m.ActionTime.Get()),
+
+		LowPercentage:      float64(m.LowPercentage.Get()),
+		CriticalPercentage: float64(m.CriticalPercentage.Get()),
+		ActionPercentage:   float64(m.ActionPercentage.Get()),
+	}
+}
+
+func (m *WarnLevelConfigManager) setChangeCallback(fn func()) {
+	m.changeCb = fn
+}
+
+func (m *WarnLevelConfigManager) delayCheckValid() {
+	logger.Debug("delayCheckValid")
+	if m.changeTimer != nil {
+		m.changeTimer.Stop()
+	}
+	m.changeTimer = time.AfterFunc(20*time.Second, func() {
+		logger.Debug("checkValid")
+		wlc := m.getWarnLevelConfig()
+		if !wlc.isValid() {
+			logger.Info("Warn level config is invalid, reset")
+			m.Reset()
+		}
+	})
+}
+
+func (m *WarnLevelConfigManager) notifyChange() {
+	if m.changeCb != nil {
+		logger.Debug("WarnLevelConfig change")
+		m.changeCb()
+	}
+	m.delayCheckValid()
+}
+
+func (m *WarnLevelConfigManager) connectSettingsChanged() {
+	gsettings.ConnectChanged(gsSchemaPower, "*", func(key string) {
+		switch key {
+		case settingKeyUsePercentageForPolicy,
+			settingKeyLowPercentage,
+			settingKeyCriticalPercentage,
+			settingKeyActionPercentage,
+
+			settingKeyLowTime,
+			settingKeyCriticalTime,
+			settingKeyActionTime:
+
+			logger.Debug("key changed", key)
+			m.notifyChange()
+		}
+	})
+
+}
+
+func (m *WarnLevelConfigManager) Reset() *dbus.Error {
+	s := m.settings
+	s.Reset(settingKeyUsePercentageForPolicy)
+	s.Reset(settingKeyLowPercentage)
+	s.Reset(settingKeyCriticalPercentage)
+	s.Reset(settingKeyActionPercentage)
+	s.Reset(settingKeyLowTime)
+	s.Reset(settingKeyCriticalTime)
+	s.Reset(settingKeyActionTime)
+	return nil
+}
+
+func (*WarnLevelConfigManager) GetInterfaceName() string {
+	return dbusInterface + ".WarnLevelConfig"
 }

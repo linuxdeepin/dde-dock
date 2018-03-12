@@ -32,6 +32,7 @@ import (
 
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
@@ -82,6 +83,12 @@ func main() {
 		// set all modules log level to appLogLevel
 		loader.SetLogLevel(appLogLevel)
 	}
+
+	service, err := dbusutil.NewSessionService()
+	if err != nil {
+		logger.Fatal(err)
+	}
+	loader.SetService(service)
 
 	needRunMainLoop := true
 

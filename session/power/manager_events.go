@@ -20,10 +20,10 @@
 package power
 
 import (
-	"pkg.deepin.io/dde/api/soundutils"
-	"pkg.deepin.io/lib/dbus"
-	. "pkg.deepin.io/lib/gettext"
 	"time"
+
+	"pkg.deepin.io/dde/api/soundutils"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 // 处理有线电源插入拔出事件
@@ -31,12 +31,18 @@ func (m *Manager) initOnBatteryChangedHandler() {
 	power := m.helper.Power
 	power.OnBattery.ConnectChanged(func() {
 		logger.Debug("property OnBattery changed")
-		m.setPropOnBattery(power.OnBattery.Get())
 
-		if m.OnBattery {
-			playSound(soundutils.EventPowerUnplug)
-		} else {
-			playSound(soundutils.EventPowerPlug)
+		onBattery := power.OnBattery.Get()
+		m.PropsMu.Lock()
+		changed := m.setPropOnBattery(onBattery)
+		m.PropsMu.Unlock()
+
+		if changed {
+			if onBattery {
+				playSound(soundutils.EventPowerUnplug)
+			} else {
+				playSound(soundutils.EventPowerPlug)
+			}
 		}
 	})
 }
@@ -55,37 +61,39 @@ func (m *Manager) handleWakeup() {
 	playSound(soundutils.EventWakeup)
 }
 
-func (m *Manager) initBatteryDisplayUpdateHandler() {
-	power := m.helper.Power
-	power.ConnectBatteryDisplayUpdate(func(timestamp int64) {
-		logger.Debug("BatteryDisplayUpdate", timestamp)
-		m.handleBatteryDisplayUpdate()
-	})
-
-	m.warnLevelConfig.setChangeCallback(m.handleBatteryDisplayUpdate)
-}
-
 func (m *Manager) handleBatteryDisplayUpdate() {
 	logger.Debug("handleBatteryDisplayUpdate")
 	power := m.helper.Power
 	hasBattery := power.HasBattery.Get()
+
+	m.PropsMu.Lock()
+	var warnLevelChanged bool
+	var warnLevel WarnLevel
+
 	if hasBattery {
 		m.setPropBatteryIsPresent(true)
 		percentage := power.BatteryPercentage.Get()
 		timeToEmpty := power.BatteryTimeToEmpty.Get()
 		m.setPropBatteryPercentage(percentage)
 		m.setPropBatteryState(power.BatteryStatus.Get())
-		warnLevel := m.getWarnLevel(percentage, timeToEmpty)
-		m.setPropWarnLevel(warnLevel)
+		warnLevel = m.getWarnLevel(percentage, timeToEmpty)
+		warnLevelChanged = m.setPropWarnLevel(warnLevel)
 
 	} else {
-		m.setPropWarnLevel(WarnLevelNone)
+		warnLevel = WarnLevelNone
+		warnLevelChanged = m.setPropWarnLevel(WarnLevelNone)
 		delete(m.BatteryIsPresent, batteryDisplay)
 		delete(m.BatteryPercentage, batteryDisplay)
 		delete(m.BatteryState, batteryDisplay)
-		dbus.NotifyChange(m, "BatteryIsPresent")
-		dbus.NotifyChange(m, "BatteryPercentage")
-		dbus.NotifyChange(m, "BatteryState")
+
+		m.service.EmitPropertiesChanged(m, nil, "BatteryIsPresent",
+			"BatteryPercentage", "BatteryState")
+	}
+
+	m.PropsMu.Unlock()
+
+	if warnLevelChanged {
+		m.handleWarnLevelChanged(warnLevel)
 	}
 }
 
@@ -96,22 +104,24 @@ func (m *Manager) disableWarnLevelCountTicker() {
 	}
 }
 
-func (m *Manager) handleWarnLevelChanged() {
+func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 	logger.Debug("handleWarnLevelChanged")
 	m.disableWarnLevelCountTicker()
 
-	switch m.WarnLevel {
+	switch level {
 	case WarnLevelAction:
 		playSound(soundutils.EventBatteryLow)
-		m.sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in"))
+		m.sendNotify("battery_empty", Tr("Battery Critical Low"),
+			Tr("Computer has been in suspend mode, please plug in"))
+
 		m.warnLevelCountTicker = newCountTicker(time.Second, func(count int) {
 			if count == 3 {
-				// after 3 seconds, lock and then show lowpower
+				// after 3 seconds, lock and then show dde low power
 				go func() {
 					if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
 						m.lockWaitShow(2 * time.Second)
 					}
-					doShowLowpower()
+					doShowDDELowPower()
 				}()
 			} else if count == 5 {
 				// after 5 seconds, force suspend
@@ -125,17 +135,19 @@ func (m *Manager) handleWarnLevelChanged() {
 			// notify every 60 seconds
 			if count%60 == 0 {
 				playSound(soundutils.EventBatteryLow)
-				m.sendNotify("battery_low", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in"))
+				m.sendNotify("battery_low", Tr("Battery Critical Low"),
+					Tr("Computer has been in suspend mode, please plug in"))
 			}
 		})
 
 	case WarnLevelLow:
 		playSound(soundutils.EventBatteryLow)
-		m.sendNotify("battery_caution", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now"))
+		m.sendNotify("battery_caution", Tr("Battery Low"),
+			Tr("Computer will be in suspend mode, please plug in now"))
 
 	case WarnLevelNone:
 		logger.Debug("Power sufficient")
-		doCloseLowpower()
+		doCloseDDELowPower()
 		// 由 低电量 到 电量充足，必然需要有线电源插入
 	}
 }

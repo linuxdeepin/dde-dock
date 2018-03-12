@@ -50,7 +50,7 @@ type fullScreenWorkaround struct {
 }
 
 func newFullScreenWorkaround(m *Manager) (string, submodule, error) {
-	name := "FullscreenWorkaround"
+	name := "FullScreenWorkaround"
 	wa := &fullScreenWorkaround{
 		manager: m,
 		enable:  true,
@@ -89,7 +89,7 @@ func (wa *fullScreenWorkaround) detect() {
 	wa.enableMutex.Unlock()
 
 	time.AfterFunc(1*time.Second, func() {
-		if wa.isFullscreenFocused(activeWin) {
+		if wa.isFullScreenFocused(activeWin) {
 			wa.tryInhibit(activeWin)
 		} else {
 			//logger.Debug("Try uninhibit")
@@ -135,11 +135,11 @@ func (wa *fullScreenWorkaround) tryInhibit(activeWin xproto.Window) {
 		return
 	}
 	cmdline := string(contents)
-	logger.Debugf("Focused | Fullscreen, Pid %v, Cmd line: %q", pid, cmdline)
+	logger.Debugf("Focused | FullScreen, Pid %v, Cmd line: %q", pid, cmdline)
 	// match process cmdline with targets
 	for _, target := range wa.targets {
 		if strings.Contains(cmdline, target) {
-			logger.Debugf("matchs %q", target)
+			logger.Debugf("match %q", target)
 			wa.inhibit()
 			break
 		}
@@ -152,7 +152,7 @@ func (wa *fullScreenWorkaround) inhibit() {
 		logger.Warning("screenSaver is nil")
 		return
 	}
-	id, err := screenSaver.Inhibit("idle", "Fullscreen play video")
+	id, err := screenSaver.Inhibit("idle", "FullScreen play video")
 	if err != nil {
 		logger.Warning("Inhibit 'idle' failed:", err)
 		return
@@ -161,7 +161,7 @@ func (wa *fullScreenWorkaround) inhibit() {
 	wa.idleId = id
 }
 
-func (wa *fullScreenWorkaround) isFullscreenFocused(xid xproto.Window) bool {
+func (wa *fullScreenWorkaround) isFullScreenFocused(xid xproto.Window) bool {
 	xu := wa.manager.helper.xu
 	states, _ := ewmh.WmStateGet(xu, xid)
 	found := 0
@@ -178,8 +178,8 @@ func (wa *fullScreenWorkaround) isFullscreenFocused(xid xproto.Window) bool {
 }
 
 func (wa *fullScreenWorkaround) Start() error {
-	if !wa.manager.settings.GetBoolean(settingKeyFullscreenWorkaroundEnabled) {
-		logger.Info("fullscreen workaround disabled")
+	if !wa.manager.settings.GetBoolean(settingKeyFullScreenWorkaroundEnabled) {
+		logger.Info("full screen workaround disabled")
 		return nil
 	}
 

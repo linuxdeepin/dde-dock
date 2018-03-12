@@ -20,8 +20,8 @@
 package power
 
 const (
+	gsSchemaPower = "com.deepin.dde.power"
 	// settingKeys
-	settingSchema                     = "com.deepin.dde.power"
 	settingKeyBatteryScreenBlackDelay = "battery-screen-black-delay"
 	settingKeyBatterySleepDelay       = "battery-sleep-delay"
 
@@ -34,9 +34,8 @@ const (
 	settingKeyLidClosedSleep          = "lid-closed-sleep"
 	settingKeyPowerButtonPressedExec  = "power-button-pressed-exec"
 
-	settingKeyFullscreenWorkaroundEnabled     = "fullscreen-workaround-enabled"
-	settingKeyMultiScreenPreventLidClosedExec = "multi-screen-prevent-lid-closed-exec"
-	settingKeyUsePercentageForPolicy          = "use-percentage-for-policy"
+	settingKeyFullScreenWorkaroundEnabled = "fullscreen-workaround-enabled"
+	settingKeyUsePercentageForPolicy      = "use-percentage-for-policy"
 
 	settingKeyPowerModuleInitialized = "power-module-initialized"
 	settingKeyLowPercentage          = "percentage-low"
@@ -48,11 +47,11 @@ const (
 	settingKeyActionTime   = "time-to-empty-action"
 
 	// dbus info
-	dbusDisplayDest = "com.deepin.daemon.Display"
-	dbusDisplayPath = "/com/deepin/daemon/Display"
+	displayDBusServiceName = "com.deepin.daemon.Display"
+	displayDBusPath        = "/com/deepin/daemon/Display"
 
 	// cmd
-	cmdLowPower = "/usr/lib/deepin-daemon/dde-lowpower"
+	cmdDDELowPower = "/usr/lib/deepin-daemon/dde-lowpower"
 
 	batteryDisplay = "Display"
 )

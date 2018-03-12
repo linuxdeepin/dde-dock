@@ -20,12 +20,13 @@
 package power
 
 import (
+	"os/exec"
+	"time"
+
 	"github.com/BurntSushi/xgb/dpms"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/icccm"
-	"os/exec"
 	"pkg.deepin.io/dde/api/soundutils"
-	"time"
 )
 
 func (m *Manager) findWindow(wminstance, wmclass string) xproto.Window {
@@ -145,19 +146,14 @@ func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
 	}
 }
 
-func doShowLowpower() {
-	logger.Info("Show low power")
-	go exec.Command(cmdLowPower, "--raise").Run()
+func doShowDDELowPower() {
+	logger.Info("Show dde low power")
+	go exec.Command(cmdDDELowPower, "--raise").Run()
 }
 
-func execCommand(cmd string) {
-	logger.Infof("exec %q", cmd)
-	go exec.Command("sh", "-c", cmd).Run()
-}
-
-func doCloseLowpower() {
+func doCloseDDELowPower() {
 	logger.Info("Close low power")
-	go exec.Command(cmdLowPower, "--quit").Run()
+	go exec.Command(cmdDDELowPower, "--quit").Run()
 }
 
 func (m *Manager) sendNotify(icon, summary, body string) {

@@ -43,7 +43,7 @@ func (lv WarnLevel) String() string {
 	}
 }
 
-func _getWarnLevel(config *WarnLevelConfig, onBattery bool,
+func getWarnLevel(config *warnLevelConfig, onBattery bool,
 	percentage float64, timeToEmpty uint64) WarnLevel {
 
 	if !onBattery {
@@ -76,8 +76,9 @@ func _getWarnLevel(config *WarnLevelConfig, onBattery bool,
 		}
 		return WarnLevelAction
 	}
+	return WarnLevelNone
 }
 
 func (m *Manager) getWarnLevel(percentage float64, timeToEmpty uint64) WarnLevel {
-	return _getWarnLevel(m.warnLevelConfig, m.OnBattery, percentage, timeToEmpty)
+	return getWarnLevel(m.warnLevelConfig.getWarnLevelConfig(), m.OnBattery, percentage, timeToEmpty)
 }

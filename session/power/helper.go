@@ -63,7 +63,7 @@ func (h *Helper) init() error {
 		return err
 	}
 
-	notify.Init(dbusDest)
+	notify.Init(dbusServiceName)
 	h.Notification = notify.NewNotification("", "", "")
 
 	h.SessionManager, err = libsessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager")
@@ -78,7 +78,7 @@ func (h *Helper) init() error {
 		return err
 	}
 
-	h.Display, err = libdisplay.NewDisplay(dbusDisplayDest, dbusDisplayPath)
+	h.Display, err = libdisplay.NewDisplay(displayDBusServiceName, displayDBusPath)
 	if err != nil {
 		logger.Warning("init Display failed:", err)
 		return err

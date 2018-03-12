@@ -23,7 +23,7 @@ import (
 	"fmt"
 )
 
-var submoduleList = []func(*Manager) (string, submodule, error){}
+var submoduleList []func(*Manager) (string, submodule, error)
 
 type submodule interface {
 	Start() error
