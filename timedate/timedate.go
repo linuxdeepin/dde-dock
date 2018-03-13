@@ -21,7 +21,6 @@ package timedate
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -45,30 +44,33 @@ func (d *Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-// Start to run timedate manager
+// Start to run time date manager
 func (d *Daemon) Start() error {
 	if _manager != nil {
 		return nil
 	}
-
-	logger.BeginTracing()
+	service := loader.GetService()
 
 	var err error
-	_manager, err = NewManager()
+	_manager, err = NewManager(service)
 	if err != nil {
-		logger.Error("Create Manager failed:", err)
-		logger.EndTracing()
 		return err
 	}
 
-	err = dbus.InstallOnSession(_manager)
+	err = service.Export(dbusPath, _manager)
 	if err != nil {
-		logger.Error("Install DBus failed:", err)
 		_manager.destroy()
 		_manager = nil
-		logger.EndTracing()
 		return err
 	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		_manager.destroy()
+		_manager = nil
+		return err
+	}
+
 	go func() {
 		_manager.init()
 		_manager.handlePropChanged()
@@ -76,13 +78,12 @@ func (d *Daemon) Start() error {
 	return nil
 }
 
-// Stop the timedate manager
+// Stop the time date manager
 func (d *Daemon) Stop() error {
 	if _manager == nil {
 		return nil
 	}
 
-	logger.EndTracing()
 	_manager.destroy()
 	_manager = nil
 	return nil

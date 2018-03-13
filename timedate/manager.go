@@ -22,20 +22,29 @@ package timedate
 import (
 	"dbus/com/deepin/daemon/timedated"
 	"dbus/org/freedesktop/timedate1"
+	"sync"
+
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
 const (
-	timedateSchema          = "com.deepin.dde.datetime"
+	timeDateSchema          = "com.deepin.dde.datetime"
 	settingsKey24Hour       = "is-24hour"
 	settingsKeyTimezoneList = "user-timezone-list"
 	settingsKeyDSTOffset    = "dst-offset"
+
+	dbusServiceName = "com.deepin.daemon.Timedate"
+	dbusPath        = "/com/deepin/daemon/Timedate"
+	dbusInterface   = dbusServiceName
 )
 
+//go:generate dbusutil-gen -type Manager manager.go
 // Manage time settings
 type Manager struct {
+	service *dbusutil.Service
+	PropsMu sync.RWMutex
 	// Whether can use NTP service
 	CanNTP bool
 	// Whether enable NTP service
@@ -46,21 +55,36 @@ type Manager struct {
 	// Current timezone
 	Timezone string
 
+	// dbusutil-gen: ignore-below
 	// Use 24 hour format to display time
-	Use24HourFormat *property.GSettingsBoolProperty `access:"readwrite"`
+	Use24HourFormat gsprop.Bool `prop:"access:rw"`
 	// DST offset
-	DSTOffset *property.GSettingsIntProperty `access:"readwrite"`
+	DSTOffset gsprop.Int `prop:"access:rw"`
 	// User added timezone list
-	UserTimezones *property.GSettingsStrvProperty
+	UserTimezones gsprop.Strv
 
 	settings *gio.Settings
 	td1      *timedate1.Timedate1
 	setter   *timedated.Timedated
+
+	methods *struct {
+		SetDate            func() `in:"year,month,day,hour,min,sec,nsec"`
+		SetTime            func() `in:"usec,relative"`
+		SetNTP             func() `in:"useNTP"`
+		SetLocalRTC        func() `in:"localeRTC,fixSystem"`
+		SetTimezone        func() `in:"zone"`
+		AddUserTimezone    func() `in:"zone"`
+		DeleteUserTimezone func() `in:"zone"`
+		GetZoneInfo        func() `in:"zone" out:"zone_info"`
+		GetZoneList        func() `out:"zone_list"`
+	}
 }
 
 // Create Manager, if create freedesktop timedate1 failed return error
-func NewManager() (*Manager, error) {
-	var m = &Manager{}
+func NewManager(service *dbusutil.Service) (*Manager, error) {
+	var m = &Manager{
+		service: service,
+	}
 
 	var err error
 	m.td1, err = timedate1.NewTimedate1("org.freedesktop.timedate1",
@@ -75,31 +99,28 @@ func NewManager() (*Manager, error) {
 		return nil, err
 	}
 
+	m.settings = gio.NewSettings(timeDateSchema)
+	m.Use24HourFormat.Bind(m.settings, settingsKey24Hour)
+	m.DSTOffset.Bind(m.settings, settingsKeyDSTOffset)
+	m.UserTimezones.Bind(m.settings, settingsKeyTimezoneList)
+
 	return m, nil
 }
 
 func (m *Manager) init() {
-	m.setPropBool(&m.CanNTP, "CanNTP", m.td1.CanNTP.Get())
-	m.setPropBool(&m.NTP, "NTP", m.td1.NTP.Get())
-	m.setPropBool(&m.LocalRTC, "LocalRTC", m.td1.LocalRTC.Get())
-	m.setPropString(&m.Timezone, "Timezone", m.td1.Timezone.Get())
-
-	m.settings = gio.NewSettings(timedateSchema)
-	m.Use24HourFormat = property.NewGSettingsBoolProperty(
-		m, "Use24HourFormat",
-		m.settings, settingsKey24Hour)
-	m.DSTOffset = property.NewGSettingsIntProperty(
-		m, "DSTOffset",
-		m.settings, settingsKeyDSTOffset)
-	m.UserTimezones = property.NewGSettingsStrvProperty(
-		m, "UserTimezones",
-		m.settings, settingsKeyTimezoneList)
+	m.PropsMu.Lock()
+	m.setPropCanNTP(m.td1.CanNTP.Get())
+	m.setPropNTP(m.td1.NTP.Get())
+	m.setPropLocalRTC(m.td1.LocalRTC.Get())
+	m.setPropTimezone(m.td1.Timezone.Get())
+	m.PropsMu.Unlock()
 
 	newList, hasNil := filterNilString(m.UserTimezones.Get())
 	if hasNil {
 		m.UserTimezones.Set(newList)
 	}
 	m.AddUserTimezone(m.Timezone)
+
 }
 
 func (m *Manager) destroy() {
@@ -117,5 +138,9 @@ func (m *Manager) destroy() {
 		m.setter = nil
 	}
 
-	dbus.UnInstallObject(m)
+	m.service.StopExport(m)
+}
+
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }

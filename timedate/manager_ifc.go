@@ -23,21 +23,23 @@ import (
 	"time"
 
 	"pkg.deepin.io/dde/daemon/timedate/zoneinfo"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )
 
-func (m *Manager) Reset() error {
+func (m *Manager) Reset() *dbus.Error {
 	return m.SetNTP(true)
 }
 
 // SetDate Set the system clock to the specified.
 //
 // The time may be specified in the format '2015' '1' '1' '18' '18' '18' '8'.
-func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) error {
+func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) *dbus.Error {
 	loc, err := time.LoadLocation(m.Timezone)
 	if err != nil {
 		logger.Debugf("Load location '%s' failed: %v", m.Timezone, err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	ns := time.Date(int(year), time.Month(month), int(day),
 		int(hour), int(min), int(sec), int(nsec), loc).UnixNano()
@@ -49,27 +51,27 @@ func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) error {
 // usec: pass a value of microseconds since 1 Jan 1970 UTC.
 //
 // relative: if true, the passed usec value will be added to the current system time; if false, the current system time will be set to the passed usec value.
-func (m *Manager) SetTime(usec int64, relative bool) error {
+func (m *Manager) SetTime(usec int64, relative bool) *dbus.Error {
 	err := m.setter.SetTime(usec, relative,
 		Tr("Authentication is required to set the system time."))
 	if err != nil {
 		logger.Debug("SetTime failed:", err)
 	}
 
-	return err
+	return dbusutil.ToError(err)
 }
 
 // To control whether the system clock is synchronized with the network.
 //
 // useNTP: if true, enable ntp; else disable
-func (m *Manager) SetNTP(useNTP bool) error {
+func (m *Manager) SetNTP(useNTP bool) *dbus.Error {
 	err := m.setter.SetNTP(useNTP,
 		Tr("Authentication is required to control whether network time synchronization shall be enabled."))
 	if err != nil {
 		logger.Debug("SetNTP failed:", err)
 	}
 
-	return err
+	return dbusutil.ToError(err)
 }
 
 // To control whether the RTC is the local time or UTC.
@@ -82,41 +84,41 @@ func (m *Manager) SetNTP(useNTP bool) error {
 // localRTC: whether to use local time.
 //
 // fixSystem: if true, will use the RTC time to adjust the system clock; if false, the system time is written to the RTC taking the new setting into account.
-func (m *Manager) SetLocalRTC(localRTC, fixSystem bool) error {
+func (m *Manager) SetLocalRTC(localRTC, fixSystem bool) *dbus.Error {
 	err := m.setter.SetLocalRTC(localRTC, fixSystem,
 		Tr("Authentication is required to control whether the RTC stores the local or UTC time."))
 	if err != nil {
 		logger.Debug("SetLocalRTC failed:", err)
 	}
 
-	return err
+	return dbusutil.ToError(err)
 }
 
 // Set the system time zone to the specified value.
 // timezones you may parse from /usr/share/zoneinfo/zone.tab.
 //
 // zone: pass a value like "Asia/Shanghai" to set the timezone.
-func (m *Manager) SetTimezone(zone string) error {
+func (m *Manager) SetTimezone(zone string) *dbus.Error {
 	if !zoneinfo.IsZoneValid(zone) {
 		logger.Debug("Invalid zone:", zone)
-		return zoneinfo.ErrZoneInvalid
+		return dbusutil.ToError(zoneinfo.ErrZoneInvalid)
 	}
 
 	err := m.setter.SetTimezone(zone,
 		Tr("Authentication is required to set the system timezone."))
 	if err != nil {
 		logger.Debug("SetTimezone failed:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 
 	return m.AddUserTimezone(zone)
 }
 
 // Add the specified time zone to user time zone list.
-func (m *Manager) AddUserTimezone(zone string) error {
+func (m *Manager) AddUserTimezone(zone string) *dbus.Error {
 	if !zoneinfo.IsZoneValid(zone) {
 		logger.Debug("Invalid zone:", zone)
-		return zoneinfo.ErrZoneInvalid
+		return dbusutil.ToError(zoneinfo.ErrZoneInvalid)
 	}
 
 	oldList, hasNil := filterNilString(m.UserTimezones.Get())
@@ -128,10 +130,10 @@ func (m *Manager) AddUserTimezone(zone string) error {
 }
 
 // Delete the specified time zone from user time zone list.
-func (m *Manager) DeleteUserTimezone(zone string) error {
+func (m *Manager) DeleteUserTimezone(zone string) *dbus.Error {
 	if !zoneinfo.IsZoneValid(zone) {
 		logger.Debug("Invalid zone:", zone)
-		return zoneinfo.ErrZoneInvalid
+		return dbusutil.ToError(zoneinfo.ErrZoneInvalid)
 	}
 
 	oldList, hasNil := filterNilString(m.UserTimezones.Get())
@@ -143,17 +145,17 @@ func (m *Manager) DeleteUserTimezone(zone string) error {
 }
 
 // GetZoneInfo returns the information of the specified time zone.
-func (m *Manager) GetZoneInfo(zone string) (zoneinfo.ZoneInfo, error) {
+func (m *Manager) GetZoneInfo(zone string) (zoneinfo.ZoneInfo, *dbus.Error) {
 	info, err := zoneinfo.GetZoneInfo(zone)
 	if err != nil {
 		logger.Debugf("Get zone info for '%s' failed: %v", zone, err)
-		return zoneinfo.ZoneInfo{}, err
+		return zoneinfo.ZoneInfo{}, dbusutil.ToError(err)
 	}
 
 	return *info, nil
 }
 
 // GetZoneList returns all the valid timezones.
-func (m *Manager) GetZoneList() []string {
-	return zoneinfo.GetAllZones()
+func (m *Manager) GetZoneList() ([]string, *dbus.Error) {
+	return zoneinfo.GetAllZones(), nil
 }

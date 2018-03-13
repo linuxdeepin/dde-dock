@@ -25,16 +25,25 @@ func (m *Manager) handlePropChanged() {
 	}
 
 	m.td1.CanNTP.ConnectChanged(func() {
-		m.setPropBool(&m.CanNTP, "CanNTP", m.td1.CanNTP.Get())
+		m.PropsMu.Lock()
+		m.setPropCanNTP(m.td1.CanNTP.Get())
+		m.PropsMu.Unlock()
 	})
 	m.td1.NTP.ConnectChanged(func() {
-		m.setPropBool(&m.NTP, "NTP", m.td1.NTP.Get())
+		m.PropsMu.Lock()
+		m.setPropNTP(m.td1.NTP.Get())
+		m.PropsMu.Unlock()
 	})
 	m.td1.LocalRTC.ConnectChanged(func() {
-		m.setPropBool(&m.LocalRTC, "LocalRTC", m.td1.LocalRTC.Get())
+		m.PropsMu.Lock()
+		m.setPropLocalRTC(m.td1.LocalRTC.Get())
+		m.PropsMu.Unlock()
 	})
 	m.td1.Timezone.ConnectChanged(func() {
-		m.setPropString(&m.Timezone, "Timezone", m.td1.Timezone.Get())
+		m.PropsMu.Lock()
+		m.setPropTimezone(m.td1.Timezone.Get())
+		m.PropsMu.Unlock()
+
 		m.AddUserTimezone(m.Timezone)
 	})
 }
