@@ -20,15 +20,18 @@
 package sessionwatcher
 
 import (
-	"dbus/org/freedesktop/login1"
 	"fmt"
 	"os/user"
-	"pkg.deepin.io/lib/dbus"
+
+	"dbus/org/freedesktop/login1"
+
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 )
 
 func newLoginSession(path dbus.ObjectPath) (uint32, *login1.Session) {
-	session, err := login1.NewSession(login1Dest, path)
+	session, err := login1.NewSession(login1DBusServiceName, oldDBusLib.ObjectPath(path))
 	if err != nil {
 		logger.Warning("New session '(%v)%s' failed: %v", path, err)
 		return 0, nil

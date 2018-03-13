@@ -20,40 +20,56 @@
 package sessionwatcher
 
 import (
+	"sync"
+
 	libdisplay "dbus/com/deepin/daemon/display"
 	"dbus/org/freedesktop/login1"
-	"pkg.deepin.io/lib/dbus"
-	"sync"
+
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	login1Dest         = "org.freedesktop.login1"
-	login1Path         = "/org/freedesktop/login1"
-	displayDBusDest    = "com.deepin.daemon.Display"
-	displayDBusObjPath = "/com/deepin/daemon/Display"
+	login1DBusServiceName  = "org.freedesktop.login1"
+	login1DBusPath         = "/org/freedesktop/login1"
+	displayDBusServiceName = "com.deepin.daemon.Display"
+	displayDBusPath        = "/com/deepin/daemon/Display"
+
+	dbusServiceName = "com.deepin.daemon.SessionWatcher"
+	dbusPath        = "/com/deepin/daemon/SessionWatcher"
+	dbusInterface   = dbusServiceName
 )
 
 type Manager struct {
+	service           *dbusutil.Service
 	display           *libdisplay.Display
 	loginManager      *login1.Manager
 	sessionLocker     sync.Mutex
 	sessions          map[string]*login1.Session
-	IsActive          bool
 	activeSessionType string
+
+	PropsMu  sync.RWMutex
+	IsActive bool
+	methods  *struct {
+		GetSessions        func() `out:"sessions"`
+		IsX11SessionActive func() `out:"is_active"`
+	}
 }
 
-func newManager() (*Manager, error) {
+func newManager(service *dbusutil.Service) (*Manager, error) {
 	manager := &Manager{
+		service:  service,
 		sessions: make(map[string]*login1.Session),
 	}
 	var err error
-	manager.loginManager, err = login1.NewManager(login1Dest, login1Path)
+	manager.loginManager, err = login1.NewManager(login1DBusServiceName, login1DBusPath)
 	if err != nil {
 		logger.Warning("New login1 manager failed:", err)
 		return nil, err
 	}
 
-	manager.display, err = libdisplay.NewDisplay(displayDBusDest, displayDBusObjPath)
+	manager.display, err = libdisplay.NewDisplay(displayDBusServiceName, displayDBusPath)
 	if err != nil {
 		logger.Warning(err)
 		return nil, err
@@ -80,6 +96,10 @@ func (m *Manager) destroy() {
 	}
 }
 
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
+}
+
 func (m *Manager) initUserSessions() {
 	list, err := m.loginManager.ListSessions()
 	if err != nil {
@@ -99,24 +119,24 @@ func (m *Manager) initUserSessions() {
 			continue
 		}
 
-		p, ok := v[4].(dbus.ObjectPath)
+		p, ok := v[4].(oldDBusLib.ObjectPath)
 		if !ok {
 			continue
 		}
 
-		m.addSession(id, p)
+		m.addSession(id, dbus.ObjectPath(p))
 	}
 	m.handleSessionChanged()
 
-	m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
+	m.loginManager.ConnectSessionNew(func(id string, path oldDBusLib.ObjectPath) {
 		logger.Debug("Session added:", id, path)
-		m.addSession(id, path)
+		m.addSession(id, dbus.ObjectPath(path))
 		m.handleSessionChanged()
 	})
 
-	m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
+	m.loginManager.ConnectSessionRemoved(func(id string, path oldDBusLib.ObjectPath) {
 		logger.Debug("Session removed:", id, path)
-		m.deleteSession(id, path)
+		m.deleteSession(id, dbus.ObjectPath(path))
 		m.handleSessionChanged()
 	})
 }
@@ -190,7 +210,9 @@ func (m *Manager) handleSessionChanged() {
 		sessionType = session.Type.Get()
 	}
 	m.activeSessionType = sessionType
+	m.PropsMu.Lock()
 	changed := m.setIsActive(isActive)
+	m.PropsMu.Unlock()
 	if !changed {
 		return
 	}
@@ -215,7 +237,7 @@ func (m *Manager) setIsActive(val bool) bool {
 	if m.IsActive != val {
 		m.IsActive = val
 		logger.Debug("[setIsActive] IsActive changed:", val)
-		dbus.NotifyChange(m, "IsActive")
+		m.service.EmitPropertyChanged(m, "IsActive", val)
 		return true
 	}
 	return false
@@ -234,16 +256,16 @@ func (m *Manager) getActiveSession() *login1.Session {
 	return nil
 }
 
-func (m *Manager) IsX11SessionActive() bool {
-	return m.activeSessionType == "x11"
+func (m *Manager) IsX11SessionActive() (bool, *dbus.Error) {
+	return m.activeSessionType == "x11", nil
 }
 
-func (m *Manager) GetSessions() (ret []dbus.ObjectPath) {
+func (m *Manager) GetSessions() (ret []dbus.ObjectPath, err *dbus.Error) {
 	m.sessionLocker.Lock()
 	ret = make([]dbus.ObjectPath, len(m.sessions))
 	i := 0
 	for _, session := range m.sessions {
-		ret[i] = session.Path
+		ret[i] = dbus.ObjectPath(session.Path)
 		i++
 	}
 	m.sessionLocker.Unlock()

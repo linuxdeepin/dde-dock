@@ -21,7 +21,6 @@ package sessionwatcher
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -52,15 +51,22 @@ func (*Daemon) Start() error {
 	if _manager != nil {
 		return nil
 	}
+	service := loader.GetService()
 
-	m, err := newManager()
+	var err error
+	_manager, err = newManager(service)
 	if err != nil {
 		return err
 	}
-	_manager = m
+
 	_manager.initUserSessions()
 
-	err = dbus.InstallOnSession(_manager)
+	err = service.Export(dbusPath, _manager)
+	if err != nil {
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		return err
 	}
@@ -73,7 +79,8 @@ func (*Daemon) Stop() error {
 		return nil
 	}
 
-	dbus.UnInstallObject(_manager)
+	service := loader.GetService()
+	service.StopExport(_manager)
 	_manager.destroy()
 	_manager = nil
 	logger.EndTracing()
