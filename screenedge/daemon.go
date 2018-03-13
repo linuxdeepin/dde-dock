@@ -47,11 +47,16 @@ func (d *Daemon) Start() error {
 	if d.manager != nil {
 		return nil
 	}
-	logger.BeginTracing()
-	var err error
-	d.manager, err = NewManager()
+	service := loader.GetService()
+	d.manager = newManager(service)
+
+	err := service.Export(dbusPath, d.manager)
 	if err != nil {
-		logger.EndTracing()
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -61,7 +66,9 @@ func (d *Daemon) Stop() error {
 	if d.manager == nil {
 		return nil
 	}
-	d.manager.destroy()
-	logger.EndTracing()
+	service := loader.GetService()
+	service.StopExport(d.manager)
+	d.manager.destory()
+	d.manager = nil
 	return nil
 }

@@ -20,68 +20,69 @@
 package screenedge
 
 import (
-	"dbus/com/deepin/wm"
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"errors"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 // Enable desktop edge zone detected
 //
 // 是否启用桌面边缘热区功能
-func (m *Manager) EnableZoneDetected(enable bool) {
-	if !ddbus.IsSessionBusActivated("com.deepin.wm") {
-		logger.Warning("Deepin window manager not running")
-		return
+func (m *Manager) EnableZoneDetected(enabled bool) *dbus.Error {
+	has, err := m.service.NameHasOwner(wmDBusServiceName)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
 
-	obj, err := wm.NewWm("com.deepin.wm", "/com/deepin/wm")
-	if err != nil {
-		logger.Warning("[EnableZoneDetected] Failed to connect wm dbus:", err)
-		return
+	if !has {
+		return dbusutil.ToError(errors.New("deepin-wm is not running"))
 	}
 
-	err = obj.EnableZoneDetected(enable)
-	wm.DestroyWm(obj)
-	if err != nil {
-		logger.Warning("[EnableZoneDetected] failed to toggle zone:", err)
-	}
+	err = m.wm.EnableZoneDetected(enabled)
+	return dbusutil.ToError(err)
 }
 
 // Set left-top edge action
-func (m *Manager) SetTopLeft(value string) {
+func (m *Manager) SetTopLeft(value string) *dbus.Error {
 	m.settings.SetEdgeAction(TopLeft, value)
+	return nil
 }
 
 // Get left-top edge action
-func (m *Manager) TopLeftAction() string {
-	return m.settings.GetEdgeAction(TopLeft)
+func (m *Manager) TopLeftAction() (string, *dbus.Error) {
+	return m.settings.GetEdgeAction(TopLeft), nil
 }
 
 // Set left-bottom edge action
-func (m *Manager) SetBottomLeft(value string) {
+func (m *Manager) SetBottomLeft(value string) *dbus.Error {
 	m.settings.SetEdgeAction(BottomLeft, value)
+	return nil
 }
 
 // Get left-bottom edge action
-func (m *Manager) BottomLeftAction() string {
-	return m.settings.GetEdgeAction(BottomLeft)
+func (m *Manager) BottomLeftAction() (string, *dbus.Error) {
+	return m.settings.GetEdgeAction(BottomLeft), nil
 }
 
 // Set right-top edge action
-func (m *Manager) SetTopRight(value string) {
+func (m *Manager) SetTopRight(value string) *dbus.Error {
 	m.settings.SetEdgeAction(TopRight, value)
+	return nil
 }
 
 // Get right-top edge action
-func (m *Manager) TopRightAction() string {
-	return m.settings.GetEdgeAction(TopRight)
+func (m *Manager) TopRightAction() (string, *dbus.Error) {
+	return m.settings.GetEdgeAction(TopRight), nil
 }
 
 // Set right-bottom edge action
-func (m *Manager) SetBottomRight(value string) {
+func (m *Manager) SetBottomRight(value string) *dbus.Error {
 	m.settings.SetEdgeAction(BottomRight, value)
+	return nil
 }
 
 // Get right-bottom edge action
-func (m *Manager) BottomRightAction() string {
-	return m.settings.GetEdgeAction(BottomRight)
+func (m *Manager) BottomRightAction() (string, *dbus.Error) {
+	return m.settings.GetEdgeAction(BottomRight), nil
 }

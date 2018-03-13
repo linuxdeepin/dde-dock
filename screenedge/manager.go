@@ -20,7 +20,9 @@
 package screenedge
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	libwm "dbus/com/deepin/wm"
+
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
@@ -28,23 +30,54 @@ const (
 	TopRight    = "right-up"
 	BottomLeft  = "left-down"
 	BottomRight = "right-down"
+
+	dbusServiceName = "com.deepin.daemon.Zone"
+	dbusPath        = "/com/deepin/daemon/Zone"
+	dbusInterface   = "com.deepin.daemon.Zone"
+
+	wmDBusServiceName = "com.deepin.wm"
+	wmDBusPath        = "/com/deepin/wm"
 )
 
 type Manager struct {
+	service  *dbusutil.Service
 	settings *Settings
-}
+	wm       *libwm.Wm
 
-func NewManager() (*Manager, error) {
-	var m = new(Manager)
-	m.settings = NewSettings()
-	err := dbus.InstallOnSession(m)
-	if err != nil {
-		m.destroy()
-		return nil, err
+	methods *struct {
+		EnableZoneDetected func() `in:"enabled"`
+		SetTopLeft         func() `in:"value"`
+		TopLeftAction      func() `out:"value"`
+		SetBottomLeft      func() `in:"value"`
+		BottomLeftAction   func() `out:"value"`
+		SetTopRight        func() `in:"value"`
+		TopRightAction     func() `out:"value"`
+		SetBottomRight     func() `in:"value"`
+		BottomRightAction  func() `out:"value"`
 	}
-	return m, nil
 }
 
-func (m *Manager) destroy() {
-	dbus.UnInstallObject(m)
+func newManager(service *dbusutil.Service) *Manager {
+	var m = new(Manager)
+	m.service = service
+	m.settings = NewSettings()
+
+	var err error
+	m.wm, err = libwm.NewWm(wmDBusServiceName, wmDBusPath)
+	if err != nil {
+		panic(err)
+	}
+
+	return m
+}
+
+func (m *Manager) destory() {
+	if m.wm != nil {
+		libwm.DestroyWm(m.wm)
+		m.wm = nil
+	}
+}
+
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
