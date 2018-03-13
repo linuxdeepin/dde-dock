@@ -37,8 +37,8 @@ public:
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
 
-    QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
+    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemTipsWidget(const QString &itemKey) override;
 
 private:
     DBusAdaptors *m_dbusAdaptors;

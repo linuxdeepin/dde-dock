@@ -122,7 +122,8 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
         return false;
 
     // FIXME: ensure position move after global mouse release event
-    QTimer::singleShot(100, this, [this] { if (isVisible()) show(m_lastPoint, m_model); });
+    if (isVisible())
+        QTimer::singleShot(0, this, [=] { show(m_lastPoint, m_model); });
 
     return false;
 }
