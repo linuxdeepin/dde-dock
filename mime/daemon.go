@@ -21,7 +21,6 @@ package mime
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -47,25 +46,16 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() error {
-	logger.BeginTracing()
-	d.manager = NewManager()
+	service := loader.GetService()
+	d.manager = NewManager(service)
 
-	err := dbus.InstallOnSession(d.manager)
+	err := service.Export(dbusPath, d.manager)
 	if err != nil {
-		logger.Warning("Install Manager dbus failed:", err)
 		return err
 	}
 
-	media, err := NewMedia()
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		logger.Error("New Media failed:", err)
-		return err
-	}
-	d.manager.media = media
-
-	err = dbus.InstallOnSession(media)
-	if err != nil {
-		logger.Warning("Install Media dbus failed:", err)
 		return err
 	}
 
@@ -78,6 +68,8 @@ func (d *Daemon) Stop() error {
 		return nil
 	}
 
+	service := loader.GetService()
+	service.StopExport(d.manager)
 	d.manager.destroy()
 	d.manager = nil
 	return nil

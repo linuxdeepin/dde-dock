@@ -21,35 +21,50 @@ package mime
 
 import (
 	"path/filepath"
-	"pkg.deepin.io/lib/dbus"
+	"strings"
+	"time"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/fsnotify"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
-	"strings"
-	"time"
 )
 
 const (
 	AppMimeTerminal = "application/x-terminal"
 
-	dbusDest = "com.deepin.daemon.Mime"
-	dbusPath = "/com/deepin/daemon/Mime"
-	dbusIFC  = dbusDest
+	dbusServiceName = "com.deepin.daemon.Mime"
+	dbusPath        = "/com/deepin/daemon/Mime"
+	dbusInterface   = dbusServiceName
 )
 
 type Manager struct {
-	Change      func()
-	media       *Media
+	service     *dbusutil.Service
 	userManager *userAppManager
 	fsWatcher   *fsnotify.Watcher
 	changeTimer *time.Timer
 
 	done     chan struct{}
 	doneResp chan struct{}
+
+	methods *struct {
+		GetDefaultApp func() `in:"mime_type" out:"default_app"`
+		SetDefaultApp func() `in:"mime_types,desktop_id"`
+		ListApps      func() `in:"mime_type" out:"apps"`
+		ListUserApps  func() `in:"mime_type" out:"user_apps"`
+		AddUserApp    func() `in:"mime_types,desktop_id"`
+		DeleteUserApp func() `in:"desktop_id"`
+	}
+
+	signals *struct {
+		Change struct{}
+	}
 }
 
-func NewManager() *Manager {
+func NewManager(service *dbusutil.Service) *Manager {
 	m := new(Manager)
+	m.service = service
 	m.done = make(chan struct{})
 	m.doneResp = make(chan struct{})
 	userManager, err := newUserAppManager(userAppFile)
@@ -132,17 +147,18 @@ func (m *Manager) deferEmitChange() {
 	delay := 2 * time.Second
 	if m.changeTimer == nil {
 		m.changeTimer = time.AfterFunc(delay, func() {
-			dbus.Emit(m, "Change")
+			m.emitSignalChange()
 		})
 	} else {
 		m.changeTimer.Reset(delay)
 	}
 }
 
-func (m *Manager) destroy() {
-	dbus.UnInstallObject(m)
-	dbus.UnInstallObject(m.media)
+func (m *Manager) emitSignalChange() {
+	m.service.Emit(m, "Change")
+}
 
+func (m *Manager) destroy() {
 	m.changeTimer.Stop()
 	m.changeTimer = nil
 
@@ -182,7 +198,7 @@ func (m *Manager) Reset() {
 		if err != nil {
 			logger.Warning("Init mime config file failed", err)
 		}
-		dbus.Emit(m, "Change")
+		m.emitSignalChange()
 	}()
 
 }
@@ -191,7 +207,7 @@ func (m *Manager) Reset() {
 // ty: the special mime
 // ret0: the default app info
 // ret1: error message
-func (m *Manager) GetDefaultApp(ty string) (string, error) {
+func (m *Manager) GetDefaultApp(ty string) (string, *dbus.Error) {
 	var (
 		info *AppInfo
 		err  error
@@ -202,37 +218,42 @@ func (m *Manager) GetDefaultApp(ty string) (string, error) {
 		info, err = GetAppInfo(ty)
 	}
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
-	return marshal(info)
+	defaultApp, err := marshal(info)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	return defaultApp, nil
 }
 
 // SetDefaultApp set the default app for the special mime list
 // ty: the special mime
 // deskId: the default app desktop id
 // ret0: error message
-func (m *Manager) SetDefaultApp(mimes []string, deskId string) error {
+func (m *Manager) SetDefaultApp(mimes []string, desktopDd string) *dbus.Error {
 	var err error
 	for _, mime := range mimes {
 		if mime == AppMimeTerminal {
-			err = setDefaultTerminal(deskId)
+			err = setDefaultTerminal(desktopDd)
 		} else {
-			err = SetAppInfo(mime, deskId)
+			err = SetAppInfo(mime, desktopDd)
 		}
 		if err != nil {
 			logger.Warningf("Set '%s' default app to '%s' failed: %v",
-				mime, deskId, err)
+				mime, desktopDd, err)
 			break
 		}
 	}
-	return err
+	return dbusutil.ToError(err)
 }
 
 // ListApps list the apps that supported the special mime
 // ty: the special mime
 // ret0: the app infos
-func (m *Manager) ListApps(ty string) string {
+func (m *Manager) ListApps(ty string) (string, *dbus.Error) {
 	var infos AppInfos
 	if ty == AppMimeTerminal {
 		infos = getTerminalInfos()
@@ -250,8 +271,12 @@ func (m *Manager) ListApps(ty string) string {
 		filteredInfos = append(filteredInfos, info)
 	}
 
-	content, _ := marshal(filteredInfos)
-	return content
+	content, err := marshal(filteredInfos)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	return content, nil
 }
 
 var userAppDir string
@@ -272,10 +297,10 @@ func isDeepinCustomDesktopFile(file string) bool {
 	return dir == userAppDir && strings.HasPrefix(base, "deepin-custom-")
 }
 
-func (m *Manager) ListUserApps(ty string) string {
+func (m *Manager) ListUserApps(ty string) (string, *dbus.Error) {
 	apps := m.userManager.Get(ty)
 	if len(apps) == 0 {
-		return ""
+		return "", nil
 	}
 	var infos AppInfos
 	for _, app := range apps {
@@ -286,38 +311,39 @@ func (m *Manager) ListUserApps(ty string) string {
 		}
 		infos = append(infos, info)
 	}
-	content, _ := marshal(infos)
-	return content
+	content, err := marshal(infos)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return content, nil
 }
 
-func (m *Manager) AddUserApp(mimes []string, desktopId string) error {
+func (m *Manager) AddUserApp(mimes []string, desktopId string) *dbus.Error {
 	logger.Debugf("Manager.AddUserApp mimes %v desktop id: %q", mimes, desktopId)
 	// check app validity
 	_, err := newAppInfoById(desktopId)
 	if err != nil {
 		logger.Warningf("Invalid desktop id %q", desktopId)
-		return err
+		return dbusutil.ToError(err)
 	}
 	if !m.userManager.Add(mimes, desktopId) {
 		return nil
 	}
-	return m.userManager.Write()
+	err = m.userManager.Write()
+	return dbusutil.ToError(err)
 }
 
-func (m *Manager) DeleteUserApp(desktopId string) error {
+func (m *Manager) DeleteUserApp(desktopId string) *dbus.Error {
 	logger.Debugf("Manager.DeleteUserApp %q", desktopId)
 	err := m.userManager.Delete(desktopId)
 	if err != nil {
 		logger.Warningf("Delete %q failed: %v", desktopId, err)
-		return err
+		return dbusutil.ToError(err)
 	}
-	return m.userManager.Write()
+	err = m.userManager.Write()
+	return dbusutil.ToError(err)
 }
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }

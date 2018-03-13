@@ -20,9 +20,10 @@
 package mime
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"os"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestAppInfos(t *testing.T) {
@@ -124,19 +125,6 @@ func TestIsStrInList(t *testing.T) {
 		var list = []string{"abc", "abs"}
 		So(isStrInList("abs", list), ShouldEqual, true)
 		So(isStrInList("abd", list), ShouldEqual, false)
-	})
-}
-
-func TestDelStrFromList(t *testing.T) {
-	Convey("Test delete str from list", t, func() {
-		var list = []string{"abc", "abs"}
-		ret, deleted := delStrFromList("abs", list)
-		So(deleted, ShouldEqual, true)
-		So(ret, ShouldResemble, []string{"abc"})
-
-		ret, deleted = delStrFromList("abd", list)
-		So(deleted, ShouldEqual, false)
-		So(ret, ShouldResemble, list)
 	})
 }
 
