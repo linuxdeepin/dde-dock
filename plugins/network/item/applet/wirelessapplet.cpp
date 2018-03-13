@@ -24,7 +24,7 @@
 
 #include <QJsonDocument>
 #include <QScreen>
-#include <QScreen>
+#include <QDebug>
 #include <QGuiApplication>
 
 #include <dinputdialog.h>
@@ -167,7 +167,7 @@ void WirelessList::APRemoved(const QString &devPath, const QString &info)
 void WirelessList::setDeviceInfo(const int index)
 {
     // set device enable state
-    m_controlPanel->setDeviceEnabled(m_networkInter->IsDeviceEnabled(m_device.dbusPath()));
+    m_controlPanel->setDeviceEnabled(m_deviceEnabled);
 
     // set device name
     if (index == -1)
@@ -371,8 +371,11 @@ void WirelessList::deviceEnabled(const QString &devPath, const bool enable)
     if (devPath != m_device.path())
         return;
 
-    m_controlPanel->setDeviceEnabled(enable);
-    m_updateAPTimer->start();
+    if (m_deviceEnabled != enable) {
+        m_deviceEnabled = enable;
+        m_controlPanel->setDeviceEnabled(enable);
+        m_updateAPTimer->start();
+    }
 }
 
 void WirelessList::activateAP(const QDBusObjectPath &apPath, const QString &ssid)

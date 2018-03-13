@@ -90,6 +90,7 @@ private:
     QWidget *m_centralWidget;
     DeviceControlWidget *m_controlPanel;
     DBusNetwork *m_networkInter;
+    bool m_deviceEnabled;
 };
 
 #endif // WIRELESSAPPLET_H
