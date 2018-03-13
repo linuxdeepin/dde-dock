@@ -27,7 +27,7 @@ class KeyboardPlugin : public QObject , PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
-    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "keyboard-layout.json")
+    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "keyboard.json")
 
 public:
      KeyboardPlugin(QObject *parent = nullptr);
