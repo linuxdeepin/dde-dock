@@ -20,10 +20,16 @@
 package systeminfo
 
 import (
-	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/log"
+)
+
+const (
+	dbusServiceName = "com.deepin.daemon.SystemInfo"
+	dbusPath        = "/com/deepin/daemon/SystemInfo"
+	dbusInterface   = dbusServiceName
 )
 
 type SystemInfo struct {
@@ -66,15 +72,21 @@ func (d *Daemon) Start() error {
 	if d.info != nil {
 		return nil
 	}
-
-	logger.BeginTracing()
+	service := loader.GetService()
 
 	d.info = NewSystemInfo()
-	err := dbus.InstallOnSession(d.info)
+
+	err := service.Export(dbusPath, d.info)
 	if err != nil {
 		d.info = nil
 		logger.Error(err)
-		logger.EndTracing()
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		d.info = nil
+		logger.Error(err)
 		return err
 	}
 	return nil
@@ -85,9 +97,9 @@ func (d *Daemon) Stop() error {
 		return nil
 	}
 
-	dbus.UnInstallObject(d.info)
+	service := loader.GetService()
+	service.StopExport(d.info)
 	d.info = nil
-	logger.EndTracing()
 
 	return nil
 }
@@ -150,10 +162,6 @@ func (info *SystemInfo) isValidity() bool {
 	return true
 }
 
-func (*SystemInfo) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.SystemInfo",
-		ObjectPath: "/com/deepin/daemon/SystemInfo",
-		Interface:  "com.deepin.daemon.SystemInfo",
-	}
+func (*SystemInfo) GetInterfaceName() string {
+	return dbusInterface
 }
