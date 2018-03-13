@@ -20,15 +20,18 @@
 package screensaver
 
 import (
+	"errors"
+	"sync"
+
 	"github.com/BurntSushi/xgb/dpms"
 	"github.com/BurntSushi/xgb/screensaver"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
+
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
-	"sync"
 )
 
 var logger = log.NewLogger("daemon/screensaver")
@@ -39,26 +42,37 @@ type inhibitor struct {
 	reason string
 }
 type ScreenSaver struct {
-	xu *xgbutil.XUtil
-
-	// Idle 定时器超时信号，当系统在给定时间内未被使用时发送
-	IdleOn func()
-	// Idle 超时时，如果设置了壁纸切换，则发送此信号
-	CycleActive func()
-	// Idle 超时后，如果系统被使用就发送此信号，重新开始 Idle 计时器
-	IdleOff func()
+	xu      *xgbutil.XUtil
+	service *dbusutil.Service
 
 	blank        byte
 	idleTime     uint32
 	idleInterval uint32
 
-	inhibitors  map[uint32]inhibitor
-	counter     uint32
-	counterLock sync.Mutex
+	inhibitors map[uint32]inhibitor
+	counter    uint32
+	mu         sync.Mutex
 
 	//Inhibit state, we need save the SetTimeout value,
 	//so we can recover the correct state when enter UnInhibit state.
 	lastVals *timeoutVals
+
+	signals *struct {
+		// Idle 定时器超时信号，当系统在给定时间内未被使用时发送
+		IdleOn struct{}
+
+		// Idle 超时时，如果设置了壁纸切换，则发送此信号
+		CycleActive struct{}
+
+		// Idle 超时后，如果系统被使用就发送此信号，重新开始 Idle 计时器
+		IdleOff struct{}
+	}
+
+	methods *struct {
+		Inhibit    func() `in:"name,reason" out:"cookie"`
+		UnInhibit  func() `in:"cookie"`
+		SetTimeout func() `in:"seconds,interval,blank"`
+	}
 }
 
 type timeoutVals struct {
@@ -73,9 +87,9 @@ type timeoutVals struct {
 // reason: 抑制原因
 //
 // ret0: 此次操作对应的 id，用来取消抑制
-func (ss *ScreenSaver) Inhibit(name, reason string) uint32 {
-	ss.counterLock.Lock()
-	defer ss.counterLock.Unlock()
+func (ss *ScreenSaver) Inhibit(name, reason string) (uint32, *dbus.Error) {
+	ss.mu.Lock()
+	defer ss.mu.Unlock()
 
 	ss.counter++
 
@@ -86,30 +100,31 @@ func (ss *ScreenSaver) Inhibit(name, reason string) uint32 {
 	}
 	logger.Infof("\"%s\" want system enter inhibit, because: \"%s\"", name, reason)
 
-	return ss.counter
+	return ss.counter, nil
 }
 
 // 模拟用户操作，让系统处于使用状态，重新开始 Idle 定时器
-func (ss *ScreenSaver) SimulateUserActivity() {
+func (ss *ScreenSaver) SimulateUserActivity() *dbus.Error {
 	xproto.ForceScreenSaver(ss.xu.Conn(), 0)
+	return nil
 }
 
 // 根据 id 取消对应的抑制操作
-func (ss *ScreenSaver) UnInhibit(cookie uint32) {
-	ss.counterLock.Lock()
-	defer ss.counterLock.Unlock()
+func (ss *ScreenSaver) UnInhibit(cookie uint32) *dbus.Error {
+	ss.mu.Lock()
+	defer ss.mu.Unlock()
 
 	inhibitor, ok := ss.inhibitors[cookie]
 	if !ok {
-		logger.Warning("no valid inhibit cookie", cookie)
-		return
+		logger.Warning("invalid cookie", cookie)
+		return dbusutil.ToError(errors.New("invalid cookie"))
 	}
 
-	logger.Infof("\"%s\" no need inhibit.", inhibitor.name)
+	logger.Infof("%q no need inhibit.", inhibitor.name)
 
 	delete(ss.inhibitors, cookie)
 	if len(ss.inhibitors) == 0 {
-		logger.Info("Enter uninhibit state")
+		logger.Info("Enter un-inhibit state")
 		if ss.lastVals != nil {
 			logger.Info("recover from ", ss.lastVals)
 			ss.setTimeout(ss.lastVals.seconds, ss.lastVals.interval, ss.lastVals.blank)
@@ -118,6 +133,8 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 			ss.setTimeout(ss.idleTime, ss.idleInterval, ss.blank == 1)
 		}
 	}
+
+	return nil
 }
 
 // 设置 Idle 的定时器超时时间
@@ -127,7 +144,10 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 // interval: 屏保模式下，背景更换的间隔时间
 //
 // blank: 是否黑屏，此参数暂时无效
-func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
+func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) *dbus.Error {
+	ss.mu.Lock()
+	defer ss.mu.Unlock()
+
 	if len(ss.inhibitors) > 0 {
 		ss.lastVals = &timeoutVals{seconds, interval, blank}
 		logger.Info("Current is inhibit state, the value", ss.lastVals, "will apply when in unhibit state")
@@ -142,6 +162,7 @@ func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
 			ss.blank = 0
 		}
 	}
+	return nil
 }
 
 func (ss *ScreenSaver) setTimeout(seconds, interval uint32, blank bool) {
@@ -156,25 +177,25 @@ func (ss *ScreenSaver) setTimeout(seconds, interval uint32, blank bool) {
 }
 
 const (
-	dbusDest = "org.freedesktop.ScreenSaver"
-	dbusPath = "/org/freedesktop/ScreenSaver"
-	dbusIFC  = dbusDest
+	dbusServiceName = "org.freedesktop.ScreenSaver"
+	dbusPath        = "/org/freedesktop/ScreenSaver"
+	dbusInterface   = dbusServiceName
 )
 
-func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
+func (*ScreenSaver) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (ss *ScreenSaver) destroy() {
-	dbus.UnInstallObject(ss)
+	ss.service.StopExport(ss)
 }
 
-func NewScreenSaver() *ScreenSaver {
-	s := &ScreenSaver{inhibitors: make(map[uint32]inhibitor)}
+func newScreenSaver(service *dbusutil.Service) *ScreenSaver {
+	s := &ScreenSaver{
+		service:    service,
+		inhibitors: make(map[uint32]inhibitor),
+	}
+
 	s.xu, _ = xgbutil.NewConn()
 	screensaver.Init(s.xu.Conn())
 	screensaver.QueryVersion(s.xu.Conn(), 1, 0)
@@ -202,7 +223,13 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() error {
-	if !lib.UniqueOnSession(dbusDest) {
+	service := loader.GetService()
+
+	has, err := service.NameHasOwner(dbusServiceName)
+	if err != nil {
+		return err
+	}
+	if has {
 		logger.Warning("ScreenSaver has been register, exit...")
 		return nil
 	}
@@ -211,14 +238,20 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	_ssaver = NewScreenSaver()
+	_ssaver = newScreenSaver(service)
 
-	err := dbus.InstallOnSession(_ssaver)
+	err = service.Export(dbusPath, _ssaver)
+	if err != nil {
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		_ssaver.destroy()
 		_ssaver = nil
 		return err
 	}
+
 	return nil
 }
 
@@ -233,6 +266,7 @@ func (d *Daemon) Stop() error {
 }
 
 func (ss *ScreenSaver) loop() {
+	s := ss.service
 	for {
 		e, err := ss.xu.Conn().WaitForEvent()
 		if err != nil {
@@ -242,11 +276,11 @@ func (ss *ScreenSaver) loop() {
 		case screensaver.NotifyEvent:
 			switch ee.State {
 			case screensaver.StateCycle:
-				dbus.Emit(ss, "CycleActive")
+				s.Emit(ss, "CycleActive")
 			case screensaver.StateOn:
-				dbus.Emit(ss, "IdleOn")
+				s.Emit(ss, "IdleOn")
 			case screensaver.StateOff:
-				dbus.Emit(ss, "IdleOff")
+				s.Emit(ss, "IdleOff")
 			}
 		}
 	}
