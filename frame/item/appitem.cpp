@@ -594,7 +594,13 @@ void AppItem::playSwingEffect()
         m_itemAnimation.timeLine()->stop();
         m_itemAnimation.clear();
     } else {
-        m_itemAnimation.setTimeLine(new QTimeLine);
+        QTimeLine *tl = new QTimeLine(1200, this);
+        tl->setFrameRange(0, 60);
+        tl->setLoopCount(1);
+        tl->setEasingCurve(QEasingCurve::Linear);
+        tl->setStartFrame(0);
+
+        m_itemAnimation.setTimeLine(tl);
     }
 
     m_itemScene->clear();
@@ -612,13 +618,6 @@ void AppItem::playSwingEffect()
     m_swingEffectView->setSceneRect(r);
     m_swingEffectView->setFixedSize(r.size());
 
-    QTimeLine *tl = m_itemAnimation.timeLine();
-    tl->setDuration(1200);
-    tl->setFrameRange(0, 60);
-    tl->setLoopCount(1);
-    tl->setEasingCurve(QEasingCurve::Linear);
-    tl->setStartFrame(0);
-
     const int px = qreal(-icon.rect().center().x()) / ratio;
     const int py = qreal(-icon.rect().center().y()) / ratio - 18.;
     const QPoint pos = r.center() + QPoint(0, 18);
@@ -629,6 +628,7 @@ void AppItem::playSwingEffect()
         m_itemAnimation.setRotationAt(i / 60.0, Frames[i]);
     }
 
+    QTimeLine *tl = m_itemAnimation.timeLine();
     connect(tl, &QTimeLine::finished, m_swingEffectView, &QGraphicsView::hide);
     connect(tl, &QTimeLine::finished, this, &AppItem::checkAttentionEffect);
 
