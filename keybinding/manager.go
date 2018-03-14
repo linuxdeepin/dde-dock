@@ -30,14 +30,13 @@ import (
 	"dbus/com/deepin/sessionmanager"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
-	"pkg.deepin.io/lib/gsettings"
-	"pkg.deepin.io/lib/xdg/basedir"
-
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/gsettings"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 const (
@@ -60,17 +59,10 @@ const (
 )
 
 type Manager struct {
+	service *dbusutil.Service
 	// properties
-	NumLockState         *property.GSettingsEnumProperty
-	ShortcutSwitchLayout *property.GSettingsUintProperty `access:"readwrite"`
-
-	// Signals
-	Added   func(string, int32)
-	Deleted func(string, int32)
-	Changed func(string, int32)
-
-	// (pressed, keystroke)
-	KeyEvent func(bool, string)
+	NumLockState         gsprop.Enum
+	ShortcutSwitchLayout gsprop.Uint `prop:"access:rw"`
 
 	conn       *x.Conn
 	keySymbols *keysyms.KeySymbols
@@ -105,6 +97,41 @@ type Manager struct {
 	// for switch kbd layout
 	switchKbdLayoutState SKLState
 	sklWaitQuit          chan int
+
+	signals *struct {
+		Added, Deleted, Changed struct {
+			id  string
+			typ int32
+		}
+
+		KeyEvent struct {
+			pressed   bool
+			keystroke string
+		}
+	}
+
+	methods *struct {
+		AddCustomShortcut         func() `in:"name,action,keystroke" out:"id,type"`
+		AddShortcutKeystroke      func() `in:"id,type,keystroke"`
+		ClearShortcutKeystrokes   func() `in:"id,type"`
+		DeleteCustomShortcut      func() `in:"id"`
+		DeleteShortcutKeystroke   func() `in:"id,type,keystroke"`
+		GetShortcut               func() `in:"id,type" out:"shortcut"`
+		ListAllShortcuts          func() `out:"shortcuts"`
+		ListShortcutsByType       func() `in:"type" out:"shortcuts"`
+		LookupConflictingShortcut func() `in:"keystroke" out:"shortcut"`
+		ModifyCustomShortcut      func() `in:"id,name,cmd,keystroke"`
+		SetNumLockState           func() `in:"state"`
+
+		// deprecated
+		Add            func() `in:"name,action,keystroke" out:"ret0,ret1"`
+		Query          func() `in:"id,type" out:"shortcut"`
+		List           func() `out:"shortcuts"`
+		Delete         func() `in:"id,type"`
+		Disable        func() `in:"id,type"`
+		CheckAvaliable func() `in:"keystroke" out:"available,shortcut"`
+		ModifiedAccel  func() `in:"id,type,keystroke,add" out:"ret0,ret1"`
+	}
 }
 
 // SKLState Switch keyboard Layout state
@@ -116,24 +143,26 @@ const (
 	SKLStateOSDShown
 )
 
-func NewManager() (*Manager, error) {
+func newManager(service *dbusutil.Service) (*Manager, error) {
 	conn, err := x.NewConn()
 	if err != nil {
 		return nil, err
 	}
 
 	var m = Manager{
+		service:               service,
 		enableListenGSettings: true,
 		conn:       conn,
 		keySymbols: keysyms.NewKeySymbols(conn),
 	}
+
+	m.gsKeyboard = gio.NewSettings(gsSchemaKeyboard)
+	m.NumLockState.Bind(m.gsKeyboard, gsKeyNumLockState)
+	m.ShortcutSwitchLayout.Bind(m.gsKeyboard, gsKeyShortcutSwitchLayout)
 	return &m, nil
 }
 
 func (m *Manager) init() {
-	m.gsKeyboard = gio.NewSettings(gsSchemaKeyboard)
-	// init numlock state
-	m.NumLockState = property.NewGSettingsEnumProperty(m, "NumLockState", m.gsKeyboard, gsKeyNumLockState)
 	if m.gsKeyboard.GetBoolean(gsKeySaveNumLockState) {
 		nlState := NumLockState(m.NumLockState.Get())
 		if nlState == NumLockUnknown {
@@ -150,8 +179,6 @@ func (m *Manager) init() {
 			}
 		}
 	}
-	m.ShortcutSwitchLayout = property.NewGSettingsUintProperty(m, "ShortcutSwitchLayout",
-		m.gsKeyboard, gsKeyShortcutSwitchLayout)
 
 	// init settings
 	m.gsSystem = gio.NewSettings(gsSchemaSystem)
@@ -217,7 +244,12 @@ func (m *Manager) init() {
 }
 
 func (m *Manager) destroy() {
-	m.shortcutManager.Destroy()
+	m.service.StopExport(m)
+
+	if m.shortcutManager != nil {
+		m.shortcutManager.Destroy()
+		m.shortcutManager = nil
+	}
 
 	// destroy settings
 	if m.gsSystem != nil {
@@ -297,7 +329,7 @@ func shouldEmitSignalChanged(shortcut shortcuts.Shortcut) bool {
 
 func (m *Manager) emitShortcutSignal(signalName string, shortcut shortcuts.Shortcut) {
 	logger.Debug("emit DBus signal", signalName, shortcut.GetId(), shortcut.GetType())
-	dbus.Emit(m, signalName, shortcut.GetId(), shortcut.GetType())
+	m.service.Emit(m, signalName, shortcut.GetId(), shortcut.GetType())
 }
 
 func (m *Manager) enableListenGSettingsChanged(val bool) {

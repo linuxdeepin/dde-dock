@@ -24,7 +24,6 @@ import (
 	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/mousebind"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *Manager) selectKeystroke() error {
@@ -58,7 +57,7 @@ loop:
 			}
 			logger.Debug("event key:", key)
 			ks := key.ToKeystroke(m.keySymbols)
-			dbus.Emit(m, "KeyEvent", true, ks.String())
+			m.emitSignalKeyEvent(true, ks.String())
 			if ks.IsGood() {
 				logger.Debug("good keystroke", ks)
 				m.grabScreenKeystroke = ks
@@ -70,17 +69,17 @@ loop:
 			event, _ := x.NewKeyReleaseEvent(event)
 			logger.Debug(event)
 			if m.grabScreenKeystroke != nil {
-				dbus.Emit(m, "KeyEvent", false, m.grabScreenKeystroke.String())
+				m.emitSignalKeyEvent(false, m.grabScreenKeystroke.String())
 				m.grabScreenKeystroke = nil
 			} else {
-				dbus.Emit(m, "KeyEvent", false, "")
+				m.emitSignalKeyEvent(false, "")
 			}
 
 			break loop
 		case x.ButtonPressEventCode:
-			dbus.Emit(m, "KeyEvent", true, "")
+			m.emitSignalKeyEvent(true, "")
 		case x.ButtonReleaseEventCode:
-			dbus.Emit(m, "KeyEvent", false, "")
+			m.emitSignalKeyEvent(false, "")
 			break loop
 		}
 	}
@@ -89,6 +88,10 @@ loop:
 	conn.Close()
 	logger.Debug("end selectKeystroke")
 	return nil
+}
+
+func (m *Manager) emitSignalKeyEvent(pressed bool, keystroke string) {
+	m.service.Emit(m, "KeyEvent", pressed, keystroke)
 }
 
 func grabKbdAndMouse(conn *x.Conn) error {

@@ -25,13 +25,14 @@ import (
 	"strings"
 
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	dbusDest     = "com.deepin.daemon.Keybinding"
-	bindDBusPath = "/com/deepin/daemon/Keybinding"
-	bindDBusIFC  = "com.deepin.daemon.Keybinding"
+	dbusServiceName = "com.deepin.daemon.Keybinding"
+	dbusPath        = "/com/deepin/daemon/Keybinding"
+	dbusInterface   = "com.deepin.daemon.Keybinding"
 )
 
 type ErrInvalidShortcutType struct {
@@ -55,16 +56,12 @@ var errTypeAssertionFail = errors.New("type assertion failed")
 var errShortcutKeystrokesUnmodifiable = errors.New("keystrokes of this shortcut is unmodifiable")
 var errKeystrokeUsed = errors.New("keystroke have been used")
 
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: bindDBusPath,
-		Interface:  bindDBusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 // Reset reset all shortcut
-func (m *Manager) Reset() {
+func (m *Manager) Reset() *dbus.Error {
 	m.shortcutManager.UngrabAll()
 
 	m.enableListenGSettingsChanged(false)
@@ -82,44 +79,51 @@ func (m *Manager) Reset() {
 	for _, shortcut := range changes {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	}
+	return nil
 }
 
-func (m *Manager) ListAllShortcuts() (string, error) {
+func (m *Manager) ListAllShortcuts() (string, *dbus.Error) {
 	list := m.shortcutManager.List()
 	ret, err := doMarshal(list)
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 	return ret, nil
 }
 
-func (m *Manager) ListShortcutsByType(type0 int32) (string, error) {
+func (m *Manager) ListShortcutsByType(type0 int32) (string, *dbus.Error) {
 	list := m.shortcutManager.ListByType(type0)
 	ret, err := doMarshal(list)
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 	return ret, nil
 }
 
-func (m *Manager) AddCustomShortcut(name, action, keystroke string) (id string, type0 int32, err error) {
+func (m *Manager) AddCustomShortcut(name, action, keystroke string) (id string,
+	type0 int32, busErr *dbus.Error) {
+
 	logger.Debugf("Add custom key: %q %q %q", name, action, keystroke)
 	ks, err := shortcuts.ParseKeystroke(keystroke)
 	if err != nil {
+		busErr = dbusutil.ToError(err)
 		return
 	}
 
 	conflictKeystroke, err := m.shortcutManager.FindConflictingKeystroke(ks)
 	if err != nil {
+		busErr = dbusutil.ToError(err)
 		return
 	}
 	if conflictKeystroke != nil {
 		err = errKeystrokeUsed
+		busErr = dbusutil.ToError(err)
 		return
 	}
 
 	shortcut, err := m.customShortcutManager.Add(name, action, []*shortcuts.Keystroke{ks})
 	if err != nil {
+		busErr = dbusutil.ToError(err)
 		return
 	}
 	m.shortcutManager.Add(shortcut)
@@ -129,26 +133,26 @@ func (m *Manager) AddCustomShortcut(name, action, keystroke string) (id string, 
 	return
 }
 
-func (m *Manager) DeleteCustomShortcut(id string) error {
+func (m *Manager) DeleteCustomShortcut(id string) *dbus.Error {
 	shortcut := m.shortcutManager.GetByIdType(id, shortcuts.ShortcutTypeCustom)
 	if err := m.customShortcutManager.Delete(shortcut.GetId()); err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	m.shortcutManager.Delete(shortcut)
 	m.emitShortcutSignal(shortcutSignalDeleted, shortcut)
 	return nil
 }
 
-func (m *Manager) ClearShortcutKeystrokes(id string, type0 int32) error {
+func (m *Manager) ClearShortcutKeystrokes(id string, type0 int32) *dbus.Error {
 	logger.Debug("ClearShortcutKeystrokes", id, type0)
 	shortcut := m.shortcutManager.GetByIdType(id, type0)
 	if shortcut == nil {
-		return ErrShortcutNotFound{id, type0}
+		return dbusutil.ToError(ErrShortcutNotFound{id, type0})
 	}
 	m.shortcutManager.ModifyShortcutKeystrokes(shortcut, nil)
 	err := shortcut.SaveKeystrokes()
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	if shouldEmitSignalChanged(shortcut) {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
@@ -156,21 +160,21 @@ func (m *Manager) ClearShortcutKeystrokes(id string, type0 int32) error {
 	return nil
 }
 
-func (m *Manager) LookupConflictingShortcut(keystroke string) (string, error) {
+func (m *Manager) LookupConflictingShortcut(keystroke string) (string, *dbus.Error) {
 	ks, err := shortcuts.ParseKeystroke(keystroke)
 	if err != nil {
 		// parse keystroke error
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 
 	conflictKeystroke, err := m.shortcutManager.FindConflictingKeystroke(ks)
 	if err != nil {
-		return "", err
+		return "", dbusutil.ToError(err)
 	}
 	if conflictKeystroke != nil {
 		detail, err := doMarshal(conflictKeystroke.Shortcut)
 		if err != nil {
-			return "", err
+			return "", dbusutil.ToError(err)
 		}
 		return detail, nil
 	}
@@ -183,32 +187,32 @@ func (m *Manager) LookupConflictingShortcut(keystroke string) (string, error) {
 // name: new name
 // cmd: new commandline
 // keystroke: new keystroke
-func (m *Manager) ModifyCustomShortcut(id, name, cmd, keystroke string) error {
+func (m *Manager) ModifyCustomShortcut(id, name, cmd, keystroke string) *dbus.Error {
 	logger.Debugf("ModifyCustomShortcut id: %q, name: %q, cmd: %q, keystroke: %q", id, name, cmd, keystroke)
 	const ty = shortcuts.ShortcutTypeCustom
 	// get the shortcut
 	shortcut := m.shortcutManager.GetByIdType(id, ty)
 	if shortcut == nil {
-		return ErrShortcutNotFound{id, ty}
+		return dbusutil.ToError(ErrShortcutNotFound{id, ty})
 	}
 	customShortcut, ok := shortcut.(*shortcuts.CustomShortcut)
 	if !ok {
-		return errTypeAssertionFail
+		return dbusutil.ToError(errTypeAssertionFail)
 	}
 
 	var keystrokes []*shortcuts.Keystroke
 	if keystroke != "" {
 		ks, err := shortcuts.ParseKeystroke(keystroke)
 		if err != nil {
-			return err
+			return dbusutil.ToError(err)
 		}
 		// check conflicting
 		conflictKeystroke, err := m.shortcutManager.FindConflictingKeystroke(ks)
 		if err != nil {
-			return err
+			return dbusutil.ToError(err)
 		}
 		if conflictKeystroke != nil && conflictKeystroke.Shortcut != shortcut {
-			return errKeystrokeUsed
+			return dbusutil.ToError(errKeystrokeUsed)
 		}
 		keystrokes = []*shortcuts.Keystroke{ks}
 	}
@@ -219,76 +223,77 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, keystroke string) error {
 	m.shortcutManager.ModifyShortcutKeystrokes(shortcut, keystrokes)
 	err := customShortcut.Save()
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	return nil
 }
 
-func (m *Manager) AddShortcutKeystroke(id string, type0 int32, keystroke string) error {
+func (m *Manager) AddShortcutKeystroke(id string, type0 int32, keystroke string) *dbus.Error {
 	logger.Debug("AddShortcutKeystroke", id, type0, keystroke)
 	shortcut := m.shortcutManager.GetByIdType(id, type0)
 	if shortcut == nil {
-		return ErrShortcutNotFound{id, type0}
+		return dbusutil.ToError(ErrShortcutNotFound{id, type0})
 	}
 	if !shortcut.GetKeystrokesModifiable() {
-		return errShortcutKeystrokesUnmodifiable
+		return dbusutil.ToError(errShortcutKeystrokesUnmodifiable)
 	}
 
 	ks, err := shortcuts.ParseKeystroke(keystroke)
 	if err != nil {
 		// parse keystroke error
-		return err
+		return dbusutil.ToError(err)
 	}
 	logger.Debug("keystroke:", ks.DebugString())
 
 	if type0 == shortcuts.ShortcutTypeWM && ks.Mods == 0 {
 		keyLower := strings.ToLower(ks.Keystr)
 		if keyLower == "super_l" || keyLower == "super_r" {
-			return errors.New("keystroke of shortcut which type is wm can not be set to the Super key")
+			return dbusutil.ToError(errors.New(
+				"keystroke of shortcut which type is wm can not be set to the Super key"))
 		}
 	}
 
 	conflictKeystroke, err := m.shortcutManager.FindConflictingKeystroke(ks)
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	if conflictKeystroke == nil {
 		m.shortcutManager.AddShortcutKeystroke(shortcut, ks)
 		err := shortcut.SaveKeystrokes()
 		if err != nil {
-			return err
+			return dbusutil.ToError(err)
 		}
 		if shouldEmitSignalChanged(shortcut) {
 			m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 		}
 	} else if conflictKeystroke.Shortcut != shortcut {
-		return errKeystrokeUsed
+		return dbusutil.ToError(errKeystrokeUsed)
 	}
 	return nil
 }
 
-func (m *Manager) DeleteShortcutKeystroke(id string, type0 int32, keystroke string) error {
+func (m *Manager) DeleteShortcutKeystroke(id string, type0 int32, keystroke string) *dbus.Error {
 	logger.Debug("DeleteShortcutKeystroke", id, type0, keystroke)
 	shortcut := m.shortcutManager.GetByIdType(id, type0)
 	if shortcut == nil {
-		return ErrShortcutNotFound{id, type0}
+		return dbusutil.ToError(ErrShortcutNotFound{id, type0})
 	}
 	if !shortcut.GetKeystrokesModifiable() {
-		return errShortcutKeystrokesUnmodifiable
+		return dbusutil.ToError(errShortcutKeystrokesUnmodifiable)
 	}
 
 	ks, err := shortcuts.ParseKeystroke(keystroke)
 	if err != nil {
 		// parse keystroke error
-		return err
+		return dbusutil.ToError(err)
 	}
 	logger.Debug("keystroke:", ks.DebugString())
 
 	m.shortcutManager.DeleteShortcutKeystroke(shortcut, ks)
 	err = shortcut.SaveKeystrokes()
 	if err != nil {
-		return err
+		return dbusutil.ToError(err)
 	}
 	if shouldEmitSignalChanged(shortcut) {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
@@ -296,20 +301,26 @@ func (m *Manager) DeleteShortcutKeystroke(id string, type0 int32, keystroke stri
 	return nil
 }
 
-func (m *Manager) GetShortcut(id string, type0 int32) (string, error) {
+func (m *Manager) GetShortcut(id string, type0 int32) (string, *dbus.Error) {
 	shortcut := m.shortcutManager.GetByIdType(id, type0)
 	if shortcut == nil {
-		return "", ErrShortcutNotFound{id, type0}
+		return "", dbusutil.ToError(ErrShortcutNotFound{id, type0})
 	}
-	return doMarshal(shortcut)
+	detail, err := doMarshal(shortcut)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return detail, nil
 }
 
-func (m *Manager) SelectKeystroke() error {
+func (m *Manager) SelectKeystroke() *dbus.Error {
 	logger.Debug("SelectKeystroke")
-	return m.selectKeystroke()
+	err := m.selectKeystroke()
+	return dbusutil.ToError(err)
 }
 
-func (m *Manager) SetNumLockState(state int32) error {
+func (m *Manager) SetNumLockState(state int32) *dbus.Error {
 	logger.Debug("SetNumLockState", state)
-	return setNumLockState(m.conn, m.keySymbols, NumLockState(state))
+	err := setNumLockState(m.conn, m.keySymbols, NumLockState(state))
+	return dbusutil.ToError(err)
 }

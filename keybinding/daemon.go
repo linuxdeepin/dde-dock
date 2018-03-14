@@ -22,7 +22,6 @@ package keybinding
 import (
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -50,37 +49,43 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (daemon *Daemon) Start() error {
-	if daemon.manager != nil {
+func (d *Daemon) Start() error {
+	if d.manager != nil {
 		return nil
 	}
-	logger.BeginTracing()
 	var err error
 
-	daemon.manager, err = NewManager()
+	service := loader.GetService()
+
+	d.manager, err = newManager(service)
 	if err != nil {
-		logger.EndTracing()
 		return err
 	}
 
-	err = dbus.InstallOnSession(daemon.manager)
+	err = service.Export(dbusPath, d.manager)
 	if err != nil {
-		daemon.manager.destroy()
-		daemon.manager = nil
-		logger.EndTracing()
+		d.manager.destroy()
+		d.manager = nil
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		d.manager.destroy()
+		d.manager = nil
 		return err
 	}
 
 	go func() {
-		m := daemon.manager
+		m := d.manager
 		m.init()
 
 		m.initHandlers()
 
 		// listen gsettings changed event
-		m.listenGSettingsChanged(gsSchemaSystem, daemon.manager.gsSystem, shortcuts.ShortcutTypeSystem)
-		m.listenGSettingsChanged(gsSchemaMediaKey, daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
-		m.listenGSettingsChanged(gsSchemaGnomeWM, daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
+		m.listenGSettingsChanged(gsSchemaSystem, d.manager.gsSystem, shortcuts.ShortcutTypeSystem)
+		m.listenGSettingsChanged(gsSchemaMediaKey, d.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
+		m.listenGSettingsChanged(gsSchemaGnomeWM, d.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
 
 		m.eliminateKeystrokeConflict()
 		m.shortcutManager.EventLoop()
@@ -89,13 +94,12 @@ func (daemon *Daemon) Start() error {
 	return nil
 }
 
-func (daemon *Daemon) Stop() error {
-	if daemon.manager == nil {
+func (d *Daemon) Stop() error {
+	if d.manager == nil {
 		return nil
 	}
-	logger.EndTracing()
-	daemon.manager.destroy()
-	dbus.UnInstallObject(daemon.manager)
-	daemon.manager = nil
+
+	d.manager.destroy()
+	d.manager = nil
 	return nil
 }
