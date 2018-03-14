@@ -427,8 +427,10 @@ void MainWindow::updatePosition()
     updateGeometry();
 
     // make sure strut partial is set after the size/position animation;
-    const int inter = qMax(m_sizeChangeAni->duration(), m_posChangeAni->duration());
-    QTimer::singleShot(inter + 100, this, &MainWindow::setStrutPartial);
+    const int duration = qMax(m_sizeChangeAni->duration(), m_posChangeAni->duration());
+
+    QTimer::singleShot(duration, this, &MainWindow::setStrutPartial);
+    QTimer::singleShot(duration, this, &MainWindow::updatePanelVisible);
 }
 
 void MainWindow::updateGeometry()
