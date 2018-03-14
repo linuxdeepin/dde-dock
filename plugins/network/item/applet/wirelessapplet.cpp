@@ -77,6 +77,9 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
     m_centralLayout->setSpacing(0);
     m_centralLayout->setMargin(0);
 
+    // initialization state.
+    m_deviceEnabled = m_networkInter->IsDeviceEnabled(m_device.dbusPath());
+
     setWidget(m_centralWidget);
     setFrameStyle(QFrame::NoFrame);
     setFixedWidth(300);
