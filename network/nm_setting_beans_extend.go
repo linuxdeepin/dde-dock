@@ -259,3 +259,11 @@ func getSettingWimaxAvailableValues(data connectionData, key string) (values []k
 func checkSettingWimaxValues(data connectionData) (err sectionErrors) {
 	return
 }
+
+func setSettingWirelessAssignedMacAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-11-wireless", "assigned-mac-address", valueJSON, ktypeWrapperString)
+}
+
+func setSettingWiredAssignedMacAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-3-ethernet", "assigned-mac-address", valueJSON, ktypeWrapperString)
+}

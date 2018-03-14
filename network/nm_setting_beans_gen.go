@@ -7294,6 +7294,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWiredAutoNegotiateJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWiredClonedMacAddressJSON(data, valueJSON)
+		case "assigned-mac-address":
+			err = setSettingWiredAssignedMacAddressJSON(data, valueJSON)
 		case "duplex":
 			err = setSettingWiredDuplexJSON(data, valueJSON)
 		case "generate-mac-address-mask":
@@ -7332,6 +7334,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWirelessChannelJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWirelessClonedMacAddressJSON(data, valueJSON)
+		case "assigned-mac-address":
+			err = setSettingWirelessAssignedMacAddressJSON(data, valueJSON)
 		case "generate-mac-address-mask":
 			err = setSettingWirelessGenerateMacAddressMaskJSON(data, valueJSON)
 		case "hidden":

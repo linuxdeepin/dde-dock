@@ -66,3 +66,10 @@ NetworkManager 各操作.
 ```sh
 $ make gen-nm-code
 ```
+
+## 特别注意
+
+每次重新生成 nm_setting_beans_gen.go 文件后，需要手工给 generalSetSettingKeyJSON 打补丁，
+否则就会出现想将 MAC 地址由非空设置为空，但不能成功的问题。
+
+相关 Change-Id: Ie1ff2b980b601b04866d9b46f119da7d810b69da
