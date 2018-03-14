@@ -36,7 +36,8 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/fsnotify"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -70,25 +71,25 @@ const (
 	defaultStandardFont   = "Noto Sans"
 	defaultMonospaceFont  = "Noto Mono"
 	defaultFontConfigFile = "/usr/share/deepin-default-settings/fontconfig.json"
+
+	dbusServiceName = "com.deepin.daemon.Appearance"
+	dbusPath        = "/com/deepin/daemon/Appearance"
+	dbusInterface   = dbusServiceName
 )
 
 // Manager shows current themes and fonts settings, emit 'Changed' signal if modified
 // if themes list changed will emit 'Refreshed' signal
 type Manager struct {
-	GtkTheme      *property.GSettingsStringProperty
-	IconTheme     *property.GSettingsStringProperty
-	CursorTheme   *property.GSettingsStringProperty
-	Background    *property.GSettingsStringProperty
-	StandardFont  *property.GSettingsStringProperty
-	MonospaceFont *property.GSettingsStringProperty
+	service *dbusutil.Service
 
-	FontSize *property.GSettingsFloatProperty
+	GtkTheme      gsprop.String
+	IconTheme     gsprop.String
+	CursorTheme   gsprop.String
+	Background    gsprop.String
+	StandardFont  gsprop.String
+	MonospaceFont gsprop.String
 
-	// Signals:
-	// Theme setting changed
-	Changed func(_type string, name string)
-	// Theme list refreshed
-	Refreshed func(_type string)
+	FontSize gsprop.Double `prop:"access:rw"`
 
 	userObj   *accounts.User
 	imageBlur *accounts.ImageBlur
@@ -103,36 +104,45 @@ type Manager struct {
 	endWatcher chan struct{}
 
 	wm *wm.Wm
+
+	signals *struct {
+		// Theme setting changed
+		Changed struct {
+			type0 string
+			value string
+		}
+
+		// Theme list refreshed
+		Refreshed struct {
+			type0 string
+		}
+	}
+
+	methods *struct {
+		Delete         func() `in:"type,name"`
+		GetScaleFactor func() `out:"scale_factor"`
+		List           func() `in:"type" out:"list"`
+		Set            func() `in:"type,value"`
+		SetScaleFactor func() `in:"scale_factor"`
+		Show           func() `in:"type,names" out:"detail"`
+		Thumbnail      func() `in:"type,name" out:"file"`
+	}
 }
 
 // NewManager will create a 'Manager' object
-func NewManager() *Manager {
+func newManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
+	m.service = service
 	m.setting = gio.NewSettings(appearanceSchema)
 	m.wrapBgSetting = gio.NewSettings(wrapBgSchema)
 
-	m.GtkTheme = property.NewGSettingsStringProperty(
-		m, "GtkTheme",
-		m.setting, gsKeyGtkTheme)
-	m.IconTheme = property.NewGSettingsStringProperty(
-		m, "IconTheme",
-		m.setting, gsKeyIconTheme)
-	m.CursorTheme = property.NewGSettingsStringProperty(
-		m, "CursorTheme",
-		m.setting, gsKeyCursorTheme)
-	m.StandardFont = property.NewGSettingsStringProperty(
-		m, "StandardFont",
-		m.setting, gsKeyFontStandard)
-	m.MonospaceFont = property.NewGSettingsStringProperty(
-		m, "MonospaceFont",
-		m.setting, gsKeyFontMonospace)
-	m.Background = property.NewGSettingsStringProperty(
-		m, "Background",
-		m.wrapBgSetting, gsKeyBackground)
-
-	m.FontSize = property.NewGSettingsFloatProperty(
-		m, "FontSize",
-		m.setting, gsKeyFontSize)
+	m.GtkTheme.Bind(m.setting, gsKeyGtkTheme)
+	m.IconTheme.Bind(m.setting, gsKeyIconTheme)
+	m.CursorTheme.Bind(m.setting, gsKeyCursorTheme)
+	m.StandardFont.Bind(m.setting, gsKeyFontStandard)
+	m.MonospaceFont.Bind(m.setting, gsKeyFontMonospace)
+	m.Background.Bind(m.wrapBgSetting, gsKeyBackground)
+	m.FontSize.Bind(m.setting, gsKeyFontSize)
 
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
@@ -464,4 +474,8 @@ func (m *Manager) setDesktopBackgrounds(val []string) {
 			logger.Warning("call userObj.SetDesktopBackgrounds err:", err)
 		}
 	}
+}
+
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }

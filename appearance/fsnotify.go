@@ -22,11 +22,11 @@ package appearance
 import (
 	"os"
 	"path"
-	"pkg.deepin.io/dde/daemon/appearance/background"
-	"pkg.deepin.io/dde/daemon/appearance/subthemes"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/appearance/background"
+	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 )
 
 var (
@@ -78,15 +78,15 @@ func (m *Manager) handleThemeChanged() {
 					// Wait for theme copy finished
 					<-time.After(time.Millisecond * 700)
 					subthemes.RefreshGtkThemes()
-					m.emitRefreshed(TypeGtkTheme)
+					m.emitSignalRefreshed(TypeGtkTheme)
 				case hasEventOccurred(file, iconDirs):
 					// Wait for theme copy finished
 					logger.Debug("fs event in iconDirs")
 					<-time.After(time.Millisecond * 700)
 					subthemes.RefreshIconThemes()
 					subthemes.RefreshCursorThemes()
-					m.emitRefreshed(TypeIconTheme)
-					m.emitRefreshed(TypeCursorTheme)
+					m.emitSignalRefreshed(TypeIconTheme)
+					m.emitSignalRefreshed(TypeCursorTheme)
 				}
 			}
 		}
@@ -145,6 +145,6 @@ func hasEventOccurred(ev string, list []string) bool {
 	return false
 }
 
-func (m *Manager) emitRefreshed(_type string) {
-	dbus.Emit(m, "Refreshed", _type)
+func (m *Manager) emitSignalRefreshed(type0 string) {
+	m.service.Emit(m, "Refreshed", type0)
 }

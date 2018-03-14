@@ -27,10 +27,12 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 // Reset reset all themes and fonts settings to default values
-func (m *Manager) Reset() {
+func (m *Manager) Reset() *dbus.Error {
 	logger.Debug("Reset settings")
 
 	var settingKeys = []string{
@@ -48,11 +50,20 @@ func (m *Manager) Reset() {
 	}
 
 	m.resetFonts()
+	return nil
 }
 
 // List list all available for the special type, return a json format list
-func (m *Manager) List(ty string) (string, error) {
+func (m *Manager) List(ty string) (string, *dbus.Error) {
 	logger.Debug("List for type:", ty)
+	jsonStr, err := m.list(ty)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return jsonStr, nil
+}
+
+func (m *Manager) list(ty string) (string, error) {
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
 		return m.doShow(subthemes.ListGtkTheme())
@@ -67,13 +78,22 @@ func (m *Manager) List(ty string) (string, error) {
 	case TypeMonospaceFont:
 		return m.doShow(fonts.GetFamilyTable().ListMonospace())
 	}
-	return "", fmt.Errorf("Invalid type: %v", ty)
+	return "", fmt.Errorf("invalid type: %v", ty)
+
 }
 
 // Show show detail infos for the special type
 // ret0: detail info, json format
-func (m *Manager) Show(ty string, names []string) (string, error) {
+func (m *Manager) Show(ty string, names []string) (string, *dbus.Error) {
 	logger.Debugf("Show '%s' type '%s'", names, ty)
+	jsonStr, err := m.show(ty, names)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return jsonStr, nil
+}
+
+func (m *Manager) show(ty string, names []string) (string, error) {
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
 		return m.doShow(subthemes.ListGtkTheme().ListGet(names))
@@ -86,12 +106,17 @@ func (m *Manager) Show(ty string, names []string) (string, error) {
 	case TypeStandardFont, TypeMonospaceFont:
 		return m.doShow(fonts.GetFamilyTable().GetFamilies(names))
 	}
-	return "", fmt.Errorf("Invalid type: %v", ty)
+	return "", fmt.Errorf("invalid type: %v", ty)
 }
 
 // Set set to the special 'value'
-func (m *Manager) Set(ty, value string) error {
+func (m *Manager) Set(ty, value string) *dbus.Error {
 	logger.Debugf("Set '%s' for type '%s'", value, ty)
+	err := m.set(ty, value)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) set(ty, value string) error {
 	var err error
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
@@ -160,14 +185,19 @@ func (m *Manager) Set(ty, value string) error {
 			m.FontSize.Set(size)
 		}
 	default:
-		return fmt.Errorf("Invalid type: %v", ty)
+		return fmt.Errorf("invalid type: %v", ty)
 	}
 	return err
 }
 
 // Delete delete the special 'name'
-func (m *Manager) Delete(ty, name string) error {
+func (m *Manager) Delete(ty, name string) *dbus.Error {
 	logger.Debugf("Delete '%s' type '%s'", name, ty)
+	err := m.delete(ty, name)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) delete(ty, name string) error {
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
 		return subthemes.ListGtkTheme().Delete(name)
@@ -185,11 +215,19 @@ func (m *Manager) Delete(ty, name string) error {
 		//case TypeStandardFont:
 		//case TypeMonospaceFont:
 	}
-	return fmt.Errorf("Invalid type: %v", ty)
+	return fmt.Errorf("invalid type: %v", ty)
 }
 
 // Thumbnail get thumbnail for the special 'name'
-func (m *Manager) Thumbnail(ty, name string) (string, error) {
+func (m *Manager) Thumbnail(ty, name string) (string, *dbus.Error) {
+	file, err := m.thumbnail(ty, name)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return file, nil
+}
+
+func (m *Manager) thumbnail(ty, name string) (string, error) {
 	logger.Debugf("Get thumbnail for '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
@@ -199,20 +237,25 @@ func (m *Manager) Thumbnail(ty, name string) (string, error) {
 	case TypeCursorTheme:
 		return subthemes.GetCursorThumbnail(name)
 	}
-	return "", fmt.Errorf("Invalid type: %v", ty)
+	return "", fmt.Errorf("invalid type: %v", ty)
 }
 
-func (m *Manager) GetScaleFactor() float64 {
-	return doGetScaleFactor()
+func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
+	return doGetScaleFactor(), nil
 }
 
-func (m *Manager) SetScaleFactor(scale float64) error {
+func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
+	err := m.setScaleFactor(scale)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) setScaleFactor(scale float64) error {
 	if scale < 0 {
-		return fmt.Errorf("Invalid scale value: %v", scale)
+		return fmt.Errorf("invalid scale value: %v", scale)
 	}
 
 	if getScaleStatus() {
-		return fmt.Errorf("There is a scale job running.")
+		return fmt.Errorf("there is a scale job running")
 	}
 
 	setScaleStatus(true)

@@ -22,7 +22,6 @@ package appearance
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -54,17 +53,24 @@ func (*Daemon) Start() error {
 		return nil
 	}
 
-	logger.BeginTracing()
-	_m = NewManager()
-	err := dbus.InstallOnSession(_m)
+	service := loader.GetService()
+
+	_m = newManager(service)
+	err := service.Export(dbusPath, _m)
 	if err != nil {
-		logger.Error("Install dbus failed:", err)
 		_m.destroy()
-		logger.EndTracing()
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		_m.destroy()
+		service.StopExport(_m)
 		return err
 	}
 
 	_m.init()
+
 	go _m.listenCursorChanged()
 	go _m.handleThemeChanged()
 	_m.listenGSettingChanged()
@@ -78,8 +84,8 @@ func (*Daemon) Stop() error {
 	}
 
 	_m.destroy()
-	dbus.UnInstallObject(_m)
-	logger.EndTracing()
+	service := loader.GetService()
+	service.StopExport(_m)
 	_m = nil
 	return nil
 }

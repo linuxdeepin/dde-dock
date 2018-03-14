@@ -24,8 +24,6 @@ import (
 	"time"
 
 	"pkg.deepin.io/dde/daemon/appearance/background"
-	"pkg.deepin.io/lib/dbus"
-
 	"pkg.deepin.io/lib/gsettings"
 )
 
@@ -76,10 +74,14 @@ func (m *Manager) listenGSettingChanged() {
 			logger.Warningf("Set %v failed: %v", key, err)
 			return
 		}
-		dbus.Emit(m, "Changed", ty, value)
+		m.emitSignalChanged(ty, value)
 	})
 
 	m.listenBgGSettings()
+}
+
+func (m *Manager) emitSignalChanged(type0, value string) {
+	m.service.Emit(m, "Changed", type0, value)
 }
 
 func (m *Manager) listenBgGSettings() {
@@ -99,7 +101,7 @@ func (m *Manager) listenBgGSettings() {
 		if uri != value {
 			m.wrapBgSetting.SetString(key, uri)
 		}
-		dbus.Emit(m, "Changed", TypeBackground, uri)
+		m.emitSignalChanged(TypeBackground, uri)
 	})
 
 	if m.gnomeBgSetting == nil {
