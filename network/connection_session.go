@@ -21,12 +21,13 @@ package network
 
 import (
 	"fmt"
+	"sync"
+	"time"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/utils"
-	"sync"
-	"time"
 )
 
 type sectionErrors map[string]string
@@ -142,6 +143,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	fillSectionCache(s.data)
 	s.setProps()
+	s.AllowDelete = false
 	logger.Debugf("newConnectionSessionByCreate(): %#v", s.data)
 	return
 }
