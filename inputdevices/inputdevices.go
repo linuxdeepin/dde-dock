@@ -20,11 +20,11 @@
 package inputdevices
 
 import (
-	"fmt"
-	. "pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
+
+//go:generate dbusutil-gen -type Mouse,Touchpad,TrackPoint,Wacom mouse.go touchpad.go trackpoint.go wacom.go
 
 var (
 	_manager *Manager
@@ -32,15 +32,15 @@ var (
 )
 
 type Daemon struct {
-	*ModuleBase
+	*loader.ModuleBase
 }
 
 func init() {
-	Register(NewInputdevicesDaemon(logger))
+	loader.Register(NewInputdevicesDaemon(logger))
 }
 func NewInputdevicesDaemon(logger *log.Logger) *Daemon {
 	var d = new(Daemon)
-	d.ModuleBase = NewModuleBase("inputdevices", d, logger)
+	d.ModuleBase = loader.NewModuleBase("inputdevices", d, logger)
 	return d
 }
 
@@ -53,33 +53,35 @@ func (*Daemon) Start() error {
 		return nil
 	}
 
-	logger.BeginTracing()
-	_manager = NewManager()
+	service := loader.GetService()
+	_manager = NewManager(service)
 
-	err := installSessionBus(_manager)
-	if err != nil {
-		return err
-	}
-
-	err = installSessionBus(_manager.kbd)
+	err := service.Export(dbusPath, _manager)
 	if err != nil {
 		return err
 	}
 
-	err = installSessionBus(_manager.wacom)
+	err = service.Export(kbdDBusPath, _manager.kbd)
 	if err != nil {
 		return err
 	}
 
-	err = installSessionBus(_manager.tpad)
+	err = service.Export(wacomDBusPath, _manager.wacom)
 	if err != nil {
 		return err
 	}
-	err = installSessionBus(_manager.mouse)
+
+	err = service.Export(touchPadDBusPath, _manager.tpad)
 	if err != nil {
 		return err
 	}
-	err = installSessionBus(_manager.trackPoint)
+
+	err = service.Export(mouseDBusPath, _manager.mouse, _manager.trackPoint)
+	if err != nil {
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		return err
 	}
@@ -97,23 +99,12 @@ func (*Daemon) Stop() error {
 	}
 	_manager = nil
 
-	logger.EndTracing()
-	getWacom().destroy()
+	if _manager.wacom != nil {
+		_manager.wacom.destroy()
+		_manager.wacom = nil
+	}
+
 	// TODO endDeviceListener will be stuck
 	endDeviceListener()
-	return nil
-}
-
-func installSessionBus(obj dbus.DBusObject) error {
-	if obj == nil {
-		logger.Error("Invalid dbus object: empty")
-		return fmt.Errorf("Invalid dbus object")
-	}
-
-	err := dbus.InstallOnSession(obj)
-	if err != nil {
-		logger.Error("Install session bus failed:", err)
-		return err
-	}
 	return nil
 }

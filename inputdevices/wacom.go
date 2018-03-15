@@ -27,12 +27,13 @@ import (
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/dxinput"
-	"pkg.deepin.io/lib/dbus/property"
 
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
 const (
@@ -111,25 +112,29 @@ func getOutputInfo(conn *xgb.Conn, output randr.Output, ts xproto.Timestamp) (*O
 }
 
 type Wacom struct {
-	LeftHanded       *property.GSettingsBoolProperty `access:"readwrite"`
-	CursorMode       *property.GSettingsBoolProperty `access:"readwrite"`
-	ForceProportions *property.GSettingsBoolProperty `access:"readwrite"`
+	service    *dbusutil.Service
+	PropsMu    sync.RWMutex
+	DeviceList string
+	Exist      bool
+	MapOutput  string
 
-	KeyUpAction   *property.GSettingsStringProperty `access:"readwrite"`
-	KeyDownAction *property.GSettingsStringProperty `access:"readwrite"`
-	MapOutput     string
+	// dbusutil-gen: ignore-below
+	LeftHanded       gsprop.Bool `prop:"access:rw"`
+	CursorMode       gsprop.Bool `prop:"access:rw"`
+	ForceProportions gsprop.Bool `prop:"access:rw"`
 
-	Suppress                *property.GSettingsUintProperty `access:"readwrite"`
-	StylusPressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
-	EraserPressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
-	StylusRawSample         *property.GSettingsUintProperty `access:"readwrite"`
-	EraserRawSample         *property.GSettingsUintProperty `access:"readwrite"`
-	StylusThreshold         *property.GSettingsUintProperty `access:"readwrite"`
-	EraserThreshold         *property.GSettingsUintProperty `access:"readwrite"`
+	KeyUpAction   gsprop.String `prop:"access:rw"`
+	KeyDownAction gsprop.String `prop:"access:rw"`
 
-	DeviceList  string
-	ActionInfos ActionInfos
-	Exist       bool
+	Suppress                gsprop.Uint `prop:"access:rw"`
+	StylusPressureSensitive gsprop.Uint `prop:"access:rw"`
+	EraserPressureSensitive gsprop.Uint `prop:"access:rw"`
+	StylusRawSample         gsprop.Uint `prop:"access:rw"`
+	EraserRawSample         gsprop.Uint `prop:"access:rw"`
+	StylusThreshold         gsprop.Uint `prop:"access:rw"`
+	EraserThreshold         gsprop.Uint `prop:"access:rw"`
+
+	ActionInfos ActionInfos // TODO: remove this field
 
 	devInfos      dxWacoms
 	setting       *gio.Settings
@@ -145,67 +150,29 @@ type Wacom struct {
 	exit         chan int
 }
 
-var _wacom *Wacom
-
-func getWacom() *Wacom {
-	if _wacom == nil {
-		_wacom = NewWacom()
-	}
-
-	return _wacom
-}
-
-func NewWacom() *Wacom {
+func newWacom(service *dbusutil.Service) *Wacom {
 	var w = new(Wacom)
 
+	w.service = service
 	w.setting = gio.NewSettings(wacomSchema)
+	w.LeftHanded.Bind(w.setting, wacomKeyLeftHanded)
+	w.CursorMode.Bind(w.setting, wacomKeyCursorMode)
+	w.ForceProportions.Bind(w.setting, wacomKeyForceProportions)
+	w.Suppress.Bind(w.setting, wacomKeySuppress)
+
+	// stylus settings
 	w.stylusSetting = gio.NewSettings(wacomStylusSchema)
+	w.KeyUpAction.Bind(w.stylusSetting, wacomKeyUpAction)
+	w.KeyDownAction.Bind(w.stylusSetting, wacomKeyDownAction)
+	w.StylusPressureSensitive.Bind(w.stylusSetting, wacomKeyPressureSensitive)
+	w.StylusRawSample.Bind(w.stylusSetting, wacomKeyRawSample)
+	w.StylusThreshold.Bind(w.stylusSetting, wacomKeyThreshold)
+
+	// eraser settings
 	w.eraserSetting = gio.NewSettings(wacomEraserSchema)
-
-	w.LeftHanded = property.NewGSettingsBoolProperty(
-		w, "LeftHanded",
-		w.setting, wacomKeyLeftHanded)
-	w.CursorMode = property.NewGSettingsBoolProperty(
-		w, "CursorMode",
-		w.setting, wacomKeyCursorMode)
-	w.ForceProportions = property.NewGSettingsBoolProperty(
-		w, "ForceProportions",
-		w.setting, wacomKeyForceProportions)
-
-	w.KeyUpAction = property.NewGSettingsStringProperty(
-		w, "KeyUpAction",
-		w.stylusSetting, wacomKeyUpAction)
-	w.KeyDownAction = property.NewGSettingsStringProperty(
-		w, "KeyDownAction",
-		w.stylusSetting, wacomKeyDownAction)
-
-	w.Suppress = property.NewGSettingsUintProperty(
-		w, "Suppress",
-		w.setting, wacomKeySuppress)
-
-	w.StylusPressureSensitive = property.NewGSettingsUintProperty(
-		w, "StylusPressureSensitive",
-		w.stylusSetting, wacomKeyPressureSensitive)
-
-	w.EraserPressureSensitive = property.NewGSettingsUintProperty(
-		w, "EraserPressureSensitive",
-		w.eraserSetting, wacomKeyPressureSensitive)
-
-	w.StylusRawSample = property.NewGSettingsUintProperty(
-		w, "StylusRawSample",
-		w.stylusSetting, wacomKeyRawSample)
-
-	w.EraserRawSample = property.NewGSettingsUintProperty(
-		w, "EraserRawSample",
-		w.eraserSetting, wacomKeyRawSample)
-
-	w.StylusThreshold = property.NewGSettingsUintProperty(
-		w, "StylusThreshold",
-		w.stylusSetting, wacomKeyThreshold)
-
-	w.EraserThreshold = property.NewGSettingsUintProperty(
-		w, "EraserThreshold",
-		w.eraserSetting, wacomKeyThreshold)
+	w.EraserPressureSensitive.Bind(w.eraserSetting, wacomKeyPressureSensitive)
+	w.EraserRawSample.Bind(w.eraserSetting, wacomKeyRawSample)
+	w.EraserThreshold.Bind(w.eraserSetting, wacomKeyThreshold)
 
 	w.updateDXWacoms()
 
@@ -346,10 +313,12 @@ func (w *Wacom) updateAreaAndMapToOutput() {
 		w.setArea()
 	}
 
+	w.PropsMu.Lock()
 	if w.setPropMapOutput(inOutput.Name) {
 		// map to output changed
 		w.setMapToOutput()
 	}
+	w.PropsMu.Unlock()
 }
 
 func (w *Wacom) pointerInOutput() *OutputInfo {
@@ -380,6 +349,7 @@ func (w *Wacom) updateDXWacoms() {
 		w.devInfos = append(w.devInfos, info)
 	}
 
+	w.PropsMu.Lock()
 	var v string
 	if len(w.devInfos) == 0 {
 		w.setPropExist(false)
@@ -387,7 +357,8 @@ func (w *Wacom) updateDXWacoms() {
 		w.setPropExist(true)
 		v = w.devInfos.string()
 	}
-	setPropString(w, &w.DeviceList, "DeviceList", v)
+	w.setPropDeviceList(v)
+	w.PropsMu.Unlock()
 }
 
 func (w *Wacom) setStylusButtonAction(btnNum int, action string) {

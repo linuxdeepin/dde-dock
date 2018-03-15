@@ -26,9 +26,10 @@ import "C"
 
 import (
 	"encoding/json"
+	"strings"
+
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
-	"strings"
 )
 
 type dxMouses []*dxinput.Mouse
@@ -62,10 +63,15 @@ func handleDeviceChanged() {
 	wacomInfos = dxWacoms{}
 	getWacomInfos(false)
 
-	getTouchpad().handleDeviceChanged()
-	getMouse().handleDeviceChanged()
-	getWacom().handleDeviceChanged()
-	getKeyboard().handleDeviceChanged()
+	if _manager == nil {
+		logger.Warning("_manager is nil")
+		return
+	}
+
+	_manager.tpad.handleDeviceChanged()
+	_manager.mouse.handleDeviceChanged()
+	_manager.wacom.handleDeviceChanged()
+	_manager.kbd.handleDeviceChanged()
 }
 
 func getDeviceInfos(force bool) dxutils.DeviceInfos {

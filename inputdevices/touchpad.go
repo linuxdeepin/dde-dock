@@ -21,36 +21,40 @@ package inputdevices
 
 import (
 	"fmt"
-	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"pkg.deepin.io/lib/dbus/property"
-	"pkg.deepin.io/lib/strv"
-	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
 	"strings"
+
+	"sync"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/strv"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
 	tpadSchema = "com.deepin.dde.touchpad"
 
-	tpadKeyEnabled        = "touchpad-enabled"
-	tpadKeyLeftHanded     = "left-handed"
-	tpadKeyWhileTyping    = "disable-while-typing"
-	tpadKeyNaturalScroll  = "natural-scroll"
-	tpadKeyEdgeScroll     = "edge-scroll-enabled"
-	tpadKeyHorizScroll    = "horiz-scroll-enabled"
-	tpadKeyVertScroll     = "vert-scroll-enabled"
-	tpadKeyAcceleration   = "motion-acceleration"
-	tpadKeyThreshold      = "motion-threshold"
-	tpadKeyScaling        = "motion-scaling"
-	tpadKeyTapClick       = "tap-to-click"
-	tpadKeyScrollDelta    = "delta-scroll"
-	tpadKeyWhileTypingCmd = "disable-while-typing-cmd"
-	tpadKeyPalmDetect     = "palm-detect"
-	tpadKeyPalmMinWidth   = "palm-min-width"
-	tpadKeyPalmMinZ       = "palm-min-pressure"
+	tpadKeyEnabled            = "touchpad-enabled"
+	tpadKeyLeftHanded         = "left-handed"
+	tpadKeyDisableWhileTyping = "disable-while-typing"
+	tpadKeyNaturalScroll      = "natural-scroll"
+	tpadKeyEdgeScroll         = "edge-scroll-enabled"
+	tpadKeyHorizScroll        = "horiz-scroll-enabled"
+	tpadKeyVertScroll         = "vert-scroll-enabled"
+	tpadKeyAcceleration       = "motion-acceleration"
+	tpadKeyThreshold          = "motion-threshold"
+	tpadKeyScaling            = "motion-scaling"
+	tpadKeyTapClick           = "tap-to-click"
+	tpadKeyScrollDelta        = "delta-scroll"
+	tpadKeyWhileTypingCmd     = "disable-while-typing-cmd"
+	tpadKeyPalmDetect         = "palm-detect"
+	tpadKeyPalmMinWidth       = "palm-min-width"
+	tpadKeyPalmMinZ           = "palm-min-pressure"
 )
 
 const (
@@ -58,104 +62,61 @@ const (
 )
 
 type Touchpad struct {
-	TPadEnable      *property.GSettingsBoolProperty `access:"readwrite"`
-	LeftHanded      *property.GSettingsBoolProperty `access:"readwrite"`
-	DisableIfTyping *property.GSettingsBoolProperty `access:"readwrite"`
-	NaturalScroll   *property.GSettingsBoolProperty `access:"readwrite"`
-	EdgeScroll      *property.GSettingsBoolProperty `access:"readwrite"`
-	HorizScroll     *property.GSettingsBoolProperty `access:"readwrite"`
-	VertScroll      *property.GSettingsBoolProperty `access:"readwrite"`
-	TapClick        *property.GSettingsBoolProperty `access:"readwrite"`
-	PalmDetect      *property.GSettingsBoolProperty `access:"readwrite"`
-
-	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
-	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
-	MotionScaling      *property.GSettingsFloatProperty `access:"readwrite"`
-
-	DoubleClick   *property.GSettingsIntProperty `access:"readwrite"`
-	DragThreshold *property.GSettingsIntProperty `access:"readwrite"`
-	DeltaScroll   *property.GSettingsIntProperty `access:"readwrite"`
-	PalmMinWidth  *property.GSettingsIntProperty `access:"readwrite"`
-	PalmMinZ      *property.GSettingsIntProperty `access:"readwrite"`
-
+	service    *dbusutil.Service
+	PropsMu    sync.RWMutex
 	Exist      bool
 	DeviceList string
+
+	// dbusutil-gen: ignore-below
+	TPadEnable      gsprop.Bool `prop:"access:rw"`
+	LeftHanded      gsprop.Bool `prop:"access:rw"`
+	DisableIfTyping gsprop.Bool `prop:"access:rw"`
+	NaturalScroll   gsprop.Bool `prop:"access:rw"`
+	EdgeScroll      gsprop.Bool `prop:"access:rw"`
+	HorizScroll     gsprop.Bool `prop:"access:rw"`
+	VertScroll      gsprop.Bool `prop:"access:rw"`
+	TapClick        gsprop.Bool `prop:"access:rw"`
+	PalmDetect      gsprop.Bool `prop:"access:rw"`
+
+	MotionAcceleration gsprop.Double `prop:"access:rw"`
+	MotionThreshold    gsprop.Double `prop:"access:rw"`
+	MotionScaling      gsprop.Double `prop:"access:rw"`
+
+	DoubleClick   gsprop.Int `prop:"access:rw"`
+	DragThreshold gsprop.Int `prop:"access:rw"`
+	DeltaScroll   gsprop.Int `prop:"access:rw"`
+	PalmMinWidth  gsprop.Int `prop:"access:rw"`
+	PalmMinZ      gsprop.Int `prop:"access:rw"`
 
 	devInfos     dxTouchpads
 	setting      *gio.Settings
 	mouseSetting *gio.Settings
 }
 
-var _tpad *Touchpad
-
-func getTouchpad() *Touchpad {
-	if _tpad == nil {
-		_tpad = NewTouchpad()
-	}
-
-	return _tpad
-}
-
-func NewTouchpad() *Touchpad {
+func newTouchpad(service *dbusutil.Service) *Touchpad {
 	var tpad = new(Touchpad)
 
+	tpad.service = service
 	tpad.setting = gio.NewSettings(tpadSchema)
-
-	tpad.TPadEnable = property.NewGSettingsBoolProperty(
-		tpad, "TPadEnable",
-		tpad.setting, tpadKeyEnabled)
-	tpad.LeftHanded = property.NewGSettingsBoolProperty(
-		tpad, "LeftHanded",
-		tpad.setting, tpadKeyLeftHanded)
-	tpad.DisableIfTyping = property.NewGSettingsBoolProperty(
-		tpad, "DisableIfTyping",
-		tpad.setting, tpadKeyWhileTyping)
-	tpad.NaturalScroll = property.NewGSettingsBoolProperty(
-		tpad, "NaturalScroll",
-		tpad.setting, tpadKeyNaturalScroll)
-	tpad.EdgeScroll = property.NewGSettingsBoolProperty(
-		tpad, "EdgeScroll",
-		tpad.setting, tpadKeyEdgeScroll)
-	tpad.VertScroll = property.NewGSettingsBoolProperty(
-		tpad, "VertScroll",
-		tpad.setting, tpadKeyVertScroll)
-	tpad.HorizScroll = property.NewGSettingsBoolProperty(
-		tpad, "HorizScroll",
-		tpad.setting, tpadKeyHorizScroll)
-	tpad.TapClick = property.NewGSettingsBoolProperty(
-		tpad, "TapClick",
-		tpad.setting, tpadKeyTapClick)
-	tpad.PalmDetect = property.NewGSettingsBoolProperty(
-		tpad, "PalmDetect",
-		tpad.setting, tpadKeyPalmDetect)
-
-	tpad.MotionAcceleration = property.NewGSettingsFloatProperty(
-		tpad, "MotionAcceleration",
-		tpad.setting, tpadKeyAcceleration)
-	tpad.MotionThreshold = property.NewGSettingsFloatProperty(
-		tpad, "MotionThreshold",
-		tpad.setting, tpadKeyThreshold)
-	tpad.MotionScaling = property.NewGSettingsFloatProperty(
-		tpad, "MotionScaling",
-		tpad.setting, tpadKeyScaling)
-
-	tpad.DeltaScroll = property.NewGSettingsIntProperty(
-		tpad, "DeltaScroll",
-		tpad.setting, tpadKeyScrollDelta)
-	tpad.PalmMinWidth = property.NewGSettingsIntProperty(
-		tpad, "PalmMinWidth",
-		tpad.setting, tpadKeyPalmMinWidth)
-	tpad.PalmMinZ = property.NewGSettingsIntProperty(
-		tpad, "PalmMinZ",
-		tpad.setting, tpadKeyPalmMinZ)
+	tpad.TPadEnable.Bind(tpad.setting, tpadKeyEnabled)
+	tpad.LeftHanded.Bind(tpad.setting, tpadKeyLeftHanded)
+	tpad.DisableIfTyping.Bind(tpad.setting, tpadKeyDisableWhileTyping)
+	tpad.NaturalScroll.Bind(tpad.setting, tpadKeyNaturalScroll)
+	tpad.EdgeScroll.Bind(tpad.setting, tpadKeyEdgeScroll)
+	tpad.VertScroll.Bind(tpad.setting, tpadKeyVertScroll)
+	tpad.HorizScroll.Bind(tpad.setting, tpadKeyHorizScroll)
+	tpad.TapClick.Bind(tpad.setting, tpadKeyTapClick)
+	tpad.PalmDetect.Bind(tpad.setting, tpadKeyPalmDetect)
+	tpad.MotionAcceleration.Bind(tpad.setting, tpadKeyAcceleration)
+	tpad.MotionThreshold.Bind(tpad.setting, tpadKeyThreshold)
+	tpad.MotionScaling.Bind(tpad.setting, tpadKeyScaling)
+	tpad.DeltaScroll.Bind(tpad.setting, tpadKeyScrollDelta)
+	tpad.PalmMinWidth.Bind(tpad.setting, tpadKeyPalmMinWidth)
+	tpad.PalmMinZ.Bind(tpad.setting, tpadKeyPalmMinZ)
 
 	tpad.mouseSetting = gio.NewSettings(mouseSchema)
-	tpad.DoubleClick = property.NewGSettingsIntProperty(
-		tpad, "DoubleClick",
-		tpad.mouseSetting, mouseKeyDoubleClick)
-	tpad.DragThreshold = property.NewGSettingsIntProperty(
-		tpad, "DragThreshold",
-		tpad.mouseSetting, mouseKeyDragThreshold)
+	tpad.DoubleClick.Bind(tpad.mouseSetting, mouseKeyDoubleClick)
+	tpad.DragThreshold.Bind(tpad.mouseSetting, mouseKeyDragThreshold)
 
 	tpad.updateDXTpads()
 
@@ -196,6 +157,7 @@ func (tpad *Touchpad) updateDXTpads() {
 		tpad.devInfos = append(tpad.devInfos, info)
 	}
 
+	tpad.PropsMu.Lock()
 	var v string
 	if len(tpad.devInfos) == 0 {
 		tpad.setPropExist(false)
@@ -203,7 +165,8 @@ func (tpad *Touchpad) updateDXTpads() {
 		tpad.setPropExist(true)
 		v = tpad.devInfos.string()
 	}
-	setPropString(tpad, &tpad.DeviceList, "DeviceList", v)
+	tpad.setPropDeviceList(v)
+	tpad.PropsMu.Unlock()
 }
 
 func (tpad *Touchpad) enable(enabled bool) {

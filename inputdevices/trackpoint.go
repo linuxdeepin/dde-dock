@@ -20,8 +20,11 @@
 package inputdevices
 
 import (
+	"sync"
+
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
 const (
@@ -39,74 +42,45 @@ const (
 )
 
 type TrackPoint struct {
-	MiddleButtonEnabled *property.GSettingsBoolProperty `access:"readwrite"`
-	WheelEmulation      *property.GSettingsBoolProperty `access:"readwrite"`
-	WheelHorizScroll    *property.GSettingsBoolProperty `access:"readwrite"`
-
-	MiddleButtonTimeout   *property.GSettingsIntProperty `access:"readwrite"`
-	WheelEmulationButton  *property.GSettingsIntProperty `access:"readwrite"`
-	WheelEmulationTimeout *property.GSettingsIntProperty `access:"readwrite"`
-
-	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
-	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
-	MotionScaling      *property.GSettingsFloatProperty `access:"readwrite"`
-
-	LeftHanded *property.GSettingsBoolProperty `access:"readwrite"`
-
+	service    *dbusutil.Service
+	PropsMu    sync.RWMutex
 	DeviceList string
 	Exist      bool
+
+	// dbusutil-gen: ignore-below
+	MiddleButtonEnabled gsprop.Bool `prop:"access:rw"`
+	WheelEmulation      gsprop.Bool `prop:"access:rw"`
+	WheelHorizScroll    gsprop.Bool `prop:"access:rw"`
+
+	MiddleButtonTimeout   gsprop.Int `prop:"access:rw"`
+	WheelEmulationButton  gsprop.Int `prop:"access:rw"`
+	WheelEmulationTimeout gsprop.Int `prop:"access:rw"`
+
+	MotionAcceleration gsprop.Double `prop:"access:rw"`
+	MotionThreshold    gsprop.Double `prop:"access:rw"`
+	MotionScaling      gsprop.Double `prop:"access:rw"`
+
+	LeftHanded gsprop.Bool `prop:"access:rw"`
 
 	devInfos dxMouses
 	setting  *gio.Settings
 }
 
-var _trackpoint *TrackPoint
-
-func getTrackPoint() *TrackPoint {
-	if _trackpoint == nil {
-		_trackpoint = NewTrackPoint()
-	}
-
-	return _trackpoint
-}
-
-func NewTrackPoint() *TrackPoint {
+func newTrackPoint(service *dbusutil.Service) *TrackPoint {
 	var tp = new(TrackPoint)
 
+	tp.service = service
 	tp.setting = gio.NewSettings(trackPointSchema)
-	tp.MiddleButtonEnabled = property.NewGSettingsBoolProperty(
-		tp, "MiddleButtonEnabled",
-		tp.setting, trackPointKeyMidButton)
-	tp.WheelEmulation = property.NewGSettingsBoolProperty(
-		tp, "WheelEmulation",
-		tp.setting, trackPointKeyWheel)
-	tp.WheelHorizScroll = property.NewGSettingsBoolProperty(
-		tp, "WheelHorizScroll",
-		tp.setting, trackPointKeyWheelHorizScroll)
-
-	tp.MotionAcceleration = property.NewGSettingsFloatProperty(
-		tp, "MotionAcceleration",
-		tp.setting, trackPointKeyAcceleration)
-	tp.MotionThreshold = property.NewGSettingsFloatProperty(
-		tp, "MotionThreshold",
-		tp.setting, trackPointKeyThreshold)
-	tp.MotionScaling = property.NewGSettingsFloatProperty(
-		tp, "MotionScaling",
-		tp.setting, trackPointKeyScaling)
-
-	tp.MiddleButtonTimeout = property.NewGSettingsIntProperty(
-		tp, "MiddleButtonTimeout",
-		tp.setting, trackPointKeyMidButtonTimeout)
-	tp.WheelEmulationButton = property.NewGSettingsIntProperty(
-		tp, "WheelEmulationButton",
-		tp.setting, trackPointKeyWheelButton)
-	tp.WheelEmulationTimeout = property.NewGSettingsIntProperty(
-		tp, "WheelEmulationTimeout",
-		tp.setting, trackPointKeyWheelTimeout)
-
-	tp.LeftHanded = property.NewGSettingsBoolProperty(
-		tp, "LeftHanded",
-		tp.setting, trackPointKeyLeftHanded)
+	tp.MiddleButtonEnabled.Bind(tp.setting, trackPointKeyMidButton)
+	tp.WheelEmulation.Bind(tp.setting, trackPointKeyWheel)
+	tp.WheelHorizScroll.Bind(tp.setting, trackPointKeyWheelHorizScroll)
+	tp.MotionAcceleration.Bind(tp.setting, trackPointKeyAcceleration)
+	tp.MotionThreshold.Bind(tp.setting, trackPointKeyThreshold)
+	tp.MotionScaling.Bind(tp.setting, trackPointKeyScaling)
+	tp.MiddleButtonTimeout.Bind(tp.setting, trackPointKeyMidButtonTimeout)
+	tp.WheelEmulationButton.Bind(tp.setting, trackPointKeyWheelButton)
+	tp.WheelEmulationTimeout.Bind(tp.setting, trackPointKeyWheelTimeout)
+	tp.LeftHanded.Bind(tp.setting, trackPointKeyLeftHanded)
 
 	tp.updateDXMouses()
 
@@ -149,6 +123,7 @@ func (tp *TrackPoint) updateDXMouses() {
 		tp.devInfos = append(tp.devInfos, info)
 	}
 
+	tp.PropsMu.Lock()
 	var v string
 	if len(tp.devInfos) == 0 {
 		tp.setPropExist(false)
@@ -156,7 +131,8 @@ func (tp *TrackPoint) updateDXMouses() {
 		tp.setPropExist(true)
 		v = tp.devInfos.string()
 	}
-	setPropString(tp, &tp.DeviceList, "DeviceList", v)
+	tp.setPropDeviceList(v)
+	tp.PropsMu.Unlock()
 }
 
 func (tp *TrackPoint) enableMiddleButton() {

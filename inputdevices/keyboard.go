@@ -23,16 +23,17 @@ import (
 	"bufio"
 	"dbus/com/deepin/daemon/accounts"
 	"fmt"
-	"gir/gio-2.0"
 	"os"
 	"os/user"
 	"path"
-	"pkg.deepin.io/dde/api/dxinput"
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	"pkg.deepin.io/lib/dbus/property"
-	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 	"strings"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/api/dxinput"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -59,64 +60,49 @@ const (
 )
 
 type Keyboard struct {
-	RepeatEnabled  *property.GSettingsBoolProperty `access:"readwrite"`
-	CapslockToggle *property.GSettingsBoolProperty `access:"readwrite"`
+	RepeatEnabled  gsprop.Bool `prop:"access:rw"`
+	CapslockToggle gsprop.Bool `prop:"access:rw"`
 
-	CursorBlink *property.GSettingsIntProperty `access:"readwrite"`
+	CursorBlink gsprop.Int `prop:"access:rw"`
 
-	RepeatInterval *property.GSettingsUintProperty `access:"readwrite"`
-	RepeatDelay    *property.GSettingsUintProperty `access:"readwrite"`
+	RepeatInterval gsprop.Uint `prop:"access:rw"`
+	RepeatDelay    gsprop.Uint `prop:"access:rw"`
 
-	CurrentLayout *property.GSettingsStringProperty `access:"readwrite"`
+	CurrentLayout gsprop.String `prop:"access:rw"`
 
-	UserLayoutList *property.GSettingsStrvProperty
-	UserOptionList *property.GSettingsStrvProperty
+	UserLayoutList gsprop.Strv
+	UserOptionList gsprop.Strv
 
 	setting       *gio.Settings
 	userObj       *accounts.User
 	layoutDescMap map[string]string
 
 	devNumber int
-}
 
-var _kbd *Keyboard
+	methods *struct {
+		AddLayoutOption    func() `in:"option"`
+		DeleteLayoutOption func() `in:"option"`
 
-func getKeyboard() *Keyboard {
-	if _kbd == nil {
-		_kbd = NewKeyboard()
+		AddUserLayout    func() `in:"layout"`
+		DeleteUserLayout func() `in:"layout"`
+
+		GetLayoutDesc func() `in:"layout" out:"description"`
+		LayoutList    func() `out:"layout_list"`
 	}
-
-	return _kbd
 }
 
-func NewKeyboard() *Keyboard {
+func newKeyboard() *Keyboard {
 	var kbd = new(Keyboard)
 
 	kbd.setting = gio.NewSettings(kbdSchema)
-	kbd.CurrentLayout = property.NewGSettingsStringProperty(
-		kbd, "CurrentLayout",
-		kbd.setting, kbdKeyLayout)
-	kbd.RepeatEnabled = property.NewGSettingsBoolProperty(
-		kbd, "RepeatEnabled",
-		kbd.setting, kbdKeyRepeatEnable)
-	kbd.RepeatInterval = property.NewGSettingsUintProperty(
-		kbd, "RepeatInterval",
-		kbd.setting, kbdKeyRepeatInterval)
-	kbd.RepeatDelay = property.NewGSettingsUintProperty(
-		kbd, "RepeatDelay",
-		kbd.setting, kbdKeyRepeatDelay)
-	kbd.CursorBlink = property.NewGSettingsIntProperty(
-		kbd, "CursorBlink",
-		kbd.setting, kbdKeyCursorBlink)
-	kbd.CapslockToggle = property.NewGSettingsBoolProperty(
-		kbd, "CapslockToggle",
-		kbd.setting, kbdKeyCapslockToggle)
-	kbd.UserLayoutList = property.NewGSettingsStrvProperty(
-		kbd, "UserLayoutList",
-		kbd.setting, kbdKeyUserLayoutList)
-	kbd.UserOptionList = property.NewGSettingsStrvProperty(
-		kbd, "UserOptionList",
-		kbd.setting, kbdKeyLayoutOptions)
+	kbd.CurrentLayout.Bind(kbd.setting, kbdKeyLayout)
+	kbd.RepeatEnabled.Bind(kbd.setting, kbdKeyRepeatEnable)
+	kbd.RepeatInterval.Bind(kbd.setting, kbdKeyRepeatInterval)
+	kbd.RepeatDelay.Bind(kbd.setting, kbdKeyRepeatDelay)
+	kbd.CursorBlink.Bind(kbd.setting, kbdKeyCursorBlink)
+	kbd.CapslockToggle.Bind(kbd.setting, kbdKeyCapslockToggle)
+	kbd.UserLayoutList.Bind(kbd.setting, kbdKeyUserLayoutList)
+	kbd.UserOptionList.Bind(kbd.setting, kbdKeyLayoutOptions)
 
 	var err error
 	kbd.layoutDescMap, err = getLayoutListByFile(kbdLayoutsXml)

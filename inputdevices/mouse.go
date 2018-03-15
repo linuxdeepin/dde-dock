@@ -20,8 +20,11 @@
 package inputdevices
 
 import (
+	"sync"
+
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
 
 const (
@@ -39,68 +42,44 @@ const (
 )
 
 type Mouse struct {
-	LeftHanded            *property.GSettingsBoolProperty `access:"readwrite"`
-	DisableTpad           *property.GSettingsBoolProperty `access:"readwrite"`
-	NaturalScroll         *property.GSettingsBoolProperty `access:"readwrite"`
-	MiddleButtonEmulation *property.GSettingsBoolProperty `access:"readwrite"`
-
-	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
-	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
-	MotionScaling      *property.GSettingsFloatProperty `access:"readwrite"`
-
-	DoubleClick   *property.GSettingsIntProperty `access:"readwrite"`
-	DragThreshold *property.GSettingsIntProperty `access:"readwrite"`
-
+	service    *dbusutil.Service
+	PropsMu    sync.RWMutex
 	DeviceList string
 	Exist      bool
 
+	// dbusutil-gen: ignore-below
+	LeftHanded            gsprop.Bool `prop:"access:rw"`
+	DisableTpad           gsprop.Bool `prop:"access:rw"`
+	NaturalScroll         gsprop.Bool `prop:"access:rw"`
+	MiddleButtonEmulation gsprop.Bool `prop:"access:rw"`
+
+	MotionAcceleration gsprop.Double `prop:"access:rw"`
+	MotionThreshold    gsprop.Double `prop:"access:rw"`
+	MotionScaling      gsprop.Double `prop:"access:rw"`
+
+	DoubleClick   gsprop.Int `prop:"access:rw"`
+	DragThreshold gsprop.Int `prop:"access:rw"`
+
 	devInfos dxMouses
 	setting  *gio.Settings
+	touchPad *Touchpad
 }
 
-var _mouse *Mouse
-
-func getMouse() *Mouse {
-	if _mouse == nil {
-		_mouse = NewMouse()
-	}
-
-	return _mouse
-}
-
-func NewMouse() *Mouse {
+func newMouse(service *dbusutil.Service, touchPad *Touchpad) *Mouse {
 	var m = new(Mouse)
 
+	m.service = service
+	m.touchPad = touchPad
 	m.setting = gio.NewSettings(mouseSchema)
-	m.LeftHanded = property.NewGSettingsBoolProperty(
-		m, "LeftHanded",
-		m.setting, mouseKeyLeftHanded)
-	m.DisableTpad = property.NewGSettingsBoolProperty(
-		m, "DisableTpad",
-		m.setting, mouseKeyDisableTouchpad)
-	m.NaturalScroll = property.NewGSettingsBoolProperty(
-		m, "NaturalScroll",
-		m.setting, mouseKeyNaturalScroll)
-	m.MiddleButtonEmulation = property.NewGSettingsBoolProperty(
-		m, "MiddleButtonEmulation",
-		m.setting, mouseKeyMiddleButton)
-
-	m.MotionAcceleration = property.NewGSettingsFloatProperty(
-		m, "MotionAcceleration",
-		m.setting, mouseKeyAcceleration)
-	m.MotionThreshold = property.NewGSettingsFloatProperty(
-		m, "MotionThreshold",
-		m.setting, mouseKeyThreshold)
-	m.MotionScaling = property.NewGSettingsFloatProperty(
-		m, "MotionScaling",
-		m.setting, mouseKeyScaling)
-
-	m.DoubleClick = property.NewGSettingsIntProperty(
-		m, "DoubleClick",
-		m.setting, mouseKeyDoubleClick)
-	m.DragThreshold = property.NewGSettingsIntProperty(
-		m, "DragThreshold",
-		m.setting, mouseKeyDragThreshold)
+	m.LeftHanded.Bind(m.setting, mouseKeyLeftHanded)
+	m.DisableTpad.Bind(m.setting, mouseKeyDisableTouchpad)
+	m.NaturalScroll.Bind(m.setting, mouseKeyNaturalScroll)
+	m.MiddleButtonEmulation.Bind(m.setting, mouseKeyMiddleButton)
+	m.MotionAcceleration.Bind(m.setting, mouseKeyAcceleration)
+	m.MotionThreshold.Bind(m.setting, mouseKeyThreshold)
+	m.MotionScaling.Bind(m.setting, mouseKeyScaling)
+	m.DoubleClick.Bind(m.setting, mouseKeyDoubleClick)
+	m.DragThreshold.Bind(m.setting, mouseKeyDragThreshold)
 
 	m.updateDXMouses()
 
@@ -109,7 +88,7 @@ func NewMouse() *Mouse {
 
 func (m *Mouse) init() {
 	if !m.Exist {
-		tpad := getTouchpad()
+		tpad := m.touchPad
 		if tpad.Exist && !tpad.TPadEnable.Get() {
 			tpad.TPadEnable.Set(true)
 		}
@@ -122,7 +101,7 @@ func (m *Mouse) init() {
 	m.motionAcceleration()
 	m.motionThreshold()
 	if m.DisableTpad.Get() {
-		m.disableTouchpad()
+		m.disableTouchPad()
 	}
 }
 
@@ -145,6 +124,7 @@ func (m *Mouse) updateDXMouses() {
 		m.devInfos = append(m.devInfos, info)
 	}
 
+	m.PropsMu.Lock()
 	var v string
 	if len(m.devInfos) == 0 {
 		m.setPropExist(false)
@@ -152,25 +132,32 @@ func (m *Mouse) updateDXMouses() {
 		m.setPropExist(true)
 		v = m.devInfos.string()
 	}
-	setPropString(m, &m.DeviceList, "DeviceList", v)
+	m.setPropDeviceList(v)
+	m.PropsMu.Unlock()
 }
 
-func (m *Mouse) disableTouchpad() {
-	if !m.Exist {
+func (m *Mouse) disableTouchPad() {
+	m.PropsMu.RLock()
+	mouseExist := m.Exist
+	m.PropsMu.RUnlock()
+	if !mouseExist {
 		return
 	}
 
-	tpad := getTouchpad()
-	if !tpad.Exist {
+	touchPad := m.touchPad
+	touchPad.PropsMu.RLock()
+	touchPadExist := touchPad.Exist
+	touchPad.PropsMu.RUnlock()
+	if !touchPadExist {
 		return
 	}
 
-	if !m.DisableTpad.Get() && tpad.TPadEnable.Get() {
-		tpad.enable(true)
+	if !m.DisableTpad.Get() && touchPad.TPadEnable.Get() {
+		touchPad.enable(true)
 		return
 	}
 
-	tpad.enable(false)
+	touchPad.enable(false)
 }
 
 func (m *Mouse) enableLeftHanded() {

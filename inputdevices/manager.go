@@ -27,7 +27,8 @@ import (
 	"path/filepath"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
 
@@ -44,10 +45,11 @@ type devicePathInfo struct {
 type devicePathInfos []*devicePathInfo
 
 type Manager struct {
-	Infos             devicePathInfos
+	Infos      devicePathInfos // readonly
+	WheelSpeed gsprop.Uint     `prop:"access:rw"`
+
 	settings          *gio.Settings
 	imWheelConfigFile string
-	WheelSpeed        *property.GSettingsUintProperty `access:"readwrite"`
 
 	kbd        *Keyboard
 	mouse      *Mouse
@@ -56,37 +58,40 @@ type Manager struct {
 	wacom      *Wacom
 }
 
-func NewManager() *Manager {
+func NewManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
 	m.imWheelConfigFile = filepath.Join(basedir.GetUserHomeDir(), ".imwheelrc")
 
 	m.Infos = devicePathInfos{
 		&devicePathInfo{
-			Path: "com.deepin.daemon.InputDevice.Keyboard",
+			Path: kbdDBusInterface,
 			Type: "keyboard",
 		},
 		&devicePathInfo{
-			Path: "com.deepin.daemon.InputDevice.Mouse",
+			Path: mouseDBusInterface,
 			Type: "mouse",
 		},
 		&devicePathInfo{
-			Path: "com.deepin.daemon.InputDevice.TrackPoint",
+			Path: trackPointDBusInterface,
 			Type: "trackpoint",
 		},
 		&devicePathInfo{
-			Path: "com.deepin.daemon.InputDevice.TouchPad",
+			Path: touchPadDBusInterface,
 			Type: "touchpad",
 		},
 	}
 
 	m.settings = gio.NewSettings(gsSchemaInputDevices)
-	m.WheelSpeed = property.NewGSettingsUintProperty(m, "WheelSpeed", m.settings, gsKeyWheelSpeed)
+	m.WheelSpeed.Bind(m.settings, gsKeyWheelSpeed)
 
-	m.kbd = getKeyboard()
-	m.wacom = getWacom()
-	m.tpad = getTouchpad()
-	m.mouse = getMouse()
-	m.trackPoint = getTrackPoint()
+	m.kbd = newKeyboard()
+	m.wacom = newWacom(service)
+
+	m.tpad = newTouchpad(service)
+
+	m.mouse = newMouse(service, m.tpad)
+
+	m.trackPoint = newTrackPoint(service)
 
 	return m
 }
@@ -131,7 +136,7 @@ func controlImWheel(speed uint32) error {
 func writeImWheelConfig(file string, speed uint32) error {
 	logger.Debugf("writeImWheelConfig file:%q, speed: %d", file, speed)
 
-	const header = `# written by ` + dbusDest + `
+	const header = `# written by ` + dbusServiceName + `
 ".*"
 Control_L,Up,Control_L|Button4
 Control_R,Up,Control_R|Button4

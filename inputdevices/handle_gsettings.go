@@ -58,7 +58,7 @@ func (m *Mouse) handleGSettings() {
 		case mouseKeyLeftHanded:
 			m.enableLeftHanded()
 		case mouseKeyDisableTouchpad:
-			m.disableTouchpad()
+			m.disableTouchPad()
 		case mouseKeyNaturalScroll:
 			m.enableNaturalScroll()
 		case mouseKeyMiddleButton:
@@ -122,7 +122,7 @@ func (tpad *Touchpad) handleGSettings() {
 			tpad.enableEdgeScroll()
 		case tpadKeyVertScroll, tpadKeyHorizScroll:
 			tpad.enableTwoFingerScroll()
-		case tpadKeyWhileTyping:
+		case tpadKeyDisableWhileTyping:
 			tpad.disableWhileTyping()
 		case tpadKeyAcceleration:
 			tpad.motionAcceleration()

@@ -19,25 +19,30 @@
 
 package inputdevices
 
-func (m *Mouse) Reset() {
+import "pkg.deepin.io/lib/dbus1"
+
+func (m *Mouse) Reset() *dbus.Error {
 	for _, key := range m.setting.ListKeys() {
 		m.setting.Reset(key)
 	}
+	return nil
 }
 
-func (tp *TrackPoint) Reset() {
+func (tp *TrackPoint) Reset() *dbus.Error {
 	for _, key := range tp.setting.ListKeys() {
 		tp.setting.Reset(key)
 	}
+	return nil
 }
 
-func (tpad *Touchpad) Reset() {
+func (tpad *Touchpad) Reset() *dbus.Error {
 	for _, key := range tpad.setting.ListKeys() {
 		tpad.setting.Reset(key)
 	}
+	return nil
 }
 
-func (w *Wacom) Reset() {
+func (w *Wacom) Reset() *dbus.Error {
 	for _, key := range w.setting.ListKeys() {
 		w.setting.Reset(key)
 	}
@@ -47,47 +52,54 @@ func (w *Wacom) Reset() {
 	for _, key := range w.eraserSetting.ListKeys() {
 		w.eraserSetting.Reset(key)
 	}
+	return nil
 }
 
-func (kbd *Keyboard) Reset() {
+func (kbd *Keyboard) Reset() *dbus.Error {
 	for _, key := range kbd.setting.ListKeys() {
 		kbd.setting.Reset(key)
 	}
+	return nil
 }
 
-func (kbd *Keyboard) LayoutList() map[string]string {
-	return kbd.layoutDescMap
+func (kbd *Keyboard) LayoutList() (map[string]string, *dbus.Error) {
+	return kbd.layoutDescMap, nil
 }
 
-func (kbd *Keyboard) GetLayoutDesc(layout string) string {
+func (kbd *Keyboard) GetLayoutDesc(layout string) (string, *dbus.Error) {
 	if len(layout) == 0 {
-		return ""
+		return "", nil
 	}
 
 	desc, ok := kbd.layoutDescMap[layout]
 	if !ok {
-		return ""
+		return "", nil
 	}
 
-	return desc
+	return desc, nil
 }
 
-func (kbd *Keyboard) AddUserLayout(layout string) {
+func (kbd *Keyboard) AddUserLayout(layout string) *dbus.Error {
 	kbd.addUserLayout(layout)
+	return nil
 }
 
-func (kbd *Keyboard) DeleteUserLayout(layout string) {
+func (kbd *Keyboard) DeleteUserLayout(layout string) *dbus.Error {
 	kbd.delUserLayout(layout)
+	return nil
 }
 
-func (kbd *Keyboard) AddLayoutOption(option string) {
+func (kbd *Keyboard) AddLayoutOption(option string) *dbus.Error {
 	kbd.addUserOption(option)
+	return nil
 }
 
-func (kbd *Keyboard) DeleteLayoutOption(option string) {
+func (kbd *Keyboard) DeleteLayoutOption(option string) *dbus.Error {
 	kbd.delUserOption(option)
+	return nil
 }
 
-func (kbd *Keyboard) ClearLayoutOption() {
+func (kbd *Keyboard) ClearLayoutOption() *dbus.Error {
 	kbd.UserOptionList.Set([]string{})
+	return nil
 }
