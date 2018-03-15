@@ -21,7 +21,6 @@ package audio
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -52,7 +51,6 @@ func (*Daemon) GetDependencies() []string {
 func finalize() {
 	_audio.destroy()
 	_audio = nil
-	logger.EndTracing()
 }
 
 func (*Daemon) Start() error {
@@ -60,8 +58,7 @@ func (*Daemon) Start() error {
 		return nil
 	}
 
-	logger.BeginTracing()
-
+	service := loader.GetService()
 	ctx := pulse.GetContext()
 	if ctx == nil {
 		logger.Error("Failed to connect pulseaudio server")
@@ -69,10 +66,15 @@ func (*Daemon) Start() error {
 		return nil
 	}
 
-	_audio = NewAudio(ctx)
+	_audio = NewAudio(ctx, service)
 
-	if err := dbus.InstallOnSession(_audio); err != nil {
-		logger.Error("Failed InstallOnSession:", err)
+	err := service.Export(dbusPath, _audio)
+	if err != nil {
+		finalize()
+		return err
+	}
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
 		finalize()
 		return err
 	}

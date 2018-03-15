@@ -66,7 +66,9 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		}
 		infos, added := a.cards.add(newCardInfo(card))
 		if added {
+			a.PropsMu.Lock()
 			a.setPropCards(infos.string())
+			a.PropsMu.Unlock()
 			a.cards = infos
 		}
 		// fix change profile not work
@@ -94,7 +96,9 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		logger.Debugf("[Event] card #%d removed", idx)
 		infos, deleted := a.cards.delete(idx)
 		if deleted {
+			a.PropsMu.Lock()
 			a.setPropCards(infos.string())
+			a.PropsMu.Unlock()
 			a.cards = infos
 		}
 	case pulse.EventTypeChange:
@@ -108,7 +112,9 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		oldPorts := info.Ports
 		if info != nil {
 			info.update(card)
+			a.PropsMu.Lock()
 			a.setPropCards(a.cards.string())
+			a.PropsMu.Unlock()
 
 			if !autoSwitchPort {
 				return
@@ -159,21 +165,21 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		}
 	case pulse.EventTypeChange:
 		logger.Debugf("[Event] sink #%d changed", idx)
-		if a.DefaultSink != nil && a.DefaultSink.index == idx {
+		if a.defaultSink != nil && a.defaultSink.index == idx {
 			info, err := a.core.GetSink(idx)
 			if err != nil {
 				logger.Warning(err)
 				return
 			}
-			a.DefaultSink.core = info
-			a.DefaultSink.update()
+			a.defaultSink.core = info
+			a.defaultSink.update()
 		}
 	default:
 		logger.Debugf("[Event] sink #%d unknown type %d", eType, idx)
 		return
 	}
-	if a.DefaultSink != nil {
-		a.moveSinkInputsToSink(a.DefaultSink.index)
+	if a.defaultSink != nil {
+		a.moveSinkInputsToSink(a.defaultSink.index)
 	}
 }
 
@@ -206,7 +212,7 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 
 	case pulse.EventTypeChange:
 		a.siEventChan <- func() {
-			for _, s := range a.SinkInputs {
+			for _, s := range a.sinkInputs {
 				if s.index == idx {
 					info, err := a.core.GetSinkInput(idx)
 					if err != nil {
@@ -239,14 +245,14 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 		}
 	case pulse.EventTypeChange:
 		logger.Debugf("[Event] source #%d changed", idx)
-		if a.DefaultSource != nil && a.DefaultSource.index == idx {
+		if a.defaultSource != nil && a.defaultSource.index == idx {
 			info, err := a.core.GetSource(idx)
 			if err != nil {
 				logger.Warning(err)
 				return
 			}
-			a.DefaultSource.core = info
-			a.DefaultSource.update()
+			a.defaultSource.core = info
+			a.defaultSource.update()
 		}
 	default:
 		logger.Debugf("[Event] source #%d unknown type %d", idx, eType)

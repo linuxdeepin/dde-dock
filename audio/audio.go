@@ -21,11 +21,13 @@ package audio
 
 import (
 	"fmt"
+	"sync"
+
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pulse"
 	dutils "pkg.deepin.io/lib/utils"
-	"sync"
 )
 
 const (
@@ -45,18 +47,29 @@ var (
 	autoSwitchPort      bool
 )
 
+//go:generate dbusutil-gen -type Audio,Sink,SinkInput,Source,Meter -import pkg.deepin.io/lib/dbus1 audio.go sink.go sinkinput.go source.go meter.go
+
 type Audio struct {
+	service *dbusutil.Service
+	PropsMu sync.RWMutex
+	// dbusutil-gen: equal=nil
+	SinkInputs    []dbus.ObjectPath
+	DefaultSink   dbus.ObjectPath
+	DefaultSource dbus.ObjectPath
+	Cards         string
+
+	// dbusutil-gen: ignore
+	// 最大音量
+	MaxUIVolume float64 // readonly
+
 	init bool
 	core *pulse.Context
 	// 正常输出声音的程序列表
-	SinkInputs    []*SinkInput
-	Cards         string
-	DefaultSink   *Sink
-	DefaultSource *Source
+	sinkInputs    []*SinkInput
+	defaultSink   *Sink
+	defaultSource *Source
 
-	// 最大音量
-	MaxUIVolume float64
-	cards       CardInfos
+	cards CardInfos
 
 	siEventChan  chan func()
 	siPollerExit chan struct{}
@@ -66,18 +79,27 @@ type Audio struct {
 
 	sinkLocker sync.Mutex
 	portLocker sync.Mutex
+
+	methods *struct {
+		SetDefaultSink   func() `in:"name"`
+		SetDefaultSource func() `in:"name"`
+		SetPort          func() `in:"cardId,portName,direction"`
+	}
 }
 
-func NewAudio(core *pulse.Context) *Audio {
-	a := &Audio{core: core}
+func NewAudio(core *pulse.Context, service *dbusutil.Service) *Audio {
+	a := &Audio{
+		core:    core,
+		service: service,
+	}
 	a.MaxUIVolume = pulse.VolumeUIMax
 	a.siEventChan = make(chan func(), 10)
 	a.siPollerExit = make(chan struct{})
 	go func() {
 		a.update()
 		a.applyConfig()
-		if a.DefaultSink != nil {
-			_prevSinkActivePort = a.DefaultSink.ActivePort
+		if a.defaultSink != nil {
+			_prevSinkActivePort = a.defaultSink.ActivePort
 		}
 		a.updateProps()
 		a.initEventHandlers()
@@ -104,38 +126,40 @@ func initDefaultVolume(audio *Audio) {
 	audio.Reset()
 }
 
-func (a *Audio) SetDefaultSink(name string) {
+func (a *Audio) SetDefaultSink(name string) *dbus.Error {
 	a.sinkLocker.Lock()
 	defer a.sinkLocker.Unlock()
 
-	if a.DefaultSink != nil && a.DefaultSink.Name == name {
-		a.moveSinkInputsToSink(a.DefaultSink.index)
-		return
+	if a.defaultSink != nil && a.defaultSink.Name == name {
+		a.moveSinkInputsToSink(a.defaultSink.index)
+		return nil
 	}
 
 	logger.Debugf("audio.core.SetDefaultSink name: %q", name)
 	a.core.SetDefaultSink(name)
 	a.update()
 	a.saveConfig()
-	a.moveSinkInputsToSink(a.DefaultSink.index)
+	a.moveSinkInputsToSink(a.defaultSink.index)
+	return nil
 }
 
-func (a *Audio) SetDefaultSource(name string) {
-	if a.DefaultSource != nil && a.DefaultSource.Name == name {
-		return
+func (a *Audio) SetDefaultSource(name string) *dbus.Error {
+	if a.defaultSource != nil && a.defaultSource.Name == name {
+		return nil
 	}
 	a.core.SetDefaultSource(name)
 	a.update()
 	a.saveConfig()
+	return nil
 }
 
 func (a *Audio) getActiveSinkPort() string {
-	if a.DefaultSink == nil {
+	if a.defaultSink == nil {
 		return ""
 	}
 
 	for _, sink := range a.core.GetSinkList() {
-		if sink.Name == a.DefaultSink.Name {
+		if sink.Name == a.defaultSink.Name {
 			return sink.ActivePort.Name
 		}
 	}
@@ -159,12 +183,12 @@ func (a *Audio) trySetDefaultSink(cardId uint32, portName string) error {
 }
 
 func (a *Audio) getActiveSourcePort() string {
-	if a.DefaultSource == nil {
+	if a.defaultSource == nil {
 		return ""
 	}
 
 	for _, source := range a.core.GetSourceList() {
-		if source.Name == a.DefaultSource.Name {
+		if source.Name == a.defaultSource.Name {
 			return source.ActivePort.Name
 		}
 	}
@@ -181,7 +205,7 @@ func (a *Audio) trySetDefaultSource(cardId uint32, portName string) error {
 		if source.ActivePort.Name != portName {
 			source.SetPort(portName)
 		}
-		if a.DefaultSource == nil || a.DefaultSource.Name != source.Name {
+		if a.defaultSource == nil || a.defaultSource.Name != source.Name {
 			a.SetDefaultSource(source.Name)
 		}
 		return nil
@@ -191,10 +215,16 @@ func (a *Audio) trySetDefaultSource(cardId uint32, portName string) error {
 
 // SetPort activate the port for the special card.
 // The available sinks and sources will also change with the profile changing.
-func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
-	logger.Debugf("Audio.SetPort card idx: %d, port name: %q, direction: %d", cardId, portName, direction)
+func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.Error {
+	logger.Debugf("Audio.SetPort card idx: %d, port name: %q, direction: %d",
+		cardId, portName, direction)
 	a.portLocker.Lock()
-	defer a.portLocker.Unlock()
+	err := a.setPort(cardId, portName, direction)
+	a.portLocker.Unlock()
+	return dbusutil.ToError(err)
+}
+
+func (a *Audio) setPort(cardId uint32, portName string, direction int32) error {
 	var (
 		curCard           *CardInfo
 		oppositePort      string
@@ -298,16 +328,16 @@ func (a *Audio) Reset() {
 
 func (a *Audio) destroy() {
 	close(a.siPollerExit)
-	dbus.UnInstallObject(a)
+	a.service.StopExport(a)
 }
 
 func (a *Audio) moveSinkInputsToSink(sinkId uint32) {
 	// TODO: locker sinkinputs changed
-	if len(a.SinkInputs) == 0 {
+	if len(a.sinkInputs) == 0 {
 		return
 	}
 	var list []uint32
-	for _, sinkInput := range a.SinkInputs {
+	for _, sinkInput := range a.sinkInputs {
 		logger.Debugf("-----------[moveSinkInputsToSink] si info: %#v", sinkInput)
 		if sinkInput == nil || sinkInput.core == nil ||
 			sinkInput.core.Sink == sinkId {

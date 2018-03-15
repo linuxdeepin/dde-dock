@@ -21,14 +21,22 @@ package audio
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/pulse"
 	"strings"
+
+	"sync"
+
+	"strconv"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/pulse"
 )
 
 type Sink struct {
-	core  *pulse.Sink
-	index uint32
+	service *dbusutil.Service
+	PropsMu sync.RWMutex
+	core    *pulse.Sink
+	index   uint32
 
 	Name        string
 	Description string
@@ -50,16 +58,29 @@ type Sink struct {
 	// 是否支持前后声道调整
 	SupportFade bool
 
+	// dbusutil-gen: equal=portsEqual
 	// 支持的输出端口
 	Ports []Port
 	// 当前使用的输出端口
 	ActivePort Port
 	// 声卡的索引
 	Card uint32
+
+	methods *struct {
+		SetVolume  func() `in:"value,isPlay"`
+		SetBalance func() `in:"value,isPlay"`
+		SetFade    func() `in:"value"`
+		SetMute    func() `in:"value"`
+		SetPort    func() `in:"name"`
+		GetMeter   func() `out:"meter"`
+	}
 }
 
-func NewSink(core *pulse.Sink) *Sink {
-	s := &Sink{core: core}
+func NewSink(core *pulse.Sink, service *dbusutil.Service) *Sink {
+	s := &Sink{
+		core:    core,
+		service: service,
+	}
 	s.index = s.core.Index
 	s.update()
 	return s
@@ -70,9 +91,9 @@ func NewSink(core *pulse.Sink) *Sink {
 // v: 音量大小
 //
 // isPlay: 是否播放声音反馈
-func (s *Sink) SetVolume(v float64, isPlay bool) error {
+func (s *Sink) SetVolume(v float64, isPlay bool) *dbus.Error {
 	if !isVolumeValid(v) {
-		return fmt.Errorf("Invalid volume value: %v", v)
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
 	if v == 0 {
@@ -90,9 +111,9 @@ func (s *Sink) SetVolume(v float64, isPlay bool) error {
 // v: 声道平衡值
 //
 // isPlay: 是否播放声音反馈
-func (s *Sink) SetBalance(v float64, isPlay bool) error {
+func (s *Sink) SetBalance(v float64, isPlay bool) *dbus.Error {
 	if v < -1.00 || v > 1.00 {
-		return fmt.Errorf("Invalid volume value: %v", v)
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
@@ -107,9 +128,9 @@ func (s *Sink) SetBalance(v float64, isPlay bool) error {
 // v: 声道平衡值
 //
 // isPlay: 是否播放声音反馈
-func (s *Sink) SetFade(v float64) error {
+func (s *Sink) SetFade(v float64) *dbus.Error {
 	if v < -1.00 || v > 1.00 {
-		return fmt.Errorf("Invalid volume value: %v", v)
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
@@ -118,25 +139,27 @@ func (s *Sink) SetFade(v float64) error {
 }
 
 // 是否静音
-func (s *Sink) SetMute(v bool) {
+func (s *Sink) SetMute(v bool) *dbus.Error {
 	logger.Debugf("Sink #%d SetMute %v", s.index, v)
 	s.core.SetMute(v)
 	if !v {
 		playFeedbackWithDevice(s.Name)
 	}
+	return nil
 }
 
 // 设置此设备的当前使用端口
-func (s *Sink) SetPort(name string) {
+func (s *Sink) SetPort(name string) *dbus.Error {
 	s.core.SetPort(name)
+	return nil
 }
 
-func (s *Sink) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       baseBusName,
-		ObjectPath: fmt.Sprintf("%s/Sink%d", baseBusPath, s.index),
-		Interface:  baseBusIfc + ".Sink",
-	}
+func (s *Sink) getPath() dbus.ObjectPath {
+	return dbus.ObjectPath(dbusPath + "/Sink" + strconv.Itoa(int(s.index)))
+}
+
+func (*Sink) GetInterfaceName() string {
+	return dbusInterface + ".Sink"
 }
 
 // if prev active port is 'headset-output',
@@ -149,6 +172,7 @@ func (s *Sink) update() {
 	s.Card = s.core.Card
 	s.BaseVolume = s.core.BaseVolume.ToPercent()
 
+	s.PropsMu.Lock()
 	s.setPropMute(s.core.Mute)
 	s.setPropVolume(floatPrecision(s.core.Volume.Avg()))
 
@@ -165,6 +189,8 @@ func (s *Sink) update() {
 		ports = append(ports, toPort(p))
 	}
 	s.setPropPorts(ports)
+
+	s.PropsMu.Unlock()
 
 	if activePortChanged {
 		logger.Debugf("sink #%d active port changed, old %v, new %v", s.index, oldActivePort, s.ActivePort)
@@ -201,66 +227,7 @@ func isHeadphoneOrHeadsetPort(portName string) bool {
 	return strings.Contains(name, "headphone") || strings.Contains(name, "headset-output")
 }
 
-// return whether changed
-func (s *Sink) setPropActivePort(v Port) bool {
-	if s.ActivePort != v {
-		s.ActivePort = v
-		dbus.NotifyChange(s, "ActivePort")
-		return true
-	}
-	return false
-}
-
-func (s *Sink) setPropPorts(v []Port) {
-	if !portsEqual(s.Ports, v) {
-		s.Ports = v
-		dbus.NotifyChange(s, "Ports")
-	}
-}
-
-func (s *Sink) setPropVolume(v float64) {
-	if s.Volume != v {
-		s.Volume = v
-		dbus.NotifyChange(s, "Volume")
-	}
-}
-
-func (s *Sink) setPropBalance(v float64) {
-	if s.Balance != v {
-		s.Balance = v
-		dbus.NotifyChange(s, "Balance")
-	}
-}
-
-func (s *Sink) setPropSupportBalance(v bool) {
-	if s.SupportBalance != v {
-		s.SupportBalance = v
-		dbus.NotifyChange(s, "SupportBalance")
-	}
-}
-
-func (s *Sink) setPropSupportFade(v bool) {
-	if s.SupportFade != v {
-		s.SupportFade = v
-		dbus.NotifyChange(s, "SupportFade")
-	}
-}
-
-func (s *Sink) setPropFade(v float64) {
-	if s.Fade != v {
-		s.Fade = v
-		dbus.NotifyChange(s, "Fade")
-	}
-}
-
-func (s *Sink) setPropMute(v bool) {
-	if s.Mute != v {
-		s.Mute = v
-		dbus.NotifyChange(s, "Mute")
-	}
-}
-
-func (s *Sink) GetMeter() *Meter {
+func (s *Sink) GetMeter() (dbus.ObjectPath, *dbus.Error) {
 	//TODO
-	return nil
+	return "/", nil
 }

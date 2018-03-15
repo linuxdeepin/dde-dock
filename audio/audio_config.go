@@ -20,8 +20,9 @@
 package audio
 
 import (
-	"pkg.deepin.io/lib/pulse"
 	"time"
+
+	"pkg.deepin.io/lib/pulse"
 )
 
 func (a *Audio) applyConfig() {
@@ -136,7 +137,11 @@ func (a *Audio) trySelectBestPort() {
 
 func (a *Audio) updateProps() {
 	a.cards = newCardInfos(a.core.GetCardList())
+
+	a.PropsMu.Lock()
 	a.setPropCards(a.cards.string())
+	a.PropsMu.Unlock()
+
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
 		a.updateDefaultSink(sinfo.DefaultSinkName, true)
@@ -172,7 +177,7 @@ func (a *Audio) doSaveConfig() {
 	}
 
 	for _, s := range a.core.GetSinkList() {
-		if a.DefaultSink == nil || s.Name != a.DefaultSink.Name {
+		if a.defaultSink == nil || s.Name != a.defaultSink.Name {
 			continue
 		}
 		info.Sink = s.Name
@@ -182,7 +187,7 @@ func (a *Audio) doSaveConfig() {
 	}
 
 	for _, s := range a.core.GetSourceList() {
-		if a.DefaultSource == nil || s.Name != a.DefaultSource.Name {
+		if a.defaultSource == nil || s.Name != a.defaultSource.Name {
 			continue
 		}
 		info.Source = s.Name

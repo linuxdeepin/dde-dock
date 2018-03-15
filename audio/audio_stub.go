@@ -20,22 +20,18 @@
 package audio
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 )
 
 const (
-	baseBusName = "com.deepin.daemon.Audio"
-	baseBusPath = "/com/deepin/daemon/Audio"
-	baseBusIfc  = baseBusName
+	dbusServiceName = "com.deepin.daemon.Audio"
+	dbusPath        = "/com/deepin/daemon/Audio"
+	dbusInterface   = dbusServiceName
 )
 
-func (*Audio) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       baseBusName,
-		ObjectPath: baseBusPath,
-		Interface:  baseBusIfc,
-	}
+func (*Audio) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func filterSinkInput(c *pulse.SinkInput) bool {
@@ -66,17 +62,31 @@ func (a *Audio) rebuildSinkInputList() {
 		if s == nil || filterSinkInput(s) {
 			continue
 		}
-		si := NewSinkInput(s)
+		si := NewSinkInput(s, a.service)
 		if si == nil {
 			continue
 		}
 		sinkinputs = append(sinkinputs, si)
 	}
-	a.setPropSinkInputs(sinkinputs)
+
+	for _, o := range a.sinkInputs {
+		a.service.StopExport(o)
+	}
+
+	sinkInputPaths := make([]dbus.ObjectPath, len(sinkinputs))
+	for idx, o := range sinkinputs {
+		sinkInputPath := o.getPath()
+		a.service.Export(sinkInputPath, o)
+		sinkInputPaths[idx] = sinkInputPath
+	}
+	a.sinkInputs = sinkinputs
+	a.PropsMu.Lock()
+	a.setPropSinkInputs(sinkInputPaths)
+	a.PropsMu.Unlock()
 }
 
 func (a *Audio) addSinkInput(idx uint32) {
-	for _, si := range a.SinkInputs {
+	for _, si := range a.sinkInputs {
 		if si.index == idx {
 			return
 		}
@@ -91,25 +101,29 @@ func (a *Audio) addSinkInput(idx uint32) {
 		return
 	}
 
-	si := NewSinkInput(core)
+	si := NewSinkInput(core, a.service)
 	if si == nil {
 		return
 	}
-	err = dbus.InstallOnSession(si)
+	sinkInputPath := si.getPath()
+	err = a.service.Export(sinkInputPath, si)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
 
-	a.SinkInputs = append(a.SinkInputs, si)
-	dbus.NotifyChange(a, "SinkInputs")
+	a.sinkInputs = append(a.sinkInputs, si)
+	a.PropsMu.Lock()
+	a.SinkInputs = append(a.SinkInputs, sinkInputPath)
+	a.emitPropChangedSinkInputs(a.SinkInputs)
+	a.PropsMu.Unlock()
 	logger.Debugf("addSinkInput idx: %d, si: %#v", idx, si)
 }
 
 func (a *Audio) removeSinkInput(idx uint32) {
 	var tryRemoveSinkInput *SinkInput
 	var newSinkInputList []*SinkInput
-	for _, si := range a.SinkInputs {
+	for _, si := range a.sinkInputs {
 		if si.index == idx {
 			tryRemoveSinkInput = si
 		} else {
@@ -119,9 +133,15 @@ func (a *Audio) removeSinkInput(idx uint32) {
 
 	if tryRemoveSinkInput != nil {
 		logger.Debugf("removeSinkInput idx: %d, si: %#v", idx, tryRemoveSinkInput)
-		dbus.UnInstallObject(tryRemoveSinkInput)
-		a.SinkInputs = newSinkInputList
-		dbus.NotifyChange(a, "SinkInputs")
+		a.service.StopExport(tryRemoveSinkInput)
+		a.sinkInputs = newSinkInputList
+		sinkInputPaths := make([]dbus.ObjectPath, len(newSinkInputList))
+		for idx, si := range newSinkInputList {
+			sinkInputPaths[idx] = si.getPath()
+		}
+		a.PropsMu.Lock()
+		a.setPropSinkInputs(sinkInputPaths)
+		a.PropsMu.Unlock()
 	}
 }
 
@@ -135,16 +155,20 @@ func (a *Audio) update() {
 
 	a.rebuildSinkInputList()
 	a.cards = newCardInfos(a.core.GetCardList())
+
+	a.PropsMu.Lock()
 	a.setPropCards(a.cards.string())
-	if a.DefaultSink != nil {
-		a.moveSinkInputsToSink(a.DefaultSink.index)
+	a.PropsMu.Unlock()
+
+	if a.defaultSink != nil {
+		a.moveSinkInputsToSink(a.defaultSink.index)
 	}
 }
 
 func (a *Audio) updateDefaultSink(name string, force bool) {
-	if !force && a.DefaultSink != nil && a.DefaultSink.Name == name {
+	if !force && a.defaultSink != nil && a.defaultSink.Name == name {
 		// default source no changed
-		a.DefaultSink.update()
+		a.defaultSink.update()
 		return
 	}
 	// default sink changed
@@ -153,21 +177,27 @@ func (a *Audio) updateDefaultSink(name string, force bool) {
 			continue
 		}
 
-		if a.DefaultSink != nil {
-			dbus.UnInstallObject(a.DefaultSink)
+		if a.defaultSink != nil {
+			a.service.StopExport(a.defaultSink)
 		}
-		a.DefaultSink = NewSink(o)
-		dbus.InstallOnSession(a.DefaultSink)
-		dbus.NotifyChange(a, "DefaultSink")
-		logger.Debugf("Audio.DefaultSink change to #%d %s", a.DefaultSink.index, a.DefaultSink.Name)
+		a.defaultSink = NewSink(o, a.service)
+		defaultSinkPath := a.defaultSink.getPath()
+		a.service.Export(defaultSinkPath, a.defaultSink)
+
+		a.PropsMu.Lock()
+		a.setPropDefaultSink(defaultSinkPath)
+		a.PropsMu.Unlock()
+
+		logger.Debugf("Audio.DefaultSink change to #%d %s",
+			a.defaultSink.index, a.defaultSink.Name)
 		return
 	}
 }
 
 func (a *Audio) updateDefaultSource(name string, force bool) {
-	if !force && a.DefaultSource != nil && a.DefaultSource.Name == name {
+	if !force && a.defaultSource != nil && a.defaultSource.Name == name {
 		// default source no changed
-		a.DefaultSource.update()
+		a.defaultSource.update()
 		return
 	}
 	// default source changed
@@ -176,32 +206,18 @@ func (a *Audio) updateDefaultSource(name string, force bool) {
 			continue
 		}
 
-		if a.DefaultSource != nil {
-			dbus.UnInstallObject(a.DefaultSource)
+		if a.defaultSource != nil {
+			a.service.StopExport(a.defaultSource)
 		}
-		a.DefaultSource = NewSource(o)
-		dbus.InstallOnSession(a.DefaultSource)
-		dbus.NotifyChange(a, "DefaultSource")
-		logger.Debugf("Audio.DefaultSource change to #%d %s", a.DefaultSource.index, a.DefaultSource.Name)
+		a.defaultSource = NewSource(o, a.service)
+		defaultSourcePath := a.defaultSource.getPath()
+		a.service.Export(defaultSourcePath, a.defaultSource)
+
+		a.PropsMu.Lock()
+		a.setPropDefaultSource(defaultSourcePath)
+		a.PropsMu.Unlock()
+
+		logger.Debugf("Audio.DefaultSource change to #%d %s", a.defaultSource.index, a.defaultSource.Name)
 		return
 	}
-}
-
-func (s *Audio) setPropSinkInputs(v []*SinkInput) {
-	for _, o := range s.SinkInputs {
-		dbus.UnInstallObject(o)
-	}
-	for _, o := range v {
-		dbus.InstallOnSession(o)
-	}
-	s.SinkInputs = v
-	dbus.NotifyChange(s, "SinkInputs")
-}
-
-func (a *Audio) setPropCards(v string) {
-	if a.Cards == v {
-		return
-	}
-	a.Cards = v
-	dbus.NotifyChange(a, "Cards")
 }

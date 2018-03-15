@@ -20,10 +20,12 @@
 package audio
 
 import (
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/pulse"
 	"sync"
 	"time"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/pulse"
 )
 
 var (
@@ -32,6 +34,8 @@ var (
 )
 
 type Meter struct {
+	service *dbusutil.Service
+	PropsMu sync.RWMutex
 	Volume  float64
 	id      string
 	hasTick bool
@@ -39,8 +43,12 @@ type Meter struct {
 }
 
 //TODO: use pulse.Meter instead of remove pulse.SourceMeter
-func NewMeter(id string, core *pulse.SourceMeter) *Meter {
-	m := &Meter{id: id, core: core}
+func NewMeter(id string, core *pulse.SourceMeter, service *dbusutil.Service) *Meter {
+	m := &Meter{
+		id:      id,
+		core:    core,
+		service: service,
+	}
 	m.Tick()
 	go m.tryQuit()
 	return m
@@ -48,7 +56,7 @@ func NewMeter(id string, core *pulse.SourceMeter) *Meter {
 
 func (m *Meter) quit() {
 	delete(meters, m.id)
-	dbus.UnInstallObject(m)
+	m.service.StopExport(m)
 	m.core.Destroy()
 }
 
@@ -71,21 +79,15 @@ func (m *Meter) tryQuit() {
 	}
 }
 
-func (m *Meter) Tick() {
+func (m *Meter) Tick() *dbus.Error {
 	m.hasTick = true
+	return nil
 }
 
-func (m *Meter) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       baseBusName,
-		ObjectPath: baseBusPath + "/Meter" + m.id,
-		Interface:  baseBusIfc + ".Meter",
-	}
+func (m *Meter) getPath() dbus.ObjectPath {
+	return dbus.ObjectPath(dbusPath + "/Meter" + m.id)
 }
 
-func (m *Meter) setPropVolume(v float64) {
-	if m.Volume != v {
-		m.Volume = v
-		dbus.NotifyChange(m, "Volume")
-	}
+func (*Meter) GetInterfaceName() string {
+	return dbusInterface + ".Meter"
 }

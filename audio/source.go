@@ -21,11 +21,19 @@ package audio
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
+
+	"sync"
+
+	"strconv"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pulse"
 )
 
 type Source struct {
+	service     *dbusutil.Service
+	PropsMu     sync.RWMutex
 	core        *pulse.Source
 	index       uint32
 	Name        string
@@ -38,23 +46,36 @@ type Source struct {
 	SupportBalance bool
 	Fade           float64
 	SupportFade    bool
-	Ports          []Port
-	ActivePort     Port
+	// dbusutil-gen: equal=portsEqual
+	Ports      []Port
+	ActivePort Port
 	// 声卡的索引
 	Card uint32
+
+	methods *struct {
+		SetVolume  func() `in:"value,isPlay"`
+		SetBalance func() `in:"value,isPlay"`
+		SetFade    func() `in:"value"`
+		SetMute    func() `in:"value"`
+		SetPort    func() `in:"name"`
+		GetMeter   func() `out:"meter"`
+	}
 }
 
-func NewSource(core *pulse.Source) *Source {
-	s := &Source{core: core}
+func NewSource(core *pulse.Source, service *dbusutil.Service) *Source {
+	s := &Source{
+		core:    core,
+		service: service,
+	}
 	s.index = s.core.Index
 	s.update()
 	return s
 }
 
 // 如何反馈输入音量？
-func (s *Source) SetVolume(v float64, isPlay bool) error {
+func (s *Source) SetVolume(v float64, isPlay bool) *dbus.Error {
 	if !isVolumeValid(v) {
-		return fmt.Errorf("Invalid volume value: %v", v)
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
 	if v == 0 {
@@ -67,9 +88,9 @@ func (s *Source) SetVolume(v float64, isPlay bool) error {
 	return nil
 }
 
-func (s *Source) SetBalance(v float64, isPlay bool) error {
+func (s *Source) SetBalance(v float64, isPlay bool) *dbus.Error {
 	if v < -1.00 || v > 1.00 {
-		return fmt.Errorf("Invalid volume value: %v", v)
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
@@ -79,9 +100,9 @@ func (s *Source) SetBalance(v float64, isPlay bool) error {
 	return nil
 }
 
-func (s *Source) SetFade(v float64) error {
+func (s *Source) SetFade(v float64) *dbus.Error {
 	if v < -1.00 || v > 1.00 {
-		return fmt.Errorf("Invalid volume value: %v", v)
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
@@ -89,40 +110,49 @@ func (s *Source) SetFade(v float64) error {
 	return nil
 }
 
-func (s *Source) SetMute(v bool) {
+func (s *Source) SetMute(v bool) *dbus.Error {
 	s.core.SetMute(v)
 	if !v {
 		playFeedback()
 	}
+	return nil
 }
 
-func (s *Source) SetPort(name string) {
+func (s *Source) SetPort(name string) *dbus.Error {
 	s.core.SetPort(name)
+	return nil
 }
 
-func (s *Source) GetMeter() *Meter {
+func (s *Source) GetMeter() (dbus.ObjectPath, *dbus.Error) {
 	meterLocker.Lock()
 	defer meterLocker.Unlock()
 	id := fmt.Sprintf("source%d", s.core.Index)
 	m, ok := meters[id]
+	var meterPath dbus.ObjectPath
 	if !ok {
 		core := pulse.NewSourceMeter(pulse.GetContext(), s.core.Index)
-		m = NewMeter(id, core)
-		dbus.InstallOnSession(m)
+		m = NewMeter(id, core, s.service)
+		meterPath = m.getPath()
+		s.service.Export(meterPath, m)
+
 		meters[id] = m
 		core.ConnectChanged(func(v float64) {
+			m.PropsMu.Lock()
 			m.setPropVolume(v)
+			m.PropsMu.Unlock()
 		})
+	} else {
+		meterPath = m.getPath()
 	}
-	return m
+	return meterPath, nil
 }
 
-func (s *Source) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       baseBusName,
-		ObjectPath: fmt.Sprintf("%s/Source%d", baseBusPath, s.index),
-		Interface:  baseBusIfc + ".Source",
-	}
+func (s *Source) getPath() dbus.ObjectPath {
+	return dbus.ObjectPath(dbusPath + "/Source" + strconv.Itoa(int(s.index)))
+}
+
+func (*Source) GetInterfaceName() string {
+	return dbusInterface + ".Source"
 }
 
 func (s *Source) update() {
@@ -131,6 +161,7 @@ func (s *Source) update() {
 	s.Card = s.core.Card
 	s.BaseVolume = s.core.BaseVolume.ToPercent()
 
+	s.PropsMu.Lock()
 	s.setPropVolume(floatPrecision(s.core.Volume.Avg()))
 	s.setPropMute(s.core.Mute)
 
@@ -147,60 +178,6 @@ func (s *Source) update() {
 		ports = append(ports, toPort(p))
 	}
 	s.setPropPorts(ports)
-}
 
-func (s *Source) setPropPorts(v []Port) {
-	if !portsEqual(s.Ports, v) {
-		s.Ports = v
-		dbus.NotifyChange(s, "Ports")
-	}
-}
-
-func (s *Source) setPropVolume(v float64) {
-	if s.Volume != v {
-		s.Volume = v
-		dbus.NotifyChange(s, "Volume")
-	}
-}
-
-func (s *Source) setPropSupportBalance(v bool) {
-	if s.SupportBalance != v {
-		s.SupportBalance = v
-		dbus.NotifyChange(s, "SupportBalance")
-	}
-}
-
-func (s *Source) setPropBalance(v float64) {
-	if s.Balance != v {
-		s.Balance = v
-		dbus.NotifyChange(s, "Balance")
-	}
-}
-
-func (s *Source) setPropSupportFade(v bool) {
-	if s.SupportFade != v {
-		s.SupportFade = v
-		dbus.NotifyChange(s, "SupportFade")
-	}
-}
-
-func (s *Source) setPropFade(v float64) {
-	if s.Fade != v {
-		s.Fade = v
-		dbus.NotifyChange(s, "Fade")
-	}
-}
-
-func (s *Source) setPropMute(v bool) {
-	if s.Mute != v {
-		s.Mute = v
-		dbus.NotifyChange(s, "Mute")
-	}
-}
-
-func (s *Source) setPropActivePort(v Port) {
-	if s.ActivePort != v {
-		s.ActivePort = v
-		dbus.NotifyChange(s, "ActivePort")
-	}
+	s.PropsMu.Unlock()
 }
