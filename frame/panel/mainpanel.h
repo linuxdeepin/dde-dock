@@ -36,6 +36,7 @@
 #define str(s) #s
 #define PANEL_BORDER    0
 #define PANEL_PADDING   0
+#define PANEL_MARGIN    1
 #define WINDOW_OVERFLOW 5
 
 DWIDGET_USE_NAMESPACE

@@ -95,6 +95,7 @@ MainWindow::MainWindow(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setAcceptDrops(true);
 
+    DPlatformWindowHandle::enableDXcbForWindow(this, true);
     m_platformWindowHandle.setEnableBlurWindow(false);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);

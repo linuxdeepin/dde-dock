@@ -103,9 +103,15 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     switch (m_position)
     {
     case Position::Top:
-    case Position::Bottom:          m_itemLayout->setDirection(QBoxLayout::LeftToRight);    break;
+    case Position::Bottom:
+        m_itemLayout->setDirection(QBoxLayout::LeftToRight);
+        m_itemLayout->setContentsMargins(1, 0, 1, 0);
+        break;
     case Position::Left:
-    case Position::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
+    case Position::Right:
+        m_itemLayout->setDirection(QBoxLayout::TopToBottom);
+        m_itemLayout->setContentsMargins(0, 1, 0, 1);
+        break;
     }
 
     m_itemAdjustTimer->start();
@@ -420,8 +426,8 @@ void MainPanel::adjustItemSize()
         }
     }
 
-    const int w = width() - PANEL_BORDER * 2 - PANEL_PADDING * 2;
-    const int h = height() - PANEL_BORDER * 2 - PANEL_PADDING * 2;
+    const int w = width() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
+    const int h = height() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
 
     // test if panel can display all items completely
     bool containsCompletely = false;
