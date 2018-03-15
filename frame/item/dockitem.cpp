@@ -104,8 +104,11 @@ void DockItem::updatePopupPosition()
 {
     Q_ASSERT(sender() == m_popupAdjustDelayTimer);
 
-    if (!m_popupShown || !PopupWindow->isVisible())
+    if (!m_popupShown || !PopupWindow->model())
         return;
+
+    if (PopupWindow->getContent() != m_lastPopupWidget.data())
+        return popupWindowAccept();
 
     const QPoint p = popupMarkPoint();
     PopupWindow->show(p, PopupWindow->model());
@@ -129,7 +132,8 @@ void DockItem::enterEvent(QEvent *e)
 {
     m_hover = true;
     m_hoverEffect->setHighlighting(true);
-    m_popupTipsDelayTimer->start();
+    if (!PopupWindow->model())
+        m_popupTipsDelayTimer->start();
 
     update();
 
@@ -235,6 +239,7 @@ void DockItem::showHoverTips()
 void DockItem::showPopupWindow(QWidget * const content, const bool model)
 {
     m_popupShown = true;
+    m_lastPopupWidget = content;
 
     if (model)
         emit requestWindowAutoHide(false);
@@ -276,7 +281,7 @@ void DockItem::popupWindowAccept()
 void DockItem::showPopupApplet(QWidget * const applet)
 {
     // another model popup window is alread exists
-    if (PopupWindow->isVisible() && PopupWindow->model())
+    if (PopupWindow->model())
         return;
 
     showPopupWindow(applet, true);
@@ -330,6 +335,7 @@ const QPoint DockItem::topleftPoint() const
 void DockItem::hidePopup()
 {
     m_popupTipsDelayTimer->stop();
+    m_popupAdjustDelayTimer->stop();
     m_popupShown = false;
     PopupWindow->hide();
 

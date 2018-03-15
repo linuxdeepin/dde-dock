@@ -58,7 +58,7 @@ DockPopupWindow::~DockPopupWindow()
 
 bool DockPopupWindow::model() const
 {
-    return m_model;
+    return isVisible() && m_model;
 }
 
 void DockPopupWindow::setContent(QWidget *content)

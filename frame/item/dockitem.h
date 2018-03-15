@@ -98,6 +98,7 @@ protected:
     bool m_hover;
     bool m_popupShown;
 
+    QPointer<QWidget> m_lastPopupWidget;
     QPointer<HoverHighlightEffect> m_hoverEffect;
 
     QTimer *m_popupTipsDelayTimer;
