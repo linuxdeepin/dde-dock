@@ -21,7 +21,6 @@ package fprintd
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -52,13 +51,19 @@ func (*Daemon) Start() error {
 	if _m != nil {
 		return nil
 	}
+	service := loader.GetService()
 
-	_m = newManager()
-	err := dbus.InstallOnSession(_m)
+	_m = newManager(service)
+	err := service.Export(dbusPath, _m)
 	if err != nil {
-		logger.Error("Failed to install fprintd dbus:", err)
 		return err
 	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
 	go _m.init()
 	return nil
 }

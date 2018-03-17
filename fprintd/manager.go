@@ -21,64 +21,70 @@ package fprintd
 
 import (
 	"dbus/net/reactivated/fprint"
-	"pkg.deepin.io/lib/dbus"
 	"sync"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	dbusDest      = "com.deepin.daemon.Fprintd"
-	dbusPath      = "/com/deepin/daemon/Fprintd"
-	dbusIFC       = dbusDest
-	dbusDeviceIFC = dbusDest + ".Device"
+	dbusServiceName     = "com.deepin.daemon.Fprintd"
+	dbusPath            = "/com/deepin/daemon/Fprintd"
+	dbusInterface       = dbusServiceName
+	dbusDeviceInterface = dbusServiceName + ".Device"
 
-	fprintDest       = "net.reactivated.Fprint"
-	fprintPath       = "/net/reactivated/Fprint/"
-	fprintManagerIFC = "net.reactivated.Fprint.Manager"
-	fprintDeviceIFC  = "net.reactivated.Fprint.Device"
+	fprintDBusServiceName  = "net.reactivated.Fprint"
+	fprintDBusPath         = "/net/reactivated/Fprint/"
+	fprintManagerInterface = "net.reactivated.Fprint.Manager"
+	fprintDeviceInterface  = "net.reactivated.Fprint.Device"
 )
 
 type Manager struct {
-	core *fprint.Manager
-
+	service   *dbusutil.Service
+	core      *fprint.Manager
 	devList   Devices
 	devLocker sync.Mutex
+
+	methods *struct {
+		GetDefaultDevice func() `out:"device"`
+		GetDevices       func() `out:"devices"`
+	}
 }
 
-func newManager() *Manager {
+func newManager(service *dbusutil.Service) *Manager {
 	var m Manager
-	m.core, _ = fprint.NewManager(fprintDest, fprintPath+"Manager")
+	m.service = service
+	m.core, _ = fprint.NewManager(fprintDBusServiceName, fprintDBusPath+"Manager")
 	return &m
 }
 
-func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, error) {
+func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
 	objPath, err := m.core.GetDefaultDevice()
 	if err != nil {
 		logger.Warning("Failed to get default device:", err)
-		return "/", err
+		return "/", dbusutil.ToError(err)
 	}
-	m.addDevice(objPath)
-	return convertFprintPath(objPath), nil
+	objPath0 := dbus.ObjectPath(objPath)
+	m.addDevice(objPath0)
+	return convertFPrintPath(objPath0), nil
 }
 
-func (m *Manager) GetDevices() ([]dbus.ObjectPath, error) {
+func (m *Manager) GetDevices() ([]dbus.ObjectPath, *dbus.Error) {
 	list, err := m.core.GetDevices()
 	if err != nil {
-		return nil, err
+		return nil, dbusutil.ToError(err)
 	}
 	var ret []dbus.ObjectPath
 	for _, v := range list {
-		m.addDevice(v)
-		ret = append(ret, convertFprintPath(v))
+		devPath := dbus.ObjectPath(v)
+		m.addDevice(devPath)
+		ret = append(ret, convertFPrintPath(devPath))
 	}
 	return ret, nil
 }
 
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (m *Manager) init() {
@@ -92,13 +98,17 @@ func (m *Manager) init() {
 		logger.Info("Not found fprint device")
 		return
 	}
-	m.addDevices(list)
+	list0 := make([]dbus.ObjectPath, len(list))
+	for idx, devPath := range list {
+		list0[idx] = dbus.ObjectPath(devPath)
+	}
+	m.addDevices(list0)
 }
 
 func (m *Manager) addDevice(objPath dbus.ObjectPath) {
 	logger.Debug("Will add device:", objPath)
 	m.devLocker.Lock()
-	m.devList = m.devList.Add(objPath)
+	m.devList = m.devList.Add(objPath, m.service)
 	m.devLocker.Unlock()
 }
 
@@ -106,7 +116,7 @@ func (m *Manager) addDevices(pathList []dbus.ObjectPath) {
 	logger.Debug("Will add device list:", pathList)
 	m.devLocker.Lock()
 	for _, v := range pathList {
-		m.devList = m.devList.Add(v)
+		m.devList = m.devList.Add(v, m.service)
 	}
 	m.devLocker.Unlock()
 }

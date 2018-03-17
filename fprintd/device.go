@@ -22,31 +22,54 @@ package fprintd
 import (
 	"dbus/net/reactivated/fprint"
 	"path"
-	"pkg.deepin.io/lib/dbus"
+
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 type Device struct {
-	core *fprint.Device
+	service *dbusutil.Service
+	core    *fprint.Device
+
+	methods *struct {
+		Claim                 func() `in:"username"`
+		EnrollStart           func() `in:"finger"`
+		VerifyStart           func() `in:"finger"`
+		DeleteEnrolledFingers func() `in:"username"`
+		ListEnrolledFingers   func() `in:"username" out:"fingers"`
+	}
 
 	// TODO: enroll image
-	EnrollStatus         func(string, bool)
-	VerifyStatus         func(string, bool)
-	VerifyFingerSelected func(string)
+	signals *struct {
+		EnrollStatus struct {
+			status string
+			ok     bool
+		}
+		VerifyStatus struct {
+			status string
+			ok     bool
+		}
+		VerifyFingerSelected struct {
+			finger string
+		}
+	}
 }
 type Devices []*Device
 
-func newDevice(objPath dbus.ObjectPath) *Device {
+func newDevice(objPath dbus.ObjectPath, service *dbusutil.Service) *Device {
 	var dev Device
-	dev.core, _ = fprint.NewDevice(fprintDest, objPath)
+	dev.service = service
+	dev.core, _ = fprint.NewDevice(fprintDBusServiceName, oldDBusLib.ObjectPath(objPath))
 
 	dev.core.ConnectEnrollStatus(func(status string, ok bool) {
-		dbus.Emit(&dev, "EnrollStatus", status, ok)
+		dev.service.Emit(&dev, "EnrollStatus", status, ok)
 	})
 	dev.core.ConnectVerifyStatus(func(status string, ok bool) {
-		dbus.Emit(&dev, "VerifyStatus", status, ok)
+		dev.service.Emit(&dev, "VerifyStatus", status, ok)
 	})
 	dev.core.ConnectVerifyFingerSelected(func(finger string) {
-		dbus.Emit(&dev, "VerifyFingerSelected", finger)
+		dev.service.Emit(&dev, "VerifyFingerSelected", finger)
 	})
 
 	return &dev
@@ -57,44 +80,55 @@ func destroyDevice(dev *Device) {
 	dev = nil
 }
 
-func (dev *Device) Claim(username string) error {
-	return dev.core.Claim(username)
+func (dev *Device) Claim(username string) *dbus.Error {
+	err := dev.core.Claim(username)
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) Release() error {
-	return dev.core.Release()
+func (dev *Device) Release() *dbus.Error {
+	err := dev.core.Release()
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) EnrollStart(finger string) error {
-	return dev.core.EnrollStart(finger)
+func (dev *Device) EnrollStart(finger string) *dbus.Error {
+	err := dev.core.EnrollStart(finger)
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) EnrollStop() error {
-	return dev.core.EnrollStop()
+func (dev *Device) EnrollStop() *dbus.Error {
+	err := dev.core.EnrollStop()
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) VerifyStart(finger string) error {
-	return dev.core.VerifyStart(finger)
+func (dev *Device) VerifyStart(finger string) *dbus.Error {
+	err := dev.core.VerifyStart(finger)
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) VerifyStop() error {
-	return dev.core.VerifyStop()
+func (dev *Device) VerifyStop() *dbus.Error {
+	err := dev.core.VerifyStop()
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) DeleteEnrolledFingers(username string) error {
-	return dev.core.DeleteEnrolledFingers(username)
+func (dev *Device) DeleteEnrolledFingers(username string) *dbus.Error {
+	err := dev.core.DeleteEnrolledFingers(username)
+	return dbusutil.ToError(err)
 }
 
-func (dev *Device) ListEnrolledFingers(username string) ([]string, error) {
-	return dev.core.ListEnrolledFingers(username)
-}
-
-func (dev *Device) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: string(convertFprintPath(dev.core.Path)),
-		Interface:  dbusDeviceIFC,
+func (dev *Device) ListEnrolledFingers(username string) ([]string, *dbus.Error) {
+	fingers, err := dev.core.ListEnrolledFingers(username)
+	if err != nil {
+		return nil, dbusutil.ToError(err)
 	}
+	return fingers, nil
+}
+
+func (*Device) GetInterfaceName() string {
+	return dbusDeviceInterface
+}
+
+func (dev *Device) getPath() dbus.ObjectPath {
+	return convertFPrintPath(dbus.ObjectPath(dev.core.Path))
 }
 
 func destroyDevices(list Devices) {
@@ -104,26 +138,26 @@ func destroyDevices(list Devices) {
 	list = nil
 }
 
-func (devList Devices) Add(objPath dbus.ObjectPath) Devices {
+func (devList Devices) Add(objPath dbus.ObjectPath, service *dbusutil.Service) Devices {
 	dev := devList.Get(objPath)
 	if dev != nil {
 		return devList
 	}
 
-	var v = newDevice(objPath)
-	err := dbus.InstallOnSession(v)
+	var v = newDevice(objPath, service)
+	err := service.Export(v.getPath(), v)
 	if err != nil {
-		logger.Warning("Failed to install dbus:", objPath)
+		logger.Warning("Failed to export:", objPath)
 		return devList
 	}
 
-	devList = append(devList, newDevice(objPath))
+	devList = append(devList, v)
 	return devList
 }
 
 func (devList Devices) Get(objPath dbus.ObjectPath) *Device {
 	for _, dev := range devList {
-		if dev.core.Path == objPath {
+		if dbus.ObjectPath(dev.core.Path) == objPath {
 			return dev
 		}
 	}
@@ -136,7 +170,7 @@ func (devList Devices) Delete(objPath dbus.ObjectPath) Devices {
 		v    *Device
 	)
 	for _, dev := range devList {
-		if dev.core.Path == objPath {
+		if dbus.ObjectPath(dev.core.Path) == objPath {
 			v = dev
 			continue
 		}
@@ -148,6 +182,6 @@ func (devList Devices) Delete(objPath dbus.ObjectPath) Devices {
 	return list
 }
 
-func convertFprintPath(objPath dbus.ObjectPath) dbus.ObjectPath {
+func convertFPrintPath(objPath dbus.ObjectPath) dbus.ObjectPath {
 	return dbus.ObjectPath(dbusPath + "/Device/" + path.Base(string(objPath)))
 }
