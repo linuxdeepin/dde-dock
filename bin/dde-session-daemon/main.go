@@ -68,10 +68,18 @@ func main() {
 	proxy.SetupProxy()
 
 	app := NewSessionDaemon(flags, daemonSettings, logger)
-	if err = app.register(); err != nil {
+
+	service, err := dbusutil.NewSessionService()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	if err = app.register(service); err != nil {
 		logger.Info(err)
 		os.Exit(0)
 	}
+
+	loader.SetService(service)
 
 	logger.SetLogLevel(log.LevelInfo)
 	if cmd.IsLogLevelNone() &&
@@ -84,12 +92,6 @@ func main() {
 		loader.SetLogLevel(appLogLevel)
 	}
 
-	service, err := dbusutil.NewSessionService()
-	if err != nil {
-		logger.Fatal(err)
-	}
-	loader.SetService(service)
-
 	needRunMainLoop := true
 
 	// Ensure each module and mainloop in the same thread
@@ -100,11 +102,11 @@ func main() {
 	case "auto":
 		app.execDefaultAction()
 	case "enable":
-		err = app.EnableModules(*enablingModules)
+		err = app.enableModules(*enablingModules)
 	case "disable":
-		err = app.DisableModules(*disableModules)
+		err = app.disableModules(*disableModules)
 	case "list":
-		err = app.ListModule(*listModule)
+		err = app.listModule(*listModule)
 		needRunMainLoop = false
 	}
 

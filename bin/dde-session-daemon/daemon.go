@@ -20,7 +20,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"sync"
@@ -30,8 +29,8 @@ import (
 	"pkg.deepin.io/dde/api/session"
 	"pkg.deepin.io/dde/daemon/calltrace"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
 )
@@ -39,6 +38,10 @@ import (
 const (
 	ProfTypeCPU = "cpu"
 	ProfTypeMem = "memory"
+
+	dbusPath        = "/com/deepin/daemon/Daemon"
+	dbusServiceName = "com.deepin.daemon.Daemon"
+	dbusInterface   = dbusServiceName
 )
 
 func runMainLoop() {
@@ -48,15 +51,7 @@ func runMainLoop() {
 	}
 
 	session.Register()
-	dbus.DealWithUnhandledMessage()
 	listenDaemonSettings()
-
-	go func() {
-		if err := dbus.Wait(); err != nil {
-			logger.Errorf("Lost dbus: %v", err)
-			os.Exit(-1)
-		}
-	}()
 
 	glib.StartLoop()
 	logger.Info("Loop has been terminated!")
@@ -86,14 +81,17 @@ type SessionDaemon struct {
 
 	cpuLocker sync.Mutex
 	cpuWriter *os.File
+
+	methods *struct {
+		EnableModules  func() `in:"enablingModules"`
+		DisableModules func() `in:"disableModules "`
+		ListModule     func() `in:"name"`
+		CallTrace      func() `in:"times,seconds"`
+	}
 }
 
-func (*SessionDaemon) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Daemon",
-		ObjectPath: "/com/deepin/daemon/Daemon",
-		Interface:  "com.deepin.daemon.Daemon",
-	}
+func (*SessionDaemon) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) *SessionDaemon {
@@ -110,22 +108,16 @@ func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) 
 	return session
 }
 
-func (s *SessionDaemon) exitIfNotSingleton() error {
-	if !lib.UniqueOnSession(s.GetDBusInfo().Dest) {
-		return errors.New("There already has a dde daemon running.")
-	}
-	return nil
-}
-
-func (s *SessionDaemon) register() error {
-	if err := s.exitIfNotSingleton(); err != nil {
-		return err
-	}
-
-	if err := dbus.InstallOnSession(s); err != nil {
+func (s *SessionDaemon) register(service *dbusutil.Service) error {
+	err := service.Export(dbusPath, s)
+	if err != nil {
 		s.log.Fatal(err)
 	}
 
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -170,19 +162,29 @@ func (s *SessionDaemon) getEnabledModules() []string {
 	return s.enabledModules.List()
 }
 
-func (s *SessionDaemon) EnableModules(enablingModules []string) error {
+func (s *SessionDaemon) enableModules(enablingModules []string) error {
 	disabledModules := s.getDisabledModules()
 	disabledModules = filterList(disabledModules, enablingModules)
 	return loader.EnableModules(enablingModules, disabledModules, getEnableFlag(s.flags))
 }
 
-func (s *SessionDaemon) DisableModules(disableModules []string) error {
+func (s *SessionDaemon) EnableModules(enablingModules []string) *dbus.Error {
+	err := s.enableModules(enablingModules)
+	return dbusutil.ToError(err)
+}
+
+func (s *SessionDaemon) disableModules(disableModules []string) error {
 	enablingModules := s.getEnabledModules()
 	enablingModules = filterList(enablingModules, disableModules)
 	return loader.EnableModules(enablingModules, disableModules, getEnableFlag(s.flags))
 }
 
-func (s *SessionDaemon) ListModule(name string) error {
+func (s *SessionDaemon) DisableModules(disableModules []string) *dbus.Error {
+	err := s.disableModules(disableModules)
+	return dbusutil.ToError(err)
+}
+
+func (s *SessionDaemon) listModule(name string) error {
 	if name == "" {
 		for _, module := range loader.List() {
 			fmt.Println(module.Name())
@@ -202,11 +204,16 @@ func (s *SessionDaemon) ListModule(name string) error {
 	return nil
 }
 
-func (s *SessionDaemon) CallTrace(times, seconds uint32) error {
+func (s *SessionDaemon) ListModule(name string) *dbus.Error {
+	err := s.listModule(name)
+	return dbusutil.ToError(err)
+}
+
+func (s *SessionDaemon) CallTrace(times, seconds uint32) *dbus.Error {
 	ct, err := calltrace.NewManager(seconds / times)
 	if err != nil {
 		logger.Warning("Failed to start calltrace:", err)
-		return err
+		return dbusutil.ToError(err)
 	}
 	ct.SetAutoDestroy(seconds)
 	return nil
