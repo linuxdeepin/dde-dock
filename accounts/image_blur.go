@@ -6,8 +6,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sync"
-	"syscall"
-	"time"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -61,7 +59,7 @@ func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
 
 	blurFile := getImageBlurFile(file)
 
-	fileInfo, err := os.Stat(file)
+	_, err := os.Stat(file)
 	if err != nil {
 		logger.Warning(err)
 		if os.IsNotExist(err) {
@@ -71,27 +69,13 @@ func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
 		return "", dbusutil.ToError(err)
 	}
 
-	blurFileInfo, err := os.Stat(blurFile)
+	_, err = os.Stat(blurFile)
 	if err == nil {
-		fileChangeTime := getChangeTime(fileInfo)
-		blurFileChangeTime := getChangeTime(blurFileInfo)
-
-		if fileChangeTime.Before(blurFileChangeTime) {
-			return blurFile, nil
-		} else {
-			// delete old, generate new
-			os.Remove(blurFile)
-		}
+		return blurFile, nil
 	}
 
 	ib.gen(file)
 	return "", nil
-}
-
-// getChangeTime get time when file status was last changed.
-func getChangeTime(fileInfo os.FileInfo) time.Time {
-	stat := fileInfo.Sys().(*syscall.Stat_t)
-	return time.Unix(int64(stat.Ctim.Sec), int64(stat.Ctim.Nsec))
 }
 
 func (ib *ImageBlur) Delete(file string) *dbus.Error {
