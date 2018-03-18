@@ -25,37 +25,44 @@ import (
 	"sync"
 	"time"
 
-	"dbus/org/bluez"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	dbusAgentDest = "."
-	dbusAgentPath = dbusBluetoothPath + "/Agent"
-	dbusAgentIfs  = "org.bluez.Agent1"
+	agentDBusPath      = dbusPath + "/Agent"
+	agentDBusInterface = "org.bluez.Agent1"
 )
 
 type authorize struct {
-	dpath  dbus.ObjectPath
+	path   dbus.ObjectPath
 	key    string
 	accept bool
 }
 
 type agent struct {
-	agentManager *bluez.AgentManager1
-	b            *Bluetooth
-	rspChan      chan authorize
+	service  *dbusutil.Service
+	bluezObj dbus.BusObject
+
+	b       *Bluetooth
+	rspChan chan authorize
 
 	lk            sync.Mutex
 	requestDevice dbus.ObjectPath
+
+	methods *struct {
+		RequestPinCode       func() `in:"device" out:"pinCode"`
+		DisplayPinCode       func() `in:"device,pinCode"`
+		RequestPasskey       func() `in:"device" out:"passkey"`
+		DisplayPasskey       func() `in:"device,passkey,entered"`
+		RequestConfirmation  func() `in:"device,passkey"`
+		RequestAuthorization func() `in:"device"`
+		AuthorizeService     func() `in:"device,uuid"`
+	}
 }
 
-func (a *agent) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusAgentDest,
-		ObjectPath: dbusAgentPath,
-		Interface:  dbusAgentIfs,
-	}
+func (*agent) GetInterfaceName() string {
+	return agentDBusInterface
 }
 
 /*****************************************************************************/
@@ -63,22 +70,23 @@ func (a *agent) GetDBusInfo() dbus.DBusInfo {
 //Release method gets called when the service daemon unregisters the agent.
 //An agent can use it to do cleanup tasks. There is no need to unregister the
 //agent, because when this method gets called it has already been unregistered.
-func (a *agent) Release() {
+func (a *agent) Release() *dbus.Error {
 	logger.Info("Release()")
+	return nil
 }
 
 //RequestPinCode method gets called when the service daemon needs to get the passkey for an authentication.
 //The return value should be a string of 1-16 characters length. The string can be alphanumeric.
 //Possible errors: org.bluez.Error.Rejected
 //                 org.bluez.Error.Canceled
-func (a *agent) RequestPinCode(dpath dbus.ObjectPath) (pincode string, err error) {
+func (a *agent) RequestPinCode(dpath dbus.ObjectPath) (pincode string, busErr *dbus.Error) {
 	logger.Info("RequestPinCode()")
 	//return utils.RandString(8), nil
 	auth, err := a.emitRequest(dpath, "RequestPinCode")
-	if nil != err {
-		return "", err
+	if err != nil {
+		return "", dbusutil.ToError(err)
 	}
-	return auth.key, err
+	return auth.key, nil
 }
 
 //DisplayPinCode method gets called when the service daemon needs to display a pincode for an authentication.
@@ -90,9 +98,9 @@ func (a *agent) RequestPinCode(dpath dbus.ObjectPath) (pincode string, err error
 //the later specification.
 //Possible errors: org.bluez.Error.Rejected
 //				   org.bluez.Error.Canceled
-func (a *agent) DisplayPinCode(dpath dbus.ObjectPath, pincode string) (err error) {
-	logger.Info("DisplayPinCode()", pincode)
-	dbus.Emit(a.b, "DisplayPinCode", dpath, pincode)
+func (a *agent) DisplayPinCode(devPath dbus.ObjectPath, pinCode string) (err *dbus.Error) {
+	logger.Info("DisplayPinCode()", pinCode)
+	a.b.service.Emit(a.b, "DisplayPinCode", devPath, pinCode)
 	return
 }
 
@@ -100,16 +108,20 @@ func (a *agent) DisplayPinCode(dpath dbus.ObjectPath, pincode string) (err error
 //The return value should be a numeric value between 0-999999.
 //Possible errors: org.bluez.Error.Rejected
 //				   org.bluez.Error.Canceled
-func (a *agent) RequestPasskey(dpath dbus.ObjectPath) (passkey uint32, err error) {
+func (a *agent) RequestPasskey(dpath dbus.ObjectPath) (passkey uint32, busErr *dbus.Error) {
 	//passkey = rand.Uint32() % 999999
 	logger.Info("RequestPasskey()")
 	auth, err := a.emitRequest(dpath, "RequestPasskey")
-	if nil != err {
-		return 0, err
+	if err != nil {
+		return 0, dbusutil.ToError(err)
 	}
+
 	key, err := strconv.ParseUint(auth.key, 10, 32)
+	if err != nil {
+		return 0, dbusutil.ToError(err)
+	}
 	passkey = uint32(key)
-	return passkey, err
+	return passkey, nil
 }
 
 //DisplayPasskey method gets called when the service daemon needs to display a passkey for an authentication.
@@ -119,10 +131,12 @@ func (a *agent) RequestPasskey(dpath dbus.ObjectPath) (passkey uint32, err error
 //During the pairing process this method might be called multiple times to update the entered value.
 //Note that the passkey will always be a 6-digit number, so the display should be zero-padded at the start if
 //the value contains less than 6 digits.
-func (a *agent) DisplayPasskey(dpath dbus.ObjectPath, passkey uint32, entered uint16) {
+func (a *agent) DisplayPasskey(dpath dbus.ObjectPath, passkey uint32,
+	entered uint16) *dbus.Error {
+
 	logger.Info("DisplayPasskey()", passkey, entered)
-	dbus.Emit(a.b, "DisplayPasskey", dpath, passkey, entered)
-	return
+	a.b.service.Emit(a.b, "DisplayPasskey", dpath, passkey, entered)
+	return nil
 }
 
 //RequestConfirmation This method gets called when the service daemon needs to confirm a passkey for an authentication.
@@ -131,27 +145,27 @@ func (a *agent) DisplayPasskey(dpath dbus.ObjectPath, passkey uint32, entered ui
 //the value contains less than 6 digits.
 //Possible errors: org.bluez.Error.Rejected
 //			       org.bluez.Error.Canceled
-func (a *agent) RequestConfirmation(dpath dbus.ObjectPath, passkey uint32) (err error) {
+func (a *agent) RequestConfirmation(dpath dbus.ObjectPath, passkey uint32) *dbus.Error {
 	logger.Info("RequestConfirmation", dpath, passkey)
 	key := fmt.Sprintf("%06d", passkey)
-	_, err = a.emitRequest(dpath, "RequestConfirmation", key)
-	return err
+	_, err := a.emitRequest(dpath, "RequestConfirmation", key)
+	return dbusutil.ToError(err)
 }
 
 //RequestAuthorization method gets called to request the user to authorize an incoming pairing attempt which
 //would in other circumstances trigger the just-works model.
 //Possible errors: org.bluez.Error.Rejected
 //				   org.bluez.Error.Canceled
-func (a *agent) RequestAuthorization(dpath dbus.ObjectPath) (err error) {
+func (a *agent) RequestAuthorization(dpath dbus.ObjectPath) *dbus.Error {
 	logger.Info("RequestAuthorization()")
-	_, err = a.emitRequest(dpath, "RequestAuthorization")
-	return err
+	_, err := a.emitRequest(dpath, "RequestAuthorization")
+	return dbusutil.ToError(err)
 }
 
 //AuthorizeService method gets called when the service daemon needs to authorize a connection/service request.
 //Possible errors: org.bluez.Error.Rejected
 //				   org.bluez.Error.Canceled
-func (a *agent) AuthorizeService(dpath dbus.ObjectPath, uuid string) (err error) {
+func (a *agent) AuthorizeService(dpath dbus.ObjectPath, uuid string) *dbus.Error {
 	logger.Info("AuthorizeService()")
 	// TODO: DO NOT forbiden device connect service
 	//dbus.Emit(a.b, "AuthorizeService")
@@ -160,15 +174,17 @@ func (a *agent) AuthorizeService(dpath dbus.ObjectPath, uuid string) (err error)
 }
 
 //Cancel method gets called to indicate that the agent request failed before a reply was returned.
-func (a *agent) Cancel() {
+func (a *agent) Cancel() *dbus.Error {
 	logger.Info("Cancel()")
-	a.rspChan <- authorize{dpath: a.requestDevice, accept: false, key: ""}
+	a.rspChan <- authorize{path: a.requestDevice, accept: false, key: ""}
+	return nil
 }
 
 /*****************************************************************************/
 
-func newAgent() (a *agent) {
+func newAgent(service *dbusutil.Service) (a *agent) {
 	a = &agent{
+		service: service,
 		rspChan: make(chan authorize, 1),
 	}
 	return
@@ -182,35 +198,46 @@ func (a *agent) init() (err error) {
 		}
 	}()
 
-	a.agentManager, err = bluez.NewAgentManager1(dbusBluezDest, dbusBluezPath)
-	if nil != err {
-		logger.Info("Get AgentManager failed: ", err)
+	sysBus := a.service.Conn()
+	a.bluezObj = sysBus.Object(bluezDBusServiceName, bluezDBusPath)
+
+	// register agent
+	err = a.bluezObj.Call(bluezAgentManagerDBusInterface+".RegisterAgent", 0,
+		dbus.ObjectPath(agentDBusPath), "DisplayYesNo").Err
+	if err != nil {
+		logger.Warning("failed to register agent:", err)
 		return err
 	}
-	err = a.agentManager.RegisterAgent(dbusAgentPath, "DisplayYesNo")
-	if nil != err {
-		logger.Info("Register agent failed: ", err)
+
+	// request default agent
+	err = a.bluezObj.Call(bluezAgentManagerDBusInterface+".RequestDefaultAgent", 0,
+		dbus.ObjectPath(agentDBusPath)).Err
+	if err != nil {
+		logger.Warning("failed to set default agent:", err)
 		return err
 	}
-	err = a.agentManager.RequestDefaultAgent(dbusAgentPath)
-	if nil != err {
-		logger.Info("Set default agent failed: ", err)
-		return err
-	}
+
 	return nil
 }
 
 func (a *agent) destroy() {
-	a.agentManager.UnregisterAgent(dbusAgentPath)
-	dbus.UnInstallObject(a)
+	a.bluezObj.Call(bluezAgentManagerDBusInterface+".UnregisterAgent", 0,
+		dbus.ObjectPath(agentDBusPath))
+
+	a.service.StopExport(a)
 }
 
-func (a *agent) waitRespone() (auth authorize, err error) {
+func (a *agent) waitResponse() (auth authorize, err error) {
 	// TODO: time is too short or long
-	logger.Info("waitRespone")
-	defer func() { a.requestDevice = "" }()
+	logger.Info("waitResponse")
+
+	defer func() {
+		a.requestDevice = ""
+	}()
+
 	t := time.NewTimer(60 * time.Second)
 	for {
+		// TODO: remove for
 		select {
 		case auth = <-a.rspChan:
 			logger.Info("receive", auth)
@@ -228,73 +255,76 @@ func (a *agent) waitRespone() (auth authorize, err error) {
 			return
 		}
 	}
-	logger.Error("Shoud not run here!!!")
+	logger.Error("Should not run here!!!")
 	err = errBluezCanceled
 	return
 }
 
-func (a *agent) emit(signal string, dpath dbus.ObjectPath, ins ...interface{}) (err error) {
-	sins := [](interface{}){}
-	sins = append(sins, dpath)
-	sins = append(sins, ins...)
-	return dbus.Emit(a.b, signal, sins...)
+func (a *agent) emit(signal string, devPath dbus.ObjectPath, args ...interface{}) (err error) {
+	var args0 []interface{}
+	args0 = append(args0, devPath)
+	args0 = append(args0, args...)
+	return a.b.service.Emit(a.b, signal, args0...)
 }
 
-func (a *agent) emitRequest(dpath dbus.ObjectPath, signal string, ins ...interface{}) (auth authorize, err error) {
-	logger.Info("emitRequest", dpath, signal, ins)
+func (a *agent) emitRequest(devPath dbus.ObjectPath, signal string, args ...interface{}) (auth authorize, err error) {
+	logger.Info("emitRequest", devPath, signal, args)
 
 	a.lk.Lock()
-	a.requestDevice = dpath
+	a.requestDevice = devPath
 	a.lk.Unlock()
 
-	_, err = a.b.getDevice(dpath)
+	_, err = a.b.getDevice(devPath)
 	if nil != err {
-		logger.Warningf("emitRequest can not find device: %v, %v", dpath, err)
+		logger.Warningf("emitRequest can not find device: %v, %v", devPath, err)
 		return auth, errBluezCanceled
 	}
 
-	logger.Debug("Send Signal for device: ", dpath, signal, ins)
-	a.emit(signal, dpath, ins...)
+	logger.Debug("Send Signal for device: ", devPath, signal, args)
+	a.emit(signal, devPath, args...)
 
-	return a.waitRespone()
+	return a.waitResponse()
 }
 
-func (b *Bluetooth) feed(dpath dbus.ObjectPath, accept bool, key string) (err error) {
-	_, err = b.getDevice(dpath)
+func (b *Bluetooth) feed(devPath dbus.ObjectPath, accept bool, key string) (err error) {
+	_, err = b.getDevice(devPath)
 	if nil != err {
-		logger.Warningf("FeedRequest can not find device: %v, %v", dpath, err)
+		logger.Warningf("FeedRequest can not find device: %v, %v", devPath, err)
 		return err
 	}
 
 	b.agent.lk.Lock()
-	if b.agent.requestDevice != dpath {
+	if b.agent.requestDevice != devPath {
 		b.agent.lk.Unlock()
-		logger.Warningf("FeedRequest can not find match device: %v, %v", b.agent.requestDevice, dpath)
+		logger.Warningf("FeedRequest can not find match device: %v, %v", b.agent.requestDevice, devPath)
 		return errBluezCanceled
 	}
 	b.agent.lk.Unlock()
 
-	b.agent.rspChan <- authorize{dpath: dpath, accept: accept, key: key}
+	b.agent.rspChan <- authorize{path: devPath, accept: accept, key: key}
 	return nil
 }
 
 //Confirm should call when you receive RequestConfirmation signal
-func (b *Bluetooth) Confirm(dpath dbus.ObjectPath, accept bool) (err error) {
+func (b *Bluetooth) Confirm(devPath dbus.ObjectPath, accept bool) *dbus.Error {
 	logger.Info("Confirm()")
-	return b.feed(dpath, accept, "")
+	err := b.feed(devPath, accept, "")
+	return dbusutil.ToError(err)
 }
 
 //FeedPinCode should call when you receive RequestPinCode signal, notice that accept must true
-//if you accept connect request. If accept is false, pincode will be ignored.
-func (b *Bluetooth) FeedPinCode(dpath dbus.ObjectPath, accept bool, pincode string) (err error) {
+//if you accept connect request. If accept is false, pinCode will be ignored.
+func (b *Bluetooth) FeedPinCode(devPath dbus.ObjectPath, accept bool, pinCode string) *dbus.Error {
 	logger.Info("FeedPinCode()")
-	return b.feed(dpath, accept, pincode)
+	err := b.feed(devPath, accept, pinCode)
+	return dbusutil.ToError(err)
 }
 
 //FeedPasskey should call when you receive RequestPasskey signal, notice that accept must true
 //if you accept connect request. If accept is false, passkey will be ignored.
 //passkey must be range in 0~999999.
-func (b *Bluetooth) FeedPasskey(dpath dbus.ObjectPath, accept bool, passkey uint32) (err error) {
+func (b *Bluetooth) FeedPasskey(devPath dbus.ObjectPath, accept bool, passkey uint32) *dbus.Error {
 	logger.Info("FeedPasskey()")
-	return b.feed(dpath, accept, fmt.Sprintf("%06d", passkey))
+	err := b.feed(devPath, accept, fmt.Sprintf("%06d", passkey))
+	return dbusutil.ToError(err)
 }

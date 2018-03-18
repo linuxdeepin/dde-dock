@@ -21,33 +21,38 @@ package bluetooth
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
+
+	"pkg.deepin.io/lib/dbus1"
 )
 
-func (b *Bluetooth) DebugInfo() (info string) {
-	info = fmt.Sprintf("adapters: %s\ndevices: %s", marshalJSON(b.adapters), marshalJSON(b.devices))
-	return
+func (b *Bluetooth) DebugInfo() (string, *dbus.Error) {
+	info := fmt.Sprintf("adapters: %s\ndevices: %s", marshalJSON(b.adapters), marshalJSON(b.devices))
+	return info, nil
 }
 
-func (b *Bluetooth) setPropState() {
-	b.State = StateUnavailable
+func (b *Bluetooth) updateState() {
+	newState := StateUnavailable
 	if len(b.adapters) > 0 {
-		b.State = StateAvailable
+		newState = StateAvailable
 	}
-	for _, devs := range b.devices {
-		for _, d := range devs {
+
+	for _, devices := range b.devices {
+		for _, d := range devices {
 			if d.connected {
-				b.State = StateConnected
+				newState = StateConnected
 				break
 			}
 		}
 	}
-	dbus.NotifyChange(b, "State")
+
+	b.PropsMu.Lock()
+	b.setPropState(uint32(newState))
+	b.PropsMu.Unlock()
 }
 
 //ClearUnpairedDevice will remove all device in unpaired list
-func (b *Bluetooth) ClearUnpairedDevice() {
-	removeDevices := [](*device){}
+func (b *Bluetooth) ClearUnpairedDevice() *dbus.Error {
+	var removeDevices []*device
 	for _, devices := range b.devices {
 		for _, d := range devices {
 			if !d.Paired {
@@ -60,4 +65,5 @@ func (b *Bluetooth) ClearUnpairedDevice() {
 	for _, d := range removeDevices {
 		bluezRemoveDevice(d.AdapterPath, d.Path)
 	}
+	return nil
 }

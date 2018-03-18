@@ -21,19 +21,23 @@ package bluetooth
 
 import (
 	sysdbus "dbus/org/freedesktop/dbus/system"
-	"pkg.deepin.io/lib/dbus"
 	"sync"
+
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	dbusBluezDest       = "org.bluez"
-	dbusBluezPath       = "/org/bluez"
-	dbusBluezIfsAdapter = "org.bluez.Adapter1"
-	dbusBluezIfsDevice  = "org.bluez.Device1"
+	bluezDBusServiceName           = "org.bluez"
+	bluezDBusPath                  = "/org/bluez"
+	bluezAdapterDBusInterface      = "org.bluez.Adapter1"
+	bluezDeviceDBusInterface       = "org.bluez.Device1"
+	bluezAgentManagerDBusInterface = "org.bluez.AgentManager1"
 
-	dbusBluetoothDest = "com.deepin.daemon.Bluetooth"
-	dbusBluetoothPath = "/com/deepin/daemon/Bluetooth"
-	dbusBluetoothIfs  = "com.deepin.daemon.Bluetooth"
+	dbusServiceName = "com.deepin.daemon.Bluetooth"
+	dbusPath        = "/com/deepin/daemon/Bluetooth"
+	dbusInterface   = dbusServiceName
 )
 
 const (
@@ -42,11 +46,12 @@ const (
 	StateConnected   = 2
 )
 
-type dbusObjectData map[string]dbus.Variant
-type dbusInterfaceData map[string]map[string]dbus.Variant
-type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
+type dbusObjectData map[string]oldDBusLib.Variant
+
+//go:generate dbusutil-gen -type Bluetooth bluetooth.go
 
 type Bluetooth struct {
+	service       *dbusutil.Service
 	config        *config
 	objectManager *sysdbus.ObjectManager
 	agent         *agent
@@ -59,46 +64,88 @@ type Bluetooth struct {
 	devicesLock sync.Mutex
 	devices     map[dbus.ObjectPath][]*device
 
-	State uint32 // StateUnavailable/StateAvailable/StateConnected
+	PropsMu sync.RWMutex
+	State   uint32 // StateUnavailable/StateAvailable/StateConnected
 
-	// Bluetooth adaper/device properties changed signals
-	AdapterAdded             func(adapterJSON string)
-	AdapterRemoved           func(adapterJSON string)
-	AdapterPropertiesChanged func(adapterJSON string)
-	DeviceAdded              func(devJSON string)
-	DeviceRemoved            func(devJSON string)
-	DevicePropertiesChanged  func(devJSON string)
+	methods *struct {
+		DebugInfo                     func() `out:"info"`
+		GetDevices                    func() `in:"adapter" out:"devicesJSON"`
+		ConnectDevice                 func() `in:"device"`
+		DisconnectDevice              func() `in:"device"`
+		RemoveDevice                  func() `in:"adapter,device"`
+		SetDeviceAlias                func() `in:"device,alias"`
+		SetDeviceTrusted              func() `in:"device,trusted"`
+		Confirm                       func() `in:"device,accept"`
+		FeedPinCode                   func() `in:"device,accept,pinCode"`
+		FeedPasskey                   func() `in:"device,accept,passkey"`
+		GetAdapters                   func() `out:"adaptersJSON"`
+		RequestDiscovery              func() `in:"adapter"`
+		SetAdapterPowered             func() `in:"adapter,powered"`
+		SetAdapterAlias               func() `in:"adapter,alias"`
+		SetAdapterDiscoverable        func() `in:"adapter,discoverable"`
+		SetAdapterDiscovering         func() `in:"adapter,discovering"`
+		SetAdapterDiscoverableTimeout func() `in:"adapter,timeout"`
+	}
 
-	// Bluetooth pair request signals
-	DisplayPinCode func(device dbus.ObjectPath, pincode string)
-	DisplayPasskey func(device dbus.ObjectPath, passkey uint32, entered uint32)
-	// RequestConfirmation you shoud call Confirm with accpet
-	RequestConfirmation func(device dbus.ObjectPath, passkey string)
-	// RequestAuthorization you shoud call Confirm with accpet
-	RequestAuthorization func(device dbus.ObjectPath)
-	// RequestPinCode you should call FeedPinCode with accpet and key
-	RequestPinCode func(device dbus.ObjectPath)
-	// RequestPasskey you should call FeedPasskey with accpet and key
-	RequestPasskey func(device dbus.ObjectPath)
+	signals *struct {
+		// adapter/device properties changed signals
+		AdapterAdded, AdapterRemoved, AdapterPropertiesChanged struct {
+			adapterJSON string
+		}
+
+		DeviceAdded, DeviceRemoved, DevicePropertiesChanged struct {
+			devJSON string
+		}
+
+		// pair request signals
+		DisplayPinCode struct {
+			device  dbus.ObjectPath
+			pinCode string
+		}
+		DisplayPasskey struct {
+			device  dbus.ObjectPath
+			passkey uint32
+			entered uint32
+		}
+
+		// RequestConfirmation you should call Confirm with accept
+		RequestConfirmation struct {
+			device  dbus.ObjectPath
+			passkey string
+		}
+
+		// RequestAuthorization you should call Confirm with accept
+		RequestAuthorization struct {
+			device dbus.ObjectPath
+		}
+
+		// RequestPinCode you should call FeedPinCode with accept and key
+		RequestPinCode struct {
+			device dbus.ObjectPath
+		}
+
+		// RequestPasskey you should call FeedPasskey with accept and key
+		RequestPasskey struct {
+			device dbus.ObjectPath
+		}
+	}
 }
 
-func newBluetooth() (b *Bluetooth) {
-	b = &Bluetooth{}
-	b.adapters = map[dbus.ObjectPath]*adapter{}
+func newBluetooth(service *dbusutil.Service) (b *Bluetooth) {
+	b = &Bluetooth{
+		service: service,
+	}
+	b.adapters = make(map[dbus.ObjectPath]*adapter)
 	return
 }
 
 func (b *Bluetooth) destroy() {
 	bluezDestroyObjectManager(b.objectManager)
-	dbus.UnInstallObject(b)
+	b.service.StopExport(b)
 }
 
-func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusBluetoothDest,
-		ObjectPath: dbusBluetoothPath,
-		Interface:  dbusBluetoothIfs,
-	}
+func (*Bluetooth) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func (b *Bluetooth) init() {
@@ -136,20 +183,20 @@ func (b *Bluetooth) init() {
 		}
 	}()
 }
-func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
-	if _, ok := data[dbusBluezIfsAdapter]; ok {
+func (b *Bluetooth) handleInterfacesAdded(path oldDBusLib.ObjectPath, data map[string]map[string]oldDBusLib.Variant) {
+	if _, ok := data[bluezAdapterDBusInterface]; ok {
 		requestUnblockBluetoothDevice()
-		b.addAdapter(path)
+		b.addAdapter(dbus.ObjectPath(path))
 	}
-	if _, ok := data[dbusBluezIfsDevice]; ok {
-		b.addDevice(path, data[dbusBluezIfsDevice])
+	if _, ok := data[bluezDeviceDBusInterface]; ok {
+		b.addDevice(dbus.ObjectPath(path), data[bluezDeviceDBusInterface])
 	}
 }
-func (b *Bluetooth) handleInterfacesRemoved(path dbus.ObjectPath, interfaces []string) {
-	if isStringInArray(dbusBluezIfsAdapter, interfaces) {
-		b.removeAdapter(path)
+func (b *Bluetooth) handleInterfacesRemoved(path oldDBusLib.ObjectPath, interfaces []string) {
+	if isStringInArray(bluezAdapterDBusInterface, interfaces) {
+		b.removeAdapter(dbus.ObjectPath(path))
 	}
-	if isStringInArray(dbusBluezIfsDevice, interfaces) {
-		b.removeDevice(path)
+	if isStringInArray(bluezDeviceDBusInterface, interfaces) {
+		b.removeDevice(dbus.ObjectPath(path))
 	}
 }

@@ -22,8 +22,10 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	sysdbus "dbus/org/freedesktop/dbus/system"
-	"pkg.deepin.io/lib/dbus"
 	"time"
+
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 var bluezDBusDaemon *sysdbus.DBusDaemon
@@ -35,7 +37,7 @@ func bluezDestroyDbusDaemon(d *sysdbus.DBusDaemon) {
 	sysdbus.DestroyDBusDaemon(d)
 }
 func bluezNewObjectManager() (objectManager *sysdbus.ObjectManager, err error) {
-	objectManager, err = sysdbus.NewObjectManager(dbusBluezDest, "/")
+	objectManager, err = sysdbus.NewObjectManager(bluezDBusServiceName, "/")
 	if err != nil {
 		logger.Error(err)
 	}
@@ -46,7 +48,7 @@ func bluezDestroyObjectManager(objectManager *sysdbus.ObjectManager) {
 }
 
 func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.Adapter1, err error) {
-	bluezAdapter, err = bluez.NewAdapter1(dbusBluezDest, apath)
+	bluezAdapter, err = bluez.NewAdapter1(bluezDBusServiceName, oldDBusLib.ObjectPath(apath))
 	if err != nil {
 		logger.Error(err)
 	}
@@ -57,7 +59,7 @@ func bluezDestroyAdapter(bluezAdapter *bluez.Adapter1) {
 }
 
 func bluezNewDevice(dpath dbus.ObjectPath) (bluezDevice *bluez.Device1, err error) {
-	bluezDevice, err = bluez.NewDevice1(dbusBluezDest, dpath)
+	bluezDevice, err = bluez.NewDevice1(bluezDBusServiceName, oldDBusLib.ObjectPath(dpath))
 	if err != nil {
 		logger.Error(err)
 	}
@@ -80,8 +82,8 @@ func bluezGetAdapters() (apathes []dbus.ObjectPath) {
 		return
 	}
 	for path, data := range objects {
-		if _, ok := data[dbusBluezIfsAdapter]; ok {
-			apathes = append(apathes, path)
+		if _, ok := data[bluezAdapterDBusInterface]; ok {
+			apathes = append(apathes, dbus.ObjectPath(path))
 		}
 	}
 	return
@@ -287,7 +289,7 @@ func bluezRemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
 	}
 	defer bluezDestroyAdapter(bluezAdapter)
 
-	err = bluezAdapter.RemoveDevice(dpath)
+	err = bluezAdapter.RemoveDevice(oldDBusLib.ObjectPath(dpath))
 	if err != nil {
 		logger.Error(err)
 	}
@@ -352,7 +354,7 @@ func bluezWatchRestart() {
 	bluezDBusDaemon, _ = bluezNewDBusDaemon()
 	logger.Info("bluezWatchRestart", bluezDBusDaemon)
 	bluezDBusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
-		if name == dbusBluezDest {
+		if name == bluezDBusServiceName {
 			// if a new dbus session was installed, the name and newOwner
 			// will be not empty, if a dbus session was uninstalled, the
 			// name and oldOwner will be not empty

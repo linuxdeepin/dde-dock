@@ -22,9 +22,12 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
 	"sync"
 	"time"
+
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const deviceRssiNotInRange = -1000 // -1000db means device not in range
@@ -65,10 +68,10 @@ type device struct {
 	confirmation chan bool
 }
 
-func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) {
+func newDevice(dpath dbus.ObjectPath, data map[string]oldDBusLib.Variant) (d *device) {
 	d = &device{Path: dpath}
 	d.bluezDevice, _ = bluezNewDevice(dpath)
-	d.AdapterPath = d.bluezDevice.Adapter.Get()
+	d.AdapterPath = dbus.ObjectPath(d.bluezDevice.Adapter.Get())
 	d.Name = d.bluezDevice.Name.Get()
 	d.Alias = d.bluezDevice.Alias.Get()
 	d.Address = d.bluezDevice.Address.Get()
@@ -97,18 +100,18 @@ func destroyDevice(d *device) {
 
 func (d *device) notifyDeviceAdded() {
 	logger.Debug("DeviceAdded", marshalJSON(d))
-	dbus.Emit(bluetooth, "DeviceAdded", marshalJSON(d))
-	bluetooth.setPropState()
+	bluetooth.service.Emit(bluetooth, "DeviceAdded", marshalJSON(d))
+	bluetooth.updateState()
 }
 func (d *device) notifyDeviceRemoved() {
 	logger.Debug("DeviceRemoved", marshalJSON(d))
-	dbus.Emit(bluetooth, "DeviceRemoved", marshalJSON(d))
-	bluetooth.setPropState()
+	bluetooth.service.Emit(bluetooth, "DeviceRemoved", marshalJSON(d))
+	bluetooth.updateState()
 }
 func (d *device) notifyDevicePropertiesChanged() {
 	logger.Debug("DevicePropertiesChanged", marshalJSON(d))
-	dbus.Emit(bluetooth, "DevicePropertiesChanged", marshalJSON(d))
-	bluetooth.setPropState()
+	bluetooth.service.Emit(bluetooth, "DevicePropertiesChanged", marshalJSON(d))
+	bluetooth.updateState()
 }
 
 func (d *device) connectProperties() {
@@ -202,7 +205,7 @@ func (d *device) fixRssi() {
 	}
 }
 
-func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
+func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]oldDBusLib.Variant) {
 	if b.isDeviceExists(dpath) {
 		logger.Error("repeat add device", dpath)
 		return
@@ -290,17 +293,17 @@ func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (*device, error) {
 }
 
 // GetDevices return all device objects that marshaled by json.
-func (b *Bluetooth) GetDevices(apath dbus.ObjectPath) (devicesJSON string, err error) {
+func (b *Bluetooth) GetDevices(apath dbus.ObjectPath) (devicesJSON string, err *dbus.Error) {
 	devices := b.devices[apath]
 	devicesJSON = marshalJSON(devices)
 	return
 }
 
-func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) *dbus.Error {
 	// mark device is connecting
 	d, err := b.getDevice(dpath)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 	d.connecting = true
 	d.notifyStateChanged()
@@ -347,34 +350,34 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 			d.notifyStateChanged()
 		}
 	}()
-	return
+	return nil
 }
 
-func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) *dbus.Error {
 	// mark disconnected in time
 	d, err := b.getDevice(dpath)
 	if err != nil {
-		return
+		return dbusutil.ToError(err)
 	}
 	d.connected = false
 	d.notifyStateChanged()
 	b.config.setDeviceConfigConnected(d.connectAddress(), false)
 	go bluezDisconnectDevice(dpath)
-	return
+	return nil
 }
 
-func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) *dbus.Error {
 	// TODO
 	go bluezRemoveDevice(apath, dpath)
-	return
+	return nil
 }
 
-func (b *Bluetooth) SetDeviceAlias(dpath dbus.ObjectPath, alias string) (err error) {
+func (b *Bluetooth) SetDeviceAlias(dpath dbus.ObjectPath, alias string) *dbus.Error {
 	go bluezSetDeviceAlias(dpath, alias)
-	return
+	return nil
 }
 
-func (b *Bluetooth) SetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
+func (b *Bluetooth) SetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) *dbus.Error {
 	go bluezSetDeviceTrusted(dpath, trusted)
-	return
+	return nil
 }

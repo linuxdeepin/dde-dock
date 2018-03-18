@@ -22,7 +22,9 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 type adapter struct {
@@ -57,19 +59,20 @@ func destroyAdapter(a *adapter) {
 
 func (a *adapter) notifyAdapterAdded() {
 	logger.Info("AdapterAdded", marshalJSON(a))
-	dbus.Emit(bluetooth, "AdapterAdded", marshalJSON(a))
-	bluetooth.setPropState()
+	bluetooth.service.Emit(bluetooth, "AdapterAdded", marshalJSON(a))
+	bluetooth.updateState()
 }
 func (a *adapter) notifyAdapterRemoved() {
 	logger.Info("AdapterRemoved", marshalJSON(a))
-	dbus.Emit(bluetooth, "AdapterRemoved", marshalJSON(a))
-	bluetooth.setPropState()
+	bluetooth.service.Emit(bluetooth, "AdapterRemoved", marshalJSON(a))
+	bluetooth.updateState()
 }
 func (a *adapter) notifyPropertiesChanged() {
 	logger.Debug("AdapterPropertiesChanged", marshalJSON(a))
-	dbus.Emit(bluetooth, "AdapterPropertiesChanged", marshalJSON(a))
-	bluetooth.setPropState()
+	bluetooth.service.Emit(bluetooth, "AdapterPropertiesChanged", marshalJSON(a))
+	bluetooth.updateState()
 }
+
 func (a *adapter) connectProperties() {
 	a.bluezAdapter.Name.ConnectChanged(func() {
 		a.Name = a.bluezAdapter.Name.Get()
@@ -163,7 +166,7 @@ func (b *Bluetooth) isAdapterExists(apath dbus.ObjectPath) bool {
 }
 
 // GetAdapters return all adapter objects that marshaled by json.
-func (b *Bluetooth) GetAdapters() (adaptersJSON string, err error) {
+func (b *Bluetooth) GetAdapters() (adaptersJSON string, err *dbus.Error) {
 	v := make([]*adapter, 0, len(b.adapters))
 	for _, a := range b.adapters {
 		v = append(v, a)
@@ -172,7 +175,7 @@ func (b *Bluetooth) GetAdapters() (adaptersJSON string, err error) {
 	return
 }
 
-func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err *dbus.Error) {
 	// if adapter is discovering now, just ignore
 	if bluezGetAdapterDiscovering(apath) {
 		return
@@ -182,9 +185,11 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err error) {
 	return
 }
 
-func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath, powered bool) (err error) {
+func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
+	powered bool) (busErr *dbus.Error) {
+
 	b.ClearUnpairedDevice()
-	err = bluezSetAdapterPowered(apath, powered)
+	err := bluezSetAdapterPowered(apath, powered)
 	if err == nil {
 		// save the powered state
 		b.config.setAdapterConfigPowered(bluezGetAdapterAddress(apath), powered)
@@ -192,21 +197,28 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath, powered bool) (err 
 			b.SetAdapterDiscovering(apath, true)
 		}
 	}
-	return
+	return dbusutil.ToError(err)
 }
-func (b *Bluetooth) SetAdapterAlias(apath dbus.ObjectPath, alias string) (err error) {
-	err = bluezSetAdapterAlias(apath, alias)
-	return
+
+func (b *Bluetooth) SetAdapterAlias(apath dbus.ObjectPath, alias string) *dbus.Error {
+	err := bluezSetAdapterAlias(apath, alias)
+	return dbusutil.ToError(err)
 }
-func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath, discoverable bool) (err error) {
-	err = bluezSetAdapterDiscoverable(apath, discoverable)
-	return
+
+func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath,
+	discoverable bool) *dbus.Error {
+	err := bluezSetAdapterDiscoverable(apath, discoverable)
+	return dbusutil.ToError(err)
 }
-func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath, discoverable bool) (err error) {
-	err = bluezSetAdapterDiscovering(apath, discoverable)
-	return
+
+func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
+	discoverable bool) *dbus.Error {
+	err := bluezSetAdapterDiscovering(apath, discoverable)
+	return dbusutil.ToError(err)
 }
-func (b *Bluetooth) SetAdapterDiscoverableTimeout(apath dbus.ObjectPath, discoverableTimeout uint32) (err error) {
-	err = bluezSetAdapterDiscoverableTimeout(apath, discoverableTimeout)
-	return
+
+func (b *Bluetooth) SetAdapterDiscoverableTimeout(apath dbus.ObjectPath,
+	discoverableTimeout uint32) *dbus.Error {
+	err := bluezSetAdapterDiscoverableTimeout(apath, discoverableTimeout)
+	return dbusutil.ToError(err)
 }

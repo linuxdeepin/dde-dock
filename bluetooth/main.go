@@ -20,18 +20,18 @@
 package bluetooth
 
 import (
-	. "pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
 type daemon struct {
-	*ModuleBase
+	*loader.ModuleBase
 }
 
 func newBluetoothDaemon(logger *log.Logger) *daemon {
 	var d = new(daemon)
-	d.ModuleBase = NewModuleBase("bluetooth", d, logger)
+	d.ModuleBase = loader.NewModuleBase("bluetooth", d, logger)
 	return d
 }
 
@@ -45,22 +45,33 @@ var _agent *agent
 func initBluetooth() error {
 	destroyBluetooth()
 
-	bluetooth = newBluetooth()
-	err := dbus.InstallOnSession(bluetooth)
+	service := loader.GetService()
+	bluetooth = newBluetooth(service)
+
+	err := service.Export(dbusPath, bluetooth)
 	if err != nil {
-		// don't panic or fatal here
-		logger.Error("register dbus interface failed: ", err)
+		logger.Warning("failed to export bluetooth:", err)
 		bluetooth = nil
 		return err
 	}
 
-	_agent = newAgent()
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
+	sysService, err := dbusutil.NewSystemService()
+	if err != nil {
+		return err
+	}
+
+	_agent = newAgent(sysService)
 	_agent.b = bluetooth
 	bluetooth.agent = _agent
-	err = dbus.InstallOnSystem(_agent)
+
+	err = sysService.Export(agentDBusPath, _agent)
 	if err != nil {
-		//don't panic or fatal here
-		logger.Error("register dbus interface failed: ", err)
+		logger.Warning("failed to export agent:", err)
 		return err
 	}
 
