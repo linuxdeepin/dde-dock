@@ -21,7 +21,6 @@ package miracast
 
 import (
 	"os"
-	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 
@@ -42,10 +41,10 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 			// default using 'USER' as link name
 			link.SetName(os.Getenv("USER"))
 			// TODO: wait WfdSubelements changed
-			dbus.Emit(m, "Event", EventLinkManaged, link.Path)
+			m.service.Emit(m, "Event", EventLinkManaged, link.Path)
 		} else {
 			link.core.WfdSubelements.Set("")
-			dbus.Emit(m, "Event", EventLinkUnmanaged, link.Path)
+			m.service.Emit(m, "Event", EventLinkUnmanaged, link.Path)
 			err := m.enableWirelessManaged(link.MacAddress, true)
 			if err != nil {
 				logger.Error("Enable nm device failed:", link.MacAddress, err)
@@ -77,12 +76,12 @@ func (m *Miracast) handleSinkConnected(sink *SinkInfo, x, y, w, h uint32) {
 		defer delete(m.connectingSinks, sink.Path)
 		if !sink.Connected {
 			logger.Debugf("Sink '%s' was disconnect", sink.Path)
-			dbus.Emit(m, "Event", EventSinkDisconnected, sink.Path)
+			m.service.Emit(m, "Event", EventSinkDisconnected, sink.Path)
 			return
 		}
 
 		hasConnected = true
-		dbus.Emit(m, "Event", EventSinkConnected, sink.Path)
+		m.service.Emit(m, "Event", EventSinkConnected, sink.Path)
 		m.doConnect(sink, x, y, w, h)
 	})
 
@@ -91,8 +90,8 @@ func (m *Miracast) handleSinkConnected(sink *SinkInfo, x, y, w, h uint32) {
 		if sink.core == nil || hasConnected {
 			return
 		}
-		m.Disconnect(sink.Path)
-		dbus.Emit(m, "Event", EventSinkConnectedFailed, sink.Path)
+		m.disconnect(sink.Path)
+		m.service.Emit(m, "Event", EventSinkConnectedFailed, sink.Path)
 	})
 }
 

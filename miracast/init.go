@@ -21,7 +21,6 @@ package miracast
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -45,15 +44,16 @@ func (*Daemon) GetDependencies() []string {
 
 var (
 	_m     *Miracast
-	logger = log.NewLogger(dbusDest)
+	logger = log.NewLogger(dbusServiceName)
 )
 
 func (d *Daemon) Start() error {
 	if _m != nil {
 		return nil
 	}
+	service := loader.GetService()
 
-	m, err := newMiracast()
+	m, err := newMiracast(service)
 	if err != nil {
 		logger.Error("Failed to new manager:", err)
 		return err
@@ -65,14 +65,22 @@ func (d *Daemon) Start() error {
 	}()
 	_m = m
 
-	err = dbus.InstallOnSession(m)
+	err = service.Export(dbusPath, m)
 	if err != nil {
-		logger.Error("Failed to install bus:", err)
+		logger.Error("Failed to export:", err)
 		_m.destroy()
 		_m = nil
 		return err
 	}
-	dbus.DealWithUnhandledMessage()
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		logger.Error("Failed to request name:", err)
+		_m.destroy()
+		service.StopExport(m)
+		_m = nil
+		return err
+	}
 
 	return nil
 }
@@ -82,7 +90,8 @@ func (*Daemon) Stop() error {
 		return nil
 	}
 	_m.destroy()
-	dbus.UnInstallObject(_m)
+	service := loader.GetService()
+	service.StopExport(_m)
 	_m = nil
 	return nil
 }

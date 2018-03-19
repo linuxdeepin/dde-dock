@@ -21,11 +21,13 @@ package miracast
 
 import (
 	"dbus/org/freedesktop/miracle/wifi"
-	"pkg.deepin.io/dde/daemon/iw"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/iw"
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 type LinkInfo struct {
@@ -43,7 +45,7 @@ type LinkInfo struct {
 type LinkInfos []*LinkInfo
 
 func newLinkInfo(dpath dbus.ObjectPath) (*LinkInfo, error) {
-	link, err := wifi.NewLink(wifiDest, dpath)
+	link, err := wifi.NewLink(wifiDBusServiceName, oldDBusLib.ObjectPath(dpath))
 	if err != nil {
 		return nil, err
 	}
@@ -156,5 +158,5 @@ func (links LinkInfos) Remove(dpath dbus.ObjectPath) (LinkInfos, bool) {
 }
 
 func isLinkObjectPath(dpath dbus.ObjectPath) bool {
-	return strings.Contains(string(dpath), linkPath)
+	return strings.Contains(string(dpath), linkDBusPath)
 }

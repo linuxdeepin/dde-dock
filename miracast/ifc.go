@@ -21,8 +21,10 @@ package miracast
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
 	"time"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
@@ -33,29 +35,34 @@ const (
 	EventSinkDisconnected
 )
 
-func (m *Miracast) ListLinks() LinkInfos {
+func (m *Miracast) ListLinks() (LinkInfos, *dbus.Error) {
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
-	return m.links
+	return m.links, nil
 }
 
-func (m *Miracast) ListSinks() SinkInfos {
+func (m *Miracast) ListSinks() (SinkInfos, *dbus.Error) {
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
-	return m.sinks
+	return m.sinks, nil
 }
 
-func (m *Miracast) Enable(dpath dbus.ObjectPath, enabled bool) error {
-	if !isLinkObjectPath(dpath) {
-		return fmt.Errorf("Invalid link dpath: %v", dpath)
+func (m *Miracast) Enable(linkPath dbus.ObjectPath, enabled bool) *dbus.Error {
+	err := m.enable(linkPath, enabled)
+	return dbusutil.ToError(err)
+}
+
+func (m *Miracast) enable(linkPath dbus.ObjectPath, enabled bool) error {
+	if !isLinkObjectPath(linkPath) {
+		return fmt.Errorf("Invalid link dpath: %v", linkPath)
 	}
 
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
-	link := m.links.Get(dpath)
+	link := m.links.Get(linkPath)
 	if link == nil {
-		logger.Warning("Not found the link:", dpath)
-		return fmt.Errorf("Not found the link: %v", dpath)
+		logger.Warning("Not found the link:", linkPath)
+		return fmt.Errorf("Not found the link: %v", linkPath)
 	}
 
 	if link.core.Managed.Get() == enabled {
@@ -63,16 +70,16 @@ func (m *Miracast) Enable(dpath dbus.ObjectPath, enabled bool) error {
 		return nil
 	}
 
-	if v, ok := m.managingLinks[dpath]; ok && v == enabled {
+	if v, ok := m.managingLinks[linkPath]; ok && v == enabled {
 		logger.Debug("Link's managed '%s' has been setting to ", enabled)
 		return nil
 	}
-	m.managingLinks[dpath] = enabled
+	m.managingLinks[linkPath] = enabled
 
 	if enabled {
 		err := m.enableWirelessManaged(link.MacAddress, false)
 		if err != nil {
-			delete(m.managingLinks, dpath)
+			delete(m.managingLinks, linkPath)
 			logger.Error("Failed to disable manage wireless device:", err)
 			return err
 		}
@@ -83,34 +90,44 @@ func (m *Miracast) Enable(dpath dbus.ObjectPath, enabled bool) error {
 	return link.EnableManaged(enabled)
 }
 
-func (m *Miracast) SetLinkName(dpath dbus.ObjectPath, name string) error {
-	if !isLinkObjectPath(dpath) {
-		return fmt.Errorf("Invalid link dpath: %v", dpath)
+func (m *Miracast) SetLinkName(linkPath dbus.ObjectPath, name string) *dbus.Error {
+	err := m.setLinkName(linkPath, name)
+	return dbusutil.ToError(err)
+}
+
+func (m *Miracast) setLinkName(linkPath dbus.ObjectPath, name string) error {
+	if !isLinkObjectPath(linkPath) {
+		return fmt.Errorf("Invalid link dpath: %v", linkPath)
 	}
 
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
-	link := m.links.Get(dpath)
+	link := m.links.Get(linkPath)
 	if link == nil {
-		logger.Warning("Not found the link:", dpath)
-		return fmt.Errorf("Not found the link: %v", dpath)
+		logger.Warning("Not found the link:", linkPath)
+		return fmt.Errorf("Not found the link: %v", linkPath)
 	}
 
 	link.SetName(name)
 	return nil
 }
 
-func (m *Miracast) Scanning(dpath dbus.ObjectPath, enabled bool) error {
-	if !isLinkObjectPath(dpath) {
-		return fmt.Errorf("Invalid link dpath: %v", dpath)
+func (m *Miracast) Scanning(linkPath dbus.ObjectPath, enabled bool) *dbus.Error {
+	err := m.scanning(linkPath, enabled)
+	return dbusutil.ToError(err)
+}
+
+func (m *Miracast) scanning(linkPath dbus.ObjectPath, enabled bool) error {
+	if !isLinkObjectPath(linkPath) {
+		return fmt.Errorf("Invalid link dpath: %v", linkPath)
 	}
 
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
-	link := m.links.Get(dpath)
+	link := m.links.Get(linkPath)
 	if link == nil {
-		logger.Warning("Not found the link:", dpath)
-		return fmt.Errorf("Not found the link: %v", dpath)
+		logger.Warning("Not found the link:", linkPath)
+		return fmt.Errorf("Not found the link: %v", linkPath)
 	}
 
 	link.EnableP2PScanning(enabled)
@@ -119,17 +136,22 @@ func (m *Miracast) Scanning(dpath dbus.ObjectPath, enabled bool) error {
 	return nil
 }
 
-func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint32) error {
-	if !isSinkObjectPath(dpath) {
-		return fmt.Errorf("Invalid sink dpath: %v", dpath)
+func (m *Miracast) Connect(sinkPath dbus.ObjectPath, x, y, w, h uint32) *dbus.Error {
+	err := m.connect(sinkPath, x, y, w, h)
+	return dbusutil.ToError(err)
+}
+
+func (m *Miracast) connect(sinkPath dbus.ObjectPath, x, y, w, h uint32) error {
+	if !isSinkObjectPath(sinkPath) {
+		return fmt.Errorf("Invalid sink dpath: %v", sinkPath)
 	}
 
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
-	sink := m.sinks.Get(dpath)
+	sink := m.sinks.Get(sinkPath)
 	if sink == nil {
-		logger.Warning("Not found the sink:", dpath)
-		return fmt.Errorf("Not found the sink: %v", dpath)
+		logger.Warning("Not found the sink:", sinkPath)
+		return fmt.Errorf("Not found the sink: %v", sinkPath)
 	}
 
 	if sink.peer.Connected.Get() {
@@ -138,16 +160,16 @@ func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint32) error {
 		return nil
 	}
 
-	if v, ok := m.connectingSinks[dpath]; ok && v {
-		logger.Debug("[ConnectSink] sink has connecting:", dpath)
+	if v, ok := m.connectingSinks[sinkPath]; ok && v {
+		logger.Debug("[ConnectSink] sink has connecting:", sinkPath)
 		return nil
 	}
-	m.connectingSinks[dpath] = true
+	m.connectingSinks[sinkPath] = true
 
 	m.handleSinkConnected(sink, x, y, w, h)
 	err := sink.peer.Connect("auto", "")
 	if err != nil {
-		delete(m.connectingSinks, dpath)
+		delete(m.connectingSinks, sinkPath)
 		logger.Error("Failed to connect sink:", err)
 		return err
 	}
@@ -155,9 +177,14 @@ func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint32) error {
 	return nil
 }
 
-func (m *Miracast) Disconnect(dpath dbus.ObjectPath) error {
-	if !isSinkObjectPath(dpath) {
-		return fmt.Errorf("Invalid sink dpath: %v", dpath)
+func (m *Miracast) Disconnect(sinkPath dbus.ObjectPath) *dbus.Error {
+	err := m.disconnect(sinkPath)
+	return dbusutil.ToError(err)
+}
+
+func (m *Miracast) disconnect(sinkPath dbus.ObjectPath) error {
+	if !isSinkObjectPath(sinkPath) {
+		return fmt.Errorf("Invalid sink dpath: %v", sinkPath)
 	}
-	return m.disconnectSink(dpath)
+	return m.disconnectSink(sinkPath)
 }

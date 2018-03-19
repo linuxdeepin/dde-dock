@@ -25,35 +25,38 @@ import (
 	"dbus/org/freedesktop/networkmanager"
 	"encoding/json"
 	"fmt"
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	"pkg.deepin.io/dde/daemon/iw"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
 	"time"
+
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/dde/daemon/iw"
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	dbusDest = "com.deepin.daemon.Miracast"
-	dbusPath = "/com/deepin/daemon/Miracast"
-	dbusIFC  = dbusDest
+	dbusServiceName = "com.deepin.daemon.Miracast"
+	dbusPath        = "/com/deepin/daemon/Miracast"
+	dbusInterface   = dbusServiceName
 )
 
 const (
-	wifiDest = "org.freedesktop.miracle.wifi"
-	wifiPath = "/org/freedesktop/miracle/wifi"
-	linkPath = "/org/freedesktop/miracle/wifi/link/"
-	linkIFC  = "org.freedesktop.miracle.wifi.Link"
-	peerPath = "/org/freedesktop/miracle/wifi/peer/"
-	peerIFC  = "org.freedesktop.miracle.wifi.Peer"
+	wifiDBusServiceName = "org.freedesktop.miracle.wifi"
+	wifiDBusPath        = "/org/freedesktop/miracle/wifi"
+	linkDBusPath        = "/org/freedesktop/miracle/wifi/link/"
+	linkDBusInterface   = "org.freedesktop.miracle.wifi.Link"
+	peerDBusPath        = "/org/freedesktop/miracle/wifi/peer/"
+	peerDBusInterface   = "org.freedesktop.miracle.wifi.Peer"
 
-	wfdDest  = "org.freedesktop.miracle.wfd"
-	wfdPath  = "/org/freedesktop/miracle/wfd"
-	sinkPath = "/org/freedesktop/miracle/wfd/sink/"
-	sinkIFC  = "org.freedesktop.miracle.wfd.Sink"
+	wfdDBusServiceName = "org.freedesktop.miracle.wfd"
+	wfdDBusPath        = "/org/freedesktop/miracle/wfd"
+	sinkDBusPath       = "/org/freedesktop/miracle/wfd/sink/"
+	sinkDBusInterface  = "org.freedesktop.miracle.wfd.Sink"
 
-	nmDest = "org.freedesktop.NetworkManager"
-	nmPath = "/org/freedesktop/NetworkManager"
+	nmDBusServiceName = "org.freedesktop.NetworkManager"
+	nmDBusPath        = "/org/freedesktop/NetworkManager"
 )
 
 const (
@@ -75,24 +78,42 @@ type Miracast struct {
 	managingLinks   map[dbus.ObjectPath]bool
 	connectingSinks map[dbus.ObjectPath]bool
 
-	Added   func(dbus.ObjectPath, string)
-	Removed func(dbus.ObjectPath, string)
-	Event   func(uint8, dbus.ObjectPath)
+	service *dbusutil.Service
+	signals *struct {
+		Added, Removed struct {
+			path       dbus.ObjectPath
+			detailJSON string
+		}
+		Event struct {
+			eventType uint8
+			path      dbus.ObjectPath
+		}
+	}
+
+	methods *struct {
+		ListLinks   func() `out:"links"`
+		ListSinks   func() `out:"sinks"`
+		Enable      func() `in:"link,enabled"`
+		SetLinkName func() `in:"link,name"`
+		Scanning    func() `in:"link,enabled"`
+		Connect     func() `in:"sink,x,y,w,h"`
+		Disconnect  func() `in:"sink"`
+	}
 }
 
-func newMiracast() (*Miracast, error) {
-	network, err := networkmanager.NewManager(nmDest, nmPath)
+func newMiracast(service *dbusutil.Service) (*Miracast, error) {
+	network, err := networkmanager.NewManager(nmDBusServiceName, nmDBusPath)
 	if err != nil {
 		return nil, err
 	}
 
-	wifiObj, err := wifi.NewObjectManager(wifiDest, wifiPath)
+	wifiObj, err := wifi.NewObjectManager(wifiDBusServiceName, wifiDBusPath)
 	if err != nil {
 		networkmanager.DestroyManager(network)
 		return nil, err
 	}
 
-	wfdObj, err := wfd.NewObjectManager(wfdDest, wfdPath)
+	wfdObj, err := wfd.NewObjectManager(wfdDBusServiceName, wfdDBusPath)
 	if err != nil {
 		networkmanager.DestroyManager(network)
 		wifi.DestroyObjectManager(wifiObj)
@@ -100,6 +121,7 @@ func newMiracast() (*Miracast, error) {
 	}
 
 	return &Miracast{
+		service:         service,
 		network:         network,
 		wifiObj:         wifiObj,
 		wfdObj:          wfdObj,
@@ -125,7 +147,7 @@ func (m *Miracast) init() {
 		logger.Error("Failed to get wifi objects:", err)
 	}
 	for dpath, _ := range objs {
-		_, err := m.addObject(dpath)
+		_, err := m.addObject(dbus.ObjectPath(dpath))
 		if err != nil {
 			logger.Warning("Failed to add path:", dpath, err)
 		}
@@ -135,7 +157,7 @@ func (m *Miracast) init() {
 		logger.Error("Failed to get wfd objects:", err)
 	}
 	for dpath, _ := range objs {
-		_, err := m.addObject(dpath)
+		_, err := m.addObject(dbus.ObjectPath(dpath))
 		if err != nil {
 			logger.Warning("Failed to add path:", dpath, err)
 		}
@@ -244,33 +266,33 @@ func (m *Miracast) removeObject(dpath dbus.ObjectPath) (bool, string) {
 }
 
 func (m *Miracast) handleEvent() {
-	m.wifiObj.ConnectInterfacesAdded(func(dpath dbus.ObjectPath, detail map[string]map[string]dbus.Variant) {
+	m.wifiObj.ConnectInterfacesAdded(func(dpath oldDBusLib.ObjectPath, detail map[string]map[string]oldDBusLib.Variant) {
 		logger.Debug("[WIFI Added]:", dpath)
-		v, err := m.addObject(dpath)
+		v, err := m.addObject(dbus.ObjectPath(dpath))
 		if err == nil {
-			dbus.Emit(m, "Added", dpath, toJSON(v))
+			m.service.Emit(m, "Added", dpath, toJSON(v))
 		}
 	})
 
-	m.wifiObj.ConnectInterfacesRemoved(func(dpath dbus.ObjectPath, details []string) {
+	m.wifiObj.ConnectInterfacesRemoved(func(dpath oldDBusLib.ObjectPath, details []string) {
 		logger.Debug("[WIFI Removed]:", dpath)
-		if ok, detail := m.removeObject(dpath); ok {
-			dbus.Emit(m, "Removed", dpath, detail)
+		if ok, detail := m.removeObject(dbus.ObjectPath(dpath)); ok {
+			m.service.Emit(m, "Removed", dpath, detail)
 		}
 	})
 
-	m.wfdObj.ConnectInterfacesAdded(func(dpath dbus.ObjectPath, detail map[string]map[string]dbus.Variant) {
+	m.wfdObj.ConnectInterfacesAdded(func(dpath oldDBusLib.ObjectPath, detail map[string]map[string]oldDBusLib.Variant) {
 		logger.Debug("[WFD Added]:", dpath)
-		v, err := m.addObject(dpath)
+		v, err := m.addObject(dbus.ObjectPath(dpath))
 		if err == nil {
-			dbus.Emit(m, "Added", dpath, toJSON(v))
+			m.service.Emit(m, "Added", dpath, toJSON(v))
 		}
 	})
 
-	m.wfdObj.ConnectInterfacesRemoved(func(dpath dbus.ObjectPath, details []string) {
+	m.wfdObj.ConnectInterfacesRemoved(func(dpath oldDBusLib.ObjectPath, details []string) {
 		logger.Debug("[WFD Added]:", dpath)
-		if ok, detail := m.removeObject(dpath); ok {
-			dbus.Emit(m, "Removed", dpath, detail)
+		if ok, detail := m.removeObject(dbus.ObjectPath(dpath)); ok {
+			m.service.Emit(m, "Removed", dpath, detail)
 		}
 	})
 
@@ -278,7 +300,7 @@ func (m *Miracast) handleEvent() {
 		logger.Warning("Network service no activation")
 		return
 	}
-	m.network.ConnectDeviceAdded(func(dpath dbus.ObjectPath) {
+	m.network.ConnectDeviceAdded(func(dpath oldDBusLib.ObjectPath) {
 		m.deviceLocker.Lock()
 		defer m.deviceLocker.Unlock()
 		logger.Debug("[Device Added]:", dpath)
@@ -289,7 +311,7 @@ func (m *Miracast) handleEvent() {
 		}
 		m.devices = devices.ListMiracastDevice()
 	})
-	m.network.ConnectDeviceRemoved(func(dpath dbus.ObjectPath) {
+	m.network.ConnectDeviceRemoved(func(dpath oldDBusLib.ObjectPath) {
 		m.deviceLocker.Lock()
 		defer m.deviceLocker.Unlock()
 		logger.Debug("[Device Removed]:", dpath)
@@ -313,7 +335,7 @@ func (m *Miracast) enableWirelessManaged(macAddress string, enabled bool) error 
 	}
 
 	for _, devPath := range devPaths {
-		wireless, err := networkmanager.NewDeviceWireless(nmDest, devPath)
+		wireless, err := networkmanager.NewDeviceWireless(nmDBusServiceName, devPath)
 		if err != nil {
 			logger.Warning("Failed to create device:", err)
 			continue
@@ -324,7 +346,7 @@ func (m *Miracast) enableWirelessManaged(macAddress string, enabled bool) error 
 		}
 
 		networkmanager.DestroyDeviceWireless(wireless)
-		dev, err := networkmanager.NewDevice(nmDest, devPath)
+		dev, err := networkmanager.NewDevice(nmDBusServiceName, devPath)
 		if err != nil {
 			return err
 		}
@@ -399,12 +421,8 @@ func (m *Miracast) ensureMiracleActive() {
 	}
 }
 
-func (*Miracast) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
+func (*Miracast) GetInterfaceName() string {
+	return dbusInterface
 }
 
 func toJSON(v interface{}) string {

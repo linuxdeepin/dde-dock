@@ -25,10 +25,12 @@ import (
 	"dbus/org/freedesktop/miracle/wifi"
 	"fmt"
 	"os"
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
+
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 type SinkInfo struct {
@@ -46,11 +48,11 @@ type SinkInfo struct {
 type SinkInfos []*SinkInfo
 
 func newSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
-	core, err := wfd.NewSink(wfdDest, dpath)
+	core, err := wfd.NewSink(wfdDBusServiceName, oldDBusLib.ObjectPath(dpath))
 	if err != nil {
 		return nil, err
 	}
-	peer, err := wifi.NewPeer(wifiDest, core.Peer.Get())
+	peer, err := wifi.NewPeer(wifiDBusServiceName, core.Peer.Get())
 	if err != nil {
 		wfd.DestroySink(core)
 		return nil, err
@@ -87,7 +89,7 @@ func (sink *SinkInfo) update() {
 	sink.P2PMac = sink.peer.P2PMac.Get()
 	sink.Interface = sink.peer.Interface.Get()
 	sink.Connected = sink.peer.Connected.Get()
-	sink.LinkPath = sink.peer.Link.Get()
+	sink.LinkPath = dbus.ObjectPath(sink.peer.Link.Get())
 }
 
 func (sink *SinkInfo) StartSession(x, y, w, h uint32) error {
@@ -113,7 +115,7 @@ func (sink *SinkInfo) Teardown() error {
 		return fmt.Errorf("No session found")
 	}
 
-	session, err := wfd.NewSession(wfdDest, p)
+	session, err := wfd.NewSession(wfdDBusServiceName, p)
 	if err != nil {
 		return err
 	}
@@ -149,7 +151,7 @@ func (sinks SinkInfos) Remove(dpath dbus.ObjectPath) (SinkInfos, bool) {
 }
 
 func isSinkObjectPath(dpath dbus.ObjectPath) bool {
-	return strings.Contains(string(dpath), sinkPath)
+	return strings.Contains(string(dpath), sinkDBusPath)
 }
 
 func getAudioSink() string {
@@ -174,5 +176,5 @@ func getAudioSink() string {
 }
 
 func isPeerObjectPath(dpath dbus.ObjectPath) bool {
-	return strings.Contains(string(dpath), peerPath)
+	return strings.Contains(string(dpath), peerDBusPath)
 }
