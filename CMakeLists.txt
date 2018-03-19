@@ -11,6 +11,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
+if (DEFINED DOCK_TRAY_USE_NATIVE_POPUP)
+    add_definitions(-DDOCK_TRAY_USE_NATIVE_POPUP)
+endif ()
+
 if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 
