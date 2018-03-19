@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Jozef Gaal <preklady@mayday.sk>, 2016
-# Marek Bujko <marek.bujko@gmail.com>, 2016-2017
+# Marek Bujko <marek.bujko@gmail.com>, 2016-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-03-07 13:42+0000\n"
+"Last-Translator: Marek Bujko <marek.bujko@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1784,7 +1784,7 @@ msgstr "GSM SIM modem vyžaduje PUK"
 
 #: ../../network/state_handler.go:82
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "Chyba SIM karty v GSM modeme"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
@@ -1796,7 +1796,7 @@ msgstr "Závislosť na pripojení zlyhala"
 
 #: ../../network/state_handler.go:85
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgstr "RFC 2684 Ethernet prepojenie chyba do ADSL"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
@@ -1937,7 +1937,7 @@ msgstr "Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôto
 
 #: ../../network/state_handler.go:297
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "Nepodarilo sa pripojiť %q, skontrolujte router alebo sieťový kábel."
 
 #: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"

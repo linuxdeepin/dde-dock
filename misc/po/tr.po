@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Adem Çalışkan <ademcal@yahoo.com>, 2017-2018
+# Emin Tufan <etcetin@gmail.com>, 2018
 # unc926 <win32-blackghost@hotmail.com>, 2017
 # Murat Servan Kahraman <muratservan@outlook.com>, 2016
 # Ömer GÖK <omergok@outlook.com>, 2016
@@ -13,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:59+0000\n"
+"PO-Revision-Date: 2018-03-14 05:55+0000\n"
 "Last-Translator: Adem Çalışkan <ademcal@yahoo.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -927,7 +928,7 @@ msgstr "Ağ Geçidi"
 #: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "NT Domain"
-msgstr "NT Etki alanı"
+msgstr "NT Alan adı"
 
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
@@ -1158,7 +1159,7 @@ msgstr "Uzak Sunucuları Rasgele Oluştur"
 
 #: ../../network/nm_setting_beans_gen.go:435
 msgid "Domain"
-msgstr "Etki alanı"
+msgstr "Alan adı"
 
 #: ../../network/nm_setting_beans_gen.go:436
 msgid "Vendor"
@@ -1940,7 +1941,7 @@ msgstr "%q bağlanılamadı, lütfen kablosuz yönlendiriciye daha yakın durunu
 
 #: ../../network/state_handler.go:297
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "%q bağlanamıyor, lütfen yönlendiricinizi veya ağ kablonuzu kontrol ediniz."
+msgstr "%q bağlanamıyor, lütfen yönlendiricinizi veya ağ kablonuzu denetleyiniz."
 
 #: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"

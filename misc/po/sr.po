@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-03-05 10:18+0000\n"
+"PO-Revision-Date: 2018-03-18 15:37+0000\n"
 "Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -1341,7 +1341,7 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:37
 #: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
-msgstr ""
+msgstr "Увек Питај"
 
 #: ../../network/nm_setting_vpn_l2tp.go:38
 #: ../../network/nm_setting_vpn_openvpn.go:35
@@ -1362,12 +1362,12 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:120
 #: ../../network/nm_setting_vpn_openvpn.go:286
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../../network/nm_setting_vpn_openvpn.go:121
 #: ../../network/nm_setting_vpn_openvpn.go:287
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:230
 msgid "DES-CBC"

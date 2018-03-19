@@ -3,55 +3,54 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Dedy Yugo Purwanto <dedy.yugo.purwanto@gmail.com>, 2017
-# Muhamad Mashudi Ardi Winata <muhamadmashudiardiwinata@gmail.com>, 2016
+# Craig Anderson <cranderson0110@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-03-08 04:29+0000\n"
-"Last-Translator: Vallery De Lexy <vallerydelexy@gmail.com>\n"
-"Language-Team: Indonesian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/id/)\n"
+"PO-Revision-Date: 2018-03-12 22:04+0000\n"
+"Last-Translator: Craig Anderson <cranderson0110@gmail.com>\n"
+"Language-Team: English (United Kingdom) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: id\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr "Masukkan sandi lewat tidak kurang dari 8 karakter"
+msgstr "The password must be at least 8 characters"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Sandi lewat harus mengandung huruf bahasa Inggris (case-sensitive), angka atau simbol-simbol spesial (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
-msgstr "Nama pengguna tidak boleh kosong."
+msgstr ""
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Nama pengguna harus mengandung a~z, 0~9, - or _."
+msgstr ""
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
-msgstr "Karakter awal harus huruf kecil."
+msgstr ""
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
-msgstr "Nama pengguna sudah ada"
+msgstr "That username already exists"
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
-msgstr "Nama pengguna telah digunakan oleh sistem."
+msgstr ""
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username's length exceeds the limit"
-msgstr "Panjangnya nama pengguna melebihi batas"
+msgstr ""
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
@@ -67,60 +66,60 @@ msgstr ""
 
 #: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "View by logging out after setting the display scaling"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr "Port Serial"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr "Dial-Up networking"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr "Perangkat Hands-Free"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr "Gerbang suara Hands-Free"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr "Gerbang suara Headset"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr "Push Objek"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr "Transfer berkas"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
-msgstr "Sinkronisasi"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr "Akses buku telepon"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr "Klien akses Buku Telepon"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr "Akses Pesan"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr "Notifikasi pesan"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
-msgstr "Tersambung"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
@@ -130,27 +129,27 @@ msgstr "Tersambung"
 #: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
 #: ../../network/utils_notify.go:202
 msgid "Disconnected"
-msgstr "Terputus"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:62
 msgid "Make sure %q is turned on and in range"
-msgstr "Pastikan %q dinyalakan dan berada dalam jangkauan"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
 msgid "Bluetooth connection failed"
-msgstr "Koneksi bluetooth gagal"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect %q, automatically ignored"
-msgstr "Gagal menyambung ke %q, otomatis diabaikan"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:104
 msgid "_Open"
-msgstr "_Buka"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:111
 msgid "_Close All"
-msgstr "_Tutup Semua"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
@@ -158,39 +157,39 @@ msgstr ""
 
 #: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
-msgstr "_Dock"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
-msgstr "_Undock"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
-msgstr "_Semua jendela"
+msgstr ""
 
 #: ../../housekeeping/init.go:88
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Ruang diska tidak mencukupi, mohon untuk membersihkan segera!"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Peluncur"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr "Terminal"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Rekaman Layar Deepin"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Kunci Layar"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Sembunyikan/Tampilkan dock"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
@@ -198,35 +197,35 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Terminal layar penuh"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Tangkapan Layar"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr "Tangkapan layar penuh"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr "Tangkapan layar jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Jeda tangkapan layar"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr "Manajer Berkas"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Matikan Touchpad"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr "Ganti efek jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
@@ -242,137 +241,137 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "Beralih layout"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "Beralih ke ruang kerja kiri"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr "Beralih ke ruang kerja kanan"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr "Beralih ke ruang kerja atas"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr "Beralih ke ruang kerja bawah"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
-msgstr "Beralih jendela serupa"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr "Beralih jendela serupa mundur"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
-msgstr "Beralih jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr "Beralih jendela mundur"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Tampilkan Desktop"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr "Maksimalkan jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr "Kembalikan jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr "Minimalkan jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
-msgstr "Tutup jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
-msgstr "Pindah jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr "Ubah ukuran jendela"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "Pindah ke ruang kerja kiri"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "Pindah ke ruang kerja kanan"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr "Pindah ke ruang kerja atas"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr "Pindah ke ruang kerja bawah"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr "Tampilkan jendela dari semua ruang kerja"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr "Tampilkan jendela dari ruang kerja sekarang"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Tampilkan ruang kerja"
+msgstr ""
 
 #: ../../langselector/handle_event.go:34
 msgid "Authentication is required to switch language"
-msgstr "Autentikasi dibutuhkan untuk mengalihkan bahasa"
+msgstr ""
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr "Bahasa sistem gagal diubah, silakan coba lain kali"
+msgstr ""
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
-msgstr "Bahasa sistem telah diubah, silakan masuk kembali setelah keluar"
+msgstr ""
 
 #: ../../langselector/locale_ifc.go:74
 msgid "System language is being changed, please wait..."
-msgstr "Sistem bahasa sedang diubah, silahkan tunggu..."
+msgstr ""
 
 #: ../../langselector/locale_ifc.go:80
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Sistem bahasa sedang diubah dengan instalasi paket kekurangan bahasa, silahkan tunggu..."
+msgstr "System language is being changed and missing language packages are being installed, please wait..."
 
 #: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
-msgstr "%q berhasil dihapus"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
-msgstr "Gagal untuk melepas %q"
+msgstr ""
 
 #: ../../mime/media.go:67 ../../mime/media.go:68
 msgid "Nothing"
-msgstr "Tidak ada apa-apa"
+msgstr ""
 
 #: ../../mime/media.go:76 ../../mime/media.go:77
 msgid "Open Folder"
-msgstr "Buka Folder"
+msgstr ""
 
 #: ../../mime/media.go:85 ../../mime/media.go:86
 msgid "Run Software"
-msgstr "Jalankan Perangkat lunak"
+msgstr ""
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
@@ -381,17 +380,17 @@ msgstr ""
 #: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
+msgstr ""
 
 #: ../../network/manager_active.go:319
 #: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
+msgstr ""
 
 #: ../../network/manager_active.go:321 ../../network/nm_setting_802_1x.go:146
 #: ../../network/nm_setting_wireless.go:210
 msgid "Automatic"
-msgstr "Otomatis"
+msgstr ""
 
 #: ../../network/manager_active.go:332 ../../network/manager_active.go:337
 #: ../../network/nm_setting_virtual_key.go:189
@@ -400,240 +399,240 @@ msgstr "Otomatis"
 #: ../../network/nm_setting_vpn_openvpn.go:250
 #: ../../network/nm_setting_vpn_vpnc.go:161
 msgid "None"
-msgstr "TIdak ada"
+msgstr "None"
 
 #: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit Key"
+msgstr ""
 
 #: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 Personal"
+msgstr ""
 
 #: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
-msgstr "TLS"
+msgstr ""
 
 #: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
-msgstr "MD5"
+msgstr ""
 
 #: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
-msgstr "LEAP"
+msgstr ""
 
 #: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
-msgstr "FAST"
+msgstr ""
 
 #: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr "Tunneled TLS"
+msgstr ""
 
 #: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
-msgstr "Protected EAP"
+msgstr ""
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
-msgstr "Koneksi Kabel"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:226
 msgid "Connection"
-msgstr "Koneksi"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:230
 msgid "Wireless Connection"
-msgstr "Koneksi Wireless"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:232
 msgid "Wireless Ad-Hoc"
-msgstr "Wireless Ad-Hoc"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Wireless Ap-Hotspot"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
-msgstr "Koneksi PPPoE"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
-msgstr "Koneksi Mobile"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:240
 msgid "Mobile GSM Connection"
-msgstr "Koneksi Mobile GSM"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:242
 msgid "Mobile CDMA Connection"
-msgstr "Koneksi Mobile CDMA"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:244
 msgid "VPN Connection"
-msgstr "Koneksi VPN"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:246
 msgid "VPN L2TP"
-msgstr "VPN L2TP"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:248
 msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:250
 msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:252
 msgid "VPN PPTP"
-msgstr "VPN PPTP"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr "VPN StrongSwan"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
-msgstr "VPN VPNC"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:34
 msgid "PAP"
-msgstr "PAP"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:35
 msgid "CHAP"
-msgstr "CHAP"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:36
 msgid "MSCHAP"
-msgstr "MSCHAP"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:37
 msgid "MSCHAPV2"
-msgstr "MSCHAPV2"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
-msgstr "GTC"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:39
 msgid "OTP"
-msgstr "OTP"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:139
 #: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_vpn_vpnc.go:150
 msgid "Disabled"
-msgstr "Nonaktifkan"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:140
 msgid "Anonymous"
-msgstr "Anonim"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:141
 msgid "Authenticated"
-msgstr "Terotentifikasi"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:142
 msgid "Both"
-msgstr "Keduanya"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:147
 msgid "Version 0"
-msgstr "Versi 0"
+msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:148
 msgid "Version 1"
-msgstr "Versi 1"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:37
 msgid "General"
-msgstr "Umum"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:39
 msgid "Name"
-msgstr "Nama"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:40
 msgid "Automatically connect"
-msgstr "Sambung Otomatis"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "For All Users"
-msgstr "Untuk Semua Pengguna"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:47
 msgid "Ethernet"
-msgstr "Ethernet"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr "Alamat MAC Perangkat"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr "Alamat MAC Tergandakan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr "Kustom MTU"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
 #: ../../network/nm_setting_beans_gen.go:359
 msgid "MTU"
-msgstr "MTU"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:58
 #: ../../network/nm_setting_beans_gen.go:80
 #: ../../network/nm_setting_beans_gen.go:94
 msgid "Mobile"
-msgstr "Mobile"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:60
 msgid "Country or region"
-msgstr "Negara atau wilayah"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:61
 msgid "Provider"
-msgstr "Provider"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:62
 msgid "Plan"
-msgstr "Rencana"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
-msgstr "Tipe Layanan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:65
 #: ../../network/nm_setting_beans_gen.go:82
 msgid "APN"
-msgstr "APN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:66
 #: ../../network/nm_setting_beans_gen.go:72
 #: ../../network/nm_setting_beans_gen.go:83
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Number"
-msgstr "Nomor"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:67
 #: ../../network/nm_setting_beans_gen.go:73
@@ -652,7 +651,7 @@ msgstr "Nomor"
 #: ../../network/nm_setting_beans_gen.go:405
 #: ../../network/nm_setting_beans_gen.go:420
 msgid "Username"
-msgstr "Nama pengguna"
+msgstr "Username"
 
 #: ../../network/nm_setting_beans_gen.go:68
 #: ../../network/nm_setting_beans_gen.go:74
@@ -672,45 +671,45 @@ msgstr "Nama pengguna"
 #: ../../network/nm_setting_beans_gen.go:408
 #: ../../network/nm_setting_vpn_openvpn.go:114
 msgid "Password"
-msgstr "Kata sandi"
+msgstr "Password"
 
 #: ../../network/nm_setting_beans_gen.go:69
 #: ../../network/nm_setting_beans_gen.go:86
 msgid "Network ID"
-msgstr "ID Jaringan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr "Hanya Jaringan Rumah"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
 msgid "PIN"
-msgstr "PIN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
 #: ../../network/nm_setting_beans_gen.go:260
 #: ../../network/nm_setting_beans_gen.go:384
 msgid "Security"
-msgstr "Keamanan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr "Keamanan Dibutuhkan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
-msgstr "Kunci"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
-msgstr "Autentikasi EAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:111
 msgid "Identity"
-msgstr "Identitas"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:112
 #: ../../network/nm_setting_beans_gen.go:115
@@ -727,17 +726,17 @@ msgstr "Identitas"
 #: ../../network/nm_setting_beans_gen.go:421
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Ask for Pwd"
-msgstr "Tanya Password"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Anonymous ID"
-msgstr "ID Anonim"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:199
 #: ../../network/nm_setting_beans_gen.go:304
 msgid "Private Pwd"
-msgstr "Privat Pwd"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:117
 #: ../../network/nm_setting_beans_gen.go:188
@@ -748,7 +747,7 @@ msgstr "Privat Pwd"
 #: ../../network/nm_setting_beans_gen.go:407
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
-msgstr "Kunci Privat"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:118
 #: ../../network/nm_setting_beans_gen.go:183
@@ -758,7 +757,7 @@ msgstr "Kunci Privat"
 #: ../../network/nm_setting_beans_gen.go:300
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "CA Cert"
-msgstr "CA Cert"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:187
@@ -768,125 +767,125 @@ msgstr "CA Cert"
 #: ../../network/nm_setting_beans_gen.go:301
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "User Cert"
-msgstr "Cert Pengguna"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:120
 msgid "Provisioning"
-msgstr "Provisioning"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:121
 msgid "PAC file"
-msgstr "Berkas PAC"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:122
 msgid "PEAP Version"
-msgstr "Versi PEAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:123
 msgid "Inner Auth"
-msgstr "Inner Auth"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:129
 msgid "Wi-Fi"
-msgstr "Wi-Fi"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:131
 msgid "SSID"
-msgstr "SSID"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:132
 msgid "Mode"
-msgstr "Mode"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:133
 msgid "Band"
-msgstr "Pita"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:134
 msgid "Channel"
-msgstr "Kanal"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:144
 msgid "PPPoE"
-msgstr "PPPoE"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:147
 msgid "Service"
-msgstr "Layanan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:154
 msgid "PPP"
-msgstr "PPP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:156
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
 msgid "Use MPPE"
-msgstr "Gunakan MPPE"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"
-msgstr "128-bit MPEE"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:261
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Stateful MPPE"
-msgstr "Stateful MPPE"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:386
 msgid "Refuse EAP Authentication"
-msgstr "Tolak Autentikasi EAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Refuse PAP Authentication"
-msgstr "Tolak Autentikasi PAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse CHAP Authentication"
-msgstr "Tolak Autentikasi CHAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse MSCHAP Authentication"
-msgstr "Tolak Autentikasi MSCHAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:266
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "Tolak Autentikasi MSCHAPv2"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:267
 #: ../../network/nm_setting_beans_gen.go:391
 msgid "No BSD Data Compression"
-msgstr "Tidak ada kompresi data BSD"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:165
 #: ../../network/nm_setting_beans_gen.go:268
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "No Deflate Data Compression"
-msgstr "Tidak ada penurunan data kompresi"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:269
 #: ../../network/nm_setting_beans_gen.go:393
 msgid "No TCP Header Compression"
-msgstr "Tidak ada kompresi TCP Header"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:272
 #: ../../network/nm_setting_beans_gen.go:394
 msgid "Send PPP Echo Packets"
-msgstr "Kirim Paket PPP Echo"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
@@ -896,11 +895,11 @@ msgstr "Kirim Paket PPP Echo"
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:417
 msgid "VPN"
-msgstr "VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:176
 msgid "Need VPN Plugin"
-msgstr "Memerlukan plugin VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:177
 #: ../../network/nm_setting_beans_gen.go:182
@@ -917,74 +916,74 @@ msgstr "Memerlukan plugin VPN"
 #: ../../network/nm_setting_beans_gen.go:454
 #: ../../network/nm_setting_beans_gen.go:468
 msgid "Gateway"
-msgstr "Gateway"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
 #: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "NT Domain"
-msgstr "Domain NT"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:282
 msgid "Proxy"
-msgstr "Proxy"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:283
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr "Mengizinkan Cisco Secure Desktop Trojan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:186
 #: ../../network/nm_setting_beans_gen.go:284
 msgid "CSD Script"
-msgstr "Skrip CSD"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:287
 msgid "Use FSID for Key Passphrase"
-msgstr "Gunakan FSID untuk Frasa Kunci"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
 #: ../../network/nm_setting_beans_gen.go:296
 #: ../../network/nm_setting_beans_gen.go:404
 msgid "Auth Type"
-msgstr "Tipe Auth"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:200
 #: ../../network/nm_setting_beans_gen.go:305
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
-msgstr "Kunci Statis"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:201
 #: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:329
 msgid "Customize Key Direction"
-msgstr "Menyesuaikan Arah Kunci"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:202
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:330
 msgid "Key Direction"
-msgstr "Key Pengarah"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:203
 #: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote IP"
-msgstr "IP Remote"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:204
 #: ../../network/nm_setting_beans_gen.go:309
 msgid "Local IP"
-msgstr "IP Lokal"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:409
 msgid "Request an Inner IP Address"
-msgstr "Meminta alamat IP dalam"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
@@ -994,228 +993,228 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Use IP Compression"
-msgstr "Gunakan kompresi IP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:422
 msgid "User Pwd"
-msgstr "Sandi Pengguna"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:224
 #: ../../network/nm_setting_beans_gen.go:249
 #: ../../network/nm_setting_beans_gen.go:423
 msgid "Group Name"
-msgstr "Nama Grup"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:226
 #: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Pwd"
-msgstr "Sandi Grup"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:426
 msgid "Use Hybrid Authentication"
-msgstr "Gunakan Autentikasi Ganda"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:427
 msgid "CA File"
-msgstr "Berkas CA"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:246
 msgid "VPN IPsec"
-msgstr "VPN IPsec"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:248
 msgid "Enable IPsec"
-msgstr "Nyalakan IPsec"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:250
 msgid "Group ID"
-msgstr "ID Grup"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr "Pra-Pembagian Kunci"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:257
 #: ../../network/nm_setting_beans_gen.go:381
 msgid "VPN PPP"
-msgstr "VPN PPP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:270
 msgid "No Protocol Field Compression"
-msgstr "Tidak ada kompresi Protokl Field"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:271
 msgid "No Address/Control Compression"
-msgstr "Tidak ada Kompresi Alamat/Kontrol"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:315
 msgid "VPN Security"
-msgstr "Keamanan VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "Cipher"
-msgstr "Chiper"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:318
 msgid "HMAC Auth"
-msgstr "HMAC Auth"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:324
 msgid "VPN TLS Authentication"
-msgstr "Autentikasi VPN TLS"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "Subject Match"
-msgstr "Subyek Cocok"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:327
 msgid "Remote Cert Type"
-msgstr "Tipe Remote Cert"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:328
 msgid "Key File"
-msgstr "Berkas Kunci"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:336
 msgid "VPN Proxies"
-msgstr "Proksi VPN"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Proxy Type"
-msgstr "Jenis Proksi"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Server IP"
-msgstr "IP Server"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "Port"
-msgstr "Port"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Retry Indefinitely When Failed"
-msgstr "Ulangi Indefinite Ketika Gagal"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:349
 #: ../../network/nm_setting_beans_gen.go:433
 msgid "VPN Advanced"
-msgstr "VPN Lanjutan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:351
 msgid "Customize Gateway Port"
-msgstr "Kustom Gateway Port"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:352
 msgid "Gateway Port"
-msgstr "Port Gateway"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Renegotiation Interval"
-msgstr "Kustom Renegosiasi Interval"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:354
 msgid "Renegotiation Interval"
-msgstr "Renegosiasi Interval"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:355
 msgid "Use LZO data compression"
-msgstr "Gunakan LZO kompresi data"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "Use TCP connection"
-msgstr "Gunakan Koneksi TCP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:357
 msgid "Use TAP device"
-msgstr "Gunakan Piranti TAP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:358
 msgid "Customize Tunnel MTU"
-msgstr "Kustom Tunnel MTU"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize UDP Fragment Size"
-msgstr "Kustom ukuran UDP Fragment"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:361
 msgid "UDP Fragment Size"
-msgstr "Ukuran UDP Fragment"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Restrict Tunnel TCP MSS"
-msgstr "Pembatasan Tunnel TCP MSS"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:363
 msgid "Randomize Remote Hosts"
-msgstr "Acak Host Remote"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:435
 msgid "Domain"
-msgstr "Domain"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:436
 msgid "Vendor"
-msgstr "Vendor"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:437
 msgid "Version"
-msgstr "Versi"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:438
 msgid "Encryption"
-msgstr "Enkripsi"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "NAT Traversal"
-msgstr "NAT Traversal"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:440
 msgid "IKE DH Group"
-msgstr "ID DH Group"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:441
 msgid "Forward Secrecy"
-msgstr "Teruskan Kerahasiaan"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "Local Port"
-msgstr "Port Lokal"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Disable Dead Peer Detection"
-msgstr "Nonaktifkan Deteksi Dead Peer "
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:449
 msgid "IPv4"
-msgstr "IPv4"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:451
 #: ../../network/nm_setting_beans_gen.go:465
 msgid "Method"
-msgstr "Metode"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:452
 #: ../../network/nm_setting_beans_gen.go:466
 msgid "IP Address"
-msgstr "Alamat IP"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:453
 msgid "Netmask"
-msgstr "Netmask"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:455
 #: ../../network/nm_setting_beans_gen.go:469
 msgid "Primary DNS"
-msgstr "DNS Primer"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:456
 #: ../../network/nm_setting_beans_gen.go:470
 msgid "Secondary DNS"
-msgstr "DNS Kedua"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
@@ -1224,16 +1223,16 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:463
 msgid "IPv6"
-msgstr "IPv6"
+msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:467
 msgid "Prefix"
-msgstr "Awalan"
+msgstr ""
 
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "Custom"
-msgstr "Kustom"
+msgstr ""
 
 #: ../../network/nm_setting_gsm.go:165
 #: ../../network/nm_setting_virtual_key.go:159
@@ -1243,105 +1242,105 @@ msgstr "Kustom"
 #: ../../network/nm_setting_wireless.go:36
 #: ../../network/nm_setting_wireless.go:85
 msgid "Default"
-msgstr "Baku"
+msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip6_config.go:38
 msgid "Auto"
-msgstr "Otomatis"
+msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip6_config.go:40
 msgid "Link-Local Only"
-msgstr "Hanya Link-Local"
+msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
 msgid "Manual"
-msgstr "Manual"
+msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:41
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_wireless_security.go:81
 msgid "Shared"
-msgstr "Bagikan"
+msgstr ""
 
 #: ../../network/nm_setting_ip6_config.go:37
 msgid "Ignore"
-msgstr "Abaikan"
+msgstr "Ignore"
 
 #: ../../network/nm_setting_ip6_config.go:39
 msgid "DHCP"
-msgstr "DHCP"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:164
 msgid "GSM (GPRS, UMTS)"
-msgstr "GSM (GPRS, UMTS)"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:165
 msgid "CDMA (1xRTT, EVDO)"
-msgstr "CDMA (1xRTT, EVDO)"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "L2TP"
-msgstr "L2TP"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:173
 msgid "PPTP"
-msgstr "PPTP"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:174
 msgid "OpenConnect"
-msgstr "OpenConnect"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:175
 msgid "OpenVPN"
-msgstr "OpenVPN"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "VPNC"
-msgstr "VPNC"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Enterprise"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:215
 msgid "All Available (default)"
-msgstr "Semua Tersedia (baku)"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:216
 msgid "128-bit (most secure)"
-msgstr "128-bit (lebih aman)"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:217
 msgid "40-bit (less secure)"
-msgstr "40-bit (kurang aman)"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:224
 msgid "Secure (default)"
-msgstr "Aman (baku)"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:225
 msgid "Weak"
-msgstr "Lemah"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_l2tp.go:36
 #: ../../network/nm_setting_vpn_openvpn.go:33
 #: ../../network/nm_setting_vpn_pptp.go:36
 #: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
-msgstr "Tersimpan"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:34
 #: ../../network/nm_setting_vpn_pptp.go:37
 #: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
-msgstr "Selalu Tanyakan"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_l2tp.go:38
 #: ../../network/nm_setting_vpn_openvpn.go:35
@@ -1349,243 +1348,243 @@ msgstr "Selalu Tanyakan"
 #: ../../network/nm_setting_vpn_pptp.go:38
 #: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
-msgstr "Tidak Diperlukan"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:113
 msgid "Certificates (TLS)"
-msgstr "Sertifikat (TLS)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:115
 msgid "Certificates with Password (TLS)"
-msgstr "Sertifikat dengan Kata sandi (TLS)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:120
 #: ../../network/nm_setting_vpn_openvpn.go:286
 msgid "0"
-msgstr "0"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:121
 #: ../../network/nm_setting_vpn_openvpn.go:287
 msgid "1"
-msgstr "1"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:230
 msgid "DES-CBC"
-msgstr "DES-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:231
 msgid "RC2-CBC"
-msgstr "RC2-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:232
 msgid "DES-EDE-CBC"
-msgstr "DES-EDE-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:233
 msgid "DES-EDE3-CBC"
-msgstr "DES-EDE3-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:234
 msgid "DESX-CBC"
-msgstr "DESX-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:235
 msgid "BF-CBC"
-msgstr "BF-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:236
 msgid "RC2-40-CBC"
-msgstr "RC2-40-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:237
 msgid "CAST5-CBC"
-msgstr "CAST5-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:238
 msgid "RC2-64-CBC"
-msgstr "RC2-64-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:239
 msgid "AES-128-CBC"
-msgstr "AES-128-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:240
 msgid "AES-192-CBC"
-msgstr "AES-192-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:241
 msgid "AES-256-CBC"
-msgstr "AES-256-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:242
 msgid "CAMELLIA-128-CBC"
-msgstr "CAMELLIA-128-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:243
 msgid "CAMELLIA-192-CBC"
-msgstr "CAMELLIA-192-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:244
 msgid "CAMELLIA-256-CBC"
-msgstr "CAMELLIA-256-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:245
 msgid "SEED-CBC"
-msgstr "SEED-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "RSA MD-4"
-msgstr "RSA MD-4"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "MD-5"
-msgstr "MD-5"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "SHA-1"
-msgstr "SHA-1"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "SHA-224"
-msgstr "SHA-224"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
 msgid "SHA-256"
-msgstr "SHA-256"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:256
 msgid "SHA-384"
-msgstr "SHA-384"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:257
 msgid "SHA-512"
-msgstr "SHA-512"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 msgid "RIPEMD-160"
-msgstr "RIPEMD-160"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:281
 msgid "Client"
-msgstr "Klient"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:282
 msgid "Server"
-msgstr "Peladen"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:332
 msgid "HTTP"
-msgstr "HTTP"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:333
 msgid "SOCKS"
-msgstr "SOCKS"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr "SSH Agent"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
-msgstr "Smartcard"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:81
 msgid "EAP"
-msgstr "EAP"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
-msgstr "Cisco (baku)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:143
 msgid "Netscreen"
-msgstr "Netscreen"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T Ketika Tersedia (baku)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "NAT-T Always"
-msgstr "Selalu NAT-T"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:149
 msgid "Cisco UDP"
-msgstr "Cisco UDP"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:162
 msgid "DH Group 1"
-msgstr "DH Group 1"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:155
 msgid "DH Group 2 (default)"
-msgstr "DH Group 2 (baku)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:156
 #: ../../network/nm_setting_vpn_vpnc.go:164
 msgid "DH Group 5"
-msgstr "DH Group 5"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:160
 msgid "Server (default)"
-msgstr "Peladen (baku)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:163
 msgid "DH Group 2"
-msgstr "DH Group 2"
+msgstr ""
 
 #: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
-msgstr "Infrastruktur"
+msgstr ""
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
-msgstr "Ad-Hoc"
+msgstr ""
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
-msgstr "AP-Hotspot"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
-msgstr "WEP"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:66
 msgid "Dynamic WEP"
-msgstr "Dynamic WEP"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:67
 msgid "Ad-Hoc WPA-PSK"
-msgstr "Ad-Hoc WPA-PSK"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:68
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infrastruktur"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:69
 msgid "WPA Enterprise"
-msgstr "WPA Enterprise"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:73
 msgid "WEP40"
-msgstr "WEP40"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:74
 msgid "WEP104"
-msgstr "WEP104"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:75
 msgid "TKIP"
-msgstr "TKIP"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:76
 msgid "CCMP"
-msgstr "CCMP"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:80
 msgid "Open"
-msgstr "Terbuka"
+msgstr ""
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed"
@@ -1597,11 +1596,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed"
-msgstr "Perangkat sekarang sudah diatur"
+msgstr ""
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed"
-msgstr "Perangkat tidak lagi diatur"
+msgstr ""
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration"
@@ -1614,11 +1613,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
-msgstr "Konfigurasi IP sudah tidak valid"
+msgstr ""
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided"
-msgstr "Sandi lewat dibutuhkan tapi tidak disediakan"
+msgstr ""
 
 #: ../../network/state_handler.go:42
 msgid ""
@@ -1672,7 +1671,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
-msgstr "Layanan AutoIP gagal dimulai"
+msgstr ""
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error"
@@ -1712,11 +1711,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr "Tidak ada jaringan dicari"
+msgstr ""
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"
-msgstr "Registrasi jaringan telah ditolak"
+msgstr ""
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out"
@@ -1728,7 +1727,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed"
-msgstr "PIN gagal diperiksa"
+msgstr ""
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
@@ -1736,7 +1735,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
-msgstr "Perangkat telah dihapus"
+msgstr ""
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep"
@@ -1764,7 +1763,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
-msgstr "Model tidak dapat ditemukan"
+msgstr ""
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
@@ -1792,7 +1791,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr "Dependensi koneksi gagal"
+msgstr ""
 
 #: ../../network/state_handler.go:85
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -1808,7 +1807,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
-msgstr "Koneksi sekunder dari koneksi inti gagal"
+msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed"
@@ -1824,11 +1823,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr "Model siap dan tersedia"
+msgstr ""
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
-msgstr "PIN SIM salah"
+msgstr ""
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing"
@@ -1836,7 +1835,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed"
-msgstr "Perangkat induk diubah"
+msgstr ""
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed"
@@ -1844,11 +1843,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged"
-msgstr "Kabel jaringan telah dicabut"
+msgstr ""
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Pastikan kartu SIM telah dimasukkan dengan jaringan sinyal mobil"
+msgstr ""
 
 #: ../../network/state_handler.go:103
 msgid ""
@@ -1861,7 +1860,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed"
-msgstr "Aktivasi koneksi VPN gagal"
+msgstr ""
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
@@ -1873,7 +1872,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
-msgstr "Layanan VPN dihentikan"
+msgstr ""
 
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid"
@@ -1889,7 +1888,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:114
 msgid "The VPN service failed to start"
-msgstr "Layanan VPN gagal dimulai"
+msgstr ""
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
@@ -1897,11 +1896,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed"
-msgstr "Autentikasi ke server VPN gagal"
+msgstr ""
 
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings"
-msgstr "Koneksi telah dihapus dari pengaturan"
+msgstr ""
 
 #: ../../network/state_handler.go:220
 msgid "Try enabling hotspot"
@@ -1945,55 +1944,55 @@ msgstr ""
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
-msgstr "Tidak diketahui"
+msgstr ""
 
 #: ../../network/utils_notify.go:80
 msgid "You are now offline."
-msgstr "Anda kini luring."
+msgstr ""
 
 #: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
-msgstr "Mode pesawat telah diaktifkan"
+msgstr ""
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr "Mode Akses Point tidak didukung perangkat ini."
+msgstr ""
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
 msgid "Network"
-msgstr "Jaringan"
+msgstr ""
 
 #: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Saklar perangkat keras Kartu WLAN mati, harap hidupkan."
+msgstr ""
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
-msgstr "Proksi sistem sukses ditata."
+msgstr ""
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
-msgstr "Proksi sistem telah dibatalkan."
+msgstr ""
 
 #: ../../session/power/manager_events.go:108
 #: ../../session/power/manager_events.go:130
 msgid "Battery Critical Low"
-msgstr "Baterai Kritis"
+msgstr ""
 
 #: ../../session/power/manager_events.go:108
 #: ../../session/power/manager_events.go:130
 msgid "Computer has been in suspend mode, please plug in"
-msgstr "Komputer dalam mode penangguhan, silakan sambungkan listrik"
+msgstr ""
 
 #: ../../session/power/manager_events.go:136
 msgid "Battery Low"
-msgstr "Baterai Lemah"
+msgstr ""
 
 #: ../../session/power/manager_events.go:136
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr "Komputer akan ditangguhkan, silakan sambungkan listrik sekarang"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:54
 msgid "Authentication is required to set the system time."

@@ -44,22 +44,22 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Şifre olmadan oturum açılması için kimlik doğrulama gereklidir</translation>
+			<translation>Parola olmadan oturum açılması için kimlik doğrulama gereklidir</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation>Şifresiz oturum aç etkin</translation>
+			<translation>Parolasız oturum aç etkin</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Şİfresiz oturum açmayı devre dışı bırakmak için kimlik doğrulama gereklidir</translation>
+			<translation>Parolasız oturum açmayı devre dışı bırakmak için kimlik doğrulama gereklidir</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation>Şifresiz oturum aç devre dışı</translation>
+			<translation>Parolasız oturum aç devre dışı</translation>
 		</message>
 	</context>
 </TS>

@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Jaime Muñoz Martín <jmmartin_5@outlook.com>, 2018
 # Davidmp <medipas@gmail.com>, 2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-03-12 22:26+0000\n"
+"Last-Translator: Jaime Muñoz Martín <jmmartin_5@outlook.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1936,7 +1937,7 @@ msgstr "No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de l'encam
 
 #: ../../network/state_handler.go:297
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "No es pot connectar a %q, comproveu el vostre encaminador o el cable de xarxa."
 
 #: ../../network/state_handler.go:300
 msgid "Connection failed, unable to connect %q, wrong password"

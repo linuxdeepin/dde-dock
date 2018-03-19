@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Jami K., 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-03-16 23:31+0000\n"
+"Last-Translator: Jami K.\n"
 "Language-Team: Finnish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,13 +20,13 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "Syötä salasana, jonka pituus on vähintään 8 merkkiä"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "Salasanan pitää sisältää kirjaimia (isot ja pienet kirjaimet), numeroita tai erikoismerkkejä (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -41,7 +42,7 @@ msgstr "Ensimmäisen merkin täytyy olla pienellä kirjoitettu."
 
 #: ../../accounts/checkers/username.go:65
 msgid "The username exists."
-msgstr "Käyttäjänimi on käytössä. "
+msgstr "Käyttäjänimi on olemassa."
 
 #: ../../accounts/checkers/username.go:67
 msgid "The username has been used by system."
@@ -53,19 +54,19 @@ msgstr "Käyttäjänimen pituus ylittää sallitun merkkimäärän"
 
 #: ../../appearance/scale.go:47
 msgid "Display scaling"
-msgstr ""
+msgstr "Näytön skaalaus"
 
 #: ../../appearance/scale.go:48
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Asetetaan näytön skaalausta"
 
 #: ../../appearance/scale.go:78
 msgid "Set successfully"
-msgstr ""
+msgstr "Asetettu onnistuneesti"
 
 #: ../../appearance/scale.go:79
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "Näe muutokset kirjautumalla ulos näytön skaalauksen asetuksen jälkeen"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -152,27 +153,27 @@ msgstr "_Sulje kaikki"
 
 #: ../../dock/app_entry_menu.go:120
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Pakota lopetus"
 
 #: ../../dock/app_entry_menu.go:127
 msgid "_Dock"
-msgstr "_Dock"
+msgstr "_Telakka"
 
 #: ../../dock/app_entry_menu.go:134
 msgid "_Undock"
-msgstr "Irroita"
+msgstr "_Irrota telakasta"
 
 #: ../../dock/app_entry_menu.go:141
 msgid "_All windows"
-msgstr ""
+msgstr "_Kaikki ikkunat"
 
 #: ../../housekeeping/init.go:88
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Riittämätön levytila, ole hyvä ja siivoa ajoissa!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Käynnistäjä"
+msgstr "Käynnistin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -180,23 +181,23 @@ msgstr "Pääte"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin näytön tallennin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Lukittu näyttö"
+msgstr "Lukitse näyttö"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Näytä/Piilota asema"
+msgstr "Näytä/Piilota telakka"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "Sammutus käyttöliittymä"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Terminal Quake Window"
+msgstr "Terminal Quake ikkuna"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -232,19 +233,19 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Deepin järjestelmänhallinta"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Deepin Värinvalitsija"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "Vaihda ulkoasu"
+msgstr "Vaihda asettelu"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "Siirry vasemmalla olevaan työtilaan"
+msgstr "Siirry vasempaan työtilaan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
@@ -272,7 +273,7 @@ msgstr "Vaihda ikkunoita"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr "Selaa ikkunoita toiseen suuntaan"
+msgstr "Vaihda ikkunoita päinvastoin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
@@ -304,19 +305,19 @@ msgstr "Säädä ikkunan koko"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "Siirrä vasempaan työtilaan"
+msgstr "Siirry vasempaan työtilaan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "Siirrä oikeaan työtilaan"
+msgstr "Siirry oikeaan työtilaan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr "Siirrä ylempään työtilaan"
+msgstr "Siirry ylempään työtilaan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr "Siirrä alempaan työtilaan"
+msgstr "Siirry alempaan työtilaan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
@@ -336,11 +337,11 @@ msgstr "Kielen vaihtaminen vaatii tunnistautumisen"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "Kielenvaihtaminen epäonnistui, ole hyvä ja yritä uudelleen"
 
 #: ../../langselector/handle_event.go:56
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "Järjestelmän kieli on vaihdettu, ole hyvä ja kirjaudu sisään uudelleen"
 
 #: ../../langselector/locale_ifc.go:74
 msgid "System language is being changed, please wait..."
@@ -354,7 +355,7 @@ msgstr "Järjestelmän kieltä vaihdetaan puuttuvien kielipakettien asennuksella
 
 #: ../../launcher/manager_uninstall.go:68
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q poistettu onnistuneesti"
 
 #: ../../launcher/manager_uninstall.go:70
 msgid "Failed to uninstall %q"
@@ -436,7 +437,7 @@ msgstr "NOPEA"
 #: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr "Tunneled TLS"
+msgstr "Tunneloitu TLS"
 
 #: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
@@ -501,7 +502,7 @@ msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
@@ -521,7 +522,7 @@ msgstr "MS-CHAP"
 
 #: ../../network/nm_setting_802_1x.go:37
 msgid "MSCHAPV2"
-msgstr "MSCHAPV2"
+msgstr "MS-CHAP-V2"
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
@@ -580,17 +581,17 @@ msgstr "Verkko"
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr "Laitteen MAC osoite"
+msgstr "Laitteen MAC-osoite"
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr "Kloonattu MAC osoite"
+msgstr "Kloonattu MAC-osoite"
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr "Muokkaa MTU"
+msgstr "Muokkaa MTU:ta"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
@@ -696,7 +697,7 @@ msgstr "Tietoturva"
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr "Security Required"
+msgstr "Turvallisuus vaadittu"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
@@ -982,17 +983,17 @@ msgstr "Local IP"
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:409
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "Pyydä sisempää IP-osoitetta"
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:410
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "Vaadi UDP-kapselointi"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Use IP Compression"
-msgstr ""
+msgstr "Käytä IP-kompressiota"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:422
@@ -1481,15 +1482,15 @@ msgstr "SUKAT"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr ""
+msgstr "SSH agentti"
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
-msgstr ""
+msgstr "Smartcard"
 
 #: ../../network/nm_setting_vpn_strongswan.go:81
 msgid "EAP"
-msgstr ""
+msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
@@ -1587,23 +1588,23 @@ msgstr "Avaa"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed"
-msgstr ""
+msgstr "Laitteen tila muuttunut"
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason"
-msgstr ""
+msgstr "Laitteen tila muuttunut, tuntematon syy"
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed"
-msgstr ""
+msgstr "Laite on nyt hallittu"
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Laitetta ei enää hallita"
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Laite ei ole ollut valmis kokoonpanoa varten"
 
 #: ../../network/state_handler.go:39
 msgid ""
@@ -2011,4 +2012,4 @@ msgstr ""
 
 #: ../../timedate/manager_ifc.go:106
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "Järjestelmän aikavyöhykkeen asettaminen vaatii tunnistautumisen."
