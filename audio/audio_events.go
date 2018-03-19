@@ -109,8 +109,8 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 			return
 		}
 		info, _ := a.cards.get(idx)
-		oldPorts := info.Ports
 		if info != nil {
+			oldPorts := info.Ports
 			info.update(card)
 			a.PropsMu.Lock()
 			a.setPropCards(a.cards.string())
@@ -121,7 +121,8 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 			}
 			old, port := hasPortChanged(oldPorts, info.Ports)
 			if port.Name == "" {
-				logger.Debugf("No available port found, old: %#v, new: %#v", oldPorts, info.Ports)
+				logger.Debugf("No available port found, old: %#v, new: %#v",
+					oldPorts, info.Ports)
 				return
 			}
 			a.handlePortChanged(info.Id, old, port)
