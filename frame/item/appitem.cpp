@@ -590,6 +590,10 @@ void AppItem::cancelAndHidePreview()
 
 void AppItem::playSwingEffect()
 {
+    // NOTE(sbw): return if animation view already playing
+    if (m_swingEffectView->isVisible())
+        return;
+
     stopSwingEffect();
     if (!m_itemAnimation.timeLine())
     {
