@@ -73,20 +73,17 @@ func getEnableFlag(flag *Flags) loader.EnableFlag {
 }
 
 type SessionDaemon struct {
-	flags           *Flags
-	log             *log.Logger
-	settings        *gio.Settings
-	enabledModules  loader.Modules
-	disabledModules map[string]loader.Module
+	flags                  *Flags
+	log                    *log.Logger
+	settings               *gio.Settings
+	defaultEnabledModules  []string
+	defaultDisabledModules []string
 
 	cpuLocker sync.Mutex
 	cpuWriter *os.File
 
 	methods *struct {
-		EnableModules  func() `in:"enablingModules"`
-		DisableModules func() `in:"disableModules "`
-		ListModule     func() `in:"name"`
-		CallTrace      func() `in:"times,seconds"`
+		CallTrace func() `in:"times,seconds"`
 	}
 }
 
@@ -96,11 +93,9 @@ func (*SessionDaemon) GetInterfaceName() string {
 
 func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) *SessionDaemon {
 	session := &SessionDaemon{
-		flags:           flags,
-		settings:        settings,
-		log:             logger,
-		enabledModules:  loader.Modules{},
-		disabledModules: map[string]loader.Module{},
+		flags:    flags,
+		settings: settings,
+		log:      logger,
 	}
 
 	session.initModules()
@@ -122,7 +117,7 @@ func (s *SessionDaemon) register(service *dbusutil.Service) error {
 }
 
 func (s *SessionDaemon) defaultAction() {
-	err := loader.EnableModules(s.getEnabledModules(), s.getDisabledModules(), getEnableFlag(s.flags))
+	err := loader.EnableModules(s.defaultEnabledModules, s.defaultDisabledModules, getEnableFlag(s.flags))
 	if err != nil {
 		fmt.Println(err)
 		// TODO: define exit code.
@@ -136,52 +131,57 @@ func (s *SessionDaemon) execDefaultAction() {
 
 func (s *SessionDaemon) initModules() {
 	allModules := loader.List()
-	for _, module := range allModules {
-		name := module.Name()
-		if s.settings.GetBoolean(name) {
-			s.enabledModules = append(s.enabledModules, module)
+	moduleNames := []string{
+		"network",
+		"audio",
+		"screensaver",
+		"sessionwatcher",
+		"power", // need screensaver and sessionwatcher
+		"service-trigger",
+		"clipboard",
+		"keybinding",
+		"appearance",
+		"inputdevices",
+		"gesture",
+		"housekeeping",
+		"timedate",
+		"bluetooth",
+		"screenedge",
+		"fprintd",
+		"mime",
+		"miracast", // need network
+		"systeminfo",
+		"calltrace",
+		"debug",
+	}
+	if len(moduleNames) != len(allModules) {
+		panic("failed to assert len(moduleNames) == len(allModules)")
+	}
+
+	for _, moduleName := range moduleNames {
+		mod := loader.GetModule(moduleName)
+		if mod == nil {
+			panic(fmt.Errorf("not found module %q", moduleName))
+		}
+
+		if s.settings.GetBoolean(moduleName) {
+			// enabled
+			s.defaultEnabledModules = append(s.defaultEnabledModules, moduleName)
 		} else {
-			s.disabledModules[name] = module
+			// disabled
+			s.defaultDisabledModules = append(s.defaultDisabledModules, moduleName)
 		}
 	}
 }
 
-func keys(m map[string]loader.Module) []string {
-	keys := []string{}
-	for key, _ := range m {
-		keys = append(keys, key)
-	}
-	return keys
-}
-
-func (s *SessionDaemon) getDisabledModules() []string {
-	return keys(s.disabledModules)
-}
-
-func (s *SessionDaemon) getEnabledModules() []string {
-	return s.enabledModules.List()
-}
-
 func (s *SessionDaemon) enableModules(enablingModules []string) error {
-	disabledModules := s.getDisabledModules()
-	disabledModules = filterList(disabledModules, enablingModules)
+	disabledModules := filterList(s.defaultDisabledModules, enablingModules)
 	return loader.EnableModules(enablingModules, disabledModules, getEnableFlag(s.flags))
 }
 
-func (s *SessionDaemon) EnableModules(enablingModules []string) *dbus.Error {
-	err := s.enableModules(enablingModules)
-	return dbusutil.ToError(err)
-}
-
 func (s *SessionDaemon) disableModules(disableModules []string) error {
-	enablingModules := s.getEnabledModules()
-	enablingModules = filterList(enablingModules, disableModules)
+	enablingModules := filterList(s.defaultEnabledModules, disableModules)
 	return loader.EnableModules(enablingModules, disableModules, getEnableFlag(s.flags))
-}
-
-func (s *SessionDaemon) DisableModules(disableModules []string) *dbus.Error {
-	err := s.disableModules(disableModules)
-	return dbusutil.ToError(err)
 }
 
 func (s *SessionDaemon) listModule(name string) error {
@@ -202,11 +202,6 @@ func (s *SessionDaemon) listModule(name string) error {
 	}
 
 	return nil
-}
-
-func (s *SessionDaemon) ListModule(name string) *dbus.Error {
-	err := s.listModule(name)
-	return dbusutil.ToError(err)
 }
 
 func (s *SessionDaemon) CallTrace(times, seconds uint32) *dbus.Error {
