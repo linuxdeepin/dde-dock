@@ -26,7 +26,7 @@ import (
 	C "gopkg.in/check.v1"
 	"os"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	. "pkg.deepin.io/lib/gettext"
 	"time"

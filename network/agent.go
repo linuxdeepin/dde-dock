@@ -27,7 +27,8 @@ import (
 	"time"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )
 
@@ -40,6 +41,7 @@ type mapKey struct {
 	settingName string
 }
 type agent struct {
+	service          *dbusutil.Service // is system service
 	pendingKeys      map[mapKey]chan interface{}
 	savedKeys        map[mapKey]map[string]map[string]dbus.Variant // TODO: remove
 	vpnProcesses     map[dbus.ObjectPath]*os.Process
@@ -47,6 +49,13 @@ type agent struct {
 
 	secretReceivers *secretProxyType
 	receiversLocker sync.Mutex
+
+	methods *struct {
+		GetSecrets       func() `in:"connection,connectionPath,settingName,hints,flags" out:"secrets"`
+		CancelGetSecrets func() `in:"connectionPath,settingName"`
+		SaveSecrets      func() `in:"connection,connectionPath"`
+		DeleteSecrets    func() `in:"connection,connectionPath"`
+	}
 }
 
 // secretsInfo provide more detailed information for front-end to
@@ -76,14 +85,17 @@ type secretsInfo struct {
 	Receiver uint32
 }
 
-func newAgent() (a *agent) {
+func newAgent(service *dbusutil.Service) (a *agent) {
 	a = &agent{}
 	a.pendingKeys = make(map[mapKey]chan interface{})
 	a.vpnProcesses = make(map[dbus.ObjectPath]*os.Process)
 	a.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
 	a.secretReceivers = new(secretProxyType)
+	a.service = service
 
-	err := dbus.InstallOnSystem(a)
+	err := a.service.Export("/org/freedesktop/NetworkManager/SecretAgent",
+		a)
+
 	if err != nil {
 		logger.Error("install network agent failed:", err)
 		return
@@ -99,15 +111,11 @@ func destroyAgent(a *agent) {
 		delete(a.pendingKeys, key)
 	}
 	nmAgentUnregister()
-	dbus.UnInstallObject(a)
+	a.service.StopExport(a)
 }
 
-func (a *agent) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       ".",
-		ObjectPath: "/org/freedesktop/NetworkManager/SecretAgent",
-		Interface:  "org.freedesktop.NetworkManager.SecretAgent",
-	}
+func (*agent) GetInterfaceName() string {
+	return "org.freedesktop.NetworkManager.SecretAgent"
 }
 
 // TODO: refactor code
@@ -228,7 +236,7 @@ func fillKeyringSecret(secretsData map[string]map[string]dbus.Variant, settingNa
 	}
 }
 
-func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (secretsData map[string]map[string]dbus.Variant) {
+func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (secretsData map[string]map[string]dbus.Variant, busErr *dbus.Error) {
 	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 
 	var ask = false
@@ -262,7 +270,7 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 	keyId := mapKey{connPath: connectionPath, settingName: settingName}
 	if _, ok := a.pendingKeys[keyId]; ok {
 		logger.Info("GetSecrets repeatly, cancel last one", keyId)
-		a.CancelGetSecrets(connectionPath, settingName, false)
+		a.cancelGetSecrets(connectionPath, settingName, false)
 	}
 	select {
 	case value, ok := <-a.createPendingKey(connectionData, keyId, hints, flags):
@@ -273,10 +281,11 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 			logger.Info("failed to get secretes", keyId)
 		}
 		if !isVpnConnection(connectionData) {
-			dbus.Emit(manager, "NeedSecretsFinished", string(connectionPath), settingName)
+			manager.service.Emit(manager, "NeedSecretsFinished",
+				string(connectionPath), settingName)
 		}
 	case <-time.After(agentTimeout * time.Second):
-		a.CancelGetSecrets(connectionPath, settingName, true)
+		a.cancelGetSecrets(connectionPath, settingName, true)
 		logger.Info("get secrets timeout", keyId)
 	}
 	return
@@ -376,7 +385,7 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 				// operation, the vpn auth dialog should be killed by
 				// cancelVpnAuthDialog() which is triggered for user
 				// disconnected the vpn connection
-				a.CancelGetSecrets(keyId.connPath, keyId.settingName, false)
+				a.cancelGetSecrets(keyId.connPath, keyId.settingName, false)
 			}
 		}()
 	} else {
@@ -394,7 +403,7 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 		a.receiversLocker.Unlock()
 		secretsInfoJSON, _ := marshalJSON(secretsInfo)
 		notify(notifyIconWirelessDisconnected, "", fmt.Sprintf(Tr("Password required to connect %q"), connectionId))
-		dbus.Emit(manager, "NeedSecrets", secretsInfoJSON)
+		manager.service.Emit(manager, "NeedSecrets", secretsInfoJSON)
 	}
 	return a.pendingKeys[keyId]
 }
@@ -459,12 +468,19 @@ func (a *agent) cancelVpnAuthDialog(connPath dbus.ObjectPath) {
 	delete(a.vpnProcesses, connPath)
 }
 
-func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string, notifyFinished bool) {
+func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string) *dbus.Error {
 	logger.Info("CancelGetSecrets:", connectionPath, settingName)
+	a.cancelGetSecrets(connectionPath, settingName, true)
+	return nil
+}
+
+func (a *agent) cancelGetSecrets(connectionPath dbus.ObjectPath, settingName string, notifyFinished bool) {
+	logger.Debug("cancelGetSecrets", connectionPath, settingName, notifyFinished)
 	keyId := mapKey{connPath: connectionPath, settingName: settingName}
 
 	if notifyFinished {
-		dbus.Emit(manager, "NeedSecretsFinished", string(connectionPath), settingName)
+		manager.service.Emit(manager, "NeedSecretsFinished",
+			string(connectionPath), settingName)
 	}
 
 	if pendingChan, ok := a.pendingKeys[keyId]; ok {
@@ -475,17 +491,19 @@ func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName str
 	}
 }
 
-func (a *agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+func (a *agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) *dbus.Error {
 	logger.Info("SaveSecretes:", connectionPath)
+	return nil
 }
 
-func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) *dbus.Error {
 	// TODO delete secrets from keyring
 	logger.Info("DeleteSecrets:", connectionPath)
 	if _, ok := connection["802-11-wireless-security"]; ok {
 		keyId := mapKey{connPath: connectionPath, settingName: "802-11-wireless-security"}
 		delete(a.savedKeys, keyId)
 	}
+	return nil
 }
 
 func (a *agent) feedSecret(path dbus.ObjectPath, settingName string, keyValue interface{}, autoConnect bool) {
@@ -508,20 +526,30 @@ func (a *agent) feedSecret(path dbus.ObjectPath, settingName string, keyValue in
 	nmUpdateConnectionData(path, data)
 }
 
-func (m *Manager) FeedSecret(path string, settingName, keyValue string, autoConnect bool) {
+func (m *Manager) FeedSecret(path string, settingName, keyValue string, autoConnect bool) *dbus.Error {
 	logger.Info("FeedSecret:", path, settingName, "xxxx")
 	m.agent.feedSecret(dbus.ObjectPath(path), settingName, keyValue, autoConnect)
+	return nil
 }
-func (m *Manager) CancelSecret(path string, settingName string) {
+
+func (m *Manager) CancelSecret(path string, settingName string) *dbus.Error {
 	logger.Info("CancelSecret:", path, settingName)
-	m.agent.CancelGetSecrets(dbus.ObjectPath(path), settingName, true)
+	m.agent.cancelGetSecrets(dbus.ObjectPath(path), settingName, true)
+	return nil
 }
-func (m *Manager) RegisterSecretReceiver(dmsg dbus.DMessage) {
+
+func (m *Manager) RegisterSecretReceiver(sender dbus.Sender) *dbus.Error {
 	if m.agent == nil {
 		logger.Info("Agent object no created")
-		return
+		return nil
 	}
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
 	m.agent.receiversLocker.Lock()
-	m.agent.secretReceivers.Add(dmsg.GetSenderPID())
+	m.agent.secretReceivers.Add(pid)
 	m.agent.receiversLocker.Unlock()
+	return nil
 }

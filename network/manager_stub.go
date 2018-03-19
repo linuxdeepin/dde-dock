@@ -21,58 +21,33 @@ package network
 
 import (
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Errorf("%v", err)
-		}
-	}()
-	logger.Debug("OnPropertiesChanged: " + name)
-	var oldBool bool
-	switch oldv.(type) {
-	case bool:
-		oldBool, _ = oldv.(bool)
+func (m *Manager) networkingEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
+	enabled, ok := write.Value.(bool)
+	if !ok {
+		logger.Warning("type of value is not bool")
+		return nil
 	}
+	m.switchHandler.setNetworkingEnabled(enabled)
+	return nil
+}
 
-	// NetworkingEnabled, WirelessEnabled and WwanEnabled were managed
-	// by NetworkManager, so restore to their old value here and get
-	// the right value from NetworkManager.
-	switch name {
-	case "NetworkingEnabled":
-		if oldBool != m.NetworkingEnabled {
-			newValue := m.NetworkingEnabled
-			m.NetworkingEnabled = oldBool
-			m.switchHandler.setNetworkingEnabled(newValue)
-		}
-	case "WirelessEnabled":
-		if oldBool != m.wirelessEnabled {
-			newValue := m.wirelessEnabled
-			m.wirelessEnabled = oldBool
-			m.switchHandler.setWirelessEnabled(newValue)
-		}
-	case "WwanEnabled":
-		if oldBool != m.wwanEnabled {
-			newValue := m.wwanEnabled
-			m.wwanEnabled = oldBool
-			m.switchHandler.setWwanEnabled(newValue)
-		}
-	case "WiredEnabled":
-		if oldBool != m.wiredEnabled {
-			m.switchHandler.setWiredEnabled(m.wiredEnabled)
-		}
-	case "VpnEnabled":
-		if oldBool != m.VpnEnabled {
-			m.switchHandler.setVpnEnabled(m.VpnEnabled)
-		}
+func (m *Manager) vpnEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
+	enabled, ok := write.Value.(bool)
+	if !ok {
+		logger.Warning("type of value is not bool")
+		return nil
 	}
+	m.switchHandler.setVpnEnabled(enabled)
+	return nil
 }
 
 func (m *Manager) setPropNetworkingEnabled(value bool) {
 	m.NetworkingEnabled = value
-	dbus.NotifyChange(m, "NetworkingEnabled")
+	m.service.EmitPropertyChanged(m, "NetworkingEnabled", value)
 }
 func (m *Manager) setPropWirelessEnabled(value bool) {
 	m.wirelessEnabled = value
@@ -83,22 +58,23 @@ func (m *Manager) setPropWwanEnabled(value bool) {
 func (m *Manager) setPropWiredEnabled(value bool) {
 	m.wiredEnabled = value
 }
+
 func (m *Manager) setPropVpnEnabled(value bool) {
 	m.VpnEnabled = value
-	dbus.NotifyChange(m, "VpnEnabled")
+	m.service.EmitPropertyChanged(m, "VpnEnabled", value)
 }
 
-func (m *Manager) setPropActiveConnections() {
+func (m *Manager) updatePropActiveConnections() {
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
-	dbus.NotifyChange(m, "ActiveConnections")
+	m.service.EmitPropertyChanged(m, "ActiveConnections", m.ActiveConnections)
 }
 
-func (m *Manager) setPropState() {
+func (m *Manager) updatePropState() {
 	m.State = nmGetManagerState()
-	dbus.NotifyChange(m, "State")
+	m.service.EmitPropertyChanged(m, "State", m.State)
 }
 
-func (m *Manager) setPropDevices() {
+func (m *Manager) updatePropDevices() {
 	filteredDevices := make(map[string][]*device)
 	for key, devices := range m.devices {
 		filteredDevices[key] = make([]*device, 0)
@@ -112,10 +88,10 @@ func (m *Manager) setPropDevices() {
 		}
 	}
 	m.Devices, _ = marshalJSON(filteredDevices)
-	dbus.NotifyChange(m, "Devices")
+	m.service.EmitPropertyChanged(m, "Devices", m.Devices)
 }
 
-func (m *Manager) setPropConnections() {
+func (m *Manager) updatePropConnections() {
 	m.Connections, _ = marshalJSON(m.connections)
-	dbus.NotifyChange(m, "Connections")
+	m.service.EmitPropertyChanged(m, "Connections", m.Connections)
 }

@@ -20,35 +20,42 @@
 package network
 
 import (
-	"pkg.deepin.io/lib/dbus"
 	"sync"
 	"time"
 
+	"pkg.deepin.io/lib/dbus1"
+
 	"pkg.deepin.io/dde/daemon/network/proxychains"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
-	dbusNetworkDest = "com.deepin.daemon.Network"
-	dbusNetworkPath = "/com/deepin/daemon/Network"
-	dbusNetworkIfs  = "com.deepin.daemon.Network"
+	dbusServiceName = "com.deepin.daemon.Network"
+	dbusPath        = "/com/deepin/daemon/Network"
+	dbusInterface   = "com.deepin.daemon.Network"
 )
 
 type connectionData map[string]map[string]dbus.Variant
 
+//go:generate dbusutil-gen -type Manager manager.go
+
 // Manager is the main DBus object for network module.
 type Manager struct {
-	config *config
+	sysSigLoop *dbusutil.SignalLoop
+	service    *dbusutil.Service
+	config     *config
 
+	PropsMu sync.RWMutex
 	// update by manager.go
 	State uint32 // global networking state
 
-	NetworkingEnabled bool `access:"readwrite"` // airplane mode for NetworkManager
-	VpnEnabled        bool `access:"readwrite"`
+	NetworkingEnabled bool `prop:"access:rw"` // airplane mode for NetworkManager
+	VpnEnabled        bool `prop:"access:rw"`
 
 	// hidden properties
-	wirelessEnabled bool `access:"readwrite"`
-	wwanEnabled     bool `access:"readwrite"`
-	wiredEnabled    bool `access:"readwrite"`
+	wirelessEnabled bool
+	wwanEnabled     bool
+	wiredEnabled    bool
 
 	// update by manager_devices.go
 	devicesLock sync.Mutex
@@ -71,31 +78,67 @@ type Manager struct {
 	activeConnections     map[dbus.ObjectPath]*activeConnection
 	ActiveConnections     string // array of connections that activated and marshaled by json
 
-	// signals
-
-	// NeedSecrets send signal to front-end to pop-up password input
-	// dialog to fill the secrets.
-	NeedSecrets                  func(secretsInfoJSON string)
-	NeedSecretsFinished          func(connPath, settingName string)
-	AccessPointAdded             func(devPath, apJSON string)
-	AccessPointRemoved           func(devPath, apJSON string)
-	AccessPointPropertiesChanged func(devPath, apJSON string)
-	DeviceEnabled                func(devPath string, enabled bool)
-
 	agent         *agent
 	stateHandler  *stateHandler
 	dbusWatcher   *dbusWatcher
 	switchHandler *switchHandler
 
 	proxyChainsManager *proxychains.Manager
+
+	signals *struct {
+		// NeedSecrets send signal to front-end to pop-up password input
+		// dialog to fill the secrets.
+		NeedSecrets struct {
+			secretsInfoJSON string
+		}
+		NeedSecretsFinished struct {
+			connPath, settingName string
+		}
+		AccessPointAdded, AccessPointRemoved, AccessPointPropertiesChanged struct {
+			devPath, apJSON string
+		}
+		DeviceEnabled struct {
+			devPath string
+			enabled bool
+		}
+	}
+
+	methods *struct {
+		ActivateAccessPoint            func() `in:"uuid,apPath,devPath" out:"cPath"`
+		ActivateConnection             func() `in:"uuid,devPath" out:"cPath"`
+		CancelSecret                   func() `in:"path,settingName"`
+		CreateConnection               func() `in:"connType,devPath" out:"sessionPath"`
+		CreateConnectionForAccessPoint func() `in:"apPath,devPath" out:"sessionPath"`
+		DeactivateConnection           func() `in:"uuid"`
+		DeleteConnection               func() `in:"uuid"`
+		DisableWirelessHotspotMode     func() `in:"devPath"`
+		DisconnectDevice               func() `in:"devPath"`
+		EditConnection                 func() `in:"uuid,devPath" out:"sessionPath"`
+		EnableDevice                   func() `in:"devPath,enabled"`
+		EnableWirelessHotspotMode      func() `in:"devPath"`
+		FeedSecret                     func() `in:"path,settingName,keyValue,autoConnect"`
+		GetAccessPoints                func() `in:"path" out:"apsJSON"`
+		GetActiveConnectionInfo        func() `out:"acInfosJSON"`
+		GetAutoProxy                   func() `out:"proxyAuto"`
+		GetProxy                       func() `in:"proxyType" out:"host,port"`
+		GetProxyIgnoreHosts            func() `out:"ignoreHosts"`
+		GetProxyMethod                 func() `out:"proxyMode"`
+		GetSupportedConnectionTypes    func() `out:"types"`
+		GetWiredConnectionUuid         func() `in:"wiredDevPath" out:"uuid"`
+		IsDeviceEnabled                func() `in:"devPath" out:"enabled"`
+		IsPasswordValid                func() `in:"passType,value" out:"ok"`
+		IsWirelessHotspotModeEnabled   func() `in:"devPath" out:"enabled"`
+		ListDeviceConnections          func() `in:"devPath" out:"connections"`
+		SetAutoProxy                   func() `in:"proxyAuto"`
+		SetDeviceManaged               func() `in:"devPathOrIfc,managed"`
+		SetProxy                       func() `in:"proxyType,host,port"`
+		SetProxyIgnoreHosts            func() `in:"ignoreHosts"`
+		SetProxyMethod                 func() `in:"proxyMode"`
+	}
 }
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusNetworkDest,
-		ObjectPath: dbusNetworkPath,
-		Interface:  dbusNetworkIfs,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 // initialize slice code manually to make i18n works
@@ -114,18 +157,24 @@ func initSlices() {
 	initNmStateReasons()
 }
 
-func NewManager() (m *Manager) {
-	m = &Manager{}
+func NewManager(service *dbusutil.Service) (m *Manager) {
+	m = &Manager{
+		service: service,
+	}
 	return
 }
-func DestroyManager(m *Manager) {
-	m.destroyManager()
-}
 
-func (m *Manager) initManager() {
+func (m *Manager) init() {
 	logger.Info("initialize network")
 
-	initDbusObjects()
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		return
+	}
+
+	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+	m.sysSigLoop.Start()
+	m.initDbusObjects()
 
 	disableNotify()
 	defer enableNotify()
@@ -133,8 +182,15 @@ func (m *Manager) initManager() {
 	m.config = newConfig()
 	m.switchHandler = newSwitchHandler(m.config)
 	m.dbusWatcher = newDbusWatcher(true)
-	m.stateHandler = newStateHandler(m.config)
-	m.agent = newAgent()
+	m.stateHandler = newStateHandler(m.config, m.sysSigLoop)
+
+	sysService, err := dbusutil.NewSystemService()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	m.agent = newAgent(sysService)
 
 	// initialize device and connection handlers
 	m.initDeviceManage()
@@ -142,10 +198,10 @@ func (m *Manager) initManager() {
 	m.initActiveConnectionManage()
 
 	// update property "State"
-	nmManager.State.ConnectChanged(func() {
-		m.setPropState()
+	nmManager.State().ConnectChanged(func(hasValue bool, value uint32) {
+		m.updatePropState()
 	})
-	m.setPropState()
+	m.updatePropState()
 
 	// TODO: notifications issue when resume from suspend
 
@@ -164,7 +220,7 @@ func (m *Manager) initManager() {
 	})
 }
 
-func (m *Manager) destroyManager() {
+func (m *Manager) destroy() {
 	logger.Info("destroy network")
 	destroyDbusObjects()
 	destroyAgent(m.agent)
@@ -178,7 +234,7 @@ func (m *Manager) destroyManager() {
 
 	// reset dbus properties
 	m.setPropNetworkingEnabled(false)
-	m.setPropState()
+	m.updatePropState()
 }
 
 func watchNetworkManagerRestart(m *Manager) {
@@ -191,11 +247,11 @@ func watchNetworkManagerRestart(m *Manager) {
 				// network-manager is starting
 				logger.Info("network-manager is starting")
 				time.Sleep(1 * time.Second)
-				m.initManager()
+				m.init()
 			} else {
 				// network-manager stopped
 				logger.Info("network-manager stopped")
-				m.destroyManager()
+				m.destroy()
 			}
 		}
 	})

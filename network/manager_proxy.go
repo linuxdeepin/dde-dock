@@ -19,10 +19,16 @@
 
 package network
 
-import "fmt"
-import "gir/gio-2.0"
-import "strconv"
-import "strings"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+
+	"gir/gio-2.0"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+)
 
 const (
 	proxyTypeHttp  = "http"
@@ -87,12 +93,18 @@ func getProxyChildSettings(proxyType string) (childSettings *gio.Settings, err e
 
 // GetProxyMethod get current proxy method, it would be "none",
 // "manual" or "auto".
-func (m *Manager) GetProxyMethod() (proxyMode string, err error) {
+func (m *Manager) GetProxyMethod() (proxyMode string, err *dbus.Error) {
 	proxyMode = proxySettings.GetString(gkeyProxyMode)
 	logger.Info("GetProxyMethod", proxyMode)
 	return
 }
-func (m *Manager) SetProxyMethod(proxyMode string) (err error) {
+
+func (m *Manager) SetProxyMethod(proxyMode string) *dbus.Error {
+	err := m.setProxyMethod(proxyMode)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) setProxyMethod(proxyMode string) (err error) {
 	logger.Info("SetProxyMethod", proxyMode)
 	err = checkProxyMethod(proxyMode)
 	if err != nil {
@@ -130,43 +142,47 @@ func checkProxyMethod(proxyMode string) (err error) {
 
 // GetAutoProxy get proxy PAC file URL for "auto" proxy mode, the
 // value will keep there even the proxy mode is not "auto".
-func (m *Manager) GetAutoProxy() (proxyAuto string, err error) {
+func (m *Manager) GetAutoProxy() (proxyAuto string, err *dbus.Error) {
 	proxyAuto = proxySettings.GetString(gkeyProxyAuto)
 	return
 }
-func (m *Manager) SetAutoProxy(proxyAuto string) (err error) {
+
+func (m *Manager) SetAutoProxy(proxyAuto string) (busErr *dbus.Error) {
 	logger.Debug("set autoconfig-url for proxy", proxyAuto)
 	ok := proxySettings.SetString(gkeyProxyAuto, proxyAuto)
 	if !ok {
-		err = fmt.Errorf("set autoconfig-url proxy through gsettings failed %s", proxyAuto)
+		err := fmt.Errorf("set autoconfig-url proxy through gsettings failed %s", proxyAuto)
 		logger.Error(err)
+		busErr = dbusutil.ToError(err)
 	}
 	return
 }
 
 // GetProxyIgnoreHosts get the ignored hosts for proxy network which
 // is a string separated by ",".
-func (m *Manager) GetProxyIgnoreHosts() (ignoreHosts string, err error) {
+func (m *Manager) GetProxyIgnoreHosts() (ignoreHosts string, err *dbus.Error) {
 	array := proxySettings.GetStrv(gkeyProxyIgnoreHosts)
 	ignoreHosts = strings.Join(array, ", ")
 	return
 }
-func (m *Manager) SetProxyIgnoreHosts(ignoreHosts string) (err error) {
+func (m *Manager) SetProxyIgnoreHosts(ignoreHosts string) (busErr *dbus.Error) {
 	logger.Debug("set ignore-hosts for proxy", ignoreHosts)
 	ignoreHostsFixed := strings.Replace(ignoreHosts, " ", "", -1)
 	array := strings.Split(ignoreHostsFixed, ",")
 	ok := proxySettings.SetStrv(gkeyProxyIgnoreHosts, array)
 	if !ok {
-		err = fmt.Errorf("set automatic proxy through gsettings failed %s", ignoreHosts)
+		err := fmt.Errorf("set automatic proxy through gsettings failed %s", ignoreHosts)
 		logger.Error(err)
+		busErr = dbusutil.ToError(err)
 	}
 	return
 }
 
 // GetProxy get the host and port for target proxy type.
-func (m *Manager) GetProxy(proxyType string) (host, port string, err error) {
+func (m *Manager) GetProxy(proxyType string) (host, port string, busErr *dbus.Error) {
 	childSettings, err := getProxyChildSettings(proxyType)
 	if err != nil {
+		busErr = dbusutil.ToError(busErr)
 		return
 	}
 	host = childSettings.GetString(gkeyProxyHost)
@@ -175,7 +191,12 @@ func (m *Manager) GetProxy(proxyType string) (host, port string, err error) {
 }
 
 // SetProxy set host and port for target proxy type.
-func (m *Manager) SetProxy(proxyType, host, port string) (err error) {
+func (m *Manager) SetProxy(proxyType, host, port string) *dbus.Error {
+	err := m.setProxy(proxyType, host, port)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) setProxy(proxyType, host, port string) (err error) {
 	logger.Debugf("Manager.SetProxy proxyType: %q, host: %q, port: %q", proxyType, host, port)
 
 	if port == "" {

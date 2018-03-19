@@ -21,7 +21,8 @@ package network
 
 import (
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )
 
@@ -124,7 +125,7 @@ func (m *Manager) initActiveConnections() {
 	for _, path := range nmGetActiveConnections() {
 		m.activeConnections[path] = m.newActiveConnection(path)
 	}
-	m.setPropActiveConnections()
+	m.updatePropActiveConnections()
 }
 
 func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason uint32) {
@@ -174,7 +175,7 @@ func (m *Manager) rebuildActiveConnections(apaths []dbus.ObjectPath) {
 		m.activeConnections[apath] = aconn
 	}
 
-	m.setPropActiveConnections()
+	m.updatePropActiveConnections()
 }
 func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32) {
 	m.activeConnectionsLock.Lock()
@@ -205,7 +206,7 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32) 
 		//}
 	}
 
-	m.setPropActiveConnections()
+	m.updatePropActiveConnections()
 }
 
 func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnection) {
@@ -214,13 +215,12 @@ func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnec
 	if err != nil {
 		return
 	}
-	defer nmDestroyActiveConnection(nmAConn)
 
-	aconn.State = nmAConn.State.Get()
-	aconn.Devices = nmAConn.Devices.Get()
-	aconn.typ = nmAConn.Type.Get()
-	aconn.Uuid = nmAConn.Uuid.Get()
-	aconn.Vpn = nmAConn.Vpn.Get()
+	aconn.State, _ = nmAConn.State().Get(0)
+	aconn.Devices, _ = nmAConn.Devices().Get(0)
+	aconn.typ, _ = nmAConn.Type().Get(0)
+	aconn.Uuid, _ = nmAConn.Uuid().Get(0)
+	aconn.Vpn, _ = nmAConn.Vpn().Get(0)
 	if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
 		aconn.Id = nmGetConnectionId(cpath)
 	}
@@ -232,10 +232,10 @@ func (m *Manager) clearActiveConnections() {
 	m.activeConnectionsLock.Lock()
 	defer m.activeConnectionsLock.Unlock()
 	m.activeConnections = make(map[dbus.ObjectPath]*activeConnection)
-	m.setPropActiveConnections()
+	m.updatePropActiveConnections()
 }
 
-func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
+func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, busErr *dbus.Error) {
 	var acinfos []activeConnectionInfo
 	// get activated devices' connection information
 	for _, devPath := range nmGetDevices() {
@@ -248,18 +248,19 @@ func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
 	// get activated vpn connection information
 	for _, apath := range nmGetVpnActiveConnections() {
 		if nmAConn, err := nmNewActiveConnection(apath); err == nil {
-			if devs := nmAConn.Devices.Get(); len(devs) > 0 {
+			if devs, _ := nmAConn.Devices().Get(0); len(devs) > 0 {
 				devPath := devs[0]
 				if info, err := m.doGetActiveConnectionInfo(apath, devPath); err == nil {
 					acinfos = append(acinfos, info)
 				}
 			}
-			nmDestroyActiveConnection(nmAConn)
 		}
 	}
-	acinfosJSON, err = marshalJSON(acinfos)
+	acinfosJSON, err := marshalJSON(acinfos)
+	busErr = dbusutil.ToError(err)
 	return
 }
+
 func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (acinfo activeConnectionInfo, err error) {
 	var connType, connName, mobileNetworkType, security, devType, devIfc, hwAddress, speed string
 	var ip4Address, ip4Mask string
@@ -275,25 +276,25 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	if err != nil {
 		return
 	}
-	defer nmDestroyActiveConnection(nmAConn)
 
-	nmConn, err := nmNewSettingsConnection(nmAConn.Connection.Get())
+	nmAConnConnection, _ := nmAConn.Connection().Get(0)
+	nmConn, err := nmNewSettingsConnection(nmAConnConnection)
 	if err != nil {
 		return
 	}
-	defer nmDestroySettingsConnection(nmConn)
 
 	// device
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-	defer nmDestroyDevice(nmDev)
 
-	devType = getCustomDeviceType(nmDev.DeviceType.Get())
-	devIfc = nmDev.Interface.Get()
+	deviceType, _ := nmDev.DeviceType().Get(0)
+	devType = getCustomDeviceType(deviceType)
+	devIfc, _ = nmDev.Interface().Get(0)
 	if devType == deviceModem {
-		mobileNetworkType = mmGetModemMobileNetworkType(dbus.ObjectPath(nmDev.Udi.Get()))
+		devUdi, _ := nmDev.Udi().Get(0)
+		mobileNetworkType = mmGetModemMobileNetworkType(dbus.ObjectPath(devUdi))
 	}
 
 	// connection data
@@ -303,7 +304,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 	speed = nmGeneralGetDeviceSpeed(devPath)
 
-	cdata, err := nmConn.GetSettings()
+	cdata, err := nmConn.GetSettings(0)
 	if err != nil {
 		return
 	}
@@ -361,7 +362,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 
 	// ipv4
-	if ip4Path := nmAConn.Ip4Config.Get(); isNmObjectPathValid(ip4Path) {
+	if ip4Path, _ := nmAConn.Ip4Config().Get(0); isNmObjectPathValid(ip4Path) {
 		ip4Address, ip4Mask, ip4Gateways, ip4Dnses = nmGetIp4ConfigInfo(ip4Path)
 	}
 	ip4Info = ip4ConnectionInfo{
@@ -372,7 +373,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 
 	// ipv6
-	if ip6Path := nmAConn.Ip6Config.Get(); isNmObjectPathValid(ip6Path) {
+	if ip6Path, _ := nmAConn.Ip6Config().Get(0); isNmObjectPathValid(ip6Path) {
 		ip6Address, ip6Prefix, ip6Gateways, ip6Dnses = nmGetIp6ConfigInfo(ip6Path)
 	}
 	ip6Info = ip6ConnectionInfo{
@@ -382,13 +383,14 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 		Dnses:    ip6Dnses,
 	}
 
+	nmAConnUuid, _ := nmAConn.Uuid().Get(0)
 	acinfo = activeConnectionInfo{
 		IsPrimaryConnection: nmGetPrimaryConnection() == apath,
 		Device:              devPath,
-		SettingPath:         nmConn.Path,
+		SettingPath:         nmConn.Path_(),
 		ConnectionType:      connType,
 		ConnectionName:      connName,
-		ConnectionUuid:      nmAConn.Uuid.Get(),
+		ConnectionUuid:      nmAConnUuid,
 		MobileNetworkType:   mobileNetworkType,
 		Security:            security,
 		DeviceType:          devType,

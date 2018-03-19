@@ -21,7 +21,7 @@ package network
 
 import (
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 type switchHandler struct {
@@ -39,18 +39,19 @@ func newSwitchHandler(c *config) (sh *switchHandler) {
 	sh.init()
 
 	// connect global switch signals
-	nmManager.NetworkingEnabled.ConnectChanged(func() {
+	nmManager.NetworkingEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		sh.setPropNetworkingEnabled()
 	})
-	nmManager.WirelessEnabled.ConnectChanged(func() {
+	nmManager.WirelessEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		sh.setPropWirelessEnabled()
 	})
-	nmManager.WwanEnabled.ConnectChanged(func() {
+	nmManager.WwanEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		// FIXME: when mobile adapter plugin, dbus property
 		// WwanEnabled will be set to false automatically, don't known
 		// why, so we force it to true here
-		if nmManager.WwanEnabled.Get() == false {
-			nmManager.WwanEnabled.Set(true)
+		wwanEnabled, _ := nmManager.WwanEnabled().Get(0)
+		if wwanEnabled == false {
+			nmManager.WwanEnabled().Set(0, true)
 			return
 		}
 		sh.setPropWwanEnabled()
@@ -73,6 +74,7 @@ func (sh *switchHandler) init() {
 func (sh *switchHandler) setNetworkingEnabled(enabled bool) {
 	nmSetNetworkingEnabled(enabled)
 }
+
 func (sh *switchHandler) setWirelessEnabled(enabled bool) {
 	if sh.NetworkingEnabled {
 		nmSetWirelessEnabled(enabled)
@@ -107,6 +109,7 @@ func (sh *switchHandler) setWiredEnabled(enabled bool) {
 	}
 }
 func (sh *switchHandler) setVpnEnabled(enabled bool) {
+	logger.Debug("switchHandler.setVpnEnabled", enabled)
 	if sh.NetworkingEnabled {
 		sh.setPropVpnEnabled(enabled)
 	} else {
@@ -120,26 +123,27 @@ func (sh *switchHandler) setVpnEnabled(enabled bool) {
 
 func (sh *switchHandler) initPropNetworkingEnabled() {
 	if nmHasSystemSettingsModifyPermission() {
-		sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+		sh.NetworkingEnabled, _ = nmManager.NetworkingEnabled().Get(0)
 		if !sh.NetworkingEnabled {
 			sh.doTurnOffGlobalDeviceSwitches()
 		}
 	}
-	sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+	sh.NetworkingEnabled, _ = nmManager.NetworkingEnabled().Get(0)
 	manager.setPropNetworkingEnabled(sh.NetworkingEnabled)
 }
 func (sh *switchHandler) setPropNetworkingEnabled() {
-	if sh.NetworkingEnabled == nmManager.NetworkingEnabled.Get() {
+	networkingEnabled, _ := nmManager.NetworkingEnabled().Get(0)
+	if sh.NetworkingEnabled == networkingEnabled {
 		return
 	}
-	sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+	sh.NetworkingEnabled = networkingEnabled
 	// setup global device switches
 	if sh.NetworkingEnabled {
 		sh.restoreGlobalDeviceSwitches()
 	} else {
 		sh.saveAndTurnOffGlobalDeviceSwitches()
 	}
-	sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+	sh.NetworkingEnabled, _ = nmManager.NetworkingEnabled().Get(0)
 	manager.setPropNetworkingEnabled(sh.NetworkingEnabled)
 }
 func (sh *switchHandler) restoreGlobalDeviceSwitches() {
@@ -164,7 +168,7 @@ func (sh *switchHandler) doTurnOffGlobalDeviceSwitches() {
 
 func (sh *switchHandler) initPropWirelessEnabled() {
 	if nmHasSystemSettingsModifyPermission() {
-		sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
+		sh.WirelessEnabled, _ = nmManager.WirelessEnabled().Get(0)
 		for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_WIFI) {
 			if sh.WirelessEnabled {
 				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
@@ -173,14 +177,15 @@ func (sh *switchHandler) initPropWirelessEnabled() {
 			}
 		}
 	}
-	sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
+	sh.WirelessEnabled, _ = nmManager.WirelessEnabled().Get(0)
 	manager.setPropWirelessEnabled(sh.WirelessEnabled)
 }
 func (sh *switchHandler) setPropWirelessEnabled() {
-	if sh.WirelessEnabled == nmManager.WirelessEnabled.Get() {
+	wirelessEnabled, _ := nmManager.WirelessEnabled().Get(0)
+	if sh.WirelessEnabled == wirelessEnabled {
 		return
 	}
-	sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
+	sh.WirelessEnabled = wirelessEnabled
 	logger.Debug("setPropWirelessEnabled", sh.WirelessEnabled)
 	// setup wireless devices switches
 	for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_WIFI) {
@@ -190,13 +195,13 @@ func (sh *switchHandler) setPropWirelessEnabled() {
 			sh.saveAndDisconnectDevice(devPath)
 		}
 	}
-	sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
+	sh.WirelessEnabled, _ = nmManager.WirelessEnabled().Get(0)
 	manager.setPropWirelessEnabled(sh.WirelessEnabled)
 }
 
 func (sh *switchHandler) initPropWwanEnabled() {
 	if nmHasSystemSettingsModifyPermission() {
-		sh.WwanEnabled = nmManager.WwanEnabled.Get()
+		sh.WwanEnabled, _ = nmManager.WwanEnabled().Get(0)
 		for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_MODEM) {
 			if sh.WwanEnabled {
 				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
@@ -205,14 +210,16 @@ func (sh *switchHandler) initPropWwanEnabled() {
 			}
 		}
 	}
-	sh.WwanEnabled = nmManager.WwanEnabled.Get()
+	sh.WwanEnabled, _ = nmManager.WwanEnabled().Get(0)
 	manager.setPropWwanEnabled(sh.WwanEnabled)
 }
+
 func (sh *switchHandler) setPropWwanEnabled() {
-	if sh.WwanEnabled == nmManager.WwanEnabled.Get() {
+	wwanEnabled, _ := nmManager.WwanEnabled().Get(0)
+	if sh.WwanEnabled == wwanEnabled {
 		return
 	}
-	sh.WwanEnabled = nmManager.WwanEnabled.Get()
+	sh.WwanEnabled = wwanEnabled
 	// setup modem devices switches
 	for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_MODEM) {
 		if sh.WwanEnabled {
@@ -221,7 +228,7 @@ func (sh *switchHandler) setPropWwanEnabled() {
 			sh.saveAndDisconnectDevice(devPath)
 		}
 	}
-	sh.WwanEnabled = nmManager.WwanEnabled.Get()
+	sh.WwanEnabled, _ = nmManager.WwanEnabled().Get(0)
 	manager.setPropWwanEnabled(sh.WwanEnabled)
 }
 
@@ -363,8 +370,8 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 		if len(uuidToActive) > 0 {
 			activeUuid, _ := nmGetDeviceActiveConnectionUuid(devPath)
 			if uuidToActive != activeUuid {
-				nmRunOnceUntilDeviceAvailable(devPath, func() {
-					manager.ActivateConnection(uuidToActive, devPath)
+				manager.nmRunOnceUntilDeviceAvailable(devPath, func() {
+					manager.activateConnection(uuidToActive, devPath)
 				})
 			}
 		}
@@ -382,7 +389,7 @@ func (sh *switchHandler) restoreVpnConnectionState(uuid string) (err error) {
 	if vpnConfig.lastActivated || vpnConfig.AutoConnect {
 		sh.activateVpnConnection(uuid)
 	} else {
-		err = manager.DeactivateConnection(uuid)
+		err = manager.deactivateConnection(uuid)
 	}
 	return
 }
@@ -392,7 +399,7 @@ func (sh *switchHandler) activateVpnConnection(uuid string) {
 		return
 	}
 	nmRunOnceUtilNetworkAvailable(func() {
-		manager.ActivateConnection(uuid, "/")
+		manager.activateConnection(uuid, "/")
 	})
 }
 func (sh *switchHandler) deactivateVpnConnection(uuid string) (err error) {
@@ -401,7 +408,7 @@ func (sh *switchHandler) deactivateVpnConnection(uuid string) (err error) {
 		return
 	}
 	vpnConfig.lastActivated = vpnConfig.activated
-	err = manager.DeactivateConnection(uuid)
+	err = manager.deactivateConnection(uuid)
 	sh.config.save()
 	return
 }

@@ -20,8 +20,9 @@
 package network
 
 import (
-	"dbus/org/freedesktop/secret"
-	"pkg.deepin.io/lib/dbus"
+	secret "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
+
+	"pkg.deepin.io/lib/dbus1"
 )
 
 // keep keyring tags same with nm-applet
@@ -31,48 +32,21 @@ const (
 	keyringTagSK   = "setting-key"
 )
 
-type itemSecretStruct struct {
-	Session     dbus.ObjectPath
-	Parameters  []byte
-	Value       []byte
-	ContentType string `dbus:"content_type"`
-}
-
-// convert []interface{} from DBus to the really item secret struct.
-// A []interface{} example is: []interface{}{
-// "/org/freedesktop/secrets/session/s16", []byte{}, []byte{0x70,
-// 0x61}, "text/plain" }⏎
-func convertToItemSecret(ifcArray []interface{}) (secret itemSecretStruct, ok bool) {
-	if len(ifcArray) < 4 {
-		ok = false
-		return
-	}
-	secret = itemSecretStruct{}
-	if secret.Session, ok = ifcArray[0].(dbus.ObjectPath); !ok {
-		return
-	}
-	if secret.Parameters, ok = ifcArray[1].([]byte); !ok {
-		return
-	}
-	if secret.Value, ok = ifcArray[2].([]byte); !ok {
-		return
-	}
-	if secret.ContentType, ok = ifcArray[3].(string); !ok {
-		return
-	}
-	return
-}
-
 func secretNewService() (service *secret.Service, err error) {
-	service, err = secret.NewService("org.freedesktop.secrets", "/org/freedesktop/secrets")
+	sessionBus, err := dbus.SessionBus()
 	if err != nil {
-		logger.Error(err)
+		return nil, err
 	}
+	service = secret.NewService(sessionBus)
 	return
 }
 
 func secretNewCollection(path dbus.ObjectPath) (collection *secret.Collection, err error) {
-	collection, err = secret.NewCollection("org.freedesktop.secrets", path)
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		return nil, err
+	}
+	collection, err = secret.NewCollection(sessionBus, path)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -80,7 +54,11 @@ func secretNewCollection(path dbus.ObjectPath) (collection *secret.Collection, e
 }
 
 func secretNewSession(path dbus.ObjectPath) (session *secret.Session, err error) {
-	session, err = secret.NewSession("org.freedesktop.secrets", path)
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		return nil, err
+	}
+	session, err = secret.NewSession(sessionBus, path)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -88,7 +66,11 @@ func secretNewSession(path dbus.ObjectPath) (session *secret.Session, err error)
 }
 
 func secretNewItem(path dbus.ObjectPath) (item *secret.Item, err error) {
-	item, err = secret.NewItem("org.freedesktop.secrets", path)
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		return nil, err
+	}
+	item, err = secret.NewItem(sessionBus, path)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -100,10 +82,9 @@ func secretServiceOpenSession() (sessionPath dbus.ObjectPath, err error) {
 	if err != nil {
 		return
 	}
-	defer secret.DestroyService(service)
 
 	input := dbus.MakeVariant("")
-	_, sessionPath, err = service.OpenSession("plain", input)
+	_, sessionPath, err = service.OpenSession(0, "plain", input)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -132,7 +113,7 @@ func secretCloseSession() {
 		return
 	}
 
-	err = session.Close()
+	err = session.Close(0)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -155,7 +136,6 @@ func secretGetAll(uuid, settingName string) (keyValues map[string]string, ok boo
 		ok = false
 		return
 	}
-	defer secret.DestroyService(service)
 
 	keyValues = make(map[string]string)
 
@@ -164,11 +144,11 @@ func secretGetAll(uuid, settingName string) (keyValues map[string]string, ok boo
 		keyringTagSN:   settingName,
 	}
 
-	unlockedPaths, lockedPaths, err := service.SearchItems(attributes)
+	unlockedPaths, lockedPaths, err := service.SearchItems(0, attributes)
 	if err != nil {
 		logger.Error(err)
 	}
-	reUnlockedPaths, _, _ := service.Unlock(lockedPaths)
+	reUnlockedPaths, _, _ := service.Unlock(0, lockedPaths)
 
 	doSecretGetAll(service, sessionPath, unlockedPaths, keyValues)
 	doSecretGetAll(service, sessionPath, reUnlockedPaths, keyValues)
@@ -178,22 +158,19 @@ func secretGetAll(uuid, settingName string) (keyValues map[string]string, ok boo
 	return
 }
 func doSecretGetAll(service *secret.Service, sessionPath dbus.ObjectPath, itemPaths []dbus.ObjectPath, values map[string]string) {
-	secretsMap, err := service.GetSecrets(itemPaths, sessionPath)
+	secretsMap, err := service.GetSecrets(0, itemPaths, sessionPath)
 	if err != nil {
 		logger.Error(err)
 	}
-	for itemPath, itemSecretIfcArray := range secretsMap {
-		if itemSecret, ok := convertToItemSecret(itemSecretIfcArray); ok {
-			item, err := secretNewItem(itemPath)
-			if err != nil {
-				continue
-			}
-			defer secret.DestroyItem(item)
+	for itemPath, itemSecret := range secretsMap {
+		item, err := secretNewItem(itemPath)
+		if err != nil {
+			continue
+		}
 
-			attributes := item.Attributes.Get()
-			if keyName, ok := attributes[keyringTagSK]; ok {
-				values[keyName] = string(itemSecret.Value)
-			}
+		attributes, _ := item.Attributes().Get(0)
+		if keyName, ok := attributes[keyringTagSK]; ok {
+			values[keyName] = string(itemSecret.Value)
 		}
 	}
 	return
@@ -207,14 +184,13 @@ func secretSet(uuid, settingName, settingKey string, value string) {
 	if err != nil {
 		return
 	}
-	defer secret.DestroyService(service)
 
-	collectionPath, err := service.ReadAlias("default")
+	collectionPath, err := service.ReadAlias(0, "default")
 	if err != nil {
 		return
 	}
 
-	unlockedPaths, _, err := service.Unlock([]dbus.ObjectPath{collectionPath})
+	unlockedPaths, _, err := service.Unlock(0, []dbus.ObjectPath{collectionPath})
 	if err != nil {
 		return
 	}
@@ -224,7 +200,6 @@ func secretSet(uuid, settingName, settingKey string, value string) {
 	if err != nil {
 		return
 	}
-	defer secret.DestroyCollection(collection)
 
 	properties := map[string]dbus.Variant{
 		"org.freedesktop.Secret.Item.Label": dbus.MakeVariant("NetworkManager password secret"),
@@ -236,14 +211,14 @@ func secretSet(uuid, settingName, settingKey string, value string) {
 		}),
 	}
 
-	itemSecret := itemSecretStruct{
+	itemSecret := secret.Secret{
 		Session:     sessionPath,
 		Parameters:  []byte{},
 		Value:       []byte(value),
 		ContentType: "text/plain",
 	}
 
-	_, _, err = collection.CreateItem(properties, itemSecret, true)
+	_, _, err = collection.CreateItem(0, properties, itemSecret, true)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -259,17 +234,16 @@ func secretDeleteAll(uuid string) {
 	if err != nil {
 		return
 	}
-	defer secret.DestroyService(service)
 
 	attributes := map[string]string{
 		keyringTagUUID: uuid,
 	}
 
-	unlockedPaths, lockedPaths, err := service.SearchItems(attributes)
+	unlockedPaths, lockedPaths, err := service.SearchItems(0, attributes)
 	if err != nil {
 		logger.Error(err)
 	}
-	reUnlockedPaths, _, _ := service.Unlock(lockedPaths)
+	reUnlockedPaths, _, _ := service.Unlock(0, lockedPaths)
 
 	doSecretDeleteAll(service, sessionPath, unlockedPaths)
 	doSecretDeleteAll(service, sessionPath, reUnlockedPaths)
@@ -280,7 +254,6 @@ func doSecretDeleteAll(service *secret.Service, sessionPath dbus.ObjectPath, ite
 		if err != nil {
 			continue
 		}
-		defer secret.DestroyItem(item)
-		item.Delete()
+		item.Delete(0)
 	}
 }

@@ -27,7 +27,8 @@ import (
 	"time"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/utils"
 )
@@ -40,12 +41,14 @@ type sessionErrors map[string]sectionErrors
 // AvailableKeys and GetAvailableValues, the front-end could show the
 // related widgets automatically.
 type ConnectionSession struct {
+	service          *dbusutil.Service
 	sessionPath      dbus.ObjectPath
 	devPath          dbus.ObjectPath
 	data             connectionData
 	dataLocker       sync.RWMutex
 	connectionExists bool
 
+	PropsMu        sync.RWMutex
 	ConnectionPath dbus.ObjectPath
 	Uuid           string
 	Type           string // customized connection types, e.g. connectionMobileGsm
@@ -66,11 +69,29 @@ type ConnectionSession struct {
 
 	// used by font-end to update widget value that with proeprty
 	// "alwaysUpdate", which should only update value when visible
-	ConnectionDataChanged func()
+	signals *struct {
+		ConnectionDataChanged struct{}
+	}
+
+	methods *struct {
+		DebugGetErrors           func() `out:"errors"`
+		DebugListKeyDetail       func() `out:"info"`
+		GetAllKeys               func() `out:"keys"`
+		GetAvailableValues       func() `in:"section,key" out:"valuesJSON"`
+		GetKey                   func() `in:"section,key" out:"valueJSON"`
+		GetKeyName               func() `in:"section,key" out:"name"`
+		IsDefaultExpandedSection func() `in:"vsection" out:"result"`
+		ListAvailableKeyDetail   func() `out:"detail"`
+		Save                     func() `in:"activated" out:"ok"`
+		SetKey                   func() `in:"section,key,valueJSON"`
+		SetKeyFd                 func() `in:"section,key" out:"fd"`
+	}
 }
 
-func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *ConnectionSession) {
+func doNewConnectionSession(devPath dbus.ObjectPath, uuid string,
+	service *dbusutil.Service) (s *ConnectionSession) {
 	s = &ConnectionSession{}
+	s.service = service
 	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", utils.RandString(8)))
 	s.devPath = devPath
 	s.Uuid = uuid
@@ -82,14 +103,14 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	return s
 }
 
-func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
+func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath, service *dbusutil.Service) (s *ConnectionSession, err error) {
 	if !isStringInArray(connectionType, supportedConnectionTypes) {
 		err = fmt.Errorf("connection type is out of support: %s", connectionType)
 		logger.Error(err)
 		return
 	}
 
-	s = doNewConnectionSession(devPath, utils.GenUuid())
+	s = doNewConnectionSession(devPath, utils.GenUuid(), service)
 	s.connectionExists = false
 
 	// expand wrapper connection type
@@ -150,13 +171,14 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	return
 }
 
-func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
+func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath,
+	service *dbusutil.Service) (s *ConnectionSession, err error) {
 	connectionPath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}
 
-	s = doNewConnectionSession(devPath, uuid)
+	s = doNewConnectionSession(devPath, uuid, service)
 	s.connectionExists = true
 	s.ConnectionPath = connectionPath
 
@@ -334,7 +356,12 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 
 // Save save current connection session, and the 'activated' will special whether activate it,
 // but if the connection non-exists, the 'activated' no effect
-func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
+func (s *ConnectionSession) Save(activated bool) (bool, *dbus.Error) {
+	ok, err := s.save(activated)
+	return ok, dbusutil.ToError(err)
+}
+
+func (s *ConnectionSession) save(activated bool) (ok bool, err error) {
 	logger.Debugf("Save connection: %#v", s.data)
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
@@ -359,18 +386,17 @@ func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 		if err != nil {
 			return false, err
 		}
-		defer nmDestroySettingsConnection(nmConn)
 
 		correctConnectionData(s.data)
-		err = nmConn.Update(s.data)
+		err = nmConn.Update(0, s.data)
 		if err != nil {
 			logger.Error(err)
 			return false, err
 		}
 		if !activated {
-			err = nmConn.Save()
+			err = nmConn.Save(0)
 		} else {
-			_, err = manager.ActivateConnection(s.Uuid, s.devPath)
+			_, err = manager.activateConnection(s.Uuid, s.devPath)
 		}
 		if err != nil {
 			logger.Error("Failed to save exists connection:", err)
@@ -413,7 +439,7 @@ func (s *ConnectionSession) isErrorOccurred() bool {
 }
 
 // Close cancel current connection.
-func (s *ConnectionSession) Close() {
+func (s *ConnectionSession) Close() *dbus.Error {
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
 	// clean up vpn config if abort the new connection
@@ -424,10 +450,11 @@ func (s *ConnectionSession) Close() {
 	}
 
 	manager.removeConnectionSession(s)
+	return nil
 }
 
 // GetAllKeys return all may used section key information in current session.
-func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
+func (s *ConnectionSession) GetAllKeys() (infoJSON string, err *dbus.Error) {
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
 	allVsectionInfo := make([]VsectionInfo, 0)
@@ -448,7 +475,8 @@ func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
 }
 
 // GetAvailableValues return available values marshaled by JSON for target key.
-func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string) {
+func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string,
+	err *dbus.Error) {
 	s.dataLocker.RLock()
 	defer s.dataLocker.RUnlock()
 	var values []kvalue
@@ -457,24 +485,35 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 	return
 }
 
-// GetKey get target key value which marshaled by JSON.
-func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
+func (s *ConnectionSession) getKey(section, key string) (valueJSON string) {
 	s.dataLocker.RLock()
 	defer s.dataLocker.RUnlock()
 	valueJSON = generalGetSettingKeyJSON(s.data, section, key)
 	return
 }
 
+// GetKey get target key value which marshaled by JSON.
+func (s *ConnectionSession) GetKey(section, key string) (valueJSON string, err *dbus.Error) {
+	valueJSON = s.getKey(section, key)
+	return
+}
+
 // GetKeyName return the display name for special key.
-func (s *ConnectionSession) GetKeyName(section, key string) (name string, err error) {
+func (s *ConnectionSession) GetKeyName(section, key string) (name string, busErr *dbus.Error) {
 	s.dataLocker.RLock()
 	defer s.dataLocker.RUnlock()
-	name, err = getRelatedKeyName(s.data, section, key)
+	name, err := getRelatedKeyName(s.data, section, key)
+	busErr = dbusutil.ToError(err)
 	return
 }
 
 // SetKey set target key with new value, the value should be marshaled by JSON.
-func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
+func (s *ConnectionSession) SetKey(section, key, valueJSON string) *dbus.Error {
+	s.setKey(section, key, valueJSON)
+	return nil
+}
+
+func (s *ConnectionSession) setKey(section, key, valueJSON string) {
 	logger.Debugf("SetKey(), section=%s, key=%s, len(valueJSON)=%d", section, key, len(valueJSON))
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
@@ -497,7 +536,12 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	return
 }
 
-func (s *ConnectionSession) SetKeyFd(section, key string) (dbus.UnixFD, error) {
+func (s *ConnectionSession) SetKeyFd(section, key string) (dbus.UnixFD, *dbus.Error) {
+	fd, err := s.setKeyFd(section, key)
+	return fd, dbusutil.ToError(err)
+}
+
+func (s *ConnectionSession) setKeyFd(section, key string) (dbus.UnixFD, error) {
 	const deadline = 10 * time.Second
 	r, w, err := os.Pipe()
 	if err != nil {
@@ -541,7 +585,7 @@ func (s *ConnectionSession) SetKeyFd(section, key string) (dbus.UnixFD, error) {
 		r.Close()
 		w.Close()
 		if ok {
-			s.SetKey(section, key, secretValue)
+			s.setKey(section, key, secretValue)
 		}
 	}()
 
@@ -571,7 +615,7 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err 
 
 // IsDefaultExpandedSection check if target virtual section should be
 // expanded default.
-func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, error) {
+func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, *dbus.Error) {
 	switch s.Type {
 	case connectionWired:
 		switch vsection {
@@ -610,13 +654,13 @@ func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, err
 // Debug functions
 
 // DebugGetErrors get current errors.
-func (s *ConnectionSession) DebugGetErrors() sessionErrors {
-	return s.Errors
+func (s *ConnectionSession) DebugGetErrors() (sessionErrors, *dbus.Error) {
+	return s.Errors, nil
 }
 
 // DebugListKeyDetail get all key deails, including all the available
 // key values.
-func (s *ConnectionSession) DebugListKeyDetail() (info string) {
+func (s *ConnectionSession) DebugListKeyDetail() (info string, err *dbus.Error) {
 	for _, vsection := range s.AvailableVirtualSections {
 		for _, section := range getAvailableSectionsOfVsection(s.data, vsection) {
 			sectionKeys, ok := s.AvailableKeys[section]
@@ -629,10 +673,10 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 				if values := generalGetSettingAvailableValues(s.data, section, key); len(values) > 0 {
 					valuesJSON, _ := marshalJSON(values)
 					info += fmt.Sprintf("%s: %s[%s](%s): %s (%s)\n", vsection, section, key,
-						getKtypeDesc(t), s.GetKey(section, key), valuesJSON)
+						getKtypeDesc(t), s.getKey(section, key), valuesJSON)
 				} else {
 					info += fmt.Sprintf("%s: %s[%s](%s): %s\n", vsection, section, key,
-						getKtypeDesc(t), s.GetKey(section, key))
+						getKtypeDesc(t), s.getKey(section, key))
 				}
 			}
 		}
@@ -641,7 +685,7 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 }
 
 // ListAvailableKeyDetail get all available key details, include vitual sections
-func (s *ConnectionSession) ListAvailableKeyDetail() string {
+func (s *ConnectionSession) ListAvailableKeyDetail() (string, *dbus.Error) {
 	var (
 		firstKey      bool   = true
 		firstVSection bool   = true
@@ -684,7 +728,7 @@ func (s *ConnectionSession) ListAvailableKeyDetail() string {
 			}
 
 			info += fmt.Sprintf("{\"Section\": \"%s\", \"Key\": \"%s\",", keyInfo.Section, keyInfo.Key)
-			info += fmt.Sprintf("\"Value\": %s", s.GetKey(keyInfo.Section, keyInfo.Key))
+			info += fmt.Sprintf("\"Value\": %s", s.getKey(keyInfo.Section, keyInfo.Key))
 			values := generalGetSettingAvailableValues(s.data, keyInfo.Section, keyInfo.Key)
 			if len(values) > 0 {
 				valuesJSON, _ := marshalJSON(values)
@@ -699,7 +743,7 @@ func (s *ConnectionSession) ListAvailableKeyDetail() string {
 	}
 
 	info += "]"
-	return info
+	return info, nil
 }
 
 func correctConnectionData(data connectionData) {

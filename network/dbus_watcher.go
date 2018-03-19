@@ -20,13 +20,13 @@
 package network
 
 import (
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 type dbusWatcher struct {
 	isSystemBus bool
-	dbusObj     *dbus.Conn
-	sigChan     <-chan *dbus.Signal
+	dbusConn    *dbus.Conn
+	sigChan     chan *dbus.Signal
 	callbacks   []func(*dbus.Signal)
 }
 
@@ -34,9 +34,9 @@ func newDbusWatcher(isSystemBus bool) (dw *dbusWatcher) {
 	dw = &dbusWatcher{isSystemBus: isSystemBus}
 	var err error
 	if dw.isSystemBus {
-		dw.dbusObj, err = dbus.SystemBus()
+		dw.dbusConn, err = dbus.SystemBus()
 	} else {
-		dw.dbusObj, err = dbus.SessionBus()
+		dw.dbusConn, err = dbus.SessionBus()
 	}
 	if err != nil {
 		logger.Error(err)
@@ -52,7 +52,7 @@ func destroyDbusWatcher(dw *dbusWatcher) {
 }
 
 func (dw *dbusWatcher) watch(expression string) {
-	dw.dbusObj.BusObject().Call("org.freedesktop.DBus.AddMatch", 0, expression)
+	dw.dbusConn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0, expression)
 }
 
 func (dw *dbusWatcher) connect(cb func(*dbus.Signal)) {
@@ -66,7 +66,8 @@ func (dw *dbusWatcher) reset() {
 }
 
 func (dw *dbusWatcher) start() {
-	dw.sigChan = dw.dbusObj.Signal()
+	dw.sigChan = make(chan *dbus.Signal, 10)
+	dw.dbusConn.Signal(dw.sigChan)
 	go func() {
 		for s := range dw.sigChan {
 			for _, cb := range dw.callbacks {
@@ -77,5 +78,5 @@ func (dw *dbusWatcher) start() {
 }
 
 func (dw *dbusWatcher) stop() {
-	dw.dbusObj.DetachSignal(dw.sigChan)
+	dw.dbusConn.RemoveSignal(dw.sigChan)
 }

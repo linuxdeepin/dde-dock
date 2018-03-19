@@ -20,8 +20,10 @@
 package network
 
 import (
-	mmdbus "dbus/org/freedesktop/modemmanager1"
-	"pkg.deepin.io/lib/dbus"
+	mmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.modemmanager1"
+
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 // modem capabilities
@@ -75,18 +77,23 @@ const (
 )
 
 func mmNewModem(modemPath dbus.ObjectPath) (modem *mmdbus.Modem, err error) {
-	modem, err = mmdbus.NewModem(dbusMmDest, modemPath)
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		return
+	}
+	modem, err = mmdbus.NewModem(systemBus, modemPath)
 	if err != nil {
 		logger.Error(err)
 	}
 	return
 }
+
 func mmDestroyModem(modem *mmdbus.Modem) {
 	if modem == nil {
 		logger.Error("Modem to destroy is nil")
 		return
 	}
-	mmdbus.DestroyModem(modem)
+	modem.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
 func mmGetModemDeviceIdentifier(modemPath dbus.ObjectPath) (devId string, err error) {
@@ -94,9 +101,8 @@ func mmGetModemDeviceIdentifier(modemPath dbus.ObjectPath) (devId string, err er
 	if err != nil {
 		return
 	}
-	defer mmdbus.DestroyModem(modem)
 
-	devId = modem.DeviceIdentifier.Get()
+	devId, err = modem.DeviceIdentifier().Get(0)
 	return
 }
 
@@ -105,9 +111,8 @@ func mmGetModemDeviceSysPath(modemPath dbus.ObjectPath) (sysPath string, err err
 	if err != nil {
 		return
 	}
-	defer mmdbus.DestroyModem(modem)
 
-	sysPath = modem.Device.Get()
+	sysPath, err = modem.Device().Get(0)
 	return
 }
 
@@ -116,16 +121,22 @@ func mmGetModemDeviceSignalQuality(modemPath dbus.ObjectPath) (signalQuality uin
 	if err != nil {
 		return
 	}
-	defer mmdbus.DestroyModem(modem)
 
-	signalQuality = mmDoGetModemDeviceSignalQuality(modem.SignalQuality.Get())
+	signalQualityProp, err := modem.SignalQuality().Get(0)
+	if err != nil {
+		return
+	}
+
+	signalQuality = signalQualityProp.Quality
 	return
 }
-func mmDoGetModemDeviceSignalQuality(signalQualityData []interface{}) (signalQuality uint32) {
-	if len(signalQualityData) > 0 {
-		signalQuality = signalQualityData[0].(uint32)
+
+func mmDoGetModemDeviceSignalQuality(modem *mmdbus.Modem) (signalQuality uint32) {
+	prop, err := modem.SignalQuality().Get(0)
+	if err != nil {
+		return 0
 	}
-	return
+	return prop.Quality
 }
 
 func mmGetModemDeviceAccessTechnologies(modemPath dbus.ObjectPath) (accessTechnologies uint32, err error) {
@@ -133,9 +144,7 @@ func mmGetModemDeviceAccessTechnologies(modemPath dbus.ObjectPath) (accessTechno
 	if err != nil {
 		return
 	}
-	defer mmdbus.DestroyModem(modem)
-
-	accessTechnologies = modem.AccessTechnologies.Get()
+	accessTechnologies, err = modem.AccessTechnologies().Get(0)
 	return
 }
 

@@ -26,7 +26,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
@@ -38,6 +39,8 @@ func SetLogger(l *log.Logger) {
 }
 
 type Manager struct {
+	service  *dbusutil.Service
+	PropsMu  sync.RWMutex
 	Type     string
 	IP       string
 	Port     uint32
@@ -46,32 +49,32 @@ type Manager struct {
 
 	jsonFile string
 	confFile string
-	mu       sync.Mutex
+
+	methods *struct {
+		Set func() `in:"type0,ip,port,user,password"`
+	}
 }
 
-func NewManager() *Manager {
+func NewManager(service *dbusutil.Service) *Manager {
 	cfgDir := basedir.GetUserConfigDir()
 	jsonFile := filepath.Join(cfgDir, "deepin", "proxychains.json")
 	confFile := filepath.Join(cfgDir, "deepin", "proxychains.conf")
 	m := &Manager{
 		jsonFile: jsonFile,
 		confFile: confFile,
+		service:  service,
 	}
 	go m.init()
 	return m
 }
 
 const (
-	dbusObjPath   = "/com/deepin/daemon/Network/ProxyChains"
+	DBusPath      = "/com/deepin/daemon/Network/ProxyChains"
 	dbusInterface = "com.deepin.daemon.Network.ProxyChains"
 )
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Network",
-		ObjectPath: dbusObjPath,
-		Interface:  dbusInterface,
-	}
+func (*Manager) GetInterfaceName() string {
+	return dbusInterface
 }
 
 const defaultType = "http"
@@ -118,8 +121,8 @@ func (m *Manager) saveConfig() error {
 	return cfg.save(m.jsonFile)
 }
 
-func (m *Manager) notifyChange(prop string) {
-	dbus.NotifyChange(m, prop)
+func (m *Manager) notifyChange(prop string, v interface{}) {
+	m.service.EmitPropertyChanged(m, prop, v)
 }
 
 func (m *Manager) fixConfig() bool {
@@ -174,7 +177,12 @@ func (err InvalidParamError) Error() string {
 	return fmt.Sprintf("invalid param %s", err.Param)
 }
 
-func (m *Manager) Set(type0, ip string, port uint32, user, password string) error {
+func (m *Manager) Set(type0, ip string, port uint32, user, password string) *dbus.Error {
+	err := m.set(type0, ip, port, user, password)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) set(type0, ip string, port uint32, user, password string) error {
 	// allow type0 is empty
 	if type0 == "" {
 		type0 = defaultType
@@ -205,32 +213,32 @@ func (m *Manager) Set(type0, ip string, port uint32, user, password string) erro
 	}
 
 	// all params are ok
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.PropsMu.Lock()
+	defer m.PropsMu.Unlock()
 
 	if m.Type != type0 {
 		m.Type = type0
-		m.notifyChange("Type")
+		m.notifyChange("Type", type0)
 	}
 
 	if m.IP != ip {
 		m.IP = ip
-		m.notifyChange("IP")
+		m.notifyChange("IP", ip)
 	}
 
 	if m.Port != port {
 		m.Port = port
-		m.notifyChange("Port")
+		m.notifyChange("Port", port)
 	}
 
 	if m.User != user {
 		m.User = user
-		m.notifyChange("User")
+		m.notifyChange("User", user)
 	}
 
 	if m.Password != password {
 		m.Password = password
-		m.notifyChange("Password")
+		m.notifyChange("Password", password)
 	}
 
 	err := m.saveConfig()

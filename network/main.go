@@ -22,7 +22,6 @@ package network
 import (
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
-	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -54,30 +53,42 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	logger.BeginTracing()
-
 	initSlices() // initialize slice code
+	service := loader.GetService()
 
-	manager = NewManager()
-	err := dbus.InstallOnSession(manager)
+	manager = NewManager(service)
+
+	managerServerObj, err := service.NewServerObject(dbusPath, manager)
 	if err != nil {
-		logger.Error("register dbus interface failed: ", err)
+		return err
+	}
+
+	managerServerObj.SetWriteCallback(manager, "NetworkingEnabled", manager.networkingEnabledWriteCb)
+	managerServerObj.SetWriteCallback(manager, "VpnEnabled", manager.vpnEnabledWriteCb)
+
+	err = managerServerObj.Export()
+	if err != nil {
+		logger.Error("failed to export manager:", err)
 		manager = nil
 		return err
 	}
 
-	manager.proxyChainsManager = proxychains.NewManager()
-	err = dbus.InstallOnSession(manager.proxyChainsManager)
+	manager.proxyChainsManager = proxychains.NewManager(service)
+	err = service.Export(proxychains.DBusPath, manager.proxyChainsManager)
 	if err != nil {
-		logger.Warning("register proxychains manager dbus interface failed: ", err)
+		logger.Warning("failed to export proxyChainsManager:", err)
 		manager.proxyChainsManager = nil
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
 		return err
 	}
 
 	// initialize manager after dbus installed
 	go func() {
-		manager.initManager()
-		initDbusDaemon()
+		manager.init()
 		watchNetworkManagerRestart(manager)
 	}()
 	return nil
@@ -88,16 +99,21 @@ func (d *Daemon) Stop() error {
 		return nil
 	}
 
-	destroyDbusDaemon()
-	DestroyManager(manager)
-	dbus.UnInstallObject(manager)
+	service := loader.GetService()
+
+	err := service.ReleaseName(dbusServiceName)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	manager.destroy()
+	service.StopExport(manager)
 
 	if manager.proxyChainsManager != nil {
-		dbus.UnInstallObject(manager.proxyChainsManager)
+		service.StopExport(manager.proxyChainsManager)
 		manager.proxyChainsManager = nil
 	}
 
 	manager = nil
-	logger.EndTracing()
 	return nil
 }

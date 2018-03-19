@@ -566,6 +566,7 @@ func wrapIpv6Addresses(data ipv6Addresses) (wrapData ipv6AddressesWrapper) {
 	}
 	return
 }
+
 func unwrapIpv6Addresses(wrapData ipv6AddressesWrapper) (data ipv6Addresses) {
 	for _, d := range wrapData {
 		ipv6Addr := ipv6Address{}

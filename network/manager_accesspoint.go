@@ -20,11 +20,13 @@
 package network
 
 import (
-	nmdbus "dbus/org/freedesktop/networkmanager"
+	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
+
 	"fmt"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -66,7 +68,8 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 	}
 
 	// connect property changed signals
-	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
+	ap.nmAp.InitSignalExt(m.sysSigLoop, true)
+	ap.nmAp.AccessPoint().ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
 		if !m.isAccessPointExists(apPath) {
 			return
 		}
@@ -84,17 +87,17 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 				logger.Debugf("access point(ignored) properties changed %#v", ap)
 			} else {
 				logger.Debugf("access point properties changed %#v", ap)
-				dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
+				m.service.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
 			}
 		} else {
 			// ignored state changed, if became ignored now, send
 			// removed signal or send added signal
 			if ignoredNow {
 				logger.Debugf("access point is ignored %#v", ap)
-				dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
+				m.service.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
 			} else {
 				logger.Debugf("ignored access point available %#v", ap)
-				dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+				m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
 			}
 		}
 	})
@@ -103,7 +106,7 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 		logger.Debugf("new access point is ignored %#v", ap)
 	} else {
 		apJSON, _ := marshalJSON(ap)
-		dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+		m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
 	}
 
 	return
@@ -111,18 +114,24 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 func (m *Manager) destroyAccessPoint(ap *accessPoint) {
 	// emit AccessPointRemoved signal
 	apJSON, _ := marshalJSON(ap)
-	dbus.Emit(m, "AccessPointRemoved", string(ap.devPath), apJSON)
+	m.service.Emit(m, "AccessPointRemoved", string(ap.devPath), apJSON)
 	nmDestroyAccessPoint(ap.nmAp)
 }
 func (a *accessPoint) updateProps() {
-	a.Ssid = decodeSsid(a.nmAp.Ssid.Get())
+	ssid, _ := a.nmAp.Ssid().Get(0)
+	a.Ssid = decodeSsid(ssid)
 	a.Secured = getApSecType(a.nmAp) != apSecNone
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
-	a.Strength = a.nmAp.Strength.Get()
+	a.Strength, _ = a.nmAp.Strength().Get(0)
 }
+
 func getApSecType(ap *nmdbus.AccessPoint) apSecType {
-	return doParseApSecType(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())
+	flags, _ := ap.Flags().Get(0)
+	wpaFlags, _ := ap.WpaFlags().Get(0)
+	rsnFlags, _ := ap.RsnFlags().Get(0)
+	return doParseApSecType(flags, wpaFlags, rsnFlags)
 }
+
 func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 	r := apSecNone
 
@@ -251,7 +260,7 @@ func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
 }
 
 // GetAccessPoints return all access points object which marshaled by json.
-func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
+func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, busErr *dbus.Error) {
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
 	filteredAccessPoints := make([]*accessPoint, 0)
@@ -260,17 +269,25 @@ func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err err
 			filteredAccessPoints = append(filteredAccessPoints, aconn)
 		}
 	}
-	apsJSON, err = marshalJSON(filteredAccessPoints)
+	apsJSON, err := marshalJSON(filteredAccessPoints)
+	busErr = dbusutil.ToError(err)
+	return
+}
+
+func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, busErr *dbus.Error) {
+	var err error
+	cpath, err = m.activateAccessPoint(uuid, apPath, devPath)
+	busErr = dbusutil.ToError(err)
 	return
 }
 
 // ActivateAccessPoint add and activate connection for access point.
-func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
+func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateAccessPoint: uuid=%s, apPath=%s, devPath=%s", uuid, apPath, devPath)
 	defer logger.Debugf("ActivateAccessPoint end")
 
 	if len(uuid) > 0 {
-		cpath, err = m.ActivateConnection(uuid, devPath)
+		cpath, err = m.activateConnection(uuid, devPath)
 	} else {
 		// if there is no connection for current access point, create one
 		var nmAp *nmdbus.AccessPoint
@@ -278,10 +295,10 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		if err != nil {
 			return
 		}
-		defer nmDestroyAccessPoint(nmAp)
 
 		uuid = utils.GenUuid()
-		data := newWirelessConnectionData(decodeSsid(nmAp.Ssid.Get()), uuid, []byte(nmAp.Ssid.Get()), getApSecType(nmAp))
+		ssid, _ := nmAp.Ssid().Get(0)
+		data := newWirelessConnectionData(decodeSsid(ssid), uuid, ssid, getApSecType(nmAp))
 		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 	}
 	return
@@ -290,8 +307,18 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 // CreateConnectionForAccessPoint will crate connection for target
 // access point, it will set the right SSID and secret method
 // automatically.
-func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	session, err = newConnectionSessionByCreate(connectionWireless, devPath)
+func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (
+	sessionPath dbus.ObjectPath, busErr *dbus.Error) {
+	session, err := m.createConnectionForAccessPoint(apPath, devPath)
+	if err != nil {
+		return "/", dbusutil.ToError(err)
+	}
+	return session.sessionPath, nil
+}
+
+func (m *Manager) createConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (
+	session *ConnectionSession, err error) {
+	session, err = newConnectionSessionByCreate(connectionWireless, devPath, m.service)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -302,10 +329,10 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 	if err != nil {
 		return
 	}
-	defer nmDestroyAccessPoint(nmAp)
 
-	setSettingConnectionId(session.data, decodeSsid(nmAp.Ssid.Get()))
-	setSettingWirelessSsid(session.data, []byte(nmAp.Ssid.Get()))
+	ssid, _ := nmAp.Ssid().Get(0)
+	setSettingConnectionId(session.data, decodeSsid(ssid))
+	setSettingWirelessSsid(session.data, ssid)
 	secType := getApSecType(nmAp)
 	switch secType {
 	case apSecNone:

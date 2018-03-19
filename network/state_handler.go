@@ -19,12 +19,17 @@
 
 package network
 
-import "pkg.deepin.io/lib/dbus"
-import "sync"
-import . "pkg.deepin.io/lib/gettext"
-import nmdbus "dbus/org/freedesktop/networkmanager"
-import "pkg.deepin.io/dde/daemon/network/nm"
-import "fmt"
+import (
+	"fmt"
+	"sync"
+
+	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
+
+	"pkg.deepin.io/dde/daemon/network/nm"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	. "pkg.deepin.io/lib/gettext"
+)
 
 var vpnErrorTable = make(map[uint32]string)
 var deviceErrorTable = make(map[uint32]string)
@@ -121,8 +126,10 @@ type stateHandler struct {
 	devices map[dbus.ObjectPath]*deviceStateInfo
 	locker  sync.Mutex
 
-	conf *config
+	conf       *config
+	sysSigLoop *dbusutil.SignalLoop
 }
+
 type deviceStateInfo struct {
 	nmDev          *nmdbus.Device
 	enabled        bool
@@ -132,10 +139,11 @@ type deviceStateInfo struct {
 	connectionType string
 }
 
-func newStateHandler(c *config) (sh *stateHandler) {
+func newStateHandler(c *config, sysSigLoop *dbusutil.SignalLoop) (sh *stateHandler) {
 	sh = &stateHandler{}
 	sh.devices = make(map[dbus.ObjectPath]*deviceStateInfo)
 	sh.conf = c
+	sh.sysSigLoop = sysSigLoop
 
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		sh.remove(path)
@@ -147,12 +155,12 @@ func newStateHandler(c *config) (sh *stateHandler) {
 		sh.watch(path)
 	}
 
-	nmManager.NetworkingEnabled.ConnectChanged(func() {
+	nmManager.NetworkingEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		if !nmGetNetworkEnabled() {
 			notifyAirplanModeEnabled()
 		}
 	})
-	nmManager.WirelessHardwareEnabled.ConnectChanged(func() {
+	nmManager.WirelessHardwareEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		if !nmGetWirelessHardwareEnabled() {
 			notifyWirelessHardSwitchOff()
 		}
@@ -183,15 +191,16 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 		return
 	}
 
-	if !isDeviceTypeValid(nmDev.DeviceType.Get()) {
+	deviceType, _ := nmDev.DeviceType().Get(0)
+	if !isDeviceTypeValid(deviceType) {
 		return
 	}
 
 	sh.locker.Lock()
 	defer sh.locker.Unlock()
 	sh.devices[path] = &deviceStateInfo{nmDev: nmDev}
-	sh.devices[path].devType = nmDev.DeviceType.Get()
-	sh.devices[path].devUdi = nmDev.Udi.Get()
+	sh.devices[path].devType = deviceType
+	sh.devices[path].devUdi, _ = nmDev.Udi().Get(0)
 	sh.devices[path].enabled = sh.conf.getDeviceEnabled(path)
 	if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 		// remember active connection id and type if exists
@@ -200,6 +209,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 	}
 
 	// connect signals
+	nmDev.InitSignalExt(sh.sysSigLoop, true)
 	nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 		logger.Debugf("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
 		sh.locker.Lock()
@@ -220,7 +230,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 				dsi.aconnId = getSettingConnectionId(data)
 				icon := generalGetNotifyDisconnectedIcon(dsi.devType, path)
-				logger.Debug("--------[Prepare] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path)
+				logger.Debug("--------[Prepare] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path_())
 				if dsi.connectionType == connectionWirelessHotspot {
 					notify(icon, "", Tr("Try enabling hotspot"))
 				} else {
@@ -230,7 +240,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 		case nm.NM_DEVICE_STATE_ACTIVATED:
 			icon := generalGetNotifyConnectedIcon(dsi.devType, path)
 			msg := dsi.aconnId
-			logger.Debug("--------[Activated] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path)
+			logger.Debug("--------[Activated] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path_())
 			if dsi.connectionType == connectionWirelessHotspot {
 				notify(icon, "", Tr("Hotspot share enabled"))
 			} else {
@@ -288,7 +298,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				return
 			}
 
-			logger.Debug("--------[Disconnect] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path)
+			logger.Debug("--------[Disconnect] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path_())
 			var icon, msg string
 			icon = generalGetNotifyDisconnectedIcon(dsi.devType, path)
 			if len(msg) == 0 {

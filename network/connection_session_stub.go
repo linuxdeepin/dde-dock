@@ -23,15 +23,10 @@ import (
 	"fmt"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
 )
 
-func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Network",
-		ObjectPath: string(s.sessionPath),
-		Interface:  "com.deepin.daemon.ConnectionSession",
-	}
+func (*ConnectionSession) GetInterfaceName() string {
+	return "com.deepin.daemon.ConnectionSession"
 }
 
 func (s *ConnectionSession) setProps() {
@@ -46,29 +41,31 @@ func (s *ConnectionSession) setProps() {
 	// by font-end to update widget value that with proeprty
 	// "alwaysUpdate", which should only update value when visible, so
 	// it depends on "AvailableSections" and "AvailableKeys"
-	dbus.Emit(s, "ConnectionDataChanged")
+	s.service.Emit(s, "ConnectionDataChanged")
 }
 
 func (s *ConnectionSession) setPropType() {
 	s.Type = getCustomConnectionType(s.data)
-	dbus.NotifyChange(s, "Type")
+	s.service.EmitPropertyChanged(s, "Type", s.Type)
 }
 
 func (s *ConnectionSession) setPropAllowDelete(allow bool) {
 	if s.AllowDelete != allow {
 		s.AllowDelete = allow
-		dbus.NotifyChange(s, "AllowDelete")
+		s.service.EmitPropertyChanged(s, "AllowDelete", s.AllowDelete)
 	}
 }
 
 func (s *ConnectionSession) setPropAvailableVirtualSections() {
 	s.AvailableVirtualSections = getAvailableVsections(s.data)
-	dbus.NotifyChange(s, "AvailableVirtualSections")
+	s.service.EmitPropertyChanged(s, "AvailableVirtualSections",
+		s.AvailableVirtualSections)
 }
 
 func (s *ConnectionSession) setPropAvailableSections() {
 	s.AvailableSections = getAvailableSections(s.data)
-	dbus.NotifyChange(s, "AvailableSections")
+	s.service.EmitPropertyChanged(s, "AvailableSections",
+		s.AvailableSections)
 }
 
 func (s *ConnectionSession) setPropAvailableKeys() {
@@ -76,7 +73,7 @@ func (s *ConnectionSession) setPropAvailableKeys() {
 	for _, section := range getAvailableSections(s.data) {
 		s.AvailableKeys[section] = generalGetSettingAvailableKeys(s.data, section)
 	}
-	dbus.NotifyChange(s, "AvailableKeys")
+	s.service.EmitPropertyChanged(s, "AvailableKeys", s.AvailableKeys)
 }
 
 func (s *ConnectionSession) setPropErrors() {
@@ -125,5 +122,5 @@ func (s *ConnectionSession) setPropErrors() {
 		}
 	}
 
-	dbus.NotifyChange(s, "Errors")
+	s.service.EmitPropertyChanged(s, "Errors", s.Errors)
 }

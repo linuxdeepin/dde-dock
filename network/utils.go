@@ -26,7 +26,7 @@ import (
 	"os"
 	"os/exec"
 	"pkg.deepin.io/dde/daemon/iw"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/utils"
 	"strings"
 )

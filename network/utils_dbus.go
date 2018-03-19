@@ -20,54 +20,46 @@
 package network
 
 import (
-	dbusmgr "dbus/org/freedesktop/dbus/system"
-	"dbus/org/freedesktop/login1"
-	nmdbus "dbus/org/freedesktop/networkmanager"
-)
-
-const (
-	dbusMmDest        = "org.freedesktop.ModemManager1"
-	dbusNmDest        = "org.freedesktop.NetworkManager"
-	dbusNmPath        = "/org/freedesktop/NetworkManager"
-	dbusNmSettingPath = "/org/freedesktop/NetworkManager/Settings"
-	dbusLoginDest     = "org.freedesktop.login1"
-	dbusLoginPath     = "/org/freedesktop/login1"
+	dbusmgr "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 var (
 	nmManager    *nmdbus.Manager
 	nmSettings   *nmdbus.Settings
 	loginManager *login1.Manager
-	dbusDaemon   *dbusmgr.DBusDaemon
+	dbusDaemon   *dbusmgr.DBus // system dbus daemon
 )
 
-func initDbusObjects() {
-	var err error
-	if nmManager, err = nmdbus.NewManager(dbusNmDest, dbusNmPath); err != nil {
+func (m *Manager) initDbusObjects() {
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
 		logger.Error(err)
+		return
 	}
-	if nmSettings, err = nmdbus.NewSettings(dbusNmDest, dbusNmSettingPath); err != nil {
-		logger.Error(err)
-	}
-	if loginManager, err = login1.NewManager(dbusLoginDest, dbusLoginPath); err != nil {
-		logger.Error(err)
-	}
+
+	nmManager = nmdbus.NewManager(systemBus)
+	nmManager.InitSignalExt(m.sysSigLoop, true)
+
+	nmSettings = nmdbus.NewSettings(systemBus)
+	nmSettings.InitSignalExt(m.sysSigLoop, true)
+
+	loginManager = login1.NewManager(systemBus)
+	loginManager.InitSignalExt(m.sysSigLoop, true)
+
+	dbusDaemon = dbusmgr.NewDBus(systemBus)
+	dbusDaemon.InitSignalExt(m.sysSigLoop, true)
 }
+
 func destroyDbusObjects() {
 	// destroy global dbus objects manually when stopping service is
 	// required for that there are multiple signal connected with
 	// theme which need to be removed
-	login1.DestroyManager(loginManager)
-	nmdbus.DestroyManager(nmManager)
-	nmdbus.DestroySettings(nmSettings)
-}
-
-func initDbusDaemon() {
-	var err error
-	if dbusDaemon, err = dbusmgr.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus"); err != nil {
-		logger.Error(err)
-	}
-}
-func destroyDbusDaemon() {
-	dbusmgr.DestroyDBusDaemon(dbusDaemon)
+	nmManager.RemoveHandler(proxy.RemoveAllHandlers)
+	nmSettings.RemoveHandler(proxy.RemoveAllHandlers)
+	loginManager.RemoveHandler(proxy.RemoveAllHandlers)
+	dbusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
 }

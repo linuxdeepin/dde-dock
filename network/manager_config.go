@@ -21,8 +21,9 @@ package network
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -289,7 +290,7 @@ func (c *config) setDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 		return
 	}
 	devConfig.Enabled = enabled
-	dbus.Emit(manager, "DeviceEnabled", string(devPath), enabled)
+	manager.service.Emit(manager, "DeviceEnabled", string(devPath), enabled)
 	c.save()
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {
