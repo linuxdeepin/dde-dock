@@ -1,5 +1,28 @@
 ## [Unreleased]
 
+[3.2.11] 2018-03-19
+*   auto sync po files from transifex
+*   fix(audio): nil pointer error in handleCardEvent
+*   refactor(session-daemon): use newly lib dbusutil
+*   refactor(bluetooth): use newly lib dbusutil
+*   fix(accounts): get blurred image without compare change time
+*   refactor(fprintd): use newly lib dbusutil
+*   refactor(audio): use newly lib dbusutil
+*   refactor(inputdevices): use newly lib dbusutil
+*   refactor(appearance): use newly lib dbusutil
+*   fix(network): allow to delete when creating connection
+*   fix(network): fix device mac address unchanged after set it to empty
+*   refactor(keybinding): use newly lib dbusutil
+*   fix(network): filter notify if device disabled
+*   refactor(mime): use newly lib dbusutil
+*   refactor(timedate): use newly lib dbusutil
+*   refactor(screenedge): use newly lib dbusutil
+*   refactor(sessionwatcher): use newly lib dbusutil
+*   refactor(systeminfo): use newly lib dbusutil
+*   refactor(screensaver): use newly lib dbusutil
+*   refactor(session/power): use lib dbusutil
+*   chore: use lib dbusutil new api
+
 [3.2.10] 2018-03-07
 *   auto sync po files from transifex
 *   refactor(dock): optimize design
