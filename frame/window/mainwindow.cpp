@@ -322,6 +322,7 @@ void MainWindow::internalMove(const QPoint &p)
         }
     }
 
+    // using platform window to set real window position
     windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
 }
 

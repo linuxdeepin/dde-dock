@@ -84,6 +84,7 @@ private slots:
     void showPreview();
     void cancelAndHidePreview();
     void playSwingEffect();
+    void stopSwingEffect();
     void checkAttentionEffect();
 
 private:

@@ -176,6 +176,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
 AppItem::~AppItem()
 {
+    stopSwingEffect();
+
     m_appNameTips->deleteLater();
     m_appPreviewTips->deleteLater();
 }
@@ -529,8 +531,7 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
         if (DockDisplayMode == DisplayMode::Fashion)
             playSwingEffect();
     } else {
-        // stop swing effect
-        m_swingEffectView->setVisible(false);
+        stopSwingEffect();
     }
 
     update();
@@ -589,11 +590,9 @@ void AppItem::cancelAndHidePreview()
 
 void AppItem::playSwingEffect()
 {
-    if (m_itemAnimation.timeLine())
+    stopSwingEffect();
+    if (!m_itemAnimation.timeLine())
     {
-        m_itemAnimation.timeLine()->stop();
-        m_itemAnimation.clear();
-    } else {
         QTimeLine *tl = new QTimeLine(1200, this);
         tl->setFrameRange(0, 60);
         tl->setLoopCount(1);
@@ -602,8 +601,6 @@ void AppItem::playSwingEffect()
 
         m_itemAnimation.setTimeLine(tl);
     }
-
-    m_itemScene->clear();
 
     const auto ratio = qApp->devicePixelRatio();
     const QRect r = rect();
@@ -634,6 +631,17 @@ void AppItem::playSwingEffect()
 
     tl->start();
     m_swingEffectView->setVisible(true);
+}
+
+void AppItem::stopSwingEffect()
+{
+    // stop swing effect
+    m_swingEffectView->setVisible(false);
+
+    if (m_itemAnimation.timeLine())
+        m_itemAnimation.timeLine()->stop();
+    m_itemAnimation.clear();
+    m_itemScene->clear();
 }
 
 void AppItem::checkAttentionEffect()
