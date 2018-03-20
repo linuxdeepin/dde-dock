@@ -112,7 +112,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_swingEffectView(new QGraphicsView(this)),
       m_itemScene(new QGraphicsScene(this)),
 
-      m_draging(false),
+      m_dragging(false),
 
       m_appIcon(QPixmap()),
 
@@ -237,7 +237,7 @@ void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (m_draging || (m_swingEffectView->isVisible() && DockDisplayMode != Fashion))
+    if (m_dragging || (m_swingEffectView->isVisible() && DockDisplayMode != Fashion))
         return;
 
     QPainter painter(this);
@@ -471,7 +471,7 @@ const QString AppItem::contextMenu() const
 
 QWidget *AppItem::popupTips()
 {
-    if (m_draging)
+    if (m_dragging)
         return nullptr;
 
     if (!m_windowInfos.isEmpty())
@@ -488,7 +488,7 @@ QWidget *AppItem::popupTips()
 
 void AppItem::startDrag()
 {
-    m_draging = true;
+    m_dragging = true;
     update();
 
     const QPixmap &dragPix = m_appIcon;
@@ -506,7 +506,7 @@ void AppItem::startDrag()
     if (!drag->target())
         m_itemEntryInter->RequestUndock();
 
-    m_draging = false;
+    m_dragging = false;
     setVisible(true);
     update();
 }

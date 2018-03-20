@@ -69,7 +69,7 @@ private:
     PluginsItemInterface * const m_pluginInter;
     QWidget *m_centralWidget;
     const QString m_itemKey;
-    bool m_draging;
+    bool m_dragging;
 
     static QPoint MousePressPoint;
 };

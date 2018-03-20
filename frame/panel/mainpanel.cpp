@@ -25,7 +25,7 @@
 #include <QBoxLayout>
 #include <QDragEnterEvent>
 
-DockItem *MainPanel::DragingItem = nullptr;
+DockItem *MainPanel::DraggingItem = nullptr;
 PlaceholderItem *MainPanel::RequestDockItem = nullptr;
 
 const char *RequestDockKey = "RequestDock";
@@ -197,11 +197,11 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
     if (dragSourceItem)
     {
         e->accept();
-        if (DragingItem)
-            DragingItem->show();
+        if (DraggingItem)
+            DraggingItem->show();
         return;
     } else {
-        DragingItem = nullptr;
+        DraggingItem = nullptr;
     }
 
     if (!e->mimeData()->formats().contains(RequestDockKey))
@@ -223,16 +223,16 @@ void MainPanel::dragMoveEvent(QDragMoveEvent *e)
     // internal drag swap
     if (e->source())
     {
-        if (dst == DragingItem)
+        if (dst == DraggingItem)
             return;
-        if (!DragingItem)
+        if (!DraggingItem)
             return;
-        if (m_itemController->itemIsInContainer(DragingItem))
+        if (m_itemController->itemIsInContainer(DraggingItem))
             return;
 
-        m_itemController->itemMove(DragingItem, dst);
+        m_itemController->itemMove(DraggingItem, dst);
     } else {
-        DragingItem = nullptr;
+        DraggingItem = nullptr;
 
         if (!RequestDockItem)
         {
@@ -270,15 +270,15 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         RequestDockItem = nullptr;
     }
 
-    if (DragingItem && DragingItem->itemType() != DockItem::Plugins)
-        DragingItem->hide();
+    if (DraggingItem && DraggingItem->itemType() != DockItem::Plugins)
+        DraggingItem->hide();
 }
 
 void MainPanel::dropEvent(QDropEvent *e)
 {
     Q_UNUSED(e)
 
-    DragingItem = nullptr;
+    DraggingItem = nullptr;
 
     if (RequestDockItem)
     {
@@ -546,17 +546,17 @@ void MainPanel::itemMoved(DockItem *item, const int index)
 }
 
 ///
-/// \brief MainPanel::itemDragStarted handle managed item draging
+/// \brief MainPanel::itemDragStarted handle managed item dragging
 ///
 void MainPanel::itemDragStarted()
 {
-    DragingItem = qobject_cast<DockItem *>(sender());
+    DraggingItem = qobject_cast<DockItem *>(sender());
 
-    if (DragingItem->itemType() == DockItem::Plugins)
+    if (DraggingItem->itemType() == DockItem::Plugins)
     {
-        if (static_cast<PluginsItem *>(DragingItem)->allowContainer())
+        if (static_cast<PluginsItem *>(DraggingItem)->allowContainer())
         {
-            qobject_cast<PluginsItem *>(DragingItem)->hidePopup();
+            qobject_cast<PluginsItem *>(DraggingItem)->hidePopup();
             m_itemController->setDropping(true);
         }
     }
@@ -565,7 +565,7 @@ void MainPanel::itemDragStarted()
     rect.setTopLeft(mapToGlobal(pos()));
     rect.setSize(size());
 
-    DragingItem->setVisible(rect.contains(QCursor::pos()));
+    DraggingItem->setVisible(rect.contains(QCursor::pos()));
 }
 
 ///

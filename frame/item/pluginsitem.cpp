@@ -40,7 +40,7 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
       m_pluginInter(pluginInter),
       m_centralWidget(m_pluginInter->itemWidget(itemKey)),
       m_itemKey(itemKey),
-      m_draging(false)
+      m_dragging(false)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -153,7 +153,7 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 
 bool PluginsItem::eventFilter(QObject *o, QEvent *e)
 {
-    if (m_draging)
+    if (m_dragging)
         if (o == m_centralWidget && e->type() == QEvent::Paint)
             return true;
 
@@ -187,7 +187,7 @@ void PluginsItem::startDrag()
 {
     const QPixmap pixmap = grab();
 
-    m_draging = true;
+    m_dragging = true;
     update();
 
     QMimeData *mime = new QMimeData;
@@ -203,7 +203,7 @@ void PluginsItem::startDrag()
     Q_UNUSED(result);
     emit itemDropped(drag->target());
 
-    m_draging = false;
+    m_dragging = false;
     setVisible(true);
     update();
 }

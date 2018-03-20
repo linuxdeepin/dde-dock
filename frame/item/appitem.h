@@ -96,7 +96,7 @@ private:
     QGraphicsScene *m_itemScene;
     QGraphicsItemAnimation m_itemAnimation;
 
-    bool m_draging;
+    bool m_dragging;
     bool m_active;
     WindowInfoMap m_windowInfos;
     QString m_id;

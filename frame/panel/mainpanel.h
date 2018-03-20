@@ -89,7 +89,7 @@ private:
     QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
 
-    static DockItem *DragingItem;
+    static DockItem *DraggingItem;
     static PlaceholderItem *RequestDockItem;
 };
 
