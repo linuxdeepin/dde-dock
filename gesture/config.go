@@ -110,7 +110,7 @@ func (m *gestureManager) Exec(name, direction string, fingers int32) error {
 	logger.Debug("[Exec] action info:", info.Name, info.Direction, info.Fingers,
 		info.Action.Type, info.Action.Action)
 	if isKbdAlreadyGrabbed() {
-		return fmt.Errorf("There has some proccess grabed keyboard, not exec action")
+		return fmt.Errorf("Another process grabbed keyboard, not exec action")
 	}
 	var cmd = info.Action.Action
 	switch info.Action.Type {
