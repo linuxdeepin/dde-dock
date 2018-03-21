@@ -112,6 +112,9 @@ func configContent(standard, mono string) string {
         </edit>
     </match>
 
+    <match target="font">
+        <edit name="rgba"><const>rgb</const></edit>
+    </match>
 </fontconfig>`, standard, fallbackStandard,
 		standard, fallbackStandard,
 		mono, fallbackMonospace)
