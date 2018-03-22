@@ -1,3 +1,16 @@
+<a name=""></a>
+##  4.6.2 (2018-03-22)
+
+
+#### Bug Fixes
+
+*   1px line on top and left ([65100785](65100785))
+*   not installed keyboard_layout.json ([3776f361](3776f361))
+*   dock hang when receive attention on fastion mode ([1444fa40](1444fa40))
+
+
+
+
 <a name="4.6.1"></a>
 ## 4.6.1 (2018-03-15)
 
