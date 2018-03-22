@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+[3.2.12] 2018-03-22
+*   auto sync po files from transifex
+*   feat(dock): add window identify for org.deepin.flatdeb.*
+*   refactor: improve english
+*   refactor(miracast): use newly lib dbusutil
+*   fix(session-daemon): different modules startup sequence
+
 [3.2.11] 2018-03-19
 *   auto sync po files from transifex
 *   fix(audio): nil pointer error in handleCardEvent
