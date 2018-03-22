@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
+"POT-Creation-Date: 2018-03-01 13:51+0800\n"
+"PO-Revision-Date: 2018-03-22 01:40+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -598,7 +598,7 @@ msgstr "تخصيص MTU"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
-#: ../../network/nm_setting_beans_gen.go:359
+#: ../../network/nm_setting_beans_gen.go:361
 msgid "MTU"
 msgstr "MTU"
 
@@ -648,11 +648,11 @@ msgstr "الرقم"
 #: ../../network/nm_setting_beans_gen.go:213
 #: ../../network/nm_setting_beans_gen.go:221
 #: ../../network/nm_setting_beans_gen.go:237
-#: ../../network/nm_setting_beans_gen.go:297
-#: ../../network/nm_setting_beans_gen.go:342
-#: ../../network/nm_setting_beans_gen.go:372
-#: ../../network/nm_setting_beans_gen.go:405
-#: ../../network/nm_setting_beans_gen.go:420
+#: ../../network/nm_setting_beans_gen.go:299
+#: ../../network/nm_setting_beans_gen.go:344
+#: ../../network/nm_setting_beans_gen.go:374
+#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:422
 msgid "Username"
 msgstr "اسم المستخدم"
 
@@ -668,10 +668,10 @@ msgstr "اسم المستخدم"
 #: ../../network/nm_setting_beans_gen.go:208
 #: ../../network/nm_setting_beans_gen.go:216
 #: ../../network/nm_setting_beans_gen.go:239
-#: ../../network/nm_setting_beans_gen.go:299
-#: ../../network/nm_setting_beans_gen.go:343
-#: ../../network/nm_setting_beans_gen.go:374
-#: ../../network/nm_setting_beans_gen.go:408
+#: ../../network/nm_setting_beans_gen.go:301
+#: ../../network/nm_setting_beans_gen.go:345
+#: ../../network/nm_setting_beans_gen.go:376
+#: ../../network/nm_setting_beans_gen.go:410
 #: ../../network/nm_setting_vpn_openvpn.go:114
 msgid "Password"
 msgstr "كلمة المرور"
@@ -693,8 +693,8 @@ msgstr "PIN"
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
-#: ../../network/nm_setting_beans_gen.go:260
-#: ../../network/nm_setting_beans_gen.go:384
+#: ../../network/nm_setting_beans_gen.go:262
+#: ../../network/nm_setting_beans_gen.go:386
 msgid "Security"
 msgstr "الأمان"
 
@@ -723,11 +723,11 @@ msgstr "الهوية"
 #: ../../network/nm_setting_beans_gen.go:222
 #: ../../network/nm_setting_beans_gen.go:225
 #: ../../network/nm_setting_beans_gen.go:238
-#: ../../network/nm_setting_beans_gen.go:298
-#: ../../network/nm_setting_beans_gen.go:303
-#: ../../network/nm_setting_beans_gen.go:373
-#: ../../network/nm_setting_beans_gen.go:421
-#: ../../network/nm_setting_beans_gen.go:424
+#: ../../network/nm_setting_beans_gen.go:300
+#: ../../network/nm_setting_beans_gen.go:305
+#: ../../network/nm_setting_beans_gen.go:375
+#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:426
 msgid "Ask for Pwd"
 msgstr "اسأل عن Pwd"
 
@@ -737,7 +737,7 @@ msgstr "هوية مجهولة"
 
 #: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:199
-#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:306
 msgid "Private Pwd"
 msgstr "خاص Pwd"
 
@@ -745,9 +745,9 @@ msgstr "خاص Pwd"
 #: ../../network/nm_setting_beans_gen.go:188
 #: ../../network/nm_setting_beans_gen.go:197
 #: ../../network/nm_setting_beans_gen.go:215
-#: ../../network/nm_setting_beans_gen.go:286
-#: ../../network/nm_setting_beans_gen.go:302
-#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:288
+#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:409
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
 msgstr "مفتاح خاص"
@@ -756,9 +756,9 @@ msgstr "مفتاح خاص"
 #: ../../network/nm_setting_beans_gen.go:183
 #: ../../network/nm_setting_beans_gen.go:195
 #: ../../network/nm_setting_beans_gen.go:211
-#: ../../network/nm_setting_beans_gen.go:281
-#: ../../network/nm_setting_beans_gen.go:300
-#: ../../network/nm_setting_beans_gen.go:403
+#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:302
+#: ../../network/nm_setting_beans_gen.go:405
 msgid "CA Cert"
 msgstr "شهادة CA"
 
@@ -766,9 +766,9 @@ msgstr "شهادة CA"
 #: ../../network/nm_setting_beans_gen.go:187
 #: ../../network/nm_setting_beans_gen.go:196
 #: ../../network/nm_setting_beans_gen.go:214
-#: ../../network/nm_setting_beans_gen.go:285
-#: ../../network/nm_setting_beans_gen.go:301
-#: ../../network/nm_setting_beans_gen.go:406
+#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:303
+#: ../../network/nm_setting_beans_gen.go:408
 msgid "User Cert"
 msgstr "رخصة المستخدم"
 
@@ -821,8 +821,8 @@ msgid "PPP"
 msgstr "البروتوكول التناظري"
 
 #: ../../network/nm_setting_beans_gen.go:156
-#: ../../network/nm_setting_beans_gen.go:259
-#: ../../network/nm_setting_beans_gen.go:383
+#: ../../network/nm_setting_beans_gen.go:261
+#: ../../network/nm_setting_beans_gen.go:385
 msgid "Use MPPE"
 msgstr "استخدام MPPE  "
 
@@ -831,72 +831,72 @@ msgid "128-bit MPPE"
 msgstr "128-bit MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:158
-#: ../../network/nm_setting_beans_gen.go:261
-#: ../../network/nm_setting_beans_gen.go:385
+#: ../../network/nm_setting_beans_gen.go:263
+#: ../../network/nm_setting_beans_gen.go:387
 msgid "Stateful MPPE"
 msgstr "Stateful MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:159
-#: ../../network/nm_setting_beans_gen.go:262
-#: ../../network/nm_setting_beans_gen.go:386
+#: ../../network/nm_setting_beans_gen.go:264
+#: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse EAP Authentication"
 msgstr "رفض مصادقة الـ EAP"
 
 #: ../../network/nm_setting_beans_gen.go:160
-#: ../../network/nm_setting_beans_gen.go:263
-#: ../../network/nm_setting_beans_gen.go:387
+#: ../../network/nm_setting_beans_gen.go:265
+#: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse PAP Authentication"
 msgstr "رفض مصادقة الـ PAP"
 
 #: ../../network/nm_setting_beans_gen.go:161
-#: ../../network/nm_setting_beans_gen.go:264
-#: ../../network/nm_setting_beans_gen.go:388
+#: ../../network/nm_setting_beans_gen.go:266
+#: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse CHAP Authentication"
 msgstr "رفض مصادقة الـ CHAP"
 
 #: ../../network/nm_setting_beans_gen.go:162
-#: ../../network/nm_setting_beans_gen.go:265
-#: ../../network/nm_setting_beans_gen.go:389
+#: ../../network/nm_setting_beans_gen.go:267
+#: ../../network/nm_setting_beans_gen.go:391
 msgid "Refuse MSCHAP Authentication"
 msgstr "رفض مصادقة الـ MSCHAP"
 
 #: ../../network/nm_setting_beans_gen.go:163
-#: ../../network/nm_setting_beans_gen.go:266
-#: ../../network/nm_setting_beans_gen.go:390
+#: ../../network/nm_setting_beans_gen.go:268
+#: ../../network/nm_setting_beans_gen.go:392
 msgid "Refuse MSCHAPv2 Authentication"
 msgstr "رفض مصادقة الـ MSCHAPv2"
 
 #: ../../network/nm_setting_beans_gen.go:164
-#: ../../network/nm_setting_beans_gen.go:267
-#: ../../network/nm_setting_beans_gen.go:391
+#: ../../network/nm_setting_beans_gen.go:269
+#: ../../network/nm_setting_beans_gen.go:393
 msgid "No BSD Data Compression"
 msgstr "عدم ضغط بيانات  BSD"
 
 #: ../../network/nm_setting_beans_gen.go:165
-#: ../../network/nm_setting_beans_gen.go:268
-#: ../../network/nm_setting_beans_gen.go:392
+#: ../../network/nm_setting_beans_gen.go:270
+#: ../../network/nm_setting_beans_gen.go:394
 msgid "No Deflate Data Compression"
 msgstr "عدم ضغط البيانات الضئيلة"
 
 #: ../../network/nm_setting_beans_gen.go:166
-#: ../../network/nm_setting_beans_gen.go:269
-#: ../../network/nm_setting_beans_gen.go:393
+#: ../../network/nm_setting_beans_gen.go:271
+#: ../../network/nm_setting_beans_gen.go:395
 msgid "No TCP Header Compression"
 msgstr "عدم ضغط بيانات  TCP الرأسية"
 
 #: ../../network/nm_setting_beans_gen.go:167
-#: ../../network/nm_setting_beans_gen.go:272
-#: ../../network/nm_setting_beans_gen.go:394
+#: ../../network/nm_setting_beans_gen.go:274
+#: ../../network/nm_setting_beans_gen.go:396
 msgid "Send PPP Echo Packets"
 msgstr "إرسال حزم صدى PPP  "
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
-#: ../../network/nm_setting_beans_gen.go:278
-#: ../../network/nm_setting_beans_gen.go:293
-#: ../../network/nm_setting_beans_gen.go:369
-#: ../../network/nm_setting_beans_gen.go:400
-#: ../../network/nm_setting_beans_gen.go:417
+#: ../../network/nm_setting_beans_gen.go:280
+#: ../../network/nm_setting_beans_gen.go:295
+#: ../../network/nm_setting_beans_gen.go:371
+#: ../../network/nm_setting_beans_gen.go:402
+#: ../../network/nm_setting_beans_gen.go:419
 msgid "VPN"
 msgstr "VPN"
 
@@ -911,116 +911,116 @@ msgstr "بحاجة إلى ملحق VPN"
 #: ../../network/nm_setting_beans_gen.go:210
 #: ../../network/nm_setting_beans_gen.go:220
 #: ../../network/nm_setting_beans_gen.go:236
-#: ../../network/nm_setting_beans_gen.go:280
-#: ../../network/nm_setting_beans_gen.go:295
-#: ../../network/nm_setting_beans_gen.go:371
-#: ../../network/nm_setting_beans_gen.go:402
-#: ../../network/nm_setting_beans_gen.go:419
-#: ../../network/nm_setting_beans_gen.go:454
-#: ../../network/nm_setting_beans_gen.go:468
+#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:297
+#: ../../network/nm_setting_beans_gen.go:373
+#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:421
+#: ../../network/nm_setting_beans_gen.go:456
+#: ../../network/nm_setting_beans_gen.go:470
 msgid "Gateway"
 msgstr "البوابة"
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
 #: ../../network/nm_setting_beans_gen.go:240
-#: ../../network/nm_setting_beans_gen.go:375
+#: ../../network/nm_setting_beans_gen.go:377
 msgid "NT Domain"
 msgstr "NT Domain"
 
 #: ../../network/nm_setting_beans_gen.go:184
-#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:284
 msgid "Proxy"
 msgstr "الوكيل"
 
 #: ../../network/nm_setting_beans_gen.go:185
-#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:285
 msgid "Allow Cisco Secure Desktop Trojan"
 msgstr "السماح لـ Cisco Secure Desktop Trojan"
 
 #: ../../network/nm_setting_beans_gen.go:186
-#: ../../network/nm_setting_beans_gen.go:284
+#: ../../network/nm_setting_beans_gen.go:286
 msgid "CSD Script"
 msgstr "CSD Script"
 
 #: ../../network/nm_setting_beans_gen.go:189
-#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:289
 msgid "Use FSID for Key Passphrase"
 msgstr "استخدام \"FSID\" لمفتاح العبور"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
-#: ../../network/nm_setting_beans_gen.go:296
-#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:298
+#: ../../network/nm_setting_beans_gen.go:406
 msgid "Auth Type"
 msgstr "نوع المصادقة"
 
 #: ../../network/nm_setting_beans_gen.go:200
-#: ../../network/nm_setting_beans_gen.go:305
+#: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
 msgstr "مفتاح ثابت"
 
 #: ../../network/nm_setting_beans_gen.go:201
-#: ../../network/nm_setting_beans_gen.go:306
-#: ../../network/nm_setting_beans_gen.go:329
+#: ../../network/nm_setting_beans_gen.go:308
+#: ../../network/nm_setting_beans_gen.go:331
 msgid "Customize Key Direction"
 msgstr "تخصيص توجيه المفاتيح"
 
 #: ../../network/nm_setting_beans_gen.go:202
-#: ../../network/nm_setting_beans_gen.go:307
-#: ../../network/nm_setting_beans_gen.go:330
+#: ../../network/nm_setting_beans_gen.go:309
+#: ../../network/nm_setting_beans_gen.go:332
 msgid "Key Direction"
 msgstr "اتجاه المفتاح"
 
 #: ../../network/nm_setting_beans_gen.go:203
-#: ../../network/nm_setting_beans_gen.go:308
+#: ../../network/nm_setting_beans_gen.go:310
 msgid "Remote IP"
 msgstr "IP بعيد"
 
 #: ../../network/nm_setting_beans_gen.go:204
-#: ../../network/nm_setting_beans_gen.go:309
+#: ../../network/nm_setting_beans_gen.go:311
 msgid "Local IP"
 msgstr "IP محلي"
 
 #: ../../network/nm_setting_beans_gen.go:217
-#: ../../network/nm_setting_beans_gen.go:409
+#: ../../network/nm_setting_beans_gen.go:411
 msgid "Request an Inner IP Address"
 msgstr "مطلوب عنوان IP داخلي"
 
 #: ../../network/nm_setting_beans_gen.go:218
-#: ../../network/nm_setting_beans_gen.go:410
+#: ../../network/nm_setting_beans_gen.go:412
 msgid "Enforce UDP Encapsulation"
 msgstr "فرض تغليف UDP"
 
 #: ../../network/nm_setting_beans_gen.go:219
-#: ../../network/nm_setting_beans_gen.go:411
+#: ../../network/nm_setting_beans_gen.go:413
 msgid "Use IP Compression"
 msgstr "استخدام ضغط عناوين  IP "
 
 #: ../../network/nm_setting_beans_gen.go:223
-#: ../../network/nm_setting_beans_gen.go:422
+#: ../../network/nm_setting_beans_gen.go:424
 msgid "User Pwd"
 msgstr "مستخدم Pwd"
 
 #: ../../network/nm_setting_beans_gen.go:224
 #: ../../network/nm_setting_beans_gen.go:249
-#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Name"
 msgstr "اسم المجموعة "
 
 #: ../../network/nm_setting_beans_gen.go:226
-#: ../../network/nm_setting_beans_gen.go:425
+#: ../../network/nm_setting_beans_gen.go:427
 msgid "Group Pwd"
 msgstr "مجموعة Pwd"
 
 #: ../../network/nm_setting_beans_gen.go:227
-#: ../../network/nm_setting_beans_gen.go:426
+#: ../../network/nm_setting_beans_gen.go:428
 msgid "Use Hybrid Authentication"
 msgstr "استخدام المصادقة الهجينة"
 
 #: ../../network/nm_setting_beans_gen.go:228
-#: ../../network/nm_setting_beans_gen.go:427
+#: ../../network/nm_setting_beans_gen.go:429
 msgid "CA File"
 msgstr "CA ملف "
 
@@ -1041,194 +1041,202 @@ msgstr "هوية المجموعة"
 msgid "Pre-Shared Key"
 msgstr "مفتاح مشترك مسبقاً"
 
-#: ../../network/nm_setting_beans_gen.go:257
-#: ../../network/nm_setting_beans_gen.go:381
+#: ../../network/nm_setting_beans_gen.go:252
+msgid "Phase1 Algorithms"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:253
+msgid "Phase2 Algorithms"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:259
+#: ../../network/nm_setting_beans_gen.go:383
 msgid "VPN PPP"
 msgstr "VPN PPP"
 
-#: ../../network/nm_setting_beans_gen.go:270
+#: ../../network/nm_setting_beans_gen.go:272
 msgid "No Protocol Field Compression"
 msgstr "عدم ضغط حقل البروتوكول"
 
-#: ../../network/nm_setting_beans_gen.go:271
+#: ../../network/nm_setting_beans_gen.go:273
 msgid "No Address/Control Compression"
 msgstr "لا يوجد  ضغط عنوا ن\\تحكم     "
 
-#: ../../network/nm_setting_beans_gen.go:315
+#: ../../network/nm_setting_beans_gen.go:317
 msgid "VPN Security"
 msgstr "حماية vpn"
 
-#: ../../network/nm_setting_beans_gen.go:317
+#: ../../network/nm_setting_beans_gen.go:319
 msgid "Cipher"
 msgstr "الشيفرة"
 
-#: ../../network/nm_setting_beans_gen.go:318
+#: ../../network/nm_setting_beans_gen.go:320
 msgid "HMAC Auth"
 msgstr "HMAC مصادقة"
 
-#: ../../network/nm_setting_beans_gen.go:324
+#: ../../network/nm_setting_beans_gen.go:326
 msgid "VPN TLS Authentication"
 msgstr " مصادقة VPN  TLS"
 
-#: ../../network/nm_setting_beans_gen.go:326
+#: ../../network/nm_setting_beans_gen.go:328
 msgid "Subject Match"
 msgstr "مطابقة الموضوع"
 
-#: ../../network/nm_setting_beans_gen.go:327
+#: ../../network/nm_setting_beans_gen.go:329
 msgid "Remote Cert Type"
 msgstr "نوع الشهادة البعيدة"
 
-#: ../../network/nm_setting_beans_gen.go:328
+#: ../../network/nm_setting_beans_gen.go:330
 msgid "Key File"
 msgstr "مفتاح الملف"
 
-#: ../../network/nm_setting_beans_gen.go:336
+#: ../../network/nm_setting_beans_gen.go:338
 msgid "VPN Proxies"
 msgstr "وكلاء شبكة VPN"
 
-#: ../../network/nm_setting_beans_gen.go:338
+#: ../../network/nm_setting_beans_gen.go:340
 msgid "Proxy Type"
 msgstr "نوع الوكيل"
 
-#: ../../network/nm_setting_beans_gen.go:339
+#: ../../network/nm_setting_beans_gen.go:341
 msgid "Server IP"
 msgstr "Server IP"
 
-#: ../../network/nm_setting_beans_gen.go:340
+#: ../../network/nm_setting_beans_gen.go:342
 msgid "Port"
 msgstr "المنفذ"
 
-#: ../../network/nm_setting_beans_gen.go:341
+#: ../../network/nm_setting_beans_gen.go:343
 msgid "Retry Indefinitely When Failed"
 msgstr "إعادة محاولات غير محددة وعند الفشل"
 
-#: ../../network/nm_setting_beans_gen.go:349
-#: ../../network/nm_setting_beans_gen.go:433
+#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:435
 msgid "VPN Advanced"
 msgstr "VPN متقدم "
 
-#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Gateway Port"
 msgstr "تخصيص منفذ البوابة"
 
-#: ../../network/nm_setting_beans_gen.go:352
+#: ../../network/nm_setting_beans_gen.go:354
 msgid "Gateway Port"
 msgstr "منفذ البوابة"
 
-#: ../../network/nm_setting_beans_gen.go:353
+#: ../../network/nm_setting_beans_gen.go:355
 msgid "Customize Renegotiation Interval"
 msgstr "تخصيص إعادة التفاوض"
 
-#: ../../network/nm_setting_beans_gen.go:354
+#: ../../network/nm_setting_beans_gen.go:356
 msgid "Renegotiation Interval"
 msgstr "  فاصل  إعادة تفاوض "
 
-#: ../../network/nm_setting_beans_gen.go:355
+#: ../../network/nm_setting_beans_gen.go:357
 msgid "Use LZO data compression"
 msgstr "استخدام ضغط بيانات الـ LZO"
 
-#: ../../network/nm_setting_beans_gen.go:356
+#: ../../network/nm_setting_beans_gen.go:358
 msgid "Use TCP connection"
 msgstr "استخدام اتصال TCP"
 
-#: ../../network/nm_setting_beans_gen.go:357
+#: ../../network/nm_setting_beans_gen.go:359
 msgid "Use TAP device"
 msgstr "استخدام جهاز TAP"
 
-#: ../../network/nm_setting_beans_gen.go:358
+#: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize Tunnel MTU"
 msgstr "تخصيص نفق MTU "
 
-#: ../../network/nm_setting_beans_gen.go:360
+#: ../../network/nm_setting_beans_gen.go:362
 msgid "Customize UDP Fragment Size"
 msgstr "تخصيص حجم الجزء UDP"
 
-#: ../../network/nm_setting_beans_gen.go:361
+#: ../../network/nm_setting_beans_gen.go:363
 msgid "UDP Fragment Size"
 msgstr "حجم جزء UDP "
 
-#: ../../network/nm_setting_beans_gen.go:362
+#: ../../network/nm_setting_beans_gen.go:364
 msgid "Restrict Tunnel TCP MSS"
 msgstr "تقييد نفق TCP MSS"
 
-#: ../../network/nm_setting_beans_gen.go:363
+#: ../../network/nm_setting_beans_gen.go:365
 msgid "Randomize Remote Hosts"
 msgstr "المضيفون البعيدون عشوائياً"
 
-#: ../../network/nm_setting_beans_gen.go:435
+#: ../../network/nm_setting_beans_gen.go:437
 msgid "Domain"
 msgstr "النطاق"
 
-#: ../../network/nm_setting_beans_gen.go:436
+#: ../../network/nm_setting_beans_gen.go:438
 msgid "Vendor"
 msgstr "المورّد"
 
-#: ../../network/nm_setting_beans_gen.go:437
+#: ../../network/nm_setting_beans_gen.go:439
 msgid "Version"
 msgstr "الإصدار"
 
-#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:440
 msgid "Encryption"
 msgstr "التشفير"
 
-#: ../../network/nm_setting_beans_gen.go:439
+#: ../../network/nm_setting_beans_gen.go:441
 msgid "NAT Traversal"
 msgstr "اجتيار NAT"
 
-#: ../../network/nm_setting_beans_gen.go:440
+#: ../../network/nm_setting_beans_gen.go:442
 msgid "IKE DH Group"
 msgstr "IKE DH مجموعة "
 
-#: ../../network/nm_setting_beans_gen.go:441
+#: ../../network/nm_setting_beans_gen.go:443
 msgid "Forward Secrecy"
 msgstr "التقدم المحمي"
 
-#: ../../network/nm_setting_beans_gen.go:442
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "Local Port"
 msgstr "منفذ محلي"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:445
 msgid "Disable Dead Peer Detection"
 msgstr "تعطيل كشف النظير المفقود"
 
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "IPv4"
 msgstr "IPv4"
 
-#: ../../network/nm_setting_beans_gen.go:451
-#: ../../network/nm_setting_beans_gen.go:465
+#: ../../network/nm_setting_beans_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:467
 msgid "Method"
 msgstr "اﻷسلوب"
 
-#: ../../network/nm_setting_beans_gen.go:452
-#: ../../network/nm_setting_beans_gen.go:466
+#: ../../network/nm_setting_beans_gen.go:454
+#: ../../network/nm_setting_beans_gen.go:468
 msgid "IP Address"
 msgstr "عنوان IP"
 
-#: ../../network/nm_setting_beans_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:455
 msgid "Netmask"
 msgstr "قناع الشبكة"
 
-#: ../../network/nm_setting_beans_gen.go:455
-#: ../../network/nm_setting_beans_gen.go:469
+#: ../../network/nm_setting_beans_gen.go:457
+#: ../../network/nm_setting_beans_gen.go:471
 msgid "Primary DNS"
 msgstr "DNS رئيسي"
 
-#: ../../network/nm_setting_beans_gen.go:456
-#: ../../network/nm_setting_beans_gen.go:470
+#: ../../network/nm_setting_beans_gen.go:458
+#: ../../network/nm_setting_beans_gen.go:472
 msgid "Secondary DNS"
 msgstr "DNS ثانوي"
 
-#: ../../network/nm_setting_beans_gen.go:457
-#: ../../network/nm_setting_beans_gen.go:471
+#: ../../network/nm_setting_beans_gen.go:459
+#: ../../network/nm_setting_beans_gen.go:473
 msgid "Only applied in corresponding resources"
 msgstr "يطبق فقط في الموارد المتطابقة"
 
-#: ../../network/nm_setting_beans_gen.go:463
+#: ../../network/nm_setting_beans_gen.go:465
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:467
+#: ../../network/nm_setting_beans_gen.go:469
 msgid "Prefix"
 msgstr "البادئة"
 
@@ -1979,21 +1987,21 @@ msgstr "تم تعيين وكيل النظام بنجاح"
 msgid "System proxy has been cancelled."
 msgstr "تم إلغاء وكيل النظام"
 
-#: ../../session/power/manager_events.go:108
-#: ../../session/power/manager_events.go:130
+#: ../../session/power/manager_events.go:106
+#: ../../session/power/manager_events.go:128
 msgid "Battery Critical Low"
 msgstr "انخفاض حاد في طاقة البطارية"
 
-#: ../../session/power/manager_events.go:108
-#: ../../session/power/manager_events.go:130
+#: ../../session/power/manager_events.go:106
+#: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "الحاسوب في وضع اﻹسبات ، يرجى وصل قابس الطاقة."
 
-#: ../../session/power/manager_events.go:136
+#: ../../session/power/manager_events.go:134
 msgid "Battery Low"
 msgstr "طاقة البطارية منخفضة"
 
-#: ../../session/power/manager_events.go:136
+#: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "الحاسوب سيكون في وضع اﻹسبات، يرجى وصل قابس الطاقة الآن."
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
+"POT-Creation-Date: 2018-03-01 13:51+0800\n"
+"PO-Revision-Date: 2018-03-22 01:40+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -595,7 +595,7 @@ msgstr "사용자 정의된 MTU"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
-#: ../../network/nm_setting_beans_gen.go:359
+#: ../../network/nm_setting_beans_gen.go:361
 msgid "MTU"
 msgstr "MTU"
 
@@ -645,11 +645,11 @@ msgstr "번호"
 #: ../../network/nm_setting_beans_gen.go:213
 #: ../../network/nm_setting_beans_gen.go:221
 #: ../../network/nm_setting_beans_gen.go:237
-#: ../../network/nm_setting_beans_gen.go:297
-#: ../../network/nm_setting_beans_gen.go:342
-#: ../../network/nm_setting_beans_gen.go:372
-#: ../../network/nm_setting_beans_gen.go:405
-#: ../../network/nm_setting_beans_gen.go:420
+#: ../../network/nm_setting_beans_gen.go:299
+#: ../../network/nm_setting_beans_gen.go:344
+#: ../../network/nm_setting_beans_gen.go:374
+#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:422
 msgid "Username"
 msgstr "사용자 이름"
 
@@ -665,10 +665,10 @@ msgstr "사용자 이름"
 #: ../../network/nm_setting_beans_gen.go:208
 #: ../../network/nm_setting_beans_gen.go:216
 #: ../../network/nm_setting_beans_gen.go:239
-#: ../../network/nm_setting_beans_gen.go:299
-#: ../../network/nm_setting_beans_gen.go:343
-#: ../../network/nm_setting_beans_gen.go:374
-#: ../../network/nm_setting_beans_gen.go:408
+#: ../../network/nm_setting_beans_gen.go:301
+#: ../../network/nm_setting_beans_gen.go:345
+#: ../../network/nm_setting_beans_gen.go:376
+#: ../../network/nm_setting_beans_gen.go:410
 #: ../../network/nm_setting_vpn_openvpn.go:114
 msgid "Password"
 msgstr "비밀번호"
@@ -690,8 +690,8 @@ msgstr "PIN"
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
-#: ../../network/nm_setting_beans_gen.go:260
-#: ../../network/nm_setting_beans_gen.go:384
+#: ../../network/nm_setting_beans_gen.go:262
+#: ../../network/nm_setting_beans_gen.go:386
 msgid "Security"
 msgstr "보안"
 
@@ -720,11 +720,11 @@ msgstr "신원"
 #: ../../network/nm_setting_beans_gen.go:222
 #: ../../network/nm_setting_beans_gen.go:225
 #: ../../network/nm_setting_beans_gen.go:238
-#: ../../network/nm_setting_beans_gen.go:298
-#: ../../network/nm_setting_beans_gen.go:303
-#: ../../network/nm_setting_beans_gen.go:373
-#: ../../network/nm_setting_beans_gen.go:421
-#: ../../network/nm_setting_beans_gen.go:424
+#: ../../network/nm_setting_beans_gen.go:300
+#: ../../network/nm_setting_beans_gen.go:305
+#: ../../network/nm_setting_beans_gen.go:375
+#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:426
 msgid "Ask for Pwd"
 msgstr "암호 요청"
 
@@ -734,7 +734,7 @@ msgstr "익명 ID"
 
 #: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:199
-#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:306
 msgid "Private Pwd"
 msgstr "개인 Pwd"
 
@@ -742,9 +742,9 @@ msgstr "개인 Pwd"
 #: ../../network/nm_setting_beans_gen.go:188
 #: ../../network/nm_setting_beans_gen.go:197
 #: ../../network/nm_setting_beans_gen.go:215
-#: ../../network/nm_setting_beans_gen.go:286
-#: ../../network/nm_setting_beans_gen.go:302
-#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:288
+#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:409
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
 msgstr "개인키"
@@ -753,9 +753,9 @@ msgstr "개인키"
 #: ../../network/nm_setting_beans_gen.go:183
 #: ../../network/nm_setting_beans_gen.go:195
 #: ../../network/nm_setting_beans_gen.go:211
-#: ../../network/nm_setting_beans_gen.go:281
-#: ../../network/nm_setting_beans_gen.go:300
-#: ../../network/nm_setting_beans_gen.go:403
+#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:302
+#: ../../network/nm_setting_beans_gen.go:405
 msgid "CA Cert"
 msgstr "CA Cert"
 
@@ -763,9 +763,9 @@ msgstr "CA Cert"
 #: ../../network/nm_setting_beans_gen.go:187
 #: ../../network/nm_setting_beans_gen.go:196
 #: ../../network/nm_setting_beans_gen.go:214
-#: ../../network/nm_setting_beans_gen.go:285
-#: ../../network/nm_setting_beans_gen.go:301
-#: ../../network/nm_setting_beans_gen.go:406
+#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:303
+#: ../../network/nm_setting_beans_gen.go:408
 msgid "User Cert"
 msgstr "사용자 Cert"
 
@@ -818,8 +818,8 @@ msgid "PPP"
 msgstr "PPP"
 
 #: ../../network/nm_setting_beans_gen.go:156
-#: ../../network/nm_setting_beans_gen.go:259
-#: ../../network/nm_setting_beans_gen.go:383
+#: ../../network/nm_setting_beans_gen.go:261
+#: ../../network/nm_setting_beans_gen.go:385
 msgid "Use MPPE"
 msgstr "MPPE 사용"
 
@@ -828,72 +828,72 @@ msgid "128-bit MPPE"
 msgstr "128-bit MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:158
-#: ../../network/nm_setting_beans_gen.go:261
-#: ../../network/nm_setting_beans_gen.go:385
+#: ../../network/nm_setting_beans_gen.go:263
+#: ../../network/nm_setting_beans_gen.go:387
 msgid "Stateful MPPE"
 msgstr "상태유지 MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:159
-#: ../../network/nm_setting_beans_gen.go:262
-#: ../../network/nm_setting_beans_gen.go:386
+#: ../../network/nm_setting_beans_gen.go:264
+#: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse EAP Authentication"
 msgstr "EAP 인증 거부"
 
 #: ../../network/nm_setting_beans_gen.go:160
-#: ../../network/nm_setting_beans_gen.go:263
-#: ../../network/nm_setting_beans_gen.go:387
+#: ../../network/nm_setting_beans_gen.go:265
+#: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse PAP Authentication"
 msgstr "PAP 인증 거부"
 
 #: ../../network/nm_setting_beans_gen.go:161
-#: ../../network/nm_setting_beans_gen.go:264
-#: ../../network/nm_setting_beans_gen.go:388
+#: ../../network/nm_setting_beans_gen.go:266
+#: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse CHAP Authentication"
 msgstr "CHAP 인증 거부"
 
 #: ../../network/nm_setting_beans_gen.go:162
-#: ../../network/nm_setting_beans_gen.go:265
-#: ../../network/nm_setting_beans_gen.go:389
+#: ../../network/nm_setting_beans_gen.go:267
+#: ../../network/nm_setting_beans_gen.go:391
 msgid "Refuse MSCHAP Authentication"
 msgstr "MSCHAP 인증 거부"
 
 #: ../../network/nm_setting_beans_gen.go:163
-#: ../../network/nm_setting_beans_gen.go:266
-#: ../../network/nm_setting_beans_gen.go:390
+#: ../../network/nm_setting_beans_gen.go:268
+#: ../../network/nm_setting_beans_gen.go:392
 msgid "Refuse MSCHAPv2 Authentication"
 msgstr "MSCHAPv2 인증 거부"
 
 #: ../../network/nm_setting_beans_gen.go:164
-#: ../../network/nm_setting_beans_gen.go:267
-#: ../../network/nm_setting_beans_gen.go:391
+#: ../../network/nm_setting_beans_gen.go:269
+#: ../../network/nm_setting_beans_gen.go:393
 msgid "No BSD Data Compression"
 msgstr "BSD​ 데이터 압축 안함"
 
 #: ../../network/nm_setting_beans_gen.go:165
-#: ../../network/nm_setting_beans_gen.go:268
-#: ../../network/nm_setting_beans_gen.go:392
+#: ../../network/nm_setting_beans_gen.go:270
+#: ../../network/nm_setting_beans_gen.go:394
 msgid "No Deflate Data Compression"
 msgstr "무손실 데이터 압축 안함"
 
 #: ../../network/nm_setting_beans_gen.go:166
-#: ../../network/nm_setting_beans_gen.go:269
-#: ../../network/nm_setting_beans_gen.go:393
+#: ../../network/nm_setting_beans_gen.go:271
+#: ../../network/nm_setting_beans_gen.go:395
 msgid "No TCP Header Compression"
 msgstr "TCP 해더 압축 안함"
 
 #: ../../network/nm_setting_beans_gen.go:167
-#: ../../network/nm_setting_beans_gen.go:272
-#: ../../network/nm_setting_beans_gen.go:394
+#: ../../network/nm_setting_beans_gen.go:274
+#: ../../network/nm_setting_beans_gen.go:396
 msgid "Send PPP Echo Packets"
 msgstr "PPP 에코 패킷 보냄"
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
-#: ../../network/nm_setting_beans_gen.go:278
-#: ../../network/nm_setting_beans_gen.go:293
-#: ../../network/nm_setting_beans_gen.go:369
-#: ../../network/nm_setting_beans_gen.go:400
-#: ../../network/nm_setting_beans_gen.go:417
+#: ../../network/nm_setting_beans_gen.go:280
+#: ../../network/nm_setting_beans_gen.go:295
+#: ../../network/nm_setting_beans_gen.go:371
+#: ../../network/nm_setting_beans_gen.go:402
+#: ../../network/nm_setting_beans_gen.go:419
 msgid "VPN"
 msgstr "VPN"
 
@@ -908,116 +908,116 @@ msgstr "VPN 플러그인 필요"
 #: ../../network/nm_setting_beans_gen.go:210
 #: ../../network/nm_setting_beans_gen.go:220
 #: ../../network/nm_setting_beans_gen.go:236
-#: ../../network/nm_setting_beans_gen.go:280
-#: ../../network/nm_setting_beans_gen.go:295
-#: ../../network/nm_setting_beans_gen.go:371
-#: ../../network/nm_setting_beans_gen.go:402
-#: ../../network/nm_setting_beans_gen.go:419
-#: ../../network/nm_setting_beans_gen.go:454
-#: ../../network/nm_setting_beans_gen.go:468
+#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:297
+#: ../../network/nm_setting_beans_gen.go:373
+#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:421
+#: ../../network/nm_setting_beans_gen.go:456
+#: ../../network/nm_setting_beans_gen.go:470
 msgid "Gateway"
 msgstr "게이트웨이"
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
 #: ../../network/nm_setting_beans_gen.go:240
-#: ../../network/nm_setting_beans_gen.go:375
+#: ../../network/nm_setting_beans_gen.go:377
 msgid "NT Domain"
 msgstr "NT 도메인"
 
 #: ../../network/nm_setting_beans_gen.go:184
-#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:284
 msgid "Proxy"
 msgstr "프록시"
 
 #: ../../network/nm_setting_beans_gen.go:185
-#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:285
 msgid "Allow Cisco Secure Desktop Trojan"
 msgstr "시스코 보안 데스크톱 Trojan 허용"
 
 #: ../../network/nm_setting_beans_gen.go:186
-#: ../../network/nm_setting_beans_gen.go:284
+#: ../../network/nm_setting_beans_gen.go:286
 msgid "CSD Script"
 msgstr "CSD 스크립트"
 
 #: ../../network/nm_setting_beans_gen.go:189
-#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:289
 msgid "Use FSID for Key Passphrase"
 msgstr "키 암호화에 FSID 사용"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
-#: ../../network/nm_setting_beans_gen.go:296
-#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:298
+#: ../../network/nm_setting_beans_gen.go:406
 msgid "Auth Type"
 msgstr "인증 타입"
 
 #: ../../network/nm_setting_beans_gen.go:200
-#: ../../network/nm_setting_beans_gen.go:305
+#: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
 msgstr "정적 키"
 
 #: ../../network/nm_setting_beans_gen.go:201
-#: ../../network/nm_setting_beans_gen.go:306
-#: ../../network/nm_setting_beans_gen.go:329
+#: ../../network/nm_setting_beans_gen.go:308
+#: ../../network/nm_setting_beans_gen.go:331
 msgid "Customize Key Direction"
 msgstr "사용자 정의된 키 안내"
 
 #: ../../network/nm_setting_beans_gen.go:202
-#: ../../network/nm_setting_beans_gen.go:307
-#: ../../network/nm_setting_beans_gen.go:330
+#: ../../network/nm_setting_beans_gen.go:309
+#: ../../network/nm_setting_beans_gen.go:332
 msgid "Key Direction"
 msgstr "키 안내"
 
 #: ../../network/nm_setting_beans_gen.go:203
-#: ../../network/nm_setting_beans_gen.go:308
+#: ../../network/nm_setting_beans_gen.go:310
 msgid "Remote IP"
 msgstr "원격 IP"
 
 #: ../../network/nm_setting_beans_gen.go:204
-#: ../../network/nm_setting_beans_gen.go:309
+#: ../../network/nm_setting_beans_gen.go:311
 msgid "Local IP"
 msgstr "로컬 IP"
 
 #: ../../network/nm_setting_beans_gen.go:217
-#: ../../network/nm_setting_beans_gen.go:409
+#: ../../network/nm_setting_beans_gen.go:411
 msgid "Request an Inner IP Address"
 msgstr "내부 IP 주소 요청"
 
 #: ../../network/nm_setting_beans_gen.go:218
-#: ../../network/nm_setting_beans_gen.go:410
+#: ../../network/nm_setting_beans_gen.go:412
 msgid "Enforce UDP Encapsulation"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:219
-#: ../../network/nm_setting_beans_gen.go:411
+#: ../../network/nm_setting_beans_gen.go:413
 msgid "Use IP Compression"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:223
-#: ../../network/nm_setting_beans_gen.go:422
+#: ../../network/nm_setting_beans_gen.go:424
 msgid "User Pwd"
 msgstr "사용자 암호"
 
 #: ../../network/nm_setting_beans_gen.go:224
 #: ../../network/nm_setting_beans_gen.go:249
-#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Name"
 msgstr "그룹 이름"
 
 #: ../../network/nm_setting_beans_gen.go:226
-#: ../../network/nm_setting_beans_gen.go:425
+#: ../../network/nm_setting_beans_gen.go:427
 msgid "Group Pwd"
 msgstr "그룹 암호"
 
 #: ../../network/nm_setting_beans_gen.go:227
-#: ../../network/nm_setting_beans_gen.go:426
+#: ../../network/nm_setting_beans_gen.go:428
 msgid "Use Hybrid Authentication"
 msgstr "하이브리드 인증 사용"
 
 #: ../../network/nm_setting_beans_gen.go:228
-#: ../../network/nm_setting_beans_gen.go:427
+#: ../../network/nm_setting_beans_gen.go:429
 msgid "CA File"
 msgstr "CA 파일"
 
@@ -1038,194 +1038,202 @@ msgstr "그룹 ID"
 msgid "Pre-Shared Key"
 msgstr "사전 공유 킵"
 
-#: ../../network/nm_setting_beans_gen.go:257
-#: ../../network/nm_setting_beans_gen.go:381
+#: ../../network/nm_setting_beans_gen.go:252
+msgid "Phase1 Algorithms"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:253
+msgid "Phase2 Algorithms"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:259
+#: ../../network/nm_setting_beans_gen.go:383
 msgid "VPN PPP"
 msgstr "VPN PPP"
 
-#: ../../network/nm_setting_beans_gen.go:270
+#: ../../network/nm_setting_beans_gen.go:272
 msgid "No Protocol Field Compression"
 msgstr "프로토콜 필드 압축 안함"
 
-#: ../../network/nm_setting_beans_gen.go:271
+#: ../../network/nm_setting_beans_gen.go:273
 msgid "No Address/Control Compression"
 msgstr "주소/컨트롤 압축 안함"
 
-#: ../../network/nm_setting_beans_gen.go:315
+#: ../../network/nm_setting_beans_gen.go:317
 msgid "VPN Security"
 msgstr "VPN 보안"
 
-#: ../../network/nm_setting_beans_gen.go:317
+#: ../../network/nm_setting_beans_gen.go:319
 msgid "Cipher"
 msgstr "암호문"
 
-#: ../../network/nm_setting_beans_gen.go:318
+#: ../../network/nm_setting_beans_gen.go:320
 msgid "HMAC Auth"
 msgstr "HMAC 인증"
 
-#: ../../network/nm_setting_beans_gen.go:324
+#: ../../network/nm_setting_beans_gen.go:326
 msgid "VPN TLS Authentication"
 msgstr "VPN TLS 인증"
 
-#: ../../network/nm_setting_beans_gen.go:326
+#: ../../network/nm_setting_beans_gen.go:328
 msgid "Subject Match"
 msgstr "서브넷 비교"
 
-#: ../../network/nm_setting_beans_gen.go:327
+#: ../../network/nm_setting_beans_gen.go:329
 msgid "Remote Cert Type"
 msgstr "원격 Cert 타입"
 
-#: ../../network/nm_setting_beans_gen.go:328
+#: ../../network/nm_setting_beans_gen.go:330
 msgid "Key File"
 msgstr "키 파일"
 
-#: ../../network/nm_setting_beans_gen.go:336
+#: ../../network/nm_setting_beans_gen.go:338
 msgid "VPN Proxies"
 msgstr "VPN 프록시"
 
-#: ../../network/nm_setting_beans_gen.go:338
+#: ../../network/nm_setting_beans_gen.go:340
 msgid "Proxy Type"
 msgstr "프록시 타입"
 
-#: ../../network/nm_setting_beans_gen.go:339
+#: ../../network/nm_setting_beans_gen.go:341
 msgid "Server IP"
 msgstr "서버 IP"
 
-#: ../../network/nm_setting_beans_gen.go:340
+#: ../../network/nm_setting_beans_gen.go:342
 msgid "Port"
 msgstr "포트"
 
-#: ../../network/nm_setting_beans_gen.go:341
+#: ../../network/nm_setting_beans_gen.go:343
 msgid "Retry Indefinitely When Failed"
 msgstr "실패 했을때 무기한 재시도"
 
-#: ../../network/nm_setting_beans_gen.go:349
-#: ../../network/nm_setting_beans_gen.go:433
+#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:435
 msgid "VPN Advanced"
 msgstr "VPN Advanced"
 
-#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Gateway Port"
 msgstr "사용자 정의된 게이트웨이 포트"
 
-#: ../../network/nm_setting_beans_gen.go:352
+#: ../../network/nm_setting_beans_gen.go:354
 msgid "Gateway Port"
 msgstr "게이트웨이 포트"
 
-#: ../../network/nm_setting_beans_gen.go:353
+#: ../../network/nm_setting_beans_gen.go:355
 msgid "Customize Renegotiation Interval"
 msgstr "사용자 정의된 Renegotiation 간격"
 
-#: ../../network/nm_setting_beans_gen.go:354
+#: ../../network/nm_setting_beans_gen.go:356
 msgid "Renegotiation Interval"
 msgstr "Renegotiation 간격"
 
-#: ../../network/nm_setting_beans_gen.go:355
+#: ../../network/nm_setting_beans_gen.go:357
 msgid "Use LZO data compression"
 msgstr "LZO 데이터 압축 사용"
 
-#: ../../network/nm_setting_beans_gen.go:356
+#: ../../network/nm_setting_beans_gen.go:358
 msgid "Use TCP connection"
 msgstr "TCP 연결 사용"
 
-#: ../../network/nm_setting_beans_gen.go:357
+#: ../../network/nm_setting_beans_gen.go:359
 msgid "Use TAP device"
 msgstr "TAP 장치 사용"
 
-#: ../../network/nm_setting_beans_gen.go:358
+#: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize Tunnel MTU"
 msgstr "사용자 정의된 터널 MTU"
 
-#: ../../network/nm_setting_beans_gen.go:360
+#: ../../network/nm_setting_beans_gen.go:362
 msgid "Customize UDP Fragment Size"
 msgstr "사용자 정의된 UDP 조각 크기"
 
-#: ../../network/nm_setting_beans_gen.go:361
+#: ../../network/nm_setting_beans_gen.go:363
 msgid "UDP Fragment Size"
 msgstr "UDP 조각 크기"
 
-#: ../../network/nm_setting_beans_gen.go:362
+#: ../../network/nm_setting_beans_gen.go:364
 msgid "Restrict Tunnel TCP MSS"
 msgstr "터널 TCP MSS 제한"
 
-#: ../../network/nm_setting_beans_gen.go:363
+#: ../../network/nm_setting_beans_gen.go:365
 msgid "Randomize Remote Hosts"
 msgstr "무작위 원격 호스트"
 
-#: ../../network/nm_setting_beans_gen.go:435
+#: ../../network/nm_setting_beans_gen.go:437
 msgid "Domain"
 msgstr "도메인"
 
-#: ../../network/nm_setting_beans_gen.go:436
+#: ../../network/nm_setting_beans_gen.go:438
 msgid "Vendor"
 msgstr "벤더"
 
-#: ../../network/nm_setting_beans_gen.go:437
+#: ../../network/nm_setting_beans_gen.go:439
 msgid "Version"
 msgstr "버전"
 
-#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:440
 msgid "Encryption"
 msgstr "암호화"
 
-#: ../../network/nm_setting_beans_gen.go:439
+#: ../../network/nm_setting_beans_gen.go:441
 msgid "NAT Traversal"
 msgstr "NAT​ 통과"
 
-#: ../../network/nm_setting_beans_gen.go:440
+#: ../../network/nm_setting_beans_gen.go:442
 msgid "IKE DH Group"
 msgstr "IKE DH 그룹"
 
-#: ../../network/nm_setting_beans_gen.go:441
+#: ../../network/nm_setting_beans_gen.go:443
 msgid "Forward Secrecy"
 msgstr "비밀 전송"
 
-#: ../../network/nm_setting_beans_gen.go:442
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "Local Port"
 msgstr "로컬 포트"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:445
 msgid "Disable Dead Peer Detection"
 msgstr "죽은 피어 발견 비활성화"
 
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "IPv4"
 msgstr "IPv4"
 
-#: ../../network/nm_setting_beans_gen.go:451
-#: ../../network/nm_setting_beans_gen.go:465
+#: ../../network/nm_setting_beans_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:467
 msgid "Method"
 msgstr "메소드"
 
-#: ../../network/nm_setting_beans_gen.go:452
-#: ../../network/nm_setting_beans_gen.go:466
+#: ../../network/nm_setting_beans_gen.go:454
+#: ../../network/nm_setting_beans_gen.go:468
 msgid "IP Address"
 msgstr "IP 주소"
 
-#: ../../network/nm_setting_beans_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:455
 msgid "Netmask"
 msgstr "넷마스크"
 
-#: ../../network/nm_setting_beans_gen.go:455
-#: ../../network/nm_setting_beans_gen.go:469
+#: ../../network/nm_setting_beans_gen.go:457
+#: ../../network/nm_setting_beans_gen.go:471
 msgid "Primary DNS"
 msgstr "첫 번째 DNS"
 
-#: ../../network/nm_setting_beans_gen.go:456
-#: ../../network/nm_setting_beans_gen.go:470
+#: ../../network/nm_setting_beans_gen.go:458
+#: ../../network/nm_setting_beans_gen.go:472
 msgid "Secondary DNS"
 msgstr "두번째 DNS"
 
-#: ../../network/nm_setting_beans_gen.go:457
-#: ../../network/nm_setting_beans_gen.go:471
+#: ../../network/nm_setting_beans_gen.go:459
+#: ../../network/nm_setting_beans_gen.go:473
 msgid "Only applied in corresponding resources"
 msgstr ""
 
-#: ../../network/nm_setting_beans_gen.go:463
+#: ../../network/nm_setting_beans_gen.go:465
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:467
+#: ../../network/nm_setting_beans_gen.go:469
 msgid "Prefix"
 msgstr "접두사"
 
@@ -1976,21 +1984,21 @@ msgstr "시스템 프록시가 성공적으로 설정되었습니다. "
 msgid "System proxy has been cancelled."
 msgstr "시스템 프록시가 취소되었습니다."
 
-#: ../../session/power/manager_events.go:108
-#: ../../session/power/manager_events.go:130
+#: ../../session/power/manager_events.go:106
+#: ../../session/power/manager_events.go:128
 msgid "Battery Critical Low"
 msgstr "배터리 잔량이 매우 부족합니다"
 
-#: ../../session/power/manager_events.go:108
-#: ../../session/power/manager_events.go:130
+#: ../../session/power/manager_events.go:106
+#: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:136
+#: ../../session/power/manager_events.go:134
 msgid "Battery Low"
 msgstr "배터리 낮음 "
 
-#: ../../session/power/manager_events.go:136
+#: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""
 

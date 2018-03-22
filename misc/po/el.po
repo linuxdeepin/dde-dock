@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-26 15:32+0800\n"
-"PO-Revision-Date: 2018-02-27 03:12+0000\n"
+"POT-Creation-Date: 2018-03-01 13:51+0800\n"
+"PO-Revision-Date: 2018-03-22 01:40+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Greek (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/el/)\n"
 "MIME-Version: 1.0\n"
@@ -599,7 +599,7 @@ msgstr "Προσαρμογή MTU"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
-#: ../../network/nm_setting_beans_gen.go:359
+#: ../../network/nm_setting_beans_gen.go:361
 msgid "MTU"
 msgstr "MTU"
 
@@ -649,11 +649,11 @@ msgstr "Αριθμός"
 #: ../../network/nm_setting_beans_gen.go:213
 #: ../../network/nm_setting_beans_gen.go:221
 #: ../../network/nm_setting_beans_gen.go:237
-#: ../../network/nm_setting_beans_gen.go:297
-#: ../../network/nm_setting_beans_gen.go:342
-#: ../../network/nm_setting_beans_gen.go:372
-#: ../../network/nm_setting_beans_gen.go:405
-#: ../../network/nm_setting_beans_gen.go:420
+#: ../../network/nm_setting_beans_gen.go:299
+#: ../../network/nm_setting_beans_gen.go:344
+#: ../../network/nm_setting_beans_gen.go:374
+#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:422
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
@@ -669,10 +669,10 @@ msgstr "Όνομα χρήστη"
 #: ../../network/nm_setting_beans_gen.go:208
 #: ../../network/nm_setting_beans_gen.go:216
 #: ../../network/nm_setting_beans_gen.go:239
-#: ../../network/nm_setting_beans_gen.go:299
-#: ../../network/nm_setting_beans_gen.go:343
-#: ../../network/nm_setting_beans_gen.go:374
-#: ../../network/nm_setting_beans_gen.go:408
+#: ../../network/nm_setting_beans_gen.go:301
+#: ../../network/nm_setting_beans_gen.go:345
+#: ../../network/nm_setting_beans_gen.go:376
+#: ../../network/nm_setting_beans_gen.go:410
 #: ../../network/nm_setting_vpn_openvpn.go:114
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
@@ -694,8 +694,8 @@ msgstr "PIN"
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
-#: ../../network/nm_setting_beans_gen.go:260
-#: ../../network/nm_setting_beans_gen.go:384
+#: ../../network/nm_setting_beans_gen.go:262
+#: ../../network/nm_setting_beans_gen.go:386
 msgid "Security"
 msgstr "Ασφάλεια"
 
@@ -724,11 +724,11 @@ msgstr "Ταυτότητα"
 #: ../../network/nm_setting_beans_gen.go:222
 #: ../../network/nm_setting_beans_gen.go:225
 #: ../../network/nm_setting_beans_gen.go:238
-#: ../../network/nm_setting_beans_gen.go:298
-#: ../../network/nm_setting_beans_gen.go:303
-#: ../../network/nm_setting_beans_gen.go:373
-#: ../../network/nm_setting_beans_gen.go:421
-#: ../../network/nm_setting_beans_gen.go:424
+#: ../../network/nm_setting_beans_gen.go:300
+#: ../../network/nm_setting_beans_gen.go:305
+#: ../../network/nm_setting_beans_gen.go:375
+#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:426
 msgid "Ask for Pwd"
 msgstr "Ερώτηση για Κωδ. Προσ."
 
@@ -738,7 +738,7 @@ msgstr "Ανώνυμο αναγνωριστικό"
 
 #: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:199
-#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:306
 msgid "Private Pwd"
 msgstr "Ιδιωτικός Κωδ. Προσβ."
 
@@ -746,9 +746,9 @@ msgstr "Ιδιωτικός Κωδ. Προσβ."
 #: ../../network/nm_setting_beans_gen.go:188
 #: ../../network/nm_setting_beans_gen.go:197
 #: ../../network/nm_setting_beans_gen.go:215
-#: ../../network/nm_setting_beans_gen.go:286
-#: ../../network/nm_setting_beans_gen.go:302
-#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:288
+#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:409
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
 msgstr "Ιδιωτικό Κλειδί"
@@ -757,9 +757,9 @@ msgstr "Ιδιωτικό Κλειδί"
 #: ../../network/nm_setting_beans_gen.go:183
 #: ../../network/nm_setting_beans_gen.go:195
 #: ../../network/nm_setting_beans_gen.go:211
-#: ../../network/nm_setting_beans_gen.go:281
-#: ../../network/nm_setting_beans_gen.go:300
-#: ../../network/nm_setting_beans_gen.go:403
+#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:302
+#: ../../network/nm_setting_beans_gen.go:405
 msgid "CA Cert"
 msgstr "CA Cert"
 
@@ -767,9 +767,9 @@ msgstr "CA Cert"
 #: ../../network/nm_setting_beans_gen.go:187
 #: ../../network/nm_setting_beans_gen.go:196
 #: ../../network/nm_setting_beans_gen.go:214
-#: ../../network/nm_setting_beans_gen.go:285
-#: ../../network/nm_setting_beans_gen.go:301
-#: ../../network/nm_setting_beans_gen.go:406
+#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:303
+#: ../../network/nm_setting_beans_gen.go:408
 msgid "User Cert"
 msgstr "Πιστοποιητικό Χρήστη"
 
@@ -822,8 +822,8 @@ msgid "PPP"
 msgstr "PPP"
 
 #: ../../network/nm_setting_beans_gen.go:156
-#: ../../network/nm_setting_beans_gen.go:259
-#: ../../network/nm_setting_beans_gen.go:383
+#: ../../network/nm_setting_beans_gen.go:261
+#: ../../network/nm_setting_beans_gen.go:385
 msgid "Use MPPE"
 msgstr "Χρήση MPPE"
 
@@ -832,72 +832,72 @@ msgid "128-bit MPPE"
 msgstr "128-bit MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:158
-#: ../../network/nm_setting_beans_gen.go:261
-#: ../../network/nm_setting_beans_gen.go:385
+#: ../../network/nm_setting_beans_gen.go:263
+#: ../../network/nm_setting_beans_gen.go:387
 msgid "Stateful MPPE"
 msgstr "MPPE με επίβλεψη κατάστασης"
 
 #: ../../network/nm_setting_beans_gen.go:159
-#: ../../network/nm_setting_beans_gen.go:262
-#: ../../network/nm_setting_beans_gen.go:386
+#: ../../network/nm_setting_beans_gen.go:264
+#: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse EAP Authentication"
 msgstr "Άρνηση ελέγχου ταυτότητας EAP "
 
 #: ../../network/nm_setting_beans_gen.go:160
-#: ../../network/nm_setting_beans_gen.go:263
-#: ../../network/nm_setting_beans_gen.go:387
+#: ../../network/nm_setting_beans_gen.go:265
+#: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse PAP Authentication"
 msgstr "Απόρριψη ελέγχου ταυτότητας PAP "
 
 #: ../../network/nm_setting_beans_gen.go:161
-#: ../../network/nm_setting_beans_gen.go:264
-#: ../../network/nm_setting_beans_gen.go:388
+#: ../../network/nm_setting_beans_gen.go:266
+#: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse CHAP Authentication"
 msgstr "Άρνηση ελέγχου ταυτότητας CHAP"
 
 #: ../../network/nm_setting_beans_gen.go:162
-#: ../../network/nm_setting_beans_gen.go:265
-#: ../../network/nm_setting_beans_gen.go:389
+#: ../../network/nm_setting_beans_gen.go:267
+#: ../../network/nm_setting_beans_gen.go:391
 msgid "Refuse MSCHAP Authentication"
 msgstr "Άρνηση ελέγχου ταυτότητας MSCHAP "
 
 #: ../../network/nm_setting_beans_gen.go:163
-#: ../../network/nm_setting_beans_gen.go:266
-#: ../../network/nm_setting_beans_gen.go:390
+#: ../../network/nm_setting_beans_gen.go:268
+#: ../../network/nm_setting_beans_gen.go:392
 msgid "Refuse MSCHAPv2 Authentication"
 msgstr "Άρνηση ελέγχου ταυτότητας MSCHAPv2"
 
 #: ../../network/nm_setting_beans_gen.go:164
-#: ../../network/nm_setting_beans_gen.go:267
-#: ../../network/nm_setting_beans_gen.go:391
+#: ../../network/nm_setting_beans_gen.go:269
+#: ../../network/nm_setting_beans_gen.go:393
 msgid "No BSD Data Compression"
 msgstr "Χωρίς Συμπίεση Δεδομένων BSD"
 
 #: ../../network/nm_setting_beans_gen.go:165
-#: ../../network/nm_setting_beans_gen.go:268
-#: ../../network/nm_setting_beans_gen.go:392
+#: ../../network/nm_setting_beans_gen.go:270
+#: ../../network/nm_setting_beans_gen.go:394
 msgid "No Deflate Data Compression"
 msgstr "Χωρίς Ξεφούσκωμα Συμπίεσης Δεδομένων"
 
 #: ../../network/nm_setting_beans_gen.go:166
-#: ../../network/nm_setting_beans_gen.go:269
-#: ../../network/nm_setting_beans_gen.go:393
+#: ../../network/nm_setting_beans_gen.go:271
+#: ../../network/nm_setting_beans_gen.go:395
 msgid "No TCP Header Compression"
 msgstr "Χωρίς Συμπίεση Κεφαλίδας TCP"
 
 #: ../../network/nm_setting_beans_gen.go:167
-#: ../../network/nm_setting_beans_gen.go:272
-#: ../../network/nm_setting_beans_gen.go:394
+#: ../../network/nm_setting_beans_gen.go:274
+#: ../../network/nm_setting_beans_gen.go:396
 msgid "Send PPP Echo Packets"
 msgstr "Αποστολή Πακέτων Αντήχησης PPP"
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
-#: ../../network/nm_setting_beans_gen.go:278
-#: ../../network/nm_setting_beans_gen.go:293
-#: ../../network/nm_setting_beans_gen.go:369
-#: ../../network/nm_setting_beans_gen.go:400
-#: ../../network/nm_setting_beans_gen.go:417
+#: ../../network/nm_setting_beans_gen.go:280
+#: ../../network/nm_setting_beans_gen.go:295
+#: ../../network/nm_setting_beans_gen.go:371
+#: ../../network/nm_setting_beans_gen.go:402
+#: ../../network/nm_setting_beans_gen.go:419
 msgid "VPN"
 msgstr "VPN"
 
@@ -912,116 +912,116 @@ msgstr "Απαιτείται Πρόσθετο VPN"
 #: ../../network/nm_setting_beans_gen.go:210
 #: ../../network/nm_setting_beans_gen.go:220
 #: ../../network/nm_setting_beans_gen.go:236
-#: ../../network/nm_setting_beans_gen.go:280
-#: ../../network/nm_setting_beans_gen.go:295
-#: ../../network/nm_setting_beans_gen.go:371
-#: ../../network/nm_setting_beans_gen.go:402
-#: ../../network/nm_setting_beans_gen.go:419
-#: ../../network/nm_setting_beans_gen.go:454
-#: ../../network/nm_setting_beans_gen.go:468
+#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:297
+#: ../../network/nm_setting_beans_gen.go:373
+#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:421
+#: ../../network/nm_setting_beans_gen.go:456
+#: ../../network/nm_setting_beans_gen.go:470
 msgid "Gateway"
 msgstr "Gateway"
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:209
 #: ../../network/nm_setting_beans_gen.go:240
-#: ../../network/nm_setting_beans_gen.go:375
+#: ../../network/nm_setting_beans_gen.go:377
 msgid "NT Domain"
 msgstr "Τομέας NT"
 
 #: ../../network/nm_setting_beans_gen.go:184
-#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:284
 msgid "Proxy"
 msgstr "Διακομιστής Μεσολάβησης"
 
 #: ../../network/nm_setting_beans_gen.go:185
-#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:285
 msgid "Allow Cisco Secure Desktop Trojan"
 msgstr "Να επιτρέπεται ο Ασφαλής Δούρειος Ίππος Επιφάνειας Εργασίας Cisco"
 
 #: ../../network/nm_setting_beans_gen.go:186
-#: ../../network/nm_setting_beans_gen.go:284
+#: ../../network/nm_setting_beans_gen.go:286
 msgid "CSD Script"
 msgstr "CSD Script"
 
 #: ../../network/nm_setting_beans_gen.go:189
-#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:289
 msgid "Use FSID for Key Passphrase"
 msgstr "Χρησιμοποιήστε FSID για Key Passphrase "
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
-#: ../../network/nm_setting_beans_gen.go:296
-#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:298
+#: ../../network/nm_setting_beans_gen.go:406
 msgid "Auth Type"
 msgstr "Τύπος Πιστοποίησης"
 
 #: ../../network/nm_setting_beans_gen.go:200
-#: ../../network/nm_setting_beans_gen.go:305
+#: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
 msgstr "Στατικό κλειδί"
 
 #: ../../network/nm_setting_beans_gen.go:201
-#: ../../network/nm_setting_beans_gen.go:306
-#: ../../network/nm_setting_beans_gen.go:329
+#: ../../network/nm_setting_beans_gen.go:308
+#: ../../network/nm_setting_beans_gen.go:331
 msgid "Customize Key Direction"
 msgstr "Προσαρμογή Κατεύθυνσης Κλειδιού"
 
 #: ../../network/nm_setting_beans_gen.go:202
-#: ../../network/nm_setting_beans_gen.go:307
-#: ../../network/nm_setting_beans_gen.go:330
+#: ../../network/nm_setting_beans_gen.go:309
+#: ../../network/nm_setting_beans_gen.go:332
 msgid "Key Direction"
 msgstr "Βασική Κατεύθυνση"
 
 #: ../../network/nm_setting_beans_gen.go:203
-#: ../../network/nm_setting_beans_gen.go:308
+#: ../../network/nm_setting_beans_gen.go:310
 msgid "Remote IP"
 msgstr "Απομακρυσμένη IP"
 
 #: ../../network/nm_setting_beans_gen.go:204
-#: ../../network/nm_setting_beans_gen.go:309
+#: ../../network/nm_setting_beans_gen.go:311
 msgid "Local IP"
 msgstr "Τοπική IP"
 
 #: ../../network/nm_setting_beans_gen.go:217
-#: ../../network/nm_setting_beans_gen.go:409
+#: ../../network/nm_setting_beans_gen.go:411
 msgid "Request an Inner IP Address"
 msgstr "Αιτηθείτε μια εσωτερική IP διεύθυνση "
 
 #: ../../network/nm_setting_beans_gen.go:218
-#: ../../network/nm_setting_beans_gen.go:410
+#: ../../network/nm_setting_beans_gen.go:412
 msgid "Enforce UDP Encapsulation"
 msgstr "Επιβολή UDP εγκλεισμού"
 
 #: ../../network/nm_setting_beans_gen.go:219
-#: ../../network/nm_setting_beans_gen.go:411
+#: ../../network/nm_setting_beans_gen.go:413
 msgid "Use IP Compression"
 msgstr "Χρήση συμπίεσης IP"
 
 #: ../../network/nm_setting_beans_gen.go:223
-#: ../../network/nm_setting_beans_gen.go:422
+#: ../../network/nm_setting_beans_gen.go:424
 msgid "User Pwd"
 msgstr "Κωδ. Προσβ. Χρήστη"
 
 #: ../../network/nm_setting_beans_gen.go:224
 #: ../../network/nm_setting_beans_gen.go:249
-#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Name"
 msgstr "Όνομα Ομάδας"
 
 #: ../../network/nm_setting_beans_gen.go:226
-#: ../../network/nm_setting_beans_gen.go:425
+#: ../../network/nm_setting_beans_gen.go:427
 msgid "Group Pwd"
 msgstr "Κωδ. Προσβ. Ομάδας"
 
 #: ../../network/nm_setting_beans_gen.go:227
-#: ../../network/nm_setting_beans_gen.go:426
+#: ../../network/nm_setting_beans_gen.go:428
 msgid "Use Hybrid Authentication"
 msgstr "Χρήση Υβριδικής Πιστοποίησης"
 
 #: ../../network/nm_setting_beans_gen.go:228
-#: ../../network/nm_setting_beans_gen.go:427
+#: ../../network/nm_setting_beans_gen.go:429
 msgid "CA File"
 msgstr "Αρχείο CA"
 
@@ -1042,194 +1042,202 @@ msgstr "ID Ομάδας"
 msgid "Pre-Shared Key"
 msgstr "Ήδη κοινόχρηστο κλειδί"
 
-#: ../../network/nm_setting_beans_gen.go:257
-#: ../../network/nm_setting_beans_gen.go:381
+#: ../../network/nm_setting_beans_gen.go:252
+msgid "Phase1 Algorithms"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:253
+msgid "Phase2 Algorithms"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:259
+#: ../../network/nm_setting_beans_gen.go:383
 msgid "VPN PPP"
 msgstr "VPN PPP"
 
-#: ../../network/nm_setting_beans_gen.go:270
+#: ../../network/nm_setting_beans_gen.go:272
 msgid "No Protocol Field Compression"
 msgstr "Χωρίς Συμπίεση Πεδίου Πρωτοκόλλου"
 
-#: ../../network/nm_setting_beans_gen.go:271
+#: ../../network/nm_setting_beans_gen.go:273
 msgid "No Address/Control Compression"
 msgstr "Καμία συμπίεση Διεύθυνσης/Ελέγχου"
 
-#: ../../network/nm_setting_beans_gen.go:315
+#: ../../network/nm_setting_beans_gen.go:317
 msgid "VPN Security"
 msgstr "Ασφάλεια VPN"
 
-#: ../../network/nm_setting_beans_gen.go:317
+#: ../../network/nm_setting_beans_gen.go:319
 msgid "Cipher"
 msgstr "Κρυπτογράφηση"
 
-#: ../../network/nm_setting_beans_gen.go:318
+#: ../../network/nm_setting_beans_gen.go:320
 msgid "HMAC Auth"
 msgstr "HMAC Auth "
 
-#: ../../network/nm_setting_beans_gen.go:324
+#: ../../network/nm_setting_beans_gen.go:326
 msgid "VPN TLS Authentication"
 msgstr "Έλεγχος ταυτότητας VPN TLS "
 
-#: ../../network/nm_setting_beans_gen.go:326
+#: ../../network/nm_setting_beans_gen.go:328
 msgid "Subject Match"
 msgstr "Συμφωνία θέματος"
 
-#: ../../network/nm_setting_beans_gen.go:327
+#: ../../network/nm_setting_beans_gen.go:329
 msgid "Remote Cert Type"
 msgstr "Απομακρυσμένος τύπος πιστοποιητικού"
 
-#: ../../network/nm_setting_beans_gen.go:328
+#: ../../network/nm_setting_beans_gen.go:330
 msgid "Key File"
 msgstr "Αρχείο κλειδιού"
 
-#: ../../network/nm_setting_beans_gen.go:336
+#: ../../network/nm_setting_beans_gen.go:338
 msgid "VPN Proxies"
 msgstr "Διακομιστές VPN"
 
-#: ../../network/nm_setting_beans_gen.go:338
+#: ../../network/nm_setting_beans_gen.go:340
 msgid "Proxy Type"
 msgstr "Τύπος διακομιστή"
 
-#: ../../network/nm_setting_beans_gen.go:339
+#: ../../network/nm_setting_beans_gen.go:341
 msgid "Server IP"
 msgstr "IP διακομιστή"
 
-#: ../../network/nm_setting_beans_gen.go:340
+#: ../../network/nm_setting_beans_gen.go:342
 msgid "Port"
 msgstr "Θύρα"
 
-#: ../../network/nm_setting_beans_gen.go:341
+#: ../../network/nm_setting_beans_gen.go:343
 msgid "Retry Indefinitely When Failed"
 msgstr "Συνεχής προσπάθεια σε περίπτωση αποτυχίας"
 
-#: ../../network/nm_setting_beans_gen.go:349
-#: ../../network/nm_setting_beans_gen.go:433
+#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:435
 msgid "VPN Advanced"
 msgstr "Προχωρημένο VPN"
 
-#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Gateway Port"
 msgstr "Προσαρμοσμένη Θύρα Πύλης"
 
-#: ../../network/nm_setting_beans_gen.go:352
+#: ../../network/nm_setting_beans_gen.go:354
 msgid "Gateway Port"
 msgstr "Θύρα Πύλης"
 
-#: ../../network/nm_setting_beans_gen.go:353
+#: ../../network/nm_setting_beans_gen.go:355
 msgid "Customize Renegotiation Interval"
 msgstr "Προσαρμόστε το Διάστημα Επαναδιαπραγμάτευσης"
 
-#: ../../network/nm_setting_beans_gen.go:354
+#: ../../network/nm_setting_beans_gen.go:356
 msgid "Renegotiation Interval"
 msgstr "Διάστημα επαναδιαπραγμάτευσης"
 
-#: ../../network/nm_setting_beans_gen.go:355
+#: ../../network/nm_setting_beans_gen.go:357
 msgid "Use LZO data compression"
 msgstr "Χρήση συμπίεσης δεδομένων LZO "
 
-#: ../../network/nm_setting_beans_gen.go:356
+#: ../../network/nm_setting_beans_gen.go:358
 msgid "Use TCP connection"
 msgstr "Χρήση σύνδεσης TCP "
 
-#: ../../network/nm_setting_beans_gen.go:357
+#: ../../network/nm_setting_beans_gen.go:359
 msgid "Use TAP device"
 msgstr "Χρήση συσκευής TAP"
 
-#: ../../network/nm_setting_beans_gen.go:358
+#: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize Tunnel MTU"
 msgstr "Προσαρμογή Tunnel MTU "
 
-#: ../../network/nm_setting_beans_gen.go:360
+#: ../../network/nm_setting_beans_gen.go:362
 msgid "Customize UDP Fragment Size"
 msgstr "Προσαρμογή Μεγέθους Τμήματος UDP"
 
-#: ../../network/nm_setting_beans_gen.go:361
+#: ../../network/nm_setting_beans_gen.go:363
 msgid "UDP Fragment Size"
 msgstr "Μέγεθος τμήματος UDP "
 
-#: ../../network/nm_setting_beans_gen.go:362
+#: ../../network/nm_setting_beans_gen.go:364
 msgid "Restrict Tunnel TCP MSS"
 msgstr "Περιορισμός διοχέτευσης TCP MSS "
 
-#: ../../network/nm_setting_beans_gen.go:363
+#: ../../network/nm_setting_beans_gen.go:365
 msgid "Randomize Remote Hosts"
 msgstr "Τυχαίος απομακρυσμένος κεντρικός υπολογιστής"
 
-#: ../../network/nm_setting_beans_gen.go:435
+#: ../../network/nm_setting_beans_gen.go:437
 msgid "Domain"
 msgstr "Τομέας"
 
-#: ../../network/nm_setting_beans_gen.go:436
+#: ../../network/nm_setting_beans_gen.go:438
 msgid "Vendor"
 msgstr "Προμηθευτής"
 
-#: ../../network/nm_setting_beans_gen.go:437
+#: ../../network/nm_setting_beans_gen.go:439
 msgid "Version"
 msgstr "Έκδοση"
 
-#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:440
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
-#: ../../network/nm_setting_beans_gen.go:439
+#: ../../network/nm_setting_beans_gen.go:441
 msgid "NAT Traversal"
 msgstr "Διέλευση NAT"
 
-#: ../../network/nm_setting_beans_gen.go:440
+#: ../../network/nm_setting_beans_gen.go:442
 msgid "IKE DH Group"
 msgstr "IKE DH Group "
 
-#: ../../network/nm_setting_beans_gen.go:441
+#: ../../network/nm_setting_beans_gen.go:443
 msgid "Forward Secrecy"
 msgstr "Άμεση Εμπιστευτικότητα"
 
-#: ../../network/nm_setting_beans_gen.go:442
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "Local Port"
 msgstr "Τοπική Πύλη"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:445
 msgid "Disable Dead Peer Detection"
 msgstr "Απενεργοποίηση Ανίχνευσης Dead Peer"
 
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "IPv4"
 msgstr "IPv4"
 
-#: ../../network/nm_setting_beans_gen.go:451
-#: ../../network/nm_setting_beans_gen.go:465
+#: ../../network/nm_setting_beans_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:467
 msgid "Method"
 msgstr "Μέθοδος"
 
-#: ../../network/nm_setting_beans_gen.go:452
-#: ../../network/nm_setting_beans_gen.go:466
+#: ../../network/nm_setting_beans_gen.go:454
+#: ../../network/nm_setting_beans_gen.go:468
 msgid "IP Address"
 msgstr "Διεύθυνση IP"
 
-#: ../../network/nm_setting_beans_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:455
 msgid "Netmask"
 msgstr "Μάσκα Δικτύου"
 
-#: ../../network/nm_setting_beans_gen.go:455
-#: ../../network/nm_setting_beans_gen.go:469
+#: ../../network/nm_setting_beans_gen.go:457
+#: ../../network/nm_setting_beans_gen.go:471
 msgid "Primary DNS"
 msgstr "Πρωτεύον DNS"
 
-#: ../../network/nm_setting_beans_gen.go:456
-#: ../../network/nm_setting_beans_gen.go:470
+#: ../../network/nm_setting_beans_gen.go:458
+#: ../../network/nm_setting_beans_gen.go:472
 msgid "Secondary DNS"
 msgstr "Δευτερεύον DNS"
 
-#: ../../network/nm_setting_beans_gen.go:457
-#: ../../network/nm_setting_beans_gen.go:471
+#: ../../network/nm_setting_beans_gen.go:459
+#: ../../network/nm_setting_beans_gen.go:473
 msgid "Only applied in corresponding resources"
 msgstr ""
 
-#: ../../network/nm_setting_beans_gen.go:463
+#: ../../network/nm_setting_beans_gen.go:465
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:467
+#: ../../network/nm_setting_beans_gen.go:469
 msgid "Prefix"
 msgstr "Πρόθεμα"
 
@@ -1980,21 +1988,21 @@ msgstr "Ο μεσολάβησης του συστήματος έχει ορισ�
 msgid "System proxy has been cancelled."
 msgstr "Ο μεσολάβησης του συστήματος έχει ακυρωθεί."
 
-#: ../../session/power/manager_events.go:108
-#: ../../session/power/manager_events.go:130
+#: ../../session/power/manager_events.go:106
+#: ../../session/power/manager_events.go:128
 msgid "Battery Critical Low"
 msgstr "Κρίσιμα Χαμηλή Μπαταρία"
 
-#: ../../session/power/manager_events.go:108
-#: ../../session/power/manager_events.go:130
+#: ../../session/power/manager_events.go:106
+#: ../../session/power/manager_events.go:128
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:136
+#: ../../session/power/manager_events.go:134
 msgid "Battery Low"
 msgstr "Χαμηλή Μπαταρία"
 
-#: ../../session/power/manager_events.go:136
+#: ../../session/power/manager_events.go:134
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""
 
