@@ -329,6 +329,8 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
 
 void DockItemController::pluginItemRemoved(PluginsItem *item)
 {
+    item->hidePopup();
+
     if (m_containerItem->contains(item))
         m_containerItem->removeItem(item);
     else
