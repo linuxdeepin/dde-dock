@@ -212,5 +212,22 @@
                 "c:ganttproject"
             ]
         ]
+    },
+    {
+        "ret": "id=gdevelop",
+        "rules": [
+            [
+                "wmi",
+                "c:gdevelop"
+            ],
+            [
+                "wmc",
+                "c:gdevelop"
+            ],
+            [
+                "exec",
+                "=:gdevelop"
+            ]
+        ]
     }
 ]
