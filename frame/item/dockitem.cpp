@@ -132,8 +132,7 @@ void DockItem::enterEvent(QEvent *e)
 {
     m_hover = true;
     m_hoverEffect->setHighlighting(true);
-    if (!PopupWindow->model())
-        m_popupTipsDelayTimer->start();
+    m_popupTipsDelayTimer->start();
 
     update();
 
@@ -221,7 +220,7 @@ void DockItem::onContextMenuAccepted()
 void DockItem::showHoverTips()
 {
     // another model popup window is alread exists
-    if (PopupWindow->isVisible() && PopupWindow->model())
+    if (PopupWindow->model())
         return;
 
     // if not in geometry area
