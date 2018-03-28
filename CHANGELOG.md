@@ -1,3 +1,14 @@
+<a name="4.6.3"></a>
+### 4.6.3 (2018-03-28)
+
+
+#### Bug Fixes
+
+*   Popup Applet not hide when item removed ([0e9d9df0](0e9d9df0))
+*   popup not shown ([0a0b60aa](0a0b60aa))
+
+
+
 <a name=""></a>
 ##  4.6.2 (2018-03-22)
 
