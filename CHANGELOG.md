@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+[3.2.13] 2018-03-28
+*   chore(dock): add window pattern for gdevelop
+*   fix(appearance): add rgba seetings for wine
+
 [3.2.12] 2018-03-22
 *   auto sync po files from transifex
 *   feat(dock): add window identify for org.deepin.flatdeb.*
