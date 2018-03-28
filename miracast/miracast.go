@@ -265,19 +265,27 @@ func (m *Miracast) removeObject(dpath dbus.ObjectPath) (bool, string) {
 	return removed, detail
 }
 
+func (m *Miracast) emitSignalAdded(path dbus.ObjectPath, detailJSON string) {
+	m.service.Emit(m, "Added", path, detailJSON)
+}
+
+func (m *Miracast) emitSignalRemoved(path dbus.ObjectPath, detailJSON string) {
+	m.service.Emit(m, "Removed", path, detailJSON)
+}
+
 func (m *Miracast) handleEvent() {
 	m.wifiObj.ConnectInterfacesAdded(func(dpath oldDBusLib.ObjectPath, detail map[string]map[string]oldDBusLib.Variant) {
 		logger.Debug("[WIFI Added]:", dpath)
 		v, err := m.addObject(dbus.ObjectPath(dpath))
 		if err == nil {
-			m.service.Emit(m, "Added", dpath, toJSON(v))
+			m.emitSignalAdded(dbus.ObjectPath(dpath), toJSON(v))
 		}
 	})
 
 	m.wifiObj.ConnectInterfacesRemoved(func(dpath oldDBusLib.ObjectPath, details []string) {
 		logger.Debug("[WIFI Removed]:", dpath)
 		if ok, detail := m.removeObject(dbus.ObjectPath(dpath)); ok {
-			m.service.Emit(m, "Removed", dpath, detail)
+			m.emitSignalRemoved(dbus.ObjectPath(dpath), detail)
 		}
 	})
 
@@ -285,14 +293,14 @@ func (m *Miracast) handleEvent() {
 		logger.Debug("[WFD Added]:", dpath)
 		v, err := m.addObject(dbus.ObjectPath(dpath))
 		if err == nil {
-			m.service.Emit(m, "Added", dpath, toJSON(v))
+			m.emitSignalAdded(dbus.ObjectPath(dpath), toJSON(v))
 		}
 	})
 
 	m.wfdObj.ConnectInterfacesRemoved(func(dpath oldDBusLib.ObjectPath, details []string) {
-		logger.Debug("[WFD Added]:", dpath)
+		logger.Debug("[WFD Removed]:", dpath)
 		if ok, detail := m.removeObject(dbus.ObjectPath(dpath)); ok {
-			m.service.Emit(m, "Removed", dpath, detail)
+			m.emitSignalRemoved(dbus.ObjectPath(dpath), detail)
 		}
 	})
 
