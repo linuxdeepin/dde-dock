@@ -22,14 +22,10 @@ package background
 import (
 	"os"
 	"path/filepath"
-	dutils "pkg.deepin.io/lib/utils"
-	"syscall"
 )
 
 var (
-	home               = filepath.Clean(os.Getenv("HOME"))
-	dirsCache          []string
-	systemWallpaperDir = []string{
+	systemWallpapersDir = []string{
 		"/usr/share/backgrounds",
 		"/usr/share/wallpapers/deepin",
 	}
@@ -37,50 +33,24 @@ var (
 
 // ListDirs list all background dirs
 func ListDirs() []string {
-	if len(dirsCache) != 0 {
-		return dirsCache
+	var result []string
+	for _, value := range systemWallpapersDir {
+		result = append(result, value)
 	}
-
-	userWallpapersDir := filepath.Join(getUserPictureDir(), "Wallpapers")
-	var dirs = []string{userWallpapersDir}
-	for _, dir := range systemWallpaperDir {
-		dirs = append(dirs, dir)
-	}
-
-	dirsCache = dirs
-	return dirsCache
+	result = append(result, customWallpapersCacheDir)
+	return result
 }
 
-func getBgFiles() []string {
-	var walls []string
-	for _, dir := range ListDirs() {
-		walls = append(walls, getBgFilesInDir(dir)...)
+func getSysBgFiles() []string {
+	var files []string
+	for _, dir := range systemWallpapersDir {
+		files = append(files, getBgFilesInDir(dir)...)
 	}
-	return walls
+	return files
 }
 
-const W_OK = 0x2
-
-func isDeletable(file string) bool {
-	dir := filepath.Dir(file)
-	if strvContains(systemWallpaperDir, dir) {
-		// directory is system wallpapers directory
-		return false
-	}
-	if err := syscall.Access(dir, W_OK); err != nil {
-		// directory is not writable
-		return false
-	}
-	return true
-}
-
-func strvContains(strv []string, str string) bool {
-	for _, v := range strv {
-		if v == str {
-			return true
-		}
-	}
-	return false
+func getCustomBgFiles() []string {
+	return getBgFilesInDir(customWallpapersCacheDir)
 }
 
 func getBgFilesInDir(dir string) []string {
@@ -106,8 +76,7 @@ func getBgFilesInDir(dir string) []string {
 	return walls
 }
 
-func isFileInSpecialDir(file string, dirs []string) bool {
-	file = dutils.DecodeURI(file)
+func isFileInDirs(file string, dirs []string) bool {
 	for _, dir := range dirs {
 		if filepath.Dir(file) == dir {
 			return true

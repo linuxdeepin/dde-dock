@@ -20,8 +20,9 @@
 package background
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestScanner(t *testing.T) {
@@ -41,16 +42,16 @@ func TestFileInDirs(t *testing.T) {
 			"/tmp/wallpapers",
 		}
 
-		So(isFileInSpecialDir("/tmp/backgrounds/1.jpg", dirs),
+		So(isFileInDirs("/tmp/backgrounds/1.jpg", dirs),
 			ShouldEqual, true)
-		So(isFileInSpecialDir("/tmp/wallpapers/1.jpg", dirs),
+		So(isFileInDirs("/tmp/wallpapers/1.jpg", dirs),
 			ShouldEqual, true)
-		So(isFileInSpecialDir("/tmp/background/1.jpg", dirs),
+		So(isFileInDirs("/tmp/background/1.jpg", dirs),
 			ShouldEqual, false)
 	})
 }
 
 func TestGetBgFiles(t *testing.T) {
-	files := getBgFiles()
+	files := getSysBgFiles()
 	t.Log(files)
 }

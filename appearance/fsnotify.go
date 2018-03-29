@@ -72,7 +72,7 @@ func (m *Manager) handleThemeChanged() {
 				switch {
 				case hasEventOccurred(file, bgDirs):
 					logger.Debug("fs event in bgDirs")
-					background.RefreshBackground()
+					background.NotifyChanged()
 				case hasEventOccurred(file, gtkDirs):
 					logger.Debug("fs event in gtkDirs")
 					// Wait for theme copy finished

@@ -21,9 +21,7 @@ package appearance
 
 import (
 	"fmt"
-	"time"
 
-	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/lib/gsettings"
 )
 
@@ -90,18 +88,13 @@ func (m *Manager) listenBgGSettings() {
 			return
 		}
 
-		logger.Debug("wrapBgSetting picture-uri changed")
+		logger.Debug(wrapBgSchema, "changed")
 		value := m.wrapBgSetting.GetString(key)
-		uri, err := m.doSetBackground(value)
+		err := m.doSetBackground(value)
 		if err != nil {
-			// TODO: set bg to default bg
-			logger.Warning("Ensure bg exists failed:", err, value)
+			logger.Warning(err)
 			return
 		}
-		if uri != value {
-			m.wrapBgSetting.SetString(key, uri)
-		}
-		m.emitSignalChanged(TypeBackground, uri)
 	})
 
 	if m.gnomeBgSetting == nil {
@@ -112,28 +105,12 @@ func (m *Manager) listenBgGSettings() {
 			return
 		}
 
-		// Wait for file copy finished
-		time.Sleep(time.Millisecond * 500)
-		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
-		old := m.wrapBgSetting.GetString(gsKeyBackground)
-		logger.Debug("[Gnome background] changed:", key, uri, old)
-		if uri == old {
-			return
-		}
-		if !background.IsBackgroundFile(uri) {
-			logger.Debugf("[Gnome background] Invalid background file '%v'", uri)
-			return
-		}
-
-		v, err := m.doSetBackground(uri)
+		logger.Debug(gnomeBgSchema, "changed")
+		value := m.gnomeBgSetting.GetString(gsKeyBackground)
+		err := m.doSetBackground(value)
 		if err != nil {
-			logger.Debugf("[Gnome background] set '%s' failed: %s", uri, err)
+			logger.Warning(err)
 			return
 		}
-
-		if v != old {
-			m.wrapBgSetting.SetString(key, v)
-		}
-		logger.Debug("[Gnome background] sync wrap bg OVER ENDDDDDDDD:", uri)
 	})
 }

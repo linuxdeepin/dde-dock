@@ -144,14 +144,7 @@ func (m *Manager) set(ty, value string) error {
 			m.CursorTheme.Set(value)
 		}
 	case TypeBackground:
-		if m.Background.Get() == value {
-			return nil
-		}
-		var uri string
-		uri, err = m.doSetBackground(value)
-		if err == nil && uri != m.Background.Get() {
-			m.Background.Set(uri)
-		}
+		err = m.doSetBackground(value)
 	case TypeGreeterBackground:
 		err = m.doSetGreeterBackground(value)
 	case TypeStandardFont:
@@ -206,12 +199,7 @@ func (m *Manager) delete(ty, name string) error {
 	case TypeCursorTheme:
 		return subthemes.ListCursorTheme().Delete(name)
 	case TypeBackground:
-		return background.ListBackground().Delete(name, func(filename string) {
-			err := m.imageBlur.Delete(filename)
-			if err != nil {
-				logger.Warningf("imageBlur.Delete err:", err)
-			}
-		})
+		return background.ListBackground().Delete(name)
 		//case TypeStandardFont:
 		//case TypeMonospaceFont:
 	}

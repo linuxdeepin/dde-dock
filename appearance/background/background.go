@@ -20,59 +20,89 @@
 package background
 
 import (
+	"errors"
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"sync"
 
-	"gir/gio-2.0"
-	"pkg.deepin.io/dde/api/thumbnails/images"
 	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
-	"pkg.deepin.io/lib/xdg/userdir"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
-
-const (
-	thumbWidth  int = 128
-	thumbHeight     = 72
-
-	wrapBgSchema    = "com.deepin.wrap.gnome.desktop.background"
-	gsKeyBackground = "picture-uri"
-)
-
-type Background struct {
-	Id string
-
-	Deletable bool
-}
-type Backgrounds []*Background
 
 var (
-	cacheBackgrounds Backgrounds
+	backgroundsCache   Backgrounds
+	backgroundsCacheMu sync.Mutex
+	fsChanged          bool
 
-	locker  sync.Mutex
-	setting *gio.Settings
+	customWallpapersCacheDir      string
+	customWallpaperDeleteCallback func(file string)
+	logger                        *log.Logger
 )
 
-func RefreshBackground() {
-	locker.Lock()
-	defer locker.Unlock()
-	var infos Backgrounds
-	for _, file := range getBgFiles() {
-		infos = append(infos, &Background{
+const customWallpapersLimit = 10
+
+func SetLogger(value *log.Logger) {
+	logger = value
+}
+
+func SetCustomWallpaperDeleteCallback(fn func(file string)) {
+	customWallpaperDeleteCallback = fn
+}
+
+func init() {
+	customWallpapersCacheDir = filepath.Join(basedir.GetUserConfigDir(),
+		"deepin/dde-daemon/appearance/custom-wallpapers")
+	os.MkdirAll(customWallpapersCacheDir, 0755)
+}
+
+type Background struct {
+	Id        string
+	Deletable bool
+}
+
+type Backgrounds []*Background
+
+func refreshBackground() {
+	logger.Debug("refresh background")
+	var bgs Backgrounds
+	// add custom
+	for _, file := range getCustomBgFiles() {
+		bgs = append(bgs, &Background{
 			Id:        dutils.EncodeURI(file, dutils.SCHEME_FILE),
-			Deletable: isDeletable(file),
+			Deletable: true,
 		})
 	}
-	cacheBackgrounds = infos
+
+	// add system
+	for _, file := range getSysBgFiles() {
+		bgs = append(bgs, &Background{
+			Id:        dutils.EncodeURI(file, dutils.SCHEME_FILE),
+			Deletable: false,
+		})
+	}
+
+	backgroundsCache = bgs
+	fsChanged = false
 }
 
 func ListBackground() Backgrounds {
-	if len(cacheBackgrounds) == 0 {
-		RefreshBackground()
+	backgroundsCacheMu.Lock()
+	defer backgroundsCacheMu.Unlock()
+
+	if len(backgroundsCache) == 0 || fsChanged {
+		refreshBackground()
 	}
-	return cacheBackgrounds
+	return backgroundsCache
+}
+
+func NotifyChanged() {
+	backgroundsCacheMu.Lock()
+	fsChanged = true
+	backgroundsCacheMu.Unlock()
 }
 
 var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
@@ -90,49 +120,9 @@ func IsBackgroundFile(file string) bool {
 	return false
 }
 
-func (infos Backgrounds) EnsureExists(uri string) (string, error) {
+func (bgs Backgrounds) Get(uri string) *Background {
 	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
-	if isFileInSpecialDir(uri, ListDirs()) {
-		return uri, nil
-	}
-
-	file := dutils.DecodeURI(uri)
-	dest, err := getBgDest(file)
-	if err != nil {
-		return "", err
-	}
-
-	if !dutils.IsFileExist(dest) {
-		err = os.MkdirAll(path.Dir(dest), 0755)
-		if err != nil {
-			return "", err
-		}
-
-		err = dutils.CopyFile(file, dest)
-		if err != nil {
-			return "", err
-		}
-		RefreshBackground()
-	}
-	uri = dutils.EncodeURI(dest, dutils.SCHEME_FILE)
-
-	return uri, nil
-}
-
-func (infos Backgrounds) GetIds() []string {
-	var ids []string
-	for _, info := range infos {
-		ids = append(ids, info.Id)
-	}
-	return ids
-}
-
-func (infos Backgrounds) Get(uri string) *Background {
-	// Ensure list not changed
-	locker.Lock()
-	defer locker.Unlock()
-	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
-	for _, info := range infos {
+	for _, info := range bgs {
 		if uri == info.Id {
 			return info
 		}
@@ -140,10 +130,10 @@ func (infos Backgrounds) Get(uri string) *Background {
 	return nil
 }
 
-func (infos Backgrounds) ListGet(uris []string) Backgrounds {
+func (bgs Backgrounds) ListGet(uris []string) Backgrounds {
 	var ret Backgrounds
 	for _, uri := range uris {
-		v := infos.Get(uri)
+		v := bgs.Get(uri)
 		if v == nil {
 			continue
 		}
@@ -152,52 +142,44 @@ func (infos Backgrounds) ListGet(uris []string) Backgrounds {
 	return ret
 }
 
-func (infos Backgrounds) Delete(uri string, cb func(filename string)) error {
-	info := infos.Get(uri)
+func (bgs Backgrounds) Delete(uri string) error {
+	info := bgs.Get(uri)
 	if info == nil {
-		return fmt.Errorf("Not found '%s'", uri)
+		return fmt.Errorf("not found '%s'", uri)
 	}
 
-	return info.Delete(cb)
+	return info.Delete()
 }
 
-func (infos Backgrounds) Thumbnail(uri string) (string, error) {
-	info := infos.Get(uri)
-	if info == nil {
-		return "", fmt.Errorf("Not found '%s'", uri)
-	}
-
-	return info.Thumbnail()
+func (bgs Backgrounds) Thumbnail(uri string) (string, error) {
+	return "", errors.New("not supported")
 }
 
-func (info *Background) Delete(cb func(filename string)) error {
+func (info *Background) Delete() error {
 	if !info.Deletable {
-		return fmt.Errorf("Permission Denied")
+		return fmt.Errorf("not custom")
 	}
 
 	file := dutils.DecodeURI(info.Id)
 	err := os.Remove(file)
-	cb(file)
+
+	if customWallpaperDeleteCallback != nil {
+		customWallpaperDeleteCallback(file)
+	}
 	return err
 }
 
 func (info *Background) Thumbnail() (string, error) {
-	return images.ThumbnailForTheme(info.Id, thumbWidth, thumbHeight, false)
+	return "", errors.New("not supported")
 }
 
-func getBgDest(file string) (string, error) {
-	id, ok := dutils.SumFileMd5(file)
-	if !ok {
-		return "", fmt.Errorf("Not found '%s'", file)
+func Prepare(file string) (string, error) {
+	file = dutils.DecodeURI(file)
+	if isFileInDirs(file, systemWallpapersDir) {
+		logger.Debug("is system")
+		return file, nil
 	}
-	return path.Join(
-		getUserPictureDir(),
-		"Wallpapers", id+path.Ext(file)), nil
-}
 
-func getUserPictureDir() string {
-	dir := userdir.Get(userdir.Pictures)
-	// Ensure dir exists
-	os.MkdirAll(dir, 0755)
-	return dir
+	logger.Debug("is custom")
+	return prepare(file)
 }

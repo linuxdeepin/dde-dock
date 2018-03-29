@@ -21,6 +21,7 @@ package appearance
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os/user"
@@ -271,6 +272,14 @@ func (m *Manager) init() {
 		logger.Warning("new imageBlur failed:", err)
 	}
 
+	background.SetCustomWallpaperDeleteCallback(func(file string) {
+		logger.Debug("imageBlur delete", file)
+		err := m.imageBlur.Delete(file)
+		if err != nil {
+			logger.Warning("imageBlur delete err:", err)
+		}
+	})
+
 	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
 	if err != nil {
 		logger.Warning("new wm failed:", err)
@@ -283,7 +292,6 @@ func (m *Manager) init() {
 		logger.Debugf("load default font config ok %#v", m.defaultFontConfig)
 	}
 
-	m.initBackground()
 	m.doSetGtkTheme(m.GtkTheme.Get())
 	m.doSetIconTheme(m.IconTheme.Get())
 	m.doSetCursorTheme(m.CursorTheme.Get())
@@ -358,30 +366,29 @@ func (m *Manager) doSetCursorTheme(value string) error {
 	return subthemes.SetCursorTheme(value)
 }
 
-func (m *Manager) doSetBackground(value string) (string, error) {
+func (m *Manager) doSetBackground(value string) error {
 	logger.Debugf("call doSetBackground %q", value)
 	if !background.IsBackgroundFile(value) {
-		return "", fmt.Errorf("Invalid background file '%v'", value)
+		return errors.New("invalid background")
 	}
 
-	uri, err := background.ListBackground().EnsureExists(value)
+	file, err := background.Prepare(value)
 	if err != nil {
-		logger.Debugf("[doSetBackground] set '%s' failed: %v", value, uri, err)
-		return "", err
+		return err
 	}
-
+	logger.Debug("prepare result:", file)
+	uri := dutils.EncodeURI(file, dutils.SCHEME_FILE)
 	if m.wm != nil && ddbus.IsSessionBusActivated(m.wm.DestName) {
 		m.wm.ChangeCurrentWorkspaceBackground(uri)
 	}
 
 	if m.imageBlur != nil {
-		file := dutils.DecodeURI(uri)
-		_, err = m.imageBlur.Get(file)
+		_, err := m.imageBlur.Get(file)
 		if err != nil {
 			logger.Warning("call imageBlur.Get err:", err)
 		}
 	}
-	return uri, nil
+	return nil
 }
 
 func (m *Manager) doSetGreeterBackground(value string) error {

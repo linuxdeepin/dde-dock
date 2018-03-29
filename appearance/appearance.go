@@ -21,6 +21,7 @@
 package appearance
 
 import (
+	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
@@ -35,6 +36,7 @@ type Daemon struct {
 }
 
 func init() {
+	background.SetLogger(logger)
 	loader.Register(NewAppearanceDaemon(logger))
 }
 
