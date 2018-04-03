@@ -26,6 +26,9 @@
 #include <QPainter>
 #include <QProcess>
 #include <QMouseEvent>
+#include <DDBusSender>
+
+DCORE_USE_NAMESPACE
 
 LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent),
@@ -94,12 +97,12 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
 
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
 
-    QStringList args = QStringList() << "--print-reply"
-                                     << "--dest=com.deepin.dde.Launcher"
-                                     << "/com/deepin/dde/Launcher"
-                                     << "com.deepin.dde.Launcher.Toggle";
-
-    proc->start("dbus-send", args);
+    DDBusSender()
+            .service("com.deepin.dde.Launcher")
+            .interface("com.deepin.dde.Launcher")
+            .path("/com/deepin/dde/Launcher")
+            .method("com.deepin.dde.Launcher.Toggle")
+            .call();
 }
 
 QWidget *LauncherItem::popupTips()

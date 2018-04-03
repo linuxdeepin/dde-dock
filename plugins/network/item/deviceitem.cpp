@@ -20,6 +20,7 @@
  */
 
 #include "deviceitem.h"
+#include <DDBusSender>
 
 DeviceItem::DeviceItem(const QString &path)
     : QWidget(nullptr),
@@ -76,7 +77,15 @@ QWidget *DeviceItem::itemPopup()
 void DeviceItem::invokeMenuItem(const QString &menuId)
 {
     if (menuId == "settings")
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
+        //QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
+        DDBusSender()
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method("ShowModule")
+                .arg(QString("network"))
+                .call();
+
     else if (menuId == "enable")
         setEnabled(!enabled());
 }
