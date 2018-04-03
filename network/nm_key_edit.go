@@ -21,6 +21,7 @@ package network
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
@@ -143,7 +144,8 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 		kerr = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
-	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON)
+	logger.Debugf("setSettingKeyJSON data[%s][%s], len(valueJSON)=%d",
+		section, key, len(valueJSON))
 	if isInterfaceNil(value) {
 		removeSettingKey(data, section, key)
 	} else {
@@ -169,7 +171,6 @@ func doSetSettingKey(data connectionData, section, key string, value interface{}
 		return
 	}
 	sectionData[key] = dbus.MakeVariant(value)
-	logger.Debugf("setSettingKey: data[%s][%s]=%#v", section, key, value)
 }
 
 func removeSettingKey(data connectionData, section string, keys ...string) {

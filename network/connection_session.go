@@ -20,7 +20,9 @@
 package network
 
 import (
+	"encoding/binary"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -180,7 +182,6 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	case <-chSecret:
 	}
 
-	logger.Debugf("NewConnectionSessionByOpen(): %#v", s.data)
 	return
 }
 
@@ -473,7 +474,7 @@ func (s *ConnectionSession) GetKeyName(section, key string) (name string, err er
 
 // SetKey set target key with new value, the value should be marshaled by JSON.
 func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
-	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON)
+	logger.Debugf("SetKey(), section=%s, key=%s, len(valueJSON)=%d", section, key, len(valueJSON))
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)
@@ -493,6 +494,57 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	s.updateErrorsWhenSettingKey(section, key, err)
 	s.setProps()
 	return
+}
+
+func (s *ConnectionSession) SetKeyFd(section, key string) (dbus.UnixFD, error) {
+	const deadline = 10 * time.Second
+	r, w, err := os.Pipe()
+	if err != nil {
+		return 0, err
+	}
+
+	ch := make(chan string)
+	go func() {
+		defer close(ch)
+		var length uint32
+		err := binary.Read(r, binary.LittleEndian, &length)
+		if err != nil {
+			logger.Warning("SetKeyFd failed to read length:", err)
+			return
+		}
+
+		logger.Debug("length:", length)
+		if length > 1024 {
+			logger.Warning("SetKeyFd length > 1024")
+			return
+		}
+		buf := make([]byte, length)
+		n, err := r.Read(buf)
+		if err != nil {
+			logger.Warning("SetKeyFd failed to read value:", err)
+			return
+		}
+		secretValue := string(buf[:n])
+		ch <- secretValue
+	}()
+
+	go func() {
+		var secretValue string
+		var ok bool
+
+		select {
+		case secretValue, ok = <-ch:
+		case <-time.After(deadline):
+			logger.Warning("SetKeyFd timeout")
+		}
+		r.Close()
+		w.Close()
+		if ok {
+			s.SetKey(section, key, secretValue)
+		}
+	}()
+
+	return dbus.UnixFD(w.Fd()), nil
 }
 
 func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err error) {
@@ -555,11 +607,6 @@ func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, err
 }
 
 // Debug functions
-
-// DebugGetConnectionData get current connection data.
-func (s *ConnectionSession) DebugGetConnectionData() connectionData {
-	return s.data
-}
 
 // DebugGetErrors get current errors.
 func (s *ConnectionSession) DebugGetErrors() sessionErrors {
