@@ -101,7 +101,7 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
             .service("com.deepin.dde.Launcher")
             .interface("com.deepin.dde.Launcher")
             .path("/com/deepin/dde/Launcher")
-            .method("com.deepin.dde.Launcher.Toggle")
+            .method("Toggle")
             .call();
 }
 

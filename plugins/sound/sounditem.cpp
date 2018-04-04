@@ -27,6 +27,8 @@
 #include <QMouseEvent>
 #include <QApplication>
 
+#include <DDBusSender>
+
 // menu actions
 #define MUTE    "mute"
 #define SETTINS "settings"
@@ -103,7 +105,13 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
     if (menuId == MUTE)
         m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
     else if (menuId == SETTINS)
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:sound\"");
+        DDBusSender()
+            .service("com.deepin.dde.ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .method(QString("ShowModule"))
+            .arg(QString("sound"))
+            .call();
 }
 
 QSize SoundItem::sizeHint() const
