@@ -29,6 +29,8 @@ import (
 const (
 	audioDaemonDest    = "com.deepin.daemon.Audio"
 	audioDaemonObjPath = "/com/deepin/daemon/Audio"
+	volumeMin          = 0
+	volumeMax          = 1.5
 )
 
 type AudioController struct {
@@ -112,10 +114,10 @@ func (c *AudioController) changeSinkVolume(raised bool) error {
 
 	logger.Debug("[changeSinkVolume] old sink info:", sink.Name.Get(), v)
 	v += step
-	if v < 0 {
-		v = 0
-	} else if v > 1 {
-		v = 1.0
+	if v < volumeMin {
+		v = volumeMin
+	} else if v > volumeMax {
+		v = volumeMax
 	}
 
 	logger.Debug("[changeSinkVolume] will set volume to:", v)
