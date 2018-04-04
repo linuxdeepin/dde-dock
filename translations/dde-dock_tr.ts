@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation>Gizli simgeyi görüntülemek için tıklayınız</translation>
+        <translation>Gizli simgeyi görüntülemek için tıklayın</translation>
     </message>
 </context>
 <context>
@@ -40,7 +40,7 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
-        <translation>Ağ devre dışı</translation>
+        <translation>Ağı devre dışı bırak</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation>Bilinmeyen aygıt</translation>
+        <translation>Aygıt bilinmiyor</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation>Bilinmeyen birim</translation>
+        <translation>Birim bilinmiyor</translation>
     </message>
 </context>
 <context>
@@ -76,7 +76,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation>Hepsini ayır</translation>
+        <translation>Tümünün bağlantısını kes</translation>
     </message>
 </context>
 <context>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
-        <translation>Moda Kip</translation>
+        <translation>Moda Kipi</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
@@ -129,12 +129,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
-        <translation>Göstermeye Devam Et</translation>
+        <translation>Görüntülensin</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
-        <translation>Gizli Tut</translation>
+        <translation>Gizlensin</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
-        <translation>Eklentiler</translation>
+        <translation>Uygulama Ekleri</translation>
     </message>
 </context>
 <context>
@@ -188,7 +188,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Cancel</source>
-        <translation>İptal et</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
@@ -203,12 +203,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>1 öğe çöpe gönderilsin mi?</translation>
+        <translation>1 öge boşaltılsın mı?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>%1 öğe çöpe gönderilsin mi?</translation>
+        <translation>%1 öge boşaltılsın mı?</translation>
     </message>
 </context>
 <context>
@@ -227,12 +227,12 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
-        <translation>%1 Şarj Edildi</translation>
+        <translation>%1 Şarj Oldu</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
         <source>Charging %1</source>
-        <translation>Şarj Oluyor %1</translation>
+        <translation>%1 Şarj Oluyor</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
-        <translation>Cihaz</translation>
+        <translation>Aygıt</translation>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
@@ -303,7 +303,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="215"/>
         <source>Current Volume %1</source>
-        <translation>Geçerli Ses %1</translation>
+        <translation>Geçerli Ses Düzeyi %1</translation>
     </message>
 </context>
 <context>
@@ -353,12 +353,12 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknown</source>
-        <translation>Bilinmeyen</translation>
+        <translation>Bilinmiyor</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
-        <translation>Ağ Yok</translation>
+        <translation>Herhangi Bir Ağ Yok</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
@@ -371,7 +371,7 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation>Ağ Yok</translation>
+        <translation>Herhangi Bir Ağ Yok</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Otomatik-bağlantı</translation>
+        <translation>Otomatik bağlan</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
@@ -394,7 +394,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
         <source>Cancel</source>
-        <translation>İptal et</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
@@ -409,7 +409,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Bağlanmak için şifre gerekli &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <translation>&lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt; bağlantısını yapmak için parola gerekli</translation>
     </message>
 </context>
 </TS>

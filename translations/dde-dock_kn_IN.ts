@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="kn_IN" version="2.1">
 <context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation>Klicken Sie zum Anzeigen des ausgeblendeten Symbols</translation>
+        <translation>ಗುಪ್ತ ಐಕಾನ್ಗಳನ್ನು ತೋರಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ</translation>
     </message>
 </context>
 <context>
@@ -12,22 +12,22 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
-        <translation>Datum/Zeit</translation>
+        <translation>ದಿನ-ಸಮಯ</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
         <source>12 Hour Time</source>
-        <translation>12-Stunden-Zeit</translation>
+        <translation>12 ಘಂಟೆ ಸಮಯ</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
         <source>24 Hour Time</source>
-        <translation>24-Stunden-Zeit</translation>
+        <translation>24 ಘಂಟೆ ಸಮಯ</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>Time Settings</source>
-        <translation>Zeiteinstellungen</translation>
+        <translation>ಸಮಯದ ಸೆಟ್ಟಿಂಗ್ ಗಳು</translation>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
-        <translation>Netzwerk aktivieren</translation>
+        <translation>ಜಾಲವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
-        <translation>Netzwerk deaktivieren</translation>
+        <translation>ಜಾಲವನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
-        <translation>Netzwerkeinstellungen</translation>
+        <translation>ಜಾಲ ಸೆಟ್ಟಿಂಗ್ಗಳು </translation>
     </message>
 </context>
 <context>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation>Unbekanntes Gerät</translation>
+        <translation>ಅಪರಿಚಿತ ಸಾಧನ</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation>Unbekannter Datenträger</translation>
+        <translation>ಅಪರಿಚಿತ ಸಂಪುಟ</translation>
     </message>
 </context>
 <context>
@@ -66,17 +66,17 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
-        <translation>Festplatte</translation>
+        <translation>ಡಿಸ್ಕ್</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation>ತೆರೆಯಿರಿ</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation>Alle aushängen</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -84,87 +84,87 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
-        <translation>Mode-Modus</translation>
+        <translation>ಅಲಂಕೃತ ರೂಪ</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
-        <translation>Effizienter Modus</translation>
+        <translation>ದಕ್ಷ ರೂಪ</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Top</source>
-        <translation>Oben</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Bottom</source>
-        <translation>Unten</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Left</source>
-        <translation>Links</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Right</source>
-        <translation>Rechts</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Large</source>
-        <translation>Groß</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Medium</source>
-        <translation>Mittel</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Small</source>
-        <translation>Klein</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
-        <translation>Angezeigt lassen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
-        <translation>Ausgeblendet lassen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
-        <translation>Intelligentes Ausblenden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
-        <translation>Modus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
-        <translation>Ort</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
-        <translation>Größe</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
-        <translation>Starter</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -180,7 +180,7 @@
     <message>
         <location filename="../plugins/network/networkplugin.cpp" line="46"/>
         <source>Network</source>
-        <translation>Netzwerk</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -188,27 +188,27 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Empty</source>
-        <translation>Leer</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
-        <translation>Diese Aktion kann nicht wiederhergestellt werden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Sind Sie sicher, dass Sie 1 Element löschen möchten?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Sind Sie sicher, dass Sie %1 Elemente löschen möchten?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -217,57 +217,57 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Shut down</source>
-        <translation>Herunterfahren</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
         <source>Remaining Capacity %1</source>
-        <translation>Verbleibende Kapazität %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
-        <translation>%1 aufgeladen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
         <source>Charging %1</source>
-        <translation>%1 wird aufgeladen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Restart</source>
-        <translation>Neu starten</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
         <source>Lock</source>
-        <translation>Sperren</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Log out</source>
-        <translation>Abmelden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
         <source>Power</source>
-        <translation>Ein/Aus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
         <source>Switch account</source>
-        <translation>Konto wechseln</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
-        <translation>Energieeinstellungen</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -275,12 +275,12 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
-        <translation>Gerät</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation>Anwendung</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -288,22 +288,22 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation>Stummschalten aufheben</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
-        <translation>Stummschalten</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation>Audioeinstellungen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="215"/>
         <source>Current Volume %1</source>
-        <translation>Aktuelle Lautstärke %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../plugins/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
-        <translation>Ton</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
         <source>System Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -327,12 +327,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation>Papierkorb - %1 Datei</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation>Papierkorb - %1 Dateien</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -340,12 +340,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation>ತೆರೆಯಿರಿ</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
-        <translation>Leeren</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -353,17 +353,17 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknown</source>
-        <translation>Unbekannt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
-        <translation>Kein Netzwerk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation>Kabelgebundene Verbindung: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -371,12 +371,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation>Kein Netzwerk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation>Drahtlosverbindung: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -384,32 +384,32 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Automatisch verbinden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
         <source>Connect</source>
-        <translation>Verbinden</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
         <source>Wireless Network</source>
-        <translation>Drahtlosnetzwerk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
         <source>Wireless Network %1</source>
-        <translation>Drahtlosnetzwerk %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Passwort zum Verbinden mit &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt; erforderlich</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -280,7 +280,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>Εφαρμογή</translation>
     </message>
 </context>
 <context>

@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Клик за приказ скривених иконица</translation>
     </message>
 </context>
 <context>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Датум и Сат</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>

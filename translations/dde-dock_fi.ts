@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Paina näyttääksesi piilotetut kuvakket</translation>
     </message>
 </context>
 <context>
@@ -12,22 +12,22 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Päivämäärä ja aika</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 tunnin aika</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 tunnin aika</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ajan asetukset</translation>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>Ota verkkoyhteys käyttöön</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>Poista verkkoyhteys käytöstä</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>Verkkoasetukset</translation>
     </message>
 </context>
 <context>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Tuntematon laite</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Tuntematon asema</translation>
     </message>
 </context>
 <context>
@@ -76,7 +76,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>Irroita kaikki</translation>
     </message>
 </context>
 <context>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>Muotitila</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>Tehokkuustila</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Bottom</source>
-        <translation>Pohja</translation>
+        <translation>Alaosa</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
@@ -114,32 +114,32 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>Suuri</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Medium</source>
-        <translation type="unfinished"/>
+        <translation>Keskikokoinen</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Small</source>
-        <translation type="unfinished"/>
+        <translation>Pieni</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>Pidä näkyvänä</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Pidä piilotettuna</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>Älykäs piilotus</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="94"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
-        <translation>Sijaintipaikka</translation>
+        <translation>Sijainti</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="109"/>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="120"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
-        <translation>Käynnistäjä</translation>
+        <translation>Käynnistin</translation>
     </message>
 </context>
 <context>
@@ -198,17 +198,17 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
-        <translation>Tätä toimintoa ei voida palauttaa</translation>
+        <translation>Tätä toimintoa ei voida kumota</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko tyhjentää 1 kohteen?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko tyhjentää %1 kohdetta?</translation>
     </message>
 </context>
 <context>
@@ -222,17 +222,17 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
         <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Jäljellä oleva varaus: %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
         <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>Ladattu: %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
         <source>Charging %1</source>
-        <translation type="unfinished"/>
+        <translation>Ladataan: %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
@@ -262,12 +262,12 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>Vaihda käyttäjää</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>Virta-asetukset</translation>
     </message>
 </context>
 <context>
@@ -280,7 +280,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>Sovellus</translation>
     </message>
 </context>
 <context>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>Poista mykistys</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="81"/>
@@ -298,12 +298,12 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ääniasetukset</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="215"/>
         <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Nykyinen äänenvoimakkuus: %1</translation>
     </message>
 </context>
 <context>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
         <source>System Tray</source>
-        <translation type="unfinished"/>
+        <translation>Ilmaisinalue</translation>
     </message>
 </context>
 <context>
@@ -327,12 +327,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Roskakori - %1 tiedosto</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Roskakori - %1 tiedostoa</translation>
     </message>
 </context>
 <context>
@@ -345,7 +345,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
-        <translation>Tyhjä</translation>
+        <translation>Tyhjennä</translation>
     </message>
 </context>
 <context>
@@ -358,12 +358,12 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>Ei verkkoa</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Langallinen yhteys: %1</translation>
     </message>
 </context>
 <context>
@@ -371,12 +371,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>Ei verkkoa</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Langaton yhteys: %1</translation>
     </message>
 </context>
 <context>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Automaattinen yhteys</translation>
+        <translation>Yhdistä automaattisesti</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
@@ -404,12 +404,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Langaton verkko: %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Salasana vaadittu yhdistääksesi kohteeseen &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
 </context>
 </TS>
