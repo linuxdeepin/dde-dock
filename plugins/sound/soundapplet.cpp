@@ -144,19 +144,19 @@ void SoundApplet::defaultSinkChanged()
 
 void SoundApplet::onVolumeChanged()
 {
-    const float volmue = m_defSinkInter->volume();
+    const float volume = m_defSinkInter->volume();
     const bool mute = m_defSinkInter->mute();
 
-    m_volumeSlider->setValue(std::min(1500.0f, volmue * 1000.0f));
+    m_volumeSlider->setValue(std::min(1500.0f, volume * 1000.0f));
 
     emit volumeChanged(m_volumeSlider->value());
 
     QString volumeString;
     if (mute)
         volumeString = "muted";
-    else if (volmue >= double(2)/3)
+    else if (volume >= double(2)/3)
         volumeString = "high";
-    else if (volmue >= double(1)/3)
+    else if (volume >= double(1)/3)
         volumeString = "medium";
     else
         volumeString = "low";

@@ -49,6 +49,8 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
     m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24)));
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
+    m_volumeSlider->setMinimum(0);
+    m_volumeSlider->setMaximum(1000);
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_volumeIcon);
