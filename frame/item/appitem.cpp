@@ -125,6 +125,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_smallWatcher(new QFutureWatcher<QPixmap>(this)),
       m_largeWatcher(new QFutureWatcher<QPixmap>(this))
 {
+    m_swingEffectView->setAttribute(Qt::WA_TransparentForMouseEvents);
+
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_swingEffectView);
     centralLayout->setMargin(0);
