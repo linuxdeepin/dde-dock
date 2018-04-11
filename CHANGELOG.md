@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+[3.2.13.1] 2018-04-11
+*   feat: add apps.com.wechat.web to `window_patterns`
+
 [3.2.13] 2018-03-28
 *   chore(dock): add window pattern for gdevelop
 *   fix(appearance): add rgba seetings for wine
