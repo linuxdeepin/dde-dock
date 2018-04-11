@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.deepin.daemon.Authority
+Exec=/usr/lib/deepin-daemon/dde-authority
+User=root

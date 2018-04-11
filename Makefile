@@ -26,6 +26,8 @@ BINARIES =  \
 	    langselector \
 	    soundeffect \
 	    dde-lockservice \
+	    dde-authority \
+	    dde-authority-pam \
 	    default-terminal \
 	    dde-greeter-setter
 
@@ -96,6 +98,9 @@ install: build translate install-dde-data install-icons
 
 	mkdir -pv ${DESTDIR}/lib/systemd/system/
 	cp -f misc/systemd/services/* ${DESTDIR}/lib/systemd/system/
+
+	mkdir -pv ${DESTDIR}/etc/pam.d/
+	cp -f misc/etc/pam.d/* ${DESTDIR}/etc/pam.d/
 
 install-dde-data:
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde/

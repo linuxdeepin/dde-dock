@@ -19,6 +19,7 @@ Build-Depends: debhelper (>= 10), golang-go,
  golang-github-nfnt-resize-dev,
  golang-gir-gudev-1.0-dev,
  golang-github-linuxdeepin-go-x11-client-dev,
+ golang-github-linuxdeepin-go-dbus-factory-dev,
  dde-api-dev (>=2.92.2),
  libudev-dev,
  libglib2.0-dev,
@@ -66,7 +67,7 @@ Depends: ${shlibs:Depends},
  libnl-genl-3-200,
  libfprint0,
  dnsmasq,
- cgroup-tools, imwheel,
+ cgroup-tools, imwheel, procps,
  deepin-installer-timezones
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
