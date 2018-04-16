@@ -21,6 +21,7 @@
 
 #include "datetimeplugin.h"
 
+#include <DDBusSender>
 #include <QLabel>
 #include <QDebug>
 
@@ -152,10 +153,17 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId == "open")
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:datetime\"");
-    else
+    if (menuId == "open") {
+        DDBusSender()
+            .service("com.deepin.dde.ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .method(QString("ShowModule"))
+            .arg(QString("datetime"))
+            .call();
+    } else {
         m_centralWidget->toggleHourFormat();
+    }
 }
 
 void DatetimePlugin::updateCurrentTimeString()
