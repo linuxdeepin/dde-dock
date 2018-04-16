@@ -5,7 +5,7 @@
             "Key": "launcher"
         },
         {
-            "Action": "/usr/lib/deepin-daemon/default-terminal -launch-app",
+            "Action": "/usr/lib/deepin-daemon/default-terminal",
             "Key": "terminal"
         },
         {

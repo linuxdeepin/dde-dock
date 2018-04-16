@@ -91,7 +91,7 @@ func getSystemActionCmd(id string) string {
 // key is id, value is commandline.
 var defaultSysActionCmdMap = map[string]string{
 	"launcher":               "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle",
-	"terminal":               "/usr/lib/deepin-daemon/default-terminal -launch-app",
+	"terminal":               "/usr/lib/deepin-daemon/default-terminal",
 	"terminal-quake":         "deepin-terminal --quake-mode",
 	"lock-screen":            "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show",
 	"logout":                 "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show",
