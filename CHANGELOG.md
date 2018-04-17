@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+[3.2.13.2] 2018-04-17
+*    feat(default-terminal): remove --launch-app option
+
 [3.2.13.1] 2018-04-11
 *   feat: add apps.com.wechat.web to `window_patterns`
 
