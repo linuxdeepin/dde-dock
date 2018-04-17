@@ -243,6 +243,10 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			// ignore device removed signals for that could not
 			// query related information correct
 			if reason == nm.NM_DEVICE_STATE_REASON_REMOVED {
+				if dsi.connectionType == connectionWirelessHotspot {
+					icon := generalGetNotifyDisconnectedIcon(dsi.devType, path)
+					notify(icon, "", Tr("Hotspot share turned off"))
+				}
 				return
 			}
 
