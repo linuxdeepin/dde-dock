@@ -24,6 +24,7 @@
 
 #include <DApplication>
 #include <DLog>
+
 #include <QDir>
 
 #include <unistd.h>
@@ -43,12 +44,16 @@ void RegisterDdeSession()
     QByteArray cookie = qgetenv(envName.toUtf8().data());
     qunsetenv(envName.toUtf8().data());
 
-    if (!cookie.isEmpty()) {
-        QDBusInterface iface("com.deepin.SessionManager",
-                             "/com/deepin/SessionManager",
-                             "com.deepin.SessionManager",
-                             QDBusConnection::sessionBus());
-        iface.asyncCall("Register", QString(cookie));
+    if (!cookie.isEmpty())
+    {
+        QDBusPendingReply<bool> r =
+                QDBusInterface("com.deepin.SessionManager",
+                               "/com/deepin/SessionManager",
+                               "com.deepin.SessionManager",
+                               QDBusConnection::sessionBus())
+                .call("Register", QString(cookie));
+
+        qDebug() << Q_FUNC_INFO << r.value();
     }
 }
 
@@ -73,6 +78,7 @@ int main(int argc, char *argv[])
     DLogManager::registerFileAppender();
 
     qDebug() << "\n\ndde-dock startup";
+    RegisterDdeSession();
 
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());
@@ -82,8 +88,6 @@ int main(int argc, char *argv[])
     DBusDockAdaptors adaptor(&mw);
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
-
-    RegisterDdeSession();
 
     QTimer::singleShot(1, &mw, &MainWindow::launch);
 
