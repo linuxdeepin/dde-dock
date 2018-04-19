@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+[3.2.13.3] 2018-04-19
+*   fix(session/power): submodule name typo
+*   fix(network): close hotspot no send notification
+
 [3.2.13.2] 2018-04-17
 *    feat(default-terminal): remove --launch-app option
 
