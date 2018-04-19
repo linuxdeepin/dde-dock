@@ -29,10 +29,11 @@ import (
 // 处理有线电源插入拔出事件
 func (m *Manager) initOnBatteryChangedHandler() {
 	power := m.helper.Power
-	power.OnBattery.ConnectChanged(func() {
-		logger.Debug("property OnBattery changed")
-
-		onBattery := power.OnBattery.Get()
+	power.OnBattery().ConnectChanged(func(hasValue bool, onBattery bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debug("property OnBattery changed to", onBattery)
 		m.PropsMu.Lock()
 		changed := m.setPropOnBattery(onBattery)
 		m.PropsMu.Unlock()
@@ -57,14 +58,18 @@ func (m *Manager) handleBeforeSuspend() {
 
 func (m *Manager) handleWakeup() {
 	logger.Debug("wakeup")
-	m.helper.Power.RefreshBatteries()
+	m.helper.Power.RefreshBatteries(0)
 	playSound(soundutils.EventWakeup)
 }
 
 func (m *Manager) handleBatteryDisplayUpdate() {
 	logger.Debug("handleBatteryDisplayUpdate")
 	power := m.helper.Power
-	hasBattery := power.HasBattery.Get()
+	hasBattery, err := power.HasBattery().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 
 	m.PropsMu.Lock()
 	var warnLevelChanged bool
@@ -72,10 +77,24 @@ func (m *Manager) handleBatteryDisplayUpdate() {
 
 	if hasBattery {
 		m.setPropBatteryIsPresent(true)
-		percentage := power.BatteryPercentage.Get()
-		timeToEmpty := power.BatteryTimeToEmpty.Get()
+
+		percentage, err := power.BatteryPercentage().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		}
 		m.setPropBatteryPercentage(percentage)
-		m.setPropBatteryState(power.BatteryStatus.Get())
+
+		timeToEmpty, err := power.BatteryTimeToEmpty().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+
+		status, err := power.BatteryStatus().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+		m.setPropBatteryState(status)
+
 		warnLevel = m.getWarnLevel(percentage, timeToEmpty)
 		warnLevelChanged = m.setPropWarnLevel(warnLevel)
 

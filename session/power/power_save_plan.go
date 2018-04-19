@@ -20,6 +20,7 @@
 package power
 
 import (
+	"errors"
 	"sync"
 	"time"
 
@@ -101,7 +102,9 @@ func (psp *powerSavePlan) Start() error {
 	screenSaver := helper.ScreenSaver
 
 	//OnBattery changed will effect current PowerSavePlan
-	power.OnBattery.ConnectChanged(psp.Reset)
+	power.OnBattery().ConnectChanged(func(hasValue bool, value bool) {
+		psp.Reset()
+	})
 
 	screenSaver.ConnectIdleOn(psp.HandleIdleOn)
 	screenSaver.ConnectIdleOff(psp.HandleIdleOff)
@@ -175,20 +178,25 @@ func (psp *powerSavePlan) Update(screenBlackDelay, sleepDelay int32) error {
 
 func (psp *powerSavePlan) setScreenSaverTimeout(seconds int32) error {
 	logger.Debugf("set ScreenSaver timeout to %d", seconds)
-	err := psp.manager.helper.ScreenSaver.SetTimeout(uint32(seconds), 0, false)
+	err := psp.manager.helper.ScreenSaver.SetTimeout(0, uint32(seconds), 0, false)
 	if err != nil {
 		logger.Warningf("set ScreenSaver timeout %d failed: %v", seconds, err)
 	}
 	return err
 }
 
-func (psp *powerSavePlan) saveCurrentBrightness() {
+func (psp *powerSavePlan) saveCurrentBrightness() error {
 	if psp.oldBrightnessTable == nil {
-		psp.oldBrightnessTable = psp.manager.helper.Display.Brightness.Get()
+		var err error
+		psp.oldBrightnessTable, err = psp.manager.helper.Display.Brightness().Get(0)
+		if err != nil {
+			return err
+		}
 		logger.Info("saveCurrentBrightness", psp.oldBrightnessTable)
-	} else {
-		logger.Debug("saveCurrentBrightness failed")
+		return nil
 	}
+
+	return errors.New("oldBrightnessTable is not nil")
 }
 
 func (psp *powerSavePlan) resetBrightness() {
@@ -208,22 +216,27 @@ func (psp *powerSavePlan) screenBlack() {
 	adjustBrightnessEnabled := manager.settings.GetBoolean(settingKeyAdjustBrightnessEnabled)
 
 	if adjustBrightnessEnabled {
-		psp.saveCurrentBrightness()
-		// half black
-		brightnessTable := make(map[string]float64)
-		brightnessRatio := 0.5
-		logger.Debug("brightnessRatio:", brightnessRatio)
-		for output, oldBrightness := range psp.oldBrightnessTable {
-			brightnessTable[output] = oldBrightness * brightnessRatio
+		err := psp.saveCurrentBrightness()
+		if err != nil {
+			adjustBrightnessEnabled = false
+			logger.Warning(err)
+		} else {
+			// half black
+			brightnessTable := make(map[string]float64)
+			brightnessRatio := 0.5
+			logger.Debug("brightnessRatio:", brightnessRatio)
+			for output, oldBrightness := range psp.oldBrightnessTable {
+				brightnessTable[output] = oldBrightness * brightnessRatio
+			}
+			manager.setDisplayBrightness(brightnessTable)
 		}
-		manager.setDisplayBrightness(brightnessTable)
 	} else {
 		logger.Debug("adjust brightness disabled")
 	}
 
 	// full black
-	const fullBlackTime = 5000 // ms
-	taskF := NewTimeAfterTask(fullBlackTime*time.Millisecond, func() {
+	const fullBlackTime = 5000 * time.Millisecond
+	taskF := NewTimeAfterTask(fullBlackTime, func() {
 		logger.Info("Screen full black")
 		if manager.ScreenBlackLock.Get() {
 			manager.lockWaitShow(2 * time.Second)
@@ -232,7 +245,7 @@ func (psp *powerSavePlan) screenBlack() {
 		if adjustBrightnessEnabled {
 			// set min brightness for all outputs
 			brightnessTable := make(map[string]float64)
-			for output, _ := range psp.oldBrightnessTable {
+			for output := range psp.oldBrightnessTable {
 				brightnessTable[output] = 0.02
 			}
 			manager.setDisplayBrightness(brightnessTable)

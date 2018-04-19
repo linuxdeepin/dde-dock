@@ -115,7 +115,7 @@ func (m *Manager) doLock() {
 	logger.Info("Lock Screen")
 	sessionManager := m.helper.SessionManager
 	if sessionManager != nil {
-		err := sessionManager.RequestLock()
+		err := sessionManager.RequestLock(0)
 		if err != nil {
 			logger.Error("Lock failed:", err)
 		}
@@ -126,7 +126,7 @@ func (m *Manager) doSuspend() {
 	logger.Debug("Suspend")
 	sessionManager := m.helper.SessionManager
 	if sessionManager != nil {
-		err := sessionManager.RequestSuspend()
+		err := sessionManager.RequestSuspend(0)
 		if err != nil {
 			logger.Error("Suspend failed:", err)
 		}
@@ -137,7 +137,7 @@ func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
 	display := m.helper.Display
 	for output, brightness := range brightnessTable {
 		logger.Infof("Change output %q brightness to %.2f", output, brightness)
-		err := display.SetBrightness(output, brightness)
+		err := display.SetBrightness(0, output, brightness)
 		if err != nil {
 			logger.Warningf("Change output %q brightness to %.2f failed: %v", output, brightness, err)
 		} else {

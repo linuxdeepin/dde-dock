@@ -47,7 +47,7 @@ func (d *Daemon) GetDependencies() []string {
 
 func (d *Daemon) Start() (err error) {
 	service := loader.GetService()
-	d.manager, err = NewManager(service)
+	d.manager, err = newManager(service)
 	if err != nil {
 		return
 	}

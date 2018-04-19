@@ -31,6 +31,8 @@ import (
 //go:generate dbusutil-gen -type Manager manager.go
 type Manager struct {
 	service              *dbusutil.Service
+	sessionSigLoop       *dbusutil.SignalLoop
+	systemSigLoop        *dbusutil.SignalLoop
 	helper               *Helper
 	settings             *gio.Settings
 	isSuspending         bool
@@ -75,11 +77,18 @@ type Manager struct {
 	LidClosedSleep gsprop.Bool `prop:"access:rw"`
 }
 
-func NewManager(service *dbusutil.Service) (*Manager, error) {
+func newManager(service *dbusutil.Service) (*Manager, error) {
 	m := &Manager{
 		service: service,
 	}
-	helper, err := NewHelper()
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		return nil, err
+	}
+	sessionConn := service.Conn()
+	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionConn, 10)
+	m.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
+	helper, err := newHelper(systemConn, sessionConn)
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +106,16 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	m.LidClosedSleep.Bind(m.settings, settingKeyLidClosedSleep)
 
 	power := m.helper.Power
-	m.LidIsPresent = power.HasLidSwitch.Get()
-	m.OnBattery = power.OnBattery.Get()
+	m.LidIsPresent, err = power.HasLidSwitch().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	m.OnBattery, err = power.OnBattery().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	logger.Info("LidIsPresent", m.LidIsPresent)
 
 	// init battery display
@@ -110,8 +127,14 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 }
 
 func (m *Manager) init() {
+	m.sessionSigLoop.Start()
+	m.systemSigLoop.Start()
+	m.helper.LoginManager.InitSignalExt(m.systemSigLoop, true)
+	m.helper.Power.InitSignalExt(m.systemSigLoop, true)
+	m.helper.ScreenSaver.InitSignalExt(m.sessionSigLoop, true)
+
 	// init sleep inhibitor
-	m.inhibitor = newSleepInhibitor(m.helper.Login1Manager)
+	m.inhibitor = newSleepInhibitor(m.helper.LoginManager)
 	m.inhibitor.OnBeforeSuspend = m.handleBeforeSuspend
 	m.inhibitor.OnWakeup = m.handleWakeup
 	m.inhibitor.block()
@@ -137,17 +160,22 @@ func (m *Manager) initPowerModule() {
 	if !init {
 		// TODO: 也许有更好的判断台式机的方法
 		power := m.helper.Power
-		if !power.HasBattery.Get() {
-			// 无电池，判断为台式机, 设置待机为 从不
-			m.LinePowerSleepDelay.Set(0)
-			m.BatterySleepDelay.Set(0)
+		hasBattery, err := power.HasBattery().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		} else {
+			if !hasBattery {
+				// 无电池，判断为台式机, 设置待机为 从不
+				m.LinePowerSleepDelay.Set(0)
+				m.BatterySleepDelay.Set(0)
+			}
 		}
 		m.settings.SetBoolean(settingKeyPowerModuleInitialized, true)
 	}
 }
 
 func (m *Manager) isX11SessionActive() (bool, error) {
-	return m.helper.SessionWatcher.IsX11SessionActive()
+	return m.helper.SessionWatcher.IsX11SessionActive(0)
 }
 
 func (m *Manager) destroy() {
@@ -162,6 +190,9 @@ func (m *Manager) destroy() {
 		m.inhibitor.unblock()
 		m.inhibitor = nil
 	}
+
+	m.systemSigLoop.Stop()
+	m.sessionSigLoop.Stop()
 	m.service.StopExport(m)
 }
 

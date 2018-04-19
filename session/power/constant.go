@@ -46,10 +46,6 @@ const (
 	settingKeyCriticalTime = "time-to-empty-critical"
 	settingKeyActionTime   = "time-to-empty-action"
 
-	// dbus info
-	displayDBusServiceName = "com.deepin.daemon.Display"
-	displayDBusPath        = "/com/deepin/daemon/Display"
-
 	// cmd
 	cmdDDELowPower = "/usr/lib/deepin-daemon/dde-lowpower"
 

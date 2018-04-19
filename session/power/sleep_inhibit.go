@@ -20,30 +20,31 @@
 package power
 
 import (
-	liblogin1 "dbus/org/freedesktop/login1"
 	"syscall"
+
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 )
 
 type sleepInhibitor struct {
-	login1Manager *liblogin1.Manager
-	fd            int
-	what          string
-	who           string
-	why           string
-	mode          string
+	loginManager *login1.Manager
+	fd           int
+	what         string
+	who          string
+	why          string
+	mode         string
 
 	OnWakeup        func()
 	OnBeforeSuspend func()
 }
 
-func newSleepInhibitor(login1Manager *liblogin1.Manager) *sleepInhibitor {
+func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 	inhibitor := &sleepInhibitor{
-		login1Manager: login1Manager,
-		fd:            -1,
-		what:          "sleep",
-		who:           "com.deepin.daemon.Power",
-		why:           "run screenlock",
-		mode:          "delay",
+		loginManager: login1Manager,
+		fd:           -1,
+		what:         "sleep",
+		who:          "com.deepin.daemon.Power",
+		why:          "run screen lock",
+		mode:         "delay",
 	}
 
 	login1Manager.ConnectPrepareForSleep(func(before bool) {
@@ -69,7 +70,7 @@ func (inhibitor *sleepInhibitor) block() error {
 	if inhibitor.fd != -1 {
 		return nil
 	}
-	fd, err := inhibitor.login1Manager.Inhibit(
+	fd, err := inhibitor.loginManager.Inhibit(0,
 		inhibitor.what, inhibitor.who, inhibitor.why, inhibitor.mode)
 	if err != nil {
 		logger.Error("inbhibit block failed:", err)

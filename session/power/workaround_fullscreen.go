@@ -109,7 +109,7 @@ func (wa *fullScreenWorkaround) uninhibit() {
 	}
 	if wa.idleId != 0 {
 		logger.Debug("* Uninhibit:", wa.idleId)
-		err := screenSaver.UnInhibit(wa.idleId)
+		err := screenSaver.UnInhibit(0, wa.idleId)
 		if err != nil {
 			logger.Warning("Uninhibit failed:", wa.idleId, err)
 		}
@@ -152,7 +152,7 @@ func (wa *fullScreenWorkaround) inhibit() {
 		logger.Warning("screenSaver is nil")
 		return
 	}
-	id, err := screenSaver.Inhibit("idle", "FullScreen play video")
+	id, err := screenSaver.Inhibit(0, "idle", "FullScreen play video")
 	if err != nil {
 		logger.Warning("Inhibit 'idle' failed:", err)
 		return
