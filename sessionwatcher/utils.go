@@ -20,38 +20,10 @@
 package sessionwatcher
 
 import (
-	"fmt"
-	"os/user"
+	"os"
 
-	"dbus/org/freedesktop/login1"
-
-	oldDBusLib "pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 )
-
-func newLoginSession(path dbus.ObjectPath) (uint32, *login1.Session) {
-	session, err := login1.NewSession(login1DBusServiceName, oldDBusLib.ObjectPath(path))
-	if err != nil {
-		logger.Warning("New session '(%v)%s' failed: %v", path, err)
-		return 0, nil
-	}
-
-	uinfo := session.User.Get()
-	if len(uinfo) != 2 {
-		logger.Warning("Invalid session user info:", path)
-		login1.DestroySession(session)
-		return 0, nil
-	}
-
-	uid, ok := uinfo[0].(uint32)
-	if !ok {
-		logger.Warning("Get session uid failed:", path)
-		login1.DestroySession(session)
-		return 0, nil
-	}
-	return uid, session
-}
 
 func suspendPulseSinks(suspend int) {
 	var ctx = pulse.GetContext()
@@ -75,16 +47,6 @@ func suspendPulseSources(suspend int) {
 	}
 }
 
-var curUid string
-
 func isCurrentUser(uid uint32) bool {
-	if len(curUid) == 0 {
-		cur, err := user.Current()
-		if err != nil {
-			return false
-		}
-		curUid = cur.Uid
-	}
-
-	return curUid == fmt.Sprint(uid)
+	return os.Getuid() == int(uid)
 }

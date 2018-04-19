@@ -25,12 +25,12 @@ import (
 )
 
 var (
-	logger   = log.NewLogger("daemon/sessionwatcher")
-	_manager *Manager
+	logger = log.NewLogger("daemon/sessionwatcher")
 )
 
 type Daemon struct {
 	*loader.ModuleBase
+	manager *Manager
 }
 
 func init() {
@@ -47,21 +47,21 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Daemon) Start() error {
-	if _manager != nil {
+func (d *Daemon) Start() error {
+	if d.manager != nil {
 		return nil
 	}
 	service := loader.GetService()
 
 	var err error
-	_manager, err = newManager(service)
+	d.manager, err = newManager(service)
 	if err != nil {
 		return err
 	}
 
-	_manager.initUserSessions()
+	d.manager.initUserSessions()
 
-	err = service.Export(dbusPath, _manager)
+	err = service.Export(dbusPath, d.manager)
 	if err != nil {
 		return err
 	}
@@ -74,15 +74,14 @@ func (*Daemon) Start() error {
 	return nil
 }
 
-func (*Daemon) Stop() error {
-	if _manager == nil {
+func (d *Daemon) Stop() error {
+	if d.manager == nil {
 		return nil
 	}
 
 	service := loader.GetService()
-	service.StopExport(_manager)
-	_manager.destroy()
-	_manager = nil
-	logger.EndTracing()
+	service.StopExport(d.manager)
+	d.manager.destroy()
+	d.manager = nil
 	return nil
 }

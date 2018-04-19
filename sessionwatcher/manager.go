@@ -22,20 +22,15 @@ package sessionwatcher
 import (
 	"sync"
 
-	libdisplay "dbus/com/deepin/daemon/display"
-	"dbus/org/freedesktop/login1"
-
-	oldDBusLib "pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
+
+	libdisplay "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.display"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 )
 
 const (
-	login1DBusServiceName  = "org.freedesktop.login1"
-	login1DBusPath         = "/org/freedesktop/login1"
-	displayDBusServiceName = "com.deepin.daemon.Display"
-	displayDBusPath        = "/com/deepin/daemon/Display"
-
 	dbusServiceName = "com.deepin.daemon.SessionWatcher"
 	dbusPath        = "/com/deepin/daemon/SessionWatcher"
 	dbusInterface   = dbusServiceName
@@ -45,7 +40,8 @@ type Manager struct {
 	service           *dbusutil.Service
 	display           *libdisplay.Display
 	loginManager      *login1.Manager
-	sessionLocker     sync.Mutex
+	systemSigLoop     *dbusutil.SignalLoop
+	mu                sync.Mutex
 	sessions          map[string]*login1.Session
 	activeSessionType string
 
@@ -62,18 +58,17 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		service:  service,
 		sessions: make(map[string]*login1.Session),
 	}
-	var err error
-	manager.loginManager, err = login1.NewManager(login1DBusServiceName, login1DBusPath)
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
-		logger.Warning("New login1 manager failed:", err)
 		return nil, err
 	}
+	sessionConn := service.Conn()
+	manager.loginManager = login1.NewManager(systemConn)
+	manager.display = libdisplay.NewDisplay(sessionConn)
 
-	manager.display, err = libdisplay.NewDisplay(displayDBusServiceName, displayDBusPath)
-	if err != nil {
-		logger.Warning(err)
-		return nil, err
-	}
+	manager.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
+	manager.systemSigLoop.Start()
+	manager.loginManager.InitSignalExt(manager.systemSigLoop, true)
 
 	// default as active
 	manager.IsActive = true
@@ -81,19 +76,14 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 }
 
 func (m *Manager) destroy() {
-	if m.sessions != nil {
-		m.destroySessions()
+	m.mu.Lock()
+	for _, session := range m.sessions {
+		session.RemoveHandler(proxy.RemoveAllHandlers)
 	}
+	m.mu.Unlock()
 
-	if m.display != nil {
-		libdisplay.DestroyDisplay(m.display)
-		m.display = nil
-	}
-
-	if m.loginManager != nil {
-		login1.DestroyManager(m.loginManager)
-		m.loginManager = nil
-	}
+	m.loginManager.RemoveHandler(proxy.RemoveAllHandlers)
+	m.systemSigLoop.Stop()
 }
 
 func (*Manager) GetInterfaceName() string {
@@ -101,103 +91,87 @@ func (*Manager) GetInterfaceName() string {
 }
 
 func (m *Manager) initUserSessions() {
-	list, err := m.loginManager.ListSessions()
+	sessions, err := m.loginManager.ListSessions(0)
 	if err != nil {
 		logger.Warning("List sessions failed:", err)
 		return
 	}
 
-	for _, v := range list {
-		// v info: (id, uid, username, seat id, session path)
-		if len(v) != 5 {
-			logger.Warning("Invalid session info:", v)
-			continue
-		}
-
-		id, ok := v[0].(string)
-		if !ok {
-			continue
-		}
-
-		p, ok := v[4].(oldDBusLib.ObjectPath)
-		if !ok {
-			continue
-		}
-
-		m.addSession(id, dbus.ObjectPath(p))
+	for _, session := range sessions {
+		m.addSession(session.SessionId, session.Path)
 	}
 	m.handleSessionChanged()
 
-	m.loginManager.ConnectSessionNew(func(id string, path oldDBusLib.ObjectPath) {
+	m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session added:", id, path)
-		m.addSession(id, dbus.ObjectPath(path))
+		m.addSession(id, path)
 		m.handleSessionChanged()
 	})
 
-	m.loginManager.ConnectSessionRemoved(func(id string, path oldDBusLib.ObjectPath) {
+	m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session removed:", id, path)
-		m.deleteSession(id, dbus.ObjectPath(path))
+		m.deleteSession(id, path)
 		m.handleSessionChanged()
 	})
-}
-
-func (m *Manager) destroySessions() {
-	m.sessionLocker.Lock()
-	for _, s := range m.sessions {
-		login1.DestroySession(s)
-		s = nil
-	}
-	m.sessions = nil
-	m.sessionLocker.Unlock()
 }
 
 func (m *Manager) addSession(id string, path dbus.ObjectPath) {
-	uid, session := newLoginSession(path)
-	if session == nil {
+	systemConn := m.systemSigLoop.Conn()
+	session, err := login1.NewSession(systemConn, path)
+	if err != nil {
+		logger.Warning(err)
 		return
 	}
 
+	userInfo, err := session.User().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	uid := userInfo.UID
 	logger.Debug("Add session:", id, path, uid)
 	if !isCurrentUser(uid) {
 		logger.Debug("Not the current user session:", id, path, uid)
-		login1.DestroySession(session)
 		return
 	}
-
-	if session.Remote.Get() {
+	remote, err := session.Remote().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if remote {
 		logger.Debugf("session %v is remote", id)
-		login1.DestroySession(session)
 		return
 	}
 
-	m.sessionLocker.Lock()
+	m.mu.Lock()
 	m.sessions[id] = session
-	m.sessionLocker.Unlock()
+	m.mu.Unlock()
 
-	session.Active.ConnectChanged(func() {
-		if session == nil {
-			return
-		}
+	session.InitSignalExt(m.systemSigLoop, true)
+	session.Active().ConnectChanged(func(hasValue bool, value bool) {
 		m.handleSessionChanged()
 	})
 }
 
 func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
-	m.sessionLocker.Lock()
+	m.mu.Lock()
 	session, ok := m.sessions[id]
 	if !ok {
-		m.sessionLocker.Unlock()
+		m.mu.Unlock()
 		return
 	}
 
+	session.RemoveHandler(proxy.RemoveAllHandlers)
 	logger.Debug("Delete session:", id, path)
-	login1.DestroySession(session)
-	session = nil
 	delete(m.sessions, id)
-	m.sessionLocker.Unlock()
+	m.mu.Unlock()
 }
 
 func (m *Manager) handleSessionChanged() {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	if len(m.sessions) == 0 {
 		return
 	}
@@ -207,7 +181,11 @@ func (m *Manager) handleSessionChanged() {
 	var sessionType string
 	if session != nil {
 		isActive = true
-		sessionType = session.Type.Get()
+		var err error
+		sessionType, err = session.Type().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	m.activeSessionType = sessionType
 	m.PropsMu.Lock()
@@ -219,12 +197,12 @@ func (m *Manager) handleSessionChanged() {
 
 	if isActive {
 		logger.Debug("[handleSessionChanged] Resume pulse")
-		// fixed block when unused pulseaudio
+		// fixed block when unused pulse-audio
 		go suspendPulseSinks(0)
 		go suspendPulseSources(0)
 
 		logger.Debug("[handleSessionChanged] Refresh Brightness")
-		go m.display.RefreshBrightness()
+		go m.display.RefreshBrightness(0)
 	} else {
 		logger.Debug("[handleSessionChanged] Suspend pulse")
 		go suspendPulseSinks(1)
@@ -244,11 +222,12 @@ func (m *Manager) setIsActive(val bool) bool {
 }
 
 func (m *Manager) getActiveSession() *login1.Session {
-	m.sessionLocker.Lock()
-	defer m.sessionLocker.Unlock()
-
 	for _, session := range m.sessions {
-		active := session.Active.Get()
+		active, err := session.Active().Get(0)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
 		if active {
 			return session
 		}
@@ -257,17 +236,20 @@ func (m *Manager) getActiveSession() *login1.Session {
 }
 
 func (m *Manager) IsX11SessionActive() (bool, *dbus.Error) {
-	return m.activeSessionType == "x11", nil
+	m.mu.Lock()
+	isActive := m.activeSessionType == "x11"
+	m.mu.Unlock()
+	return isActive, nil
 }
 
 func (m *Manager) GetSessions() (ret []dbus.ObjectPath, err *dbus.Error) {
-	m.sessionLocker.Lock()
+	m.mu.Lock()
 	ret = make([]dbus.ObjectPath, len(m.sessions))
 	i := 0
 	for _, session := range m.sessions {
-		ret[i] = dbus.ObjectPath(session.Path)
+		ret[i] = session.Path_()
 		i++
 	}
-	m.sessionLocker.Unlock()
+	m.mu.Unlock()
 	return
 }
