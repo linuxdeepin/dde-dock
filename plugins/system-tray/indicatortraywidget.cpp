@@ -84,7 +84,7 @@ public:
                                                   q,
                                                   propertyChangedSlot);
 
-            // FIXME(sbw): hack for qt dbus propery changed signal.
+            // FIXME(sbw): hack for qt dbus property changed signal.
             // see: https://bugreports.qt.io/browse/QTBUG-48008
             QDBusConnection::sessionBus().connect(dbusService,
                                                   dbusPath,
