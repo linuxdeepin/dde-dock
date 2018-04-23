@@ -22,8 +22,7 @@ package keybinding
 import (
 	"errors"
 
-	"dbus/com/deepin/daemon/helper/backlight"
-
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	commonbl "pkg.deepin.io/lib/backlight/common"
 	kbdbl "pkg.deepin.io/lib/backlight/keyboard"
@@ -90,7 +89,7 @@ func (c *KbdLightController) toggle() error {
 		value = 0
 	}
 	logger.Debug("[KbdLightController.toggle] will set kbd backlight to:", value)
-	return c.backlightHelper.SetBrightness(backlightTypeKeyboard, controller.Name, int32(value))
+	return c.backlightHelper.SetBrightness(0, backlightTypeKeyboard, controller.Name, int32(value))
 }
 
 var kbdBacklightStep int = 0
@@ -138,5 +137,5 @@ func (c *KbdLightController) changeBrightness(raised bool) error {
 	}
 
 	logger.Debug("[KbdLightController.changeBrightness] will set kbd backlight to:", value)
-	return c.backlightHelper.SetBrightness(backlightTypeKeyboard, controller.Name, int32(value))
+	return c.backlightHelper.SetBrightness(0, backlightTypeKeyboard, controller.Name, int32(value))
 }

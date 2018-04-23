@@ -99,6 +99,12 @@ func (d *Daemon) Stop() error {
 		return nil
 	}
 
+	service := loader.GetService()
+	err := service.ReleaseName(dbusServiceName)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	d.manager.destroy()
 	d.manager = nil
 	return nil

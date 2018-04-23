@@ -20,39 +20,26 @@
 package keybinding
 
 import (
-	"dbus/com/deepin/daemon/inputdevices"
-
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus1"
 )
 
-type TouchpadController struct {
-	touchpad *inputdevices.TouchPad
+type TouchPadController struct {
+	touchPad *inputdevices.TouchPad
 }
 
-func NewTouchpadController() (*TouchpadController, error) {
-	c := new(TouchpadController)
-	var err error
-	c.touchpad, err = inputdevices.NewTouchPad("com.deepin.daemon.InputDevices", "/com/deepin/daemon/InputDevice/TouchPad")
-	if err != nil {
-		return nil, err
-	}
-
-	return c, nil
+func NewTouchPadController(sessionConn *dbus.Conn) *TouchPadController {
+	c := new(TouchPadController)
+	c.touchPad = inputdevices.NewTouchPad(sessionConn)
+	return c
 }
 
-func (c *TouchpadController) Destroy() {
-	if c.touchpad != nil {
-		inputdevices.DestroyTouchPad(c.touchpad)
-		c.touchpad = nil
-	}
+func (*TouchPadController) Name() string {
+	return "TouchPad"
 }
 
-func (*TouchpadController) Name() string {
-	return "Touchpad"
-}
-
-func (c *TouchpadController) ExecCmd(cmd ActionCmd) error {
+func (c *TouchPadController) ExecCmd(cmd ActionCmd) error {
 	switch cmd {
 	case TouchpadToggle:
 		c.toggle()
@@ -66,17 +53,19 @@ func (c *TouchpadController) ExecCmd(cmd ActionCmd) error {
 	return nil
 }
 
-func (c *TouchpadController) enable(val bool) error {
-	if c.touchpad == nil || !ddbus.IsSessionBusActivated(c.touchpad.DestName) {
-		return ErrIsNil{"TouchpadController.touchpad"}
+func (c *TouchPadController) enable(val bool) error {
+	exist, err := c.touchPad.Exist().Get(0)
+	if err != nil {
+		return err
 	}
-	// check touchpad exist?
-	exist := c.touchpad.Exist.Get()
 	if !exist {
 		return nil
 	}
 
-	c.touchpad.TPadEnable.Set(val)
+	err = c.touchPad.TPadEnable().Set(0, val)
+	if err != nil {
+		return err
+	}
 
 	osd := "TouchpadOn"
 	if !val {
@@ -86,17 +75,25 @@ func (c *TouchpadController) enable(val bool) error {
 	return nil
 }
 
-func (c *TouchpadController) toggle() error {
-	if c.touchpad == nil || !ddbus.IsSessionBusActivated(c.touchpad.DestName) {
-		return ErrIsNil{"TouchpadController.touchpad"}
-	}
+func (c *TouchPadController) toggle() error {
 	// check touchpad exist?
-	exist := c.touchpad.Exist.Get()
+	exist, err := c.touchPad.Exist().Get(0)
+	if err != nil {
+		return err
+	}
 	if !exist {
 		return nil
 	}
 
-	c.touchpad.TPadEnable.Set(!c.touchpad.TPadEnable.Get())
+	enabled, err := c.touchPad.TPadEnable().Get(0)
+	if err != nil {
+		return err
+	}
+
+	err = c.touchPad.TPadEnable().Set(0, !enabled)
+	if err != nil {
+		return err
+	}
 
 	showOSD("TouchpadToggle")
 	return nil

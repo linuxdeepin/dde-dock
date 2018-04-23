@@ -25,16 +25,18 @@ import (
 	"strings"
 	"time"
 
-	"dbus/com/deepin/daemon/helper/backlight"
-	"dbus/com/deepin/daemon/inputdevices"
-	"dbus/com/deepin/sessionmanager"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 
 	"gir/gio-2.0"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
@@ -76,6 +78,8 @@ type Manager struct {
 
 	customShortcutManager *shortcuts.CustomShortcutManager
 
+	sessionSigLoop  *dbusutil.SignalLoop
+	systemSigLoop   *dbusutil.SignalLoop
 	startManager    *sessionmanager.StartManager
 	backlightHelper *backlight.Backlight
 	keyboard        *inputdevices.Keyboard
@@ -86,7 +90,7 @@ type Manager struct {
 	mediaPlayerController *MediaPlayerController
 	displayController     *DisplayController
 	kbdLightController    *KbdLightController
-	touchpadController    *TouchpadController
+	touchPadController    *TouchPadController
 
 	shortcutManager *shortcuts.ShortcutManager
 	// shortcut action handlers
@@ -149,6 +153,11 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		return nil, err
 	}
 
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		return nil, err
+	}
+
 	var m = Manager{
 		service:               service,
 		enableListenGSettings: true,
@@ -156,13 +165,27 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		keySymbols: keysyms.NewKeySymbols(conn),
 	}
 
+	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
+	m.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
+
 	m.gsKeyboard = gio.NewSettings(gsSchemaKeyboard)
 	m.NumLockState.Bind(m.gsKeyboard, gsKeyNumLockState)
 	m.ShortcutSwitchLayout.Bind(m.gsKeyboard, gsKeyShortcutSwitchLayout)
 	return &m, nil
 }
 
+func (m *Manager) systemConn() *dbus.Conn {
+	return m.systemSigLoop.Conn()
+}
+
+func (m *Manager) sessionConn() *dbus.Conn {
+	return m.sessionSigLoop.Conn()
+}
+
 func (m *Manager) init() {
+	m.sessionSigLoop.Start()
+	m.systemSigLoop.Start()
+
 	if m.gsKeyboard.GetBoolean(gsKeySaveNumLockState) {
 		nlState := NumLockState(m.NumLockState.Get())
 		if nlState == NumLockUnknown {
@@ -195,34 +218,18 @@ func (m *Manager) init() {
 	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
 	m.shortcutManager.AddCustom(m.customShortcutManager)
 
-	var err error
-	m.audioController, err = NewAudioController()
-	if err != nil {
-		logger.Warning("NewAudioController failed:", err)
-	}
+	sessionConn := m.sessionConn()
+	m.audioController = NewAudioController(sessionConn)
+	m.mediaPlayerController = NewMediaPlayerController(m.systemSigLoop, sessionConn)
 
-	m.mediaPlayerController, err = NewMediaPlayerController()
-	if err != nil {
-		logger.Warning("NewMediaPlayerController failed:", err)
-	}
-
-	m.backlightHelper, err = backlight.NewBacklight("com.deepin.daemon.helper.Backlight",
-		"/com/deepin/daemon/helper/Backlight")
-	if err != nil {
-		logger.Warning("NewBacklight failed:", err)
-	}
-
-	m.startManager, err = sessionmanager.NewStartManager("com.deepin.SessionManager", "/com/deepin/StartManager")
-	if err != nil {
-		logger.Warning("NewStartManager failed:", err)
-	}
-
-	m.keyboard, err = inputdevices.NewKeyboard("com.deepin.daemon.InputDevices",
-		"/com/deepin/daemon/InputDevice/Keyboard")
-
-	m.keyboard.CurrentLayout.ConnectChanged(func() {
-		layout := m.keyboard.CurrentLayout.Get()
-
+	m.backlightHelper = backlight.NewBacklight(m.systemConn())
+	m.startManager = sessionmanager.NewStartManager(sessionConn)
+	m.keyboard = inputdevices.NewKeyboard(sessionConn)
+	m.keyboard.InitSignalExt(m.sessionSigLoop, true)
+	m.keyboard.CurrentLayout().ConnectChanged(func(hasValue bool, layout string) {
+		if !hasValue {
+			return
+		}
 		if m.keyboardLayout != layout {
 			m.keyboardLayout = layout
 			logger.Debug("keyboard layout changed:", layout)
@@ -230,17 +237,9 @@ func (m *Manager) init() {
 		}
 	})
 
-	m.displayController, err = NewDisplayController(m.backlightHelper)
-	if err != nil {
-		logger.Warning("NewDisplayController failed:", err)
-	}
-
+	m.displayController = NewDisplayController(m.backlightHelper, sessionConn)
 	m.kbdLightController = NewKbdLightController(m.backlightHelper)
-
-	m.touchpadController, err = NewTouchpadController()
-	if err != nil {
-		logger.Warning("NewTouchpadController failed:", err)
-	}
+	m.touchPadController = NewTouchPadController(sessionConn)
 }
 
 func (m *Manager) destroy() {
@@ -267,34 +266,24 @@ func (m *Manager) destroy() {
 		m.gsGnomeWM = nil
 	}
 
-	if m.audioController != nil {
-		m.audioController.Destroy()
-		m.audioController = nil
-	}
-
 	if m.mediaPlayerController != nil {
 		m.mediaPlayerController.Destroy()
 		m.mediaPlayerController = nil
 	}
 
-	if m.displayController != nil {
-		m.displayController.Destroy()
-		m.displayController = nil
-	}
-
-	if m.touchpadController != nil {
-		m.touchpadController.Destroy()
-		m.touchpadController = nil
-	}
-
-	if m.startManager != nil {
-		sessionmanager.DestroyStartManager(m.startManager)
-		m.startManager = nil
-	}
-
 	if m.keyboard != nil {
-		inputdevices.DestroyKeyboard(m.keyboard)
+		m.keyboard.RemoveHandler(proxy.RemoveAllHandlers)
 		m.keyboard = nil
+	}
+
+	if m.sessionSigLoop != nil {
+		m.sessionSigLoop.Stop()
+		m.sessionSigLoop = nil
+	}
+
+	if m.systemSigLoop != nil {
+		m.systemSigLoop.Stop()
+		m.systemSigLoop = nil
 	}
 }
 
@@ -364,7 +353,7 @@ func (m *Manager) execCmd(cmd string) error {
 	}
 
 	logger.Debug("startdde run cmd:", cmd)
-	return m.startManager.RunCommand("sh", []string{"-c", cmd})
+	return m.startManager.RunCommand(0, "sh", []string{"-c", cmd})
 }
 
 func (m *Manager) eliminateKeystrokeConflict() {

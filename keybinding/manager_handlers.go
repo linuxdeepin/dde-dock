@@ -114,11 +114,11 @@ func (m *Manager) initHandlers() {
 	m.handlers[ActionTypeMediaPlayerCtrl] = buildHandlerFromController(m.mediaPlayerController)
 	m.handlers[ActionTypeDisplayCtrl] = buildHandlerFromController(m.displayController)
 	m.handlers[ActionTypeKbdLightCtrl] = buildHandlerFromController(m.kbdLightController)
-	m.handlers[ActionTypeTouchpadCtrl] = buildHandlerFromController(m.touchpadController)
+	m.handlers[ActionTypeTouchpadCtrl] = buildHandlerFromController(m.touchPadController)
 	logger.Debug("-----------ManageWireless:", ManageWireless)
 	if ManageWireless == "enabled" {
 		m.handlers[ActionTypeToggleWireless] = func(ev *KeyEvent) {
-			err := toggleWireless()
+			err := toggleWireless(m.sessionConn())
 			if err != nil {
 				logger.Warning("Failed to toggle wireless:", err)
 			}

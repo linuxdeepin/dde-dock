@@ -21,12 +21,9 @@ package keybinding
 
 import (
 	"encoding/json"
-	"fmt"
 
-	"dbus/com/deepin/daemon/network"
-
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	"pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.network"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 var (
@@ -34,22 +31,16 @@ var (
 	ManageWireless = "disabled"
 )
 
-func toggleWireless() error {
-	net, err := Network.NewNetworkManager("com.deepin.daemon.Network",
-		"/com/deepin/daemon/Network")
+func toggleWireless(sessionConn *dbus.Conn) error {
+	net := network.NewNetwork(sessionConn)
+	devices, err := net.Devices().Get(0)
 	if err != nil {
 		return err
 	}
-	defer Network.DestroyNetworkManager(net)
-
-	if !ddbus.IsSystemBusActivated(net.DestName) {
-		return fmt.Errorf("Network service no activation")
-	}
-
-	list := getWirelessDevice(net.Devices.Get())
+	list := getWirelessDevice(devices)
 	enabled := false
 	for _, dev := range list {
-		ok, _ := net.IsDeviceEnabled(dbus.ObjectPath(dev))
+		ok, _ := net.IsDeviceEnabled(0, dbus.ObjectPath(dev))
 		if ok {
 			enabled = true
 			break
@@ -57,7 +48,7 @@ func toggleWireless() error {
 	}
 
 	for _, dev := range list {
-		net.EnableDevice(dbus.ObjectPath(dev), !enabled)
+		net.EnableDevice(0, dbus.ObjectPath(dev), !enabled)
 	}
 	return nil
 }

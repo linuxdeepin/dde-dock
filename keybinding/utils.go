@@ -27,7 +27,7 @@ import (
 	"strings"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 func getPowerButtonPressedExec() string {

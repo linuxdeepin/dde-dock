@@ -23,58 +23,49 @@ import (
 	"errors"
 	"strings"
 
-	"dbus/org/freedesktop/dbus"
-	"dbus/org/freedesktop/login1"
-	mpris2 "dbus/org/mpris/mediaplayer2"
-
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const (
 	senderTypeMpris = "org.mpris.MediaPlayer2"
-	mprisPath       = "/org/mpris/MediaPlayer2"
 
 	playerDelta int64 = 5000 * 1000 // 5s
 )
 
 type MediaPlayerController struct {
+	conn         *dbus.Conn
 	prevPlayer   string
-	dbusDaemon   *dbus.DBusDaemon
+	dbusDaemon   *ofdbus.DBus
 	loginManager *login1.Manager
 }
 
-func NewMediaPlayerController() (*MediaPlayerController, error) {
+func NewMediaPlayerController(systemSigLoop *dbusutil.SignalLoop,
+	sessionConn *dbus.Conn) *MediaPlayerController {
+
 	c := new(MediaPlayerController)
-	var err error
-	c.dbusDaemon, err = dbus.NewDBusDaemon("org.freedesktop.DBus", "/")
-	if err != nil {
-		return nil, err
-	}
-	c.loginManager, err = login1.NewManager("org.freedesktop.login1", "/org/freedesktop/login1")
-	if err != nil {
-		return nil, err
-	}
+	c.conn = sessionConn
+	c.dbusDaemon = ofdbus.NewDBus(sessionConn)
+	c.loginManager = login1.NewManager(systemSigLoop.Conn())
+	c.loginManager.InitSignalExt(systemSigLoop, true)
 
 	// pause all player before system sleep
-	c.loginManager.ConnectPrepareForSleep(func(actived bool) {
-		if !actived {
+	c.loginManager.ConnectPrepareForSleep(func(start bool) {
+		if !start {
 			return
 		}
 		c.pauseAllPlayer()
 	})
-	return c, nil
+	return c
 }
 
-func (c MediaPlayerController) Destroy() {
-	if c.dbusDaemon != nil {
-		dbus.DestroyDBusDaemon(c.dbusDaemon)
-		c.dbusDaemon = nil
-	}
-
-	if c.loginManager != nil {
-		login1.DestroyManager(c.loginManager)
-		c.loginManager = nil
-	}
+func (c *MediaPlayerController) Destroy() {
+	c.loginManager.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
 func (c *MediaPlayerController) Name() string {
@@ -87,49 +78,61 @@ func (c *MediaPlayerController) ExecCmd(cmd ActionCmd) error {
 		return errors.New("no player found")
 	}
 
-	logger.Debug("[HandlerAction] active player dest name:", player.DestName)
+	logger.Debug("[HandlerAction] active player dest name:", player.ServiceName_())
 	switch cmd {
 	case MediaPlayerPlay:
-		return player.PlayPause()
+		return player.PlayPause(0)
 	case MediaPlayerPause:
-		return player.Pause()
+		return player.Pause(0)
 	case MediaPlayerStop:
-		return player.Stop()
+		return player.Stop(0)
 
 	case MediaPlayerPrevious:
-		if err := player.Previous(); err != nil {
+		if err := player.Previous(0); err != nil {
 			return err
 		}
-		return player.Play()
+		return player.Play(0)
 
 	case MediaPlayerNext:
-		if err := player.Next(); err != nil {
+		if err := player.Next(0); err != nil {
 			return err
 		}
-		return player.Play()
+		return player.Play(0)
 
 	case MediaPlayerRewind:
-		pos := player.Position.Get()
+		pos, err := player.Position().Get(0)
+		if err != nil {
+			return err
+		}
+
 		var offset int64
 		if pos-playerDelta > 0 {
 			offset = -playerDelta
 		}
 
-		if err := player.Seek(offset); err != nil {
+		if err := player.Seek(0, offset); err != nil {
 			return err
 		}
-		if player.PlaybackStatus.Get() != "Playing" {
-			return player.PlayPause()
+		status, err := player.PlaybackStatus().Get(0)
+		if err != nil {
+			return err
+		}
+		if status != "Playing" {
+			return player.PlayPause(0)
 		}
 	case MediaPlayerForword:
-		if err := player.Seek(playerDelta); err != nil {
+		if err := player.Seek(0, playerDelta); err != nil {
 			return err
 		}
-		if player.PlaybackStatus.Get() != "Playing" {
-			return player.PlayPause()
+		status, err := player.PlaybackStatus().Get(0)
+		if err != nil {
+			return err
+		}
+		if status != "Playing" {
+			return player.PlayPause(0)
 		}
 	case MediaPlayerRepeat:
-		return player.Play()
+		return player.Play(0)
 
 	default:
 		return ErrInvalidActionCmd{cmd}
@@ -139,11 +142,11 @@ func (c *MediaPlayerController) ExecCmd(cmd ActionCmd) error {
 
 func (c *MediaPlayerController) pauseAllPlayer() {
 	for _, sender := range c.getMprisSender() {
-		player, err := mpris2.NewPlayer(sender, mprisPath)
+		player := mpris2.NewMediaPlayer(c.conn, sender)
+		err := player.Pause(0)
 		if err != nil {
-			continue
+			logger.Warning(err)
 		}
-		player.Pause()
 	}
 }
 
@@ -152,19 +155,17 @@ func (c *MediaPlayerController) getMprisSender() []string {
 		return nil
 	}
 	var senders []string
-	names, _ := c.dbusDaemon.ListNames()
+	names, _ := c.dbusDaemon.ListNames(0)
 	for _, name := range names {
-		if !strings.Contains(name, senderTypeMpris) {
-			continue
+		if strings.HasPrefix(name, senderTypeMpris) {
+			senders = append(senders, name)
 		}
-
-		senders = append(senders, name)
 	}
 
 	return senders
 }
 
-func (c *MediaPlayerController) getActiveMpris() *mpris2.Player {
+func (c *MediaPlayerController) getActiveMpris() *mpris2.MediaPlayer {
 	var senders = c.getMprisSender()
 
 	length := len(senders)
@@ -173,10 +174,7 @@ func (c *MediaPlayerController) getActiveMpris() *mpris2.Player {
 	}
 
 	for _, sender := range senders {
-		player, err := mpris2.NewPlayer(sender, mprisPath)
-		if err != nil {
-			continue
-		}
+		player := mpris2.NewMediaPlayer(c.conn, sender)
 
 		if length == 1 {
 			return player
@@ -186,7 +184,13 @@ func (c *MediaPlayerController) getActiveMpris() *mpris2.Player {
 			return player
 		}
 
-		if player.PlaybackStatus.Get() == "Playing" {
+		status, err := player.PlaybackStatus().Get(0)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+
+		if status == "Playing" {
 			c.prevPlayer = sender
 			return player
 		}
@@ -196,6 +200,6 @@ func (c *MediaPlayerController) getActiveMpris() *mpris2.Player {
 		}
 	}
 
-	player, _ := mpris2.NewPlayer(senders[0], mprisPath)
+	player := mpris2.NewMediaPlayer(c.conn, senders[0])
 	return player
 }

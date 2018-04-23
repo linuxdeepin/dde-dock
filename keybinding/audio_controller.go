@@ -20,38 +20,25 @@
 package keybinding
 
 import (
-	"dbus/com/deepin/daemon/audio"
-
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.audio"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 const (
-	audioDaemonDest    = "com.deepin.daemon.Audio"
-	audioDaemonObjPath = "/com/deepin/daemon/Audio"
-	volumeMin          = 0
-	volumeMax          = 1.5
+	volumeMin = 0
+	volumeMax = 1.5
 )
 
 type AudioController struct {
+	conn        *dbus.Conn
 	audioDaemon *audio.Audio
 }
 
-func NewAudioController() (*AudioController, error) {
-	c := &AudioController{}
-	var err error
-	// c.audioDaemon must not be nil
-	c.audioDaemon, err = audio.NewAudio(audioDaemonDest, audioDaemonObjPath)
-	if err != nil {
-		return nil, err
-	}
-	return c, nil
-}
-
-func (c *AudioController) Destroy() {
-	if c.audioDaemon != nil {
-		audio.DestroyAudio(c.audioDaemon)
-		c.audioDaemon = nil
+func NewAudioController(sessionConn *dbus.Conn) *AudioController {
+	return &AudioController{
+		conn:        sessionConn,
+		audioDaemon: audio.NewAudio(sessionConn),
 	}
 }
 
@@ -83,7 +70,16 @@ func (c *AudioController) toggleSinkMute() error {
 	if err != nil {
 		return err
 	}
-	sink.SetMute(!sink.Mute.Get())
+
+	mute, err := sink.Mute().Get(0)
+	if err != nil {
+		return err
+	}
+
+	err = sink.SetMute(0, !mute)
+	if err != nil {
+		return err
+	}
 	showOSD("AudioMute")
 	return nil
 }
@@ -93,7 +89,17 @@ func (c *AudioController) toggleSourceMute() error {
 	if err != nil {
 		return err
 	}
-	source.SetMute(!source.Mute.Get())
+
+	mute, err := source.Mute().Get(0)
+	if err != nil {
+		return err
+	}
+
+	err = source.SetMute(0, !mute)
+	if err != nil {
+		return err
+	}
+
 	// TODO: here we can show osd
 	return nil
 }
@@ -105,14 +111,17 @@ func (c *AudioController) changeSinkVolume(raised bool) error {
 	}
 
 	osd := "AudioUp"
-	v := sink.Volume.Get()
-	var step float64 = 0.05
+	v, err := sink.Volume().Get(0)
+	if err != nil {
+		return err
+	}
+
+	var step = 0.05
 	if !raised {
 		step = -step
 		osd = "AudioDown"
 	}
 
-	logger.Debug("[changeSinkVolume] old sink info:", sink.Name.Get(), v)
 	v += step
 	if v < volumeMin {
 		v = volumeMin
@@ -121,33 +130,45 @@ func (c *AudioController) changeSinkVolume(raised bool) error {
 	}
 
 	logger.Debug("[changeSinkVolume] will set volume to:", v)
-	if sink.Mute.Get() {
-		sink.SetMute(false)
+	mute, err := sink.Mute().Get(0)
+	if err != nil {
+		return err
 	}
-	sink.SetVolume(v, true)
+
+	if mute {
+		err = sink.SetMute(0, false)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
+	err = sink.SetVolume(0, v, true)
+	if err != nil {
+		return err
+	}
 	showOSD(osd)
 	return nil
 }
 
-func (c *AudioController) getDefaultSink() (*audio.AudioSink, error) {
-	if c.audioDaemon == nil || !ddbus.IsSessionBusActivated(c.audioDaemon.DestName) {
-		return nil, ErrIsNil{"AudioController.audioDaemon"}
-	}
-	sinkPath := c.audioDaemon.DefaultSink.Get()
-	sink, err := audio.NewAudioSink(audioDaemonDest, sinkPath)
+func (c *AudioController) getDefaultSink() (*audio.Sink, error) {
+	sinkPath, err := c.audioDaemon.DefaultSink().Get(0)
 	if err != nil {
 		return nil, err
 	}
 
+	sink, err := audio.NewSink(c.conn, sinkPath)
+	if err != nil {
+		return nil, err
+	}
 	return sink, nil
 }
 
-func (c *AudioController) getDefaultSource() (*audio.AudioSource, error) {
-	if c.audioDaemon == nil || !ddbus.IsSessionBusActivated(c.audioDaemon.DestName) {
-		return nil, ErrIsNil{"AudioController.audioDaemon"}
+func (c *AudioController) getDefaultSource() (*audio.Source, error) {
+	sourcePath, err := c.audioDaemon.DefaultSource().Get(0)
+	if err != nil {
+		return nil, err
 	}
-	sourcePath := c.audioDaemon.DefaultSource.Get()
-	source, err := audio.NewAudioSource(audioDaemonDest, sourcePath)
+	source, err := audio.NewSource(c.conn, sourcePath)
 	if err != nil {
 		return nil, err
 	}
