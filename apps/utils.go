@@ -131,15 +131,6 @@ func getHomeByUid(uid int) (string, error) {
 	return user.HomeDir, nil
 }
 
-func getDirPerm(uid int) os.FileMode {
-	if uid == 0 {
-		// rwx r-x r-x
-		return 0755
-	}
-	// rwx --- ---
-	return 0700
-}
-
 // copy from go source src/os/path.go
 func MkdirAll(path string, uid int, perm os.FileMode) error {
 	logger.Debug("MkdirAll", path, uid, perm)

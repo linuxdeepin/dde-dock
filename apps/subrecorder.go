@@ -33,6 +33,10 @@ import (
 	"time"
 )
 
+const (
+	dirPerm = 0755
+)
+
 type SubRecorder struct {
 	root   string
 	rootOk bool
@@ -69,7 +73,7 @@ func (sr *SubRecorder) initRoot() {
 
 	subDirNames, apps := getDirsAndApps(sr.root)
 	if sr.initAppLaunchedMap(apps) {
-		MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, getDirPerm(sr.statusFileOwner))
+		MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, dirPerm)
 		sr.RequestSave()
 	}
 
@@ -88,7 +92,7 @@ func (sr *SubRecorder) doCheck() {
 			// do init
 			subDirNames, apps := getDirsAndApps(sr.root)
 			if sr.initAppLaunchedMap(apps) {
-				MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, getDirPerm(sr.statusFileOwner))
+				MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, dirPerm)
 				sr.RequestSave()
 			}
 
