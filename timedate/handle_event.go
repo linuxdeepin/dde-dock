@@ -19,29 +19,48 @@
 
 package timedate
 
-func (m *Manager) handlePropChanged() {
-	if m.td1 == nil {
-		return
-	}
+func (m *Manager) listenPropChanged() {
+	m.td.InitSignalExt(m.systemSigLoop, true)
+	m.td.CanNTP().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debug("property CanTTP changed to", value)
 
-	m.td1.CanNTP.ConnectChanged(func() {
 		m.PropsMu.Lock()
-		m.setPropCanNTP(m.td1.CanNTP.Get())
+		m.setPropCanNTP(value)
 		m.PropsMu.Unlock()
 	})
-	m.td1.NTP.ConnectChanged(func() {
+
+	m.td.NTP().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debug("property NTP changed to", value)
+
 		m.PropsMu.Lock()
-		m.setPropNTP(m.td1.NTP.Get())
+		m.setPropNTP(value)
 		m.PropsMu.Unlock()
 	})
-	m.td1.LocalRTC.ConnectChanged(func() {
+
+	m.td.LocalRTC().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debug("property LocalRTC changed to", value)
+
 		m.PropsMu.Lock()
-		m.setPropLocalRTC(m.td1.LocalRTC.Get())
+		m.setPropLocalRTC(value)
 		m.PropsMu.Unlock()
 	})
-	m.td1.Timezone.ConnectChanged(func() {
+
+	m.td.Timezone().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+		logger.Debug("property Timezone changed to", value)
 		m.PropsMu.Lock()
-		m.setPropTimezone(m.td1.Timezone.Get())
+		m.setPropTimezone(value)
 		m.PropsMu.Unlock()
 
 		m.AddUserTimezone(m.Timezone)

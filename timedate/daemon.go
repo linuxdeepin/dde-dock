@@ -25,13 +25,12 @@ import (
 )
 
 var (
-	_manager *Manager
-
 	logger = log.NewLogger("daemon/timedate")
 )
 
 type Daemon struct {
 	*loader.ModuleBase
+	manager *Manager
 }
 
 func NewDaemon(logger *log.Logger) *Daemon {
@@ -46,45 +45,52 @@ func (d *Daemon) GetDependencies() []string {
 
 // Start to run time date manager
 func (d *Daemon) Start() error {
-	if _manager != nil {
+	if d.manager != nil {
 		return nil
 	}
 	service := loader.GetService()
 
 	var err error
-	_manager, err = NewManager(service)
+	d.manager, err = NewManager(service)
 	if err != nil {
 		return err
 	}
 
-	err = service.Export(dbusPath, _manager)
+	err = service.Export(dbusPath, d.manager)
 	if err != nil {
-		_manager.destroy()
-		_manager = nil
 		return err
 	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		_manager.destroy()
-		_manager = nil
 		return err
 	}
 
 	go func() {
-		_manager.init()
-		_manager.handlePropChanged()
+		d.manager.init()
+		d.manager.listenPropChanged()
 	}()
 	return nil
 }
 
 // Stop the time date manager
 func (d *Daemon) Stop() error {
-	if _manager == nil {
+	if d.manager == nil {
 		return nil
 	}
 
-	_manager.destroy()
-	_manager = nil
+	service := loader.GetService()
+	err := service.ReleaseName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
+	err = service.StopExport(d.manager)
+	if err != nil {
+		return err
+	}
+
+	d.manager.destroy()
+	d.manager = nil
 	return nil
 }

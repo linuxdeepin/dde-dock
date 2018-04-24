@@ -20,13 +20,15 @@
 package timedate
 
 import (
-	"dbus/com/deepin/daemon/timedated"
-	"dbus/org/freedesktop/timedate1"
 	"sync"
 
 	"gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.timedated"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const (
@@ -43,8 +45,9 @@ const (
 //go:generate dbusutil-gen -type Manager manager.go
 // Manage time settings
 type Manager struct {
-	service *dbusutil.Service
-	PropsMu sync.RWMutex
+	service       *dbusutil.Service
+	systemSigLoop *dbusutil.SignalLoop
+	PropsMu       sync.RWMutex
 	// Whether can use NTP service
 	CanNTP bool
 	// Whether enable NTP service
@@ -64,7 +67,7 @@ type Manager struct {
 	UserTimezones gsprop.Strv
 
 	settings *gio.Settings
-	td1      *timedate1.Timedate1
+	td       *timedate1.Timedate
 	setter   *timedated.Timedated
 
 	methods *struct {
@@ -82,22 +85,18 @@ type Manager struct {
 
 // Create Manager, if create freedesktop timedate1 failed return error
 func NewManager(service *dbusutil.Service) (*Manager, error) {
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		return nil, err
+	}
+
 	var m = &Manager{
 		service: service,
 	}
 
-	var err error
-	m.td1, err = timedate1.NewTimedate1("org.freedesktop.timedate1",
-		"/org/freedesktop/timedate1")
-	if err != nil {
-		return nil, err
-	}
-	m.setter, err = timedated.NewTimedated("com.deepin.daemon.Timedated",
-		"/com/deepin/daemon/Timedated")
-	if err != nil {
-		timedate1.DestroyTimedate1(m.td1)
-		return nil, err
-	}
+	m.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
+	m.td = timedate1.NewTimedate(systemConn)
+	m.setter = timedated.NewTimedated(systemConn)
 
 	m.settings = gio.NewSettings(timeDateSchema)
 	m.Use24HourFormat.Bind(m.settings, settingsKey24Hour)
@@ -109,10 +108,31 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 
 func (m *Manager) init() {
 	m.PropsMu.Lock()
-	m.setPropCanNTP(m.td1.CanNTP.Get())
-	m.setPropNTP(m.td1.NTP.Get())
-	m.setPropLocalRTC(m.td1.LocalRTC.Get())
-	m.setPropTimezone(m.td1.Timezone.Get())
+
+	canNTP, err := m.td.CanNTP().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.setPropCanNTP(canNTP)
+
+	ntp, err := m.td.NTP().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.setPropNTP(ntp)
+
+	localRTC, err := m.td.LocalRTC().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.setPropLocalRTC(localRTC)
+
+	timezone, err := m.td.Timezone().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.setPropTimezone(timezone)
+
 	m.PropsMu.Unlock()
 
 	newList, hasNil := filterNilString(m.UserTimezones.Get())
@@ -121,24 +141,13 @@ func (m *Manager) init() {
 	}
 	m.AddUserTimezone(m.Timezone)
 
+	m.systemSigLoop.Start()
 }
 
 func (m *Manager) destroy() {
-	if m.settings != nil {
-		m.settings.Unref()
-		m.settings = nil
-	}
-
-	if m.td1 != nil {
-		timedate1.DestroyTimedate1(m.td1)
-		m.td1 = nil
-	}
-
-	if m.setter != nil {
-		m.setter = nil
-	}
-
-	m.service.StopExport(m)
+	m.settings.Unref()
+	m.td.RemoveHandler(proxy.RemoveAllHandlers)
+	m.systemSigLoop.Stop()
 }
 
 func (*Manager) GetInterfaceName() string {
