@@ -20,19 +20,17 @@
 package gesture
 
 import (
-	"dbus/com/deepin/daemon/gesture"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 
 type Daemon struct {
 	*loader.ModuleBase
+	manager *Manager
 }
 
 var (
-	gs       *gesture.Gesture
-	_manager *gestureManager
-	logger   = log.NewLogger("gesture")
+	logger = log.NewLogger("gesture")
 )
 
 func NewDaemon() *Daemon {
@@ -49,45 +47,27 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Daemon) Start() error {
-	if _manager != nil {
+func (d *Daemon) Start() error {
+	if d.manager != nil {
 		return nil
 	}
 
 	var err error
-	_manager, err = newGestureManager()
+	d.manager, err = newManager()
 	if err != nil {
 		logger.Error("Failed to initialize gesture manager:", err)
 		return err
 	}
-
-	gs, err = gesture.NewGesture("com.deepin.daemon.Gesture",
-		"/com/deepin/daemon/Gesture")
-	if err != nil {
-		logger.Error("Failed to initialize gesture object:", err)
-		_manager = nil
-		return err
-	}
-
-	_manager.handleGSettingsChanged()
-	gs.ConnectEvent(func(name, direction string, fingers int32) {
-		logger.Debug("[Event] received:", name, direction, fingers)
-		err := _manager.Exec(name, direction, fingers)
-		if err != nil {
-			logger.Error("Exec failed:", err)
-		}
-	})
-
+	d.manager.init()
 	return nil
 }
 
-func (*Daemon) Stop() error {
-	if _manager == nil {
+func (d *Daemon) Stop() error {
+	if d.manager == nil {
 		return nil
 	}
 
-	gesture.DestroyGesture(gs)
-	gs = nil
-	_manager = nil
+	d.manager.destroy()
+	d.manager = nil
 	return nil
 }

@@ -19,10 +19,6 @@
 
 package gesture
 
-import (
-	"dbus/com/deepin/wm"
-)
-
 const (
 	wmActionShowWorkspace int32 = iota + 1
 	wmActionToggleMaximize
@@ -36,75 +32,67 @@ const (
 	wmTileDirectionRight
 )
 
-var builtinSets = map[string]func() error{
-	"ShowWorkspace":            doShowWorkspace,
-	"ToggleMaximize":           doToggleMaximize,
-	"Minimize":                 doMinimize,
-	"ShowWindow":               doShowWindow,
-	"ShowAllWindow":            doShowAllWindow,
-	"SwitchApplication":        doSwitchApplication,
-	"ReverseSwitchApplication": doReverseSwitchApplication,
-	"SwitchWorkspace":          doSwitchWorkspace,
-	"ReverseSwitchWorkspace":   doReverseSwitchWorkspace,
-	"SplitWindowLeft":          doTileActiveWindowLeft,
-	"SplitWindowRight":         doTileActiveWindowRight,
-	"MoveWindow":               doMoveActiveWindow,
-}
-
-var _wmHandler *wm.Wm
-
-func getWmHandler() *wm.Wm {
-	if _wmHandler != nil {
-		return _wmHandler
+func (m *Manager) initBuiltinSets() {
+	m.builtinSets = map[string]func() error{
+		"ShowWorkspace":            m.doShowWorkspace,
+		"ToggleMaximize":           m.doToggleMaximize,
+		"Minimize":                 m.doMinimize,
+		"ShowWindow":               m.doShowWindow,
+		"ShowAllWindow":            m.doShowAllWindow,
+		"SwitchApplication":        m.doSwitchApplication,
+		"ReverseSwitchApplication": m.doReverseSwitchApplication,
+		"SwitchWorkspace":          m.doSwitchWorkspace,
+		"ReverseSwitchWorkspace":   m.doReverseSwitchWorkspace,
+		"SplitWindowLeft":          m.doTileActiveWindowLeft,
+		"SplitWindowRight":         m.doTileActiveWindowRight,
+		"MoveWindow":               m.doMoveActiveWindow,
 	}
-	_wmHandler, _ = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
-	return _wmHandler
 }
 
-func doShowWorkspace() error {
-	return getWmHandler().PerformAction(wmActionShowWorkspace)
+func (m *Manager) doShowWorkspace() error {
+	return m.wm.PerformAction(0, wmActionShowWorkspace)
 }
 
-func doToggleMaximize() error {
-	return getWmHandler().PerformAction(wmActionToggleMaximize)
+func (m *Manager) doToggleMaximize() error {
+	return m.wm.PerformAction(0, wmActionToggleMaximize)
 }
 
-func doMinimize() error {
-	return getWmHandler().PerformAction(wmActionMinimize)
+func (m *Manager) doMinimize() error {
+	return m.wm.PerformAction(0, wmActionMinimize)
 }
 
-func doShowWindow() error {
-	return getWmHandler().PerformAction(wmActionShowWindow)
+func (m *Manager) doShowWindow() error {
+	return m.wm.PerformAction(0, wmActionShowWindow)
 }
 
-func doShowAllWindow() error {
-	return getWmHandler().PerformAction(wmActionShowAllWindow)
+func (m *Manager) doShowAllWindow() error {
+	return m.wm.PerformAction(0, wmActionShowAllWindow)
 }
 
-func doSwitchApplication() error {
-	return getWmHandler().SwitchApplication(false)
+func (m *Manager) doSwitchApplication() error {
+	return m.wm.SwitchApplication(0, false)
 }
 
-func doReverseSwitchApplication() error {
-	return getWmHandler().SwitchApplication(true)
+func (m *Manager) doReverseSwitchApplication() error {
+	return m.wm.SwitchApplication(0, true)
 }
 
-func doSwitchWorkspace() error {
-	return getWmHandler().SwitchToWorkspace(false)
+func (m *Manager) doSwitchWorkspace() error {
+	return m.wm.SwitchToWorkspace(0, false)
 }
 
-func doReverseSwitchWorkspace() error {
-	return getWmHandler().SwitchToWorkspace(true)
+func (m *Manager) doReverseSwitchWorkspace() error {
+	return m.wm.SwitchToWorkspace(0, true)
 }
 
-func doTileActiveWindowLeft() error {
-	return getWmHandler().TileActiveWindow(wmTileDirectionLeft)
+func (m *Manager) doTileActiveWindowLeft() error {
+	return m.wm.TileActiveWindow(0, wmTileDirectionLeft)
 }
 
-func doTileActiveWindowRight() error {
-	return getWmHandler().TileActiveWindow(wmTileDirectionRight)
+func (m *Manager) doTileActiveWindowRight() error {
+	return m.wm.TileActiveWindow(0, wmTileDirectionRight)
 }
 
-func doMoveActiveWindow() error {
-	return getWmHandler().BeginToMoveActiveWindow()
+func (m *Manager) doMoveActiveWindow() error {
+	return m.wm.BeginToMoveActiveWindow(0)
 }
