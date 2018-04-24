@@ -39,7 +39,7 @@ func (m *Manager) EnableZoneDetected(enabled bool) *dbus.Error {
 		return dbusutil.ToError(errors.New("deepin-wm is not running"))
 	}
 
-	err = m.wm.EnableZoneDetected(enabled)
+	err = m.wm.EnableZoneDetected(0, enabled)
 	return dbusutil.ToError(err)
 }
 

@@ -20,8 +20,7 @@
 package screenedge
 
 import (
-	libwm "dbus/com/deepin/wm"
-
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -36,13 +35,12 @@ const (
 	dbusInterface   = "com.deepin.daemon.Zone"
 
 	wmDBusServiceName = "com.deepin.wm"
-	wmDBusPath        = "/com/deepin/wm"
 )
 
 type Manager struct {
 	service  *dbusutil.Service
 	settings *Settings
-	wm       *libwm.Wm
+	wm       *wm.Wm
 
 	methods *struct {
 		EnableZoneDetected func() `in:"enabled"`
@@ -61,20 +59,14 @@ func newManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
 	m.service = service
 	m.settings = NewSettings()
-
-	var err error
-	m.wm, err = libwm.NewWm(wmDBusServiceName, wmDBusPath)
-	if err != nil {
-		panic(err)
-	}
-
+	m.wm = wm.NewWm(service.Conn())
 	return m
 }
 
 func (m *Manager) destory() {
-	if m.wm != nil {
-		libwm.DestroyWm(m.wm)
-		m.wm = nil
+	if m.settings != nil {
+		m.settings.Destroy()
+		m.settings = nil
 	}
 }
 

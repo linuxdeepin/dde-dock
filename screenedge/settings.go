@@ -52,3 +52,7 @@ func (s *Settings) GetWhiteList() []string {
 func (s *Settings) GetBlackList() []string {
 	return s.gsettings.GetStrv("black-list")
 }
+
+func (s *Settings) Destroy() {
+	s.gsettings.Unref()
+}

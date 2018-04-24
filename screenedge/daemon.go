@@ -67,7 +67,16 @@ func (d *Daemon) Stop() error {
 		return nil
 	}
 	service := loader.GetService()
-	service.StopExport(d.manager)
+	err := service.StopExport(d.manager)
+	if err != nil {
+		return err
+	}
+
+	err = service.ReleaseName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
 	d.manager.destory()
 	d.manager = nil
 	return nil
