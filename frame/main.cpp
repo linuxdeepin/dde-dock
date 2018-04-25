@@ -21,6 +21,7 @@
 
 #include "window/mainwindow.h"
 #include "util/themeappicon.h"
+#include "dbus/dbusdockadaptors.h"
 
 #include <DApplication>
 #include <DLog>
@@ -28,34 +29,13 @@
 #include <QDir>
 
 #include <unistd.h>
-#include "dbus/dbusdockadaptors.h"
+
 DWIDGET_USE_NAMESPACE
 #ifdef DCORE_NAMESPACE
 DCORE_USE_NAMESPACE
 #else
 DUTIL_USE_NAMESPACE
 #endif
-
-// let startdde know that we've already started.
-void RegisterDdeSession()
-{
-    QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
-
-    QByteArray cookie = qgetenv(envName.toUtf8().data());
-    qunsetenv(envName.toUtf8().data());
-
-    if (!cookie.isEmpty())
-    {
-        QDBusPendingReply<bool> r =
-                QDBusInterface("com.deepin.SessionManager",
-                               "/com/deepin/SessionManager",
-                               "com.deepin.SessionManager",
-                               QDBusConnection::sessionBus())
-                .call("Register", QString(cookie));
-
-        qDebug() << Q_FUNC_INFO << r.value();
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -78,7 +58,6 @@ int main(int argc, char *argv[])
     DLogManager::registerFileAppender();
 
     qDebug() << "\n\ndde-dock startup";
-    RegisterDdeSession();
 
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());
