@@ -25,6 +25,7 @@ import (
 	"path/filepath"
 
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
@@ -108,16 +109,20 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 }
 
 func syncUserLocale(locale string) error {
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+
 	cur, err := user.Current()
 	if err != nil {
 		return err
 	}
 
-	u, err := ddbus.NewUserByUid(cur.Uid)
+	u, err := ddbus.NewUserByUid(systemConn, cur.Uid)
 	if err != nil {
 		return err
 	}
-	err = u.SetLocale(locale)
-	ddbus.DestroyUser(u)
+	err = u.SetLocale(0, locale)
 	return err
 }

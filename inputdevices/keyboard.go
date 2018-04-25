@@ -21,7 +21,6 @@ package inputdevices
 
 import (
 	"bufio"
-	"dbus/com/deepin/daemon/accounts"
 	"fmt"
 	"os"
 	"os/user"
@@ -30,8 +29,10 @@ import (
 	"strings"
 
 	"gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"pkg.deepin.io/dde/api/dxinput"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -105,6 +106,13 @@ func newKeyboard() *Keyboard {
 	kbd.UserOptionList.Bind(kbd.setting, kbdKeyLayoutOptions)
 
 	var err error
+
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning(err)
+		return nil
+	}
+
 	kbd.layoutDescMap, err = getLayoutListByFile(kbdLayoutsXml)
 	if err != nil {
 		logger.Error("Get layout desc list failed:", err)
@@ -115,7 +123,7 @@ func newKeyboard() *Keyboard {
 	if err != nil {
 		logger.Warning("Get current user info failed:", err)
 	} else {
-		kbd.userObj, err = ddbus.NewUserByUid(cur.Uid)
+		kbd.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
 		if err != nil {
 			logger.Warning("New user object failed:", cur.Name, err)
 			kbd.userObj = nil
@@ -128,8 +136,11 @@ func newKeyboard() *Keyboard {
 
 func (kbd *Keyboard) init() {
 	if kbd.userObj != nil {
-		value := kbd.userObj.Layout.Get()
-		if len(value) != 0 && value != kbd.CurrentLayout.Get() {
+		value, err := kbd.userObj.Layout().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+		if value != "" && value != kbd.CurrentLayout.Get() {
 			kbd.CurrentLayout.Set(value)
 		}
 	}
@@ -272,12 +283,17 @@ func (kbd *Keyboard) setGreeterLayout() {
 		return
 	}
 
-	name := kbd.userObj.UserName.Get()
+	name, err := kbd.userObj.UserName().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
 	if isInvalidUser(name) {
 		return
 	}
 
-	err := kbd.userObj.SetLayout(kbd.CurrentLayout.Get())
+	err = kbd.userObj.SetLayout(0, kbd.CurrentLayout.Get())
 	if err != nil {
 		logger.Debugf("Set '%s' greeter layout failed: %v", name, err)
 	}
@@ -288,12 +304,17 @@ func (kbd *Keyboard) setGreeterLayoutList() {
 		return
 	}
 
-	name := kbd.userObj.UserName.Get()
+	name, err := kbd.userObj.UserName().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
 	if isInvalidUser(name) {
 		return
 	}
 
-	err := kbd.userObj.SetHistoryLayout(kbd.UserLayoutList.Get())
+	err = kbd.userObj.SetHistoryLayout(0, kbd.UserLayoutList.Get())
 	if err != nil {
 		logger.Debugf("Set '%s' greeter layout list failed: %v",
 			name, err)

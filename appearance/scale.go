@@ -20,18 +20,20 @@
 package appearance
 
 import (
-	ddaemon "dbus/com/deepin/daemon/daemon/system"
-	"dbus/com/deepin/daemon/greeter"
 	"fmt"
-	"gir/gio-2.0"
 	"io/ioutil"
 	"math"
 	"os"
+	"strings"
+	"sync"
+
+	"gir/gio-2.0"
+	ddaemon "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.daemon"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.greeter"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/notify"
 	"pkg.deepin.io/lib/utils"
-	"strings"
-	"sync"
 )
 
 var pamEnvFile = os.Getenv("HOME") + "/.pam_environment"
@@ -82,32 +84,29 @@ func doSetScaleFactor(scale float64) {
 }
 
 func doScaleGreeter(scale float64) {
-	setter, err := greeter.NewGreeter("com.deepin.daemon.Greeter", "/com/deepin/daemon/Greeter")
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
-		logger.Warning("Invalid dbus path:", err)
+		logger.Warning(err)
 		return
 	}
-
-	err = setter.SetScaleFactor(scale)
+	setter := greeter.NewGreeter(systemConn)
+	err = setter.SetScaleFactor(0, scale)
 	if err != nil {
 		logger.Warning("Failed to set greeter scale:", err)
 	}
-	setter = nil
 }
 
 func doScalePlymouth(scale uint32) {
-	setter, err := ddaemon.NewDaemon("com.deepin.daemon.Daemon",
-		"/com/deepin/daemon/Daemon")
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
-		logger.Warning("Invalid dbus path:", err)
+		logger.Warning(err)
 		return
 	}
-
-	err = setter.ScalePlymouth(scale)
+	setter := ddaemon.NewDaemon(systemConn)
+	err = setter.ScalePlymouth(0, scale)
 	if err != nil {
 		logger.Warning("Failed to scale plymouth:", err)
 	}
-	setter = nil
 }
 
 func doSetJAVAScale(scale float64) {

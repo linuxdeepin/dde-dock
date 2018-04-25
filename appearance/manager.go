@@ -28,15 +28,15 @@ import (
 	"strconv"
 	"time"
 
-	"dbus/com/deepin/daemon/accounts"
-	"dbus/com/deepin/wm"
-
 	"gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/fsnotify"
@@ -174,25 +174,10 @@ func (m *Manager) destroy() {
 		m.gnomeBgSetting = nil
 	}
 
-	if m.userObj != nil {
-		ddbus.DestroyUser(m.userObj)
-		m.userObj = nil
-	}
-
-	if m.imageBlur != nil {
-		accounts.DestroyImageBlur(m.imageBlur)
-		m.imageBlur = nil
-	}
-
 	if m.watcher != nil {
 		close(m.endWatcher)
 		m.watcher.Close()
 		m.watcher = nil
-	}
-
-	if m.wm != nil {
-		wm.DestroyWm(m.wm)
-		m.wm = nil
 	}
 
 	m.endCursorChangedHandler()
@@ -255,35 +240,34 @@ func (m *Manager) init() {
 		}
 	})
 
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
 	cur, err := user.Current()
 	if err != nil {
 		logger.Warning("Get current user info failed:", err)
 	} else {
-		m.userObj, err = ddbus.NewUserByUid(cur.Uid)
+		m.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
 		if err != nil {
 			logger.Warning("New user object failed:", cur.Name, err)
 			m.userObj = nil
 		}
 	}
 
-	m.imageBlur, err = accounts.NewImageBlur("com.deepin.daemon.Accounts",
-		"/com/deepin/daemon/ImageBlur")
-	if err != nil {
-		logger.Warning("new imageBlur failed:", err)
-	}
+	m.imageBlur = accounts.NewImageBlur(systemConn)
 
 	background.SetCustomWallpaperDeleteCallback(func(file string) {
 		logger.Debug("imageBlur delete", file)
-		err := m.imageBlur.Delete(file)
+		err := m.imageBlur.Delete(0, file)
 		if err != nil {
 			logger.Warning("imageBlur delete err:", err)
 		}
 	})
 
-	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
-	if err != nil {
-		logger.Warning("new wm failed:", err)
-	}
+	m.wm = wm.NewWm(m.service.Conn())
 
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
@@ -300,7 +284,7 @@ func (m *Manager) init() {
 func (m *Manager) correctFontName() {
 	defaultStandardFont, defaultMonospaceFont := m.getDefaultFonts()
 
-	var changed bool = false
+	var changed = false
 	table := fonts.GetFamilyTable()
 	stand := table.GetFamily(m.StandardFont.Get())
 	if stand != nil {
@@ -339,7 +323,7 @@ func (m *Manager) correctFontName() {
 
 func (m *Manager) doSetGtkTheme(value string) error {
 	if !subthemes.IsGtkTheme(value) {
-		return fmt.Errorf("Invalid gtk theme '%v'", value)
+		return fmt.Errorf("invalid gtk theme '%v'", value)
 	}
 
 	return subthemes.SetGtkTheme(value)
@@ -347,7 +331,7 @@ func (m *Manager) doSetGtkTheme(value string) error {
 
 func (m *Manager) doSetIconTheme(value string) error {
 	if !subthemes.IsIconTheme(value) {
-		return fmt.Errorf("Invalid icon theme '%v'", value)
+		return fmt.Errorf("invalid icon theme '%v'", value)
 	}
 
 	err := subthemes.SetIconTheme(value)
@@ -360,7 +344,7 @@ func (m *Manager) doSetIconTheme(value string) error {
 
 func (m *Manager) doSetCursorTheme(value string) error {
 	if !subthemes.IsCursorTheme(value) {
-		return fmt.Errorf("Invalid cursor theme '%v'", value)
+		return fmt.Errorf("invalid cursor theme '%v'", value)
 	}
 
 	return subthemes.SetCursorTheme(value)
@@ -378,30 +362,26 @@ func (m *Manager) doSetBackground(value string) error {
 	}
 	logger.Debug("prepare result:", file)
 	uri := dutils.EncodeURI(file, dutils.SCHEME_FILE)
-	if m.wm != nil && ddbus.IsSessionBusActivated(m.wm.DestName) {
-		m.wm.ChangeCurrentWorkspaceBackground(uri)
-	}
+	m.wm.ChangeCurrentWorkspaceBackground(dbus.FlagNoAutoStart, uri)
 
-	if m.imageBlur != nil {
-		_, err := m.imageBlur.Get(file)
-		if err != nil {
-			logger.Warning("call imageBlur.Get err:", err)
-		}
+	_, err = m.imageBlur.Get(0, file)
+	if err != nil {
+		logger.Warning("call imageBlur.Get err:", err)
 	}
 	return nil
 }
 
 func (m *Manager) doSetGreeterBackground(value string) error {
 	if m.userObj == nil {
-		return fmt.Errorf("Create user object failed")
+		return fmt.Errorf("create user object failed")
 	}
 
-	return m.userObj.SetGreeterBackground(value)
+	return m.userObj.SetGreeterBackground(0, value)
 }
 
 func (m *Manager) doSetStandardFont(value string) error {
 	if !fonts.IsFontFamily(value) {
-		return fmt.Errorf("Invalid font family '%v'", value)
+		return fmt.Errorf("invalid font family '%v'", value)
 	}
 
 	err := fonts.SetFamily(value, m.MonospaceFont.Get(), m.FontSize.Get())
@@ -413,7 +393,7 @@ func (m *Manager) doSetStandardFont(value string) error {
 
 func (m *Manager) doSetMonnospaceFont(value string) error {
 	if !fonts.IsFontFamily(value) {
-		return fmt.Errorf("Invalid font family '%v'", value)
+		return fmt.Errorf("invalid font family '%v'", value)
 	}
 
 	err := fonts.SetFamily(m.StandardFont.Get(), value, m.FontSize.Get())
@@ -426,7 +406,7 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 func (m *Manager) doSetFontSize(size float64) error {
 	if !fonts.IsFontSizeValid(size) {
 		logger.Debug("[doSetFontSize] invalid size:", size)
-		return fmt.Errorf("Invalid font size '%v'", size)
+		return fmt.Errorf("invalid font size '%v'", size)
 	}
 
 	err := fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(), size)
@@ -439,7 +419,7 @@ func (m *Manager) doSetFontSize(size float64) error {
 
 func (*Manager) doShow(ifc interface{}) (string, error) {
 	if ifc == nil {
-		return "", fmt.Errorf("Not found target")
+		return "", fmt.Errorf("not found target")
 	}
 	content, err := json.Marshal(ifc)
 	return string(content), err
@@ -476,7 +456,7 @@ func (m *Manager) writeDQtTheme(key, value string) error {
 
 func (m *Manager) setDesktopBackgrounds(val []string) {
 	if m.userObj != nil {
-		err := m.userObj.SetDesktopBackgrounds(val)
+		err := m.userObj.SetDesktopBackgrounds(0, val)
 		if err != nil {
 			logger.Warning("call userObj.SetDesktopBackgrounds err:", err)
 		}
