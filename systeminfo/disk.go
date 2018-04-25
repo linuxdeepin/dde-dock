@@ -20,9 +20,10 @@
 package systeminfo
 
 import (
-	"dbus/org/freedesktop/udisks2"
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
+
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.udisks2"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 type diskInfo struct {
@@ -109,29 +110,28 @@ func getDiskCap() (uint64, error) {
 	size := set.GetRootSize()
 	err = nil
 	if size == 0 {
-		err = fmt.Errorf("Failed to get disk capacity: not found root mount point")
+		err = fmt.Errorf("failed to get disk capacity: not found root mount point")
 	}
 	return size, err
 }
 
 func parseUDisksManagers() (diskInfoMap, error) {
-	udisk, err := udisks2.NewObjectManager(
-		"org.freedesktop.UDisks2",
-		"/org/freedesktop/UDisks2")
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
 
-	var set = make(diskInfoMap)
-	managers, _ := udisk.GetManagedObjects()
-	for k, manager := range managers {
+	set := make(diskInfoMap)
+	udisk := udisks2.NewUDisks(systemConn)
+	managedObjects, _ := udisk.GetManagedObjects(0)
+	for objPath, obj := range managedObjects {
 		var info diskInfo
-		block, ok := manager["org.freedesktop.UDisks2.Block"]
+		block, ok := obj["org.freedesktop.UDisks2.Block"]
 		if ok {
 			info.Drive = block["Drive"].Value().(dbus.ObjectPath)
 		}
 
-		fs, ok := manager["org.freedesktop.UDisks2.Filesystem"]
+		fs, ok := obj["org.freedesktop.UDisks2.Filesystem"]
 		if ok {
 			values := fs["MountPoints"].Value().([][]byte)
 			for _, v := range values {
@@ -140,33 +140,33 @@ func parseUDisksManagers() (diskInfoMap, error) {
 			}
 		}
 
-		// the manager maybe a partition, or partition table, or drive, or loop(wubi)
-		partition, ok := manager["org.freedesktop.UDisks2.Partition"]
+		// the object maybe a partition, or partition table, or drive, or loop(wubi)
+		partition, ok := obj["org.freedesktop.UDisks2.Partition"]
 		if ok {
 			info.Size = partition["Size"].Value().(uint64)
 			info.Table = partition["Table"].Value().(dbus.ObjectPath)
-			set[k] = info
+			set[objPath] = info
 			continue
 		}
 
-		_, ok = manager["org.freedesktop.UDisks2.PartitionTable"]
+		_, ok = obj["org.freedesktop.UDisks2.PartitionTable"]
 		if ok {
 			info.Size = block["Size"].Value().(uint64)
-			set[k] = info
+			set[objPath] = info
 			continue
 		}
 
-		drive, ok := manager["org.freedesktop.UDisks2.Drive"]
+		drive, ok := obj["org.freedesktop.UDisks2.Drive"]
 		if ok {
 			info.Size = drive["Size"].Value().(uint64)
-			set[k] = info
+			set[objPath] = info
 			continue
 		}
 
-		_, ok = manager["org.freedesktop.UDisks2.Loop"]
+		_, ok = obj["org.freedesktop.UDisks2.Loop"]
 		if ok {
 			info.Size = block["Size"].Value().(uint64)
-			set[k] = info
+			set[objPath] = info
 			continue
 		}
 	}

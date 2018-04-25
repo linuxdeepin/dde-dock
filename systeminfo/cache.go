@@ -22,14 +22,16 @@ package systeminfo
 import (
 	"encoding/gob"
 	"os"
-	"path"
+	"path/filepath"
 	"sync"
+
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 var (
 	cacheLocker sync.Mutex
-	cacheFile   = path.Join(os.Getenv("HOME"),
-		".cache/deepin/dde-daemon/systeminfo.cache")
+	cacheFile   = filepath.Join(basedir.GetUserCacheDir(),
+		"deepin/dde-daemon/systeminfo.cache")
 )
 
 func doReadCache(file string) (*SystemInfo, error) {
@@ -53,7 +55,7 @@ func doReadCache(file string) (*SystemInfo, error) {
 func doSaveCache(info *SystemInfo, file string) error {
 	cacheLocker.Lock()
 	defer cacheLocker.Unlock()
-	err := os.MkdirAll(path.Dir(file), 0755)
+	err := os.MkdirAll(filepath.Dir(file), 0755)
 	if err != nil {
 		return err
 	}
