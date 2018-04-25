@@ -1,3 +1,13 @@
+<a name="4.6.3.2"></a>
+## 4.6.3.2 (2018-04-25)
+
+
+#### Bug Fixes
+
+*   gcc remove resources data by an error optimize. ([8785696e](8785696e))
+
+
+
 <a name=""></a>
 ##  4.6.3.1 (2018-04-11)
 
