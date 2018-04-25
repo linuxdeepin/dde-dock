@@ -20,53 +20,37 @@
 package bluetooth
 
 import (
-	"dbus/org/bluez"
-	sysdbus "dbus/org/freedesktop/dbus/system"
 	"time"
 
-	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/dbus1"
 )
 
-var bluezDBusDaemon *sysdbus.DBusDaemon
-
-func bluezNewDBusDaemon() (*sysdbus.DBusDaemon, error) {
-	return sysdbus.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus")
-}
-func bluezDestroyDbusDaemon(d *sysdbus.DBusDaemon) {
-	sysdbus.DestroyDBusDaemon(d)
-}
-func bluezNewObjectManager() (objectManager *sysdbus.ObjectManager, err error) {
-	objectManager, err = sysdbus.NewObjectManager(bluezDBusServiceName, "/")
+func bluezNewObjectManager() (*bluez.ObjectManager, error) {
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
-		logger.Error(err)
+		return nil, err
 	}
-	return
-}
-func bluezDestroyObjectManager(objectManager *sysdbus.ObjectManager) {
-	sysdbus.DestroyObjectManager(objectManager)
+
+	return bluez.NewObjectManager(systemConn), nil
 }
 
-func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.Adapter1, err error) {
-	bluezAdapter, err = bluez.NewAdapter1(bluezDBusServiceName, oldDBusLib.ObjectPath(apath))
+func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.HCI, err error) {
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
-		logger.Error(err)
+		return nil, err
 	}
-	return
-}
-func bluezDestroyAdapter(bluezAdapter *bluez.Adapter1) {
-	bluez.DestroyAdapter1(bluezAdapter)
+
+	return bluez.NewHCI(systemConn, apath)
 }
 
-func bluezNewDevice(dpath dbus.ObjectPath) (bluezDevice *bluez.Device1, err error) {
-	bluezDevice, err = bluez.NewDevice1(bluezDBusServiceName, oldDBusLib.ObjectPath(dpath))
+func bluezNewDevice(dpath dbus.ObjectPath) (bluezDevice *bluez.Device, err error) {
+	systemConn, err := dbus.SystemBus()
 	if err != nil {
-		logger.Error(err)
+		return nil, err
 	}
-	return
-}
-func bluezDestroyDevice(bluezDevice *bluez.Device1) {
-	bluez.DestroyDevice1(bluezDevice)
+
+	return bluez.NewDevice(systemConn, dpath)
 }
 
 func bluezGetAdapters() (apathes []dbus.ObjectPath) {
@@ -74,9 +58,7 @@ func bluezGetAdapters() (apathes []dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyObjectManager(objectManager)
-
-	objects, err := objectManager.GetManagedObjects()
+	objects, err := objectManager.GetManagedObjects(0)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -94,9 +76,7 @@ func bluezStartDiscovery(apath dbus.ObjectPath) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	err = bluezAdapter.StartDiscovery()
+	err = bluezAdapter.StartDiscovery(0)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -108,9 +88,7 @@ func bluezStopDiscovery(apath dbus.ObjectPath) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	err = bluezAdapter.StopDiscovery()
+	err = bluezAdapter.StopDiscovery(0)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -122,9 +100,10 @@ func bluezGetAdapterAddress(apath dbus.ObjectPath) (address string) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	address = bluezAdapter.Address.Get()
+	address, err = bluezAdapter.Address().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
 
@@ -133,20 +112,19 @@ func bluezGetAdapterAlias(apath dbus.ObjectPath) (alias string) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	alias = bluezAdapter.Alias.Get()
+	alias, err = bluezAdapter.Alias().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
+
 func bluezSetAdapterAlias(apath dbus.ObjectPath, alias string) (err error) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	bluezAdapter.Alias.Set(alias)
-	return
+	return bluezAdapter.Alias().Set(0, alias)
 }
 
 func bluezGetAdapterDiscoverable(apath dbus.ObjectPath) (discoverable bool) {
@@ -154,20 +132,19 @@ func bluezGetAdapterDiscoverable(apath dbus.ObjectPath) (discoverable bool) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	discoverable = bluezAdapter.Discoverable.Get()
+	discoverable, err = bluezAdapter.Discoverable().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
+
 func bluezSetAdapterDiscoverable(apath dbus.ObjectPath, discoverable bool) (err error) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	bluezAdapter.Discoverable.Set(discoverable)
-	return
+	return bluezAdapter.Discoverable().Set(0, discoverable)
 }
 
 func bluezSetAdapterDiscovering(apath dbus.ObjectPath, discovering bool) (err error) {
@@ -192,9 +169,10 @@ func bluezGetAdapterDiscovering(apath dbus.ObjectPath) (discovering bool) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	discovering = bluezAdapter.Discovering.Get()
+	discovering, err = bluezAdapter.Discovering().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
 
@@ -203,20 +181,19 @@ func bluezGetAdapterDiscoverableTimeout(apath dbus.ObjectPath) (discoverableTime
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	discoverableTimeout = bluezAdapter.DiscoverableTimeout.Get()
+	discoverableTimeout, err = bluezAdapter.DiscoverableTimeout().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
+
 func bluezSetAdapterDiscoverableTimeout(apath dbus.ObjectPath, discoverableTimeout uint32) (err error) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	bluezAdapter.DiscoverableTimeout.Set(discoverableTimeout)
-	return
+	return bluezAdapter.DiscoverableTimeout().Set(0, discoverableTimeout)
 }
 
 func bluezGetAdapterPowered(apath dbus.ObjectPath) (powered bool) {
@@ -224,20 +201,19 @@ func bluezGetAdapterPowered(apath dbus.ObjectPath) (powered bool) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	powered = bluezAdapter.Powered.Get()
+	powered, err = bluezAdapter.Powered().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
+
 func bluezSetAdapterPowered(apath dbus.ObjectPath, powered bool) (er error) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	bluezAdapter.Powered.Set(powered)
-	return
+	return bluezAdapter.Powered().Set(0, powered)
 }
 
 func bluezPairDevice(dpath dbus.ObjectPath) (err error) {
@@ -245,9 +221,7 @@ func bluezPairDevice(dpath dbus.ObjectPath) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	err = bluezDevice.Pair()
+	err = bluezDevice.Pair(0)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -259,9 +233,7 @@ func bluezConnectDevice(dpath dbus.ObjectPath) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	err = bluezDevice.Connect()
+	err = bluezDevice.Connect(0)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -273,9 +245,7 @@ func bluezDisconnectDevice(dpath dbus.ObjectPath) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	err = bluezDevice.Disconnect()
+	err = bluezDevice.Disconnect(0)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -287,9 +257,7 @@ func bluezRemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyAdapter(bluezAdapter)
-
-	err = bluezAdapter.RemoveDevice(oldDBusLib.ObjectPath(dpath))
+	err = bluezAdapter.RemoveDevice(0, dpath)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -301,10 +269,7 @@ func bluezSetDeviceAlias(dpath dbus.ObjectPath, alias string) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	bluezDevice.Alias.Set(alias)
-	return
+	return bluezDevice.Alias().Set(0, alias)
 }
 
 func bluezSetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
@@ -312,10 +277,7 @@ func bluezSetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	bluezDevice.Trusted.Set(trusted)
-	return
+	return bluezDevice.Trusted().Set(0, trusted)
 }
 
 func bluezGetDeviceAddress(dpath dbus.ObjectPath) (address string) {
@@ -323,19 +285,22 @@ func bluezGetDeviceAddress(dpath dbus.ObjectPath) (address string) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	address = bluezDevice.Address.Get()
+	address, err = bluezDevice.Address().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
+
 func bluezGetDeviceTrusted(dpath dbus.ObjectPath) (trusted bool) {
 	bluezDevice, err := bluezNewDevice(dpath)
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	trusted = bluezDevice.Trusted.Get()
+	trusted, err = bluezDevice.Trusted().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
 }
 
@@ -344,30 +309,9 @@ func bluezGetDevicePaired(dpath dbus.ObjectPath) (paired bool) {
 	if err != nil {
 		return
 	}
-	defer bluezDestroyDevice(bluezDevice)
-
-	paired = bluezDevice.Paired.Get()
+	paired, err = bluezDevice.Paired().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return
-}
-
-func bluezWatchRestart() {
-	bluezDBusDaemon, _ = bluezNewDBusDaemon()
-	logger.Info("bluezWatchRestart", bluezDBusDaemon)
-	bluezDBusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
-		if name == bluezDBusServiceName {
-			// if a new dbus session was installed, the name and newOwner
-			// will be not empty, if a dbus session was uninstalled, the
-			// name and oldOwner will be not empty
-			if len(newOwner) != 0 {
-				// network-manager is starting
-				logger.Info("bluetooth is starting")
-				time.Sleep(1 * time.Second)
-				initBluetooth()
-			} else {
-				// network-manager stopped
-				logger.Info("bluetooth stopped")
-				destroyBluetooth()
-			}
-		}
-	})
 }

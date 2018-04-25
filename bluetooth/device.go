@@ -20,14 +20,14 @@
 package bluetooth
 
 import (
-	"dbus/org/bluez"
 	"fmt"
 	"sync"
 	"time"
 
-	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const deviceRssiNotInRange = -1000 // -1000db means device not in range
@@ -39,11 +39,11 @@ const (
 )
 
 var (
-	errInvaildDevicePath = fmt.Errorf("Invaild Device Path")
+	errInvalidDevicePath = fmt.Errorf("invalid device path")
 )
 
 type device struct {
-	bluezDevice *bluez.Device1
+	bluezDevice *bluez.Device
 
 	Path        dbus.ObjectPath
 	AdapterPath dbus.ObjectPath
@@ -68,17 +68,18 @@ type device struct {
 	confirmation chan bool
 }
 
-func newDevice(dpath dbus.ObjectPath, data map[string]oldDBusLib.Variant) (d *device) {
+func newDevice(systemSigLoop *dbusutil.SignalLoop, dpath dbus.ObjectPath,
+	data map[string]dbus.Variant) (d *device) {
 	d = &device{Path: dpath}
 	d.bluezDevice, _ = bluezNewDevice(dpath)
-	d.AdapterPath = dbus.ObjectPath(d.bluezDevice.Adapter.Get())
-	d.Name = d.bluezDevice.Name.Get()
-	d.Alias = d.bluezDevice.Alias.Get()
-	d.Address = d.bluezDevice.Address.Get()
-	d.Trusted = d.bluezDevice.Trusted.Get()
-	d.Paired = d.bluezDevice.Paired.Get()
-	d.connected = d.bluezDevice.Connected.Get()
-	d.UUIDs = d.bluezDevice.UUIDs.Get()
+	d.AdapterPath, _ = d.bluezDevice.Adapter().Get(0)
+	d.Name, _ = d.bluezDevice.Name().Get(0)
+	d.Alias, _ = d.bluezDevice.Alias().Get(0)
+	d.Address, _ = d.bluezDevice.Address().Get(0)
+	d.Trusted, _ = d.bluezDevice.Trusted().Get(0)
+	d.Paired, _ = d.bluezDevice.Paired().Get(0)
+	d.connected, _ = d.bluezDevice.Connected().Get(0)
+	d.UUIDs, _ = d.bluezDevice.UUIDs().Get(0)
 	d.oldConnected = d.connected
 	d.blockNotify = false
 	d.notifyStateChanged()
@@ -91,74 +92,106 @@ func newDevice(dpath dbus.ObjectPath, data map[string]oldDBusLib.Variant) (d *de
 	}
 	d.fixRssi()
 
+	d.bluezDevice.InitSignalExt(systemSigLoop, true)
 	d.connectProperties()
 	return
 }
-func destroyDevice(d *device) {
-	bluezDestroyDevice(d.bluezDevice)
+
+func (d *device) destroy() {
+	d.bluezDevice.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
 func (d *device) notifyDeviceAdded() {
 	logger.Debug("DeviceAdded", marshalJSON(d))
-	bluetooth.service.Emit(bluetooth, "DeviceAdded", marshalJSON(d))
-	bluetooth.updateState()
+	globalBluetooth.service.Emit(globalBluetooth, "DeviceAdded", marshalJSON(d))
+	globalBluetooth.updateState()
 }
 func (d *device) notifyDeviceRemoved() {
 	logger.Debug("DeviceRemoved", marshalJSON(d))
-	bluetooth.service.Emit(bluetooth, "DeviceRemoved", marshalJSON(d))
-	bluetooth.updateState()
+	globalBluetooth.service.Emit(globalBluetooth, "DeviceRemoved", marshalJSON(d))
+	globalBluetooth.updateState()
 }
 func (d *device) notifyDevicePropertiesChanged() {
 	logger.Debug("DevicePropertiesChanged", marshalJSON(d))
-	bluetooth.service.Emit(bluetooth, "DevicePropertiesChanged", marshalJSON(d))
-	bluetooth.updateState()
+	globalBluetooth.service.Emit(globalBluetooth, "DevicePropertiesChanged", marshalJSON(d))
+	globalBluetooth.updateState()
 }
 
 func (d *device) connectProperties() {
-	d.bluezDevice.Connected.ConnectChanged(d.handleConnected)
+	d.bluezDevice.Connected().ConnectChanged(func(hasValue bool, value bool) {
+		d.handleConnected()
+	})
 
-	d.bluezDevice.Name.ConnectChanged(func() {
-		d.Name = d.bluezDevice.Name.Get()
+	d.bluezDevice.Name().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+		d.Name = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.Alias.ConnectChanged(func() {
-		d.Alias = d.bluezDevice.Alias.Get()
+
+	d.bluezDevice.Alias().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+		d.Alias = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.Address.ConnectChanged(func() {
-		d.Address = d.bluezDevice.Address.Get()
+
+	d.bluezDevice.Address().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+		d.Address = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.Trusted.ConnectChanged(func() {
-		d.Trusted = d.bluezDevice.Trusted.Get()
+
+	d.bluezDevice.Trusted().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		d.Trusted = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.Paired.ConnectChanged(func() {
-		d.Paired = d.bluezDevice.Paired.Get()
+
+	d.bluezDevice.Paired().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		d.Paired = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.Icon.ConnectChanged(func() {
-		d.Icon = d.bluezDevice.Icon.Get()
+
+	d.bluezDevice.Icon().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+		d.Icon = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.UUIDs.ConnectChanged(func() {
-		d.UUIDs = d.bluezDevice.UUIDs.Get()
+
+	d.bluezDevice.UUIDs().ConnectChanged(func(hasValue bool, value []string) {
+		if !hasValue {
+			return
+		}
+		d.UUIDs = value
 		d.notifyDevicePropertiesChanged()
 	})
-	d.bluezDevice.RSSI.ConnectChanged(func() {
-		_, err := d.bluezDevice.RSSI.GetValue()
-		if nil != err && !d.Paired {
+
+	d.bluezDevice.RSSI().ConnectChanged(func(hasValue bool, value int16) {
+		rssi, err := d.bluezDevice.RSSI().Get(0)
+		if err != nil && !d.Paired {
 			logger.Debug("Get dbus property RSSI failed", d.Path, err)
 			bluezRemoveDevice(d.AdapterPath, d.Path)
 			return
 		}
-		d.RSSI = d.bluezDevice.RSSI.Get()
+		d.RSSI = rssi
 		d.fixRssi()
 		d.notifyDevicePropertiesChanged()
 	})
 }
 func (d *device) handleConnected() {
-	d.connected = d.bluezDevice.Connected.Get()
+	d.connected, _ = d.bluezDevice.Connected().Get(0)
 	if d.oldConnected != d.connected {
 		d.oldConnected = d.connected
 		if !d.blockNotify {
@@ -205,14 +238,14 @@ func (d *device) fixRssi() {
 	}
 }
 
-func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]oldDBusLib.Variant) {
+func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
 	if b.isDeviceExists(dpath) {
 		logger.Error("repeat add device", dpath)
 		return
 	}
 
 	b.devicesLock.Lock()
-	d := newDevice(dpath, data)
+	d := newDevice(b.systemSigLoop, dpath, data)
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
 	b.config.addDeviceConfig(d.connectAddress())
 
@@ -250,7 +283,7 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
 	d := devices[i]
 	b.config.removeDeviceConfig(d.connectAddress())
 	d.notifyDeviceRemoved()
-	destroyDevice(d)
+	d.destroy()
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
 	devices = devices[:len(devices)-1]
@@ -287,7 +320,7 @@ func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (*device, error) {
 	defer b.devicesLock.Unlock()
 	apath, index := b.findDeviceIndex(dpath)
 	if index < 0 {
-		return nil, errInvaildDevicePath
+		return nil, errInvalidDevicePath
 	}
 	return b.devices[apath][index], nil
 }

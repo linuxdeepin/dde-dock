@@ -25,6 +25,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -41,8 +42,8 @@ type authorize struct {
 }
 
 type agent struct {
-	service  *dbusutil.Service
-	bluezObj dbus.BusObject
+	service      *dbusutil.Service
+	bluezManager *bluez.Manager
 
 	b       *Bluetooth
 	rspChan chan authorize
@@ -190,41 +191,43 @@ func newAgent(service *dbusutil.Service) (a *agent) {
 	return
 }
 
-func (a *agent) init() (err error) {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Error(err)
-			a.destroy()
-		}
-	}()
-
+func (a *agent) init() {
 	sysBus := a.service.Conn()
-	a.bluezObj = sysBus.Object(bluezDBusServiceName, bluezDBusPath)
+	a.bluezManager = bluez.NewManager(sysBus)
+	a.registerDefaultAgent()
+	return
+}
 
+func (a *agent) registerDefaultAgent() {
 	// register agent
-	err = a.bluezObj.Call(bluezAgentManagerDBusInterface+".RegisterAgent", 0,
-		dbus.ObjectPath(agentDBusPath), "DisplayYesNo").Err
+	err := a.bluezManager.RegisterAgent(0, agentDBusPath, "DisplayYesNo")
 	if err != nil {
 		logger.Warning("failed to register agent:", err)
-		return err
+		return
 	}
 
 	// request default agent
-	err = a.bluezObj.Call(bluezAgentManagerDBusInterface+".RequestDefaultAgent", 0,
-		dbus.ObjectPath(agentDBusPath)).Err
+	err = a.bluezManager.RequestDefaultAgent(0, agentDBusPath)
 	if err != nil {
-		logger.Warning("failed to set default agent:", err)
-		return err
+		logger.Warning("failed to become the default agent:", err)
+		err = a.bluezManager.UnregisterAgent(0, agentDBusPath)
+		if err != nil {
+			logger.Warning(err)
+		}
+		return
 	}
-
-	return nil
 }
 
 func (a *agent) destroy() {
-	a.bluezObj.Call(bluezAgentManagerDBusInterface+".UnregisterAgent", 0,
-		dbus.ObjectPath(agentDBusPath))
+	err := a.bluezManager.UnregisterAgent(0, agentDBusPath)
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	a.service.StopExport(a)
+	err = a.service.StopExport(a)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (a *agent) waitResponse() (auth authorize, err error) {

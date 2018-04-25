@@ -39,19 +39,21 @@ func (*daemon) GetDependencies() []string {
 	return []string{}
 }
 
-var bluetooth *Bluetooth
-var _agent *agent
+var globalBluetooth *Bluetooth
+var globalAgent *agent
 
-func initBluetooth() error {
-	destroyBluetooth()
+func (*daemon) Start() error {
+	if globalBluetooth != nil {
+		return nil
+	}
 
 	service := loader.GetService()
-	bluetooth = newBluetooth(service)
+	globalBluetooth = newBluetooth(service)
 
-	err := service.Export(dbusPath, bluetooth)
+	err := service.Export(dbusPath, globalBluetooth)
 	if err != nil {
 		logger.Warning("failed to export bluetooth:", err)
-		bluetooth = nil
+		globalBluetooth = nil
 		return err
 	}
 
@@ -65,54 +67,33 @@ func initBluetooth() error {
 		return err
 	}
 
-	_agent = newAgent(sysService)
-	_agent.b = bluetooth
-	bluetooth.agent = _agent
+	globalAgent = newAgent(sysService)
+	globalAgent.b = globalBluetooth
+	globalBluetooth.agent = globalAgent
 
-	err = sysService.Export(agentDBusPath, _agent)
+	err = sysService.Export(agentDBusPath, globalAgent)
 	if err != nil {
 		logger.Warning("failed to export agent:", err)
 		return err
 	}
 
 	// initialize bluetooth after dbus interface installed
-	bluetooth.init()
-	_agent.init()
-	return nil
-}
-
-func destroyBluetooth() {
-	if bluetooth != nil {
-		bluetooth.destroy()
-		bluetooth = nil
-	}
-
-	if _agent != nil {
-		_agent.destroy()
-		_agent = nil
-	}
-
-}
-
-func doStart() {
-	initBluetooth()
-	bluezWatchRestart()
-}
-
-func (*daemon) Start() error {
-	if bluetooth != nil {
-		return nil
-	}
-
-	logger.BeginTracing()
-
-	go doStart()
+	go globalBluetooth.init()
 	return nil
 }
 
 func (*daemon) Stop() error {
-	logger.EndTracing()
-	destroyBluetooth()
-	bluezDestroyDbusDaemon(bluezDBusDaemon)
+	if globalBluetooth == nil {
+		return nil
+	}
+
+	service := loader.GetService()
+	err := service.ReleaseName(dbusServiceName)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	globalBluetooth.destroy()
+	globalBluetooth = nil
 	return nil
 }

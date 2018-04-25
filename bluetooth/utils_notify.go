@@ -20,14 +20,11 @@
 package bluetooth
 
 import (
-	"dbus/org/freedesktop/notifications"
 	"fmt"
-	. "pkg.deepin.io/lib/gettext"
-)
 
-const (
-	dbusNotifyDest = "org.freedesktop.Notifications"
-	dbusNotifyPath = "/org/freedesktop/Notifications"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
+	"pkg.deepin.io/lib/dbus1"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 const (
@@ -37,18 +34,16 @@ const (
 )
 
 func notify(icon, summary, body string) {
-	notifier, err := notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+	sessionConn, err := dbus.SessionBus()
 	if err != nil {
-		logger.Error(err)
+		logger.Warning(err)
 		return
 	}
 
+	notifier := notifications.NewNotifications(sessionConn)
 	logger.Info("notify", icon, summary, body)
-	// use goroutine to fix dbus cycle call issue
-	go func() {
-		notifier.Notify("Bluetooth", 0, icon, summary, body, nil, nil, 0)
-		notifications.DestroyNotifier(notifier)
-	}()
+	notifier.GoNotify(dbus.FlagNoReplyExpected, nil, "Bluetooth", 0, icon,
+		summary, body, nil, nil, 0)
 	return
 }
 

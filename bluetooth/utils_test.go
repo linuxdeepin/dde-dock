@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	C "gopkg.in/check.v1"
-	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 func TestT(t *testing.T) { C.TestingT(t) }
@@ -35,20 +35,20 @@ var _ = C.Suite(&testWrapper{})
 func (*testWrapper) TestIsDBusObjectKeyExists(c *C.C) {
 	data := make(dbusObjectData)
 	c.Check(isDBusObjectKeyExists(data, "key"), C.Equals, false)
-	data["key"] = oldDBusLib.MakeVariant(int32(8))
+	data["key"] = dbus.MakeVariant(int32(8))
 	c.Check(isDBusObjectKeyExists(data, "key"), C.Equals, true)
 }
 
 func (*testWrapper) TestGetDBusObjectValueString(c *C.C) {
 	data := make(dbusObjectData)
 	c.Check(getDBusObjectValueString(data, "key"), C.Equals, "")
-	data["key"] = oldDBusLib.MakeVariant("value")
+	data["key"] = dbus.MakeVariant("value")
 	c.Check(getDBusObjectValueString(data, "key"), C.Equals, "value")
 }
 
 func (*testWrapper) TestGetDBusObjectValueInt16(c *C.C) {
 	data := make(dbusObjectData)
 	c.Check(getDBusObjectValueInt16(data, "key"), C.Equals, int16(0))
-	data["key"] = oldDBusLib.MakeVariant(int16(8))
+	data["key"] = dbus.MakeVariant(int16(8))
 	c.Check(getDBusObjectValueInt16(data, "key"), C.Equals, int16(8))
 }

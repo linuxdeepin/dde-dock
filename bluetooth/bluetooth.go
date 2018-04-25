@@ -20,20 +20,20 @@
 package bluetooth
 
 import (
-	sysdbus "dbus/org/freedesktop/dbus/system"
 	"sync"
+	"time"
 
-	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const (
-	bluezDBusServiceName           = "org.bluez"
-	bluezDBusPath                  = "/org/bluez"
-	bluezAdapterDBusInterface      = "org.bluez.Adapter1"
-	bluezDeviceDBusInterface       = "org.bluez.Device1"
-	bluezAgentManagerDBusInterface = "org.bluez.AgentManager1"
+	bluezDBusServiceName      = "org.bluez"
+	bluezAdapterDBusInterface = "org.bluez.Adapter1"
+	bluezDeviceDBusInterface  = "org.bluez.Device1"
 
 	dbusServiceName = "com.deepin.daemon.Bluetooth"
 	dbusPath        = "/com/deepin/daemon/Bluetooth"
@@ -46,14 +46,16 @@ const (
 	StateConnected   = 2
 )
 
-type dbusObjectData map[string]oldDBusLib.Variant
+type dbusObjectData map[string]dbus.Variant
 
 //go:generate dbusutil-gen -type Bluetooth bluetooth.go
 
 type Bluetooth struct {
 	service       *dbusutil.Service
+	systemSigLoop *dbusutil.SignalLoop
 	config        *config
-	objectManager *sysdbus.ObjectManager
+	objectManager *bluez.ObjectManager
+	sysDBusDaemon *ofdbus.DBus
 	agent         *agent
 
 	// adapter
@@ -132,16 +134,45 @@ type Bluetooth struct {
 }
 
 func newBluetooth(service *dbusutil.Service) (b *Bluetooth) {
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning(err)
+		return nil
+	}
+
 	b = &Bluetooth{
-		service: service,
+		service:       service,
+		systemSigLoop: dbusutil.NewSignalLoop(systemConn, 10),
 	}
 	b.adapters = make(map[dbus.ObjectPath]*adapter)
 	return
 }
 
 func (b *Bluetooth) destroy() {
-	bluezDestroyObjectManager(b.objectManager)
-	b.service.StopExport(b)
+	b.agent.destroy()
+
+	b.objectManager.RemoveHandler(proxy.RemoveAllHandlers)
+	b.sysDBusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
+
+	b.devicesLock.Lock()
+	for _, devices := range b.devices {
+		for _, device := range devices {
+			device.destroy()
+		}
+	}
+	b.devicesLock.Unlock()
+
+	b.adaptersLock.Lock()
+	for _, adapter := range b.adapters {
+		adapter.destroy()
+	}
+	b.adaptersLock.Unlock()
+
+	err := b.service.StopExport(b)
+	if err != nil {
+		logger.Warning(err)
+	}
+	b.systemSigLoop.Stop()
 }
 
 func (*Bluetooth) GetInterfaceName() string {
@@ -149,41 +180,62 @@ func (*Bluetooth) GetInterfaceName() string {
 }
 
 func (b *Bluetooth) init() {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Error(err)
-			b.destroy()
-		}
-	}()
+	b.systemSigLoop.Start()
+	b.config = newConfig()
+	b.config.save()
+	b.devices = make(map[dbus.ObjectPath][]*device)
 
-	go func() {
-		b.config = newConfig()
-		b.config.save()
-		b.devices = make(map[dbus.ObjectPath][]*device)
+	systemConn := b.systemSigLoop.Conn()
 
-		// initialize dbus object manager
-		var err error
-		b.objectManager, err = bluezNewObjectManager()
-		if err != nil {
-			return
-		}
+	b.sysDBusDaemon = ofdbus.NewDBus(systemConn)
+	b.sysDBusDaemon.InitSignalExt(b.systemSigLoop, true)
+	b.sysDBusDaemon.ConnectNameOwnerChanged(b.handleDBusNameOwnerChanged)
 
-		// connect signals
-		b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
-		b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+	// initialize dbus object manager
+	b.objectManager = bluez.NewObjectManager(systemConn)
 
-		// add exists adapters and devices
-		objects, err := b.objectManager.GetManagedObjects()
-		if err != nil {
-			logger.Error(err)
-			return
-		}
-		for path, data := range objects {
-			b.handleInterfacesAdded(path, data)
-		}
-	}()
+	// connect signals
+	b.objectManager.InitSignalExt(b.systemSigLoop, true)
+	b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
+	b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+
+	b.agent.init()
+	b.loadObjects()
 }
-func (b *Bluetooth) handleInterfacesAdded(path oldDBusLib.ObjectPath, data map[string]map[string]oldDBusLib.Variant) {
+
+func (b *Bluetooth) loadObjects() {
+	// add exists adapters and devices
+	objects, err := b.objectManager.GetManagedObjects(0)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	for path, data := range objects {
+		b.handleInterfacesAdded(path, data)
+	}
+}
+
+func (b *Bluetooth) removeAllObjects() {
+	b.devicesLock.Lock()
+	for _, devices := range b.devices {
+		for _, device := range devices {
+			device.notifyDeviceRemoved()
+			device.destroy()
+		}
+	}
+	b.devices = make(map[dbus.ObjectPath][]*device)
+	b.devicesLock.Unlock()
+
+	b.adaptersLock.Lock()
+	for _, adapter := range b.adapters {
+		adapter.notifyAdapterRemoved()
+		adapter.destroy()
+	}
+	b.adapters = make(map[dbus.ObjectPath]*adapter)
+	b.adaptersLock.Unlock()
+}
+
+func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[bluezAdapterDBusInterface]; ok {
 		requestUnblockBluetoothDevice()
 		b.addAdapter(dbus.ObjectPath(path))
@@ -192,11 +244,31 @@ func (b *Bluetooth) handleInterfacesAdded(path oldDBusLib.ObjectPath, data map[s
 		b.addDevice(dbus.ObjectPath(path), data[bluezDeviceDBusInterface])
 	}
 }
-func (b *Bluetooth) handleInterfacesRemoved(path oldDBusLib.ObjectPath, interfaces []string) {
+
+func (b *Bluetooth) handleInterfacesRemoved(path dbus.ObjectPath, interfaces []string) {
 	if isStringInArray(bluezAdapterDBusInterface, interfaces) {
 		b.removeAdapter(dbus.ObjectPath(path))
 	}
 	if isStringInArray(bluezDeviceDBusInterface, interfaces) {
 		b.removeDevice(dbus.ObjectPath(path))
+	}
+}
+
+func (b *Bluetooth) handleDBusNameOwnerChanged(name, oldOwner, newOwner string) {
+	// if a new dbus session was installed, the name and newOwner
+	// will be not empty, if a dbus session was uninstalled, the
+	// name and oldOwner will be not empty
+	if name != bluezDBusServiceName {
+		return
+	}
+	if newOwner != "" {
+		logger.Info("bluetooth is starting")
+		time.AfterFunc(1*time.Second, func() {
+			b.loadObjects()
+			b.agent.registerDefaultAgent()
+		})
+	} else {
+		logger.Info("bluetooth stopped")
+		b.removeAllObjects()
 	}
 }
