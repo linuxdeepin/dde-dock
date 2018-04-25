@@ -20,13 +20,15 @@
 package audio
 
 import (
-	libdbus "dbus/org/freedesktop/dbus"
-	mpris2 "dbus/org/mpris/mediaplayer2"
 	"encoding/json"
 	"math"
-	"pkg.deepin.io/dde/api/soundutils"
-	"pkg.deepin.io/lib/pulse"
 	"strings"
+
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
+	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
+	"pkg.deepin.io/dde/api/soundutils"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/pulse"
 )
 
 func isVolumeValid(v float64) bool {
@@ -54,45 +56,42 @@ func toJSON(v interface{}) string {
 
 const (
 	mprisPlayerDestPrefix = "org.mpris.MediaPlayer2"
-	mprisPlayerObjPath    = "/org/mpris/MediaPlayer2"
 )
 
-func getMprisPlayers() ([]string, error) {
-	dbusDaemon, err := libdbus.NewDBusDaemon("org.freedesktop.DBus", "/")
-	if err != nil {
-		return nil, err
-	}
-	defer libdbus.DestroyDBusDaemon(dbusDaemon)
-
-	var playerDests []string
-	names, err := dbusDaemon.ListNames()
+func getMprisPlayers(sessionConn *dbus.Conn) ([]string, error) {
+	var playerNames []string
+	dbusDaemon := ofdbus.NewDBus(sessionConn)
+	names, err := dbusDaemon.ListNames(0)
 	if err != nil {
 		return nil, err
 	}
 	for _, name := range names {
 		if strings.HasPrefix(name, mprisPlayerDestPrefix) {
 			// is mpris player
-			playerDests = append(playerDests, name)
+			playerNames = append(playerNames, name)
 		}
 	}
-	return playerDests, nil
+	return playerNames, nil
 }
 
 func pauseAllPlayers() {
-	playerDests, err := getMprisPlayers()
+	sessionConn, err := dbus.SessionBus()
+	if err != nil {
+		return
+	}
+	playerNames, err := getMprisPlayers(sessionConn)
 	if err != nil {
 		logger.Warning("getMprisPlayers failed:", err)
 		return
 	}
 
 	logger.Debug("pause all players")
-	for _, playerDest := range playerDests {
-		player, err := mpris2.NewPlayer(playerDest, mprisPlayerObjPath)
+	for _, playerName := range playerNames {
+		player := mpris2.NewMediaPlayer(sessionConn, playerName)
+		err := player.Pause(0)
 		if err != nil {
-			continue
+			logger.Warningf("failed to pause player %s: %v", playerName, err)
 		}
-		defer mpris2.DestroyPlayer(player)
-		player.Pause()
 	}
 }
 
