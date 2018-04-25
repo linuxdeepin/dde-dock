@@ -20,12 +20,12 @@
 package fprintd
 
 import (
-	"dbus/net/reactivated/fprint"
 	"path"
 
-	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 type Device struct {
@@ -57,11 +57,13 @@ type Device struct {
 }
 type Devices []*Device
 
-func newDevice(objPath dbus.ObjectPath, service *dbusutil.Service) *Device {
+func newDevice(objPath dbus.ObjectPath, service *dbusutil.Service,
+	systemSigLoop *dbusutil.SignalLoop) *Device {
 	var dev Device
 	dev.service = service
-	dev.core, _ = fprint.NewDevice(fprintDBusServiceName, oldDBusLib.ObjectPath(objPath))
+	dev.core, _ = fprint.NewDevice(systemSigLoop.Conn(), objPath)
 
+	dev.core.InitSignalExt(systemSigLoop, true)
 	dev.core.ConnectEnrollStatus(func(status string, ok bool) {
 		dev.service.Emit(&dev, "EnrollStatus", status, ok)
 	})
@@ -75,48 +77,48 @@ func newDevice(objPath dbus.ObjectPath, service *dbusutil.Service) *Device {
 	return &dev
 }
 
-func destroyDevice(dev *Device) {
-	fprint.DestroyDevice(dev.core)
-	dev = nil
+func (dev *Device) destroy() {
+	dev.core.RemoveHandler(proxy.RemoveAllHandlers)
+	dev.service.StopExport(dev)
 }
 
 func (dev *Device) Claim(username string) *dbus.Error {
-	err := dev.core.Claim(username)
+	err := dev.core.Claim(0, username)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) Release() *dbus.Error {
-	err := dev.core.Release()
+	err := dev.core.Release(0)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) EnrollStart(finger string) *dbus.Error {
-	err := dev.core.EnrollStart(finger)
+	err := dev.core.EnrollStart(0, finger)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) EnrollStop() *dbus.Error {
-	err := dev.core.EnrollStop()
+	err := dev.core.EnrollStop(0)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) VerifyStart(finger string) *dbus.Error {
-	err := dev.core.VerifyStart(finger)
+	err := dev.core.VerifyStart(0, finger)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) VerifyStop() *dbus.Error {
-	err := dev.core.VerifyStop()
+	err := dev.core.VerifyStop(0)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) DeleteEnrolledFingers(username string) *dbus.Error {
-	err := dev.core.DeleteEnrolledFingers(username)
+	err := dev.core.DeleteEnrolledFingers(0, username)
 	return dbusutil.ToError(err)
 }
 
 func (dev *Device) ListEnrolledFingers(username string) ([]string, *dbus.Error) {
-	fingers, err := dev.core.ListEnrolledFingers(username)
+	fingers, err := dev.core.ListEnrolledFingers(0, username)
 	if err != nil {
 		return nil, dbusutil.ToError(err)
 	}
@@ -128,23 +130,23 @@ func (*Device) GetInterfaceName() string {
 }
 
 func (dev *Device) getPath() dbus.ObjectPath {
-	return convertFPrintPath(dbus.ObjectPath(dev.core.Path))
+	return convertFPrintPath(dev.core.Path_())
 }
 
 func destroyDevices(list Devices) {
 	for _, dev := range list {
-		destroyDevice(dev)
+		dev.destroy()
 	}
-	list = nil
 }
 
-func (devList Devices) Add(objPath dbus.ObjectPath, service *dbusutil.Service) Devices {
+func (devList Devices) Add(objPath dbus.ObjectPath, service *dbusutil.Service,
+	systemSigLoop *dbusutil.SignalLoop) Devices {
 	dev := devList.Get(objPath)
 	if dev != nil {
 		return devList
 	}
 
-	var v = newDevice(objPath, service)
+	var v = newDevice(objPath, service, systemSigLoop)
 	err := service.Export(v.getPath(), v)
 	if err != nil {
 		logger.Warning("Failed to export:", objPath)
@@ -157,7 +159,7 @@ func (devList Devices) Add(objPath dbus.ObjectPath, service *dbusutil.Service) D
 
 func (devList Devices) Get(objPath dbus.ObjectPath) *Device {
 	for _, dev := range devList {
-		if dbus.ObjectPath(dev.core.Path) == objPath {
+		if dev.core.Path_() == objPath {
 			return dev
 		}
 	}
@@ -170,14 +172,14 @@ func (devList Devices) Delete(objPath dbus.ObjectPath) Devices {
 		v    *Device
 	)
 	for _, dev := range devList {
-		if dbus.ObjectPath(dev.core.Path) == objPath {
+		if dev.core.Path_() == objPath {
 			v = dev
 			continue
 		}
 		list = append(list, dev)
 	}
 	if v != nil {
-		destroyDevice(v)
+		v.destroy()
 	}
 	return list
 }

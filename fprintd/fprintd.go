@@ -26,11 +26,11 @@ import (
 
 var (
 	logger = log.NewLogger("System/Fprintd")
-	_m     *Manager
 )
 
 type Daemon struct {
 	*loader.ModuleBase
+	manager *Manager
 }
 
 func NewDaemon() *Daemon {
@@ -47,14 +47,19 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Daemon) Start() error {
-	if _m != nil {
+func (d *Daemon) Start() error {
+	if d.manager != nil {
 		return nil
 	}
 	service := loader.GetService()
 
-	_m = newManager(service)
-	err := service.Export(dbusPath, _m)
+	var err error
+	d.manager, err = newManager(service)
+	if err != nil {
+		return err
+	}
+
+	err = service.Export(dbusPath, d.manager)
 	if err != nil {
 		return err
 	}
@@ -64,16 +69,28 @@ func (*Daemon) Start() error {
 		return err
 	}
 
-	go _m.init()
+	go d.manager.init()
 	return nil
 }
 
-func (*Daemon) Stop() error {
-	if _m == nil {
+func (d *Daemon) Stop() error {
+	if d.manager == nil {
 		return nil
 	}
 
-	destroyDevices(_m.devList)
-	_m = nil
+	service := loader.GetService()
+
+	err := service.ReleaseName(dbusServiceName)
+	if err != nil {
+		return err
+	}
+
+	err = service.StopExport(d.manager)
+	if err != nil {
+		return err
+	}
+
+	d.manager.destroy()
+	d.manager = nil
 	return nil
 }
