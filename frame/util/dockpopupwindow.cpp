@@ -81,10 +81,11 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
     show(pos.x(), pos.y());
 
     const bool regionRegistered = m_regionInter->registered();
-    if (!m_model && regionRegistered)
+    if (!m_model && regionRegistered) {
         m_regionInter->unregisterRegion();
-    else if (m_model && !regionRegistered)
-        m_regionInter->registerRegion();
+    } else if (m_model && !regionRegistered) {
+        QTimer::singleShot(100, this, [=] { m_regionInter->registerRegion(); });
+    }
 }
 
 void DockPopupWindow::show(const int x, const int y)
