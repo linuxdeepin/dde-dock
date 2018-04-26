@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     app.loadTranslator();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
+    app.registerDDESession();
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
