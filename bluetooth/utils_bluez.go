@@ -20,8 +20,6 @@
 package bluetooth
 
 import (
-	"time"
-
 	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/dbus1"
 )
@@ -150,14 +148,6 @@ func bluezSetAdapterDiscoverable(apath dbus.ObjectPath, discoverable bool) (err 
 func bluezSetAdapterDiscovering(apath dbus.ObjectPath, discovering bool) (err error) {
 	if discovering {
 		err = bluezStartDiscovery(apath)
-		go func() {
-			// adapter is not ready, retry again
-			if err != nil {
-				time.Sleep(3 * time.Second)
-				bluezStartDiscovery(apath)
-			}
-
-		}()
 	} else {
 		err = bluezStopDiscovery(apath)
 	}

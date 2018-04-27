@@ -239,6 +239,7 @@ func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath,
 
 func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
 	discoverable bool) *dbus.Error {
+	logger.Debug("SetAdapterDiscovering", apath, discoverable)
 	err := bluezSetAdapterDiscovering(apath, discoverable)
 	return dbusutil.ToError(err)
 }

@@ -25,6 +25,8 @@ import (
 	"sync"
 	"time"
 
+	"errors"
+
 	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -178,6 +180,7 @@ func (a *agent) AuthorizeService(dpath dbus.ObjectPath, uuid string) *dbus.Error
 func (a *agent) Cancel() *dbus.Error {
 	logger.Info("Cancel()")
 	a.rspChan <- authorize{path: a.requestDevice, accept: false, key: ""}
+	a.emitCancelled()
 	return nil
 }
 
@@ -186,7 +189,7 @@ func (a *agent) Cancel() *dbus.Error {
 func newAgent(service *dbusutil.Service) (a *agent) {
 	a = &agent{
 		service: service,
-		rspChan: make(chan authorize, 1),
+		rspChan: make(chan authorize),
 	}
 	return
 }
@@ -231,36 +234,32 @@ func (a *agent) destroy() {
 }
 
 func (a *agent) waitResponse() (auth authorize, err error) {
-	// TODO: time is too short or long
 	logger.Info("waitResponse")
 
 	defer func() {
+		a.lk.Lock()
 		a.requestDevice = ""
+		a.lk.Unlock()
 	}()
 
 	t := time.NewTimer(60 * time.Second)
-	for {
-		// TODO: remove for
-		select {
-		case auth = <-a.rspChan:
-			logger.Info("receive", auth)
-			if !auth.accept {
-				err = errBluezRejected
-				logger.Warningf("emitRequest return with: %v", err)
-				return
-			}
-			logger.Infof("emitRequest accept %v with %v", a.requestDevice, auth.key)
-			return
-		case <-t.C:
-			logger.Info("timeout")
-			err = errBluezCanceled
+	select {
+	case auth = <-a.rspChan:
+		logger.Info("receive", auth)
+		if !auth.accept {
+			err = errBluezRejected
 			logger.Warningf("emitRequest return with: %v", err)
 			return
 		}
+		logger.Infof("emitRequest accept %v with %v", a.requestDevice, auth.key)
+		return
+	case <-t.C:
+		logger.Info("timeout")
+		err = errBluezCanceled
+		logger.Warningf("emitRequest return with: %v", err)
+		a.emitCancelled()
+		return
 	}
-	logger.Error("Should not run here!!!")
-	err = errBluezCanceled
-	return
 }
 
 func (a *agent) emit(signal string, devPath dbus.ObjectPath, args ...interface{}) (err error) {
@@ -268,6 +267,21 @@ func (a *agent) emit(signal string, devPath dbus.ObjectPath, args ...interface{}
 	args0 = append(args0, devPath)
 	args0 = append(args0, args...)
 	return a.b.service.Emit(a.b, signal, args0...)
+}
+
+func (a *agent) emitCancelled() {
+	a.lk.Lock()
+	devPath := a.requestDevice
+	a.lk.Unlock()
+
+	if devPath == "" {
+		logger.Warning("failed to emitCancelled, devPath is empty")
+		return
+	}
+	err := a.b.service.Emit(a.b, "Cancelled", devPath)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (a *agent) emitRequest(devPath dbus.ObjectPath, signal string, args ...interface{}) (auth authorize, err error) {
@@ -299,18 +313,22 @@ func (b *Bluetooth) feed(devPath dbus.ObjectPath, accept bool, key string) (err 
 	b.agent.lk.Lock()
 	if b.agent.requestDevice != devPath {
 		b.agent.lk.Unlock()
-		logger.Warningf("FeedRequest can not find match device: %v, %v", b.agent.requestDevice, devPath)
+		logger.Warningf("FeedRequest can not find match device: %q, %q", b.agent.requestDevice, devPath)
 		return errBluezCanceled
 	}
 	b.agent.lk.Unlock()
 
-	b.agent.rspChan <- authorize{path: devPath, accept: accept, key: key}
-	return nil
+	select {
+	case b.agent.rspChan <- authorize{path: devPath, accept: accept, key: key}:
+		return nil
+	default:
+		return errors.New("rspChan no reader")
+	}
 }
 
 //Confirm should call when you receive RequestConfirmation signal
 func (b *Bluetooth) Confirm(devPath dbus.ObjectPath, accept bool) *dbus.Error {
-	logger.Info("Confirm()")
+	logger.Infof("Confirm(%v)", accept)
 	err := b.feed(devPath, accept, "")
 	return dbusutil.ToError(err)
 }

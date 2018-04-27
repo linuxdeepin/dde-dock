@@ -130,6 +130,10 @@ type Bluetooth struct {
 		RequestPasskey struct {
 			device dbus.ObjectPath
 		}
+
+		Cancelled struct {
+			device dbus.ObjectPath
+		}
 	}
 }
 
