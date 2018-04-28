@@ -22,9 +22,8 @@ package bluetooth
 import (
 	"fmt"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
-	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
+	libnotify "pkg.deepin.io/lib/notify"
 )
 
 const (
@@ -33,31 +32,59 @@ const (
 	notifyIconBluetoothConnectFailed = "notification-bluetooth-error"
 )
 
+var globalNotification *libnotify.Notification
+
+func init() {
+	globalNotification = libnotify.NewNotification("", "", "")
+}
+
 func notify(icon, summary, body string) {
-	sessionConn, err := dbus.SessionBus()
+	logger.Info("notify", icon, summary, body)
+	globalNotification.Update(summary, body, icon)
+	err := globalNotification.Show()
 	if err != nil {
 		logger.Warning(err)
-		return
 	}
-
-	notifier := notifications.NewNotifications(sessionConn)
-	logger.Info("notify", icon, summary, body)
-	notifier.GoNotify(dbus.FlagNoReplyExpected, nil, "Bluetooth", 0, icon,
-		summary, body, nil, nil, 0)
 	return
 }
 
-func notifyBluetoothConnected(alias string) {
+func notifyConnected(alias string) {
 	notify(notifyIconBluetoothConnected, Tr("Connected"), alias)
 }
-func notifyBluetoothDisconnected(alias string) {
+func notifyDisconnected(alias string) {
 	notify(notifyIconBluetoothDisconnected, Tr("Disconnected"), alias)
 }
-func notifyBluetoothConnectFailed(alias string) {
+
+func notifyConnectFailedHostDown(alias string) {
 	format := Tr("Make sure %q is turned on and in range")
-	notify(notifyIconBluetoothConnectFailed, Tr("Bluetooth connection failed"), fmt.Sprintf(format, alias))
+	notifyConnectFailedAux(alias, format)
 }
+
 func notifyBluetoothDeviceIgnored(alias string) {
 	format := Tr("Failed to connect %q, automatically ignored")
+	notifyConnectFailedAux(alias, format)
+}
+
+func notifyConnectFailedResourceUnavailable(alias string) {
+	format := Tr("Failed to connect %q, resource temporarily unavailable")
+	notifyConnectFailedAux(alias, format)
+}
+
+func notifyConnectFailedSoftwareCaused(alias string) {
+	format := Tr("Failed to connect %q, software caused connection abort")
+	notifyConnectFailedAux(alias, format)
+}
+
+func notifyConnectFailedOther(alias string) {
+	format := Tr("Failed to connect %q")
+	notifyConnectFailedAux(alias, format)
+}
+
+func notifyConnectFailedPairing(alias string) {
+	format := Tr("Failed to connect %q, pairing failed")
+	notifyConnectFailedAux(alias, format)
+}
+
+func notifyConnectFailedAux(alias, format string) {
 	notify(notifyIconBluetoothConnectFailed, Tr("Bluetooth connection failed"), fmt.Sprintf(format, alias))
 }

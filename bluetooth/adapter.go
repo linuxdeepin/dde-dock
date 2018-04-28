@@ -43,7 +43,8 @@ type adapter struct {
 
 func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *adapter) {
 	a = &adapter{Path: apath}
-	a.bluezAdapter, _ = bluezNewAdapter(apath)
+	systemConn := systemSigLoop.Conn()
+	a.bluezAdapter, _ = bluez.NewHCI(systemConn, apath)
 	a.bluezAdapter.InitSignalExt(systemSigLoop, true)
 	a.connectProperties()
 	a.adddress, _ = a.bluezAdapter.Address().Get(0)
@@ -60,16 +61,22 @@ func (a *adapter) destroy() {
 	a.bluezAdapter.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
+func (a *adapter) String() string {
+	return fmt.Sprintf("adapter %s [%s]", a.Alias, a.adddress)
+}
+
 func (a *adapter) notifyAdapterAdded() {
-	logger.Info("AdapterAdded", marshalJSON(a))
+	logger.Info("AdapterAdded", a)
 	globalBluetooth.service.Emit(globalBluetooth, "AdapterAdded", marshalJSON(a))
 	globalBluetooth.updateState()
 }
+
 func (a *adapter) notifyAdapterRemoved() {
 	logger.Info("AdapterRemoved", marshalJSON(a))
 	globalBluetooth.service.Emit(globalBluetooth, "AdapterRemoved", marshalJSON(a))
 	globalBluetooth.updateState()
 }
+
 func (a *adapter) notifyPropertiesChanged() {
 	logger.Debug("AdapterPropertiesChanged", marshalJSON(a))
 	globalBluetooth.service.Emit(globalBluetooth, "AdapterPropertiesChanged", marshalJSON(a))
@@ -120,132 +127,4 @@ func (a *adapter) connectProperties() {
 		a.DiscoverableTimeout = value
 		a.notifyPropertiesChanged()
 	})
-}
-
-func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
-	if b.isAdapterExists(apath) {
-		logger.Error("repeat add adapter", apath)
-		return
-	}
-
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-
-	a := newAdapter(b.systemSigLoop, apath)
-	// initialize adapter power state
-	b.config.addAdapterConfig(bluezGetAdapterAddress(apath))
-	oldPowered := b.config.getAdapterConfigPowered(bluezGetAdapterAddress(apath))
-	b.SetAdapterPowered(apath, oldPowered)
-	b.SetAdapterDiscoverable(apath, false)
-	if oldPowered {
-		b.RequestDiscovery(apath)
-	}
-
-	b.adapters[apath] = a
-	a.notifyAdapterAdded()
-}
-
-func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-
-	if b.adapters[apath] == nil {
-		logger.Error("repeat remove adapter", apath)
-		return
-	}
-
-	b.doRemoveAdapter(apath)
-}
-
-func (b *Bluetooth) doRemoveAdapter(apath dbus.ObjectPath) {
-	removeAdapter := b.adapters[apath]
-	delete(b.adapters, apath)
-
-	removeAdapter.notifyAdapterRemoved()
-	removeAdapter.destroy()
-}
-
-func (b *Bluetooth) getAdapter(apath dbus.ObjectPath) (a *adapter, err error) {
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-
-	a = b.adapters[apath]
-	if a == nil {
-		err = fmt.Errorf("adapter not exists %s", apath)
-		logger.Error(err)
-		return
-	}
-	return
-}
-func (b *Bluetooth) isAdapterExists(apath dbus.ObjectPath) bool {
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-	if b.adapters[apath] != nil {
-		return true
-	}
-	return false
-}
-
-// GetAdapters return all adapter objects that marshaled by json.
-func (b *Bluetooth) GetAdapters() (adaptersJSON string, err *dbus.Error) {
-	v := make([]*adapter, 0, len(b.adapters))
-	for _, a := range b.adapters {
-		v = append(v, a)
-	}
-	adaptersJSON = marshalJSON(v)
-	return
-}
-
-func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err *dbus.Error) {
-	// if adapter is discovering now, just ignore
-	if bluezGetAdapterDiscovering(apath) {
-		return
-	}
-
-	b.SetAdapterDiscovering(apath, true)
-	return
-}
-
-func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
-	powered bool) (busErr *dbus.Error) {
-
-	logger.Debug("SetAdapterPowered", apath, powered)
-
-	b.ClearUnpairedDevice()
-	err := bluezSetAdapterPowered(apath, powered)
-	if err == nil {
-		// save the powered state
-		b.config.setAdapterConfigPowered(bluezGetAdapterAddress(apath), powered)
-		if powered {
-			b.SetAdapterDiscovering(apath, true)
-		}
-		return nil
-	}
-
-	logger.Warning("failed to set adapter powered:", err)
-	return dbusutil.ToError(err)
-}
-
-func (b *Bluetooth) SetAdapterAlias(apath dbus.ObjectPath, alias string) *dbus.Error {
-	err := bluezSetAdapterAlias(apath, alias)
-	return dbusutil.ToError(err)
-}
-
-func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath,
-	discoverable bool) *dbus.Error {
-	err := bluezSetAdapterDiscoverable(apath, discoverable)
-	return dbusutil.ToError(err)
-}
-
-func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
-	discoverable bool) *dbus.Error {
-	logger.Debug("SetAdapterDiscovering", apath, discoverable)
-	err := bluezSetAdapterDiscovering(apath, discoverable)
-	return dbusutil.ToError(err)
-}
-
-func (b *Bluetooth) SetAdapterDiscoverableTimeout(apath dbus.ObjectPath,
-	discoverableTimeout uint32) *dbus.Error {
-	err := bluezSetAdapterDiscoverableTimeout(apath, discoverableTimeout)
-	return dbusutil.ToError(err)
 }

@@ -24,19 +24,35 @@ import (
 	"sync"
 	"time"
 
+	"strings"
+
 	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
-const deviceRssiNotInRange = -1000 // -1000db means device not in range
-
 const (
-	deviceStateDisconnected = 0
-	deviceStateConnecting   = 1
-	deviceStateConnected    = 2
+	deviceStateDisconnected  = 0
+	deviceStateConnecting    = 1
+	deviceStateConnected     = 2
+	deviceStateDisconnecting = 1
 )
+
+type deviceState uint32
+
+func (s deviceState) String() string {
+	switch s {
+	case deviceStateDisconnected:
+		return "Disconnected"
+	case deviceStateConnecting:
+		return "doing"
+	case deviceStateConnected:
+		return "Connected"
+	default:
+		return fmt.Sprintf("Unknown(%d)", s)
+	}
+}
 
 var (
 	errInvalidDevicePath = fmt.Errorf("invalid device path")
@@ -48,30 +64,123 @@ type device struct {
 	Path        dbus.ObjectPath
 	AdapterPath dbus.ObjectPath
 
-	Name    string
-	Alias   string
-	Trusted bool
-	Paired  bool
-	State   uint32
-	UUIDs   []string
+	Alias            string
+	Trusted          bool
+	Paired           bool
+	State            deviceState
+	ServicesResolved bool
 	// optional
+	UUIDs   []string
+	Name    string
 	Icon    string
 	RSSI    int16
 	Address string
 
-	oldConnected bool
 	connected    bool
 	connecting   bool
-	blockNotify  bool
+	agentWorking bool
 
-	lk           sync.Mutex
-	confirmation chan bool
+	connectPhase      connectPhase
+	disconnectPhase   disconnectPhase
+	disconnectChan    chan struct{}
+	mu                sync.Mutex
+	confirmation      chan bool
+	pairingFailedTime time.Time
+}
+
+type connectPhase uint32
+
+const (
+	connectPhaseNone = iota
+	connectPhaseStart
+	connectPhasePairStart
+	connectPhasePairEnd
+	connectPhaseConnectProfilesStart
+	connectPhaseConnectProfilesEnd
+)
+
+type disconnectPhase uint32
+
+const (
+	disconnectPhaseNone = iota
+	disconnectPhaseStart
+	disconnectPhaseDisconnectStart
+	disconnectPhaseDisconnectEnd
+)
+
+func (d *device) setDisconnectPhase(value disconnectPhase) {
+	d.mu.Lock()
+	d.disconnectPhase = value
+	d.mu.Unlock()
+
+	switch value {
+	case disconnectPhaseDisconnectStart:
+		logger.Debugf("%s disconnect start", d)
+	case disconnectPhaseDisconnectEnd:
+		logger.Debugf("%s disconnect end", d)
+	}
+	d.updateState()
+	d.notifyDevicePropertiesChanged()
+}
+
+func (d *device) getDisconnectPhase() disconnectPhase {
+	d.mu.Lock()
+	value := d.disconnectPhase
+	d.mu.Unlock()
+	return value
+}
+
+func (d *device) setConnectPhase(value connectPhase) {
+	d.mu.Lock()
+	d.connectPhase = value
+	d.mu.Unlock()
+
+	switch value {
+	case connectPhasePairStart:
+		logger.Debugf("%s pair start", d)
+	case connectPhasePairEnd:
+		logger.Debugf("%s pair end", d)
+
+	case connectPhaseConnectProfilesStart:
+		logger.Debugf("%s connect profiles start", d)
+	case connectPhaseConnectProfilesEnd:
+		logger.Debugf("%s connect profiles end", d)
+	}
+
+	d.updateState()
+	d.notifyDevicePropertiesChanged()
+}
+
+func (d *device) getConnectPhase() connectPhase {
+	d.mu.Lock()
+	value := d.connectPhase
+	d.mu.Unlock()
+	return value
+}
+
+func (d *device) agentWorkStart() {
+	logger.Debugf("%s agent work start", d)
+	d.agentWorking = true
+	d.updateState()
+	d.notifyDevicePropertiesChanged()
+}
+
+func (d *device) agentWorkEnd() {
+	logger.Debugf("%s agent work end", d)
+	d.agentWorking = false
+	d.updateState()
+	d.notifyDevicePropertiesChanged()
+}
+
+func (d *device) String() string {
+	return fmt.Sprintf("device [%s] %s", d.Address, d.Alias)
 }
 
 func newDevice(systemSigLoop *dbusutil.SignalLoop, dpath dbus.ObjectPath,
 	data map[string]dbus.Variant) (d *device) {
 	d = &device{Path: dpath}
-	d.bluezDevice, _ = bluezNewDevice(dpath)
+	systemConn := systemSigLoop.Conn()
+	d.bluezDevice, _ = bluez.NewDevice(systemConn, dpath)
 	d.AdapterPath, _ = d.bluezDevice.Adapter().Get(0)
 	d.Name, _ = d.bluezDevice.Name().Get(0)
 	d.Alias, _ = d.bluezDevice.Alias().Get(0)
@@ -80,9 +189,10 @@ func newDevice(systemSigLoop *dbusutil.SignalLoop, dpath dbus.ObjectPath,
 	d.Paired, _ = d.bluezDevice.Paired().Get(0)
 	d.connected, _ = d.bluezDevice.Connected().Get(0)
 	d.UUIDs, _ = d.bluezDevice.UUIDs().Get(0)
-	d.oldConnected = d.connected
-	d.blockNotify = false
-	d.notifyStateChanged()
+	d.ServicesResolved, _ = d.bluezDevice.ServicesResolved().Get(0)
+
+	d.disconnectChan = make(chan struct{})
+	d.updateState()
 
 	// optional properties, read from dbus object data in order to
 	// check if property exists
@@ -90,7 +200,6 @@ func newDevice(systemSigLoop *dbusutil.SignalLoop, dpath dbus.ObjectPath,
 	if isDBusObjectKeyExists(data, "RSSI") {
 		d.RSSI = getDBusObjectValueInt16(data, "RSSI")
 	}
-	d.fixRssi()
 
 	d.bluezDevice.InitSignalExt(systemSigLoop, true)
 	d.connectProperties()
@@ -102,30 +211,59 @@ func (d *device) destroy() {
 }
 
 func (d *device) notifyDeviceAdded() {
-	logger.Debug("DeviceAdded", marshalJSON(d))
+	logger.Debug("DeviceAdded", d)
+	if d.Name == "" {
+		logger.Debugf("%s is hidden", d)
+		return
+	}
+
 	globalBluetooth.service.Emit(globalBluetooth, "DeviceAdded", marshalJSON(d))
 	globalBluetooth.updateState()
 }
+
 func (d *device) notifyDeviceRemoved() {
-	logger.Debug("DeviceRemoved", marshalJSON(d))
+	logger.Debug("DeviceRemoved", d)
 	globalBluetooth.service.Emit(globalBluetooth, "DeviceRemoved", marshalJSON(d))
 	globalBluetooth.updateState()
 }
+
 func (d *device) notifyDevicePropertiesChanged() {
-	logger.Debug("DevicePropertiesChanged", marshalJSON(d))
 	globalBluetooth.service.Emit(globalBluetooth, "DevicePropertiesChanged", marshalJSON(d))
 	globalBluetooth.updateState()
 }
 
 func (d *device) connectProperties() {
-	d.bluezDevice.Connected().ConnectChanged(func(hasValue bool, value bool) {
-		d.handleConnected()
+	d.bluezDevice.Connected().ConnectChanged(func(hasValue bool, connected bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debugf("%s Connected: %v", d, connected)
+		d.connected = connected
+
+		needNotify := true
+		if !connected {
+			select {
+			case d.disconnectChan <- struct{}{}:
+				logger.Debugf("%s disconnectChan send done", d)
+				needNotify = false
+			default:
+			}
+		}
+
+		d.updateState()
+		d.notifyDevicePropertiesChanged()
+
+		if needNotify {
+			d.notifyConnectedChanged()
+		}
+		return
 	})
 
 	d.bluezDevice.Name().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
+		logger.Debugf("%s Name: %v", d, value)
 		d.Name = value
 		d.notifyDevicePropertiesChanged()
 	})
@@ -135,6 +273,7 @@ func (d *device) connectProperties() {
 			return
 		}
 		d.Alias = value
+		logger.Debugf("%s Alias: %v", d, value)
 		d.notifyDevicePropertiesChanged()
 	})
 
@@ -143,6 +282,7 @@ func (d *device) connectProperties() {
 			return
 		}
 		d.Address = value
+		logger.Debugf("%s Address: %v", d, value)
 		d.notifyDevicePropertiesChanged()
 	})
 
@@ -151,6 +291,7 @@ func (d *device) connectProperties() {
 			return
 		}
 		d.Trusted = value
+		logger.Debugf("%s Trusted: %v", d, value)
 		d.notifyDevicePropertiesChanged()
 	})
 
@@ -159,6 +300,16 @@ func (d *device) connectProperties() {
 			return
 		}
 		d.Paired = value
+		logger.Debugf("%s Paired: %v", d, value)
+		d.notifyDevicePropertiesChanged()
+	})
+
+	d.bluezDevice.ServicesResolved().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		d.ServicesResolved = value
+		logger.Debugf("%s ServicesResolved: %v", d, value)
 		d.notifyDevicePropertiesChanged()
 	})
 
@@ -167,6 +318,7 @@ func (d *device) connectProperties() {
 			return
 		}
 		d.Icon = value
+		logger.Debugf("%s Icon: %v", d, value)
 		d.notifyDevicePropertiesChanged()
 	})
 
@@ -175,52 +327,87 @@ func (d *device) connectProperties() {
 			return
 		}
 		d.UUIDs = value
+		logger.Debugf("%s UUIDs: %v", d, value)
 		d.notifyDevicePropertiesChanged()
 	})
 
 	d.bluezDevice.RSSI().ConnectChanged(func(hasValue bool, value int16) {
-		rssi, err := d.bluezDevice.RSSI().Get(0)
-		if err != nil && !d.Paired {
-			logger.Debug("Get dbus property RSSI failed", d.Path, err)
-			bluezRemoveDevice(d.AdapterPath, d.Path)
-			return
+		if !hasValue {
+			d.RSSI = 0
+			logger.Debugf("%s RSSI invalidated", d)
+		} else {
+			d.RSSI = value
+			logger.Debugf("%s RSSI: %v", d, value)
 		}
-		d.RSSI = rssi
-		d.fixRssi()
 		d.notifyDevicePropertiesChanged()
 	})
+
+	d.bluezDevice.LegacyPairing().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debugf("%s LegacyPairing: %v", d, value)
+	})
+
+	d.bluezDevice.Blocked().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+		logger.Debugf("%s Blocked: %v", d, value)
+	})
 }
-func (d *device) handleConnected() {
-	d.connected, _ = d.bluezDevice.Connected().Get(0)
-	if d.oldConnected != d.connected {
-		d.oldConnected = d.connected
-		if !d.blockNotify {
-			if d.connected {
-				notifyBluetoothConnected(d.Alias)
-			} else {
-				notifyBluetoothDisconnected(d.Alias)
-			}
+
+func (d *device) notifyConnectedChanged() {
+	connectPhase := d.getConnectPhase()
+	if connectPhase != connectPhaseNone {
+		// connect is in progress
+		logger.Debugf("%s handleNotifySend: connect is in progress", d)
+		return
+	}
+
+	disconnectPhase := d.getDisconnectPhase()
+	if disconnectPhase != disconnectPhaseNone {
+		// disconnect is in progress
+		logger.Debugf("%s handleNotifySend: disconnect is in progress", d)
+		return
+	}
+
+	if d.connected {
+		notifyConnected(d.Alias)
+	} else {
+		if time.Since(d.pairingFailedTime) < 2*time.Second {
+			return
+		}
+		notifyDisconnected(d.Alias)
+	}
+}
+
+func (d *device) updateState() {
+	newState := d.getState()
+	if d.State != newState {
+		d.State = newState
+		logger.Debugf("%s State: %s", d, d.State)
+	}
+}
+
+func (d *device) getState() deviceState {
+	if d.agentWorking {
+		return deviceStateConnecting
+	}
+
+	if d.connectPhase != connectPhaseNone {
+		return deviceStateConnecting
+
+	} else if d.disconnectPhase != connectPhaseNone {
+		return deviceStateDisconnecting
+
+	} else {
+		if d.connected {
+			return deviceStateConnected
+		} else {
+			return deviceStateDisconnected
 		}
 	}
-	d.notifyStateChanged()
-}
-func (d *device) notifyConnectFailed() {
-	notifyBluetoothConnectFailed(d.Alias)
-}
-func (d *device) notifyIgnored() {
-	notifyBluetoothDeviceIgnored(d.Alias)
-}
-func (d *device) notifyStateChanged() {
-	if d.connected {
-		d.connecting = false
-		d.State = deviceStateConnected
-	} else if d.connecting {
-		d.State = deviceStateConnecting
-	} else {
-		d.State = deviceStateDisconnected
-	}
-	logger.Debugf("notifyStateChanged: %#v", d) // TODO test
-	d.notifyDevicePropertiesChanged()
 }
 
 func (d *device) connectAddress() string {
@@ -228,189 +415,155 @@ func (d *device) connectAddress() string {
 	return adapterAddress + "/" + d.Address
 }
 
-func (d *device) fixRssi() {
-	if d.RSSI == 0 {
-		if d.Trusted {
-			d.RSSI = deviceRssiNotInRange / 2
-		} else {
-			d.RSSI = deviceRssiNotInRange
-		}
-	}
-}
-
-func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
-	if b.isDeviceExists(dpath) {
-		logger.Error("repeat add device", dpath)
+func (d *device) Connect() {
+	logger.Debug(d, "call Connect()")
+	connectPhase := d.getConnectPhase()
+	disconnectPhase := d.getDisconnectPhase()
+	if connectPhase != connectPhaseNone {
+		logger.Warningf("%s connect is in progress", d)
+		return
+	} else if disconnectPhase != disconnectPhaseNone {
+		logger.Debugf("%s disconnect is in progress", d)
 		return
 	}
 
-	b.devicesLock.Lock()
-	d := newDevice(b.systemSigLoop, dpath, data)
-	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
-	b.config.addDeviceConfig(d.connectAddress())
+	d.setConnectPhase(connectPhaseStart)
+	defer d.setConnectPhase(connectPhaseNone)
 
-	d.notifyDeviceAdded()
-	b.devicesLock.Unlock()
-
-	connected := b.config.getDeviceConfigConnected(d.connectAddress())
-	if connected {
-		d.blockNotify = true
-		go func() {
-			time.Sleep(25 * time.Second)
-			if d, _ := b.getDevice(dpath); nil != d && !d.connected {
-				logger.Infof("auto connect device %v", d)
-				bluezConnectDevice(dpath)
-			}
-			d.blockNotify = false
-		}()
-	}
-}
-
-func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
-	apath, i := b.getDeviceIndex(dpath)
-	if i < 0 {
-		logger.Error("repeat remove device", dpath)
-		return
-	}
-
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
-	b.devices[apath] = b.doRemoveDevice(b.devices[apath], i)
-	return
-}
-
-func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
-	d := devices[i]
-	b.config.removeDeviceConfig(d.connectAddress())
-	d.notifyDeviceRemoved()
-	d.destroy()
-	copy(devices[i:], devices[i+1:])
-	devices[len(devices)-1] = nil
-	devices = devices[:len(devices)-1]
-	return devices
-}
-
-func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
-	_, i := b.getDeviceIndex(dpath)
-	if i >= 0 {
-		return true
-	}
-	return false
-}
-
-func (b *Bluetooth) findDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
-	for p, devices := range b.devices {
-		for i, d := range devices {
-			if d.Path == dpath {
-				return p, i
-			}
-		}
-	}
-	return "", -1
-}
-
-func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
-	return b.findDeviceIndex(dpath)
-}
-
-func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (*device, error) {
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
-	apath, index := b.findDeviceIndex(dpath)
-	if index < 0 {
-		return nil, errInvalidDevicePath
-	}
-	return b.devices[apath][index], nil
-}
-
-// GetDevices return all device objects that marshaled by json.
-func (b *Bluetooth) GetDevices(apath dbus.ObjectPath) (devicesJSON string, err *dbus.Error) {
-	devices := b.devices[apath]
-	devicesJSON = marshalJSON(devices)
-	return
-}
-
-func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) *dbus.Error {
-	// mark device is connecting
-	d, err := b.getDevice(dpath)
+	blocked, err := d.bluezDevice.Blocked().Get(0)
 	if err != nil {
-		return dbusutil.ToError(err)
+		logger.Warning(err)
+		return
 	}
-	d.connecting = true
-	d.notifyStateChanged()
+	if blocked {
+		err := d.bluezDevice.Blocked().Set(0, false)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+	}
 
+	paired, err := d.bluezDevice.Paired().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if !paired {
+		d.setConnectPhase(connectPhasePairStart)
+		err := d.bluezDevice.Pair(0)
+		d.setConnectPhase(connectPhasePairEnd)
+
+		if err != nil {
+			logger.Warningf("%s pair failed: %v", d, err)
+			notifyConnectFailedPairing(d.Alias)
+			d.pairingFailedTime = time.Now()
+			d.setConnectPhase(connectPhaseNone)
+			return
+		} else {
+			logger.Warningf("%s pair succeeded", d)
+		}
+	} else {
+		logger.Debugf("%s already paired", d)
+	}
+
+	// TODO: remove work code if bluez a2dp is ok
+	// bluez do not support muti a2dp devices
+	// disconnect a2dp device before connect
+
+	for _, uuid := range d.UUIDs {
+		if uuid == A2DP_SINK_UUID {
+			globalBluetooth.disconnectA2DPDeviceExcept(d)
+		}
+	}
+
+	d.setConnectPhase(connectPhaseConnectProfilesStart)
+	err = d.bluezDevice.Connect(0)
+	d.setConnectPhase(connectPhaseConnectProfilesEnd)
+	if err == nil {
+		// connect succeeded
+		logger.Infof("%s connect succeeded", d)
+		globalBluetooth.config.setDeviceConfigConnected(d.connectAddress(), true)
+
+		// auto trust device when connecting success
+		trusted, _ := d.bluezDevice.Trusted().Get(0)
+		if !trusted {
+			err := d.bluezDevice.Trusted().Set(0, true)
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
+		notifyConnected(d.Alias)
+
+	} else {
+		// connect failed
+		logger.Warningf("%s connect failed: %v", d, err)
+
+		globalBluetooth.config.setDeviceConfigConnected(d.connectAddress(), false)
+
+		errMsg := err.Error()
+		if strings.Contains(errMsg, "Host is down") ||
+			strings.Contains(errMsg, "Input/output error") {
+			notifyConnectFailedHostDown(d.Alias)
+		} else if strings.Contains(errMsg, "Resource temporarily unavailable") {
+			notifyConnectFailedResourceUnavailable(d.Alias)
+		} else if strings.Contains(errMsg, "Software caused connection abort") {
+			notifyConnectFailedSoftwareCaused(d.Alias)
+		} else {
+			notifyConnectFailedOther(d.Alias)
+		}
+	}
+}
+
+func (d *device) Disconnect() {
+	logger.Debugf("%s call Disconnect()", d)
+
+	disconnectPhase := d.getDisconnectPhase()
+	if disconnectPhase != disconnectPhaseNone {
+		logger.Debugf("%s disconnect is in progress", d)
+		return
+	}
+
+	d.setDisconnectPhase(disconnectPhaseStart)
+	defer d.setDisconnectPhase(disconnectPhaseNone)
+
+	connected, err := d.bluezDevice.Connected().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if !connected {
+		logger.Debugf("%s not connected", d)
+		return
+	}
+
+	globalBluetooth.config.setDeviceConfigConnected(d.connectAddress(), false)
+
+	ch := d.goWaitDisconnect()
+
+	d.setDisconnectPhase(disconnectPhaseDisconnectStart)
+	d.bluezDevice.Disconnect(0)
+	d.setDisconnectPhase(disconnectPhaseDisconnectEnd)
+
+	if d.Icon == "phone" || d.Icon == "computer" {
+		// do not block phone or computer
+	} else {
+		d.bluezDevice.Blocked().Set(0, true)
+	}
+
+	<-ch
+	notifyDisconnected(d.Alias)
+}
+
+func (d *device) goWaitDisconnect() chan struct{} {
+	ch := make(chan struct{})
 	go func() {
-		d.blockNotify = true
-		defer func() { d.blockNotify = false }()
-		if !bluezGetDevicePaired(dpath) {
-			bluezPairDevice(dpath)
-			time.Sleep(200 * time.Millisecond)
+		select {
+		case <-d.disconnectChan:
+			logger.Debugf("%s disconnectChan receive ok", d)
+		case <-time.After(60 * time.Second):
+			logger.Debugf("%s disconnectChan receive timed out", d)
 		}
-
-		// TODO: remove work code if bluez a2dp is ok
-		// bluez do not support muti a2dp devices
-		// disconnect a2dp device before connect
-		for _, uuid := range d.UUIDs {
-			if uuid == A2DP_SINK_UUID {
-				b.disconnectA2DPDeviceExcept(d)
-			}
-		}
-
-		err = bluezConnectDevice(dpath)
-		if err == nil {
-			b.config.setDeviceConfigConnected(d.connectAddress(), true)
-			// trust device when connecting success
-			if !bluezGetDeviceTrusted(dpath) {
-				bluezSetDeviceTrusted(dpath, true)
-			}
-		} else {
-			b.config.setDeviceConfigConnected(d.connectAddress(), false)
-			logger.Warning("ConnectDevice failed:", dpath, err)
-			if err.Error() == bluezErrorInvalidKey.Error() || !d.Paired {
-				// we do not want to pop notify for device because we will remove it.
-				bluezRemoveDevice(d.AdapterPath, d.Path)
-				d.notifyIgnored()
-				return
-			}
-			d.notifyConnectFailed()
-		}
-		d.handleConnected()
-
-		if d.connecting {
-			d.connecting = false
-			d.notifyStateChanged()
-		}
+		ch <- struct{}{}
 	}()
-	return nil
-}
-
-func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) *dbus.Error {
-	// mark disconnected in time
-	d, err := b.getDevice(dpath)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	d.connected = false
-	d.notifyStateChanged()
-	b.config.setDeviceConfigConnected(d.connectAddress(), false)
-	go bluezDisconnectDevice(dpath)
-	return nil
-}
-
-func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) *dbus.Error {
-	// TODO
-	go bluezRemoveDevice(apath, dpath)
-	return nil
-}
-
-func (b *Bluetooth) SetDeviceAlias(dpath dbus.ObjectPath, alias string) *dbus.Error {
-	go bluezSetDeviceAlias(dpath, alias)
-	return nil
-}
-
-func (b *Bluetooth) SetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) *dbus.Error {
-	go bluezSetDeviceTrusted(dpath, trusted)
-	return nil
+	return ch
 }
