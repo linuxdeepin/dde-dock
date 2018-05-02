@@ -31,7 +31,7 @@ func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	err = a.bluezAdapter.RemoveDevice(0, dpath)
+	err = a.core.RemoveDevice(0, dpath)
 	if err != nil {
 		logger.Warning("failed to remove device %q from adapter %q: %v",
 			dpath, apath, err)
@@ -46,7 +46,7 @@ func (b *Bluetooth) SetDeviceAlias(dpath dbus.ObjectPath, alias string) *dbus.Er
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	err = d.bluezDevice.Alias().Set(0, alias)
+	err = d.core.Alias().Set(0, alias)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -58,7 +58,7 @@ func (b *Bluetooth) SetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) *dbus.
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	err = d.bluezDevice.Trusted().Set(0, trusted)
+	err = d.core.Trusted().Set(0, trusted)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -71,9 +71,7 @@ func (b *Bluetooth) GetDevices(apath dbus.ObjectPath) (devicesJSON string, err *
 	devices := b.devices[apath]
 	var result []*device
 	for _, device := range devices {
-		if device.Name != "" {
-			result = append(result, device)
-		}
+		result = append(result, device)
 	}
 	devicesJSON = marshalJSON(result)
 	b.devicesLock.Unlock()
@@ -98,7 +96,7 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	discovering, err := a.bluezAdapter.Discovering().Get(0)
+	discovering, err := a.core.Discovering().Get(0)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -108,7 +106,7 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) *dbus.Error {
 		return nil
 	}
 
-	err = a.bluezAdapter.StartDiscovery(0)
+	err = a.core.StartDiscovery(0)
 	if err != nil {
 		logger.Warningf("failed to start %s discovery %v:", a, err)
 	}
@@ -126,14 +124,14 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		return dbusutil.ToError(err)
 	}
 
-	err = a.bluezAdapter.Powered().Set(0, powered)
+	err = a.core.Powered().Set(0, powered)
 	if err != nil {
 		logger.Warningf("failed to set %s powered: %v", a, err)
 		return dbusutil.ToError(err)
 	}
 
 	if powered {
-		err = a.bluezAdapter.StartDiscovery(0)
+		err = a.core.StartDiscovery(0)
 		if err != nil {
 			logger.Warningf("failed to start discovery for %s: %v", a, err)
 		}
@@ -148,7 +146,7 @@ func (b *Bluetooth) SetAdapterAlias(apath dbus.ObjectPath, alias string) *dbus.E
 		return dbusutil.ToError(err)
 	}
 
-	err = a.bluezAdapter.Alias().Set(0, alias)
+	err = a.core.Alias().Set(0, alias)
 	if err != nil {
 		logger.Warningf("failed to set %s alias: %v", a, err)
 		return dbusutil.ToError(err)
@@ -159,13 +157,14 @@ func (b *Bluetooth) SetAdapterAlias(apath dbus.ObjectPath, alias string) *dbus.E
 
 func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath,
 	discoverable bool) *dbus.Error {
+	logger.Debug("SetAdapterDiscoverable", apath, discoverable)
 
 	a, err := b.getAdapter(apath)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
 
-	err = a.bluezAdapter.Discoverable().Set(0, discoverable)
+	err = a.core.Discoverable().Set(0, discoverable)
 	if err != nil {
 		logger.Warningf("failed to set %s discoverable: %v", a, err)
 		return dbusutil.ToError(err)
@@ -184,13 +183,13 @@ func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
 	}
 
 	if discovering {
-		err = a.bluezAdapter.StartDiscovery(0)
+		err = a.core.StartDiscovery(0)
 		if err != nil {
 			logger.Warningf("failed to start discovery for %s: %v", a, err)
 			return dbusutil.ToError(err)
 		}
 	} else {
-		err = a.bluezAdapter.StopDiscovery(0)
+		err = a.core.StopDiscovery(0)
 		if err != nil {
 			logger.Warningf("failed to stop discovery for %s: %v", a, err)
 			return dbusutil.ToError(err)
@@ -202,13 +201,14 @@ func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
 
 func (b *Bluetooth) SetAdapterDiscoverableTimeout(apath dbus.ObjectPath,
 	discoverableTimeout uint32) *dbus.Error {
+	logger.Debug("SetAdapterDiscoverableTimeout", apath, discoverableTimeout)
 
 	a, err := b.getAdapter(apath)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
 
-	err = a.bluezAdapter.DiscoverableTimeout().Set(0, discoverableTimeout)
+	err = a.core.DiscoverableTimeout().Set(0, discoverableTimeout)
 	if err != nil {
 		logger.Warningf("failed to set %s discoverableTimeout: %v", a, err)
 		return dbusutil.ToError(err)

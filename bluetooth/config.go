@@ -20,6 +20,8 @@
 package bluetooth
 
 import (
+	"strings"
+
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -27,7 +29,7 @@ type config struct {
 	core utils.Config
 
 	Adapters map[string]*adapterConfig // use adapter hardware address as key
-	Devices  map[string]*deviceConfig  // use device dpath as key
+	Devices  map[string]*deviceConfig  // use adapter address/device address as key
 }
 
 type adapterConfig struct {
@@ -45,7 +47,6 @@ func newConfig() (c *config) {
 	c.Adapters = make(map[string]*adapterConfig)
 	c.Devices = make(map[string]*deviceConfig)
 	c.load()
-	go c.clearSpareConfig()
 	return
 }
 
@@ -62,20 +63,55 @@ func newAdapterConfig() (ac *adapterConfig) {
 	return
 }
 
-func (c *config) clearSpareConfig() {
-	var addresses []string
-	apathes := bluezGetAdapters()
-	for _, apath := range apathes {
-		addresses = append(addresses, bluezGetAdapterAddress(apath))
+func (c *config) clearSpareConfig(b *Bluetooth) {
+	var adapterAddresses []string
+	// key is adapter address
+	var adapterDevicesMap = make(map[string][]*device)
+
+	b.adaptersLock.Lock()
+	for _, adapter := range b.adapters {
+		adapterAddresses = append(adapterAddresses, adapter.address)
+	}
+	b.adaptersLock.Unlock()
+
+	for _, adapterAddr := range adapterAddresses {
+		adapterDevicesMap[adapterAddr] = b.getAdapterDevices(adapterAddr)
 	}
 
 	c.core.Lock()
-	defer c.core.Unlock()
-	for address, _ := range c.Adapters {
-		if !isStringInArray(address, addresses) {
-			delete(c.Adapters, address)
+	// remove spare adapters
+	for addr := range c.Adapters {
+		if !isStringInArray(addr, adapterAddresses) {
+			delete(c.Adapters, addr)
 		}
 	}
+
+	// remove spare devices
+	for addr := range c.Devices {
+		addrParts := strings.SplitN(addr, "/", 2)
+		if len(addrParts) != 2 {
+			delete(c.Devices, addr)
+			continue
+		}
+		adapterAddr := addrParts[0]
+		deviceAddr := addrParts[1]
+
+		devices := adapterDevicesMap[adapterAddr]
+		var foundDevice bool
+		for _, device := range devices {
+			if device.Address == deviceAddr {
+				foundDevice = true
+				break
+			}
+		}
+
+		if !foundDevice {
+			delete(c.Devices, addr)
+			continue
+		}
+	}
+
+	c.core.Unlock()
 }
 
 func (c *config) addAdapterConfig(address string) {
@@ -84,19 +120,16 @@ func (c *config) addAdapterConfig(address string) {
 	}
 
 	c.core.Lock()
-	defer c.core.Unlock()
 	c.Adapters[address] = newAdapterConfig()
+	c.core.Unlock()
+	c.save()
 }
 
 func (c *config) removeAdapterConfig(address string) {
-	if !c.isAdapterConfigExists(address) {
-		logger.Errorf("config for adapter %s not exists", address)
-		return
-	}
-
 	c.core.Lock()
-	defer c.core.Unlock()
 	delete(c.Adapters, address)
+	c.core.Unlock()
+	c.save()
 }
 
 func (c *config) getAdapterConfig(address string) (ac *adapterConfig, ok bool) {
@@ -136,12 +169,14 @@ func newDeviceConfig() (ac *deviceConfig) {
 	ac = &deviceConfig{Connected: false}
 	return
 }
+
 func (c *config) isDeviceConfigExist(address string) (ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
 	_, ok = c.Devices[address]
 	return
 }
+
 func (c *config) addDeviceConfig(address string) {
 	if c.isDeviceConfigExist(address) {
 		return
@@ -151,18 +186,21 @@ func (c *config) addDeviceConfig(address string) {
 	c.core.Unlock()
 	c.save()
 }
+
 func (c *config) getDeviceConfig(address string) (dc *deviceConfig, ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
 	dc, ok = c.Devices[address]
 	return
 }
+
 func (c *config) removeDeviceConfig(address string) {
 	c.core.Lock()
 	delete(c.Devices, address)
 	c.core.Unlock()
 	c.save()
 }
+
 func (c *config) getDeviceConfigConnected(address string) (connected bool) {
 	dc, ok := c.getDeviceConfig(address)
 	if !ok {
@@ -173,14 +211,15 @@ func (c *config) getDeviceConfigConnected(address string) (connected bool) {
 	defer c.core.Unlock()
 	return dc.Connected
 }
-func (c *config) setDeviceConfigConnected(address string, conneted bool) {
+
+func (c *config) setDeviceConfigConnected(address string, connected bool) {
 	dc, ok := c.getDeviceConfig(address)
 	if !ok {
 		return
 	}
 
 	c.core.Lock()
-	dc.Connected = conneted
+	dc.Connected = connected
 	c.core.Unlock()
 
 	c.save()

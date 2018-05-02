@@ -189,7 +189,6 @@ func (*Bluetooth) GetInterfaceName() string {
 func (b *Bluetooth) init() {
 	b.systemSigLoop.Start()
 	b.config = newConfig()
-	b.config.save()
 	b.devices = make(map[dbus.ObjectPath][]*device)
 
 	systemConn := b.systemSigLoop.Conn()
@@ -208,6 +207,9 @@ func (b *Bluetooth) init() {
 
 	b.agent.init()
 	b.loadObjects()
+
+	b.config.clearSpareConfig(b)
+	b.config.save()
 }
 
 func (b *Bluetooth) loadObjects() {
@@ -217,8 +219,20 @@ func (b *Bluetooth) loadObjects() {
 		logger.Error(err)
 		return
 	}
-	for path, data := range objects {
-		b.handleInterfacesAdded(path, data)
+
+	requestUnblockBluetoothDevice()
+	// add adapters
+	for path, obj := range objects {
+		if _, ok := obj[bluezAdapterDBusInterface]; ok {
+			b.addAdapter(path)
+		}
+	}
+
+	// then add devices
+	for path, obj := range objects {
+		if _, ok := obj[bluezDeviceDBusInterface]; ok {
+			b.addDevice(path)
+		}
 	}
 }
 
@@ -245,19 +259,19 @@ func (b *Bluetooth) removeAllObjects() {
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[bluezAdapterDBusInterface]; ok {
 		requestUnblockBluetoothDevice()
-		b.addAdapter(dbus.ObjectPath(path))
+		b.addAdapter(path)
 	}
 	if _, ok := data[bluezDeviceDBusInterface]; ok {
-		b.addDevice(dbus.ObjectPath(path), data[bluezDeviceDBusInterface])
+		b.addDevice(path)
 	}
 }
 
 func (b *Bluetooth) handleInterfacesRemoved(path dbus.ObjectPath, interfaces []string) {
 	if isStringInArray(bluezAdapterDBusInterface, interfaces) {
-		b.removeAdapter(dbus.ObjectPath(path))
+		b.removeAdapter(path)
 	}
 	if isStringInArray(bluezDeviceDBusInterface, interfaces) {
-		b.removeDevice(dbus.ObjectPath(path))
+		b.removeDevice(path)
 	}
 }
 
@@ -280,30 +294,51 @@ func (b *Bluetooth) handleDBusNameOwnerChanged(name, oldOwner, newOwner string) 
 	}
 }
 
-func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
+func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 	if b.isDeviceExists(dpath) {
 		logger.Error("repeat add device", dpath)
 		return
 	}
 
-	b.devicesLock.Lock()
-	d := newDevice(b.systemSigLoop, dpath, data)
-	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
-	b.config.addDeviceConfig(d.connectAddress())
+	d := newDevice(b.systemSigLoop, dpath)
+	b.adaptersLock.Lock()
+	d.adapter = b.adapters[d.AdapterPath]
+	b.adaptersLock.Unlock()
 
-	d.notifyDeviceAdded()
+	b.config.addDeviceConfig(d.getAddress())
+
+	b.devicesLock.Lock()
+	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
 	b.devicesLock.Unlock()
 
-	connected := b.config.getDeviceConfigConnected(d.connectAddress())
+	connected := b.config.getDeviceConfigConnected(d.getAddress())
 	if connected {
 		time.AfterFunc(25*time.Second, func() {
 			d, _ := b.getDevice(dpath)
-			if d != nil && !d.connected {
+			if d == nil {
+				return
+			}
+
+			paired, err := d.core.Paired().Get(0)
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+
+			connected, err := d.core.Connected().Get(0)
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+
+			if paired && !connected {
 				logger.Infof("auto connect %s", d)
 				d.Connect()
 			}
 		})
 	}
+
+	d.notifyDeviceAdded()
 }
 
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
@@ -321,7 +356,7 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 
 func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
 	d := devices[i]
-	b.config.removeDeviceConfig(d.connectAddress())
+	b.config.removeDeviceConfig(d.getAddress())
 	d.notifyDeviceRemoved()
 	d.destroy()
 	copy(devices[i:], devices[i+1:])
@@ -365,6 +400,36 @@ func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (*device, error) {
 	return b.devices[apath][index], nil
 }
 
+func (b *Bluetooth) getAdapterDevices(adapterAddress string) []*device {
+	var aPath dbus.ObjectPath
+	b.adaptersLock.Lock()
+	for adapterPath, adapter := range b.adapters {
+		if adapter.address == adapterAddress {
+			aPath = adapterPath
+			break
+		}
+	}
+	b.adaptersLock.Unlock()
+
+	if aPath == "" {
+		return nil
+	}
+
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+
+	devices := b.devices[aPath]
+	if devices == nil {
+		return nil
+	}
+
+	result := make([]*device, 0, len(devices))
+	for _, dev := range devices {
+		result = append(result, dev)
+	}
+	return result
+}
+
 func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	if b.isAdapterExists(apath) {
 		logger.Warning("repeat add adapter", apath)
@@ -373,15 +438,15 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 
 	a := newAdapter(b.systemSigLoop, apath)
 	// initialize adapter power state
-	b.config.addAdapterConfig(bluezGetAdapterAddress(apath))
-	oldPowered := b.config.getAdapterConfigPowered(bluezGetAdapterAddress(apath))
+	b.config.addAdapterConfig(a.address)
+	cfgPowered := b.config.getAdapterConfigPowered(a.address)
 
-	err := a.bluezAdapter.Powered().Set(0, oldPowered)
+	err := a.core.Powered().Set(0, cfgPowered)
 	if err != nil {
 		logger.Warning(err)
 	}
 
-	err = a.bluezAdapter.Discoverable().Set(0, false)
+	err = a.core.Discoverable().Set(0, false)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -408,7 +473,7 @@ func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
 func (b *Bluetooth) doRemoveAdapter(apath dbus.ObjectPath) {
 	removeAdapter := b.adapters[apath]
 	delete(b.adapters, apath)
-
+	b.config.removeAdapterConfig(removeAdapter.address)
 	removeAdapter.notifyAdapterRemoved()
 	removeAdapter.destroy()
 }

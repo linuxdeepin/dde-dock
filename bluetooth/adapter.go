@@ -29,10 +29,10 @@ import (
 )
 
 type adapter struct {
-	bluezAdapter *bluez.HCI
+	core    *bluez.HCI
+	address string
 
 	Path                dbus.ObjectPath
-	adddress            string
 	Name                string
 	Alias               string
 	Powered             bool
@@ -44,25 +44,25 @@ type adapter struct {
 func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *adapter) {
 	a = &adapter{Path: apath}
 	systemConn := systemSigLoop.Conn()
-	a.bluezAdapter, _ = bluez.NewHCI(systemConn, apath)
-	a.bluezAdapter.InitSignalExt(systemSigLoop, true)
+	a.core, _ = bluez.NewHCI(systemConn, apath)
+	a.core.InitSignalExt(systemSigLoop, true)
 	a.connectProperties()
-	a.adddress, _ = a.bluezAdapter.Address().Get(0)
-	a.Alias, _ = a.bluezAdapter.Alias().Get(0)
-	a.Name, _ = a.bluezAdapter.Name().Get(0)
-	a.Powered, _ = a.bluezAdapter.Powered().Get(0)
-	a.Discovering, _ = a.bluezAdapter.Discovering().Get(0)
-	a.Discoverable, _ = a.bluezAdapter.Discoverable().Get(0)
-	a.DiscoverableTimeout, _ = a.bluezAdapter.DiscoverableTimeout().Get(0)
+	a.address, _ = a.core.Address().Get(0)
+	a.Alias, _ = a.core.Alias().Get(0)
+	a.Name, _ = a.core.Name().Get(0)
+	a.Powered, _ = a.core.Powered().Get(0)
+	a.Discovering, _ = a.core.Discovering().Get(0)
+	a.Discoverable, _ = a.core.Discoverable().Get(0)
+	a.DiscoverableTimeout, _ = a.core.DiscoverableTimeout().Get(0)
 	return
 }
 
 func (a *adapter) destroy() {
-	a.bluezAdapter.RemoveHandler(proxy.RemoveAllHandlers)
+	a.core.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
 func (a *adapter) String() string {
-	return fmt.Sprintf("adapter %s [%s]", a.Alias, a.adddress)
+	return fmt.Sprintf("adapter %s [%s]", a.Alias, a.address)
 }
 
 func (a *adapter) notifyAdapterAdded() {
@@ -72,59 +72,64 @@ func (a *adapter) notifyAdapterAdded() {
 }
 
 func (a *adapter) notifyAdapterRemoved() {
-	logger.Info("AdapterRemoved", marshalJSON(a))
+	logger.Info("AdapterRemoved", a)
 	globalBluetooth.service.Emit(globalBluetooth, "AdapterRemoved", marshalJSON(a))
 	globalBluetooth.updateState()
 }
 
 func (a *adapter) notifyPropertiesChanged() {
-	logger.Debug("AdapterPropertiesChanged", marshalJSON(a))
 	globalBluetooth.service.Emit(globalBluetooth, "AdapterPropertiesChanged", marshalJSON(a))
 	globalBluetooth.updateState()
 }
 
 func (a *adapter) connectProperties() {
-	a.bluezAdapter.Name().ConnectChanged(func(hasValue bool, value string) {
+	a.core.Name().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
 		a.Name = value
+		logger.Debugf("%s Name: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.bluezAdapter.Alias().ConnectChanged(func(hasValue bool, value string) {
+
+	a.core.Alias().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
 		a.Alias = value
+		logger.Debugf("%s Alias: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.bluezAdapter.Powered().ConnectChanged(func(hasValue bool, value bool) {
+	a.core.Powered().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
 		a.Powered = value
-		logger.Infof("adapter powered changed %#v", a)
+		logger.Debugf("%s Powered: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.bluezAdapter.Discovering().ConnectChanged(func(hasValue bool, value bool) {
+	a.core.Discovering().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
 		a.Discovering = value
+		logger.Debugf("%s Discovering: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.bluezAdapter.Discoverable().ConnectChanged(func(hasValue bool, value bool) {
+	a.core.Discoverable().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
 		a.Discoverable = value
+		logger.Debugf("%s Discoverable: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.bluezAdapter.DiscoverableTimeout().ConnectChanged(func(hasValue bool, value uint32) {
+	a.core.DiscoverableTimeout().ConnectChanged(func(hasValue bool, value uint32) {
 		if !hasValue {
 			return
 		}
 		a.DiscoverableTimeout = value
+		logger.Debugf("%s DiscoverableTimeout: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
 }

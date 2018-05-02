@@ -60,26 +60,6 @@ func notifyConnectFailedHostDown(alias string) {
 	notifyConnectFailedAux(alias, format)
 }
 
-func notifyBluetoothDeviceIgnored(alias string) {
-	format := Tr("Failed to connect %q, automatically ignored")
-	notifyConnectFailedAux(alias, format)
-}
-
-func notifyConnectFailedResourceUnavailable(alias string) {
-	format := Tr("Failed to connect %q, resource temporarily unavailable")
-	notifyConnectFailedAux(alias, format)
-}
-
-func notifyConnectFailedSoftwareCaused(alias string) {
-	format := Tr("Failed to connect %q, software caused connection abort")
-	notifyConnectFailedAux(alias, format)
-}
-
-func notifyConnectFailedOther(alias string) {
-	format := Tr("Failed to connect %q")
-	notifyConnectFailedAux(alias, format)
-}
-
 func notifyConnectFailedPairing(alias string) {
 	format := Tr("Failed to connect %q, pairing failed")
 	notifyConnectFailedAux(alias, format)
