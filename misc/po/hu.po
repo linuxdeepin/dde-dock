@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 13:51+0800\n"
-"PO-Revision-Date: 2018-03-22 01:40+0000\n"
+"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -58,19 +58,19 @@ msgstr "A felhasználónév felhasználásra került a rendszer által."
 msgid "The username's length exceeds the limit"
 msgstr "A felhasználónév hossza meghaladja a korlátot"
 
-#: ../../appearance/scale.go:47
+#: ../../appearance/scale.go:49
 msgid "Display scaling"
 msgstr "Felbontás"
 
-#: ../../appearance/scale.go:48
+#: ../../appearance/scale.go:50
 msgid "Setting display scaling"
 msgstr "Kijelző-méret beállítás"
 
-#: ../../appearance/scale.go:78
+#: ../../appearance/scale.go:80
 msgid "Set successfully"
 msgstr "A beállítás sikerült"
 
-#: ../../appearance/scale.go:79
+#: ../../appearance/scale.go:81
 msgid "View by logging out after set display scaling"
 msgstr "A beállított képernyőméret próbája."
 
@@ -122,12 +122,12 @@ msgstr "Üzenet hozzáférés"
 msgid "Message notification"
 msgstr "Üzenet értesítés"
 
-#: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
+#: ../../bluetooth/utils_notify.go:52 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "Kapcsolódva"
 
-#: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
+#: ../../bluetooth/utils_notify.go:55 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
 #: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
@@ -137,39 +137,39 @@ msgstr "Kapcsolódva"
 msgid "Disconnected"
 msgstr "Szétkapcsolva"
 
-#: ../../bluetooth/utils_notify.go:62
+#: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
 msgstr "Ellenőrizzük, hogy a %q be van e kapcsolva és hatótávolságon belül van."
 
-#: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
+#: ../../bluetooth/utils_notify.go:64
+msgid "Failed to connect %q, pairing failed"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth kapcsolódás sikertelen"
 
-#: ../../bluetooth/utils_notify.go:66
-msgid "Failed to connect %q, automatically ignored"
-msgstr "Nem sikerült a kapcsolódás: %s. Automatikusan figyelmen kívül lett hagyva"
-
-#: ../../dock/app_entry_menu.go:104
+#: ../../dock/app_entry_menu.go:99
 msgid "_Open"
 msgstr "_Megnyitás"
 
-#: ../../dock/app_entry_menu.go:111
+#: ../../dock/app_entry_menu.go:106
 msgid "_Close All"
 msgstr "_Összes bezárása"
 
-#: ../../dock/app_entry_menu.go:120
+#: ../../dock/app_entry_menu.go:115
 msgid "_Force Quit"
 msgstr "_Erőltetett kilépés"
 
-#: ../../dock/app_entry_menu.go:127
+#: ../../dock/app_entry_menu.go:122
 msgid "_Dock"
 msgstr "_Dokk"
 
-#: ../../dock/app_entry_menu.go:134
+#: ../../dock/app_entry_menu.go:129
 msgid "_Undock"
 msgstr "_Rögzítés feloldása"
 
-#: ../../dock/app_entry_menu.go:141
+#: ../../dock/app_entry_menu.go:136
 msgid "_All windows"
 msgstr "_Összes ablak"
 
@@ -337,7 +337,7 @@ msgstr "A jelenlegi munkaterület ablakainak megjelenítése"
 msgid "Display workspace"
 msgstr "Munkaterület  megjelenítése"
 
-#: ../../langselector/handle_event.go:34
+#: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
 msgstr "Hitelesítés szükség a nyelvi beállítások módosításához"
 
@@ -345,7 +345,7 @@ msgstr "Hitelesítés szükség a nyelvi beállítások módosításához"
 msgid "System language failed to change, please try later"
 msgstr "A rendszer nyelvi beállításainak módosítása sikertelen, kérem próbálja meg később"
 
-#: ../../langselector/handle_event.go:56
+#: ../../langselector/handle_event.go:61
 msgid "System language has been changed, please log in again after logged out"
 msgstr "A rendszer nyelvi beállításai módosultak, kérem jelentkezzen be újra"
 
@@ -359,25 +359,13 @@ msgid ""
 "packages, please wait..."
 msgstr "A nyelv megváltoztatása folyamatban van a hiányzó csomagok telepítésével együtt, várjunk..."
 
-#: ../../launcher/manager_uninstall.go:68
+#: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
 msgstr "%q sikeresen eltávolítva"
 
-#: ../../launcher/manager_uninstall.go:70
+#: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
 msgstr "%q eltávolítása sikertelen"
-
-#: ../../mime/media.go:67 ../../mime/media.go:68
-msgid "Nothing"
-msgstr "Semmi"
-
-#: ../../mime/media.go:76 ../../mime/media.go:77
-msgid "Open Folder"
-msgstr "Mappa megnyitása"
-
-#: ../../mime/media.go:85 ../../mime/media.go:86
-msgid "Run Software"
-msgstr "Szoftver futtatása"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
@@ -1916,43 +1904,43 @@ msgstr "Hitelesítés a VPN szerverhez sikertelen"
 msgid "The connection was deleted from settings"
 msgstr "A kapcsolat eltávolításra került a beállításokból"
 
-#: ../../network/state_handler.go:220
+#: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
 msgstr "Hotspot hozzáférés engedélyezése"
 
-#: ../../network/state_handler.go:222
+#: ../../network/state_handler.go:227
 msgid "Try connecting %q"
 msgstr "Kapcsolat használata %q"
 
-#: ../../network/state_handler.go:230
+#: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
 msgstr "Hotspot megosztás engedélyezése"
 
-#: ../../network/state_handler.go:232
+#: ../../network/state_handler.go:237
 msgid "%q connected"
 msgstr "%q kapcsolódva"
 
-#: ../../network/state_handler.go:285
+#: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
 msgstr "Hotspot megosztás kikapcsolva"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
+#: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
 msgstr "%q szétkapcsolva"
 
-#: ../../network/state_handler.go:293
+#: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Nem sikerült a hotspot megosztás, kérjük, ellenőrizze a netmasztk beállítást"
 
-#: ../../network/state_handler.go:295
+#: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Nem sikerült csatlakozni %q -hoz, próbáljon meg a router hatótávolságán belül kapcsolódni."
 
-#: ../../network/state_handler.go:297
+#: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 
-#: ../../network/state_handler.go:300
+#: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Nem sikerült csatlakoztatni a %q -hoz, kérem ellenőrizze a beírt jelszót."
 
@@ -1990,40 +1978,40 @@ msgstr "Rendszer Proxy sikeresen beállítva."
 msgid "System proxy has been cancelled."
 msgstr "Rendszer Proxy leállítva."
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:157
 msgid "Battery Critical Low"
 msgstr "Az akkumulátor töltöttségi szintje kritikusan alacsony"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "A számítógép felfüggesztett állapotban volt, kérem csatlakoztassa a töltőre"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:164
 msgid "Battery Low"
 msgstr "Alacsony akkumulátor töltöttség"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "A számítógép felfüggesztett állapotba kerül, kérem csatlakoztassa a töltőre most"
 
-#: ../../timedate/manager_ifc.go:54
+#: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
 msgstr "Hitelesítés szükséges a rendszeridő beállításához."
 
-#: ../../timedate/manager_ifc.go:67
+#: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
 msgstr "Hitelesítés szükséges a hálózatról történő időszinkronizálás engedélyezéséhez"
 
-#: ../../timedate/manager_ifc.go:87
+#: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "Hitelesítés szükséges az RTC ellenőrzéséhez és lokális idő mentéséhez."
 
-#: ../../timedate/manager_ifc.go:106
+#: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
 msgstr "Az időzóna beállításához hitelesítés szükséges"

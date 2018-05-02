@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 13:51+0800\n"
-"PO-Revision-Date: 2018-03-22 01:40+0000\n"
+"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -60,19 +60,19 @@ msgstr "Le nom d'utilisateur à été utilisé par le systeme."
 msgid "The username's length exceeds the limit"
 msgstr "La longueur du nom d'utilisateur dépasse la limite"
 
-#: ../../appearance/scale.go:47
+#: ../../appearance/scale.go:49
 msgid "Display scaling"
 msgstr "Mise à l'échelle de l'affichage"
 
-#: ../../appearance/scale.go:48
+#: ../../appearance/scale.go:50
 msgid "Setting display scaling"
 msgstr "Mise à l'échelle de l'affichage"
 
-#: ../../appearance/scale.go:78
+#: ../../appearance/scale.go:80
 msgid "Set successfully"
 msgstr "Établit avec succès"
 
-#: ../../appearance/scale.go:79
+#: ../../appearance/scale.go:81
 msgid "View by logging out after set display scaling"
 msgstr "Veuillez vous déconnecter et vous reconnecter après avoir ajusté l'échelle d'écran."
 
@@ -124,12 +124,12 @@ msgstr "Message d'accès"
 msgid "Message notification"
 msgstr "Message de notification"
 
-#: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
+#: ../../bluetooth/utils_notify.go:52 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "Connecté"
 
-#: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
+#: ../../bluetooth/utils_notify.go:55 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
 #: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
@@ -139,39 +139,39 @@ msgstr "Connecté"
 msgid "Disconnected"
 msgstr "Déconnecté"
 
-#: ../../bluetooth/utils_notify.go:62
+#: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
 msgstr "Assurez-vous que %q est sous tension "
 
-#: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
+#: ../../bluetooth/utils_notify.go:64
+msgid "Failed to connect %q, pairing failed"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
 msgstr "Connection bluetooth échouée "
 
-#: ../../bluetooth/utils_notify.go:66
-msgid "Failed to connect %q, automatically ignored"
-msgstr "Impossible de se connecter %q, ignoré automatiquement"
-
-#: ../../dock/app_entry_menu.go:104
+#: ../../dock/app_entry_menu.go:99
 msgid "_Open"
 msgstr "_Ouvrir"
 
-#: ../../dock/app_entry_menu.go:111
+#: ../../dock/app_entry_menu.go:106
 msgid "_Close All"
 msgstr "_Fermer tout"
 
-#: ../../dock/app_entry_menu.go:120
+#: ../../dock/app_entry_menu.go:115
 msgid "_Force Quit"
 msgstr "_Forcer à quitter"
 
-#: ../../dock/app_entry_menu.go:127
+#: ../../dock/app_entry_menu.go:122
 msgid "_Dock"
 msgstr "_Ajouter au dock"
 
-#: ../../dock/app_entry_menu.go:134
+#: ../../dock/app_entry_menu.go:129
 msgid "_Undock"
 msgstr "_Détacher du dock"
 
-#: ../../dock/app_entry_menu.go:141
+#: ../../dock/app_entry_menu.go:136
 msgid "_All windows"
 msgstr "_Toutes les fenêtres"
 
@@ -339,7 +339,7 @@ msgstr "Afficher l'espace de travail actuel"
 msgid "Display workspace"
 msgstr "Afficher l'espace de travail"
 
-#: ../../langselector/handle_event.go:34
+#: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
 msgstr "L'authentification est requise pour changer la langue"
 
@@ -347,7 +347,7 @@ msgstr "L'authentification est requise pour changer la langue"
 msgid "System language failed to change, please try later"
 msgstr "Le langage système n'a pas pu être changé, veuillez réessayer plus tard"
 
-#: ../../langselector/handle_event.go:56
+#: ../../langselector/handle_event.go:61
 msgid "System language has been changed, please log in again after logged out"
 msgstr "Le langage système a été changé, veuillez vous reconnecter après vous avoir déconnecté."
 
@@ -361,25 +361,13 @@ msgid ""
 "packages, please wait..."
 msgstr "Le language du système est en cours de modification avec un paquet de language manquant,veuillez patienter..."
 
-#: ../../launcher/manager_uninstall.go:68
+#: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
 msgstr "%q désinstallé avec succès"
 
-#: ../../launcher/manager_uninstall.go:70
+#: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
 msgstr "Échec de la désinstallation de %q"
-
-#: ../../mime/media.go:67 ../../mime/media.go:68
-msgid "Nothing"
-msgstr "Aucun"
-
-#: ../../mime/media.go:76 ../../mime/media.go:77
-msgid "Open Folder"
-msgstr "Ouvrir le dossier"
-
-#: ../../mime/media.go:85 ../../mime/media.go:86
-msgid "Run Software"
-msgstr "Lancer l'application"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
@@ -1048,11 +1036,11 @@ msgstr "Clé pré-partagée"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
-msgstr ""
+msgstr "Algorithmes de la phase 1"
 
 #: ../../network/nm_setting_beans_gen.go:253
 msgid "Phase2 Algorithms"
-msgstr ""
+msgstr "Algorithmes de la phase 2"
 
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
@@ -1918,43 +1906,43 @@ msgstr "L'authentification au serveur VPN a échoué"
 msgid "The connection was deleted from settings"
 msgstr "La connexion a été supprimée des paramètres"
 
-#: ../../network/state_handler.go:220
+#: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
 msgstr "Essayez d'activer un point d'accès"
 
-#: ../../network/state_handler.go:222
+#: ../../network/state_handler.go:227
 msgid "Try connecting %q"
 msgstr "Essayez de connecter% q"
 
-#: ../../network/state_handler.go:230
+#: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
 msgstr "Partage de point d'accès activé"
 
-#: ../../network/state_handler.go:232
+#: ../../network/state_handler.go:237
 msgid "%q connected"
 msgstr "%q connecté"
 
-#: ../../network/state_handler.go:285
+#: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
 msgstr "Partage de point d'accès desactivé"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
+#: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
 msgstr "%q déconnecté"
 
-#: ../../network/state_handler.go:293
+#: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Impossible de partager le point d'accès, veuillez vérifier les paramètres de dnsmasq"
 
-#: ../../network/state_handler.go:295
+#: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Impossible de se connecter à% q, veuillez vous rapprocher du routeur sans fil."
 
-#: ../../network/state_handler.go:297
+#: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Impossible de se connecter à %q, veuillez vérifier votre routeur ou votre câble internet."
 
-#: ../../network/state_handler.go:300
+#: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Échec de la connexion, impossible de connecter %q, mot de passe incorrect"
 
@@ -1992,40 +1980,40 @@ msgstr "Le proxy a été réglé avec succès."
 msgid "System proxy has been cancelled."
 msgstr "Le proxy a été annulé."
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:157
 msgid "Battery Critical Low"
 msgstr "Niveau de batterie critique"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "L'ordinateur était en veille, veuillez le brancher"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:164
 msgid "Battery Low"
 msgstr "Batterie faible"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "L'ordinateur se mettra en veille, veuillez le brancher maintenant"
 
-#: ../../timedate/manager_ifc.go:54
+#: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
 msgstr "Authentification requise pour ajuster l'heure du système."
 
-#: ../../timedate/manager_ifc.go:67
+#: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
 msgstr "Authentification requise pour déterminer si la synchronisation de l'heure réseau doit être activée."
 
-#: ../../timedate/manager_ifc.go:87
+#: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "Authentification requise pour déterminer si le RTC correspond à l'heure locale ou UTC."
 
-#: ../../timedate/manager_ifc.go:106
+#: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
 msgstr "Authentification requise pour définir le fuseau horaire du système."

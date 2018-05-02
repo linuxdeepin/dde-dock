@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 13:51+0800\n"
-"PO-Revision-Date: 2018-03-22 01:40+0000\n"
+"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
@@ -52,19 +52,19 @@ msgstr "ব্যবহারকারীর নাম সিস্টেম দ
 msgid "The username's length exceeds the limit"
 msgstr "ব্যবহারকারীর নামটি দৈর্ঘ্য ছাড়িয়ে গেছে"
 
-#: ../../appearance/scale.go:47
+#: ../../appearance/scale.go:49
 msgid "Display scaling"
 msgstr "প্রদর্শন স্কেলিং"
 
-#: ../../appearance/scale.go:48
+#: ../../appearance/scale.go:50
 msgid "Setting display scaling"
 msgstr "প্রদর্শন স্কেলিং সেট"
 
-#: ../../appearance/scale.go:78
+#: ../../appearance/scale.go:80
 msgid "Set successfully"
 msgstr "সফলভাবে সেট করা হয়েছে"
 
-#: ../../appearance/scale.go:79
+#: ../../appearance/scale.go:81
 msgid "View by logging out after set display scaling"
 msgstr "লগ আউট দ্বারা সেট প্রদর্শন স্কেলিং পরে  দেখুন"
 
@@ -116,12 +116,12 @@ msgstr "বার্তা অ্যাক্সেস"
 msgid "Message notification"
 msgstr "বার্তা বিজ্ঞপ্তি"
 
-#: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
+#: ../../bluetooth/utils_notify.go:52 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "সংযুক্ত"
 
-#: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
+#: ../../bluetooth/utils_notify.go:55 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
 #: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
@@ -131,39 +131,39 @@ msgstr "সংযুক্ত"
 msgid "Disconnected"
 msgstr "অসংযুক্ত"
 
-#: ../../bluetooth/utils_notify.go:62
+#: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
 msgstr "নিশ্চিত করুন যে% q চালু এবং পরিসরের মধ্যে"
 
-#: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
+#: ../../bluetooth/utils_notify.go:64
+msgid "Failed to connect %q, pairing failed"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
 msgstr "ব্লুটুথ সংযোগ ব্যর্থ হয়েছে"
 
-#: ../../bluetooth/utils_notify.go:66
-msgid "Failed to connect %q, automatically ignored"
-msgstr "% Q সংযোগ করতে ব্যর্থ, স্বয়ংক্রিয়ভাবে উপেক্ষা করা হয়েছে"
-
-#: ../../dock/app_entry_menu.go:104
+#: ../../dock/app_entry_menu.go:99
 msgid "_Open"
 msgstr "_খোলা"
 
-#: ../../dock/app_entry_menu.go:111
+#: ../../dock/app_entry_menu.go:106
 msgid "_Close All"
 msgstr "_সব বন্ধ করা"
 
-#: ../../dock/app_entry_menu.go:120
+#: ../../dock/app_entry_menu.go:115
 msgid "_Force Quit"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:127
+#: ../../dock/app_entry_menu.go:122
 msgid "_Dock"
 msgstr "_ডক"
 
-#: ../../dock/app_entry_menu.go:134
+#: ../../dock/app_entry_menu.go:129
 msgid "_Undock"
 msgstr "_ডকমুক্ত করুন"
 
-#: ../../dock/app_entry_menu.go:141
+#: ../../dock/app_entry_menu.go:136
 msgid "_All windows"
 msgstr ""
 
@@ -331,7 +331,7 @@ msgstr "বর্তমান কর্মক্ষেত্রের উইন�
 msgid "Display workspace"
 msgstr "কর্মক্ষেত্র প্রদর্শন"
 
-#: ../../langselector/handle_event.go:34
+#: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
 msgstr "ভাষা পরিবর্তন করতে প্রমাণীকরণের প্রয়োজন"
 
@@ -339,7 +339,7 @@ msgstr "ভাষা পরিবর্তন করতে প্রমাণী
 msgid "System language failed to change, please try later"
 msgstr "সিস্টেম ভাষা পরিবর্তন করতে ব্যর্থ হয়েছে, দয়া করে পরে চেষ্টা করুন"
 
-#: ../../langselector/handle_event.go:56
+#: ../../langselector/handle_event.go:61
 msgid "System language has been changed, please log in again after logged out"
 msgstr "সিস্টেম ভাষা পরিবর্তিত হয়েছে, লগ আউট করার পরে আবার লগ ইন করুন"
 
@@ -353,25 +353,13 @@ msgid ""
 "packages, please wait..."
 msgstr "সিস্টেম ভাষা অভাব ভাষা প্যাকেজ ইনস্টল করা সঙ্গে পরিবর্তিত হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন ..."
 
-#: ../../launcher/manager_uninstall.go:68
+#: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
 msgstr "%q সফলভাবে মুছে ফেলা হয়েছে"
 
-#: ../../launcher/manager_uninstall.go:70
+#: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
 msgstr "%q আনইনস্টল করতে ব্যর্থ হয়েছে"
-
-#: ../../mime/media.go:67 ../../mime/media.go:68
-msgid "Nothing"
-msgstr "কিছু না"
-
-#: ../../mime/media.go:76 ../../mime/media.go:77
-msgid "Open Folder"
-msgstr "ফোল্ডার খুলুন"
-
-#: ../../mime/media.go:85 ../../mime/media.go:86
-msgid "Run Software"
-msgstr "সফটওয়্যার চালান"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
@@ -1910,43 +1898,43 @@ msgstr ""
 msgid "The connection was deleted from settings"
 msgstr ""
 
-#: ../../network/state_handler.go:220
+#: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
 msgstr ""
 
-#: ../../network/state_handler.go:222
+#: ../../network/state_handler.go:227
 msgid "Try connecting %q"
 msgstr ""
 
-#: ../../network/state_handler.go:230
+#: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
 msgstr ""
 
-#: ../../network/state_handler.go:232
+#: ../../network/state_handler.go:237
 msgid "%q connected"
 msgstr ""
 
-#: ../../network/state_handler.go:285
+#: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
 msgstr ""
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
+#: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
 msgstr ""
 
-#: ../../network/state_handler.go:293
+#: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 
-#: ../../network/state_handler.go:295
+#: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
-#: ../../network/state_handler.go:297
+#: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 
-#: ../../network/state_handler.go:300
+#: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
@@ -1984,40 +1972,40 @@ msgstr ""
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:157
 msgid "Battery Critical Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:164
 msgid "Battery Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:54
+#: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:67
+#: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:87
+#: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:106
+#: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
 msgstr ""

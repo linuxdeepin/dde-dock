@@ -4,12 +4,12 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation type="unfinished"/>
+			<translation>المصادقة مطلوبة لتغيير  ملكية بيانات المستخدم الخاصة بك </translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
 			<source>Change your own user data</source>
-			<translation type="unfinished"/>
+			<translation>تغيير ملكية بيانات المستخدم الخاصة بك</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
@@ -24,42 +24,42 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation type="unfinished"/>
+			<translation>المصادقة مطلوبة لتمكين تسجيل الدخول التلقائي</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation type="unfinished"/>
+			<translation>تمكين تسجيل الدخول التلقائي</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation type="unfinished"/>
+			<translation>المصادقة مطلوبة لتعطيل تسجيل الدخول التلقائي</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation type="unfinished"/>
+			<translation>تعطيل تسجيل الدخول التلقائي</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation type="unfinished"/>
+			<translation>المصادقة مطلوبة لتمكين تسجيل الدخول بدون كلمة المرور</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>تمكين تسجيل الدخول بدون كلمة المرور</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation type="unfinished"/>
+			<translation>المصادقة مطلوبة لتعطيل تسجيل الدخول بدون كلمة المرور</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>تعطيل تسجيل الدخول بدون كلمة المرور</translation>
 		</message>
 	</context>
 </TS>

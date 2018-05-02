@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 13:51+0800\n"
-"PO-Revision-Date: 2018-03-22 01:40+0000\n"
+"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
@@ -52,19 +52,19 @@ msgstr "Nama pengguna telah digunakan oleh sistem."
 msgid "The username's length exceeds the limit"
 msgstr "Panjang nama pengguna melebihi had"
 
-#: ../../appearance/scale.go:47
+#: ../../appearance/scale.go:49
 msgid "Display scaling"
 msgstr "Penskalaan paparan"
 
-#: ../../appearance/scale.go:48
+#: ../../appearance/scale.go:50
 msgid "Setting display scaling"
 msgstr "Menetapkan penskalaan paparan"
 
-#: ../../appearance/scale.go:78
+#: ../../appearance/scale.go:80
 msgid "Set successfully"
 msgstr "Berjaya ditetapkan"
 
-#: ../../appearance/scale.go:79
+#: ../../appearance/scale.go:81
 msgid "View by logging out after set display scaling"
 msgstr "Lihat dengan mendaftar keluar selepas tetapkan penskalaan paparan"
 
@@ -116,12 +116,12 @@ msgstr "Capaian mesej"
 msgid "Message notification"
 msgstr "Pemberitahuan mesej"
 
-#: ../../bluetooth/utils_notify.go:56 ../../network/dev_test.go:116
+#: ../../bluetooth/utils_notify.go:52 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
 msgstr "Bersambung"
 
-#: ../../bluetooth/utils_notify.go:59 ../../network/dev_test.go:120
+#: ../../bluetooth/utils_notify.go:55 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
 #: ../../network/dev_test.go:135 ../../network/dev_test.go:138
 #: ../../network/utils_notify.go:80 ../../network/utils_notify.go:84
@@ -131,39 +131,39 @@ msgstr "Bersambung"
 msgid "Disconnected"
 msgstr "Terputus"
 
-#: ../../bluetooth/utils_notify.go:62
+#: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
 msgstr "Pastikan %q dihidupkan dan berada dalam julat"
 
-#: ../../bluetooth/utils_notify.go:63 ../../bluetooth/utils_notify.go:67
+#: ../../bluetooth/utils_notify.go:64
+msgid "Failed to connect %q, pairing failed"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
-#: ../../bluetooth/utils_notify.go:66
-msgid "Failed to connect %q, automatically ignored"
-msgstr "Gagal menyambung ke %q diabaikan secara automatik"
-
-#: ../../dock/app_entry_menu.go:104
+#: ../../dock/app_entry_menu.go:99
 msgid "_Open"
 msgstr "_Buka"
 
-#: ../../dock/app_entry_menu.go:111
+#: ../../dock/app_entry_menu.go:106
 msgid "_Close All"
 msgstr "_Tutup Semua"
 
-#: ../../dock/app_entry_menu.go:120
+#: ../../dock/app_entry_menu.go:115
 msgid "_Force Quit"
 msgstr "_Paksa Keluar"
 
-#: ../../dock/app_entry_menu.go:127
+#: ../../dock/app_entry_menu.go:122
 msgid "_Dock"
 msgstr "_Labuh"
 
-#: ../../dock/app_entry_menu.go:134
+#: ../../dock/app_entry_menu.go:129
 msgid "_Undock"
 msgstr "_Nyahlabuh"
 
-#: ../../dock/app_entry_menu.go:141
+#: ../../dock/app_entry_menu.go:136
 msgid "_All windows"
 msgstr "Semu_a tetingkap"
 
@@ -331,7 +331,7 @@ msgstr "Papar tetingkap pada ruang kerja semasa"
 msgid "Display workspace"
 msgstr "Papar ruang kerja"
 
-#: ../../langselector/handle_event.go:34
+#: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
 msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
@@ -339,7 +339,7 @@ msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 msgid "System language failed to change, please try later"
 msgstr "Bahasa sistem gagal diubah, cuba lagi kemudian"
 
-#: ../../langselector/handle_event.go:56
+#: ../../langselector/handle_event.go:61
 msgid "System language has been changed, please log in again after logged out"
 msgstr "Bahasa sistem telah diubah, sila daftar masuk sekali lagi selepas daftar keluar"
 
@@ -353,25 +353,13 @@ msgid ""
 "packages, please wait..."
 msgstr "Bahasa sistem sedang diubah dengan pemasangan pakej bahasa yang kurang lengkap, tunggu sebentar..."
 
-#: ../../launcher/manager_uninstall.go:68
+#: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
 msgstr "%q berjaya dibuang"
 
-#: ../../launcher/manager_uninstall.go:70
+#: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
 msgstr "Gagal menyahpasang %q"
-
-#: ../../mime/media.go:67 ../../mime/media.go:68
-msgid "Nothing"
-msgstr "Jangan buat apa-apa"
-
-#: ../../mime/media.go:76 ../../mime/media.go:77
-msgid "Open Folder"
-msgstr "Buka Folder"
-
-#: ../../mime/media.go:85 ../../mime/media.go:86
-msgid "Run Software"
-msgstr "Jalankan Perisian"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
@@ -1040,11 +1028,11 @@ msgstr "Kunci Pra-Kongsi"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
-msgstr ""
+msgstr "Algoritma Fasa1"
 
 #: ../../network/nm_setting_beans_gen.go:253
 msgid "Phase2 Algorithms"
-msgstr ""
+msgstr "Algoritma Fasa2"
 
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
@@ -1910,43 +1898,43 @@ msgstr "Pengesahihan ke pelayan VPN telah gagal"
 msgid "The connection was deleted from settings"
 msgstr "Sambungan telah dipadam dari tetapan"
 
-#: ../../network/state_handler.go:220
+#: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
 msgstr "Cuba membenarkan hotspot"
 
-#: ../../network/state_handler.go:222
+#: ../../network/state_handler.go:227
 msgid "Try connecting %q"
 msgstr "Cuba bersambung dengan %q"
 
-#: ../../network/state_handler.go:230
+#: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
 msgstr "Perkongsian kawasan khas dibenarkan"
 
-#: ../../network/state_handler.go:232
+#: ../../network/state_handler.go:237
 msgid "%q connected"
 msgstr "%q bersambung"
 
-#: ../../network/state_handler.go:285
+#: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
 msgstr "Perkongsian kawasan panas dimatikan"
 
-#: ../../network/state_handler.go:287 ../../network/state_handler.go:302
+#: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
 msgstr "%q terputus"
 
-#: ../../network/state_handler.go:293
+#: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Tidak boleh berkongsi kawasan panas, sila periksa tetapan dnsmasq"
 
-#: ../../network/state_handler.go:295
+#: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
 
-#: ../../network/state_handler.go:297
+#: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
 
-#: ../../network/state_handler.go:300
+#: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 
@@ -1984,40 +1972,40 @@ msgstr "Proksi sistem berjaya ditetapkan."
 msgid "System proxy has been cancelled."
 msgstr "Proksi sistem dibatalkan."
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:157
 msgid "Battery Critical Low"
 msgstr "Kuasa Bateri Sangat Rendah"
 
-#: ../../session/power/manager_events.go:106
-#: ../../session/power/manager_events.go:128
+#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "Komputer dalam mod tangguh, sila palamkan kabel kuasa"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:164
 msgid "Battery Low"
 msgstr "Kuasa Bateri Rendah"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "Komputer akan pergi ke mod tangguh, sila palamkan kabel kuasa sekarang"
 
-#: ../../timedate/manager_ifc.go:54
+#: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
 msgstr "Pengesahihan diperlukan untuk menetap waktu sistem."
 
-#: ../../timedate/manager_ifc.go:67
+#: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
 msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan."
 
-#: ../../timedate/manager_ifc.go:87
+#: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
 msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC."
 
-#: ../../timedate/manager_ifc.go:106
+#: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
 msgstr "Pengesahihan diperlukan untuk menetap zon waktu sistem."
