@@ -38,6 +38,7 @@ import (
 	// depends: screensaver, sessionwatcher
 	_ "pkg.deepin.io/dde/daemon/session/power"
 
+	_ "pkg.deepin.io/dde/daemon/launcher"
 	_ "pkg.deepin.io/dde/daemon/service_trigger"
 
 	_ "pkg.deepin.io/dde/daemon/clipboard"

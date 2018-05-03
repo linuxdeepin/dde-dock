@@ -28,7 +28,6 @@ import (
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/session"
 	_ "pkg.deepin.io/dde/daemon/dock"
-	_ "pkg.deepin.io/dde/daemon/launcher"
 	"pkg.deepin.io/dde/daemon/loader"
 	_ "pkg.deepin.io/dde/daemon/trayicon"
 	_ "pkg.deepin.io/dde/daemon/x_event_monitor"
@@ -104,7 +103,7 @@ func main() {
 		loader.SetLogLevel(appLogLevel)
 	}
 
-	loader.EnableModules([]string{"dock", "launcher", "trayicon", "x_event_monitor"}, nil, loader.EnableFlagIgnoreMissingModule)
+	loader.EnableModules([]string{"dock", "trayicon", "x_event_monitor"}, nil, loader.EnableFlagIgnoreMissingModule)
 	runMainLoop()
 	service.Wait()
 }
