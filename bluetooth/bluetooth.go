@@ -296,7 +296,7 @@ func (b *Bluetooth) handleDBusNameOwnerChanged(name, oldOwner, newOwner string) 
 
 func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 	if b.isDeviceExists(dpath) {
-		logger.Error("repeat add device", dpath)
+		logger.Warning("repeat add device", dpath)
 		return
 	}
 
@@ -304,6 +304,11 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 	b.adaptersLock.Lock()
 	d.adapter = b.adapters[d.AdapterPath]
 	b.adaptersLock.Unlock()
+
+	if d.adapter == nil {
+		logger.Warning("failed to add device %s, not found adapter", dpath)
+		return
+	}
 
 	b.config.addDeviceConfig(d.getAddress())
 
@@ -316,6 +321,16 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 		time.AfterFunc(25*time.Second, func() {
 			d, _ := b.getDevice(dpath)
 			if d == nil {
+				return
+			}
+
+			adapterPowered, err := d.adapter.core.Powered().Get(0)
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+
+			if !adapterPowered {
 				return
 			}
 
@@ -355,8 +370,8 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 }
 
 func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
+	// NOTE: do not remove device from config
 	d := devices[i]
-	b.config.removeDeviceConfig(d.getAddress())
 	d.notifyDeviceRemoved()
 	d.destroy()
 	copy(devices[i:], devices[i+1:])
@@ -446,9 +461,12 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 		logger.Warning(err)
 	}
 
-	err = a.core.Discoverable().Set(0, false)
-	if err != nil {
-		logger.Warning(err)
+	if cfgPowered {
+		// set discoverable to false
+		err = a.core.Discoverable().Set(0, false)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	b.adaptersLock.Lock()
@@ -471,9 +489,9 @@ func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
 }
 
 func (b *Bluetooth) doRemoveAdapter(apath dbus.ObjectPath) {
+	// NOTE: do not remove adapter from config file
 	removeAdapter := b.adapters[apath]
 	delete(b.adapters, apath)
-	b.config.removeAdapterConfig(removeAdapter.address)
 	removeAdapter.notifyAdapterRemoved()
 	removeAdapter.destroy()
 }
