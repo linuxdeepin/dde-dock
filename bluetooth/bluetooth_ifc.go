@@ -130,6 +130,9 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		return dbusutil.ToError(err)
 	}
 
+	// save the powered state
+	b.config.setAdapterConfigPowered(a.address, powered)
+
 	if powered {
 		err = a.core.StartDiscovery(0)
 		if err != nil {
