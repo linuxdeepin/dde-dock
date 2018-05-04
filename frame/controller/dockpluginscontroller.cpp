@@ -26,6 +26,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QGSettings>
 
 #define API_VERSION "1.0"
 
@@ -35,7 +36,9 @@ DockPluginsController::DockPluginsController(DockItemController *itemControllerI
 {
     qApp->installEventFilter(this);
 
-    QTimer::singleShot(2000, this, &DockPluginsController::startLoader);
+    QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
+
+    QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(), this, &DockPluginsController::startLoader);
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
