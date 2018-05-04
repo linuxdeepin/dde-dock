@@ -20,13 +20,15 @@
 package housekeeping
 
 import (
-	"dbus/org/freedesktop/notifications"
 	"os"
+	"time"
+
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/utils"
-	"time"
 )
 
 const (
@@ -108,16 +110,13 @@ func (d *Daemon) Stop() error {
 }
 
 func sendNotify(icon, summary, body string) error {
-	notifier, err := notifications.NewNotifier(
-		"org.freedesktop.Notifications",
-		"/org/freedesktop/Notifications")
+	sessionConn, err := dbus.SessionBus()
 	if err != nil {
 		return err
 	}
-
-	_, err = notifier.Notify("housekeeping", 0,
+	notifier := notifications.NewNotifications(sessionConn)
+	_, err = notifier.Notify(0, "housekeeping", 0,
 		icon, summary, body,
 		nil, nil, 0)
-
 	return err
 }
