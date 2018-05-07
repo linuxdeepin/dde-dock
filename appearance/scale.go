@@ -65,18 +65,24 @@ func doSetScaleFactor(scale float64) {
 	doSetJAVAScale(scale)
 
 	// if 1.7 < scale < 2, window scale = 2
-	tmp := int32(math.Trunc((scale+0.3)*10) / 10)
-	if tmp < 1 {
-		tmp = 1
+	windowScale := int32(math.Trunc((scale+0.3)*10) / 10)
+	if windowScale < 1 {
+		windowScale = 1
 	}
-	window := s.GetInt("window-scale")
-	if window != tmp {
-		s.SetInt("window-scale", tmp)
+	oldWindowScale := s.GetInt("window-scale")
+	if oldWindowScale != windowScale {
+		s.SetInt("window-scale", windowScale)
 	}
+
+	// set cursor size for deepin-metacity
+	gsWrapGDI := gio.NewSettings("com.deepin.wrap.gnome.desktop.interface")
+	cursorSize := s.GetInt("gtk-cursor-theme-size")
+	gsWrapGDI.SetInt("cursor-size", cursorSize*windowScale)
+	gsWrapGDI.Unref()
 
 	doScaleGreeter(scale)
 	go func() {
-		doScalePlymouth(uint32(tmp))
+		doScalePlymouth(uint32(windowScale))
 		sendNotify(gettext.Tr("Set successfully"),
 			gettext.Tr("View by logging out after set display scaling"), "dialog-window-scale")
 		setScaleStatus(false)
