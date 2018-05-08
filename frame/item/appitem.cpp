@@ -641,6 +641,13 @@ void AppItem::playSwingEffect()
 
 void AppItem::stopSwingEffect()
 {
+    // NOTE(hualet): return immediatly if animation is not running,
+    // because operations on QGraphicsScenes are very expensive,
+    // especially when we do one of startSwingEffect/stopSwingEffect
+    // in updateWindowInfos which happens very often.
+    if (!m_swingEffectView->isVisible())
+        return;
+
     // stop swing effect
     m_swingEffectView->setVisible(false);
 
