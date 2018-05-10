@@ -23,6 +23,16 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
+# Test architecture
+execute_process(COMMAND dpkg-architecture -qDEB_BUILD_ARCH OUTPUT_VARIABLE ARCHITECTURE)
+string(STRIP ${ARCHITECTURE} ARCHITECTURE)
+
+if (${ARCHITECTURE} STREQUAL "sw_64")
+    # add compiler flags -mieee for mathmatic
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
+    message(${CMAKE_CXX_FLAGS})
+endif()
+
 file(GLOB INTERFACES "interfaces/*.h")
 
 add_subdirectory("frame")
