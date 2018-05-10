@@ -25,7 +25,7 @@ import (
 	"path"
 )
 
-const _fontConfVersion = "1.3"
+const _fontConfVersion = "1.4"
 
 var _fontVersionConf = os.Getenv("HOME") + "/.config/fontconfig/conf.d/deepin_conf.version"
 

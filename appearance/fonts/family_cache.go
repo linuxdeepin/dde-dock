@@ -109,6 +109,7 @@ func configContent(standard, mono string) string {
         <edit name="family" mode="assign" binding="strong">
             <string>%s</string>
             <string>%s</string>
+			<string>%s</string>
         </edit>
     </match>
 
@@ -117,5 +118,5 @@ func configContent(standard, mono string) string {
     </match>
 </fontconfig>`, standard, fallbackStandard,
 		standard, fallbackStandard,
-		mono, fallbackMonospace)
+		mono, fallbackMonospace, standard)
 }
