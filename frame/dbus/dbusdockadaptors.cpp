@@ -21,10 +21,11 @@
 
 #include "dbusdockadaptors.h"
 #include <QScreen>
+#include <QDebug>
 
 DBusDockAdaptors::DBusDockAdaptors(MainWindow* parent): QDBusAbstractAdaptor(parent)
 {
-    connect(parent, &MainWindow::panelGeometryChanged, this, [this] {
+    connect(parent, &MainWindow::panelGeometryChanged, this, [=] {
         emit DBusDockAdaptors::geometryChanged(geometry());
     });
 }
@@ -41,6 +42,6 @@ MainWindow *DBusDockAdaptors::parent() const
 
 QRect DBusDockAdaptors::geometry() const
 {
-    return parent()->geometry();
+    return parent()->mainPanelGeometry();
 }
 

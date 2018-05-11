@@ -44,6 +44,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    QRect mainPanelGeometry() const;
+
 public slots:
     void launch();
 
