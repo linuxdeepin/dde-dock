@@ -1,3 +1,14 @@
+<a name="4.6.3.3"></a>
+## 4.6.3.3 (2018-05-11)
+
+
+#### Features
+
+*   use gsettings value delay load plugins ([077c1f06](077c1f06))
+*   register DDE Session cookie ([fa1f2d59](fa1f2d59))
+
+
+
 <a name="4.6.3.2"></a>
 ## 4.6.3.2 (2018-04-25)
 
