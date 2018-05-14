@@ -44,6 +44,9 @@ type SubRecorder struct {
 	launchedMap      map[string]bool
 	launchedMapMutex sync.RWMutex
 
+	removedLaunchedMap   map[string]bool
+	removedLaunchedMapMu sync.Mutex
+
 	statusFile      string
 	statusFileOwner int
 
@@ -54,9 +57,10 @@ type SubRecorder struct {
 
 func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder {
 	sr := &SubRecorder{
-		root:   root,
-		uids:   []int{uid}, // first uid
-		parent: parent,
+		root:               root,
+		uids:               []int{uid}, // first uid
+		parent:             parent,
+		removedLaunchedMap: make(map[string]bool),
 	}
 
 	sr.statusFile, sr.statusFileOwner = getStatusFileAndOwner(uid, home, root)
@@ -317,24 +321,34 @@ func (sr *SubRecorder) resetStatus(apps []string) {
 func (sr *SubRecorder) handleAdded(name string) {
 	logger.Debug("SubRecorder.handleAdded", sr.root, name)
 	sr.launchedMapMutex.Lock()
+	sr.removedLaunchedMapMu.Lock()
 
 	if _, ok := sr.launchedMap[name]; !ok {
-		sr.launchedMap[name] = false
+		launched, ok1 := sr.removedLaunchedMap[name]
+		if ok1 {
+			delete(sr.removedLaunchedMap, name)
+		}
+		sr.launchedMap[name] = launched
 		sr.RequestSave()
 	}
 
+	sr.removedLaunchedMapMu.Unlock()
 	sr.launchedMapMutex.Unlock()
 }
 
 func (sr *SubRecorder) handleRemoved(name string) {
 	logger.Debug("SubRecorder.handleRemoved", sr.root, name)
 	sr.launchedMapMutex.Lock()
+	sr.removedLaunchedMapMu.Lock()
 
-	if _, ok := sr.launchedMap[name]; ok {
+	launched, ok := sr.launchedMap[name]
+	if ok {
+		sr.removedLaunchedMap[name] = launched
 		delete(sr.launchedMap, name)
 		sr.RequestSave()
 	}
 
+	sr.removedLaunchedMapMu.Unlock()
 	sr.launchedMapMutex.Unlock()
 }
 
