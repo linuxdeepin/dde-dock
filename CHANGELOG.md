@@ -1,5 +1,41 @@
 ## [Unreleased]
 
+[3.2.14] 2018-05-14
+*   feat(apps): record the launched state of the removed app
+*   auto sync po files from transifex
+*   feat(appearances): set standard font as monospace font fallback
+*   fix(appearance): cursor size of window border is small
+*   chore(housekeeping): use go-dbus-factory
+*   fix(bluetooth): remove adapters and devices config
+*   chore(launcher): move launcher module to dde-session-daemon
+*   fix(bluetooth): adapter powered not saved
+*   auto sync po files from transifex
+*   refactor(bluetooth): refactor code again
+*   refactor(bluetooth): refactor code
+*   feat(bluetooth): add signal Cancelled
+*   chore(bluetooth): use go-dbus-factory
+*   chore(appearance): use go-dbus-factory
+*   chore(audio): use go-dbus-factory
+*   chore(fprintd) use go-dbus-factory
+*   chore(systeminfo): use go-dbus-factory
+*   chore(timedate): use go-dbus-factory
+*   chore(gesture): use go-dbus-factory
+*   chore(screenedge): use go-dbus-factory
+*   chore(keybinding): use go-dbus-factory
+*   fix(apps): directory permissions is not 0755
+*   chore(sessionwatcher): use go-dbus-factory
+*   chore(session/power): use go-dbus-factory
+*   feat: add UI unified authentication service
+*   fix(session/power): submodule name typo
+*   fix(session/power): submodule name typo
+*   fix(network): close hotspot no send notification
+*   feat(default-terminal): remove --launch-app option
+*   feat(network): ConnectionSession add method SetKeyFd
+*   feat(keybinding): allow volume to be adjusted to maximum 150%
+*   feat: add apps.com.wechat.web to window_patterns
+*   feat(appearance): limit the number of custom wallpapers
+*   fix(miracast): failed to emit signal Added and Removed
+
 [3.2.13] 2018-03-28
 *   chore(dock): add window pattern for gdevelop
 *   fix(appearance): add rgba seetings for wine
