@@ -6,6 +6,7 @@
 # geost <george.stefanakis@gmail.com>, 2016
 # geost <george.stefanakis@gmail.com>, 2016
 # nonviotale <nonviotale@gmail.com>, 2017
+# Jim Gios (Joker) <jgpers@gmail.com>, 2018
 # takis b, 2017
 # takis b, 2017
 msgid ""
@@ -13,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-05-08 12:28+0000\n"
+"Last-Translator: Jim Gios (Joker) <jgpers@gmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -337,7 +338,7 @@ msgstr "Εμφάνιση χώρου εργασίας"
 
 #: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Απαιτείται πιστοποίηση για εναλλαγή γλώσσας"
 
 #: ../../langselector/handle_event.go:44
 msgid "System language failed to change, please try later"
@@ -363,11 +364,11 @@ msgstr ""
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Αποτυχία απεγκατάστασης %q"
 
 #: ../../network/agent.go:395
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "Απαιτείται κωδικός για σύνδεση %q"
 
 #: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
@@ -1515,7 +1516,7 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:162
 msgid "DH Group 1"
-msgstr "DH Ομάδα`1"
+msgstr "DH Ομάδα 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:155
 msgid "DH Group 2 (default)"
@@ -1687,23 +1688,23 @@ msgstr ""
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "Η κλήση απέτυχε λόγω έλλεψης σήματος τηλεφωνικής επιλογής"
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "Η κλήση απέτυχε λόγω φορέα"
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Έληξε ο χρόνος κλήσης"
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed"
-msgstr ""
+msgstr "Αποτυχία κλήσης"
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Απέτυχε η προετοιμασία του μόντεμ"
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN"
@@ -1711,7 +1712,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr ""
+msgstr "Δεν αναζητήθηκαν δίκτυα"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"

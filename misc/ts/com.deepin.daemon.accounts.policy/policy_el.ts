@@ -24,42 +24,42 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation type="unfinished"/>
+			<translation>Απαιτείται πιστοποίηση για ενεργοποίηση αυτόματης εισόδου</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation type="unfinished"/>
+			<translation>Ενεργοποίηση Αυτόματης Εισόδου</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation type="unfinished"/>
+			<translation>Απαιτείται πιστοποίηση για απενεργοποίηση αυτόματης εισόδου</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation type="unfinished"/>
+			<translation>Απενεργοποίηση Αυτόματης Εισόδου</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation type="unfinished"/>
+			<translation>Απαιτείται πιστοποίηση για ενεργοποίηση εισόδου χωρίς κωδικό</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>Ενεργοποίηση Εισόδου χωρίς κωδικό</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation type="unfinished"/>
+			<translation>Απαιτείται πιστοποίηση για απενεργοποίηση εισόδου χωρίς κωδικό</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>Απενεργοποίηση Εισόδου χωρίς κωδικό</translation>
 		</message>
 	</context>
 </TS>

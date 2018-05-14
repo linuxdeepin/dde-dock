@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-05-10 12:16+0000\n"
+"Last-Translator: Ricardo Simões <xmcorporation@gmail.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -142,7 +142,7 @@ msgstr "Certifique-se que %q está ligado e dentro do alcance"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "Falha ao ligar %q, emparelhamento falhou"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
