@@ -117,11 +117,6 @@ MainWindow::~MainWindow()
     delete m_xcbMisc;
 }
 
-QRect MainWindow::mainPanelGeometry() const
-{
-    return m_mainPanel->geometry();
-}
-
 void MainWindow::launch()
 {
     m_updatePanelVisible = false;

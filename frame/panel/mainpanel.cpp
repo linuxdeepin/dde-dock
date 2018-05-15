@@ -173,8 +173,6 @@ void MainPanel::setEffectEnabled(const bool enabled)
 void MainPanel::moveEvent(QMoveEvent* e)
 {
     DBlurEffectWidget::moveEvent(e);
-
-    emit geometryChanged();
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)
@@ -183,8 +181,6 @@ void MainPanel::resizeEvent(QResizeEvent *e)
 
     m_itemAdjustTimer->start();
 //    m_effectWidget->resize(e->size());
-
-    emit geometryChanged();
 }
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
@@ -495,6 +491,9 @@ void MainPanel::adjustItemSize()
         if (extraDecrease)
             --extraDecrease;
     }
+
+    // make it after the adjustment to send signals.
+    emit geometryChanged();
 
     // ensure all extra space assigned
     Q_ASSERT(extraDecrease == 0);
