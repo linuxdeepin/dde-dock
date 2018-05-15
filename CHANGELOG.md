@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+[3.2.15] 2018-05-15
+*   chore(debian): update build-depends
+
 [3.2.14] 2018-05-14
 *   feat(apps): record the launched state of the removed app
 *   auto sync po files from transifex
