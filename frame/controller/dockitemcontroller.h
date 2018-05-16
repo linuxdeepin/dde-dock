@@ -40,7 +40,7 @@ class DockItemController : public QObject
 public:
     static DockItemController *instance(QObject *parent);
 
-    const QList<DockItem *> itemList() const;
+    const QList<QPointer<DockItem> > itemList() const;
     const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
     bool itemIsInContainer(DockItem * const item) const;
@@ -74,7 +74,7 @@ private:
     void reloadAppItems();
 
 private:
-    QList<DockItem *> m_itemList;
+    QList<QPointer<DockItem>> m_itemList;
 
     QTimer *m_updatePluginsOrderTimer;
 
