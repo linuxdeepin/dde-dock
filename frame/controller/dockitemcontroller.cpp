@@ -37,7 +37,7 @@ DockItemController *DockItemController::instance(QObject *parent)
     return INSTANCE;
 }
 
-const QList<DockItem *> DockItemController::itemList() const
+const QList<QPointer<DockItem>> DockItemController::itemList() const
 {
     return m_itemList;
 }
@@ -78,9 +78,9 @@ void DockItemController::updatePluginsItemOrderKey()
     int index = 0;
     for (auto item : m_itemList)
     {
-        if (item->itemType() != DockItem::Plugins)
+        if (item.isNull() || item->itemType() != DockItem::Plugins)
             continue;
-        static_cast<PluginsItem *>(item)->setItemSortKey(++index);
+        static_cast<PluginsItem *>(item.data())->setItemSortKey(++index);
     }
 }
 
@@ -255,8 +255,8 @@ void DockItemController::appItemRemoved(const QString &appId)
         if (m_itemList[i]->itemType() != DockItem::App)
             continue;
 
-        AppItem *app = static_cast<AppItem *>(m_itemList[i]);
-        if (app->appId() != appId)
+        AppItem *app = static_cast<AppItem *>(m_itemList[i].data());
+        if (!app || app->appId() != appId)
             continue;
 
         appItemRemoved(app);
@@ -310,7 +310,7 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
         insertIndex = m_itemList.size();
         for (int i(firstPluginPosition + 1); i != m_itemList.size() + 1; ++i)
         {
-            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i - 1]);
+            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i - 1].data());
             Q_ASSERT(pItem);
 
             const int sortKey = pItem->itemSortKey();
@@ -346,7 +346,7 @@ void DockItemController::reloadAppItems()
     // remove old item
     for (auto item : m_itemList)
         if (item->itemType() == DockItem::App)
-            appItemRemoved(static_cast<AppItem *>(item));
+            appItemRemoved(static_cast<AppItem *>(item.data()));
 
     // append new item
     for (auto path : m_appInter->entries())

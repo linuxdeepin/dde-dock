@@ -82,7 +82,7 @@ MainPanel::MainPanel(QWidget *parent)
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
 
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         manageItem(item);
@@ -125,7 +125,7 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
     m_displayMode = displayMode;
 
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         // we need to hide container item at fashion mode.
@@ -304,7 +304,7 @@ void MainPanel::manageItem(DockItem *item)
 ///
 DockItem *MainPanel::itemAt(const QPoint &point)
 {
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
 
     for (auto item : itemList)
     {
@@ -361,7 +361,7 @@ void MainPanel::adjustItemSize()
     int totalAppItemCount = 0;
     int totalWidth = 0;
     int totalHeight = 0;
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         const auto itemType = item->itemType();

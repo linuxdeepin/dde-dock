@@ -123,14 +123,18 @@ void DockPluginsController::startLoader()
 void DockPluginsController::displayModeChanged()
 {
     const DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    for (auto inter : m_pluginList.keys())
+    const auto inters = m_pluginList.keys();
+
+    for (auto inter : inters)
         inter->displayModeChanged(displayMode);
 }
 
 void DockPluginsController::positionChanged()
 {
     const Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    for (auto inter : m_pluginList.keys())
+    const auto inters = m_pluginList.keys();
+
+    for (auto inter : inters)
         inter->positionChanged(position);
 }
 

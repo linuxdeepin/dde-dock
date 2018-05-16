@@ -516,7 +516,7 @@ void DockSettings::calculateWindowConfig()
     else if (m_displayMode == Dock::Fashion)
     {
         int visibleItemCount = 0;
-        const QList<DockItem *> itemList = m_itemController->itemList();
+        const auto &itemList = m_itemController->itemList();
         for (auto item : itemList)
         {
             switch (item->itemType())
