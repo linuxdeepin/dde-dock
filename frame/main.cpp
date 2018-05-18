@@ -52,7 +52,7 @@ void RegisterDdeSession()
                 .path("/com/deepin/SessionManager")
                 .service("com.deepin.SessionManager")
                 .method("Register")
-                .arg(cookie)
+                .arg(QString(cookie))
                 .call();
 
         qDebug() << Q_FUNC_INFO << r.value();
