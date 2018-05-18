@@ -92,7 +92,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
     const DockItem::ItemType replaceType = replaceItem->itemType();
 
     // app move
-    if (moveType == DockItem::App)
+    if (moveType == DockItem::App || moveType == DockItem::Placeholder)
         if (replaceType != DockItem::App && replaceType != DockItem::Stretch)
             return;
 
