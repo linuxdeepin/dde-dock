@@ -20,31 +20,41 @@
 package gesture
 
 import (
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"pkg.deepin.io/lib/dbus1"
+)
+
+var (
+	xconn  *x.Conn
+	_dconn *dbus.Conn
+	_self  *login1.Session
 )
 
 func isKbdAlreadyGrabbed() bool {
-	conn, err := x.NewConn()
-	if err != nil {
-		return false
+	if xconn == nil {
+		conn, err := x.NewConn()
+		if err != nil {
+			return false
+		}
+		xconn = conn
 	}
-	defer conn.Close()
 
-	ewmhConn, err := ewmh.NewConn(conn)
+	ewmhConn, err := ewmh.NewConn(xconn)
 	if err != nil {
 		return false
 	}
 
 	var grabWin x.Window
 
-	rootWin := conn.GetDefaultScreen().Root
+	rootWin := xconn.GetDefaultScreen().Root
 	if activeWin, _ := ewmhConn.GetActiveWindow().Reply(ewmhConn); activeWin == 0 {
 		grabWin = rootWin
 	} else {
 		// check viewable
-		attrs, err := x.GetWindowAttributes(conn, activeWin).Reply(conn)
+		attrs, err := x.GetWindowAttributes(xconn, activeWin).Reply(xconn)
 		if err != nil {
 			grabWin = rootWin
 		} else if attrs.MapState != x.MapStateViewable {
@@ -56,10 +66,10 @@ func isKbdAlreadyGrabbed() bool {
 		}
 	}
 
-	err = keybind.GrabKeyboard(conn, grabWin)
+	err = keybind.GrabKeyboard(xconn, grabWin)
 	if err == nil {
 		// grab keyboard successful
-		keybind.UngrabKeyboard(conn)
+		keybind.UngrabKeyboard(xconn)
 		return false
 	}
 
@@ -70,4 +80,31 @@ func isKbdAlreadyGrabbed() bool {
 		return true
 	}
 	return false
+}
+
+func isSessionActive() bool {
+	if _dconn == nil {
+		conn, err := dbus.SystemBus()
+		if err != nil {
+			logger.Error("Failed to new system bus:", err)
+			return false
+		}
+		_dconn = conn
+	}
+
+	if _self == nil {
+		self, err := login1.NewSession(_dconn, "/org/freedesktop/login1/session/self")
+		if err != nil {
+			logger.Error("Failed to connect self session:", err)
+			return false
+		}
+		_self = self
+	}
+
+	active, err := _self.Active().Get(dbus.FlagNoAutoStart)
+	if err != nil {
+		logger.Error("Failed to get self active:", err)
+		return false
+	}
+	return active
 }

@@ -94,8 +94,8 @@ func (m *Manager) Exec(name, direction string, fingers int32) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	if !m.enabled {
-		logger.Debug("Gesture had been disabled")
+	if !m.enabled || !isSessionActive() {
+		logger.Debug("Gesture had been disabled or session inactive")
 		return nil
 	}
 

@@ -63,6 +63,11 @@ func (d *Daemon) Start() error {
 }
 
 func (d *Daemon) Stop() error {
+	if xconn != nil {
+		xconn.Close()
+		xconn = nil
+	}
+
 	if d.manager == nil {
 		return nil
 	}
