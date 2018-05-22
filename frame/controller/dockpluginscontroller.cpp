@@ -75,12 +75,11 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
         return;
 
     item->detachPluginWidget();
+    item->deleteLater();
 
     emit pluginItemRemoved(item);
 
     m_pluginList[itemInter].remove(itemKey);
-
-    QTimer::singleShot(1, this, [=] { delete item; });
 }
 
 //void DockPluginsController::requestRefershWindowVisible()

@@ -216,8 +216,8 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemController::*)(const QString &)>(&DockItemController::appItemRemoved), Qt::QueuedConnection);
     connect(m_appInter, &DBusDock::ServiceRestarted, this, &DockItemController::reloadAppItems);
 
+    connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemController::pluginItemRemoved);
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginItemInserted, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemController::pluginItemRemoved, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemController::itemUpdated, Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
