@@ -46,6 +46,9 @@ public:
     Q_PROPERTY(QString layout READ layout NOTIFY layoutChanged)
     QString layout() const;
 
+public slots:
+    void onLayoutChanged();
+
 signals:
     void layoutChanged(QString text);
 

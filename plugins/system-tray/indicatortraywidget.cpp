@@ -75,7 +75,6 @@ public:
             auto propertyNameCStr = propertyName.toStdString();
             propertyInterfaceNames.insert(key, dbusInterface);
             propertyNames.insert(key, QString::fromStdString(propertyNameCStr));
-            callback(interface.property(propertyNameCStr.c_str()));
             QDBusConnection::sessionBus().connect(dbusService,
                                                   dbusPath,
                                                   "org.freedesktop.DBus.Properties",
@@ -93,6 +92,8 @@ public:
                                                   "s",
                                                   q,
                                                   propertyChangedSlot);
+
+            callback(interface.property(propertyNameCStr.c_str()));
         }
     }
 
@@ -177,7 +178,7 @@ void IndicatorTrayWidget::updateIcon()
 
 const QImage IndicatorTrayWidget::trayImage()
 {
-    return grab().toImage();
+    return d_ptr->label->grab().toImage();
 }
 
 void IndicatorTrayWidget::sendClick(uint8_t buttonIndex, int x, int y)

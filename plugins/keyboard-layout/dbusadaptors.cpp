@@ -26,10 +26,7 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
                               "/com/deepin/daemon/InputDevice/Keyboard",
                               QDBusConnection::sessionBus(), this))
 {
-    connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this,
-            [=] {
-                emit layoutChanged(layout());
-            });
+    connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onLayoutChanged);
 }
 
 DBusAdaptors::~DBusAdaptors()
@@ -38,5 +35,20 @@ DBusAdaptors::~DBusAdaptors()
 
 QString DBusAdaptors::layout() const
 {
-    return QString(m_keyboard->currentLayout()).split(';').first();
+    const auto layouts = m_keyboard->currentLayout().split(';');
+
+    if (!layouts.isEmpty())
+        return layouts.first();
+
+    qWarning() << Q_FUNC_INFO << "layouts is Empty!!";
+
+    // re-fetch data.
+    QTimer::singleShot(1000, this, &DBusAdaptors::onLayoutChanged);
+
+    return QString();
+}
+
+void DBusAdaptors::onLayoutChanged()
+{
+    emit layoutChanged(layout());
 }
