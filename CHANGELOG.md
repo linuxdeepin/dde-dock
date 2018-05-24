@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+[3.2.16] 2018-05-24
+*   add fprintd depends in `Desktop edition system`
+*   fix(network): allow to delete when creating vpn connection
+
 [3.2.15] 2018-05-15
 *   chore(debian): update build-depends
 
