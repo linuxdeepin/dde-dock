@@ -21,6 +21,7 @@ package network
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
@@ -36,7 +37,6 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 func (s *ConnectionSession) setProps() {
 	correctConnectionData(s.data)
 	s.setPropType()
-	s.setPropAllowDelete()
 	s.setPropAvailableVirtualSections()
 	s.setPropAvailableSections()
 	s.setPropAvailableKeys()
@@ -54,16 +54,11 @@ func (s *ConnectionSession) setPropType() {
 	dbus.NotifyChange(s, "Type")
 }
 
-func (s *ConnectionSession) setPropAllowDelete() {
-	//any connection was allowed to deleted
-	//if !s.connectionExists || (isNmObjectPathValid(s.devPath) &&
-	//	nmGeneralGetDeviceUniqueUuid(s.devPath) == s.Uuid) {
-	//	s.AllowDelete = false
-	//} else {
-	//	s.AllowDelete = true
-	//}
-	s.AllowDelete = true
-	dbus.NotifyChange(s, "AllowDelete")
+func (s *ConnectionSession) setPropAllowDelete(allow bool) {
+	if s.AllowDelete != allow {
+		s.AllowDelete = allow
+		dbus.NotifyChange(s, "AllowDelete")
+	}
 }
 
 func (s *ConnectionSession) setPropAvailableVirtualSections() {

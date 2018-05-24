@@ -22,6 +22,7 @@ package network
 import (
 	nmdbus "dbus/org/freedesktop/networkmanager"
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
@@ -317,6 +318,7 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-eap")
 	}
 	session.setProps()
+	session.setPropAllowDelete(false)
 
 	// install dbus session
 	m.addConnectionSession(session)

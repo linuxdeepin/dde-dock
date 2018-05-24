@@ -145,7 +145,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	fillSectionCache(s.data)
 	s.setProps()
-	s.AllowDelete = false
+	s.setPropAllowDelete(false)
 	logger.Debugf("newConnectionSessionByCreate(): %#v", s.data)
 	return
 }
@@ -169,6 +169,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.fixValues()
 	fillSectionCache(s.data)
 	s.setProps()
+	s.setPropAllowDelete(true)
 
 	// execute asynchronous to avoid front-end block if
 	// NeedSecrets() signal emitted
