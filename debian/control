@@ -48,6 +48,7 @@ Package: dde-daemon
 Architecture: any
 Depends: ${shlibs:Depends},
  ${misc:Depends},
+ ${dist:Depends},
  upower,
  network-manager,
  iso-codes,
@@ -75,8 +76,6 @@ Provides: lastore-daemon-migration
 Recommends: proxychains-ng, flatpak
 Suggests:
  bluez (>=5.4),
- libpam-fprintd,
- fprintd,
  network-manager-pptp,
  network-manager-l2tp,
  network-manager-openconnect,
