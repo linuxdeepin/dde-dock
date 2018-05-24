@@ -6,13 +6,11 @@ GOBUILD = go build
 ARCH=$(shell uname -m)
 
 ifdef USE_GCCGO
-	GOLDFLAGS = -Os -O2
+	extra_gccgo_flags = -Os -O2
 	ifeq ($(ARCH), sw_64)
-		GOLDFLAGS += -mieee
+		extra_gccgo_flags += -mieee
 	endif
-	GOLDFLAGS += $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libpulse-simple alsa libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 fontconfig librsvg-2.0 gudev-1.0 libinput xcb xcb-record libnl-genl-3.0 )
-	GOLDFLAGS += -lcrypt -lpam -lm
-	GOBUILD += -compiler gccgo -gccgoflags "${GOLDFLAGS}"
+	GOBUILD=gccgo_build.pl -p "gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libpulse-simple alsa libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 fontconfig librsvg-2.0 gudev-1.0 libinput xcb xcb-record libnl-genl-3.0" -f "$(extra_gccgo_flags)"
 endif
 
 BINARIES =  \

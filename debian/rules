@@ -1,12 +1,8 @@
 #!/usr/bin/make -f
 
 export GOPATH := /usr/share/gocode
-
-ifdef USE_GCCGO
-override_dh_strip:
-	true
-override_dh_auto_test:
-	true
+ifeq ($(DEB_BUILD_ARCH), sw_64)
+	export USE_GCCGO=1
 endif
 
 SYSTYPE=Desktop
@@ -21,6 +17,10 @@ endif
 	dh $@ --with systemd
 
 ifeq ($(DEB_BUILD_ARCH), sw_64)
+override_dh_strip:
+	true
+override_dh_auto_test:
+	true
 override_dh_auto_configure:
 	# mate-screenshot -a grab the area screen
 	#sed -i 's|"deepin-screenshot"|"mate-screenshot -a"|g' misc/dde-daemon/keybinding/system_actions.json
