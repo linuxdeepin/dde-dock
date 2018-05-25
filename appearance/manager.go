@@ -40,6 +40,7 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/fsnotify"
+	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -205,6 +206,31 @@ func (m *Manager) resetFonts() {
 	m.checkFontConfVersion()
 }
 
+func (m *Manager) initUserObj(systemConn *dbus.Conn) {
+	cur, err := user.Current()
+	if err != nil {
+		logger.Warning("failed to get current user:", err)
+		return
+	}
+	m.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
+	if err != nil {
+		logger.Warning("failed to new user object", err)
+		return
+	}
+
+	// sync desktop backgrounds
+	userBackgrounds, err := m.userObj.DesktopBackgrounds().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	gsBackgrounds := m.setting.GetStrv(gsKeyBackgroundURIs)
+	if !strv.Strv(userBackgrounds).Equal(gsBackgrounds) {
+		m.setDesktopBackgrounds(gsBackgrounds)
+	}
+}
+
 func (m *Manager) init() {
 	theme_thumb.Init(doGetScaleFactor())
 
@@ -246,17 +272,7 @@ func (m *Manager) init() {
 		return
 	}
 
-	cur, err := user.Current()
-	if err != nil {
-		logger.Warning("Get current user info failed:", err)
-	} else {
-		m.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
-		if err != nil {
-			logger.Warning("New user object failed:", cur.Name, err)
-			m.userObj = nil
-		}
-	}
-
+	m.initUserObj(systemConn)
 	m.imageBlur = accounts.NewImageBlur(systemConn)
 
 	background.SetCustomWallpaperDeleteCallback(func(file string) {
