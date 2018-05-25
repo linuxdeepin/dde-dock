@@ -211,6 +211,14 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) bool {
 	}
 	entry.updateIcon()
 	entry.updateMenu()
+
+	// print window info
+	logger.Infof("attach window id: %d, wmClass: %q %q, wmState: %v,"+
+		" wmWindowType: %v, wmAllowedActions: %v, hasXEmbedInfo: %v, hasWmTransientFor: %v",
+		winInfo.window, winInfo.wmClass.Class, winInfo.wmClass.Instance,
+		winInfo.wmState, winInfo.wmWindowType, winInfo.wmAllowedActions, winInfo.hasXEmbedInfo,
+		winInfo.hasWmTransientFor)
+
 	return true
 }
 
