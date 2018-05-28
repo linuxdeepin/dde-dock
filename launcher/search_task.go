@@ -28,63 +28,42 @@ import (
 )
 
 type searchTask struct {
+	mu           sync.RWMutex
 	chars        []rune
 	fuzzyMatcher *regexp.Regexp
 	stack        *searchTaskStack
 
 	result MatchResults
 
-	isCanceled      bool
-	isCanceledMutex sync.RWMutex
-	isFinished      bool
-	isFinishedMutex sync.RWMutex
+	isCanceled bool
+	isFinished bool
 }
 
 func (t *searchTask) IsCanceled() bool {
-	t.isCanceledMutex.RLock()
-	defer t.isCanceledMutex.RUnlock()
-	return t.isCanceled
+	t.mu.RLock()
+	val := t.isCanceled
+	t.mu.RUnlock()
+	return val
 }
 
 func (t *searchTask) Cancel() {
-	t.isCanceledMutex.Lock()
+	t.mu.Lock()
 	t.isCanceled = true
-	t.isCanceledMutex.Unlock()
+	t.mu.Unlock()
 }
 
 func (t *searchTask) IsFinished() bool {
-	t.isFinishedMutex.RLock()
-	defer t.isFinishedMutex.RUnlock()
-	return t.isFinished
+	t.mu.RLock()
+	val := t.isFinished
+	t.mu.RUnlock()
+	return val
 }
 
 func (t *searchTask) Finish() {
-	t.isFinishedMutex.Lock()
+	t.mu.Lock()
 	t.isFinished = true
-	t.isFinishedMutex.Unlock()
+	t.mu.Unlock()
 	logger.Debug("finish", t)
-}
-
-func (t *searchTask) Index() int {
-	for i, task := range t.stack.tasks {
-		if t == task {
-			return i
-		}
-	}
-	return -1
-}
-
-func (t *searchTask) next() *searchTask {
-	tasks := t.stack.tasks
-	index := t.Index()
-	if index == -1 {
-		return nil
-	}
-	index++
-	if 0 <= index && index < len(tasks) {
-		return tasks[index]
-	}
-	return nil
 }
 
 func (t *searchTask) String() string {
@@ -123,19 +102,19 @@ func newSearchTask(c rune, stack *searchTaskStack, prev *searchTask) *searchTask
 	return t
 }
 
-func (t *searchTask) doSearch(prev *searchTask) {
+func (t *searchTask) search(prev *searchTask) {
 	if prev == nil {
-		go t.doFirst()
+		go t.searchWithoutBase()
 	} else {
 		if prev.IsFinished() {
 			logger.Debug("start", t, "doSearch prev finished")
-			go t.doWithBase(prev.result)
+			go t.searchWithBase(prev.result)
 		}
 	}
 }
 
-func (t *searchTask) doFirst() {
-	logger.Debug("start first", t)
+func (t *searchTask) searchWithoutBase() {
+	logger.Debug("search without base", t)
 	for _, item := range t.stack.items {
 		t.matchItem(item)
 		if t.IsCanceled() {
@@ -146,7 +125,7 @@ func (t *searchTask) doFirst() {
 	t.done()
 }
 
-func (st *searchTask) doWithBase(result MatchResults) {
+func (st *searchTask) searchWithBase(result MatchResults) {
 	for _, mResult := range result {
 		st.matchItem(mResult.item)
 		if st.IsCanceled() {
@@ -235,11 +214,11 @@ func (st *searchTask) done() {
 		logger.Debug("no done canceled", st)
 		return
 	}
-	next := st.next()
+	next := st.stack.GetNext(st)
 	if next != nil {
 		// notify next task
 		logger.Debug("start", next, "next")
-		go next.doWithBase(st.result)
+		go next.searchWithBase(st.result)
 		st.Finish()
 	} else {
 		// if no next task, emit SearchDone signal

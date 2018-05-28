@@ -179,8 +179,8 @@ func newWacom(service *dbusutil.Service) *Wacom {
 	w.initX()
 	w.handleScreenChanged()
 	go w.listenXRandrEvents()
-	go w.checkLoop()
 	w.exit = make(chan int)
+	go w.checkLoop()
 	return w
 }
 
@@ -206,6 +206,7 @@ func (w *Wacom) initX() error {
 	}
 	w.xu = xu
 
+	// TODO: randr.Init race
 	if err := randr.Init(xu.Conn()); err != nil {
 		return err
 	}

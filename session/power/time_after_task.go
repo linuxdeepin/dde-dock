@@ -20,6 +20,7 @@
 package power
 
 import (
+	"sync"
 	"time"
 )
 
@@ -33,6 +34,7 @@ const (
 
 type TimeAfterTask struct {
 	State      TimeAfterTaskState
+	mu         sync.Mutex
 	fn         func()
 	cancelable bool
 	timer      *time.Timer
@@ -44,19 +46,27 @@ func NewTimeAfterTask(delay time.Duration, fn func()) *TimeAfterTask {
 		cancelable: true,
 	}
 	t.timer = time.AfterFunc(delay, func() {
+		t.mu.Lock()
 		t.cancelable = false
 		t.State = TimeAfterTaskStateRunning
+		t.mu.Unlock()
+
 		fn()
+
+		t.mu.Lock()
 		t.State = TimeAfterTaskStateDone
+		t.mu.Unlock()
 	})
 	return t
 }
 
 func (t *TimeAfterTask) Cancel() {
+	t.mu.Lock()
 	if t.cancelable {
 		t.timer.Stop()
 		t.State = TimeAfterTaskStateDone
 	}
+	t.mu.Unlock()
 }
 
 type TimeAfterTasks []*TimeAfterTask
@@ -66,7 +76,11 @@ func (tasks TimeAfterTasks) Wait(delay time.Duration, countMax int) {
 	for {
 		allDone := true
 		for _, task := range tasks {
-			if task.State != TimeAfterTaskStateDone {
+			task.mu.Lock()
+			state := task.State
+			task.mu.Unlock()
+
+			if state != TimeAfterTaskStateDone {
 				allDone = false
 				break
 			}

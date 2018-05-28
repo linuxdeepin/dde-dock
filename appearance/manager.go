@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"os/user"
 	"strconv"
+	"sync"
 	"time"
 
 	"gir/gio-2.0"
@@ -100,7 +101,8 @@ type Manager struct {
 	wrapBgSetting  *gio.Settings
 	gnomeBgSetting *gio.Settings
 
-	defaultFontConfig DefaultFontConfig
+	defaultFontConfig   DefaultFontConfig
+	defaultFontConfigMu sync.Mutex
 
 	watcher    *fsnotify.Watcher
 	endWatcher chan struct{}
@@ -288,8 +290,6 @@ func (m *Manager) init() {
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
 		logger.Warning("load default font config failed:", err)
-	} else {
-		logger.Debugf("load default font config ok %#v", m.defaultFontConfig)
 	}
 
 	m.doSetGtkTheme(m.GtkTheme.Get())
@@ -452,12 +452,19 @@ func (m *Manager) loadDefaultFontConfig(filename string) error {
 		return err
 	}
 
+	m.defaultFontConfigMu.Lock()
 	m.defaultFontConfig = defaultFontConfig
+	m.defaultFontConfigMu.Unlock()
+
+	logger.Debugf("load default font config ok %#v", defaultFontConfig)
 	return nil
 }
 
 func (m *Manager) getDefaultFonts() (standard string, monospace string) {
+	m.defaultFontConfigMu.Lock()
 	cfg := m.defaultFontConfig
+	m.defaultFontConfigMu.Unlock()
+
 	if cfg == nil {
 		return defaultStandardFont, defaultMonospaceFont
 	}
