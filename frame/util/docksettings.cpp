@@ -467,12 +467,16 @@ void DockSettings::updateForbidPostions()
     QList<QRect> rawScreenRects;
     for (auto *s : screens)
     {
+        qInfo() << s->name() << s->geometry();
+
         if (s == qApp->primaryScreen())
             continue;
 
         const QRect &g = s->geometry();
         rawScreenRects << QRect(g.topLeft(), g.size() * s->devicePixelRatio());
     }
+
+    qInfo() << rawScreenRects << m_screenRawWidth << m_screenRawHeight;
 
     if (!test(Top, rawScreenRects))
         forbids << Top;
@@ -488,7 +492,6 @@ void DockSettings::updateForbidPostions()
 
 void DockSettings::calculateWindowConfig()
 {
-//    qDebug() << Q_FUNC_INFO;
     const auto ratio = qApp->devicePixelRatio();
     const int defaultHeight = std::round(AppItem::itemBaseHeight() / ratio);
     const int defaultWidth = std::round(AppItem::itemBaseWidth() / ratio);
