@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+[3.2.17] 2018-05-29
+*   fix(session-daemon): some data race problems
+*   feat(appearance): sync desktop backgrounds during startup
+*   fix(dock): panic if winInfo.wmClass is nil
+*   chore(dock): entry.attachWindow print window info
+*   chore: update makefile
+*   chore: update makefile for arch `sw_64`
+*   fix(gesture): disabled if session inactive
+
 [3.2.16] 2018-05-24
 *   add fprintd depends in `Desktop edition system`
 *   fix(network): allow to delete when creating vpn connection
