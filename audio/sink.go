@@ -21,11 +21,9 @@ package audio
 
 import (
 	"fmt"
-	"strings"
-
-	"sync"
-
 	"strconv"
+	"strings"
+	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -33,9 +31,9 @@ import (
 )
 
 type Sink struct {
+	audio   *Audio
 	service *dbusutil.Service
 	PropsMu sync.RWMutex
-	core    *pulse.Sink
 	index   uint32
 
 	Name        string
@@ -48,7 +46,9 @@ type Sink struct {
 	Mute bool
 
 	// 当前音量
-	Volume float64
+	Volume     float64
+	cVolume    pulse.CVolume
+	channelMap pulse.ChannelMap
 	// 左右声道平衡值
 	Balance float64
 	// 是否支持左右声道调整
@@ -76,13 +76,13 @@ type Sink struct {
 	}
 }
 
-func NewSink(core *pulse.Sink, service *dbusutil.Service) *Sink {
+func newSink(sinkInfo *pulse.Sink, audio *Audio) *Sink {
 	s := &Sink{
-		core:    core,
-		service: service,
+		audio:   audio,
+		service: audio.service,
+		index:   sinkInfo.Index,
 	}
-	s.index = s.core.Index
-	s.update()
+	s.update(sinkInfo)
 	return s
 }
 
@@ -99,9 +99,13 @@ func (s *Sink) SetVolume(v float64, isPlay bool) *dbus.Error {
 	if v == 0 {
 		v = 0.001
 	}
-	s.core.SetVolume(s.core.Volume.SetAvg(v))
+	s.PropsMu.Lock()
+	cv := s.cVolume.SetAvg(v)
+	s.PropsMu.Unlock()
+	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
+
 	if isPlay {
-		playFeedbackWithDevice(s.Name)
+		s.playFeedback()
 	}
 	return nil
 }
@@ -116,9 +120,12 @@ func (s *Sink) SetBalance(v float64, isPlay bool) *dbus.Error {
 		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
-	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+	s.PropsMu.RLock()
+	cv := s.cVolume.SetBalance(s.channelMap, v)
+	s.PropsMu.RUnlock()
+	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
 	if isPlay {
-		playFeedbackWithDevice(s.Name)
+		s.playFeedback()
 	}
 	return nil
 }
@@ -133,24 +140,27 @@ func (s *Sink) SetFade(v float64) *dbus.Error {
 		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
 
-	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
-	playFeedbackWithDevice(s.Name)
+	s.PropsMu.RLock()
+	cv := s.cVolume.SetFade(s.channelMap, v)
+	s.PropsMu.RUnlock()
+	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
+	s.playFeedback()
 	return nil
 }
 
 // 是否静音
 func (s *Sink) SetMute(v bool) *dbus.Error {
 	logger.Debugf("Sink #%d SetMute %v", s.index, v)
-	s.core.SetMute(v)
+	s.audio.context().SetSinkMuteByIndex(s.index, v)
 	if !v {
-		playFeedbackWithDevice(s.Name)
+		s.playFeedback()
 	}
 	return nil
 }
 
 // 设置此设备的当前使用端口
 func (s *Sink) SetPort(name string) *dbus.Error {
-	s.core.SetPort(name)
+	s.audio.context().SetSinkPortByIndex(s.index, name)
 	return nil
 }
 
@@ -162,38 +172,34 @@ func (*Sink) GetInterfaceName() string {
 	return dbusInterface + ".Sink"
 }
 
-// if prev active port is 'headset-output',
-// after unpluged, will lost the port info
-var _prevSinkActivePort Port
-
-func (s *Sink) update() {
-	s.Name = s.core.Name
-	s.Description = s.core.Description
-	s.Card = s.core.Card
-	s.BaseVolume = s.core.BaseVolume.ToPercent()
-
+func (s *Sink) update(sinkInfo *pulse.Sink) {
 	s.PropsMu.Lock()
-	s.setPropMute(s.core.Mute)
-	s.setPropVolume(floatPrecision(s.core.Volume.Avg()))
+
+	s.Name = sinkInfo.Name
+	s.Description = sinkInfo.Description
+	s.Card = sinkInfo.Card
+	s.BaseVolume = sinkInfo.BaseVolume.ToPercent()
+	s.cVolume = sinkInfo.Volume
+	s.channelMap = sinkInfo.ChannelMap
+
+	s.setPropMute(sinkInfo.Mute)
+	s.setPropVolume(floatPrecision(sinkInfo.Volume.Avg()))
 
 	s.setPropSupportFade(false)
-	s.setPropFade(s.core.Volume.Fade(s.core.ChannelMap))
+	s.setPropFade(sinkInfo.Volume.Fade(sinkInfo.ChannelMap))
 	s.setPropSupportBalance(true)
-	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
+	s.setPropBalance(sinkInfo.Volume.Balance(sinkInfo.ChannelMap))
 
 	oldActivePort := s.ActivePort
-	activePortChanged := s.setPropActivePort(toPort(s.core.ActivePort))
+	newActivePort := toPort(sinkInfo.ActivePort)
+	activePortChanged := s.setPropActivePort(newActivePort)
 
-	var ports []Port
-	for _, p := range s.core.Ports {
-		ports = append(ports, toPort(p))
-	}
-	s.setPropPorts(ports)
-
+	s.setPropPorts(toPorts(sinkInfo.Ports))
 	s.PropsMu.Unlock()
 
 	if activePortChanged {
-		logger.Debugf("sink #%d active port changed, old %v, new %v", s.index, oldActivePort, s.ActivePort)
+		logger.Debugf("sink #%d active port changed, old %v, new %v",
+			s.index, oldActivePort, newActivePort)
 		// old port but has new available state
 		oldPort, foundOldPort := getPortByName(s.Ports, oldActivePort.Name)
 		var oldPortUnavailable bool
@@ -201,11 +207,11 @@ func (s *Sink) update() {
 			logger.Debug("Sink.update not found old port")
 			oldPortUnavailable = true
 		} else {
-			oldPortUnavailable = (int(oldPort.Available) == pulse.AvailableTypeNo)
+			oldPortUnavailable = int(oldPort.Available) == pulse.AvailableTypeNo
 		}
 		logger.Debugf("oldPortUnavailable: %v", oldPortUnavailable)
-		handleUnplugedEvent(_prevSinkActivePort, s.ActivePort, oldPortUnavailable)
-		_prevSinkActivePort = s.ActivePort
+
+		handleUnplugedEvent(oldActivePort, newActivePort, oldPortUnavailable)
 	}
 }
 
@@ -214,7 +220,7 @@ func handleUnplugedEvent(oldActivePort, newActivePort Port, oldPortUnavailable b
 	logger.Debug("[handleUnplugedEvent] New port:", newActivePort.String())
 	// old active port is headphone or bluetooth
 	if isHeadphoneOrHeadsetPort(oldActivePort.Name) &&
-		// old active port is not unavailable
+		// old active port available is yes or unknown, not no
 		int(oldActivePort.Available) != pulse.AvailableTypeNo &&
 		// new port is not headphone and bluetooth
 		!isHeadphoneOrHeadsetPort(newActivePort.Name) && oldPortUnavailable {
@@ -230,4 +236,11 @@ func isHeadphoneOrHeadsetPort(portName string) bool {
 func (s *Sink) GetMeter() (dbus.ObjectPath, *dbus.Error) {
 	//TODO
 	return "/", nil
+}
+
+func (s *Sink) playFeedback() {
+	s.PropsMu.RLock()
+	name := s.Name
+	s.PropsMu.RUnlock()
+	playFeedbackWithDevice(name)
 }

@@ -20,9 +20,10 @@
 package audio
 
 import (
+	"sort"
+
 	"pkg.deepin.io/lib/pulse"
 	"pkg.deepin.io/lib/strv"
-	"sort"
 )
 
 const (
@@ -65,7 +66,7 @@ func selectNewCardProfile(c *pulse.Card) {
 		return
 	}
 
-	var profiles cProfileInfos2
+	var profiles pulse.ProfileInfos2
 	for _, p := range c.Profiles {
 		// skip the profile in the blacklist
 		if blacklist.Contains(p.Name) {

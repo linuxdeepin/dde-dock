@@ -21,113 +21,132 @@ package audio
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/pulse"
 	"sort"
-	"sync"
+
+	"pkg.deepin.io/lib/pulse"
 )
 
-var (
-	cardLocker sync.Mutex
-)
-
-type CardInfo struct {
+type Card struct {
 	Id            uint32
 	Name          string
-	ActiveProfile *ProfileInfo2
-	Profiles      ProfileInfos2
+	ActiveProfile *Profile
+	Profiles      ProfileList
 	Ports         pulse.CardPortInfos
 	core          *pulse.Card
 }
 
-func newCardInfo(card *pulse.Card) *CardInfo {
-	var info = new(CardInfo)
+type CardExport struct {
+	Id    uint32
+	Name  string
+	Ports []CardPortExport
+}
+
+type CardPortExport struct {
+	Name        string
+	Description string
+	Direction   int
+}
+
+func newCard(card *pulse.Card) *Card {
+	var info = new(Card)
 	info.core = card
 	info.update(card)
 	return info
 }
 
-func (info *CardInfo) update(card *pulse.Card) {
-	info.Id = card.Index
+func (c *Card) update(card *pulse.Card) {
+	c.Id = card.Index
 	propAlsaCardName := card.PropList["alsa.card_name"]
 	if propAlsaCardName != "" {
-		info.Name = propAlsaCardName
+		c.Name = propAlsaCardName
 	} else {
-		info.Name = card.Name
+		c.Name = card.Name
 	}
 
-	info.ActiveProfile = newProfileInfo2(card.ActiveProfile)
-	sort.Sort(cProfileInfos2(card.Profiles))
-	info.Profiles = newProfileInfos2(card.Profiles)
-	info.filterProfile(card)
-	info.Ports = card.Ports
+	c.ActiveProfile = newProfile(card.ActiveProfile)
+	sort.Sort(card.Profiles)
+	c.Profiles = newProfileList(card.Profiles)
+	c.filterProfile(card)
+	c.Ports = card.Ports
 }
 
-func (info *CardInfo) tryGetProfileByPort(portName string) (string, error) {
-	profile, _ := info.Ports.TrySelectProfile(portName)
+func (c *Card) tryGetProfileByPort(portName string) (string, error) {
+	profile, _ := c.Ports.TrySelectProfile(portName)
 	if len(profile) == 0 {
-		return "", fmt.Errorf("Not found profile for port '%s'", portName)
+		return "", fmt.Errorf("not found profile for port '%s'", portName)
 	}
 	return profile, nil
 }
 
-func (info *CardInfo) filterProfile(card *pulse.Card) {
-	var profiles ProfileInfos2
+func (c *Card) filterProfile(card *pulse.Card) {
+	var profiles ProfileList
 	blacklist := profileBlacklist(card)
-	for _, p := range info.Profiles {
+	for _, p := range c.Profiles {
 		// skip unavailable and blacklisted profiles
 		if p.Available == 0 || blacklist.Contains(p.Name) {
+			// TODO : p.Available == 0 ?
 			continue
 		}
 		profiles = append(profiles, p)
 	}
-	info.Profiles = profiles
+	c.Profiles = profiles
 }
 
-type CardInfos []*CardInfo
+type CardList []*Card
 
-func newCardInfos(cards []*pulse.Card) CardInfos {
-	var infos CardInfos
-	cardLocker.Lock()
-	defer cardLocker.Unlock()
+func newCardList(cards []*pulse.Card) CardList {
+	var result CardList
 	for _, v := range cards {
-		infos = append(infos, newCardInfo(v))
+		result = append(result, newCard(v))
 	}
-	return infos
+	return result
 }
 
-func (infos CardInfos) string() string {
-	return toJSON(infos)
+func (cl CardList) string() string {
+	var list []CardExport
+	for _, cardInfo := range cl {
+		var ports []CardPortExport
+		for _, portInfo := range cardInfo.Ports {
+			ports = append(ports, CardPortExport{
+				Name:        portInfo.Name,
+				Description: portInfo.Description,
+				Direction:   portInfo.Direction,
+			})
+		}
+
+		list = append(list, CardExport{
+			Id:    cardInfo.Id,
+			Name:  cardInfo.Name,
+			Ports: ports,
+		})
+	}
+	return toJSON(list)
 }
 
-func (infos CardInfos) get(id uint32) (*CardInfo, error) {
-	cardLocker.Lock()
-	defer cardLocker.Unlock()
-	for _, info := range infos {
+func (cl CardList) get(id uint32) (*Card, error) {
+	for _, info := range cl {
 		if info.Id == id {
 			return info, nil
 		}
 	}
-	return nil, fmt.Errorf("Invalid card id: %v", id)
+	return nil, fmt.Errorf("invalid card id: %v", id)
 }
 
-func (infos CardInfos) add(info *CardInfo) (CardInfos, bool) {
-	tmp, _ := infos.get(info.Id)
-	if tmp != nil {
-		return infos, false
+func (cl CardList) add(info *Card) (CardList, bool) {
+	card, _ := cl.get(info.Id)
+	if card != nil {
+		return cl, false
 	}
 
-	cardLocker.Lock()
-	defer cardLocker.Unlock()
-	infos = append(infos, info)
-	return infos, true
+	return append(cl, info), true
 }
 
-func (infos CardInfos) delete(id uint32) (CardInfos, bool) {
+func (cl CardList) delete(id uint32) (CardList, bool) {
 	var (
-		ret     CardInfos
+		ret     CardList
 		deleted bool
 	)
-	for _, info := range infos {
+	for _, info := range cl {
 		if info.Id == id {
 			deleted = true
 			continue
@@ -137,14 +156,14 @@ func (infos CardInfos) delete(id uint32) (CardInfos, bool) {
 	return ret, deleted
 }
 
-func (infos CardInfos) getAvailablePort(direction int) (uint32, pulse.CardPortInfo) {
+func (cl CardList) getAvailablePort(direction int) (uint32, pulse.CardPortInfo) {
 	var (
 		idY   uint32
 		id    uint32
 		portY pulse.CardPortInfo // Yes state
 		port  pulse.CardPortInfo
 	)
-	for _, info := range infos {
+	for _, info := range cl {
 		v := hasPortAvailable(info.Ports, direction, true)
 		if v.Name != "" {
 			if portY.Priority < v.Priority || portY.Name == "" {
@@ -170,7 +189,7 @@ func (infos CardInfos) getAvailablePort(direction int) (uint32, pulse.CardPortIn
 func hasPortAvailable(infos pulse.CardPortInfos, direction int, onlyYes bool) pulse.CardPortInfo {
 	var (
 		portY pulse.CardPortInfo // Yes state
-		portU pulse.CardPortInfo // Unknow state
+		portU pulse.CardPortInfo // Unknown state
 	)
 	for _, v := range infos {
 		if v.Direction != direction {
@@ -196,22 +215,4 @@ func hasPortAvailable(infos pulse.CardPortInfos, direction int, onlyYes bool) pu
 		return portY
 	}
 	return portU
-}
-
-func hasPortChanged(oldInfos, newInfos pulse.CardPortInfos) (old, port pulse.CardPortInfo) {
-	if len(oldInfos) != len(newInfos) {
-		return
-	}
-	for _, v := range oldInfos {
-		tmp, _ := newInfos.Get(v.Name, v.Direction)
-		if v.Available == tmp.Available {
-			continue
-		}
-
-		if port.Priority < tmp.Priority || port.Name == "" {
-			old = v
-			port = tmp
-		}
-	}
-	return old, port
 }

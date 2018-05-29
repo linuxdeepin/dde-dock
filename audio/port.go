@@ -21,6 +21,7 @@ package audio
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/lib/pulse"
 )
 
@@ -49,6 +50,13 @@ func toPort(v pulse.PortInfo) Port {
 		Description: v.Description,
 		Available:   byte(v.Available),
 	}
+}
+
+func toPorts(portInfoList []pulse.PortInfo) (result []Port) {
+	for _, p := range portInfoList {
+		result = append(result, toPort(p))
+	}
+	return
 }
 
 // return port and whether found

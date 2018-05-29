@@ -21,11 +21,12 @@ package audio
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/pulse"
 	"sort"
+
+	"pkg.deepin.io/lib/pulse"
 )
 
-type ProfileInfo2 struct {
+type Profile struct {
 	Name        string
 	Description string
 
@@ -37,8 +38,8 @@ type ProfileInfo2 struct {
 	Available int
 }
 
-func newProfileInfo2(info pulse.ProfileInfo2) *ProfileInfo2 {
-	return &ProfileInfo2{
+func newProfile(info pulse.ProfileInfo2) *Profile {
+	return &Profile{
 		Name:        info.Name,
 		Description: info.Description,
 		Priority:    info.Priority,
@@ -46,46 +47,23 @@ func newProfileInfo2(info pulse.ProfileInfo2) *ProfileInfo2 {
 	}
 }
 
-type ProfileInfos2 []*ProfileInfo2
+type ProfileList []*Profile
 
-func newProfileInfos2(infos []pulse.ProfileInfo2) ProfileInfos2 {
-	var pinfos ProfileInfos2
-	for _, v := range infos {
-		pinfos = append(pinfos, newProfileInfo2(v))
+func newProfileList(src []pulse.ProfileInfo2) ProfileList {
+	var result ProfileList
+	for _, v := range src {
+		result = append(result, newProfile(v))
 	}
-	return pinfos
+	return result
 }
 
-func (infos ProfileInfos2) get(name string) (*ProfileInfo2, error) {
-	for _, info := range infos {
+func (pl ProfileList) get(name string) (*Profile, error) {
+	for _, info := range pl {
 		if info.Name == name {
 			return info, nil
 		}
 	}
-	return nil, fmt.Errorf("Invalid profile name: %v", name)
-}
-
-type cProfileInfos2 []pulse.ProfileInfo2
-
-func (infos cProfileInfos2) exist(name string) bool {
-	for _, info := range infos {
-		if info.Name == name {
-			return true
-		}
-	}
-	return false
-}
-
-func (infos cProfileInfos2) Len() int {
-	return len(infos)
-}
-
-func (infos cProfileInfos2) Less(i, j int) bool {
-	return infos[i].Priority > infos[j].Priority
-}
-
-func (infos cProfileInfos2) Swap(i, j int) {
-	infos[i], infos[j] = infos[j], infos[i]
+	return nil, fmt.Errorf("invalid profile name: %v", name)
 }
 
 func getCommonProfiles(info1, info2 pulse.CardPortInfo) pulse.ProfileInfos2 {

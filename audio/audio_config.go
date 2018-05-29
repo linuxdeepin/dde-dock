@@ -26,7 +26,7 @@ import (
 )
 
 func (a *Audio) applyConfig() {
-	info, err := readConfigInfo()
+	info, err := readConfig()
 	if err != nil {
 		logger.Warning("Read config info failed:", err)
 		return
@@ -38,7 +38,7 @@ func (a *Audio) applyConfig() {
 		return
 	}
 
-	for _, card := range a.core.GetCardList() {
+	for _, card := range a.ctx.GetCardList() {
 		v, ok := info.Profiles[card.Name]
 		if !ok {
 			continue
@@ -51,7 +51,7 @@ func (a *Audio) applyConfig() {
 	}
 
 	var sinkValidity = true
-	for _, s := range a.core.GetSinkList() {
+	for _, s := range a.ctx.GetSinkList() {
 		if s.Name == info.Sink {
 			if len(info.SinkPort) == 0 {
 				sinkValidity = false
@@ -60,59 +60,54 @@ func (a *Audio) applyConfig() {
 			port := pulse.PortInfos(s.Ports).Get(info.SinkPort)
 			// if port invalid, nothing to do.
 			// TODO: some device port can play sound when state is 'NO', how to fix?
-			if port == nil || (autoSwitchPort && port.Available == pulse.AvailableTypeNo) {
+			if port == nil {
 				sinkValidity = false
 				break
 			}
 
 			if s.ActivePort.Name != info.SinkPort {
-				s.SetPort(info.SinkPort)
+				a.ctx.SetSinkPortByIndex(s.Index, info.SinkPort)
 				time.Sleep(time.Microsecond * 50)
 			}
-			s.SetVolume(s.Volume.SetAvg(info.SinkVolume))
+			cv := s.Volume.SetAvg(info.SinkVolume)
+			a.ctx.SetSinkVolumeByIndex(s.Index, cv)
 			time.Sleep(time.Microsecond * 50)
 			break
 		}
 	}
 	logger.Debug("Audio config sink validity:", sinkValidity, info.Sink)
 	if sinkValidity {
-		a.core.SetDefaultSink(info.Sink)
+		a.ctx.SetDefaultSink(info.Sink)
 		time.Sleep(time.Microsecond * 50)
 	}
 
 	var sourceValidity = true
-	for _, s := range a.core.GetSourceList() {
+	for _, s := range a.ctx.GetSourceList() {
 		if s.Name == info.Source {
 			if len(info.SourcePort) == 0 {
 				sourceValidity = false
 				continue
 			}
 			port := pulse.PortInfos(s.Ports).Get(info.SourcePort)
-			if port == nil || (autoSwitchPort && port.Available == pulse.AvailableTypeNo) {
+			if port == nil {
 				sourceValidity = false
 				continue
 			}
 			if s.ActivePort.Name != info.SourcePort {
-				s.SetPort(info.SourcePort)
+				a.ctx.SetSourcePortByIndex(s.Index, info.SourcePort)
 				time.Sleep(time.Microsecond * 50)
 			}
-			s.SetVolume(s.Volume.SetAvg(info.SourceVolume))
+			cv := s.Volume.SetAvg(info.SourceVolume)
+			a.ctx.SetSourceVolumeByIndex(s.Index, cv)
 			time.Sleep(time.Microsecond * 50)
 			break
 		}
 	}
 	logger.Debug("Audio config source validity:", sourceValidity, info.Source)
 	if sourceValidity {
-		a.core.SetDefaultSource(info.Source)
+		a.ctx.SetDefaultSource(info.Source)
 		time.Sleep(time.Microsecond * 50)
 	}
-
-	if !autoSwitchPort || sinkValidity || sourceValidity {
-		return
-	}
-
-	logger.Debug("Audio config no invalid sink/source, auto switch")
-	a.trySelectBestPort()
 }
 
 func (a *Audio) trySelectBestPort() {
@@ -132,20 +127,6 @@ func (a *Audio) trySelectBestPort() {
 		if err != nil {
 			logger.Warningf("Failed to switch to source port: %#v, error: %v", sourcePort, err)
 		}
-	}
-}
-
-func (a *Audio) updateProps() {
-	a.cards = newCardInfos(a.core.GetCardList())
-
-	a.PropsMu.Lock()
-	a.setPropCards(a.cards.string())
-	a.PropsMu.Unlock()
-
-	sinfo, _ := a.core.GetServer()
-	if sinfo != nil {
-		a.updateDefaultSink(sinfo.DefaultSinkName, true)
-		a.updateDefaultSource(sinfo.DefaultSourceName, true)
 	}
 }
 
@@ -169,47 +150,51 @@ func (a *Audio) saveConfig() {
 }
 
 func (a *Audio) doSaveConfig() {
-	var info = configInfo{
+	var info = config{
 		Profiles: make(map[string]string),
 	}
-	for _, card := range a.core.GetCardList() {
+
+	ctx := a.context()
+	for _, card := range ctx.GetCardList() {
 		info.Profiles[card.Name] = card.ActiveProfile.Name
 	}
 
-	for _, s := range a.core.GetSinkList() {
-		if a.defaultSink == nil || s.Name != a.defaultSink.Name {
+	for _, sinkInfo := range ctx.GetSinkList() {
+		if a.getDefaultSinkName() != sinkInfo.Name {
 			continue
 		}
-		info.Sink = s.Name
-		info.SinkPort = s.ActivePort.Name
-		info.SinkVolume = s.Volume.Avg()
+
+		info.Sink = sinkInfo.Name
+		info.SinkPort = sinkInfo.ActivePort.Name
+		info.SinkVolume = sinkInfo.Volume.Avg()
 		break
 	}
 
-	for _, s := range a.core.GetSourceList() {
-		if a.defaultSource == nil || s.Name != a.defaultSource.Name {
+	for _, sourceInfo := range ctx.GetSourceList() {
+		if a.getDefaultSourceName() != sourceInfo.Name {
 			continue
 		}
-		info.Source = s.Name
-		info.SourcePort = s.ActivePort.Name
-		info.SourceVolume = s.Volume.Avg()
+
+		info.Source = sourceInfo.Name
+		info.SourcePort = sourceInfo.ActivePort.Name
+		info.SourceVolume = sourceInfo.Volume.Avg()
 		break
 	}
 
-	err := saveConfigInfo(&info)
+	err := saveConfig(&info)
 	if err != nil {
 		logger.Warning("Save config file failed:", info.string(), err)
 	}
 }
 
-func (a *Audio) isConfigValid(cfg *configInfo) bool {
+func (a *Audio) isConfigValid(cfg *config) bool {
 	if len(cfg.Profiles) == 0 {
 		return false
 	}
 
 	// check cfg.Profiles
 	var validProfileCount int
-	for _, card := range a.core.GetCardList() {
+	for _, card := range a.ctx.GetCardList() {
 		cardProfile, ok := cfg.Profiles[card.Name]
 		if !ok {
 			continue
@@ -236,7 +221,7 @@ func (a *Audio) isConfigValid(cfg *configInfo) bool {
 
 	// check cfg.Sink and cfg.SinkPort
 	var sinkValid bool
-	for _, sink := range a.core.GetSinkList() {
+	for _, sink := range a.ctx.GetSinkList() {
 		if sink.Name != cfg.Sink {
 			continue
 		}
@@ -259,7 +244,7 @@ func (a *Audio) isConfigValid(cfg *configInfo) bool {
 
 	// check cfg.Source and cfg.SourcePort
 	var sourceValid bool
-	for _, source := range a.core.GetSourceList() {
+	for _, source := range a.ctx.GetSourceList() {
 		if source.Name != cfg.Source {
 			continue
 		}

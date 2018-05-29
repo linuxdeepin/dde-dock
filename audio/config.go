@@ -21,13 +21,14 @@ package audio
 
 import (
 	"encoding/json"
-	dutils "pkg.deepin.io/lib/utils"
 	"sync"
+
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 var (
 	fileLocker    sync.Mutex
-	configCache   *configInfo
+	configCache   *config
 	configHandler *dutils.Config
 )
 
@@ -36,7 +37,7 @@ func init() {
 	configHandler.SetConfigName("dde-daemon/audio")
 }
 
-type configInfo struct {
+type config struct {
 	Profiles   map[string]string // Profiles[cardName] = activeProfile
 	Sink       string
 	Source     string
@@ -47,22 +48,22 @@ type configInfo struct {
 	SourceVolume float64
 }
 
-func (info *configInfo) string() string {
-	data, _ := json.Marshal(info)
+func (c *config) string() string {
+	data, _ := json.Marshal(c)
 	return string(data)
 }
 
-func (a *configInfo) equal(b *configInfo) bool {
-	return (a.Sink == b.Sink &&
-		a.Source == b.Source &&
-		a.SinkPort == b.SinkPort &&
-		a.SourcePort == b.SourcePort &&
-		a.SinkVolume == b.SinkVolume &&
-		a.SourceVolume == b.SourceVolume &&
-		mapStrStrEqual(a.Profiles, b.Profiles))
+func (c *config) equal(b *config) bool {
+	return c.Sink == b.Sink &&
+		c.Source == b.Source &&
+		c.SinkPort == b.SinkPort &&
+		c.SourcePort == b.SourcePort &&
+		c.SinkVolume == b.SinkVolume &&
+		c.SourceVolume == b.SourceVolume &&
+		mapStrStrEqual(c.Profiles, b.Profiles)
 }
 
-func readConfigInfo() (*configInfo, error) {
+func readConfig() (*config, error) {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
 
@@ -70,7 +71,7 @@ func readConfigInfo() (*configInfo, error) {
 		return configCache, nil
 	}
 
-	var info configInfo
+	var info config
 	err := configHandler.Load(&info)
 	if err != nil {
 		return nil, err
@@ -80,7 +81,7 @@ func readConfigInfo() (*configInfo, error) {
 	return configCache, nil
 }
 
-func saveConfigInfo(info *configInfo) error {
+func saveConfig(info *config) error {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
 

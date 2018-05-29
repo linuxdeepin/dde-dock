@@ -28,26 +28,23 @@ import (
 	"pkg.deepin.io/lib/pulse"
 )
 
-var (
-	meterLocker sync.Mutex
-	meters      = make(map[string]*Meter)
-)
-
 type Meter struct {
+	audio   *Audio
 	service *dbusutil.Service
 	PropsMu sync.RWMutex
 	Volume  float64
 	id      string
-	hasTick bool
+	alive   bool
 	core    *pulse.SourceMeter
 }
 
 //TODO: use pulse.Meter instead of remove pulse.SourceMeter
-func NewMeter(id string, core *pulse.SourceMeter, service *dbusutil.Service) *Meter {
+func newMeter(id string, core *pulse.SourceMeter, audio *Audio) *Meter {
 	m := &Meter{
 		id:      id,
 		core:    core,
-		service: service,
+		audio:   audio,
+		service: audio.service,
 	}
 	m.Tick()
 	go m.tryQuit()
@@ -55,8 +52,14 @@ func NewMeter(id string, core *pulse.SourceMeter, service *dbusutil.Service) *Me
 }
 
 func (m *Meter) quit() {
-	delete(meters, m.id)
-	m.service.StopExport(m)
+	m.audio.mu.Lock()
+	delete(m.audio.meters, m.id)
+	m.audio.mu.Unlock()
+
+	err := m.service.StopExport(m)
+	if err != nil {
+		logger.Warning(err)
+	}
 	m.core.Destroy()
 }
 
@@ -65,22 +68,22 @@ func (m *Meter) tryQuit() {
 
 	for {
 		select {
-		case _, ok := <-time.After(time.Second * 10):
-			if !ok {
-				logger.Error("Invalid time event")
+		case <-time.After(time.Second * 10):
+			m.PropsMu.Lock()
+			if !m.alive {
+				m.PropsMu.Unlock()
 				return
 			}
-
-			if !m.hasTick {
-				return
-			}
-			m.hasTick = false
+			m.alive = false
+			m.PropsMu.Unlock()
 		}
 	}
 }
 
 func (m *Meter) Tick() *dbus.Error {
-	m.hasTick = true
+	m.PropsMu.Lock()
+	m.alive = true
+	m.PropsMu.Unlock()
 	return nil
 }
 

@@ -27,7 +27,6 @@ import (
 
 var (
 	logger = log.NewLogger("daemon/audio")
-	_audio *Audio
 )
 
 func init() {
@@ -36,6 +35,7 @@ func init() {
 
 type Daemon struct {
 	*loader.ModuleBase
+	audio *Audio
 }
 
 func NewAudioDaemon(logger *log.Logger) *Daemon {
@@ -48,46 +48,53 @@ func (*Daemon) GetDependencies() []string {
 	return []string{}
 }
 
-func finalize() {
-	_audio.destroy()
-	_audio = nil
-}
-
-func (*Daemon) Start() error {
-	if _audio != nil {
+func (d *Daemon) Start() error {
+	if d.audio != nil {
 		return nil
 	}
 
 	service := loader.GetService()
 	ctx := pulse.GetContext()
 	if ctx == nil {
-		logger.Error("Failed to connect pulseaudio server")
-		logger.EndTracing()
+		logger.Error("failed to connect pulseaudio server")
 		return nil
 	}
 
-	_audio = NewAudio(ctx, service)
+	d.audio = newAudio(ctx, service)
 
-	err := service.Export(dbusPath, _audio)
+	err := service.Export(dbusPath, d.audio)
 	if err != nil {
-		finalize()
 		return err
 	}
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		finalize()
 		return err
 	}
 
-	initDefaultVolume(_audio)
+	go d.audio.handleEvent()
+	go d.audio.handleStateChanged()
+	initDefaultVolume(d.audio)
 	return nil
 }
 
-func (*Daemon) Stop() error {
-	if _audio == nil {
+func (d *Daemon) Stop() error {
+	if d.audio == nil {
 		return nil
 	}
 
-	finalize()
+	d.audio.destroy()
+
+	service := loader.GetService()
+	err := service.StopExport(d.audio)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = service.ReleaseName(dbusServiceName)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	d.audio = nil
 	return nil
 }

@@ -20,255 +20,407 @@
 package audio
 
 import "pkg.deepin.io/lib/pulse"
-import "time"
+import (
+	"sort"
+	"strconv"
+	"time"
 
-func (a *Audio) initEventHandlers() {
-	if !a.init {
-		a.core.ConnectStateChanged(pulse.ContextStateFailed, func() {
-			logger.Warning("Pulse context connection failed, try again")
-			a.core = pulse.GetContextForced()
-			a.update()
-			a.init = false
-			a.initEventHandlers()
-		})
+	"pkg.deepin.io/lib/dbus1"
+)
 
-		a.core.Connect(pulse.FacilityCard, func(e int, idx uint32) {
-			a.handleCardEvent(e, idx)
-			a.saveConfig()
-		})
-		a.core.Connect(pulse.FacilitySink, func(e int, idx uint32) {
-			a.handleSinkEvent(e, idx)
-			a.saveConfig()
-		})
-		a.core.Connect(pulse.FacilitySource, func(e int, idx uint32) {
-			a.handleSourceEvent(e, idx)
-			a.saveConfig()
-		})
-		a.core.Connect(pulse.FacilitySinkInput, func(e int, idx uint32) {
-			a.handleSinkInputEvent(e, idx)
-		})
-		a.core.Connect(pulse.FacilityServer, func(e int, idx uint32) {
-			a.handleServerEvent()
-			a.saveConfig()
-		})
-		a.init = true
+func (a *Audio) handleEvent() {
+	for {
+		select {
+		case event := <-a.eventChan:
+			switch event.Facility {
+			case pulse.FacilityServer:
+				a.handleServerEvent(event.Type)
+				a.saveConfig()
+			case pulse.FacilityCard:
+				a.handleCardEvent(event.Type, event.Index)
+				a.saveConfig()
+			case pulse.FacilitySink:
+				a.handleSinkEvent(event.Type, event.Index)
+				a.saveConfig()
+			case pulse.FacilitySource:
+				a.handleSourceEvent(event.Type, event.Index)
+				a.saveConfig()
+			case pulse.FacilitySinkInput:
+				a.handleSinkInputEvent(event.Type, event.Index)
+			}
+
+		case <-a.quit:
+			logger.Debug("handleEvent return")
+			return
+		}
 	}
 }
 
-func (a *Audio) handleCardEvent(eType int, idx uint32) {
-	switch eType {
+func (a *Audio) initCtxChan() {
+	a.ctx.AddEventChan(a.eventChan)
+	a.ctx.AddStateChan(a.stateChan)
+}
+
+func (a *Audio) handleStateChanged() {
+	for {
+		select {
+		case state := <-a.stateChan:
+			switch state {
+			case pulse.ContextStateFailed:
+				logger.Warning("Pulse context connection failed, try again")
+				ctx := pulse.GetContextForced()
+				if ctx == nil {
+					logger.Warning("failed to connect pulseaudio server")
+					break
+				}
+
+				a.destroyCtxRelated()
+				a.mu.Lock()
+				a.ctx = ctx
+				a.mu.Unlock()
+				a.init()
+			}
+
+		case <-a.quit:
+			logger.Debug("handleStateChanged return")
+			return
+		}
+	}
+}
+
+func (a *Audio) handleCardEvent(eventType int, idx uint32) {
+	switch eventType {
 	case pulse.EventTypeNew:
 		logger.Debugf("[Event] card #%d added", idx)
-		card, err := a.core.GetCard(idx)
+		cardInfo, err := a.ctx.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
-		infos, added := a.cards.add(newCardInfo(card))
+		cards, added := a.cards.add(newCard(cardInfo))
 		if added {
 			a.PropsMu.Lock()
-			a.setPropCards(infos.string())
+			a.setPropCards(cards.string())
 			a.PropsMu.Unlock()
-			a.cards = infos
+			a.cards = cards
 		}
 		// fix change profile not work
 		time.AfterFunc(time.Millisecond*500, func() {
-			selectNewCardProfile(card)
-			logger.Debug("After select profile:", card.ActiveProfile.Name)
-
-			if !autoSwitchPort {
-				return
-			}
-			port := hasPortAvailable(card.Ports, pulse.DirectionSink, true)
-			if port.Name != "" {
-				logger.Debug("New card, found available sink port:", port)
-				a.handlePortChanged(card.Index, pulse.CardPortInfo{}, port)
-				time.Sleep(time.Millisecond * 300)
-			}
-			port = hasPortAvailable(card.Ports, pulse.DirectionSource, true)
-			if port.Name != "" {
-				logger.Debug("New card, found available source port:", port)
-				a.handlePortChanged(card.Index, pulse.CardPortInfo{}, port)
-				time.Sleep(time.Millisecond * 300)
-			}
+			selectNewCardProfile(cardInfo)
+			logger.Debug("After select profile:", cardInfo.ActiveProfile.Name)
 		})
 	case pulse.EventTypeRemove:
 		logger.Debugf("[Event] card #%d removed", idx)
-		infos, deleted := a.cards.delete(idx)
+		cards, deleted := a.cards.delete(idx)
 		if deleted {
 			a.PropsMu.Lock()
-			a.setPropCards(infos.string())
+			a.setPropCards(cards.string())
 			a.PropsMu.Unlock()
-			a.cards = infos
+			a.cards = cards
 		}
 	case pulse.EventTypeChange:
 		logger.Debugf("[Event] card #%d changed", idx)
-		card, err := a.core.GetCard(idx)
+		cardInfo, err := a.ctx.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
-		info, _ := a.cards.get(idx)
-		if info != nil {
-			oldPorts := info.Ports
-			info.update(card)
+		a.mu.Lock()
+		card, _ := a.cards.get(idx)
+		if card != nil {
+			card.update(cardInfo)
 			a.PropsMu.Lock()
 			a.setPropCards(a.cards.string())
 			a.PropsMu.Unlock()
+		}
+		a.mu.Unlock()
+	}
+}
 
-			if !autoSwitchPort {
-				return
-			}
-			old, port := hasPortChanged(oldPorts, info.Ports)
-			if port.Name == "" {
-				logger.Debugf("No available port found, old: %#v, new: %#v",
-					oldPorts, info.Ports)
-				return
-			}
-			a.handlePortChanged(info.Id, old, port)
-		}
-	}
-}
-func (a *Audio) handlePortChanged(cardId uint32, old, port pulse.CardPortInfo) {
-	logger.Debugf("Will switch to port: %#v", port)
-	var err error
-	if port.Available == pulse.AvailableTypeYes {
-		// switch to port
-		err = a.SetPort(cardId, port.Name, int32(port.Direction))
-	} else if old.Available == pulse.AvailableTypeYes &&
-		port.Available == pulse.AvailableTypeNo {
-		// switch from port
-		id, p := a.cards.getAvailablePort(port.Direction)
-		if p.Name == "" {
-			logger.Warningf("Not found available port: %#v", a.cards)
-			return
-		}
-		logger.Debugf("Will switch from port: %#v, switch to: %#v", port, p)
-		err = a.SetPort(id, p.Name, int32(p.Direction))
-	}
+func (a *Audio) addSink(sinkInfo *pulse.Sink) {
+	sink := newSink(sinkInfo, a)
+
+	a.mu.Lock()
+	a.sinks[sinkInfo.Index] = sink
+	a.mu.Unlock()
+
+	sinkPath := sink.getPath()
+	err := a.service.Export(sinkPath, sink)
 	if err != nil {
-		logger.Warning("Failed to set port:", err)
-	}
-}
-func (a *Audio) handleSinkEvent(eType int, idx uint32) {
-	switch eType {
-	case pulse.EventTypeNew:
-		logger.Debugf("[Event] sink #%d added", idx)
-		sinfo, _ := a.core.GetServer()
-		if sinfo != nil {
-			a.updateDefaultSink(sinfo.DefaultSinkName, false)
-		}
-	case pulse.EventTypeRemove:
-		logger.Debugf("[Event] sink #%d removed", idx)
-		sinfo, _ := a.core.GetServer()
-		if sinfo != nil {
-			a.updateDefaultSink(sinfo.DefaultSinkName, false)
-		}
-	case pulse.EventTypeChange:
-		logger.Debugf("[Event] sink #%d changed", idx)
-		if a.defaultSink != nil && a.defaultSink.index == idx {
-			info, err := a.core.GetSink(idx)
-			if err != nil {
-				logger.Warning(err)
-				return
-			}
-			a.defaultSink.core = info
-			a.defaultSink.update()
-		}
-	default:
-		logger.Debugf("[Event] sink #%d unknown type %d", eType, idx)
+		logger.Warning(err)
 		return
 	}
-	if a.defaultSink != nil {
-		a.moveSinkInputsToSink(a.defaultSink.index)
+
+	if sink.Name == a.defaultSinkName {
+		a.defaultSink = sink
+		a.PropsMu.Lock()
+		a.setPropDefaultSink(sinkPath)
+		a.PropsMu.Unlock()
+		logger.Debug("set prop default sink:", sinkPath)
 	}
 }
 
-func (a *Audio) sinkInputPoller() {
-	for {
-		select {
-		case handler, ok := <-a.siEventChan:
-			if !ok {
-				logger.Error("SinkInput event channel has been abnormally closed!")
-				return
-			}
-
-			handler()
-		case <-a.siPollerExit:
+func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
+	switch eventType {
+	case pulse.EventTypeNew:
+		logger.Debugf("[Event] sink #%d added", idx)
+		sinkInfo, err := a.ctx.GetSink(idx)
+		if err != nil {
+			logger.Warning(err)
 			return
 		}
+
+		a.mu.Lock()
+		_, ok := a.sinks[idx]
+		a.mu.Unlock()
+		if ok {
+			return
+		}
+		a.addSink(sinkInfo)
+
+	case pulse.EventTypeRemove:
+		logger.Debugf("[Event] sink #%d removed", idx)
+
+		a.mu.Lock()
+		sink, ok := a.sinks[idx]
+		if !ok {
+			a.mu.Unlock()
+			return
+		}
+		delete(a.sinks, idx)
+		a.mu.Unlock()
+
+		err := a.service.StopExport(sink)
+		if err != nil {
+			logger.Warning(err)
+		}
+
+	case pulse.EventTypeChange:
+		logger.Debugf("[Event] sink #%d changed", idx)
+		sinkInfo, err := a.ctx.GetSink(idx)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+
+		a.mu.Lock()
+		sink, ok := a.sinks[idx]
+		a.mu.Unlock()
+		if !ok {
+			a.addSink(sinkInfo)
+			return
+		}
+		sink.update(sinkInfo)
 	}
 }
 
 func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew:
-		a.siEventChan <- func() {
-			a.addSinkInput(idx)
-		}
+		logger.Debugf("[Event] sink-input #%d added", idx)
+		a.handleSinkInputAdded(idx)
 	case pulse.EventTypeRemove:
-		a.siEventChan <- func() {
-			a.removeSinkInput(idx)
-		}
-
+		logger.Debugf("[Event] sink-input #%d removed", idx)
+		a.handleSinkInputRemoved(idx)
 	case pulse.EventTypeChange:
-		a.siEventChan <- func() {
-			for _, s := range a.sinkInputs {
-				if s.index == idx {
-					info, err := a.core.GetSinkInput(idx)
-					if err != nil {
-						logger.Warning(err)
-						break
-					}
-
-					s.core = info
-					s.update()
-					break
-				}
-			}
+		logger.Debugf("[Event] sink-input #%d changed", idx)
+		sinkInputInfo, err := a.ctx.GetSinkInput(idx)
+		if err != nil {
+			logger.Warning(err)
+			return
 		}
+
+		a.mu.Lock()
+		sinkInput, ok := a.sinkInputs[idx]
+		a.mu.Unlock()
+		if !ok {
+			return
+		}
+		sinkInput.update(sinkInputInfo)
 	}
 }
 
-func (a *Audio) handleSourceEvent(eType int, idx uint32) {
-	switch eType {
+func (a *Audio) updatePropSinkInputs() {
+	var sinkInputIdList []int
+	a.mu.Lock()
+	for _, sinkInput := range a.sinkInputs {
+		if sinkInput.visible {
+			sinkInputIdList = append(sinkInputIdList, int(sinkInput.index))
+		}
+	}
+	a.mu.Unlock()
+	sort.Ints(sinkInputIdList)
+
+	sinkInputPaths := make([]dbus.ObjectPath, len(sinkInputIdList))
+	for idx, id := range sinkInputIdList {
+		sinkInputPaths[idx] = dbus.ObjectPath(dbusPath + "/SinkInput" + strconv.Itoa(id))
+	}
+
+	a.PropsMu.Lock()
+	a.setPropSinkInputs(sinkInputPaths)
+	a.PropsMu.Unlock()
+}
+
+func (a *Audio) addSinkInput(sinkInputInfo *pulse.SinkInput) {
+	sinkInput := newSinkInput(sinkInputInfo, a)
+	a.mu.Lock()
+	a.sinkInputs[sinkInputInfo.Index] = sinkInput
+	a.mu.Unlock()
+
+	sinkInputPath := sinkInput.getPath()
+
+	if sinkInput.visible {
+		err := a.service.Export(sinkInputPath, sinkInput)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+	}
+	a.updatePropSinkInputs()
+
+	logger.Debugf("sink-input #%d play with sink #%d", sinkInputInfo.Index,
+		sinkInputInfo.Sink)
+	// move sink to default sink
+	defaultSink := a.getDefaultSink()
+	if defaultSink != nil &&
+		defaultSink.index != sinkInputInfo.Sink {
+		a.ctx.MoveSinkInputsByIndex([]uint32{sinkInputInfo.Index}, defaultSink.index)
+		logger.Debugf("move sink-input #%d to sink #%d",
+			sinkInputInfo.Index, defaultSink.index)
+	}
+}
+
+func (a *Audio) handleSinkInputAdded(idx uint32) {
+	sinkInputInfo, err := a.ctx.GetSinkInput(idx)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	a.mu.Lock()
+	_, ok := a.sinkInputs[idx]
+	a.mu.Unlock()
+	if ok {
+		return
+	}
+
+	a.addSinkInput(sinkInputInfo)
+}
+
+func (a *Audio) handleSinkInputRemoved(idx uint32) {
+	a.mu.Lock()
+	sinkInput, ok := a.sinkInputs[idx]
+	if !ok {
+		a.mu.Unlock()
+		return
+	}
+	delete(a.sinkInputs, idx)
+	a.mu.Unlock()
+
+	if sinkInput.visible {
+		err := a.service.StopExport(sinkInput)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
+	a.updatePropSinkInputs()
+}
+
+func (a *Audio) addSource(sourceInfo *pulse.Source) {
+	source := newSource(sourceInfo, a)
+
+	a.mu.Lock()
+	a.sources[sourceInfo.Index] = source
+	a.mu.Unlock()
+
+	sourcePath := source.getPath()
+	err := a.service.Export(sourcePath, source)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if a.defaultSourceName == source.Name {
+		a.defaultSource = source
+		a.PropsMu.Lock()
+		a.setPropDefaultSource(sourcePath)
+		a.PropsMu.Unlock()
+	}
+}
+
+func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
+	switch eventType {
 	case pulse.EventTypeNew:
 		logger.Debugf("[Event] source #%d added", idx)
-		sinfo, _ := a.core.GetServer()
-		if sinfo != nil {
-			a.updateDefaultSource(sinfo.DefaultSourceName, false)
+		sourceInfo, err := a.ctx.GetSource(idx)
+		if err != nil {
+			logger.Warning(err)
+			return
 		}
+
+		a.mu.Lock()
+		_, ok := a.sources[idx]
+		a.mu.Unlock()
+		if ok {
+			return
+		}
+		a.addSource(sourceInfo)
+
 	case pulse.EventTypeRemove:
 		logger.Debugf("[Event] source #%d removed", idx)
-		sinfo, _ := a.core.GetServer()
-		if sinfo != nil {
-			a.updateDefaultSource(sinfo.DefaultSourceName, false)
+
+		a.mu.Lock()
+		source, ok := a.sources[idx]
+		if !ok {
+			a.mu.Unlock()
+			return
 		}
+		delete(a.sources, idx)
+		a.mu.Unlock()
+
+		err := a.service.StopExport(source)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+
 	case pulse.EventTypeChange:
 		logger.Debugf("[Event] source #%d changed", idx)
-		if a.defaultSource != nil && a.defaultSource.index == idx {
-			info, err := a.core.GetSource(idx)
-			if err != nil {
-				logger.Warning(err)
-				return
-			}
-			a.defaultSource.core = info
-			a.defaultSource.update()
+		sourceInfo, err := a.ctx.GetSource(idx)
+		if err != nil {
+			logger.Warning(err)
+			return
 		}
-	default:
-		logger.Debugf("[Event] source #%d unknown type %d", idx, eType)
-		return
+
+		a.mu.Lock()
+		source, ok := a.sources[idx]
+		a.mu.Unlock()
+		if !ok {
+			// not found source
+			a.addSource(sourceInfo)
+			return
+		}
+		source.update(sourceInfo)
 	}
 }
 
-func (a *Audio) handleServerEvent() {
-	sinfo, err := a.core.GetServer()
-	if err != nil {
-		logger.Error(err)
-		return
-	}
+func (a *Audio) handleServerEvent(eventType int) {
+	switch eventType {
+	case pulse.EventTypeChange:
+		server, err := a.ctx.GetServer()
+		if err != nil {
+			logger.Error(err)
+			return
+		}
 
-	logger.Debug("[Event] server changed:", sinfo.DefaultSinkName, sinfo.DefaultSourceName)
-	a.updateDefaultSink(sinfo.DefaultSinkName, true)
-	a.updateDefaultSource(sinfo.DefaultSourceName, true)
+		logger.Debugf("[Event] server changed: default sink: %s, default source: %s",
+			server.DefaultSinkName, server.DefaultSourceName)
+
+		a.defaultSinkName = server.DefaultSinkName
+		a.defaultSourceName = server.DefaultSourceName
+
+		a.updateDefaultSink(server.DefaultSinkName)
+		a.updateDefaultSource(server.DefaultSourceName)
+	}
 }
