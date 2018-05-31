@@ -1,0 +1,5 @@
+[clog]
+repository = "https://github.com/linuxdeepin/dde-dock"
+from-latest-tag = true
+
+changelog = "CHANGELOG.md"

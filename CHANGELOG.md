@@ -1,3 +1,13 @@
+<a name="4.6.5"></a>
+### 4.6.5 (2018-05-31)
+
+
+#### Bug Fixes
+
+* **tray:**  remove red background ([6514110b](https://github.com/linuxdeepin/dde-dock/commit/6514110b1dea173ac4989c385767b1e47f882cf9))
+
+
+
 <a name=""></a>
 ##  4.6.4 (2018-05-24)
 
