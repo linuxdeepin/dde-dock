@@ -147,6 +147,8 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorKey, QWidget *p
     p.setColor(QPalette::Background, Qt::red);
     d->label->setPalette(p);
 
+    d->label->setAttribute(Qt::WA_TranslucentBackground);
+
     layout->addWidget(d->label, 0, Qt::AlignCenter);
     setLayout(layout);
 
