@@ -19,7 +19,10 @@
 
 package inputdevices
 
-import "pkg.deepin.io/lib/dbus1"
+import (
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
+)
 
 func (m *Mouse) Reset() *dbus.Error {
 	for _, key := range m.setting.ListKeys() {
@@ -80,6 +83,11 @@ func (kbd *Keyboard) GetLayoutDesc(layout string) (string, *dbus.Error) {
 }
 
 func (kbd *Keyboard) AddUserLayout(layout string) *dbus.Error {
+	err := kbd.checkLayout(layout)
+	if err != nil {
+		return dbusutil.ToError(errInvalidLayout)
+	}
+
 	kbd.addUserLayout(layout)
 	return nil
 }

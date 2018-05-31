@@ -21,9 +21,10 @@ package inputdevices
 
 import (
 	"fmt"
-	"gir/gio-2.0"
 	"os/exec"
 	"sync"
+
+	"gir/gio-2.0"
 )
 
 const (
@@ -77,10 +78,9 @@ func delItemFromList(item string, list []string) ([]string, bool) {
 func filterSpaceStr(list []string) []string {
 	var ret []string
 	for _, v := range list {
-		if len(v) == 0 {
-			continue
+		if v != "" {
+			ret = append(ret, v)
 		}
-		ret = append(ret, v)
 	}
 	return ret
 }

@@ -21,19 +21,23 @@ package inputdevices
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"os/user"
 	"path"
 	"regexp"
 	"strings"
+	"sync"
 
 	"gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"pkg.deepin.io/dde/api/dxinput"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -43,24 +47,28 @@ const (
 	kbdKeyRepeatEnable   = "repeat-enabled"
 	kbdKeyRepeatInterval = "repeat-interval"
 	kbdKeyRepeatDelay    = "delay"
-	kbdKeyLayout         = "layout"
-	kbdKeyLayoutModel    = "layout-model"
 	kbdKeyLayoutOptions  = "layout-options"
-	kbdKeyUserLayoutList = "user-layout-list"
 	kbdKeyCursorBlink    = "cursor-blink-time"
 	kbdKeyCapslockToggle = "capslock-toggle"
 
 	layoutDelim      = ";"
 	kbdDefaultLayout = "us" + layoutDelim
 
-	kbdSystemConfig  = "/etc/default/keyboard"
-	kbdGreeterConfig = "/var/lib/greeter/users.ini"
-	qtDefaultConfig  = ".config/Trolltech.conf"
+	kbdSystemConfig = "/etc/default/keyboard"
+	qtDefaultConfig = ".config/Trolltech.conf"
 
 	cmdSetKbd = "/usr/bin/setxkbmap"
 )
 
 type Keyboard struct {
+	service       *dbusutil.Service
+	sysSigLoop    *dbusutil.SignalLoop
+	PropsMu       sync.RWMutex
+	CurrentLayout string `prop:"access:rw"`
+	// dbusutil-gen: equal=nil
+	UserLayoutList []string
+
+	// dbusutil-gen: ignore-below
 	RepeatEnabled  gsprop.Bool `prop:"access:rw"`
 	CapslockToggle gsprop.Bool `prop:"access:rw"`
 
@@ -69,13 +77,10 @@ type Keyboard struct {
 	RepeatInterval gsprop.Uint `prop:"access:rw"`
 	RepeatDelay    gsprop.Uint `prop:"access:rw"`
 
-	CurrentLayout gsprop.String `prop:"access:rw"`
-
-	UserLayoutList gsprop.Strv
 	UserOptionList gsprop.Strv
 
 	setting       *gio.Settings
-	userObj       *accounts.User
+	user          *accounts.User
 	layoutDescMap map[string]string
 
 	devNumber int
@@ -92,41 +97,54 @@ type Keyboard struct {
 	}
 }
 
-func newKeyboard() *Keyboard {
+func newKeyboard(service *dbusutil.Service) *Keyboard {
 	var kbd = new(Keyboard)
 
+	kbd.service = service
 	kbd.setting = gio.NewSettings(kbdSchema)
-	kbd.CurrentLayout.Bind(kbd.setting, kbdKeyLayout)
 	kbd.RepeatEnabled.Bind(kbd.setting, kbdKeyRepeatEnable)
 	kbd.RepeatInterval.Bind(kbd.setting, kbdKeyRepeatInterval)
 	kbd.RepeatDelay.Bind(kbd.setting, kbdKeyRepeatDelay)
 	kbd.CursorBlink.Bind(kbd.setting, kbdKeyCursorBlink)
 	kbd.CapslockToggle.Bind(kbd.setting, kbdKeyCapslockToggle)
-	kbd.UserLayoutList.Bind(kbd.setting, kbdKeyUserLayoutList)
 	kbd.UserOptionList.Bind(kbd.setting, kbdKeyLayoutOptions)
 
 	var err error
 
-	systemConn, err := dbus.SystemBus()
+	kbd.layoutDescMap, err = getLayoutListByFile(kbdLayoutsXml)
+	if err != nil {
+		logger.Error("failed to get layouts description:", err)
+		return nil
+	}
+
+	sysConn, err := dbus.SystemBus()
 	if err != nil {
 		logger.Warning(err)
 		return nil
 	}
+	kbd.sysSigLoop = dbusutil.NewSignalLoop(sysConn, 10)
+	kbd.sysSigLoop.Start()
+	kbd.initUser()
 
-	kbd.layoutDescMap, err = getLayoutListByFile(kbdLayoutsXml)
-	if err != nil {
-		logger.Error("Get layout desc list failed:", err)
-		return nil
-	}
-
-	cur, err := user.Current()
-	if err != nil {
-		logger.Warning("Get current user info failed:", err)
-	} else {
-		kbd.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
+	if kbd.user != nil {
+		// set current layout
+		layout, err := kbd.user.Layout().Get(0)
 		if err != nil {
-			logger.Warning("New user object failed:", cur.Name, err)
-			kbd.userObj = nil
+			logger.Warning(err)
+		} else {
+			kbd.PropsMu.Lock()
+			kbd.CurrentLayout = layout
+			kbd.PropsMu.Unlock()
+		}
+
+		// set layout list
+		layoutList, err := kbd.user.HistoryLayout().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		} else {
+			kbd.PropsMu.Lock()
+			kbd.UserLayoutList = layoutList
+			kbd.PropsMu.Unlock()
 		}
 	}
 
@@ -134,110 +152,200 @@ func newKeyboard() *Keyboard {
 	return kbd
 }
 
+func (kbd *Keyboard) initUser() {
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	cur, err := user.Current()
+	if err != nil {
+		logger.Warning("failed to get current user:", err)
+		return
+	}
+
+	kbd.user, err = ddbus.NewUserByUid(systemConn, cur.Uid)
+	if err != nil {
+		logger.Warningf("failed to new user by uid %s: %v", cur.Uid, err)
+		return
+	}
+	kbd.user.InitSignalExt(kbd.sysSigLoop, true)
+	kbd.user.Layout().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+
+		kbd.PropsMu.Lock()
+		kbd.setPropCurrentLayout(value)
+		kbd.PropsMu.Unlock()
+
+		kbd.applyLayout()
+	})
+	kbd.user.HistoryLayout().ConnectChanged(func(hasValue bool, value []string) {
+		if !hasValue {
+			return
+		}
+
+		kbd.PropsMu.Lock()
+		kbd.setPropUserLayoutList(value)
+		kbd.PropsMu.Unlock()
+	})
+}
+
+func (kbd *Keyboard) destroy() {
+	if kbd.user != nil {
+		kbd.user.RemoveHandler(proxy.RemoveAllHandlers)
+		kbd.user = nil
+	}
+
+	kbd.sysSigLoop.Stop()
+}
+
 func (kbd *Keyboard) init() {
-	if kbd.userObj != nil {
-		value, err := kbd.userObj.Layout().Get(0)
+	if kbd.user != nil {
+		kbd.correctLayout()
+	}
+	kbd.applySettings()
+}
+
+func (kbd *Keyboard) applySettings() {
+	kbd.applyLayout()
+	kbd.applyOptions()
+	kbd.applyRepeat()
+}
+
+func (kbd *Keyboard) correctLayout() {
+	kbd.PropsMu.RLock()
+	currentLayout := kbd.CurrentLayout
+	kbd.PropsMu.RUnlock()
+
+	if currentLayout == "" {
+		layoutFromSysCfg, err := getSystemLayout(kbdSystemConfig)
 		if err != nil {
 			logger.Warning(err)
 		}
-		if value != "" && value != kbd.CurrentLayout.Get() {
-			kbd.CurrentLayout.Set(value)
+		if layoutFromSysCfg == "" {
+			layoutFromSysCfg = kbdDefaultLayout
 		}
+
+		kbd.setLayoutForAccountsUser(layoutFromSysCfg)
 	}
 
-	kbd.setLayout()
-	err := kbd.setOptions()
-	if err != nil {
-		logger.Debugf("Init keymap options failed: %v", err)
+	kbd.PropsMu.RLock()
+	layoutList := kbd.UserLayoutList
+	kbd.PropsMu.RUnlock()
+
+	if len(layoutList) == 0 {
+		kbd.setLayoutListForAccountsUser([]string{currentLayout})
 	}
-	kbd.setRepeat()
 }
 
 func (kbd *Keyboard) handleDeviceChanged() {
 	num := getKeyboardNumber()
 	logger.Debug("Keyboard changed:", num, kbd.devNumber)
 	if num > kbd.devNumber {
-		kbd.init()
+		kbd.applySettings()
 	}
 	kbd.devNumber = num
 }
 
-func (kbd *Keyboard) correctLayout() {
-	current := kbd.CurrentLayout.Get()
-	if len(current) != 0 {
-		return
-	}
+func (kbd *Keyboard) applyLayout() {
+	kbd.PropsMu.RLock()
+	currentLayout := kbd.CurrentLayout
+	kbd.PropsMu.RUnlock()
 
-	system, _ := getSystemLayout(kbdSystemConfig)
-	if len(system) == 0 {
-		kbd.CurrentLayout.Set(kbdDefaultLayout)
-	} else {
-		kbd.CurrentLayout.Set(system)
-	}
-}
-
-func (kbd *Keyboard) setLayout() {
-	kbd.correctLayout()
-	err := doSetLayout(kbd.CurrentLayout.Get())
+	err := applyLayout(currentLayout)
 	if err != nil {
-		logger.Debugf("Set layout to '%s' failed: %v",
-			kbd.CurrentLayout.Get(), err)
+		logger.Warningf("failed to set layout to %q: %v", currentLayout, err)
 		return
 	}
-
-	kbd.setGreeterLayout()
-	kbd.addUserLayout(kbd.CurrentLayout.Get())
 
 	err = applyXmodmapConfig()
 	if err != nil {
-		logger.Warning("Failed to apply xmodmap:", err)
+		logger.Warning("failed to apply xmodmap:", err)
 	}
 }
 
-func (kbd *Keyboard) setOptions() error {
+func (kbd *Keyboard) applyOptions() {
 	options := kbd.UserOptionList.Get()
-
 	if len(options) == 0 {
-		return nil
+		return
 	}
 
 	// the old value wouldn't be cleared, so we will force clear it.
-	doAction(cmdSetKbd + " -option")
+	err := doAction(cmdSetKbd + " -option")
+	if err != nil {
+		logger.Warning("failed to clear keymap option:", err)
+		return
+	}
 
 	cmd := cmdSetKbd
 	for _, opt := range options {
 		cmd += fmt.Sprintf(" -option %q", opt)
 	}
-	return doAction(cmd)
+	err = doAction(cmd)
+	if err != nil {
+		logger.Warning("failed to set keymap options:", err)
+	}
 }
 
-func (kbd *Keyboard) addUserLayout(layout string) {
-	if len(layout) == 0 {
-		return
+var errInvalidLayout = errors.New("invalid layout")
+
+func (kbd *Keyboard) checkLayout(layout string) error {
+	if layout == "" {
+		return dbusutil.ToError(errInvalidLayout)
 	}
 
 	_, ok := kbd.layoutDescMap[layout]
 	if !ok {
-		return
+		return dbusutil.ToError(errInvalidLayout)
+	}
+	return nil
+}
+
+func (kbd *Keyboard) setCurrentLayout(write *dbusutil.PropertyWrite) *dbus.Error {
+	layout := write.Value.(string)
+	logger.Debugf("setCurrentLayout %q", layout)
+
+	if kbd.user == nil {
+		return dbusutil.ToError(errors.New("kbd.user is nil"))
 	}
 
-	ret, added := addItemToList(layout, kbd.UserLayoutList.Get())
+	err := kbd.checkLayout(layout)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	kbd.setLayoutForAccountsUser(layout)
+	kbd.addUserLayout(layout)
+	return nil
+}
+
+func (kbd *Keyboard) addUserLayout(layout string) {
+	kbd.PropsMu.Lock()
+	newLayoutList, added := addItemToList(layout, kbd.UserLayoutList)
+	kbd.PropsMu.Unlock()
+
 	if !added {
 		return
 	}
-	kbd.UserLayoutList.Set(filterSpaceStr(ret))
+
+	kbd.setLayoutListForAccountsUser(newLayoutList)
 }
 
 func (kbd *Keyboard) delUserLayout(layout string) {
-	if len(layout) == 0 {
+	if layout == "" {
 		return
 	}
 
-	ret, deleted := delItemFromList(layout, kbd.UserLayoutList.Get())
+	kbd.PropsMu.Lock()
+	newLayoutList, deleted := delItemFromList(layout, kbd.UserLayoutList)
+	kbd.PropsMu.Unlock()
 	if !deleted {
 		return
 	}
-	kbd.UserLayoutList.Set(filterSpaceStr(ret))
+	kbd.setLayoutListForAccountsUser(newLayoutList)
 }
 
 func (kbd *Keyboard) addUserOption(option string) {
@@ -266,62 +374,43 @@ func (kbd *Keyboard) delUserOption(option string) {
 	kbd.UserOptionList.Set(ret)
 }
 
-func (kbd *Keyboard) setCursorBlink() {
+func (kbd *Keyboard) applyCursorBlink() {
 	value := kbd.CursorBlink.Get()
 	xsSetInt32(xsPropBlinkTimeut, value)
 
 	err := setQtCursorBlink(value, path.Join(os.Getenv("HOME"),
 		qtDefaultConfig))
 	if err != nil {
-		logger.Debugf("Set qt cursor blink to '%v' failed: %v",
+		logger.Debugf("failed to set qt cursor blink to '%v': %v",
 			value, err)
 	}
 }
 
-func (kbd *Keyboard) setGreeterLayout() {
-	if kbd.userObj == nil {
+func (kbd *Keyboard) setLayoutForAccountsUser(layout string) {
+	if kbd.user == nil {
 		return
 	}
 
-	name, err := kbd.userObj.UserName().Get(0)
+	err := kbd.user.SetLayout(0, layout)
 	if err != nil {
-		logger.Warning(err)
-		return
-	}
-
-	if isInvalidUser(name) {
-		return
-	}
-
-	err = kbd.userObj.SetLayout(0, kbd.CurrentLayout.Get())
-	if err != nil {
-		logger.Debugf("Set '%s' greeter layout failed: %v", name, err)
+		logger.Debug("failed to set layout for accounts user:", err)
 	}
 }
 
-func (kbd *Keyboard) setGreeterLayoutList() {
-	if kbd.userObj == nil {
+func (kbd *Keyboard) setLayoutListForAccountsUser(layoutList []string) {
+	if kbd.user == nil {
 		return
 	}
 
-	name, err := kbd.userObj.UserName().Get(0)
+	layoutList = filterSpaceStr(layoutList)
+
+	err := kbd.user.SetHistoryLayout(0, layoutList)
 	if err != nil {
-		logger.Warning(err)
-		return
-	}
-
-	if isInvalidUser(name) {
-		return
-	}
-
-	err = kbd.userObj.SetHistoryLayout(0, kbd.UserLayoutList.Get())
-	if err != nil {
-		logger.Debugf("Set '%s' greeter layout list failed: %v",
-			name, err)
+		logger.Debug("failed to set layout list for accounts user:", err)
 	}
 }
 
-func (kbd *Keyboard) setRepeat() {
+func (kbd *Keyboard) applyRepeat() {
 	var (
 		repeat   = kbd.RepeatEnabled.Get()
 		delay    = kbd.RepeatDelay.Get()
@@ -329,15 +418,15 @@ func (kbd *Keyboard) setRepeat() {
 	)
 	err := dxinput.SetKeyboardRepeat(repeat, delay, interval)
 	if err != nil {
-		logger.Debug("Set kbd repeat failed:", err, repeat, delay, interval)
+		logger.Debug("failed to set repeat:", err, repeat, delay, interval)
 	}
 	setWMKeyboardRepeat(repeat, delay, interval)
 }
 
-func doSetLayout(value string) error {
+func applyLayout(value string) error {
 	array := strings.Split(value, layoutDelim)
 	if len(array) != 2 {
-		return fmt.Errorf("Invalid layout: %s", value)
+		return fmt.Errorf("invalid layout: %s", value)
 	}
 
 	layout, variant := array[0], array[1]
@@ -357,7 +446,7 @@ func doSetLayout(value string) error {
 func setQtCursorBlink(rate int32, file string) error {
 	ok := dutils.WriteKeyToKeyFile(file, "Qt", "cursorFlashTime", rate)
 	if !ok {
-		return fmt.Errorf("Write failed")
+		return fmt.Errorf("write failed")
 	}
 
 	return nil
@@ -399,7 +488,7 @@ func getSystemLayout(file string) (string, error) {
 	}
 
 	if len(layout) == 0 {
-		return "", fmt.Errorf("Not found default layout")
+		return "", fmt.Errorf("not found default layout")
 	}
 
 	return layout + layoutDelim + variant, nil
@@ -412,18 +501,6 @@ func getValueFromLine(line, delim string) string {
 	}
 
 	return strings.TrimSpace(array[1])
-}
-
-func isInvalidUser(name string) bool {
-	if len(name) == 0 {
-		return true
-	}
-
-	if os.Getenv("HOME") == path.Join("/tmp", name) {
-		return true
-	}
-
-	return false
 }
 
 func applyXmodmapConfig() error {

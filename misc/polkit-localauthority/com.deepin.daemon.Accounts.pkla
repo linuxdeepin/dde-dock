@@ -1,0 +1,6 @@
+[Greeter Set Keyboard Layout]
+Identity=unix-user:lightdm
+Action=com.deepin.daemon.accounts.set-keyboard-layout
+ResultAny=no
+ResultInactive=no
+ResultActive=yes

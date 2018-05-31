@@ -1,69 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policyconfig PUBLIC
- "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
- "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+        "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+        "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
 <policyconfig>
-  <vendor/>
-  <vendor_url/>
+    <vendor/>
+    <vendor_url/>
 
-  <action id="com.deepin.daemon.accounts.change-own-user-data">
-    <description>Change your own user data</description>
-    <message>Authentication is required to change your own user data</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
-    </defaults>
-  </action>
+    <action id="com.deepin.daemon.accounts.change-own-user-data">
+        <description>Change your own user data</description>
+        <message>Authentication is required to change your own user data</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_self</allow_active>
+        </defaults>
+    </action>
 
-  <action id="com.deepin.daemon.accounts.user-administration">
-    <description>Manage user accounts</description>
-    <message>Authentication is required to change user data</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin_keep</allow_active>
-    </defaults>
-  </action>
+    <action id="com.deepin.daemon.accounts.user-administration">
+        <description>Manage user accounts</description>
+        <message>Authentication is required to change user data</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_admin_keep</allow_active>
+        </defaults>
+    </action>
 
-  <action id="com.deepin.daemon.accounts.enable-auto-login">
-    <description>Enable Auto Login</description>
-    <message>Authentication is required to enable auto login</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
-    </defaults>
-  </action>
+    <action id="com.deepin.daemon.accounts.enable-auto-login">
+        <description>Enable Auto Login</description>
+        <message>Authentication is required to enable auto login</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_self</allow_active>
+        </defaults>
+    </action>
 
     <action id="com.deepin.daemon.accounts.disable-auto-login">
-    <description>Disable Auto Login</description>
-    <message>Authentication is required to disable auto login</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
-    </defaults>
-  </action>
+        <description>Disable Auto Login</description>
+        <message>Authentication is required to disable auto login</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_self</allow_active>
+        </defaults>
+    </action>
 
     <action id="com.deepin.daemon.accounts.enable-nopass-login">
-    <description>Enable Login without password</description>
-    <message>Authentication is required to enable login without password</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
-    </defaults>
-  </action>
+        <description>Enable Login without password</description>
+        <message>Authentication is required to enable login without password</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_self</allow_active>
+        </defaults>
+    </action>
 
     <action id="com.deepin.daemon.accounts.disable-nopass-login">
-    <description>Disable Login without password</description>
-    <message>Authentication is required to disable login without password</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_self</allow_active>
-    </defaults>
-  </action>
+        <description>Disable Login without password</description>
+        <message>Authentication is required to disable login without password</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_self</allow_active>
+        </defaults>
+    </action>
+
+    <action id="com.deepin.daemon.accounts.set-keyboard-layout">
+        <description>Set keyboard layout</description>
+        <message>Authentication is required to set keyboard layout</message>
+        <defaults>
+            <allow_any>no</allow_any>
+            <allow_inactive>no</allow_inactive>
+            <allow_active>auth_self</allow_active>
+        </defaults>
+    </action>
 
 </policyconfig>

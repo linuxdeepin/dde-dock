@@ -24,7 +24,7 @@ import (
 	"pkg.deepin.io/lib/log"
 )
 
-//go:generate dbusutil-gen -type Mouse,Touchpad,TrackPoint,Wacom mouse.go touchpad.go trackpoint.go wacom.go
+//go:generate dbusutil-gen -type Keyboard,Mouse,Touchpad,TrackPoint,Wacom keyboard.go mouse.go touchpad.go trackpoint.go wacom.go
 
 var (
 	_manager *Manager
@@ -66,6 +66,13 @@ func (*Daemon) Start() error {
 		return err
 	}
 
+	kbdServerObj := service.GetServerObject(_manager.kbd)
+	err = kbdServerObj.SetWriteCallback(_manager.kbd, "CurrentLayout",
+		_manager.kbd.setCurrentLayout)
+	if err != nil {
+		return err
+	}
+
 	err = service.Export(wacomDBusPath, _manager.wacom)
 	if err != nil {
 		return err
@@ -97,12 +104,17 @@ func (*Daemon) Stop() error {
 	if _manager == nil {
 		return nil
 	}
-	_manager = nil
+
+	if _manager.kbd != nil {
+		_manager.kbd.destroy()
+		_manager.kbd = nil
+	}
 
 	if _manager.wacom != nil {
 		_manager.wacom.destroy()
 		_manager.wacom = nil
 	}
+	_manager = nil
 
 	// TODO endDeviceListener will be stuck
 	endDeviceListener()

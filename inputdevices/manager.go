@@ -84,7 +84,7 @@ func NewManager(service *dbusutil.Service) *Manager {
 	m.settings = gio.NewSettings(gsSchemaInputDevices)
 	m.WheelSpeed.Bind(m.settings, gsKeyWheelSpeed)
 
-	m.kbd = newKeyboard()
+	m.kbd = newKeyboard(service)
 	m.wacom = newWacom(service)
 
 	m.tpad = newTouchpad(service)

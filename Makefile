@@ -88,6 +88,9 @@ install: build translate install-dde-data install-icons
 	mkdir -pv ${DESTDIR}${PREFIX}/share/polkit-1/actions
 	cp misc/polkit-action/*.policy ${DESTDIR}${PREFIX}/share/polkit-1/actions/
 
+	mkdir -pv ${DESTDIR}/var/lib/polkit-1/localauthority/10-vendor.d
+	cp misc/polkit-localauthority/*.pkla ${DESTDIR}/var/lib/polkit-1/localauthority/10-vendor.d/
+
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r misc/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
 

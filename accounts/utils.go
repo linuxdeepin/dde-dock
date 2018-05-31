@@ -43,6 +43,7 @@ const (
 	polkitDisableAutoLogin     = "com.deepin.daemon.accounts.disable-auto-login"
 	polkitEnableNoPasswdLogin  = "com.deepin.daemon.accounts.enable-nopass-login"
 	polkitDisableNoPasswdLogin = "com.deepin.daemon.accounts.disable-nopass-login"
+	polkitSetKeyboardLayout    = "com.deepin.daemon.accounts.set-keyboard-layout"
 )
 
 type ErrCodeType int32
@@ -146,6 +147,10 @@ func polkitAuthNoPasswdLogin(pid uint32, enable bool) error {
 	}
 
 	return polkitAuthentication(polkitDisableNoPasswdLogin, "", "", pid)
+}
+
+func polkitAuthSetKeyboardLayout(pid uint32) error {
+	return polkitAuthentication(polkitSetKeyboardLayout, "", "", pid)
 }
 
 func polkitAuthentication(action, user, uid string, pid uint32) error {

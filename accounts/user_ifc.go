@@ -338,7 +338,7 @@ func (u *User) SetLayout(sender dbus.Sender, layout string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
+		err := polkitAuthSetKeyboardLayout(pid)
 		if err != nil {
 			logger.Debug("[SetLayout] access denied:", err)
 			return dbusutil.ToError(err)

@@ -39,15 +39,11 @@ func (kbd *Keyboard) handleGSettings() {
 		switch key {
 		case kbdKeyRepeatEnable, kbdKeyRepeatDelay,
 			kbdKeyRepeatInterval:
-			kbd.setRepeat()
-		case kbdKeyLayout:
-			kbd.setLayout()
+			kbd.applyRepeat()
 		case kbdKeyCursorBlink:
-			kbd.setCursorBlink()
+			kbd.applyCursorBlink()
 		case kbdKeyLayoutOptions:
-			kbd.setOptions()
-		case kbdKeyUserLayoutList:
-			kbd.setGreeterLayoutList()
+			kbd.applyOptions()
 		}
 	})
 }
