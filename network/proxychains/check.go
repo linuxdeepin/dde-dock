@@ -25,9 +25,9 @@ import (
 	"strings"
 )
 
-var ipReg = regexp.MustCompile(`\d+\.\d+\.\d+\.\d+`)
+var ipv4Reg = regexp.MustCompile(`\d+\.\d+\.\d+\.\d+`)
 
-func checkType(type0 string) bool {
+func validType(type0 string) bool {
 	switch type0 {
 	case "http", "socks4", "socks5":
 		return true
@@ -36,19 +36,19 @@ func checkType(type0 string) bool {
 	}
 }
 
-func checkIP(ipstr string) bool {
-	if !ipReg.MatchString(ipstr) {
+func validIPv4(ipStr string) bool {
+	if !ipv4Reg.MatchString(ipStr) {
 		return false
 	}
 
-	ip := net.ParseIP(ipstr)
+	ip := net.ParseIP(ipStr)
 	if ip == nil {
 		return false
 	}
 	return true
 }
 
-func checkUser(user string) bool {
+func validUser(user string) bool {
 	if strings.ContainsAny(user, "\t ") {
 		return false
 	}
@@ -56,6 +56,6 @@ func checkUser(user string) bool {
 	return true
 }
 
-func checkPassword(password string) bool {
-	return checkUser(password)
+func validPassword(password string) bool {
+	return validUser(password)
 }

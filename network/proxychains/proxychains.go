@@ -91,6 +91,7 @@ func (m *Manager) init() {
 	}
 
 	changed := m.fixConfig()
+	logger.Debug("fixConfig changed:", changed)
 	if changed {
 		if err := m.saveConfig(); err != nil {
 			logger.Warning("save config failed", err)
@@ -123,23 +124,22 @@ func (m *Manager) notifyChange(prop string) {
 
 func (m *Manager) fixConfig() bool {
 	var changed bool
-	if !checkType(m.Type) {
+	if !validType(m.Type) {
 		m.Type = defaultType
 		changed = true
 	}
 
-	if !checkIP(m.IP) {
+	if m.IP != "" && !validIPv4(m.IP) {
 		m.IP = ""
-		m.Port = 0
 		changed = true
 	}
 
-	if !checkUser(m.User) {
+	if !validUser(m.User) {
 		m.User = ""
 		changed = true
 	}
 
-	if !checkPassword(m.Password) {
+	if !validPassword(m.Password) {
 		m.Password = ""
 		changed = true
 	}
@@ -148,19 +148,19 @@ func (m *Manager) fixConfig() bool {
 }
 
 func (m *Manager) checkConfig() bool {
-	if !checkType(m.Type) {
+	if !validType(m.Type) {
 		return false
 	}
 
-	if !checkIP(m.IP) {
+	if !validIPv4(m.IP) {
 		return false
 	}
 
-	if !checkUser(m.User) {
+	if !validUser(m.User) {
 		return false
 	}
 
-	if !checkPassword(m.Password) {
+	if !validPassword(m.Password) {
 		return false
 	}
 	return true
@@ -175,22 +175,28 @@ func (err InvalidParamError) Error() string {
 }
 
 func (m *Manager) Set(type0, ip string, port uint32, user, password string) error {
-	if !checkType(type0) {
+	// allow type0 is empty
+	if type0 == "" {
+		type0 = defaultType
+	}
+	if !validType(type0) {
 		return InvalidParamError{"Type"}
 	}
 
 	var disable bool
 	if ip == "" && port == 0 {
 		disable = true
-	} else if !checkIP(ip) {
+	}
+
+	if !disable && !validIPv4(ip) {
 		return InvalidParamError{"IP"}
 	}
 
-	if !checkUser(user) {
+	if !validUser(user) {
 		return InvalidParamError{"User"}
 	}
 
-	if !checkPassword(password) {
+	if !validPassword(password) {
 		return InvalidParamError{"Password"}
 	}
 
