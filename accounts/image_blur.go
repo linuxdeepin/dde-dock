@@ -48,18 +48,10 @@ func (ib *ImageBlur) GetInterfaceName() string {
 }
 
 func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
-	ib.mu.Lock()
-	_, ok := ib.tasks[file]
-	ib.mu.Unlock()
-
-	if ok {
-		// generating
-		return "", nil
-	}
+	logger.Debugf("Get %q", file)
 
 	blurFile := getImageBlurFile(file)
-
-	_, err := os.Stat(file)
+	fileInfo, err := os.Lstat(file)
 	if err != nil {
 		logger.Warning(err)
 		if os.IsNotExist(err) {
@@ -67,6 +59,28 @@ func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
 			os.Remove(blurFile)
 		}
 		return "", dbusutil.ToError(err)
+	}
+	if fileInfo.Mode()&os.ModeSymlink != 0 {
+		// file is a symbolic link
+		logger.Debug("the file is a symbolic link")
+		realFile, err := filepath.EvalSymlinks(file)
+		if err != nil {
+			logger.Warning(err)
+			return "", dbusutil.ToError(err)
+		}
+
+		logger.Debugf("real file: %q", realFile)
+		file = realFile
+		blurFile = getImageBlurFile(file)
+	}
+
+	ib.mu.Lock()
+	_, ok := ib.tasks[file]
+	ib.mu.Unlock()
+
+	if ok {
+		// generating
+		return "", nil
 	}
 
 	_, err = os.Stat(blurFile)
@@ -133,7 +147,9 @@ func (ib *ImageBlur) gen(file string) {
 }
 
 func (ib *ImageBlur) emitBlurDone(file string, ok bool) {
-	err := ib.service.Emit(ib, "BlurDone", file, getImageBlurFile(file), ok)
+	blurFile := getImageBlurFile(file)
+	logger.Debugf("emit signal BlurDone (%q,%q,%v)", file, blurFile, ok)
+	err := ib.service.Emit(ib, "BlurDone", file, blurFile, ok)
 	if err != nil {
 		logger.Warning(err)
 	}

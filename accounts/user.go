@@ -48,7 +48,7 @@ const (
 	defaultLayout         = "us" + layoutDelim
 	defaultLayoutFile     = "/etc/default/keyboard"
 	defaultUserIcon       = "file:///var/lib/AccountsService/icons/default.png"
-	defaultUserBackground = "file:///usr/share/backgrounds/default_background.jpg"
+	defaultUserBackground = "file:///usr/share/wallpapers/deepin/desktop.jpg"
 
 	maxWidth  = 200
 	maxHeight = 200

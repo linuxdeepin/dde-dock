@@ -26,7 +26,6 @@ import (
 
 var (
 	systemWallpapersDir = []string{
-		"/usr/share/backgrounds",
 		"/usr/share/wallpapers/deepin",
 	}
 )
