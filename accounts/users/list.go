@@ -162,6 +162,10 @@ func (info UserInfo) isHumanUser(configShadow string, configLoginDefs string) bo
 		return false
 	}
 
+	if CanNoPasswdLogin(info.Name) {
+		return true
+	}
+
 	if !info.isHumanViaShell() {
 		return false
 	}
