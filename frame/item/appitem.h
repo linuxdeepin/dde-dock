@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@
 
 #include "dockitem.h"
 #include "components/previewcontainer.h"
+#include "components/appdrag.h"
 #include "dbus/dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
 
@@ -49,6 +51,9 @@ public:
     static int iconBaseSize();
     static int itemBaseHeight();
     static int itemBaseWidth();
+    void undock();
+    QWidget *appDragWidget();
+    void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
     inline ItemType itemType() const { return App; }
 
@@ -56,6 +61,7 @@ signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
+    void dragReady(QWidget *dragWidget);
 
 private:
     void moveEvent(QMoveEvent *e) override;
@@ -96,6 +102,10 @@ private:
 
     QGraphicsView *m_swingEffectView;
     QGraphicsItemAnimation *m_itemAnimation;
+
+    DWindowManagerHelper *m_wmHelper;
+
+    AppDrag *m_drag;
 
     bool m_dragging;
     bool m_active;

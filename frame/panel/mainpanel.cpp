@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +26,11 @@
 #include <QBoxLayout>
 #include <QDragEnterEvent>
 #include <QApplication>
+#include <QScreen>
+#include <QGraphicsView>
 
-DockItem *MainPanel::DraggingItem = nullptr;
-PlaceholderItem *MainPanel::RequestDockItem = nullptr;
+static DockItem *DraggingItem = nullptr;
+static PlaceholderItem *RequestDockItem = nullptr;
 
 const char *RequestDockKey = "RequestDock";
 
@@ -36,9 +39,9 @@ MainPanel::MainPanel(QWidget *parent)
       m_position(Dock::Top),
       m_displayMode(Dock::Fashion),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
-
       m_itemAdjustTimer(new QTimer(this)),
-      m_itemController(DockItemController::instance(this))
+      m_itemController(DockItemController::instance(this)),
+      m_appDragWidget(nullptr)
 {
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
@@ -78,6 +81,8 @@ MainPanel::MainPanel(QWidget *parent)
 
     setLayout(m_itemLayout);
 }
+
+MainPanel::~MainPanel() { }
 
 ///
 /// \brief MainPanel::updateDockPosition change panel layout with spec position.
@@ -157,6 +162,23 @@ void MainPanel::setEffectEnabled(const bool enabled)
     m_itemAdjustTimer->start();
 }
 
+bool MainPanel::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
+        QDropEvent *e = static_cast<QDropEvent *>(event);
+        bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
+        if (isContains) {
+            if (event->type() == QEvent::DragMove) {
+                handleDragMove(static_cast<QDragMoveEvent *>(event), true);
+            } else if (event->type() == QEvent::Drop) {
+                m_appDragWidget->hide();
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void MainPanel::moveEvent(QMoveEvent* e)
 {
     DBlurEffectWidget::moveEvent(e);
@@ -201,43 +223,7 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 
 void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
-    e->accept();
-
-    DockItem *dst = itemAt(e->pos());
-    if (!dst)
-        return;
-
-    // internal drag swap
-    if (e->source())
-    {
-        if (dst == DraggingItem)
-            return;
-        if (!DraggingItem)
-            return;
-        if (m_itemController->itemIsInContainer(DraggingItem))
-            return;
-
-        m_itemController->itemMove(DraggingItem, dst);
-    } else {
-        DraggingItem = nullptr;
-
-        if (!RequestDockItem)
-        {
-            DockItem *insertPositionItem = itemAt(e->pos());
-            if (!insertPositionItem)
-                return;
-            const auto type = insertPositionItem->itemType();
-            if (type != DockItem::App && type != DockItem::Stretch)
-                return;
-            RequestDockItem = new PlaceholderItem;
-            m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
-        } else {
-            if (dst == RequestDockItem)
-                return;
-
-            m_itemController->itemMove(RequestDockItem, dst);
-        }
-    }
+    handleDragMove(e, false);
 }
 
 void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
@@ -539,6 +525,14 @@ void MainPanel::itemDragStarted()
 {
     DraggingItem = qobject_cast<DockItem *>(sender());
 
+    if (DraggingItem->itemType() == DockItem::App)
+    {
+        AppItem *appItem = qobject_cast<AppItem *>(DraggingItem);
+        m_appDragWidget = appItem->appDragWidget();
+        appItem->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
+        static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
+    }
+
     if (DraggingItem->itemType() == DockItem::Plugins)
     {
         if (static_cast<PluginsItem *>(DraggingItem)->allowContainer())
@@ -563,11 +557,11 @@ void MainPanel::itemDropped(QObject *destnation)
 {
     m_itemController->setDropping(false);
 
-    if (m_displayMode == Dock::Fashion)
-        return;
-
     DockItem *src = qobject_cast<DockItem *>(sender());
 //    DockItem *dst = qobject_cast<DockItem *>(destnation);
+
+    if (m_displayMode == Dock::Fashion)
+        return;
 
     if (!src)
         return;
@@ -583,4 +577,46 @@ void MainPanel::itemDropped(QObject *destnation)
         m_itemController->itemDroppedIntoContainer(src);
 
     m_itemAdjustTimer->start();
+}
+
+void MainPanel::handleDragMove(QDragMoveEvent *e, bool isFilter)
+{
+    e->accept();
+
+    DockItem *dst = itemAt(isFilter ? mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())) : e->pos());
+
+    if (!dst)
+        return;
+
+    // internal drag swap
+    if (e->source())
+    {
+        if (dst == DraggingItem)
+            return;
+        if (!DraggingItem)
+            return;
+        if (m_itemController->itemIsInContainer(DraggingItem))
+            return;
+
+        m_itemController->itemMove(DraggingItem, dst);
+    } else {
+        DraggingItem = nullptr;
+
+        if (!RequestDockItem)
+        {
+            DockItem *insertPositionItem = itemAt(e->pos());
+            if (!insertPositionItem)
+                return;
+            const auto type = insertPositionItem->itemType();
+            if (type != DockItem::App && type != DockItem::Stretch)
+                return;
+            RequestDockItem = new PlaceholderItem;
+            m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
+        } else {
+            if (dst == RequestDockItem)
+                return;
+
+            m_itemController->itemMove(RequestDockItem, dst);
+        }
+    }
 }

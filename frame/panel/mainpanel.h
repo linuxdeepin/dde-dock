@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +50,7 @@ class MainPanel : public DBlurEffectWidget
 
 public:
     explicit MainPanel(QWidget *parent = 0);
+    virtual ~MainPanel();
 
     void updateDockPosition(const Position dockPosition);
     void updateDockDisplayMode(const Dock::DisplayMode displayMode);
@@ -56,6 +58,8 @@ public:
     int position() const;
 
     void setEffectEnabled(const bool enabled);
+
+    bool eventFilter(QObject *watched, QEvent *event);
 
 signals:
     void requestWindowAutoHide(const bool autoHide) const;
@@ -80,6 +84,7 @@ private slots:
     void itemMoved(DockItem *item, const int index);
     void itemDragStarted();
     void itemDropped(QObject *destnation);
+    void handleDragMove(QDragMoveEvent *e, bool isFilter);
 
 private:
     Position m_position;
@@ -89,8 +94,7 @@ private:
     QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
 
-    static DockItem *DraggingItem;
-    static PlaceholderItem *RequestDockItem;
+    QWidget *m_appDragWidget;
 };
 
 #endif // MAINPANEL_H

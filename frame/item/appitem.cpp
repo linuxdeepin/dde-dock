@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +53,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
       m_swingEffectView(nullptr),
       m_itemAnimation(nullptr),
+
+      m_wmHelper(DWindowManagerHelper::instance()),
+
+      m_drag(nullptr),
 
       m_dragging(false),
 
@@ -137,6 +142,21 @@ int AppItem::itemBaseWidth()
         return itemBaseHeight() * 1.1;
     else
         return itemBaseHeight() * 1.4;
+}
+
+void AppItem::undock()
+{
+    m_itemEntryInter->RequestUndock();
+}
+
+QWidget *AppItem::appDragWidget()
+{
+    return static_cast<AppDrag *>(m_drag)->appDragWidget();
+}
+
+void AppItem::setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry)
+{
+    static_cast<AppDrag *>(m_drag)->appDragWidget()->setDockInfo(dockPosition, dockGeometry);
 }
 
 void AppItem::moveEvent(QMoveEvent *e)
@@ -425,18 +445,28 @@ void AppItem::startDrag()
 
     const QPixmap &dragPix = m_appIcon;
 
-    QDrag *drag = new QDrag(this);
-    drag->setPixmap(dragPix);
-    drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
-    drag->setMimeData(new QMimeData);
+    m_drag = new AppDrag(this);
+    m_drag->setMimeData(new QMimeData);
 
-    emit dragStarted();
-    const Qt::DropAction result = drag->exec(Qt::MoveAction);
-    Q_UNUSED(result);
+    if (m_wmHelper->hasComposite()) {
+        m_drag->setPixmap(dragPix);
+        emit dragStarted();
+        m_drag->exec(Qt::MoveAction);
+    } else {
+        m_drag->QDrag::setPixmap(dragPix);
+        m_drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
+        emit dragStarted();
+        m_drag->QDrag::exec(Qt::MoveAction);
+    }
 
-    // drag out of dock panel
-    if (!drag->target())
-        m_itemEntryInter->RequestUndock();
+    // MainPanel will put this item to Item-Container when received this signal(MainPanel::itemDropped)
+    //emit itemDropped(m_drag->target());
+
+    if (!m_wmHelper->hasComposite()) {
+        if (!m_drag->target()) {
+            m_itemEntryInter->RequestUndock();
+        }
+    }
 
     m_dragging = false;
     setVisible(true);
