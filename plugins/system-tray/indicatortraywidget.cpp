@@ -203,6 +203,14 @@ void IndicatorTrayWidget::setPixmapData(const QByteArray &data)
     rawPixmap.setDevicePixelRatio(devicePixelRatioF());
     d->label->setPixmap(rawPixmap);
     d->updateContent();
+
+    if (data.isEmpty()) {
+        Q_EMIT removed();
+        return;
+    }
+    else {
+        Q_EMIT delayLoaded();
+    }
 }
 
 void IndicatorTrayWidget::setPixmapPath(const QString &text)
@@ -210,6 +218,14 @@ void IndicatorTrayWidget::setPixmapPath(const QString &text)
     Q_D(IndicatorTrayWidget);
     d->label->setPixmap(QPixmap(text));
     d->updateContent();
+
+    if (text.isEmpty()) {
+        Q_EMIT removed();
+        return;
+    }
+    else {
+        Q_EMIT delayLoaded();
+    }
 }
 
 void IndicatorTrayWidget::setText(const QString &text)
@@ -217,6 +233,14 @@ void IndicatorTrayWidget::setText(const QString &text)
     Q_D(IndicatorTrayWidget);
     d->label->setText(text);
     d->updateContent();
+
+    if (text.isEmpty()) {
+        Q_EMIT removed();
+        return;
+    }
+    else {
+        Q_EMIT delayLoaded();
+    }
 }
 
 void IndicatorTrayWidget::iconPropertyChanged(const QDBusMessage &msg)
@@ -289,7 +313,5 @@ void IndicatorTrayWidgetPrivate::initDBus(const QString &indicatorKey)
                 QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus, q);
                 interface.asyncCall(methodName);
             });
-
-        Q_EMIT q->delayLoaded();
     });
 }

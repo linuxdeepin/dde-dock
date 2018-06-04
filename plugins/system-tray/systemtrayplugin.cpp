@@ -211,6 +211,8 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
 
     auto addTrayWidget = [ = ](AbstractTrayWidget * trayWidget) {
         if (trayWidget) {
+            if (m_trayList.values().contains(trayWidget)) return;
+
             m_trayList.insert(itemKey, trayWidget);
             m_fashionItem->setMouseEnable(m_trayList.size() == 1);
             if (!m_fashionItem->activeTray()) {
@@ -238,6 +240,9 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
         connect(trayWidget, &IndicatorTrayWidget::delayLoaded,
         trayWidget, [ = ]() {
             addTrayWidget(trayWidget);
+        });
+        connect(trayWidget, &IndicatorTrayWidget::removed, this, [=] {
+            trayRemoved(m_trayList.key(trayWidget));
         });
     }
 }

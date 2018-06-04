@@ -35,7 +35,14 @@ DBusAdaptors::~DBusAdaptors()
 
 QString DBusAdaptors::layout() const
 {
-    const auto layouts = m_keyboard->currentLayout().split(';');
+    QStringList layouts = m_keyboard->currentLayout().split(';');
+    layouts.removeAll(QString(""));
+
+    // Hide layout if user is chinese
+    QLocale locale;
+    if (locale.language() == QLocale::Chinese) {
+        return QString();
+    }
 
     if (!layouts.isEmpty())
         return layouts.first();

@@ -54,6 +54,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void delayLoaded();
+    void removed();
     void clicked(uint8_t, int, int);
 
 private:
