@@ -230,7 +230,6 @@ func (r *ALRecorder) GetNew(sender dbus.Sender) (map[string][]string, *dbus.Erro
 
 	ret := make(map[string][]string)
 	r.subRecordersMutex.RLock()
-	defer r.subRecordersMutex.RUnlock()
 
 	for _, sr := range r.subRecorders {
 		if intSliceContains(sr.uids, int(uid)) {
@@ -240,6 +239,8 @@ func (r *ALRecorder) GetNew(sender dbus.Sender) (map[string][]string, *dbus.Erro
 			}
 		}
 	}
+	r.subRecordersMutex.RUnlock()
+
 	return ret, nil
 }
 
@@ -297,7 +298,6 @@ func (r *ALRecorder) WatchDirs(sender dbus.Sender, dataDirs []string) *dbus.Erro
 func (r *ALRecorder) handleUserRemoved(uid int) {
 	logger.Debug("handleUserRemoved uid:", uid)
 	r.subRecordersMutex.Lock()
-	defer r.subRecordersMutex.Unlock()
 
 	for _, sr := range r.subRecorders {
 		logger.Debug(sr.root, sr.uids)
@@ -307,5 +307,7 @@ func (r *ALRecorder) handleUserRemoved(uid int) {
 			delete(r.subRecorders, sr.root)
 		}
 	}
+
+	r.subRecordersMutex.Unlock()
 	logger.Debug("r.subRecorders:", r.subRecorders)
 }

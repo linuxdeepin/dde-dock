@@ -41,11 +41,10 @@ type SubRecorder struct {
 	root   string
 	rootOk bool
 	// key: app, value: launched
-	launchedMap      map[string]bool
-	launchedMapMutex sync.RWMutex
+	launchedMap        map[string]bool
+	removedLaunchedMap map[string]bool
 
-	removedLaunchedMap   map[string]bool
-	removedLaunchedMapMu sync.Mutex
+	launchedMapMu sync.RWMutex
 
 	statusFile      string
 	statusFileOwner int
@@ -193,9 +192,9 @@ func (sr *SubRecorder) checkSave() {
 		return
 	}
 
-	sr.launchedMapMutex.RLock()
+	sr.launchedMapMu.RLock()
 	err := sr.save()
-	sr.launchedMapMutex.RUnlock()
+	sr.launchedMapMu.RUnlock()
 	if err != nil {
 		logger.Warning("SubRecorder.saveDirContent error:", err)
 	}
@@ -204,7 +203,7 @@ func (sr *SubRecorder) checkSave() {
 
 func (sr *SubRecorder) writeStatus(w io.Writer) error {
 	writer := csv.NewWriter(w)
-	sr.launchedMapMutex.RLock()
+	sr.launchedMapMu.RLock()
 	writer.Write([]string{"# " + sr.root})
 	for app, launched := range sr.launchedMap {
 		record := make([]string, 2)
@@ -215,10 +214,11 @@ func (sr *SubRecorder) writeStatus(w io.Writer) error {
 			record[1] = "f"
 		}
 		if err := writer.Write(record); err != nil {
+			sr.launchedMapMu.RUnlock()
 			return err
 		}
 	}
-	sr.launchedMapMutex.RUnlock()
+	sr.launchedMapMu.RUnlock()
 
 	writer.Flush()
 	return writer.Error()
@@ -320,8 +320,7 @@ func (sr *SubRecorder) resetStatus(apps []string) {
 
 func (sr *SubRecorder) handleAdded(name string) {
 	logger.Debug("SubRecorder.handleAdded", sr.root, name)
-	sr.launchedMapMutex.Lock()
-	sr.removedLaunchedMapMu.Lock()
+	sr.launchedMapMu.Lock()
 
 	if _, ok := sr.launchedMap[name]; !ok {
 		launched, ok1 := sr.removedLaunchedMap[name]
@@ -332,14 +331,12 @@ func (sr *SubRecorder) handleAdded(name string) {
 		sr.RequestSave()
 	}
 
-	sr.removedLaunchedMapMu.Unlock()
-	sr.launchedMapMutex.Unlock()
+	sr.launchedMapMu.Unlock()
 }
 
 func (sr *SubRecorder) handleRemoved(name string) {
 	logger.Debug("SubRecorder.handleRemoved", sr.root, name)
-	sr.launchedMapMutex.Lock()
-	sr.removedLaunchedMapMu.Lock()
+	sr.launchedMapMu.Lock()
 
 	launched, ok := sr.launchedMap[name]
 	if ok {
@@ -348,15 +345,14 @@ func (sr *SubRecorder) handleRemoved(name string) {
 		sr.RequestSave()
 	}
 
-	sr.removedLaunchedMapMu.Unlock()
-	sr.launchedMapMutex.Unlock()
+	sr.launchedMapMu.Unlock()
 }
 
 func (sr *SubRecorder) handleDirRemoved(name string) {
 	logger.Debug("SubRecorder.handleDirRemoved", sr.root, name)
 	changed := false
 
-	sr.launchedMapMutex.Lock()
+	sr.launchedMapMu.Lock()
 	if name == "." {
 		// applications dir removed
 		if len(sr.launchedMap) > 0 {
@@ -375,7 +371,7 @@ func (sr *SubRecorder) handleDirRemoved(name string) {
 			}
 		}
 	}
-	sr.launchedMapMutex.Unlock()
+	sr.launchedMapMu.Unlock()
 
 	if changed {
 		sr.RequestSave()
@@ -384,8 +380,8 @@ func (sr *SubRecorder) handleDirRemoved(name string) {
 
 func (sr *SubRecorder) MarkLaunched(name string) bool {
 	logger.Debug("SubRecorder.MarkLaunched", sr.root, name)
-	sr.launchedMapMutex.Lock()
-	defer sr.launchedMapMutex.Unlock()
+	sr.launchedMapMu.Lock()
+	defer sr.launchedMapMu.Unlock()
 	if launched, ok := sr.launchedMap[name]; ok {
 		if !launched {
 			sr.launchedMap[name] = true
@@ -397,12 +393,12 @@ func (sr *SubRecorder) MarkLaunched(name string) bool {
 }
 
 func (sr *SubRecorder) GetNew() (newApps []string) {
-	sr.launchedMapMutex.RLock()
+	sr.launchedMapMu.RLock()
 	for app, launched := range sr.launchedMap {
 		if !launched {
 			newApps = append(newApps, app)
 		}
 	}
-	sr.launchedMapMutex.RUnlock()
+	sr.launchedMapMu.RUnlock()
 	return
 }
