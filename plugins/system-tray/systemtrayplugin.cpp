@@ -56,6 +56,11 @@ const QString SystemTrayPlugin::pluginName() const
 
 void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 {
+    if (!m_containerSettings->value("enable", true).toBool()) {
+        qDebug() << "hide tray from config disable!!";
+        return;
+    }
+
     m_proxyInter = proxyInter;
 
     connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &SystemTrayPlugin::trayListChanged);
