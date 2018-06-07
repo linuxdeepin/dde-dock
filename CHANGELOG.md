@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+[3.2.18] 2018-06-07
+*   chore(accounts): users in the nopasswdlogin group are treated as human users
+*   fix(apps): dead lock
+*   chore(appearance): do not list pictures in dir /usr/share/backgrounds
+*   feat(inputdevices): layout only saved in accounts user
+*   fix(network/proxychains): failed to remove conf if type0 is empty
+
 [3.2.17] 2018-05-29
 *   fix(session-daemon): some data race problems
 *   feat(appearance): sync desktop backgrounds during startup
