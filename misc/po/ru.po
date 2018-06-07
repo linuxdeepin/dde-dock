@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-05-02 17:33+0000\n"
+"PO-Revision-Date: 2018-05-23 15:24+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1255,7 +1255,7 @@ msgstr "Только локальные ссылки"
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
 msgid "Manual"
-msgstr "Вручную"
+msgstr "Руководство"
 
 #: ../../network/nm_setting_ip4_config.go:41
 #: ../../network/nm_setting_ip6_config.go:42

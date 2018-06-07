@@ -4,7 +4,7 @@
 # 
 # Translators:
 # C Phan <saochi09@googlemail.com>, 2017
-# Ettore Atalan <atalanttore@googlemail.com>, 2016-2017
+# Ettore Atalan <atalanttore@googlemail.com>, 2016-2018
 # Marcel Pa <marcelpaluch@me.com>, 2018
 # Matthäus Beyrle <transifex.com@mmb.entwanderer.de>, 2017
 # Matthäus Beyrle <transifex.com@mmb.entwanderer.de>, 2018
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-05-09 08:39+0000\n"
+"PO-Revision-Date: 2018-05-27 17:14+0000\n"
 "Last-Translator: Marcel Pa <marcelpaluch@me.com>\n"
 "Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -1180,7 +1180,7 @@ msgstr "IKE DH-Gruppe"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Forward Secrecy"
-msgstr "Verschwiegenheit Weiterleiten"
+msgstr "Vorwärts gerichtete Geheimhaltung"
 
 #: ../../network/nm_setting_beans_gen.go:444
 msgid "Local Port"
