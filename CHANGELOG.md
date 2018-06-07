@@ -1,3 +1,13 @@
+<a name="4.6.6"></a>
+### 4.6.6 (2018-06-07)
+
+
+#### Features
+
+* **tray:**  hide layout when zh_CN locale ([3486d0c1](https://github.com/linuxdeepin/dde-dock/commit/3486d0c108fe3ed8089dda2ef7629481c95ec104))
+
+
+
 <a name="4.6.5"></a>
 ### 4.6.5 (2018-05-31)
 
