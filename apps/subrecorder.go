@@ -192,9 +192,7 @@ func (sr *SubRecorder) checkSave() {
 		return
 	}
 
-	sr.launchedMapMu.RLock()
 	err := sr.save()
-	sr.launchedMapMu.RUnlock()
 	if err != nil {
 		logger.Warning("SubRecorder.saveDirContent error:", err)
 	}
@@ -232,10 +230,11 @@ func (sr *SubRecorder) save() error {
 	if err != nil {
 		return err
 	}
-	if err := sr.writeStatus(bufio.NewWriter(f)); err != nil {
+	bufWriter := bufio.NewWriter(f)
+	if err := sr.writeStatus(bufWriter); err != nil {
 		return err
 	}
-	if err := f.Sync(); err != nil {
+	if err := bufWriter.Flush(); err != nil {
 		return err
 	}
 	if err := f.Close(); err != nil {
