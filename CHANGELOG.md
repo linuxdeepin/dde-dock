@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+[3.2.19] 2018-06-11
+*   auto sync po files from transifex
+*   fix(apps) dead lock again
+
 [3.2.18] 2018-06-07
 *   chore(accounts): users in the nopasswdlogin group are treated as human users
 *   fix(apps): dead lock
