@@ -76,6 +76,10 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 
 void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 {
+    if (!m_containerSettings->value("enable", true).toBool()) {
+        return;
+    }
+
     switchToMode(mode);
 }
 
