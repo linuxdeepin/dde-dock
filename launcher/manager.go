@@ -187,6 +187,69 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	m.DisplayMode.Bind(m.settings, gsKeyDisplayMode)
 	m.Fullscreen.Bind(m.settings, gsKeyFullscreen)
 
+	m.noPkgItemIDs = make(map[string]int)
+
+	m.appsHidden = m.settings.GetStrv(gsKeyAppsHidden)
+	logger.Debug("appsHidden: ", m.appsHidden)
+	m.listenSettingsChanged()
+
+	// init notification
+	notify.Init(dbusServiceName)
+	m.notification = notify.NewNotification("", "", "")
+
+	m.appDirs = getAppDirs()
+	err = m.loadDesktopPkgMap()
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = m.loadPkgCategoryMap()
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	// load name map
+	err = m.loadNameMap()
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.initItems()
+
+	// init searchTaskStack
+	m.searchTaskStack = newSearchTaskStack(m)
+
+	// init popPushOpChan
+	m.popPushOpChan = make(chan *popPushOp, 50)
+	go m.handlePopPushOps()
+
+	m.fsEventTimers = make(map[string]*time.Timer)
+
+	err = m.fsWatcher.Watch(lastoreDataDir)
+	if err != nil {
+		logger.Warning(err)
+	}
+	go m.handleFsWatcherEvents()
+	m.desktopFileWatcher.ConnectEvent(func(filename string, _ uint32) {
+		if shouldCheckDesktopFile(filename) {
+			logger.Debug("DFWatcher event", filename)
+			m.delayHandleFileEvent(filename)
+		}
+	})
+
+	m.launchedRecorder.WatchDirs(getDataDirsForWatch())
+
+	m.launchedRecorder.ConnectServiceRestarted(func() {
+		if m.launchedRecorder != nil {
+			m.launchedRecorder.WatchDirs(getDataDirsForWatch())
+		}
+	})
+	m.launchedRecorder.ConnectLaunched(func(path string) {
+		item := m.getItemByPath(path)
+		if item == nil {
+			return
+		}
+		m.service.Emit(m, "NewAppLaunched", item.ID)
+	})
 	return m, nil
 }
 

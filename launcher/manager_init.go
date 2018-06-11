@@ -21,10 +21,8 @@ package launcher
 
 import (
 	"path/filepath"
-	"time"
 
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/notify"
 )
 
 const (
@@ -32,33 +30,7 @@ const (
 	appsDBusObjectPath = "/com/deepin/daemon/Apps"
 )
 
-func (m *Manager) init() {
-	m.noPkgItemIDs = make(map[string]int)
-
-	m.appsHidden = m.settings.GetStrv(gsKeyAppsHidden)
-	logger.Debug("appsHidden: ", m.appsHidden)
-	m.listenSettingsChanged()
-
-	// init notification
-	notify.Init(dbusServiceName)
-	m.notification = notify.NewNotification("", "", "")
-
-	m.appDirs = getAppDirs()
-	err := m.loadDesktopPkgMap()
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	err = m.loadPkgCategoryMap()
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	err = m.loadNameMap()
-	if err != nil {
-		logger.Warning(err)
-	}
-
+func (m *Manager) initItems() {
 	// load items
 	m.items = make(map[string]*Item)
 
@@ -81,42 +53,6 @@ func (m *Manager) init() {
 		m.addItem(item)
 	}
 	logger.Debug("load items count:", len(m.items))
-
-	// init searchTaskStack
-	m.searchTaskStack = newSearchTaskStack(m)
-
-	// init popPushOpChan
-	m.popPushOpChan = make(chan *popPushOp, 50)
-	go m.handlePopPushOps()
-
-	m.fsEventTimers = make(map[string]*time.Timer)
-
-	err = m.fsWatcher.Watch(lastoreDataDir)
-	if err != nil {
-		logger.Warning(err)
-	}
-	go m.handleFsWatcherEvents()
-	m.desktopFileWatcher.ConnectEvent(func(filename string, _ uint32) {
-		if shouldCheckDesktopFile(filename) {
-			logger.Debug("DFWatcher event", filename)
-			m.delayHandleFileEvent(filename)
-		}
-	})
-
-	m.launchedRecorder.WatchDirs(getDataDirsForWatch())
-
-	m.launchedRecorder.ConnectServiceRestarted(func() {
-		if m.launchedRecorder != nil {
-			m.launchedRecorder.WatchDirs(getDataDirsForWatch())
-		}
-	})
-	m.launchedRecorder.ConnectLaunched(func(path string) {
-		item := m.getItemByPath(path)
-		if item == nil {
-			return
-		}
-		m.service.Emit(m, "NewAppLaunched", item.ID)
-	})
 }
 
 func shouldCheckDesktopFile(filename string) bool {

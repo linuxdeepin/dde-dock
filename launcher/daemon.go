@@ -63,7 +63,6 @@ func (d *Daemon) Start() (err error) {
 		return
 	}
 
-	go d.manager.init()
 	return
 }
 
