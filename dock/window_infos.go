@@ -20,7 +20,7 @@
 package dock
 
 import (
-	"github.com/BurntSushi/xgb/xproto"
+	x "github.com/linuxdeepin/go-x11-client"
 )
 
 type ExportWindowInfo struct {
@@ -28,7 +28,7 @@ type ExportWindowInfo struct {
 	Flash bool
 }
 
-type windowInfosType map[xproto.Window]ExportWindowInfo
+type windowInfosType map[x.Window]ExportWindowInfo
 
 func newWindowInfos() windowInfosType {
 	return make(windowInfosType)

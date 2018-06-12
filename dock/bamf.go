@@ -20,7 +20,7 @@
 package dock
 
 import (
-	"github.com/BurntSushi/xgb/xproto"
+	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -32,7 +32,7 @@ const (
 	bamfAppInterface      = bamfDBusServiceName + ".application"
 )
 
-func getDesktopFromWindowByBamf(win xproto.Window) (string, error) {
+func getDesktopFromWindowByBamf(win x.Window) (string, error) {
 	bus, err := dbus.SessionBus()
 	if err != nil {
 		return "", err

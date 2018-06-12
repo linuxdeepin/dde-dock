@@ -23,10 +23,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
-	"github.com/BurntSushi/xgbutil/xrect"
+	x "github.com/linuxdeepin/go-x11-client"
 )
 
 func max(a, b int) int {
@@ -43,7 +40,7 @@ func min(a, b int) int {
 	return b
 }
 
-func hasIntersection(rectA, rectB xrect.Rect) bool {
+func hasIntersection(rectA, rectB *Rect) bool {
 	if rectA == nil || rectB == nil {
 		logger.Warning("hasIntersection rectA or rectB is nil")
 		return false
@@ -57,10 +54,11 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 	return ax < bx && ay < by
 }
 
-func (m *Manager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Window) {
+func (m *Manager) getActiveWinGroup(activeWin x.Window) (ret []x.Window) {
 
-	ret = []xproto.Window{activeWin}
-	list, err := ewmh.ClientListStackingGet(XU)
+	ret = []x.Window{activeWin}
+
+	list, err := globalEwmhConn.GetClientListStacking().Reply(globalEwmhConn)
 	if err != nil {
 		logger.Warning(err)
 		return
@@ -80,20 +78,20 @@ func (m *Manager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Windo
 		return
 	}
 
-	aPid := getWmPid(XU, activeWin)
-	aWmClass, _ := icccm.WmClassGet(XU, activeWin)
-	aLeaderWin, _ := getWmClientLeader(XU, activeWin)
+	aPid := getWmPid(activeWin)
+	aWmClass, _ := getWmClass(activeWin)
+	aLeaderWin, _ := getWmClientLeader(activeWin)
 
 	for i := idx - 1; i >= 0; i-- {
 		win := list[i]
-		pid := getWmPid(XU, win)
+		pid := getWmPid(win)
 		if aPid != 0 && pid == aPid {
 			// ok
 			ret = append(ret, win)
 			continue
 		}
 
-		wmClass, _ := icccm.WmClassGet(XU, win)
+		wmClass, _ := getWmClass(win)
 		if wmClass != nil && wmClass.Class == frontendWindowWmClass {
 			// skip over frontend window
 			continue
@@ -106,7 +104,7 @@ func (m *Manager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Windo
 			continue
 		}
 
-		leaderWin, _ := getWmClientLeader(XU, win)
+		leaderWin, _ := getWmClientLeader(win)
 		if aLeaderWin != 0 && leaderWin == aLeaderWin {
 			// ok
 			ret = append(ret, win)
@@ -114,7 +112,7 @@ func (m *Manager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Windo
 		}
 
 		aboveWin := list[i+1]
-		aboveWinTransientFor, _ := getWmTransientFor(XU, aboveWin)
+		aboveWinTransientFor, _ := getWmTransientFor(aboveWin)
 		if aboveWinTransientFor != 0 && aboveWinTransientFor == win {
 			// ok
 			ret = append(ret, win)
@@ -126,18 +124,20 @@ func (m *Manager) getActiveWinGroup(activeWin xproto.Window) (ret []xproto.Windo
 	return
 }
 
-func (m *Manager) isWindowDockOverlap(win xproto.Window) (bool, error) {
+func (m *Manager) isWindowDockOverlap(win x.Window) (bool, error) {
 	// overlap condition:
 	// window type is not desktop
 	// window opacity is not zero
 	// window showing and  on current workspace,
 	// window dock rect has intersection
-	windowType, err := ewmh.WmWindowTypeGet(XU, win)
-	if err == nil && strSliceContains(windowType, "_NET_WM_WINDOW_TYPE_DESKTOP") {
+
+	windowType, err := globalEwmhConn.GetWMWindowType(win).Reply(globalEwmhConn)
+
+	if err == nil && atomsContains(windowType, atomNetWmWindowTypeDesktop) {
 		return false, nil
 	}
 
-	opacity, err := getWmWindowOpacity(XU, win)
+	opacity, err := getWmWindowOpacity(win)
 	if err == nil && opacity == 0 {
 		return false, nil
 	}
@@ -147,7 +147,7 @@ func (m *Manager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 		return false, nil
 	}
 
-	winRect, err := getWindowGeometry(XU, win)
+	winRect, err := getWindowGeometry(globalXConn, win)
 	if err != nil {
 		logger.Warning("Get target window geometry failed", err)
 		return false, err
@@ -155,22 +155,22 @@ func (m *Manager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 
 	logger.Debug("window rect:", winRect)
 	logger.Debug("dock rect:", m.FrontendWindowRect)
-	return hasIntersection(winRect, m.FrontendWindowRect.ToXRect()), nil
+	return hasIntersection(winRect, m.FrontendWindowRect), nil
 }
 
 const (
 	ddeLauncherWMClass = "dde-launcher"
 )
 
-func isDDELauncher(win xproto.Window) (bool, error) {
-	winClass, err := icccm.WmClassGet(XU, win)
+func isDDELauncher(win x.Window) (bool, error) {
+	winClass, err := getWmClass(win)
 	if err != nil {
 		return false, err
 	}
 	return winClass.Instance == ddeLauncherWMClass, nil
 }
 
-func (m *Manager) getActiveWindow() (activeWin xproto.Window) {
+func (m *Manager) getActiveWindow() (activeWin x.Window) {
 	m.activeWindowMu.Lock()
 	if m.activeWindow == 0 {
 		activeWin = m.activeWindowOld

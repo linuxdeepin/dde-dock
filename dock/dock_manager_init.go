@@ -22,6 +22,8 @@ package dock
 import (
 	"time"
 
+	x "github.com/linuxdeepin/go-x11-client"
+
 	// dbus interfaces
 	libApps "dbus/com/deepin/daemon/apps"
 	"dbus/com/deepin/dde/daemon/launcher"
@@ -32,7 +34,6 @@ import (
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/gsettings"
 
-	"github.com/BurntSushi/xgb/xproto"
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -141,6 +142,8 @@ func (m *Manager) getWinIconPreferredApps() []string {
 }
 
 func (m *Manager) init() error {
+	m.rootWindow = globalXConn.GetDefaultScreen().Root
+
 	var err error
 	m.settings = gio.NewSettings(dockSchema)
 	m.HideMode.Bind(m.settings, settingKeyHideMode)
@@ -157,7 +160,7 @@ func (m *Manager) init() error {
 
 	m.listenSettingsChanged()
 
-	m.windowInfoMap = make(map[xproto.Window]*WindowInfo)
+	m.windowInfoMap = make(map[x.Window]*WindowInfo)
 	m.windowPatterns, err = loadWindowPatterns(windowPatternsFile)
 	if err != nil {
 		logger.Warning("loadWindowPatterns failed:", err)
@@ -201,5 +204,6 @@ func (m *Manager) init() error {
 		m.DisplayMode.Set(int32(DisplayModeEfficientMode))
 	}
 
+	go m.eventHandleLoop()
 	return nil
 }

@@ -29,18 +29,15 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
-	"github.com/BurntSushi/xgbutil/xevent"
-	"github.com/BurntSushi/xgbutil/xprop"
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 )
 
 const windowHashPrefix = "w:"
 
 type WindowInfo struct {
 	innerId string
-	window  xproto.Window
+	window  x.Window
 	Title   string
 	Icon    string
 
@@ -48,20 +45,16 @@ type WindowInfo struct {
 	y                        int16
 	width                    uint16
 	height                   uint16
-	lastConfigureNotifyEvent *xevent.ConfigureNotifyEvent
+	lastConfigureNotifyEvent *x.ConfigureNotifyEvent
+	mu                       sync.Mutex
 	updateConfigureTimer     *time.Timer
 
-	propertyNotifyTimer          *time.Timer
-	propertyNotifyAtomTable      map[xproto.Atom]bool
-	propertyNotifyAtomTableMutex sync.Mutex
-	propertyNotifyEnabled        bool
-
-	wmState           []string
-	wmWindowType      []string
-	wmAllowedActions  []string
+	wmState           []x.Atom
+	wmWindowType      []x.Atom
+	wmAllowedActions  []x.Atom
 	hasXEmbedInfo     bool
 	hasWmTransientFor bool
-	wmClass           *icccm.WmClass
+	wmClass           *icccm.WMClass
 	wmName            string
 
 	gtkAppId     string
@@ -77,7 +70,7 @@ type WindowInfo struct {
 	appInfo      *AppInfo
 }
 
-func NewWindowInfo(win xproto.Window) *WindowInfo {
+func NewWindowInfo(win x.Window) *WindowInfo {
 	winInfo := &WindowInfo{
 		window: win,
 	}
@@ -87,77 +80,84 @@ func NewWindowInfo(win xproto.Window) *WindowInfo {
 // window type
 func (winInfo *WindowInfo) updateWmWindowType() {
 	var err error
-	winInfo.wmWindowType, err = ewmh.WmWindowTypeGet(XU, winInfo.window)
+	winInfo.wmWindowType, err = globalEwmhConn.GetWMWindowType(winInfo.window).Reply(globalEwmhConn)
 	if err != nil {
-		logger.Debug(err)
+		logger.Debugf("failed to get WMWindowType for window %d: %v", winInfo.window, err)
 	}
 }
 
 // wm allowed actions
 func (winInfo *WindowInfo) updateWmAllowedActions() {
 	var err error
-	winInfo.wmAllowedActions, err = ewmh.WmAllowedActionsGet(XU, winInfo.window)
+	winInfo.wmAllowedActions, err = globalEwmhConn.GetWMAllowedActions(winInfo.window).Reply(globalEwmhConn)
 	if err != nil {
-		logger.Debug(err)
+		logger.Debugf("failed to get WMAllowedActions for window %d: %v", winInfo.window, err)
 	}
 }
 
 // wm state
 func (winInfo *WindowInfo) updateWmState() {
 	var err error
-	winInfo.wmState, err = ewmh.WmStateGet(XU, winInfo.window)
+	winInfo.wmState, err = globalEwmhConn.GetWMState(winInfo.window).Reply(globalEwmhConn)
 	if err != nil {
-		logger.Debug(err)
+		logger.Debugf("failed to get WMState for window %d: %v", winInfo.window, err)
 	}
 }
 
 // wm class
 func (winInfo *WindowInfo) updateWmClass() {
 	var err error
-	winInfo.wmClass, err = icccm.WmClassGet(XU, winInfo.window)
+	winInfo.wmClass, err = getWmClass(winInfo.window)
 	if err != nil {
-		logger.Debug(err)
+		logger.Debugf("failed to get wmClass for window %d: %v", winInfo.window, err)
 	}
 }
 
 // wm name
 func (winInfo *WindowInfo) updateWmName() {
-	winInfo.wmName = getWmName(XU, winInfo.window)
+	winInfo.wmName = getWmName(winInfo.window)
 	winInfo.Title = winInfo.getTitle()
 }
 
 func (winInfo *WindowInfo) updateIcon() {
-	winInfo.Icon = getIconFromWindow(XU, winInfo.window)
+	winInfo.Icon = getIconFromWindow(winInfo.window)
 }
 
 // XEmbed info
 // 一般 tray icon 会带有 _XEMBED_INFO 属性
 func (winInfo *WindowInfo) updateHasXEmbedInfo() {
-	_, err := xprop.GetProperty(XU, winInfo.window, "_XEMBED_INFO")
-	winInfo.hasXEmbedInfo = err == nil
+	reply, err := x.GetProperty(globalXConn, x.False, winInfo.window, atomXEmbedInfo, x.AtomAny, 0, 2).Reply(globalXConn)
+	if err != nil {
+		logger.Debug(err)
+		return
+	}
+	if reply.Format != 0 {
+		// has property
+		winInfo.hasXEmbedInfo = true
+	}
 }
 
 // WM_TRANSIENT_FOR
 func (winInfo *WindowInfo) updateHasWmTransientFor() {
-	_, err := xprop.GetProperty(XU, winInfo.window, "WM_TRANSIENT_FOR")
+	_, err := globalIcccmConn.GetWMTransientFor(winInfo.window).Reply(globalIcccmConn)
 	winInfo.hasWmTransientFor = err == nil
 }
 
 func (winInfo *WindowInfo) isActionMinimizeAllowed() bool {
 	logger.Debugf("wmAllowedActions: %#v", winInfo.wmAllowedActions)
-	return strSliceContains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
+	return atomsContains(winInfo.wmAllowedActions, atomNetWmActionMinimize)
 }
 
 func (winInfo *WindowInfo) hasWmStateDemandsAttention() bool {
-	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_DEMANDS_ATTENTION")
+	return atomsContains(winInfo.wmState, atomWmStateDemandsAttention)
 }
 
 func (winInfo *WindowInfo) hasWmStateSkipTaskBar() bool {
-	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
+	return atomsContains(winInfo.wmState, atomNetWmStateSkipTaskbar)
 }
 
 func (winInfo *WindowInfo) hasWmStateModal() bool {
-	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_MODAL")
+	return atomsContains(winInfo.wmState, atomNetWmStateModal)
 }
 
 func (winInfo *WindowInfo) isValidModal() bool {
@@ -247,7 +247,7 @@ func (winInfo *WindowInfo) getTitle() string {
 func (winInfo *WindowInfo) getIcon() string {
 	if winInfo.Icon == "" {
 		logger.Debug("get icon from window", winInfo.window)
-		winInfo.Icon = getIconFromWindow(XU, winInfo.window)
+		winInfo.Icon = getIconFromWindow(winInfo.window)
 	}
 	return winInfo.Icon
 }
@@ -284,10 +284,11 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 	}
 
 	for _, winType := range winInfo.wmWindowType {
-		if winType == "_NET_WM_WINDOW_TYPE_DIALOG" &&
+		winTypeStr, _ := getAtomName(winType)
+		if winType == atomNetWmWindowTypeDialog &&
 			!winInfo.isActionMinimizeAllowed() {
 			return false
-		} else if strSliceContains(skipTaskBarWindowTypes, winType) {
+		} else if strSliceContains(skipTaskBarWindowTypes, winTypeStr) {
 			return false
 		}
 	}
@@ -296,13 +297,13 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 
 func (winInfo *WindowInfo) initProcessInfo() {
 	win := winInfo.window
-	winInfo.pid = getWmPid(XU, win)
+	winInfo.pid = getWmPid(win)
 	var err error
 	winInfo.process, err = NewProcessInfo(winInfo.pid)
 	if err != nil {
 		logger.Debug(err)
 		// Try WM_COMMAND
-		wmCommand, err := getWmCommand(XU, win)
+		wmCommand, err := getWmCommand(win)
 		if err == nil {
 			winInfo.process = NewProcessInfoWithCmdline(wmCommand)
 		}
@@ -322,9 +323,9 @@ func (winInfo *WindowInfo) update() {
 	}
 	winInfo.updateHasWmTransientFor()
 	winInfo.initProcessInfo()
-	winInfo.wmRole = getWmWindowRole(XU, win)
-	winInfo.gtkAppId = getWindowGtkApplicationId(XU, win)
-	winInfo.flatpakAppID = getWindowFlatpakAppID(XU, win)
+	winInfo.wmRole = getWmWindowRole(win)
+	winInfo.gtkAppId = getWindowGtkApplicationId(win)
+	winInfo.flatpakAppID = getWindowFlatpakAppID(win)
 	winInfo.updateWmName()
 	winInfo.genInnerId()
 }

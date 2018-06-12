@@ -20,7 +20,7 @@
 package dock
 
 import (
-	"github.com/BurntSushi/xgbutil/ewmh"
+	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -105,8 +105,8 @@ func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 	return NewMenuItem(Tr("_Close All"), func(timestamp uint32) {
 		logger.Debug("Close All")
-		for win, _ := range entry.windows {
-			ewmh.CloseWindow(XU, win)
+		for win := range entry.windows {
+			closeWindow(win, x.Timestamp(timestamp))
 		}
 	}, true)
 }

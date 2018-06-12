@@ -24,10 +24,10 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
 	"sync"
 
-	"github.com/BurntSushi/xgb/xproto"
+	x "github.com/linuxdeepin/go-x11-client"
+
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -122,7 +122,7 @@ func (entries *AppEntries) IndexOf(entry *AppEntry) int {
 	return idx
 }
 
-func (entries AppEntries) Move(index, newIndex int) error {
+func (entries *AppEntries) Move(index, newIndex int) error {
 	if index == newIndex {
 		return errors.New("index == newIndex")
 	}
@@ -147,7 +147,7 @@ func (entries AppEntries) Move(index, newIndex int) error {
 	return fmt.Errorf("index out of bounds, index: %v, newIndex: %v, len: %v", index, newIndex, entriesLength)
 }
 
-func (entries AppEntries) FilterDocked() (dockedEntries []*AppEntry) {
+func (entries *AppEntries) FilterDocked() (dockedEntries []*AppEntry) {
 	entries.mu.RLock()
 	for _, entry := range entries.items {
 		if entry.appInfo != nil && entry.IsDocked == true {
@@ -158,7 +158,7 @@ func (entries AppEntries) FilterDocked() (dockedEntries []*AppEntry) {
 	return dockedEntries
 }
 
-func (entries AppEntries) GetByWindowPid(pid uint) *AppEntry {
+func (entries *AppEntries) GetByWindowPid(pid uint) *AppEntry {
 	entries.mu.RLock()
 
 	for _, entry := range entries.items {
@@ -174,7 +174,7 @@ func (entries AppEntries) GetByWindowPid(pid uint) *AppEntry {
 	return nil
 }
 
-func (entries AppEntries) getByWindowId(winId xproto.Window) *AppEntry {
+func (entries *AppEntries) getByWindowId(winId x.Window) *AppEntry {
 	entries.mu.RLock()
 	for _, entry := range entries.items {
 		entry.PropsMu.RLock()
@@ -205,7 +205,7 @@ func getByAppId(items []*AppEntry, id string) *AppEntry {
 	return nil
 }
 
-func (entries AppEntries) GetByAppId(id string) *AppEntry {
+func (entries *AppEntries) GetByAppId(id string) *AppEntry {
 	entries.mu.RLock()
 	e := getByAppId(entries.items, id)
 	entries.mu.RUnlock()
@@ -241,7 +241,7 @@ func getByDesktopFilePath(entriesItems []*AppEntry, desktopFilePath string) (*Ap
 	return nil, nil
 }
 
-func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
+func (entries *AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
 	entries.mu.RLock()
 	e, err := getByDesktopFilePath(entries.items, desktopFilePath)
 	entries.mu.RUnlock()

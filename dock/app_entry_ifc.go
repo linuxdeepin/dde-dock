@@ -22,8 +22,7 @@ package dock
 import (
 	"errors"
 
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -55,14 +54,14 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	win := entry.current.window
-	state, err := ewmh.WmStateGet(XU, win)
+	state, err := globalEwmhConn.GetWMState(win).Reply(globalEwmhConn)
 	if err != nil {
 		logger.Warning("Get ewmh wmState failed win:", win)
 		return dbusutil.ToError(err)
 	}
 
-	if strSliceContains(state, "_NET_WM_STATE_FOCUSED") {
-		s, err := icccm.WmStateGet(XU, win)
+	if atomsContains(state, atomNetWmStateFocused) {
+		s, err := globalIcccmConn.GetWMState(win).Reply(globalIcccmConn)
 		if err != nil {
 			logger.Warning("Get icccm WmState failed win:", win)
 			return dbusutil.ToError(err)
@@ -72,7 +71,7 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 			activateWindow(win)
 		case icccm.StateNormal:
 			if len(entry.windows) == 1 {
-				minimizeWindow(XU, win)
+				minimizeWindow(win)
 			} else if entry.manager.getActiveWindow() == win {
 				nextWin := entry.findNextLeader()
 				activateWindow(nextWin)

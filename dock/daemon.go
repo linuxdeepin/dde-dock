@@ -20,10 +20,12 @@
 package dock
 
 import (
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/xevent"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 )
 
 type Daemon struct {
@@ -44,9 +46,9 @@ func (d *Daemon) Stop() error {
 		dockManager = nil
 	}
 
-	if XU != nil {
-		XU.Conn().Close()
-		XU = nil
+	if globalXConn != nil {
+		globalXConn.Close()
+		globalXConn = nil
 	}
 
 	return nil
@@ -62,8 +64,20 @@ func (d *Daemon) Start() error {
 	}
 
 	var err error
-	// init x conn
-	XU, err = xgbutil.NewConn()
+
+	globalXConn, err = x.NewConn()
+	if err != nil {
+		d.startFailed()
+		return err
+	}
+
+	globalEwmhConn, err = ewmh.NewConn(globalXConn)
+	if err != nil {
+		d.startFailed()
+		return err
+	}
+
+	globalIcccmConn, err = icccm.NewConn(globalXConn)
 	if err != nil {
 		d.startFailed()
 		return err
@@ -81,8 +95,7 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	dockManager.listenRootWindowPropertyChange()
-	go xevent.Main(XU)
+	dockManager.listenRootWindowXEvent()
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {

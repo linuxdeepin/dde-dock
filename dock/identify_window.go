@@ -109,7 +109,7 @@ func identifyWindowByScratch(m *Manager, winInfo *WindowInfo) (string, *AppInfo)
 }
 
 func identifyWindowByPid(m *Manager, winInfo *WindowInfo) (string, *AppInfo) {
-	if winInfo.pid != 0 {
+	if winInfo.pid > 10 {
 		logger.Debugf("identifyWindowByPid: pid: %d", winInfo.pid)
 		entry := m.Entries.GetByWindowPid(winInfo.pid)
 		if entry != nil {

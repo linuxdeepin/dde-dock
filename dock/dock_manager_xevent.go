@@ -23,14 +23,10 @@ import (
 	"sort"
 	"time"
 
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/xevent"
-	"github.com/BurntSushi/xgbutil/xwindow"
+	x "github.com/linuxdeepin/go-x11-client"
 )
 
-func (m *Manager) registerWindow(win xproto.Window) {
+func (m *Manager) registerWindow(win x.Window) {
 	logger.Debug("register window", win)
 
 	m.windowInfoMapMutex.RLock()
@@ -52,23 +48,22 @@ func (m *Manager) registerWindow(win xproto.Window) {
 	m.attachOrDetachWindow(winInfo)
 }
 
-func (m *Manager) isWindowRegistered(win xproto.Window) bool {
+func (m *Manager) isWindowRegistered(win x.Window) bool {
 	m.windowInfoMapMutex.RLock()
 	_, ok := m.windowInfoMap[win]
 	m.windowInfoMapMutex.RUnlock()
 	return ok
 }
 
-func (m *Manager) unregisterWindow(win xproto.Window) {
+func (m *Manager) unregisterWindow(win x.Window) {
 	logger.Debugf("unregister window %v", win)
-	xevent.Detach(XU, win)
 	m.windowInfoMapMutex.Lock()
 	delete(m.windowInfoMap, win)
 	m.windowInfoMapMutex.Unlock()
 }
 
 func (m *Manager) handleClientListChanged() {
-	clientList, err := ewmh.ClientListGet(XU)
+	clientList, err := globalEwmhConn.GetClientList().Reply(globalEwmhConn)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
 		return
@@ -100,7 +95,7 @@ func (m *Manager) handleClientListChanged() {
 }
 
 func (m *Manager) handleActiveWindowChanged() {
-	activeWindow, err := ewmh.ActiveWindowGet(XU)
+	activeWindow, err := globalEwmhConn.GetActiveWindow().Reply(globalEwmhConn)
 	if err != nil {
 		logger.Warning(err)
 		return
@@ -139,55 +134,130 @@ func (m *Manager) handleActiveWindowChanged() {
 	m.updateHideState(true)
 }
 
-func (m *Manager) listenRootWindowPropertyChange() {
-	rootWin := XU.RootWin()
-	xwindow.New(XU, rootWin).Listen(xproto.EventMaskPropertyChange | xproto.EventMaskSubstructureNotify)
-	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		switch ev.Atom {
-		case atomNetClientList:
-			m.handleClientListChanged()
-		case atomNetActiveWindow:
-			m.handleActiveWindowChanged()
-		case atomNetShowingDesktop:
-			m.updateHideState(false)
-		}
-	}).Connect(XU, rootWin)
-
-	xevent.MapNotifyFun(func(XU *xgbutil.XUtil, ev xevent.MapNotifyEvent) {
-		win := ev.Window
-		logger.Debugf("rootWin MapNotifyEvent window: %v", win)
-
-		m.registerWindow(win)
-	}).Connect(XU, rootWin)
-
+func (m *Manager) listenRootWindowXEvent() {
+	const eventMask = x.EventMaskPropertyChange | x.EventMaskSubstructureNotify
+	err := x.ChangeWindowAttributes(globalXConn, m.rootWindow, x.CWEventMask,
+		&x.ChangeWindowAttributesValueList{EventMask: eventMask}).Check(globalXConn)
+	if err != nil {
+		logger.Warning(err)
+	}
 	m.handleActiveWindowChanged()
 	m.handleClientListChanged()
 }
 
 func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
-	win := winInfo.window
-	logger.Debugf("start listen window %v x event", win)
-	xwin := xwindow.New(XU, win)
-
-	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
-
-	// need listen EventMaskPropertyChange
-	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		m.handlePropertyNotifyEvent(winInfo, ev)
-	}).Connect(XU, win)
-
-	// need listen EventMaskStructureNotify
-	// move resize minimized Maximize window
-	xevent.ConfigureNotifyFun(func(XU *xgbutil.XUtil, ev xevent.ConfigureNotifyEvent) {
-		m.handleConfigureNotifyEvent(winInfo, ev)
-	}).Connect(XU, win)
-
-	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
-		m.handleDestroyNotifyEvent(winInfo, ev)
-	}).Connect(XU, win)
+	const eventMask = x.EventMaskPropertyChange | x.EventMaskStructureNotify | x.EventMaskVisibilityChange
+	err := x.ChangeWindowAttributes(globalXConn, winInfo.window, x.CWEventMask,
+		&x.ChangeWindowAttributesValueList{EventMask: eventMask}).Check(globalXConn)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
-func (m *Manager) handlePropertyNotifyEvent(winInfo *WindowInfo, ev xevent.PropertyNotifyEvent) {
+func (m *Manager) handleDestroyNotifyEvent(ev *x.DestroyNotifyEvent) {
+	logger.Debug(ev)
+	if ev.Window != ev.Event {
+		return
+	}
+	winInfo := m.getWindowInfo(ev.Window)
+	if winInfo != nil {
+		m.detachWindow(winInfo)
+	}
+	m.unregisterWindow(ev.Window)
+}
+
+func (m *Manager) handleMapNotifyEvent(ev *x.MapNotifyEvent) {
+	logger.Debugf("MapNotifyEvent window: %v", ev.Window)
+	m.registerWindow(ev.Window)
+}
+
+func (m *Manager) getWindowInfo(win x.Window) *WindowInfo {
+	m.windowInfoMapMutex.RLock()
+	v := m.windowInfoMap[win]
+	m.windowInfoMapMutex.RUnlock()
+	return v
+}
+
+func (m *Manager) handleConfigureNotifyEvent(ev *x.ConfigureNotifyEvent) {
+	winInfo := m.getWindowInfo(ev.Window)
+	if winInfo == nil {
+		return
+	}
+
+	if HideModeType(m.HideMode.Get()) != HideModeSmartHide {
+		return
+	}
+	if winInfo.wmClass != nil && winInfo.wmClass.Class == frontendWindowWmClass {
+		// ignore frontend window ConfigureNotify event
+		return
+	}
+
+	winInfo.mu.Lock()
+	winInfo.lastConfigureNotifyEvent = ev
+	winInfo.mu.Unlock()
+
+	const configureNotifyDelay = 100 * time.Millisecond
+	if winInfo.updateConfigureTimer != nil {
+		winInfo.updateConfigureTimer.Reset(configureNotifyDelay)
+	} else {
+		winInfo.updateConfigureTimer = time.AfterFunc(configureNotifyDelay, func() {
+			logger.Debug("ConfigureNotify: updateConfigureTimer expired")
+
+			winInfo.mu.Lock()
+			ev := winInfo.lastConfigureNotifyEvent
+			winInfo.mu.Unlock()
+
+			logger.Debugf("in closure: configure notify ev %s", ev)
+			isXYWHChange := false
+			if winInfo.x != ev.X {
+				winInfo.x = ev.X
+				isXYWHChange = true
+			}
+
+			if winInfo.y != ev.Y {
+				winInfo.y = ev.Y
+				isXYWHChange = true
+			}
+
+			if winInfo.width != ev.Width {
+				winInfo.width = ev.Width
+				isXYWHChange = true
+			}
+
+			if winInfo.height != ev.Height {
+				winInfo.height = ev.Height
+				isXYWHChange = true
+			}
+			logger.Debug("isXYWHChange", isXYWHChange)
+			// if xywh changed ,update hide state without delay
+			m.updateHideState(!isXYWHChange)
+		})
+	}
+
+}
+
+func (m *Manager) handleRootWindowPropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
+	switch ev.Atom {
+	case atomNetClientList:
+		m.handleClientListChanged()
+	case atomNetActiveWindow:
+		m.handleActiveWindowChanged()
+	case atomNetShowingDesktop:
+		m.updateHideState(false)
+	}
+}
+
+func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
+	if ev.Window == m.rootWindow {
+		m.handleRootWindowPropertyNotifyEvent(ev)
+		return
+	}
+
+	winInfo := m.getWindowInfo(ev.Window)
+	if winInfo == nil {
+		return
+	}
+
 	switch ev.Atom {
 	case atomNetWMState:
 		winInfo.updateWmState()
@@ -224,54 +294,25 @@ func (m *Manager) handlePropertyNotifyEvent(winInfo *WindowInfo, ev xevent.Prope
 	}
 }
 
-func (m *Manager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
-	if HideModeType(m.HideMode.Get()) != HideModeSmartHide {
-		return
+func (m *Manager) eventHandleLoop() {
+	for {
+		ev := globalXConn.WaitForEvent()
+		switch ev.GetEventCode() {
+		case x.MapNotifyEventCode:
+			event, _ := x.NewMapNotifyEvent(ev)
+			m.handleMapNotifyEvent(event)
+
+		case x.DestroyNotifyEventCode:
+			event, _ := x.NewDestroyNotifyEvent(ev)
+			m.handleDestroyNotifyEvent(event)
+
+		case x.ConfigureNotifyEventCode:
+			event, _ := x.NewConfigureNotifyEvent(ev)
+			m.handleConfigureNotifyEvent(event)
+
+		case x.PropertyNotifyEventCode:
+			event, _ := x.NewPropertyNotifyEvent(ev)
+			m.handlePropertyNotifyEvent(event)
+		}
 	}
-	if winInfo.wmClass != nil && winInfo.wmClass.Class == frontendWindowWmClass {
-		// ignore frontend window ConfigureNotify event
-		return
-	}
-
-	winInfo.lastConfigureNotifyEvent = &ev
-	const configureNotifyDelay = 100 * time.Millisecond
-	if winInfo.updateConfigureTimer != nil {
-		winInfo.updateConfigureTimer.Reset(configureNotifyDelay)
-	} else {
-		winInfo.updateConfigureTimer = time.AfterFunc(configureNotifyDelay, func() {
-			logger.Debug("ConfigureNotify: updateConfigureTimer expired")
-
-			ev := winInfo.lastConfigureNotifyEvent
-			logger.Debugf("in closure: configure notify ev %s", ev)
-			isXYWHChange := false
-			if winInfo.x != ev.X {
-				winInfo.x = ev.X
-				isXYWHChange = true
-			}
-
-			if winInfo.y != ev.Y {
-				winInfo.y = ev.Y
-				isXYWHChange = true
-			}
-
-			if winInfo.width != ev.Width {
-				winInfo.width = ev.Width
-				isXYWHChange = true
-			}
-
-			if winInfo.height != ev.Height {
-				winInfo.height = ev.Height
-				isXYWHChange = true
-			}
-			logger.Debug("isXYWHChange", isXYWHChange)
-			// if xywh changed ,update hide state without delay
-			m.updateHideState(!isXYWHChange)
-		})
-	}
-}
-
-func (m *Manager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
-	logger.Debug(ev)
-	m.unregisterWindow(winInfo.window)
-	m.detachWindow(winInfo)
 }

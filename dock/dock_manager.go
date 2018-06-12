@@ -37,8 +37,7 @@ import (
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
+	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
@@ -58,12 +57,13 @@ type Manager struct {
 
 	service            *dbusutil.Service
 	clientList         windowSlice
-	windowInfoMap      map[xproto.Window]*WindowInfo
+	windowInfoMap      map[x.Window]*WindowInfo
 	windowInfoMapMutex sync.RWMutex
 	settings           *gio.Settings
 
-	activeWindow    xproto.Window
-	activeWindowOld xproto.Window
+	rootWindow      x.Window
+	activeWindow    x.Window
+	activeWindowOld x.Window
 	activeWindowMu  sync.Mutex
 
 	ddeLauncherVisible   bool
@@ -189,7 +189,7 @@ func (m *Manager) launch(desktopFile string, timestamp uint32, files []string) {
 
 // ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
 func (m *Manager) ActivateWindow(win uint32) *dbus.Error {
-	err := activateWindow(xproto.Window(win))
+	err := activateWindow(x.Window(win))
 	if err != nil {
 		logger.Warning("Activate window failed:", err)
 		return dbusutil.ToError(err)
@@ -199,7 +199,7 @@ func (m *Manager) ActivateWindow(win uint32) *dbus.Error {
 
 // CloseWindow会将传入id的窗口关闭。
 func (m *Manager) CloseWindow(win uint32) *dbus.Error {
-	err := ewmh.CloseWindow(XU, xproto.Window(win))
+	err := closeWindow(x.Window(win), 0)
 	if err != nil {
 		logger.Warning("Close window failed:", err)
 		return dbusutil.ToError(err)
@@ -212,7 +212,7 @@ func (m *Manager) MaximizeWindow(win uint32) *dbus.Error {
 	if err != nil {
 		return err
 	}
-	err1 := maximizeWindow(XU, xproto.Window(win))
+	err1 := maximizeWindow(x.Window(win))
 	if err1 != nil {
 		logger.Warning("maximize window failed:", err)
 		return dbusutil.ToError(err1)
@@ -221,7 +221,7 @@ func (m *Manager) MaximizeWindow(win uint32) *dbus.Error {
 }
 
 func (m *Manager) MinimizeWindow(win uint32) *dbus.Error {
-	err := minimizeWindow(XU, xproto.Window(win))
+	err := minimizeWindow(x.Window(win))
 	if err != nil {
 		logger.Warning("minimize window failed:", err)
 		return dbusutil.ToError(err)
@@ -235,7 +235,7 @@ func (m *Manager) MakeWindowAbove(win uint32) *dbus.Error {
 		return err
 	}
 
-	err1 := makeWindowAbove(XU, xproto.Window(win))
+	err1 := makeWindowAbove(x.Window(win))
 	if err1 != nil {
 		logger.Warning("make window above failed:", err)
 		return dbusutil.ToError(err1)
@@ -249,7 +249,7 @@ func (m *Manager) MoveWindow(win uint32) *dbus.Error {
 		return err
 	}
 
-	err1 := moveWindow(XU, xproto.Window(win))
+	err1 := moveWindow(x.Window(win))
 	if err1 != nil {
 		logger.Warning("move window failed:", err)
 		return dbusutil.ToError(err1)
@@ -372,7 +372,7 @@ func (m *Manager) QueryWindowIdentifyMethod(wid uint32) (string, *dbus.Error) {
 	defer m.Entries.mu.RUnlock()
 
 	for _, entry := range m.Entries.items {
-		winInfo, ok := entry.windows[xproto.Window(wid)]
+		winInfo, ok := entry.windows[x.Window(wid)]
 		if ok {
 			if winInfo.appInfo != nil {
 				return winInfo.appInfo.identifyMethod, nil

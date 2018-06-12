@@ -24,7 +24,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/BurntSushi/xgb/xproto"
+	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -33,7 +33,7 @@ const (
 	entryDBusInterface     = dbusInterface + ".Entry"
 )
 
-//go:generate dbusutil-gen -type AppEntry -import=github.com/BurntSushi/xgb/xproto app_entry.go
+//go:generate dbusutil-gen -type AppEntry -import=github.com/linuxdeepin/go-x11-client=x app_entry.go
 
 type AppEntry struct {
 	PropsMu       sync.RWMutex
@@ -43,7 +43,7 @@ type AppEntry struct {
 	Icon          string
 	Menu          string
 	DesktopFile   string
-	CurrentWindow xproto.Window
+	CurrentWindow x.Window
 	IsDocked      bool
 	// dbusutil-gen: equal=method:Equal
 	WindowInfos windowInfosType
@@ -51,7 +51,7 @@ type AppEntry struct {
 	service          *dbusutil.Service
 	manager          *Manager
 	innerId          string
-	windows          map[xproto.Window]*WindowInfo
+	windows          map[x.Window]*WindowInfo
 	current          *WindowInfo
 	coreMenu         *Menu
 	appInfo          *AppInfo
@@ -71,7 +71,7 @@ func newAppEntry(dockManager *Manager, innerId string, appInfo *AppInfo) *AppEnt
 		service: dockManager.service,
 		Id:      dockManager.allocEntryId(),
 		innerId: innerId,
-		windows: make(map[xproto.Window]*WindowInfo),
+		windows: make(map[x.Window]*WindowInfo),
 	}
 	entry.setAppInfo(appInfo)
 	entry.Name = entry.getName()
@@ -159,7 +159,7 @@ func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
 	}
 }
 
-func (entry *AppEntry) findNextLeader() xproto.Window {
+func (entry *AppEntry) findNextLeader() x.Window {
 	winSlice := make(windowSlice, 0, len(entry.windows))
 	for win, _ := range entry.windows {
 		winSlice = append(winSlice, win)

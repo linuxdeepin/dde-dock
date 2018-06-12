@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/BurntSushi/xgbutil/ewmh"
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -86,7 +85,7 @@ func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 }
 
 func (m *Manager) initClientList() {
-	clientList, err := ewmh.ClientListGet(XU)
+	clientList, err := globalEwmhConn.GetClientList().Reply(globalEwmhConn)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
 		return
