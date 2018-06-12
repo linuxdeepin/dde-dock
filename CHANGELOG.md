@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+[3.2.20] 2018-06-12
+*   fix(launcher): no app found in launcher
+
 [3.2.19] 2018-06-11
 *   auto sync po files from transifex
 *   fix(apps) dead lock again
