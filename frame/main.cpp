@@ -63,10 +63,6 @@ int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
-    if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
-        qDebug() << "set single instance failed!";
-        return -1;
-    }
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
@@ -78,6 +74,19 @@ int main(int argc, char *argv[])
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
+
+    QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
+    QCommandLineParser parser;
+    parser.setApplicationDescription("DDE Dock");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(disablePlugOption);
+    parser.process(app);
+
+    if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
+        qDebug() << "set single instance failed!";
+        return -1;
+    }
 
     qDebug() << "\n\ndde-dock startup";
     RegisterDdeSession();
@@ -92,6 +101,10 @@ int main(int argc, char *argv[])
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
 
     QTimer::singleShot(1, &mw, &MainWindow::launch);
+
+    if (!parser.isSet(disablePlugOption)) {
+        DockItemController::instance()->startLoadPlugins();
+    }
 
     return app.exec();
 }

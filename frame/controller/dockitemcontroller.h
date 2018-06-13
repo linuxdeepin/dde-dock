@@ -38,13 +38,14 @@ class DockItemController : public QObject
     Q_OBJECT
 
 public:
-    static DockItemController *instance(QObject *parent);
+    static DockItemController *instance(QObject *parent = nullptr);
 
     const QList<QPointer<DockItem> > itemList() const;
     const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
     bool itemIsInContainer(DockItem * const item) const;
     void setDropping(const bool dropping);
+    void startLoadPlugins() const;
 
 signals:
     void itemInserted(const int index, DockItem *item) const;
@@ -65,7 +66,7 @@ public slots:
     void placeholderItemRemoved(PlaceholderItem *item);
 
 private:
-    explicit DockItemController(QObject *parent = 0);
+    explicit DockItemController(QObject *parent = nullptr);
     void appItemAdded(const QDBusObjectPath &path, const int index);
     void appItemRemoved(const QString &appId);
     void appItemRemoved(AppItem *appItem);

@@ -26,6 +26,7 @@
 #include "item/pluginsitem.h"
 
 #include <QDebug>
+#include <QGSettings>
 
 DockItemController *DockItemController::INSTANCE = nullptr;
 
@@ -60,6 +61,13 @@ bool DockItemController::itemIsInContainer(DockItem * const item) const
 void DockItemController::setDropping(const bool dropping)
 {
     m_containerItem->setDropping(dropping);
+}
+
+void DockItemController::startLoadPlugins() const
+{
+    QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
+
+    QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(), m_pluginsInter, &DockPluginsController::startLoader);
 }
 
 void DockItemController::refershItemsIcon()
