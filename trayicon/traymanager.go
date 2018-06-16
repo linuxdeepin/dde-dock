@@ -192,16 +192,15 @@ func sendClientMessage(win, dest x.Window, msgType x.Atom, pArray *[5]uint32) er
 	var data x.ClientMessageData
 	data.SetData32(pArray)
 	event := x.ClientMessageEvent{
-		ResponseType: x.ClientMessageEventCode,
-		Format:       32,
-		Window:       win,
-		Type:         msgType,
-		Data:         data,
+		Format: 32,
+		Window: win,
+		Type:   msgType,
+		Data:   data,
 	}
 	w := x.NewWriter()
-	x.ClientMessageEventWrite(w, &event)
+	x.WriteClientMessageEvent(w, &event)
 	const evMask = x.EventMaskStructureNotify
-	return x.SendEventChecked(XConn, x.False, dest, evMask, w.Bytes()).Check(XConn)
+	return x.SendEventChecked(XConn, false, dest, evMask, w.Bytes()).Check(XConn)
 }
 
 // to notify tray icon applications
@@ -239,9 +238,8 @@ func createOwnerWindow(visual x.VisualID) (x.Window, error) {
 		x.WindowClassInputOnly,
 		visual,
 		x.CWEventMask,
-		&x.CreateWindowValueList{
-			EventMask: x.EventMaskStructureNotify,
-		}).Check(XConn)
+		[]uint32{x.EventMaskStructureNotify},
+	).Check(XConn)
 	if err != nil {
 		return 0, err
 	}
@@ -274,9 +272,7 @@ func (m *TrayManager) acquireSystemTraySelection() error {
 		m.owner,                   // window
 		XA_NET_SYSTEM_TRAY_VISUAL, // property
 		x.AtomVisualID,            // type
-		32,
-		1,
-		w.Bytes())
+		32, w.Bytes())
 
 	w = x.NewWriter()
 	w.Write4b(0)
@@ -286,7 +282,6 @@ func (m *TrayManager) acquireSystemTraySelection() error {
 		XA_NET_SYSTEM_TRAY_ORIENTAION, // property
 		x.AtomCardinal,                // type
 		32,
-		1,
 		w.Bytes())
 
 	logger.Debug("acquire selection successful")
@@ -297,8 +292,10 @@ func (m *TrayManager) eventHandleLoop() {
 	damageExtData := XConn.GetExtensionData(damage.Ext())
 	damageFirstEvent := damageExtData.FirstEvent
 
-	for {
-		ev := XConn.WaitForEvent()
+	eventChan := make(chan x.GenericEvent, 500)
+	XConn.AddEventChan(eventChan)
+
+	for ev := range eventChan {
 		switch ev.GetEventCode() {
 		case x.ClientMessageEventCode:
 			event, _ := x.NewClientMessageEvent(ev)
@@ -363,12 +360,10 @@ func (m *TrayManager) addIcon(win x.Window) {
 	composite.RedirectWindow(XConn, win, composite.RedirectAutomatic)
 
 	const valueMask = x.CWBackPixel | x.CWEventMask
-	valueList := &x.ChangeWindowAttributesValueList{
-		BackgroundPixel: 0,
-		EventMask:       x.EventMaskVisibilityChange | x.EventMaskStructureNotify,
-	}
-
-	x.ChangeWindowAttributes(XConn, win, valueMask, valueList)
+	x.ChangeWindowAttributes(XConn, win, valueMask, []uint32{
+		0, // background pixel
+		x.EventMaskVisibilityChange | x.EventMaskStructureNotify, // event mask
+	})
 
 	m.service.Emit(m, "Added", uint32(win))
 	logger.Infof("Add tray icon %v name: %q", win, icon.getName())

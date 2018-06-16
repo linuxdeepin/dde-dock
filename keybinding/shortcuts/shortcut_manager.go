@@ -134,7 +134,7 @@ func (sm *ShortcutManager) recordEventLoop() {
 			continue
 		}
 
-		if reply.ClientSwapped != 0 {
+		if reply.ClientSwapped {
 			logger.Warning("reply.ClientSwapped is true")
 			continue
 		}
@@ -204,7 +204,8 @@ func (sm *ShortcutManager) initRecord() error {
 		},
 	}
 
-	err = record.CreateContextChecked(ctrlConn, ctx, record.ElementHeader(0), 1, 1, clientSpec, ranges).Check(ctrlConn)
+	err = record.CreateContextChecked(ctrlConn, ctx, record.ElementHeader(0),
+		clientSpec, ranges).Check(ctrlConn)
 	if err != nil {
 		return err
 	}
@@ -553,8 +554,9 @@ func (sm *ShortcutManager) handleXRecordButtonEvent(pressed bool) {
 }
 
 func (sm *ShortcutManager) EventLoop() {
-	for {
-		ev := sm.conn.WaitForEvent()
+	eventChan := make(chan x.GenericEvent, 500)
+	sm.conn.AddEventChan(eventChan)
+	for ev := range eventChan {
 		switch ev.GetEventCode() {
 		case x.KeyPressEventCode:
 			event, _ := x.NewKeyPressEvent(ev)

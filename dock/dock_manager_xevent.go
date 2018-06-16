@@ -136,8 +136,8 @@ func (m *Manager) handleActiveWindowChanged() {
 
 func (m *Manager) listenRootWindowXEvent() {
 	const eventMask = x.EventMaskPropertyChange | x.EventMaskSubstructureNotify
-	err := x.ChangeWindowAttributes(globalXConn, m.rootWindow, x.CWEventMask,
-		&x.ChangeWindowAttributesValueList{EventMask: eventMask}).Check(globalXConn)
+	err := x.ChangeWindowAttributesChecked(globalXConn, m.rootWindow, x.CWEventMask,
+		[]uint32{eventMask}).Check(globalXConn)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -147,8 +147,8 @@ func (m *Manager) listenRootWindowXEvent() {
 
 func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
 	const eventMask = x.EventMaskPropertyChange | x.EventMaskStructureNotify | x.EventMaskVisibilityChange
-	err := x.ChangeWindowAttributes(globalXConn, winInfo.window, x.CWEventMask,
-		&x.ChangeWindowAttributesValueList{EventMask: eventMask}).Check(globalXConn)
+	err := x.ChangeWindowAttributesChecked(globalXConn, winInfo.window, x.CWEventMask,
+		[]uint32{eventMask}).Check(globalXConn)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -295,8 +295,10 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 }
 
 func (m *Manager) eventHandleLoop() {
-	for {
-		ev := globalXConn.WaitForEvent()
+	eventChan := make(chan x.GenericEvent, 500)
+	globalXConn.AddEventChan(eventChan)
+
+	for ev := range eventChan {
 		switch ev.GetEventCode() {
 		case x.MapNotifyEventCode:
 			event, _ := x.NewMapNotifyEvent(ev)

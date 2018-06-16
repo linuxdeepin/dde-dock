@@ -42,9 +42,11 @@ func (m *Manager) selectKeystroke() error {
 	m.shortcutManager.EnableRecord(false)
 	defer m.shortcutManager.EnableRecord(true)
 
+	eventChan := make(chan x.GenericEvent, 500)
+	conn.AddEventChan(eventChan)
+
 loop:
-	for {
-		event := conn.WaitForEvent()
+	for event := range eventChan {
 		switch event.GetEventCode() {
 		case x.KeyPressEventCode:
 			event, _ := x.NewKeyPressEvent(event)

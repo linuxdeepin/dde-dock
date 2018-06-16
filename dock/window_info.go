@@ -126,7 +126,7 @@ func (winInfo *WindowInfo) updateIcon() {
 // XEmbed info
 // 一般 tray icon 会带有 _XEMBED_INFO 属性
 func (winInfo *WindowInfo) updateHasXEmbedInfo() {
-	reply, err := x.GetProperty(globalXConn, x.False, winInfo.window, atomXEmbedInfo, x.AtomAny, 0, 2).Reply(globalXConn)
+	reply, err := x.GetProperty(globalXConn, false, winInfo.window, atomXEmbedInfo, x.AtomAny, 0, 2).Reply(globalXConn)
 	if err != nil {
 		logger.Debug(err)
 		return

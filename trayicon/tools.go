@@ -33,7 +33,7 @@ func findRGBAVisualID() x.VisualID {
 	for _, dinfo := range screen.AllowedDepths {
 		if dinfo.Depth == 32 {
 			for _, vinfo := range dinfo.Visuals {
-				return vinfo.VisualId
+				return vinfo.Id
 			}
 		}
 	}

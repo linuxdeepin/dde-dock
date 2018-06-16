@@ -61,8 +61,7 @@ func getAtomName(atom x.Atom) (string, error) {
 }
 
 func getAtom(name string) (x.Atom, error) {
-	nameLen := uint16(len(name))
-	reply, err := x.InternAtom(globalXConn, 0, nameLen, name).Reply(globalXConn)
+	reply, err := x.InternAtom(globalXConn, false, name).Reply(globalXConn)
 	if err != nil {
 		return 0, err
 	}
@@ -99,11 +98,11 @@ type windowFrameExtents struct {
 }
 
 func getWindowFrameExtents(xConn *x.Conn, win x.Window) (*windowFrameExtents, error) {
-	reply, err := x.GetProperty(xConn, 0, win, atomNetFrameExtents, x.AtomCardinal,
+	reply, err := x.GetProperty(xConn, false, win, atomNetFrameExtents, x.AtomCardinal,
 		0, 4).Reply(xConn)
 	if err != nil || reply.Format == 0 {
 		// try _GTK_FRAME_EXTENTS
-		reply, err = x.GetProperty(xConn, 0, win, atomGtkFrameExtents, x.AtomCardinal,
+		reply, err = x.GetProperty(xConn, false, win, atomGtkFrameExtents, x.AtomCardinal,
 			0, 4).Reply(xConn)
 		if err != nil {
 			return nil, err
@@ -212,7 +211,7 @@ func getWmPid(win x.Window) uint {
 
 // WM_CLIENT_LEADER
 func getWmClientLeader(win x.Window) (x.Window, error) {
-	reply, err := x.GetProperty(globalXConn, x.False, win, atomWmClientLeader, atomUTF8String,
+	reply, err := x.GetProperty(globalXConn, false, win, atomWmClientLeader, atomUTF8String,
 		0, 1).Reply(globalXConn)
 	if err != nil {
 		return 0, err
@@ -231,7 +230,7 @@ func getWmTransientFor(win x.Window) (x.Window, error) {
 
 // _NET_WM_WINDOW_OPACITY
 func getWmWindowOpacity(win x.Window) (uint, error) {
-	reply, err := x.GetProperty(globalXConn, x.False, win, atomNetWmWindowOpacity, atomUTF8String,
+	reply, err := x.GetProperty(globalXConn, false, win, atomNetWmWindowOpacity, atomUTF8String,
 		0, 1).Reply(globalXConn)
 	if err != nil {
 		return 0, err
@@ -246,7 +245,7 @@ func getWmWindowOpacity(win x.Window) (uint, error) {
 }
 
 func getWmCommand(win x.Window) ([]string, error) {
-	reply, err := x.GetProperty(globalXConn, x.False, win, atomWmCommand, atomUTF8String,
+	reply, err := x.GetProperty(globalXConn, false, win, atomWmCommand, atomUTF8String,
 		0, lengthMax).Reply(globalXConn)
 	if err != nil {
 		return nil, err
@@ -272,7 +271,7 @@ func getWmWindowRole(win x.Window) string {
 }
 
 func getWindowPropertyString(win x.Window, atom x.Atom) (string, error) {
-	reply, err := x.GetProperty(globalXConn, x.False, win, atom, atomUTF8String,
+	reply, err := x.GetProperty(globalXConn, false, win, atom, atomUTF8String,
 		0, lengthMax).Reply(globalXConn)
 	if err != nil {
 		return "", err
@@ -547,5 +546,8 @@ func isGoodWindow(win x.Window) bool {
 }
 
 func killClient(win x.Window) {
-	x.KillClient(globalXConn, uint32(win))
+	err := x.KillClientChecked(globalXConn, uint32(win)).Check(globalXConn)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
