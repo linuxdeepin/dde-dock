@@ -197,7 +197,6 @@ func (m *Manager) keyCode2Str(key int32) string {
 }
 
 func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
-	logger.Debug("call handleKeyboardEvent", code, press, x, y)
 	list, _ := m.getIdList(x, y)
 	for _, id := range list {
 		array, ok := m.idAreaInfoMap[id]
