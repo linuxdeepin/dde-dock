@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/wired">
+        <file>resources/wired/network-wired-symbolic-connecting1.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting2.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting3.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting4.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting5.svg</file>
+    </qresource>
+    <qresource prefix="/wireless">
+        <file>resources/wireless/wireless-0.svg</file>
+        <file>resources/wireless/wireless-20.svg</file>
+        <file>resources/wireless/wireless-40.svg</file>
+        <file>resources/wireless/wireless-60.svg</file>
+        <file>resources/wireless/wireless-80.svg</file>
+        <file>resources/wireless/wireless-background.svg</file>
+        <file>resources/wireless/wireless-disconnect.svg</file>
+        <file>resources/wireless/wireless-0-symbolic.svg</file>
+        <file>resources/wireless/wireless-20-symbolic.svg</file>
+        <file>resources/wireless/wireless-40-symbolic.svg</file>
+        <file>resources/wireless/wireless-60-symbolic.svg</file>
+        <file>resources/wireless/wireless-80-symbolic.svg</file>
+        <file>resources/wireless/wireless-disconnect-symbolic.svg</file>
+    </qresource>
+</RCC>
