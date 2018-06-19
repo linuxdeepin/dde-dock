@@ -19,14 +19,6 @@
 
 package x_event_monitor
 
-import (
-	"strings"
-
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/keybind"
-)
-
 const (
 	MotionFlag = int32(1 << 0)
 	ButtonFlag = int32(1 << 1)
@@ -94,20 +86,3 @@ func isInIdList(md5Str string, list []string) bool {
 
 	return false
 }
-
-var keyCode2Str = func() func(int32) string {
-	XU, err := xgbutil.NewConn()
-	if err != nil {
-		logger.Error("Can't connect to Xserver")
-		return func(int32) string { return "" }
-	}
-	keybind.Initialize(XU)
-	return func(code int32) string {
-		keyStr := keybind.LookupString(XU, 0, xproto.Keycode(code))
-		if keyStr == " " {
-			keyStr = "space"
-		}
-		keyStr = strings.ToLower(keyStr)
-		return keyStr
-	}
-}()

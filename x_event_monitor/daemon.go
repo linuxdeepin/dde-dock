@@ -60,11 +60,15 @@ func (d *Daemon) Name() string {
 func (d *Daemon) Start() error {
 	service := loader.GetService()
 
-	m := newManager(service)
+	m, err := newManager(service)
+	if err != nil {
+		return err
+	}
+	go m.handleXEvent()
 	rawEventCallback = m.handleRawEvent
 	go startListen()
 
-	err := service.Export(dbusPath, m)
+	err = service.Export(dbusPath, m)
 	if err != nil {
 		return err
 	}

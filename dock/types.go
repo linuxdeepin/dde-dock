@@ -19,10 +19,6 @@
 
 package dock
 
-import (
-	"github.com/BurntSushi/xgbutil/xrect"
-)
-
 type HideModeType int32
 
 const (
@@ -122,8 +118,4 @@ func NewRect() *Rect {
 
 func (r *Rect) Pieces() (int, int, int, int) {
 	return int(r.X), int(r.Y), int(r.Width), int(r.Height)
-}
-
-func (r *Rect) ToXRect() xrect.Rect {
-	return xrect.New(int(r.X), int(r.Y), int(r.Width), int(r.Height))
 }

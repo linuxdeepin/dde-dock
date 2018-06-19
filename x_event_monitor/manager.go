@@ -24,6 +24,8 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
@@ -51,8 +53,10 @@ type coordinateRange struct {
 }
 
 type Manager struct {
-	service *dbusutil.Service
-	signals *struct {
+	xConn      *x.Conn
+	keySymbols *keysyms.KeySymbols
+	service    *dbusutil.Service
+	signals    *struct {
 		CancelAllArea struct{}
 
 		CursorInto, CursorOut, CursorMove struct {
@@ -85,12 +89,34 @@ type Manager struct {
 	mu sync.Mutex
 }
 
-func newManager(service *dbusutil.Service) *Manager {
+func newManager(service *dbusutil.Service) (*Manager, error) {
+	xConn, err := x.NewConn()
+	if err != nil {
+		return nil, err
+	}
+	keySymbols := keysyms.NewKeySymbols(xConn)
+
 	return &Manager{
+		xConn:           xConn,
+		keySymbols:      keySymbols,
 		service:         service,
 		pidAidsMap:      make(map[uint32]strv.Strv),
 		idAreaInfoMap:   make(map[string]*coordinateInfo),
 		idReferCountMap: make(map[string]int32),
+	}, nil
+}
+
+func (m *Manager) handleXEvent() {
+	eventChan := make(chan x.GenericEvent, 10)
+	m.xConn.AddEventChan(eventChan)
+
+	for ev := range eventChan {
+		switch ev.GetEventCode() {
+		case x.MappingNotifyEventCode:
+			logger.Debug("mapping notify event")
+			event, _ := x.NewMappingNotifyEvent(ev)
+			m.keySymbols.RefreshKeyboardMapping(event)
+		}
 	}
 }
 
@@ -165,7 +191,13 @@ func (m *Manager) handleButtonEvent(button int32, press bool, x, y int32) {
 	}
 }
 
+func (m *Manager) keyCode2Str(key int32) string {
+	str, _ := m.keySymbols.LookupString(x.Keycode(key), 0)
+	return str
+}
+
 func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
+	logger.Debug("call handleKeyboardEvent", code, press, x, y)
 	list, _ := m.getIdList(x, y)
 	for _, id := range list {
 		array, ok := m.idAreaInfoMap[id]
@@ -174,9 +206,9 @@ func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
 		}
 
 		if press {
-			m.service.Emit(m, "KeyPress", keyCode2Str(code), x, y, id)
+			m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y, id)
 		} else {
-			m.service.Emit(m, "KeyRelease", keyCode2Str(code), x, y, id)
+			m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y, id)
 		}
 	}
 
@@ -186,9 +218,9 @@ func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
 	}
 
 	if press {
-		m.service.Emit(m, "KeyPress", keyCode2Str(code), x, y, _FullscreenId)
+		m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y, _FullscreenId)
 	} else {
-		m.service.Emit(m, "KeyRelease", keyCode2Str(code), x, y, _FullscreenId)
+		m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y, _FullscreenId)
 	}
 }
 
