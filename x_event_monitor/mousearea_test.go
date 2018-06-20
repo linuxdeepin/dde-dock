@@ -20,7 +20,6 @@
 package x_event_monitor
 
 import (
-	"os"
 	"testing"
 
 	C "gopkg.in/check.v1"
@@ -30,11 +29,11 @@ func Test(t *testing.T) {
 	C.TestingT(t)
 }
 
-func init() {
-	C.Suite(newManager(nil))
-}
+type mySuite struct{}
 
-func (m *Manager) TestUtils(c *C.C) {
+var _ = C.Suite(&mySuite{})
+
+func (s *mySuite) TestUtils(c *C.C) {
 	c.Check(hasMotionFlag(1), C.Equals, true)
 	c.Check(hasMotionFlag(0), C.Equals, false)
 
@@ -43,8 +42,4 @@ func (m *Manager) TestUtils(c *C.C) {
 
 	c.Check(hasKeyFlag(4), C.Equals, true)
 	c.Check(hasKeyFlag(0), C.Equals, false)
-
-	if os.Getenv("DISPLAY") != "" {
-		c.Check(keyCode2Str(25), C.Equals, "w")
-	}
 }
