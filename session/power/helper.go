@@ -20,8 +20,6 @@
 package power
 
 import (
-	"github.com/BurntSushi/xgb/dpms"
-	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/notify"
@@ -35,6 +33,7 @@ import (
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.sessionwatcher"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.screensaver"
+	"github.com/linuxdeepin/go-x11-client"
 )
 
 type Helper struct {
@@ -48,7 +47,7 @@ type Helper struct {
 	ScreenSaver    *screensaver.ScreenSaver // sig
 	Display        *display.Display
 
-	xu *xgbutil.XUtil
+	xConn *x.Conn
 }
 
 func newHelper(systemConn, sessionConn *dbus.Conn) (*Helper, error) {
@@ -74,11 +73,10 @@ func (h *Helper) init(systemConn, sessionConn *dbus.Conn) error {
 	h.SessionWatcher = sessionwatcher.NewSessionWatcher(sessionConn)
 
 	// init X conn
-	h.xu, err = xgbutil.NewConn()
+	h.xConn, err = x.NewConn()
 	if err != nil {
 		return err
 	}
-	dpms.Init(h.xu.Conn())
 	return nil
 }
 
@@ -93,10 +91,8 @@ func (h *Helper) Destroy() {
 		notify.Destroy()
 	}
 
-	// NOTE: Don't close x conn, because the bug of lib xgbutil.
-	// [xgbutil] eventloop.go:27: BUG: Could not read an event or an error.
-	if h.xu != nil {
-		//h.xu.Conn().Close()
-		h.xu = nil
+	if h.xConn != nil {
+		h.xConn.Close()
+		h.xConn = nil
 	}
 }

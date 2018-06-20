@@ -23,35 +23,35 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/BurntSushi/xgb/dpms"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/icccm"
+	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/api/soundutils"
 )
 
-func (m *Manager) findWindow(wminstance, wmclass string) xproto.Window {
-	xu := m.helper.xu
-	rootWin := xu.RootWin()
-	tree, err := xproto.QueryTree(xu.Conn(), rootWin).Reply()
+func (m *Manager) findWindow(wmClassInstance, wmClassClass string) x.Window {
+	c := m.helper.xConn
+	rootWin := c.GetDefaultScreen().Root
+	tree, err := x.QueryTree(c, rootWin).Reply(c)
 	if err != nil {
 		logger.Warning("QueryTree error:", err)
 		return 0
 	}
-	for i := int(tree.ChildrenLen) - 1; i >= 0; i-- {
-		win := tree.Children[i]
-		wmClass, err := icccm.WmClassGet(xu, win)
+
+	for _, win := range tree.Children {
+		wmClass, err := icccm.GetWMClass(c, win).Reply(c)
 		if err == nil &&
-			wmClass.Instance == wminstance &&
-			wmClass.Class == wmclass {
+			wmClass.Instance == wmClassInstance &&
+			wmClass.Class == wmClassClass {
 			return win
 		}
 	}
 	return 0
 }
 
-func (m *Manager) waitWindowViewable(wminstance, wmclass string, timeout time.Duration) {
-	xu := m.helper.xu
-	logger.Debug("waitWindowViewable", wminstance, wmclass)
+func (m *Manager) waitWindowViewable(wmClassInstance, wmClassClass string, timeout time.Duration) {
+	c := m.helper.xConn
+	logger.Debug("waitWindowViewable", wmClassInstance, wmClassClass)
 	ticker := time.NewTicker(time.Millisecond * 300)
 	timer := time.NewTimer(timeout)
 	for {
@@ -63,17 +63,17 @@ func (m *Manager) waitWindowViewable(wminstance, wmclass string, timeout time.Du
 			}
 
 			logger.Debug("waitWindowViewable tick")
-			win := m.findWindow(wminstance, wmclass)
+			win := m.findWindow(wmClassInstance, wmClassClass)
 			if win == 0 {
 				continue
 			}
 
-			winAttr, err := xproto.GetWindowAttributes(xu.Conn(), win).Reply()
+			winAttr, err := x.GetWindowAttributes(c, win).Reply(c)
 			if err != nil {
 				logger.Warning(err)
 				continue
 			}
-			if winAttr.MapState == xproto.MapStateViewable {
+			if winAttr.MapState == x.MapStateViewable {
 				logger.Debug("waitWindowViewable found")
 				ticker.Stop()
 				return
@@ -95,8 +95,8 @@ func (m *Manager) lockWaitShow(timeout time.Duration) {
 
 func (m *Manager) setDPMSModeOn() {
 	logger.Info("DPMS On")
-	xu := m.helper.xu
-	err := dpms.ForceLevelChecked(xu.Conn(), dpms.DPMSModeOn).Check()
+	c := m.helper.xConn
+	err := dpms.ForceLevelChecked(c, dpms.DPMSModeOn).Check(c)
 	if err != nil {
 		logger.Warning("Set DPMS on error:", err)
 	}
@@ -104,8 +104,8 @@ func (m *Manager) setDPMSModeOn() {
 
 func (m *Manager) setDPMSModeOff() {
 	logger.Info("DPMS Off")
-	xu := m.helper.xu
-	err := dpms.ForceLevelChecked(xu.Conn(), dpms.DPMSModeOff).Check()
+	c := m.helper.xConn
+	err := dpms.ForceLevelChecked(c, dpms.DPMSModeOff).Check(c)
 	if err != nil {
 		logger.Warning("Set DPMS off error:", err)
 	}

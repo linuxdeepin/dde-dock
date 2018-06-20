@@ -21,8 +21,9 @@ package power
 
 import (
 	"os/exec"
-	"pkg.deepin.io/dde/api/drandr"
 	"strings"
+
+	"pkg.deepin.io/dde/api/drandr"
 )
 
 func init() {
@@ -154,7 +155,7 @@ func isBuiltinOuput(name string) bool {
 
 // get the names of the working display outputs
 func getWorkingOutputNames(helper *Helper) ([]string, error) {
-	conn := helper.xu.Conn()
+	conn := helper.xConn
 	screenInfo, err := drandr.GetScreenInfo(conn)
 	if err != nil {
 		return nil, err

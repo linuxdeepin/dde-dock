@@ -53,7 +53,7 @@ func (m *Manager) _startSubmodule(name string) error {
 }
 
 func (m *Manager) startSubmodules() {
-	startOrder := []string{"PowerSavePlan", "FullScreenWorkaround", "LidSwitchHandler"}
+	startOrder := []string{"PowerSavePlan", "LidSwitchHandler"}
 	for _, name := range startOrder {
 		logger.Infof("submodule %v start", name)
 		err := m._startSubmodule(name)

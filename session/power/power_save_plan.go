@@ -21,10 +21,14 @@ package power
 
 import (
 	"errors"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/lib/gsettings"
+	"pkg.deepin.io/lib/procfs"
 )
 
 const submodulePSP = "PowerSavePlan"
@@ -42,11 +46,29 @@ type powerSavePlan struct {
 	oldBrightnessTable map[string]float64
 	mu                 sync.Mutex
 	idleOn             bool
+
+	atomNetWMStateFullscreen    x.Atom
+	atomNetWMStateFocused       x.Atom
+	fullscreenWorkaroundAppList []string
 }
 
 func newPowerSavePlan(manager *Manager) (string, submodule, error) {
 	p := new(powerSavePlan)
 	p.manager = manager
+
+	conn := manager.helper.xConn
+	var err error
+	p.atomNetWMStateFullscreen, err = conn.GetAtom("_NET_WM_STATE_FULLSCREEN")
+	if err != nil {
+		return submodulePSP, nil, err
+	}
+	p.atomNetWMStateFocused, err = conn.GetAtom("_NET_WM_STATE_FOCUSED")
+	if err != nil {
+		return submodulePSP, nil, err
+	}
+
+	p.fullscreenWorkaroundAppList = manager.settings.GetStrv(
+		"fullscreen-workaround-app-list")
 	return submodulePSP, p, nil
 }
 
@@ -256,6 +278,44 @@ func (psp *powerSavePlan) screenBlack() {
 	psp.tasks = append(psp.tasks, taskF)
 }
 
+func (psp *powerSavePlan) shouldPreventIdle() (bool, error) {
+	conn := psp.manager.helper.xConn
+	activeWin, err := ewmh.GetActiveWindow(conn).Reply(conn)
+	if err != nil {
+		return false, err
+	}
+
+	isFullscreenAndFocused, err := psp.isWindowFullScreenAndFocused(activeWin)
+	if err != nil {
+		return false, err
+	}
+
+	if !isFullscreenAndFocused {
+		return false, nil
+	}
+
+	pid, err := ewmh.GetWMPid(conn, activeWin).Reply(conn)
+	if err != nil {
+		return false, err
+	}
+
+	p := procfs.Process(pid)
+	cmdline, err := p.Cmdline()
+	if err != nil {
+		return false, err
+	}
+
+	for _, arg := range cmdline {
+		for _, app := range psp.fullscreenWorkaroundAppList {
+			if strings.Contains(arg, app) {
+				logger.Debugf("match %q", app)
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
 // 开始 Idle
 func (psp *powerSavePlan) HandleIdleOn() {
 	psp.mu.Lock()
@@ -264,7 +324,6 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	if psp.idleOn {
 		return
 	}
-	psp.idleOn = true
 
 	if isActive, err := psp.manager.isX11SessionActive(); err != nil {
 		logger.Warning(err)
@@ -273,6 +332,21 @@ func (psp *powerSavePlan) HandleIdleOn() {
 		logger.Info("X11 session is inactive, don't HandleIdleOn")
 		return
 	}
+
+	// check window
+	preventIdle, err := psp.shouldPreventIdle()
+	if err != nil {
+		logger.Warning(err)
+	}
+	if preventIdle {
+		logger.Debug("prevent idle")
+		err := psp.manager.helper.ScreenSaver.SimulateUserActivity(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+		return
+	}
+	psp.idleOn = true
 
 	logger.Info("HandleIdleOn")
 	if psp.doScreenBlack {
@@ -305,4 +379,24 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	psp.interruptTasks()
 	psp.manager.setDPMSModeOn()
 	psp.resetBrightness()
+}
+
+func (psp *powerSavePlan) isWindowFullScreenAndFocused(xid x.Window) (bool, error) {
+	conn := psp.manager.helper.xConn
+	states, err := ewmh.GetWMState(conn, xid).Reply(conn)
+	if err != nil {
+		return false, err
+	}
+	found := 0
+	for _, s := range states {
+		if s == psp.atomNetWMStateFullscreen {
+			found++
+		} else if s == psp.atomNetWMStateFocused {
+			found++
+		}
+		if found == 2 {
+			return true, nil
+		}
+	}
+	return false, nil
 }
