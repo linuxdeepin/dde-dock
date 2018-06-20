@@ -23,11 +23,9 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/BurntSushi/xgb/dpms"
-	"github.com/BurntSushi/xgb/screensaver"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-
+	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
+	"github.com/linuxdeepin/go-x11-client/ext/screensaver"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -42,7 +40,7 @@ type inhibitor struct {
 	reason string
 }
 type ScreenSaver struct {
-	xu      *xgbutil.XUtil
+	xConn   *x.Conn
 	service *dbusutil.Service
 
 	blank        byte
@@ -105,8 +103,8 @@ func (ss *ScreenSaver) Inhibit(name, reason string) (uint32, *dbus.Error) {
 
 // 模拟用户操作，让系统处于使用状态，重新开始 Idle 定时器
 func (ss *ScreenSaver) SimulateUserActivity() *dbus.Error {
-	xproto.ForceScreenSaver(ss.xu.Conn(), 0)
-	return nil
+	err := x.ForceScreenSaverChecked(ss.xConn, x.ScreenSaverReset).Check(ss.xConn)
+	return dbusutil.ToError(err)
 }
 
 // 根据 id 取消对应的抑制操作
@@ -167,12 +165,23 @@ func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) *dbus.Er
 
 func (ss *ScreenSaver) setTimeout(seconds, interval uint32, blank bool) {
 	if blank {
-		ss.blank = 1
+		ss.blank = x.BlankingPreferred
 	} else {
-		ss.blank = 0
+		ss.blank = x.BlankingNotPreferred
 	}
-	xproto.SetScreenSaver(ss.xu.Conn(), int16(seconds), int16(interval), ss.blank, 0)
-	dpms.SetTimeouts(ss.xu.Conn(), 0, 0, 0)
+
+	err := x.SetScreenSaverChecked(ss.xConn, int16(seconds), int16(interval), ss.blank,
+		x.ExposuresNotAllowed).Check(ss.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = dpms.SetTimeoutsChecked(ss.xConn, 0, 0,
+		0).Check(ss.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	logger.Info("SetTimeout to ", seconds, interval, blank)
 }
 
@@ -190,20 +199,43 @@ func (ss *ScreenSaver) destroy() {
 	ss.service.StopExport(ss)
 }
 
-func newScreenSaver(service *dbusutil.Service) *ScreenSaver {
+func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 	s := &ScreenSaver{
 		service:    service,
 		inhibitors: make(map[uint32]inhibitor),
 	}
 
-	s.xu, _ = xgbutil.NewConn()
-	screensaver.Init(s.xu.Conn())
-	screensaver.QueryVersion(s.xu.Conn(), 1, 0)
-	screensaver.SelectInput(s.xu.Conn(), xproto.Drawable(s.xu.RootWin()), screensaver.EventNotifyMask|screensaver.EventCycleMask)
-	dpms.Init(s.xu.Conn())
+	var err error
+	s.xConn, err = x.NewConn()
+	if err != nil {
+		return nil, err
+	}
+
+	// query screensaver ext version
+	ssVersion, err := screensaver.QueryVersion(s.xConn, screensaver.MajorVersion, screensaver.MinorVersion).Reply(s.xConn)
+	if err != nil {
+		return nil, err
+	}
+	logger.Debugf("screensaver ext version %d.%d", ssVersion.ServerMajorVersion,
+		ssVersion.ServerMinorVersion)
+
+	// query dpms ext version
+	dpmsVersion, err := dpms.GetVersion(s.xConn, 1, 1).Reply(s.xConn)
+	if err != nil {
+		return nil, err
+	}
+	logger.Debugf("dpms ext version %d.%d", dpmsVersion.ServerMajorVersion,
+		dpmsVersion.ServerMinorVersion)
+
+	root := s.xConn.GetDefaultScreen().Root
+	err = screensaver.SelectInputChecked(s.xConn, x.Drawable(root), screensaver.EventNotifyMask|
+		screensaver.EventCycleMask).Check(s.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	go s.loop()
-	return s
+	return s, nil
 }
 
 var _ssaver *ScreenSaver
@@ -238,7 +270,10 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	_ssaver = newScreenSaver(service)
+	_ssaver, err = newScreenSaver(service)
+	if err != nil {
+		return err
+	}
 
 	err = service.Export(dbusPath, _ssaver)
 	if err != nil {
@@ -266,15 +301,17 @@ func (d *Daemon) Stop() error {
 }
 
 func (ss *ScreenSaver) loop() {
-	s := ss.service
-	for {
-		e, err := ss.xu.Conn().WaitForEvent()
-		if err != nil {
-			continue
-		}
-		switch ee := e.(type) {
-		case screensaver.NotifyEvent:
-			switch ee.State {
+	ssExtData := ss.xConn.GetExtensionData(screensaver.Ext())
+
+	eventChan := make(chan x.GenericEvent, 10)
+	ss.xConn.AddEventChan(eventChan)
+
+	for ev := range eventChan {
+		switch ev.GetEventCode() {
+		case screensaver.NotifyEventCode + ssExtData.FirstEvent:
+			event, _ := screensaver.NewNotifyEvent(ev)
+			s := ss.service
+			switch event.State {
 			case screensaver.StateCycle:
 				s.Emit(ss, "CycleActive")
 			case screensaver.StateOn:
