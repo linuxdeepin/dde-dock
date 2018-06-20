@@ -26,12 +26,14 @@
 #include <QIcon>
 #include <QMouseEvent>
 #include <QApplication>
-
+#include <DApplication>
 #include <DDBusSender>
 
 // menu actions
 #define MUTE    "mute"
 #define SETTINS "settings"
+
+DWIDGET_USE_NAMESPACE
 
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
@@ -53,6 +55,7 @@ SoundItem::SoundItem(QWidget *parent)
 
     connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
     connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refershTips, Qt::QueuedConnection);
+    connect(static_cast<DApplication*>(qApp), &DApplication::iconThemeChanged, this, &SoundItem::refershIcon);
 }
 
 QWidget *SoundItem::tipsWidget()
