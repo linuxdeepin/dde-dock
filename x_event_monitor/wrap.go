@@ -23,12 +23,16 @@ package x_event_monitor
 // #cgo pkg-config: x11 xi
 // #include "xinput.h"
 import "C"
+import "sync"
 
-func startListen() {
-	C.start_listen()
-}
+func (m *Manager) handleRawEvent(eventType int, detail, x, y, mask int32) bool {
+	m.mu.Lock()
+	numItems := len(m.pidAidsMap)
+	m.mu.Unlock()
+	if numItems == 0 {
+		return false
+	}
 
-func (m *Manager) handleRawEvent(eventType int, detail, x, y, mask int32) {
 	switch eventType {
 	case C.XI_RawKeyPress:
 		m.handleKeyboardEvent(detail, true, x, y)
@@ -57,15 +61,22 @@ func (m *Manager) handleRawEvent(eventType int, detail, x, y, mask int32) {
 			m.handleCursorEvent(x, y, false)
 		}
 	}
+	return true
 }
 
-var rawEventCallback func(eventType int, detail, x, y, mask int32)
+var rawEventCallback func(eventType int, detail, x, y, mask int32) bool
 
 //export go_handle_raw_event
-func go_handle_raw_event(eventType int, detail, x, y, mask int32) {
+func go_handle_raw_event(eventType int, detail, x, y, mask int32) int {
 	if rawEventCallback != nil {
-		rawEventCallback(eventType, detail, x, y, mask)
+		shouldContinue := rawEventCallback(eventType, detail, x, y, mask)
+		if shouldContinue {
+			return 1
+		} else {
+			return 0
+		}
 	}
+	return 0
 }
 
 func getButtonState(event *C.XIDeviceEvent) []int {
@@ -77,3 +88,34 @@ func getButtonState(event *C.XIDeviceEvent) []int {
 	}
 	return buttons
 }
+
+type xiListener struct {
+	mu      sync.Mutex
+	started bool
+}
+
+func (l *xiListener) start() {
+	l.mu.Lock()
+	if l.started {
+		l.mu.Unlock()
+		return
+	}
+	l.mu.Unlock()
+
+	// not started
+	go func() {
+		l.mu.Lock()
+		l.started = true
+		l.mu.Unlock()
+
+		logger.Debug("xiListener start")
+		C.start_listen()
+		logger.Debug("xiListener stop")
+
+		l.mu.Lock()
+		l.started = false
+		l.mu.Unlock()
+	}()
+}
+
+var globalXIListener = &xiListener{}

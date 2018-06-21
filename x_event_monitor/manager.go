@@ -20,6 +20,7 @@
 package x_event_monitor
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sync"
@@ -32,7 +33,7 @@ import (
 	dutils "pkg.deepin.io/lib/utils"
 )
 
-const _FullscreenId = "d41d8cd98f00b204e9800998ecf8427e"
+const fullscreenId = "d41d8cd98f00b204e9800998ecf8427e"
 
 var errAreasRegistered = errors.New("the areas has been registered")
 var errAreasNotRegistered = errors.New("the areas has not been registered yet")
@@ -76,10 +77,11 @@ type Manager struct {
 	}
 
 	methods *struct {
-		RegisterArea       func() `in:"x1,y1,x2,y2,flag" out:"id"`
-		RegisterAreas      func() `in:"areas,flag" out:"id"`
-		RegisterFullScreen func() `out:"id"`
-		UnregisterArea     func() `in:"id" out:"ok"`
+		RegisterArea        func() `in:"x1,y1,x2,y2,flag" out:"id"`
+		RegisterAreas       func() `in:"areas,flag" out:"id"`
+		RegisterFullScreen  func() `out:"id"`
+		UnregisterArea      func() `in:"id" out:"ok"`
+		DebugGetPidAreasMap func() `out:"pidAreasMapJSON"`
 	}
 
 	pidAidsMap      map[uint32]strv.Strv
@@ -155,12 +157,10 @@ func (m *Manager) handleCursorEvent(x, y int32, press bool) {
 		}
 	}
 
-	_, ok := m.idReferCountMap[_FullscreenId]
-	if !ok {
-		return
+	_, ok := m.idReferCountMap[fullscreenId]
+	if ok {
+		m.service.Emit(m, "CursorMove", x, y, fullscreenId)
 	}
-
-	m.service.Emit(m, "CursorMove", x, y, _FullscreenId)
 }
 
 func (m *Manager) handleButtonEvent(button int32, press bool, x, y int32) {
@@ -179,15 +179,15 @@ func (m *Manager) handleButtonEvent(button int32, press bool, x, y int32) {
 		}
 	}
 
-	_, ok := m.idReferCountMap[_FullscreenId]
+	_, ok := m.idReferCountMap[fullscreenId]
 	if !ok {
 		return
 	}
 
 	if press {
-		m.service.Emit(m, "ButtonPress", button, x, y, _FullscreenId)
+		m.service.Emit(m, "ButtonPress", button, x, y, fullscreenId)
 	} else {
-		m.service.Emit(m, "ButtonRelease", button, x, y, _FullscreenId)
+		m.service.Emit(m, "ButtonRelease", button, x, y, fullscreenId)
 	}
 }
 
@@ -211,16 +211,17 @@ func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
 		}
 	}
 
-	_, ok := m.idReferCountMap[_FullscreenId]
-	if !ok {
-		return
+	_, ok := m.idReferCountMap[fullscreenId]
+	if ok {
+		if press {
+			m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y,
+				fullscreenId)
+		} else {
+			m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y,
+				fullscreenId)
+		}
 	}
 
-	if press {
-		m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y, _FullscreenId)
-	} else {
-		m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y, _FullscreenId)
-	}
 }
 
 func (m *Manager) cancelAllRegisterArea() {
@@ -239,6 +240,8 @@ func (m *Manager) registerPidArea(pid uint32, areasId string) {
 	areasIds := m.pidAidsMap[pid]
 	areasIds, _ = areasIds.Add(areasId)
 	m.pidAidsMap[pid] = areasIds
+
+	globalXIListener.start()
 }
 
 func (m *Manager) unregisterPidArea(pid uint32, areasId string) {
@@ -253,7 +256,7 @@ func (m *Manager) unregisterPidArea(pid uint32, areasId string) {
 
 func (m *Manager) RegisterArea(sender dbus.Sender, x1, y1, x2, y2, flag int32) (string, *dbus.Error) {
 	return m.RegisterAreas(sender,
-		[]coordinateRange{coordinateRange{x1, y1, x2, y2}},
+		[]coordinateRange{{x1, y1, x2, y2}},
 		flag)
 }
 
@@ -310,19 +313,19 @@ func (m *Manager) RegisterFullScreen(sender dbus.Sender) (id string, busErr *dbu
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	if m.isPidAreaRegistered(pid, _FullscreenId) {
+	if m.isPidAreaRegistered(pid, fullscreenId) {
 		logger.Warningf("RegisterFullScreen pid %d failed: %v", pid, errAreasRegistered)
 		return "", dbusutil.ToError(errAreasRegistered)
 	}
 
-	_, ok := m.idReferCountMap[_FullscreenId]
+	_, ok := m.idReferCountMap[fullscreenId]
 	if !ok {
-		m.idReferCountMap[_FullscreenId] = 1
+		m.idReferCountMap[fullscreenId] = 1
 	} else {
-		m.idReferCountMap[_FullscreenId] += 1
+		m.idReferCountMap[fullscreenId] += 1
 	}
-	m.registerPidArea(pid, _FullscreenId)
-	return _FullscreenId, nil
+	m.registerPidArea(pid, fullscreenId)
+	return fullscreenId, nil
 }
 
 func (m *Manager) UnregisterArea(sender dbus.Sender, id string) (bool, *dbus.Error) {
@@ -357,8 +360,8 @@ func (m *Manager) UnregisterArea(sender dbus.Sender, id string) (bool, *dbus.Err
 }
 
 func (m *Manager) getIdList(x, y int32) ([]string, []string) {
-	inList := []string{}
-	outList := []string{}
+	var inList []string
+	var outList []string
 
 	for id, array := range m.idAreaInfoMap {
 		inFlag := false
@@ -402,4 +405,14 @@ func (m *Manager) sumAreasMd5(areas []coordinateRange, flag int32) (md5Str strin
 	md5Str, ok = dutils.SumStrMd5(content)
 
 	return
+}
+
+func (m *Manager) DebugGetPidAreasMap() (string, *dbus.Error) {
+	m.mu.Lock()
+	data, err := json.Marshal(m.pidAidsMap)
+	m.mu.Unlock()
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return string(data), nil
 }

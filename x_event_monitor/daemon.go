@@ -66,7 +66,6 @@ func (d *Daemon) Start() error {
 	}
 	go m.handleXEvent()
 	rawEventCallback = m.handleRawEvent
-	go startListen()
 
 	err = service.Export(dbusPath, m)
 	if err != nil {
