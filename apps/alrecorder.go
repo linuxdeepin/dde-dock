@@ -25,7 +25,6 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
-	"time"
 
 	"dbus/org/freedesktop/login1"
 
@@ -95,21 +94,7 @@ func NewALRecorder(watcher *DFWatcher) *ALRecorder {
 		r.handleUserRemoved(int(uid))
 	})
 
-	go r.checkLoop()
 	return r
-}
-
-func (r *ALRecorder) checkLoop() {
-	// There is no need to consider stop the loop
-	for {
-		r.subRecordersMutex.RLock()
-		for _, sr := range r.subRecorders {
-			sr.doCheck()
-		}
-		r.subRecordersMutex.RUnlock()
-
-		time.Sleep(time.Second * 2)
-	}
 }
 
 func (*ALRecorder) GetInterfaceName() string {

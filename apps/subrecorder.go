@@ -29,7 +29,6 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
 )
 
@@ -51,7 +50,8 @@ type SubRecorder struct {
 
 	uids     []int
 	parent   *ALRecorder
-	needSave int32 // if value == 1, need save status file
+	saveMu   sync.Mutex
+	isSaving bool
 }
 
 func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder {
@@ -64,16 +64,13 @@ func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder
 
 	sr.statusFile, sr.statusFileOwner = getStatusFileAndOwner(uid, home, root)
 	logger.Debugf("NewSubRecorder status file: %q, owner: %d", sr.statusFile, sr.statusFileOwner)
-	sr.initRoot()
+
+	parent.watcher.fsWatcher.addRoot(root)
+	sr.init()
 	return sr
 }
 
-func (sr *SubRecorder) initRoot() {
-	sr.rootOk = sr.getRootOk()
-	if !sr.rootOk {
-		return
-	}
-
+func (sr *SubRecorder) init() {
 	subDirNames, apps := getDirsAndApps(sr.root)
 	if sr.initAppLaunchedMap(apps) {
 		MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, dirPerm)
@@ -86,56 +83,10 @@ func (sr *SubRecorder) initRoot() {
 	}
 }
 
-func (sr *SubRecorder) doCheck() {
-	rootOkChanged := sr.checkRoot()
-	if rootOkChanged {
-		if sr.rootOk {
-			logger.Debugf("sr root %q Ok false => true", sr.root)
-			// rootOk false => true
-			// do init
-			subDirNames, apps := getDirsAndApps(sr.root)
-			if sr.initAppLaunchedMap(apps) {
-				MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, dirPerm)
-				sr.RequestSave()
-			}
-
-			for _, dirName := range subDirNames {
-				path := filepath.Join(sr.root, dirName)
-				sr.parent.watcher.addRecursive(path, true)
-			}
-		} else {
-			// rootOk true => false
-			logger.Debugf("sr root %q Ok true => false", sr.root)
-		}
-	}
-
-	sr.checkSave()
-}
-
-// return true if sr.rootOk changed
-func (sr *SubRecorder) checkRoot() bool {
-	oldRootOk := sr.rootOk
-	sr.rootOk = sr.getRootOk()
-	return oldRootOk != sr.rootOk
-}
-
-func (sr *SubRecorder) getRootOk() bool {
-	// rootOk: root exist and is dir
-	fileInfo, err := os.Stat(sr.root)
-	if err != nil {
-		return false
-	}
-
-	if fileInfo.IsDir() {
-		return true
-	}
-
-	logger.Warning(sr.root, "is not a direcotry")
-	return false
-}
-
 func (sr *SubRecorder) Destroy() {
-	sr.parent.watcher.removeRecursive(sr.root)
+	watcher := sr.parent.watcher
+	watcher.fsWatcher.removeRoot(sr.root)
+	watcher.removeRecursive(sr.root)
 }
 
 const sysAppsCfgDir = "/var/lib/dde-daemon/apps"
@@ -184,19 +135,26 @@ func (sr *SubRecorder) initAppLaunchedMap(apps []string) bool {
 }
 
 func (sr *SubRecorder) RequestSave() {
-	atomic.StoreInt32(&sr.needSave, 1)
-}
-
-func (sr *SubRecorder) checkSave() {
-	if atomic.SwapInt32(&sr.needSave, 0) == 0 {
+	logger.Debug("SubRecorder.RequestSave", sr.root)
+	sr.saveMu.Lock()
+	if sr.isSaving {
+		sr.saveMu.Unlock()
 		return
 	}
 
-	err := sr.save()
-	if err != nil {
-		logger.Warning("SubRecorder.saveDirContent error:", err)
-	}
-	sr.parent.emitStatusSaved(sr.root, sr.statusFile, err == nil)
+	sr.isSaving = true
+	time.AfterFunc(2*time.Second, func() {
+		err := sr.save()
+		if err != nil {
+			logger.Warning("SubRecorder.save error:", err)
+		}
+		sr.parent.emitStatusSaved(sr.root, sr.statusFile, err == nil)
+
+		sr.saveMu.Lock()
+		sr.isSaving = false
+		sr.saveMu.Unlock()
+	})
+	sr.saveMu.Unlock()
 }
 
 func (sr *SubRecorder) writeStatus(w io.Writer) error {

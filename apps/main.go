@@ -45,7 +45,7 @@ func NewDaemon(logger *log.Logger) *Daemon {
 func (d *Daemon) Start() error {
 	service := loader.GetService()
 	logger.Debug("apps daemon start")
-	if watcher, err := NewDFWachter(service); err != nil {
+	if watcher, err := NewDFWatcher(service); err != nil {
 		return err
 	} else {
 		d.watcher = watcher

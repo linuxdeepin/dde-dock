@@ -22,9 +22,11 @@ package apps
 import (
 	"os"
 	"path/filepath"
+	"time"
 
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/fsnotify"
+	"pkg.deepin.io/lib/log"
 )
 
 const (
@@ -34,7 +36,7 @@ const (
 // desktop file watcher
 type DFWatcher struct {
 	service   *dbusutil.Service
-	fsWatcher *fsnotify.Watcher
+	fsWatcher *fsWatcher
 	sem       chan int
 	eventChan chan *FileEvent
 
@@ -46,14 +48,21 @@ type DFWatcher struct {
 	}
 }
 
-func NewDFWachter(service *dbusutil.Service) (*DFWatcher, error) {
+func NewDFWatcher(service *dbusutil.Service) (*DFWatcher, error) {
 	w := new(DFWatcher)
-	if fsWatcher, err := fsnotify.NewWatcher(); err != nil {
-		return nil, err
-	} else {
-		w.fsWatcher = fsWatcher
-	}
 
+	interval := 6 * time.Second
+	if logger.GetLogLevel() == log.LevelDebug {
+		interval = 3 * time.Second
+	}
+	fsWatcher, err := newFsWatcher(interval)
+	if err != nil {
+		return nil, err
+	}
+	fsWatcher.trySuccessCb = func(file string) {
+		w.addRecursive(file, true)
+	}
+	w.fsWatcher = fsWatcher
 	w.service = service
 	w.sem = make(chan int, 4)
 	w.eventChan = make(chan *FileEvent, 10)
@@ -73,7 +82,6 @@ func (w *DFWatcher) listenEvents() {
 				logger.Error("Invalid event:", ev)
 				return
 			}
-
 			logger.Debug("event", ev)
 			w.handleEvent(ev)
 
@@ -85,6 +93,7 @@ func (w *DFWatcher) listenEvents() {
 }
 
 func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
+	w.fsWatcher.handleEvent(event)
 	ev := NewFileEvent(event)
 	file := ev.Name
 	if (ev.IsCreate() || ev.IsRename()) && ev.IsDir {
@@ -141,7 +150,10 @@ func (w *DFWatcher) removeRecursive(path string) {
 	filepath.Walk(path,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
-				logger.Warning(err)
+				// ignore file not exist error
+				if !os.IsNotExist(err) {
+					logger.Warning(err)
+				}
 				return nil
 			}
 
