@@ -25,7 +25,7 @@
 #include "constants.h"
 
 #include "deviceitem.h"
-//#include "applet/wirelessapplet.h"
+#include "applet/wirelesslist.h"
 
 #include <QHash>
 #include <QLabel>
@@ -42,6 +42,19 @@ public:
 
     QWidget *itemApplet();
     QWidget *itemTips();
+
+public Q_SLOTS:
+    void onNeedSecrets(const QString &info);
+    void onNeedSecretsFinished(const QString &info0, const QString &info1);
+    // set the device name displayed
+    // in the top-left corner of the applet
+    void setDeviceInfo(const int index);
+
+Q_SIGNALS:
+    void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
+    void requestDeactiveAP(const QString &devPath) const;
+    void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
+    void cancelSecret(const QString &connectionPath, const QString &settingName);
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
@@ -65,8 +78,7 @@ private:
     QTimer *m_refershTimer;
     QWidget *m_wirelessApplet;
     QLabel *m_wirelessPopup;
-    /* TODO: refactor */
-    //WirelessList *m_APList;
+    WirelessList *m_APList;
 };
 
 #endif // WIRELESSITEM_H

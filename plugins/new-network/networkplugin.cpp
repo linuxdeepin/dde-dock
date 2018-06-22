@@ -131,7 +131,12 @@ QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
 
 QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 {
-    /* TODO: refactor */
+    DeviceItem *item = itemByPath(itemKey);
+    if (item) {
+        return item->itemApplet();
+    }
+
+    Q_UNREACHABLE();
     return nullptr;
 }
 
@@ -152,6 +157,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
     QList<QString> mPaths = m_itemsMap.keys();
     QList<QString> newPaths;
 
+    QList<WirelessItem *> wirelessItems;
+
     for (auto device : devices) {
         const QString &path = device->path();
         newPaths << path;
@@ -164,6 +171,22 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     break;
                 case NetworkDevice::Wireless:
                     item = new WirelessItem(static_cast<WirelessDevice *>(device));
+                    wirelessItems.append(static_cast<WirelessItem *>(item));
+
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
+                            m_networkWorker, &NetworkWorker::activateAccessPoint);
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
+                            m_networkWorker, &NetworkWorker::disconnectDevice);
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::feedSecret,
+                            m_networkWorker, &NetworkWorker::feedSecret);
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::cancelSecret,
+                            m_networkWorker, &NetworkWorker::cancelSecret);
+
+                    connect(m_networkModel, &NetworkModel::needSecrets,
+                            static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecrets);
+                    connect(m_networkModel, &NetworkModel::needSecretsFinished,
+                            static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecretsFinished);
+                    m_networkWorker->queryAccessPoints(path);
                     break;
                 default:
                     Q_UNREACHABLE();
@@ -184,6 +207,13 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             m_proxyInter->itemRemoved(this, mPath);
             m_itemsMap.take(mPath)->deleteLater();
         }
+    }
+
+    int wirelessItemCount = wirelessItems.size();
+    for (int i = 0; i < wirelessItemCount; ++i) {
+        QTimer::singleShot(1, [=] {
+            wirelessItems.at(i)->setDeviceInfo(wirelessItemCount == 1 ? -1 : i + 1);
+        });
     }
 }
 

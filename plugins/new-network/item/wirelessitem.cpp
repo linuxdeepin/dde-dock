@@ -34,8 +34,8 @@ WirelessItem::WirelessItem(WirelessDevice *device)
 
       m_refershTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
-      m_wirelessPopup(new QLabel)
-      //m_APList(nullptr)
+      m_wirelessPopup(new QLabel),
+      m_APList(nullptr)
 {
     m_refershTimer->setSingleShot(false);
     m_refershTimer->setInterval(100);
@@ -48,13 +48,14 @@ WirelessItem::WirelessItem(WirelessDevice *device)
 
     connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_refershTimer, &QTimer::timeout, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
+
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
 WirelessItem::~WirelessItem()
 {
-    //m_APList->deleteLater();
-    //m_APList->controlPanel()->deleteLater();
+    m_APList->deleteLater();
+    m_APList->controlPanel()->deleteLater();
 }
 
 QWidget *WirelessItem::itemApplet()
@@ -70,7 +71,7 @@ QWidget *WirelessItem::itemTips()
 
     if (stat == NetworkDevice::Activated)
     {
-        const QJsonObject obj = static_cast<WirelessDevice *>(m_device)->activeApInfo();
+        const QJsonObject obj = static_cast<WirelessDevice *>(m_device)->activeConnectionInfo();
         if (obj.contains("Ip4"))
         {
             const QJsonObject ip4 = obj["Ip4"].toObject();
@@ -84,11 +85,25 @@ QWidget *WirelessItem::itemTips()
     return m_wirelessPopup;
 }
 
+void WirelessItem::onNeedSecrets(const QString &info)
+{
+    m_APList->onNeedSecrets(info);
+}
+
+void WirelessItem::onNeedSecretsFinished(const QString &info0, const QString &info1)
+{
+    m_APList->onNeedSecretsFinished(info0, info1);
+}
+
+void WirelessItem::setDeviceInfo(const int index)
+{
+    m_APList->setDeviceInfo(index);
+}
+
 bool WirelessItem::eventFilter(QObject *o, QEvent *e)
 {
-    /* TODO: refactor */
-    //if (o == m_APList && e->type() == QEvent::Resize)
-        //QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection);
+    if (o == m_APList && e->type() == QEvent::Resize)
+        QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection);
 
     return false;
 }
@@ -140,8 +155,6 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
 {
     QString type;
 
-    /* TODO:  refactor */
-    //const auto state = m_APList->wirelessState();
     const auto state = m_device->status();
     if (state <= NetworkDevice::Disconnected)
     {
@@ -153,7 +166,7 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
         int strength = 0;
         if (state == NetworkDevice::Activated)
         {
-            strength = static_cast<WirelessDevice *>(m_device)->activeApStrgength();
+            strength = static_cast<WirelessDevice *>(m_device)->activeApInfo().value("Strength").toInt();
             m_refershTimer->stop();
         }
         else
@@ -198,24 +211,27 @@ void WirelessItem::init()
     //const auto devInfo = m_networkManager->device(m_devicePath);
 
     //m_APList = new WirelessList(devInfo);
-    //m_APList->installEventFilter(this);
-    //m_APList->setObjectName("wireless-" + m_devicePath);
+    m_APList = new WirelessList(static_cast<WirelessDevice *>(m_device));
+    m_APList->installEventFilter(this);
+    m_APList->setObjectName("wireless-" + m_device->path());
 
-    //QVBoxLayout *vLayout = new QVBoxLayout;
-    //vLayout->addWidget(m_APList->controlPanel());
-    //vLayout->addWidget(m_APList);
-    //vLayout->setMargin(0);
-    //vLayout->setSpacing(0);
-    //m_wirelessApplet->setLayout(vLayout);
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addWidget(m_APList->controlPanel());
+    vLayout->addWidget(m_APList);
+    vLayout->setMargin(0);
+    vLayout->setSpacing(0);
+    m_wirelessApplet->setLayout(vLayout);
 
-    //connect(m_APList, &WirelessList::activeAPChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
-    //connect(m_APList, &WirelessList::wirelessStateChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
+    connect(m_APList, &WirelessList::requestSetDeviceEnable, this, &WirelessItem::requestSetDeviceEnable);
+    connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessItem::requestActiveAP);
+    connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
+    connect(m_APList, &WirelessList::feedSecret, this, &WirelessItem::feedSecret);
+    connect(m_APList, &WirelessList::cancelSecret, this, &WirelessItem::cancelSecret);
 }
 
 void WirelessItem::adjustHeight()
 {
-    /* TODO: refactor */
-    //m_wirelessApplet->setFixedHeight(m_APList->height() + m_APList->controlPanel()->height());
+    m_wirelessApplet->setFixedHeight(m_APList->height() + m_APList->controlPanel()->height());
 }
 
 void WirelessItem::refreshIcon()
