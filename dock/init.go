@@ -27,8 +27,6 @@ import (
 	"pkg.deepin.io/lib/xdg/basedir"
 
 	x "github.com/linuxdeepin/go-x11-client"
-	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 )
 
 func init() {
@@ -41,9 +39,7 @@ var (
 	scratchDir  string
 	dockManager *Manager
 
-	globalXConn     *x.Conn
-	globalEwmhConn  *ewmh.Conn
-	globalIcccmConn *icccm.Conn
+	globalXConn *x.Conn
 
 	atomNetShowingDesktop       x.Atom
 	atomNetClientList           x.Atom

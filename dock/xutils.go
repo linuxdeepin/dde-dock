@@ -45,7 +45,7 @@ func atomsContains(slice []x.Atom, atom x.Atom) bool {
 }
 
 func getWmClass(win x.Window) (*icccm.WMClass, error) {
-	wmClass, err := globalIcccmConn.GetWMClass(win).Reply(globalIcccmConn)
+	wmClass, err := icccm.GetWMClass(globalXConn, win).Reply(globalXConn)
 	if err != nil {
 		return nil, err
 	}
@@ -53,44 +53,36 @@ func getWmClass(win x.Window) (*icccm.WMClass, error) {
 }
 
 func getAtomName(atom x.Atom) (string, error) {
-	reply, err := x.GetAtomName(globalXConn, atom).Reply(globalXConn)
-	if err != nil {
-		return "", err
-	}
-	return reply.Name, nil
+	return globalXConn.GetAtomName(atom)
 }
 
 func getAtom(name string) (x.Atom, error) {
-	reply, err := x.InternAtom(globalXConn, false, name).Reply(globalXConn)
-	if err != nil {
-		return 0, err
-	}
-	return reply.Atom, nil
+	return globalXConn.GetAtom(name)
 }
 
 func maximizeWindow(win x.Window) error {
-	return globalEwmhConn.RequestChangeWMState(win, ewmh.WMStateAdd, atomNetWmStateMaximizedVert, atomNetWmStateMaximizedHorz, 2).Check(globalXConn)
+	return ewmh.RequestChangeWMState(globalXConn, win, ewmh.WMStateAdd, atomNetWmStateMaximizedVert, atomNetWmStateMaximizedHorz, 2).Check(globalXConn)
 	return nil
 }
 
 func minimizeWindow(win x.Window) error {
-	return globalIcccmConn.RequestChangeWMState(win, icccm.StateIconic).Check(globalXConn)
+	return icccm.RequestChangeWMState(globalXConn, win, icccm.StateIconic).Check(globalXConn)
 }
 
 func makeWindowAbove(win x.Window) error {
-	return globalEwmhConn.RequestChangeWMState(win, ewmh.WMStateAdd, atomNetWmStateAbove,
+	return ewmh.RequestChangeWMState(globalXConn, win, ewmh.WMStateAdd, atomNetWmStateAbove,
 		0, 2).Check(globalXConn)
 }
 
 func moveWindow(win x.Window) error {
 	// TODO:
 	//return ewmh.WmMoveresize(xu, win, ewmh.MoveKeyboard)
-	//globalEwmhConn.RequestWMMoveResize(win, )
+	//ewmh.RequestWMMoveResize(win, )
 	return nil
 }
 
 func closeWindow(win x.Window, ts x.Timestamp) error {
-	return globalEwmhConn.RequestCloseWindow(win, ts, 2).Check(globalXConn)
+	return ewmh.RequestCloseWindow(globalXConn, win, ts, 2).Check(globalXConn)
 }
 
 type windowFrameExtents struct {
@@ -194,10 +186,10 @@ func getRawGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
 
 func getWmName(win x.Window) string {
 	// get _NET_WM_NAME
-	name, err := globalEwmhConn.GetWMName(win).Reply(globalEwmhConn)
+	name, err := ewmh.GetWMName(globalXConn, win).Reply(globalXConn)
 	if err != nil || name == "" {
 		// get WM_NAME
-		nameTp, _ := globalIcccmConn.GetWMName(win).Reply(globalIcccmConn)
+		nameTp, _ := icccm.GetWMName(globalXConn, win).Reply(globalXConn)
 		name, _ = nameTp.GetStr()
 	}
 
@@ -205,7 +197,7 @@ func getWmName(win x.Window) string {
 }
 
 func getWmPid(win x.Window) uint {
-	pid, _ := globalEwmhConn.GetWMPid(win).Reply(globalEwmhConn)
+	pid, _ := ewmh.GetWMPid(globalXConn, win).Reply(globalXConn)
 	return uint(pid)
 }
 
@@ -225,7 +217,7 @@ func getWmClientLeader(win x.Window) (x.Window, error) {
 
 // WM_TRANSIENT_FOR
 func getWmTransientFor(win x.Window) (x.Window, error) {
-	return globalIcccmConn.GetWMTransientFor(win).Reply(globalIcccmConn)
+	return icccm.GetWMTransientFor(globalXConn, win).Reply(globalXConn)
 }
 
 // _NET_WM_WINDOW_OPACITY
@@ -376,7 +368,7 @@ func findIconIcccm(wid x.Window) (image.Image, error) {
 }
 
 func getBestEwmhIcon(win x.Window) (*ewmh.WMIcon, error) {
-	icons, err := globalEwmhConn.GetWMIcon(win).Reply(globalEwmhConn)
+	icons, err := ewmh.GetWMIcon(globalXConn, win).Reply(globalXConn)
 	if err != nil {
 		return nil, err
 	}
@@ -457,14 +449,14 @@ func NewNRGBAImageFromEwmhIcon(icon *ewmh.WMIcon) *image.NRGBA {
 }
 
 func getWindowUserTime(win x.Window) (uint, error) {
-	timestamp, err := globalEwmhConn.GetWMUserTime(win).Reply(globalEwmhConn)
+	timestamp, err := ewmh.GetWMUserTime(globalXConn, win).Reply(globalXConn)
 	if err != nil {
-		userTimeWindow, err := globalEwmhConn.GetWMUserTimeWindow(win).Reply(globalEwmhConn)
+		userTimeWindow, err := ewmh.GetWMUserTimeWindow(globalXConn, win).Reply(globalXConn)
 		if err != nil {
 			return 0, err
 		}
 
-		timestamp, err = globalEwmhConn.GetWMUserTime(userTimeWindow).Reply(globalEwmhConn)
+		timestamp, err = ewmh.GetWMUserTime(globalXConn, userTimeWindow).Reply(globalXConn)
 		if err != nil {
 			return 0, err
 		}
@@ -473,12 +465,12 @@ func getWindowUserTime(win x.Window) (uint, error) {
 }
 
 func changeCurrentWorkspaceToWindowWorkspace(win x.Window) error {
-	winWorkspace, err := globalEwmhConn.GetWMDesktop(win).Reply(globalEwmhConn)
+	winWorkspace, err := ewmh.GetWMDesktop(globalXConn, win).Reply(globalXConn)
 	if err != nil {
 		return err
 	}
 
-	currentWorkspace, err := globalEwmhConn.GetCurrentDesktop().Reply(globalEwmhConn)
+	currentWorkspace, err := ewmh.GetCurrentDesktop(globalXConn).Reply(globalXConn)
 	if err != nil {
 		return err
 	}
@@ -495,7 +487,8 @@ func changeCurrentWorkspaceToWindowWorkspace(win x.Window) error {
 		// only warning not return
 		logger.Warning("getWindowUserTime failed:", err)
 	}
-	err = globalEwmhConn.RequestChangeCurrentDestkop(winWorkspace, x.Timestamp(winUserTime)).Check(globalXConn)
+	err = ewmh.RequestChangeCurrentDesktop(globalXConn, winWorkspace,
+		x.Timestamp(winUserTime)).Check(globalXConn)
 
 	return nil
 }
@@ -506,23 +499,23 @@ func activateWindow(win x.Window) error {
 	if err != nil {
 		return err
 	}
-	return globalEwmhConn.RequestChangeActiveWindow(win,
+	return ewmh.RequestChangeActiveWindow(globalXConn, win,
 		2, 0, 0).Check(globalXConn)
 }
 
 func isHiddenPre(win x.Window) bool {
-	state, _ := globalEwmhConn.GetWMState(win).Reply(globalEwmhConn)
+	state, _ := ewmh.GetWMState(globalXConn, win).Reply(globalXConn)
 	return atomsContains(state, atomNetWmStateHidden)
 }
 
 // works for new deepin wm.
 func isWindowOnCurrentWorkspace(win x.Window) (bool, error) {
-	winWorkspace, err := globalEwmhConn.GetWMDesktop(win).Reply(globalEwmhConn)
+	winWorkspace, err := ewmh.GetWMDesktop(globalXConn, win).Reply(globalXConn)
 	if err != nil {
 		return false, err
 	}
 
-	currentWorkspace, err := globalEwmhConn.GetCurrentDesktop().Reply(globalEwmhConn)
+	currentWorkspace, err := ewmh.GetCurrentDesktop(globalXConn).Reply(globalXConn)
 	if err != nil {
 		return false, err
 	}

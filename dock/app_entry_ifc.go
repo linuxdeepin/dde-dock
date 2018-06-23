@@ -22,6 +22,7 @@ package dock
 import (
 	"errors"
 
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -54,14 +55,14 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	win := entry.current.window
-	state, err := globalEwmhConn.GetWMState(win).Reply(globalEwmhConn)
+	state, err := ewmh.GetWMState(globalXConn, win).Reply(globalXConn)
 	if err != nil {
 		logger.Warning("Get ewmh wmState failed win:", win)
 		return dbusutil.ToError(err)
 	}
 
 	if atomsContains(state, atomNetWmStateFocused) {
-		s, err := globalIcccmConn.GetWMState(win).Reply(globalIcccmConn)
+		s, err := icccm.GetWMState(globalXConn, win).Reply(globalXConn)
 		if err != nil {
 			logger.Warning("Get icccm WmState failed win:", win)
 			return dbusutil.ToError(err)

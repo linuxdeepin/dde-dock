@@ -24,8 +24,6 @@ import (
 	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
 	"github.com/linuxdeepin/go-x11-client/util/atom"
-	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
@@ -38,9 +36,7 @@ func init() {
 var (
 	logger = log.NewLogger("daemon/trayicon")
 
-	XConn     *x.Conn
-	ewmhConn  *ewmh.Conn
-	icccmConn *icccm.Conn
+	XConn *x.Conn
 
 	XA_NET_SYSTEM_TRAY_S0         x.Atom
 	XA_NET_SYSTEM_TRAY_OPCODE     x.Atom

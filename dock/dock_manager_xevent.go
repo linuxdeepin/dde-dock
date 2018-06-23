@@ -24,6 +24,7 @@ import (
 	"time"
 
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 )
 
 func (m *Manager) registerWindow(win x.Window) {
@@ -63,7 +64,7 @@ func (m *Manager) unregisterWindow(win x.Window) {
 }
 
 func (m *Manager) handleClientListChanged() {
-	clientList, err := globalEwmhConn.GetClientList().Reply(globalEwmhConn)
+	clientList, err := ewmh.GetClientList(globalXConn).Reply(globalXConn)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
 		return
@@ -95,7 +96,7 @@ func (m *Manager) handleClientListChanged() {
 }
 
 func (m *Manager) handleActiveWindowChanged() {
-	activeWindow, err := globalEwmhConn.GetActiveWindow().Reply(globalEwmhConn)
+	activeWindow, err := ewmh.GetActiveWindow(globalXConn).Reply(globalXConn)
 	if err != nil {
 		logger.Warning(err)
 		return

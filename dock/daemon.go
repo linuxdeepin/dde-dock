@@ -24,8 +24,6 @@ import (
 	"pkg.deepin.io/lib/log"
 
 	x "github.com/linuxdeepin/go-x11-client"
-	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 )
 
 type Daemon struct {
@@ -66,18 +64,6 @@ func (d *Daemon) Start() error {
 	var err error
 
 	globalXConn, err = x.NewConn()
-	if err != nil {
-		d.startFailed()
-		return err
-	}
-
-	globalEwmhConn, err = ewmh.NewConn(globalXConn)
-	if err != nil {
-		d.startFailed()
-		return err
-	}
-
-	globalIcccmConn, err = icccm.NewConn(globalXConn)
 	if err != nil {
 		d.startFailed()
 		return err

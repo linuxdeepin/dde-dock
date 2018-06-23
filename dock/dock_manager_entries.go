@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -85,7 +86,7 @@ func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 }
 
 func (m *Manager) initClientList() {
-	clientList, err := globalEwmhConn.GetClientList().Reply(globalEwmhConn)
+	clientList, err := ewmh.GetClientList(globalXConn).Reply(globalXConn)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
 		return

@@ -30,6 +30,7 @@ import (
 	"unicode/utf8"
 
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 )
 
@@ -80,7 +81,7 @@ func NewWindowInfo(win x.Window) *WindowInfo {
 // window type
 func (winInfo *WindowInfo) updateWmWindowType() {
 	var err error
-	winInfo.wmWindowType, err = globalEwmhConn.GetWMWindowType(winInfo.window).Reply(globalEwmhConn)
+	winInfo.wmWindowType, err = ewmh.GetWMWindowType(globalXConn, winInfo.window).Reply(globalXConn)
 	if err != nil {
 		logger.Debugf("failed to get WMWindowType for window %d: %v", winInfo.window, err)
 	}
@@ -89,7 +90,8 @@ func (winInfo *WindowInfo) updateWmWindowType() {
 // wm allowed actions
 func (winInfo *WindowInfo) updateWmAllowedActions() {
 	var err error
-	winInfo.wmAllowedActions, err = globalEwmhConn.GetWMAllowedActions(winInfo.window).Reply(globalEwmhConn)
+	winInfo.wmAllowedActions, err = ewmh.GetWMAllowedActions(globalXConn,
+		winInfo.window).Reply(globalXConn)
 	if err != nil {
 		logger.Debugf("failed to get WMAllowedActions for window %d: %v", winInfo.window, err)
 	}
@@ -98,7 +100,7 @@ func (winInfo *WindowInfo) updateWmAllowedActions() {
 // wm state
 func (winInfo *WindowInfo) updateWmState() {
 	var err error
-	winInfo.wmState, err = globalEwmhConn.GetWMState(winInfo.window).Reply(globalEwmhConn)
+	winInfo.wmState, err = ewmh.GetWMState(globalXConn, winInfo.window).Reply(globalXConn)
 	if err != nil {
 		logger.Debugf("failed to get WMState for window %d: %v", winInfo.window, err)
 	}
@@ -139,7 +141,7 @@ func (winInfo *WindowInfo) updateHasXEmbedInfo() {
 
 // WM_TRANSIENT_FOR
 func (winInfo *WindowInfo) updateHasWmTransientFor() {
-	_, err := globalIcccmConn.GetWMTransientFor(winInfo.window).Reply(globalIcccmConn)
+	_, err := icccm.GetWMTransientFor(globalXConn, winInfo.window).Reply(globalXConn)
 	winInfo.hasWmTransientFor = err == nil
 }
 

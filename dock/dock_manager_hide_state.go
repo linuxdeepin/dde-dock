@@ -24,6 +24,7 @@ import (
 	"time"
 
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 )
 
 func max(a, b int) int {
@@ -58,7 +59,7 @@ func (m *Manager) getActiveWinGroup(activeWin x.Window) (ret []x.Window) {
 
 	ret = []x.Window{activeWin}
 
-	list, err := globalEwmhConn.GetClientListStacking().Reply(globalEwmhConn)
+	list, err := ewmh.GetClientListStacking(globalXConn).Reply(globalXConn)
 	if err != nil {
 		logger.Warning(err)
 		return
@@ -131,7 +132,7 @@ func (m *Manager) isWindowDockOverlap(win x.Window) (bool, error) {
 	// window showing and  on current workspace,
 	// window dock rect has intersection
 
-	windowType, err := globalEwmhConn.GetWMWindowType(win).Reply(globalEwmhConn)
+	windowType, err := ewmh.GetWMWindowType(globalXConn, win).Reply(globalXConn)
 
 	if err == nil && atomsContains(windowType, atomNetWmWindowTypeDesktop) {
 		return false, nil

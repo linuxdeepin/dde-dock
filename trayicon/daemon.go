@@ -21,8 +21,6 @@ package trayicon
 
 import (
 	x "github.com/linuxdeepin/go-x11-client"
-	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
@@ -52,16 +50,6 @@ func (d *Daemon) Start() error {
 	var err error
 	// init x conn
 	XConn, err = x.NewConn()
-	if err != nil {
-		return err
-	}
-
-	ewmhConn, err = ewmh.NewConn(XConn)
-	if err != nil {
-		return err
-	}
-
-	icccmConn, err = icccm.NewConn(XConn)
 	if err != nil {
 		return err
 	}

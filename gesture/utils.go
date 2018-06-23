@@ -42,15 +42,10 @@ func isKbdAlreadyGrabbed() bool {
 		xconn = conn
 	}
 
-	ewmhConn, err := ewmh.NewConn(xconn)
-	if err != nil {
-		return false
-	}
-
 	var grabWin x.Window
 
 	rootWin := xconn.GetDefaultScreen().Root
-	if activeWin, _ := ewmhConn.GetActiveWindow().Reply(ewmhConn); activeWin == 0 {
+	if activeWin, _ := ewmh.GetActiveWindow(xconn).Reply(xconn); activeWin == 0 {
 		grabWin = rootWin
 	} else {
 		// check viewable
@@ -66,7 +61,7 @@ func isKbdAlreadyGrabbed() bool {
 		}
 	}
 
-	err = keybind.GrabKeyboard(xconn, grabWin)
+	err := keybind.GrabKeyboard(xconn, grabWin)
 	if err == nil {
 		// grab keyboard successful
 		keybind.UngrabKeyboard(xconn)

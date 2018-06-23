@@ -56,7 +56,6 @@ type ShortcutManager struct {
 	keyKeystrokeMap   map[Key]*Keystroke
 	keyKeystrokeMapMu sync.Mutex
 	keySymbols        *keysyms.KeySymbols
-	ewmhConn          *ewmh.Conn
 
 	recordEnable        bool
 	recordContext       record.Context
@@ -86,11 +85,9 @@ func NewShortcutManager(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb Ke
 		layoutChanged:   make(chan struct{}),
 	}
 
-	ss.ewmhConn, _ = ewmh.NewConn(conn)
-
 	ss.xRecordEventHandler = NewXRecordEventHandler(keySymbols)
 	ss.xRecordEventHandler.modKeyReleasedCb = func(code uint8, mods uint16) {
-		if isKbdAlreadyGrabbed(ss.conn, ss.ewmhConn) {
+		if isKbdAlreadyGrabbed(ss.conn) {
 			return
 		}
 		switch mods {
@@ -485,11 +482,11 @@ func (sm *ShortcutManager) emitKeyEvent(mods Modifiers, key Key) {
 	}
 }
 
-func isKbdAlreadyGrabbed(conn *x.Conn, ewmhConn *ewmh.Conn) bool {
+func isKbdAlreadyGrabbed(conn *x.Conn) bool {
 	var grabWin x.Window
 
 	rootWin := conn.GetDefaultScreen().Root
-	if activeWin, _ := ewmhConn.GetActiveWindow().Reply(ewmhConn); activeWin == 0 {
+	if activeWin, _ := ewmh.GetActiveWindow(conn).Reply(conn); activeWin == 0 {
 		grabWin = rootWin
 	} else {
 		// check viewable

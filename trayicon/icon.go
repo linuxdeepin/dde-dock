@@ -27,6 +27,8 @@ import (
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 )
 
 type TrayIcon struct {
@@ -45,12 +47,12 @@ func NewTrayIcon(win x.Window) *TrayIcon {
 }
 
 func (icon *TrayIcon) getName() string {
-	wmName, _ := ewmhConn.GetWMName(icon.win).Reply(ewmhConn)
+	wmName, _ := ewmh.GetWMName(XConn, icon.win).Reply(XConn)
 	if wmName != "" {
 		return wmName
 	}
 
-	wmNameTextProp, err := icccmConn.GetWMName(icon.win).Reply(icccmConn)
+	wmNameTextProp, err := icccm.GetWMName(XConn, icon.win).Reply(XConn)
 	if err == nil {
 		wmName, _ := wmNameTextProp.GetStr()
 		if wmName != "" {
@@ -58,7 +60,7 @@ func (icon *TrayIcon) getName() string {
 		}
 	}
 
-	wmClass, err := icccmConn.GetWMClass(icon.win).Reply(icccmConn)
+	wmClass, err := icccm.GetWMClass(XConn, icon.win).Reply(XConn)
 	if err == nil {
 		return fmt.Sprintf("[%s|%s]", wmClass.Class, wmClass.Instance)
 	}
