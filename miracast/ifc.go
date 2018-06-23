@@ -36,12 +36,14 @@ const (
 )
 
 func (m *Miracast) ListLinks() (LinkInfos, *dbus.Error) {
+	m.init()
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
 	return m.links, nil
 }
 
 func (m *Miracast) ListSinks() (SinkInfos, *dbus.Error) {
+	m.init()
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
 	return m.sinks, nil

@@ -71,6 +71,9 @@ type Miracast struct {
 	sinks   SinkInfos
 	devices iw.WirelessInfos
 
+	inited bool
+	locker sync.Mutex
+
 	linkLocker   sync.Mutex
 	sinkLocker   sync.Mutex
 	deviceLocker sync.Mutex
@@ -121,6 +124,7 @@ func newMiracast(service *dbusutil.Service) (*Miracast, error) {
 	}
 
 	return &Miracast{
+		inited:          false,
 		service:         service,
 		network:         network,
 		wifiObj:         wifiObj,
@@ -131,6 +135,14 @@ func newMiracast(service *dbusutil.Service) (*Miracast, error) {
 }
 
 func (m *Miracast) init() {
+	m.locker.Lock()
+	if m.inited {
+		m.locker.Unlock()
+		return
+	}
+	m.inited = true
+	m.locker.Unlock()
+
 	devices, err := iw.ListWirelessInfo()
 	if err != nil {
 		logger.Error("Failed to list wireless info:", err)

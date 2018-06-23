@@ -59,10 +59,10 @@ func (d *Daemon) Start() error {
 		return err
 	}
 	// fix dbus timeout
-	go func() {
-		m.init()
-		m.ensureMiracleActive()
-	}()
+	// go func() {
+	// 	m.init()
+	// 	m.ensureMiracleActive()
+	// }()
 	_m = m
 
 	err = service.Export(dbusPath, m)
