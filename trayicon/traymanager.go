@@ -224,7 +224,7 @@ func getSystemTraySelectionOwner() (x.Window, error) {
 }
 
 func createOwnerWindow(visual x.VisualID) (x.Window, error) {
-	winId, err := XConn.GenerateID()
+	winId, err := XConn.AllocID()
 	if err != nil {
 		return 0, err
 	}
@@ -341,7 +341,7 @@ func (m *TrayManager) addIcon(win x.Window) {
 		logger.Debugf("addIcon failed: %v existed", win)
 		return
 	}
-	damageId, err := XConn.GenerateID()
+	damageId, err := XConn.AllocID()
 	if err != nil {
 		logger.Debug("addIcon failed, new damage id failed:", err)
 		return
@@ -375,11 +375,18 @@ func (m *TrayManager) removeIcon(win x.Window) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 
-	_, ok := m.icons[win]
+	icon, ok := m.icons[win]
 	if !ok {
 		logger.Debugf("removeIcon failed: %v not exist", win)
 		return
 	}
+	// NOTE: no need to destroy the damage, the window of icon is destroyed.
+
+	err := XConn.FreeID(uint32(icon.damage))
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	delete(m.icons, win)
 	m.service.Emit(m, "Removed", uint32(win))
 	logger.Debugf("remove tray icon %v", win)

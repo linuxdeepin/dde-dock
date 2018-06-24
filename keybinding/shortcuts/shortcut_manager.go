@@ -183,7 +183,7 @@ func (sm *ShortcutManager) initRecord() error {
 		return err
 	}
 
-	xid, err := ctrlConn.GenerateID()
+	xid, err := ctrlConn.AllocID()
 	if err != nil {
 		return err
 	}

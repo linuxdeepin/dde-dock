@@ -69,10 +69,12 @@ func (icon *TrayIcon) getName() string {
 }
 
 func (icon *TrayIcon) getPixmapData() ([]byte, error) {
-	pixmapId, err := XConn.GenerateID()
+	pixmapId, err := XConn.AllocID()
 	if err != nil {
 		return nil, err
 	}
+	defer XConn.FreeID(pixmapId)
+
 	pixmap := x.Pixmap(pixmapId)
 	err = composite.NameWindowPixmapChecked(XConn, icon.win, pixmap).Check(XConn)
 	if err != nil {
