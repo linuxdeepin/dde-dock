@@ -124,16 +124,13 @@ func key2Mod(key string) (uint16, bool) {
 	}
 
 	// control/alt/meta/shift/super _ l/r
-	parts := strings.Split(key, "_")
-	if len(parts) != 2 {
+	i := strings.IndexByte(key, '_')
+	if i == -1 {
 		return 0, false
 	}
 
-	if parts[1] != "l" && parts[1] != "r" {
-		return 0, false
-	}
-
-	switch parts[0] {
+	match := key[0:i]
+	switch match {
 	case "shift":
 		return keysyms.ModMaskShift, true
 	case "control":
