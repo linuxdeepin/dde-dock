@@ -282,6 +282,8 @@ void WirelessList::updateAPList()
             }
         }
 
+        if (m_apList.isEmpty()) return;
+
         std::sort(m_apList.begin(), m_apList.end(), [&] (const AccessPoint &ap1, const AccessPoint &ap2) {
             if (ap1 == m_activeAP)
                 return true;
