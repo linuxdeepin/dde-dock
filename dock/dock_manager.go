@@ -26,20 +26,18 @@ import (
 	"time"
 
 	// dbus interfaces:
-	libApps "dbus/com/deepin/daemon/apps"
-	"dbus/com/deepin/dde/daemon/launcher"
-	libDDELauncher "dbus/com/deepin/dde/launcher"
-	"dbus/com/deepin/sessionmanager"
-	"dbus/com/deepin/wm"
-
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.daemon.launcher"
+	libDDELauncher "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.launcher"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
-
 	x "github.com/linuxdeepin/go-x11-client"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 type Manager struct {
@@ -56,6 +54,7 @@ type Manager struct {
 	FrontendWindowRect *Rect
 
 	service            *dbusutil.Service
+	sessionSigLoop     *dbusutil.SignalLoop
 	clientList         windowSlice
 	windowInfoMap      map[x.Window]*WindowInfo
 	windowInfoMapMutex sync.RWMutex
@@ -77,11 +76,11 @@ type Manager struct {
 	windowPatterns     WindowPatterns
 
 	// dbus objects:
-	launcher         *launcher.Launcher
-	ddeLauncher      *libDDELauncher.Launcher
-	wm               *wm.Wm
-	launchedRecorder *libApps.LaunchedRecorder
-	startManager     *sessionmanager.StartManager
+	launcher     *launcher.Launcher
+	ddeLauncher  *libDDELauncher.Launcher
+	wm           *wm.Wm
+	appsObj      *libApps.Apps
+	startManager *sessionmanager.StartManager
 
 	signals *struct {
 		ServiceRestarted struct{}
@@ -157,31 +156,15 @@ func (m *Manager) destroy() {
 		m.settings = nil
 	}
 
-	if m.wm != nil {
-		wm.DestroyWm(m.wm)
-		m.wm = nil
-	}
-
-	if m.launcher != nil {
-		launcher.DestroyLauncher(m.launcher)
-		m.launcher = nil
-	}
-
-	if m.launchedRecorder != nil {
-		libApps.DestroyLaunchedRecorder(m.launchedRecorder)
-		m.launchedRecorder = nil
-	}
-
-	if m.startManager != nil {
-		sessionmanager.DestroyStartManager(m.startManager)
-		m.startManager = nil
-	}
+	m.launcher.RemoveHandler(proxy.RemoveAllHandlers)
+	m.ddeLauncher.RemoveHandler(proxy.RemoveAllHandlers)
+	m.sessionSigLoop.Stop()
 
 	m.service.StopExport(m)
 }
 
 func (m *Manager) launch(desktopFile string, timestamp uint32, files []string) {
-	err := m.startManager.LaunchApp(desktopFile, timestamp, files)
+	err := m.startManager.LaunchApp(dbus.FlagNoAutoStart, desktopFile, timestamp, files)
 	if err != nil {
 		logger.Warningf("launch %q failed: %v", desktopFile, err)
 	}
@@ -258,20 +241,12 @@ func (m *Manager) MoveWindow(win uint32) *dbus.Error {
 }
 
 func (m *Manager) PreviewWindow(win uint32) *dbus.Error {
-	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
-		logger.Warning("Deepin window manager not running, unsupported this operation")
-		return nil
-	}
-	err := m.wm.PreviewWindow(win)
+	err := m.wm.PreviewWindow(dbus.FlagNoAutoStart, win)
 	return dbusutil.ToError(err)
 }
 
 func (m *Manager) CancelPreviewWindow() *dbus.Error {
-	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
-		logger.Warning("Deepin window manager not running, unsupported this operation")
-		return nil
-	}
-	err := m.wm.CancelPreviewWindow()
+	err := m.wm.CancelPreviewWindow(dbus.FlagNoAutoStart)
 	return dbusutil.ToError(err)
 }
 

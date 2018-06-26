@@ -141,11 +141,11 @@ func getWindowGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
 	}
 	frameExtents, _ := getWindowFrameExtents(xConn, win)
 	if frameExtents != nil {
-		x := winRect.X + int32(frameExtents.Left)
+		X := winRect.X + int32(frameExtents.Left)
 		y := winRect.Y + int32(frameExtents.Top)
 		w := winRect.Width - uint32(frameExtents.Left+frameExtents.Right)
 		h := winRect.Height - uint32(frameExtents.Top+frameExtents.Bottom)
-		return &Rect{x, y, w, h}, nil
+		return &Rect{X, y, w, h}, nil
 	}
 	return winRect, nil
 }

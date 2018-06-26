@@ -22,6 +22,7 @@ package dock
 import (
 	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
+	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 )
 
@@ -66,7 +67,8 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 	launchAction := func(action desktopappinfo.DesktopAction) func(timestamp uint32) {
 		return func(timestamp uint32) {
 			logger.Debugf("launch action %+v", action)
-			err := entry.manager.startManager.LaunchAppAction(ai.GetFileName(), action.Section, timestamp)
+			err := entry.manager.startManager.LaunchAppAction(dbus.FlagNoAutoStart,
+				ai.GetFileName(), action.Section, timestamp)
 			if err != nil {
 				logger.Warning("launchAppAction failed:", err)
 			}

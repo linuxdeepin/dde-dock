@@ -46,11 +46,11 @@ func hasIntersection(rectA, rectB *Rect) bool {
 		logger.Warning("hasIntersection rectA or rectB is nil")
 		return false
 	}
-	x, y, w, h := rectA.Pieces()
+	X, y, w, h := rectA.Pieces()
 	x1, y1, w1, h1 := rectB.Pieces()
-	ax := max(x, x1)
+	ax := max(X, x1)
 	ay := max(y, y1)
-	bx := min(x+w, x1+w1)
+	bx := min(X+w, x1+w1)
 	by := min(y+h, y1+h1)
 	return ax < bx && ay < by
 }

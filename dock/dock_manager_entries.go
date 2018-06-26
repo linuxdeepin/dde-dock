@@ -39,14 +39,14 @@ func (m *Manager) allocEntryId() string {
 }
 
 func (m *Manager) markAppLaunched(appInfo *AppInfo) {
-	if appInfo == nil || m.launchedRecorder == nil {
+	if appInfo == nil {
 		return
 	}
 	file := appInfo.GetFileName()
 	logger.Debug("markAppLaunched", file)
 
 	go func() {
-		err := m.launchedRecorder.MarkLaunched(file)
+		err := m.appsObj.MarkLaunched(0, file)
 		if err != nil {
 			logger.Debug(err)
 		}

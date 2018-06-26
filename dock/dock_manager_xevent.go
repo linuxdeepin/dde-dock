@@ -156,10 +156,10 @@ func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
 }
 
 func (m *Manager) handleDestroyNotifyEvent(ev *x.DestroyNotifyEvent) {
-	logger.Debug(ev)
 	if ev.Window != ev.Event {
 		return
 	}
+	logger.Debug("DestroyNotifyEvent window:", ev.Window)
 	winInfo := m.getWindowInfo(ev.Window)
 	if winInfo != nil {
 		m.detachWindow(winInfo)
@@ -168,7 +168,7 @@ func (m *Manager) handleDestroyNotifyEvent(ev *x.DestroyNotifyEvent) {
 }
 
 func (m *Manager) handleMapNotifyEvent(ev *x.MapNotifyEvent) {
-	logger.Debugf("MapNotifyEvent window: %v", ev.Window)
+	logger.Debug("MapNotifyEvent window:", ev.Window)
 	m.registerWindow(ev.Window)
 }
 
@@ -208,7 +208,7 @@ func (m *Manager) handleConfigureNotifyEvent(ev *x.ConfigureNotifyEvent) {
 			ev := winInfo.lastConfigureNotifyEvent
 			winInfo.mu.Unlock()
 
-			logger.Debugf("in closure: configure notify ev %s", ev)
+			logger.Debugf("in closure: configure notify ev: %#v", ev)
 			isXYWHChange := false
 			if winInfo.x != ev.X {
 				winInfo.x = ev.X
