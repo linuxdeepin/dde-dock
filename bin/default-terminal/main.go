@@ -6,11 +6,10 @@ import (
 	"os"
 	"os/exec"
 
-	"dbus/com/deepin/sessionmanager"
-
 	"gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 var executeFlag string
@@ -38,12 +37,11 @@ func main() {
 
 	if executeFlag == "" {
 		if appInfo != nil {
-			startManager, err := sessionmanager.NewStartManager(
-				"com.deepin.SessionManager",
-				"/com/deepin/StartManager")
+			sessionBus, err := dbus.SessionBus()
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
+			startManager := sessionmanager.NewStartManager(sessionBus)
 			filename := appInfo.GetFileName()
 			workDir, err := os.Getwd()
 			if err != nil {
@@ -52,8 +50,8 @@ func main() {
 			options := map[string]dbus.Variant{
 				"path": dbus.MakeVariant(workDir),
 			}
-			err = startManager.LaunchAppWithOptions(filename, 0, nil, options)
-			sessionmanager.DestroyStartManager(startManager)
+			err = startManager.LaunchAppWithOptions(0, filename, 0,
+				nil, options)
 			if err != nil {
 				log.Println(err)
 			}
