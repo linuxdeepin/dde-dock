@@ -76,7 +76,8 @@ func main() {
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		logger.Fatal(err)
+		logger.Warning(err)
+		os.Exit(1)
 	}
 
 	cmd := app.New("dde-session-initializer",
