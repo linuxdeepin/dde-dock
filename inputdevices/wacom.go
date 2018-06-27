@@ -26,12 +26,9 @@ import (
 	"time"
 
 	"gir/gio-2.0"
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/dxinput"
-
-	"github.com/BurntSushi/xgb"
-	"github.com/BurntSushi/xgb/randr"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
@@ -89,23 +86,26 @@ func (i *OutputInfo) Contains(x, y int16) bool {
 		i.Y <= y && y < i.Y+int16(i.H)
 }
 
-func getOutputInfo(conn *xgb.Conn, output randr.Output, ts xproto.Timestamp) (*OutputInfo, error) {
-	reply, err := randr.GetOutputInfo(conn, output, ts).Reply()
+func getOutputInfo(conn *x.Conn, output randr.Output, ts x.Timestamp) (*OutputInfo, error) {
+	outputInfoReply, err := randr.GetOutputInfo(conn, output, ts).Reply(conn)
 	if err != nil {
+		logger.Warningf("failed to get output %d info: %v", output, err)
 		return nil, err
 	}
 
-	if reply.Crtc != 0 {
-		crtcReply, err := randr.GetCrtcInfo(conn, reply.Crtc, ts).Reply()
+	if outputInfoReply.Crtc != 0 {
+		crtcInfoReply, err := randr.GetCrtcInfo(conn, outputInfoReply.Crtc, ts).Reply(conn)
 		if err != nil {
+			logger.Warningf("failed to get crtc %d info: %v",
+				outputInfoReply.Crtc, err)
 			return nil, err
 		}
 		return &OutputInfo{
-			Name: string(reply.Name),
-			X:    crtcReply.X,
-			Y:    crtcReply.Y,
-			W:    crtcReply.Width,
-			H:    crtcReply.Height,
+			Name: string(outputInfoReply.Name),
+			X:    crtcInfoReply.X,
+			Y:    crtcInfoReply.Y,
+			W:    crtcInfoReply.Width,
+			H:    crtcInfoReply.Height,
 		}, nil
 	}
 	return nil, errors.New("BadCrtc")
@@ -141,13 +141,14 @@ type Wacom struct {
 	stylusSetting *gio.Settings
 	eraserSetting *gio.Settings
 
-	pointerX     int16
-	pointerY     int16
-	outputInfos  []*OutputInfo
-	mapToOutput  *OutputInfo
-	setAreaMutex sync.Mutex
-	xu           *xgbutil.XUtil
-	exit         chan int
+	pointerX      int16
+	pointerY      int16
+	outputInfos   []*OutputInfo
+	outputInfosMu sync.Mutex
+	mapToOutput   *OutputInfo
+	setAreaMutex  sync.Mutex
+	xConn         *x.Conn
+	exit          chan int
 }
 
 func newWacom(service *dbusutil.Service) *Wacom {
@@ -200,14 +201,15 @@ func (w *Wacom) init() {
 }
 
 func (w *Wacom) initX() error {
-	xu, err := xgbutil.NewConn()
+	var err error
+	w.xConn, err = x.NewConn()
 	if err != nil {
 		return err
 	}
-	w.xu = xu
 
-	// TODO: randr.Init race
-	if err := randr.Init(xu.Conn()); err != nil {
+	_, err = randr.QueryVersion(w.xConn, randr.MajorVersion,
+		randr.MinorVersion).Reply(w.xConn)
+	if err != nil {
 		return err
 	}
 
@@ -215,60 +217,63 @@ func (w *Wacom) initX() error {
 }
 
 func (w *Wacom) listenXRandrEvents() {
-	conn := w.xu.Conn()
-	randr.SelectInputChecked(conn, w.xu.RootWin(), randr.NotifyMaskScreenChange)
-	for {
-		ev, err := conn.WaitForEvent()
-		if ev == nil && err == nil {
-			logger.Debug("listenXRandrEvents return")
-			return
-		}
-		if err != nil {
-			logger.Warning(err)
-			continue
-		}
+	conn := w.xConn
+	root := conn.GetDefaultScreen().Root
+	err := randr.SelectInputChecked(conn, root, randr.NotifyMaskScreenChange).Check(conn)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 
-		switch event := ev.(type) {
-		case randr.ScreenChangeNotifyEvent:
-			logger.Debug(event)
+	rrExtData := conn.GetExtensionData(randr.Ext())
+	eventChan := make(chan x.GenericEvent, 10)
+	conn.AddEventChan(eventChan)
+	for ev := range eventChan {
+		switch ev.GetEventCode() {
+		case randr.ScreenChangeNotifyEventCode + rrExtData.FirstEvent:
+			event, _ := randr.NewScreenChangeNotifyEvent(ev)
+			logger.Debugf("event: %#v", event)
 			w.handleScreenChanged()
 		}
 	}
 }
 
 func (w *Wacom) handleScreenChanged() {
-	conn := w.xu.Conn()
-	resources, err := randr.GetScreenResources(conn, w.xu.RootWin()).Reply()
+	conn := w.xConn
+	root := conn.GetDefaultScreen().Root
+	resources, err := randr.GetScreenResources(conn, root).Reply(conn)
 	if err != nil {
 		logger.Warning(err)
 		return
 	}
 
-	cfgTs := resources.ConfigTimestamp
-
 	var outputInfos []*OutputInfo
 	for _, output := range resources.Outputs {
-		outputInfo, err := getOutputInfo(conn, output, cfgTs)
-		if err == nil {
-			outputInfos = append(outputInfos, outputInfo)
+		outputInfo, err := getOutputInfo(conn, output, resources.ConfigTimestamp)
+		if err != nil {
+			continue
 		}
+		outputInfos = append(outputInfos, outputInfo)
 	}
+	w.outputInfosMu.Lock()
 	w.outputInfos = outputInfos
+	w.outputInfosMu.Unlock()
 }
 
 func (w *Wacom) updatePointerPos() {
-	conn := w.xu.Conn()
-	reply, err := xproto.QueryPointer(conn, w.xu.RootWin()).Reply()
+	conn := w.xConn
+	root := conn.GetDefaultScreen().Root
+	reply, err := x.QueryPointer(conn, root).Reply(conn)
 	if err != nil {
 		logger.Debug(err)
 		return
 	}
-	x := reply.RootX
+	X := reply.RootX
 	y := reply.RootY
 
-	if x != w.pointerX || y != w.pointerY {
+	if X != w.pointerX || y != w.pointerY {
 		// pointer pos changed
-		w.pointerX = x
+		w.pointerX = X
 		w.pointerY = y
 		// logger.Debugf("x: %d, y: %d", x, y)
 	}
@@ -323,6 +328,9 @@ func (w *Wacom) updateAreaAndMapToOutput() {
 }
 
 func (w *Wacom) pointerInOutput() *OutputInfo {
+	w.outputInfosMu.Lock()
+	defer w.outputInfosMu.Unlock()
+
 	if len(w.outputInfos) == 1 {
 		return w.outputInfos[0]
 	}
@@ -633,6 +641,6 @@ func (w *Wacom) setThreshold() {
 }
 
 func (w *Wacom) destroy() {
-	w.xu.Conn().Close()
+	w.xConn.Close()
 	close(w.exit)
 }
