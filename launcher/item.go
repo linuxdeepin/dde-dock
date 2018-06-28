@@ -20,10 +20,11 @@
 package launcher
 
 import (
-	"dbus/com/deepin/api/pinyin"
 	"fmt"
-	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"strings"
+
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 )
 
 type SearchScore uint64
@@ -54,8 +55,7 @@ func (item *Item) String() string {
 }
 
 const (
-	desktopExt           = ".desktop"
-	desktopCategroyDelim = ";"
+	desktopExt = ".desktop"
 )
 
 func getAppId(desktopId string) string {
@@ -142,7 +142,7 @@ func (item *Item) setSearchTargets(pinyin *pinyin.Pinyin) {
 		item.addSearchTarget(categoryScore, c)
 	}
 	if pinyin != nil {
-		pinyinList, err := pinyin.Query(item.Name)
+		pinyinList, err := pinyin.Query(0, item.Name)
 		if err == nil {
 			for _, v := range pinyinList {
 				item.addSearchTarget(nameScore, v)

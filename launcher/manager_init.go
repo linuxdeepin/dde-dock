@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const (
@@ -101,5 +102,6 @@ func (m *Manager) handlePopPushOps() {
 }
 
 func (m *Manager) destroy() {
-	// TODO
+	m.appsObj.RemoveHandler(proxy.RemoveAllHandlers)
+	m.sysSigLoop.Stop()
 }

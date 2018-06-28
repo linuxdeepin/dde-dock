@@ -63,7 +63,7 @@ func (m *Manager) GetItemInfo(id string) (ItemInfo, *dbus.Error) {
 }
 
 func (m *Manager) GetAllNewInstalledApps() ([]string, *dbus.Error) {
-	newApps, err := m.launchedRecorder.GetNew()
+	newApps, err := m.appsObj.GetNew(0)
 	if err != nil {
 		return nil, dbusutil.ToError(err)
 	}

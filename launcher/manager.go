@@ -28,9 +28,9 @@ import (
 	"sync"
 	"time"
 
-	libPinyin "dbus/com/deepin/api/pinyin"
-	libApps "dbus/com/deepin/daemon/apps"
-	libLastore "dbus/com/deepin/lastore"
+	libPinyin "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
+	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
+	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
@@ -65,17 +65,17 @@ const (
 
 type Manager struct {
 	service    *dbusutil.Service
+	sysSigLoop *dbusutil.SignalLoop
 	items      map[string]*Item
 	itemsMutex sync.Mutex
 
-	launchedRecorder   *libApps.LaunchedRecorder
-	desktopFileWatcher *libApps.DesktopFileWatcher
-	notification       *notify.Notification
-	lastoreManager     *libLastore.Manager
-	pinyin             *libPinyin.Pinyin
-	desktopPkgMap      map[string]string
-	pkgCategoryMap     map[string]CategoryID
-	nameMap            map[string]string
+	appsObj        *libApps.Apps
+	notification   *notify.Notification
+	lastore        *libLastore.Lastore
+	pinyin         *libPinyin.Pinyin
+	desktopPkgMap  map[string]string
+	pkgCategoryMap map[string]CategoryID
+	nameMap        map[string]string
 
 	searchTaskStack *searchTaskStack
 
@@ -146,41 +146,27 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 		service: service,
 	}
 
-	var err error
-	// init launchedRecorder
-	m.launchedRecorder, err = libApps.NewLaunchedRecorder(appsDBusDest, appsDBusObjectPath)
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
-
-	// init desktopFileWatcher
-	m.desktopFileWatcher, err = libApps.NewDesktopFileWatcher(appsDBusDest, appsDBusObjectPath)
-	if err != nil {
-		m.destroy()
-		return nil, err
-	}
-
-	// init lastoreManager
-	m.lastoreManager, err = libLastore.NewManager(lastoreDBusDest, "/com/deepin/lastore")
-	if err != nil {
-		m.destroy()
-		return nil, err
-	}
-
-	// init pinyin if lang is zh*
+	m.appsObj = libApps.NewApps(systemBus)
+	m.lastore = libLastore.NewLastore(systemBus)
 	if isZH() {
-		m.pinyin, err = libPinyin.NewPinyin("com.deepin.api.Pinyin", "/com/deepin/api/Pinyin")
-		if err != nil {
-			m.destroy()
-			return nil, err
-		}
+		m.pinyin = libPinyin.NewPinyin(service.Conn())
 	}
 
 	// init fsWatcher
 	m.fsWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		m.destroy()
-		return nil, err
+	if err == nil {
+		err = m.fsWatcher.Watch(lastoreDataDir)
+		if err == nil {
+			go m.handleFsWatcherEvents()
+		} else {
+			logger.Warning(err)
+		}
+	} else {
+		logger.Warning("failed to init fsWatcher:", err)
 	}
 
 	m.settings = gio.NewSettings(gsSchemaLauncher)
@@ -224,26 +210,24 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 
 	m.fsEventTimers = make(map[string]*time.Timer)
 
-	err = m.fsWatcher.Watch(lastoreDataDir)
-	if err != nil {
-		logger.Warning(err)
-	}
-	go m.handleFsWatcherEvents()
-	m.desktopFileWatcher.ConnectEvent(func(filename string, _ uint32) {
+	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 100)
+	m.sysSigLoop.Start()
+	m.appsObj.InitSignalExt(m.sysSigLoop, true)
+	m.appsObj.ConnectEvent(func(filename string, _ uint32) {
 		if shouldCheckDesktopFile(filename) {
 			logger.Debug("DFWatcher event", filename)
 			m.delayHandleFileEvent(filename)
 		}
 	})
 
-	m.launchedRecorder.WatchDirs(getDataDirsForWatch())
+	m.appsObj.WatchDirs(0, getDataDirsForWatch())
 
-	m.launchedRecorder.ConnectServiceRestarted(func() {
-		if m.launchedRecorder != nil {
-			m.launchedRecorder.WatchDirs(getDataDirsForWatch())
+	m.appsObj.ConnectServiceRestarted(func() {
+		if m.appsObj != nil {
+			m.appsObj.WatchDirs(0, getDataDirsForWatch())
 		}
 	})
-	m.launchedRecorder.ConnectLaunched(func(path string) {
+	m.appsObj.ConnectLaunched(func(path string) {
 		item := m.getItemByPath(path)
 		if item == nil {
 			return

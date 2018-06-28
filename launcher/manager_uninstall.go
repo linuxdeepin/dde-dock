@@ -197,7 +197,7 @@ func (m *Manager) uninstall(id string) error {
 	// uninstall system package
 	if pkg := m.queryPkgName(item.ID); pkg != "" {
 		// is pkg installed?
-		installed, err := m.lastoreManager.PackageExists(pkg)
+		installed, err := m.lastore.PackageExists(0, pkg)
 		if err != nil {
 			return err
 		}
@@ -238,7 +238,7 @@ const (
 )
 
 func (m *Manager) uninstallSystemPackage(jobName, pkg string) error {
-	jobPath, err := m.lastoreManager.RemovePackage(jobName, pkg)
+	jobPath, err := m.lastore.RemovePackage(0, jobName, pkg)
 	logger.Debugf("uninstallSystemPackage pkg: %q jobPath: %q", pkg, jobPath)
 	if err != nil {
 		return err
