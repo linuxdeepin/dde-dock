@@ -53,9 +53,6 @@ var logger = log.NewLogger("daemon/dde-system-daemon")
 var _daemon *Daemon
 
 func main() {
-	logger.BeginTracing()
-	defer logger.EndTracing()
-
 	service, err := dbusutil.NewSystemService()
 	if err != nil {
 		logger.Fatal("failed to new system service", err)
