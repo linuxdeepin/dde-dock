@@ -20,7 +20,6 @@
 package bluetooth
 
 import (
-	apidevice "dbus/com/deepin/api/device"
 	"encoding/json"
 )
 
@@ -41,16 +40,4 @@ func marshalJSON(v interface{}) (strJSON string) {
 	}
 	strJSON = string(byteJSON)
 	return
-}
-
-func requestUnblockBluetoothDevice() {
-	d, err := apidevice.NewDevice("com.deepin.api.Device", "/com/deepin/api/Device")
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	err = d.UnblockDevice("bluetooth")
-	if err != nil {
-		logger.Error(err)
-	}
 }

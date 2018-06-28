@@ -21,11 +21,11 @@ package bluetooth
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 
-	"fmt"
-
+	apidevice "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.device"
 	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"pkg.deepin.io/lib/dbus1"
@@ -59,6 +59,7 @@ type Bluetooth struct {
 	config        *config
 	objectManager *bluez.ObjectManager
 	sysDBusDaemon *ofdbus.DBus
+	apiDevice     *apidevice.Device
 	agent         *agent
 
 	// adapter
@@ -191,14 +192,15 @@ func (b *Bluetooth) init() {
 	b.config = newConfig()
 	b.devices = make(map[dbus.ObjectPath][]*device)
 
-	systemConn := b.systemSigLoop.Conn()
+	systemBus := b.systemSigLoop.Conn()
 
-	b.sysDBusDaemon = ofdbus.NewDBus(systemConn)
+	b.apiDevice = apidevice.NewDevice(systemBus)
+	b.sysDBusDaemon = ofdbus.NewDBus(systemBus)
 	b.sysDBusDaemon.InitSignalExt(b.systemSigLoop, true)
 	b.sysDBusDaemon.ConnectNameOwnerChanged(b.handleDBusNameOwnerChanged)
 
 	// initialize dbus object manager
-	b.objectManager = bluez.NewObjectManager(systemConn)
+	b.objectManager = bluez.NewObjectManager(systemBus)
 
 	// connect signals
 	b.objectManager.InitSignalExt(b.systemSigLoop, true)
@@ -212,6 +214,10 @@ func (b *Bluetooth) init() {
 	b.config.save()
 }
 
+func (b *Bluetooth) unblockBluetoothDevice() {
+	b.apiDevice.UnblockDevice(0, "bluetooth")
+}
+
 func (b *Bluetooth) loadObjects() {
 	// add exists adapters and devices
 	objects, err := b.objectManager.GetManagedObjects(0)
@@ -220,7 +226,7 @@ func (b *Bluetooth) loadObjects() {
 		return
 	}
 
-	requestUnblockBluetoothDevice()
+	b.unblockBluetoothDevice()
 	// add adapters
 	for path, obj := range objects {
 		if _, ok := obj[bluezAdapterDBusInterface]; ok {
@@ -258,7 +264,7 @@ func (b *Bluetooth) removeAllObjects() {
 
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[bluezAdapterDBusInterface]; ok {
-		requestUnblockBluetoothDevice()
+		b.unblockBluetoothDevice()
 		b.addAdapter(path)
 	}
 	if _, ok := data[bluezDeviceDBusInterface]; ok {
