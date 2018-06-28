@@ -24,7 +24,6 @@ import (
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	. "pkg.deepin.io/lib/gettext"
 )
 
 const (
@@ -49,56 +48,17 @@ func (*LangSelector) GetInterfaceName() string {
 func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 	lang.service.DelayAutoQuit()
 
-	if len(locale) == 0 || !lang.isSupportedLocale(locale) {
+	if !lang.isSupportedLocale(locale) {
 		return dbusutil.ToError(fmt.Errorf("invalid locale: %v", locale))
-	}
-	if lang.helper == nil {
-		return dbusutil.ToError(fmt.Errorf("LocaleHelper object is nil"))
 	}
 
 	lang.PropsMu.Lock()
 	defer lang.PropsMu.Unlock()
-
-	if lang.LocaleState == LocaleStateChanging {
+	if lang.LocaleState == LocaleStateChanging || lang.CurrentLocale == locale {
 		return nil
 	}
-
-	if lang.CurrentLocale == locale {
-		return nil
-	}
-
-	go func() {
-		// send notification
-		if ok, _ := isNetworkEnable(); !ok {
-			err := sendNotify(localeIconStart, "",
-				Tr("System language is being changed, please wait..."))
-			if err != nil {
-				logger.Warning("sendNotify failed:", err)
-			}
-		} else {
-			err := sendNotify(localeIconStart, "",
-				Tr("System language is being changed with an installation of lacked language packages, please wait..."))
-			if err != nil {
-				logger.Warning("sendNotify failed:", err)
-			}
-		}
-
-		lang.PropsMu.Lock()
-		lang.setPropLocaleState(LocaleStateChanging)
-		lang.setPropCurrentLocale(locale)
-		lang.PropsMu.Unlock()
-
-		err := lang.helper.GenerateLocale(0, locale)
-		if err != nil {
-			logger.Warning("GenerateLocale failed:", err)
-
-			lang.PropsMu.Lock()
-			lang.setPropLocaleState(LocaleStateChanged)
-			lang.PropsMu.Unlock()
-		}
-
-	}()
-
+	logger.Debugf("setLocale %q", locale)
+	go lang.setLocale(locale)
 	return nil
 }
 

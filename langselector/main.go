@@ -49,8 +49,6 @@ func Run() {
 		logger.Fatal("failed to export:", err)
 	}
 
-	lang.listenHelperSignal()
-
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		logger.Fatal("failed to request name:", err)

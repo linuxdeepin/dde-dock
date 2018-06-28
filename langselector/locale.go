@@ -21,29 +21,43 @@ package langselector
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"os/user"
+	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
+	// dbus services:
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.localehelper"
 	libnetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.network"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 
 	"pkg.deepin.io/dde/api/lang_info"
+	"pkg.deepin.io/dde/api/language_support"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 const (
 	systemLocaleFile     = "/etc/default/locale"
 	systemdLocaleFile    = "/etc/locale.conf"
-	userLocaleFilePAM    = ".pam_environment"
+	userLocaleFilePamEnv = ".pam_environment"
 	userLocaleConfigFile = ".config/locale.conf"
 
 	defaultLocale = "en_US.UTF-8"
+)
+
+var (
+	// for locale-helper
+	_ = Tr("Authentication is required to switch language")
 )
 
 const (
@@ -75,7 +89,7 @@ var (
 //go:generate dbusutil-gen -type LangSelector locale.go
 type LangSelector struct {
 	service      *dbusutil.Service
-	sysSigLoop   *dbusutil.SignalLoop
+	systemBus    *dbus.Conn
 	helper       *localehelper.LocaleHelper
 	localesCache LocaleInfos
 
@@ -132,8 +146,7 @@ func newLangSelector(service *dbusutil.Service) (*LangSelector, error) {
 	if err != nil {
 		return nil, err
 	}
-	lang.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
-	lang.sysSigLoop.Start()
+	lang.systemBus = systemBus
 	lang.helper = localehelper.NewLocaleHelper(systemBus)
 
 	locale := getCurrentUserLocale()
@@ -173,22 +186,31 @@ func (ls *LangSelector) getCachedLocales() LocaleInfos {
 }
 
 func (ls *LangSelector) isSupportedLocale(locale string) bool {
+	if locale == "" {
+		return false
+	}
 	infos := ls.getCachedLocales()
 	_, err := infos.Get(locale)
 	return err == nil
 }
 
-func sendNotify(icon, summary, body string) error {
+func sendNotify(icon, summary, body string) {
 	sessionBus, err := dbus.SessionBus()
 	if err != nil {
-		return err
+		logger.Warning(err)
+		return
 	}
 	n := notifications.NewNotifications(sessionBus)
 	_, err = n.Notify(0, dbusServiceName, 0,
 		icon, summary, body,
 		nil, nil, 0)
+	logger.Debugf("send notification icon: %q, summary: %q, body: %q",
+		icon, summary, body)
 
-	return err
+	if err != nil {
+		logger.Warning(err)
+	}
+	return
 }
 
 func isNetworkEnable() (bool, error) {
@@ -211,7 +233,7 @@ func isNetworkEnable() (bool, error) {
 
 func getCurrentUserLocale() (locale string) {
 	files := [3]string{
-		path.Join(os.Getenv("HOME"), userLocaleFilePAM),
+		filepath.Join(basedir.GetUserHomeDir(), userLocaleFilePamEnv),
 		systemLocaleFile,
 		systemdLocaleFile, // It is used by systemd to store system-wide locale settings
 	}
@@ -231,15 +253,15 @@ func getCurrentUserLocale() (locale string) {
 }
 
 func writeUserLocale(locale string) error {
-	homeDir := os.Getenv("HOME")
-	pamEnvFile := path.Join(homeDir, userLocaleFilePAM)
+	homeDir := basedir.GetUserHomeDir()
+	pamEnvFile := filepath.Join(homeDir, userLocaleFilePamEnv)
 	var err error
 	// only for lightdm
 	err = writeLocaleEnvFile(locale, pamEnvFile)
 	if err != nil {
 		return err
 	}
-	localeConfigFile := path.Join(homeDir, userLocaleConfigFile)
+	localeConfigFile := filepath.Join(homeDir, userLocaleConfigFile)
 	err = writeLocaleEnvFile(locale, localeConfigFile)
 	if err != nil {
 		return err
@@ -321,4 +343,234 @@ func readEnvFile(file string) (envInfos, error) {
 	}
 
 	return infos, nil
+}
+
+func (lang *LangSelector) setLocaleFailed(oldLocale string) {
+	sendNotify(localeIconFailed, "",
+		Tr("System language failed to change, please try later"))
+	// restore CurrentLocale
+	lang.PropsMu.Lock()
+	lang.setPropCurrentLocale(oldLocale)
+	lang.setPropLocaleState(LocaleStateChanged)
+	lang.PropsMu.Unlock()
+}
+
+func (lang *LangSelector) setLocale(locale string) {
+	// begin
+	lang.PropsMu.Lock()
+	oldLocale := lang.CurrentLocale
+	lang.setPropLocaleState(LocaleStateChanging)
+	lang.setPropCurrentLocale(locale)
+	lang.PropsMu.Unlock()
+
+	// send notification
+	networkEnabled, err := isNetworkEnable()
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	if networkEnabled {
+		sendNotify(localeIconStart, "",
+			Tr("System language is being changed with an installation of lacked language packages, please wait..."))
+	} else {
+		sendNotify(localeIconStart, "",
+			Tr("System language is being changed, please wait..."))
+	}
+
+	// generate locale
+	err = lang.generateLocale(locale)
+	if err != nil {
+		logger.Warning("failed to generate locale:", err)
+		lang.setLocaleFailed(oldLocale)
+		return
+	} else {
+		logger.Debug("generate locale success")
+	}
+
+	err = writeUserLocale(locale)
+	if err != nil {
+		logger.Warning("failed to write user locale:", err)
+		lang.setLocaleFailed(oldLocale)
+		return
+	}
+
+	// sync user locale to accounts daemon
+	err = syncUserLocale(locale)
+	if err != nil {
+		logger.Warning("failed to sync user locale to accounts daemon:", err)
+	}
+
+	// remove font config file
+	fontCfgFile := filepath.Join(basedir.GetUserConfigDir(),
+		"fontconfig/conf.d/99-deepin.conf")
+	err = os.Remove(fontCfgFile)
+	if err != nil {
+		// ignore not exist error
+		if !os.IsNotExist(err) {
+			logger.Warningf("failed to remove font config file: %v", err)
+		}
+	}
+
+	// install language support packages
+	if networkEnabled {
+		err = lang.installLangSupportPackages(locale)
+		if err != nil {
+			logger.Warning("failed to install packages:", err)
+		} else {
+			logger.Debug("install packages success")
+		}
+	}
+
+	sendNotify(localeIconFinished, "",
+		Tr("System language has been changed, please log in again after logged out"))
+
+	// end
+	lang.PropsMu.Lock()
+	lang.setPropLocaleState(LocaleStateChanged)
+	lang.PropsMu.Unlock()
+}
+
+func syncUserLocale(locale string) error {
+	systemConn, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+
+	currentUser, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	u, err := ddbus.NewUserByUid(systemConn, currentUser.Uid)
+	if err != nil {
+		return err
+	}
+	err = u.SetLocale(0, locale)
+	return err
+}
+
+var errSignalBodyInvalid = errors.New("signal body is invalid")
+
+func (lang *LangSelector) generateLocale(locale string) error {
+	successMatchRule := dbusutil.NewMatchRuleBuilder().ExtSignal("/com/deepin/api/LocaleHelper", "com.deepin.api.LocaleHelper", "Success").Build()
+	err := successMatchRule.AddTo(lang.systemBus)
+	if err != nil {
+		return err
+	}
+	sigChan := make(chan *dbus.Signal, 1)
+	lang.systemBus.Signal(sigChan)
+
+	defer func() {
+		lang.systemBus.RemoveSignal(sigChan)
+		err := successMatchRule.RemoveFrom(lang.systemBus)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
+
+	logger.Debug("generating locale")
+	err = lang.helper.GenerateLocale(0, locale)
+	if err != nil {
+		return err
+	}
+
+	select {
+	case <-time.NewTimer(10 * time.Minute).C:
+		return errors.New("wait success signal timed out")
+	case sig := <-sigChan:
+		if len(sig.Body) != 2 {
+			return errSignalBodyInvalid
+		}
+		genLocaleOk, ok := sig.Body[0].(bool)
+		if !ok {
+			return errSignalBodyInvalid
+		}
+
+		failReason, ok := sig.Body[1].(string)
+		if !ok {
+			return errSignalBodyInvalid
+		}
+
+		if genLocaleOk {
+			return nil
+		} else {
+			return errors.New(failReason)
+		}
+	}
+}
+
+func (lang *LangSelector) installLangSupportPackages(locale string) error {
+	logger.Debug("install language support packages for locale", locale)
+	ls, err := language_support.NewLanguageSupport()
+	if err != nil {
+		return err
+	}
+
+	pkgs := ls.ByLocale(locale, false)
+	ls.Destroy()
+	logger.Info("need to install:", pkgs)
+	return lang.installPackages(pkgs)
+}
+
+func (lang *LangSelector) installPackages(pkgs []string) error {
+	if len(pkgs) == 0 {
+		return nil
+	}
+	systemBus := lang.systemBus
+	lastoreObj := lastore.NewLastore(systemBus)
+	jobPath, err := lastoreObj.InstallPackage(0, "",
+		strings.Join(pkgs, " "))
+	if err != nil {
+		return err
+	}
+	logger.Debug("install job path:", jobPath)
+
+	jobMatchRule := dbusutil.NewMatchRuleBuilder().ExtPropertiesChanged(
+		string(jobPath), "com.deepin.lastore.Job").Build()
+	err = jobMatchRule.AddTo(systemBus)
+	if err != nil {
+		return err
+	}
+
+	sigChan := make(chan *dbus.Signal, 10)
+	systemBus.Signal(sigChan)
+
+	defer func() {
+		systemBus.RemoveSignal(sigChan)
+		err := jobMatchRule.RemoveFrom(systemBus)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
+
+	for sig := range sigChan {
+		if sig.Path == jobPath &&
+			sig.Name == "org.freedesktop.DBus.Properties.PropertiesChanged" {
+			if len(sig.Body) != 3 {
+				return errSignalBodyInvalid
+			}
+
+			props, ok := sig.Body[1].(map[string]dbus.Variant)
+			if !ok {
+				return errSignalBodyInvalid
+			}
+			v, ok := props["Progress"]
+			if ok {
+				progress, _ := v.Value().(float64)
+				if progress == 1 {
+					// install success
+					return nil
+				}
+			}
+
+			v, ok = props["Status"]
+			if ok {
+				status, _ := v.Value().(string)
+				if status == "failed" {
+					return errors.New("install failed")
+				}
+			}
+		}
+	}
+	return nil
 }
