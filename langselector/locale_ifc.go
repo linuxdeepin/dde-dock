@@ -73,13 +73,13 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed, please wait..."))
 			if err != nil {
-				lang.logger.Warning("sendNotify failed:", err)
+				logger.Warning("sendNotify failed:", err)
 			}
 		} else {
 			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed with an installation of lacked language packages, please wait..."))
 			if err != nil {
-				lang.logger.Warning("sendNotify failed:", err)
+				logger.Warning("sendNotify failed:", err)
 			}
 		}
 
@@ -88,9 +88,9 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 		lang.setPropCurrentLocale(locale)
 		lang.PropsMu.Unlock()
 
-		err := lang.helper.GenerateLocale(locale)
+		err := lang.helper.GenerateLocale(0, locale)
 		if err != nil {
-			lang.logger.Warning("GenerateLocale failed:", err)
+			logger.Warning("GenerateLocale failed:", err)
 
 			lang.PropsMu.Lock()
 			lang.setPropLocaleState(LocaleStateChanged)

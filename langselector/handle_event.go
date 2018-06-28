@@ -36,18 +36,19 @@ var (
 )
 
 func (lang *LangSelector) listenHelperSignal() {
+	lang.helper.InitSignalExt(lang.sysSigLoop, true)
 	lang.helper.ConnectSuccess(func(ok bool, reason string) {
 		err := lang.handleLocaleChanged(ok, reason)
 		if err != nil {
-			lang.logger.Warning(err)
+			logger.Warning(err)
 			err := sendNotify(localeIconFailed, "",
 				Tr("System language failed to change, please try later"))
 			if err != nil {
-				lang.logger.Warning("sendNotify failed:", err)
+				logger.Warning("sendNotify failed:", err)
 			}
 			err = syncUserLocale(lang.CurrentLocale)
 			if err != nil {
-				lang.logger.Warning("Sync user object locale failed:", err)
+				logger.Warning("Sync user object locale failed:", err)
 			}
 
 			// recover lang.CurrentLocale
@@ -60,7 +61,7 @@ func (lang *LangSelector) listenHelperSignal() {
 		err = sendNotify(localeIconFinished, "",
 			Tr("System language has been changed, please log in again after logged out"))
 		if err != nil {
-			lang.logger.Warning("sendNotify failed:", err)
+			logger.Warning("sendNotify failed:", err)
 		}
 
 		lang.PropsMu.Lock()
@@ -68,7 +69,7 @@ func (lang *LangSelector) listenHelperSignal() {
 
 		err = syncUserLocale(lang.CurrentLocale)
 		if err != nil {
-			lang.logger.Warning("Sync user object locale failed:", err)
+			logger.Warning("Sync user object locale failed:", err)
 		}
 
 		lang.setPropLocaleState(LocaleStateChanged)
@@ -96,12 +97,12 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 
 	fontCfgFile := filepath.Join(basedir.GetUserConfigDir(), "fontconfig/conf.d/99-deepin.conf")
 	if err := os.Remove(fontCfgFile); err != nil {
-		lang.logger.Warningf("remove font config file %q failed: %v", fontCfgFile, err)
+		logger.Warningf("remove font config file %q failed: %v", fontCfgFile, err)
 	}
 
 	err = installLangSupportPackages(currentLocale)
 	if err != nil {
-		lang.logger.Warning(err)
+		logger.Warning(err)
 	}
 	lang.service.Emit(lang, "Changed", currentLocale)
 

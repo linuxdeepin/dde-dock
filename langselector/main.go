@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	dbusSender = "com.deepin.daemon.LangSelector"
+	dbusServiceName = "com.deepin.daemon.LangSelector"
 )
 
 var (
@@ -35,14 +35,15 @@ var (
 )
 
 func Run() {
-	logger.BeginTracing()
-
 	service, err := dbusutil.NewSessionService()
 	if err != nil {
 		logger.Fatal("failed to new session service:", err)
 	}
 
-	lang := newLangSelector(service)
+	lang, err := newLangSelector(service)
+	if err != nil {
+		logger.Fatal("failed to new langSelector:", err)
+	}
 	err = service.Export(dbusPath, lang)
 	if err != nil {
 		logger.Fatal("failed to export:", err)
@@ -50,7 +51,7 @@ func Run() {
 
 	lang.listenHelperSignal()
 
-	err = service.RequestName(dbusSender)
+	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		logger.Fatal("failed to request name:", err)
 	}

@@ -28,13 +28,13 @@ import (
 	"strings"
 	"sync"
 
-	"dbus/com/deepin/api/localehelper"
-	libnetwork "dbus/com/deepin/daemon/network"
-	"dbus/org/freedesktop/notifications"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.localehelper"
+	libnetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.network"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 
 	"pkg.deepin.io/dde/api/lang_info"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/log"
 )
 
 const (
@@ -75,7 +75,7 @@ var (
 //go:generate dbusutil-gen -type LangSelector locale.go
 type LangSelector struct {
 	service      *dbusutil.Service
-	logger       *log.Logger
+	sysSigLoop   *dbusutil.SignalLoop
 	helper       *localehelper.LocaleHelper
 	localesCache LocaleInfos
 
@@ -122,21 +122,19 @@ func (infos LocaleInfos) Get(locale string) (LocaleInfo, error) {
 	return LocaleInfo{}, fmt.Errorf("invalid locale %q", locale)
 }
 
-func newLangSelector(service *dbusutil.Service) *LangSelector {
+func newLangSelector(service *dbusutil.Service) (*LangSelector, error) {
 	lang := LangSelector{
 		service:     service,
 		LocaleState: LocaleStateChanged,
-		logger:      logger,
 	}
 
-	var err error
-	lang.helper, err = localehelper.NewLocaleHelper(
-		"com.deepin.api.LocaleHelper",
-		"/com/deepin/api/LocaleHelper")
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
-		lang.logger.Warning("New LocaleHelper Failed:", err)
-		return nil
+		return nil, err
 	}
+	lang.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+	lang.sysSigLoop.Start()
+	lang.helper = localehelper.NewLocaleHelper(systemBus)
 
 	locale := getCurrentUserLocale()
 	if !lang.isSupportedLocale(locale) {
@@ -144,7 +142,7 @@ func newLangSelector(service *dbusutil.Service) *LangSelector {
 		locale = defaultLocale
 	}
 	lang.CurrentLocale = locale
-	return &lang
+	return &lang, nil
 }
 
 func getLocaleInfos() (LocaleInfos, error) {
@@ -181,14 +179,12 @@ func (ls *LangSelector) isSupportedLocale(locale string) bool {
 }
 
 func sendNotify(icon, summary, body string) error {
-	notifier, err := notifications.NewNotifier(
-		"org.freedesktop.Notifications",
-		"/org/freedesktop/Notifications")
+	sessionBus, err := dbus.SessionBus()
 	if err != nil {
 		return err
 	}
-
-	_, err = notifier.Notify(dbusSender, 0,
+	n := notifications.NewNotifications(sessionBus)
+	_, err = n.Notify(0, dbusServiceName, 0,
 		icon, summary, body,
 		nil, nil, 0)
 
@@ -196,14 +192,15 @@ func sendNotify(icon, summary, body string) error {
 }
 
 func isNetworkEnable() (bool, error) {
-	network, err := libnetwork.NewNetworkManager(
-		"com.deepin.daemon.Network",
-		"/com/deepin/daemon/Network")
+	sessionBus, err := dbus.SessionBus()
 	if err != nil {
 		return false, err
 	}
-
-	state := network.State.Get()
+	network := libnetwork.NewNetwork(sessionBus)
+	state, err := network.State().Get(0)
+	if err != nil {
+		return false, err
+	}
 	// if state < 50, network disconnect
 	if state < 50 {
 		return false, nil
