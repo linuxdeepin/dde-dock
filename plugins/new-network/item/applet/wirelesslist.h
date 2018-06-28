@@ -77,6 +77,7 @@ private slots:
     void activateAP(const QString &apPath, const QString &ssid);
     void deactiveAP();
     void updateIndicatorPos();
+    void onActiveConnectionChanged();
 
 
 private:
