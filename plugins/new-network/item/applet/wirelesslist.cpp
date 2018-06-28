@@ -122,9 +122,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     });
 
     QMetaObject::invokeMethod(this, "loadAPList", Qt::QueuedConnection);
-
-    /* TODO: remove */
-    //loadAPList();
 }
 
 WirelessList::~WirelessList()
@@ -141,26 +138,30 @@ QWidget *WirelessList::controlPanel()
 void WirelessList::APAdded(const QJsonObject &apInfo)
 {
     AccessPoint ap(apInfo);
-    if (m_apList.contains(ap))
-        return;
+    const auto mIndex = m_apList.indexOf(ap);
+    if (mIndex != -1) {
+        if (ap > m_apList.at(mIndex)) {
+            m_apList.replace(mIndex, ap);
+        } else {
+            return;
+        }
+    } else {
+        m_apList.append(ap);
+    }
 
-    m_apList.append(ap);
     m_updateAPTimer->start();
 }
 
 void WirelessList::APRemoved(const QJsonObject &apInfo)
 {
     AccessPoint ap(apInfo);
-    if (ap.ssid() == m_activeAP.ssid())
-        return;
-
-    /* TODO:  <22-06-18, yourname> */
-//    m_apList.removeOne(ap);
-//    m_updateAPTimer->start();
-
-    // NOTE: if one ap removed, prehaps another ap has same ssid, so we need to refersh ap list instead of remove it
-    m_apList.clear();
-    loadAPList();
+    const auto mIndex = m_apList.indexOf(ap);
+    if (mIndex != -1) {
+        if (ap.path() == m_apList.at(mIndex).path()) {
+            m_apList.removeAt(mIndex);
+            m_updateAPTimer->start();
+        }
+    }
 }
 
 void WirelessList::setDeviceInfo(const int index)
@@ -179,8 +180,16 @@ void WirelessList::loadAPList()
 {
     for (auto item : m_device->apList()) {
         AccessPoint ap(item.toObject());
-        if (!m_apList.contains(ap))
+        const auto mIndex = m_apList.indexOf(ap);
+        if (mIndex != -1) {
+            // indexOf() will use AccessPoint reimplemented function "operator==" as comparison condition
+            // this means that the ssid of the AP is a comparison condition
+            if (ap > m_apList.at(mIndex)) {
+                m_apList.replace(mIndex, ap);
+            }
+        } else {
             m_apList.append(ap);
+        }
     }
 
     m_updateAPTimer->start();
@@ -188,28 +197,14 @@ void WirelessList::loadAPList()
 
 void WirelessList::APPropertiesChanged(const QJsonObject &apInfo)
 {
-    const AccessPoint ap(apInfo);
-
-    //auto it = std::find_if(m_apList.begin(), m_apList.end(),
-                           //[&] (const AccessPoint &a) {return a == ap;});
-
-    //if (it == m_apList.end())
-        //return;
-
-    //*it = ap;
-    if (m_apList.contains(ap) && m_activeAP.path() == ap.path())
-    {
-        m_activeAP = ap;
+    AccessPoint ap(apInfo);
+    const auto mIndex = m_apList.indexOf(ap);
+    if (mIndex != -1) {
+        if (ap > m_apList.at(mIndex)) {
+            m_apList.replace(mIndex, ap);
+            m_updateAPTimer->start();
+        }
     }
-
-//    if (*it > ap)
-//    {
-//        *it = ap;
-//        m_activeAP = ap;
-//        m_updateAPTimer->start();
-
-//        emit activeAPChanged();
-//    }
 }
 
 void WirelessList::updateAPList()

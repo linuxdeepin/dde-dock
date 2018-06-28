@@ -53,7 +53,6 @@ AccessPoint::AccessPoint()
 
 bool AccessPoint::operator==(const AccessPoint &ap) const
 {
-//    return m_path == ap.m_path;
     return m_ssid == ap.ssid();
 }
 
