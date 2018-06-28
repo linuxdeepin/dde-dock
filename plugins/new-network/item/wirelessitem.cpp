@@ -47,6 +47,8 @@ WirelessItem::WirelessItem(WirelessDevice *device)
                                    "padding: 0px 3px;");
 
     connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeApInfoChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_refershTimer, &QTimer::timeout, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
 
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
@@ -166,8 +168,13 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
         int strength = 0;
         if (state == NetworkDevice::Activated)
         {
-            strength = static_cast<WirelessDevice *>(m_device)->activeApInfo().value("Strength").toInt();
-            m_refershTimer->stop();
+            const auto &activeApInfo = static_cast<WirelessDevice *>(m_device)->activeApInfo();
+            if (activeApInfo.isEmpty()) {
+                m_refershTimer->start();
+            } else {
+                strength = activeApInfo.value("Strength").toInt();
+                m_refershTimer->stop();
+            }
         }
         else
         {
