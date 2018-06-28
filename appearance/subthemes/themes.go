@@ -25,11 +25,11 @@ import (
 	"path"
 	"strings"
 
-	"dbus/com/deepin/api/cursorhelper"
-
 	"gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.cursorhelper"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/api/themes"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 const (
@@ -119,13 +119,12 @@ func SetIconTheme(id string) error {
 }
 
 func SetCursorTheme(id string) error {
-	helper, err := cursorhelper.NewCursorHelper("com.deepin.api.CursorHelper",
-		"/com/deepin/api/CursorHelper")
+	sessionBus, err := dbus.SessionBus()
 	if err != nil {
 		return err
 	}
-	helper.Set(id)
-	return nil
+	helper := cursorhelper.NewCursorHelper(sessionBus)
+	return helper.Set(0, id)
 }
 
 func GetGtkThumbnail(id string) (string, error) {
