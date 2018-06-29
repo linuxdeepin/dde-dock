@@ -30,6 +30,8 @@ import (
 	"strings"
 	"time"
 
+	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/encoding/kv"
 	"pkg.deepin.io/lib/graphic"
 	"pkg.deepin.io/lib/procfs"
@@ -37,13 +39,13 @@ import (
 )
 
 const (
-	polkitManagerUser          = "com.deepin.daemon.accounts.user-administration"
-	polkitChangeOwnData        = "com.deepin.daemon.accounts.change-own-user-data"
-	polkitEnableAutoLogin      = "com.deepin.daemon.accounts.enable-auto-login"
-	polkitDisableAutoLogin     = "com.deepin.daemon.accounts.disable-auto-login"
-	polkitEnableNoPasswdLogin  = "com.deepin.daemon.accounts.enable-nopass-login"
-	polkitDisableNoPasswdLogin = "com.deepin.daemon.accounts.disable-nopass-login"
-	polkitSetKeyboardLayout    = "com.deepin.daemon.accounts.set-keyboard-layout"
+	polkitActionUserAdministration   = "com.deepin.daemon.accounts.user-administration"
+	polkitActionChangeOwnData        = "com.deepin.daemon.accounts.change-own-user-data"
+	polkitActionEnableAutoLogin      = "com.deepin.daemon.accounts.enable-auto-login"
+	polkitActionDisableAutoLogin     = "com.deepin.daemon.accounts.disable-auto-login"
+	polkitActionEnableNoPasswdLogin  = "com.deepin.daemon.accounts.enable-nopass-login"
+	polkitActionDisableNoPasswdLogin = "com.deepin.daemon.accounts.disable-nopass-login"
+	polkitActionSetKeyboardLayout    = "com.deepin.daemon.accounts.set-keyboard-layout"
 )
 
 type ErrCodeType int32
@@ -125,36 +127,8 @@ func isStrvEqual(l1, l2 []string) bool {
 	return true
 }
 
-func polkitAuthManagerUser(pid uint32) error {
-	return polkitAuthentication(polkitManagerUser, "", "", pid)
-}
-
-func polkitAuthChangeOwnData(user, uid string, pid uint32) error {
-	return polkitAuthentication(polkitChangeOwnData, user, uid, pid)
-}
-
-func polkitAuthAutoLogin(pid uint32, enable bool) error {
-	if enable {
-		return polkitAuthentication(polkitEnableAutoLogin, "", "", pid)
-	}
-
-	return polkitAuthentication(polkitDisableAutoLogin, "", "", pid)
-}
-
-func polkitAuthNoPasswdLogin(pid uint32, enable bool) error {
-	if enable {
-		return polkitAuthentication(polkitEnableNoPasswdLogin, "", "", pid)
-	}
-
-	return polkitAuthentication(polkitDisableNoPasswdLogin, "", "", pid)
-}
-
-func polkitAuthSetKeyboardLayout(pid uint32) error {
-	return polkitAuthentication(polkitSetKeyboardLayout, "", "", pid)
-}
-
-func polkitAuthentication(action, user, uid string, pid uint32) error {
-	success, err := polkitAuthWithPid(action, user, uid, pid)
+func checkAuth(actionId string, pid uint32) error {
+	success, err := checkAuthByPolkit(actionId, pid)
 	if err != nil {
 		return err
 	}
@@ -164,6 +138,25 @@ func polkitAuthentication(action, user, uid string, pid uint32) error {
 	}
 
 	return nil
+}
+
+func checkAuthByPolkit(actionId string, pid uint32) (bool, error) {
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		return false, err
+	}
+	authority := polkit.NewAuthority(systemBus)
+	subject := polkit.MakeSubject(polkit.SubjectKindUnixProcess)
+	subject.SetDetail("pid", pid)
+	subject.SetDetail("start-time", uint64(0))
+
+	ret, err := authority.CheckAuthorization(0, subject,
+		actionId, nil,
+		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
+	if err != nil {
+		return false, err
+	}
+	return ret.IsAuthorized, nil
 }
 
 func getUidByPid(pid uint32) (string, error) {

@@ -99,8 +99,7 @@ func doAuthorized(msg string, pid uint32) (bool, error) {
 	authority := polkit.NewAuthority(systemBus)
 	var subject = polkit.MakeSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
-	var t = uint64(0)
-	subject.SetDetail("start-time", t)
+	subject.SetDetail("start-time", uint64(0))
 	detail := map[string]string{
 		"polkit.message": msg,
 	}

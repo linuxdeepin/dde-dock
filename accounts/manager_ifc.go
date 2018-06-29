@@ -58,11 +58,8 @@ func (m *Manager) CreateUser(sender dbus.Sender,
 
 	logger.Debug("[CreateUser] new user:", name, fullName, ty)
 
-	pid, err := m.service.GetConnPID(string(sender))
+	err := m.checkAuth(sender)
 	if err != nil {
-		return nilObjPath, dbusutil.ToError(err)
-	}
-	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[CreateUser] access denied:", err)
 		return nilObjPath, dbusutil.ToError(err)
 	}
@@ -118,11 +115,9 @@ func (m *Manager) DeleteUser(sender dbus.Sender,
 	name string, rmFiles bool) *dbus.Error {
 
 	logger.Debug("[DeleteUser] user:", name, rmFiles)
-	pid, err := m.service.GetConnPID(string(sender))
+
+	err := m.checkAuth(sender)
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[DeleteUser] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -216,11 +211,8 @@ func (m *Manager) IsPasswordValid(password string) (bool, string, int32, *dbus.E
 }
 
 func (m *Manager) AllowGuestAccount(sender dbus.Sender, allow bool) *dbus.Error {
-	pid, err := m.service.GetConnPID(string(sender))
+	err := m.checkAuth(sender)
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	if err := polkitAuthManagerUser(pid); err != nil {
 		return dbusutil.ToError(err)
 	}
 
@@ -243,11 +235,8 @@ func (m *Manager) AllowGuestAccount(sender dbus.Sender, allow bool) *dbus.Error 
 }
 
 func (m *Manager) CreateGuestAccount(sender dbus.Sender) (string, *dbus.Error) {
-	pid, err := m.service.GetConnPID(string(sender))
+	err := m.checkAuth(sender)
 	if err != nil {
-		return "", dbusutil.ToError(err)
-	}
-	if err := polkitAuthManagerUser(pid); err != nil {
 		return "", dbusutil.ToError(err)
 	}
 

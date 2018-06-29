@@ -249,3 +249,11 @@ func isGuestUserEnabled() bool {
 
 	return ret
 }
+
+func (m *Manager) checkAuth(sender dbus.Sender) error {
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return err
+	}
+	return checkAuth(polkitActionUserAdministration, pid)
+}

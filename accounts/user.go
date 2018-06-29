@@ -111,7 +111,7 @@ type User struct {
 		SetPassword           func() `in:"password"`
 		SetAccountType        func() `in:"accountType"`
 		SetLocked             func() `in:"locked"`
-		SetAutomaticLogin     func() `in:"auto"`
+		SetAutomaticLogin     func() `in:"enabled"`
 		EnableNoPasswdLogin   func() `in:"enabled"`
 		SetLocale             func() `in:"locale"`
 		SetLayout             func() `in:"layout"`
@@ -383,22 +383,47 @@ func (u *User) getAccountType() int32 {
 	return UserTypeStandard
 }
 
-func (u *User) accessAuthentication(sender dbus.Sender, check bool) error {
+func (u *User) checkAuth(sender dbus.Sender, selfPass bool, actionId string) error {
 	pid, err := u.service.GetConnPID(string(sender))
 	if err != nil {
 		return err
 	}
 
-	if check && u.isSelf(pid) {
-		err = polkitAuthChangeOwnData(u.UserName, u.Uid, pid)
-	} else {
-		err = polkitAuthManagerUser(pid)
-	}
-	if err != nil {
-		return err
+	isSelf := u.isSelf(pid)
+	if selfPass && isSelf {
+		return nil
 	}
 
-	return nil
+	if actionId == "" {
+		if isSelf {
+			actionId = polkitActionChangeOwnData
+		} else {
+			actionId = polkitActionUserAdministration
+		}
+	}
+
+	return checkAuth(actionId, pid)
+}
+
+func (u *User) checkAuthAutoLogin(sender dbus.Sender, enabled bool) error {
+	var actionId string
+	if enabled {
+		actionId = polkitActionEnableAutoLogin
+	} else {
+		actionId = polkitActionDisableAutoLogin
+	}
+
+	return u.checkAuth(sender, false, actionId)
+}
+
+func (u *User) checkAuthNoPasswdLogin(sender dbus.Sender, enabled bool) error {
+	var actionId string
+	if enabled {
+		actionId = polkitActionEnableNoPasswdLogin
+	} else {
+		actionId = polkitActionDisableNoPasswdLogin
+	}
+	return u.checkAuth(sender, false, actionId)
 }
 
 func (u *User) isSelf(pid uint32) bool {

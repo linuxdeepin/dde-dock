@@ -74,7 +74,7 @@ func (ci *CommentInfo) SetFullName(value string) {
 }
 
 func isCommentFieldValid(name string) bool {
-	if strings.ContainsAny(name, ",=:") {
+	if strings.ContainsAny(name, ",=:\n") {
 		return false
 	}
 	return true

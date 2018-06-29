@@ -47,7 +47,8 @@ func (*User) GetInterfaceName() string {
 func (u *User) SetFullName(sender dbus.Sender, name string) *dbus.Error {
 	logger.Debugf("[SetFullName] new name: %q", name)
 
-	if err := u.accessAuthentication(sender, true); err != nil {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
 		logger.Debug("[SetFullName] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -70,7 +71,9 @@ func (u *User) SetFullName(sender dbus.Sender, name string) *dbus.Error {
 
 func (u *User) SetHomeDir(sender dbus.Sender, home string) *dbus.Error {
 	logger.Debug("[SetHomeDir] new home:", home)
-	if err := u.accessAuthentication(sender, true); err != nil {
+
+	err := u.checkAuth(sender, false, "")
+	if err != nil {
 		logger.Debug("[SetHomeDir] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -98,7 +101,8 @@ func (u *User) SetHomeDir(sender dbus.Sender, home string) *dbus.Error {
 func (u *User) SetShell(sender dbus.Sender, shell string) *dbus.Error {
 	logger.Debug("[SetShell] new shell:", shell)
 
-	if err := u.accessAuthentication(sender, true); err != nil {
+	err := u.checkAuth(sender, false, "")
+	if err != nil {
 		logger.Debug("[SetShell] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -134,7 +138,8 @@ func (u *User) SetShell(sender dbus.Sender, shell string) *dbus.Error {
 func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 	logger.Debug("[SetPassword] start ...")
 
-	if err := u.accessAuthentication(sender, true); err != nil {
+	err := u.checkAuth(sender, false, "")
+	if err != nil {
 		logger.Debug("[SetPassword] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -161,7 +166,8 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 func (u *User) SetAccountType(sender dbus.Sender, ty int32) *dbus.Error {
 	logger.Debug("[SetAccountType] type:", ty)
 
-	if err := u.accessAuthentication(sender, false); err != nil {
+	err := u.checkAuth(sender, false, polkitActionUserAdministration)
+	if err != nil {
 		logger.Debug("[SetAccountType] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -183,12 +189,8 @@ func (u *User) SetAccountType(sender dbus.Sender, ty int32) *dbus.Error {
 func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 	logger.Debug("[SetLocked] locked:", locked)
 
-	pid, err := u.service.GetConnPID(string(sender))
+	err := u.checkAuth(sender, false, "")
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	if err := polkitAuthChangeOwnData("", "", pid); err != nil {
 		logger.Debug("[SetLocked] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -217,15 +219,11 @@ func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 	return nil
 }
 
-func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
-	logger.Debug("[SetAutomaticLogin] auto", auto)
+func (u *User) SetAutomaticLogin(sender dbus.Sender, enabled bool) *dbus.Error {
+	logger.Debug("[SetAutomaticLogin] enable:", enabled)
 
-	pid, err := u.service.GetConnPID(string(sender))
+	err := u.checkAuthAutoLogin(sender, enabled)
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	if err := polkitAuthAutoLogin(pid, auto); err != nil {
 		logger.Debug("[SetAutomaticLogin] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -237,12 +235,12 @@ func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
 		return dbusutil.ToError(fmt.Errorf("user %s has been locked", u.UserName))
 	}
 
-	if u.AutomaticLogin == auto {
+	if u.AutomaticLogin == enabled {
 		return nil
 	}
 
 	var name = u.UserName
-	if !auto {
+	if !enabled {
 		name = ""
 	}
 
@@ -255,20 +253,16 @@ func (u *User) SetAutomaticLogin(sender dbus.Sender, auto bool) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	u.AutomaticLogin = auto
-	u.emitPropChangedAutomaticLogin(auto)
+	u.AutomaticLogin = enabled
+	u.emitPropChangedAutomaticLogin(enabled)
 	return nil
 }
 
 func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error {
 	logger.Debug("[EnableNoPasswdLogin] enabled:", enabled)
 
-	pid, err := u.service.GetConnPID(string(sender))
+	err := u.checkAuthNoPasswdLogin(sender, enabled)
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	if err := polkitAuthNoPasswdLogin(pid, enabled); err != nil {
 		logger.Debug("[EnableNoPasswdLogin] access denied:", err)
 		return dbusutil.ToError(err)
 	}
@@ -296,17 +290,11 @@ func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error
 
 func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 	logger.Debug("[SetLocale] locale:", locale)
-	pid, err := u.service.GetConnPID(string(sender))
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
 
-	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
-		if err != nil {
-			logger.Debug("[SetLocale] access denied:", err)
-			return dbusutil.ToError(err)
-		}
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetLocale] access denied:", err)
+		return dbusutil.ToError(err)
 	}
 
 	if !lang_info.IsSupportedLocale(locale) {
@@ -333,16 +321,11 @@ func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 
 func (u *User) SetLayout(sender dbus.Sender, layout string) *dbus.Error {
 	logger.Debug("[SetLayout] new layout:", layout)
-	pid, err := u.service.GetConnPID(string(sender))
+
+	err := u.checkAuth(sender, true, polkitActionSetKeyboardLayout)
 	if err != nil {
+		logger.Debug("[SetLayout] access denied:", err)
 		return dbusutil.ToError(err)
-	}
-	if !u.isSelf(pid) {
-		err := polkitAuthSetKeyboardLayout(pid)
-		if err != nil {
-			logger.Debug("[SetLayout] access denied:", err)
-			return dbusutil.ToError(err)
-		}
 	}
 
 	// TODO: check layout validity
@@ -365,16 +348,11 @@ func (u *User) SetLayout(sender dbus.Sender, layout string) *dbus.Error {
 
 func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 	logger.Debug("[SetIconFile] new icon:", iconURI)
-	pid, err := u.service.GetConnPID(string(sender))
+
+	err := u.checkAuth(sender, true, "")
 	if err != nil {
+		logger.Debug("[SetIconFile] access denied:", err)
 		return dbusutil.ToError(err)
-	}
-	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
-		if err != nil {
-			logger.Debug("[SetIconFile] access denied:", err)
-			return dbusutil.ToError(err)
-		}
 	}
 
 	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
@@ -434,16 +412,11 @@ func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 // 只能删除不是用户当前图标的自定义图标
 func (u *User) DeleteIconFile(sender dbus.Sender, icon string) *dbus.Error {
 	logger.Debug("[DeleteIconFile] icon:", icon)
-	pid, err := u.service.GetConnPID(string(sender))
+
+	err := u.checkAuth(sender, true, "")
 	if err != nil {
+		logger.Debug("[DeleteIconFile] access denied:", err)
 		return dbusutil.ToError(err)
-	}
-	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
-		if err != nil {
-			logger.Debug("[DeleteIconFile] access denied:", err)
-			return dbusutil.ToError(err)
-		}
 	}
 
 	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
@@ -473,16 +446,11 @@ func (u *User) DeleteIconFile(sender dbus.Sender, icon string) *dbus.Error {
 
 func (u *User) SetDesktopBackgrounds(sender dbus.Sender, val []string) *dbus.Error {
 	logger.Debugf("[SetDesktopBackgrounds] val: %#v", val)
-	pid, err := u.service.GetConnPID(string(sender))
+
+	err := u.checkAuth(sender, true, "")
 	if err != nil {
+		logger.Debug("[SetDesktopBackgrounds] access denied:", err)
 		return dbusutil.ToError(err)
-	}
-	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
-		if err != nil {
-			logger.Debug("[SetDesktopBackgrounds] access denied:", err)
-			return dbusutil.ToError(err)
-		}
 	}
 
 	if len(val) == 0 {
@@ -513,17 +481,13 @@ func (u *User) SetDesktopBackgrounds(sender dbus.Sender, val []string) *dbus.Err
 
 func (u *User) SetGreeterBackground(sender dbus.Sender, bg string) *dbus.Error {
 	logger.Debug("[SetGreeterBackground] new background:", bg)
-	pid, err := u.service.GetConnPID(string(sender))
+
+	err := u.checkAuth(sender, true, "")
 	if err != nil {
+		logger.Debug("[SetGreeterBackground] access denied:", err)
 		return dbusutil.ToError(err)
 	}
-	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
-		if err != nil {
-			logger.Debug("[SetGreeterBackground] access denied:", err)
-			return dbusutil.ToError(err)
-		}
-	}
+
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 
 	if !isBackgroundValid(bg) {
@@ -553,16 +517,11 @@ func (u *User) SetGreeterBackground(sender dbus.Sender, bg string) *dbus.Error {
 
 func (u *User) SetHistoryLayout(sender dbus.Sender, list []string) *dbus.Error {
 	logger.Debug("[SetHistoryLayout] new history layout:", list)
-	pid, err := u.service.GetConnPID(string(sender))
+
+	err := u.checkAuth(sender, true, "")
 	if err != nil {
+		logger.Debug("[SetHistoryLayout] access denied:", err)
 		return dbusutil.ToError(err)
-	}
-	if !u.isSelf(pid) {
-		err := polkitAuthManagerUser(pid)
-		if err != nil {
-			logger.Debug("[SetHistoryLayout] access denied:", err)
-			return dbusutil.ToError(err)
-		}
 	}
 
 	// TODO: check layout list whether validity
