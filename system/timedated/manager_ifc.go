@@ -33,7 +33,7 @@ func (m *Manager) SetTime(sender dbus.Sender, usec int64, relative bool, msg str
 	}
 
 	// TODO: check usec validity
-	err = m.core.SetTime(usec, relative, false)
+	err = m.core.SetTime(0, usec, relative, false)
 	return dbusutil.ToError(err)
 }
 
@@ -45,10 +45,15 @@ func (m *Manager) SetTimezone(sender dbus.Sender, timezone, msg string) *dbus.Er
 	}
 
 	// TODO: check timezone validity
-	if m.core.Timezone.Get() == timezone {
+	currentTimezone, err := m.core.Timezone().Get(0)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	if currentTimezone == timezone {
 		return nil
 	}
-	err = m.core.SetTimezone(timezone, false)
+	err = m.core.SetTimezone(0, timezone, false)
 	return dbusutil.ToError(err)
 }
 
@@ -59,10 +64,15 @@ func (m *Manager) SetLocalRTC(sender dbus.Sender, enabled bool, fixSystem bool, 
 		return dbusutil.ToError(err)
 	}
 
-	if m.core.LocalRTC.Get() == enabled {
+	currentLocalRTCEnabled, err := m.core.LocalRTC().Get(0)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	if currentLocalRTCEnabled == enabled {
 		return nil
 	}
-	err = m.core.SetLocalRTC(enabled, fixSystem, false)
+	err = m.core.SetLocalRTC(0, enabled, fixSystem, false)
 	return dbusutil.ToError(err)
 }
 
@@ -73,9 +83,13 @@ func (m *Manager) SetNTP(sender dbus.Sender, enabled bool, msg string) *dbus.Err
 		return dbusutil.ToError(err)
 	}
 
-	if m.core.NTP.Get() == enabled {
+	currentNTPEnabled, err := m.core.NTP().Get(0)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	if currentNTPEnabled == enabled {
 		return nil
 	}
-	err = m.core.SetNTP(enabled, false)
+	err = m.core.SetNTP(0, enabled, false)
 	return dbusutil.ToError(err)
 }

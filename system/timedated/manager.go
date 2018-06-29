@@ -22,7 +22,7 @@ package timedated
 import (
 	"fmt"
 
-	"dbus/org/freedesktop/timedate1"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -30,7 +30,7 @@ import (
 )
 
 type Manager struct {
-	core    *timedate1.Timedate1
+	core    *timedate1.Timedate
 	service *dbusutil.Service
 
 	methods *struct {
@@ -50,11 +50,11 @@ const (
 )
 
 func NewManager(service *dbusutil.Service) (*Manager, error) {
-	core, err := timedate1.NewTimedate1("org.freedesktop.timedate1",
-		"/org/freedesktop/timedate1")
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
+	core := timedate1.NewTimedate(systemBus)
 
 	polkit.Init()
 	return &Manager{
@@ -71,7 +71,6 @@ func (m *Manager) destroy() {
 	if m.core == nil {
 		return
 	}
-	timedate1.DestroyTimedate1(m.core)
 	m.core = nil
 }
 
