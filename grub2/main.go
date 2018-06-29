@@ -28,7 +28,7 @@ import (
 var _g *Grub2
 
 func RunAsDaemon() {
-	initPolkit()
+	allowNoCheckAuth()
 	service, err := dbusutil.NewSystemService()
 	if err != nil {
 		logger.Fatal("failed to new system service", err)

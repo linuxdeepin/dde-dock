@@ -28,7 +28,8 @@ import (
 	"strconv"
 	"strings"
 
-	"pkg.deepin.io/lib/polkit"
+	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 func quoteString(str string) string {
@@ -99,22 +100,24 @@ func getStringIndexInArray(a string, list []string) int {
 
 var noCheckAuth bool
 
-func initPolkit() {
+func allowNoCheckAuth() {
 	if os.Getenv("NO_CHECK_AUTH") == "1" {
 		noCheckAuth = true
 		return
 	}
-
-	polkit.Init()
 }
 
 func checkAuthWithPid(pid uint32) (bool, error) {
-	subject := polkit.NewSubject(polkit.SubjectKindUnixProcess)
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		return false, err
+	}
+	authority := polkit.NewAuthority(systemBus)
+	subject := polkit.MakeSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
 	subject.SetDetail("start-time", uint64(0))
 	const actionId = dbusServiceName
-	details := make(map[string]string)
-	result, err := polkit.CheckAuthorization(subject, actionId, details,
+	result, err := authority.CheckAuthorization(0, subject, actionId, nil,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {
 		return false, err
