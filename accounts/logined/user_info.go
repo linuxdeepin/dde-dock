@@ -20,9 +20,8 @@
 package logined
 
 import (
-	"dbus/org/freedesktop/login1"
-	"fmt"
-	"pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 // SessionInfo Show logined session info, if type is tty or ssh, no desktop and display
@@ -39,21 +38,27 @@ type SessionInfo struct {
 type SessionInfos []*SessionInfo
 
 func newSessionInfo(sessionPath dbus.ObjectPath) (*SessionInfo, error) {
-	core, err := login1.NewSession(login1DBusServiceName, sessionPath)
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
-	defer login1.DestroySession(core)
-
-	list := core.User.Get()
-	if len(list) != 2 {
-		return nil, fmt.Errorf("Invalid user path: %s", sessionPath)
+	core, err := login1.NewSession(systemBus, sessionPath)
+	if err != nil {
+		return nil, err
 	}
 
+	userInfo, err := core.User().Get(0)
+	if err != nil {
+		return nil, err
+	}
+
+	desktop, _ := core.Desktop().Get(0)
+	display, _ := core.Display().Get(0)
+
 	var info = SessionInfo{
-		Uid:         list[0].(uint32),
-		Desktop:     core.Desktop.Get(),
-		Display:     core.Display.Get(),
+		Uid:         userInfo.UID,
+		Desktop:     desktop,
+		Display:     display,
 		sessionPath: sessionPath,
 	}
 

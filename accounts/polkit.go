@@ -20,53 +20,31 @@
 package accounts
 
 import (
-	"dbus/org/freedesktop/policykit1"
-	"fmt"
-
 	"strconv"
 
-	"pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
+	"pkg.deepin.io/lib/dbus1"
 )
-
-const (
-	polkitSender = "org.freedesktop.PolicyKit1"
-	polkitPath   = "/org/freedesktop/PolicyKit1/Authority"
-)
-
-type polkitSubject struct {
-	/*
-	 * The following kinds of subjects are known:
-	 * Unix Process: should be set to unix-process with keys
-	 *                  pid (of type uint32) and
-	 *                  start-time (of type uint64)
-	 * Unix Session: should be set to unix-session with the key
-	 *                  session-id (of type string)
-	 * System Bus Name: should be set to system-bus-name with the key
-	 *                  name (of type string)
-	 */
-	SubjectKind    string
-	SubjectDetails map[string]dbus.Variant
-}
 
 func polkitAuthWithPid(actionId, user, uid string, pid uint32) (bool, error) {
-	polkit, err := policykit1.NewAuthority(polkitSender,
-		polkitPath)
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return false, err
 	}
+	polkit := policykit1.NewAuthority(systemBus)
 
-	var subject polkitSubject
-	subject.SubjectKind = "unix-process"
-	subject.SubjectDetails = make(map[string]dbus.Variant)
-	subject.SubjectDetails["pid"] = dbus.MakeVariant(uint32(pid))
-	subject.SubjectDetails["start-time"] = dbus.MakeVariant(uint64(0))
+	var subject policykit1.Subject
+	subject.Kind = "unix-process"
+	subject.Details = make(map[string]dbus.Variant)
+	subject.Details["pid"] = dbus.MakeVariant(uint32(pid))
+	subject.Details["start-time"] = dbus.MakeVariant(uint64(0))
 	if user != "" {
-		subject.SubjectDetails["user"] = dbus.MakeVariant(user)
+		subject.Details["user"] = dbus.MakeVariant(user)
 	}
 	if uid != "" {
 		v, err := strconv.ParseUint(uid, 10, 32)
 		if err == nil {
-			subject.SubjectDetails["uid"] = dbus.MakeVariant(uint32(v))
+			subject.Details["uid"] = dbus.MakeVariant(uint32(v))
 		}
 	}
 
@@ -75,21 +53,10 @@ func polkitAuthWithPid(actionId, user, uid string, pid uint32) (bool, error) {
 	var flg uint32 = 1
 	var cancelId string
 
-	ret, err := polkit.CheckAuthorization(subject,
+	ret, err := polkit.CheckAuthorization(0, subject,
 		actionId, details, flg, cancelId)
 	if err != nil {
 		return false, err
 	}
-
-	//If ret[0].(bool) == true, successful.
-	if len(ret) == 0 {
-		return false, fmt.Errorf("No results returned")
-	}
-
-	v, ok := ret[0].(bool)
-	if !ok {
-		return false, fmt.Errorf("Invalid result type")
-	}
-
-	return v, nil
+	return ret.IsAuthorized, nil
 }

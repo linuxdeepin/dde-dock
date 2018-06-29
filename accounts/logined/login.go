@@ -20,21 +20,23 @@
 package logined
 
 import (
-	"dbus/org/freedesktop/login1"
 	"encoding/json"
 	"fmt"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/log"
 )
 
 // Manager manager logined user list
 type Manager struct {
-	service *dbusutil.Service
-	core    *login1.Manager
-	logger  *log.Logger
+	service    *dbusutil.Service
+	sysSigLoop *dbusutil.SignalLoop
+	core       *login1.Manager
+	logger     *log.Logger
 
 	userSessions map[uint32]SessionInfos
 	locker       sync.Mutex
@@ -43,24 +45,24 @@ type Manager struct {
 }
 
 const (
-	login1DBusServiceName = "org.freedesktop.login1"
-	login1DBusPath        = "/org/freedesktop/login1"
-
 	DBusPath = "/com/deepin/daemon/Logined"
 )
 
 // Register register and install loginedManager on dbus
 func Register(logger *log.Logger, service *dbusutil.Service) (*Manager, error) {
-	core, err := login1.NewManager(login1DBusServiceName, login1DBusPath)
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
-
+	core := login1.NewManager(systemBus)
+	sysSigLoop := dbusutil.NewSignalLoop(systemBus, 10)
+	sysSigLoop.Start()
 	var m = &Manager{
 		service:      service,
 		core:         core,
 		logger:       logger,
 		userSessions: make(map[uint32]SessionInfos),
+		sysSigLoop:   sysSigLoop,
 	}
 
 	go m.init()
@@ -74,9 +76,8 @@ func Unregister(m *Manager) {
 		return
 	}
 
-	if m.core != nil {
-		login1.DestroyManager(m.core)
-	}
+	m.core.RemoveHandler(proxy.RemoveAllHandlers)
+	m.sysSigLoop.Stop()
 
 	if m.userSessions != nil {
 		m.userSessions = nil
@@ -87,23 +88,20 @@ func Unregister(m *Manager) {
 
 func (m *Manager) init() {
 	// the result struct: {id, uid, username, seat, path}
-	list, err := m.core.ListSessions()
+	sessions, err := m.core.ListSessions(0)
 	if err != nil {
 		m.logger.Warning("Failed to list sessions:", err)
 		return
 	}
 
-	for _, value := range list {
-		if len(value) != 5 {
-			continue
-		}
-
-		m.addSession(value[4].(dbus.ObjectPath))
+	for _, session := range sessions {
+		m.addSession(session.Path)
 	}
 	m.setPropUserList()
 }
 
 func (m *Manager) handleChanged() {
+	m.core.InitSignalExt(m.sysSigLoop, true)
 	m.core.ConnectSessionNew(func(id string, sessionPath dbus.ObjectPath) {
 		m.logger.Debug("[Event] session new:", id, sessionPath)
 		added := m.addSession(sessionPath)
