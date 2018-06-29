@@ -22,11 +22,11 @@ package timedated
 import (
 	"fmt"
 
+	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/polkit"
 )
 
 type Manager struct {
@@ -56,7 +56,6 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	}
 	core := timedate1.NewTimedate(systemBus)
 
-	polkit.Init()
 	return &Manager{
 		core:    core,
 		service: service,
@@ -93,16 +92,20 @@ func (m *Manager) checkAuthorization(method, msg string, sender dbus.Sender) err
 }
 
 func doAuthorized(msg string, pid uint32) (bool, error) {
-	var subject = polkit.NewSubject(polkit.SubjectKindUnixProcess)
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		return false, err
+	}
+	authority := polkit.NewAuthority(systemBus)
+	var subject = polkit.MakeSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
 	var t = uint64(0)
 	subject.SetDetail("start-time", t)
-	var detail = make(map[string]string)
-	detail["polkit.message"] = msg
-	var cancelId string
-	ret, err := polkit.CheckAuthorization(subject, timedate1ActionId,
-		detail, polkit.CheckAuthorizationFlagsAllowUserInteraction, cancelId)
-	subject = nil
+	detail := map[string]string{
+		"polkit.message": msg,
+	}
+	ret, err := authority.CheckAuthorization(0, subject, timedate1ActionId,
+		detail, polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {
 		return false, err
 	}
