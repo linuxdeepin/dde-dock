@@ -45,16 +45,20 @@ func NewDaemon(logger *log.Logger) *Daemon {
 func (d *Daemon) Start() error {
 	service := loader.GetService()
 	logger.Debug("apps daemon start")
-	if watcher, err := NewDFWatcher(service); err != nil {
+
+	var err error
+	d.watcher, err = newDFWatcher(service)
+	if err != nil {
 		return err
-	} else {
-		d.watcher = watcher
 	}
 
-	d.recorder = NewALRecorder(d.watcher)
+	d.recorder, err = newALRecorder(d.watcher)
+	if err != nil {
+		return err
+	}
 
 	// export recorder and watcher
-	err := service.Export(dbusPath, d.recorder, d.watcher)
+	err = service.Export(dbusPath, d.recorder, d.watcher)
 	if err != nil {
 		return err
 	}

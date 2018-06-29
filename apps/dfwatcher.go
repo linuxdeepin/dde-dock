@@ -48,7 +48,7 @@ type DFWatcher struct {
 	}
 }
 
-func NewDFWatcher(service *dbusutil.Service) (*DFWatcher, error) {
+func newDFWatcher(service *dbusutil.Service) (*DFWatcher, error) {
 	w := new(DFWatcher)
 
 	interval := 6 * time.Second

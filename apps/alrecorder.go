@@ -26,9 +26,8 @@ import (
 	"strings"
 	"sync"
 
-	"dbus/org/freedesktop/login1"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 
-	oldDBusLib "pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -69,16 +68,16 @@ type ALRecorder struct {
 	}
 }
 
-func NewALRecorder(watcher *DFWatcher) *ALRecorder {
+func newALRecorder(watcher *DFWatcher) (*ALRecorder, error) {
 	r := &ALRecorder{
 		watcher:      watcher,
 		subRecorders: make(map[string]*SubRecorder),
 	}
-	var err error
-	r.loginManager, err = login1.NewManager("org.freedesktop.login1", "/org/freedesktop/login1")
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
+	r.loginManager = login1.NewManager(systemBus)
 
 	go r.listenEvents()
 
@@ -87,14 +86,14 @@ func NewALRecorder(watcher *DFWatcher) *ALRecorder {
 		r.watchAppsDir(0, "", filepath.Join(dataDir, "applications"))
 	}
 
-	r.loginManager.ConnectUserRemoved(func(uid uint32, _ oldDBusLib.ObjectPath) {
-		if uid < minUid {
-			return
-		}
+	sysSigLoop := dbusutil.NewSignalLoop(systemBus, 10)
+	sysSigLoop.Start()
+	r.loginManager.InitSignalExt(sysSigLoop, true)
+	r.loginManager.ConnectUserRemoved(func(uid uint32, userPath dbus.ObjectPath) {
 		r.handleUserRemoved(int(uid))
 	})
 
-	return r
+	return r, nil
 }
 
 func (*ALRecorder) GetInterfaceName() string {
