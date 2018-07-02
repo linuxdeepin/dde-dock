@@ -14,7 +14,7 @@
 
 build*/
 *.pro.user*
-CMakeLists.txt.user
+CMakeLists.txt.user*
 *.DS_Store
 *.qm
 

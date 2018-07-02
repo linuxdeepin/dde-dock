@@ -148,7 +148,7 @@ void AppSnapshot::fetchSnapshot()
 
         m_snapshot = qimage.copy(left, top, width - left - right, height - top - bottom);
     } else {
-        m_snapshot = qimage.copy();
+        m_snapshot = qimage;
     }
 
     const auto size = rect().marginsRemoved(QMargins(8, 8, 8, 8)).size();
