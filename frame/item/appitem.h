@@ -25,6 +25,7 @@
 #include "dockitem.h"
 #include "components/previewcontainer.h"
 #include "dbus/dbusclientmanager.h"
+#include "item/tipswidget.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -57,17 +58,17 @@ signals:
     void requestCancelPreview() const;
 
 private:
-    void moveEvent(QMoveEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dragMoveEvent(QDragMoveEvent *e);
-    void dropEvent(QDropEvent *e);
-    void leaveEvent(QEvent *e);
+    void moveEvent(QMoveEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+    void leaveEvent(QEvent *e) override;
     void showEvent(QShowEvent *e) override;
 
     void showHoverTips();
@@ -89,7 +90,7 @@ private slots:
     void checkAttentionEffect();
 
 private:
-    QLabel *m_appNameTips;
+    TipsWidget *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
     DockEntryInter *m_itemEntryInter;
 

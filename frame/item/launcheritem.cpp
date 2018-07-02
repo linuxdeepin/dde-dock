@@ -33,14 +33,12 @@ DCORE_USE_NAMESPACE
 LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent),
 
-      m_tips(new QLabel(this))
+      m_tips(new TipsWidget(this))
 {
     setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
     m_tips->setText(tr("Launcher"));
-    m_tips->setStyleSheet("color:white;"
-                          "padding:0px 3px;");
 }
 
 void LauncherItem::refershIcon()

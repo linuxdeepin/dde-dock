@@ -105,7 +105,7 @@ QPoint AppItem::MousePressPos;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent),
-      m_appNameTips(new QLabel(this)),
+      m_appNameTips(new TipsWidget(this)),
       m_appPreviewTips(new PreviewContainer(this)),
       m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this)),
 
@@ -149,11 +149,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
 
-    m_appNameTips->setObjectName(m_itemEntryInter->name());
+    m_appNameTips->setObjectName("AppItemTips");
     m_appNameTips->setAccessibleName(m_itemEntryInter->name() + "-tips");
     m_appNameTips->setVisible(false);
-    m_appNameTips->setStyleSheet("color:white;"
-                                 "padding:0px 3px;");
+    m_appNameTips->installEventFilter(this);
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);

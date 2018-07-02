@@ -24,6 +24,7 @@
 
 #include <QBoxLayout>
 #include <QDragEnterEvent>
+#include <QApplication>
 
 DockItem *MainPanel::DraggingItem = nullptr;
 PlaceholderItem *MainPanel::RequestDockItem = nullptr;
@@ -49,28 +50,14 @@ MainPanel::MainPanel(QWidget *parent)
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
     setObjectName("MainPanel");
-    setStyleSheet("QWidget #MainPanel {"
-//                  "background-color:rgba(10, 10, 10, .6);"
-                  "}"
-//                  "QWidget #MainPanel[displayMode='1'] {"
-//                  "border:none;"
-//                  "}"
-                  "QWidget #MainPanel[position='0'] {"
-                  "padding:0 " xstr(PANEL_PADDING) "px;"
-                  "border-top:none;"
-                  "}"
-                  "QWidget #MainPanel[position='1'] {"
-                  "padding:" xstr(PANEL_PADDING) "px 0;"
-                  "border-right:none;"
-                  "}"
-                  "QWidget #MainPanel[position='2'] {"
-                  "padding:0 " xstr(PANEL_PADDING) "px;"
-                  "border-bottom:none;"
-                  "}"
-                  "QWidget #MainPanel[position='3'] {"
-                  "padding:" xstr(PANEL_PADDING) "px 0;"
-                  "border-left:none;"
-                  "}");
+
+    QFile qssFile(":/qss/frame.qss");
+
+    qssFile.open(QFile::ReadOnly);
+    if(qssFile.isOpen()) {
+        setStyleSheet(qssFile.readAll());
+        qssFile.close();
+    }
 
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);

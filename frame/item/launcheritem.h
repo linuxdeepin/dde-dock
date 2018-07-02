@@ -23,6 +23,7 @@
 #define LAUNCHERITEM_H
 
 #include "dockitem.h"
+#include "tipswidget.h"
 
 class LauncherItem : public DockItem
 {
@@ -46,7 +47,7 @@ private:
     QPixmap m_smallIcon;
     QPixmap m_largeIcon;
 
-    QLabel *m_tips;
+    TipsWidget *m_tips;
 };
 
 #endif // LAUNCHERITEM_H

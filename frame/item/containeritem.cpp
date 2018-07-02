@@ -32,10 +32,7 @@ ContainerItem::ContainerItem(QWidget *parent)
     m_containerWidget->setVisible(false);
     m_popupTips->setText(tr("Click to display hidden icon"));
     m_popupTips->setVisible(false);
-    m_popupTips->setStyleSheet("QLabel {"
-                               "color: white;"
-                               "margin: 2px 4px;"
-                               "}");
+    m_popupTips->setObjectName("ContainerItem");
 
     setAcceptDrops(true);
 }

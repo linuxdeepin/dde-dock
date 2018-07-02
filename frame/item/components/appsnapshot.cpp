@@ -46,7 +46,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.svg");
     m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
     m_closeBtn->setVisible(false);
-    m_title->setStyleSheet("color: white;");
+    m_title->setObjectName("AppSnapshotTitle");
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_title);
