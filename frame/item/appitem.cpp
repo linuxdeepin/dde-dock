@@ -451,6 +451,13 @@ void AppItem::leaveEvent(QEvent *e)
         m_appPreviewTips->prepareHide();
 }
 
+void AppItem::showEvent(QShowEvent *e)
+{
+    DockItem::showEvent(e);
+
+    refershIcon();
+}
+
 void AppItem::showHoverTips()
 {
     if (!m_windowInfos.isEmpty())
@@ -541,6 +548,9 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
 
 void AppItem::refershIcon()
 {
+    if (!isVisible())
+        return;
+
     const QString icon = m_itemEntryInter->icon();
     const int iconSize = qMin(width(), height());
 

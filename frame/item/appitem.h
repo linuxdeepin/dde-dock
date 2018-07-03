@@ -68,6 +68,7 @@ private:
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
     void leaveEvent(QEvent *e);
+    void showEvent(QShowEvent *e) override;
 
     void showHoverTips();
     void invokedMenuItem(const QString &itemId, const bool checked);

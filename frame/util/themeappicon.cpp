@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QApplication>
+#include <QPixmapCache>
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
@@ -38,10 +39,22 @@ ThemeAppIcon::~ThemeAppIcon()
 
 const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 {
-    const auto ratio = qApp->devicePixelRatio();
-    const int s = int(size * ratio) & ~1;
-
     QPixmap pixmap;
+
+    const auto ratio = qApp->devicePixelRatio();
+    const QString &key = QString("%1x%2x%3") \
+            .arg(size) \
+            .arg(ratio) \
+            .arg(iconName.mid(0, 20)); // incase the iconName is too long.
+
+    // FIXME(hualet): The cache can reduce memory usage,
+    // that is ~2M on HiDPI enabled machine with 9 icons loaded,
+    // but I don't know why since QIcon has its own cache and all of the
+    // icons loaded are loaded by QIcon::fromTheme, really strange here.
+    if (QPixmapCache::find(key, &pixmap))
+        return pixmap;
+
+    const int s = int(size * ratio) & ~1;
 
     do {
 
@@ -77,6 +90,8 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 
     pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
+
+    QPixmapCache::insert(key, pixmap);
 
     return pixmap;
 }
