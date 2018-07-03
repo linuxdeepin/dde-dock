@@ -128,9 +128,45 @@ func (psp *powerSavePlan) Start() error {
 		psp.Reset()
 	})
 
+	power.PowerSavingModeEnabled().ConnectChanged(psp.handlePowerSavingModeChanged)
+
 	screenSaver.ConnectIdleOn(psp.HandleIdleOn)
 	screenSaver.ConnectIdleOff(psp.HandleIdleOff)
 	return nil
+}
+
+func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bool) {
+	if !hasValue {
+		return
+	}
+	logger.Debug("power saving mode enabled changed to", enabled)
+
+	brightnessTable, err := psp.manager.helper.Display.GetBrightness(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if enabled {
+		// reduce brightness by 20%
+		for key, value := range brightnessTable {
+			value = value * 0.8
+			if value < 0.1 {
+				value = 0.1
+			}
+			brightnessTable[key] = value
+		}
+
+	} else {
+		// increase brightness by 25%
+		for key, value := range brightnessTable {
+			value = value * 1.25
+			if value > 1 {
+				value = 1
+			}
+			brightnessTable[key] = value
+		}
+	}
+	psp.manager.setDisplayBrightness(brightnessTable)
 }
 
 // 取消之前的任务

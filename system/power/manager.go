@@ -20,7 +20,11 @@
 package power
 
 import (
+	"encoding/json"
 	"errors"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -59,6 +63,9 @@ type Manager struct {
 	BatteryStatus      battery.Status
 	BatteryTimeToEmpty uint64
 	BatteryTimeToFull  uint64
+
+	PowerSavingModeEnabled bool `prop:"access:rw"`
+	PowerSavingModeAuto    bool `prop:"access:rw"`
 
 	methods *struct {
 		GetBatteries func() `out:"batteries"`
@@ -119,6 +126,9 @@ func (m *Manager) refreshAC(ac *gudev.Device) {
 
 	m.PropsMu.Lock()
 	m.setPropOnBattery(onBattery)
+	if m.PowerSavingModeAuto {
+		m.setPropPowerSavingModeEnabled(onBattery)
+	}
 	m.PropsMu.Unlock()
 }
 
@@ -169,6 +179,28 @@ func (m *Manager) init() error {
 	}
 
 	m.gudevClient.Connect("uevent", m.handleUEvent)
+
+	cfg := loadConfigSafe()
+	m.PowerSavingModeEnabled = cfg.PowerSavingModeEnabled
+	m.PowerSavingModeAuto = cfg.PowerSavingModeAuto
+
+	// init LMT config
+	var err error
+	if m.PowerSavingModeAuto {
+		m.PowerSavingModeEnabled = m.OnBattery
+		err = setLMTConfig(lmtConfigAuto)
+	} else {
+		if m.PowerSavingModeEnabled {
+			err = setLMTConfig(lmtConfigEnabled)
+		} else {
+			err = setLMTConfig(lmtConfigDisabled)
+		}
+	}
+
+	if err != nil {
+		logger.Warning("failed to set LMT config:", err)
+	}
+
 	return nil
 }
 
@@ -306,4 +338,63 @@ func (m *Manager) destroy() {
 		m.gudevClient.Unref()
 		m.gudevClient = nil
 	}
+}
+
+const configFile = "/var/lib/dde-daemon/power/config.json"
+
+type Config struct {
+	PowerSavingModeEnabled bool
+	PowerSavingModeAuto    bool
+}
+
+func loadConfig() (*Config, error) {
+	content, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		return nil, err
+	}
+	var cfg Config
+	err = json.Unmarshal(content, &cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &cfg, nil
+}
+
+func loadConfigSafe() *Config {
+	cfg, err := loadConfig()
+	if err != nil {
+		// ignore not exist error
+		if !os.IsNotExist(err) {
+			logger.Warning(err)
+		}
+		return &Config{
+			// default config
+			PowerSavingModeAuto:    true,
+			PowerSavingModeEnabled: false,
+		}
+	}
+	return cfg
+}
+
+func (m *Manager) saveConfig() error {
+	logger.Debug("call saveConfig")
+
+	var cfg Config
+	m.PropsMu.RLock()
+	cfg.PowerSavingModeAuto = m.PowerSavingModeAuto
+	cfg.PowerSavingModeEnabled = m.PowerSavingModeEnabled
+	m.PropsMu.RUnlock()
+
+	dir := filepath.Dir(configFile)
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
+
+	content, err := json.Marshal(&cfg)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(configFile, content, 0644)
 }

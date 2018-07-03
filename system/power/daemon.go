@@ -21,6 +21,7 @@ package power
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -61,7 +62,25 @@ func (d *Daemon) Start() (err error) {
 	}
 	d.manager.batteriesMu.Unlock()
 
-	err = service.Export(dbusPath, d.manager)
+	serverObj, err := service.NewServerObject(dbusPath, d.manager)
+	if err != nil {
+		return
+	}
+	serverObj.SetWriteCallback(d.manager, "PowerSavingModeEnabled",
+		d.manager.writePowerSavingModeEnabledCb)
+
+	serverObj.SetWriteCallback(d.manager, "PowerSavingModeAuto",
+		d.manager.writePowerSavingModeAutoCb)
+
+	serverObj.ConnectChanged(d.manager, "PowerSavingModeAuto", func(change *dbusutil.PropertyChanged) {
+		d.manager.saveConfig()
+	})
+
+	serverObj.ConnectChanged(d.manager, "PowerSavingModeEnabled", func(change *dbusutil.PropertyChanged) {
+		d.manager.saveConfig()
+	})
+
+	err = serverObj.Export()
 	if err != nil {
 		return
 	}

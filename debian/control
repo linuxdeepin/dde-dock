@@ -67,6 +67,7 @@ Depends: ${shlibs:Depends},
  libfprint0,
  dnsmasq,
  cgroup-tools, imwheel, procps,
+ laptop-mode-tools,
  deepin-installer-timezones
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
