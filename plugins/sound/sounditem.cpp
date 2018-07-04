@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <DApplication>
 #include <DDBusSender>
+#include "../widgets/tipswidget.h"
 
 // menu actions
 #define MUTE    "mute"
@@ -38,18 +39,12 @@ DWIDGET_USE_NAMESPACE
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
 
-      m_tipsLabel(new QLabel(this)),
+      m_tipsLabel(new TipsWidget(this)),
       m_applet(new SoundApplet(this)),
       m_sinkInter(nullptr)
 {
-//    QIcon::setThemeName("deepin");
-
     m_tipsLabel->setObjectName("sound");
     m_tipsLabel->setVisible(false);
-    //    m_tipsLabel->setFixedWidth(145);
-    m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setStyleSheet("color:white;"
-                               "padding: 0 3px;");
 
     m_applet->setVisible(false);
 

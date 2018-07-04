@@ -23,6 +23,7 @@
 #include "constants.h"
 #include "wireditem.h"
 #include "util/imageutil.h"
+#include "../widgets/tipswidget.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -34,7 +35,7 @@ using namespace dde::network;
 WiredItem::WiredItem(WiredDevice *device)
     : DeviceItem(device),
 
-      m_itemTips(new QLabel(this)),
+      m_itemTips(new TipsWidget(this)),
       m_delayTimer(new QTimer(this))
 {
 //    QIcon::setThemeName("deepin");
@@ -44,8 +45,6 @@ WiredItem::WiredItem(WiredDevice *device)
 
     m_itemTips->setObjectName("wired-" + m_device->path());
     m_itemTips->setVisible(false);
-    m_itemTips->setStyleSheet("color:white;"
-                              "padding:0px 3px;");
 
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);

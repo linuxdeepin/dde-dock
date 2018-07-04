@@ -23,7 +23,7 @@
 #define SYSTEMTRAYPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "tipswidget.h"
+#include "trayapplet.h"
 #include "dbus/dbustraymanager.h"
 
 #include "xwindowtraywidget.h"
@@ -33,6 +33,7 @@
 #include <QLabel>
 
 class FashionTrayItem;
+class TipsWidget;
 class SystemTrayPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -74,7 +75,7 @@ private:
     QMap<QString, AbstractTrayWidget *> m_trayList;
 
     TrayApplet *m_trayApplet;
-    QLabel *m_tipsLabel;
+    TipsWidget *m_tipsLabel;
 
     QSettings *m_containerSettings;
 };

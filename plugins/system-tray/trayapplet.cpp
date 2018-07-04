@@ -19,25 +19,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIPSWIDGET_H
-#define TIPSWIDGET_H
+#include "trayapplet.h"
+#include "abstracttraywidget.h"
 
-#include <QWidget>
-#include <QBoxLayout>
-
-class AbstractTrayWidget;
-class TrayApplet : public QWidget
+TrayApplet::TrayApplet(QWidget *parent)
+    : QWidget(parent),
+      m_mainLayout(new QHBoxLayout)
 {
-    Q_OBJECT
+    m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(0);
 
-public:
-    explicit TrayApplet(QWidget *parent = 0);
+    setLayout(m_mainLayout);
+    setFixedHeight(26);
+}
 
-    void clear();
-    void addWidgets(QList<AbstractTrayWidget *> &widgets);
+void TrayApplet::clear()
+{
+    QLayoutItem *item = nullptr;
+    while ((item = m_mainLayout->takeAt(0)) != nullptr)
+    {
+        if (item->widget())
+            item->widget()->setParent(nullptr);
+        delete item;
+    }
+}
 
-private:
-    QBoxLayout *m_mainLayout;
-};
-
-#endif // TIPSWIDGET_H
+void TrayApplet::addWidgets(QList<AbstractTrayWidget *> &widgets)
+{
+    for (auto w : widgets)
+    {
+        w->setVisible(true);
+        m_mainLayout->addWidget(w);
+    }
+    setFixedWidth(widgets.size() * 26);
+}

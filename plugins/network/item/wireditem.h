@@ -30,6 +30,7 @@
 
 #include <WiredDevice>
 
+class TipsWidget;
 class WiredItem : public DeviceItem
 {
     Q_OBJECT
@@ -53,7 +54,7 @@ private slots:
 private:
     QPixmap m_icon;
 
-    QLabel *m_itemTips;
+    TipsWidget *m_itemTips;
     QTimer *m_delayTimer;
 };
 

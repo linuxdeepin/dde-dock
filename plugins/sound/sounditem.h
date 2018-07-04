@@ -27,6 +27,7 @@
 
 #include <QWidget>
 
+class TipsWidget;
 class SoundItem : public QWidget
 {
     Q_OBJECT
@@ -56,7 +57,7 @@ private slots:
     void sinkChanged(DBusSink *sink);
 
 private:
-    QLabel *m_tipsLabel;
+    TipsWidget *m_tipsLabel;
     SoundApplet *m_applet;
     DBusSink *m_sinkInter;
     QPixmap m_iconPixmap;

@@ -21,6 +21,7 @@
 
 #include "wirelessitem.h"
 #include "util/imageutil.h"
+#include "../widgets/tipswidget.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -34,7 +35,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
 
       m_refershTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
-      m_wirelessPopup(new QLabel),
+      m_wirelessPopup(new TipsWidget),
       m_APList(nullptr)
 {
     m_refershTimer->setSingleShot(false);
@@ -43,8 +44,6 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     m_wirelessApplet->setVisible(false);
     m_wirelessPopup->setObjectName("wireless-" + m_device->path());
     m_wirelessPopup->setVisible(false);
-    m_wirelessPopup->setStyleSheet("color:white;"
-                                   "padding: 0px 3px;");
 
     connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeApInfoChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));

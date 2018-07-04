@@ -5,7 +5,7 @@ set(BIN_NAME dde-dock)
 configure_file(environments.h.in environments.h @ONLY)
 
 # Sources files
-file(GLOB_RECURSE SRCS "*.h" "*.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../widgets/*.h" "../widgets/*.cpp")
 
 # Find the library
 find_package(PkgConfig REQUIRED)

@@ -33,15 +33,12 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
       m_settings("deepin", "dde-dock-power"),
       m_shutdownWidget(new PluginWidget),
       m_powerStatusWidget(new PowerStatusWidget),
-      m_tipsLabel(new QLabel),
+      m_tipsLabel(new TipsWidget),
 
       m_powerInter(new DBusPower(this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("power");
-    m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setStyleSheet("color:white;"
-                               "padding: 0px 3px;");
 
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
     connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);

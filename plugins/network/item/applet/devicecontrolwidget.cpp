@@ -21,6 +21,7 @@
 
 #include "devicecontrolwidget.h"
 #include "horizontalseperator.h"
+#include "../widgets/tipswidget.h"
 
 #include <DHiDPIHelper>
 #include <QTimer>
@@ -33,9 +34,8 @@ DWIDGET_USE_NAMESPACE
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_deviceName = new QLabel;
+    m_deviceName = new TipsWidget;
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_deviceName->setStyleSheet("color:white;");
 
     m_switchBtn = new DSwitchButton;
 

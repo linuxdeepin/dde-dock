@@ -26,6 +26,7 @@
 #include "pluginwidget.h"
 #include "powerstatuswidget.h"
 #include "dbus/dbuspower.h"
+#include "../widgets/tipswidget.h"
 
 #include <QLabel>
 
@@ -68,7 +69,7 @@ private:
     QSettings m_settings;
     PluginWidget *m_shutdownWidget;
     PowerStatusWidget *m_powerStatusWidget;
-    QLabel *m_tipsLabel;
+    TipsWidget *m_tipsLabel;
 
     DBusPower *m_powerInter;
 };

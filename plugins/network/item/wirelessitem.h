@@ -32,6 +32,7 @@
 
 #include <WirelessDevice>
 
+class TipsWidget;
 class WirelessItem : public DeviceItem
 {
     Q_OBJECT
@@ -77,7 +78,7 @@ private:
 
     QTimer *m_refershTimer;
     QWidget *m_wirelessApplet;
-    QLabel *m_wirelessPopup;
+    TipsWidget *m_wirelessPopup;
     WirelessList *m_APList;
 };
 

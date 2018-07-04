@@ -22,6 +22,7 @@
 #include "soundapplet.h"
 #include "sinkinputwidget.h"
 #include "componments/horizontalseparator.h"
+#include "../widgets/tipswidget.h"
 
 #include <QLabel>
 #include <QIcon>
@@ -50,9 +51,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeSlider->setAccessibleName("volume-slider");
 
-    QLabel *deviceLabel = new QLabel;
+    TipsWidget *deviceLabel = new TipsWidget;
     deviceLabel->setText(tr("Device"));
-    deviceLabel->setStyleSheet("color:white;");
 
     QHBoxLayout *deviceLineLayout = new QHBoxLayout;
     deviceLineLayout->addWidget(deviceLabel);
@@ -69,9 +69,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
 
-    QLabel *appLabel = new QLabel;
+    TipsWidget *appLabel = new TipsWidget;
     appLabel->setText(tr("Application"));
-    appLabel->setStyleSheet("color:white;");
 
     QHBoxLayout *appLineHLayout = new QHBoxLayout;
     appLineHLayout->addWidget(appLabel);

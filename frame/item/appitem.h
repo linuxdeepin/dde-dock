@@ -25,7 +25,7 @@
 #include "dockitem.h"
 #include "components/previewcontainer.h"
 #include "dbus/dbusclientmanager.h"
-#include "item/tipswidget.h"
+#include "../widgets/tipswidget.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>

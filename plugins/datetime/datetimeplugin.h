@@ -24,6 +24,7 @@
 
 #include "pluginsiteminterface.h"
 #include "datetimewidget.h"
+#include "../../widgets/tipswidget.h"
 
 #include <QTimer>
 #include <QLabel>
@@ -62,7 +63,7 @@ private slots:
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
-    QPointer<QLabel> m_dateTipsLabel;
+    QPointer<TipsWidget> m_dateTipsLabel;
 
     QTimer *m_refershTimer;
 

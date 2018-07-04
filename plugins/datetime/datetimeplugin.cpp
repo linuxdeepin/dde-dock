@@ -28,14 +28,12 @@
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent),
 
-      m_dateTipsLabel(new QLabel),
+      m_dateTipsLabel(new TipsWidget),
 
       m_refershTimer(new QTimer(this)),
       m_settings("deepin", "dde-dock-datetime")
 {
     m_dateTipsLabel->setObjectName("datetime");
-    m_dateTipsLabel->setStyleSheet("color:white;"
-                                   "padding:0px 3px;");
 
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();

@@ -27,6 +27,7 @@
 #include <QWidget>
 #include <QX11Info>
 
+#include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
 
 #define FASHION_MODE_ITEM   "fashion-mode-item"
@@ -35,7 +36,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
       m_trayApplet(new TrayApplet),
-      m_tipsLabel(new QLabel),
+      m_tipsLabel(new TipsWidget),
 
       m_containerSettings(new QSettings("deepin", "dde-dock-tray"))
 {
@@ -45,8 +46,6 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     m_tipsLabel->setObjectName("sys-tray");
     m_tipsLabel->setText(tr("System Tray"));
     m_tipsLabel->setVisible(false);
-    m_tipsLabel->setStyleSheet("color:white;"
-                               "padding: 0 3px;");
 }
 
 const QString SystemTrayPlugin::pluginName() const

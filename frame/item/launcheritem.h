@@ -23,7 +23,7 @@
 #define LAUNCHERITEM_H
 
 #include "dockitem.h"
-#include "tipswidget.h"
+#include "../widgets/tipswidget.h"
 
 class LauncherItem : public DockItem
 {
