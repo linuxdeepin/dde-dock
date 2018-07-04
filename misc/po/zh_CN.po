@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Cindy0514 <zhuxiujuan@deepin.com>, 2018
 # deepin_transifex <xiabin@linuxdeepin.com>, 2017-2018
@@ -14,14 +14,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-06-04 09:00+0000\n"
 "Last-Translator: Cindy0514 <zhuxiujuan@deepin.com>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-"
+"desktop-environment/language/zh_CN/)\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -32,7 +33,8 @@ msgstr "请输入长度不小于8位密码"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "密码必须包含英文（区分大小写）、数字或特殊符号（~!@#$%^&*()[]{}\\|/?,.<>）"
+msgstr ""
+"密码必须包含英文（区分大小写）、数字或特殊符号（~!@#$%^&*()[]{}\\|/?,.<>）"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -66,11 +68,11 @@ msgstr "屏幕缩放"
 msgid "Setting display scaling"
 msgstr "即将设置屏幕缩放"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "设置成功"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "设置屏幕缩放后请注销用户再查看"
 
@@ -149,31 +151,31 @@ msgstr "无法连接%q，配对失败"
 msgid "Bluetooth connection failed"
 msgstr "蓝牙连接失败"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "关闭所有(_C)"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "强制退出"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "驻留(_D)"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "移除驻留(_U)"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "所有窗口(_A)"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "系统磁盘空间不足，请及时清理！"
 
@@ -337,27 +339,70 @@ msgstr "显示当前工作区的窗口"
 msgid "Display workspace"
 msgstr "显示工作区 "
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "切换语言需要授权"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "系统语言切换失败，请稍后重试"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "语言切换成功，请注销后重新登录"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "正在切换系统语言，请稍候…"
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
 msgstr "正在切换系统语言并安装缺失的语言包，请稍候…"
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "正在切换系统语言，请稍候…"
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr "语言切换成功，请注销后重新登录"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "恢复"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "取消"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "重试 "
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q 安装成功。"
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q 安装失败。"
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "卸载 %q 成功。"
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "卸载 %q 失败。"
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr "为防止自动关机，请连接电源以保证安全更新。"
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "已成功清理软件包缓存"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr "检测到您的系统源已被修改，为了您的正常使用建议恢复到官方源"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -371,13 +416,11 @@ msgstr "%q 卸载失败"
 msgid "Password required to connect %q"
 msgstr "连接%q需要密码"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A（5 GHz）"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG（2.4 GHz）"
 
@@ -1966,8 +2009,7 @@ msgid "Network"
 msgstr "网络"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
 
 #: ../../network/utils_notify.go:100

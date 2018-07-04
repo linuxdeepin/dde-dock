@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # samson <sambelet@yahoo.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/am_ET/)\n"
+"Language-Team: Amharic (Ethiopia) (http://www.transifex.com/linuxdeepin/"
+"deepin-desktop-environment/language/am_ET/)\n"
+"Language: am_ET\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: am_ET\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -26,7 +27,9 @@ msgstr "እባክዎን የ መግቢያ ቃል ያስገቡ ከ 8 ባህሪዎ�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "የ መግቢያ ቃል መያዝ አለበት የ English letters (case-sensitive), ቁጥሮች ወይንም የ ተለዩ ምልክቶች (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"የ መግቢያ ቃል መያዝ አለበት የ English letters (case-sensitive), ቁጥሮች ወይንም የ ተለዩ ምልክቶች "
+"(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -60,11 +63,11 @@ msgstr "መጠን ማሳያ"
 msgid "Setting display scaling"
 msgstr "የ ማሳያ መጠን ማሰናጃ "
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "ተሳክቶ ተፋጽሟል"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -143,31 +146,31 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr "ብሉቱዝ ግንኙነት አልተሳካም"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_መክፈቻ"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_ሁሉንም መዝጊያ"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_አስገድዶ ማጥፊያ"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_ማሳረፊያ"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_መለያያ"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_ሁሉንም መስኮቶች"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "በቂ ነፃ የ ዲስክ ቦታ የለም: እባክዎን የ ዲስክ ቦታ ያጽዱ"
 
@@ -331,27 +334,70 @@ msgstr " የ አሁኑን የ ስራ ቦታ ማሳያ"
 msgid "Display workspace"
 msgstr " የ ስራ ቦታ ማሳያ"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "ቋንቋ ለ መቀየር ማረጋገጫ ያስፈልጋል"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "የ ስርአቱን ቋንቋ መቀየር አልተቻለም: እባክዎን እንደገና ይሞክሩ"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "የ ስርአቱን ቋንቋ ተቀይሯል: እባክዎን እንደገና ይግቡ"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "የ ስርአቱ ቋንቋ ተቀይሯል: እባክዎን ይጠብቁ"
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
 msgstr "የ ስርአቱ ቋንቋ ተቀይሯል በ መግጠሚያው: እባክዎን ይጠብቁ..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "የ ስርአቱ ቋንቋ ተቀይሯል: እባክዎን ይጠብቁ"
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr "የ ስርአቱን ቋንቋ ተቀይሯል: እባክዎን እንደገና ይግቡ"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr ""
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "መሰረዣ"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "እንደገና መሞከሪያ"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q ተሳክቶ ተገጥሟል"
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q መግጠም አልተቻለም"
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q ማስወገዱ ተሳክቷል."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q ማስወገድ አልተቻለም"
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr "ራሱ በራሱ እንዳያጠፋ ለ መከልከል: እባክዎን መደበኛ ማሻሻያ ይጠቀሙ"
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "የ ጥቅል cache ተጠርጓል"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -365,13 +411,11 @@ msgstr "ማጥፋት አልተቻለም %q."
 msgid "Password required to connect %q"
 msgstr "የ መግቢያ ቃል ያስፈልጋል ለ መገናኘት %q "
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1960,8 +2004,7 @@ msgid "Network"
 msgstr "ኔትዎርክ"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "የ ጠንካራ አካል ለ WLAN ካርድ ጥፍቷል: እባክዎን ሲያስፈልግ ያብሩት"
 
 #: ../../network/utils_notify.go:100

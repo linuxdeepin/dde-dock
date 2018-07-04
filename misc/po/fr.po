@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Aestan <anthony.margerand@gmail.com>, 2018
 # iderr, 2016
@@ -16,14 +16,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-03 08:32+0000\n"
 "Last-Translator: Joselito 8 <morbihan8pool@gmail.com>\n"
-"Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
+"Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -34,7 +35,9 @@ msgstr "Veuillez insérer un mot de passe d'au moins 8 caractères"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Le mot de passe doit contenir des lettres (sensibles à la casse), des chiffres ou des symboles spéciaux (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Le mot de passe doit contenir des lettres (sensibles à la casse), des "
+"chiffres ou des symboles spéciaux (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -68,13 +71,15 @@ msgstr "Mise à l'échelle de l'affichage"
 msgid "Setting display scaling"
 msgstr "Mise à l'échelle de l'affichage"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Établit avec succès"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
-msgstr "Veuillez vous déconnecter et vous reconnecter après avoir ajusté l'échelle d'écran."
+msgstr ""
+"Veuillez vous déconnecter et vous reconnecter après avoir ajusté l'échelle "
+"d'écran."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -151,31 +156,31 @@ msgstr "Échec de la connexion %q, échec de l'appariement"
 msgid "Bluetooth connection failed"
 msgstr "Connection bluetooth échouée "
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Ouvrir"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Fermer tout"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Forcer à quitter"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Ajouter au dock"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Détacher du dock"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Toutes les fenêtres"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Espace disque insuffisant, nettoyez de temps en temps !"
 
@@ -339,27 +344,80 @@ msgstr "Afficher l'espace de travail actuel"
 msgid "Display workspace"
 msgstr "Afficher l'espace de travail"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "L'authentification est requise pour changer la langue"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr "Le langage système n'a pas pu être changé, veuillez réessayer plus tard"
+msgstr ""
+"Le langage système n'a pas pu être changé, veuillez réessayer plus tard"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Le langage système a été changé, veuillez vous reconnecter après vous avoir déconnecté."
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Le language du systeme est en cours de modification,veuillez patienter..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Le language du système est en cours de modification avec un paquet de language manquant,veuillez patienter..."
+msgstr ""
+"Le language du système est en cours de modification avec un paquet de "
+"language manquant,veuillez patienter..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr ""
+"Le language du systeme est en cours de modification,veuillez patienter..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+"Le langage système a été changé, veuillez vous reconnecter après vous avoir "
+"déconnecté."
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Restaurer"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Réessayer"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q Installation terminée."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q installation échouée."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q désinstallation terminée."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q désinstallation échouée."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Afin d'éviter l'arrêt automatique, veuillez branchez votre appareil pendant "
+"l'actualisation."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Cache de paquets effacé"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"La source du système a été modifiée, veuillez restaurer la source officielle "
+"pour votre usage normal"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -373,13 +431,11 @@ msgstr "Échec de la désinstallation de %q"
 msgid "Password required to connect %q"
 msgstr "Mot de passe requis pour connecter %q"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1613,7 +1669,9 @@ msgstr "Le périphérique n'a pas été prêt pour la configuration"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "La configuration IP ne peut être réservée (pas d'adresse disponible, délai dépassé, etc.)"
+msgstr ""
+"La configuration IP ne peut être réservée (pas d'adresse disponible, délai "
+"dépassé, etc.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1627,7 +1685,9 @@ msgstr "Des mots de passe sont requis mais n'ont pas été fournis"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Le suppliant 802.1X s'est déconnecté du point d'accès ou du serveur d'authentification"
+msgstr ""
+"Le suppliant 802.1X s'est déconnecté du point d'accès ou du serveur "
+"d'authentification"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1671,7 +1731,8 @@ msgstr "Le service de connexion partagée n'a pas pu démarrer"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Le service de connexion partagée a quitté ou a échoué de manière inattendue"
+msgstr ""
+"Le service de connexion partagée a quitté ou a échoué de manière inattendue"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1771,7 +1832,8 @@ msgstr "Le modem n'a pas pu être trouvé"
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
-msgstr "Le délai de la connexion Bluetooth est dépassé ou la connexion a échoué"
+msgstr ""
+"Le délai de la connexion Bluetooth est dépassé ou la connexion a échoué"
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted"
@@ -1803,7 +1865,8 @@ msgstr "Erreur de pontage Ethernet RFC 2684 sur ADSL"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr "ModemManager n'est pas en cours d'exécution ou a quitté de manière innatendue"
+msgstr ""
+"ModemManager n'est pas en cours d'exécution ou a quitté de manière innatendue"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
@@ -1851,12 +1914,15 @@ msgstr "Le câble réseau est débranché"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Assurez-vous que la carte SIM a été insérée avec un signal du réseau mobile"
+msgstr ""
+"Assurez-vous que la carte SIM a été insérée avec un signal du réseau mobile"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Veuillez vous assurer qu'un plan corect a été sélectionné sans arriérés de la carte SIM"
+msgstr ""
+"Veuillez vous assurer qu'un plan corect a été sélectionné sans arriérés de "
+"la carte SIM"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1872,7 +1938,8 @@ msgstr "La connexion VPN a changé de statut dû à la déconnexion d'utilisateu
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr "La connexion VPN a changé de statut dû à la déconnexion de périphériques"
+msgstr ""
+"La connexion VPN a changé de statut dû à la déconnexion de périphériques"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1932,19 +1999,26 @@ msgstr "%q déconnecté"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Impossible de partager le point d'accès, veuillez vérifier les paramètres de dnsmasq"
+msgstr ""
+"Impossible de partager le point d'accès, veuillez vérifier les paramètres de "
+"dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Impossible de se connecter à% q, veuillez vous rapprocher du routeur sans fil."
+msgstr ""
+"Impossible de se connecter à% q, veuillez vous rapprocher du routeur sans "
+"fil."
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Impossible de se connecter à %q, veuillez vérifier votre routeur ou votre câble internet."
+msgstr ""
+"Impossible de se connecter à %q, veuillez vérifier votre routeur ou votre "
+"câble internet."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Échec de la connexion, impossible de connecter %q, mot de passe incorrect"
+msgstr ""
+"Échec de la connexion, impossible de connecter %q, mot de passe incorrect"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -1968,9 +2042,10 @@ msgid "Network"
 msgstr "Réseau"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Le connecteur de la carte WIFI est désactivé, veuillez l'activer lorsque nécessaire."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
+"Le connecteur de la carte WIFI est désactivé, veuillez l'activer lorsque "
+"nécessaire."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2006,13 +2081,17 @@ msgstr "Authentification requise pour ajuster l'heure du système."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr "Authentification requise pour déterminer si la synchronisation de l'heure réseau doit être activée."
+msgstr ""
+"Authentification requise pour déterminer si la synchronisation de l'heure "
+"réseau doit être activée."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Authentification requise pour déterminer si le RTC correspond à l'heure locale ou UTC."
+msgstr ""
+"Authentification requise pour déterminer si le RTC correspond à l'heure "
+"locale ou UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

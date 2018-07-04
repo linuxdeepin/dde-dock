@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Ivica  Kolić <ikoli@yahoo.com>, 2016
 # dpnlin, 2016
@@ -9,15 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Croatian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hr/)\n"
+"Language-Team: Croatian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/hr/)\n"
+"Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hr\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -27,7 +29,9 @@ msgstr "Molim unesite lozinku koja nije manja od 8 znakova"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Lozinka mora sadržavati engleska slova (velika i mala slova nisu ekvivalentna), brojeve ili posebne simbole (~!@#$%^&*()[]{}\\|/?,.<>)."
+msgstr ""
+"Lozinka mora sadržavati engleska slova (velika i mala slova nisu "
+"ekvivalentna), brojeve ili posebne simbole (~!@#$%^&*()[]{}\\|/?,.<>)."
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -61,11 +65,11 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr ""
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -144,31 +148,31 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr "Povezivanje bluetoothom nije uspjelo"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Otvori"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Zatvori sve"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Pričvrsti"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Ukloni"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Svi prozori"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr ""
 
@@ -332,27 +336,74 @@ msgstr "Prikaži prozore trenutačnog radnog prostora"
 msgid "Display workspace"
 msgstr "Prikaži radni prostor"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Potrebna je ovjera za promjenu jezika"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr ""
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Jezik sustava se promjenio, molim pričekajte..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Jezik sustava se mijenja instalacijom nedostajućih jezičnih paketa, molim pričekajte..."
+msgstr ""
+"Jezik sustava se mijenja instalacijom nedostajućih jezičnih paketa, molim "
+"pričekajte..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Jezik sustava se promjenio, molim pričekajte..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr ""
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Prekini"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Pokušaj ponovno"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q je uspješno instaliran."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q nije uspješno instaliran."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q uspješno uklonjen."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q nije uspješno uklonjen."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Da bi se spriječilo automatsko isključivanje, uključite za normalno "
+"ažuriranje."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr ""
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -366,13 +417,11 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1961,9 +2010,10 @@ msgid "Network"
 msgstr "Mreža"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hardverski prekidač na WLAN kartici je isključen, molimo uključite ga po potrebi."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
+"Hardverski prekidač na WLAN kartici je isključen, molimo uključite ga po "
+"potrebi."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

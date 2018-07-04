@@ -1,21 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Romanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ro/)\n"
+"Language-Team: Romanian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/ro/)\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
+"2:1));\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -33,7 +35,9 @@ msgstr "Câmpul nume utilizator nu poate fi gol."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Numele de utilizator trebuie să cuprindă litere de la a la z, cifre de la 0 la 9,  sau _."
+msgstr ""
+"Numele de utilizator trebuie să cuprindă litere de la a la z, cifre de la 0 "
+"la 9,  sau _."
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -59,11 +63,11 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr ""
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -142,31 +146,31 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr "Conexiune Bluetooth eşuată"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Deschide"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Închide tot"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_ Bară"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Elimină de pe bară"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr ""
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr ""
 
@@ -330,27 +334,74 @@ msgstr "Afişare ferestre ale spaţiului de lucru actual"
 msgid "Display workspace"
 msgstr "Afișează spațiu de lucru"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr ""
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr ""
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Se modifică limbajul de  sistem, vă rugăm să așteptați..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Are loc modificarea limbajului de sistem prin instalarea pachetelor lingvistice ce lipsesc, vă rugăm să așteptați..."
+msgstr ""
+"Are loc modificarea limbajului de sistem prin instalarea pachetelor "
+"lingvistice ce lipsesc, vă rugăm să așteptați..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Se modifică limbajul de  sistem, vă rugăm să așteptați..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr ""
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Anulare"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Încercaţi din nou"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q s-a instalat cu succes."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "instalarea %q a eșuat."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q șterse cu succes."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "ștergerea %q a eșuat."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Pentru a preveni închiderea automată, vă rugăm conectați pentru actualizare "
+"normală."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr ""
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -364,13 +415,11 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1959,9 +2008,10 @@ msgid "Network"
 msgstr "Reţea"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Comutatorul  dispozitivului WLAN este în poziția oprit, vă rugăm să-l porniți."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
+"Comutatorul  dispozitivului WLAN este în poziția oprit, vă rugăm să-l "
+"porniți."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

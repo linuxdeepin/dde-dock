@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Massimo A. Carofano <real.massimo@hotmail.it>, 2017-2018
 # Massimo A. Carofano <real.massimo@hotmail.it>, 2016-2017
@@ -9,14 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-03 07:07+0000\n"
 "Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
-"Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
+"Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/it/)\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -27,7 +28,9 @@ msgstr "Inserisci una password lunga almeno 8 caratteri"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "La password deve contenere lettere Italiane (case-sensitive), numeri o caratteri speciali (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"La password deve contenere lettere Italiane (case-sensitive), numeri o "
+"caratteri speciali (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -61,11 +64,11 @@ msgstr "Scala di visualizzazione"
 msgid "Setting display scaling"
 msgstr "Imposta scala di visualizzazione"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Modifica effettuata"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "Effettua un Logout per rendere effettive le modifiche"
 
@@ -144,31 +147,31 @@ msgstr "Collegamento a %q fallito, accoppiamento fallito"
 msgid "Bluetooth connection failed"
 msgstr "Connessione Bluetooth fallita"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Apri"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Chiudi Tutti"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Forza Chiusura"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Dock"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Sblocca"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Tutte le finestre"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Spazio su disco insufficiente, ripuliscilo un po'!"
 
@@ -332,27 +335,78 @@ msgstr "Visualizza le finestre dell'attuale spazio di lavoro"
 msgid "Display workspace"
 msgstr "Visualizza lo spazio di lavoro"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Il cambio lingua richiede l'autenticazione"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "La modifica della lingua di sistema fallita, prova più tardi."
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "La lingua di sistema è stata modificata, riesegui il login per attuare le modifiche."
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Sto modificando la lingua di sistema, attendi.."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "La lingua di sistema verrà modificata installando un pacchetto mancante, attendi.."
+msgstr ""
+"La lingua di sistema verrà modificata installando un pacchetto mancante, "
+"attendi.."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Sto modificando la lingua di sistema, attendi.."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+"La lingua di sistema è stata modificata, riesegui il login per attuare le "
+"modifiche."
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Ripristina"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Cancella"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Riprova"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "installazione %q completata."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "installazione %q fallita."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q rimossa con successo."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "rimozione di %q fallita."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Per evitare spegnimenti imprevisti, collega il PC alla corrente prima di "
+"aggiornare."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Pulizia cache pacchetti completata"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"Le fonti di Sistema sono state modificate, ripristinale per tormare all'uso "
+"comune."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -366,13 +420,11 @@ msgstr "Disinstallazione di %q fallita"
 msgid "Password required to connect %q"
 msgstr "Password richiesta per connettersi a %q"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1606,7 +1658,9 @@ msgstr "Il dispositivo non è pronto per la configurazione"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "La configurazione IP non può esser riservata (nessun indirizzo disponibile, timeout, ecc)"
+msgstr ""
+"La configurazione IP non può esser riservata (nessun indirizzo disponibile, "
+"timeout, ecc)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1620,7 +1674,9 @@ msgstr "Password richieste ma non fornite"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "La rete 802.1X si è disconnessa dall'access point o dal server di autentificazione"
+msgstr ""
+"La rete 802.1X si è disconnessa dall'access point o dal server di "
+"autentificazione"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1660,11 +1716,14 @@ msgstr "Il servizio DHCP si è chiuso o ha fallito inaspettatamente"
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr "Il servizio di condivisione della connessione non è riuscito ad avviarsi"
+msgstr ""
+"Il servizio di condivisione della connessione non è riuscito ad avviarsi"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire o è fallito inaspettatamente"
+msgstr ""
+"Il servizio di condivisione della connessione non è riuscito a partire o è "
+"fallito inaspettatamente"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1849,7 +1908,8 @@ msgstr "Assicurati che la SIM card sia inserita nel dispositivo Mobile"
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Assicurati che il piano dati corretto sia selezionato per la tua SIM card"
+msgstr ""
+"Assicurati che il piano dati corretto sia selezionato per la tua SIM card"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1861,11 +1921,13 @@ msgstr "Attivazione della connessione VPN fallita"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr "La connessione VPN è cambiata per via della disconnessione dagli utenti"
+msgstr ""
+"La connessione VPN è cambiata per via della disconnessione dagli utenti"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr "La connessione VPN è cambiata per via di una disconnessione dai dispositivi"
+msgstr ""
+"La connessione VPN è cambiata per via di una disconnessione dai dispositivi"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1933,7 +1995,8 @@ msgstr "Impossibile collegarsi a %q, avvicinati al router wireless"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Impossibile connettersi a %q, controlla il tuo router o il cavo di rete."
+msgstr ""
+"Impossibile connettersi a %q, controlla il tuo router o il cavo di rete."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -1961,8 +2024,7 @@ msgid "Network"
 msgstr "Rete"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Lo switch hardware della scheda WLAN è spento, attivalo se necessario."
 
 #: ../../network/utils_notify.go:100
@@ -1981,7 +2043,8 @@ msgstr "Livello di carica della batteria critico"
 #: ../../session/power/manager_events.go:134
 #: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
-msgstr "Il computer era in modalità di sospensione, connettilo all'alimentatore"
+msgstr ""
+"Il computer era in modalità di sospensione, connettilo all'alimentatore"
 
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
@@ -1989,7 +2052,8 @@ msgstr "Batteria scarica"
 
 #: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr "Il computer entrerà in modalità sospensione, collegalo all'alimentatore"
+msgstr ""
+"Il computer entrerà in modalità sospensione, collegalo all'alimentatore"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
@@ -1999,13 +2063,17 @@ msgstr "Autenticazione richiesta per impostare l'orario di sistema."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr "Autenticazione richieta per verificare se la sincronizzazione dell'orario dalla Rete può esser abilitata."
+msgstr ""
+"Autenticazione richieta per verificare se la sincronizzazione dell'orario "
+"dalla Rete può esser abilitata."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Autenticazione richiesta per verificare se lo store RTC utilizza l'orario Locale o UTC."
+msgstr ""
+"Autenticazione richiesta per verificare se lo store RTC utilizza l'orario "
+"Locale o UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

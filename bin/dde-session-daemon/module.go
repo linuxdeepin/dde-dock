@@ -66,6 +66,8 @@ import (
 
 	_ "pkg.deepin.io/dde/daemon/calltrace"
 	_ "pkg.deepin.io/dde/daemon/debug"
+
+	_ "pkg.deepin.io/dde/daemon/lastore"
 )
 
 var (

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # kolera <koleramilan@gmail.com>, 2017
 # Један Пријатељ <3acejax@gmail.com>, 2018
@@ -9,15 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-06-10 14:04+0000\n"
 "Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
-"Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
+"Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/sr/)\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sr\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -27,7 +29,9 @@ msgstr "Молим вас унесите лозинку дужу од 8 кара
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Лозинка мора да садржи слова алфабета (осетљиво на мала и велика слова), бројеве или специјалне симболе (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Лозинка мора да садржи слова алфабета (осетљиво на мала и велика слова), "
+"бројеве или специјалне симболе (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -61,11 +65,11 @@ msgstr "Скалирање приказа"
 msgid "Setting display scaling"
 msgstr "Подешавање салираног приказа"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Успешно подешено"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "Прегледај одјављивањем након поставке скалираног приказа"
 
@@ -144,31 +148,31 @@ msgstr "Неуспешно повезивање са %q, упаривање не
 msgid "Bluetooth connection failed"
 msgstr "Блутут повезивање неуспело"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Отвори"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Затвори све"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Принудно Заустави"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Закачи"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Откачи"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Сви прозори"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Недовољно места на диску, молимо чистите редовно!"
 
@@ -332,27 +336,76 @@ msgstr "Приказати све прозоре тренутне радне п�
 msgid "Display workspace"
 msgstr "Приказати радни простор"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Аутентикација је неопходна за промену језика"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "Промена системског језика неуспела, молимо покушајте касније"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Системски језик је промењен, молимо одјавите и након тога се пријавите ради примена измена подешавања"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Промена системског језика у току, молимо сачекајте..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Промена системског језика са инсталацијом недостајућих пакета је у току, молимо сачекајте..."
+msgstr ""
+"Промена системског језика са инсталацијом недостајућих пакета је у току, "
+"молимо сачекајте..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Промена системског језика у току, молимо сачекајте..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+"Системски језик је промењен, молимо одјавите и након тога се пријавите ради "
+"примена измена подешавања"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Поврати"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Откажи"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Поново"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q инсталација успешна."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q инсталација неуспешна."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q уклањање успешно."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q уклањање неуспешно."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Прикључите пуњач да би сте успешно ажурирали и избегли самостално "
+"искључивање."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Кеш пакета уклоњен"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -366,13 +419,11 @@ msgstr "Уклањање %q неуспешно"
 msgid "Password required to connect %q"
 msgstr "Лозинка је потребна за повезивање %q"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1961,8 +2012,7 @@ msgid "Network"
 msgstr "Мрежа"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../network/utils_notify.go:100

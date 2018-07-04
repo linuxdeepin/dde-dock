@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Jozef Gaal <preklady@mayday.sk>, 2016
 # Marek Bujko <marek.bujko@gmail.com>, 2016-2018
@@ -9,15 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-03 09:40+0000\n"
 "Last-Translator: Marek Bujko <marek.bujko@gmail.com>\n"
-"Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
+"Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/sk/)\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n "
+">= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -27,7 +29,9 @@ msgstr "Prosím, zadajte heslo s viac ako 8 znakmi"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Heslo musí obsahovať písmená anglickej abecedy (veľké a malé písmená), číslice alebo špeciálne znaky (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Heslo musí obsahovať písmená anglickej abecedy (veľké a malé písmená), "
+"číslice alebo špeciálne znaky (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -61,11 +65,11 @@ msgstr "Zobrazenie mierky displeja"
 msgid "Setting display scaling"
 msgstr "Nastavenie mierky zobrazenia"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Úspešne nastavené"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "Zobraziť po odhlásení, po nastavení mierky zobrazenia"
 
@@ -144,31 +148,31 @@ msgstr "Nepodarilo sa pripojiť %q, párovanie zlyhalo"
 msgid "Bluetooth connection failed"
 msgstr "Pripojenie bluetooth zlyhalo"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Otvoriť"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Zatvoriť všetko"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Vynútené ukončenie"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Dock"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Odstrániť z docku"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Všetky okná"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Nedostatok miesta na disku, prosím uvoľníte viac miesta!"
 
@@ -332,27 +336,76 @@ msgstr "Zobraziť okná z aktuálného pracovného prostredia"
 msgid "Display workspace"
 msgstr "Pracovné prostredie"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Na prepínanie jazyka je potrebná autentifikácia"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "Jazyk systému sa nezmenil, skúste to prosím neskôr"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Systémový jazyk bol zmenený, po odhlásení sa znovu prihláste"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Dochádza k zmene systémového jazyka, prosím čakajte..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Systémový jazyk sa zmení inštaláciou potrebných jazykových balíkov, prosím čakajte..."
+msgstr ""
+"Systémový jazyk sa zmení inštaláciou potrebných jazykových balíkov, prosím "
+"čakajte..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Dochádza k zmene systémového jazyka, prosím čakajte..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr "Systémový jazyk bol zmenený, po odhlásení sa znovu prihláste"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Obnoviť"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Skúsiť znova"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q úspešne nainštalovaný."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q inštalácia zlyhala."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q úspešne odstránený."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q odstránenie zlyhalo."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Aby sa zabránilo automatickému vypnutiu, prosím pripojte normálne "
+"aktualizácie."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Vyrovnávaciu pamäť balíčkov vymazaná"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"Váš systémový zdroj bol upravený, obnovte ho na oficiálny zdroj pre bežné "
+"používanie"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -366,13 +419,11 @@ msgstr "Nepodarilo sa odinštalovať %q"
 msgid "Password required to connect %q"
 msgstr "Na pripojenie %q je vyžadované heslo"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1606,7 +1657,9 @@ msgstr "Zariadenie nie je pripravené na konfiguráciu"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Konfigurácia IP nemôže byť vyhradená (nie je dostupná adresa, časový limit atď.)"
+msgstr ""
+"Konfigurácia IP nemôže byť vyhradená (nie je dostupná adresa, časový limit "
+"atď.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1620,7 +1673,9 @@ msgstr "Boli požadované heslá, ale neboli poskytnuté"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Žiadateľ 802.1X sa odpojil od prístupového bodu alebo autentifikačného servera"
+msgstr ""
+"Žiadateľ 802.1X sa odpojil od prístupového bodu alebo autentifikačného "
+"servera"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1849,7 +1904,9 @@ msgstr "Ubezpečte sa, že ste vložili SIM kartu so signálom mobilnej siete"
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Uistite sa, že ste vybrali správny plán bez toho, aby ste mali na SIM karte nedoplatky"
+msgstr ""
+"Uistite sa, že ste vybrali správny plán bez toho, aby ste mali na SIM karte "
+"nedoplatky"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1929,7 +1986,9 @@ msgstr "Nepodarilo sa zdieľať hotspot, skontrolujte nastavenia dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôtovému smerovaču"
+msgstr ""
+"Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôtovému "
+"smerovaču"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
@@ -1961,8 +2020,7 @@ msgid "Network"
 msgstr "Sieť"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Hardvérový vypínač WLAN karty je vypnutý, prosím zapnite ho. "
 
 #: ../../network/utils_notify.go:100
@@ -2005,7 +2063,9 @@ msgstr "Je potrebné overiť, či je zapnutá synchronizácia času v sieti."
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Autentifikácia je potrebná na kontrolu, či RTC ukladá miestny čas alebo čas UTC."
+msgstr ""
+"Autentifikácia je potrebná na kontrolu, či RTC ukladá miestny čas alebo čas "
+"UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # enolp <enolp@softastur.org>, 2016-2018
 # Nacho García Gómez <nachoxana@gmail.com>, 2018
@@ -9,14 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Asturian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ast/)\n"
+"Language-Team: Asturian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/ast/)\n"
+"Language: ast\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ast\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -27,7 +28,9 @@ msgstr "Introduz una contraseña mayor de 8 caráuteres"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "La contraseña ha contener lletres (sensible a mayúscules), númberos o símbolos especiales (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"La contraseña ha contener lletres (sensible a mayúscules), númberos o "
+"símbolos especiales (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -61,11 +64,11 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Afitóse con ésitu"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -144,31 +147,31 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr "Falló la conexón bluettoth"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Abrir"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Zarrar too"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Forciar colar"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Anclar"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Desanclar"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Toles ventanes"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Nun hai abondu espaciu en discu. ¡Llibera daqué d'espaciu!"
 
@@ -332,27 +335,76 @@ msgstr "Amosar ventanes de la estaya de trabayu actual"
 msgid "Display workspace"
 msgstr "Amosar estaya de trabayu"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Ríquese l'autenticación pa camudar la llingua"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr "Falló'l cambéu de la llingua del sistema. Volvi tentalo más sero, por favor"
+msgstr ""
+"Falló'l cambéu de la llingua del sistema. Volvi tentalo más sero, por favor"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Camudóse la llingua del sistema. Volvi aniciar sesión, por favor"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Ta camudándose la llingua'l sistema. Espera, por favor..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Ta camudándose la llingua'l sistema con una instalación a la que-y falten paquetes de llingua. Espera, por favor..."
+msgstr ""
+"Ta camudándose la llingua'l sistema con una instalación a la que-y falten "
+"paquetes de llingua. Espera, por favor..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Ta camudándose la llingua'l sistema. Espera, por favor..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr "Camudóse la llingua del sistema. Volvi aniciar sesión, por favor"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Restaurar"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Encaboxar"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Retentar"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q instalóse con ésitu."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q falló al instalase."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q desanicióse con ésitu."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q falló al desaniciase."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Pa evitar l'apagáu automáticu, por favor coneuta'l cargador pa un "
+"anovamientu normal."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Llimpióse la caché de paquetes"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"Modificóse la fonte del sistema, restaura la fonte oficial pa un usu normal"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -366,13 +418,11 @@ msgstr "Fallu al desinstalar %q"
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1606,7 +1656,9 @@ msgstr "El preséu nun se tresnó pa la configuración"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Nun pudo acutase la configuración d'IP (direición non disponible, escosa de tiempu... etc)"
+msgstr ""
+"Nun pudo acutase la configuración d'IP (direición non disponible, escosa de "
+"tiempu... etc)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1844,7 +1896,8 @@ msgstr "Desenchufóse'l cable de rede"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Asegúrate que la tarxeta SIM s'inxertó y hai cobertoria móvil, por favor"
+msgstr ""
+"Asegúrate que la tarxeta SIM s'inxertó y hai cobertoria móvil, por favor"
 
 #: ../../network/state_handler.go:103
 msgid ""
@@ -1961,9 +2014,10 @@ msgid "Network"
 msgstr "Rede"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "L'interruptor físicu de WLAN ta apagáu. Priendilu según seya preciso, por favor."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
+"L'interruptor físicu de WLAN ta apagáu. Priendilu según seya preciso, por "
+"favor."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # ahmad nourallah <ahmadnurallah@gmail.com>, 2017
 # hamdy abd elfatah <hamdy.elzankly@gmail.com>, 2018
@@ -12,15 +12,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-06-05 01:28+0000\n"
 "Last-Translator: hamdy abd elfatah <hamdy.elzankly@gmail.com>\n"
-"Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
+"Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/ar/)\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ar\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -30,7 +32,9 @@ msgstr "يرجى إدخال كلمة مرور لا تقل عن 8 أحرف"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام "
+"أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -38,7 +42,9 @@ msgstr "لا يمكن ترك خانة اسم المستخدم فارغة"
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "يجب أن يحوي اسم المستخدم على الأحرف من a إلى z , والأرقام من 0 إلى 9 , و - أو _ ."
+msgstr ""
+"يجب أن يحوي اسم المستخدم على الأحرف من a إلى z , والأرقام من 0 إلى 9 , و - "
+"أو _ ."
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -64,11 +70,11 @@ msgstr "عرض الشاشة"
 msgid "Setting display scaling"
 msgstr "إعدادات تحجيم العرض"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "تم اﻹعداد بنجاح"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "سيتم تغيير حجم العرض بعد تسجيل الخروج"
 
@@ -147,31 +153,31 @@ msgstr "فشل الإتصال %q فشل الإقتران"
 msgid "Bluetooth connection failed"
 msgstr "فشل الاتصال بالبلوتوث"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "فتح"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "إغلاق الكل"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_خروج بالقوة"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "إرساء"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "إلغاء الإرساء"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "كل النوافذ"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "مساحة القرص غير كافية، يرجى التنظيف في الوقت المناسب"
 
@@ -335,27 +341,71 @@ msgstr "عرض نوافذ مساحة العمل الحالية"
 msgid "Display workspace"
 msgstr "عرض مساحة العمل"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "المصادقة مطلوبة لتبديل اللغة"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة لاحقاً."
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "تم تغيير لغة النظام، يرجى تسجيل الدخول مرة أخرى بعد تسجيل الخروج."
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "يتم تغيير لغة النظام، يرجى الانتظار ..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
 msgstr " يجري تعديل لغة النظام بتثبيت حزم اللغة الناقصة، الرجاء الانتظار ..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "يتم تغيير لغة النظام، يرجى الانتظار ..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr "تم تغيير لغة النظام، يرجى تسجيل الدخول مرة أخرى بعد تسجيل الخروج."
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "استعادة"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "إعادة المحاولة"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr " تم تثبيت  %q بنجاح"
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "تعذر تثبيت  %q"
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "تمت إزالة %q بنجاح"
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "تعذر إزالة %q"
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"من أجل منع إيقاف التشغيل التلقائي، يرجى وصل الطاقة  للتحديث بشكل طبيعي."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "تم مسح ذاكرة التخزين المؤقت للحزمة"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr "نظامك قد تم تعديله، يرجى الرجوع الى الضبط الأصلي للعمل بصورة صحيحة."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -369,13 +419,11 @@ msgstr "تعذر إلغاء تثبيت %q "
 msgid "Password required to connect %q"
 msgstr "كلمة المرور مطلوبة للإتصال ب %q"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1852,7 +1900,8 @@ msgstr "الرجاء كن متأكداً من إدراج بطاقة SIM ، مع 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "الرجاء التأكد  من الطريقة الصحيحة المحددة بدون تأخير دفع رصيد بطاقة SIM  "
+msgstr ""
+"الرجاء التأكد  من الطريقة الصحيحة المحددة بدون تأخير دفع رصيد بطاقة SIM  "
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1964,8 +2013,7 @@ msgid "Network"
 msgstr "الشبكة"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "مبدل الجهاز لبطاقة الشبكة \"متوقف\" ، يرجى التبديل على حسب الضرورة ."
 
 #: ../../network/utils_notify.go:100
@@ -2008,7 +2056,9 @@ msgstr "المصادقة مطلوبة للتحكم بما إذا كان سيتم
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق."
+msgstr ""
+"المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت "
+"عالمي منسق."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

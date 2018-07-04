@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Alik Miankoli <alikmiankoliid@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-02 08:58+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
+"Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/fa/)\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fa\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -60,11 +61,11 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr ""
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr ""
 
@@ -143,31 +144,31 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr "اتصال  بلوتوث ناموفق بود"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_باز کردن"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "ـ بستن همه"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "ـ چسباندن"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "ـ رهاسازی"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr ""
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr ""
 
@@ -331,27 +332,71 @@ msgstr "نمایش پنجره های فضای کار جاری"
 msgid "Display workspace"
 msgstr "نمایش فضای کار"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr ""
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr ""
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "زبان سیستم در حال تغییر است لطفا صبر کنید..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "زبان سیستم در حال تغییر با نصب بسته های الحاقی  زبان است لطفا صبور باشد..."
+msgstr ""
+"زبان سیستم در حال تغییر با نصب بسته های الحاقی  زبان است لطفا صبور باشد..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "زبان سیستم در حال تغییر است لطفا صبر کنید..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr ""
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "انصراف"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "سعی مجدد"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr ""
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr ""
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr ""
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr ""
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr ""
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -365,13 +410,11 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1960,8 +2003,7 @@ msgid "Network"
 msgstr "شبکه"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "کلید سخت افزاری WLAN خاموش است. لطفا آن را در صورت لزوم روشن کنید."
 
 #: ../../network/utils_notify.go:100

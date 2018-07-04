@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # abuyop <abuyop@gmail.com>, 2016-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-05-29 13:36+0000\n"
 "Last-Translator: abuyop <abuyop@gmail.com>\n"
-"Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
+"Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/ms/)\n"
+"Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -26,7 +27,9 @@ msgstr "Sila masukkan kata aluan tidak kurang dari 8 aksara panjangnya"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor "
+"atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -60,11 +63,11 @@ msgstr "Penskalaan paparan"
 msgid "Setting display scaling"
 msgstr "Menetapkan penskalaan paparan"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Berjaya ditetapkan"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "Lihat dengan mendaftar keluar selepas tetapkan penskalaan paparan"
 
@@ -143,31 +146,31 @@ msgstr "Gagal menyambung dengan %q, perpasangan gagal"
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Buka"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Tutup Semua"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Paksa Keluar"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Labuh"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Nyahlabuh"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "Semu_a tetingkap"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Ruang Cakera Tidak Mencukupi, sila bersihkan mengikut masa!"
 
@@ -331,27 +334,78 @@ msgstr "Papar tetingkap pada ruang kerja semasa"
 msgid "Display workspace"
 msgstr "Papar ruang kerja"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "Bahasa sistem gagal diubah, cuba lagi kemudian"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Bahasa sistem telah diubah, sila daftar masuk sekali lagi selepas daftar keluar"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Bahasa sistem sedang diubah, tunggu sebentar..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Bahasa sistem sedang diubah dengan pemasangan pakej bahasa yang kurang lengkap, tunggu sebentar..."
+msgstr ""
+"Bahasa sistem sedang diubah dengan pemasangan pakej bahasa yang kurang "
+"lengkap, tunggu sebentar..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Bahasa sistem sedang diubah, tunggu sebentar..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+"Bahasa sistem telah diubah, sila daftar masuk sekali lagi selepas daftar "
+"keluar"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Pulih"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Batal"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Cuba lagi"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q berjaya dipasangkan."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q gagal dipasangkan."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q berjaya dibuang."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q gagal dibuang."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi "
+"kemaskini biasa."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Cache pakej disapu bersih"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk "
+"kegunaan biasa anda"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -365,13 +419,11 @@ msgstr "Gagal menyahpasang %q"
 msgid "Password required to connect %q"
 msgstr "Kata laluan diperlukan untuk menyambung dengan %q"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1605,7 +1657,9 @@ msgstr "Peranti belum bersedia untuk konfigurasi"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-lain)"
+msgstr ""
+"Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-"
+"lain)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1663,7 +1717,8 @@ msgstr "Perkhidmatan sambungan terkongsi gagal dimulakan"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
+msgstr ""
+"Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1843,12 +1898,14 @@ msgstr "Kabel rangkaian telah dicabut"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
+msgstr ""
+"Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
+msgstr ""
+"Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1860,11 +1917,15 @@ msgstr "Sambungan VPN yang diaktifkan telah gagal"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr "Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada pengguna"
+msgstr ""
+"Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada "
+"pengguna"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr "Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada peranti"
+msgstr ""
+"Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada "
+"peranti"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1928,11 +1989,15 @@ msgstr "Tidak boleh berkongsi kawasan panas, sila periksa tetapan dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
+msgstr ""
+"Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala "
+"tanpa wayar"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
+msgstr ""
+"Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian "
+"anda."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -1960,8 +2025,7 @@ msgid "Network"
 msgstr "Rangkaian"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Suis perkakasan Kad WLAN dimatikan, sila hidupkan jika perlu."
 
 #: ../../network/utils_notify.go:100
@@ -1998,13 +2062,17 @@ msgstr "Pengesahihan diperlukan untuk menetap waktu sistem."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan."
+msgstr ""
+"Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian "
+"dapat dibenarkan."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC."
+msgstr ""
+"Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat "
+"atau UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

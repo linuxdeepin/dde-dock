@@ -146,6 +146,7 @@ func (s *SessionDaemon) initModules() {
 		"mime",
 		"miracast", // need network
 		"systeminfo",
+		"lastore",
 		"calltrace",
 		"debug",
 	}

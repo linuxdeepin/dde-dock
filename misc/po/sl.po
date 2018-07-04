@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Eva Černi <mini.muca000@gmail.com>, 2016
 # Gorzy Gorup <gorupgorazd@gmail.com>, 2016-2018
@@ -10,15 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-06-10 09:17+0000\n"
 "Last-Translator: Gorzy Gorup <gorupgorazd@gmail.com>\n"
-"Language-Team: Slovenian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sl/)\n"
+"Language-Team: Slovenian (http://www.transifex.com/linuxdeepin/deepin-"
+"desktop-environment/language/sl/)\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sl\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -28,7 +30,9 @@ msgstr "Prosim, vnesite geslo z več kot 8 znaki."
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Geslo mora vsebovati angleške črke (veliksot črk je pomembna), številke ali posebne simbole (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Geslo mora vsebovati angleške črke (veliksot črk je pomembna), številke ali "
+"posebne simbole (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -62,11 +66,11 @@ msgstr "Spreminjanje velikosti prikaza"
 msgid "Setting display scaling"
 msgstr "Nastavljanje spreminjanja velikosti"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Uspešno nastavljeno"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "Prikaži pri odjavljanju po nastavitvi velikosti prikaza"
 
@@ -145,31 +149,31 @@ msgstr "Povezava z/s %q ni uspela, parjenje ni bilo mogoče"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth povezava ni uspela "
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Odpri"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Zapri vse"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Prisilni izhod"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Zasidraj"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Odpni iz pulta"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Vsa okna"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Premajhen prostor na disku, prosim pravočasno očistite!"
 
@@ -333,27 +337,74 @@ msgstr "Prikaži okna na trenutni delovni površini."
 msgid "Display workspace"
 msgstr "Prikaži delovna mesta."
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Za zamenjavo jezika je potrebna avtentikacija"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "Sprememba jezika je spodletela, prosimo da poskusite kasneje"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Jezik nastavljen, prosimo da se ponovno prijavite"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Spreminjanje sistemskega jezika, prosimo počakajte..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Spreminjanje sistemskega jezika z namestitvijo manjkajočega jezikovnega paketa ..."
+msgstr ""
+"Spreminjanje sistemskega jezika z namestitvijo manjkajočega jezikovnega "
+"paketa ..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Spreminjanje sistemskega jezika, prosimo počakajte..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr "Jezik nastavljen, prosimo da se ponovno prijavite"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Obnovi"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Ponovno poskusi"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q je uspešno nameščen."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "Namestitev %q je spodletela."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q je uspešno odstranjen."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "Odstranitev %q ni uspela."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr "Da se izognete samodejnemu izklopu, vključite običajne posodobitve."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Predpomnilnik paketa izbrisan"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"Vaš sistemski vir je bil spremenjen, za normalno uporabo spremenite nazaj na "
+"uradni vir"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -367,13 +418,11 @@ msgstr "Ni uspelo odstraniti %q"
 msgid "Password required to connect %q"
 msgstr "Za povezovanje %q je potrebno geslo"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2,4 GHz)"
 
@@ -1607,7 +1656,9 @@ msgstr "Naprava ni bila pripravljena na konfiguracijo"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP konfiguracija ni bila rezervirana (na voljo ni noben naslov, zakasnitev, itd)"
+msgstr ""
+"IP konfiguracija ni bila rezervirana (na voljo ni noben naslov, zakasnitev, "
+"itd)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1621,7 +1672,8 @@ msgstr "Geslo je bilo zahtevano, vendar ni na voljo"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1x odjemalec se je odklopil od dostopne točke ali pristnostnega strežnika"
+msgstr ""
+"802.1x odjemalec se je odklopil od dostopne točke ali pristnostnega strežnika"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1862,11 +1914,13 @@ msgstr "Vključitev povezave VPN ni uspela"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr "Stanje povezave VPN se je spremenilo, ker je uporabnik prekinil povezavo"
+msgstr ""
+"Stanje povezave VPN se je spremenilo, ker je uporabnik prekinil povezavo"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr "Stanje povezave VPN se je spremenilo zaradi prekinitve povezave z napravami"
+msgstr ""
+"Stanje povezave VPN se je spremenilo zaradi prekinitve povezave z napravami"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1930,7 +1984,8 @@ msgstr "Deljenje vroče točke ni uspelo, prosim preverite nastavitve dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Ni mogoče povezati %q, prosimo približajte se brezžičnemu usmerjevalniku"
+msgstr ""
+"Ni mogoče povezati %q, prosimo približajte se brezžičnemu usmerjevalniku"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
@@ -1962,8 +2017,7 @@ msgid "Network"
 msgstr "Omrežje"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Stikalo WLAN kartice je izklopljeno, vklopite ga."
 
 #: ../../network/utils_notify.go:100
@@ -2006,7 +2060,9 @@ msgstr "Za omogočanje uravnavanja omrežnega časa je potrebna avtentikacija."
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Za nadzor, ali naj RTC shranjuje lokalni ali UTC čas, je potrebna avtentikacija."
+msgstr ""
+"Za nadzor, ali naj RTC shranjuje lokalni ali UTC čas, je potrebna "
+"avtentikacija."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

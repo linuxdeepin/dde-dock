@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Carl Andersen <carl@black-pearl.dk>, 2016-2017
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2016,2018
@@ -10,14 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 16:47+0800\n"
+"POT-Creation-Date: 2018-07-09 19:28+0800\n"
 "PO-Revision-Date: 2018-07-02 21:38+0000\n"
 "Last-Translator: scootergrisen\n"
-"Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
+"Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-"
+"environment/language/da/)\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -28,7 +29,9 @@ msgstr "Indtast venligt en adgangskode, ikke mindre end 8 tegn"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Adgangskoden skal indeholde engelske bogstaver (forskel på store og små "
+"bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -62,11 +65,11 @@ msgstr "Skærmskalering"
 msgid "Setting display scaling"
 msgstr "Sætter skærmskalering"
 
-#: ../../appearance/scale.go:80
+#: ../../appearance/scale.go:86
 msgid "Set successfully"
 msgstr "Sat"
 
-#: ../../appearance/scale.go:81
+#: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
 msgstr "Vis ved at logge ud efter skærmskaleringen er blevet sat"
 
@@ -145,31 +148,31 @@ msgstr "Kunne ikke tilslutte %q, parring mislykkedes"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:101
 msgid "_Open"
 msgstr "_Åbn"
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
 msgstr "_Luk alle"
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
 msgstr "_Gennemtving afslut"
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
 msgstr "_Dok"
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
 msgstr "_Fjern fra dok"
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
 msgstr "_Alle vinduer"
 
-#: ../../housekeeping/init.go:88
+#: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Utilstrækkelig diskplads, ryd venligt op i tide!"
 
@@ -333,27 +336,78 @@ msgstr "Vis vinduer på aktuelle arbejdsområde"
 msgid "Display workspace"
 msgstr "Vis arbejdsområde"
 
-#: ../../langselector/handle_event.go:35
+#: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
 msgstr "Autentifikation kræves for at skifte sprog"
 
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
 msgstr "Kunne ikke ændre systemets sprog, prøv venligst senere"
 
-#: ../../langselector/handle_event.go:61
-msgid "System language has been changed, please log in again after logged out"
-msgstr "Systemets sprog er blevet ændret, log venligst ind igen efter du har logget ud"
-
-#: ../../langselector/locale_ifc.go:74
-msgid "System language is being changed, please wait..."
-msgstr "Systemsproget bliver ændret, vent venligst..."
-
-#: ../../langselector/locale_ifc.go:80
+#: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Systemsproget bliver ændret, med en installation af manglede sprogpakker, vent venligst..."
+msgstr ""
+"Systemsproget bliver ændret, med en installation af manglede sprogpakker, "
+"vent venligst..."
+
+#: ../../langselector/locale.go:377
+msgid "System language is being changed, please wait..."
+msgstr "Systemsproget bliver ændret, vent venligst..."
+
+#: ../../langselector/locale.go:425
+msgid "System language has been changed, please log in again after logged out"
+msgstr ""
+"Systemets sprog er blevet ændret, log venligst ind igen efter du har logget "
+"ud"
+
+#: ../../lastore/check_source.go:51
+msgid "Restore"
+msgstr "Genskab"
+
+#: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
+msgid "Cancel"
+msgstr "Annuller"
+
+#: ../../lastore/lastore.go:233
+msgid "Retry"
+msgstr "Prøv igen"
+
+#: ../../lastore/notify.go:82
+msgid "%q installed successfully."
+msgstr "%q installeret."
+
+#: ../../lastore/notify.go:85
+msgid "%q failed to install."
+msgstr "%q blev ikke installeret."
+
+#: ../../lastore/notify.go:93
+msgid "%q removed successfully."
+msgstr "%q fjernet."
+
+#: ../../lastore/notify.go:95
+msgid "%q failed to remove."
+msgstr "%q blev ikke fjernet."
+
+#: ../../lastore/notify.go:102
+msgid ""
+"In order to prevent automatic shutdown, please plug in for normal update."
+msgstr ""
+"Sæt venligst stikket i for at opdatere normalt så automatisk nedlukning "
+"forhindres."
+
+#: ../../lastore/notify.go:107
+msgid "Package cache wiped"
+msgstr "Pakke-mellemlager ryddet"
+
+#: ../../lastore/notify.go:112
+msgid ""
+"Your system source has been modified, please restore to official source for "
+"your normal use"
+msgstr ""
+"Dit system er blevet ændret. Genskab venligst til officiel kilde for at "
+"bruge det normalt"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -367,13 +421,11 @@ msgstr "Kunne ikke afinstallere %q"
 msgid "Password required to connect %q"
 msgstr "Der kræves adgangskode for at oprette forbindelse til %q"
 
-#: ../../network/manager_active.go:317
-#: ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319
-#: ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1607,7 +1659,9 @@ msgstr "Enheden har ikke været klar til konfiguration"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP-konfiguration kunne ikke reserveres (ingen tilgængelig adresse, timeout osv.)"
+msgstr ""
+"IP-konfiguration kunne ikke reserveres (ingen tilgængelig adresse, timeout "
+"osv.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1621,7 +1675,8 @@ msgstr "Adgangskoder blev påkrævet, men ikke angivet"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X-supplicanten afbrudt fra access point eller godkendelsesserveren"
+msgstr ""
+"802.1X-supplicanten afbrudt fra access point eller godkendelsesserveren"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1850,7 +1905,9 @@ msgstr "Sørg for, at SIM-kortet er blevet indsat med mobilnet-signal"
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Sørg venligst for, at en korrekt plan blev valgt uden at genoprette SIM-kortet"
+msgstr ""
+"Sørg venligst for, at en korrekt plan blev valgt uden at genoprette SIM-"
+"kortet"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1930,7 +1987,9 @@ msgstr "Kan ikke dele hotspot, tjek venligst dnsmasq-indstillinger"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse router"
+msgstr ""
+"Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse "
+"router"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
@@ -1938,7 +1997,9 @@ msgstr "Kan ikke forbinde %q, check din router eller netværkskabel."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
+msgstr ""
+"Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert "
+"adgangskode"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -1962,9 +2023,10 @@ msgid "Network"
 msgstr "Netværk"
 
 #: ../../network/utils_notify.go:96
-msgid ""
-"The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er nødvendigt."
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
+"Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er "
+"nødvendigt."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2000,13 +2062,16 @@ msgstr "Autentifikation kræves for at sætte systemets tid."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr "Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres."
+msgstr ""
+"Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr "Autentifikation kræves for at styre om RTC'en lagre den lokale tid eller UTC-tiden."
+msgstr ""
+"Autentifikation kræves for at styre om RTC'en lagre den lokale tid eller UTC-"
+"tiden."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
