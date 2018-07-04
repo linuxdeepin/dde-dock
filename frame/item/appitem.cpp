@@ -24,6 +24,7 @@
 #include "util/themeappicon.h"
 #include "util/imagefactory.h"
 #include "xcb/xcb_misc.h"
+#include "components/appswingeffectbuilder.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -39,67 +40,6 @@
 
 #define APP_DRAG_THRESHOLD      20
 
-const static qreal Frames[] = { 0,
-                                0.327013,
-                                0.987033,
-                                1.77584,
-                                2.61157,
-                                3.45043,
-                                4.26461,
-                                5.03411,
-                                5.74306,
-                                6.37782,
-                                6.92583,
-                                7.37484,
-                                7.71245,
-                                7.92557,
-                                8, 7.86164,
-                                7.43184,
-                                6.69344,
-                                5.64142,
-                                4.2916,
-                                2.68986,
-                                0.91694,
-                                -0.91694,
-                                -2.68986,
-                                -4.2916,
-                                -5.64142,
-                                -6.69344,
-                                -7.43184,
-                                -7.86164,
-                                -8,
-                                -7.86164,
-                                -7.43184,
-                                -6.69344,
-                                -5.64142,
-                                -4.2916,
-                                -2.68986,
-                                -0.91694,
-                                0.91694,
-                                2.68986,
-                                4.2916,
-                                5.64142,
-                                6.69344,
-                                7.43184,
-                                7.86164,
-                                8,
-                                7.93082,
-                                7.71592,
-                                7.34672,
-                                6.82071,
-                                6.1458,
-                                5.34493,
-                                4.45847,
-                                3.54153,
-                                2.65507,
-                                1.8542,
-                                1.17929,
-                                0.653279,
-                                0.28408,
-                                0.0691776,
-                                0,
-                              };
-
 int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
 
@@ -109,8 +49,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_appPreviewTips(new PreviewContainer(this)),
       m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this)),
 
-      m_swingEffectView(new QGraphicsView(this)),
-      m_itemScene(new QGraphicsScene(this)),
+      m_swingEffectView(nullptr),
+      m_itemAnimation(nullptr),
 
       m_dragging(false),
 
@@ -125,26 +65,13 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_smallWatcher(new QFutureWatcher<QPixmap>(this)),
       m_largeWatcher(new QFutureWatcher<QPixmap>(this))
 {
-    m_swingEffectView->setAttribute(Qt::WA_TransparentForMouseEvents);
-
     QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addWidget(m_swingEffectView);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
     setAccessibleName(m_itemEntryInter->name());
     setAcceptDrops(true);
     setLayout(centralLayout);
-
-    m_swingEffectView->setScene(m_itemScene);
-    m_swingEffectView->setAlignment(Qt::AlignCenter);
-    m_swingEffectView->setVisible(false);
-    m_swingEffectView->setFrameStyle(QFrame::NoFrame);
-    m_swingEffectView->setContentsMargins(0, 0, 0, 0);
-    m_swingEffectView->setRenderHints(QPainter::SmoothPixmapTransform);
-    m_swingEffectView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    m_swingEffectView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_swingEffectView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
@@ -238,7 +165,7 @@ void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (m_dragging || (m_swingEffectView->isVisible() && DockDisplayMode != Fashion))
+    if (m_dragging || (m_swingEffectView != nullptr && DockDisplayMode != Fashion))
         return;
 
     QPainter painter(this);
@@ -322,7 +249,7 @@ void AppItem::paintEvent(QPaintEvent *e)
         }
     }
 
-    if (m_swingEffectView->isVisible())
+    if (m_swingEffectView != nullptr)
         return;
 
     // icon
@@ -602,62 +529,42 @@ void AppItem::cancelAndHidePreview()
 void AppItem::playSwingEffect()
 {
     // NOTE(sbw): return if animation view already playing
-    if (m_swingEffectView->isVisible())
+    if (m_swingEffectView != nullptr)
         return;
 
     stopSwingEffect();
-    if (!m_itemAnimation.timeLine())
-    {
-        QTimeLine *tl = new QTimeLine(1200, this);
-        tl->setFrameRange(0, 60);
-        tl->setLoopCount(1);
-        tl->setEasingCurve(QEasingCurve::Linear);
-        tl->setStartFrame(0);
 
-        m_itemAnimation.setTimeLine(tl);
-    }
+    QPair<QGraphicsView *, QGraphicsItemAnimation *> pair =  SwingEffect(
+            this, m_appIcon, rect(), qApp->devicePixelRatio());
 
-    const auto ratio = qApp->devicePixelRatio();
-    const QRect r = rect();
-    const QPixmap &icon = m_appIcon;
+    m_swingEffectView = pair.first;
+    m_itemAnimation = pair.second;
 
-    QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
-    item->setTransformationMode(Qt::SmoothTransformation);
-    item->setPos(QPointF(r.center()) - QPointF(icon.rect().center()) / ratio);
+    QTimeLine *tl = m_itemAnimation->timeLine();
+    connect(tl, &QTimeLine::stateChanged, [=](QTimeLine::State newState) {
+        if (newState == QTimeLine::NotRunning) {
+            m_swingEffectView->hide();
+            layout()->removeWidget(m_swingEffectView);
+            m_swingEffectView = nullptr;
+            m_itemAnimation = nullptr;
+            checkAttentionEffect();
+        }
+    });
 
-    m_itemAnimation.setItem(item);
-    m_itemScene->setSceneRect(r);
-    m_swingEffectView->setSceneRect(r);
-    m_swingEffectView->setFixedSize(r.size());
-
-    const int px = qreal(-icon.rect().center().x()) / ratio;
-    const int py = qreal(-icon.rect().center().y()) / ratio - 18.;
-    const QPoint pos = r.center() + QPoint(0, 18);
-    for (int i(0); i != 60; ++i)
-    {
-        m_itemAnimation.setPosAt(i / 60.0, pos);
-        m_itemAnimation.setTranslationAt(i / 60.0, px, py);
-        m_itemAnimation.setRotationAt(i / 60.0, Frames[i]);
-    }
-
-    QTimeLine *tl = m_itemAnimation.timeLine();
-    connect(tl, &QTimeLine::finished, m_swingEffectView, &QGraphicsView::hide);
-    connect(tl, &QTimeLine::finished, this, &AppItem::checkAttentionEffect);
-
+    layout()->addWidget(m_swingEffectView);
     tl->start();
-    m_swingEffectView->setVisible(true);
 }
 
 void AppItem::stopSwingEffect()
 {
+    if (m_swingEffectView == nullptr || m_itemAnimation == nullptr)
+        return;
+
     // stop swing effect
     m_swingEffectView->setVisible(false);
 
-    if (m_itemAnimation.timeLine() && m_itemAnimation.timeLine()->state() != QTimeLine::NotRunning)
-        m_itemAnimation.timeLine()->stop();
-    m_itemAnimation.clear();
-    if (!m_itemScene->items().isEmpty())
-        m_itemScene->clear();
+    if (m_itemAnimation->timeLine() && m_itemAnimation->timeLine()->state() != QTimeLine::NotRunning)
+        m_itemAnimation->timeLine()->stop();
 }
 
 void AppItem::checkAttentionEffect()

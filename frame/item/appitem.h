@@ -95,8 +95,7 @@ private:
     DockEntryInter *m_itemEntryInter;
 
     QGraphicsView *m_swingEffectView;
-    QGraphicsScene *m_itemScene;
-    QGraphicsItemAnimation m_itemAnimation;
+    QGraphicsItemAnimation *m_itemAnimation;
 
     bool m_dragging;
     bool m_active;
