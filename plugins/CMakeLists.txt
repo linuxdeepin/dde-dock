@@ -1,11 +1,7 @@
 
 add_subdirectory("datetime")
 #add_subdirectory("disk-mount")
-if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    add_subdirectory("network")
-else()
-    add_subdirectory("new-network")
-endif ()
+add_subdirectory("new-network")
 add_subdirectory("shutdown")
 add_subdirectory("sound")
 add_subdirectory("system-tray")
