@@ -1,5 +1,5 @@
 
-set(PLUGIN_NAME "new-network")
+set(PLUGIN_NAME "network")
 
 project(${PLUGIN_NAME})
 
