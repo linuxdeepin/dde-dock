@@ -158,6 +158,7 @@ func (sr *SubRecorder) RequestSave() {
 }
 
 func (sr *SubRecorder) writeStatus(w io.Writer) error {
+	// NOTE: csv.NewWriter will new a bufio.Writer
 	writer := csv.NewWriter(w)
 	sr.launchedMapMu.RLock()
 	writer.Write([]string{"# " + sr.root})
@@ -188,14 +189,8 @@ func (sr *SubRecorder) save() error {
 	if err != nil {
 		return err
 	}
-	bufWriter := bufio.NewWriter(f)
-	if err := sr.writeStatus(bufWriter); err != nil {
-		return err
-	}
-	if err := bufWriter.Flush(); err != nil {
-		return err
-	}
-	if err := f.Close(); err != nil {
+	defer f.Close()
+	if err := sr.writeStatus(f); err != nil {
 		return err
 	}
 
