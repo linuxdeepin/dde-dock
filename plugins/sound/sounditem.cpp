@@ -174,7 +174,7 @@ void SoundItem::refershIcon()
         else
             volumeString = QString("0") + ('0' + int(volmue / 100)) + "0";
 
-        iconString = ":/icons/image/audio-volume-" + volumeString;
+        iconString = "audio-volume-" + volumeString;
 
         if (mute)
             iconString += "-muted";
@@ -189,7 +189,7 @@ void SoundItem::refershIcon()
         else
             volumeString = "low";
 
-        iconString = QString(":/icons/image/audio-volume-%1-symbolic").arg(volumeString);
+        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
     }
 
     const auto ratio = qApp->devicePixelRatio();
