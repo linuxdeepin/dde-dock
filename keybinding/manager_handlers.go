@@ -115,13 +115,16 @@ func (m *Manager) initHandlers() {
 	m.handlers[ActionTypeDisplayCtrl] = buildHandlerFromController(m.displayController)
 	m.handlers[ActionTypeKbdLightCtrl] = buildHandlerFromController(m.kbdLightController)
 	m.handlers[ActionTypeTouchpadCtrl] = buildHandlerFromController(m.touchPadController)
-	logger.Debug("-----------ManageWireless:", ManageWireless)
-	if ManageWireless == "enabled" {
-		m.handlers[ActionTypeToggleWireless] = func(ev *KeyEvent) {
-			err := toggleWireless(m.sessionConn())
-			if err != nil {
-				logger.Warning("Failed to toggle wireless:", err)
-			}
+	m.handlers[ActionTypeToggleWireless] = func(ev *KeyEvent) {
+		state, err := getRfkillWlanState()
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		if state == 0 {
+			showOSD("WLANOff")
+		} else {
+			showOSD("WLANOn")
 		}
 	}
 

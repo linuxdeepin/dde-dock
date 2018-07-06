@@ -94,13 +94,19 @@ func (c *AudioController) toggleSourceMute() error {
 	if err != nil {
 		return err
 	}
-
-	err = source.SetMute(0, !mute)
+	mute = !mute
+	err = source.SetMute(0, mute)
 	if err != nil {
 		return err
 	}
 
-	// TODO: here we can show osd
+	var osd string
+	if mute {
+		osd = "AudioMicMuteOn"
+	} else {
+		osd = "AudioMicMuteOff"
+	}
+	showOSD(osd)
 	return nil
 }
 

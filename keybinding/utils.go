@@ -20,10 +20,14 @@
 package keybinding
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"strconv"
 	"strings"
 
 	"gir/gio-2.0"
@@ -134,4 +138,50 @@ func checkIBMHotkey(file string) bool {
 		}
 	}
 	return false
+}
+
+func getRfkillWlanState() (int, error) {
+	dir := "/sys/class/rfkill"
+	fileInfoList, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, fileInfo := range fileInfoList {
+		typeFile := filepath.Join(dir, fileInfo.Name(), "type")
+		typeBytes, err := readTinyFile(typeFile)
+		if err != nil {
+			continue
+		}
+		if bytes.Equal(bytes.TrimSpace(typeBytes), []byte("wlan")) {
+			stateFile := filepath.Join(dir, fileInfo.Name(), "state")
+			stateBytes, err := readTinyFile(stateFile)
+			if err != nil {
+				return 0, err
+			}
+			stateBytes = bytes.TrimSpace(stateBytes)
+			state, err := strconv.Atoi(string(stateBytes))
+			if err != nil {
+				return 0, err
+			}
+			return state, nil
+
+		}
+	}
+	return 0, errors.New("not found rfkill with type wlan")
+}
+
+func readTinyFile(file string) ([]byte, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	buf := make([]byte, 8)
+	n, err := f.Read(buf)
+
+	if err != nil {
+		return nil, err
+	}
+	return buf[:n], nil
 }
