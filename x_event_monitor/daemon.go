@@ -28,7 +28,7 @@ const (
 	dbusServiceName = "com.deepin.api.XEventMonitor"
 	dbusPath        = "/com/deepin/api/XEventMonitor"
 	dbusInterface   = dbusServiceName
-	moduleName      = "x_event_monitor"
+	moduleName      = "x-event-monitor"
 )
 
 var (

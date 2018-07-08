@@ -14,7 +14,6 @@ ifdef USE_GCCGO
 endif
 
 BINARIES =  \
-	    dde-session-initializer\
 	    dde-session-daemon \
 	    dde-system-daemon \
 	    grub2 \

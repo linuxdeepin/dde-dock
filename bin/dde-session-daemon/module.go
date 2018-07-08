@@ -27,7 +27,10 @@ import (
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/gsettings"
 
-	// sort modules
+	_ "pkg.deepin.io/dde/daemon/dock"
+	_ "pkg.deepin.io/dde/daemon/trayicon"
+	_ "pkg.deepin.io/dde/daemon/x_event_monitor"
+
 	_ "pkg.deepin.io/dde/daemon/network"
 
 	_ "pkg.deepin.io/dde/daemon/audio"

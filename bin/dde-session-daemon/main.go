@@ -25,13 +25,13 @@ package main
 //void init(){XInitThreads();gtk_init(0,0);}
 import "C"
 import (
-	// "gopkg.in/alecthomas/kingpin.v2"
 	"os"
 	"os/user"
 	"runtime"
 
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
@@ -40,8 +40,38 @@ import (
 )
 
 var logger = log.NewLogger("daemon/dde-session-daemon")
+var hasDDECookie bool
+
+func allowRun() bool {
+	if os.Getenv("DDE_SESSION_PROCESS_COOKIE_ID") != "" {
+		hasDDECookie = true
+		return true
+	}
+
+	systemBus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Warning(err)
+		os.Exit(1)
+	}
+	sessionManagerObj := systemBus.Object("com.deepin.SessionManager",
+		"/com/deepin/SessionManager")
+	var allowRun bool
+	err = sessionManagerObj.Call("com.deepin.SessionManager.AllowSessionDaemonRun",
+		dbus.FlagNoAutoStart).Store(&allowRun)
+	if err != nil {
+		logger.Warning(err)
+		return true
+	}
+
+	return allowRun
+}
 
 func main() {
+	if !allowRun() {
+		logger.Warning("session manager does not allow me to run")
+		os.Exit(1)
+	}
+
 	InitI18n()
 	Textdomain("dde-daemon")
 
@@ -62,6 +92,7 @@ func main() {
 	listModule := cmd.Command("list", "List all the modules or the dependencies of one module.").Arg("module", "module name.").String()
 
 	subCmd := cmd.ParseCommandLine(os.Args[1:])
+
 	cmd.StartProfile()
 
 	C.init()
