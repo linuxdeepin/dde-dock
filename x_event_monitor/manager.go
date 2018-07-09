@@ -26,6 +26,8 @@ import (
 	"sync"
 
 	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/ge"
+	"github.com/linuxdeepin/go-x11-client/ext/input"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -39,11 +41,9 @@ var errAreasRegistered = errors.New("the areas has been registered")
 var errAreasNotRegistered = errors.New("the areas has not been registered yet")
 
 type coordinateInfo struct {
-	areas        []coordinateRange
-	moveIntoFlag bool
-	motionFlag   bool
-	buttonFlag   bool
-	keyFlag      bool
+	areas      []coordinateRange
+	buttonFlag bool
+	keyFlag    bool
 }
 
 type coordinateRange struct {
@@ -59,11 +59,6 @@ type Manager struct {
 	service    *dbusutil.Service
 	signals    *struct {
 		CancelAllArea struct{}
-
-		CursorInto, CursorOut, CursorMove struct {
-			x, y int32
-			id   string
-		}
 
 		ButtonPress, ButtonRelease struct {
 			button, x, y int32
@@ -108,9 +103,61 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	}, nil
 }
 
+func (m *Manager) queryPointer() (*x.QueryPointerReply, error) {
+	root := m.xConn.GetDefaultScreen().Root
+	reply, err := x.QueryPointer(m.xConn, root).Reply(m.xConn)
+	return reply, err
+}
+
+func (m *Manager) selectXInputEvents() {
+	logger.Debug("select input events")
+	root := m.xConn.GetDefaultScreen().Root
+	err := input.XISelectEventsChecked(m.xConn, root, []input.EventMask{
+		{
+			DeviceId: input.DeviceAllMaster,
+			Mask: []uint32{
+				input.XIEventMaskRawButtonPress |
+					input.XIEventMaskRawButtonRelease |
+					input.XIEventMaskRawKeyPress |
+					input.XIEventMaskRawKeyRelease,
+			},
+		},
+	}).Check(m.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func (m *Manager) deselectXInputEvents() {
+	logger.Debug("deselect input events")
+	root := m.xConn.GetDefaultScreen().Root
+	err := input.XISelectEventsChecked(m.xConn, root, []input.EventMask{
+		{
+			DeviceId: input.DeviceAllMaster,
+			Mask:     []uint32{0},
+		},
+	}).Check(m.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
 func (m *Manager) handleXEvent() {
+	_, err := ge.QueryVersion(m.xConn, ge.MajorVersion, ge.MinorVersion).Reply(m.xConn)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	_, err = input.XIQueryVersion(m.xConn, input.MajorVersion, input.MinorVersion).Reply(m.xConn)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
 	eventChan := make(chan x.GenericEvent, 10)
 	m.xConn.AddEventChan(eventChan)
+	inputExtData := m.xConn.GetExtensionData(input.Ext())
 
 	for ev := range eventChan {
 		switch ev.GetEventCode() {
@@ -118,48 +165,52 @@ func (m *Manager) handleXEvent() {
 			logger.Debug("mapping notify event")
 			event, _ := x.NewMappingNotifyEvent(ev)
 			m.keySymbols.RefreshKeyboardMapping(event)
-		}
-	}
-}
 
-func (m *Manager) handleCursorEvent(x, y int32, press bool) {
-	press = !press
+		case x.GeGenericEventCode:
+			geEvent, _ := x.NewGeGenericEvent(ev)
+			if geEvent.Extension == inputExtData.MajorOpcode {
+				switch geEvent.EventType {
+				case input.RawKeyPressEventCode:
+					e, _ := input.NewRawKeyPressEvent(geEvent.Data)
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						m.handleKeyboardEvent(int32(e.Detail), true, int32(qpReply.RootX),
+							int32(qpReply.RootY))
+					}
+				case input.RawKeyReleaseEventCode:
+					e, _ := input.NewRawKeyReleaseEvent(geEvent.Data)
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						m.handleKeyboardEvent(int32(e.Detail), false, int32(qpReply.RootX),
+							int32(qpReply.RootY))
+					}
 
-	inList, outList := m.getIdList(x, y)
-	for _, id := range inList {
-		array, ok := m.idAreaInfoMap[id]
-		if !ok {
-			continue
-		}
+				case input.RawButtonPressEventCode:
+					e, _ := input.NewRawButtonPressEvent(geEvent.Data)
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						m.handleButtonEvent(int32(e.Detail), true, int32(qpReply.RootX),
+							int32(qpReply.RootY))
+					}
 
-		/* moveIntoFlag == true : mouse move in area */
-		if !array.moveIntoFlag {
-			if press {
-				m.service.Emit(m, "CursorInto", x, y, id)
-				array.moveIntoFlag = true
+				case input.RawButtonReleaseEventCode:
+					e, _ := input.NewRawButtonReleaseEvent(geEvent.Data)
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						m.handleButtonEvent(int32(e.Detail), false, int32(qpReply.RootX),
+							int32(qpReply.RootY))
+					}
+				}
 			}
 		}
-
-		if array.motionFlag {
-			m.service.Emit(m, "CursorMove", x, y, id)
-		}
-	}
-	for _, id := range outList {
-		array, ok := m.idAreaInfoMap[id]
-		if !ok {
-			continue
-		}
-
-		/* moveIntoFlag == false : mouse move out area */
-		if array.moveIntoFlag {
-			m.service.Emit(m, "CursorOut", x, y, id)
-			array.moveIntoFlag = false
-		}
-	}
-
-	_, ok := m.idReferCountMap[fullscreenId]
-	if ok {
-		m.service.Emit(m, "CursorMove", x, y, fullscreenId)
 	}
 }
 
@@ -241,7 +292,7 @@ func (m *Manager) registerPidArea(pid uint32, areasId string) {
 	areasIds, _ = areasIds.Add(areasId)
 	m.pidAidsMap[pid] = areasIds
 
-	globalXIListener.start()
+	m.selectXInputEvents()
 }
 
 func (m *Manager) unregisterPidArea(pid uint32, areasId string) {
@@ -251,6 +302,10 @@ func (m *Manager) unregisterPidArea(pid uint32, areasId string) {
 		m.pidAidsMap[pid] = areasIds
 	} else {
 		delete(m.pidAidsMap, pid)
+	}
+
+	if len(m.pidAidsMap) == 0 {
+		m.deselectXInputEvents()
 	}
 }
 
@@ -291,10 +346,8 @@ func (m *Manager) RegisterAreas(sender dbus.Sender, areas []coordinateRange, fla
 
 	info := &coordinateInfo{}
 	info.areas = areas
-	info.moveIntoFlag = false
 	info.buttonFlag = hasButtonFlag(flag)
 	info.keyFlag = hasKeyFlag(flag)
-	info.motionFlag = hasMotionFlag(flag)
 
 	m.idAreaInfoMap[id] = info
 	m.idReferCountMap[id] = 1

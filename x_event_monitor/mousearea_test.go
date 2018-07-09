@@ -34,9 +34,6 @@ type mySuite struct{}
 var _ = C.Suite(&mySuite{})
 
 func (s *mySuite) TestUtils(c *C.C) {
-	c.Check(hasMotionFlag(1), C.Equals, true)
-	c.Check(hasMotionFlag(0), C.Equals, false)
-
 	c.Check(hasButtonFlag(2), C.Equals, true)
 	c.Check(hasButtonFlag(0), C.Equals, false)
 

@@ -20,53 +20,17 @@
 package x_event_monitor
 
 const (
-	MotionFlag = int32(1 << 0)
 	ButtonFlag = int32(1 << 1)
 	KeyFlag    = int32(1 << 2)
-	AllFlag    = MotionFlag | ButtonFlag | KeyFlag
 )
 
-var hasMotionFlag = func() func(int32) bool {
-	return func(flag int32) bool {
-		if flag < 0 || flag > AllFlag {
-			return false
-		}
+func hasKeyFlag(flag int32) bool {
+	return flag&KeyFlag != 0
+}
 
-		if flag&MotionFlag == MotionFlag {
-			return true
-		}
-
-		return false
-	}
-}()
-
-var hasButtonFlag = func() func(int32) bool {
-	return func(flag int32) bool {
-		if flag < 0 || flag > AllFlag {
-			return false
-		}
-
-		if flag&ButtonFlag == ButtonFlag {
-			return true
-		}
-
-		return false
-	}
-}()
-
-var hasKeyFlag = func() func(int32) bool {
-	return func(flag int32) bool {
-		if flag < 0 || flag > AllFlag {
-			return false
-		}
-
-		if flag&KeyFlag == KeyFlag {
-			return true
-		}
-
-		return false
-	}
-}()
+func hasButtonFlag(flag int32) bool {
+	return flag&ButtonFlag != 0
+}
 
 func isInArea(x, y int32, area coordinateRange) bool {
 	if (x >= area.X1 && x <= area.X2) &&
