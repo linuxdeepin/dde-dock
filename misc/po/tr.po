@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Adem Çalışkan <ademcal@yahoo.com>, 2017-2018
 # Emin Tufan <etcetin@gmail.com>, 2018
@@ -15,14 +15,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-06-20 21:42+0000\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
-"Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/tr/)\n"
-"Language: tr\n"
+"Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -33,9 +32,7 @@ msgstr "Lütfen en az 8 karakter uzunluğunda bir parola yazın"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Parolada, İngiliz alfabesi harfleri (büyük-küçük harfe duyarlı), rakamlar ya "
-"da özel simgeler (~!@#$%^&*()[]{}\\|/?,.<>) bulunmalıdır"
+msgstr "Parolada, İngiliz alfabesi harfleri (büyük-küçük harfe duyarlı), rakamlar ya da özel simgeler (~!@#$%^&*()[]{}\\|/?,.<>) bulunmalıdır"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -43,9 +40,7 @@ msgstr "Kullanıcı adı boş olamaz."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
-"Kullanıcı adında, a-z harfleri, 0-9 arası rakamlar ve - ya da _ özel "
-"simgeleri kullanılabilir"
+msgstr "Kullanıcı adında, a-z harfleri, 0-9 arası rakamlar ve - ya da _ özel simgeleri kullanılabilir"
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -354,9 +349,7 @@ msgstr "Sistem dili değiştirilemedi, lütfen daha sonra yeniden deneyin"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Eksik dil paketlerinin kurulmasıyla sistem dili değiştiriliyor, lütfen "
-"bekleyin..."
+msgstr "Eksik dil paketlerinin kurulmasıyla sistem dili değiştiriliyor, lütfen bekleyin..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -397,8 +390,7 @@ msgstr "%q kaldırılamadı."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Otomatik kapatmayı engellemek için. Lütfen normal güncelleme için fişe takın."
+msgstr "Otomatik kapatmayı engellemek için. Lütfen normal güncelleme için fişe takın."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -408,9 +400,7 @@ msgstr "Paket ön belleği silindi"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Sistem kaynağınız değiştirilmiş, lütfen normal kullanımınız için resmi "
-"kaynağı geri yükleyin"
+msgstr "Sistem kaynağınız değiştirilmiş, lütfen normal kullanımınız için resmi kaynağı geri yükleyin"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -424,11 +414,13 @@ msgstr "%q kaldırılamadı"
 msgid "Password required to connect %q"
 msgstr "%q bağlantısını kurmak için parola gerekli"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1662,9 +1654,7 @@ msgstr "Bu aygıt yapılandırmaya hazır değil"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"IP yapılandırması kaydedilemedi (kullanılabilecek bir adres yok, zaman "
-"aşımı, vb.)"
+msgstr "IP yapılandırması kaydedilemedi (kullanılabilecek bir adres yok, zaman aşımı, vb.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1678,9 +1668,7 @@ msgstr "Zorunlu parolalar sağlanmadı"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"802.1X istemcisinin erişim noktası ya da kimlik doğrulama sunucusu ile "
-"bağlantısını kesildi"
+msgstr "802.1X istemcisinin erişim noktası ya da kimlik doğrulama sunucusu ile bağlantısını kesildi"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1688,8 +1676,7 @@ msgstr "802.1X istemcisi yapılandırılamadı"
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
-"802.1X destek hizmeti beklenmedik biçimde sona erdi ya da çalıştırılamadı"
+msgstr "802.1X destek hizmeti beklenmedik biçimde sona erdi ya da çalıştırılamadı"
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate"
@@ -1725,9 +1712,7 @@ msgstr "Paylaşılan bağlantı hizmeti başlatılamadı"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"Paylaşılan bağlantı hizmeti beklenmedik biçimde sona erdi ya da "
-"çalıştırılamadı"
+msgstr "Paylaşılan bağlantı hizmeti beklenmedik biçimde sona erdi ya da çalıştırılamadı"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1907,14 +1892,12 @@ msgstr "Ağ kablosu takılı değil"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Lütfen SIM kartın takılmış ve mobil ağ sinyalinin var olduğundan emin olun"
+msgstr "Lütfen SIM kartın takılmış ve mobil ağ sinyalinin var olduğundan emin olun"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"SIM kartın borçlu duruma düşmemesi için doğru planın seçildiğinden emin olun"
+msgstr "SIM kartın borçlu duruma düşmemesi için doğru planın seçildiğinden emin olun"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1926,14 +1909,11 @@ msgstr "VPN bağlantısı kurulamadı"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"Kullanıcıların bağlantısının kesilmesi nedeniyle VPN bağlantısının durumu "
-"değişti"
+msgstr "Kullanıcıların bağlantısının kesilmesi nedeniyle VPN bağlantısının durumu değişti"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
-"Aygıtların bağlantısının kesilmesi nedeniyle VPN bağlantısının durumu değişti"
+msgstr "Aygıtların bağlantısının kesilmesi nedeniyle VPN bağlantısının durumu değişti"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1997,14 +1977,11 @@ msgstr "Erişim noktası paylaşılamadı, lütfen dnsmasq ayarlarını denetley
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"%q bağlantısı kurulamadı, lütfen kablosuz erişim noktasına daha yakın durun"
+msgstr "%q bağlantısı kurulamadı, lütfen kablosuz erişim noktasına daha yakın durun"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"%q bağlantısı kurulamadı, lütfen erişim noktanızı ya da ağ kablonuzu "
-"denetleyin."
+msgstr "%q bağlantısı kurulamadı, lütfen erişim noktanızı ya da ağ kablonuzu denetleyin."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2032,10 +2009,9 @@ msgid "Network"
 msgstr "Ağ"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Kablosuz yerel ağ kartının donanım anahtarı kapalı, gerekli olduğundan "
-"lütfen açın."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Kablosuz yerel ağ kartının donanım anahtarı kapalı, gerekli olduğundan lütfen açın."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2077,9 +2053,7 @@ msgstr "Ağ zaman eşitlemesini ayarlamak için kimlik doğrulaması gereklidir.
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"RTC tarafından yerel ya da UTC zamanının tutulmasını ayarlamak için kimlik "
-"doğrulaması gereklidir."
+msgstr "RTC tarafından yerel ya da UTC zamanının tutulmasını ayarlamak için kimlik doğrulaması gereklidir."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

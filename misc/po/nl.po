@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # dragnadh <dragnadh@gmail.com>, 2016-2018
 # Hans van Schooten <hans@schootenvan.nl>, 2017
@@ -11,14 +11,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/nl/)\n"
-"Language: nl\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -29,9 +28,7 @@ msgstr "Vul alstublieft een wachtwoord in met niet minder dan 8 tekens"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Het wachtwoord moet letters (hoofdlettergevoelig), cijfers en speciale "
-"tekens bevatten (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Het wachtwoord moet letters (hoofdlettergevoelig), cijfers en speciale tekens bevatten (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -348,9 +345,7 @@ msgstr "Systeemtaal niet geslaagd om te veranderen, probeer het later opnieuw"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Systeemtaal wordt gewijzigd, maar er ontbreken taalpakketten. Gelieve te "
-"wachten... "
+msgstr "Systeemtaal wordt gewijzigd, maar er ontbreken taalpakketten. Gelieve te wachten... "
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -391,9 +386,7 @@ msgstr "Het verwijderen van %q is mislukt."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Om te voorkomen dat de computer automatisch wordt afgesloten, moet u deze op "
-"de netstroom aansluiten."
+msgstr "Om te voorkomen dat de computer automatisch wordt afgesloten, moet u deze op de netstroom aansluiten."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -403,8 +396,7 @@ msgstr "Pakket cache uitgewist"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Uw systeembron is gewijzigd. Herstel de officiële bron voor normaal gebruik"
+msgstr "Uw systeembron is gewijzigd. Herstel de officiële bron voor normaal gebruik"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -418,11 +410,13 @@ msgstr "%q mislukt om te verwijderen"
 msgid "Password required to connect %q"
 msgstr "Wachtwoord vereist om te verbinden met %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1656,9 +1650,7 @@ msgstr "Het apparaat is niet klaar voor configuratie"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"IP-configuratie kan niet gereserveerd worden (geen beschikbaar adres, time-"
-"out, enz.)"
+msgstr "IP-configuratie kan niet gereserveerd worden (geen beschikbaar adres, time-out, enz.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1672,9 +1664,7 @@ msgstr "Wachtwoorden zijn vereist, maar niet verstrekt"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"De 802.1X aanvrager werd losgekoppeld van het toegangspunt van de "
-"authenticatieserver"
+msgstr "De 802.1X aanvrager werd losgekoppeld van het toegangspunt van de authenticatieserver"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1898,15 +1888,12 @@ msgstr "Netwerkkabel is niet aangesloten."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Zorg ervoor dat er een SIM-kaart is geplaatst met een mobiel netwerk signaal"
+msgstr "Zorg ervoor dat er een SIM-kaart is geplaatst met een mobiel netwerk signaal"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Zorg ervoor dat de juiste plan werd gekozen zonder achterstand van de SIM-"
-"kaart"
+msgstr "Zorg ervoor dat de juiste plan werd gekozen zonder achterstand van de SIM-kaart"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1918,15 +1905,11 @@ msgstr "Activeren VPN-verbinding mislukt"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"De VPN-verbinding veranderde de status door het verbinding verbreken van "
-"gebruikers"
+msgstr "De VPN-verbinding veranderde de status door het verbinding verbreken van gebruikers"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
-"De VPN-verbinding veranderde de status als gevolg van verbinding verbreken "
-"van apparaten"
+msgstr "De VPN-verbinding veranderde de status als gevolg van verbinding verbreken van apparaten"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1998,8 +1981,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
-"Verbinding mislukt, kan geen verbinding maken met %q, verkeerd wachtwoord"
+msgstr "Verbinding mislukt, kan geen verbinding maken met %q, verkeerd wachtwoord"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -2023,10 +2005,9 @@ msgid "Network"
 msgstr "Netwerk"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"De hardwareswitch van de WLAN-kaart is uitgeschakeld, gelieve in te "
-"schakelen indien nodig."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "De hardwareswitch van de WLAN-kaart is uitgeschakeld, gelieve in te schakelen indien nodig."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2062,17 +2043,13 @@ msgstr "Authenticatie vereist om gebruikersgegevens te kunnen veranderen."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Authenticatie is vereist om te bepalen of netwerktijdsynchronisatie moet "
-"worden ingeschakeld."
+msgstr "Authenticatie is vereist om te bepalen of netwerktijdsynchronisatie moet worden ingeschakeld."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Authenticatie is vereist om te bepalen of de RTC de lokale tijd of UTC-tijd "
-"opslaat."
+msgstr "Authenticatie is vereist om te bepalen of de RTC de lokale tijd of UTC-tijd opslaat."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

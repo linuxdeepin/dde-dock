@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Kiss Zoltan <atari@freemail.hu>, 2017
 # ddabrahim <ddabrahim@googlemail.com>, 2016-2017
@@ -15,14 +15,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Hungarian (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/hu/)\n"
-"Language: hu\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Laszlo Espadas\n"
+"Language-Team: Hungarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -33,9 +32,7 @@ msgstr "Adjunk meg egy 8 karakterből álló jelszót"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"A jelszó nem tartalmazhat ékezeteket (de kis és nagy betűket igen), valamint "
-"számokat és speciális karaktereket (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "A jelszó nem tartalmazhat ékezeteket (de kis és nagy betűket igen), valamint számokat és speciális karaktereket (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -142,8 +139,7 @@ msgstr "Szétkapcsolva"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
-msgstr ""
-"Ellenőrizzük, hogy a %q be van e kapcsolva és hatótávolságon belül van."
+msgstr "Ellenőrizzük, hogy a %q be van e kapcsolva és hatótávolságon belül van."
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
@@ -179,8 +175,7 @@ msgstr "_Összes ablak"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
-"Nincs elegendő szabad lemezterület, kérem törölje a felesleges fájlokat."
+msgstr "Nincs elegendő szabad lemezterület, kérem törölje a felesleges fájlokat."
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -348,17 +343,13 @@ msgstr "Hitelesítés szükség a nyelvi beállítások módosításához"
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr ""
-"A rendszer nyelvi beállításainak módosítása sikertelen, kérem próbálja meg "
-"később"
+msgstr "A rendszer nyelvi beállításainak módosítása sikertelen, kérem próbálja meg később"
 
 #: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"A nyelv megváltoztatása folyamatban van a hiányzó csomagok telepítésével "
-"együtt, várjunk..."
+msgstr "A nyelv megváltoztatása folyamatban van a hiányzó csomagok telepítésével együtt, várjunk..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -374,7 +365,7 @@ msgstr "Visszaállítás"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
@@ -399,9 +390,7 @@ msgstr "%q eltávolítása sikertelen."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Az automatikus kikapcsolás megelőzése érdekében csatlakoztassuk az eszközt "
-"az áramforráshoz."
+msgstr "Az automatikus kikapcsolás megelőzése érdekében csatlakoztassuk az eszközt az áramforráshoz."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -425,11 +414,13 @@ msgstr "%q eltávolítása sikertelen"
 msgid "Password required to connect %q"
 msgstr "Jelszó szükséges a %q kapcsolódásához"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1663,9 +1654,7 @@ msgstr "Az eszköz nem áll készen a konfigurálásra"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"IP konfiguráció lefoglalása sikertelen (nincs rendelkezésre álló cím, "
-"időtúllépés, stb)"
+msgstr "IP konfiguráció lefoglalása sikertelen (nincs rendelkezésre álló cím, időtúllépés, stb)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1679,9 +1668,7 @@ msgstr "Jelszó megadása szükséges"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"A 802.1X hitelesítendő fél lecsatlakozott a hozzáférési pontról vagy a "
-"hitelesítő szerverről"
+msgstr "A 802.1X hitelesítendő fél lecsatlakozott a hozzáférési pontról vagy a hitelesítő szerverről"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1725,8 +1712,7 @@ msgstr "A megosztott kapcsolat szolgáltatás elindítása sikertelen"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"A megosztott kapcsolat szolgáltatás leállításra került vagy váratlanul leállt"
+msgstr "A megosztott kapcsolat szolgáltatás leállításra került vagy váratlanul leállt"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1906,15 +1892,12 @@ msgstr "Hálózati kábel nincs bedugva"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Kérem ellenőrizze, hogy a SIM kártya mobil hálózati jellel lett behelyezve"
+msgstr "Kérem ellenőrizze, hogy a SIM kártya mobil hálózati jellel lett behelyezve"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Kérem ellenőrizze, hogy egy megfelelő csomag ki lett választva a SIM kártya "
-"hátraléka nélkül"
+msgstr "Kérem ellenőrizze, hogy egy megfelelő csomag ki lett választva a SIM kártya hátraléka nélkül"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1926,8 +1909,7 @@ msgstr "VPN kapcsolat aktiválás sikertelen"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"A VPN kapcsolat állapota megváltozott a felhasználók lecsatlakozása miatt"
+msgstr "A VPN kapcsolat állapota megváltozott a felhasználók lecsatlakozása miatt"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
@@ -1943,8 +1925,7 @@ msgstr "A VPN kapcsolat IP konfigurációja érvénytelen"
 
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
-"A VPN szolgáltatáshoz való csatlakozási kísérlet időtúllépés miatt sikertelen"
+msgstr "A VPN szolgáltatáshoz való csatlakozási kísérlet időtúllépés miatt sikertelen"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out"
@@ -1992,14 +1973,11 @@ msgstr "%q szétkapcsolva"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
-"Nem sikerült a hotspot megosztás, kérjük, ellenőrizze a netmasztk beállítást"
+msgstr "Nem sikerült a hotspot megosztás, kérjük, ellenőrizze a netmasztk beállítást"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"Nem sikerült csatlakozni %q -hoz, próbáljon meg a router hatótávolságán "
-"belül kapcsolódni."
+msgstr "Nem sikerült csatlakozni %q -hoz, próbáljon meg a router hatótávolságán belül kapcsolódni."
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
@@ -2007,8 +1985,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
-"Nem sikerült csatlakoztatni a %q -hoz, kérem ellenőrizze a beírt jelszót."
+msgstr "Nem sikerült csatlakoztatni a %q -hoz, kérem ellenőrizze a beírt jelszót."
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -2032,10 +2009,9 @@ msgid "Network"
 msgstr "Hálózat"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"A számítógépen ki van kapcsolva a vezeték nélküli adapter. Kapcsoljuk be ha "
-"szükséges."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "A számítógépen ki van kapcsolva a vezeték nélküli adapter. Kapcsoljuk be ha szükséges."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2053,8 +2029,7 @@ msgstr "Az akkumulátor töltöttségi szintje kritikusan alacsony"
 #: ../../session/power/manager_events.go:134
 #: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
-msgstr ""
-"A számítógép felfüggesztett állapotban volt, kérem csatlakoztassa a töltőre"
+msgstr "A számítógép felfüggesztett állapotban volt, kérem csatlakoztassa a töltőre"
 
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
@@ -2062,9 +2037,7 @@ msgstr "Alacsony akkumulátor töltöttség"
 
 #: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
-"A számítógép felfüggesztett állapotba kerül, kérem csatlakoztassa a töltőre "
-"most"
+msgstr "A számítógép felfüggesztett állapotba kerül, kérem csatlakoztassa a töltőre most"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
@@ -2074,8 +2047,7 @@ msgstr "Hitelesítés szükséges a rendszeridő beállításához."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Hitelesítés szükséges a hálózatról történő időszinkronizálás engedélyezéséhez"
+msgstr "Hitelesítés szükséges a hálózatról történő időszinkronizálás engedélyezéséhez"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2016
 msgid ""
@@ -9,16 +9,14 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Hebrew (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/he/)\n"
-"Language: he\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
-"1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
+"Language: he\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -36,9 +34,7 @@ msgstr "שם המשתמש לא יכול להיות ריק"
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
-"שם המשתמש חייב להיות מורכב מאותיות לטיניות a~z, מספרים 0~9, מקף - או קו "
-"תחתון _"
+msgstr "שם המשתמש חייב להיות מורכב מאותיות לטיניות a~z, מספרים 0~9, מקף - או קו תחתון _"
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -412,11 +408,13 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2005,7 +2003,8 @@ msgid "Network"
 msgstr "רשת"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "מתג ההפעלה הפיזי של כרטיס WLAN כבוי, אנא הדלק אותו אם יש בכך צורך"
 
 #: ../../network/utils_notify.go:100

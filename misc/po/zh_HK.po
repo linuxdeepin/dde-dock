@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Philip CHEUNG, 2016
 # Philip CHEUNG, 2016
@@ -10,14 +10,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Chinese (Hong Kong) (http://www.transifex.com/linuxdeepin/"
-"deepin-desktop-environment/language/zh_HK/)\n"
-"Language: zh_HK\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Philip CHEUNG\n"
+"Language-Team: Chinese (Hong Kong) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_HK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -410,11 +409,13 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2003,7 +2004,8 @@ msgid "Network"
 msgstr "網路"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../network/utils_notify.go:100

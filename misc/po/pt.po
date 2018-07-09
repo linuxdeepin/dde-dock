@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Dickprince, 2017
 # Gabriel Vicente <gabrielvicent98@gmail.com>, 2017
@@ -14,14 +14,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-15 13:40+0000\n"
-"Last-Translator: Manuela Silva <manuela.silva@sky.com>\n"
-"Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/pt/)\n"
-"Language: pt\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Luís Lima <geral@liqensoft.com>\n"
+"Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -32,9 +31,7 @@ msgstr "Por favor insira uma palavra-passe não inferior a 8 caratéres"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"A palavra-passe tem de conter letras Inglesas (sensível a maiúsculas), "
-"números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "A palavra-passe tem de conter letras Inglesas (sensível a maiúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -351,9 +348,7 @@ msgstr "Falha ao alterar o idioma do sistema, por favor tente mais tarde"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"O idioma do sistema está a ser alterado com uma instalação de pacotes de "
-"idioma incompletos. por favor espere..."
+msgstr "O idioma do sistema está a ser alterado com uma instalação de pacotes de idioma incompletos. por favor espere..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -361,9 +356,7 @@ msgstr "Idioma do sistema em alteração, por favor espere..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"O idioma do sistema foi alterado, por favor entre novamente depois de "
-"terminar a sessão"
+msgstr "O idioma do sistema foi alterado, por favor entre novamente depois de terminar a sessão"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -396,9 +389,7 @@ msgstr "%q falhou ao remover."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Para impedir o encerramento automático, por favor, ligue para a atualização "
-"normal."
+msgstr "Para impedir o encerramento automático, por favor, ligue para a atualização normal."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -408,9 +399,7 @@ msgstr "Cache dos pacotes limpa"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"A fonte do seu sistema foi modificada, por favor, restaure para a fonte "
-"oficial para a sua utilização normal"
+msgstr "A fonte do seu sistema foi modificada, por favor, restaure para a fonte oficial para a sua utilização normal"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -424,11 +413,13 @@ msgstr "Falha ao desinstalar %q"
 msgid "Password required to connect %q"
 msgstr "Palavra-passe requerida para ligar %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1662,9 +1653,7 @@ msgstr "O dispositivo não esteve pronto para configuração"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"Não foi possível reservar a configuração do IP (endereço indisponível, tempo "
-"expirado, etc)"
+msgstr "Não foi possível reservar a configuração do IP (endereço indisponível, tempo expirado, etc)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1678,9 +1667,7 @@ msgstr "As palavras-passe eram obrigatórias mas não foram fornecidas"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"O requerente 802.1X desligou-se do ponto de acesso ou servidor de "
-"autenticação"
+msgstr "O requerente 802.1X desligou-se do ponto de acesso ou servidor de autenticação"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1904,16 +1891,12 @@ msgstr "O cabo de rede está desligado"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Por favor certifique-se que o cartão SIM está inserido com sinal de rede "
-"móvel"
+msgstr "Por favor certifique-se que o cartão SIM está inserido com sinal de rede móvel"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Por favor certifique-se que um plano correto foi selecionado e o cartão SIM "
-"tem saldo suficiente"
+msgstr "Por favor certifique-se que um plano correto foi selecionado e o cartão SIM tem saldo suficiente"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -2025,10 +2008,9 @@ msgid "Network"
 msgstr "Rede"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"O interruptor da placa de Rede Sem-Fios está desligado, por favor ligue-o "
-"conforme necessário."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "O interruptor da placa de Rede Sem-Fios está desligado, por favor ligue-o conforme necessário."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2064,16 +2046,13 @@ msgstr "Autenticação é requerida para definir hora do sistema."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Autenticação é requirida para controlar se a sincronização da hora através "
-"da rede deverá estar ativada."
+msgstr "Autenticação é requirida para controlar se a sincronização da hora através da rede deverá estar ativada."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Autenticação é requirida para controlar se o RTC guarda UTC ou a hora local."
+msgstr "Autenticação é requirida para controlar se o RTC guarda UTC ou a hora local."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Galin Iskrenov <loot270@abv.bg>, 2016-2018
 # Kiril Kirilov <cybercop_montana@abv.bg>, 2017
@@ -11,14 +11,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-15 12:38+0000\n"
-"Last-Translator: Galin Iskrenov <loot270@abv.bg>\n"
-"Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/bg/)\n"
-"Language: bg\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Радослав Иванов <reckku@gmail.com>\n"
+"Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -29,9 +28,7 @@ msgstr "Моля, въведете парола не по-малка от 8 си
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Паролата трябва да е от английски букви (големината е от значение), числа и "
-"специални символи (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Паролата трябва да е от английски букви (големината е от значение), числа и специални символи (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -174,8 +171,7 @@ msgstr "_Всички прозорци"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
-"Няма достатъчно дисково пространство, Моля, почистете в най- скоро време."
+msgstr "Няма достатъчно дисково пространство, Моля, почистете в най- скоро време."
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -349,9 +345,7 @@ msgstr "Неуспешна промяна на системен език, опи
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Системният език е в процес на смяна чрез инсталиране на липсващи езикови "
-"пакети, моля изчакайте..."
+msgstr "Системният език е в процес на смяна чрез инсталиране на липсващи езикови пакети, моля изчакайте..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -367,11 +361,11 @@ msgstr "Възстановяване"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
-msgstr "Отмяна"
+msgstr "Отказ"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
-msgstr "Отново"
+msgstr "Повторен опит"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
@@ -392,9 +386,7 @@ msgstr "%q неосъществено премахване."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"За да се предотврати автоматичното изключване, моля, използвайте добавката "
-"за нормална актуализация."
+msgstr "За да се предотврати автоматичното изключване, моля, използвайте добавката за нормална актуализация."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -404,9 +396,7 @@ msgstr "Изтрит пакетен кеш"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Вашият системен източник е променен, моля да го промените към официалния "
-"източник за нормална употреба"
+msgstr "Вашият системен източник е променен, моля да го промените към официалния източник за нормална употреба"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -420,11 +410,13 @@ msgstr "Неуспешно инсталиране на %q"
 msgid "Password required to connect %q"
 msgstr "Нужна е парола за връзка с %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1658,9 +1650,7 @@ msgstr "Устройството не е готово за конфигурир�
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"IP конфигурацията не може да бъде запазена (няма свободни адреси, timeout, и "
-"др.)."
+msgstr "IP конфигурацията не може да бъде запазена (няма свободни адреси, timeout, и др.)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1674,8 +1664,7 @@ msgstr "Изисканите пароли не бяха осигурени"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"802.1X връзката е прекъсната от точката за достъп или от оторизиращия сървър."
+msgstr "802.1X връзката е прекъсната от точката за достъп или от оторизиращия сървър."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -2016,10 +2005,9 @@ msgid "Network"
 msgstr "Мрежа"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Хардуерното превключването на WLAN Карта е изключено, моля вкючете го, както "
-"е необходимо."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Хардуерното превключването на WLAN Карта е изключено, моля вкючете го, както е необходимо."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2055,17 +2043,13 @@ msgstr "Необходима е идентификация за промяна �
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Необходима е идентификация за разрешаване на мрежова синхронизация на "
-"времето."
+msgstr "Необходима е идентификация за разрешаване на мрежова синхронизация на времето."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Необходима е идентификация за контрол дали RTC съхранява местното или UTC "
-"време."
+msgstr "Необходима е идентификация за контрол дали RTC съхранява местното или UTC време."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

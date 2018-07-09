@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Craig Anderson <cranderson0110@gmail.com>, 2018
 msgid ""
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: English (United Kingdom) (http://www.transifex.com/"
-"linuxdeepin/deepin-desktop-environment/language/en_GB/)\n"
-"Language: en_GB\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Craig Anderson <cranderson0110@gmail.com>\n"
+"Language-Team: English (United Kingdom) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -344,9 +343,7 @@ msgstr ""
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"System language is being changed and missing language packages are being "
-"installed, please wait..."
+msgstr "System language is being changed and missing language packages are being installed, please wait..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -362,7 +359,7 @@ msgstr ""
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
@@ -411,11 +408,13 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr ""
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr ""
 
@@ -2004,7 +2003,8 @@ msgid "Network"
 msgstr ""
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../network/utils_notify.go:100

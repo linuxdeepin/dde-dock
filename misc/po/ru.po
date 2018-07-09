@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Анатолий Валерианович <ffox909@mail.ru>, 2016
 # Валерий Владимирович, 2016-2018
@@ -11,17 +11,14 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-23 15:24+0000\n"
-"Last-Translator: Валерий Владимирович\n"
-"Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/ru/)\n"
-"Language: ru\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Анатолий Валерианович <ffox909@mail.ru>\n"
+"Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -31,9 +28,7 @@ msgstr "Введите пароль не менее 8 символов"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Пароль должен содержать латинские буквы (с учетом регистра), цифры или "
-"специальные символы (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Пароль должен содержать латинские буквы (с учетом регистра), цифры или специальные символы (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -73,8 +68,7 @@ msgstr "Задано успешно"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
-msgstr ""
-"Просмотр путем выхода из системы после заданного масштабирования экрана"
+msgstr "Просмотр путем выхода из системы после заданного масштабирования экрана"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -351,9 +345,7 @@ msgstr "Не удалось изменить язык системы, попро
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Изменяется язык системы, с установкой недостающих языковых пакетов, "
-"пожалуйста подождите…"
+msgstr "Изменяется язык системы, с установкой недостающих языковых пакетов, пожалуйста подождите…"
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -361,8 +353,7 @@ msgstr "Изменяется язык системы, пожалуйста по�
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-" Язык системы был изменен, пожалуйста выйдите из системы и войдите вновь…"
+msgstr " Язык системы был изменен, пожалуйста выйдите из системы и войдите вновь…"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -395,9 +386,7 @@ msgstr "%q удалить не удалось."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Чтобы избежать автоматического отключения, подключите для нормального "
-"обновления."
+msgstr "Чтобы избежать автоматического отключения, подключите для нормального обновления."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -407,9 +396,7 @@ msgstr "Сброс кеша пакета"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Ваш источник приложений системы был изменен, пожалуйста, восстановите "
-"официальный источник для нормального использования"
+msgstr "Ваш источник приложений системы был изменен, пожалуйста, восстановите официальный источник для нормального использования"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -423,11 +410,13 @@ msgstr "Не удалось удалить %q"
 msgid "Password required to connect %q"
 msgstr "Для подключения к %q требуется пароль"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1904,8 +1893,7 @@ msgstr "Убедитесь, что вставлена SIM-карта с сигн
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Убедитесь, что выбран верный тариф и отсутствует задолженность SIM-карты."
+msgstr "Убедитесь, что выбран верный тариф и отсутствует задолженность SIM-карты."
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1985,15 +1973,11 @@ msgstr "Не удалось предоставить точку доступа, 
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"Не удалось соединить %q, пожалуйста держитесь ближе к беспроводному "
-"маршрутизатору."
+msgstr "Не удалось соединить %q, пожалуйста держитесь ближе к беспроводному маршрутизатору."
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"Не удалось соединить %q, пожалуйста проверьте ваш беспроводной маршрутизатор "
-"или сетевой кабель."
+msgstr "Не удалось соединить %q, пожалуйста проверьте ваш беспроводной маршрутизатор или сетевой кабель."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2021,7 +2005,8 @@ msgid "Network"
 msgstr "Сеть"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Аппаратный переключатель WLAN-карты выключен, включите если требуется."
 
 #: ../../network/utils_notify.go:100
@@ -2058,17 +2043,13 @@ msgstr "Для установки системного времени требу
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Для управления включением синхронизации времени по сети требуется "
-"аутентификация."
+msgstr "Для управления включением синхронизации времени по сети требуется аутентификация."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Аутентификация требуется для контроля того, сохраняет ли RTC местное время "
-"или время UTC."
+msgstr "Аутентификация требуется для контроля того, сохраняет ли RTC местное время или время UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

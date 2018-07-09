@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Jonas Motiejūnas <exjonas@gmail.com>, 2016
 # Lukas Zemeckis <nekaip3@gmail.com>, 2016
@@ -11,17 +11,14 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-06-06 08:14+0000\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
 "Last-Translator: Moo\n"
-"Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/lt/)\n"
-"Language: lt\n"
+"Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < "
-"11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? "
-"1 : n % 1 != 0 ? 2: 3);\n"
+"Language: lt\n"
+"Plural-Forms: nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -31,9 +28,7 @@ msgstr "Prašome įrašyti ne trumpesnį, nei 8 simbolių slaptažodį"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), "
-"skaičiai ar ypatingi simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), skaičiai ar ypatingi simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -350,9 +345,7 @@ msgstr "Nepavyko pakeisti sistemos kalbos, pabandykite vėliau"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Sistemos kalba keičiama įdiegiant trūkstamus kalbos paketus, prašome "
-"palaukti..."
+msgstr "Sistemos kalba keičiama įdiegiant trūkstamus kalbos paketus, prašome palaukti..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -372,7 +365,7 @@ msgstr "Atsisakyti"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
-msgstr "Bandyti iš naujo"
+msgstr "Bandyti vėl"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
@@ -393,9 +386,7 @@ msgstr "Nepavyko pašalinti %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Normaliam atnaujinimui, ir tam, kad būtų išvengta automatinio išjungimo, "
-"prašome prijungti maitinimo laidą."
+msgstr "Normaliam atnaujinimui, ir tam, kad būtų išvengta automatinio išjungimo, prašome prijungti maitinimo laidą."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -405,9 +396,7 @@ msgstr "Paketų podėlis išvalytas"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Jūsų sistemos šaltinis buvo modifikuotas. Normaliam naudojimui, atkurkite į "
-"oficialų šaltinį"
+msgstr "Jūsų sistemos šaltinis buvo modifikuotas. Normaliam naudojimui, atkurkite į oficialų šaltinį"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -421,11 +410,13 @@ msgstr "Nepavyko pašalinti %q"
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1659,9 +1650,7 @@ msgstr "Įrenginys nebuvo pasiruošęs konfigūracijai"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"Nepavyko užsirezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi "
-"laiko terminas ir t.t.)"
+msgstr "Nepavyko užsirezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi laiko terminas ir t.t.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1783,8 +1772,7 @@ msgstr "PIN patikrinimas nepavyko"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
-"Gali būti, kad trūksta įrenginiui reikalingos programinės aparatinės įrangos"
+msgstr "Gali būti, kad trūksta įrenginiui reikalingos programinės aparatinės įrangos"
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
@@ -2017,10 +2005,9 @@ msgid "Network"
 msgstr "Tinklas"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Belaidžio tinklo aparatinės įrangos perjungiklis yra išjungtas, prašome, jei "
-"būtina, jį įjungti"
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Belaidžio tinklo aparatinės įrangos perjungiklis yra išjungtas, prašome, jei būtina, jį įjungti"
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2066,5 +2053,4 @@ msgstr ""
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
-msgstr ""
-"Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas."
+msgstr "Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas."

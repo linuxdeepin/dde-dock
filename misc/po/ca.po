@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Jaime Muñoz Martín <jmmartin_5@outlook.com>, 2018
 # Davidmp <medipas@gmail.com>, 2017-2018
@@ -10,14 +10,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-30 16:50+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>\n"
-"Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/ca/)\n"
-"Language: ca\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -28,9 +27,7 @@ msgstr "Si us plau, escriviu una contrasenya d'un mínim de 8 caràcters."
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"La contrasenya ha de contenir lletres angleses (majúscules o minúscules), "
-"números o símbols especials (~!@#$%^&*()[]{}\\|/?,.<>)."
+msgstr "La contrasenya ha de contenir lletres angleses (majúscules o minúscules), números o símbols especials (~!@#$%^&*()[]{}\\|/?,.<>)."
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -38,9 +35,7 @@ msgstr "El nom d'usuari no pot estar en blanc."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
-"El nom d'usuari ha de contenir lletres de la a a la z, números del 0 al 9, - "
-"o _."
+msgstr "El nom d'usuari ha de contenir lletres de la a a la z, números del 0 al 9, - o _."
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -72,9 +67,7 @@ msgstr "Establiment correcte"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
-msgstr ""
-"Visualitzeu-ho sortint i tornant a entrar després d'establir l'escalat de la "
-"pantalla."
+msgstr "Visualitzeu-ho sortint i tornant a entrar després d'establir l'escalat de la pantalla."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -345,17 +338,13 @@ msgstr "Cal autenticació per canviar la llengua."
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr ""
-"Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més "
-"tard."
+msgstr "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més tard."
 
 #: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Es canvia la llengua del sistema amb la instal·lació de paquets de llengua "
-"nous. Espereu, si us plau..."
+msgstr "Es canvia la llengua del sistema amb la instal·lació de paquets de llengua nous. Espereu, si us plau..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -363,9 +352,7 @@ msgstr "Es canvia la llengua del sistema. Espereu, si us plau..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"S'ha canviat la llengua del sistema. Si us plau, torneu a entrar a la sessió "
-"després de sortir-ne."
+msgstr "S'ha canviat la llengua del sistema. Si us plau, torneu a entrar a la sessió després de sortir-ne."
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -398,9 +385,7 @@ msgstr "Ha fallat l'eliminació de %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Per tal d'evitar l'aturada automàtica, connecteu-vos per a l'actualització "
-"normal."
+msgstr "Per tal d'evitar l'aturada automàtica, connecteu-vos per a l'actualització normal."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -410,9 +395,7 @@ msgstr "S'ha netejat la cau de paquets."
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"La font del sistema s'ha modificat; si us plau, restaureu-la a la font "
-"oficial per a un ús normal."
+msgstr "La font del sistema s'ha modificat; si us plau, restaureu-la a la font oficial per a un ús normal."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -426,11 +409,13 @@ msgstr "Ha fallat desinstal·lar %q."
 msgid "Password required to connect %q"
 msgstr "Cal la contrasenya per connectar amb %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1664,9 +1649,7 @@ msgstr "El dispositiu no estava a punt per configurar."
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"La configuració d'IP no s'ha pogut reservar (sense adreça disponible, temps "
-"d'espera, etc.)"
+msgstr "La configuració d'IP no s'ha pogut reservar (sense adreça disponible, temps d'espera, etc.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1680,9 +1663,7 @@ msgstr "Les contrasenyes s'han demanat però no s'han proporcionat."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"El 802.1X sol·licitant s'ha desconnectat del punt d'accés o del servidor "
-"d'autenticació."
+msgstr "El 802.1X sol·licitant s'ha desconnectat del punt d'accés o del servidor d'autenticació."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1906,16 +1887,12 @@ msgstr "El cable de xarxa està desconnectat."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Si us plau, assegureu-vos que la targeta SIM estigui inserida i que tingui "
-"senyal de xarxa mòbil."
+msgstr "Si us plau, assegureu-vos que la targeta SIM estigui inserida i que tingui senyal de xarxa mòbil."
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Si us plau, assegureu-vos que teniu una contractació correcta sense un "
-"reajustament de la targeta SIM."
+msgstr "Si us plau, assegureu-vos que teniu una contractació correcta sense un reajustament de la targeta SIM."
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1927,14 +1904,11 @@ msgstr "Ha fallat l'activació de la connexió de VPN."
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"La connexió de VPN ha canviat l'estat a causa de la desconnexió d'usuaris."
+msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió d'usuaris."
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
-"La connexió de VPN ha canviat l'estat a causa de la desconnexió de "
-"dispositius."
+msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió de dispositius."
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1958,8 +1932,7 @@ msgstr "El servei de VPN ha fallat l'inici."
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
-"No s'ha proporcionat la contrasenya necessària per a la connexió de VPN."
+msgstr "No s'ha proporcionat la contrasenya necessària per a la connexió de VPN."
 
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed"
@@ -1995,26 +1968,19 @@ msgstr "%q desconnectada"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
-"No es pot compartir el punt d'accés. Si us plau, comproveu la configuració "
-"de dnsmasq."
+msgstr "No es pot compartir el punt d'accés. Si us plau, comproveu la configuració de dnsmasq."
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de "
-"l'encaminador."
+msgstr "No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de l'encaminador."
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"No es pot connectar a %q, comproveu el vostre encaminador o el cable de "
-"xarxa."
+msgstr "No es pot connectar a %q, comproveu el vostre encaminador o el cable de xarxa."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
-"Ha fallat la connexió. No es pot connectar amb %q. Contrasenya incorrecta."
+msgstr "Ha fallat la connexió. No es pot connectar amb %q. Contrasenya incorrecta."
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -2038,10 +2004,9 @@ msgid "Network"
 msgstr "Xarxa"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"L'interruptor de la targeta WLAN està desactivat. Activeu-lo quan sigui "
-"necessari."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "L'interruptor de la targeta WLAN està desactivat. Activeu-lo quan sigui necessari."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2067,8 +2032,7 @@ msgstr "Bateria baixa"
 
 #: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
-"L'ordinador estatarà en mode de suspensió. Si us plau, endolleu-lo ara."
+msgstr "L'ordinador estatarà en mode de suspensió. Si us plau, endolleu-lo ara."
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
@@ -2078,16 +2042,13 @@ msgstr "Cal autenticació per establir l'hora del sistema."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Cal autenticació per controlar si s'ha d'habilitar la sincronització amb "
-"l'hora de la xarxa."
+msgstr "Cal autenticació per controlar si s'ha d'habilitar la sincronització amb l'hora de la xarxa."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Cal autenticació per controlar si l'RTC desa l'hora local o l'hora UTC."
+msgstr "Cal autenticació per controlar si l'RTC desa l'hora local o l'hora UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

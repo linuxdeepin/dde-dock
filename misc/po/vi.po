@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Luke Phạm <phamnamanh25@gmail.com>, 2016
 # Phạm Đông Giang <ginise99@yahoo.com>, 2016-2017
@@ -10,14 +10,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/vi/)\n"
-"Language: vi\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Phạm Đông Giang <ginise99@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -28,9 +27,7 @@ msgstr "Xin hãy nhập mật khẩu nhiều hơn hoặc bằng 8 ký tự"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ), số hay các ký hiệu "
-"đặc biệt (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ), số hay các ký hiệu đặc biệt (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -347,9 +344,7 @@ msgstr "Ngôn ngữ hệ thống thay đổi thất bại, xin hãy thử lại 
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Ngôn ngữ hệ thống đang được đổi với một cài đặt của những gói ngôn ngữ bị "
-"thiếu, xin hãy đợi..."
+msgstr "Ngôn ngữ hệ thống đang được đổi với một cài đặt của những gói ngôn ngữ bị thiếu, xin hãy đợi..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -357,9 +352,7 @@ msgstr "Ngôn ngữ hệ thống đã được thay đổi, xin hãy đợi..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"Ngôn ngữ hệ thống đã được thay đổi, xin hãy đăng nhập lại lần nữa sau khi "
-"đăng xuất"
+msgstr "Ngôn ngữ hệ thống đã được thay đổi, xin hãy đăng nhập lại lần nữa sau khi đăng xuất"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -416,11 +409,13 @@ msgstr "Gỡ bỏ %q đã thất bại"
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1654,9 +1649,7 @@ msgstr "Thiết bị chưa sẵn sàng để cấu hình"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"Cấu hình IP không thể được giữ lại (không có địa chỉ hiện có, hết thời "
-"gian,...)"
+msgstr "Cấu hình IP không thể được giữ lại (không có địa chỉ hiện có, hết thời gian,...)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1670,8 +1663,7 @@ msgstr "Mật khẩu được đòi hỏi nhưng không được cung cấp"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"Máy yêu cầu 802.1X đã ngắt kết nối ở điểm truy cập hoặc máy chủ xác thực"
+msgstr "Máy yêu cầu 802.1X đã ngắt kết nối ở điểm truy cập hoặc máy chủ xác thực"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -2012,7 +2004,8 @@ msgid "Network"
 msgstr "Mạng"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Công tắc phần cứng của Thẻ WLAN đang tắt, xin hãy bật lên khi cần."
 
 #: ../../network/utils_notify.go:100

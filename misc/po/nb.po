@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Andreas Dreyer Hysing, 2016
 # Espen Bye, 2016
@@ -12,14 +12,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Norwegian Bokmål (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/nb/)\n"
-"Language: nb\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Kristoffer Ulseth <ulseth85@gmail.com>\n"
+"Language-Team: Norwegian Bokmål (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nb\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -347,8 +346,7 @@ msgstr ""
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Systemspråket er endres med en installasjon av språkpakker. Vennligst vent..."
+msgstr "Systemspråket er endres med en installasjon av språkpakker. Vennligst vent..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -389,9 +387,7 @@ msgstr "Feilet ved flytting av %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"For å hindre automatisk nedlasning vennligst koble til for å motta normale "
-"oppdateringer."
+msgstr "For å hindre automatisk nedlasning vennligst koble til for å motta normale oppdateringer."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -415,11 +411,13 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2008,7 +2006,8 @@ msgid "Network"
 msgstr "Nettverk"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Maskinvareswitchen for WLAN-kortet er av. Vennligst skru den på."
 
 #: ../../network/utils_notify.go:100

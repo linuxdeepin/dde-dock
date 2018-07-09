@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # geost <george.stefanakis@gmail.com>, 2016
 # geost <george.stefanakis@gmail.com>, 2016
@@ -14,14 +14,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-08 12:28+0000\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
 "Last-Translator: Jim Gios (Joker) <jgpers@gmail.com>\n"
-"Language-Team: Greek (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/el/)\n"
-"Language: el\n"
+"Language-Team: Greek (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -32,9 +31,7 @@ msgstr "Παρακαλώ εισάγετε ένα κωδικό πρόσβασης
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Ο κωδικός πρέπει να περιέχει Αγγλικά γράμματα (case-sensitive), νούμερα ή "
-"εδικά σύμβολα (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Ο κωδικός πρέπει να περιέχει Αγγλικά γράμματα (case-sensitive), νούμερα ή εδικά σύμβολα (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -351,9 +348,7 @@ msgstr ""
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Η γλώσσα συστήματος αλλάζει με εγκατάσταση ελλειπών πακέτων γλώσσαςμ "
-"παρακαλώ περιμένετε..."
+msgstr "Η γλώσσα συστήματος αλλάζει με εγκατάσταση ελλειπών πακέτων γλώσσαςμ παρακαλώ περιμένετε..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -369,7 +364,7 @@ msgstr "Ανάκτηση"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
-msgstr "Άκυρο"
+msgstr "Ακύρωση"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
@@ -394,9 +389,7 @@ msgstr "Αποτυχία αφαίρεσης του %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Προκειμένου να αποτραπεί η αυτόματη διακοπή λειτουργίας, παρακαλούμε "
-"συνδέστε στο ρεύμα για κανονική ενημέρωση."
+msgstr "Προκειμένου να αποτραπεί η αυτόματη διακοπή λειτουργίας, παρακαλούμε συνδέστε στο ρεύμα για κανονική ενημέρωση."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -420,11 +413,13 @@ msgstr "Αποτυχία απεγκατάστασης %q"
 msgid "Password required to connect %q"
 msgstr "Απαιτείται κωδικός για σύνδεση %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2005,8 +2000,7 @@ msgstr "Λειτουργία πτήσης ενεργοποιημένη."
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr ""
-"Η λειτουργία Σημείου Πρόσβασης δεν υποστηρίζεται από αυτήν την συσκευή."
+msgstr "Η λειτουργία Σημείου Πρόσβασης δεν υποστηρίζεται από αυτήν την συσκευή."
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
@@ -2014,10 +2008,9 @@ msgid "Network"
 msgstr "Δίκτυο"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Ο διακόπτης υλίκου της κάρτας WLAN είναι κλειστός, παρακαλώ ενεργοποιήστε "
-"τον αν χρειάζεται "
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Ο διακόπτης υλίκου της κάρτας WLAN είναι κλειστός, παρακαλώ ενεργοποιήστε τον αν χρειάζεται "
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

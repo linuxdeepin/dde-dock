@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Deepin <justfortest16162215@gmail.com>, 2017
 msgid ""
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/bn/)\n"
-"Language: bn\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Sekander Badsha <badsha_eee@yahoo.com>\n"
+"Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -27,9 +26,7 @@ msgstr "দয়া করে একটি পাসওয়ার্ড ল�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"পাসওয়ার্ডটিতে ইংরেজি অক্ষর (কেস-সংবেদনশীল), সংখ্যা বা বিশেষ চিহ্ন (~! @ # $% ^ & "
-"* () [] {} \\ | /?,। <>) থাকতে হবে"
+msgstr "পাসওয়ার্ডটিতে ইংরেজি অক্ষর (কেস-সংবেদনশীল), সংখ্যা বা বিশেষ চিহ্ন (~! @ # $% ^ & * () [] {} \\ | /?,। <>) থাকতে হবে"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -346,9 +343,7 @@ msgstr "সিস্টেম ভাষা পরিবর্তন করতে
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"সিস্টেম ভাষা অভাব ভাষা প্যাকেজ ইনস্টল করা সঙ্গে পরিবর্তিত হচ্ছে, অনুগ্রহ করে অপেক্ষা "
-"করুন ..."
+msgstr "সিস্টেম ভাষা অভাব ভাষা প্যাকেজ ইনস্টল করা সঙ্গে পরিবর্তিত হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন ..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -413,11 +408,13 @@ msgstr "%q আনইনস্টল করতে ব্যর্থ হয়ে
 msgid "Password required to connect %q"
 msgstr "% Q সংযুক্ত করতে পাসওয়ার্ড প্রয়োজন"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1665,8 +1662,7 @@ msgstr "পাসওয়ার্ড প্রয়োজন কিন্ত�
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"অ্যাক্সেস পয়েন্ট বা প্রমাণীকরণ সার্ভার থেকে 802.1X supplicant সংযোগ বিচ্ছিন্ন হয়েছে"
+msgstr "অ্যাক্সেস পয়েন্ট বা প্রমাণীকরণ সার্ভার থেকে 802.1X supplicant সংযোগ বিচ্ছিন্ন হয়েছে"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -2007,7 +2003,8 @@ msgid "Network"
 msgstr ""
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../network/utils_notify.go:100

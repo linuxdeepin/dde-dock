@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # ElnathK <drjekyll1@gmail.com>, 2018
 # Sangmin Lee <sangminlee7648@gmail.com>, 2016
@@ -10,14 +10,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-06-15 11:24+0000\n"
-"Last-Translator: ElnathK <drjekyll1@gmail.com>\n"
-"Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/ko/)\n"
-"Language: ko\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Sangmin Lee <sangminlee7648@gmail.com>\n"
+"Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -345,8 +344,7 @@ msgstr ""
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"부족한 언어 패키지 설치와 함께 시스템 언어가 바뀌고 있습니다. 기다리세요..."
+msgstr "부족한 언어 패키지 설치와 함께 시스템 언어가 바뀌고 있습니다. 기다리세요..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -411,11 +409,13 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2004,9 +2004,9 @@ msgid "Network"
 msgstr "네트워크"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"WLAN 카드의 하드웨어 스위치가 꺼져있습니다, 필요하시면 전원을 켜주세요."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "WLAN 카드의 하드웨어 스위치가 꺼져있습니다, 필요하시면 전원을 켜주세요."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

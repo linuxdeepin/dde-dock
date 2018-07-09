@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Grzegorz Ciężarkiewicz <pegaz19803@gmail.com>, 2018
 # Piotr Strębski <strebski@gmail.com>, 2017-2018
@@ -11,17 +11,14 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-09 16:49+0000\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
 "Last-Translator: Piotr Strębski <strebski@gmail.com>\n"
-"Language-Team: Polish (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/pl/)\n"
-"Language: pl\n"
+"Language-Team: Polish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -31,9 +28,7 @@ msgstr "Prosimy wpisać hasło o długości nie krótszej niż 8 znaków"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Hasło musi zawierać litery alfabetu angielskiego (uwzględniając wielkie "
-"litery), cyfry lub znaki specjalne (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Hasło musi zawierać litery alfabetu angielskiego (uwzględniając wielkie litery), cyfry lub znaki specjalne (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -41,8 +36,7 @@ msgstr "Nazwa użytkownika nie może być pusta."
 
 #: ../../accounts/checkers/username.go:61
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
-"Nazwa użytkownika musi składać się tylko ze znaków: a-z, 0-9, - lub _. "
+msgstr "Nazwa użytkownika musi składać się tylko ze znaków: a-z, 0-9, - lub _. "
 
 #: ../../accounts/checkers/username.go:63
 msgid "The first character must be in lower case."
@@ -177,8 +171,7 @@ msgstr "_Wszystkie okna"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
-"Brak wystarczającego miejsca na dysku: Prosimy go niezwłocznie uprzątnąć!"
+msgstr "Brak wystarczającego miejsca na dysku: Prosimy go niezwłocznie uprzątnąć!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -352,9 +345,7 @@ msgstr "Błąd zmiany języka systemu, prosimy spróbować później"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Następuje zmiana języka systemu wraz z instalacją brakujących pakietów "
-"językowych, prosimy czekać..."
+msgstr "Następuje zmiana języka systemu wraz z instalacją brakujących pakietów językowych, prosimy czekać..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -362,9 +353,7 @@ msgstr "Następuje zmiana języka systemu, prosimy czekać..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"Zmiana języka systemu zakończyła się pomyślnie, zmiany będą widoczne po "
-"ponownym zalogowaniu się"
+msgstr "Zmiana języka systemu zakończyła się pomyślnie, zmiany będą widoczne po ponownym zalogowaniu się"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -397,9 +386,7 @@ msgstr "Błąd usunięcia %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Aby zapobiec automatycznemu wyłączeniu komputera prosimy o przełączenie się "
-"na normalną aktualizację."
+msgstr "Aby zapobiec automatycznemu wyłączeniu komputera prosimy o przełączenie się na normalną aktualizację."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -409,9 +396,7 @@ msgstr "Wyczyszczono pamięć podręczną pakietów"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Źródła systemowe zostały zmodyfikowane, prosimy o przywrócenie ich do "
-"wartości oficjalnych, aby system mógł normalnie działać"
+msgstr "Źródła systemowe zostały zmodyfikowane, prosimy o przywrócenie ich do wartości oficjalnych, aby system mógł normalnie działać"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -425,11 +410,13 @@ msgstr "Błąd odinstalowania %q"
 msgid "Password required to connect %q"
 msgstr "Wymagane hasło, aby połączyć się z %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1663,9 +1650,7 @@ msgstr "Urządzenie nie jest gotowe do skonfigurowania"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"Nie można zarezerwować konfiguracji IP (brak adresu, przekroczony limit "
-"czasu, itp.)"
+msgstr "Nie można zarezerwować konfiguracji IP (brak adresu, przekroczony limit czasu, itp.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1679,9 +1664,7 @@ msgstr "Wymagane jest hasło, ale nie zostało wprowadzone"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"Suplikant 802.1X rozłączył się od punktu dostępowego lub serwera "
-"uwierzytelniania"
+msgstr "Suplikant 802.1X rozłączył się od punktu dostępowego lub serwera uwierzytelniania"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1725,9 +1708,7 @@ msgstr "Wystąpił błąd przy uruchomieniu usługi współdzielonego połączen
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"Usługa współdzielonego połączenia niespodziewanie zakończyła pracę lub "
-"uległa awarii"
+msgstr "Usługa współdzielonego połączenia niespodziewanie zakończyła pracę lub uległa awarii"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1859,8 +1840,7 @@ msgstr "Błąd mostkowania do ADSL karty sieciowej RFC 2684"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
-"Zarządzanie modemem nie uruchomiło się lub niespodziewanie zakończyło pracę"
+msgstr "Zarządzanie modemem nie uruchomiło się lub niespodziewanie zakończyło pracę"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
@@ -1925,9 +1905,7 @@ msgstr "Wystąpił błąd aktywacji połączenia VPN"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"Połączenie VPN zmieniło stan z uwagi na rozłączenie dokonane przez "
-"użytkowników"
+msgstr "Połączenie VPN zmieniło stan z uwagi na rozłączenie dokonane przez użytkowników"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
@@ -1995,13 +1973,11 @@ msgstr "Nie można udostępnić hotspotu, należy sprawdzić ustawienia dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"Nie można połączyć z %q, prosimy przybliżyć się do routera bezprzewodowego"
+msgstr "Nie można połączyć z %q, prosimy przybliżyć się do routera bezprzewodowego"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"Nie można połączyć z %q, prosimy sprawdzić swój router lub kabel sieciowy."
+msgstr "Nie można połączyć z %q, prosimy sprawdzić swój router lub kabel sieciowy."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2029,10 +2005,9 @@ msgid "Network"
 msgstr "Sieć"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Przełącznik sprzętowy karty WLAN jest wyłączony, prosimy koniecznie go "
-"włączyć."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Przełącznik sprzętowy karty WLAN jest wyłączony, prosimy koniecznie go włączyć."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2058,8 +2033,7 @@ msgstr "Niski stan baterii"
 
 #: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
-"Komputer przejdzie w tryb wstrzymania, prosimy teraz podłączyć zasilanie"
+msgstr "Komputer przejdzie w tryb wstrzymania, prosimy teraz podłączyć zasilanie"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
@@ -2069,17 +2043,13 @@ msgstr "Aby ustawić czas systemowy wymagane jest uwierzytelnienie."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Aby kontrolować włączeniem synchronizacji czasu sieciowego wymagane jest "
-"uwierzytelnienie."
+msgstr "Aby kontrolować włączeniem synchronizacji czasu sieciowego wymagane jest uwierzytelnienie."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Aby kontrolować zasoby lokalne RTC lub czas UTC konieczne jest "
-"uwierzytelnienie."
+msgstr "Aby kontrolować zasoby lokalne RTC lub czas UTC konieczne jest uwierzytelnienie."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

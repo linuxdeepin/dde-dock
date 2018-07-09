@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
 # Marck Hrin <marck741@gmail.com>, 2017
@@ -13,18 +13,14 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-06-27 06:22+0000\n"
-"Last-Translator: Максим Назаренко <mnaz261295@gmail.com>\n"
-"Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/uk/)\n"
-"Language: uk\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
@@ -34,9 +30,7 @@ msgstr "Пароль має бути не менше 8 символів"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Пароль повинен містити англійські літери (чутливі до регістру), цифри або "
-"спеціальні символи(~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Пароль повинен містити англійські літери (чутливі до регістру), цифри або спеціальні символи(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -353,9 +347,7 @@ msgstr "Системна мова не змінилася, спробуйте щ
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Мова системи змінюється зі встановленням мовних пакетів, яких бракувало, "
-"будь ласка, зачекайте..."
+msgstr "Мова системи змінюється зі встановленням мовних пакетів, яких бракувало, будь ласка, зачекайте..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -363,9 +355,7 @@ msgstr "Мову системи було змінено. Будь ласка, з
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"Мова системи була змінена , будь ласка, увійдіть знову після виходу з "
-"системи."
+msgstr "Мова системи була змінена , будь ласка, увійдіть знову після виходу з системи."
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -398,9 +388,7 @@ msgstr "Не вдалося видалити %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Підключіть, щоб запобігти автоматичному вимкненню й належним чином здійснити "
-"оновлення."
+msgstr "Підключіть, щоб запобігти автоматичному вимкненню й належним чином здійснити оновлення."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -410,9 +398,7 @@ msgstr "Очищення кешу пакету"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Ваше джерело системи було змінено, будь ласка, відновіть офіційне джерело "
-"для нормального використання"
+msgstr "Ваше джерело системи було змінено, будь ласка, відновіть офіційне джерело для нормального використання"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -426,11 +412,13 @@ msgstr "Не вдалося встановити %q"
 msgid "Password required to connect %q"
 msgstr "Пароль, необхідний для підключення %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2,4 ГГц)"
 
@@ -1664,9 +1652,7 @@ msgstr "Пристрій не був готовий до конфігураці�
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"Не вдалося зарезервувати IP-конфігурацію (немає доступної адреси, завершився "
-"час очікування тощо)."
+msgstr "Не вдалося зарезервувати IP-конфігурацію (немає доступної адреси, завершився час очікування тощо)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1680,9 +1666,7 @@ msgstr "Паролі вимагались, але не були надані."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"Запитувальний прилад 802.1x від'єднано від точки доступу або серверу "
-"аутентифікації."
+msgstr "Запитувальний прилад 802.1x від'єднано від точки доступу або серверу аутентифікації."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1906,16 +1890,12 @@ msgstr "Мережевий кабель не підключено."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Переконайтеся, будь ласка, що SIM-карта встановлена з сигналом мобільної "
-"мережі."
+msgstr "Переконайтеся, будь ласка, що SIM-карта встановлена з сигналом мобільної мережі."
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Будь ласка, упевніться, що був обраний правильний тарифний план без "
-"заборгованості на SIM-картці."
+msgstr "Будь ласка, упевніться, що був обраний правильний тарифний план без заборгованості на SIM-картці."
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1995,15 +1975,11 @@ msgstr "Неможливо поділитися точкою доступу, п�
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"Неможливо підключити %q, будь ласка, тримайтеся ближче до бездротового "
-"маршрутизатора"
+msgstr "Неможливо підключити %q, будь ласка, тримайтеся ближче до бездротового маршрутизатора"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"Не вдалося з'єднатися із %q. Будь ласка, перевірте, чи працює ваш "
-"маршрутизатор або мережевий кабель."
+msgstr "Не вдалося з'єднатися із %q. Будь ласка, перевірте, чи працює ваш маршрутизатор або мережевий кабель."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2031,10 +2007,9 @@ msgid "Network"
 msgstr "Мережа"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Апаратний перемикач WLAN Card вимкнений, будь ласка, увімкніть його в разі "
-"потреби."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Апаратний перемикач WLAN Card вимкнений, будь ласка, увімкніть його в разі потреби."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2070,17 +2045,13 @@ msgstr "Аутентифікація потрібна для встановле�
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Аутентифікація необхідна для того, щоб контролювати, чи має бути включена "
-"синхронізація часу мережі."
+msgstr "Аутентифікація необхідна для того, щоб контролювати, чи має бути включена синхронізація часу мережі."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Аутентифікація необхідна для контролю того, чи зберігає RTC місцевий або UTC "
-"час ."
+msgstr "Аутентифікація необхідна для контролю того, чи зберігає RTC місцевий або UTC час ."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

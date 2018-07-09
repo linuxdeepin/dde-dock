@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Jonatan Nyberg, 2016-2017
 msgid ""
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Swedish (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/sv/)\n"
-"Language: sv\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"Language-Team: Swedish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -27,9 +26,7 @@ msgstr "Vänligen ange ett lösenord som inte har mindre än 8 tecken"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Lösenordet måste innehålla engelska bokstäver (skiftlägeskänsliga), siffror "
-"eller specialtecken (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Lösenordet måste innehålla engelska bokstäver (skiftlägeskänsliga), siffror eller specialtecken (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -346,9 +343,7 @@ msgstr ""
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Systemspråk ändras genom en installation av saknade språkpaket, var god "
-"vänta..."
+msgstr "Systemspråk ändras genom en installation av saknade språkpaket, var god vänta..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -389,8 +384,7 @@ msgstr "%q kunde inte tas bort."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"För att förhindra automatisk avstängning, anslut för normal uppdatering."
+msgstr "För att förhindra automatisk avstängning, anslut för normal uppdatering."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -400,9 +394,7 @@ msgstr "Paket cache rensad"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Din systemkälla har modifierats, vänligen återställ till den officiella "
-"källan för normalt användande"
+msgstr "Din systemkälla har modifierats, vänligen återställ till den officiella källan för normalt användande"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -416,11 +408,13 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2009,9 +2003,9 @@ msgid "Network"
 msgstr "Nätverk"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Hårdvaruomkopplare för WLAN-kort är avstängd, var god slå på vid behov."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Hårdvaruomkopplare för WLAN-kort är avstängd, var god slå på vid behov."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

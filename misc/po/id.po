@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Dedy Yugo Purwanto <dedy.yugo.purwanto@gmail.com>, 2017
 # Muhamad Mashudi Ardi Winata <muhamadmashudiardiwinata@gmail.com>, 2016
@@ -10,14 +10,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Indonesian (http://www.transifex.com/linuxdeepin/deepin-"
-"desktop-environment/language/id/)\n"
-"Language: id\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Muhammad Fauzi <fauzi.padlaw@gmail.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -28,9 +27,7 @@ msgstr "Masukkan sandi lewat tidak kurang dari 8 karakter"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Sandi lewat harus mengandung huruf bahasa Inggris (case-sensitive), angka "
-"atau simbol-simbol spesial (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Sandi lewat harus mengandung huruf bahasa Inggris (case-sensitive), angka atau simbol-simbol spesial (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -347,9 +344,7 @@ msgstr "Bahasa sistem gagal diubah, silakan coba lain kali"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Sistem bahasa sedang diubah dengan instalasi paket kekurangan bahasa, "
-"silahkan tunggu..."
+msgstr "Sistem bahasa sedang diubah dengan instalasi paket kekurangan bahasa, silahkan tunggu..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -400,9 +395,7 @@ msgstr "Chace paket dibersihkan"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Sumber sistem Anda telah di modifikasi, silahkan kembalikan ke sumber resmi "
-"untuk penggunaan yang normal"
+msgstr "Sumber sistem Anda telah di modifikasi, silahkan kembalikan ke sumber resmi untuk penggunaan yang normal"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -416,11 +409,13 @@ msgstr "Gagal untuk melepas %q"
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2009,7 +2004,8 @@ msgid "Network"
 msgstr "Jaringan"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Saklar perangkat keras Kartu WLAN mati, harap hidupkan."
 
 #: ../../network/utils_notify.go:100

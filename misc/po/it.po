@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Massimo A. Carofano <real.massimo@hotmail.it>, 2017-2018
 # Massimo A. Carofano <real.massimo@hotmail.it>, 2016-2017
@@ -10,14 +10,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-03 07:07+0000\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
 "Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
-"Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/it/)\n"
-"Language: it\n"
+"Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -28,9 +27,7 @@ msgstr "Inserisci una password lunga almeno 8 caratteri"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"La password deve contenere lettere Italiane (case-sensitive), numeri o "
-"caratteri speciali (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "La password deve contenere lettere Italiane (case-sensitive), numeri o caratteri speciali (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -347,9 +344,7 @@ msgstr "La modifica della lingua di sistema fallita, prova più tardi."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"La lingua di sistema verrà modificata installando un pacchetto mancante, "
-"attendi.."
+msgstr "La lingua di sistema verrà modificata installando un pacchetto mancante, attendi.."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -357,9 +352,7 @@ msgstr "Sto modificando la lingua di sistema, attendi.."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"La lingua di sistema è stata modificata, riesegui il login per attuare le "
-"modifiche."
+msgstr "La lingua di sistema è stata modificata, riesegui il login per attuare le modifiche."
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -367,7 +360,7 @@ msgstr "Ripristina"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
@@ -392,9 +385,7 @@ msgstr "rimozione di %q fallita."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Per evitare spegnimenti imprevisti, collega il PC alla corrente prima di "
-"aggiornare."
+msgstr "Per evitare spegnimenti imprevisti, collega il PC alla corrente prima di aggiornare."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -404,9 +395,7 @@ msgstr "Pulizia cache pacchetti completata"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Le fonti di Sistema sono state modificate, ripristinale per tormare all'uso "
-"comune."
+msgstr "Le fonti di Sistema sono state modificate, ripristinale per tormare all'uso comune."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -420,11 +409,13 @@ msgstr "Disinstallazione di %q fallita"
 msgid "Password required to connect %q"
 msgstr "Password richiesta per connettersi a %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1658,9 +1649,7 @@ msgstr "Il dispositivo non è pronto per la configurazione"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"La configurazione IP non può esser riservata (nessun indirizzo disponibile, "
-"timeout, ecc)"
+msgstr "La configurazione IP non può esser riservata (nessun indirizzo disponibile, timeout, ecc)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1674,9 +1663,7 @@ msgstr "Password richieste ma non fornite"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"La rete 802.1X si è disconnessa dall'access point o dal server di "
-"autentificazione"
+msgstr "La rete 802.1X si è disconnessa dall'access point o dal server di autentificazione"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1716,14 +1703,11 @@ msgstr "Il servizio DHCP si è chiuso o ha fallito inaspettatamente"
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr ""
-"Il servizio di condivisione della connessione non è riuscito ad avviarsi"
+msgstr "Il servizio di condivisione della connessione non è riuscito ad avviarsi"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"Il servizio di condivisione della connessione non è riuscito a partire o è "
-"fallito inaspettatamente"
+msgstr "Il servizio di condivisione della connessione non è riuscito a partire o è fallito inaspettatamente"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1908,8 +1892,7 @@ msgstr "Assicurati che la SIM card sia inserita nel dispositivo Mobile"
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Assicurati che il piano dati corretto sia selezionato per la tua SIM card"
+msgstr "Assicurati che il piano dati corretto sia selezionato per la tua SIM card"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1921,13 +1904,11 @@ msgstr "Attivazione della connessione VPN fallita"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"La connessione VPN è cambiata per via della disconnessione dagli utenti"
+msgstr "La connessione VPN è cambiata per via della disconnessione dagli utenti"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
-"La connessione VPN è cambiata per via di una disconnessione dai dispositivi"
+msgstr "La connessione VPN è cambiata per via di una disconnessione dai dispositivi"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1995,8 +1976,7 @@ msgstr "Impossibile collegarsi a %q, avvicinati al router wireless"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"Impossibile connettersi a %q, controlla il tuo router o il cavo di rete."
+msgstr "Impossibile connettersi a %q, controlla il tuo router o il cavo di rete."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2024,7 +2004,8 @@ msgid "Network"
 msgstr "Rete"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Lo switch hardware della scheda WLAN è spento, attivalo se necessario."
 
 #: ../../network/utils_notify.go:100
@@ -2043,8 +2024,7 @@ msgstr "Livello di carica della batteria critico"
 #: ../../session/power/manager_events.go:134
 #: ../../session/power/manager_events.go:158
 msgid "Computer has been in suspend mode, please plug in"
-msgstr ""
-"Il computer era in modalità di sospensione, connettilo all'alimentatore"
+msgstr "Il computer era in modalità di sospensione, connettilo all'alimentatore"
 
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
@@ -2052,8 +2032,7 @@ msgstr "Batteria scarica"
 
 #: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
-"Il computer entrerà in modalità sospensione, collegalo all'alimentatore"
+msgstr "Il computer entrerà in modalità sospensione, collegalo all'alimentatore"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
@@ -2063,17 +2042,13 @@ msgstr "Autenticazione richiesta per impostare l'orario di sistema."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Autenticazione richieta per verificare se la sincronizzazione dell'orario "
-"dalla Rete può esser abilitata."
+msgstr "Autenticazione richieta per verificare se la sincronizzazione dell'orario dalla Rete può esser abilitata."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Autenticazione richiesta per verificare se lo store RTC utilizza l'orario "
-"Locale o UTC."
+msgstr "Autenticazione richiesta per verificare se lo store RTC utilizza l'orario Locale o UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

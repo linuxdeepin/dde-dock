@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # abuyop <abuyop@gmail.com>, 2016-2018
 msgid ""
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-29 13:36+0000\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
 "Last-Translator: abuyop <abuyop@gmail.com>\n"
-"Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/ms/)\n"
-"Language: ms\n"
+"Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -27,9 +26,7 @@ msgstr "Sila masukkan kata aluan tidak kurang dari 8 aksara panjangnya"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor "
-"atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -346,9 +343,7 @@ msgstr "Bahasa sistem gagal diubah, cuba lagi kemudian"
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Bahasa sistem sedang diubah dengan pemasangan pakej bahasa yang kurang "
-"lengkap, tunggu sebentar..."
+msgstr "Bahasa sistem sedang diubah dengan pemasangan pakej bahasa yang kurang lengkap, tunggu sebentar..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -356,9 +351,7 @@ msgstr "Bahasa sistem sedang diubah, tunggu sebentar..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"Bahasa sistem telah diubah, sila daftar masuk sekali lagi selepas daftar "
-"keluar"
+msgstr "Bahasa sistem telah diubah, sila daftar masuk sekali lagi selepas daftar keluar"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -391,9 +384,7 @@ msgstr "%q gagal dibuang."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi "
-"kemaskini biasa."
+msgstr "Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi kemaskini biasa."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -403,9 +394,7 @@ msgstr "Cache pakej disapu bersih"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk "
-"kegunaan biasa anda"
+msgstr "Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk kegunaan biasa anda"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -419,11 +408,13 @@ msgstr "Gagal menyahpasang %q"
 msgid "Password required to connect %q"
 msgstr "Kata laluan diperlukan untuk menyambung dengan %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1657,9 +1648,7 @@ msgstr "Peranti belum bersedia untuk konfigurasi"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-"
-"lain)"
+msgstr "Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-lain)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1717,8 +1706,7 @@ msgstr "Perkhidmatan sambungan terkongsi gagal dimulakan"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
+msgstr "Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1898,14 +1886,12 @@ msgstr "Kabel rangkaian telah dicabut"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
+msgstr "Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
+msgstr "Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1917,15 +1903,11 @@ msgstr "Sambungan VPN yang diaktifkan telah gagal"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada "
-"pengguna"
+msgstr "Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada pengguna"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
-"Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada "
-"peranti"
+msgstr "Sambungan VPN telah berubah keadaan kerana terputus sambungan daripada peranti"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -1989,15 +1971,11 @@ msgstr "Tidak boleh berkongsi kawasan panas, sila periksa tetapan dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
-"Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala "
-"tanpa wayar"
+msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian "
-"anda."
+msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2025,7 +2003,8 @@ msgid "Network"
 msgstr "Rangkaian"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Suis perkakasan Kad WLAN dimatikan, sila hidupkan jika perlu."
 
 #: ../../network/utils_notify.go:100
@@ -2062,17 +2041,13 @@ msgstr "Pengesahihan diperlukan untuk menetap waktu sistem."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian "
-"dapat dibenarkan."
+msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat "
-"atau UTC."
+msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

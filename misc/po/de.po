@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # C Phan <saochi09@googlemail.com>, 2017
 # Ettore Atalan <atalanttore@googlemail.com>, 2016-2018
@@ -15,14 +15,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-06-12 07:11+0000\n"
-"Last-Translator: Timo Kröning\n"
-"Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/de/)\n"
-"Language: de\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -33,10 +32,7 @@ msgstr "Bitte geben Sie ein Passwort mit nicht weniger als 8 Zeichen ein"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"Das Passwort muss englische Buchstaben (Groß-/Kleinschreibung wird "
-"unterschieden), Zahlen oder Sonderzeichen (~!@#$%^&*()[]{}\\|/?,.<>) "
-"enthalten"
+msgstr "Das Passwort muss englische Buchstaben (Groß-/Kleinschreibung wird unterschieden), Zahlen oder Sonderzeichen (~!@#$%^&*()[]{}\\|/?,.<>) enthalten"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -179,8 +175,7 @@ msgstr "_Alle Fenster"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
-"Zu wenig freier Speicherplatz, bitte geben Sie unverzüglich Speicher frei!"
+msgstr "Zu wenig freier Speicherplatz, bitte geben Sie unverzüglich Speicher frei!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -348,17 +343,13 @@ msgstr "Authentifizierung ist erforderlich, um die Sprache zu wechseln"
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr ""
-"Systemsprache konnte nicht geändert werden. Bitte versuchen Sie es erneut "
-"später."
+msgstr "Systemsprache konnte nicht geändert werden. Bitte versuchen Sie es erneut später."
 
 #: ../../langselector/locale.go:374
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"Systemsprache wird geändert, fehlende Sprachpakete werden installiert, bitte "
-"warten..."
+msgstr "Systemsprache wird geändert, fehlende Sprachpakete werden installiert, bitte warten..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -399,9 +390,7 @@ msgstr "%q konnte nicht entfernt werden."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Um automatisches Herunterfahren zu verhindern, bitte für normale "
-"Aktualisierungen den Netzstecker anschließen."
+msgstr "Um automatisches Herunterfahren zu verhindern, bitte für normale Aktualisierungen den Netzstecker anschließen."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -411,9 +400,7 @@ msgstr "Programmcache gelöscht"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"Die Systemquellen wurden verändert, bitten stellen Sie wieder die offizielle "
-"Quelle für die normale Benutzung ein."
+msgstr "Die Systemquellen wurden verändert, bitten stellen Sie wieder die offizielle Quelle für die normale Benutzung ein."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -427,11 +414,13 @@ msgstr "%q konnte nicht deinstalliert werden"
 msgid "Password required to connect %q"
 msgstr "Zum Verbinden mit %q wird ein Passwort benötigt"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1665,9 +1654,7 @@ msgstr "Das Gerät war für die Konfiguration noch nicht bereit."
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"IP-Konfiguration konnte nicht belegt werden (keine verfügbaren Adressen, "
-"Zeitüberschreitung, usw.)."
+msgstr "IP-Konfiguration konnte nicht belegt werden (keine verfügbaren Adressen, Zeitüberschreitung, usw.)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1681,9 +1668,7 @@ msgstr "Passwörter waren erforderlich, wurden aber nicht bereitgestellt"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"Die 802.1X-Verbindung hat sich vom Zugangspunkt oder dem "
-"Authentifizierungsserver getrennt."
+msgstr "Die 802.1X-Verbindung hat sich vom Zugangspunkt oder dem Authentifizierungsserver getrennt."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1695,8 +1680,7 @@ msgstr "Die 802.1X Verbindung wurde beendet oder schlug unerwartet fehl."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
-"Die 802.1X Verbindung hat zu viel Zeit für die Authentifizierung benötigt."
+msgstr "Die 802.1X Verbindung hat zu viel Zeit für die Authentifizierung benötigt."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time"
@@ -1712,8 +1696,7 @@ msgstr "Der PPP-Dienst wurde beendet oder schlug unerwartet fehl."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
-"Der DHCP-Dienst konnte nicht in der vorgesehenen Zeit gestartet werden."
+msgstr "Der DHCP-Dienst konnte nicht in der vorgesehenen Zeit gestartet werden."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
@@ -1725,15 +1708,11 @@ msgstr "Der DHCP-Dienst wurde beendet oder ist unerwartet fehlgeschlagen."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr ""
-"Die Dienst zum freigeben der Netzwerkverbindung konnte nicht gestartet "
-"werden."
+msgstr "Die Dienst zum freigeben der Netzwerkverbindung konnte nicht gestartet werden."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"Der Dienst zum freigeben der Netzwerkverbindung wurde beendet oder ist "
-"unerwartet fehlgeschlagen."
+msgstr "Der Dienst zum freigeben der Netzwerkverbindung wurde beendet oder ist unerwartet fehlgeschlagen."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1913,15 +1892,12 @@ msgstr "Netzwerkkabel ist nicht angeschlossen."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Bitte stellen Sie sicher, dass eine empfangsfähige SIM-Karte eingelegt wurde."
+msgstr "Bitte stellen Sie sicher, dass eine empfangsfähige SIM-Karte eingelegt wurde."
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Bitte stellen Sie sicher, dass der richtige Tarif ausgewählt wurde und "
-"dieser das Guthaben der SIM-Karte nicht überschreitet."
+msgstr "Bitte stellen Sie sicher, dass der richtige Tarif ausgewählt wurde und dieser das Guthaben der SIM-Karte nicht überschreitet."
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1933,14 +1909,11 @@ msgstr "Aktivieren der VPN-Verbindung ist fehlgeschlagen."
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
-"Die VPN Verbindung hat ihren Status geändert, weil ein Benutzer die "
-"Verbindung getrennt hat."
+msgstr "Die VPN Verbindung hat ihren Status geändert, weil ein Benutzer die Verbindung getrennt hat."
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
-"Die VPN Verbindung hat wegen dem Entfernen von Geräten ihren Status geändert."
+msgstr "Die VPN Verbindung hat wegen dem Entfernen von Geräten ihren Status geändert."
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
@@ -2000,9 +1973,7 @@ msgstr "%q getrennt"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
-"Der Hotspot konnte nicht geteilt werden, prüfen Sie bitte die Einstellungen "
-"von dnsmasq"
+msgstr "Der Hotspot konnte nicht geteilt werden, prüfen Sie bitte die Einstellungen von dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -2010,9 +1981,7 @@ msgstr "Keine Verbindung %q, Reichweite zum WLAN Router verringern."
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
-"Kann keine Verbindung mit %q herstellen, bitte überprüfen Sie Ihren Router "
-"und das Netzwerkkabel."
+msgstr "Kann keine Verbindung mit %q herstellen, bitte überprüfen Sie Ihren Router und das Netzwerkkabel."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -2040,10 +2009,9 @@ msgid "Network"
 msgstr "Netzwerk"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"Der Hardware-Schalter der WLAN-Karte ist aus, bitte anschalten, wenn "
-"benötigt."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Der Hardware-Schalter der WLAN-Karte ist aus, bitte anschalten, wenn benötigt."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2069,8 +2037,7 @@ msgstr "Akkuladung niedrig"
 
 #: ../../session/power/manager_events.go:165
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
-"Computer wird in Kürze den Ruhezustand versetzt, bitte Netzteil anschließen."
+msgstr "Computer wird in Kürze den Ruhezustand versetzt, bitte Netzteil anschließen."
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
@@ -2080,19 +2047,14 @@ msgstr "Zum Festlegen der System-Uhrzeit ist eine Authentifizierung notwendig."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"Um die Einstellung der Synchronisation der Netzwerk-Uhrzeit zu verändern ist "
-"eine Authentifizierung notwendig."
+msgstr "Um die Einstellung der Synchronisation der Netzwerk-Uhrzeit zu verändern ist eine Authentifizierung notwendig."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"Zum Einrichten der Echtzeituhr auf die lokale oder UTC-Uhrzeit ist eine "
-"Authentifizierung notwendig."
+msgstr "Zum Einrichten der Echtzeituhr auf die lokale oder UTC-Uhrzeit ist eine Authentifizierung notwendig."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
-msgstr ""
-"Zum Festlegen der System-Zeitzone ist eine Authentifizierung notwendig."
+msgstr "Zum Festlegen der System-Zeitzone ist eine Authentifizierung notwendig."

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # مۇختەر مەخمۇت <yeganaaa@163.com>, 2017
 msgid ""
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Uighur (http://www.transifex.com/linuxdeepin/deepin-desktop-"
-"environment/language/ug/)\n"
-"Language: ug\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Abdusalam Huxur <2250907458@qq.com>\n"
+"Language-Team: Uighur (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ug/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ug\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -27,10 +26,7 @@ msgstr "پارول 8 خانىگە يەتمىسە يېڭى بىر پارول كى
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"پارول چوقۇم ئىنگلىزچە ھەرىپ-بەلگە(چوڭ كىچىك يېزىشنى ئايرىيدۇ) رەقەم ياكى "
-"بوشلۇق ئالاھىدە ھەرپ بەلگىلەر(~!@#$%^&*()[]{}\\|/?,.<>) نى ئۆز ئىچىگە ئېلىشى "
-"كېرەك"
+msgstr "پارول چوقۇم ئىنگلىزچە ھەرىپ-بەلگە(چوڭ كىچىك يېزىشنى ئايرىيدۇ) رەقەم ياكى بوشلۇق ئالاھىدە ھەرپ بەلگىلەر(~!@#$%^&*()[]{}\\|/?,.<>) نى ئۆز ئىچىگە ئېلىشى كېرەك"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -347,8 +343,7 @@ msgstr "سىستېما تىلىنى ئۆزگەرتىش مەغلۇپ بولدى،
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"سىستېما مۇناسىۋەتلىك تىل ھۆججەتلىرىنى چۈشۈرىۋاتىدۇ، سەل ساقلاپ تۇرۇڭ..."
+msgstr "سىستېما مۇناسىۋەتلىك تىل ھۆججەتلىرىنى چۈشۈرىۋاتىدۇ، سەل ساقلاپ تۇرۇڭ..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -399,8 +394,7 @@ msgstr "بوغچا قالدۇقىنى تازىلاش"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"سېستىمىزنىڭ مەنبەسى ئۆزگەرتىلگەن ، ئوشىغاندىن كېيىن نۇرمال ئىشلىتەلەيسىز"
+msgstr "سېستىمىزنىڭ مەنبەسى ئۆزگەرتىلگەن ، ئوشىغاندىن كېيىن نۇرمال ئىشلىتەلەيسىز"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -414,11 +408,13 @@ msgstr "%q چىقىرىۋېتىش مەغلۇپ بولدى"
 msgid "Password required to connect %q"
 msgstr "%q غا ئۇلىنىش پارول تەلەپ قىلىدۇ"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -2007,9 +2003,9 @@ msgid "Network"
 msgstr "تور"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
-"بۇ ئۈسكۈنىنىڭ سىمسىز تور كارتىسى تاقاق ئىكەن، سىمسىز تور ئۇزچاتنى ئىچىڭ"
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "بۇ ئۈسكۈنىنىڭ سىمسىز تور كارتىسى تاقاق ئىكەن، سىمسىز تور ئۇزچاتنى ئىچىڭ"
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

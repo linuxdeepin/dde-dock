@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Alex Wender, 2017
 # Bruno Gama <brunnogama@gmail.com>, 2017
@@ -28,14 +28,13 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-06-29 19:05+0000\n"
-"Last-Translator: Raphael Miquelis <raphaelmiquelis@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/"
-"deepin-desktop-environment/language/pt_BR/)\n"
-"Language: pt_BR\n"
+"PO-Revision-Date: 2018-07-09 12:34+0000\n"
+"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../../accounts/checkers/password.go:54
@@ -46,9 +45,7 @@ msgstr "Por favor, digite uma senha não inferior a 8 caracteres"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-"A senha deve conter caracteres do idioma inglês (sensível à maiúsculas e "
-"minúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "A senha deve conter caracteres do idioma inglês (sensível à maiúsculas e minúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."
@@ -365,9 +362,7 @@ msgstr "Falha ao alterar o idioma do sistema, tente mais tarde."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
-"O idioma do sistema está sendo alterado com uma instalação que carece de "
-"pacotes de idioma, aguarde..."
+msgstr "O idioma do sistema está sendo alterado com uma instalação que carece de pacotes de idioma, aguarde..."
 
 #: ../../langselector/locale.go:377
 msgid "System language is being changed, please wait..."
@@ -375,8 +370,7 @@ msgstr "O idioma do sistema está sendo alterado, aguarde..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
-"O idioma do sistema foi alterado, logue novamente após encerrar a sessão."
+msgstr "O idioma do sistema foi alterado, logue novamente após encerrar a sessão."
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -409,8 +403,7 @@ msgstr "Falha ao remover %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
-"Para evitar o desligamente automático, conecte-se para a atualização normal."
+msgstr "Para evitar o desligamente automático, conecte-se para a atualização normal."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -420,9 +413,7 @@ msgstr "Pacote do cache esvaziado"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-"A fonte do sistema foi modificada, restaure a fonte oficial para o seu uso "
-"normal"
+msgstr "A fonte do sistema foi modificada, restaure a fonte oficial para o seu uso normal"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -436,11 +427,13 @@ msgstr "Falha ao desinstalar %q."
 msgid "Password required to connect %q"
 msgstr "Senha necessária para se conectar %q"
 
-#: ../../network/manager_active.go:317 ../../network/nm_setting_wireless.go:211
+#: ../../network/manager_active.go:317
+#: ../../network/nm_setting_wireless.go:211
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/manager_active.go:319 ../../network/nm_setting_wireless.go:212
+#: ../../network/manager_active.go:319
+#: ../../network/nm_setting_wireless.go:212
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1674,9 +1667,7 @@ msgstr "O dispositivo não está pronto para configuração"
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
-"A configuração do IP não pôde ser reservada (sem endereços disponíveis, "
-"tempo esgotado, etc)."
+msgstr "A configuração do IP não pôde ser reservada (sem endereços disponíveis, tempo esgotado, etc)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1690,9 +1681,7 @@ msgstr "Senhas foram requisitadas, mas não foram fornecidas."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
-"O requisitante 802.1X se desconectou do ponto de acesso ou do servidor de "
-"autenticação."
+msgstr "O requisitante 802.1X se desconectou do ponto de acesso ou do servidor de autenticação."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
@@ -1736,8 +1725,7 @@ msgstr "O serviço de conexão compartilhada falhou ao iniciar."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
-"O serviço de conexão compartilhada foi encerrado ou falhou inesperadamente."
+msgstr "O serviço de conexão compartilhada foi encerrado ou falhou inesperadamente."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
@@ -1869,9 +1857,7 @@ msgstr "Erro de ponte de rede RFC 2684 para ADSL"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
-"Gerenciador de modem não estava sendo executado ou foi fechado "
-"inesperadamente."
+msgstr "Gerenciador de modem não estava sendo executado ou foi fechado inesperadamente."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
@@ -1919,15 +1905,12 @@ msgstr "Cabo de rede está desconectado."
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
-"Por favor, assegure-se que o cartão SIM inserido possua sinal de rede móvel."
+msgstr "Por favor, assegure-se que o cartão SIM inserido possua sinal de rede móvel."
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
-"Certifique-se de que um plano correto foi selecionado sem atraso no cartão "
-"SIM"
+msgstr "Certifique-se de que um plano correto foi selecionado sem atraso no cartão SIM"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -2003,8 +1986,7 @@ msgstr "%q desconectado"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
-"Não é possível compartilhar o hotspot, verifique as configurações do dnsmasq"
+msgstr "Não é possível compartilhar o hotspot, verifique as configurações do dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -2040,7 +2022,8 @@ msgid "Network"
 msgstr "Rede"
 
 #: ../../network/utils_notify.go:96
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "A placa WLAN está desativada, por favor, ative-a se necessário."
 
 #: ../../network/utils_notify.go:100
@@ -2077,17 +2060,13 @@ msgstr "É necessária autenticação para definir a hora do sistema."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
-"A autenticação é necessária para controlar se a sincronização do tempo da "
-"rede deve ser habilitada."
+msgstr "A autenticação é necessária para controlar se a sincronização do tempo da rede deve ser habilitada."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
-"A autenticação é necessária para controlar se o RTC armazena o tempo local "
-"ou a hora do UTC."
+msgstr "A autenticação é necessária para controlar se o RTC armazena o tempo local ou a hora do UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
