@@ -7,13 +7,14 @@
 # Marck Hrin <marck741@gmail.com>, 2017
 # Yevhenii Miziev <zmekinski@yahoo.com>, 2017
 # Yuri Chornoivan <yurchor@ukr.net>, 2018
+# Максим Назаренко <mnaz261295@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-05-02 08:58+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-06-27 06:22+0000\n"
+"Last-Translator: Максим Назаренко <mnaz261295@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -140,7 +141,7 @@ msgstr "Переконайтеся, що %q увімкнений і знаход
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "Помилка підключення до %q, пара не створена"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"

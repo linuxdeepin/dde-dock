@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-06-06 20:04+0000\n"
+"PO-Revision-Date: 2018-06-10 14:04+0000\n"
 "Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -138,7 +138,7 @@ msgstr "Проверите да је %q укључен и да је у опсе�
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "Неуспешно повезивање са %q, упаривање неуспешно"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -238,7 +238,7 @@ msgstr "Дипин Праћење Система"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Дипин Пипета"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"

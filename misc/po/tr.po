@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 16:47+0800\n"
-"PO-Revision-Date: 2018-05-14 13:20+0000\n"
+"PO-Revision-Date: 2018-06-20 21:42+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "Kullanıcı adının uzunluğu sınırı aşıyor"
 
 #: ../../appearance/scale.go:49
 msgid "Display scaling"
-msgstr "Görüntü ölçeklendirme"
+msgstr "Görüntü Ölçeklendirme"
 
 #: ../../appearance/scale.go:50
 msgid "Setting display scaling"
@@ -76,11 +76,11 @@ msgstr "Görüntü ölçeklendirmeyi ayarladıktan sonra oturumu kapatın"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr "Seri bağlantı noktası"
+msgstr "Seri Bağlantı Noktası"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr "Çevirmeli bağlantı"
+msgstr "Çevirmeli Bağlantı"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
@@ -88,19 +88,19 @@ msgstr "Eller Serbest Aygıtı"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr "Eller serbest ses ağ geçidi"
+msgstr "Eller Serbest Ses Ağ Geçidi"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr "Kulaklık seti ses ağ geçidi"
+msgstr "Kulaklık Seti Ses Ağ Geçidi"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr "Nesne iletme"
+msgstr "Nesne İletme"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr "Dosya aktarımı"
+msgstr "Dosya Aktarımı"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
@@ -108,24 +108,24 @@ msgstr "Eşitleme"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr "Telefon defteri erişimi"
+msgstr "Telefon Defteri Erişimi"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr "Telefon defteri erişimi istemcisi"
+msgstr "Telefon Defteri Erişimi İstemcisi"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr "İleti erişimi"
+msgstr "İleti Erişimi"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr "İleti bildirimi"
+msgstr "İleti Bildirimi"
 
 #: ../../bluetooth/utils_notify.go:52 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
-msgstr "Bağlı"
+msgstr "Bağlantı kuruldu"
 
 #: ../../bluetooth/utils_notify.go:55 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
@@ -135,7 +135,7 @@ msgstr "Bağlı"
 #: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
 #: ../../network/utils_notify.go:202
 msgid "Disconnected"
-msgstr "Bağlı değil"
+msgstr "Bağlantı kesildi"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
@@ -143,7 +143,7 @@ msgstr "%q ağının açık ve aralıkta olduğundan emin olun"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr "%q ile bağlantı kurulamadığından eşleştirilemedi"
+msgstr "%q bağlantısı kurulamadığından eşleştirilemedi"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -179,59 +179,59 @@ msgstr "Disk alanı yetersiz, lütfen zamanında temizleyin!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Başlatıcı"
+msgstr "Başlatıcıyı Açma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr "Uçbirim"
+msgstr "Uçbirimi Açma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Deepin Ekran Kaydedici"
+msgstr "Deepin Ekran Kaydediciyi Açma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Ekranı kilitle"
+msgstr "Ekranı Kilitleme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Görev Çubuğunu Görüntüle/Gizle"
+msgstr "Görev Çubuğunu Görüntüleme/Gizleme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr "Arayüzü Kapat"
+msgstr "Arayüzü Kapatma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Uçbirim Quake Penceresi"
+msgstr "Quake Uçbirim Penceresini Açma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Ekran Görüntüsü"
+msgstr "Ekran Görüntüsünü Yakalama"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr "Tam ekran görüntüsü"
+msgstr "Tam Ekran Görüntüsünü Yakalama"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr "Pencere ekran görüntüsü"
+msgstr "Pencere Ekran Görüntüsünü Yakalama"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Ekran görüntüsü gecikmesi"
+msgstr "Gecikmeli Ekran Görüntüsünü Yakalama"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr "Dosya yöneticisi"
+msgstr "Dosya Yöneticisini Açma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Dokunmatik Yüzeyi Devre Dışı Bırak"
+msgstr "Dokunmatik Yüzeyi Devre Dışı Bırakma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr "Pencere etkilerini değiştir"
+msgstr "Pencere Değiştirme Etkileri"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
@@ -247,95 +247,95 @@ msgstr "Deepin Renk Seçici"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "Görünümü Değiştir"
+msgstr "Görünümü Değiştirme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "Sol çalışma alanına geç"
+msgstr "Sol Çalışma Alanına Geçme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr "Sağ çalışma alanına geç"
+msgstr "Sağ Çalışma Alanına Geçme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr "Üst çalışma alanına geç"
+msgstr "Üst Çalışma Alanına Geçme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr "Alt çalışma alanına geç"
+msgstr "Alt Çalışma Alanına Geçme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
-msgstr "Benzer pencerelere geç"
+msgstr "Benzer Pencerelerde İleri Gitme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr "Benzer pencerelere tersten geç"
+msgstr "Benzer Pencerelerde Geri Gitme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
-msgstr "Pencere değiştir"
+msgstr "Pencerelerde İleri Gitme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr "Pencereleri tersten değiştir"
+msgstr "Pencerelerde Geri Gitme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Masaüstünü görüntüle"
+msgstr "Masaüstünü Görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr "Pencereyi büyüt"
+msgstr "Pencereyi Büyütme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr "Pencereyi geri yükle"
+msgstr "Pencereyi Önceki Boyutuna Döndürme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr "Pencereyi küçült"
+msgstr "Pencereyi Küçültme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
-msgstr "Pencereyi kapat"
+msgstr "Pencereyi Kapatma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
-msgstr "Pencereyi taşı"
+msgstr "Pencereyi Taşıma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr "Pencereyi yeniden boyutlandır"
+msgstr "Pencerenin Boyutunu Değiştirme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "Sol çalışma alanına taşı"
+msgstr "Sol Çalışma Alanına Taşıma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "Sağ çalışma alanına taşı"
+msgstr "Sağ Çalışma Alanına Taşıma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr "Üst çalışma alanına taşı"
+msgstr "Üst Çalışma Alanına Taşıma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr "Alt çalışma alanına taşı"
+msgstr "Alt Çalışma Alanına Taşıma"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr "Tüm çalışma alanı pencerelerini görüntüle"
+msgstr "Tüm Çalışma Alanlarındaki Pencereleri Görüntüleme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr "Geçerli çalışma alanı pencerelerini görüntüle"
+msgstr "Geçerli Çalışma Alanındaki Pencereleri Görüntüleme"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Çalışma alanını görüntüle"
+msgstr "Çalışma Alanını Görüntüleme"
 
 #: ../../langselector/handle_event.go:35
 msgid "Authentication is required to switch language"
@@ -530,7 +530,7 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_vpn_vpnc.go:150
 msgid "Disabled"
-msgstr "Devre dışı"
+msgstr "Devre Dışı"
 
 #: ../../network/nm_setting_802_1x.go:140
 msgid "Anonymous"
@@ -562,7 +562,7 @@ msgstr "Ad"
 
 #: ../../network/nm_setting_beans_gen.go:40
 msgid "Automatically connect"
-msgstr "Otomatik olarak bağlan"
+msgstr "Otomatik Olarak Bağlanılsın"
 
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "For All Users"
@@ -1091,7 +1091,7 @@ msgstr "Vekil Sunucu Türü"
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Server IP"
-msgstr "Sunucu IP"
+msgstr "Sunucu IP Adresi"
 
 #: ../../network/nm_setting_beans_gen.go:342
 msgid "Port"
@@ -1229,7 +1229,7 @@ msgstr "IPv6"
 
 #: ../../network/nm_setting_beans_gen.go:469
 msgid "Prefix"
-msgstr "Ön ek"
+msgstr "Ön Ek"
 
 #: ../../network/nm_setting_gsm.go:155 ../../network/nm_setting_gsm.go:157
 #: ../../network/nm_setting_virtual_key.go:150
@@ -1910,7 +1910,7 @@ msgstr "Erişim noktasını etkinleştirmeyi deneyin"
 
 #: ../../network/state_handler.go:227
 msgid "Try connecting %q"
-msgstr "%q ağına bağlanmayı deneyin"
+msgstr "%q bağlantısı kurulmaya çalışılıyor"
 
 #: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
@@ -1918,7 +1918,7 @@ msgstr "Erişim noktası paylaşımı etkinleştirildi"
 
 #: ../../network/state_handler.go:237
 msgid "%q connected"
-msgstr "%q ağına bağlı"
+msgstr "%q bağlantısı kuruldu"
 
 #: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
@@ -1934,15 +1934,15 @@ msgstr "Erişim noktası paylaşılamadı, lütfen dnsmasq ayarlarını denetley
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "%q ağına bağlanılamadı, lütfen kablosuz yönlendiriciye daha yakın durun"
+msgstr "%q bağlantısı kurulamadı, lütfen kablosuz erişim noktasına daha yakın durun"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "%q ağına bağlanılamadı, lütfen yönlendiricinizi ya da ağ kablonuzu denetleyin."
+msgstr "%q bağlantısı kurulamadı, lütfen erişim noktanızı ya da ağ kablonuzu denetleyin."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Bağlantı kurulamadı, %q ağına bağlanılamıyor, parola yanlış"
+msgstr "Bağlantı kurulamadı, parola yanlış olduğundan %q bağlantısı kurulamadı"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
