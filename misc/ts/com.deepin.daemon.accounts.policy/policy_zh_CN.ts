@@ -61,5 +61,15 @@
 			<source>Disable Login without password</source>
 			<translation>关闭无密码登录</translation>
 		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
+			<source>Authentication is required to set keyboard layout</source>
+			<translation>设置键盘布局需要认证</translation>
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
+			<source>Set keyboard layout</source>
+			<translation>设置键盘布局</translation>
+		</message>
 	</context>
 </TS>

@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-09 19:28+0800\n"
-"PO-Revision-Date: 2018-07-09 12:34+0000\n"
-"Last-Translator: salem alBream <salembream@gmail.com>\n"
+"POT-Creation-Date: 2018-07-10 16:46+0800\n"
+"PO-Revision-Date: 2018-07-10 08:48+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -408,7 +408,7 @@ msgstr "تمت إزالة %q بنجاح"
 msgid "Failed to uninstall %q"
 msgstr "تعذر إلغاء تثبيت %q "
 
-#: ../../network/agent.go:395
+#: ../../network/agent.go:396
 msgid "Password required to connect %q"
 msgstr "كلمة المرور مطلوبة للإتصال ب %q"
 
@@ -1371,24 +1371,24 @@ msgstr "محمي (افتراضي)"
 msgid "Weak"
 msgstr "ضعيف"
 
-#: ../../network/nm_setting_vpn_l2tp.go:36
+#: ../../network/nm_setting_vpn_l2tp.go:37
 #: ../../network/nm_setting_vpn_openvpn.go:33
-#: ../../network/nm_setting_vpn_pptp.go:36
+#: ../../network/nm_setting_vpn_pptp.go:37
 #: ../../network/nm_setting_vpn_vpnc.go:35 ../../network/utils_dbus_nm.go:178
 msgid "Saved"
 msgstr "تم الحفظ"
 
-#: ../../network/nm_setting_vpn_l2tp.go:37
+#: ../../network/nm_setting_vpn_l2tp.go:38
 #: ../../network/nm_setting_vpn_openvpn.go:34
-#: ../../network/nm_setting_vpn_pptp.go:37
+#: ../../network/nm_setting_vpn_pptp.go:38
 #: ../../network/nm_setting_vpn_vpnc.go:37 ../../network/utils_dbus_nm.go:180
 msgid "Always Ask"
 msgstr "السؤال دائماً"
 
-#: ../../network/nm_setting_vpn_l2tp.go:38
+#: ../../network/nm_setting_vpn_l2tp.go:39
 #: ../../network/nm_setting_vpn_openvpn.go:35
 #: ../../network/nm_setting_vpn_openvpn.go:331
-#: ../../network/nm_setting_vpn_pptp.go:38
+#: ../../network/nm_setting_vpn_pptp.go:39
 #: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
 msgstr "غير مطلوب"
@@ -2020,22 +2020,25 @@ msgid "System proxy has been cancelled."
 msgstr "تم إلغاء وكيل النظام"
 
 #: ../../session/power/manager_events.go:133
-#: ../../session/power/manager_events.go:157
-msgid "Battery Critical Low"
-msgstr "انخفاض حاد في طاقة البطارية"
+msgid "Battery Critically Low"
+msgstr ""
 
 #: ../../session/power/manager_events.go:134
-#: ../../session/power/manager_events.go:158
-msgid "Computer has been in suspend mode, please plug in"
-msgstr "الحاسوب في وضع اﻹسبات ، يرجى وصل قابس الطاقة."
+msgid "Computer will suspend very soon, please plug in now"
+msgstr ""
 
+#: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
 msgstr "طاقة البطارية منخفضة"
 
+#: ../../session/power/manager_events.go:158
+msgid "Computer will suspend soon, please plug in"
+msgstr ""
+
 #: ../../session/power/manager_events.go:165
-msgid "Computer will be in suspend mode, please plug in now"
-msgstr "الحاسوب سيكون في وضع اﻹسبات، يرجى وصل قابس الطاقة الآن."
+msgid "Battery low, please plug in"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
