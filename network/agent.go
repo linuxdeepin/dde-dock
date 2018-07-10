@@ -23,11 +23,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sync"
+	"time"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
-	"sync"
-	"time"
 )
 
 const agentTimeout = 120 // 120s
@@ -410,12 +411,20 @@ func (a *agent) doGuessDevice(connectionData map[string]map[string]dbus.Variant,
 	manager.devicesLock.Lock()
 	defer manager.devicesLock.Unlock()
 
-	devicesType := manager.devices[deviceEthernet]
+	devices := manager.devices[deviceType]
 
 	// check for the hardware address
-	hwAddress := string(getSettingWiredMacAddress(connectionData))
-	if len(hwAddress) != 0 {
-		for _, device := range devicesType {
+	var hwAddressBytes []byte
+	switch deviceType {
+	case deviceEthernet:
+		hwAddressBytes = getSettingWiredMacAddress(connectionData)
+	case deviceWifi:
+		hwAddressBytes = getSettingWirelessMacAddress(connectionData)
+	}
+
+	if len(hwAddressBytes) != 0 {
+		hwAddress := convertMacAddressToString(hwAddressBytes)
+		for _, device := range devices {
 			if hwAddress == device.HwAddress {
 				return device.Path
 			}
@@ -423,15 +432,15 @@ func (a *agent) doGuessDevice(connectionData map[string]map[string]dbus.Variant,
 	}
 
 	// check for the device state
-	for _, device := range devicesType {
+	for _, device := range devices {
 		if isDeviceStateInActivating(device.State) {
 			return device.Path
 		}
 	}
 
 	// if all failed, and there is only one device now, just return it
-	if len(devicesType) == 1 {
-		return devicesType[0].Path
+	if len(devices) == 1 {
+		return devices[0].Path
 	}
 
 	return
