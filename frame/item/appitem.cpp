@@ -25,6 +25,7 @@
 #include "util/imagefactory.h"
 #include "xcb/xcb_misc.h"
 #include "components/appswingeffectbuilder.h"
+#include "components/appspreviewprovider.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -46,7 +47,7 @@ QPoint AppItem::MousePressPos;
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent),
       m_appNameTips(new TipsWidget(this)),
-      m_appPreviewTips(new PreviewContainer(this)),
+      m_appPreviewTips(nullptr),
       m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this)),
 
       m_swingEffectView(nullptr),
@@ -84,19 +85,12 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
 
-    m_appPreviewTips->setVisible(false);
-
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refershIcon);
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
-
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, this, &AppItem::cancelAndHidePreview);
-    connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
     updateWindowInfos(m_itemEntryInter->windowInfos());
     refershIcon();
@@ -107,7 +101,6 @@ AppItem::~AppItem()
     stopSwingEffect();
 
     m_appNameTips->deleteLater();
-    m_appPreviewTips->deleteLater();
 }
 
 const QString AppItem::appId() const
@@ -354,7 +347,7 @@ void AppItem::dragMoveEvent(QDragMoveEvent *e)
     if (m_windowInfos.isEmpty())
         return;
 
-    if (!PopupWindow->isVisible() || PopupWindow->getContent() != m_appPreviewTips)
+    if (!PopupWindow->isVisible() || !m_appPreviewTips)
         showPreview();
 }
 
@@ -373,8 +366,12 @@ void AppItem::leaveEvent(QEvent *e)
 {
     DockItem::leaveEvent(e);
 
-    if (m_appPreviewTips->isVisible())
-        m_appPreviewTips->prepareHide();
+    if (m_appPreviewTips) {
+        if (m_appPreviewTips->isVisible()) {
+            m_appPreviewTips->prepareHide();
+        }
+        m_appPreviewTips = nullptr;
+    }
 }
 
 void AppItem::showEvent(QShowEvent *e)
@@ -457,7 +454,7 @@ bool AppItem::hasAttention() const
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     m_windowInfos = info;
-    m_appPreviewTips->setWindowInfos(m_windowInfos);
+    if (m_appPreviewTips) m_appPreviewTips->setWindowInfos(m_windowInfos);
     m_updateIconGeometryTimer->start();
 
     // process attention effect
@@ -500,24 +497,14 @@ void AppItem::showPreview()
     if (m_windowInfos.isEmpty())
         return;
 
-    // test cursor position
-//    const QRect r = rect();
-//    const QPoint p = mapFromGlobal(QCursor::pos());
+    m_appPreviewTips = PreviewWindow(m_windowInfos, DockPosition);
 
-//    switch (DockPosition)
-//    {
-//    case Top:       if (p.y() != r.top())       return;     break;
-//    case Left:      if (p.x() != r.left())      return;     break;
-//    case Right:     if (p.x() != r.right())     return;     break;
-//    case Bottom:    if (p.y() != r.bottom())    return;     break;
-//    default:        return;
-//    }
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, this, &AppItem::cancelAndHidePreview);
+    connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
     showPopupWindow(m_appPreviewTips, true);
-
-    m_appPreviewTips->setWindowInfos(m_windowInfos);
-    m_appPreviewTips->updateSnapshots();
-    m_appPreviewTips->updateLayoutDirection(DockPosition);
 }
 
 void AppItem::cancelAndHidePreview()
