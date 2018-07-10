@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	nmVpnOpenconnectNameFile = VPN_NAME_FILES_DIR + "nm-openconnect-service.name"
+	nmVpnOpenconnectNameFile = "nm-openconnect-service.name"
 )
 
 func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {

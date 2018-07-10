@@ -23,7 +23,7 @@ import . "pkg.deepin.io/lib/gettext"
 import "pkg.deepin.io/dde/daemon/network/nm"
 
 const (
-	nmVpnOpenvpnNameFile = VPN_NAME_FILES_DIR + "nm-openvpn-service.name"
+	nmVpnOpenvpnNameFile = "nm-openvpn-service.name"
 )
 
 var availableValuesNmOpenvpnSecretFlags []kvalue

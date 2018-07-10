@@ -21,13 +21,14 @@ package network
 
 import (
 	"io/ioutil"
+	"os"
+	"path/filepath"
+	"regexp"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
-	"regexp"
 )
-
-const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"
 
 func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
@@ -74,22 +75,35 @@ func doGetVpnAuthDialogBin(vpnType string) (authdialog string) {
 	return
 }
 func getVpnNameFile(vpnType string) (nameFile string) {
+	var baseName string
 	switch vpnType {
 	case connectionVpnL2tp:
-		nameFile = nmVpnL2tpNameFile
+		baseName = nmVpnL2tpNameFile
 	case connectionVpnOpenconnect:
-		nameFile = nmVpnOpenconnectNameFile
+		baseName = nmVpnOpenconnectNameFile
 	case connectionVpnOpenvpn:
-		nameFile = nmVpnOpenvpnNameFile
+		baseName = nmVpnOpenvpnNameFile
 	case connectionVpnPptp:
-		nameFile = nmVpnPptpNameFile
+		baseName = nmVpnPptpNameFile
 	case connectionVpnStrongswan:
-		nameFile = nmVpnStrongswanNameFile
+		baseName = nmVpnStrongswanNameFile
 	case connectionVpnVpnc:
-		nameFile = nmVpnVpncNameFile
+		baseName = nmVpnVpncNameFile
+	default:
+		return ""
 	}
-	return
+
+	for _, dir := range []string{"/etc/NetworkManager/VPN", "/usr/lib/NetworkManager/VPN"} {
+		nameFile = filepath.Join(dir, baseName)
+		_, err := os.Stat(nameFile)
+		if err == nil {
+			return nameFile
+		}
+	}
+
+	return ""
 }
+
 func parseVpnNameFile(nameFile string) (service, program, authdialog, properties string) {
 	fileContent, err := ioutil.ReadFile(nameFile)
 	if err != nil {

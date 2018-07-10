@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	nmVpnVpncNameFile = VPN_NAME_FILES_DIR + "nm-vpnc-service.name"
+	nmVpnVpncNameFile = "nm-vpnc-service.name"
 )
 
 var availableValuesNmVpncSecretFlags []kvalue

@@ -21,12 +21,13 @@ package network
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 )
 
 const (
-	nmVpnPptpNameFile = VPN_NAME_FILES_DIR + "nm-pptp-service.name"
+	nmVpnPptpNameFile = "nm-pptp-service.name"
 )
 
 var availableValuesNmPptpSecretFlags []kvalue

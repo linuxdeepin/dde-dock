@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	nmVpnStrongswanNameFile = VPN_NAME_FILES_DIR + "nm-strongswan-service.name"
+	nmVpnStrongswanNameFile = "nm-strongswan-service.name"
 )
 
 // new connection data
