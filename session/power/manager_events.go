@@ -130,8 +130,8 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 	switch level {
 	case WarnLevelAction:
 		playSound(soundutils.EventBatteryLow)
-		m.sendNotify("battery_empty", Tr("Battery Critical Low"),
-			Tr("Computer has been in suspend mode, please plug in"))
+		m.sendNotify("battery_empty", Tr("Battery Critically Low"),
+			Tr("Computer will suspend very soon, please plug in now"))
 
 		m.warnLevelCountTicker = newCountTicker(time.Second, func(count int) {
 			if count == 3 {
@@ -154,15 +154,15 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 			// notify every 60 seconds
 			if count%60 == 0 {
 				playSound(soundutils.EventBatteryLow)
-				m.sendNotify("battery_low", Tr("Battery Critical Low"),
-					Tr("Computer has been in suspend mode, please plug in"))
+				m.sendNotify("battery_low", Tr("Battery Low"),
+					Tr("Computer will suspend soon, please plug in"))
 			}
 		})
 
 	case WarnLevelLow:
 		playSound(soundutils.EventBatteryLow)
 		m.sendNotify("battery_caution", Tr("Battery Low"),
-			Tr("Computer will be in suspend mode, please plug in now"))
+			Tr("Battery low, please plug in"))
 
 	case WarnLevelNone:
 		logger.Debug("Power sufficient")
