@@ -345,8 +345,6 @@ void DockItemController::pluginItemRemoved(PluginsItem *item)
         emit itemRemoved(item);
 
     m_itemList.removeOne(item);
-
-    item->deleteLater();
 }
 
 void DockItemController::reloadAppItems()

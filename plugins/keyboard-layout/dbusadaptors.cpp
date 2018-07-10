@@ -27,6 +27,7 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
                               QDBusConnection::sessionBus(), this))
 {
     connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onLayoutChanged);
+    connect(m_keyboard, &Keyboard::UserLayoutListChanged, this, &DBusAdaptors::onLayoutChanged);
 }
 
 DBusAdaptors::~DBusAdaptors()
@@ -35,19 +36,17 @@ DBusAdaptors::~DBusAdaptors()
 
 QString DBusAdaptors::layout() const
 {
-    QStringList layouts = m_keyboard->currentLayout().split(';');
-    layouts.removeAll(QString(""));
-
-    // Hide layout if user is chinese
-    QLocale locale;
-    if (locale.language() == QLocale::Chinese) {
+    QStringList layouts = m_keyboard->userLayoutList();
+    if (layouts.size() < 2) {
+        // do NOT show keyboard indicator
         return QString();
     }
 
-    if (!layouts.isEmpty())
-        return layouts.first();
+    QString currentLayout = m_keyboard->currentLayout().split(';').first();
+    if (!currentLayout.isEmpty())
+        return currentLayout;
 
-    qWarning() << Q_FUNC_INFO << "layouts is Empty!!";
+    qWarning() << Q_FUNC_INFO << "currentLayout is Empty!!";
 
     // re-fetch data.
     QTimer::singleShot(1000, this, &DBusAdaptors::onLayoutChanged);

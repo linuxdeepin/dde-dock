@@ -214,9 +214,10 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
 
     auto addTrayWidget = [ = ](AbstractTrayWidget * trayWidget) {
         if (trayWidget) {
-            if (m_trayList.values().contains(trayWidget)) return;
+            if (!m_trayList.values().contains(trayWidget)) {
+                m_trayList.insert(itemKey, trayWidget);
+            }
 
-            m_trayList.insert(itemKey, trayWidget);
             m_fashionItem->setMouseEnable(m_trayList.size() == 1);
             if (!m_fashionItem->activeTray()) {
                 m_fashionItem->setActiveTray(trayWidget);
@@ -240,12 +241,33 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
     if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
         QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
         auto trayWidget = new IndicatorTrayWidget(indicatorKey);
+
         connect(trayWidget, &IndicatorTrayWidget::delayLoaded,
         trayWidget, [ = ]() {
             addTrayWidget(trayWidget);
         });
+
         connect(trayWidget, &IndicatorTrayWidget::removed, this, [=] {
-            trayRemoved(m_trayList.key(trayWidget));
+            // IndicatorTrayWIdget不能被析构，因为需要保持DBus
+            QWidget *widget = m_trayList.take(itemKey);
+            m_proxyInter->itemRemoved(this, itemKey);
+            m_fashionItem->setMouseEnable(m_trayList.size() == 1);
+
+            if (m_trayApplet->isVisible()) {
+                updateTipsContent();
+            }
+
+            if (m_fashionItem->activeTray() && m_fashionItem->activeTray() != widget) {
+                return;
+            }
+
+            // reset active tray
+            if (m_trayList.values().isEmpty()) {
+                m_fashionItem->setActiveTray(nullptr);
+                m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
+            } else {
+                m_fashionItem->setActiveTray(m_trayList.values().last());
+            }
         });
     }
 }
