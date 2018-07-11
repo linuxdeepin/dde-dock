@@ -23,7 +23,7 @@
 #define NETWORKPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include <item/deviceitem.h>
+#include "item/deviceitem.h"
 
 #include <QSettings>
 #include <NetworkWorker>

@@ -20,8 +20,8 @@
  */
 
 #include "networkplugin.h"
-#include <item/wireditem.h>
-#include <item/wirelessitem.h>
+#include "item/wireditem.h"
+#include "item/wirelessitem.h"
 
 using namespace dde::network;
 
@@ -40,12 +40,12 @@ NetworkPlugin::NetworkPlugin(QObject *parent)
 
 const QString NetworkPlugin::pluginName() const
 {
-    return "new-network";
+    return "network";
 }
 
 const QString NetworkPlugin::pluginDisplayName() const
 {
-    return tr("NewNetwork");
+    return tr("Network");
 }
 
 void NetworkPlugin::init(PluginProxyInterface *proxyInter)
@@ -84,6 +84,8 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 void NetworkPlugin::pluginStateSwitched()
 {
     m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
+
+    onDeviceListChanged(m_networkModel->devices());
 }
 
 bool NetworkPlugin::pluginIsDisable()
@@ -194,7 +196,6 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 
             mPaths << path;
             m_itemsMap.insert(path, item);
-            m_proxyInter->itemAdded(this, path);
 
             connect(item, &DeviceItem::requestContextMenu, this, &NetworkPlugin::contextMenuRequested);
             connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
@@ -206,6 +207,13 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         if (!newPaths.contains(mPath)) {
             m_proxyInter->itemRemoved(this, mPath);
             m_itemsMap.take(mPath)->deleteLater();
+            break;
+        }
+
+        if (m_settings.value(STATE_KEY, true).toBool()) {
+            m_proxyInter->itemAdded(this, mPath);
+        } else {
+            m_proxyInter->itemRemoved(this, mPath);
         }
     }
 
