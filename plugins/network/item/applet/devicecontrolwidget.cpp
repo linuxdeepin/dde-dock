@@ -52,11 +52,12 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
+    infoLayout->addStretch();
     infoLayout->addWidget(m_loadingIndicator);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(15, 0, 5, 0);
+    infoLayout->setContentsMargins(20, 0, 5, 0);
 
 //    m_seperator = new HorizontalSeperator;
 //    m_seperator->setFixedHeight(1);
