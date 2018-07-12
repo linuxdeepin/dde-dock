@@ -160,7 +160,7 @@ void SoundApplet::onVolumeChanged()
     else
         volumeString = "low";
 
-    const QString &iconName = QString(":/icons/image/audio-volume-%1-symbolic.svg").arg(volumeString);
+    const QString &iconName = QString(":/audio-volume-%1-symbolic.svg").arg(volumeString);
     const auto ratio = devicePixelRatioF();
     QPixmap pix = DSvgRenderer::render(iconName, QSize(24, 24) * ratio);
     pix.setDevicePixelRatio(ratio);
