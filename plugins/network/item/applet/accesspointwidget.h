@@ -68,6 +68,8 @@ private:
     Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityIcon;
     QLabel *m_strengthIcon;
+
+    QSize m_securityIconSize;
 };
 
 #endif // ACCESSPOINTWIDGET_H

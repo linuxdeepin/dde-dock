@@ -52,8 +52,8 @@ AccessPointWidget::AccessPointWidget()
 
     QPixmap iconPix = DSvgRenderer::render(":/wireless/resources/wireless/security.svg", QSize(16, 16) * ratio);
     iconPix.setDevicePixelRatio(ratio);
+    m_securityIconSize = iconPix.size();
     m_securityIcon->setPixmap(iconPix);
-    m_securityIcon->hide();
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_securityIcon);
@@ -105,7 +105,10 @@ void AccessPointWidget::updateAP(const AccessPoint &ap)
 
     setStrengthIcon(ap.strength());
 
-    m_securityIcon->setVisible(ap.secured());
+    if (!ap.secured()) {
+        m_securityIcon->clear();
+        m_securityIcon->setFixedSize(m_securityIconSize);
+    }
 
     // reset state
     setActiveState(NetworkDevice::Unknow);
