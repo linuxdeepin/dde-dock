@@ -273,7 +273,8 @@ func (l *Lastore) notifyJob(path dbus.ObjectPath) {
 		}
 
 	case CleanJobType:
-		if status == SucceedStatus {
+		if status == SucceedStatus &&
+			strings.Contains(info.Name, "+notify") {
 			l.notifyAutoClean()
 		}
 	}
