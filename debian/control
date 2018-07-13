@@ -67,13 +67,12 @@ Depends: ${shlibs:Depends},
  libfprint0,
  dnsmasq-base,
  cgroup-tools, imwheel, procps,
- laptop-mode-tools,
  lastore-daemon,
  deepin-installer-timezones
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
-Recommends: proxychains-ng, flatpak
+Recommends: proxychains-ng, flatpak, laptop-mode-tools
 Suggests:
  bluez (>=5.4),
  network-manager-pptp,
