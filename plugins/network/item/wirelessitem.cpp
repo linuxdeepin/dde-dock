@@ -50,7 +50,8 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_refershTimer, &QTimer::timeout, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
 
-    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+    //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+    init();
 }
 
 WirelessItem::~WirelessItem()
@@ -213,10 +214,6 @@ const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 
 void WirelessItem::init()
 {
-    /* TODO: refactor */
-    //const auto devInfo = m_networkManager->device(m_devicePath);
-
-    //m_APList = new WirelessList(devInfo);
     m_APList = new WirelessList(static_cast<WirelessDevice *>(m_device));
     m_APList->installEventFilter(this);
     m_APList->setObjectName("wireless-" + m_device->path());
