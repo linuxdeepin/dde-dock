@@ -21,27 +21,33 @@ package screensaver
 
 import (
 	"errors"
+	"strings"
 	"sync"
 
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"github.com/linuxdeepin/go-x11-client/ext/screensaver"
-	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/log"
 )
 
 var logger = log.NewLogger("daemon/screensaver")
 
 type inhibitor struct {
+	sender dbus.Sender
 	cookie uint32
 	name   string
 	reason string
 }
+
 type ScreenSaver struct {
-	xConn   *x.Conn
-	service *dbusutil.Service
+	xConn      *x.Conn
+	service    *dbusutil.Service
+	sigLoop    *dbusutil.SignalLoop
+	dbusDaemon *ofdbus.DBus
 
 	blank        byte
 	idleTime     uint32
@@ -85,18 +91,25 @@ type timeoutVals struct {
 // reason: 抑制原因
 //
 // ret0: 此次操作对应的 id，用来取消抑制
-func (ss *ScreenSaver) Inhibit(name, reason string) (uint32, *dbus.Error) {
+func (ss *ScreenSaver) Inhibit(sender dbus.Sender, name, reason string) (uint32,
+	*dbus.Error) {
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
 
 	ss.counter++
 
-	ss.inhibitors[ss.counter] = inhibitor{ss.counter, name, reason}
+	ss.inhibitors[ss.counter] = inhibitor{
+		cookie: ss.counter,
+		name:   name,
+		reason: reason,
+		sender: sender,
+	}
 
 	if len(ss.inhibitors) == 1 {
 		ss.setTimeout(0, 0, false)
 	}
-	logger.Infof("\"%s\" want system enter inhibit, because: \"%s\"", name, reason)
+	logger.Infof("sender %s %q want system enter inhibit, because: %q",
+		sender, name, reason)
 
 	return ss.counter, nil
 }
@@ -108,7 +121,7 @@ func (ss *ScreenSaver) SimulateUserActivity() *dbus.Error {
 }
 
 // 根据 id 取消对应的抑制操作
-func (ss *ScreenSaver) UnInhibit(cookie uint32) *dbus.Error {
+func (ss *ScreenSaver) UnInhibit(sender dbus.Sender, cookie uint32) *dbus.Error {
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
 
@@ -118,8 +131,17 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) *dbus.Error {
 		return dbusutil.ToError(errors.New("invalid cookie"))
 	}
 
-	logger.Infof("%q no need inhibit.", inhibitor.name)
+	if inhibitor.sender != sender {
+		return dbusutil.ToError(errors.New("sender not match"))
+	}
 
+	logger.Infof("%q no need inhibit.", inhibitor.name)
+	ss.unInhibit(cookie)
+
+	return nil
+}
+
+func (ss *ScreenSaver) unInhibit(cookie uint32) {
 	delete(ss.inhibitors, cookie)
 	if len(ss.inhibitors) == 0 {
 		logger.Info("Enter un-inhibit state")
@@ -131,8 +153,6 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) *dbus.Error {
 			ss.setTimeout(ss.idleTime, ss.idleInterval, ss.blank == 1)
 		}
 	}
-
-	return nil
 }
 
 // 设置 Idle 的定时器超时时间
@@ -196,7 +216,8 @@ func (*ScreenSaver) GetInterfaceName() string {
 }
 
 func (ss *ScreenSaver) destroy() {
-	ss.service.StopExport(ss)
+	ss.sigLoop.Stop()
+	ss.dbusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
 func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
@@ -204,6 +225,10 @@ func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 		service:    service,
 		inhibitors: make(map[uint32]inhibitor),
 	}
+
+	sessionBus := service.Conn()
+	s.dbusDaemon = ofdbus.NewDBus(sessionBus)
+	s.sigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 
 	var err error
 	s.xConn, err = x.NewConn()
@@ -234,71 +259,33 @@ func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 		logger.Warning(err)
 	}
 
+	s.listenDBusNameOwnerChanged()
+	s.sigLoop.Start()
 	go s.loop()
 	return s, nil
 }
 
+func (ss *ScreenSaver) listenDBusNameOwnerChanged() {
+	ss.dbusDaemon.InitSignalExt(ss.sigLoop, true)
+	ss.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
+		if strings.HasPrefix(name, ":") &&
+			name == oldOwner && newOwner == "" {
+
+			ss.mu.Lock()
+			for cookie, inhibitor := range ss.inhibitors {
+				if string(inhibitor.sender) == name {
+					logger.Infof("app %s %q disconnect from DBus",
+						name, inhibitor.name)
+					ss.unInhibit(cookie)
+					break
+				}
+			}
+			ss.mu.Unlock()
+		}
+	})
+}
+
 var _ssaver *ScreenSaver
-
-type Daemon struct {
-	*loader.ModuleBase
-}
-
-func NewDaemon(logger *log.Logger) *Daemon {
-	daemon := new(Daemon)
-	daemon.ModuleBase = loader.NewModuleBase("screensaver", daemon, logger)
-	return daemon
-}
-
-func (d *Daemon) GetDependencies() []string {
-	return []string{}
-}
-
-func (d *Daemon) Start() error {
-	service := loader.GetService()
-
-	has, err := service.NameHasOwner(dbusServiceName)
-	if err != nil {
-		return err
-	}
-	if has {
-		logger.Warning("ScreenSaver has been register, exit...")
-		return nil
-	}
-
-	if _ssaver != nil {
-		return nil
-	}
-
-	_ssaver, err = newScreenSaver(service)
-	if err != nil {
-		return err
-	}
-
-	err = service.Export(dbusPath, _ssaver)
-	if err != nil {
-		return err
-	}
-
-	err = service.RequestName(dbusServiceName)
-	if err != nil {
-		_ssaver.destroy()
-		_ssaver = nil
-		return err
-	}
-
-	return nil
-}
-
-func (d *Daemon) Stop() error {
-	if _ssaver == nil {
-		return nil
-	}
-
-	_ssaver.destroy()
-	_ssaver = nil
-	return nil
-}
 
 func (ss *ScreenSaver) loop() {
 	ssExtData := ss.xConn.GetExtensionData(screensaver.Ext())
