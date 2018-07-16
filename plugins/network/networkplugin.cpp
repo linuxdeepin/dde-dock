@@ -175,6 +175,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     item = new WirelessItem(static_cast<WirelessDevice *>(device));
                     wirelessItems.append(static_cast<WirelessItem *>(item));
 
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
+                            m_networkWorker, &NetworkWorker::queryActiveConnInfo);
                     connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
                             m_networkWorker, &NetworkWorker::activateAccessPoint);
                     connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
@@ -188,6 +190,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                             static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecrets);
                     connect(m_networkModel, &NetworkModel::needSecretsFinished,
                             static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecretsFinished);
+
                     m_networkWorker->queryAccessPoints(path);
                     break;
                 default:
