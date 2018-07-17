@@ -31,6 +31,7 @@ import (
 
 	"gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
@@ -40,6 +41,7 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
@@ -84,6 +86,7 @@ const (
 // if themes list changed will emit 'Refreshed' signal
 type Manager struct {
 	service *dbusutil.Service
+	sigLoop *dbusutil.SignalLoop
 
 	GtkTheme      gsprop.String
 	IconTheme     gsprop.String
@@ -96,6 +99,7 @@ type Manager struct {
 
 	userObj   *accounts.User
 	imageBlur *accounts.ImageBlur
+	xSettings *sessionmanager.XSettings
 
 	setting        *gio.Settings
 	wrapBgSetting  *gio.Settings
@@ -162,6 +166,9 @@ func newManager(service *dbusutil.Service) *Manager {
 }
 
 func (m *Manager) destroy() {
+	m.sigLoop.Stop()
+	m.xSettings.RemoveHandler(proxy.RemoveAllHandlers)
+
 	if m.setting != nil {
 		m.setting.Unref()
 		m.setting = nil
@@ -234,7 +241,33 @@ func (m *Manager) initUserObj(systemConn *dbus.Conn) {
 }
 
 func (m *Manager) init() {
-	theme_thumb.Init(doGetScaleFactor())
+	background.SetCustomWallpaperDeleteCallback(func(file string) {
+		logger.Debug("imageBlur delete", file)
+		err := m.imageBlur.Delete(0, file)
+		if err != nil {
+			logger.Warning("imageBlur delete err:", err)
+		}
+	})
+
+	sessionBus := m.service.Conn()
+	m.wm = wm.NewWm(sessionBus)
+
+	m.xSettings = sessionmanager.NewXSettings(sessionBus)
+	theme_thumb.Init(m.getScaleFactor())
+
+	m.sigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	m.xSettings.InitSignalExt(m.sigLoop, true)
+	m.xSettings.ConnectSetScaleFactorDone(m.handleSetScaleFactorDone)
+	m.sigLoop.Start()
+
+	err := m.loadDefaultFontConfig(defaultFontConfigFile)
+	if err != nil {
+		logger.Warning("load default font config failed:", err)
+	}
+
+	m.doSetGtkTheme(m.GtkTheme.Get())
+	m.doSetIconTheme(m.IconTheme.Get())
+	m.doSetCursorTheme(m.CursorTheme.Get())
 
 	// Init theme list
 	time.AfterFunc(time.Second*10, func() {
@@ -276,25 +309,6 @@ func (m *Manager) init() {
 
 	m.initUserObj(systemConn)
 	m.imageBlur = accounts.NewImageBlur(systemConn)
-
-	background.SetCustomWallpaperDeleteCallback(func(file string) {
-		logger.Debug("imageBlur delete", file)
-		err := m.imageBlur.Delete(0, file)
-		if err != nil {
-			logger.Warning("imageBlur delete err:", err)
-		}
-	})
-
-	m.wm = wm.NewWm(m.service.Conn())
-
-	err = m.loadDefaultFontConfig(defaultFontConfigFile)
-	if err != nil {
-		logger.Warning("load default font config failed:", err)
-	}
-
-	m.doSetGtkTheme(m.GtkTheme.Get())
-	m.doSetIconTheme(m.IconTheme.Get())
-	m.doSetCursorTheme(m.CursorTheme.Get())
 }
 
 func (m *Manager) correctFontName() {

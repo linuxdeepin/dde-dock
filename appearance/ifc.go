@@ -229,24 +229,10 @@ func (m *Manager) thumbnail(ty, name string) (string, error) {
 }
 
 func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
-	return doGetScaleFactor(), nil
+	return m.getScaleFactor(), nil
 }
 
 func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
 	err := m.setScaleFactor(scale)
 	return dbusutil.ToError(err)
-}
-
-func (m *Manager) setScaleFactor(scale float64) error {
-	if scale < 0 {
-		return fmt.Errorf("invalid scale value: %v", scale)
-	}
-
-	if getScaleStatus() {
-		return fmt.Errorf("there is a scale job running")
-	}
-
-	setScaleStatus(true)
-	doSetScaleFactor(scale)
-	return nil
 }
