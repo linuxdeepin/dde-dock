@@ -12,6 +12,8 @@ void TipsWidget::setText(const QString &text)
     m_text = text;
 
     setFixedSize(fontMetrics().width(text) + 6, fontMetrics().height());
+
+    update();
 }
 
 void TipsWidget::paintEvent(QPaintEvent *event)
