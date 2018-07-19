@@ -1,5 +1,5 @@
-<a name=""></a>
-##  (2018-07-19)
+<a name="4.6.7"></a>
+### 4.6.7 (2018-07-19)
 
 
 #### Bug Fixes
@@ -10,9 +10,9 @@
 *   load dde-network-utils translator ([3a10ce67](https://github.com/linuxdeepin/dde-dock/commit/3a10ce6773d35b5e4815825bb7122c0e8ba68245))
 *   can not hide network plugin ([eb79f17b](https://github.com/linuxdeepin/dde-dock/commit/eb79f17b0b37a476817f2cba1ecf8d77cffa441f))
 * **Icon:**  error intercepting the icon name ([6ec510ac](https://github.com/linuxdeepin/dde-dock/commit/6ec510ac12c321584605b2d305e49f043e45a6cd))
-*   Control bar layout disorder ([f73a4214](https://github.com/linuxdeepin/dde-dock/commit/f73a4214b99ce7eaeb8bc49616beb3d7009ad559))
-*   crash with list is empty ([09bbd59a](https://github.com/linuxdeepin/dde-dock/commit/09bbd59adbd0ba7b4151dcf3fd8ddba9a50401eb))
-*   wireless strength update ([60561a11](https://github.com/linuxdeepin/dde-dock/commit/60561a11394beaccf8e1fd881ff212f8516f7fc1))
+* **Network:**  Control bar layout disorder ([f73a4214](https://github.com/linuxdeepin/dde-dock/commit/f73a4214b99ce7eaeb8bc49616beb3d7009ad559))
+* **network:**  crash with list is empty ([09bbd59a](https://github.com/linuxdeepin/dde-dock/commit/09bbd59adbd0ba7b4151dcf3fd8ddba9a50401eb))
+* **network-plugin:**  wireless strength update ([60561a11](https://github.com/linuxdeepin/dde-dock/commit/60561a11394beaccf8e1fd881ff212f8516f7fc1))
 * **sound:**
   *  not update when volume changed ([2e87a062](https://github.com/linuxdeepin/dde-dock/commit/2e87a062688ad1f6dfb877dd4ff415e38570ac1c))
   *  miss volume icon ([7547beb5](https://github.com/linuxdeepin/dde-dock/commit/7547beb578f3a8da93a5a43139b75dbde1368f9a))
@@ -22,15 +22,15 @@
   *  activated ap ([eb9ea570](https://github.com/linuxdeepin/dde-dock/commit/eb9ea570ff2e3091a9e948d793cc43ca0a488638))
   *  ap property when received added,changed,removed signals ([b2ff74d2](https://github.com/linuxdeepin/dde-dock/commit/b2ff74d2f33f68a4e7e340e626c5586a0e76f816))
 
-#### Features
-
-* **TipsWidget:**  use one qss file ([052b6b29](https://github.com/linuxdeepin/dde-dock/commit/052b6b29d2a3d1c41ebee2f1505223fa04442f61))
-
 #### Performance
 
 *   reduce memory usage by introducing cache ([2c0b14e4](https://github.com/linuxdeepin/dde-dock/commit/2c0b14e41befb42cecb39679ffdb94c0c5b47c6e))
 * **mem:**  avoid some extra QImage copy ([f6c6a0e7](https://github.com/linuxdeepin/dde-dock/commit/f6c6a0e700cf4dc4827e991e24d753a07da51c5e))
 * **network:**  update info instead of recreating ([c6e33dc3](https://github.com/linuxdeepin/dde-dock/commit/c6e33dc3e1d97dcd3f73beb3f7b575ad55be532d))
+
+#### Features
+
+* **TipsWidget:**  use one qss file ([052b6b29](https://github.com/linuxdeepin/dde-dock/commit/052b6b29d2a3d1c41ebee2f1505223fa04442f61))
 
 
 
