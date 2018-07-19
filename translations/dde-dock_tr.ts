@@ -384,7 +384,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
         <source>Auto-connect</source>
-        <translation>Otomatik bağlan</translation>
+        <translation>Otomatik Olarak Bağlanılsın</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>

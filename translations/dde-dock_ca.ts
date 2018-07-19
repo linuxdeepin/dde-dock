@@ -327,7 +327,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation>Paperera: %1 fitxer</translation>
+        <translation>Paperera: %1 fitxers</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>

@@ -353,7 +353,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
         <source>Unknown</source>
-        <translation>Desconocíu</translation>
+        <translation>Desconozse</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
