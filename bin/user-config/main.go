@@ -27,8 +27,8 @@ import (
 )
 
 func helper() {
-	fmt.Println("Initialize the user configuration, if the configuration files exist out directly.\n")
-	fmt.Println("Usage: user-config [username]")
+	fmt.Println("Initialize the user configuration, if the configuration files exist out directly.")
+	fmt.Println("\nUsage: user-config [username]")
 	fmt.Println("\tIf the user is not specified, will configure the current user.")
 }
 

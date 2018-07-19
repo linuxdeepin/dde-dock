@@ -21,15 +21,20 @@ const (
 	lmtConfigDisabled = 3
 )
 
-func setLMTConfig(mode int) error {
+func isLaptopModeBinOk() bool {
 	_, err := os.Stat(laptopModeBin)
-	if err != nil {
-		return err
-	}
+	return err == nil
+}
 
+func setLMTConfig(mode int) (changed bool, err error) {
 	lines, err := loadLmtConfig()
 	if err != nil {
+		// ignore not exist error
+		if os.IsNotExist(err) {
+			return false, nil
+		}
 		logger.Warning(err)
+		return false, err
 	}
 
 	dict := make(map[string]string)
@@ -47,22 +52,24 @@ func setLMTConfig(mode int) error {
 		dict["ENABLE_LAPTOP_MODE_ON_BATTERY"] = "0"
 		dict["ENABLE_LAPTOP_MODE_ON_AC"] = "0"
 	}
-	lines, changed := modifyLMTConfig(lines, dict)
+	lines, changed = modifyLMTConfig(lines, dict)
 	if changed {
 		logger.Debug("write LMT Config")
 		err = writeLmtConfig(lines)
 		if err != nil {
-			return err
-		}
-		err = reloadLaptopModeService()
-		if err != nil {
-			return err
+			return false, err
 		}
 	}
-	return nil
+
+	return changed, nil
 }
 
 func reloadLaptopModeService() error {
+	if !isLaptopModeBinOk() {
+		logger.Debug("laptop mode tools is not installed")
+		return nil
+	}
+
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return err
@@ -169,17 +176,25 @@ func (m *Manager) writePowerSavingModeEnabledCb(write *dbusutil.PropertyWrite) *
 
 	enabled := write.Value.(bool)
 	var err error
+	var lmtCfgChanged bool
 	if enabled {
-		err = setLMTConfig(lmtConfigEnabled)
+		lmtCfgChanged, err = setLMTConfig(lmtConfigEnabled)
 	} else {
-		err = setLMTConfig(lmtConfigDisabled)
+		lmtCfgChanged, err = setLMTConfig(lmtConfigDisabled)
 	}
 
 	if err != nil {
 		logger.Warning("failed to set LMT config:", err)
 	}
 
-	return dbusutil.ToError(err)
+	if lmtCfgChanged {
+		err := reloadLaptopModeService()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
+	return nil
 }
 
 func (m *Manager) writePowerSavingModeAutoCb(write *dbusutil.PropertyWrite) *dbus.Error {
@@ -187,12 +202,13 @@ func (m *Manager) writePowerSavingModeAutoCb(write *dbusutil.PropertyWrite) *dbu
 
 	autoSwitch := write.Value.(bool)
 	var err error
+	var lmtCfgChanged bool
 	if autoSwitch {
 		m.PropsMu.Lock()
 		m.setPropPowerSavingModeEnabled(m.OnBattery)
 		m.PropsMu.Unlock()
 
-		err = setLMTConfig(lmtConfigAuto)
+		lmtCfgChanged, err = setLMTConfig(lmtConfigAuto)
 
 	} else {
 		m.PropsMu.RLock()
@@ -200,9 +216,9 @@ func (m *Manager) writePowerSavingModeAutoCb(write *dbusutil.PropertyWrite) *dbu
 		m.PropsMu.RUnlock()
 
 		if enabled {
-			err = setLMTConfig(lmtConfigEnabled)
+			lmtCfgChanged, err = setLMTConfig(lmtConfigEnabled)
 		} else {
-			err = setLMTConfig(lmtConfigDisabled)
+			lmtCfgChanged, err = setLMTConfig(lmtConfigDisabled)
 		}
 	}
 
@@ -210,5 +226,12 @@ func (m *Manager) writePowerSavingModeAutoCb(write *dbusutil.PropertyWrite) *dbu
 		logger.Warning("failed to set LMT config:", err)
 	}
 
-	return dbusutil.ToError(err)
+	if lmtCfgChanged {
+		err := reloadLaptopModeService()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
+	return nil
 }

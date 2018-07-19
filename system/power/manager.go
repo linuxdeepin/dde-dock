@@ -186,19 +186,27 @@ func (m *Manager) init() error {
 
 	// init LMT config
 	var err error
+	var lmtCfgChanged bool
 	if m.PowerSavingModeAuto {
 		m.PowerSavingModeEnabled = m.OnBattery
-		err = setLMTConfig(lmtConfigAuto)
+		lmtCfgChanged, err = setLMTConfig(lmtConfigAuto)
 	} else {
 		if m.PowerSavingModeEnabled {
-			err = setLMTConfig(lmtConfigEnabled)
+			lmtCfgChanged, err = setLMTConfig(lmtConfigEnabled)
 		} else {
-			err = setLMTConfig(lmtConfigDisabled)
+			lmtCfgChanged, err = setLMTConfig(lmtConfigDisabled)
 		}
 	}
 
 	if err != nil {
 		logger.Warning("failed to set LMT config:", err)
+	}
+
+	if lmtCfgChanged {
+		err := reloadLaptopModeService()
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	return nil
