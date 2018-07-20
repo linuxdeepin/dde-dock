@@ -32,8 +32,6 @@ func (*Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() error {
-	// TODO: enable lastore
-	return nil
 	service := loader.GetService()
 
 	lastore, err := newLastore(service)
