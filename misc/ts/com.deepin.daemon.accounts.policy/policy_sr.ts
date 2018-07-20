@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Аутентикација је неопходна за промену сопствених корисничких података</translation>
+			<translation>Аутентификација је неопходна за промену сопствених корисничких података</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
 			<source>Authentication is required to change user data</source>
-			<translation>Аутентикација је неопходна за промену корисничких података</translation>
+			<translation>Аутентификација је неопходна за промену корисничких података</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
@@ -24,7 +24,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation>Аутентикација је неопходна да се омогући аутоматско пријављивање</translation>
+			<translation>Аутентификација је неопходна да се омогући аутоматско пријављивање</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
@@ -34,7 +34,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation>Аутентикација је неопходна да се онемогући аутоматско пријављивање</translation>
+			<translation>Аутентификација је неопходна да се онемогући аутоматско пријављивање</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
@@ -44,7 +44,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Аутентикација је неопходна да се омогући пријављивање без лозинке</translation>
+			<translation>Аутентификација је неопходна да се омогући пријављивање без лозинке</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
@@ -54,7 +54,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Аутентикација је неопходна да се онемогући пријављивање без лозинке</translation>
+			<translation>Аутентификација је неопходна да се онемогући пријављивање без лозинке</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
@@ -64,12 +64,12 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Аутентификација је неопходна за подешавање распореда тастатуре</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Подеси распоред тастатуре</translation>
 		</message>
 	</context>
 </TS>
