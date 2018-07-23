@@ -720,5 +720,6 @@ void MainWindow::positionCheck()
     qWarning() << "Dock position may error!!!!!";
     qDebug() << pos() << m_settings->frontendWindowRect() << m_settings->windowRect(m_settings->position(), false);
 
-    internalMove();
+    // this may cause some position error and animation caton
+    //internalMove();
 }
