@@ -1,5 +1,59 @@
 ## [Unreleased]
 
+[3.2.21] 2018-07-23
+*   chore(debian): update depends
+*   chore: auto sync po files from transifex
+*   chore(appearance): move set/get scale factor code to startdde
+*   chore: enable lastore module
+*   fix(system/power): failed to set power saving mode
+*   feat(screensaver): application disconnects from the D-Bus session auto call uninhibit
+*   feat(lastore): clean archives from UI do not send notification
+*   change laptop-mode-tools to recommends
+*   perf(miracast): enable daemon when needed
+*   chore(debian): depends on dnsmasq-base instead of dnsmasq
+*   auto sync po files from transifex
+*   feat(session/power): improve english battery low messages
+*   fix(network): doGuessDevice
+*   fix(network): getVpnNameFile
+*   auto sync po files from transifex
+*   feat: add module lastore
+*   auto sync po files from transifex
+*   chore(x-event-monitor): use go-x11-client
+*   feat: merge dde-session-daemon and dde-session-init
+*   fix(apps): incorrect use of csv.Writer
+*   feat(keybinding): show osd for audio-mic-mute and wlan
+*   feat(power): add power saving mode
+*   chore(accounts): use lib policykit1 new feature
+*   chore(timedated): no use pkg.deepin.io/lib/polkit
+*   chore(grub2): no use pkg.deepin.io/lib/polkit
+*   chore(accounts): use go-dbus-factory
+*   chore(apps): use go-dbus-factory
+*   chore(timedated): use go-dbus-factory
+*   chore(swapsched): use go-dbus-factory
+*   chore(langselector): refactor code
+*   chore(system-daemon): remove unused func requestUnblockAllDevice
+*   chore(langselector): use go-dbus-factory
+*   chore(appearance): use go-dbus-factory
+*   chore(bluetooth): use go-dbus-factory
+*   chore(launcher): use go-dbus-factory
+*   chore(inputdevices): use go-x11-client
+*   chore(dock): use go-dbus-factory
+*   chore(default-terminal): use go-dbus-factory
+*   chore: do not beep if dde-session-init request name failed
+*   perf: optimize key2Mod
+*   chore(session/power): use go-x11-client
+*   fix: x resource id not freed
+*   chore: update for go-x11-client
+*   perf(apps): do not loop check subrecorder root ok
+*   feat(x_event_monitor): add debug method DebugGetPidAreasMap
+*   chore(screensaver): use go-x11-client
+*   fix(x_event_monitor): test build failed
+*   chore(x_event_monitor): remove debug for handleKeyboardEvent
+*   chore(x_event_monitor): use lib go-x11-client
+*   fix(audio): some data race problems
+*   chore: update for go-x11-client
+*   chore(dock): use lib go-x11-client
+
 [3.2.20] 2018-06-12
 *   fix(launcher): no app found in launcher
 
