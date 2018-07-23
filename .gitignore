@@ -42,6 +42,7 @@ bin/dde-session-initializer/dde-session-initializer
 out/
 gopath/
 .vscode/
+.idea/
 
 a.out
 misc/polkit-action/*.policy

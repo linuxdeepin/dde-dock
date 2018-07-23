@@ -39,6 +39,7 @@ const (
 	mouseKeyScaling         = "motion-scaling"
 	mouseKeyDoubleClick     = "double-click"
 	mouseKeyDragThreshold   = "drag-threshold"
+	mouseKeyAdaptiveAccel   = "adaptive-accel-profile"
 )
 
 type Mouse struct {
@@ -52,6 +53,7 @@ type Mouse struct {
 	DisableTpad           gsprop.Bool `prop:"access:rw"`
 	NaturalScroll         gsprop.Bool `prop:"access:rw"`
 	MiddleButtonEmulation gsprop.Bool `prop:"access:rw"`
+	AdaptiveAccelProfile  gsprop.Bool `prop:"access:rw"`
 
 	MotionAcceleration gsprop.Double `prop:"access:rw"`
 	MotionThreshold    gsprop.Double `prop:"access:rw"`
@@ -80,6 +82,7 @@ func newMouse(service *dbusutil.Service, touchPad *Touchpad) *Mouse {
 	m.MotionScaling.Bind(m.setting, mouseKeyScaling)
 	m.DoubleClick.Bind(m.setting, mouseKeyDoubleClick)
 	m.DragThreshold.Bind(m.setting, mouseKeyDragThreshold)
+	m.AdaptiveAccelProfile.Bind(m.setting, mouseKeyAdaptiveAccel)
 
 	m.updateDXMouses()
 
@@ -98,6 +101,7 @@ func (m *Mouse) init() {
 	m.enableLeftHanded()
 	m.enableMidBtnEmu()
 	m.enableNaturalScroll()
+	m.enableAdaptiveAccelProfile()
 	m.motionAcceleration()
 	m.motionThreshold()
 	if m.DisableTpad.Get() {
@@ -194,6 +198,21 @@ func (m *Mouse) enableMidBtnEmu() {
 		err := v.EnableMiddleButtonEmulation(enabled)
 		if err != nil {
 			logger.Debugf("Enable mid btn emulation for '%d - %v' failed: %v",
+				v.Id, v.Name, err)
+		}
+	}
+}
+
+func (m *Mouse) enableAdaptiveAccelProfile() {
+	enabled := m.AdaptiveAccelProfile.Get()
+	for _, v := range m.devInfos {
+		if !v.CanChangeAccelProfile() {
+			continue
+		}
+
+		err := v.SetUseAdaptiveAccelProfile(enabled)
+		if err != nil {
+			logger.Debugf("Enable adaptive accel profile for '%d - %v' failed: %v",
 				v.Id, v.Name, err)
 		}
 	}
