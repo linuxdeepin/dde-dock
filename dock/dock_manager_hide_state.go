@@ -80,7 +80,6 @@ func (m *Manager) getActiveWinGroup(activeWin x.Window) (ret []x.Window) {
 	}
 
 	aPid := getWmPid(activeWin)
-	aWmClass, _ := getWmClass(activeWin)
 	aLeaderWin, _ := getWmClientLeader(activeWin)
 
 	for i := idx - 1; i >= 0; i-- {
@@ -95,13 +94,6 @@ func (m *Manager) getActiveWinGroup(activeWin x.Window) (ret []x.Window) {
 		wmClass, _ := getWmClass(win)
 		if wmClass != nil && wmClass.Class == frontendWindowWmClass {
 			// skip over frontend window
-			continue
-		}
-
-		if wmClass != nil && aWmClass != nil &&
-			wmClass.Class == aWmClass.Class {
-			// ok
-			ret = append(ret, win)
 			continue
 		}
 
@@ -195,9 +187,8 @@ func (m *Manager) shouldHideOnSmartHideMode() (bool, error) {
 
 	isLauncher, err := isDDELauncher(activeWin)
 	if err != nil {
-		return false, err
+		logger.Warning(err)
 	}
-
 	if isLauncher {
 		// dde launcher is invisible, but it is still active window
 		logger.Debug("shouldHideOnSmartHideMode: active window is dde launcher")
@@ -209,7 +200,7 @@ func (m *Manager) shouldHideOnSmartHideMode() (bool, error) {
 	for _, win := range list {
 		over, err := m.isWindowDockOverlap(win)
 		if err != nil {
-			return false, err
+			logger.Warning(err)
 		}
 		logger.Debugf("shouldHideOnSmartHideMode: win %d dock overlap %v", win, over)
 		if over {
