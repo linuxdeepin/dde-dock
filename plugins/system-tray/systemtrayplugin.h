@@ -27,6 +27,7 @@
 #include "dbus/dbustraymanager.h"
 
 #include "xwindowtraywidget.h"
+#include "indicatortray.h"
 #include "indicatortraywidget.h"
 
 #include <QSettings>
@@ -73,6 +74,7 @@ private:
     DBusTrayManager *m_trayInter;
     FashionTrayItem *m_fashionItem;
     QMap<QString, AbstractTrayWidget *> m_trayList;
+    QMap<QString, IndicatorTray*> m_indicatorList;
 
     TrayApplet *m_trayApplet;
     TipsWidget *m_tipsLabel;

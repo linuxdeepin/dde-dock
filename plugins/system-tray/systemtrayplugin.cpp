@@ -203,7 +203,6 @@ void SystemTrayPlugin::trayListChanged()
     for (auto tray : trayList) {
         trayAdded(tray);
     }
-
 }
 
 void SystemTrayPlugin::trayAdded(const QString itemKey)
@@ -239,35 +238,25 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
     }
 
     if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
+        IndicatorTray *trayWidget = nullptr;
         QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
-        auto trayWidget = new IndicatorTrayWidget(indicatorKey);
 
-        connect(trayWidget, &IndicatorTrayWidget::delayLoaded,
+        if (!m_indicatorList.keys().contains(itemKey)) {
+            trayWidget = new IndicatorTray(indicatorKey);
+            m_indicatorList[indicatorKey] = trayWidget;
+        }
+        else {
+            trayWidget = m_indicatorList[itemKey];
+        }
+
+        connect(trayWidget, &IndicatorTray::delayLoaded,
         trayWidget, [ = ]() {
-            addTrayWidget(trayWidget);
+            addTrayWidget(trayWidget->widget());
         });
 
-        connect(trayWidget, &IndicatorTrayWidget::removed, this, [=] {
-            // IndicatorTrayWIdget不能被析构，因为需要保持DBus
-            QWidget *widget = m_trayList.take(itemKey);
-            m_proxyInter->itemRemoved(this, itemKey);
-            m_fashionItem->setMouseEnable(m_trayList.size() == 1);
-
-            if (m_trayApplet->isVisible()) {
-                updateTipsContent();
-            }
-
-            if (m_fashionItem->activeTray() && m_fashionItem->activeTray() != widget) {
-                return;
-            }
-
-            // reset active tray
-            if (m_trayList.values().isEmpty()) {
-                m_fashionItem->setActiveTray(nullptr);
-                m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
-            } else {
-                m_fashionItem->setActiveTray(m_trayList.values().last());
-            }
+        connect(trayWidget, &IndicatorTray::removed, this, [=] {
+            trayRemoved(itemKey);
+            trayWidget->removeWidget();
         });
     }
 }

@@ -22,9 +22,10 @@
 #pragma once
 
 #include <QScopedPointer>
+#include <QLabel>
+
 #include "abstracttraywidget.h"
 
-class IndicatorTrayWidgetPrivate;
 class IndicatorTrayWidget: public AbstractTrayWidget
 {
     Q_OBJECT
@@ -48,17 +49,10 @@ public Q_SLOTS:
     Q_SCRIPTABLE void setPixmapPath(const QString &text);
     Q_SCRIPTABLE void setText(const QString &text);
 
-public Q_SLOTS:
-    void iconPropertyChanged(const QDBusMessage &msg);
-    void textPropertyChanged(const QDBusMessage &msg);
-
 Q_SIGNALS:
-    void delayLoaded();
-    void removed();
     void clicked(uint8_t, int, int);
 
 private:
-    QScopedPointer<IndicatorTrayWidgetPrivate> d_ptr;
-    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), IndicatorTrayWidget)
+    QLabel *m_label;
 };
 
