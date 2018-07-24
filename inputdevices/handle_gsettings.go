@@ -69,6 +69,8 @@ func (m *Mouse) handleGSettings() {
 			m.doubleClick()
 		case mouseKeyDragThreshold:
 			m.dragThreshold()
+		case mouseKeyAdaptiveAccel:
+			m.enableAdaptiveAccelProfile()
 		}
 	})
 }
