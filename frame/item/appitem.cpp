@@ -390,7 +390,6 @@ void AppItem::leaveEvent(QEvent *e)
         if (m_appPreviewTips->isVisible()) {
             m_appPreviewTips->prepareHide();
         }
-        m_appPreviewTips = nullptr;
     }
 }
 
