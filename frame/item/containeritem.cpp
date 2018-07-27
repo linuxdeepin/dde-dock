@@ -26,7 +26,7 @@
 ContainerItem::ContainerItem(QWidget *parent)
     : DockItem(parent),
       m_dropping(false),
-      m_popupTips(new QLabel),
+      m_popupTips(new TipsWidget(this)),
       m_containerWidget(new ContainerWidget(this))
 {
     m_containerWidget->setVisible(false);
