@@ -60,6 +60,7 @@ signals:
     void requestDeactiveAP(const QString &devPath) const;
     void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
     void cancelSecret(const QString &connectionPath, const QString &settingName);
+    void queryAccessPoints();
 
 private:
     void loadAPList();

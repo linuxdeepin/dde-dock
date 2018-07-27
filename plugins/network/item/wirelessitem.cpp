@@ -234,6 +234,9 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
     connect(m_APList, &WirelessList::feedSecret, this, &WirelessItem::feedSecret);
     connect(m_APList, &WirelessList::cancelSecret, this, &WirelessItem::cancelSecret);
+    connect(m_APList, &WirelessList::queryAccessPoints, [=]() {
+            Q_EMIT queryAccessPoints(m_device->path());
+    });
 }
 
 void WirelessItem::adjustHeight()

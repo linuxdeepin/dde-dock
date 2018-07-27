@@ -51,7 +51,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
       m_centralLayout(new QVBoxLayout),
       m_centralWidget(new QWidget),
       m_controlPanel(new DeviceControlWidget)
-      //m_networkInter(new DBusNetwork(this))
 {
     setFixedHeight(WIDTH);
 
@@ -78,7 +77,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     m_centralWidget->setFixedWidth(WIDTH);
     m_centralWidget->setLayout(m_centralLayout);
 
-//    m_centralLayout->addWidget(m_controlPanel);
+    m_centralLayout->addWidget(m_controlPanel);
     m_centralLayout->setSpacing(0);
     m_centralLayout->setMargin(0);
 
@@ -102,8 +101,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
 
     connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
-    /* TODO:  <22-06-18, yourname> */
-    //connect(m_controlPanel, &DeviceControlWidget::requestRefresh, m_networkInter, &DBusNetwork::RequestWirelessScan);
+    connect(m_controlPanel, &DeviceControlWidget::requestRefresh, this, &WirelessList::queryAccessPoints);
 
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 

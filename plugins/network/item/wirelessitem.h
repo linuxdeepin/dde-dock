@@ -57,6 +57,7 @@ Q_SIGNALS:
     void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
     void cancelSecret(const QString &connectionPath, const QString &settingName);
     void queryActiveConnInfo();
+    void queryAccessPoints(const QString &path);
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
