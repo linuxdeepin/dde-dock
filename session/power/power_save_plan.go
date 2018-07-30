@@ -166,7 +166,7 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 			brightnessTable[key] = value
 		}
 	}
-	psp.manager.setDisplayBrightness(brightnessTable)
+	psp.manager.setAndSaveDisplayBrightness(brightnessTable)
 }
 
 // 取消之前的任务

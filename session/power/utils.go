@@ -146,6 +146,19 @@ func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
 	}
 }
 
+func (m *Manager) setAndSaveDisplayBrightness(brightnessTable map[string]float64) {
+	display := m.helper.Display
+	for output, brightness := range brightnessTable {
+		logger.Infof("Change output %q brightness to %.2f", output, brightness)
+		err := display.SetAndSaveBrightness(0, output, brightness)
+		if err != nil {
+			logger.Warningf("Change output %q brightness to %.2f failed: %v", output, brightness, err)
+		} else {
+			logger.Infof("Change output %q brightness to %.2f done!", output, brightness)
+		}
+	}
+}
+
 func doShowDDELowPower() {
 	logger.Info("Show dde low power")
 	go exec.Command(cmdDDELowPower, "--raise").Run()
