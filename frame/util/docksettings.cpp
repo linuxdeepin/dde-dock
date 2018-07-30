@@ -152,6 +152,12 @@ DockSettings::DockSettings(QWidget *parent)
     resetFrontendGeometry();
 }
 
+DockSettings &DockSettings::Instance()
+{
+    static DockSettings settings;
+    return settings;
+}
+
 const QSize DockSettings::panelSize() const
 {
     switch (m_position)

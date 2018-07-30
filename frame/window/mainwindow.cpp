@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
     m_platformWindowHandle.setShadowRadius(0);
 
-    m_settings = new DockSettings(this);
+    m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
 
     initComponents();

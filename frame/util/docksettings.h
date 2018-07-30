@@ -57,7 +57,7 @@ class DockSettings : public QObject
     Q_OBJECT
 
 public:
-    explicit DockSettings(QWidget *parent = 0);
+    static DockSettings& Instance();
 
     inline DisplayMode displayMode() const { return m_displayMode; }
     inline HideMode hideMode() const { return m_hideMode; }
@@ -106,6 +106,10 @@ private slots:
     void updateForbidPostions();
 
 private:
+    DockSettings(QWidget *parent = 0);
+    DockSettings(DockSettings const &) = delete;
+    DockSettings operator =(DockSettings const &) = delete;
+
     bool test(const Position pos, const QList<QRect> &otherScreens) const;
     void calculateWindowConfig();
     void gtkIconThemeChanged();
