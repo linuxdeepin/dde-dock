@@ -37,6 +37,10 @@ DWIDGET_USE_NAMESPACE
 #define SNAP_WIDTH       200
 #define SNAP_HEIGHT      130
 
+struct SHMInfo;
+struct _XImage;
+typedef _XImage XImage;
+
 class AppSnapshot : public QWidget
 {
     Q_OBJECT
@@ -47,6 +51,7 @@ public:
     WId wid() const { return m_wid; }
     bool attentioned() const { return m_windowInfo.attention; }
     const QImage snapshot() const { return m_snapshot; }
+    const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
     const QString title() const { return m_windowInfo.title; }
 
 signals:
@@ -67,15 +72,20 @@ private:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    SHMInfo *getImageDSHM();
+    XImage * getImageXlib();
+    QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);
 
 private:
     const WId m_wid;
 
     WindowInfo m_windowInfo;
     QImage m_snapshot;
-    QLabel *m_title;
-    DImageButton *m_closeBtn;
+    QRectF m_snapshotSrcRect;
 
+    QLabel *m_title;
+
+    DImageButton *m_closeBtn;
     DWindowManagerHelper *m_wmHelper;
 };
 
