@@ -50,8 +50,20 @@ func (m *Manager) initDbusObjects() {
 	loginManager = login1.NewManager(systemBus)
 	loginManager.InitSignalExt(m.sysSigLoop, true)
 
+}
+
+func (m *Manager) initDBusDaemon() {
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 	dbusDaemon = dbusmgr.NewDBus(systemBus)
 	dbusDaemon.InitSignalExt(m.sysSigLoop, true)
+}
+
+func destroyDBusDaemon() {
+	dbusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
 }
 
 func destroyDbusObjects() {
@@ -61,5 +73,4 @@ func destroyDbusObjects() {
 	nmManager.RemoveHandler(proxy.RemoveAllHandlers)
 	nmSettings.RemoveHandler(proxy.RemoveAllHandlers)
 	loginManager.RemoveHandler(proxy.RemoveAllHandlers)
-	dbusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
 }

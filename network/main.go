@@ -89,6 +89,7 @@ func (d *Daemon) Start() error {
 	// initialize manager after dbus installed
 	go func() {
 		manager.init()
+		manager.initDBusDaemon()
 		watchNetworkManagerRestart(manager)
 	}()
 	return nil
@@ -107,6 +108,8 @@ func (d *Daemon) Stop() error {
 	}
 
 	manager.destroy()
+	destroyDBusDaemon()
+	manager.sysSigLoop.Stop()
 	service.StopExport(manager)
 
 	if manager.proxyChainsManager != nil {
