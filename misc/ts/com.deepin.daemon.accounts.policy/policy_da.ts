@@ -69,7 +69,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Sæt tastaturlayout</translation>
 		</message>
 	</context>
 </TS>

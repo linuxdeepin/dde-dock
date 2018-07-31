@@ -64,12 +64,12 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Cal autenticació per establir el disseny del teclat</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Estableix el disseny del teclat</translation>
 		</message>
 	</context>
 </TS>

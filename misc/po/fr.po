@@ -5,7 +5,7 @@
 # Translators:
 # Aestan <anthony.margerand@gmail.com>, 2018
 # iderr, 2016
-# Charles Monzat <superboa@hotmail.fr>, 2017-2018
+# Charles Monzat <c.monzat@laposte.net>, 2017-2018
 # iderr, 2016
 # lexross <mais@techie.com>, 2016-2017
 # Joselito 8 <morbihan8pool@gmail.com>, 2018

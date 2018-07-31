@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-10 08:48+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-07-26 11:33+0000\n"
+"Last-Translator: enolp <enolp@softastur.org>\n"
 "Language-Team: Asturian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ast/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgstr "El nome d'usuariu perpasa la llende"
 
 #: ../../appearance/scale.go:49
 msgid "Display scaling"
-msgstr ""
+msgstr "Escaláu de pantalla"
 
 #: ../../appearance/scale.go:50
 msgid "Setting display scaling"
@@ -613,7 +613,7 @@ msgstr "Ethernet"
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr "Direición MAC de preséu"
+msgstr "Direición MAC del preséu"
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
@@ -1244,7 +1244,7 @@ msgstr "Direición IP"
 
 #: ../../network/nm_setting_beans_gen.go:455
 msgid "Netmask"
-msgstr "Mázacara de rede"
+msgstr "Mázcara de rede"
 
 #: ../../network/nm_setting_beans_gen.go:457
 #: ../../network/nm_setting_beans_gen.go:471
@@ -1896,7 +1896,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
-msgstr ""
+msgstr "Falló la conexón de la VPN activa, desconozse la razón"
 
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed"
@@ -1984,7 +1984,7 @@ msgstr ""
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
-msgstr "Desconocíu"
+msgstr "Desconozse"
 
 #: ../../network/utils_notify.go:80
 msgid "You are now offline."

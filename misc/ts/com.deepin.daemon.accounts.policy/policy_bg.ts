@@ -64,12 +64,12 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Удостоверяване е нужно за да промените клавиатурната подредба </translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>настройване на клавиатурна подредба</translation>
 		</message>
 	</context>
 </TS>
