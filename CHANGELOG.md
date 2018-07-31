@@ -1,3 +1,21 @@
+<a name="4.6.8"></a>
+### 4.6.8 (2018-07-31)
+
+
+#### Bug Fixes
+
+*   close preview window ([97c9d45c](https://github.com/linuxdeepin/dde-dock/commit/97c9d45c164da93bc93025993584310cd0dd7367))
+*   position and animation when show or hide ([96a70d76](https://github.com/linuxdeepin/dde-dock/commit/96a70d760eb9e84832c489e73a3c74ea2aaff80e))
+* **network:**  refresh wireless list ([590652c7](https://github.com/linuxdeepin/dde-dock/commit/590652c709df3cc6673d946cba6cf35d0076ab1b))
+* **plugin:**  unified popuptip style of container plugin ([ac4b76c3](https://github.com/linuxdeepin/dde-dock/commit/ac4b76c3e17f9d350e047261bf3ebbbabb98fa77))
+* **preview:**  refresh preview snapshot ([ef2dc365](https://github.com/linuxdeepin/dde-dock/commit/ef2dc365dac4f5b1dea4b66fe9c6b41f50a579d3))
+
+#### Features
+
+*   add dock settings instance ([4dcb1d9c](https://github.com/linuxdeepin/dde-dock/commit/4dcb1d9c4f46b48c204e2c76720792d2b1c9957f))
+
+
+
 <a name="4.6.7"></a>
 ### 4.6.7 (2018-07-19)
 
