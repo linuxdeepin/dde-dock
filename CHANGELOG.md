@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+[3.2.22] 2018-07-31
+*   auto sync po files from transifex
+*   fix(network): failed to watch network manager restart
+*   fix(session/power): not save display brightness when power saving mode changed
+*   refactor(network): use newly lib dbusutil
+*   fix(dock): getActiveWinGroup
+*   fix(mouse): handle accel profile change from gsettings
+*   feat(mouse): ability to change mouse accel profile
+
 [3.2.21] 2018-07-23
 *   chore(debian): update depends
 *   chore: auto sync po files from transifex
