@@ -34,7 +34,8 @@ NetworkPlugin::NetworkPlugin(QObject *parent)
 
       m_networkModel(nullptr),
       m_networkWorker(nullptr),
-      m_settings("deepin", "dde-dock-network")
+      m_settings("deepin", "dde-dock-network"),
+      m_pluginLoaded(false)
 {
 }
 
@@ -52,15 +53,9 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_networkModel = new NetworkModel;
-    m_networkWorker = new NetworkWorker(m_networkModel);
-
-    connect(m_networkModel, &NetworkModel::deviceListChanged, this, &NetworkPlugin::onDeviceListChanged);
-
-    m_networkModel->moveToThread(qApp->thread());
-    m_networkWorker->moveToThread(qApp->thread());
-
-    onDeviceListChanged(m_networkModel->devices());
+    if (!pluginIsDisable()) {
+        loadPlugin();
+    }
 }
 
 void NetworkPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
@@ -243,6 +238,25 @@ DeviceItem *NetworkPlugin::itemByPath(const QString &path)
     return nullptr;
 }
 
+void NetworkPlugin::loadPlugin()
+{
+    if (m_pluginLoaded) {
+        qDebug() << "network plugin has been loaded! return";
+        return;
+    }
+
+    m_pluginLoaded = true;
+
+    m_networkModel = new NetworkModel;
+    m_networkWorker = new NetworkWorker(m_networkModel);
+
+    connect(m_networkModel, &NetworkModel::deviceListChanged, this, &NetworkPlugin::onDeviceListChanged);
+
+    m_networkModel->moveToThread(qApp->thread());
+    m_networkWorker->moveToThread(qApp->thread());
+
+    onDeviceListChanged(m_networkModel->devices());
+}
 
 void NetworkPlugin::contextMenuRequested()
 {

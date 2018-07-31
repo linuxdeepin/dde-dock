@@ -52,7 +52,6 @@ private slots:
     void volumeSliderValueChanged();
     void sinkInputsChanged();
     void toggleMute();
-    void delayLoad();
     void onPlaySoundEffect();
 
 private:

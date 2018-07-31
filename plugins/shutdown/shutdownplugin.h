@@ -63,10 +63,12 @@ public:
 private:
     void updateBatteryVisible();
     void requestContextMenu(const QString &itemKey);
-    void delayLoader();
+    void loadPlugin();
 
 private:
+    bool m_pluginLoaded;
     QSettings m_settings;
+
     PluginWidget *m_shutdownWidget;
     PowerStatusWidget *m_powerStatusWidget;
     TipsWidget *m_tipsLabel;

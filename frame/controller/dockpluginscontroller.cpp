@@ -31,6 +31,7 @@
 
 DockPluginsController::DockPluginsController(DockItemController *itemControllerInter)
     : QObject(itemControllerInter),
+      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
       m_itemControllerInter(itemControllerInter)
 {
     qApp->installEventFilter(this);
@@ -156,6 +157,26 @@ void DockPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     m_pluginList.insert(interface, QMap<QString, PluginsItem *>());
+
+    QString dbusService = meta.value("depends-daemon-dbus-service").toString();
+    if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
+        qDebug() << dbusService << "daemon has not started, waiting for signal";
+        connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this,
+            [=](const QString &name, const QString &oldOwner, const QString &newOwner) {
+                if (name == dbusService && !newOwner.isEmpty()) {
+                    qDebug() << dbusService << "daemon started, init plugin and disconnect";
+                    initPlugin(interface);
+                    disconnect(m_dbusDaemonInterface);
+                }
+            }
+        );
+        return;
+    }
+
+    initPlugin(interface);
+}
+
+void DockPluginsController::initPlugin(PluginsItemInterface *interface) {
     qDebug() << "init plugin: " << interface->pluginName();
     interface->init(this);
     qDebug() << "init plugin finished: " << interface->pluginName();

@@ -61,6 +61,7 @@ private slots:
 
 private:
     DeviceItem *itemByPath(const QString &path);
+    void loadPlugin();
 
 private:
     dde::network::NetworkModel *m_networkModel;
@@ -68,6 +69,8 @@ private:
 
     QMap<QString, DeviceItem *> m_itemsMap;
     QSettings m_settings;
+
+    bool m_pluginLoaded;
 };
 
 #endif // NETWORKPLUGIN_H

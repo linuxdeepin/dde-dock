@@ -56,12 +56,14 @@ private slots:
     void displayModeChanged();
     void positionChanged();
     void loadPlugin(const QString &pluginFile);
+    void initPlugin(PluginsItemInterface *interface);
 
 private:
     bool eventFilter(QObject *o, QEvent *e);
     PluginsItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
 
 private:
+    QDBusConnectionInterface *m_dbusDaemonInterface;
     QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
     DockItemController *m_itemControllerInter;
 };

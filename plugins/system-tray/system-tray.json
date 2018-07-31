@@ -1,3 +1,4 @@
 {
-    "api": "1.0"
+    "api": "1.0",
+    "depends-daemon-dbus-service": "com.deepin.dde.TrayManager"
 }

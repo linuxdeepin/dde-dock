@@ -30,19 +30,12 @@
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
+      m_pluginLoaded(false),
       m_settings("deepin", "dde-dock-power"),
-      m_shutdownWidget(new PluginWidget),
-      m_powerStatusWidget(new PowerStatusWidget),
-      m_tipsLabel(new TipsWidget),
-
-      m_powerInter(new DBusPower(this))
+      m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("power");
-
-    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
-    connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
-    connect(m_powerStatusWidget, &PowerStatusWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
 }
 
 const QString ShutdownPlugin::pluginName() const
@@ -98,8 +91,9 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (!pluginIsDisable())
-        delayLoader();
+    if (!pluginIsDisable()) {
+        loadPlugin();
+    }
 }
 
 void ShutdownPlugin::pluginStateSwitched()
@@ -252,22 +246,23 @@ void ShutdownPlugin::requestContextMenu(const QString &itemKey)
     m_proxyInter->requestContextMenu(this, itemKey);
 }
 
-void ShutdownPlugin::delayLoader()
+void ShutdownPlugin::loadPlugin()
 {
-    static int retryTimes = 0;
-
-    ++retryTimes;
-
-    if (m_powerInter->isValid() || retryTimes > 10)
-    {
-        qDebug() << "load power item, dbus valid:" << m_powerInter->isValid();
-
-        m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
-        displayModeChanged(displayMode());
-    } else {
-        qDebug() << "load power failed, wait and retry" << retryTimes;
-
-        // wait and retry
-        QTimer::singleShot(1000, this, &ShutdownPlugin::delayLoader);
+    if (m_pluginLoaded) {
+        qDebug() << "power plugin has been loaded! return";
+        return;
     }
+
+    m_pluginLoaded = true;
+
+    m_shutdownWidget = new PluginWidget;
+    m_powerStatusWidget = new PowerStatusWidget;
+    m_powerInter = new DBusPower(this);
+
+    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
+    connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
+    connect(m_powerStatusWidget, &PowerStatusWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
+
+    m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
+    displayModeChanged(displayMode());
 }
