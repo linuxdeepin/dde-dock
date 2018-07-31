@@ -112,6 +112,8 @@ bool WirelessItem::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_APList && e->type() == QEvent::Resize)
         QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection);
+    if (o == m_APList && e->type() == QEvent::Show)
+        Q_EMIT requestWirelessScan();
 
     return false;
 }
@@ -234,9 +236,7 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
     connect(m_APList, &WirelessList::feedSecret, this, &WirelessItem::feedSecret);
     connect(m_APList, &WirelessList::cancelSecret, this, &WirelessItem::cancelSecret);
-    connect(m_APList, &WirelessList::queryAccessPoints, [=]() {
-            Q_EMIT queryAccessPoints(m_device->path());
-    });
+    connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
 }
 
 void WirelessItem::adjustHeight()

@@ -101,7 +101,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
 
     connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
-    connect(m_controlPanel, &DeviceControlWidget::requestRefresh, this, &WirelessList::queryAccessPoints);
+    connect(m_controlPanel, &DeviceControlWidget::requestRefresh, this, &WirelessList::requestWirelessScan);
 
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
