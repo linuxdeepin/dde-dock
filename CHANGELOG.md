@@ -1,3 +1,13 @@
+<a name="4.6.9"></a>
+### 4.6.9 (2018-07-31)
+
+
+#### Bug Fixes
+
+* **network:**  scan wireless ([5de234e6](https://github.com/linuxdeepin/dde-dock/commit/5de234e6cb5727c3b92bdaed05014f687a758955))
+
+
+
 <a name="4.6.8"></a>
 ### 4.6.8 (2018-07-31)
 
