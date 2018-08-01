@@ -50,9 +50,9 @@ PluginsItem 是一个对外来控件的包装类，所以在这里面大多工�
 
 其中，AppItem 的相关数据是从后端获取的。这些与后端通信的操作被封装在了 AppItem 中。Item Controller 并不处理这些具体某个 Item 的事情。
 
-### DockItem Controller
+### PluginsItem Controller
 
-由于插件的复杂性与特殊性，专门为插件管理加了一层包装。DockItem Controller 是 ItemController 的一部分，专门负责插件类型的 Items 的创建、排序等相关操作。同时，也是作为 dock 主程序到插件之间的一个 proxy 的作用。
+由于插件的复杂性与特殊性，专门为插件管理加了一层包装。PluginsItemController 是 ItemController 的一部分，专门负责插件类型的 Items 的创建、排序等相关操作。同时，也是作为 dock 主程序到插件之间的一个 proxy 的作用。
 
 ### MainPanel
 
