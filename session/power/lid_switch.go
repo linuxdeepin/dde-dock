@@ -30,6 +30,12 @@ func init() {
 	submoduleList = append(submoduleList, newLidSwitchHandler)
 }
 
+const (
+	lidSwitchStateUnknown = iota
+	lidSwitchStateOpen
+	lidSwitchStateClose
+)
+
 type LidSwitchHandler struct {
 	manager *Manager
 	cmd     *exec.Cmd
@@ -52,6 +58,11 @@ func (h *LidSwitchHandler) Start() error {
 func (h *LidSwitchHandler) onLidClosed() {
 	logger.Info("Lid closed")
 	m := h.manager
+	m.PropsMu.Lock()
+	m.lidSwitchState = lidSwitchStateClose
+	m.PropsMu.Unlock()
+	m.claimOrReleaseAmbientLight()
+
 	if !m.LidClosedSleep.Get() {
 		return
 	}
@@ -74,6 +85,12 @@ func (h *LidSwitchHandler) onLidClosed() {
 
 func (h *LidSwitchHandler) onLidOpened() {
 	logger.Info("Lid opened")
+	m := h.manager
+	m.PropsMu.Lock()
+	m.lidSwitchState = lidSwitchStateOpen
+	m.PropsMu.Unlock()
+	m.claimOrReleaseAmbientLight()
+
 	if err := h.stopAskUser(); err != nil {
 		logger.Warning("stopAskUser error:", err)
 	}
@@ -121,7 +138,7 @@ func outputsAfterLidClosed(outputs []string) []string {
 	// found built ouput
 	var found bool
 	for _, output := range outputs {
-		if !found && isBuiltinOuput(output) {
+		if !found && isBuiltinOutput(output) {
 			// skip built output
 			continue
 			found = true
@@ -132,7 +149,7 @@ func outputsAfterLidClosed(outputs []string) []string {
 }
 
 // copy from display module of project startdde
-func isBuiltinOuput(name string) bool {
+func isBuiltinOutput(name string) bool {
 	name = strings.ToLower(name)
 	switch {
 	case strings.Contains(name, "lvds"):

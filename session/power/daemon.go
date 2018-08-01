@@ -54,13 +54,11 @@ func (d *Daemon) Start() (err error) {
 
 	err = service.Export(dbusPath, d.manager, d.manager.warnLevelConfig)
 	if err != nil {
-		d.manager.destroy()
 		return err
 	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		d.manager.destroy()
 		return err
 	}
 
@@ -71,6 +69,15 @@ func (d *Daemon) Start() (err error) {
 func (d *Daemon) Stop() error {
 	if d.manager == nil {
 		return nil
+	}
+	service := loader.GetService()
+	err := service.ReleaseName(dbusServiceName)
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = service.StopExport(d.manager)
+	if err != nil {
+		logger.Warning(err)
 	}
 	d.manager.destroy()
 	d.manager = nil

@@ -30,9 +30,10 @@ import (
 
 //go:generate dbusutil-gen -type Manager manager.go
 type Manager struct {
-	service              *dbusutil.Service
-	sessionSigLoop       *dbusutil.SignalLoop
-	systemSigLoop        *dbusutil.SignalLoop
+	service        *dbusutil.Service
+	sessionSigLoop *dbusutil.SignalLoop
+	systemSigLoop  *dbusutil.SignalLoop
+	//sysDBusDaemon        *ofdbus.DBus
 	helper               *Helper
 	settings             *gio.Settings
 	isSuspending         bool
@@ -49,6 +50,9 @@ type Manager struct {
 
 	// 警告级别
 	WarnLevel WarnLevel
+
+	// 是否有环境光传感器
+	HasAmbientLightSensor bool
 
 	// dbusutil-gen: ignore-below
 	// 电池是否可用，是否存在
@@ -75,20 +79,26 @@ type Manager struct {
 
 	// 笔记本电脑盖上盖子后是否睡眠
 	LidClosedSleep gsprop.Bool `prop:"access:rw"`
+
+	AmbientLightAdjustBrightness gsprop.Bool `prop:"access:rw"`
+	ambientLightClaimed          bool
+	lightLevelUnit               string
+	lidSwitchState               uint
+	sessionActive                bool
 }
 
 func newManager(service *dbusutil.Service) (*Manager, error) {
-	m := &Manager{
-		service: service,
-	}
-	systemConn, err := dbus.SystemBus()
+	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
-	sessionConn := service.Conn()
-	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionConn, 10)
-	m.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
-	helper, err := newHelper(systemConn, sessionConn)
+	m := new(Manager)
+	m.service = service
+	sessionBus := service.Conn()
+	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	m.systemSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+
+	helper, err := newHelper(systemBus, sessionBus)
 	if err != nil {
 		return nil, err
 	}
@@ -104,6 +114,8 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)
 	m.SleepLock.Bind(m.settings, settingKeySleepLock)
 	m.LidClosedSleep.Bind(m.settings, settingKeyLidClosedSleep)
+	m.AmbientLightAdjustBrightness.Bind(m.settings,
+		settingKeyAmbientLightAdjuestBrightness)
 
 	power := m.helper.Power
 	m.LidIsPresent, err = power.HasLidSwitch().Get(0)
@@ -117,6 +129,13 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	}
 
 	logger.Info("LidIsPresent", m.LidIsPresent)
+	m.HasAmbientLightSensor, _ = helper.SensorProxy.HasAmbientLight().Get(0)
+	logger.Debug("HasAmbientLightSensor:", m.HasAmbientLightSensor)
+	if m.HasAmbientLightSensor {
+		m.lightLevelUnit, _ = helper.SensorProxy.LightLevelUnit().Get(0)
+	}
+
+	m.sessionActive, _ = helper.SessionWatcher.IsActive().Get(0)
 
 	// init battery display
 	m.BatteryIsPresent = make(map[string]bool)
@@ -127,11 +146,11 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 }
 
 func (m *Manager) init() {
+	m.claimOrReleaseAmbientLight()
 	m.sessionSigLoop.Start()
 	m.systemSigLoop.Start()
-	m.helper.LoginManager.InitSignalExt(m.systemSigLoop, true)
-	m.helper.Power.InitSignalExt(m.systemSigLoop, true)
-	m.helper.ScreenSaver.InitSignalExt(m.sessionSigLoop, true)
+
+	m.helper.initSignalExt(m.systemSigLoop, m.sessionSigLoop)
 
 	// init sleep inhibitor
 	m.inhibitor = newSleepInhibitor(m.helper.LoginManager)
@@ -144,6 +163,47 @@ func (m *Manager) init() {
 	power.ConnectBatteryDisplayUpdate(func(timestamp int64) {
 		logger.Debug("BatteryDisplayUpdate", timestamp)
 		m.handleBatteryDisplayUpdate()
+	})
+
+	m.helper.SensorProxy.LightLevel().ConnectChanged(func(hasValue bool, value float64) {
+		if !hasValue {
+			return
+		}
+		m.handleLightLevelChanged(value)
+	})
+
+	m.helper.SysDBusDaemon.ConnectNameOwnerChanged(
+		func(name string, oldOwner string, newOwner string) {
+			serviceName := m.helper.SensorProxy.ServiceName_()
+			if name == serviceName && newOwner != "" {
+				logger.Debug("sensorProxy restarted")
+				hasSensor, _ := m.helper.SensorProxy.HasAmbientLight().Get(0)
+				var lightLevelUnit string
+				if hasSensor {
+					lightLevelUnit, _ = m.helper.SensorProxy.LightLevelUnit().Get(0)
+				}
+
+				m.PropsMu.Lock()
+				m.setPropHasAmbientLightSensor(hasSensor)
+				m.ambientLightClaimed = false
+				m.lightLevelUnit = lightLevelUnit
+				m.PropsMu.Unlock()
+
+				m.claimOrReleaseAmbientLight()
+			}
+		})
+
+	m.helper.SessionWatcher.IsActive().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+
+		m.PropsMu.Lock()
+		m.sessionActive = value
+		m.PropsMu.Unlock()
+
+		logger.Debug("session active changed to:", value)
+		m.claimOrReleaseAmbientLight()
 	})
 
 	m.warnLevelConfig.setChangeCallback(m.handleBatteryDisplayUpdate)
@@ -180,6 +240,7 @@ func (m *Manager) isX11SessionActive() (bool, error) {
 
 func (m *Manager) destroy() {
 	m.destroySubmodules()
+	m.releaseAmbientLight()
 
 	if m.helper != nil {
 		m.helper.Destroy()

@@ -28,11 +28,12 @@ const (
 	settingKeyLinePowerScreenBlackDelay = "line-power-screen-black-delay"
 	settingKeyLinePowerSleepDelay       = "line-power-sleep-delay"
 
-	settingKeyAdjustBrightnessEnabled = "adjust-brightness-enabled"
-	settingKeyScreenBlackLock         = "screen-black-lock"
-	settingKeySleepLock               = "sleep-lock"
-	settingKeyLidClosedSleep          = "lid-closed-sleep"
-	settingKeyPowerButtonPressedExec  = "power-button-pressed-exec"
+	settingKeyAdjustBrightnessEnabled       = "adjust-brightness-enabled"
+	settingKeyAmbientLightAdjuestBrightness = "ambient-light-adjust-brightness"
+	settingKeyScreenBlackLock               = "screen-black-lock"
+	settingKeySleepLock                     = "sleep-lock"
+	settingKeyLidClosedSleep                = "lid-closed-sleep"
+	settingKeyPowerButtonPressedExec        = "power-button-pressed-exec"
 
 	settingKeyFullScreenWorkaroundEnabled = "fullscreen-workaround-enabled"
 	settingKeyUsePercentageForPolicy      = "use-percentage-for-policy"

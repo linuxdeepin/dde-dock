@@ -26,6 +26,8 @@ import (
 
 	// system bus
 	libpower "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
+	"github.com/linuxdeepin/go-dbus-factory/net.hadess.sensorproxy"
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 
 	// session bus
@@ -34,13 +36,16 @@ import (
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.screensaver"
 	"github.com/linuxdeepin/go-x11-client"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 type Helper struct {
 	Notification *notify.Notification
 
-	Power        *libpower.Power // sig
-	LoginManager *login1.Manager // sig
+	Power         *libpower.Power // sig
+	LoginManager  *login1.Manager // sig
+	SensorProxy   *sensorproxy.SensorProxy
+	SysDBusDaemon *ofdbus.DBus
 
 	SessionManager *sessionmanager.SessionManager
 	SessionWatcher *sessionwatcher.SessionWatcher
@@ -50,9 +55,9 @@ type Helper struct {
 	xConn *x.Conn
 }
 
-func newHelper(systemConn, sessionConn *dbus.Conn) (*Helper, error) {
+func newHelper(systemBus, sessionBus *dbus.Conn) (*Helper, error) {
 	h := &Helper{}
-	err := h.init(systemConn, sessionConn)
+	err := h.init(systemBus, sessionBus)
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +72,8 @@ func (h *Helper) init(systemConn, sessionConn *dbus.Conn) error {
 
 	h.Power = libpower.NewPower(systemConn)
 	h.LoginManager = login1.NewManager(systemConn)
+	h.SensorProxy = sensorproxy.NewSensorProxy(systemConn)
+	h.SysDBusDaemon = ofdbus.NewDBus(systemConn)
 	h.SessionManager = sessionmanager.NewSessionManager(sessionConn)
 	h.ScreenSaver = screensaver.NewScreenSaver(sessionConn)
 	h.Display = display.NewDisplay(sessionConn)
@@ -80,10 +87,26 @@ func (h *Helper) init(systemConn, sessionConn *dbus.Conn) error {
 	return nil
 }
 
+func (h *Helper) initSignalExt(systemSigLoop, sessionSigLoop *dbusutil.SignalLoop) {
+	// sys
+	h.SysDBusDaemon.InitSignalExt(systemSigLoop, true)
+	h.LoginManager.InitSignalExt(systemSigLoop, true)
+	h.Power.InitSignalExt(systemSigLoop, true)
+	h.SensorProxy.InitSignalExt(systemSigLoop, true)
+
+	// session
+	h.ScreenSaver.InitSignalExt(sessionSigLoop, true)
+	h.SessionWatcher.InitSignalExt(sessionSigLoop, true)
+}
+
 func (h *Helper) Destroy() {
-	h.Power.RemoveHandler(proxy.RemoveAllHandlers)
+	h.SysDBusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
 	h.LoginManager.RemoveHandler(proxy.RemoveAllHandlers)
+	h.Power.RemoveHandler(proxy.RemoveAllHandlers)
+	h.SensorProxy.RemoveHandler(proxy.RemoveAllHandlers)
+
 	h.ScreenSaver.RemoveHandler(proxy.RemoveAllHandlers)
+	h.SessionWatcher.RemoveHandler(proxy.RemoveAllHandlers)
 
 	if h.Notification != nil {
 		h.Notification.Destroy()

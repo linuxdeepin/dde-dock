@@ -89,6 +89,8 @@ func (psp *powerSavePlan) initSettingsChangedHandler() {
 				logger.Debug("Change OnBattery plan")
 				psp.OnBattery()
 			}
+		} else if key == settingKeyAmbientLightAdjuestBrightness {
+			psp.manager.claimOrReleaseAmbientLight()
 		}
 	})
 }
@@ -140,6 +142,14 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 		return
 	}
 	logger.Debug("power saving mode enabled changed to", enabled)
+
+	psp.manager.PropsMu.RLock()
+	hasLightSensor := psp.manager.HasAmbientLightSensor
+	psp.manager.PropsMu.RUnlock()
+
+	if hasLightSensor && psp.manager.AmbientLightAdjustBrightness.Get() {
+		return
+	}
 
 	brightnessTable, err := psp.manager.helper.Display.GetBrightness(0)
 	if err != nil {

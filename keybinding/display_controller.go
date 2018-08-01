@@ -20,6 +20,7 @@
 package keybinding
 
 import (
+	"gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.display"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
@@ -59,11 +60,20 @@ func (c *DisplayController) ExecCmd(cmd ActionCmd) error {
 	}
 }
 
+const gsKeyAmbientLightAdjustBrightness = "ambient-light-adjust-brightness"
+
 func (c *DisplayController) changeBrightness(raised bool) error {
 	var osd = "BrightnessUp"
 	if !raised {
 		osd = "BrightnessDown"
 	}
+
+	gs := gio.NewSettings("com.deepin.dde.power")
+	autoAdjustBrightnessEnabled := gs.GetBoolean(gsKeyAmbientLightAdjustBrightness)
+	if autoAdjustBrightnessEnabled {
+		gs.SetBoolean(gsKeyAmbientLightAdjustBrightness, false)
+	}
+	gs.Unref()
 
 	err := c.display.ChangeBrightness(dbus.FlagNoAutoStart, raised)
 	if err != nil {

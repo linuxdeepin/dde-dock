@@ -74,7 +74,7 @@ Breaks: dde-daemon(<< 2.92.2), dde-workspace, lastore-daemon(<< 0.9.64)
 Replaces: lastore-daemon(<< 0.9.64)
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
-Recommends: proxychains-ng, flatpak, laptop-mode-tools
+Recommends: proxychains-ng, flatpak, laptop-mode-tools, iio-sensor-proxy
 Suggests:
  bluez (>=5.4),
  network-manager-pptp,
