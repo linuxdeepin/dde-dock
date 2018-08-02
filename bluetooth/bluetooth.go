@@ -215,7 +215,18 @@ func (b *Bluetooth) init() {
 }
 
 func (b *Bluetooth) unblockBluetoothDevice() {
-	b.apiDevice.UnblockDevice(0, "bluetooth")
+	has, err := b.apiDevice.HasBluetoothDeviceBlocked(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if has {
+		err = b.apiDevice.UnblockBluetoothDevices(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
 }
 
 func (b *Bluetooth) loadObjects() {
