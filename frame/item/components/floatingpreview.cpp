@@ -55,6 +55,11 @@ WId FloatingPreview::trackedWid() const
     return m_tracked->wid();
 }
 
+AppSnapshot *FloatingPreview::trackedWindow()
+{
+    return m_tracked;
+}
+
 void FloatingPreview::trackWindow(AppSnapshot * const snap)
 {
     if (!m_tracked.isNull())
@@ -132,6 +137,13 @@ bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
         hide();
 
     return QWidget::eventFilter(watched, event);
+}
+
+void FloatingPreview::hideEvent(QHideEvent *event)
+{
+    m_tracked->setContentsMargins(0, 0, 0, 0);
+
+    QWidget::hideEvent(event);
 }
 
 void FloatingPreview::onCloseBtnClicked()
