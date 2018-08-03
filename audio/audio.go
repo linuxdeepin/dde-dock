@@ -115,8 +115,9 @@ func newAudio(ctx *pulse.Context, service *dbusutil.Service) *Audio {
 	}
 	a.MaxUIVolume = pulse.VolumeUIMax
 
-	a.init()
 	a.applyConfig()
+	a.fixActivePortNotAvailable()
+	a.init()
 	return a
 }
 
@@ -631,4 +632,40 @@ func (a *Audio) getSourceInfoByName(sourceName string) *pulse.Source {
 		}
 	}
 	return nil
+}
+func getBestPort(ports []pulse.PortInfo) pulse.PortInfo {
+	var portUnknown pulse.PortInfo
+	var portYes pulse.PortInfo
+	for _, port := range ports {
+		if port.Available == pulse.AvailableTypeYes {
+			if port.Priority > portYes.Priority || portYes.Name == "" {
+				portYes = port
+			}
+		} else if port.Available == pulse.AvailableTypeUnknow {
+			if port.Priority > portUnknown.Priority || portUnknown.Name == "" {
+				portUnknown = port
+			}
+		}
+	}
+
+	if portYes.Name != "" {
+		return portYes
+	}
+	return portUnknown
+}
+
+func (a *Audio) fixActivePortNotAvailable() {
+	sinkInfoList := a.ctx.GetSinkList()
+	for _, sinkInfo := range sinkInfoList {
+		activePort := sinkInfo.ActivePort
+
+		if activePort.Available == pulse.AvailableTypeNo {
+			newPort := getBestPort(sinkInfo.Ports)
+			if newPort.Name != activePort.Name && newPort.Name != "" {
+				logger.Info("auto switch to port", newPort.Name)
+				a.ctx.SetSinkPortByIndex(sinkInfo.Index, newPort.Name)
+				a.saveConfig()
+			}
+		}
+	}
 }

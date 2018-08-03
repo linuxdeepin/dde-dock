@@ -26,38 +26,38 @@ import (
 )
 
 func (a *Audio) applyConfig() {
-	info, err := readConfig()
+	cfg, err := readConfig()
 	if err != nil {
 		logger.Warning("Read config info failed:", err)
 		return
 	}
 
-	if !a.isConfigValid(info) {
-		logger.Warning("Invalid config:", info.string())
+	if !a.isConfigValid(cfg) {
+		logger.Warning("Invalid config:", cfg.string())
 		a.trySelectBestPort()
+		a.saveConfig()
 		return
 	}
 
 	for _, card := range a.ctx.GetCardList() {
-		v, ok := info.Profiles[card.Name]
+		profileName, ok := cfg.Profiles[card.Name]
 		if !ok {
 			continue
 		}
 
-		if card.ActiveProfile.Name != v {
-			card.SetProfile(v)
-			time.Sleep(time.Microsecond * 300)
+		if card.ActiveProfile.Name != profileName {
+			card.SetProfile(profileName)
 		}
 	}
 
 	var sinkValidity = true
 	for _, s := range a.ctx.GetSinkList() {
-		if s.Name == info.Sink {
-			if len(info.SinkPort) == 0 {
+		if s.Name == cfg.Sink {
+			if len(cfg.SinkPort) == 0 {
 				sinkValidity = false
 				break
 			}
-			port := pulse.PortInfos(s.Ports).Get(info.SinkPort)
+			port := pulse.PortInfos(s.Ports).Get(cfg.SinkPort)
 			// if port invalid, nothing to do.
 			// TODO: some device port can play sound when state is 'NO', how to fix?
 			if port == nil {
@@ -65,48 +65,42 @@ func (a *Audio) applyConfig() {
 				break
 			}
 
-			if s.ActivePort.Name != info.SinkPort {
-				a.ctx.SetSinkPortByIndex(s.Index, info.SinkPort)
-				time.Sleep(time.Microsecond * 50)
+			if s.ActivePort.Name != cfg.SinkPort {
+				a.ctx.SetSinkPortByIndex(s.Index, cfg.SinkPort)
 			}
-			cv := s.Volume.SetAvg(info.SinkVolume)
+			cv := s.Volume.SetAvg(cfg.SinkVolume)
 			a.ctx.SetSinkVolumeByIndex(s.Index, cv)
-			time.Sleep(time.Microsecond * 50)
 			break
 		}
 	}
-	logger.Debug("Audio config sink validity:", sinkValidity, info.Sink)
+	logger.Debug("Audio config sink validity:", sinkValidity, cfg.Sink)
 	if sinkValidity {
-		a.ctx.SetDefaultSink(info.Sink)
-		time.Sleep(time.Microsecond * 50)
+		a.ctx.SetDefaultSink(cfg.Sink)
 	}
 
 	var sourceValidity = true
 	for _, s := range a.ctx.GetSourceList() {
-		if s.Name == info.Source {
-			if len(info.SourcePort) == 0 {
+		if s.Name == cfg.Source {
+			if len(cfg.SourcePort) == 0 {
 				sourceValidity = false
 				continue
 			}
-			port := pulse.PortInfos(s.Ports).Get(info.SourcePort)
+			port := pulse.PortInfos(s.Ports).Get(cfg.SourcePort)
 			if port == nil {
 				sourceValidity = false
 				continue
 			}
-			if s.ActivePort.Name != info.SourcePort {
-				a.ctx.SetSourcePortByIndex(s.Index, info.SourcePort)
-				time.Sleep(time.Microsecond * 50)
+			if s.ActivePort.Name != cfg.SourcePort {
+				a.ctx.SetSourcePortByIndex(s.Index, cfg.SourcePort)
 			}
-			cv := s.Volume.SetAvg(info.SourceVolume)
+			cv := s.Volume.SetAvg(cfg.SourceVolume)
 			a.ctx.SetSourceVolumeByIndex(s.Index, cv)
-			time.Sleep(time.Microsecond * 50)
 			break
 		}
 	}
-	logger.Debug("Audio config source validity:", sourceValidity, info.Source)
+	logger.Debug("Audio config source validity:", sourceValidity, cfg.Source)
 	if sourceValidity {
-		a.ctx.SetDefaultSource(info.Source)
-		time.Sleep(time.Microsecond * 50)
+		a.ctx.SetDefaultSource(cfg.Source)
 	}
 }
 

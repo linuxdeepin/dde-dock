@@ -31,7 +31,11 @@ type Port struct {
 	Available   byte // Unknow:0, No:1, Yes:2
 }
 
-func (p Port) String() string {
+func (p *Port) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+
 	availableStr := "Invalid"
 	switch int(p.Available) {
 	case pulse.AvailableTypeUnknow:
