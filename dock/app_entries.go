@@ -149,44 +149,52 @@ func (entries *AppEntries) Move(index, newIndex int) error {
 
 func (entries *AppEntries) FilterDocked() (dockedEntries []*AppEntry) {
 	entries.mu.RLock()
+
 	for _, entry := range entries.items {
+		entry.PropsMu.RLock()
 		if entry.appInfo != nil && entry.IsDocked == true {
 			dockedEntries = append(dockedEntries, entry)
 		}
+		entry.PropsMu.RUnlock()
 	}
+
 	entries.mu.RUnlock()
 	return dockedEntries
 }
 
 func (entries *AppEntries) GetByWindowPid(pid uint) *AppEntry {
 	entries.mu.RLock()
+	defer entries.mu.RUnlock()
 
+	var foundPid bool
 	for _, entry := range entries.items {
+		entry.PropsMu.RLock()
 		for _, winInfo := range entry.windows {
 			if winInfo.pid == pid {
-				entries.mu.RUnlock()
-				return entry
+				foundPid = true
+				break
 			}
 		}
+		entry.PropsMu.RUnlock()
+		if foundPid {
+			return entry
+		}
 	}
-
-	entries.mu.RUnlock()
 	return nil
 }
 
 func (entries *AppEntries) getByWindowId(winId x.Window) *AppEntry {
 	entries.mu.RLock()
+	defer entries.mu.RUnlock()
+
 	for _, entry := range entries.items {
 		entry.PropsMu.RLock()
 		_, ok := entry.windows[winId]
 		entry.PropsMu.RUnlock()
 		if ok {
-			entries.mu.RUnlock()
 			return entry
 		}
 	}
-
-	entries.mu.RUnlock()
 	// not found
 	return nil
 }

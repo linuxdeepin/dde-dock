@@ -162,10 +162,9 @@ func needScratchDesktop(appInfo *AppInfo) bool {
 
 func (m *Manager) dockEntry(entry *AppEntry) bool {
 	entry.PropsMu.Lock()
-	defer entry.PropsMu.Unlock()
-
 	if entry.IsDocked {
 		logger.Warningf("dockEntry failed: entry %v is docked", entry.Id)
+		entry.PropsMu.Unlock()
 		return false
 	}
 	if needScratchDesktop(entry.appInfo) {
@@ -178,12 +177,14 @@ func (m *Manager) dockEntry(entry *AppEntry) bool {
 			entry.innerId = entry.appInfo.innerId
 		} else {
 			logger.Warning("createScratchDesktopFileWithAppEntry failed", err)
+			entry.PropsMu.Unlock()
 			return false
 		}
 	}
 
 	entry.setPropIsDocked(true)
 	entry.updateMenu()
+	entry.PropsMu.Unlock()
 	m.saveDockedApps()
 	return true
 }
@@ -194,16 +195,16 @@ func isFileInDir(file, dir string) bool {
 }
 
 func (m *Manager) undockEntry(entry *AppEntry) {
-	entry.PropsMu.Lock()
-	defer entry.PropsMu.Unlock()
-
+	entry.PropsMu.RLock()
 	if !entry.IsDocked {
 		logger.Warningf("undockEntry failed: entry %v is not docked", entry.Id)
+		entry.PropsMu.RUnlock()
 		return
 	}
 
 	if entry.appInfo == nil {
 		logger.Warning("undockEntry failed: entry.appInfo is nil")
+		entry.PropsMu.RUnlock()
 		return
 	}
 	desktop := entry.appInfo.GetFileName()
@@ -214,9 +215,14 @@ func (m *Manager) undockEntry(entry *AppEntry) {
 		removeScratchFiles(entry.appInfo.GetFileName())
 	}
 
-	if !entry.hasWindow() {
+	hasWin := entry.hasWindow()
+	entry.PropsMu.RUnlock()
+
+	if !hasWin {
 		m.removeAppEntry(entry)
 	} else {
+		entry.PropsMu.Lock()
+
 		if isDesktopInScratchDir && entry.current != nil {
 			if strings.HasPrefix(filepath.Base(desktop), windowHashPrefix) {
 				// desktop base starts with w:
@@ -235,6 +241,8 @@ func (m *Manager) undockEntry(entry *AppEntry) {
 		entry.setPropIsDocked(false)
 		entry.updateName()
 		entry.updateMenu()
+
+		entry.PropsMu.Unlock()
 	}
 	m.saveDockedApps()
 }
