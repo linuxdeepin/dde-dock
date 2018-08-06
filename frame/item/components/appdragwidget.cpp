@@ -187,22 +187,22 @@ bool AppDragWidget::isRemoveAble()
     const QPoint &p = QCursor::pos();
     switch (m_dockPosition) {
         case Dock::Position::Left:
-            if ((p.x() - m_dockGeometry.topRight().x()) > 100) {
+            if ((p.x() - m_dockGeometry.topRight().x()) > (m_dockGeometry.width() * 3)) {
                 return true;
             }
             break;
         case Dock::Position::Top:
-            if ((p.y() - m_dockGeometry.bottomLeft().y()) > 100) {
+            if ((p.y() - m_dockGeometry.bottomLeft().y()) > (m_dockGeometry.height() * 3)) {
                 return true;
             }
             break;
         case Dock::Position::Right:
-            if ((m_dockGeometry.topLeft().x() - p.x()) > 100) {
+            if ((m_dockGeometry.topLeft().x() - p.x()) > (m_dockGeometry.width() * 3)) {
                 return true;
             }
             break;
         case Dock::Position::Bottom:
-            if ((m_dockGeometry.topLeft().y() - p.y()) > 100) {
+            if ((m_dockGeometry.topLeft().y() - p.y()) > (m_dockGeometry.height() * 3)) {
                 return true;
             }
             break;
