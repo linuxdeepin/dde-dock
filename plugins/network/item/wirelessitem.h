@@ -77,6 +77,7 @@ private slots:
 
 private:
     QHash<QString, QPixmap> m_icons;
+    bool m_reloadIcon;
 
     QTimer *m_refershTimer;
     QWidget *m_wirelessApplet;

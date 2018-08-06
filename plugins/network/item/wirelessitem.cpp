@@ -33,6 +33,7 @@ using namespace dde::network;
 WirelessItem::WirelessItem(WirelessDevice *device)
     : DeviceItem(device),
 
+      m_reloadIcon(false),
       m_refershTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
       m_wirelessPopup(new TipsWidget),
@@ -137,6 +138,9 @@ void WirelessItem::paintEvent(QPaintEvent *e)
         painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
     }
     painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
+
+    if (m_reloadIcon)
+        m_reloadIcon = false;
 }
 
 void WirelessItem::resizeEvent(QResizeEvent *e)
@@ -211,9 +215,9 @@ const QPixmap WirelessItem::backgroundPix(const int size)
 
 const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 {
-    if (!m_icons.contains(key))
-        m_icons.insert(key, QIcon::fromTheme(key,
-                                             QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
+    if (m_reloadIcon || !m_icons.contains(key)) {
+        m_icons.insert(key, QIcon::fromTheme(key, QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
+    }
 
     return m_icons.value(key);
 }
@@ -246,6 +250,7 @@ void WirelessItem::adjustHeight()
 
 void WirelessItem::refreshIcon()
 {
+    m_reloadIcon = true;
     update();
 }
 

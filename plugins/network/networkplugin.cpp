@@ -74,6 +74,9 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
+    for (auto item : m_itemsMap.values()) {
+        item->refreshIcon();
+    }
 }
 
 void NetworkPlugin::pluginStateSwitched()
