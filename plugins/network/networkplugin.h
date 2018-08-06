@@ -57,6 +57,7 @@ public:
 
 private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
+    void refreshWiredItemVisible();
     void contextMenuRequested();
 
 private:
@@ -68,6 +69,7 @@ private:
     dde::network::NetworkWorker *m_networkWorker;
 
     QMap<QString, DeviceItem *> m_itemsMap;
+    QTimer *m_delayRefreshTimer;
     QSettings m_settings;
 
     bool m_pluginLoaded;

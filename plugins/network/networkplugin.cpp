@@ -34,6 +34,7 @@ NetworkPlugin::NetworkPlugin(QObject *parent)
 
       m_networkModel(nullptr),
       m_networkWorker(nullptr),
+      m_delayRefreshTimer(new QTimer),
       m_settings("deepin", "dde-dock-network"),
       m_pluginLoaded(false)
 {
@@ -52,6 +53,8 @@ const QString NetworkPlugin::pluginDisplayName() const
 void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
+
+    connect(m_delayRefreshTimer, &QTimer::timeout, this, &NetworkPlugin::refreshWiredItemVisible);
 
     if (!pluginIsDisable()) {
         loadPlugin();
@@ -226,6 +229,34 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         QTimer::singleShot(1, [=] {
             wirelessItems.at(i)->setDeviceInfo(wirelessItemCount == 1 ? -1 : i + 1);
         });
+    }
+
+    if (!m_delayRefreshTimer->isActive()) {
+        m_delayRefreshTimer->start(2000);
+    }
+}
+
+void NetworkPlugin::refreshWiredItemVisible()
+{
+    bool hasWireless = false;
+    QList<WiredItem *> wiredItems;
+
+    for (auto item : m_itemsMap.values()) {
+        if (item->device()->type() == NetworkDevice::Wireless) {
+            hasWireless = true;
+        } else {
+            wiredItems.append(static_cast<WiredItem *>(item));
+        }
+    }
+
+    if (!hasWireless) {
+        return;
+    }
+
+    for (auto wiredItem : wiredItems) {
+        if (!wiredItem->device()->enabled()) {
+            m_proxyInter->itemRemoved(this, wiredItem->path());
+        }
     }
 }
 
