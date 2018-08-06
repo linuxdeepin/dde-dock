@@ -323,10 +323,12 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				case nm.NM_DEVICE_STATE_REASON_NO_SECRETS:
 					msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
 				default:
-					msg = fmt.Sprintf(Tr("%q disconnected"), dsi.aconnId)
+					if dsi.aconnId != "" {
+						msg = fmt.Sprintf(Tr("%q disconnected"), dsi.aconnId)
+					}
 				}
 			}
-			if len(msg) != 0 {
+			if msg != "" {
 				notify(icon, "", msg)
 			}
 		}
