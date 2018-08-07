@@ -1,3 +1,21 @@
+<a name="4.7.0"></a>
+### 4.7.0 (2018-08-07)
+
+
+#### Bug Fixes
+
+*   triple dock size drag to remove distance ([87e6d18a](https://github.com/linuxdeepin/dde-dock/commit/87e6d18aaf99aa2c9b67643daae4881de663a97e))
+* **network:**
+  *  wired item visible ([23806991](https://github.com/linuxdeepin/dde-dock/commit/238069913130e492f00bea6edc67377e4cf6127b))
+  *  refresh network plug theme icon ([c115fd15](https://github.com/linuxdeepin/dde-dock/commit/c115fd153fd110938eda2c541f0d7c96af77d033))
+
+#### Features
+
+*   add get preview image from shm ([081522f0](https://github.com/linuxdeepin/dde-dock/commit/081522f02ccbb628c75d8ae1e5c09da33d0ff5a2))
+*   lazy loading of plugins which depends dbus daemon ([95b5c72f](https://github.com/linuxdeepin/dde-dock/commit/95b5c72f13e0ae35fae0c2b2a698bc567ae351ed))
+ 
+
+
 <a name="4.6.9"></a>
 ### 4.6.9 (2018-07-31)
 
