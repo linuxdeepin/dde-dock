@@ -1,4 +1,8 @@
-## [Unreleased]
+[3.2.23] 2018-08-07
+*   fix(network): vpn disconnect notify name is empty
+*   feat(audio): handle laptop headphones available state changed when user session is inactive
+*   fix(dock): AppEntries.mu and Entry.PropsMu dead lock
+*   chore: update call method for com.deepin.api.device
 
 [3.2.22] 2018-07-31
 *   auto sync po files from transifex

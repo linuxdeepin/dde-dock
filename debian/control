@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Deepin Packages Builder <packages@deepin.com>
 Build-Depends: debhelper (>= 10), golang-go,
  dde-go-dbus-factory(>= 3.1.17),
- golang-dlib-dev(>= 1.2.14), golang-gir-gobject-2.0-dev,
+ golang-dlib-dev(>= 1.2.16), golang-gir-gobject-2.0-dev,
  golang-gir-gio-2.0-dev, golang-gir-glib-2.0-dev,
  golang-github-mattn-go-sqlite3-dev,
  golang-gopkg-alecthomas-kingpin.v2-dev,
@@ -17,8 +17,8 @@ Build-Depends: debhelper (>= 10), golang-go,
  golang-github-nfnt-resize-dev,
  golang-gir-gudev-1.0-dev,
  golang-github-linuxdeepin-go-x11-client-dev (>= 0.0.4),
- golang-github-linuxdeepin-go-dbus-factory-dev (>= 0.0.5),
- dde-api-dev (>= 3.1.27),
+ golang-github-linuxdeepin-go-dbus-factory-dev (>= 0.0.7),
+ dde-api-dev (>= 3.1.28),
  libudev-dev,
  libglib2.0-dev,
  libgtk-3-dev,
@@ -68,7 +68,8 @@ Depends: ${shlibs:Depends},
  dnsmasq-base,
  cgroup-tools, imwheel, procps,
  lastore-daemon,
- deepin-installer-timezones
+ deepin-installer-timezones,
+ dde-api (>= 3.1.28)
 Breaks: dde-daemon(<< 2.92.2), dde-workspace, lastore-daemon(<< 0.9.64)
 Replaces: lastore-daemon(<< 0.9.64)
 Conflicts: dde-workspace, lastore-daemon-migration
