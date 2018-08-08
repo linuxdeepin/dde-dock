@@ -14,7 +14,6 @@ Build-Depends: debhelper (>= 8.0.0), pkg-config,
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
  cmake,
- clang,
  libdde-network-utils-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/

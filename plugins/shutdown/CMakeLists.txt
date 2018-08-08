@@ -13,7 +13,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} resources.qrc)
+add_library(${PLUGIN_NAME} SHARED ${SRCS} shutdown.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}

@@ -16,7 +16,7 @@ pkg_check_modules(DDE-Network-Utils REQUIRED dde-network-utils)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} resources.qrc)
+add_library(${PLUGIN_NAME} SHARED ${SRCS} network.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}

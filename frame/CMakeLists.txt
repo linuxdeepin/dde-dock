@@ -20,7 +20,7 @@ pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
 # driver-manager
-add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} item/resources.qrc frame.qrc)
+add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} item/item.qrc frame.qrc)
 target_include_directories(${BIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                               ${XCB_EWMH_INCLUDE_DIRS}
                                               ${DFrameworkDBus_INCLUDE_DIRS}

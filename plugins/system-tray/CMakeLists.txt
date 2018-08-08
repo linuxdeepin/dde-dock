@@ -16,7 +16,7 @@ find_package(DtkWidget REQUIRED)
 pkg_check_modules(XCB_LIBS REQUIRED xcb-ewmh xcb xcb-image xcb-composite xtst xcb-icccm)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} resources.qrc)
+add_library(${PLUGIN_NAME} SHARED ${SRCS} system-tray.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
