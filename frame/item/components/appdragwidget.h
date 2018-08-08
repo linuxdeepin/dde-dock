@@ -45,6 +45,7 @@ public:
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
 protected:
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;

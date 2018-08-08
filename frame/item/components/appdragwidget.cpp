@@ -94,6 +94,13 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
 
 AppDragWidget::~AppDragWidget() { }
 
+void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseMoveEvent(event);
+    // hide widget when receiving mouseMoveEvent because this means drag-and-drop has been finished
+    hide();
+}
+
 void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
