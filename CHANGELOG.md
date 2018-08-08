@@ -1,3 +1,13 @@
+<a name="4.7.1"></a>
+### 4.7.1 (2018-08-08)
+
+
+#### Bug Fixes
+
+*   drag widget follow the mouse all the time ([54593f55](https://github.com/linuxdeepin/dde-dock/commit/54593f553874a0026a4b68740e706eec28049dc2))
+
+
+
 <a name="4.7.0"></a>
 ### 4.7.0 (2018-08-07)
 
