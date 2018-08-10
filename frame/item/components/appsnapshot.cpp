@@ -143,9 +143,13 @@ void AppSnapshot::fetchSnapshot()
             qDebug() << "get Image from dxcbplugin SHM...";
             //qDebug() << info->shmid << info->width << info->height << info->bytesPerLine << info->format << info->rect.x << info->rect.y << info->rect.width << info->rect.height;
             image_data = (uchar*)shmat(info->shmid, 0, 0);
-            m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
-            m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
-            break;
+            if ((qint64)image_data != -1) {
+                m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
+                m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
+                break;
+            }
+            qDebug() << "invalid pointer of shm!";
+            image_data = nullptr;
         }
 
         if (!image_data || qimage.isNull())
