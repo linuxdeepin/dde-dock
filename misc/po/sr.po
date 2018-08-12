@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-22 11:51+0000\n"
+"PO-Revision-Date: 2018-08-10 06:44+0000\n"
 "Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr "Молим вас унесите лозинку дужу од 8 карактера"
+msgstr "Молимо унесите лозинку дужу од 8 карактера"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
@@ -67,7 +67,7 @@ msgstr "Успешно подешено"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
-msgstr "Прегледај одјављивањем након поставке скалираног приказа"
+msgstr "Прегледај одјављивањем након поставке скалирања"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -91,7 +91,7 @@ msgstr "Гласовни везни чвор за слушалице"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr ""
+msgstr "Object push"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
@@ -154,7 +154,7 @@ msgstr "_Затвори све"
 
 #: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
-msgstr "_Принудно Заустави"
+msgstr "_Принудно заустави"
 
 #: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
@@ -174,7 +174,7 @@ msgstr "Недовољно места на диску, молимо чистит
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Покретач"
+msgstr "Полетник"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -194,11 +194,11 @@ msgstr "Прикажи/Сакриј док"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr "Сучеље Искључивања"
+msgstr "Сучеље гашења"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "Спуштајући терминал"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -206,15 +206,15 @@ msgstr "Слика екрана"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr "Снимак целог екрана"
+msgstr "Усликај цео екран"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr "Снимак активног прозора"
+msgstr "Усликај прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Одлагање снимка екрана"
+msgstr "Одлагање усликавања"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -226,11 +226,11 @@ msgstr "Онемогући Додирну Таблу"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr ""
+msgstr "Мењај ефекте прозора"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "Брзо гашење екрана"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
@@ -282,15 +282,15 @@ msgstr "Приказ радне површи"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr "Увећати прозор"
+msgstr "Увећај прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr "Вратити прозор"
+msgstr "Врати прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr "Спустити прозор"
+msgstr "Спусти прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
@@ -298,7 +298,7 @@ msgstr "Затвори прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
-msgstr "Померити прозор"
+msgstr "Помери прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
@@ -330,11 +330,11 @@ msgstr "Приказати све прозоре тренутне радне п�
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Приказати радни простор"
+msgstr "Приказ активности"
 
 #: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
-msgstr "Аутентикација је неопходна за промену језика"
+msgstr "Аутентификација је неопходна за промену језика"
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
@@ -478,7 +478,7 @@ msgstr ""
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
-msgstr "Жична Мрежа"
+msgstr "Жична веза"
 
 #: ../../network/nm_custom_type.go:226
 msgid "Connection"
@@ -486,7 +486,7 @@ msgstr "Веза"
 
 #: ../../network/nm_custom_type.go:230
 msgid "Wireless Connection"
-msgstr "Бежичне везе"
+msgstr "Бежична веза"
 
 #: ../../network/nm_custom_type.go:232
 msgid "Wireless Ad-Hoc"
@@ -502,7 +502,7 @@ msgstr ""
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
-msgstr "Мобилна Веза"
+msgstr "Мобилна веза"
 
 #: ../../network/nm_custom_type.go:240
 msgid "Mobile GSM Connection"
@@ -550,11 +550,11 @@ msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:36
 msgid "MSCHAP"
-msgstr ""
+msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:37
 msgid "MSCHAPV2"
-msgstr ""
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
@@ -576,7 +576,7 @@ msgstr "Анониман"
 
 #: ../../network/nm_setting_802_1x.go:141
 msgid "Authenticated"
-msgstr "Ауторизован"
+msgstr "Аутентификован"
 
 #: ../../network/nm_setting_802_1x.go:142
 msgid "Both"
@@ -683,7 +683,7 @@ msgstr "Број"
 #: ../../network/nm_setting_beans_gen.go:407
 #: ../../network/nm_setting_beans_gen.go:422
 msgid "Username"
-msgstr "Корисничко Име"
+msgstr "Корисничко име"
 
 #: ../../network/nm_setting_beans_gen.go:68
 #: ../../network/nm_setting_beans_gen.go:74
@@ -713,7 +713,7 @@ msgstr "Мрежни ИД"
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr "Само Кућна Мрежа"
+msgstr "Само кућна мрежа"
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
@@ -1514,7 +1514,7 @@ msgstr "Сервер"
 
 #: ../../network/nm_setting_vpn_openvpn.go:332
 msgid "HTTP"
-msgstr ""
+msgstr "ХТТП"
 
 #: ../../network/nm_setting_vpn_openvpn.go:333
 msgid "SOCKS"
@@ -2035,11 +2035,11 @@ msgstr ""
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Батерија при крају, молимо укључите пуњач"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
-msgstr "Аутентикација је неопходна за подешавање времена система"
+msgstr "Аутентификација је неопходна за подешавање времена система"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
@@ -2055,4 +2055,4 @@ msgstr ""
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
-msgstr "Аутентикација је неопходна за поставку временске зоне система"
+msgstr "Аутентификација је неопходна за поставку временске зоне."

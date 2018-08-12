@@ -4,12 +4,12 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!message" line="0"/>
 			<source>Authentication is required to change the grub2 configuration</source>
-			<translation>Необходима е идентификация за промяна на настройките на grub2</translation>
+			<translation>Необходима е идентификация за промяна на конфигурацията на grub2</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation>Промяна на grub2 конфигурация</translation>
+			<translation>Промяна на конфигурацията на grub2</translation>
 		</message>
 	</context>
 </TS>
