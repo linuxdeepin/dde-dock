@@ -41,7 +41,9 @@ func (entry *AppEntry) updateMenu() {
 	menu.AppendItem(desktopActionMenuItems...)
 
 	if entry.hasWindow() {
-		menu.AppendItem(entry.getMenuItemCloseAll())
+		if entry.hasAllowedCloseWindow() {
+			menu.AppendItem(entry.getMenuItemCloseAll())
+		}
 		menu.AppendItem(entry.getMenuItemForceQuit())
 		menu.AppendItem(entry.getMenuItemAllWindows())
 	}
@@ -107,7 +109,19 @@ func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 	return NewMenuItem(Tr("_Close All"), func(timestamp uint32) {
 		logger.Debug("Close All")
-		for win := range entry.windows {
+		var winIds = make([]x.Window, 0, len(entry.windows))
+		entry.PropsMu.RLock()
+		for win, winInfo := range entry.windows {
+			for _, action := range winInfo.wmAllowedActions {
+				if action == atomNetWmActionClose {
+					winIds = append(winIds, win)
+					break
+				}
+			}
+		}
+		entry.PropsMu.RUnlock()
+
+		for _, win := range winIds {
 			closeWindow(win, x.Timestamp(timestamp))
 		}
 	}, true)

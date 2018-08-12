@@ -159,3 +159,18 @@ func (entry *AppEntry) ForceQuit() *dbus.Error {
 	}
 	return nil
 }
+
+func (entry *AppEntry) GetAllowedCloseWindows() ([]uint32, *dbus.Error) {
+	entry.PropsMu.RLock()
+	ret := make([]uint32, 0, len(entry.windows))
+	for _, winInfo := range entry.windows {
+		for _, action := range winInfo.wmAllowedActions {
+			if action == atomNetWmActionClose {
+				ret = append(ret, uint32(winInfo.window))
+				break
+			}
+		}
+	}
+	entry.PropsMu.RUnlock()
+	return ret, nil
+}

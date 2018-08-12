@@ -69,6 +69,8 @@ var (
 	atomNetWmStateMaximizedVert x.Atom
 	atomNetWmStateMaximizedHorz x.Atom
 	atomNetWmStateAbove         x.Atom
+	atomNetWmActionClose        x.Atom
+	atomNetWmAllowedActions     x.Atom
 )
 
 func initDir() {
@@ -106,5 +108,6 @@ func initAtom() {
 	atomNetWmStateMaximizedVert, _ = getAtom("_NET_WM_STATE_MAXIMIZED_VERT")
 	atomNetWmStateMaximizedHorz, _ = getAtom("_NET_WM_STATE_MAXIMIZED_HORZ")
 	atomNetWmStateAbove, _ = getAtom("_NET_WM_STATE_ABOVE")
-
+	atomNetWmActionClose, _ = getAtom("_NET_WM_ACTION_CLOSE")
+	atomNetWmAllowedActions, _ = getAtom("_NET_WM_ALLOWED_ACTIONS")
 }

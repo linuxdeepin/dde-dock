@@ -268,6 +268,9 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 
 	case atomNetWMIcon:
 		winInfo.updateIcon()
+
+	case atomNetWmAllowedActions:
+		winInfo.updateWmAllowedActions()
 	}
 
 	entry := m.Entries.getByWindowId(ev.Window)
@@ -292,6 +295,9 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 			entry.updateName()
 		}
 		entry.updateWindowInfos()
+
+	case atomNetWmAllowedActions:
+		entry.updateMenu()
 	}
 }
 

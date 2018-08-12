@@ -58,10 +58,11 @@ type AppEntry struct {
 	winIconPreferred bool
 
 	methods *struct {
-		Activate       func() `in:"timestamp"`
-		HandleMenuItem func() `in:"timestamp,id"`
-		HandleDragDrop func() `in:"timestamp,files"`
-		NewInstance    func() `in:"timestamp"`
+		Activate               func() `in:"timestamp"`
+		HandleMenuItem         func() `in:"timestamp,id"`
+		HandleDragDrop         func() `in:"timestamp,files"`
+		NewInstance            func() `in:"timestamp"`
+		GetAllowedCloseWindows func() `out:"windows"`
 	}
 }
 
@@ -107,6 +108,17 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 
 func (entry *AppEntry) hasWindow() bool {
 	return len(entry.windows) != 0
+}
+
+func (entry *AppEntry) hasAllowedCloseWindow() bool {
+	for _, winInfo := range entry.windows {
+		for _, action := range winInfo.wmAllowedActions {
+			if action == atomNetWmActionClose {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (entry *AppEntry) getWindowIds() []uint32 {
