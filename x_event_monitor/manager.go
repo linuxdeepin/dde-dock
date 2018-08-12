@@ -119,7 +119,9 @@ func (m *Manager) selectXInputEvents() {
 				input.XIEventMaskRawButtonPress |
 					input.XIEventMaskRawButtonRelease |
 					input.XIEventMaskRawKeyPress |
-					input.XIEventMaskRawKeyRelease,
+					input.XIEventMaskRawKeyRelease |
+					input.XIEventMaskRawTouchBegin |
+					input.XIEventMaskRawTouchEnd,
 			},
 		},
 	}).Check(m.xConn)
@@ -206,6 +208,24 @@ func (m *Manager) handleXEvent() {
 						logger.Warning(err)
 					} else {
 						m.handleButtonEvent(int32(e.Detail), false, int32(qpReply.RootX),
+							int32(qpReply.RootY))
+					}
+
+				case input.RawTouchBeginEventCode:
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						m.handleButtonEvent(1, true, int32(qpReply.RootX),
+							int32(qpReply.RootY))
+					}
+
+				case input.RawTouchEndEventCode:
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						m.handleButtonEvent(1, false, int32(qpReply.RootX),
 							int32(qpReply.RootY))
 					}
 				}
