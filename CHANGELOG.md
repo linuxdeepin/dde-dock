@@ -1,4 +1,14 @@
 <a name=""></a>
+##  4.7.2 (2018-08-12)
+
+
+#### Bug Fixes
+
+* **preview:**  invalid shm permission ([ac1fca3e](https://github.com/linuxdeepin/dde-dock/commit/ac1fca3e131b5590253120d18df4fdbb938283e1))
+
+
+
+<a name=""></a>
 ##  4.7.1.1 (2018-08-09)
 
 
