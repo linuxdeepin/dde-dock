@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -335,6 +336,9 @@ func (m *Manager) _queryCategoryID(item *Item, pkg string) CategoryID {
 }
 
 func (m *Manager) queryPkgName(itemID string) string {
+	if strings.HasPrefix(itemID, "org.deepin.flatdeb.") {
+		return "deepin-fpapp-" + itemID
+	}
 	if m.desktopPkgMap == nil {
 		logger.Warning("queryPkgName failed: Manager.desktopPkgMap is nil")
 		return ""
