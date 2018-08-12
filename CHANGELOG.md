@@ -1,3 +1,8 @@
+[3.2.24] 2018-08-12
+*   fix(x-event-monitor): no listen raw touch event
+*   chore: auto sync po/ts files from transifex
+*   fix(launcher):flatdeb app category wrong
+
 [3.2.23] 2018-08-07
 *   fix(network): vpn disconnect notify name is empty
 *   feat(audio): handle laptop headphones available state changed when user session is inactive
