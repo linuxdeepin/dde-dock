@@ -50,7 +50,7 @@ signals:
     void requestCancelAndHidePreview() const;
 
 public:
-    void setWindowInfos(const WindowInfoMap &infos);
+    void setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose);
     void updateSnapshots();
 
 public slots:

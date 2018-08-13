@@ -48,11 +48,13 @@ class AppSnapshot : public QWidget
 public:
     explicit AppSnapshot(const WId wid, QWidget *parent = 0);
 
-    WId wid() const { return m_wid; }
-    bool attentioned() const { return m_windowInfo.attention; }
-    const QImage snapshot() const { return m_snapshot; }
-    const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
-    const QString title() const { return m_windowInfo.title; }
+    inline WId wid() const { return m_wid; }
+    inline bool attentioned() const { return m_windowInfo.attention; }
+    inline bool closeAble() const { return m_closeAble; }
+    inline void setCloseAble(const bool value) { m_closeAble = value; }
+    inline const QImage snapshot() const { return m_snapshot; }
+    inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
+    inline const QString title() const { return m_windowInfo.title; }
 
 signals:
     void entered(const WId wid) const;
@@ -78,8 +80,10 @@ private:
 
 private:
     const WId m_wid;
-
     WindowInfo m_windowInfo;
+
+    bool m_closeAble;
+
     QImage m_snapshot;
     QRectF m_snapshotSrcRect;
 

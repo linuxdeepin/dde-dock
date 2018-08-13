@@ -61,6 +61,7 @@ void FloatingPreview::trackWindow(AppSnapshot * const snap)
         m_tracked->removeEventFilter(this);
     snap->installEventFilter(this);
     m_tracked = snap;
+    m_closeBtn->setVisible(m_tracked->closeAble());
 
     const QRect r = rect();
     const QRect sr = snap->geometry();

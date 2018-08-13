@@ -494,7 +494,7 @@ bool AppItem::hasAttention() const
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     m_windowInfos = info;
-    if (m_appPreviewTips) m_appPreviewTips->setWindowInfos(m_windowInfos);
+    if (m_appPreviewTips) m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_updateIconGeometryTimer->start();
 
     // process attention effect
@@ -549,7 +549,7 @@ void AppItem::showPreview()
     if (m_windowInfos.isEmpty())
         return;
 
-    m_appPreviewTips = PreviewWindow(m_windowInfos, DockPosition);
+    m_appPreviewTips = PreviewWindow(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value(), DockPosition);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
