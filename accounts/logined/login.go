@@ -41,7 +41,8 @@ type Manager struct {
 	userSessions map[uint32]SessionInfos
 	locker       sync.Mutex
 
-	UserList string
+	UserList       string
+	LastLogoutUser uint32
 }
 
 const (
@@ -146,6 +147,15 @@ func (m *Manager) deleteSession(sessionPath dbus.ObjectPath) bool {
 	defer m.locker.Unlock()
 	var deleted = false
 	for uid, infos := range m.userSessions {
+		idx := infos.Index(sessionPath)
+		if idx == -1 {
+			continue
+		}
+		sessionInfo := infos[idx]
+		if sessionInfo.Display != "" && sessionInfo.Desktop != "" {
+			m.setPropLastLogoutUser(sessionInfo.Uid)
+		}
+
 		tmp, ok := infos.Delete(sessionPath)
 		if !ok {
 			continue
@@ -175,6 +185,13 @@ func (m *Manager) setPropUserList() {
 	}
 	m.UserList = string(data)
 	m.service.EmitPropertyChanged(m, "UserList", m.UserList)
+}
+
+func (m *Manager) setPropLastLogoutUser(uid uint32) {
+	if m.LastLogoutUser != uid {
+		m.LastLogoutUser = uid
+		m.service.EmitPropertyChanged(m, "LastLogoutUser", uid)
+	}
 }
 
 func (m *Manager) marshalUserSessions() string {
