@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 
 #include "systemtrayplugin.h"
 #include "fashiontrayitem.h"
+#include "snitraywidget.h"
 
 #include <QDir>
 #include <QWindow>
@@ -62,6 +64,16 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
+    m_sniWatcher = new StatusNotifierWatcher(this);
+    QDBusConnection dbusConn = QDBusConnection::sessionBus();
+    const QString &host = QString("org.kde.StatusNotifierHost-") + QString::number(qApp->applicationPid());
+    dbusConn.registerService(host);
+    dbusConn.registerObject("/StatusNotifierHost", this);
+    m_sniWatcher->RegisterStatusNotifierHost(host);
+
+    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, &SystemTrayPlugin::sniItemsChanged);
+    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, &SystemTrayPlugin::sniItemsChanged);
+
     connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &SystemTrayPlugin::trayListChanged);
     connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
 
@@ -71,6 +83,7 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 
     QTimer::singleShot(1, this, &SystemTrayPlugin::trayListChanged);
     QTimer::singleShot(2, this, &SystemTrayPlugin::loadIndicator);
+    QTimer::singleShot(3, this, &SystemTrayPlugin::sniItemsChanged);
 }
 
 void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
@@ -192,6 +205,24 @@ const QString SystemTrayPlugin::getWindowClass(quint32 winId)
     return ret;
 }
 
+void SystemTrayPlugin::sniItemsChanged()
+{
+    const QStringList &itemServicePaths = m_sniWatcher->RegisteredStatusNotifierItems();
+    QStringList sinTrayKeyList;
+
+    for (auto item : itemServicePaths) {
+        sinTrayKeyList << SNITrayWidget::toSNIKey(item);
+    }
+    for (auto itemKey : m_trayList.keys())
+        if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
+            trayRemoved(itemKey);
+        }
+
+    for (auto tray : sinTrayKeyList) {
+        trayAdded(tray);
+    }
+}
+
 void SystemTrayPlugin::trayListChanged()
 {
     QList<quint32> winidList = m_trayInter->trayIcons();
@@ -211,39 +242,45 @@ void SystemTrayPlugin::trayListChanged()
     }
 }
 
+void SystemTrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget * trayWidget)
+{
+    if (!trayWidget) {
+        return;
+    }
+
+    if (!m_trayList.values().contains(trayWidget)) {
+        m_trayList.insert(itemKey, trayWidget);
+    }
+
+    m_fashionItem->setMouseEnable(m_trayList.size() == 1);
+    if (!m_fashionItem->activeTray()) {
+        m_fashionItem->setActiveTray(trayWidget);
+    }
+
+    if (displayMode() == Dock::Efficient) {
+        m_proxyInter->itemAdded(this, itemKey);
+    } else {
+        m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
+    }
+}
+
 void SystemTrayPlugin::trayAdded(const QString itemKey)
 {
     if (m_trayList.contains(itemKey)) {
         return;
     }
 
-    auto addTrayWidget = [ = ](AbstractTrayWidget * trayWidget) {
-        if (trayWidget) {
-            if (!m_trayList.values().contains(trayWidget)) {
-                m_trayList.insert(itemKey, trayWidget);
-            }
-
-            m_fashionItem->setMouseEnable(m_trayList.size() == 1);
-            if (!m_fashionItem->activeTray()) {
-                m_fashionItem->setActiveTray(trayWidget);
-            }
-
-            if (displayMode() == Dock::Efficient) {
-                m_proxyInter->itemAdded(this, itemKey);
-            } else {
-                m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
-            }
-        }
-    };
-
     if (XWindowTrayWidget::isWinIdKey(itemKey)) {
         auto winId = XWindowTrayWidget::toWinId(itemKey);
         getWindowClass(winId);
         AbstractTrayWidget *trayWidget = new XWindowTrayWidget(winId);
-        addTrayWidget(trayWidget);
-    }
-
-    if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
+        addTrayWidget(itemKey, trayWidget);
+    } else if (SNITrayWidget::isSNIKey(itemKey)) {
+        const QString &sniServicePath = SNITrayWidget::toSNIServicePath(itemKey);
+        AbstractTrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
+        connect(trayWidget, &AbstractTrayWidget::iconChanged, this, &SystemTrayPlugin::sniItemIconChanged);
+        addTrayWidget(itemKey, trayWidget);
+    } else if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
         IndicatorTray *trayWidget = nullptr;
         QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
 
@@ -257,7 +294,7 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
 
         connect(trayWidget, &IndicatorTray::delayLoaded,
         trayWidget, [ = ]() {
-            addTrayWidget(trayWidget->widget());
+            addTrayWidget(itemKey, trayWidget->widget());
         });
 
         connect(trayWidget, &IndicatorTray::removed, this, [=] {
@@ -309,6 +346,20 @@ void SystemTrayPlugin::trayChanged(quint32 winId)
     if (m_trayApplet->isVisible()) {
         updateTipsContent();
     }
+}
+
+void SystemTrayPlugin::sniItemIconChanged()
+{
+    AbstractTrayWidget *trayWidget = static_cast<AbstractTrayWidget *>(sender());
+    if (!m_trayList.values().contains(trayWidget)) {
+        return;
+    }
+
+    m_fashionItem->setActiveTray(trayWidget);
+
+    //if (m_trayApplet->isVisible()) {
+    //    updateTipsContent();
+    //}
 }
 
 void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)

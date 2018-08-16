@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@
 
 #include "pluginsiteminterface.h"
 #include "trayapplet.h"
+#include "sni/statusnotifierwatcher.h"
 #include "dbus/dbustraymanager.h"
 
 #include "xwindowtraywidget.h"
@@ -62,16 +64,20 @@ private:
     void loadIndicator();
     void updateTipsContent();
     const QString getWindowClass(quint32 winId);
+    void addTrayWidget(const QString &itemKey, AbstractTrayWidget * trayWidget);
 
 private slots:
+    void sniItemsChanged();
     void trayListChanged();
     void trayAdded(const QString itemKey);
     void trayRemoved(const QString itemKey);
     void trayChanged(quint32 winId);
+    void sniItemIconChanged();
     void switchToMode(const Dock::DisplayMode mode);
 
 private:
     DBusTrayManager *m_trayInter;
+    StatusNotifierWatcher *m_sniWatcher;
     FashionTrayItem *m_fashionItem;
     QMap<QString, AbstractTrayWidget *> m_trayList;
     QMap<QString, IndicatorTray*> m_indicatorList;
