@@ -219,7 +219,7 @@ void DockItem::onContextMenuAccepted()
 
 void DockItem::showHoverTips()
 {
-    // another model popup window is alread exists
+    // another model popup window already exists
     if (PopupWindow->model())
         return;
 
@@ -279,7 +279,7 @@ void DockItem::popupWindowAccept()
 
 void DockItem::showPopupApplet(QWidget * const applet)
 {
-    // another model popup window is alread exists
+    // another model popup window already exists
     if (PopupWindow->model())
         return;
 
