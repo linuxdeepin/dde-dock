@@ -89,7 +89,7 @@ func (d *Daemon) loop() {
 		select {
 		case _, ok := <-ticker.C:
 			if !ok {
-				logger.Error("Invaild ticker event, exit loop!")
+				logger.Error("Invalid ticker event, exit loop!")
 				return
 			}
 			d.handleProcessStat(cpuPercentage, memUsage, duration)
