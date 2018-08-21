@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation>Щракни за виждане на скритите икони</translation>
+        <translation>Щракни за показване на скритите икони</translation>
     </message>
 </context>
 <context>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
-        <translation>Дата</translation>
+        <translation>Дата и час</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
-        <translation>Плъгини</translation>
+        <translation>Добавки</translation>
     </message>
 </context>
 <context>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
         <source>Lock</source>
-        <translation>3аключвам</translation>
+        <translation>3аключване</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>

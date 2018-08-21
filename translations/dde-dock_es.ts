@@ -267,7 +267,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
-        <translation>Ajustes energía</translation>
+        <translation>Ajustes de energía</translation>
     </message>
 </context>
 <context>
@@ -363,7 +363,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation>Conexión por cable: %1</translation>
+        <translation>Conexión cableada: %1</translation>
     </message>
 </context>
 <context>

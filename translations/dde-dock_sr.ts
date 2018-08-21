@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
         <source>Datetime</source>
-        <translation>Датум и Сат</translation>
+        <translation>Датум и сат</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
-        <translation>Покретач</translation>
+        <translation>Полетник</translation>
     </message>
 </context>
 <context>
@@ -198,17 +198,17 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>This action cannot be restored</source>
-        <translation>Ова радња се не може повратити</translation>
+        <translation>Ова радња је неповратна</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Сигурно желите да очистите 1 ставку?</translation>
+        <translation>Сигурно желите да испразните 1 ставку ?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Сигурно желите да очистите %1 ставки ?</translation>
+        <translation>Сигурно желите да испразните %1 ставки/е ?</translation>
     </message>
 </context>
 <context>
@@ -327,12 +327,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
         <source>Trash - %1 file</source>
-        <translation>Смеће - %1 ствар</translation>
+        <translation>Смеће - %1 ставка/и</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
-        <translation>Смеће - %1 ствари</translation>
+        <translation>Смеће - %1 ставки/е</translation>
     </message>
 </context>
 <context>

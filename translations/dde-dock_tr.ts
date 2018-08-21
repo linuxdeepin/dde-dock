@@ -139,7 +139,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
-        <translation>Akıllı Gizleme</translation>
+        <translation>Akıllı Gizlensin</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="94"/>

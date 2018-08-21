@@ -84,12 +84,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
-        <translation>ファッションモード</translation>
+        <translation>ファッション・モード</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
-        <translation>エフィシェントモード</translation>
+        <translation>エフィシェント・モード</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
-        <translation>ロケーション</translation>
+        <translation>位置</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="109"/>
