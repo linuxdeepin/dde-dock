@@ -285,16 +285,18 @@ func (m *Manager) SetFrontendWindowRect(x, y int32, width, height uint32) *dbus.
 	return nil
 }
 
-func (m *Manager) IsDocked(desktopFilePath string) (bool, *dbus.Error) {
-	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
+func (m *Manager) IsDocked(desktopFile string) (bool, *dbus.Error) {
+	desktopFile = toLocalPath(desktopFile)
+	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFile)
 	if err != nil {
 		return false, dbusutil.ToError(err)
 	}
 	return entry != nil, nil
 }
 
-func (m *Manager) RequestDock(desktopFilePath string, index int32) (bool, *dbus.Error) {
-	appInfo := NewAppInfoFromFile(desktopFilePath)
+func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Error) {
+	desktopFile = toLocalPath(desktopFile)
+	appInfo := NewAppInfoFromFile(desktopFile)
 	if appInfo == nil {
 		return false, dbusutil.ToError(errors.New("invalid desktopFilePath"))
 	}
@@ -311,8 +313,9 @@ func (m *Manager) RequestDock(desktopFilePath string, index int32) (bool, *dbus.
 	return dockResult, nil
 }
 
-func (m *Manager) RequestUndock(desktopFilePath string) (bool, *dbus.Error) {
-	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
+func (m *Manager) RequestUndock(desktopFile string) (bool, *dbus.Error) {
+	desktopFile = toLocalPath(desktopFile)
+	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFile)
 	if err != nil {
 		return false, dbusutil.ToError(err)
 	}
@@ -334,8 +337,9 @@ func (m *Manager) MoveEntry(index, newIndex int32) *dbus.Error {
 	return nil
 }
 
-func (m *Manager) IsOnDock(desktopFilePath string) (bool, *dbus.Error) {
-	entry, err := m.Entries.GetByDesktopFilePath(desktopFilePath)
+func (m *Manager) IsOnDock(desktopFile string) (bool, *dbus.Error) {
+	desktopFile = toLocalPath(desktopFile)
+	entry, err := m.Entries.GetByDesktopFilePath(desktopFile)
 	if err != nil {
 		return false, dbusutil.ToError(err)
 	}

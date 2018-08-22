@@ -23,6 +23,7 @@ import (
 	"encoding/base64"
 	"io"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -123,4 +124,15 @@ func copyFileContents(src, dst string) (err error) {
 
 func getCurrentTimestamp() uint32 {
 	return uint32(time.Now().Unix())
+}
+
+func toLocalPath(in string) string {
+	u, err := url.Parse(in)
+	if err != nil {
+		return ""
+	}
+	if u.Scheme == "file" {
+		return u.Path
+	}
+	return in
 }
