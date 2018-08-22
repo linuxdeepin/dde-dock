@@ -241,6 +241,10 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::feedSecret, this, &WirelessItem::feedSecret);
     connect(m_APList, &WirelessList::cancelSecret, this, &WirelessItem::cancelSecret);
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
+
+    QTimer::singleShot(0, this, [=]() {
+        m_refershTimer->start();
+    });
 }
 
 void WirelessItem::adjustHeight()
