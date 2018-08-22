@@ -33,6 +33,9 @@ static DockItem *DraggingItem = nullptr;
 static PlaceholderItem *RequestDockItem = nullptr;
 
 const char *RequestDockKey = "RequestDock";
+const char *RequestDockKeyFallback = "text/plain";
+
+const char *DesktopMimeType = "application/x-desktop";
 
 MainPanel::MainPanel(QWidget *parent)
     : DBlurEffectWidget(parent),
@@ -213,10 +216,19 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
         DraggingItem = nullptr;
     }
 
-    if (!e->mimeData()->formats().contains(RequestDockKey))
+    m_draggingMimeKey = e->mimeData()->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
+
+    // dragging item is NOT a desktop file
+    if (QMimeDatabase().mimeTypeForFile(e->mimeData()->data(m_draggingMimeKey)).name() != DesktopMimeType) {
+        m_draggingMimeKey.clear();
         return;
-    if (m_itemController->appIsOnDock(e->mimeData()->data(RequestDockKey)))
+    }
+
+    // dragging item has been docked
+    if (m_itemController->appIsOnDock(e->mimeData()->data(m_draggingMimeKey))) {
+        m_draggingMimeKey.clear();
         return;
+    }
 
     e->accept();
 }
@@ -255,7 +267,7 @@ void MainPanel::dropEvent(QDropEvent *e)
 
     if (RequestDockItem)
     {
-        m_itemController->placeholderItemDocked(e->mimeData()->data(RequestDockKey), RequestDockItem);
+        m_itemController->placeholderItemDocked(e->mimeData()->data(m_draggingMimeKey), RequestDockItem);
         m_itemController->placeholderItemRemoved(RequestDockItem);
         RequestDockItem->deleteLater();
         RequestDockItem = nullptr;

@@ -363,8 +363,10 @@ void AppItem::dragEnterEvent(QDragEnterEvent *e)
         return;
 
     // ignore request dock event
-    if (e->mimeData()->formats().contains("RequestDock"))
-        return e->ignore();
+    QString draggingMimeKey = e->mimeData()->formats().contains("RequestDock") ? "RequestDock" : "text/plain";
+    if (QMimeDatabase().mimeTypeForFile(e->mimeData()->data(draggingMimeKey)).name() == "application/x-desktop") {
+        return;
+    }
 
     e->accept();
 }

@@ -95,6 +95,8 @@ private:
     DockItemController *m_itemController;
 
     QWidget *m_appDragWidget;
+
+    QString m_draggingMimeKey;
 };
 
 #endif // MAINPANEL_H
