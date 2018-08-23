@@ -23,11 +23,10 @@
 #include "sinkinputwidget.h"
 #include "componments/horizontalseparator.h"
 #include "../widgets/tipswidget.h"
+#include "../../frame/util/utils.h"
 
 #include <QLabel>
 #include <QIcon>
-
-#include <DSvgRenderer>
 
 #define WIDTH       200
 #define MAX_HEIGHT  200
@@ -162,9 +161,7 @@ void SoundApplet::onVolumeChanged()
         volumeString = "low";
 
     const QString &iconName = QString(":/audio-volume-%1-symbolic.svg").arg(volumeString);
-    const auto ratio = devicePixelRatioF();
-    QPixmap pix = DSvgRenderer::render(iconName, QSize(24, 24) * ratio);
-    pix.setDevicePixelRatio(ratio);
+    QPixmap pix = Utils::renderSVG(iconName, QSize(24, 24));
 
     m_volumeBtn->setPixmap(pix);
 }

@@ -21,11 +21,11 @@
 
 #include "accesspointwidget.h"
 #include "horizontalseperator.h"
+#include "../../frame/util/utils.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
-
-#include <DSvgRenderer>
+#include <dimagebutton.h>
 
 using namespace dde::network;
 
@@ -40,7 +40,6 @@ AccessPointWidget::AccessPointWidget()
       m_securityIcon(new QLabel),
       m_strengthIcon(new QLabel)
 {
-    const auto ratio = devicePixelRatioF();
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_ssidBtn->setObjectName("Ssid");
@@ -50,8 +49,7 @@ AccessPointWidget::AccessPointWidget()
     m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect_hover.svg");
     m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_press.svg");
 
-    QPixmap iconPix = DSvgRenderer::render(":/wireless/resources/wireless/security.svg", QSize(16, 16) * ratio);
-    iconPix.setDevicePixelRatio(ratio);
+    QPixmap iconPix = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16));
     m_securityIconSize = iconPix.size();
     m_securityIcon->setPixmap(iconPix);
 
@@ -146,8 +144,7 @@ void AccessPointWidget::leaveEvent(QEvent *e)
 void AccessPointWidget::setStrengthIcon(const int strength)
 {
     QPixmap iconPix;
-    const auto ratio = devicePixelRatioF();
-    const QSize s = QSize(16, 16) * ratio;
+    const QSize s = QSize(16, 16);
 
     QString type;
     if (strength == 100)
@@ -157,8 +154,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     else
         type = QString::number(strength / 10 & ~0x1) + "0";
 
-    iconPix = DSvgRenderer::render(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
-    iconPix.setDevicePixelRatio(ratio);
+    iconPix = Utils::renderSVG(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
 
     m_strengthIcon->setPixmap(iconPix);
 }
