@@ -86,7 +86,7 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 			if ignoredNow {
 				logger.Debugf("access point(ignored) properties changed %#v", ap)
 			} else {
-				logger.Debugf("access point properties changed %#v", ap)
+				//logger.Debugf("access point properties changed %#v", ap)
 				m.service.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
 			}
 		} else {
@@ -195,7 +195,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	logger.Debug("add access point", devPath, apPath)
+	//logger.Debug("add access point", devPath, apPath)
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], ap)
 }
 
@@ -207,7 +207,7 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
-	logger.Debug("remove access point", devPath, apPath)
+	//logger.Debug("remove access point", devPath, apPath)
 	m.accessPoints[devPath] = m.doRemoveAccessPoint(m.accessPoints[devPath], i)
 }
 func (m *Manager) doRemoveAccessPoint(aps []*accessPoint, i int) []*accessPoint {
@@ -297,9 +297,16 @@ func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		}
 
 		uuid = utils.GenUuid()
-		ssid, _ := nmAp.Ssid().Get(0)
+		ssid, err := nmAp.Ssid().Get(0)
+		if err != nil {
+			logger.Warning("failed to get Ap Ssid:", err)
+		}
+
 		data := newWirelessConnectionData(decodeSsid(ssid), uuid, ssid, getApSecType(nmAp))
 		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
+		if err != nil {
+			logger.Warning("temp debug err is:", err)
+		}
 	}
 	return
 }

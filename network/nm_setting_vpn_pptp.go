@@ -34,9 +34,9 @@ var availableValuesNmPptpSecretFlags []kvalue
 
 func initAvailableValuesNmPptpSecretFlags() {
 	availableValuesNmPptpSecretFlags = []kvalue{
-		kvalue{nm.NM_PPTP_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
-		kvalue{nm.NM_PPTP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
-		kvalue{nm.NM_PPTP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+		kvalue{secretFlagNone, Tr("Saved")}, // system saved
+		kvalue{secretFlagAsk, Tr("Always Ask")},
+		kvalue{secretFlagNotRequired, Tr("Not Required")},
 	}
 }
 

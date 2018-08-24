@@ -34,14 +34,14 @@ var availableValuesNmL2tpSecretFlags []kvalue
 
 func initAvailableValuesNmL2tpSecretFlags() {
 	availableValuesNmL2tpSecretFlags = []kvalue{
-		kvalue{nm.NM_L2TP_SECRET_FLAG_NONE, Tr("Saved")},
-		kvalue{nm.NM_L2TP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
-		kvalue{nm.NM_L2TP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+		kvalue{secretFlagNone, Tr("Saved")},
+		kvalue{secretFlagAsk, Tr("Always Ask")},
+		kvalue{secretFlagNotRequired, Tr("Not Required")},
 	}
 }
 
 func isVpnL2tpRequireSecret(flag uint32) bool {
-	if flag == nm.NM_L2TP_SECRET_FLAG_NONE || flag == nm.NM_L2TP_SECRET_FLAG_AGENT_OWNED {
+	if flag == secretFlagNone || flag == secretFlagAgentOwned {
 		return true
 	}
 	return false

@@ -173,6 +173,9 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath,
 	service *dbusutil.Service) (s *ConnectionSession, err error) {
+
+	logger.Debugf("newConnectionSessionByOpen uuid: %q, devPath: %q",
+		uuid, devPath)
 	connectionPath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
@@ -192,18 +195,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath,
 	fillSectionCache(s.data)
 	s.setProps()
 	s.setPropAllowDelete(true)
-
-	// execute asynchronous to avoid front-end block if
-	// NeedSecrets() signal emitted
-	chSecret := make(chan int)
-	go func() {
-		s.getSecrets()
-		chSecret <- 0
-	}()
-	select {
-	case <-time.After(500 * time.Millisecond):
-	case <-chSecret:
-	}
+	s.getSecrets()
 
 	return
 }
@@ -271,23 +263,20 @@ func (s *ConnectionSession) fixValues() {
 }
 
 func (s *ConnectionSession) getSecrets() {
-	if !s.getSecretsFromKeyring() {
-		logger.Info("get secrets from keyring failed, try network-manager configuration again")
-		s.getSecretsFromNM()
-	}
+	s.getSecretsFromNM()
 }
 
-func (s *ConnectionSession) getSecretsFromKeyring() (ok bool) {
-	for _, section := range s.AvailableSections {
-		realSetting := getAliasSettingRealName(section)
-		if values, okNest := secretGetAll(s.Uuid, realSetting); okNest {
-			ok = true
-			secretsData := buildKeyringSecret(s.data, realSetting, values)
-			s.doGetSecrets(secretsData)
-		}
-	}
-	return
-}
+//func (s *ConnectionSession) getSecretsFromKeyring() (ok bool) {
+//	for _, section := range s.AvailableSections {
+//		realSetting := getAliasSettingRealName(section)
+//		if values, okNest := secretGetAll(s.Uuid, realSetting); okNest {
+//			ok = true
+//			secretsData := buildKeyringSecret(s.data, realSetting, values)
+//			s.doGetSecrets(secretsData)
+//		}
+//	}
+//	return
+//}
 func (s *ConnectionSession) doGetSecrets(secretsData connectionData) {
 	for section, sectionData := range secretsData {
 		if !isSettingExists(s.data, section) {
@@ -303,16 +292,15 @@ func (s *ConnectionSession) getSecretsFromNM() {
 	switch getCustomConnectionType(s.data) {
 	case connectionWired:
 		if getSettingVk8021xEnable(s.data) {
-			// TODO 8021x secret
-			// s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
+			s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		if getSettingVk8021xEnable(s.data) {
-			// TODO 8021x secret
-			// s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
+			s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
 		} else {
 			s.doGetSecretsFromNM(nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		}
+
 	case connectionPppoe:
 		s.doGetSecretsFromNM(nm.NM_SETTING_PPPOE_SETTING_NAME)
 	case connectionMobileGsm:
@@ -322,10 +310,38 @@ func (s *ConnectionSession) getSecretsFromNM() {
 	case connectionMobileCdma:
 		// FIXME: same with connectionMobileGsm
 		// s.doGetSecretsFromNM(nm.NM_SETTING_CDMA_SETTING_NAME)
-	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
-		// ignore vpn secrets
+	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn, connectionVpnStrongswan:
+		s.doGetSecretsFromNM(nm.NM_SETTING_VPN_SETTING_NAME)
 	}
 }
+
+//func (s *ConnectionSession) getSecretsFromNM() {
+//	switch getCustomConnectionType(s.data) {
+//	case connectionWired:
+//		if getSettingVk8021xEnable(s.data) {
+//			// TODO 8021x secret
+//			// s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
+//		}
+//	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+//		if getSettingVk8021xEnable(s.data) {
+//			// TODO 8021x secret
+//			// s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
+//		} else {
+//			s.doGetSecretsFromNM(nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
+//		}
+//	case connectionPppoe:
+//		s.doGetSecretsFromNM(nm.NM_SETTING_PPPOE_SETTING_NAME)
+//	case connectionMobileGsm:
+//		// FIXME: if the connection owns no secret key, such as "US -> AT&T -> MEdia Net (phones)"
+//		// it will popup password dialog when editing the connection.
+//		// s.doGetSecretsFromNM(nm.NM_SETTING_GSM_SETTING_NAME)
+//	case connectionMobileCdma:
+//		// FIXME: same with connectionMobileGsm
+//		// s.doGetSecretsFromNM(nm.NM_SETTING_CDMA_SETTING_NAME)
+//	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
+//		// ignore vpn secrets
+//	}
+//}
 func (s *ConnectionSession) doGetSecretsFromNM(secretSection string) {
 	if isSettingExists(s.data, secretSection) {
 		if secretsData, err := nmGetConnectionSecrets(s.ConnectionPath, secretSection); err == nil {
@@ -336,23 +352,23 @@ func (s *ConnectionSession) doGetSecretsFromNM(secretSection string) {
 	}
 }
 
-func (s *ConnectionSession) updateSecretsToKeyring() {
-	for sectionName, sectionData := range s.data {
-		for keyName, variant := range sectionData {
-			if isSecretKey(s.data, sectionName, keyName) {
-				if sectionName == nm.NM_SETTING_VPN_SETTING_NAME && keyName == nm.NM_SETTING_VPN_SECRETS {
-					// dispatch vpn secret keys specially
-					vpnSecrets := getSettingVpnSecrets(s.data)
-					for k, v := range vpnSecrets {
-						secretSet(s.Uuid, sectionName, k, v)
-					}
-				} else if value, ok := variant.Value().(string); ok {
-					secretSet(s.Uuid, sectionName, keyName, value)
-				}
-			}
-		}
-	}
-}
+//func (s *ConnectionSession) updateSecretsToKeyring() {
+//	for sectionName, sectionData := range s.data {
+//		for keyName, variant := range sectionData {
+//			if isSecretKey(s.data, sectionName, keyName) {
+//				if sectionName == nm.NM_SETTING_VPN_SETTING_NAME && keyName == nm.NM_SETTING_VPN_SECRETS {
+//					// dispatch vpn secret keys specially
+//					vpnSecrets := getSettingVpnSecrets(s.data)
+//					for k, v := range vpnSecrets {
+//						secretSet(s.Uuid, sectionName, k, v)
+//					}
+//				} else if value, ok := variant.Value().(string); ok {
+//					secretSet(s.Uuid, sectionName, keyName, value)
+//				}
+//			}
+//		}
+//	}
+//}
 
 // Save save current connection session, and the 'activated' will special whether activate it,
 // but if the connection non-exists, the 'activated' no effect
@@ -393,14 +409,15 @@ func (s *ConnectionSession) save(activated bool) (ok bool, err error) {
 			logger.Error(err)
 			return false, err
 		}
-		if !activated {
-			err = nmConn.Save(0)
-		} else {
-			_, err = manager.activateConnection(s.Uuid, s.devPath)
+		manager.secretAgent.saveSecrets(s.data, s.ConnectionPath)
+
+		if activated {
+			_, err := manager.activateConnection(s.Uuid, s.devPath)
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
-		if err != nil {
-			logger.Error("Failed to save exists connection:", err)
-		}
+
 	} else {
 		// create new connection and activate it
 		connectionType := getCustomConnectionType(s.data)
@@ -423,7 +440,7 @@ func (s *ConnectionSession) save(activated bool) (ok bool, err error) {
 		s.connectionExists = true
 	}
 
-	s.updateSecretsToKeyring()
+	//s.updateSecretsToKeyring()
 
 	manager.removeConnectionSession(s)
 	return true, nil
@@ -514,7 +531,7 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) *dbus.Error {
 }
 
 func (s *ConnectionSession) setKey(section, key, valueJSON string) {
-	logger.Debugf("SetKey(), section=%s, key=%s, len(valueJSON)=%d", section, key, len(valueJSON))
+	logger.Debugf("SetKey section=%q, key=%q, len(valueJSON)=%d", section, key, len(valueJSON))
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)

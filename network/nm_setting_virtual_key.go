@@ -21,6 +21,7 @@ package network
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/iso"
@@ -229,7 +230,7 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 	}
 
 	if len(values) == 0 {
-		logger.Warningf("there is no available values for virtual key, %s->%s", section, key)
+		//logger.Warningf("there is no available values for virtual key, %s->%s", section, key)
 	}
 	return
 }

@@ -51,7 +51,6 @@ func (d *Daemon) GetDependencies() []string {
 
 func (d *Daemon) Start() error {
 	libnotify.Init("dde-session-daemon")
-
 	if manager != nil {
 		return nil
 	}

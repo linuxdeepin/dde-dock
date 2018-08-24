@@ -21,6 +21,7 @@ package network
 
 import (
 	"os"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
@@ -126,6 +127,7 @@ func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid stri
 
 // new connection data
 func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) (data connectionData) {
+	logger.Debug("newWirelessConnectionData: secType:", secType)
 	data = make(connectionData)
 
 	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)

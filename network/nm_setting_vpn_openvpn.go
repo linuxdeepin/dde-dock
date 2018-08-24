@@ -30,9 +30,9 @@ var availableValuesNmOpenvpnSecretFlags []kvalue
 
 func initAvailableValuesNmOpenvpnSecretFlags() {
 	availableValuesNmOpenvpnSecretFlags = []kvalue{
-		kvalue{nm.NM_OPENVPN_SECRET_FLAG_SAVE, Tr("Saved")}, // system saved
-		kvalue{nm.NM_OPENVPN_SECRET_FLAG_ASK, Tr("Always Ask")},
-		kvalue{nm.NM_OPENVPN_SECRET_FLAG_UNUSED, Tr("Not Required")},
+		kvalue{secretFlagNone, Tr("Saved")}, // system saved
+		kvalue{secretFlagAsk, Tr("Always Ask")},
+		kvalue{secretFlagNotRequired, Tr("Not Required")},
 	}
 }
 

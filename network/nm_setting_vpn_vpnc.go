@@ -32,15 +32,14 @@ var availableValuesNmVpncSecretFlags []kvalue
 
 func initAvailableValuesNmVpncSecretFlags() {
 	availableValuesNmVpncSecretFlags = []kvalue{
-		kvalue{nm.NM_VPNC_SECRET_FLAG_NONE, Tr("Saved")},
-		// kvalue{nm.NM_VPNC_SECRET_FLAG_SAVE, Tr("Saved")},
-		kvalue{nm.NM_VPNC_SECRET_FLAG_ASK, Tr("Always Ask")},
-		kvalue{nm.NM_VPNC_SECRET_FLAG_UNUSED, Tr("Not Required")},
+		kvalue{secretFlagNone, Tr("Saved")},
+		kvalue{secretFlagAsk, Tr("Always Ask")},
+		kvalue{secretFlagNotRequired, Tr("Not Required")},
 	}
 }
 
 func isVpnVpncRequireSecret(flag uint32) bool {
-	if flag == nm.NM_VPNC_SECRET_FLAG_NONE || flag == nm.NM_VPNC_SECRET_FLAG_SAVE {
+	if flag == secretFlagNone || flag == secretFlagAgentOwned {
 		return true
 	}
 	return false

@@ -25,6 +25,8 @@ import (
 
 	"pkg.deepin.io/lib/dbus1"
 
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -78,7 +80,8 @@ type Manager struct {
 	activeConnections     map[dbus.ObjectPath]*activeConnection
 	ActiveConnections     string // array of connections that activated and marshaled by json
 
-	agent         *agent
+	//agent         *agent
+	secretAgent   *SecretAgent
 	stateHandler  *stateHandler
 	dbusWatcher   *dbusWatcher
 	switchHandler *switchHandler
@@ -86,14 +89,6 @@ type Manager struct {
 	proxyChainsManager *proxychains.Manager
 
 	signals *struct {
-		// NeedSecrets send signal to front-end to pop-up password input
-		// dialog to fill the secrets.
-		NeedSecrets struct {
-			secretsInfoJSON string
-		}
-		NeedSecretsFinished struct {
-			connPath, settingName string
-		}
 		AccessPointAdded, AccessPointRemoved, AccessPointPropertiesChanged struct {
 			devPath, apJSON string
 		}
@@ -172,6 +167,11 @@ func (m *Manager) init() {
 		return
 	}
 
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		return
+	}
+
 	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
 	m.sysSigLoop.Start()
 	m.initDbusObjects()
@@ -190,7 +190,29 @@ func (m *Manager) init() {
 		return
 	}
 
-	m.agent = newAgent(sysService)
+	secServiceObj := secrets.NewService(sessionBus)
+	sa, err := newSecretAgent(sessionBus, secServiceObj)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	m.secretAgent = sa
+
+	logger.Debug("unique name on system bus:", systemBus.Names()[0])
+	err = sysService.Export("/org/freedesktop/NetworkManager/SecretAgent", sa)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	// register secret agent
+	nmAgentManager := networkmanager.NewAgentManager(systemBus)
+	err = nmAgentManager.Register(0, "com.deepin.daemon.network.SecretAgent")
+	if err != nil {
+		logger.Debug("failed to register secret agent:", err)
+	} else {
+		logger.Debug("register secret agent ok")
+	}
 
 	// initialize device and connection handlers
 	m.initDeviceManage()
@@ -223,7 +245,7 @@ func (m *Manager) init() {
 func (m *Manager) destroy() {
 	logger.Info("destroy network")
 	destroyDbusObjects()
-	destroyAgent(m.agent)
+	//destroyAgent(m.agent)
 	destroyStateHandler(m.stateHandler)
 	destroyDbusWatcher(m.dbusWatcher)
 	m.clearDevices()
