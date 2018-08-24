@@ -105,6 +105,10 @@ void ShutdownPlugin::pluginStateSwitched()
         m_proxyInter->itemRemoved(this, SHUTDOWN_KEY);
         m_proxyInter->itemRemoved(this, POWER_KEY);
     } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
         m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
         updateBatteryVisible();
     }

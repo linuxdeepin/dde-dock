@@ -86,6 +86,11 @@ void NetworkPlugin::pluginStateSwitched()
 {
     m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
 
+    if (!m_pluginLoaded) {
+        loadPlugin();
+        return;
+    }
+
     onDeviceListChanged(m_networkModel->devices());
 }
 
