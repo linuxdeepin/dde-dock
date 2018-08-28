@@ -1,8 +1,19 @@
-<a name="4.7.3.2"></a>
 ## 4.7.3.2 (2018-09-13)
+<a name="4.7.2.3"></a>
+## 4.7.2.3 (2018-09-10)
 
 
 #### Bug Fixes
+
+*   app icon find mistake ([14894636](https://github.com/linuxdeepin/dde-dock/commit/14894636ab1e6d812cb3ab936e23b28af94f127e))
+*   tips color error under 2D ([3ff02944](https://github.com/linuxdeepin/dde-dock/commit/3ff029440a4091cac0a9721e4091370bab1f44c0))
+* **network:**  wired item visible logic when it's enable status changed ([f5da9e50](https://github.com/linuxdeepin/dde-dock/commit/f5da9e508cef1d1838cfa2ae151c660b1cace3f2))
+
+
+
+<a name="4.7.2.2"></a>
+
+
 
 *   apps preview position error ([14e1cd49](https://github.com/linuxdeepin/dde-dock/commit/14e1cd49edc990bce1e73a74d5011b19c40882fa))
 
@@ -36,6 +47,19 @@
 *   network pointer is not initialized ([da6d47f4](https://github.com/linuxdeepin/dde-dock/commit/da6d47f47b0af37af4db7a8322f386e65be94d6e))
 *   icon is null ([da407f77](https://github.com/linuxdeepin/dde-dock/commit/da407f77dbf34b232ea3b50c51b094095206deef))
 *   activated wireless info ([c287f7d6](https://github.com/linuxdeepin/dde-dock/commit/c287f7d6d72e1da8d713e19b8d91be07b7f2ac1f))
+* **app:**  icon is null ([79f85f3d](https://github.com/linuxdeepin/dde-dock/commit/79f85f3d4af7ac71255a99f4df70db36cb1a3e28))
+* **network:**  activated wireless info ([5f4df46a](https://github.com/linuxdeepin/dde-dock/commit/5f4df46a7626e041c9e81ad81fe9cab410929647))
+
+
+
+<a name=""></a>
+##  4.7.2.1 (2018-08-28)
+
+
+#### Bug Fixes
+
+*   strange structure when dock is start up ([d6532d2a](https://github.com/linuxdeepin/dde-dock/commit/d6532d2aa690c389a468c532fcb255ac84bb1ddd))
+*   network pointer is not initialized ([5a63377f](https://github.com/linuxdeepin/dde-dock/commit/5a63377f870f2d91be04571b2b542968f131d501))
 
 
 
