@@ -54,6 +54,7 @@ func main() {
 				nil, options)
 			if err != nil {
 				log.Println(err)
+				runFallbackTerm()
 			}
 		} else {
 			runFallbackTerm()
