@@ -1,4 +1,15 @@
 <a name=""></a>
+##  4.7.2.1 (2018-08-28)
+
+
+#### Bug Fixes
+
+*   strange structure when dock is start up ([d6532d2a](https://github.com/linuxdeepin/dde-dock/commit/d6532d2aa690c389a468c532fcb255ac84bb1ddd))
+*   network pointer is not initialized ([5a63377f](https://github.com/linuxdeepin/dde-dock/commit/5a63377f870f2d91be04571b2b542968f131d501))
+
+
+
+<a name=""></a>
 ##  4.7.2 (2018-08-12)
 
 
