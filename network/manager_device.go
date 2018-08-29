@@ -209,6 +209,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			nmSetDeviceAutoconnect(dev.Path, false)
 		}()
 		if mmDevModem, err := mmNewModem(dbus.ObjectPath(dev.udi)); err == nil {
+			mmDevModem.InitSignalExt(m.sysSigLoop, true)
 			dev.mmDevModem = mmDevModem
 
 			// connect properties
