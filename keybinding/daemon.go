@@ -57,6 +57,8 @@ func (d *Daemon) Start() error {
 
 	service := loader.GetService()
 
+	loadConfig()
+
 	d.manager, err = newManager(service)
 	if err != nil {
 		return err
