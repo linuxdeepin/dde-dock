@@ -60,6 +60,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
       m_dragging(false),
 
+      m_retryTimes(0),
+
       m_appIcon(QPixmap()),
 
       m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
@@ -67,6 +69,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
       m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png")),
       m_updateIconGeometryTimer(new QTimer(this)),
+      m_retryObtainIconTimer(new QTimer(this)),
 
       m_smallWatcher(new QFutureWatcher<QPixmap>(this)),
       m_largeWatcher(new QFutureWatcher<QPixmap>(this))
@@ -90,12 +93,16 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
 
+    m_retryObtainIconTimer->setInterval(500);
+    m_retryObtainIconTimer->setSingleShot(true);
+
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refershIcon);
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
+    connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refershIcon, Qt::QueuedConnection);
 
     updateWindowInfos(m_itemEntryInter->windowInfos());
     refershIcon();
@@ -510,6 +517,18 @@ void AppItem::refershIcon()
         m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7);
     else
         m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
+
+    if (m_appIcon.isNull()) {
+        if (m_retryTimes < 5) {
+            m_retryTimes++;
+            qDebug() << m_itemEntryInter->name() << "obtain app icon failed, retry times" << m_retryTimes;
+            m_retryObtainIconTimer->start();
+        }
+        return;
+    } else if (m_retryTimes > 0) {
+        // reset times
+        m_retryTimes = 0;
+    }
 
     update();
 

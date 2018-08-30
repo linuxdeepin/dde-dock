@@ -109,6 +109,8 @@ private:
 
     bool m_dragging;
     bool m_active;
+    int m_retryTimes;
+
     WindowInfoMap m_windowInfos;
     QString m_id;
     QPixmap m_appIcon;
@@ -118,6 +120,7 @@ private:
     QPixmap m_activeVerticalIndicator;
 
     QTimer *m_updateIconGeometryTimer;
+    QTimer *m_retryObtainIconTimer;
 
     QFutureWatcher<QPixmap> *m_smallWatcher;
     QFutureWatcher<QPixmap> *m_largeWatcher;
