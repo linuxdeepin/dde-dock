@@ -1,3 +1,8 @@
+[3.2.24.1] 2018-08-30
+*   feat(keybinding): add config file handle touchpad toggle
+*   fix(audio): saveConfig panic nil pointer dereference
+*   fix(network): panic you should call *proxy.Object.InitSignalExt() first
+
 [3.2.24] 2018-08-12
 *   fix(x-event-monitor): no listen raw touch event
 *   chore: auto sync po/ts files from transifex
