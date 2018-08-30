@@ -73,11 +73,11 @@ func readConfig() (*config, error) {
 
 	var info config
 	err := configHandler.Load(&info)
+	configCache = &info
 	if err != nil {
 		return nil, err
 	}
 
-	configCache = &info
 	return configCache, nil
 }
 
