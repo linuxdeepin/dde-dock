@@ -1,3 +1,17 @@
+<a name="4.7.3"></a>
+## 4.7.3 (2018-08-31)
+
+
+#### Bug Fixes
+
+*   tips size error ([48113767](https://github.com/linuxdeepin/dde-dock/commit/481137678b52c9f1e7b4aada9653863e813259c4))
+*   strange structure when dock is start up ([752602d1](https://github.com/linuxdeepin/dde-dock/commit/752602d156d3c41596ff66c7c8663841b2d7ff97))
+*   network pointer is not initialized ([da6d47f4](https://github.com/linuxdeepin/dde-dock/commit/da6d47f47b0af37af4db7a8322f386e65be94d6e))
+*   icon is null ([da407f77](https://github.com/linuxdeepin/dde-dock/commit/da407f77dbf34b232ea3b50c51b094095206deef))
+*   activated wireless info ([c287f7d6](https://github.com/linuxdeepin/dde-dock/commit/c287f7d6d72e1da8d713e19b8d91be07b7f2ac1f))
+
+
+
 <a name=""></a>
 ##  4.7.2 (2018-08-12)
 
