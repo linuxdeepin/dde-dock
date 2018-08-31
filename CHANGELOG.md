@@ -1,3 +1,7 @@
+[3.2.24.2] 2018-08-31
+*   fix(default-terminal): fallback if session manager failure
+*   chore: update build depends debhelper (>= 9)
+
 [3.2.24.1] 2018-08-30
 *   feat(keybinding): add config file handle touchpad toggle
 *   fix(audio): saveConfig panic nil pointer dereference
