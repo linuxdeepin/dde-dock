@@ -1,3 +1,14 @@
+<a name="4.7.2.2"></a>
+## 4.7.2.2 (2018-08-31)
+
+
+#### Bug Fixes
+
+* **app:**  icon is null ([79f85f3d](https://github.com/linuxdeepin/dde-dock/commit/79f85f3d4af7ac71255a99f4df70db36cb1a3e28))
+* **network:**  activated wireless info ([5f4df46a](https://github.com/linuxdeepin/dde-dock/commit/5f4df46a7626e041c9e81ad81fe9cab410929647))
+
+
+
 <a name=""></a>
 ##  4.7.2.1 (2018-08-28)
 
