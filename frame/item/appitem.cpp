@@ -290,6 +290,8 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::MiddleButton) {
         m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
     } else if (e->button() == Qt::LeftButton) {
+        qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
+            << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
@@ -521,7 +523,7 @@ void AppItem::refershIcon()
     if (m_appIcon.isNull()) {
         if (m_retryTimes < 5) {
             m_retryTimes++;
-            qDebug() << m_itemEntryInter->name() << "obtain app icon failed, retry times" << m_retryTimes;
+            qDebug() << m_itemEntryInter->name() << "obtain app icon(" << icon << ")failed, retry times:" << m_retryTimes;
             m_retryObtainIconTimer->start();
         }
         return;
