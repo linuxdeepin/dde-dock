@@ -61,11 +61,11 @@ signals:
     void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
     void cancelSecret(const QString &connectionPath, const QString &settingName);
     void requestWirelessScan();
-
-private:
-    void loadAPList();
+    void createApConfig(const QString &devPath, const QString &apPath);
+    void queryConnectionSession( const QString &devPath, const QString &uuid );
 
 private slots:
+    void loadAPList();
     void APAdded(const QJsonObject &apInfo);
     void APRemoved(const QJsonObject &apInfo);
     void APPropertiesChanged(const QJsonObject &apInfo);
@@ -79,6 +79,7 @@ private slots:
     void deactiveAP();
     void updateIndicatorPos();
     void onActiveConnectionChanged();
+    void onActivateApFailed(const QString &apPath, const QString &uuid);
 
 
 private:
@@ -98,6 +99,8 @@ private:
     QString m_lastConnPath;
     QString m_lastConnSecurity;
     QString m_lastConnSecurityType;
+
+    QJsonObject m_editConnectionData;;
 
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;

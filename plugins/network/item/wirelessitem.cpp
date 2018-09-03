@@ -243,6 +243,8 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::feedSecret, this, &WirelessItem::feedSecret);
     connect(m_APList, &WirelessList::cancelSecret, this, &WirelessItem::cancelSecret);
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
+    connect(m_APList, &WirelessList::queryConnectionSession, this, &WirelessItem::queryConnectionSession);
+    connect(m_APList, &WirelessList::createApConfig, this, &WirelessItem::createApConfig);
 
     QTimer::singleShot(0, this, [=]() {
         m_refershTimer->start();

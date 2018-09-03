@@ -82,8 +82,6 @@ AccessPointWidget::AccessPointWidget()
                   "border-top:1px solid rgba(255, 255, 255, .05);"
                   "}"
                   "AccessPointWidget:hover {"
-                  "border:none;"
-                  "margin:0;"
                   "background-color:rgba(255, 255, 255, .1);"
                   "}"
                   "AccessPointWidget[active=true] #Ssid {"

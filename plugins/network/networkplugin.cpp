@@ -202,6 +202,10 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                             m_networkWorker, &NetworkWorker::cancelSecret);
                     connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
                             m_networkWorker, &NetworkWorker::requestWirelessScan);
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::createApConfig,
+                            m_networkWorker, &NetworkWorker::createApConfig);
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
+                            m_networkWorker, &NetworkWorker::queryConnectionSession);
 
                     connect(m_networkModel, &NetworkModel::needSecrets,
                             static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecrets);

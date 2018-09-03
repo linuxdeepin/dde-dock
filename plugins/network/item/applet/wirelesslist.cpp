@@ -29,6 +29,7 @@
 
 #include <dinputdialog.h>
 #include <QScrollBar>
+#include <DDBusSender>
 
 DWIDGET_USE_NAMESPACE
 
@@ -99,6 +100,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_device, &WirelessDevice::needSecrets, this, &WirelessList::onNeedSecrets);
     connect(m_device, &WirelessDevice::needSecretsFinished, this, &WirelessList::onNeedSecretsFinished);
     connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
+    connect(m_device, &WirelessDevice::activateAccessPointFailed, this, &WirelessList::onActivateApFailed);
 
     connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
     connect(m_controlPanel, &DeviceControlWidget::requestRefresh, this, &WirelessList::requestWirelessScan);
@@ -275,9 +277,7 @@ void WirelessList::updateAPList()
             m_indicator->move(m_currentClickAPW->mapTo(this, m_currentClickAPW->rect().topRight()) - QPoint(35, h));
         }
 
-        if (deviceStatus == NetworkDevice::Activated ||
-                deviceStatus == NetworkDevice::Failed ||
-                deviceStatus == NetworkDevice::Unknow) {
+        if (deviceStatus <= NetworkDevice::Disconnected || deviceStatus >= NetworkDevice::Activated) {
             m_indicator->stop();
             m_indicator->hide();
         }
@@ -440,5 +440,30 @@ void WirelessList::onActiveConnectionChanged()
             m_updateAPTimer->start();
             break;
         }
+    }
+}
+
+void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid)
+{
+    if (m_currentClickAP.path() == apPath) {
+        qDebug() << "wireless connect failed and may require more configuration,"
+            << "path:" << m_currentClickAP.path() << "ssid" << m_currentClickAP.ssid()
+            << "secret:" << m_currentClickAP.secured() << "strength" << m_currentClickAP.strength();
+        m_updateAPTimer->start();
+
+        m_editConnectionData = {};
+        m_editConnectionData.insert("conn-type", "wireless");
+        m_editConnectionData.insert("device-path", QJsonValue(m_device->path()));
+        m_editConnectionData.insert("conn-uuid", QJsonValue(uuid));
+        m_editConnectionData.insert("ap-path", QJsonValue(apPath));
+
+        DDBusSender()
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method("ShowPage")
+                .arg(QString("network"))
+                .arg(QString(QJsonDocument(m_editConnectionData).toJson()))
+                .call();
     }
 }
