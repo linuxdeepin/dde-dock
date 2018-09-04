@@ -21,11 +21,13 @@ package accounts
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
@@ -44,11 +46,11 @@ const (
 )
 
 const (
-	layoutDelim           = ";"
-	defaultLayout         = "us" + layoutDelim
-	defaultLayoutFile     = "/etc/default/keyboard"
-	defaultUserIcon       = "file:///var/lib/AccountsService/icons/default.png"
-	defaultUserBackground = "file:///usr/share/wallpapers/deepin/desktop.jpg"
+	layoutDelim              = ";"
+	defaultLayout            = "us" + layoutDelim
+	defaultLayoutFile        = "/etc/default/keyboard"
+	defaultUserIcon          = "file:///var/lib/AccountsService/icons/default.png"
+	defaultUserBackgroundDir = "/usr/share/wallpapers/deepin/"
 
 	maxWidth  = 200
 	maxHeight = 200
@@ -66,6 +68,30 @@ const (
 	confKeyGreeterBackground  = "GreeterBackground"
 	confKeyHistoryLayout      = "HistoryLayout"
 )
+
+var (
+	defaultUserBackgroundOnce  sync.Once
+	cacheDefaultUserBackground string
+)
+
+func getDefaultUserBackground() string {
+	defaultUserBackgroundOnce.Do(func() {
+		var baseName = "desktop.jpg"
+		content, err := ioutil.ReadFile(filepath.Join(defaultUserBackgroundDir,
+			"default.conf"))
+		content = bytes.TrimSpace(content)
+		if err == nil && len(content) != 0 {
+			contentStr := string(content)
+			_, err := os.Stat(filepath.Join(defaultUserBackgroundDir, contentStr))
+			if err == nil {
+				baseName = contentStr
+			}
+		}
+		cacheDefaultUserBackground = "file://" + defaultUserBackgroundDir + baseName
+		logger.Debug("default user background:", cacheDefaultUserBackground)
+	})
+	return cacheDefaultUserBackground
+}
 
 type User struct {
 	service    *dbusutil.Service
@@ -158,6 +184,7 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		u.Layout = u.getDefaultLayout()
 		u.Locale = getLocaleFromFile(defaultLayoutFile)
 		u.IconFile = defaultUserIcon
+		defaultUserBackground := getDefaultUserBackground()
 		u.DesktopBackgrounds = []string{defaultUserBackground}
 		u.GreeterBackground = defaultUserBackground
 		u.writeUserConfig()
@@ -214,14 +241,14 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	_, desktopBgs, _ := kf.GetStringList(confGroupUser, confKeyDesktopBackgrounds)
 	u.DesktopBackgrounds = desktopBgs
 	if len(desktopBgs) == 0 {
-		u.DesktopBackgrounds = []string{defaultUserBackground}
+		u.DesktopBackgrounds = []string{getDefaultUserBackground()}
 		isSave = true
 	}
 
 	greeterBg, _ := kf.GetString(confGroupUser, confKeyGreeterBackground)
 	u.GreeterBackground = greeterBg
 	if greeterBg == "" {
-		u.GreeterBackground = defaultUserBackground
+		u.GreeterBackground = getDefaultUserBackground()
 		isSave = true
 	}
 
