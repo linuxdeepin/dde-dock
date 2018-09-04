@@ -97,12 +97,12 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     case Position::Top:
     case Position::Bottom:
         m_itemLayout->setDirection(QBoxLayout::LeftToRight);
-        m_itemLayout->setContentsMargins(1, 0, 1, 0);
+        m_itemLayout->setContentsMargins(0, 0, 1, 0);
         break;
     case Position::Left:
     case Position::Right:
         m_itemLayout->setDirection(QBoxLayout::TopToBottom);
-        m_itemLayout->setContentsMargins(0, 1, 0, 1);
+        m_itemLayout->setContentsMargins(0, 0, 0, 1);
         break;
     }
 
