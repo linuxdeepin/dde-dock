@@ -2,7 +2,23 @@
 
 set -e
 
-case "$1" in 
+fallbackFont=/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc
+fallbackFontDir=/lib/fonts/fallback
+jvmDir=/usr/lib/jvm
+
+linkJavaFallbackFont () {
+    if [ -f $fallbackFont -a -d $jvmDir ];then
+        for javaHome in $jvmDir/*
+        do
+            if [ -d "$javaHome" -a ! -L "$javaHome" ];then
+                mkdir -p "$javaHome$fallbackFontDir"
+                ln -sf $fallbackFont "$javaHome$fallbackFontDir"
+            fi
+        done
+    fi
+}
+
+case "$1" in
     configure)
     if [ -x /usr/lib/deepin-daemon/default-terminal ];then
         update-alternatives --install /usr/bin/x-terminal-emulator \
@@ -15,6 +31,7 @@ case "$1" in
     if [ -f /usr/share/fcitx/addon/fcitx-xkb.conf ];then
         sed -i 's/Enabled=.*$/Enabled=False/' /usr/share/fcitx/addon/fcitx-xkb.conf || true
     fi
+    linkJavaFallbackFont
     ;;
     triggered)
     if [ -f /etc/systemd/logind.conf ];then
@@ -24,6 +41,7 @@ case "$1" in
     if [ -f /usr/share/fcitx/addon/fcitx-xkb.conf ];then
         sed -i 's/Enabled=.*$/Enabled=False/' /usr/share/fcitx/addon/fcitx-xkb.conf || true
     fi
+    linkJavaFallbackFont
     ;;
 esac
 
