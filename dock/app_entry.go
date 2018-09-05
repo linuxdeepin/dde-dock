@@ -36,12 +36,13 @@ const (
 //go:generate dbusutil-gen -type AppEntry -import=github.com/linuxdeepin/go-x11-client=x app_entry.go
 
 type AppEntry struct {
-	PropsMu       sync.RWMutex
-	Id            string
-	IsActive      bool
-	Name          string
-	Icon          string
-	Menu          string
+	PropsMu  sync.RWMutex
+	Id       string
+	IsActive bool
+	Name     string
+	Icon     string
+	// dbusutil-gen: ignore
+	Menu          AppEntryMenu
 	DesktopFile   string
 	CurrentWindow x.Window
 	IsDocked      bool
@@ -53,7 +54,6 @@ type AppEntry struct {
 	innerId          string
 	windows          map[x.Window]*WindowInfo
 	current          *WindowInfo
-	coreMenu         *Menu
 	appInfo          *AppInfo
 	winIconPreferred bool
 
@@ -74,6 +74,7 @@ func newAppEntry(dockManager *Manager, innerId string, appInfo *AppInfo) *AppEnt
 		innerId: innerId,
 		windows: make(map[x.Window]*WindowInfo),
 	}
+	entry.Menu.manager = dockManager
 	entry.setAppInfo(appInfo)
 	entry.Name = entry.getName()
 	entry.Icon = entry.getIcon()

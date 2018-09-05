@@ -86,11 +86,7 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 
 func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) *dbus.Error {
 	logger.Debugf("HandleMenuItem id: %q timestamp: %v", id, timestamp)
-
-	e.PropsMu.RLock()
-	menu := e.coreMenu
-	e.PropsMu.RUnlock()
-
+	menu := e.Menu.getMenu()
 	if menu != nil {
 		err := menu.HandleAction(id, timestamp)
 		return dbusutil.ToError(err)

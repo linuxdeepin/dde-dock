@@ -20,17 +20,14 @@
 package dock
 
 import (
-	x "github.com/linuxdeepin/go-x11-client"
+	"reflect"
+	"sync"
+
+	"github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 )
-
-func (e *AppEntry) setMenu(menu *Menu) {
-	e.coreMenu = menu
-	menuJSON := menu.GenerateJSON()
-	e.setPropMenu(menuJSON)
-}
 
 func (entry *AppEntry) updateMenu() {
 	logger.Debug("Update menu")
@@ -56,7 +53,7 @@ func (entry *AppEntry) updateMenu() {
 		menu.AppendItem(entry.getMenuItemDock())
 	}
 
-	entry.setMenu(menu)
+	entry.Menu.setMenu(menu)
 }
 
 func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
@@ -149,8 +146,65 @@ func (entry *AppEntry) getMenuItemUndock() *MenuItem {
 }
 
 func (entry *AppEntry) getMenuItemAllWindows() *MenuItem {
-	return NewMenuItem(Tr("_All windows"), func(uint32) {
+	menuItem := NewMenuItem(Tr("_All windows"), func(uint32) {
 		logger.Debug("menu action all windows")
 		entry.PresentWindows()
 	}, true)
+	menuItem.hint = menuItemHintShowAllWindows
+	return menuItem
+}
+
+type AppEntryMenu struct {
+	manager *Manager
+	cache   string
+	is3DWM  bool
+	dirty   bool
+	menu    *Menu
+	mu      sync.Mutex
+}
+
+func (m *AppEntryMenu) setMenu(menu *Menu) {
+	m.mu.Lock()
+	m.menu = menu
+	m.dirty = true
+	m.mu.Unlock()
+}
+
+func (m *AppEntryMenu) getMenu() *Menu {
+	m.mu.Lock()
+	ret := m.menu
+	m.mu.Unlock()
+	return ret
+}
+
+func (*AppEntryMenu) SetValue(val interface{}) (changed bool, err *dbus.Error) {
+	// read only
+	return
+}
+
+func (m *AppEntryMenu) GetValue() (val interface{}, err *dbus.Error) {
+	is3DWM := m.manager.is3DWM()
+	m.mu.Lock()
+	if m.dirty || m.cache == "" || m.is3DWM != is3DWM {
+		newItems := make([]*MenuItem, 0, len(m.menu.Items))
+		for _, item := range m.menu.Items {
+			if is3DWM || item.hint != menuItemHintShowAllWindows {
+				newItems = append(newItems, item)
+			}
+		}
+		m.menu.Items = newItems
+		m.cache = m.menu.GenerateJSON()
+		m.dirty = false
+		m.is3DWM = is3DWM
+	}
+	val = m.cache
+	m.mu.Unlock()
+	return
+}
+
+func (*AppEntryMenu) SetNotifyChangedFunc(func(val interface{})) {
+}
+
+func (*AppEntryMenu) GetType() reflect.Type {
+	return reflect.TypeOf("")
 }
