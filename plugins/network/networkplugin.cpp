@@ -54,6 +54,9 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    m_delayRefreshTimer->setSingleShot(true);
+    m_delayRefreshTimer->setInterval(2000);
+
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &NetworkPlugin::refreshWiredItemVisible);
 
     if (!pluginIsDisable()) {
@@ -215,6 +218,9 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             mPaths << path;
             m_itemsMap.insert(path, item);
 
+            connect(device, &dde::network::NetworkDevice::enableChanged,
+                    m_delayRefreshTimer, static_cast<void (QTimer:: *)()>(&QTimer::start));
+
             connect(item, &DeviceItem::requestContextMenu, this, &NetworkPlugin::contextMenuRequested);
             connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
         }
@@ -242,9 +248,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         });
     }
 
-    if (!m_delayRefreshTimer->isActive()) {
-        m_delayRefreshTimer->start(2000);
-    }
+    m_delayRefreshTimer->start();
 }
 
 void NetworkPlugin::refreshWiredItemVisible()
@@ -267,6 +271,8 @@ void NetworkPlugin::refreshWiredItemVisible()
     for (auto wiredItem : wiredItems) {
         if (!wiredItem->device()->enabled()) {
             m_proxyInter->itemRemoved(this, wiredItem->path());
+        } else {
+            m_proxyInter->itemAdded(this, wiredItem->path());
         }
     }
 }
