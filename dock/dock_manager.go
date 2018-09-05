@@ -81,6 +81,8 @@ type Manager struct {
 	wm           *wm.Wm
 	appsObj      *libApps.Apps
 	startManager *sessionmanager.StartManager
+	wmSwitcher   *sessionmanager.WMSwitcher
+	wmName       string
 
 	signals *struct {
 		ServiceRestarted struct{}

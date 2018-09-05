@@ -58,19 +58,6 @@ func (v *AppEntry) emitPropChangedIcon(value string) error {
 	return v.service.EmitPropertyChanged(v, "Icon", value)
 }
 
-func (v *AppEntry) setPropMenu(value string) (changed bool) {
-	if v.Menu != value {
-		v.Menu = value
-		v.emitPropChangedMenu(value)
-		return true
-	}
-	return false
-}
-
-func (v *AppEntry) emitPropChangedMenu(value string) error {
-	return v.service.EmitPropertyChanged(v, "Menu", value)
-}
-
 func (v *AppEntry) setPropDesktopFile(value string) (changed bool) {
 	if v.DesktopFile != value {
 		v.DesktopFile = value

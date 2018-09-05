@@ -59,8 +59,11 @@ type MenuItem struct {
 	ShowCheckMark bool   `json:"showCheckMark"`
 	SubMenu       *Menu  `json:"itemSubMenu"`
 
+	hint   int
 	action func(uint32)
 }
+
+const menuItemHintShowAllWindows = 1
 
 func NewMenuItem(name string, action func(uint32), enable bool) *MenuItem {
 	return &MenuItem{

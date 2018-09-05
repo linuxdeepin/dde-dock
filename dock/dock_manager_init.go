@@ -83,6 +83,34 @@ func (m *Manager) listenSettingsChanged() {
 	})
 }
 
+func (m *Manager) listenWMSwitcherSignal() {
+	m.wmSwitcher.InitSignalExt(m.sessionSigLoop, true)
+	m.wmSwitcher.ConnectWMChanged(func(wmName string) {
+		m.PropsMu.Lock()
+		m.wmName = wmName
+		m.PropsMu.Unlock()
+		logger.Debugf("wm changed %q", wmName)
+	})
+}
+
+func (m *Manager) is3DWM() (ret bool) {
+	m.PropsMu.Lock()
+
+	if m.wmName == "" {
+		var err error
+		m.wmName, err = m.wmSwitcher.CurrentWM(0)
+		if err != nil {
+			logger.Warning("failed to get wmSwitcher.CurrentWM:", err)
+		}
+	}
+	if m.wmName == "deepin wm" {
+		ret = true
+	}
+
+	m.PropsMu.Unlock()
+	return
+}
+
 func (m *Manager) listenLauncherSignal() {
 	m.launcher.InitSignalExt(m.sessionSigLoop, true)
 	m.launcher.ConnectItemChanged(func(status string, itemInfo launcher.ItemInfo,
@@ -165,9 +193,11 @@ func (m *Manager) init() error {
 	m.launcher = launcher.NewLauncher(sessionBus)
 	m.ddeLauncher = libDDELauncher.NewLauncher(sessionBus)
 	m.startManager = sessionmanager.NewStartManager(sessionBus)
+	m.wmSwitcher = sessionmanager.NewWMSwitcher(sessionBus)
 	m.sessionSigLoop = dbusutil.NewSignalLoop(m.service.Conn(), 10)
 	m.sessionSigLoop.Start()
 	m.listenLauncherSignal()
+	m.listenWMSwitcherSignal()
 
 	m.registerIdentifyWindowFuncs()
 	m.initEntries()
