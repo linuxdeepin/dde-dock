@@ -83,8 +83,14 @@ int DatetimePlugin::itemSortKey(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    const QString key = QString("pos_%1").arg(displayMode());
-    return m_settings.value(key, 0).toInt();
+    Dock::DisplayMode mode = displayMode();
+    const QString key = QString("pos_%1").arg(mode);
+
+    if (mode == Dock::DisplayMode::Fashion) {
+        return m_settings.value(key, 5).toInt();
+    } else {
+        return m_settings.value(key, -1).toInt();
+    }
 }
 
 void DatetimePlugin::setSortKey(const QString &itemKey, const int order)

@@ -137,8 +137,14 @@ bool SystemTrayPlugin::itemIsInContainer(const QString &itemKey)
 
 int SystemTrayPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    return m_containerSettings->value(key, 0).toInt();
+    Dock::DisplayMode mode = displayMode();
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
+
+    if (mode == Dock::DisplayMode::Fashion) {
+        return m_containerSettings->value(key, 3).toInt();
+    } else {
+        return m_containerSettings->value(key, 1).toInt();
+    }
 }
 
 void SystemTrayPlugin::setSortKey(const QString &itemKey, const int order)

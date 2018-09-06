@@ -150,8 +150,14 @@ QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 
 int NetworkPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    return m_settings.value(key, 0).toInt();
+    Dock::DisplayMode mode = displayMode();
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
+
+    if (mode == Dock::DisplayMode::Fashion) {
+        return m_settings.value(key, 2).toInt();
+    } else {
+        return m_settings.value(key, 3).toInt();
+    }
 }
 
 void NetworkPlugin::setSortKey(const QString &itemKey, const int order)
