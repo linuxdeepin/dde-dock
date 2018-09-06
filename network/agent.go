@@ -457,15 +457,16 @@ func (a *agent) doGuessDevice(connectionData map[string]map[string]dbus.Variant,
 
 func (a *agent) cancelVpnAuthDialog(connPath dbus.ObjectPath) {
 	a.vpnProcessesLock.Lock()
-	defer a.vpnProcessesLock.Unlock()
 
-	for p, process := range a.vpnProcesses {
-		if p == connPath {
+	process, ok := a.vpnProcesses[connPath]
+	if ok {
+		if process != nil {
 			process.Kill()
-			break
 		}
+		delete(a.vpnProcesses, connPath)
 	}
-	delete(a.vpnProcesses, connPath)
+
+	a.vpnProcessesLock.Unlock()
 }
 
 func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string) *dbus.Error {
