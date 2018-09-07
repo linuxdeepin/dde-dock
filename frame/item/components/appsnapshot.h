@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QDebug>
 #include <QTimer>
-#include <QLabel>
+#include "../widgets/tipswidget.h"
 
 #include <dimagebutton.h>
 #include <DWindowManagerHelper>
@@ -83,7 +83,7 @@ private:
     QImage m_snapshot;
     QRectF m_snapshotSrcRect;
 
-    QLabel *m_title;
+    TipsWidget *m_title;
 
     DImageButton *m_closeBtn;
     DWindowManagerHelper *m_wmHelper;
