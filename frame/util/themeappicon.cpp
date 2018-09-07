@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QPixmapCache>
+#include <QCryptographicHash>
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
@@ -46,10 +47,7 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
     QString key;
 
     if (iconName.startsWith("data:image/")) {
-        key = QString("%1x%2x%3") \
-                .arg(size) \
-                .arg(ratio) \
-                .arg(iconName.mid(0, 20)); // incase the iconName is too long.
+        key = QCryptographicHash::hash(iconName.toUtf8(), QCryptographicHash::Md5).toHex();
 
         // FIXME(hualet): The cache can reduce memory usage,
         // that is ~2M on HiDPI enabled machine with 9 icons loaded,
@@ -96,7 +94,9 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
     pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
 
-    QPixmapCache::insert(key, pixmap);
+    if (!key.isEmpty()) {
+        QPixmapCache::insert(key, pixmap);
+    }
 
     return pixmap;
 }
