@@ -1,3 +1,9 @@
+[3.2.24.3] 2018-09-07
+*   feat(dock): menu items excludes AllWindows when use 2D WM
+*   fix(network): agent.cancelVpnAuthDialog panic process is nil
+*   feat: add trigger to link ttc for java
+*   feat(accounts): support for configuring default user background
+
 [3.2.24.2] 2018-08-31
 *   fix(default-terminal): fallback if session manager failure
 *   chore: update build depends debhelper (>= 9)
