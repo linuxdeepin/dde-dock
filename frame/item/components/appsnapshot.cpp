@@ -55,7 +55,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
       m_wid(wid),
 
-      m_title(new QLabel),
+      m_title(new TipsWidget),
       m_closeBtn(new DImageButton),
 
       m_wmHelper(DWindowManagerHelper::instance())
@@ -202,6 +202,8 @@ void AppSnapshot::enterEvent(QEvent *e)
         m_closeBtn->setVisible(true);
     else
         emit entered(m_wid);
+
+    update();
 }
 
 void AppSnapshot::leaveEvent(QEvent *e)
@@ -209,6 +211,8 @@ void AppSnapshot::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_closeBtn->setVisible(false);
+
+    update();
 }
 
 void AppSnapshot::paintEvent(QPaintEvent *e)
