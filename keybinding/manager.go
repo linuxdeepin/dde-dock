@@ -147,6 +147,14 @@ const (
 	SKLStateOSDShown
 )
 
+func (m *Manager) systemConn() *dbus.Conn {
+	return m.systemSigLoop.Conn()
+}
+
+func (m *Manager) sessionConn() *dbus.Conn {
+	return m.sessionSigLoop.Conn()
+}
+
 func newManager(service *dbusutil.Service) (*Manager, error) {
 	conn, err := x.NewConn()
 	if err != nil {
@@ -171,18 +179,6 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.gsKeyboard = gio.NewSettings(gsSchemaKeyboard)
 	m.NumLockState.Bind(m.gsKeyboard, gsKeyNumLockState)
 	m.ShortcutSwitchLayout.Bind(m.gsKeyboard, gsKeyShortcutSwitchLayout)
-	return &m, nil
-}
-
-func (m *Manager) systemConn() *dbus.Conn {
-	return m.systemSigLoop.Conn()
-}
-
-func (m *Manager) sessionConn() *dbus.Conn {
-	return m.sessionSigLoop.Conn()
-}
-
-func (m *Manager) init() {
 	m.sessionSigLoop.Start()
 	m.systemSigLoop.Start()
 
@@ -240,6 +236,8 @@ func (m *Manager) init() {
 	m.displayController = NewDisplayController(m.backlightHelper, sessionConn)
 	m.kbdLightController = NewKbdLightController(m.backlightHelper)
 	m.touchPadController = NewTouchPadController(sessionConn)
+
+	return &m, nil
 }
 
 func (m *Manager) destroy() {
