@@ -758,15 +758,23 @@ func correctIPv6DataType(data connectionData) {
 		}
 
 		tmp, ok := value["addresses"]
-		if ok && !isInterfaceEmpty(tmp.Value()) {
-			addrs := interfaceToIpv6Addresses(tmp.Value())
-			value["addresses"] = dbus.MakeVariant(addrs)
+		if ok {
+			if isInterfaceEmpty(tmp.Value()) {
+				delete(value, "addresses")
+			} else {
+				addrs := interfaceToIpv6Addresses(tmp.Value())
+				value["addresses"] = dbus.MakeVariant(addrs)
+			}
 		}
 
 		tmp, ok = value["routes"]
-		if ok && !isInterfaceEmpty(tmp.Value()) {
-			routes := interfaceToIpv6Routes(tmp.Value())
-			value["routes"] = dbus.MakeVariant(routes)
+		if ok {
+			if isInterfaceEmpty(tmp.Value()) {
+				delete(value, "routes")
+			} else {
+				routes := interfaceToIpv6Routes(tmp.Value())
+				value["routes"] = dbus.MakeVariant(routes)
+			}
 		}
 	}
 }

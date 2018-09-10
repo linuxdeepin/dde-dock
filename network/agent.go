@@ -528,7 +528,8 @@ func (a *agent) feedSecret(path dbus.ObjectPath, settingName string, keyValue in
 }
 
 func (m *Manager) FeedSecret(path string, settingName, keyValue string, autoConnect bool) *dbus.Error {
-	logger.Info("FeedSecret:", path, settingName, "xxxx")
+	logger.Infof("FeedSecret: path: %q, settingName: %q, autoConnect: %v",
+		path, settingName, autoConnect)
 	m.agent.feedSecret(dbus.ObjectPath(path), settingName, keyValue, autoConnect)
 	return nil
 }
