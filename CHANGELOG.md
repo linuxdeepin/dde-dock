@@ -1,3 +1,15 @@
+<a name="4.7.2.3"></a>
+## 4.7.2.3 (2018-09-10)
+
+
+#### Bug Fixes
+
+*   app icon find mistake ([14894636](https://github.com/linuxdeepin/dde-dock/commit/14894636ab1e6d812cb3ab936e23b28af94f127e))
+*   tips color error under 2D ([3ff02944](https://github.com/linuxdeepin/dde-dock/commit/3ff029440a4091cac0a9721e4091370bab1f44c0))
+* **network:**  wired item visible logic when it's enable status changed ([f5da9e50](https://github.com/linuxdeepin/dde-dock/commit/f5da9e508cef1d1838cfa2ae151c660b1cace3f2))
+
+
+
 <a name="4.7.2.2"></a>
 ## 4.7.2.2 (2018-08-31)
 
