@@ -80,8 +80,6 @@ func (d *Daemon) Start() error {
 
 	go func() {
 		m := d.manager
-		m.init()
-
 		m.initHandlers()
 
 		// listen gsettings changed event
