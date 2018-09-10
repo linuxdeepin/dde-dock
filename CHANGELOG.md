@@ -1,3 +1,20 @@
+<a name="4.7.3.1"></a>
+## 4.7.3.1 (2018-09-10)
+
+
+#### Features
+
+*   remove spacing for launcher item ([f17cce91](https://github.com/linuxdeepin/dde-dock/commit/f17cce91d62bee357a657fd0c32bf993c4879ebb))
+
+#### Bug Fixes
+
+*   app icon find mistake ([7ae40f4b](https://github.com/linuxdeepin/dde-dock/commit/7ae40f4bb9ef23b9b6595e456a8428a81315bd8c))
+*   tips color error under 2D ([009c03c9](https://github.com/linuxdeepin/dde-dock/commit/009c03c9fe70c80cdab77cde1091063951e92a3a))
+* **network:**  wired item visible logic when it's enable status changed ([821e3937](https://github.com/linuxdeepin/dde-dock/commit/821e393753fdab98428092ef025bcd231a011e69))
+* **plugins:**  use a fixed default sort for plugins ([e802e87e](https://github.com/linuxdeepin/dde-dock/commit/e802e87e4b743deba4c50213e0b302d12adda032))
+
+
+
 <a name="4.7.3"></a>
 ## 4.7.3 (2018-08-31)
 
