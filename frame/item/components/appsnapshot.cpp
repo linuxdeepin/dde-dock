@@ -243,10 +243,8 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     // draw image
     const QImage &im = m_snapshot;
 
-    const QRect ir = im.rect();
-    const qreal offset_x = r.x() + r.width() / 2.0 - ir.width() / ratio / 2 + m_snapshotSrcRect.x();
-    const qreal offset_y = r.y() + r.height() / 2.0 - ir.height() / ratio / 2 + m_snapshotSrcRect.y();
-
+    const qreal offset_x = width() / 2.0 - m_snapshotSrcRect.width() / ratio / 2;
+    const qreal offset_y = height() / 2.0 - m_snapshotSrcRect.height() / ratio / 2;
     painter.drawImage(QPointF(offset_x, offset_y), im, m_snapshotSrcRect);
 }
 

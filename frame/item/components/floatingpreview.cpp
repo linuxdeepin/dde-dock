@@ -85,12 +85,11 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
+    const QRectF r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
     const auto ratio = devicePixelRatioF();
 
-    const QRect ir = snapshot.rect();
-    const qreal offset_x = r.x() + r.width() / 2.0 - ir.width() / ratio / 2 + snapshot_geometry.x();
-    const qreal offset_y = r.y() + r.height() / 2.0 - ir.height() / ratio / 2 + snapshot_geometry.y();
+    const qreal offset_x = width() / 2.0 - snapshot_geometry.width() / ratio / 2;
+    const qreal offset_y = height() / 2.0 - snapshot_geometry.height() / ratio / 2;
     const int radius = 4;
 
     // draw background
@@ -98,14 +97,13 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     painter.setBrush(QColor(255, 255, 255, 255 * 0.3));
     painter.drawRoundedRect(r, radius, radius);
 
-    // draw preview image
     painter.drawImage(QPointF(offset_x, offset_y), snapshot, m_tracked->snapshotGeometry());
 
     // bottom black background
-    QRect bgr = r;
+    QRectF bgr = r;
     bgr.setTop(bgr.bottom() - 25);
 
-    QRect bgre = bgr;
+    QRectF bgre = bgr;
     bgre.setTop(bgr.top() - radius);
 
     painter.save();
