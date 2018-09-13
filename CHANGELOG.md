@@ -1,3 +1,8 @@
+[3.2.24.4] 2018-09-13
+*   fix(system/power): lid switch not found
+*   fix(network): correntIPv6DataType not working
+*   fix(keybinding): EnableRecord panic nil pointer dereference
+
 [3.2.24.3] 2018-09-07
 *   feat(dock): menu items excludes AllWindows when use 2D WM
 *   fix(network): agent.cancelVpnAuthDialog panic process is nil
