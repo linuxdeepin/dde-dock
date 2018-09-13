@@ -1,3 +1,13 @@
+<a name="4.7.3.2"></a>
+## 4.7.3.2 (2018-09-13)
+
+
+#### Bug Fixes
+
+*   apps preview position error ([14e1cd49](https://github.com/linuxdeepin/dde-dock/commit/14e1cd49edc990bce1e73a74d5011b19c40882fa))
+
+
+
 <a name="4.7.3.1"></a>
 ## 4.7.3.1 (2018-09-10)
 
