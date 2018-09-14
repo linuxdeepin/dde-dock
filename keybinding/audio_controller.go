@@ -21,6 +21,7 @@ package keybinding
 
 import (
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.audio"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus1"
 )
@@ -31,14 +32,25 @@ const (
 )
 
 type AudioController struct {
-	conn        *dbus.Conn
-	audioDaemon *audio.Audio
+	conn                   *dbus.Conn
+	audioDaemon            *audio.Audio
+	huaweiMicLedWorkaround *huaweiMicLedWorkaround
 }
 
-func NewAudioController(sessionConn *dbus.Conn) *AudioController {
-	return &AudioController{
+func NewAudioController(sessionConn *dbus.Conn,
+	backlightHelper *backlight.Backlight) *AudioController {
+	c := &AudioController{
 		conn:        sessionConn,
 		audioDaemon: audio.NewAudio(sessionConn),
+	}
+	c.initHuaweiMicLedWorkaround(backlightHelper)
+	return c
+}
+
+func (c *AudioController) Destroy() {
+	if c.huaweiMicLedWorkaround != nil {
+		c.huaweiMicLedWorkaround.destroy()
+		c.huaweiMicLedWorkaround = nil
 	}
 }
 

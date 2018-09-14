@@ -215,10 +215,10 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.shortcutManager.AddCustom(m.customShortcutManager)
 
 	sessionConn := m.sessionConn()
-	m.audioController = NewAudioController(sessionConn)
+	m.backlightHelper = backlight.NewBacklight(m.systemConn())
+	m.audioController = NewAudioController(sessionConn, m.backlightHelper)
 	m.mediaPlayerController = NewMediaPlayerController(m.systemSigLoop, sessionConn)
 
-	m.backlightHelper = backlight.NewBacklight(m.systemConn())
 	m.startManager = sessionmanager.NewStartManager(sessionConn)
 	m.keyboard = inputdevices.NewKeyboard(sessionConn)
 	m.keyboard.InitSignalExt(m.sessionSigLoop, true)
@@ -262,6 +262,11 @@ func (m *Manager) destroy() {
 	if m.gsGnomeWM != nil {
 		m.gsGnomeWM.Unref()
 		m.gsGnomeWM = nil
+	}
+
+	if m.audioController != nil {
+		m.audioController.Destroy()
+		m.audioController = nil
 	}
 
 	if m.mediaPlayerController != nil {
