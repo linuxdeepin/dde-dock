@@ -65,7 +65,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     m_pwdDialog->setTextEchoMode(QLineEdit::Password);
     m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Dialog);
     m_pwdDialog->setTextEchoMode(DLineEdit::Password);
-    m_pwdDialog->setIcon(iconPix);
+    m_pwdDialog->setIconPixmap(iconPix);
     m_pwdDialog->addSpacing(10);
     m_pwdDialog->addContent(m_autoConnBox, Qt::AlignLeft);
     m_pwdDialog->setOkButtonText(tr("Connect"));
