@@ -20,12 +20,15 @@
 package shortcuts
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
+	"sync"
 )
 
 type BaseShortcut struct {
+	mu         sync.Mutex
 	Id         string
 	Type       int32
 	Keystrokes []*Keystroke `json:"Accels"`
@@ -33,7 +36,22 @@ type BaseShortcut struct {
 }
 
 func (sb *BaseShortcut) String() string {
-	return fmt.Sprintf("Shortcut{id=%s type=%d name=%q keystrokes=%v}", sb.Id, sb.Type, sb.Name, sb.Keystrokes)
+	sb.mu.Lock()
+	str := fmt.Sprintf("Shortcut{id=%s type=%d name=%q keystrokes=%v}", sb.Id, sb.Type, sb.Name, sb.Keystrokes)
+	sb.mu.Unlock()
+	return str
+}
+
+func (sb *BaseShortcut) Marshal() (string, error) {
+	sb.mu.Lock()
+	defer sb.mu.Unlock()
+
+	bytes, err := json.Marshal(sb)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes), nil
 }
 
 func (sb *BaseShortcut) GetId() string {
@@ -49,11 +67,15 @@ func (sb *BaseShortcut) GetUid() string {
 }
 
 func (sb *BaseShortcut) GetKeystrokes() []*Keystroke {
+	sb.mu.Lock()
+	defer sb.mu.Unlock()
 	return sb.Keystrokes
 }
 
 func (sb *BaseShortcut) setKeystrokes(val []*Keystroke) {
+	sb.mu.Lock()
 	sb.Keystrokes = val
+	sb.mu.Unlock()
 }
 
 func (sb *BaseShortcut) GetType() int32 {
@@ -94,6 +116,7 @@ type Shortcut interface {
 	ReloadKeystrokes() bool
 
 	GetAction() *Action
+	Marshal() (string, error)
 }
 
 // errors:

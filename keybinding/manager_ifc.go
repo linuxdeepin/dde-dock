@@ -306,7 +306,7 @@ func (m *Manager) GetShortcut(id string, type0 int32) (string, *dbus.Error) {
 	if shortcut == nil {
 		return "", dbusutil.ToError(ErrShortcutNotFound{id, type0})
 	}
-	detail, err := doMarshal(shortcut)
+	detail, err := shortcut.Marshal()
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
