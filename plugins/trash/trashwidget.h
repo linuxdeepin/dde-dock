@@ -1,9 +1,14 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,8 +53,9 @@ signals:
     void requestContextMenu() const;
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dropEvent(QDropEvent *e)  override;
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);

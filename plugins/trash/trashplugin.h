@@ -1,9 +1,14 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +31,7 @@
 #include "trashwidget.h"
 
 #include <QLabel>
+#include <QSettings>
 
 class TrashPlugin : public QObject, PluginsItemInterface
 {
@@ -47,7 +53,8 @@ public:
     void refershIcon(const QString &itemKey);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
 
-    int itemSortKey(const QString &itemKey);
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
     void displayModeChanged(const Dock::DisplayMode displayMode);
 
 private:
@@ -56,6 +63,7 @@ private:
 private:
     TrashWidget *m_trashWidget;
     QLabel *m_tipsLabel;
+    QSettings m_settings;
 };
 
 #endif // TRASHPLUGIN_H

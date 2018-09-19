@@ -1,9 +1,14 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +32,7 @@
 #include <QApplication>
 #include <QDragEnterEvent>
 #include <QJsonDocument>
+#include <QApplication>
 
 DWIDGET_USE_NAMESPACE
 
@@ -100,11 +106,43 @@ void TrashWidget::invokeMenuItem(const QString &menuId, const bool checked)
 
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
 {
-    if (e->mimeData()->hasFormat("RequestDock"))
-        return e->accept();
+    if (e->mimeData()->hasFormat("RequestDock")) {
+        // accept prevent the event from being propgated to the dock main panel
+        // which also takes drag event;
+        e->accept();
 
-    if (e->mimeData()->hasFormat("text/uri-list"))
-        return e->accept();
+        if (!e->mimeData()->hasFormat("Removable")) {
+            // show the forbit dropping cursor.
+            e->setDropAction(Qt::IgnoreAction);
+        }
+
+        return;
+    }
+
+    if (!e->mimeData()->hasUrls())
+        e->ignore();
+
+    e->setDropAction(Qt::MoveAction);
+
+    if (e->dropAction() != Qt::MoveAction) {
+        e->ignore();
+    } else {
+        e->accept();
+    }
+}
+
+void TrashWidget::dragMoveEvent(QDragMoveEvent *e)
+{
+    if (!e->mimeData()->hasUrls())
+        return;
+
+    e->setDropAction(Qt::MoveAction);
+
+    if (e->dropAction() != Qt::MoveAction) {
+        e->ignore();
+    } else {
+        e->accept();
+    }
 }
 
 void TrashWidget::dropEvent(QDropEvent *e)
@@ -112,12 +150,19 @@ void TrashWidget::dropEvent(QDropEvent *e)
     if (e->mimeData()->hasFormat("RequestDock"))
         return removeApp(e->mimeData()->data("AppKey"));
 
-    if (e->mimeData()->hasFormat("text/uri-list"))
-    {
-        const QMimeData *mime = e->mimeData();
-        for (auto url : mime->urls())
-            moveToTrash(url);
+    if (!e->mimeData()->hasUrls()) {
+        return e->ignore();
     }
+
+    e->setDropAction(Qt::MoveAction);
+
+    if (e->dropAction() != Qt::MoveAction) {
+        return e->ignore();
+    }
+
+    const QMimeData *mime = e->mimeData();
+    for (auto url : mime->urls())
+        moveToTrash(url);
 }
 
 void TrashWidget::paintEvent(QPaintEvent *e)
@@ -125,7 +170,7 @@ void TrashWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
+    painter.drawPixmap(rect().center() - m_icon.rect().center() / qApp->devicePixelRatio(), m_icon);
 }
 
 void TrashWidget::resizeEvent(QResizeEvent *e)
@@ -156,8 +201,8 @@ void TrashWidget::updateIcon()
 
     const int size = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     QIcon icon = QIcon::fromTheme(iconString);
-    m_icon = icon.pixmap(size, size);
-
+    m_icon = icon.pixmap(size * qApp->devicePixelRatio(), size * qApp->devicePixelRatio());
+    m_icon.setDevicePixelRatio(qApp->devicePixelRatio());
     update();
 }
 
@@ -176,11 +221,5 @@ void TrashWidget::moveToTrash(const QUrl &url)
 {
     const QFileInfo info = url.toLocalFile();
 
-    QProcess::startDetached("gvfs-trash", QStringList() << "-f" << info.absoluteFilePath());
-
-//    QDir trashDir(m_popupApplet->trashDir() + "/files");
-//    if (!trashDir.exists())
-//        trashDir.mkpath(".");
-
-//    QDir().rename(info.absoluteFilePath(), trashDir.absoluteFilePath(info.fileName()));
+    QProcess::startDetached("gio", QStringList() << "trash" << "-f" << info.absoluteFilePath());
 }

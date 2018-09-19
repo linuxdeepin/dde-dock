@@ -1,9 +1,14 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +26,15 @@
 
 #include "trashplugin.h"
 
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
+
 TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent),
       m_trashWidget(new TrashWidget),
-      m_tipsLabel(new QLabel)
+      m_tipsLabel(new QLabel),
+      m_settings("deepin", "dde-dock-trash")
 {
     m_tipsLabel->setObjectName("trash");
     m_tipsLabel->setStyleSheet("color:white;"
@@ -40,8 +50,14 @@ const QString TrashPlugin::pluginName() const
 
 void TrashPlugin::init(PluginProxyInterface *proxyInter)
 {
-    m_proxyInter = proxyInter;
+    // blumia: we are using i10n translation from DFM so...
+    QString applicationName = qApp->applicationName();
+    qApp->setApplicationName("dde-file-manager");
+    qDebug() << qApp->loadTranslator();
+    qApp->setApplicationName(applicationName);
 
+    m_proxyInter = proxyInter;
+//    DFMGlobal::instance()->installTranslator();
     displayModeChanged(displayMode());
 }
 
@@ -78,7 +94,7 @@ const QString TrashPlugin::itemCommand(const QString &itemKey)
     Q_UNUSED(itemKey);
 
 //    return QString();
-    return "gvfs-open trash:///";
+    return "gio open trash:///";
 }
 
 const QString TrashPlugin::itemContextMenu(const QString &itemKey)
@@ -104,10 +120,14 @@ void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
 int TrashPlugin::itemSortKey(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    return m_settings.value(key, -1).toInt();
+}
 
-    // always place at last
-    return -1;
+void TrashPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    m_settings.setValue(key, order);
 }
 
 void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
