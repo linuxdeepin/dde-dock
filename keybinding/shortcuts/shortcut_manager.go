@@ -58,6 +58,7 @@ type ShortcutManager struct {
 	keySymbols        *keysyms.KeySymbols
 
 	recordEnable        bool
+	recordEnableMu      sync.Mutex
 	recordContext       record.Context
 	xRecordEventHandler *XRecordEventHandler
 	eventCb             KeyEventFunc
@@ -126,7 +127,7 @@ func (sm *ShortcutManager) recordEventLoop() {
 			logger.Warning(err)
 			return
 		}
-		if !sm.recordEnable {
+		if !sm.isRecordEnabled() {
 			logger.Debug("record disabled!")
 			continue
 		}
@@ -213,7 +214,16 @@ func (sm *ShortcutManager) initRecord() error {
 }
 
 func (sm *ShortcutManager) EnableRecord(val bool) {
+	sm.recordEnableMu.Lock()
 	sm.recordEnable = val
+	sm.recordEnableMu.Unlock()
+}
+
+func (sm *ShortcutManager) isRecordEnabled() bool {
+	sm.recordEnableMu.Lock()
+	ret := sm.recordEnable
+	sm.recordEnableMu.Unlock()
+	return ret
 }
 
 func (sm *ShortcutManager) NotifyLayoutChanged() {
