@@ -21,16 +21,15 @@ Homepage: http://www.deepin.org/
 Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, deepin-menu
-Recommends: dde-disk-mount-plugin, 
- dde-trash-plugin
+Recommends: dde-disk-mount-plugin
 Conflicts: dde-workspace (<< 2.90.5),
- dde-dock-applets
+ dde-dock-applets, dde-trash-plugin
 Replaces: dde-dock-applets
 Description: deepin desktop-environment - dock module
- Deepin desktop environment 2015 - dock module.
+ Deepin desktop environment - dock module.
 
 Package: dde-dock-dev
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: deepin desktop-environment - dock module development files
- Deepin desktop environment 2015 - dock module development files.
+ Deepin desktop environment - dock module development files.
