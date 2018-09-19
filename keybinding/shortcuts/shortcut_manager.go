@@ -269,9 +269,13 @@ func (sm *ShortcutManager) grabKeystroke(shortcut Shortcut, ks *Keystroke, dummy
 
 	if ok {
 		// conflict
-		logger.Debugf("key %v is grabed by %v", key, conflictKeystroke.Shortcut.GetId())
-		if !sm.EliminateConflictDone {
-			sm.storeConflictingKeystroke(ks)
+		if conflictKeystroke.Shortcut != nil {
+			logger.Debugf("key %v is grabed by %v", key, conflictKeystroke.Shortcut.GetId())
+			if !sm.EliminateConflictDone {
+				sm.storeConflictingKeystroke(ks)
+			}
+		} else {
+			logger.Warningf("key %v is grabed, conflictKeystroke.Shortcut is nil", key)
 		}
 		return
 	}
