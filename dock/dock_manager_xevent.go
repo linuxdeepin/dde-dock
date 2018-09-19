@@ -156,9 +156,6 @@ func (m *Manager) listenWindowXEvent(winInfo *WindowInfo) {
 }
 
 func (m *Manager) handleDestroyNotifyEvent(ev *x.DestroyNotifyEvent) {
-	if ev.Window != ev.Event {
-		return
-	}
 	logger.Debug("DestroyNotifyEvent window:", ev.Window)
 	winInfo := m.getWindowInfo(ev.Window)
 	if winInfo != nil {
