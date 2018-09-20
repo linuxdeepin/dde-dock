@@ -88,7 +88,7 @@ func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
 		return blurFile, nil
 	}
 
-	ib.gen(file)
+	ib.gen(file, blurFile)
 	return "", nil
 }
 
@@ -117,7 +117,7 @@ func getImageBlurFile(src string) string {
 	return filepath.Join(imageBlurDir, md5sum+filepath.Ext(src))
 }
 
-func (ib *ImageBlur) gen(file string) {
+func (ib *ImageBlur) gen(file, blurFile string) {
 	ib.mu.Lock()
 	_, ok := ib.tasks[file]
 	if ok {
@@ -135,10 +135,19 @@ func (ib *ImageBlur) gen(file string) {
 		if len(output) > 0 {
 			logger.Debugf("image-blur-helper output: %s", output)
 		}
+
+		var blurOk bool
 		if err != nil {
 			logger.Warningf("failed to blur image %q: %v", file, err)
+		} else {
+			_, err = os.Stat(blurFile)
+			if err != nil {
+				logger.Warning("failed to stat blurFile:", err)
+			} else {
+				blurOk = true
+			}
 		}
-		ib.emitBlurDone(file, err == nil)
+		ib.emitBlurDone(file, blurOk)
 
 		ib.mu.Lock()
 		delete(ib.tasks, file)
