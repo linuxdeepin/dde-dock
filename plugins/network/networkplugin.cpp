@@ -253,6 +253,10 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 
 void NetworkPlugin::refreshWiredItemVisible()
 {
+    if (pluginIsDisable()) {
+        return;
+    }
+
     bool hasWireless = false;
     QList<WiredItem *> wiredItems;
 
