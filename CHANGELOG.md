@@ -1,3 +1,14 @@
+<a name="4.7.3.3"></a>
+## 4.7.3.3 (2018-09-21)
+
+
+#### Bug Fixes
+
+*   pixmap size of wireless password dialog in hidpi mode ([f73428a4](https://github.com/linuxdeepin/dde-dock/commit/f73428a465a235ba04db62909fa3f5bd10265461))
+* **network:**  wired item visiable when network plugin disabled ([fc42fd94](https://github.com/linuxdeepin/dde-dock/commit/fc42fd949c1be2d41731fd0904cd17329a053341))
+
+
+
 ## 4.7.3.2 (2018-09-13)
 <a name="4.7.2.3"></a>
 ## 4.7.2.3 (2018-09-10)
