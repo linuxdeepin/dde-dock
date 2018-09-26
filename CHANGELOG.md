@@ -1,3 +1,9 @@
+[3.2.24.5] 2018-09-26
+*   feat(accounts): image blur check blurred image file existence
+*   fix(keybinding): ShortcutManager.grabKeystroke panic
+*   fix(keybinding): some data race problems
+*   chore(dock): handle destroy notify event no check ev.Event
+
 [3.2.24.4] 2018-09-13
 *   fix(system/power): lid switch not found
 *   fix(network): correntIPv6DataType not working
