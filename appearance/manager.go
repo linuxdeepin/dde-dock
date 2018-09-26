@@ -72,6 +72,7 @@ const (
 	gsKeyFontMonospace  = "font-monospace"
 	gsKeyFontSize       = "font-size"
 	gsKeyBackgroundURIs = "background-uris"
+	gsKeyOpacity        = "opacity"
 
 	defaultStandardFont   = "Noto Sans"
 	defaultMonospaceFont  = "Noto Mono"
@@ -94,6 +95,7 @@ type Manager struct {
 	Background    gsprop.String
 	StandardFont  gsprop.String
 	MonospaceFont gsprop.String
+	Opacity       gsprop.Double `prop:"access:rw"`
 
 	FontSize gsprop.Double `prop:"access:rw"`
 
@@ -151,6 +153,7 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.MonospaceFont.Bind(m.setting, gsKeyFontMonospace)
 	m.Background.Bind(m.wrapBgSetting, gsKeyBackground)
 	m.FontSize.Bind(m.setting, gsKeyFontSize)
+	m.Opacity.Bind(m.setting, gsKeyOpacity)
 
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
