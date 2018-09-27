@@ -20,6 +20,16 @@
 package network
 
 // Empty functions to make compile success
+func getSetting6LowpanAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSetting6LowpanAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSetting6LowpanValues(data connectionData) (err sectionErrors) {
+	return
+}
+
 func getSettingAdslAvailableKeys(data connectionData) (keys []string) {
 	return
 }
@@ -80,6 +90,16 @@ func checkSettingDcbValues(data connectionData) (err sectionErrors) {
 	return
 }
 
+func getSettingEthtoolAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingEthtoolAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingEthtoolValues(data connectionData) (err sectionErrors) {
+	return
+}
+
 func getSettingGenericAvailableKeys(data connectionData) (keys []string) {
 	return
 }
@@ -127,6 +147,16 @@ func getSettingMacvlanAvailableValues(data connectionData, key string) (values [
 	return
 }
 func checkSettingMacvlanValues(data connectionData) (err sectionErrors) {
+	return
+}
+
+func getSettingMatchAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingMatchAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingMatchValues(data connectionData) (err sectionErrors) {
 	return
 }
 
@@ -187,6 +217,16 @@ func getSettingProxyAvailableValues(data connectionData, key string) (values []k
 	return
 }
 func checkSettingProxyValues(data connectionData) (err sectionErrors) {
+	return
+}
+
+func getSettingSriovAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingSriovAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingSriovValues(data connectionData) (err sectionErrors) {
 	return
 }
 
@@ -257,6 +297,16 @@ func getSettingWimaxAvailableValues(data connectionData, key string) (values []k
 	return
 }
 func checkSettingWimaxValues(data connectionData) (err sectionErrors) {
+	return
+}
+
+func getSettingWpanAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingWpanAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingWpanValues(data connectionData) (err sectionErrors) {
 	return
 }
 
