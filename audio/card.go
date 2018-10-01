@@ -56,9 +56,15 @@ func newCard(card *pulse.Card) *Card {
 
 func (c *Card) update(card *pulse.Card) {
 	c.Id = card.Index
+	propDeviceProductName := card.PropList["device.product.name"]
 	propAlsaCardName := card.PropList["alsa.card_name"]
-	if propAlsaCardName != "" {
+	propDeviceDescription := card.PropList["device.description"]
+	if propDeviceProductName != "" {
+		c.Name = propDeviceProductName
+	} else if propAlsaCardName != "" {
 		c.Name = propAlsaCardName
+	} else if propDeviceDescription != "" {
+		c.Name = propDeviceDescription
 	} else {
 		c.Name = card.Name
 	}
