@@ -27,7 +27,7 @@ using namespace dde::network;
 
 #define WIRED_ITEM      "wired"
 #define WIRELESS_ITEM   "wireless"
-#define STATE_KEY       "enabled"
+#define STATE_KEY       "disabled"
 
 NetworkPlugin::NetworkPlugin(QObject *parent)
     : QObject(parent),
@@ -87,7 +87,7 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 
 void NetworkPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
+    m_settings.setValue(STATE_KEY, !pluginIsDisable());
 
     if (!m_pluginLoaded) {
         loadPlugin();
@@ -99,7 +99,7 @@ void NetworkPlugin::pluginStateSwitched()
 
 bool NetworkPlugin::pluginIsDisable()
 {
-    return !m_settings.value(STATE_KEY, true).toBool();
+    return m_settings.value(STATE_KEY, false).toBool();
 }
 
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
@@ -234,10 +234,10 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             break;
         }
 
-        if (m_settings.value(STATE_KEY, true).toBool()) {
-            m_proxyInter->itemAdded(this, mPath);
-        } else {
+        if (pluginIsDisable()) {
             m_proxyInter->itemRemoved(this, mPath);
+        } else {
+            m_proxyInter->itemAdded(this, mPath);
         }
     }
 

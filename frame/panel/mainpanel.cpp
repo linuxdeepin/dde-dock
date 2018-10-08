@@ -42,6 +42,7 @@ MainPanel::MainPanel(QWidget *parent)
       m_position(Dock::Top),
       m_displayMode(Dock::Fashion),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
+      m_showDesktopItem(new ShowDesktopItem(this)),
       m_itemAdjustTimer(new QTimer(this)),
       m_itemController(DockItemController::instance(this)),
       m_appDragWidget(nullptr)
@@ -83,6 +84,9 @@ MainPanel::MainPanel(QWidget *parent)
         m_itemLayout->addWidget(item);
     }
 
+    m_showDesktopItem->setFixedSize(10, height());
+    m_itemLayout->addWidget(m_showDesktopItem);
+
     setLayout(m_itemLayout);
 }
 
@@ -101,12 +105,12 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     case Position::Top:
     case Position::Bottom:
         m_itemLayout->setDirection(QBoxLayout::LeftToRight);
-        m_itemLayout->setContentsMargins(0, 0, 1, 0);
+        m_showDesktopItem->setFixedSize(10, height());
         break;
     case Position::Left:
     case Position::Right:
         m_itemLayout->setDirection(QBoxLayout::TopToBottom);
-        m_itemLayout->setContentsMargins(0, 0, 0, 1);
+        m_showDesktopItem->setFixedSize(width(), 10);
         break;
     }
 
@@ -120,6 +124,8 @@ void MainPanel::updateDockPosition(const Position dockPosition)
 void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
     m_displayMode = displayMode;
+
+    m_showDesktopItem->setVisible(displayMode == Dock::Efficient);
 
     const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)

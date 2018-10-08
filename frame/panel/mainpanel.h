@@ -25,6 +25,7 @@
 
 #include "controller/dockitemcontroller.h"
 #include "util/docksettings.h"
+#include "item/showdesktopitem.h"
 
 #include <QFrame>
 #include <QTimer>
@@ -90,6 +91,7 @@ private:
     Position m_position;
     DisplayMode m_displayMode;
     QBoxLayout *m_itemLayout;
+    ShowDesktopItem *m_showDesktopItem;
 
     QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
