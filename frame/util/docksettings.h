@@ -27,6 +27,7 @@
 #include "dbus/dbusmenumanager.h"
 #include "dbus/dbusdisplay.h"
 #include "controller/dockitemcontroller.h"
+#include <com_deepin_daemon_appearance.h>
 
 #include <QAction>
 #include <QMenu>
@@ -39,6 +40,7 @@
 DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
+using Appearance = com::deepin::daemon::Appearance;
 
 class WhiteMenu : public QMenu
 {
@@ -74,6 +76,7 @@ public:
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
     inline const QRect frontendWindowRect() const { return m_frontendRect; }
     inline const QSize windowSize() const { return m_mainWindowSize; }
+    inline const quint8 Opacity() const { return m_opacity * 255; }
 
     const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
@@ -88,6 +91,7 @@ signals:
     void windowVisibleChanged() const;
     void windowHideModeChanged() const;
     void windowGeometryChanged() const;
+    void opacityChanged(const quint8 value) const;
 
 public slots:
     void updateGeometry();
@@ -104,6 +108,7 @@ private slots:
     void primaryScreenChanged();
     void resetFrontendGeometry();
     void updateForbidPostions();
+    void onOpacityChanged(const double value);
 
 private:
     DockSettings(QWidget *parent = 0);
@@ -119,6 +124,7 @@ private:
     bool m_autoHide;
     int m_screenRawHeight;
     int m_screenRawWidth;
+    double m_opacity;
     QSet<Position> m_forbidPositions;
     Position m_position;
     HideMode m_hideMode;
@@ -147,6 +153,7 @@ private:
     DBusDisplay *m_displayInter;
     DBusDock *m_dockInter;
     DockItemController *m_itemController;
+    Appearance* m_appearanceInter;
 };
 
 #endif // DOCKSETTINGS_H

@@ -39,26 +39,25 @@ DWIDGET_USE_NAMESPACE
 extern const QPoint rawXPosition(const QPoint &scaledPos);
 
 DockSettings::DockSettings(QWidget *parent)
-    : QObject(parent),
-
-      m_autoHide(true),
-
-      m_fashionModeAct(tr("Fashion Mode"), this),
-      m_efficientModeAct(tr("Efficient Mode"), this),
-      m_topPosAct(tr("Top"), this),
-      m_bottomPosAct(tr("Bottom"), this),
-      m_leftPosAct(tr("Left"), this),
-      m_rightPosAct(tr("Right"), this),
-      m_largeSizeAct(tr("Large"), this),
-      m_mediumSizeAct(tr("Medium"), this),
-      m_smallSizeAct(tr("Small"), this),
-      m_keepShownAct(tr("Keep Shown"), this),
-      m_keepHiddenAct(tr("Keep Hidden"), this),
-      m_smartHideAct(tr("Smart Hide"), this),
-
-      m_displayInter(new DBusDisplay(this)),
-      m_dockInter(new DBusDock(this)),
-      m_itemController(DockItemController::instance(this))
+    : QObject(parent)
+    , m_opacity(0)
+    , m_autoHide(true)
+    , m_fashionModeAct(tr("Fashion Mode"), this)
+    , m_efficientModeAct(tr("Efficient Mode"), this)
+    , m_topPosAct(tr("Top"), this)
+    , m_bottomPosAct(tr("Bottom"), this)
+    , m_leftPosAct(tr("Left"), this)
+    , m_rightPosAct(tr("Right"), this)
+    , m_largeSizeAct(tr("Large"), this)
+    , m_mediumSizeAct(tr("Medium"), this)
+    , m_smallSizeAct(tr("Small"), this)
+    , m_keepShownAct(tr("Keep Shown"), this)
+    , m_keepHiddenAct(tr("Keep Hidden"), this)
+    , m_smartHideAct(tr("Smart Hide"), this)
+    , m_displayInter(new DBusDisplay(this))
+    , m_dockInter(new DBusDock(this))
+    , m_itemController(DockItemController::instance(this))
+    , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
 {
     m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -74,6 +73,8 @@ DockSettings::DockSettings(QWidget *parent)
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
+
+    m_appearanceInter->setSync(false, false);
 
     m_fashionModeAct.setCheckable(true);
     m_efficientModeAct.setCheckable(true);
@@ -142,6 +143,8 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
 
+    connect(m_appearanceInter, &Appearance::OpacityChanged, this, &DockSettings::onOpacityChanged);
+
     DApplication *app = qobject_cast<DApplication*>(qApp);
     if (app) {
         connect(app, &DApplication::iconThemeChanged, this, &DockSettings::gtkIconThemeChanged);
@@ -150,6 +153,7 @@ DockSettings::DockSettings(QWidget *parent)
     calculateWindowConfig();
     updateForbidPostions();
     resetFrontendGeometry();
+    onOpacityChanged(m_appearanceInter->opacity());
 }
 
 DockSettings &DockSettings::Instance()
@@ -494,6 +498,15 @@ void DockSettings::updateForbidPostions()
         forbids << Right;
 
     m_forbidPositions = std::move(forbids);
+}
+
+void DockSettings::onOpacityChanged(const double value)
+{
+    if (m_opacity == value) return;
+
+    m_opacity = value;
+
+    emit opacityChanged(value * 255);
 }
 
 void DockSettings::calculateWindowConfig()

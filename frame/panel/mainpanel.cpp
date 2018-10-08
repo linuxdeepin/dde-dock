@@ -71,6 +71,7 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
+    connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainPanel::setMaskAlpha);
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
@@ -158,9 +159,11 @@ int MainPanel::position() const
 void MainPanel::setEffectEnabled(const bool enabled)
 {
     if (enabled)
-        setMaskColor(QColor(0, 0, 0, 255 * 0.4));
+        setMaskColor(DarkColor);
     else
         setMaskColor(QColor(55, 63, 71));
+
+    setMaskAlpha(DockSettings::Instance().Opacity());
 
     m_itemAdjustTimer->start();
 }
