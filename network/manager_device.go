@@ -23,10 +23,11 @@ import (
 	mmdbus "dbus/org/freedesktop/modemmanager1"
 	nmdbus "dbus/org/freedesktop/networkmanager"
 	"fmt"
-	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/network/nm"
+	"pkg.deepin.io/lib/dbus"
 )
 
 type device struct {
@@ -140,6 +141,10 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			})
 			dev.ClonedAddress = dev.nmDevWired.HwAddress.Get()
 			dev.HwAddress = dev.nmDevWired.PermHwAddress.Get()
+
+			if dev.HwAddress == "" {
+				dev.HwAddress = dev.ClonedAddress
+			}
 		}
 		if nmHasSystemSettingsModifyPermission() {
 			m.ensureWiredConnectionExists(dev.Path, true)
