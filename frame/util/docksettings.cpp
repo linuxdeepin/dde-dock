@@ -40,8 +40,8 @@ extern const QPoint rawXPosition(const QPoint &scaledPos);
 
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
-    , m_opacity(0)
     , m_autoHide(true)
+    , m_opacity(0.4)
     , m_fashionModeAct(tr("Fashion Mode"), this)
     , m_efficientModeAct(tr("Efficient Mode"), this)
     , m_topPosAct(tr("Top"), this)
@@ -128,6 +128,15 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(hideSubMenuAct);
     m_settingsMenu.setTitle("Settings Menu");
 
+    auto onDaemonIsvalid = [=] (bool isValid) {
+        if (isValid) {
+            onOpacityChanged(m_appearanceInter->opacity());
+        }
+        else {
+            m_appearanceInter->startServiceProcess();
+        }
+    };
+
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
@@ -143,6 +152,10 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
 
+    connect(m_appearanceInter, &Appearance::serviceStartFinished, this, [=] {
+        onDaemonIsvalid(m_appearanceInter->isValid());
+    });
+    connect(m_appearanceInter, &Appearance::serviceValidChanged, this, onDaemonIsvalid);
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &DockSettings::onOpacityChanged);
 
     DApplication *app = qobject_cast<DApplication*>(qApp);
@@ -153,7 +166,8 @@ DockSettings::DockSettings(QWidget *parent)
     calculateWindowConfig();
     updateForbidPostions();
     resetFrontendGeometry();
-    onOpacityChanged(m_appearanceInter->opacity());
+
+    onDaemonIsvalid(m_appearanceInter->isValid());
 }
 
 DockSettings &DockSettings::Instance()
