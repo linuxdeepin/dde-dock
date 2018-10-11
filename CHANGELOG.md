@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+[3.2.13.3.1] 2018-10-11
+*   fix(network): device hw address empty
+
 [3.2.13.3] 2018-04-19
 *   fix(session/power): submodule name typo
 *   fix(network): close hotspot no send notification
