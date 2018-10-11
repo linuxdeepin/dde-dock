@@ -424,7 +424,7 @@ void WirelessList::updateIndicatorPos()
 
 void WirelessList::onActiveConnectionChanged()
 {
-    // 在这个方法中需要通过m_device->activeConnName()的信息设置m_activeAP的值
+    // 在这个方法中需要通过m_device->activeApSsid()的信息设置m_activeAP的值
     // m_activeAP的值应该从m_apList中拿到，但在程序第一次启动后，当后端扫描无线网的数据还没有发过来，
     // 这时m_device中的ap list为空，导致本类初始化时调用loadAPList()后m_apList也是空的，
     // 那么也就无法给m_activeAP正确的值，所以在这里使用timer等待一下后端的数据，再执行遍历m_apList给m_activeAP赋值的操作
@@ -435,7 +435,7 @@ void WirelessList::onActiveConnectionChanged()
     }
 
     for (int i = 0; i < m_apList.size(); ++i) {
-        if (m_apList.at(i).ssid() == m_device->activeConnName()) {
+        if (m_apList.at(i).ssid() == m_device->activeApSsid()) {
             m_activeAP = m_apList.at(i);
             m_updateAPTimer->start();
             break;
