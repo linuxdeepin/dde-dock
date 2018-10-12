@@ -1,3 +1,7 @@
+[3.2.24.6] 2018-10-12
+*   fix(network): nmGetDevices nil pointer panic
+*   fix(inputdevices): keyboard default layout name empty
+
 [3.2.24.5] 2018-09-26
 *   feat(accounts): image blur check blurred image file existence
 *   fix(keybinding): ShortcutManager.grabKeystroke panic
