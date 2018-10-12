@@ -146,6 +146,11 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		})
 		dev.ClonedAddress, _ = nmDevWired.HwAddress().Get(0)
 		dev.HwAddress, _ = nmDevWired.PermHwAddress().Get(0)
+
+		if dev.HwAddress == "" {
+			dev.HwAddress = dev.ClonedAddress
+		}
+
 		if nmHasSystemSettingsModifyPermission() {
 			m.ensureWiredConnectionExists(dev.Path, true)
 		}
