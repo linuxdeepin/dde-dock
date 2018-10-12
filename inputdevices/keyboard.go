@@ -133,7 +133,7 @@ func newKeyboard(service *dbusutil.Service) *Keyboard {
 			logger.Warning(err)
 		} else {
 			kbd.PropsMu.Lock()
-			kbd.CurrentLayout = layout
+			kbd.CurrentLayout = fixLayout(layout)
 			kbd.PropsMu.Unlock()
 		}
 
@@ -143,13 +143,28 @@ func newKeyboard(service *dbusutil.Service) *Keyboard {
 			logger.Warning(err)
 		} else {
 			kbd.PropsMu.Lock()
-			kbd.UserLayoutList = layoutList
+			kbd.UserLayoutList = fixLayoutList(layoutList)
 			kbd.PropsMu.Unlock()
 		}
 	}
 
 	kbd.devNumber = getKeyboardNumber()
 	return kbd
+}
+
+func fixLayout(layout string) string {
+	if !strings.Contains(layout, layoutDelim) {
+		return layout + layoutDelim
+	}
+	return layout
+}
+
+func fixLayoutList(layouts []string) []string {
+	result := make([]string, len(layouts))
+	for idx, layout := range layouts {
+		result[idx] = fixLayout(layout)
+	}
+	return result
 }
 
 func (kbd *Keyboard) initUser() {
@@ -177,7 +192,7 @@ func (kbd *Keyboard) initUser() {
 		}
 
 		kbd.PropsMu.Lock()
-		kbd.setPropCurrentLayout(value)
+		kbd.setPropCurrentLayout(fixLayout(value))
 		kbd.PropsMu.Unlock()
 
 		kbd.applyLayout()
@@ -188,7 +203,7 @@ func (kbd *Keyboard) initUser() {
 		}
 
 		kbd.PropsMu.Lock()
-		kbd.setPropUserLayoutList(value)
+		kbd.setPropUserLayoutList(fixLayoutList(value))
 		kbd.PropsMu.Unlock()
 	})
 }
