@@ -24,11 +24,12 @@ import (
 	"strconv"
 	"strings"
 
-	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 // Reset reset all themes and fonts settings to default values
@@ -72,7 +73,7 @@ func (m *Manager) list(ty string) (string, error) {
 	case TypeCursorTheme:
 		return m.doShow(subthemes.ListCursorTheme())
 	case TypeBackground:
-		return m.doShow(background.ListBackground())
+		return m.doShow(m.listBackground())
 	case TypeStandardFont:
 		return m.doShow(fonts.GetFamilyTable().ListStandard())
 	case TypeMonospaceFont:
@@ -102,7 +103,7 @@ func (m *Manager) show(ty string, names []string) (string, error) {
 	case TypeCursorTheme:
 		return m.doShow(subthemes.ListCursorTheme().ListGet(names))
 	case TypeBackground:
-		return m.doShow(background.ListBackground().ListGet(names))
+		return m.doShow(m.listBackground().ListGet(names))
 	case TypeStandardFont, TypeMonospaceFont:
 		return m.doShow(fonts.GetFamilyTable().GetFamilies(names))
 	}
@@ -147,6 +148,7 @@ func (m *Manager) set(ty, value string) error {
 		err = m.doSetBackground(value)
 	case TypeGreeterBackground:
 		err = m.doSetGreeterBackground(value)
+		m.currentGreeterBg = dutils.EncodeURI(value, dutils.SCHEME_FILE)
 	case TypeStandardFont:
 		if m.StandardFont.Get() == value {
 			return nil
@@ -199,7 +201,7 @@ func (m *Manager) delete(ty, name string) error {
 	case TypeCursorTheme:
 		return subthemes.ListCursorTheme().Delete(name)
 	case TypeBackground:
-		return background.ListBackground().Delete(name)
+		return m.listBackground().Delete(name)
 		//case TypeStandardFont:
 		//case TypeMonospaceFont:
 	}

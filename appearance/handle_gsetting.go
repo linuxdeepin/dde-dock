@@ -64,6 +64,7 @@ func (m *Manager) listenGSettingChanged() {
 			err = m.doSetFontSize(size)
 		case gsKeyBackgroundURIs:
 			bgs := m.setting.GetStrv(key)
+			m.currentDesktopBgs = bgs
 			m.setDesktopBackgrounds(bgs)
 		default:
 			return

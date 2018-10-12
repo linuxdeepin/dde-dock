@@ -111,6 +111,9 @@ type Manager struct {
 	watcher    *fsnotify.Watcher
 	endWatcher chan struct{}
 
+	currentDesktopBgs []string
+	currentGreeterBg  string
+
 	wm *wm.Wm
 
 	signals *struct {
@@ -163,6 +166,49 @@ func newManager(service *dbusutil.Service) *Manager {
 	}
 
 	return m
+}
+
+func (m *Manager) initCurrentBgs() {
+	m.currentDesktopBgs = m.setting.GetStrv(gsKeyBackgroundURIs)
+	greeterBg, err := m.userObj.GreeterBackground().Get(0)
+	if err == nil {
+		m.currentGreeterBg = greeterBg
+	} else {
+		logger.Warning(err)
+	}
+}
+
+func (m *Manager) isBgInUse(file string) bool {
+	if file == m.currentGreeterBg {
+		return true
+	}
+
+	for _, bg := range m.currentDesktopBgs {
+		if bg == file {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Manager) listBackground() background.Backgrounds {
+	origin := background.ListBackground()
+	result := make(background.Backgrounds, len(origin))
+
+	for idx, bg := range origin {
+		var deletable bool
+		if bg.Deletable {
+			// custom
+			if !m.isBgInUse(bg.Id) {
+				deletable = true
+			}
+		}
+		result[idx] = &background.Background{
+			Id:        bg.Id,
+			Deletable: deletable,
+		}
+	}
+	return result
 }
 
 func (m *Manager) destroy() {
@@ -308,6 +354,7 @@ func (m *Manager) init() {
 	}
 
 	m.initUserObj(systemConn)
+	m.initCurrentBgs()
 	m.imageBlur = accounts.NewImageBlur(systemConn)
 }
 
