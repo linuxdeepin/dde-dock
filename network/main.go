@@ -57,6 +57,7 @@ func (d *Daemon) Start() error {
 	service := loader.GetService()
 
 	manager = NewManager(service)
+	manager.init()
 
 	managerServerObj, err := service.NewServerObject(dbusPath, manager)
 	if err != nil {
@@ -86,9 +87,7 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	// initialize manager after dbus installed
 	go func() {
-		manager.init()
 		manager.initDBusDaemon()
 		watchNetworkManagerRestart(manager)
 	}()
