@@ -1,3 +1,13 @@
+<a name="4.7.3.4"></a>
+## 4.7.3.4 (2018-10-12)
+
+
+#### Bug Fixes
+
+*   query active info when hotspot enabled ([4b557ae9](https://github.com/linuxdeepin/dde-dock/commit/4b557ae9a2d4e2b09dae4c655cb5b435eab3e191))
+
+
+
 <a name="4.7.3.3"></a>
 ## 4.7.3.3 (2018-09-21)
 
