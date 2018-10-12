@@ -50,7 +50,9 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeApInfoChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_refershTimer, &QTimer::timeout, [=] {
-        if (m_device->status() == NetworkDevice::Activated && static_cast<WirelessDevice *>(m_device)->activeApInfo().isEmpty()) {
+        WirelessDevice *dev = static_cast<WirelessDevice *>(m_device);
+        // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
+        if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled()) {
             Q_EMIT queryActiveConnInfo();
             return;
         }
