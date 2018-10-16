@@ -23,6 +23,7 @@
 
 #include <xcb/xproto.h>
 #include <QMouseEvent>
+#include <QDebug>
 
 AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f):
     QWidget(parent, f)
@@ -33,6 +34,11 @@ AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f):
 AbstractTrayWidget::~AbstractTrayWidget()
 {
 
+}
+
+void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
+{
+    event->accept();
 }
 
 void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
@@ -58,4 +64,9 @@ void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
     }
 
     sendClick(buttonIndex, globalPos.x(), globalPos.y());
+
+    // left mouse button clicked
+    if (buttonIndex == XCB_BUTTON_INDEX_1) {
+        Q_EMIT clicked();
+    }
 }

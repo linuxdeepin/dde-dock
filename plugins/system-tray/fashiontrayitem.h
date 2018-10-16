@@ -22,8 +22,14 @@
 #ifndef FASHIONTRAYITEM_H
 #define FASHIONTRAYITEM_H
 
+#include "constants.h"
+#include "fashiontraywidgetwrapper.h"
+#include "fashiontraycontrolwidget.h"
+
 #include <QWidget>
 #include <QPointer>
+#include <QBoxLayout>
+#include <QLabel>
 
 #include <abstracttraywidget.h>
 
@@ -32,30 +38,44 @@ class FashionTrayItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit FashionTrayItem(QWidget *parent = 0);
+    explicit FashionTrayItem(Dock::Position pos, QWidget *parent = 0);
 
-    AbstractTrayWidget *activeTray() const;
+    void setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList);
+    void trayWidgetAdded(AbstractTrayWidget *trayWidget);
+    void trayWidgetRemoved(AbstractTrayWidget *trayWidget);
+    void clearTrayWidgets();
 
-    void setMouseEnable(const bool enable);
+    void setDockPostion(Dock::Position pos);
 
 public slots:
-    void setActiveTray(AbstractTrayWidget *tray);
+    void onTrayListExpandChanged(const bool expand);
+
+protected:
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    void resizeEvent(QResizeEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize wantedTotalSize() const;
 
-    const QPixmap loadSvg(const QString &fileName, const int size) const;
+private Q_SLOTS:
+    void onTrayAttentionChanged(const bool attention);
+    void setCurrentAttentionTray(FashionTrayWidgetWrapper *attentionWrapper);
+    void requestResize();
+    void moveOutAttionTray();
+    void moveInAttionTray();
+    void switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper);
 
 private:
-    bool m_enableMouseEvent;
+    QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> m_trayWidgetWrapperMap;
+    QBoxLayout *m_mainBoxLayout;
+    QBoxLayout *m_trayBoxLayout;
+    QLabel *m_leftSpliter;
+    QLabel *m_rightSpliter;
+    FashionTrayControlWidget *m_controlWidget;
+    FashionTrayWidgetWrapper *m_currentAttentionTray;
 
-    QPointer<AbstractTrayWidget> m_activeTray;
-
-    QPixmap m_backgroundPixmap;
-    QPoint m_pressPoint;
+    Dock::Position m_dockPosistion;
 };
 
 #endif // FASHIONTRAYITEM_H

@@ -50,6 +50,7 @@ signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
+    void fashionSystemTraySizeChanged(const QSize &systemTraySize) const;
 
 private slots:
     void startLoader();

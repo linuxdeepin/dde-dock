@@ -71,6 +71,7 @@ private:
     DBusMenuImporter *m_dbusMenuImporter;
 
     QMenu *m_menu;
+    QTimer *m_updateTimer;
 
     QPixmap m_pixmap;
     QPixmap m_overlayPixmap;

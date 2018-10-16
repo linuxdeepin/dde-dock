@@ -35,7 +35,8 @@ const QStringList ItemStatusList {"ApplicationStatus" , "Communications" , "Syst
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     : AbstractTrayWidget(parent),
         m_dbusMenuImporter(nullptr),
-        m_menu(nullptr)
+        m_menu(nullptr),
+        m_updateTimer(new QTimer(this))
 {
     if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
         return;
@@ -55,7 +56,11 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     m_dbusMenuImporter = new DBusMenuImporter(service, menuPath, SYNCHRONOUS, this);
     m_menu = m_dbusMenuImporter->menu();
 
-    connect(m_sniInter, &StatusNotifierItem::NewIcon, this, &SNITrayWidget::refreshIcon);
+    m_updateTimer->setInterval(100);
+    m_updateTimer->setSingleShot(true);
+
+    connect(m_updateTimer, &QTimer::timeout, this, &SNITrayWidget::refreshIcon);
+    connect(m_sniInter, &StatusNotifierItem::NewIcon, m_updateTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_sniInter, &StatusNotifierItem::NewOverlayIcon, this, &SNITrayWidget::refreshOverlayIcon);
     connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, this, &SNITrayWidget::refreshAttentionIcon);
 
@@ -72,7 +77,7 @@ void SNITrayWidget::setActive(const bool active)
 
 void SNITrayWidget::updateIcon()
 {
-    update();
+    m_updateTimer->start();
 }
 
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)

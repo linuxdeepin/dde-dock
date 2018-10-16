@@ -41,6 +41,8 @@ public:
     bool isInContainer() const;
     void setInContainer(const bool container);
 
+    QString pluginName() const;
+
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
 
@@ -50,11 +52,14 @@ public:
 public slots:
     void refershIcon() override;
 
+protected:
+    QWidget *centralWidget();
+    bool eventFilter(QObject *o, QEvent *e) override;
+
 private:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
-    bool eventFilter(QObject *o, QEvent *e) override;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
     void showPopupWindow(QWidget * const content, const bool model = false) override;
@@ -68,6 +73,7 @@ private:
 private:
     PluginsItemInterface * const m_pluginInter;
     QWidget *m_centralWidget;
+
     const QString m_itemKey;
     bool m_dragging;
 

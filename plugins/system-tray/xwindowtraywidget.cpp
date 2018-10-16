@@ -127,16 +127,6 @@ void XWindowTrayWidget::paintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void XWindowTrayWidget::mousePressEvent(QMouseEvent *e)
-{
-    e->accept();
-    const QPoint point(e->pos() - rect().center());
-    if (point.manhattanLength() > 24)
-        e->ignore();
-
-    QWidget::mousePressEvent(e);
-}
-
 void XWindowTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
     QWidget::mouseMoveEvent(e);
@@ -270,8 +260,8 @@ void XWindowTrayWidget::sendHoverEvent()
 
 void XWindowTrayWidget::updateIcon()
 {
-    if (!isVisible() && !m_active)
-        return;
+//    if (!isVisible() && !m_active)
+//        return;
 
     m_updateTimer->start();
 }

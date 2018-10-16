@@ -49,6 +49,7 @@ public:
     const QString pluginName() const Q_DECL_OVERRIDE;
     void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
     void displayModeChanged(const Dock::DisplayMode mode) Q_DECL_OVERRIDE;
+    void positionChanged(const Dock::Position position) Q_DECL_OVERRIDE;
 
     QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;

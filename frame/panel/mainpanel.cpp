@@ -264,7 +264,8 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         RequestDockItem = nullptr;
     }
 
-    if (DraggingItem && DraggingItem->itemType() != DockItem::Plugins)
+    DockItem::ItemType type = DraggingItem->itemType();
+    if (DraggingItem && type != DockItem::Plugins && type != DockItem::SystemTrayPlugin)
         DraggingItem->hide();
 }
 
@@ -360,6 +361,7 @@ void MainPanel::adjustItemSize()
     int totalWidth = 0;
     int totalHeight = 0;
     const auto &itemList = m_itemController->itemList();
+    const QSize &fashionSystemTraySize = DockSettings::Instance().fashionSystemTraySize();
     for (auto item : itemList)
     {
         const auto itemType = item->itemType();
@@ -382,12 +384,27 @@ void MainPanel::adjustItemSize()
             totalHeight += itemSize.height();
             break;
         case DockItem::Plugins:
-            if (m_displayMode == Fashion)
-            {
-                item->setFixedSize(itemSize);
-                ++totalAppItemCount;
-                totalWidth += itemSize.width();
-                totalHeight += itemSize.height();
+        case DockItem::SystemTrayPlugin:
+            if (m_displayMode == Fashion) {
+                // 特殊处理时尚模式下的托盘插件
+                if (item->itemType() == DockItem::SystemTrayPlugin) {
+                    if (m_position == Dock::Top || m_position == Dock::Bottom) {
+                        item->setFixedWidth(fashionSystemTraySize.width());
+                        item->setFixedHeight(itemSize.height());
+                        totalWidth += fashionSystemTraySize.width();
+                        totalHeight += itemSize.height();
+                    } else {
+                        item->setFixedWidth(itemSize.width());
+                        item->setFixedHeight(fashionSystemTraySize.height());
+                        totalWidth += itemSize.width();
+                        totalHeight += fashionSystemTraySize.height();
+                    }
+                } else {
+                    item->setFixedSize(itemSize);
+                    totalWidth += itemSize.width();
+                    totalHeight += itemSize.height();
+                    ++totalAppItemCount;
+                }
             }
             else
             {
@@ -472,6 +489,9 @@ void MainPanel::adjustItemSize()
             if (m_itemController->itemIsInContainer(item))
                 continue;
         }
+        if (itemType == DockItem::SystemTrayPlugin) {
+            continue;
+        }
 
         switch (m_position)
         {
@@ -546,7 +566,8 @@ void MainPanel::itemDragStarted()
 {
     DraggingItem = qobject_cast<DockItem *>(sender());
 
-    if (DraggingItem->itemType() == DockItem::App)
+    DockItem::ItemType draggingTyep = DraggingItem->itemType();
+    if (draggingTyep == DockItem::App)
     {
         AppItem *appItem = qobject_cast<AppItem *>(DraggingItem);
         m_appDragWidget = appItem->appDragWidget();
@@ -554,7 +575,7 @@ void MainPanel::itemDragStarted()
         static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
     }
 
-    if (DraggingItem->itemType() == DockItem::Plugins)
+    if (draggingTyep == DockItem::Plugins || draggingTyep == DockItem::SystemTrayPlugin)
     {
         if (static_cast<PluginsItem *>(DraggingItem)->allowContainer())
         {
@@ -590,7 +611,9 @@ void MainPanel::itemDropped(QObject *destnation)
     const bool itemIsInContainer = m_itemController->itemIsInContainer(src);
 
     // drag from container
-    if (itemIsInContainer && src->itemType() == DockItem::Plugins && destnation == this)
+    if (itemIsInContainer
+            && (src->itemType() == DockItem::Plugins || src->itemType() == DockItem::SystemTrayPlugin)
+            && destnation == this)
         m_itemController->itemDragOutFromContainer(src);
 
     // drop to container

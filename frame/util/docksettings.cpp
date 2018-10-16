@@ -42,6 +42,7 @@ DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_autoHide(true)
     , m_opacity(0.4)
+    , m_fashionSystemTraySize(QSize(0, 0))
     , m_fashionModeAct(tr("Fashion Mode"), this)
     , m_efficientModeAct(tr("Efficient Mode"), this)
     , m_topPosAct(tr("Top"), this)
@@ -147,6 +148,7 @@ DockSettings::DockSettings(QWidget *parent)
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
+    connect(m_itemController, &DockItemController::fashionSystemTraySizeChanged, this, &DockSettings::onFashionSystemTraySizeChanged, Qt::QueuedConnection);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
@@ -523,6 +525,21 @@ void DockSettings::onOpacityChanged(const double value)
     emit opacityChanged(value * 255);
 }
 
+void DockSettings::onFashionSystemTraySizeChanged(const QSize &systemTraySize)
+{
+    if (m_displayMode == Dock::Efficient)
+        return;
+
+    if (m_fashionSystemTraySize == systemTraySize)
+        return;
+
+    m_fashionSystemTraySize = systemTraySize;
+
+    calculateWindowConfig();
+
+    emit windowGeometryChanged();
+}
+
 void DockSettings::calculateWindowConfig()
 {
     const auto ratio = qApp->devicePixelRatio();
@@ -567,8 +584,8 @@ void DockSettings::calculateWindowConfig()
             }
         }
 
-        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2;
-        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2;
+        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionSystemTraySize.width();
+        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionSystemTraySize.height();
         const int calcWidth = qMin(m_primaryRect.width() - FASHION_MODE_PADDING * 2, perfectWidth);
         const int calcHeight = qMin(m_primaryRect.height() - FASHION_MODE_PADDING * 2, perfectHeight);
         switch (m_position)

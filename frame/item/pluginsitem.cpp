@@ -100,6 +100,11 @@ void PluginsItem::setInContainer(const bool container)
     m_pluginInter->setItemIsInContainer(m_itemKey, container);
 }
 
+QString PluginsItem::pluginName() const
+{
+    return m_pluginInter->pluginName();
+}
+
 QSize PluginsItem::sizeHint() const
 {
     return m_centralWidget->sizeHint();
@@ -108,6 +113,11 @@ QSize PluginsItem::sizeHint() const
 void PluginsItem::refershIcon()
 {
     m_pluginInter->refershIcon(m_itemKey);
+}
+
+QWidget *PluginsItem::centralWidget()
+{
+    return m_centralWidget;
 }
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)

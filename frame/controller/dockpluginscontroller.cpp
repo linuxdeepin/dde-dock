@@ -23,6 +23,7 @@
 #include "pluginsiteminterface.h"
 #include "dockitemcontroller.h"
 #include "dockpluginloader.h"
+#include "item/systemtraypluginitem.h"
 
 #include <QDebug>
 #include <QDir>
@@ -44,7 +45,15 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
         if (m_pluginList[itemInter].contains(itemKey))
             return;
 
-    PluginsItem *item = new PluginsItem(itemInter, itemKey);
+    PluginsItem *item = nullptr;
+    if (itemInter->pluginName() == "system-tray") {
+        item = new SystemTrayPluginItem(itemInter, itemKey);
+        connect(static_cast<SystemTrayPluginItem *>(item), &SystemTrayPluginItem::fashionSystemTraySizeChanged,
+                this, &DockPluginsController::fashionSystemTraySizeChanged, Qt::UniqueConnection);
+    } else {
+        item = new PluginsItem(itemInter, itemKey);
+    }
+
     item->setVisible(false);
 
     m_pluginList[itemInter][itemKey] = item;

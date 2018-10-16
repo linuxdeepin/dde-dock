@@ -38,8 +38,10 @@ public:
 
 Q_SIGNALS:
     void iconChanged();
+    void clicked();
 
 protected:
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 };
 

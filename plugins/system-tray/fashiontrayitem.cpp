@@ -21,142 +21,322 @@
 
 #include "fashiontrayitem.h"
 
-#include <QPainter>
 #include <QDebug>
-#include <QMouseEvent>
-#include <QPixmap>
-#include <QSvgRenderer>
-#include <QApplication>
 
-#include <cmath>
+#define SpliterSize 2
+#define TraySpace 10
+#define TrayWidgetWidth 26
+#define TrayWidgetHeight 26
 
-#include <xcb/xproto.h>
-
-#define DRAG_THRESHOLD  10
-
-const double pi = std::acos(-1);
-
-FashionTrayItem::FashionTrayItem(QWidget *parent)
+FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     : QWidget(parent),
-      m_enableMouseEvent(false),
-      m_activeTray(nullptr)
+      m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this)),
+      m_trayBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this)),
+      m_leftSpliter(new QLabel(this)),
+      m_rightSpliter(new QLabel(this)),
+      m_controlWidget(new FashionTrayControlWidget(m_dockPosistion, this)),
+      m_currentAttentionTray(nullptr)
 {
+    m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
+    m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
 
+    m_controlWidget->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
+
+    m_mainBoxLayout->setMargin(0);
+    m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainBoxLayout->setSpacing(TraySpace);
+
+    m_trayBoxLayout->setMargin(0);
+    m_trayBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_trayBoxLayout->setSpacing(TraySpace);
+
+    m_mainBoxLayout->addWidget(m_leftSpliter);
+    m_mainBoxLayout->addLayout(m_trayBoxLayout);
+    m_mainBoxLayout->addWidget(m_controlWidget);
+    m_mainBoxLayout->addWidget(m_rightSpliter);
+
+    m_mainBoxLayout->setAlignment(Qt::AlignCenter);
+    m_trayBoxLayout->setAlignment(Qt::AlignCenter);
+    m_mainBoxLayout->setAlignment(m_leftSpliter, Qt::AlignCenter);
+    m_mainBoxLayout->setAlignment(m_controlWidget, Qt::AlignCenter);
+    m_mainBoxLayout->setAlignment(m_rightSpliter, Qt::AlignCenter);
+
+    setLayout(m_mainBoxLayout);
+
+    setDockPostion(pos);
+    onTrayListExpandChanged(m_controlWidget->expanded());
+
+    connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onTrayListExpandChanged);
 }
 
-AbstractTrayWidget *FashionTrayItem::activeTray() const
+void FashionTrayItem::setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList)
 {
-    return m_activeTray;
-}
-
-void FashionTrayItem::setMouseEnable(const bool enable)
-{
-    m_enableMouseEvent = enable;
-}
-
-void FashionTrayItem::setActiveTray(AbstractTrayWidget *tray)
-{
-    if (!m_activeTray.isNull())
-    {
-        m_activeTray->setActive(false);
-        disconnect(m_activeTray, &AbstractTrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
-    }
-
-    if (tray)
-    {
-        tray->setActive(true);
-        connect(tray, &AbstractTrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
-    }
-
-    m_activeTray = tray;
-    update();
-}
-
-void FashionTrayItem::resizeEvent(QResizeEvent *e)
-{
-    // update icon size
-    const auto ratio = qApp->devicePixelRatio();
-    const QSize s = e->size() * ratio;
-    m_backgroundPixmap = loadSvg(":/icons/resources/trayicon.svg", 0.8 * std::min(s.width(), s.height()));
-    m_backgroundPixmap.setDevicePixelRatio(ratio);
-
-    QWidget::resizeEvent(e);
-}
-
-void FashionTrayItem::paintEvent(QPaintEvent *e)
-{
-    Q_UNUSED(e);
-
-    const QRectF r = rect();
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    // draw blue circle
-    const auto ratio = qApp->devicePixelRatio();
-    const int x = r.center().x() - m_backgroundPixmap.rect().center().x() / ratio;
-    const int y = r.center().y() - m_backgroundPixmap.rect().center().y() / ratio;
-    painter.drawPixmap(x, y, m_backgroundPixmap);
-
-    // draw active icon
-    if (m_activeTray)
-    {
-        const QImage &image = m_activeTray->trayImage();
-        const auto ratio = image.devicePixelRatioF();
-
-        const double x = double(r.center().x()) - double(image.rect().width()) / ratio / 2.0;
-        const double y = double(r.center().y()) - double(image.rect().height()) / ratio / 2.0;
-        painter.drawImage(std::round(x), std::round(y), image);
+    for (auto widget : trayWidgetList) {
+        trayWidgetAdded(widget);
     }
 }
 
-void FashionTrayItem::mousePressEvent(QMouseEvent *e)
+void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
 {
-    QWidget::mousePressEvent(e);
-
-    m_pressPoint = e->pos();
-}
-
-void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
-{
-    const QPoint dis = e->pos() - rect().center();
-    if (!m_enableMouseEvent || dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
-        return QWidget::mouseReleaseEvent(e);
-
-    const QPoint point = e->pos() - m_pressPoint;
-    if (point.manhattanLength() > DRAG_THRESHOLD)
+    if (m_trayWidgetWrapperMap.keys().contains(trayWidget)) {
         return;
-
-    if (!m_activeTray)
-        return;
-
-    QPoint globalPos = QCursor::pos();
-    uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
-
-    switch (e->button()) {
-    case Qt:: MiddleButton:
-        buttonIndex = XCB_BUTTON_INDEX_2;
-        break;
-    case Qt::RightButton:
-        buttonIndex = XCB_BUTTON_INDEX_3;
-        break;
-    default:
-        break;
     }
 
-    m_activeTray->sendClick(buttonIndex, globalPos.x(), globalPos.y());
+    FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(trayWidget);
+    wrapper->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
+
+    m_trayWidgetWrapperMap.insert(trayWidget, wrapper);
+    m_trayBoxLayout->addWidget(wrapper);
+    wrapper->setVisible(m_controlWidget->expanded());
+
+    if (wrapper->attention()) {
+        setCurrentAttentionTray(wrapper);
+    }
+
+    connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &FashionTrayItem::onTrayAttentionChanged, Qt::UniqueConnection);
+
+    requestResize();
 }
 
-const QPixmap FashionTrayItem::loadSvg(const QString &fileName, const int size) const
+void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 {
-    QPixmap pixmap(size, size);
-    QSvgRenderer renderer(fileName);
-    pixmap.fill(Qt::transparent);
+    auto it = m_trayWidgetWrapperMap.constBegin();
 
-    QPainter painter;
-    painter.begin(&pixmap);
-    renderer.render(&painter);
-    painter.end();
+    for (; it != m_trayWidgetWrapperMap.constEnd(); ++it) {
+        if (it.key() == trayWidget) {
+            // removing the attention tray
+            if (m_currentAttentionTray == it.value()) {
+                if (m_controlWidget->expanded()) {
+                    m_trayBoxLayout->removeWidget(m_currentAttentionTray);
+                } else {
+                    m_mainBoxLayout->removeWidget(m_currentAttentionTray);
+                }
+                m_currentAttentionTray = nullptr;
+            } else {
+                m_trayBoxLayout->removeWidget(it.value());
+            }
+            it.value()->deleteLater();
+            m_trayWidgetWrapperMap.remove(it.key());
+            break;
+        }
+    }
 
-    return pixmap;
+    if (it == m_trayWidgetWrapperMap.constEnd()) {
+        qDebug() << "can not find the tray widget in fashion tray list:" << trayWidget;
+        return;
+    }
+
+    requestResize();
+}
+
+void FashionTrayItem::clearTrayWidgets()
+{
+    if (m_currentAttentionTray) {
+        m_mainBoxLayout->removeWidget(m_currentAttentionTray);
+        m_currentAttentionTray = nullptr;
+    }
+
+    for (auto wrapper : m_trayWidgetWrapperMap.values()) {
+        m_trayBoxLayout->removeWidget(wrapper);
+        wrapper->deleteLater();
+    }
+
+    m_trayWidgetWrapperMap.clear();
+
+    requestResize();
+}
+
+void FashionTrayItem::setDockPostion(Dock::Position pos)
+{
+    m_dockPosistion = pos;
+
+    m_controlWidget->setDockPostion(m_dockPosistion);
+
+    if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
+        m_leftSpliter->setFixedSize(SpliterSize, height());
+        m_rightSpliter->setFixedSize(SpliterSize, height());
+        m_mainBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);
+        m_trayBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);
+    } else{
+        m_leftSpliter->setFixedSize(width(), SpliterSize);
+        m_rightSpliter->setFixedSize(width(), SpliterSize);
+        m_mainBoxLayout->setDirection(QBoxLayout::Direction::TopToBottom);
+        m_trayBoxLayout->setDirection(QBoxLayout::Direction::TopToBottom);
+    }
+
+    requestResize();
+}
+
+void FashionTrayItem::onTrayListExpandChanged(const bool expand)
+{
+    if (m_currentAttentionTray) {
+        if (expand) {
+            m_mainBoxLayout->removeWidget(m_currentAttentionTray);
+            m_trayBoxLayout->addWidget(m_currentAttentionTray);
+        } else {
+            m_trayBoxLayout->removeWidget(m_currentAttentionTray);
+            m_mainBoxLayout->insertWidget(m_mainBoxLayout->indexOf(m_controlWidget) + 1, m_currentAttentionTray);
+        }
+    }
+
+    m_mainBoxLayout->setAlignment(m_currentAttentionTray, Qt::AlignCenter);
+
+    for (auto i = m_trayWidgetWrapperMap.begin(); i != m_trayWidgetWrapperMap.end(); ++i) {
+        if (i.value() == m_currentAttentionTray) {
+            continue;
+        }
+        i.value()->setVisible(expand);
+    }
+
+    requestResize();
+}
+
+void FashionTrayItem::showEvent(QShowEvent *event)
+{
+    requestResize();
+
+    QWidget::showEvent(event);
+}
+
+void FashionTrayItem::hideEvent(QHideEvent *event)
+{
+    requestResize();
+
+    QWidget::hideEvent(event);
+}
+
+QSize FashionTrayItem::sizeHint() const
+{
+    return wantedTotalSize();
+}
+
+QSize FashionTrayItem::wantedTotalSize() const
+{
+    QSize size;
+
+    if (m_controlWidget->expanded()) {
+        if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
+            size.setWidth(m_trayWidgetWrapperMap.size() * TrayWidgetWidth // 所有插件
+                          + TrayWidgetWidth // 控制按钮
+                          + SpliterSize * 2 // 两个分隔条
+                          + 3 * TraySpace // MainBoxLayout所有space
+                          + (m_trayWidgetWrapperMap.size() - 1) * TraySpace); // TrayBoxLayout所有space
+            size.setHeight(height());
+        } else {
+            size.setWidth(width());
+            size.setHeight(m_trayWidgetWrapperMap.size() * TrayWidgetHeight // 所有插件
+                          + TrayWidgetHeight // 控制按钮
+                          + SpliterSize * 2 // 两个分隔条
+                          + 3 * TraySpace // MainBoxLayout所有space
+                          + (m_trayWidgetWrapperMap.size() - 1) * TraySpace); // TrayBoxLayout所有space
+        }
+    } else {
+        if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
+            size.setWidth(TrayWidgetWidth // 控制按钮
+                          + (m_currentAttentionTray ? TrayWidgetWidth : 0) // 活动状态的tray
+                          + SpliterSize * 2 // 两个分隔条
+                          + 3 * TraySpace); // MainBoxLayout所有space
+            size.setHeight(height());
+        } else {
+            size.setWidth(width());
+            size.setHeight(TrayWidgetHeight // 控制按钮
+                          + (m_currentAttentionTray ? TrayWidgetHeight : 0) // 活动状态的tray
+                          + SpliterSize * 2 // 两个分隔条
+                          + 3 * TraySpace); // MainBoxLayout所有space
+        }
+    }
+
+    return size;
+}
+
+void FashionTrayItem::onTrayAttentionChanged(const bool attention)
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    Q_ASSERT(wrapper);
+
+    if (attention) {
+        setCurrentAttentionTray(wrapper);
+    } else {
+        if (m_currentAttentionTray != wrapper) {
+            return;
+        }
+
+        if (m_controlWidget->expanded()) {
+            m_currentAttentionTray = nullptr;
+        } else {
+            moveInAttionTray();
+            m_currentAttentionTray = nullptr;
+        }
+    }
+}
+
+void FashionTrayItem::setCurrentAttentionTray(FashionTrayWidgetWrapper *attentionWrapper)
+{
+    if (!attentionWrapper) {
+        return;
+    }
+
+    if (m_controlWidget->expanded()) {
+        m_currentAttentionTray = attentionWrapper;
+    } else {
+        if (m_currentAttentionTray == attentionWrapper) {
+            return;
+        }
+        moveInAttionTray();
+        bool sizeChanged = !m_currentAttentionTray;
+        m_currentAttentionTray = attentionWrapper;
+        moveOutAttionTray();
+        if (sizeChanged) {
+            requestResize();
+        }
+    }
+
+    m_mainBoxLayout->setAlignment(m_currentAttentionTray, Qt::AlignCenter);
+}
+
+void FashionTrayItem::requestResize()
+{
+    // reset property "FashionSystemTraySize" to notify dock resize
+    // DockPluginsController will watch this property
+
+    setProperty("FashionSystemTraySize", isVisible() ? wantedTotalSize() : QSize(0, 0));
+}
+
+void FashionTrayItem::moveOutAttionTray()
+{
+    if (!m_currentAttentionTray) {
+        return;
+    }
+
+    m_trayBoxLayout->removeWidget(m_currentAttentionTray);
+    m_mainBoxLayout->insertWidget(m_mainBoxLayout->indexOf(m_rightSpliter), m_currentAttentionTray);
+    m_currentAttentionTray->setVisible(true);
+}
+
+void FashionTrayItem::moveInAttionTray()
+{
+    if (!m_currentAttentionTray) {
+        return;
+    }
+
+    m_mainBoxLayout->removeWidget(m_currentAttentionTray);
+    m_trayBoxLayout->addWidget(m_currentAttentionTray);
+    m_currentAttentionTray->setVisible(m_controlWidget->expanded());
+}
+
+void FashionTrayItem::switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper)
+{
+    if (!m_currentAttentionTray || !attentionWrapper) {
+        return;
+    }
+
+    m_mainBoxLayout->replaceWidget(m_currentAttentionTray, attentionWrapper);
+    m_trayBoxLayout->removeWidget(attentionWrapper);
+    m_trayBoxLayout->addWidget(m_currentAttentionTray);
+
+    attentionWrapper->setVisible(true);
+    m_currentAttentionTray->setVisible(m_controlWidget->expanded());
+
+    m_currentAttentionTray = attentionWrapper;
 }
