@@ -1,3 +1,6 @@
+[3.2.24.7] 2018-10-16
+*   feat(appearance): do not allow to delete current backgrounds
+
 [3.2.24.6] 2018-10-12
 *   fix(network): nmGetDevices nil pointer panic
 *   fix(inputdevices): keyboard default layout name empty
