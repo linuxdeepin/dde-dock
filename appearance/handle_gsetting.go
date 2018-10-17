@@ -21,6 +21,7 @@ package appearance
 
 import (
 	"fmt"
+	"strings"
 
 	"pkg.deepin.io/lib/gsettings"
 )
@@ -63,9 +64,11 @@ func (m *Manager) listenGSettingChanged() {
 			value = fmt.Sprint(size)
 			err = m.doSetFontSize(size)
 		case gsKeyBackgroundURIs:
+			ty = TypeBackground
 			bgs := m.setting.GetStrv(key)
 			m.currentDesktopBgs = bgs
 			m.setDesktopBackgrounds(bgs)
+			value = strings.Join(bgs, ";")
 		default:
 			return
 		}
