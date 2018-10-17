@@ -23,6 +23,7 @@ import (
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/lib/log"
+	libnotify "pkg.deepin.io/lib/notify"
 )
 
 var (
@@ -49,6 +50,8 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() error {
+	libnotify.Init("dde-session-daemon")
+
 	if manager != nil {
 		return nil
 	}
