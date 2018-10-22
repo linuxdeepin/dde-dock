@@ -46,23 +46,19 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
     painter.setOpacity(0.5);
 
+    QColor color;
     if (m_expanded) {
-        painter.setPen(QColor::fromRgb(40, 40, 40));
-        painter.setBrush(QColor::fromRgb(40, 40, 40));
+        color = QColor::fromRgb(40, 40, 40);
         if (m_hover) {
-            painter.setPen(QColor::fromRgb(60, 60, 60));
-            painter.setBrush(QColor::fromRgb(60, 60, 60));
+            color = QColor::fromRgb(60, 60, 60);
         }
         if (m_pressed) {
-            painter.setPen(QColor::fromRgb(20, 20, 20));
-            painter.setBrush(QColor::fromRgb(20, 20, 20));
+            color = QColor::fromRgb(20, 20, 20);
         }
     } else {
-        painter.setPen(QColor::fromRgb(255, 255, 255));
-        painter.setBrush(QColor::fromRgb(255, 255, 255));
+        color = QColor::fromRgb(255, 255, 255);
         if (m_hover) {
             painter.setOpacity(0.6);
         }
@@ -71,8 +67,12 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
         }
     }
 
-    painter.drawRoundRect(rect());
+    // draw background
+    QPainterPath path;
+    path.addRoundedRect(rect(), 10, 10);
+    painter.fillPath(path, color);
 
+    // draw arrow pixmap
     QRect r = QRect(QPoint(0, 0), m_arrowPix.size());
     r.moveCenter(rect().center());
     painter.drawPixmap(r, m_arrowPix);

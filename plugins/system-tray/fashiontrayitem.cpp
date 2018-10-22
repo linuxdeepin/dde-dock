@@ -22,11 +22,12 @@
 #include "fashiontrayitem.h"
 
 #include <QDebug>
+#include <QResizeEvent>
 
 #define SpliterSize 2
 #define TraySpace 10
-#define TrayWidgetWidth 26
-#define TrayWidgetHeight 26
+#define TrayWidgetWidth 28
+#define TrayWidgetHeight 28
 
 FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     : QWidget(parent),
@@ -153,13 +154,9 @@ void FashionTrayItem::setDockPostion(Dock::Position pos)
     m_controlWidget->setDockPostion(m_dockPosistion);
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
-        m_leftSpliter->setFixedSize(SpliterSize, height());
-        m_rightSpliter->setFixedSize(SpliterSize, height());
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);
         m_trayBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);
     } else{
-        m_leftSpliter->setFixedSize(width(), SpliterSize);
-        m_rightSpliter->setFixedSize(width(), SpliterSize);
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::TopToBottom);
         m_trayBoxLayout->setDirection(QBoxLayout::Direction::TopToBottom);
     }
@@ -203,6 +200,21 @@ void FashionTrayItem::hideEvent(QHideEvent *event)
     requestResize();
 
     QWidget::hideEvent(event);
+}
+
+void FashionTrayItem::resizeEvent(QResizeEvent *event)
+{
+    const QSize &mSize = event->size();
+
+    if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
+        m_leftSpliter->setFixedSize(SpliterSize, mSize.height() * 0.8);
+        m_rightSpliter->setFixedSize(SpliterSize, mSize.height() * 0.8);
+    } else{
+        m_leftSpliter->setFixedSize(mSize.width() * 0.8, SpliterSize);
+        m_rightSpliter->setFixedSize(mSize.width() * 0.8, SpliterSize);
+    }
+
+    QWidget::resizeEvent(event);
 }
 
 QSize FashionTrayItem::sizeHint() const

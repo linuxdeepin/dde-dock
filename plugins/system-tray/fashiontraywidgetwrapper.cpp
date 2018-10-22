@@ -29,13 +29,14 @@ AbstractTrayWidget *FashionTrayWidgetWrapper::absTrayWidget() const
 
 void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
 {
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setPen(QColor(QColor::fromRgb(40, 40, 40)));
-    painter.setBrush(QColor(QColor::fromRgb(40, 40, 40)));
     painter.setOpacity(0.5);
 
-    painter.drawRoundRect(rect());
+    QPainterPath path;
+    path.addRoundedRect(rect(), 10, 10);
+    painter.fillPath(path, QColor::fromRgb(40, 40, 40));
 }
 
 void FashionTrayWidgetWrapper::onTrayWidgetIconChanged()
