@@ -20,7 +20,7 @@ FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWid
 void FashionTrayControlWidget::setDockPostion(Dock::Position pos)
 {
     m_dockPosition = pos;
-    update();
+    refreshArrowPixmap();
 }
 
 bool FashionTrayControlWidget::expanded() const
@@ -35,7 +35,7 @@ void FashionTrayControlWidget::setExpanded(const bool &expanded)
     }
 
     m_expanded = expanded;
-    update();
+    refreshArrowPixmap();
 
     m_settings->setValue(ExpandedKey, m_expanded);
 
@@ -72,6 +72,10 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
     }
 
     painter.drawRoundRect(rect());
+
+    QRect r = QRect(QPoint(0, 0), m_arrowPix.size());
+    r.moveCenter(rect().center());
+    painter.drawPixmap(r, m_arrowPix);
 }
 
 void FashionTrayControlWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -110,4 +114,22 @@ void FashionTrayControlWidget::leaveEvent(QEvent *event)
     update();
 
     QWidget::leaveEvent(event);
+}
+
+void FashionTrayControlWidget::refreshArrowPixmap()
+{
+    switch (m_dockPosition) {
+    case Dock::Top:
+    case Dock::Bottom:
+        m_arrowPix.load(m_expanded ? ":/icons/resources/arrow_left_light.svg" : ":/icons/resources/arrow_right_dark.svg");
+        break;
+    case Dock::Left:
+    case Dock::Right:
+        m_arrowPix.load(m_expanded ? ":/icons/resources/arrow_up_light.svg" : ":/icons/resources/arrow_down_dark.svg");
+        break;
+    default:
+        break;
+    }
+
+    update();
 }

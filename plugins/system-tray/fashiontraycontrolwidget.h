@@ -29,7 +29,11 @@ protected:
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    void refreshArrowPixmap();
+
+private:
     QSettings *m_settings;
+    QPixmap m_arrowPix;
 
     Dock::Position m_dockPosition;
     bool m_expanded;
