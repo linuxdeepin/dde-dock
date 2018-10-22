@@ -31,10 +31,12 @@
 DCORE_USE_NAMESPACE
 
 LauncherItem::LauncherItem(QWidget *parent)
-    : DockItem(parent),
-
-      m_tips(new TipsWidget(this))
+    : DockItem(parent)
+    , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
+    , m_tips(new TipsWidget(this))
 {
+    m_launcherInter->setSync(true, false);
+
     setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
@@ -94,12 +96,10 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
 
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
 
-    DDBusSender()
-            .service("com.deepin.dde.Launcher")
-            .interface("com.deepin.dde.Launcher")
-            .path("/com/deepin/dde/Launcher")
-            .method("Toggle")
-            .call();
+    if (!m_launcherInter->IsVisible()) {
+        m_launcherInter->Show();
+    }
+
 }
 
 QWidget *LauncherItem::popupTips()

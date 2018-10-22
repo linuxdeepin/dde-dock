@@ -25,6 +25,10 @@
 #include "dockitem.h"
 #include "../widgets/tipswidget.h"
 
+#include <com_deepin_dde_launcher.h>
+
+using LauncherInter = com::deepin::dde::Launcher;
+
 class LauncherItem : public DockItem
 {
     Q_OBJECT
@@ -46,7 +50,7 @@ private:
 private:
     QPixmap m_smallIcon;
     QPixmap m_largeIcon;
-
+    LauncherInter *m_launcherInter;
     TipsWidget *m_tips;
 };
 
