@@ -19,29 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef ABSTRACTNETWORKTRAYWIDGET_H
+#define ABSTRACTNETWORKTRAYWIDGET_H
+
+#include "abstracttraywidget.h"
 
 #include <QWidget>
 
-class QDBusMessage;
-class AbstractTrayWidget: public QWidget
+#include <NetworkDevice>
+
+class AbstractNetworkTrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
-public:
-    explicit AbstractTrayWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
-    virtual ~AbstractTrayWidget();
 
-    virtual void setActive(const bool active) = 0;
-    virtual void updateIcon() = 0;
-    virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
-    virtual const QImage trayImage() = 0;
+public:
+    explicit AbstractNetworkTrayWidget(dde::network::NetworkDevice *device, QWidget *parent = nullptr);
+
+public:
+    const QString &path() const { return m_path; }
+    inline const dde::network::NetworkDevice * device() { return m_device; }
+
+    virtual const QString itemContextMenu();
+    virtual void invokeMenuItem(const QString &menuId);
 
 Q_SIGNALS:
-    void iconChanged();
-    void clicked();
+    void requestSetDeviceEnable(const QString &path, const bool enable) const;
 
 protected:
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+
+protected:
+    dde::network::NetworkDevice *m_device;
+
+private:
+    QString m_path;
 };
 
+#endif // ABSTRACTNETWORKTRAYWIDGET_H

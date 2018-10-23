@@ -22,7 +22,7 @@
 
 #include "constants.h"
 #include "wireditem.h"
-#include "util/imageutil.h"
+#include "../util/imageutil.h"
 #include "../widgets/tipswidget.h"
 
 #include <QPainter>

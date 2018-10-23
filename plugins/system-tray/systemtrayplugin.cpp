@@ -37,6 +37,7 @@
 SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
+      m_systemTraysLoader(new SystemTraysManager(this)),
       m_trayApplet(new TrayApplet),
       m_tipsLabel(new TipsWidget),
 
@@ -77,13 +78,17 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &SystemTrayPlugin::trayListChanged);
     connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
 
+    connect(m_systemTraysLoader, &SystemTraysManager::systemTrayWidgetAdded, this, &SystemTrayPlugin::addTrayWidget);
+    connect(m_systemTraysLoader, &SystemTraysManager::systemTrayWidgetRemoved, this, &SystemTrayPlugin::trayRemoved);
+
     m_trayInter->Manage();
 
     switchToMode(displayMode());
 
-    QTimer::singleShot(1, this, &SystemTrayPlugin::trayListChanged);
-    QTimer::singleShot(2, this, &SystemTrayPlugin::loadIndicator);
-    QTimer::singleShot(3, this, &SystemTrayPlugin::sniItemsChanged);
+    QTimer::singleShot(0, this, &SystemTrayPlugin::trayListChanged);
+    QTimer::singleShot(0, this, &SystemTrayPlugin::loadIndicator);
+    QTimer::singleShot(0, this, &SystemTrayPlugin::sniItemsChanged);
+    QTimer::singleShot(0, m_systemTraysLoader, &SystemTraysManager::startLoad);
 }
 
 void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
@@ -106,7 +111,7 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
         return m_fashionItem;
     }
 
-    return m_trayList.value(itemKey);
+    return m_trayMap.value(itemKey);
 }
 
 QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
@@ -128,7 +133,7 @@ QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
         return nullptr;
     }
 
-    Q_ASSERT(m_trayList.size());
+    Q_ASSERT(m_trayMap.size());
 
     updateTipsContent();
 
@@ -184,7 +189,7 @@ void SystemTrayPlugin::setItemIsInContainer(const QString &itemKey, const bool c
 
 void SystemTrayPlugin::updateTipsContent()
 {
-    auto trayList = m_trayList.values();
+    auto trayList = m_trayMap.values();
 
     m_trayApplet->clear();
     m_trayApplet->addWidgets(trayList);
@@ -219,7 +224,7 @@ void SystemTrayPlugin::sniItemsChanged()
     for (auto item : itemServicePaths) {
         sinTrayKeyList << SNITrayWidget::toSNIKey(item);
     }
-    for (auto itemKey : m_trayList.keys())
+    for (auto itemKey : m_trayMap.keys())
         if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
             trayRemoved(itemKey);
         }
@@ -238,7 +243,7 @@ void SystemTrayPlugin::trayListChanged()
         trayList << XWindowTrayWidget::toTrayWidgetId(winid);
     }
 
-    for (auto tray : m_trayList.keys())
+    for (auto tray : m_trayMap.keys())
         if (!trayList.contains(tray) && XWindowTrayWidget::isWinIdKey(tray)) {
             trayRemoved(tray);
         }
@@ -248,14 +253,14 @@ void SystemTrayPlugin::trayListChanged()
     }
 }
 
-void SystemTrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget * trayWidget)
+void SystemTrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayWidget)
 {
     if (!trayWidget) {
         return;
     }
 
-    if (!m_trayList.values().contains(trayWidget)) {
-        m_trayList.insert(itemKey, trayWidget);
+    if (!m_trayMap.values().contains(trayWidget)) {
+        m_trayMap.insert(itemKey, trayWidget);
     }
 
     if (displayMode() == Dock::Efficient) {
@@ -266,9 +271,9 @@ void SystemTrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget 
     }
 }
 
-void SystemTrayPlugin::trayAdded(const QString itemKey)
+void SystemTrayPlugin::trayAdded(const QString &itemKey)
 {
-    if (m_trayList.contains(itemKey)) {
+    if (m_trayMap.contains(itemKey)) {
         return;
     }
 
@@ -286,12 +291,12 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
         IndicatorTray *trayWidget = nullptr;
         QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
 
-        if (!m_indicatorList.keys().contains(itemKey)) {
+        if (!m_indicatorMap.keys().contains(itemKey)) {
             trayWidget = new IndicatorTray(indicatorKey);
-            m_indicatorList[indicatorKey] = trayWidget;
+            m_indicatorMap[indicatorKey] = trayWidget;
         }
         else {
-            trayWidget = m_indicatorList[itemKey];
+            trayWidget = m_indicatorMap[itemKey];
         }
 
         connect(trayWidget, &IndicatorTray::delayLoaded,
@@ -306,13 +311,13 @@ void SystemTrayPlugin::trayAdded(const QString itemKey)
     }
 }
 
-void SystemTrayPlugin::trayRemoved(const QString itemKey)
+void SystemTrayPlugin::trayRemoved(const QString &itemKey)
 {
-    if (!m_trayList.contains(itemKey)) {
+    if (!m_trayMap.contains(itemKey)) {
         return;
     }
 
-    AbstractTrayWidget *widget = m_trayList.take(itemKey);
+    AbstractTrayWidget *widget = m_trayMap.take(itemKey);
     m_fashionItem->trayWidgetRemoved(widget);
     m_proxyInter->itemRemoved(this, itemKey);
     widget->deleteLater();
@@ -325,11 +330,11 @@ void SystemTrayPlugin::trayRemoved(const QString itemKey)
 void SystemTrayPlugin::trayChanged(quint32 winId)
 {
     QString itemKey = XWindowTrayWidget::toTrayWidgetId(winId);
-    if (!m_trayList.contains(itemKey)) {
+    if (!m_trayMap.contains(itemKey)) {
         return;
     }
 
-    m_trayList.value(itemKey)->updateIcon();
+    m_trayMap.value(itemKey)->updateIcon();
 
     if (m_trayApplet->isVisible()) {
         updateTipsContent();
@@ -339,7 +344,7 @@ void SystemTrayPlugin::trayChanged(quint32 winId)
 void SystemTrayPlugin::sniItemIconChanged()
 {
     AbstractTrayWidget *trayWidget = static_cast<AbstractTrayWidget *>(sender());
-    if (!m_trayList.values().contains(trayWidget)) {
+    if (!m_trayMap.values().contains(trayWidget)) {
         return;
     }
 }
@@ -347,19 +352,19 @@ void SystemTrayPlugin::sniItemIconChanged()
 void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)
 {
     if (mode == Dock::Fashion) {
-        for (auto itemKey : m_trayList.keys()) {
+        for (auto itemKey : m_trayMap.keys()) {
             m_proxyInter->itemRemoved(this, itemKey);
         }
-        if (m_trayList.isEmpty()) {
+        if (m_trayMap.isEmpty()) {
             m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
         } else {
-            m_fashionItem->setTrayWidgets(m_trayList.values());
+            m_fashionItem->setTrayWidgets(m_trayMap.values());
             m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
         }
     } else {
         m_fashionItem->clearTrayWidgets();
         m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
-        for (auto itemKey : m_trayList.keys()) {
+        for (auto itemKey : m_trayMap.keys()) {
             m_proxyInter->itemAdded(this, itemKey);
         }
     }

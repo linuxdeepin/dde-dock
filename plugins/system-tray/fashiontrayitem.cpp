@@ -35,8 +35,9 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
       m_trayBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this)),
       m_leftSpliter(new QLabel(this)),
       m_rightSpliter(new QLabel(this)),
-      m_controlWidget(new FashionTrayControlWidget(m_dockPosistion, this)),
-      m_currentAttentionTray(nullptr)
+      m_controlWidget(new FashionTrayControlWidget(pos, this)),
+      m_currentAttentionTray(nullptr),
+      m_dockPosistion(pos)
 {
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");

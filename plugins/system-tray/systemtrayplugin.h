@@ -27,10 +27,10 @@
 #include "trayapplet.h"
 #include "sni/statusnotifierwatcher.h"
 #include "dbus/dbustraymanager.h"
-
 #include "xwindowtraywidget.h"
 #include "indicatortray.h"
 #include "indicatortraywidget.h"
+#include "system-trays/systemtraysmanager.h"
 
 #include <QSettings>
 #include <QLabel>
@@ -65,13 +65,13 @@ private:
     void loadIndicator();
     void updateTipsContent();
     const QString getWindowClass(quint32 winId);
-    void addTrayWidget(const QString &itemKey, AbstractTrayWidget * trayWidget);
 
 private slots:
+    void addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayWidget);
     void sniItemsChanged();
     void trayListChanged();
-    void trayAdded(const QString itemKey);
-    void trayRemoved(const QString itemKey);
+    void trayAdded(const QString &itemKey);
+    void trayRemoved(const QString &itemKey);
     void trayChanged(quint32 winId);
     void sniItemIconChanged();
     void switchToMode(const Dock::DisplayMode mode);
@@ -80,8 +80,10 @@ private:
     DBusTrayManager *m_trayInter;
     StatusNotifierWatcher *m_sniWatcher;
     FashionTrayItem *m_fashionItem;
-    QMap<QString, AbstractTrayWidget *> m_trayList;
-    QMap<QString, IndicatorTray*> m_indicatorList;
+    SystemTraysManager *m_systemTraysLoader;
+
+    QMap<QString, AbstractTrayWidget *> m_trayMap;
+    QMap<QString, IndicatorTray*> m_indicatorMap;
 
     TrayApplet *m_trayApplet;
     TipsWidget *m_tipsLabel;

@@ -19,29 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef WIREDTRAYWIDGET_H
+#define WIREDTRAYWIDGET_H
+
+#include "abstractnetworktraywidget.h"
 
 #include <QWidget>
+#include <QLabel>
+#include <QTimer>
 
-class QDBusMessage;
-class AbstractTrayWidget: public QWidget
+#include <WiredDevice>
+
+class TipsWidget;
+class WiredTrayWidget : public AbstractNetworkTrayWidget
 {
     Q_OBJECT
+
 public:
-    explicit AbstractTrayWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
-    virtual ~AbstractTrayWidget();
+    explicit WiredTrayWidget(dde::network::WiredDevice *device, QWidget *parent = nullptr);
 
-    virtual void setActive(const bool active) = 0;
-    virtual void updateIcon() = 0;
-    virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
-    virtual const QImage trayImage() = 0;
+public:
+    void setActive(const bool active) Q_DECL_OVERRIDE;
+    void updateIcon() Q_DECL_OVERRIDE;
+    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
+    const QImage trayImage() Q_DECL_OVERRIDE;
 
-Q_SIGNALS:
-    void iconChanged();
-    void clicked();
+    QWidget *itemTips();
+    const QString itemCommand() const;
 
 protected:
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
+
+private:
+    QPixmap m_icon;
+
+    TipsWidget *m_itemTips;
+    QTimer *m_delayTimer;
 };
 
+#endif // WIREDTRAYWIDGET_H

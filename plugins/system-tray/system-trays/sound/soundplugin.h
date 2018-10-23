@@ -19,60 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NETWORKPLUGIN_H
-#define NETWORKPLUGIN_H
+#ifndef SOUNDPLUGIN_H
+#define SOUNDPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "item/deviceitem.h"
+#include "sounditem.h"
 
 #include <QSettings>
-#include <NetworkWorker>
-#include <NetworkModel>
 
-class NetworkPlugin : public QObject, PluginsItemInterface
+class SoundPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
-    Q_INTERFACES(PluginsItemInterface)
-    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "network.json")
+//    Q_INTERFACES(PluginsItemInterface)
+//    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "sound.json")
 
 public:
-    explicit NetworkPlugin(QObject *parent = 0);
+    explicit SoundPlugin(QObject *parent = 0);
 
     const QString pluginName() const;
     const QString pluginDisplayName() const;
     void init(PluginProxyInterface *proxyInter);
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
-    void refershIcon(const QString &itemKey);
     void pluginStateSwitched();
     bool pluginIsAllowDisable() { return true; }
     bool pluginIsDisable();
-    const QString itemCommand(const QString &itemKey);
-    const QString itemContextMenu(const QString &itemKey);
+
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
+    const QString itemContextMenu(const QString &itemKey);
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
+
     int itemSortKey(const QString &itemKey);
     void setSortKey(const QString &itemKey, const int order);
 
-private slots:
-    void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
-    void refreshWiredItemVisible();
-    void contextMenuRequested();
-
 private:
-    DeviceItem *itemByPath(const QString &path);
-    void loadPlugin();
-
-private:
-    dde::network::NetworkModel *m_networkModel;
-    dde::network::NetworkWorker *m_networkWorker;
-
-    QMap<QString, DeviceItem *> m_itemsMap;
-    QTimer *m_delayRefreshTimer;
     QSettings m_settings;
-
-    bool m_pluginLoaded;
+    SoundItem *m_soundItem;
 };
 
-#endif // NETWORKPLUGIN_H
+#endif // SOUNDPLUGIN_H

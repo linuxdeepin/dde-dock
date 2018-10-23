@@ -19,43 +19,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEVICEITEM_H
-#define DEVICEITEM_H
+#ifndef POWERTRAYWIDGET_H
+#define POWERTRAYWIDGET_H
+
+#include "abstracttraywidget.h"
+#include "dbus/dbuspower.h"
 
 #include <QWidget>
 
-#include <NetworkDevice>
-
-class DeviceItem : public QWidget
+class PowerTrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
 
 public:
-    explicit DeviceItem(dde::network::NetworkDevice *device);
+    explicit PowerTrayWidget(AbstractTrayWidget *parent = nullptr);
 
-    const QString &path() const { return m_path; }
-
-    const dde::network::NetworkDevice * device() { return m_device; };
-
-    virtual void refreshIcon() = 0;
-    virtual const QString itemCommand() const;
-    virtual const QString itemContextMenu();
-    virtual QWidget *itemApplet();
-    virtual QWidget *itemTips();
-    virtual void invokeMenuItem(const QString &menuId);
-
-signals:
-    void requestContextMenu() const;
-    void requestSetDeviceEnable(const QString &path, const bool enable) const;
+public:
+    void setActive(const bool active) Q_DECL_OVERRIDE;
+    void updateIcon() Q_DECL_OVERRIDE;
+    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
+    const QImage trayImage() Q_DECL_OVERRIDE;
 
 protected:
-    QSize sizeHint() const;
-
-protected:
-    dde::network::NetworkDevice *m_device;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 
 private:
-    QString m_path;
+    DBusPower *m_powerInter;
+
+    QPixmap m_pixmap;
 };
 
-#endif // DEVICEITEM_H
+#endif // POWERTRAYWIDGET_H
