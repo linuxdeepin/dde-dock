@@ -142,7 +142,6 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorKey)
 
     qDebug() << "delay load" << delay << indicatorKey << q;
 
-    indicatorTrayWidget->hide();
     QTimer::singleShot(delay, [ = ]() {
         auto data = config.value("data").toObject();
 
