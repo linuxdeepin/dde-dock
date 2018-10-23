@@ -21,14 +21,30 @@ package grub2
 
 import (
 	"errors"
-	"fmt"
-	"regexp"
+	"os"
+	"os/exec"
+
+	"pkg.deepin.io/lib/strv"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/graphic"
 	"pkg.deepin.io/lib/utils"
 )
+
+var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
+
+func isBackgroundValid(file string) bool {
+	format, err := graphic.SniffImageFormat(file)
+	if err != nil {
+		return false
+	}
+
+	if supportedFormats.Contains(format) {
+		return true
+	}
+	return false
+}
 
 const (
 	themeDBusPath      = dbusPath + "/Theme"
@@ -37,65 +53,6 @@ const (
 
 func (*Theme) GetInterfaceName() string {
 	return themeDBusInterface
-}
-
-var colorReg = regexp.MustCompile(`^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$`)
-
-func checkColor(v string) error {
-	if colorReg.MatchString(v) {
-		return nil
-	}
-	return fmt.Errorf("invalid color %q", v)
-}
-
-func (theme *Theme) SetItemColor(sender dbus.Sender, color string) *dbus.Error {
-	theme.service.DelayAutoQuit()
-
-	err := theme.g.checkAuth(sender)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	err = checkColor(color)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	theme.PropsMu.Lock()
-	defer theme.PropsMu.Unlock()
-
-	if theme.setPropItemColor(color) {
-		err = theme.setCustomTheme()
-		if err != nil {
-			return dbusutil.ToError(err)
-		}
-	}
-	return nil
-}
-
-func (theme *Theme) SetSelectedItemColor(sender dbus.Sender, color string) *dbus.Error {
-	theme.service.DelayAutoQuit()
-
-	err := theme.g.checkAuth(sender)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	err = checkColor(color)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	theme.PropsMu.Lock()
-	defer theme.PropsMu.Unlock()
-
-	if theme.setPropSelectedItemColor(color) {
-		err = theme.setCustomTheme()
-		if err != nil {
-			return dbusutil.ToError(err)
-		}
-	}
-	return nil
 }
 
 // SetBackgroundSourceFile setup the background source file, then
@@ -111,11 +68,20 @@ func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string)
 	}
 
 	filename = utils.DecodeURI(filename)
-	if graphic.IsSupportedImage(filename) {
-		go theme.doSetBackgroundSourceFile(filename)
-		return nil
+	if !isBackgroundValid(filename) {
+		return dbusutil.ToError(errors.New("unsupported image file"))
 	}
-	return dbusutil.ToError(errors.New("unsupported image file"))
+
+	cmd := exec.Command(adjustThemeCmd, "-set-background", filename)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+	theme.emitSignalBackgroundChanged()
+	return nil
 }
 
 func (theme *Theme) GetBackground() (string, *dbus.Error) {

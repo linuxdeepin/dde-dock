@@ -58,36 +58,10 @@ func RunAsDaemon() {
 // generate theme background image file
 // call from deepin-installer hooks/in_chroot/*_setup_bootloader_x86.job
 func Setup(resolution string) error {
-	params := getDefaultGrubParams()
-	params[grubGfxMode] = resolution
-	_, err := writeGrubParams(params)
-	if err != nil {
-		return err
-	}
-	w, h, err := parseResolution(resolution)
-	if err != nil {
-		logger.Warning(err)
-		// fallback to 1024x768
-		w = 1024
-		h = 768
-	}
-	return generateThemeBackground(w, h)
-	// no run update-grub
+	return nil
 }
 
 // call from grub-themes-deepin debian/postinst
 func SetupTheme() error {
-	params, err := loadGrubParams()
-	if err != nil {
-		logger.Warning(err)
-	}
-	resolution := getGfxMode(params)
-	w, h, err := parseResolution(resolution)
-	if err != nil {
-		logger.Warning(err)
-		// fallback to 1024x768
-		w = 1024
-		h = 768
-	}
-	return generateThemeBackground(w, h)
+	return nil
 }

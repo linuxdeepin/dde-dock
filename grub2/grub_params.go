@@ -126,16 +126,16 @@ func getGrubParamsContent(params map[string]string) []byte {
 	return buf.Bytes()
 }
 
-func writeGrubParams(params map[string]string) (string, error) {
+func writeGrubParams(params map[string]string) error {
 	logger.Debug("write grub params")
 	content := getGrubParamsContent(params)
 
 	err := ioutil.WriteFile(grubParamsFile, content, 0644)
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	return getBytesMD5Sum(content), nil
+	return nil
 }
 
 func getDefaultGrubParams() map[string]string {

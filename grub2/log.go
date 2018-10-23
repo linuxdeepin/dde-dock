@@ -29,32 +29,20 @@ import (
 )
 
 const (
-	grubScriptFile = "/boot/grub/grub.cfg"
-	dataDir        = "/var/cache/deepin"
-	logFile        = dataDir + "/grub2.log"
-	logFileMode    = 0644
+	dataDir     = "/var/cache/deepin"
+	logFile     = dataDir + "/grub2.log"
+	logFileMode = 0644
+
+	logJobMkConfig    = "mkconfig"
+	logJobAdjustTheme = "adjustTheme"
 )
 
-func getGrubScriptMD5sum() (string, error) {
-	return getFileMD5sum(grubScriptFile)
-}
-
-// write text:
-// start= now
-// paramsMD5Sum=
-func logStart(paramHash string) {
-	content := fmt.Sprintf("%s=%s\n%s=%s\n", logKeyStart, time.Now(),
-		logKeyParamsMD5Sum, paramHash)
+func logStart() {
+	content := fmt.Sprintf("start=%s\n", time.Now())
 	err := ioutil.WriteFile(logFile, []byte(content), logFileMode)
 	if err != nil {
 		logger.Warning("logStart write failed:", err)
 	}
-}
-
-// append text:
-// mkconfigFailed=1
-func logMkconfigFailed() {
-	logAppendText(logKeyMkconfigFailed + "=1\n")
 }
 
 func logAppendText(text string) {
@@ -70,44 +58,32 @@ func logAppendText(text string) {
 	}
 }
 
-// append text:
-// scriptMD5Sum=
-// end= now
 func logEnd() {
-	sum, err := getGrubScriptMD5sum()
+	logAppendText(fmt.Sprintf("end=%s\n", time.Now()))
+}
+
+func logJobStart(jobName string) {
+	logAppendText(fmt.Sprintf("%sStart=%s\n", jobName, time.Now()))
+}
+
+func logJobEnd(jobName string, err error) {
+	text := fmt.Sprintf("%sEnd=%s\n", jobName, time.Now())
 	if err != nil {
-		logger.Warning("logEnd: getGrubScriptMD5sum failed:", err)
-		return
+		text += jobName + "Failed=1\n"
 	}
-
-	logAppendText(fmt.Sprintf("%s=%s\n%s=%s\n", logKeyScriptMD5Sum, sum,
-		logKeyEnd, time.Now()))
+	logAppendText(text)
 }
 
-type Log struct {
-	hasStart       bool
-	hasEnd         bool
-	paramsMD5Sum   string
-	scriptMD5Sum   string
-	mkconfigFailed bool
-}
+type Log map[string]string
 
-const (
-	logKeyStart          = "start"
-	logKeyEnd            = "end"
-	logKeyParamsMD5Sum   = "paramsMD5Sum"
-	logKeyScriptMD5Sum   = "scriptMD5Sum"
-	logKeyMkconfigFailed = "mkconfigFailed"
-)
-
-func loadLog() (*Log, error) {
+func loadLog() (Log, error) {
 	f, err := os.Open(logFile)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
-	dict := make(map[string]string)
+	l := make(Log)
 	reader := kv.NewReader(f)
 
 	for {
@@ -115,47 +91,18 @@ func loadLog() (*Log, error) {
 		if err != nil {
 			break
 		}
-		dict[pair.Key] = pair.Value
+		l[pair.Key] = pair.Value
 	}
 
-	l := &Log{}
-
-	if dict[logKeyStart] != "" {
-		l.hasStart = true
-	}
-	if dict[logKeyEnd] != "" {
-		l.hasEnd = true
-	}
-
-	l.paramsMD5Sum = dict[logKeyParamsMD5Sum]
-	l.scriptMD5Sum = dict[logKeyScriptMD5Sum]
-
-	if dict[logKeyMkconfigFailed] == "1" {
-		l.mkconfigFailed = true
-	}
 	return l, nil
 }
 
-func (l *Log) Verify(paramsMD5Sum string) (ok bool, err error) {
-	// check start and end
-	if !l.hasStart || !l.hasEnd {
-		return false, nil
-	}
+func (l Log) hasJob(jobName string) bool {
+	_, ok := l[jobName+"Start"]
+	return ok
+}
 
-	if l.mkconfigFailed {
-		return false, nil
-	}
-
-	// check configHash
-	if paramsMD5Sum != l.paramsMD5Sum {
-		return false, nil
-	}
-
-	// check scriptMD5sum
-	scriptMD5sum, err := getGrubScriptMD5sum()
-	if err != nil {
-		return false, err
-	}
-
-	return scriptMD5sum == l.scriptMD5Sum, nil
+func (l Log) isJobDone(jobName string) bool {
+	_, ok := l[jobName+"End"]
+	return ok
 }

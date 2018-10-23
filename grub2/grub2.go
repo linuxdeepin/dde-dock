@@ -24,16 +24,21 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 	"unicode"
 
+	"pkg.deepin.io/lib/procfs"
+
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
+
+const grubScriptFile = "/boot/grub/grub.cfg"
 
 var logger *log.Logger
 
@@ -43,12 +48,11 @@ func SetLogger(v *log.Logger) {
 
 //go:generate dbusutil-gen -type Grub2,Theme grub2.go theme.go
 type Grub2 struct {
-	service         *dbusutil.Service
-	modifyFuncChan  chan ModifyFunc
-	mkconfigManager *MkconfigManager
-	entries         []Entry
-	theme           *Theme
-	PropsMu         sync.RWMutex
+	service       *dbusutil.Service
+	modifyManager *modifyManager
+	entries       []Entry
+	theme         *Theme
+	PropsMu       sync.RWMutex
 	// props:
 	DefaultEntry string
 	EnableTheme  bool
@@ -122,37 +126,60 @@ func (g *Grub2) applyParams(params map[string]string) {
 	}
 }
 
-type ModifyFunc func(map[string]string)
+type modifyTask struct {
+	paramsModifyFunc func(map[string]string)
+	adjustTheme      bool
+	adjustThemeLang  string
+}
 
-func getModifyFuncEnableTheme(enable bool) ModifyFunc {
+func getModifyTaskEnableTheme(enable bool, lang string) modifyTask {
 	if enable {
-		return func(params map[string]string) {
+		f := func(params map[string]string) {
 			params[grubTheme] = quoteString(defaultGrubTheme)
 			params[grubBackground] = quoteString(defaultGrubBackground)
 		}
+		return modifyTask{
+			paramsModifyFunc: f,
+			adjustTheme:      true,
+			adjustThemeLang:  lang,
+		}
 	} else {
-		return func(params map[string]string) {
+		f := func(params map[string]string) {
 			delete(params, grubTheme)
 			delete(params, grubBackground)
+		}
+		return modifyTask{
+			paramsModifyFunc: f,
 		}
 	}
 }
 
-func getModifyFuncTimeout(timeout uint32) ModifyFunc {
-	return func(params map[string]string) {
+func getModifyTaskTimeout(timeout uint32) modifyTask {
+	f := func(params map[string]string) {
 		params[grubTimeout] = strconv.Itoa(int(timeout))
 	}
-}
-
-func getModifyFuncResolution(val string) ModifyFunc {
-	return func(params map[string]string) {
-		params[grubGfxMode] = quoteString(val)
+	return modifyTask{
+		paramsModifyFunc: f,
 	}
 }
 
-func getModifyFuncDefaultEntry(idx int) ModifyFunc {
-	return func(params map[string]string) {
+func getModifyTaskResolution(val string, lang string) modifyTask {
+	f := func(params map[string]string) {
+		params[grubGfxMode] = quoteString(val)
+	}
+	return modifyTask{
+		paramsModifyFunc: f,
+		adjustTheme:      true,
+		adjustThemeLang:  lang,
+	}
+}
+
+func getModifyTaskDefaultEntry(idx int) modifyTask {
+	f := func(params map[string]string) {
 		params[grubDefault] = strconv.Itoa(idx)
+	}
+	return modifyTask{
+		paramsModifyFunc: f,
 	}
 }
 
@@ -167,35 +194,32 @@ func New(service *dbusutil.Service) *Grub2 {
 	if err != nil {
 		logger.Warning(err)
 	}
-	paramsMD5Sum := getGrubParamsMD5Sum(params)
-	logger.Debug("paramsHash:", paramsMD5Sum)
-
-	var needCallMkconfig bool
-	if mkconfigLog, err := loadLog(); err != nil {
-		needCallMkconfig = true
-	} else {
-		ok, _ := mkconfigLog.Verify(paramsMD5Sum)
-		if !ok {
-			needCallMkconfig = true
-		}
-	}
 
 	g.applyParams(params)
-	g.modifyFuncChan = make(chan ModifyFunc)
-	g.mkconfigManager = newMkconfigManager(g.modifyFuncChan, func(running bool) {
+	g.modifyManager = newModifyManager(func(running bool) {
 		// state change callback
 		g.setPropUpdating(running)
 	})
-	go g.mkconfigManager.loop()
+	go g.modifyManager.loop()
 
 	// init theme
 	g.theme = NewTheme(g)
-	g.theme.initTheme()
-	go g.theme.regenerateBackgroundIfNeed()
 
-	if needCallMkconfig {
-		g.modifyFuncChan <- func(_ map[string]string) {
-			// NoOp
+	jobLog, err := loadLog()
+	if err != nil {
+		if !os.IsNotExist(err) {
+			logger.Warning(err)
+		}
+	}
+	if jobLog != nil {
+		if !jobLog.isJobDone(logJobMkConfig) {
+			task := modifyTask{}
+
+			if jobLog.hasJob(logJobAdjustTheme) &&
+				!jobLog.isJobDone(logJobAdjustTheme) {
+				task.adjustTheme = true
+			}
+			g.addModifyTask(task)
 		}
 	}
 
@@ -331,7 +355,7 @@ func (g *Grub2) getScreenWidthHeight() (w, h uint16, err error) {
 
 func (g *Grub2) canSafelyExit() bool {
 	logger.Debug("call canSafelyExit")
-	if g.mkconfigManager.IsRunning() || g.theme.isUpdating() {
+	if g.modifyManager.IsRunning() {
 		return false
 	}
 	return true
@@ -352,4 +376,23 @@ func (g *Grub2) checkAuth(sender dbus.Sender) error {
 		return errAuthFailed
 	}
 	return nil
+}
+
+func (g *Grub2) addModifyTask(task modifyTask) {
+	g.modifyManager.ch <- task
+}
+
+func (g *Grub2) getSenderLang(sender dbus.Sender) (string, error) {
+	pid, err := g.service.GetConnPID(string(sender))
+	if err != nil {
+		return "", err
+	}
+
+	p := procfs.Process(pid)
+	environ, err := p.Environ()
+	if err != nil {
+		return "", err
+	}
+
+	return environ.Get("LANG"), nil
 }

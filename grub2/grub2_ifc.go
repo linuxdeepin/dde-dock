@@ -89,7 +89,7 @@ func (g *Grub2) SetDefaultEntry(sender dbus.Sender, entry string) *dbus.Error {
 
 	g.PropsMu.Lock()
 	if g.setPropDefaultEntry(entry) {
-		g.modifyFuncChan <- getModifyFuncDefaultEntry(idx)
+		g.addModifyTask(getModifyTaskDefaultEntry(idx))
 	}
 	g.PropsMu.Unlock()
 	return nil
@@ -103,9 +103,14 @@ func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	lang, err := g.getSenderLang(sender)
+	if err != nil {
+		logger.Warning("failed to get sender lang:", err)
+	}
+
 	g.PropsMu.Lock()
 	if g.setPropEnableTheme(enabled) {
-		g.modifyFuncChan <- getModifyFuncEnableTheme(enabled)
+		g.addModifyTask(getModifyTaskEnableTheme(enabled, lang))
 	}
 	g.PropsMu.Unlock()
 	return nil
@@ -124,9 +129,14 @@ func (g *Grub2) SetResolution(sender dbus.Sender, resolution string) *dbus.Error
 		return dbusutil.ToError(err)
 	}
 
+	lang, err := g.getSenderLang(sender)
+	if err != nil {
+		logger.Warning("failed to get sender lang:", err)
+	}
+
 	g.PropsMu.Lock()
 	if g.setPropResolution(resolution) {
-		g.modifyFuncChan <- getModifyFuncResolution(resolution)
+		g.addModifyTask(getModifyTaskResolution(resolution, lang))
 	}
 	g.PropsMu.Unlock()
 	return nil
@@ -146,7 +156,7 @@ func (g *Grub2) SetTimeout(sender dbus.Sender, timeout uint32) *dbus.Error {
 
 	g.PropsMu.Lock()
 	if g.setPropTimeout(timeout) {
-		g.modifyFuncChan <- getModifyFuncTimeout(timeout)
+		g.addModifyTask(getModifyTaskTimeout(timeout))
 	}
 	g.PropsMu.Unlock()
 	return nil
@@ -163,35 +173,40 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	var modifyFuncs []ModifyFunc
+	lang, err := g.getSenderLang(sender)
+	if err != nil {
+		logger.Warning("failed to get sender lang:", err)
+	}
+
+	var modifyTasks []modifyTask
 
 	g.PropsMu.Lock()
 	if g.setPropTimeout(defaultGrubTimeoutInt) {
-		modifyFuncs = append(modifyFuncs, getModifyFuncTimeout(defaultGrubTimeoutInt))
+		modifyTasks = append(modifyTasks, getModifyTaskTimeout(defaultGrubTimeoutInt))
 	}
 
 	if g.setPropEnableTheme(defaultEnableTheme) {
-		modifyFuncs = append(modifyFuncs, getModifyFuncEnableTheme(defaultEnableTheme))
+		modifyTasks = append(modifyTasks,
+			getModifyTaskEnableTheme(defaultEnableTheme, lang))
 	}
 
 	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(defaultGrubDefaultInt)
 	if g.setPropDefaultEntry(cfgDefaultEntry) {
-		modifyFuncs = append(modifyFuncs, getModifyFuncDefaultEntry(defaultGrubDefaultInt))
+		modifyTasks = append(modifyTasks, getModifyTaskDefaultEntry(defaultGrubDefaultInt))
 	}
 	g.PropsMu.Unlock()
 
-	if len(modifyFuncs) > 0 {
+	if len(modifyTasks) > 0 {
 		compoundModifyFunc := func(params map[string]string) {
-			for _, fn := range modifyFuncs {
-				fn(params)
+			for _, task := range modifyTasks {
+				task.paramsModifyFunc(params)
 			}
 		}
-		g.modifyFuncChan <- compoundModifyFunc
+		g.addModifyTask(modifyTask{
+			paramsModifyFunc: compoundModifyFunc,
+			adjustTheme:      true,
+		})
 	}
 
-	err = g.theme.reset()
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
 	return nil
 }

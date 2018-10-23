@@ -38,13 +38,10 @@ var (
 	argDebug      bool
 	argSetup      bool
 	argSetupTheme bool
-	//argGrubSettingFile string
-	//argThemeDir        string
 	argResolution string
 )
 
 func main() {
-	flag.BoolVar(&argDebug, "d", false, "debug mode")
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")
 	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
 	flag.BoolVar(&argSetupTheme, "setup-theme", false, "setup grub theme only and exit")
