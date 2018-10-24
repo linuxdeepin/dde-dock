@@ -5,9 +5,13 @@
 #include <QMouseEvent>
 #include <QApplication>
 
-ShutdownTrayWidget::ShutdownTrayWidget(AbstractTrayWidget *parent)
-    : AbstractTrayWidget(parent)
+ShutdownTrayWidget::ShutdownTrayWidget(QWidget *parent)
+    : AbstractSystemTrayWidget(parent),
+      m_tipsLabel(new TipsWidget)
 {
+    m_tipsLabel->setText(tr("Shut down"));
+    m_tipsLabel->setVisible(false);
+
     updateIcon();
 }
 
@@ -36,14 +40,19 @@ void ShutdownTrayWidget::updateIcon()
     update();
 }
 
-void ShutdownTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
-{
-
-}
-
 const QImage ShutdownTrayWidget::trayImage()
 {
     return m_pixmap.toImage();
+}
+
+QWidget *ShutdownTrayWidget::trayTipsWidget()
+{
+    return m_tipsLabel;
+}
+
+const QString ShutdownTrayWidget::trayClickCommand()
+{
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
 }
 
 QSize ShutdownTrayWidget::sizeHint() const

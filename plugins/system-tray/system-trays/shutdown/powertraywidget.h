@@ -22,23 +22,26 @@
 #ifndef POWERTRAYWIDGET_H
 #define POWERTRAYWIDGET_H
 
-#include "abstracttraywidget.h"
+#include "../abstractsystemtraywidget.h"
+#include "../widgets/tipswidget.h"
 #include "dbus/dbuspower.h"
 
 #include <QWidget>
 
-class PowerTrayWidget : public AbstractTrayWidget
+class PowerTrayWidget : public AbstractSystemTrayWidget
 {
     Q_OBJECT
 
 public:
-    explicit PowerTrayWidget(AbstractTrayWidget *parent = nullptr);
+    explicit PowerTrayWidget(QWidget *parent = nullptr);
 
 public:
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;
+
+    QWidget *trayTipsWidget() Q_DECL_OVERRIDE;
+    const QString trayClickCommand() Q_DECL_OVERRIDE;
 
 protected:
     QSize sizeHint() const Q_DECL_OVERRIDE;
@@ -46,6 +49,7 @@ protected:
 
 private:
     DBusPower *m_powerInter;
+    TipsWidget *m_tipsLabel;
 
     QPixmap m_pixmap;
 };

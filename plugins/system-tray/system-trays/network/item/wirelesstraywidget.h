@@ -44,11 +44,10 @@ public:
 public:
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;
 
-    QWidget *itemApplet();
-    QWidget *itemTips();
+    QWidget *trayTipsWidget() Q_DECL_OVERRIDE;
+    QWidget *trayPopupApplet() Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void onNeedSecrets(const QString &info);

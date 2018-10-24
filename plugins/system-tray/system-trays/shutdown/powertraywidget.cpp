@@ -25,10 +25,16 @@
 #include <QIcon>
 #include <QMouseEvent>
 
-PowerTrayWidget::PowerTrayWidget(AbstractTrayWidget *parent)
-    : AbstractTrayWidget(parent),
-      m_powerInter(new DBusPower(this))
+#define BATTERY_DISCHARED   2
+#define BATTERY_FULL        4
+
+PowerTrayWidget::PowerTrayWidget(QWidget *parent)
+    : AbstractSystemTrayWidget(parent),
+      m_powerInter(new DBusPower(this)),
+      m_tipsLabel(new TipsWidget)
 {
+    m_tipsLabel->setVisible(false);
+
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerTrayWidget::updateIcon);
     connect(m_powerInter, &DBusPower::BatteryStateChanged, this, &PowerTrayWidget::updateIcon);
     connect(m_powerInter, &DBusPower::OnBatteryChanged, this, &PowerTrayWidget::updateIcon);
@@ -73,14 +79,42 @@ void PowerTrayWidget::updateIcon()
     update();
 }
 
-void PowerTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
-{
-
-}
-
 const QImage PowerTrayWidget::trayImage()
 {
-    m_pixmap.toImage();
+    return m_pixmap.toImage();
+}
+
+QWidget *PowerTrayWidget::trayTipsWidget()
+{
+    const BatteryPercentageMap data = m_powerInter->batteryPercentage();
+
+    if (data.isEmpty())
+    {
+        m_tipsLabel->setText(tr("Shut down"));
+        return m_tipsLabel;
+    }
+
+    const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
+    const QString value = QString("%1%").arg(std::round(percentage));
+    const bool charging = !m_powerInter->onBattery();
+    if (!charging)
+        m_tipsLabel->setText(tr("Remaining Capacity %1").arg(value));
+    else
+    {
+        const int batteryState = m_powerInter->batteryState()["Display"];
+
+        if (batteryState == BATTERY_FULL || percentage == 100.)
+            m_tipsLabel->setText(tr("Charged %1").arg(value));
+        else
+            m_tipsLabel->setText(tr("Charging %1").arg(value));
+    }
+
+    return m_tipsLabel;
+}
+
+const QString PowerTrayWidget::trayClickCommand()
+{
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
 }
 
 QSize PowerTrayWidget::sizeHint() const

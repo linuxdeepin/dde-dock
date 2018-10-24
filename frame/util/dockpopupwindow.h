@@ -22,8 +22,6 @@
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
 
-#include "dbus/dbusdisplay.h"
-
 #include <darrowrectangle.h>
 #include <dregionmonitor.h>
 #include <DWindowManagerHelper>
@@ -67,7 +65,6 @@ private:
     QTimer *m_acceptDelayTimer;
 
     DRegionMonitor *m_regionInter;
-    DBusDisplay *m_displayInter;
     DWindowManagerHelper *m_wmHelper;
 };
 

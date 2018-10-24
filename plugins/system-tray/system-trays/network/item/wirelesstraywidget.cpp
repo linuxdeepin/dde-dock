@@ -114,22 +114,12 @@ void WirelessTrayWidget::updateIcon()
     update();
 }
 
-void WirelessTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
-{
-
-}
-
 const QImage WirelessTrayWidget::trayImage()
 {
     return m_pixmap.toImage();
 }
 
-QWidget *WirelessTrayWidget::itemApplet()
-{
-    return m_wirelessApplet;
-}
-
-QWidget *WirelessTrayWidget::itemTips()
+QWidget *WirelessTrayWidget::trayTipsWidget()
 {
     const NetworkDevice::DeviceStatus stat = m_device->status();
 
@@ -149,6 +139,11 @@ QWidget *WirelessTrayWidget::itemTips()
     }
 
     return m_wirelessPopup;
+}
+
+QWidget *WirelessTrayWidget::trayPopupApplet()
+{
+    return m_wirelessApplet;
 }
 
 void WirelessTrayWidget::onNeedSecrets(const QString &info)
@@ -199,7 +194,7 @@ void WirelessTrayWidget::resizeEvent(QResizeEvent *e)
 const QPixmap WirelessTrayWidget::cachedPix(const QString &key, const int size)
 {
     if (m_reloadIcon || !m_icons.contains(key)) {
-        m_icons.insert(key, QIcon::fromTheme(key, QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
+        m_icons.insert(key, QIcon::fromTheme(key, QIcon(":/icons/system-trays/network/resources/wireless/" + key + ".svg")).pixmap(size));
     }
 
     return m_icons.value(key);

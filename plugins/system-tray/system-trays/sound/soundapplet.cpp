@@ -23,7 +23,7 @@
 #include "sinkinputwidget.h"
 #include "componments/horizontalseparator.h"
 #include "../widgets/tipswidget.h"
-#include "../../frame/util/utils.h"
+#include "util/utils.h"
 
 #include <QLabel>
 #include <QIcon>
@@ -160,7 +160,7 @@ void SoundApplet::onVolumeChanged()
     else
         volumeString = "low";
 
-    const QString &iconName = QString(":/audio-volume-%1-symbolic.svg").arg(volumeString);
+    const QString &iconName = QString(":/icons/system-trays/sound/resources/audio-volume-%1-symbolic.svg").arg(volumeString);
     QPixmap pix = Utils::renderSVG(iconName, QSize(24, 24));
 
     m_volumeBtn->setPixmap(pix);

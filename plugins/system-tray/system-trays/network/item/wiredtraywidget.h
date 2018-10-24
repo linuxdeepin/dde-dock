@@ -41,11 +41,10 @@ public:
 public:
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;
 
-    QWidget *itemTips();
-    const QString itemCommand() const;
+    QWidget *trayTipsWidget() Q_DECL_OVERRIDE;
+    const QString trayClickCommand() Q_DECL_OVERRIDE;
 
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;

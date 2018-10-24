@@ -28,6 +28,7 @@
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
+#include <QDBusConnectionInterface>
 
 class DockItemController;
 class PluginsItemInterface;

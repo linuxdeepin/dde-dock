@@ -39,7 +39,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     m_switchBtn = new DSwitchButton;
 
-    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_normal.svg");
+    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/icons/system-trays/network/resources/wireless/refresh_normal.svg");
 
     m_loadingIndicator = new DLoadingIndicator;
     m_loadingIndicator->setImageSource(pixmap);

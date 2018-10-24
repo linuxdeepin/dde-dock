@@ -135,7 +135,7 @@ void WiredItem::reloadIcon()
             m_delayTimer->start();
             const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
             const int num = (index % 5) + 1;
-            m_icon = QPixmap(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num));
+            m_icon = QPixmap(QString(":/icons/system-trays/network/resources/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num));
             update();
             return;
         }

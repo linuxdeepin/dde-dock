@@ -69,7 +69,7 @@ void WiredTrayWidget::updateIcon()
             m_delayTimer->start();
             const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
             const int num = (index % 5) + 1;
-            m_icon = QPixmap(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num));
+            m_icon = QPixmap(QString(":/icons/system-trays/network/resources/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num));
             update();
             return;
         }
@@ -91,17 +91,12 @@ void WiredTrayWidget::updateIcon()
     update();
 }
 
-void WiredTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
-{
-
-}
-
 const QImage WiredTrayWidget::trayImage()
 {
     return m_icon.toImage();
 }
 
-QWidget *WiredTrayWidget::itemTips()
+QWidget *WiredTrayWidget::trayTipsWidget()
 {
     m_itemTips->setText(tr("Unknown"));
 
@@ -124,7 +119,7 @@ QWidget *WiredTrayWidget::itemTips()
     return m_itemTips;
 }
 
-const QString WiredTrayWidget::itemCommand() const
+const QString WiredTrayWidget::trayClickCommand()
 {
     return "dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"";
 }

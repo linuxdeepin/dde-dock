@@ -20,7 +20,7 @@
  */
 
 #include "snitraywidget.h"
-#include "../frame/util/themeappicon.h"
+#include "util/themeappicon.h"
 
 #include <QPainter>
 #include <QApplication>
@@ -100,7 +100,7 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
             break;
         default:
             qDebug() << "unknown mouse button key";
-        break;
+            break;
     }
 }
 

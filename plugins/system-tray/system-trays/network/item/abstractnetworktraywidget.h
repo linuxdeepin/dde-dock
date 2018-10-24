@@ -22,13 +22,13 @@
 #ifndef ABSTRACTNETWORKTRAYWIDGET_H
 #define ABSTRACTNETWORKTRAYWIDGET_H
 
-#include "abstracttraywidget.h"
+#include "../../abstractsystemtraywidget.h"
 
 #include <QWidget>
 
 #include <NetworkDevice>
 
-class AbstractNetworkTrayWidget : public AbstractTrayWidget
+class AbstractNetworkTrayWidget : public AbstractSystemTrayWidget
 {
     Q_OBJECT
 

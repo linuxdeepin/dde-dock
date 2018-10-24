@@ -16,8 +16,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-SoundTrayWidget::SoundTrayWidget(AbstractTrayWidget *parent)
-    : AbstractTrayWidget(parent),
+SoundTrayWidget::SoundTrayWidget(QWidget *parent)
+    : AbstractSystemTrayWidget(parent),
       m_tipsLabel(new TipsWidget(this)),
       m_applet(new SoundApplet(this)),
       m_sinkInter(nullptr)
@@ -68,17 +68,12 @@ void SoundTrayWidget::updateIcon()
     update();
 }
 
-void SoundTrayWidget::sendClick(uint8_t, int, int)
-{
-
-}
-
 const QImage SoundTrayWidget::trayImage()
 {
     return m_iconPixmap.toImage();
 }
 
-QWidget *SoundTrayWidget::tipsWidget()
+QWidget *SoundTrayWidget::trayTipsWidget()
 {
     refreshTips(true);
 
@@ -88,7 +83,7 @@ QWidget *SoundTrayWidget::tipsWidget()
     return m_tipsLabel;
 }
 
-QWidget *SoundTrayWidget::popupApplet()
+QWidget *SoundTrayWidget::trayPopupApplet()
 {
     return m_applet;
 }

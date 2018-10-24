@@ -21,7 +21,7 @@
 
 #include "accesspointwidget.h"
 #include "horizontalseperator.h"
-#include "../../frame/util/utils.h"
+#include "util/utils.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
@@ -45,11 +45,11 @@ AccessPointWidget::AccessPointWidget()
     m_ssidBtn->setObjectName("Ssid");
 
     m_disconnectBtn->setVisible(false);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/select.svg");
-    m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect_hover.svg");
-    m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_press.svg");
+    m_disconnectBtn->setNormalPic(":/icons/system-trays/network/resources/wireless/select.svg");
+    m_disconnectBtn->setHoverPic(":/icons/system-trays/network/resources/wireless/disconnect_hover.svg");
+    m_disconnectBtn->setPressPic(":/icons/system-trays/network/resources/wireless/disconnect_press.svg");
 
-    QPixmap iconPix = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16));
+    QPixmap iconPix = Utils::renderSVG(":/icons/system-trays/network/resources/wireless/security.svg", QSize(16, 16));
     m_securityIconSize = iconPix.size();
     m_securityIcon->setPixmap(iconPix);
 
@@ -130,13 +130,13 @@ void AccessPointWidget::setActiveState(const NetworkDevice::DeviceStatus state)
 void AccessPointWidget::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/disconnect.svg");
+    m_disconnectBtn->setNormalPic(":/icons/system-trays/network/resources/wireless/disconnect.svg");
 }
 
 void AccessPointWidget::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/select.svg");
+    m_disconnectBtn->setNormalPic(":/icons/system-trays/network/resources/wireless/select.svg");
 }
 
 void AccessPointWidget::setStrengthIcon(const int strength)
@@ -152,7 +152,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     else
         type = QString::number(strength / 10 & ~0x1) + "0";
 
-    iconPix = Utils::renderSVG(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
+    iconPix = Utils::renderSVG(QString(":/icons/system-trays/network/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
 
     m_strengthIcon->setPixmap(iconPix);
 }

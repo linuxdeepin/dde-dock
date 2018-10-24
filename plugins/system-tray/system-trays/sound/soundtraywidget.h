@@ -1,25 +1,24 @@
 #ifndef SOUNDTRAYWIDGET_H
 #define SOUNDTRAYWIDGET_H
 
-#include "abstracttraywidget.h"
+#include "../abstractsystemtraywidget.h"
 #include "soundapplet.h"
 #include "dbus/dbussink.h"
 
 #include <QWidget>
 
 class TipsWidget;
-class SoundTrayWidget : public AbstractTrayWidget
+class SoundTrayWidget : public AbstractSystemTrayWidget
 {
 public:
-    SoundTrayWidget(AbstractTrayWidget *parent = nullptr);
+    SoundTrayWidget(QWidget *parent = nullptr);
 
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t, int, int) Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;
 
-    QWidget *tipsWidget();
-    QWidget *popupApplet();
+    QWidget *trayTipsWidget() Q_DECL_OVERRIDE;
+    QWidget *trayPopupApplet() Q_DECL_OVERRIDE;
 
     const QString contextMenu() const;
     void invokeMenuItem(const QString menuId, const bool checked);

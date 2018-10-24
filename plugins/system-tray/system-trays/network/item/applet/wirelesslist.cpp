@@ -90,7 +90,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     setStyleSheet("background-color:transparent;");
 
     m_indicator = new DPictureSequenceView(this);
-    m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
+    m_indicator->setPictureSequence(":/icons/system-trays/network/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
     m_indicator->setFixedSize(QSize(14, 14) * ratio);
     m_indicator->setVisible(false);
 

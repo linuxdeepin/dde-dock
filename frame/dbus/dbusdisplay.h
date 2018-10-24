@@ -23,7 +23,7 @@
 
 typedef QMap<QString, double> BrightnessMap;
 
-Q_DECLARE_METATYPE(BrightnessMap)
+//Q_DECLARE_METATYPE(BrightnessMap)
 
 struct DisplayRect{
     qint16 x;

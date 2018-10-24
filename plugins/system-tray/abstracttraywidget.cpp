@@ -25,8 +25,8 @@
 #include <QMouseEvent>
 #include <QDebug>
 
-AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f):
-    QWidget(parent, f)
+AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
 {
 
 }

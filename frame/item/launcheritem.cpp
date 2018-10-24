@@ -27,6 +27,7 @@
 #include <QProcess>
 #include <QMouseEvent>
 #include <DDBusSender>
+#include <QApplication>
 
 DCORE_USE_NAMESPACE
 

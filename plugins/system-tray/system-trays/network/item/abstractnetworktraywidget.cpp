@@ -27,7 +27,7 @@
 using namespace dde::network;
 
 AbstractNetworkTrayWidget::AbstractNetworkTrayWidget(dde::network::NetworkDevice *device, QWidget *parent)
-    : AbstractTrayWidget(parent),
+    : AbstractSystemTrayWidget(parent),
       m_device(device),
       m_path(device->path())
 {
