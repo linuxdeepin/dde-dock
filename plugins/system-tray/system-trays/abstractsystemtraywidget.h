@@ -18,7 +18,7 @@ public:
     virtual inline QWidget *trayPopupApplet() { return nullptr; }
     virtual inline const QString trayClickCommand() { return QString(); }
     virtual inline const QString contextMenu() const {return QString(); }
-    virtual inline void invokedMenuItem(const QString &itemId, const bool checked) { Q_UNUSED(itemId); Q_UNUSED(checked); }
+    virtual inline void invokedMenuItem(const QString &menuId, const bool checked) { Q_UNUSED(menuId); Q_UNUSED(checked); }
 
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;

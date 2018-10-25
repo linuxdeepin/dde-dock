@@ -35,12 +35,15 @@ class AbstractNetworkTrayWidget : public AbstractSystemTrayWidget
 public:
     explicit AbstractNetworkTrayWidget(dde::network::NetworkDevice *device, QWidget *parent = nullptr);
 
-public:
+    void setActive(const bool active) Q_DECL_OVERRIDE = 0;
+    void updateIcon() Q_DECL_OVERRIDE = 0;
+    const QImage trayImage() Q_DECL_OVERRIDE = 0;
+
+    const QString contextMenu() const Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
+
     const QString &path() const { return m_path; }
     inline const dde::network::NetworkDevice * device() { return m_device; }
-
-    virtual const QString itemContextMenu();
-    virtual void invokeMenuItem(const QString &menuId);
 
 Q_SIGNALS:
     void requestSetDeviceEnable(const QString &path, const bool enable) const;

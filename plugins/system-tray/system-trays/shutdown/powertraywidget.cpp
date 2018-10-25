@@ -117,6 +117,33 @@ const QString PowerTrayWidget::trayClickCommand()
     return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
 }
 
+const QString PowerTrayWidget::contextMenu() const
+{
+    QList<QVariant> items;
+    items.reserve(6);
+
+    QMap<QString, QVariant> power;
+    power["itemId"] = "power";
+    power["itemText"] = tr("Power settings");
+    power["isActive"] = true;
+    items.push_back(power);
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void PowerTrayWidget::invokedMenuItem(const QString &menuId, const bool checked)
+{
+    Q_UNUSED(checked)
+
+    if (menuId == "power")
+        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+}
+
 QSize PowerTrayWidget::sizeHint() const
 {
     return QSize(26, 26);

@@ -7,7 +7,8 @@ project(${PLUGIN_NAME})
 file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
     "../../frame/util/themeappicon.h" "../../frame/util/themeappicon.cpp"
     "../../frame/util/dockpopupwindow.h" "../../frame/util/dockpopupwindow.cpp"
-    "../../frame/dbus/dbusmenu.h" "../../frame/dbus/dbusmenu.cpp")
+    "../../frame/dbus/dbusmenu.h" "../../frame/dbus/dbusmenu.cpp"
+    "../../frame/dbus/dbusmenumanager.h" "../../frame/dbus/dbusmenumanager.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)

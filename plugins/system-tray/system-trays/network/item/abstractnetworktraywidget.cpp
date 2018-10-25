@@ -38,7 +38,7 @@ QSize AbstractNetworkTrayWidget::sizeHint() const
     return QSize(26, 26);
 }
 
-const QString AbstractNetworkTrayWidget::itemContextMenu()
+const QString AbstractNetworkTrayWidget::contextMenu() const
 {
     QList<QVariant> items;
     items.reserve(2);
@@ -66,7 +66,7 @@ const QString AbstractNetworkTrayWidget::itemContextMenu()
     return QJsonDocument::fromVariant(menu).toJson();
 }
 
-void AbstractNetworkTrayWidget::invokeMenuItem(const QString &menuId)
+void AbstractNetworkTrayWidget::invokedMenuItem(const QString &menuId, const bool checked)
 {
     if (menuId == "settings")
         //QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");

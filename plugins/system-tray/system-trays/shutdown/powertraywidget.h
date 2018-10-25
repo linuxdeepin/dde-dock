@@ -43,6 +43,9 @@ public:
     QWidget *trayTipsWidget() Q_DECL_OVERRIDE;
     const QString trayClickCommand() Q_DECL_OVERRIDE;
 
+    const QString contextMenu() const Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
+
 protected:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;

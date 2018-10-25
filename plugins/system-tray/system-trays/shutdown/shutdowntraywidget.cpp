@@ -1,4 +1,5 @@
 #include "shutdowntraywidget.h"
+#include "dbus/dbusaccount.h"
 
 #include <QSvgRenderer>
 #include <QPainter>
@@ -53,6 +54,74 @@ QWidget *ShutdownTrayWidget::trayTipsWidget()
 const QString ShutdownTrayWidget::trayClickCommand()
 {
     return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+}
+
+const QString ShutdownTrayWidget::contextMenu() const
+{
+    QList<QVariant> items;
+    items.reserve(6);
+
+    QMap<QString, QVariant> shutdown;
+    shutdown["itemId"] = "Shutdown";
+    shutdown["itemText"] = tr("Shut down");
+    shutdown["isActive"] = true;
+    items.push_back(shutdown);
+
+    QMap<QString, QVariant> reboot;
+    reboot["itemId"] = "Restart";
+    reboot["itemText"] = tr("Restart");
+    reboot["isActive"] = true;
+    items.push_back(reboot);
+
+    QMap<QString, QVariant> suspend;
+    suspend["itemId"] = "Suspend";
+    suspend["itemText"] = tr("Suspend");
+    suspend["isActive"] = true;
+    items.push_back(suspend);
+
+    QMap<QString, QVariant> lock;
+    lock["itemId"] = "Lock";
+    lock["itemText"] = tr("Lock");
+    lock["isActive"] = true;
+    items.push_back(lock);
+
+    QMap<QString, QVariant> logout;
+    logout["itemId"] = "Logout";
+    logout["itemText"] = tr("Log out");
+    logout["isActive"] = true;
+    items.push_back(logout);
+
+    if (DBusAccount().userList().count() > 1)
+    {
+        QMap<QString, QVariant> switchUser;
+        switchUser["itemId"] = "SwitchUser";
+        switchUser["itemText"] = tr("Switch account");
+        switchUser["isActive"] = true;
+        items.push_back(switchUser);
+    }
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void ShutdownTrayWidget::invokedMenuItem(const QString &menuId, const bool checked)
+{
+    Q_UNUSED(checked)
+
+    if (menuId == "Lock")
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                                           << "--dest=com.deepin.dde.lockFront"
+                                                           << "/com/deepin/dde/lockFront"
+                                                           << QString("com.deepin.dde.lockFront.Show"));
+    else
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                                           << "--dest=com.deepin.dde.shutdownFront"
+                                                           << "/com/deepin/dde/shutdownFront"
+                                                           << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
 }
 
 QSize ShutdownTrayWidget::sizeHint() const

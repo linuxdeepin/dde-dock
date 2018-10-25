@@ -20,8 +20,8 @@ public:
     QWidget *trayTipsWidget() Q_DECL_OVERRIDE;
     QWidget *trayPopupApplet() Q_DECL_OVERRIDE;
 
-    const QString contextMenu() const;
-    void invokeMenuItem(const QString menuId, const bool checked);
+    const QString contextMenu() const Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
 
 protected:
     QSize sizeHint() const Q_DECL_OVERRIDE;

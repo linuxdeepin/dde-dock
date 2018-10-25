@@ -13,7 +13,8 @@ AbstractSystemTrayWidget::AbstractSystemTrayWidget(QWidget *parent)
     : AbstractTrayWidget(parent),
       m_popupShown(false),
       m_popupTipsDelayTimer(new QTimer(this)),
-      m_popupAdjustDelayTimer(new QTimer(this))
+      m_popupAdjustDelayTimer(new QTimer(this)),
+      m_menuManagerInter(new DBusMenuManager(this))
 {
     if (PopupWindow.isNull())
     {
@@ -57,8 +58,10 @@ void AbstractSystemTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     }
     case XCB_BUTTON_INDEX_2:
         break;
-    case XCB_BUTTON_INDEX_3:
+    case XCB_BUTTON_INDEX_3: {
+        showContextMenu();
         break;
+    }
     default:
         qDebug() << "unknown mouse button key";
         break;
@@ -107,9 +110,6 @@ void AbstractSystemTrayWidget::mousePressEvent(QMouseEvent *event)
 {
     m_popupTipsDelayTimer->stop();
     hideNonModel();
-
-    if (event->button() == Qt::RightButton)
-        return showContextMenu();
 
     AbstractTrayWidget::mousePressEvent(event);
 }

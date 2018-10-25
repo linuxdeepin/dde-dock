@@ -116,7 +116,7 @@ const QString SoundTrayWidget::contextMenu() const
     return QJsonDocument::fromVariant(menu).toJson();
 }
 
-void SoundTrayWidget::invokeMenuItem(const QString menuId, const bool checked)
+void SoundTrayWidget::invokedMenuItem(const QString &menuId, const bool checked)
 {
     Q_UNUSED(checked);
 
