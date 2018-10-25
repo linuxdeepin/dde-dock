@@ -1,3 +1,36 @@
+[3.3.0] 2018-10-25
+*   feat(grub2): use adjust-grub-theme to adjust theme
+*   feat(network): add new secert agent
+*   fix(appearance): signal Changed type and value empty when background changed
+*   fix(network): libnotify not inited
+*   feat(keybinding): workaround for huawei::mic led
+*   feat(appearance): do not allow to delete current backgrounds
+*   fix(network): nmGetDevices nil pointer panic
+*   fix(inputdevices): keyboard default layout name empty
+*   fix(network): device hw address empty
+*   feat(appearance): add Opacity property
+*   fix: can't get the name of bluetooth speaker
+*   feat(session/power): support automatically adjust brightness
+*   feat(accounts): image blur check blurred image file existence
+*   fix(keybinding): ShortcutManager.grabKeystroke panic
+*   fix(keybinding): some data race problems
+*   chore(dock): handle destroy notify event no check ev.Event
+*   fix(system/power): lid switch not found
+*   fix(network): correntIPv6DataType not working
+*   fix(keybinding): EnableRecord panic nil pointer dereference
+*   feat(dock): menu items excludes AllWindows when use 2D WM
+*   fix(network): agent.cancelVpnAuthDialog panic process is nil
+*   feat: add trigger to link ttc for java
+*   feat(accounts): support for configuring default user background
+*   feat(dock): entry add method GetAllowedCloseWindows
+*   feat(dock): dbus method allow argument desktopFile is file:// url
+*   fix(default-terminal): fallback if session manager failure
+*   fix(audio): saveConfig panic nil pointer dereference
+*   feat(keybinding): add config file handle touchpad toggle
+*   fix(network): panic you should call *proxy.Object.InitSignalExt() first
+*   chore: update build depends debhelper (>= 9)
+*   feat(accounts): logined service add LastLogoutUser property
+
 [3.2.24] 2018-08-12
 *   fix(x-event-monitor): no listen raw touch event
 *   chore: auto sync po/ts files from transifex
