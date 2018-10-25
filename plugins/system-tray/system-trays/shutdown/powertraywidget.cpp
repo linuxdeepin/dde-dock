@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     sbw <sbw@sbw.so>
+ * Author:     listenerri <listenerri@gmail.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
