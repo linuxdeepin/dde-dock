@@ -91,8 +91,12 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
             break;
         case XCB_BUTTON_INDEX_3:
             // ContextMenu does not work
-            //m_sniInter->ContextMenu(x, y);
-            m_menu->popup(QPoint(x, y));
+            if (m_sniInter->menu().path().startsWith("/NO_DBUSMENU")) {
+                m_sniInter->ContextMenu(x, y);
+            }
+            else {
+                m_menu->popup(QPoint(x, y));
+            }
             break;
         default:
             qDebug() << "unknown mouse button key";
