@@ -1,3 +1,26 @@
+<a name="4.7.4"></a>
+## 4.7.4 (2018-10-26)
+
+
+#### Bug Fixes
+
+*   active connection identify ([62f381d6](https://github.com/linuxdeepin/dde-dock/commit/62f381d6ba08c6a1b5f72862bdac3ca4d549ed20))
+*   frame opacity dbus valid ([e342a189](https://github.com/linuxdeepin/dde-dock/commit/e342a189535e3382144b1789f03d5f4ad984e860))
+* **launcher:**  use show replace toggle for launcher dbus ([203a6eb9](https://github.com/linuxdeepin/dde-dock/commit/203a6eb96f2da63fe0370ed87aa74e02b7f4c0c5))
+* **network:**
+  *  loading indicator visible ([6ead8ff3](https://github.com/linuxdeepin/dde-dock/commit/6ead8ff3fa2bd3c8fe4df5f3a28ce7848f7d6a5c))
+  *  wired item visiable when network plugin disabled ([b6a2a615](https://github.com/linuxdeepin/dde-dock/commit/b6a2a6152b0785a288f0025bad21bd72264935c5))
+* **system-tray:**
+  *  battery icon invisible ([fbff7b1f](https://github.com/linuxdeepin/dde-dock/commit/fbff7b1fff03a96a99e9b65733a548cd2acfa343))
+  *  keyboard indicator not show ([99095cb2](https://github.com/linuxdeepin/dde-dock/commit/99095cb249b2a502e2775d4512a38eea912646fc))
+
+#### Features
+
+*   support change frame opacity ([0310a313](https://github.com/linuxdeepin/dde-dock/commit/0310a31352ed3fb2972ead029b42218460169cea))
+* **system-tray:**  check have new tray protocol menu ([11d97f20](https://github.com/linuxdeepin/dde-dock/commit/11d97f206e4d50e566a3d66c3071eb7ec555ab92))
+
+
+
 <a name="4.7.3.5"></a>
 ## 4.7.3.5 (2018-10-12)
 
