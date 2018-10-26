@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Adem Çalışkan <ademcal@yahoo.com>, 2017-2018
+# meda <ademcal@yahoo.com>, 2017-2018
 # Emin Tufan <etcetin@gmail.com>, 2018
 # unc926 <win32-blackghost@hotmail.com>, 2017
 # Kaya Zeren <kayazeren@gmail.com>, 2018
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-12 12:53+0000\n"
+"PO-Revision-Date: 2018-10-14 09:07+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"

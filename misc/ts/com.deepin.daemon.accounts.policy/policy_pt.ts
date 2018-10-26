@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Autenticação requerida para alterar o seus próprios dados de utilizador</translation>
+			<translation>A autenticação é obrigatória para alterar os seus próprios dados de utilizador</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>

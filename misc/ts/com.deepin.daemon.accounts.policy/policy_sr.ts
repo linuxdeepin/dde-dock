@@ -29,7 +29,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation>Омогући Аутоматско Пријављивање</translation>
+			<translation>Омогући аутоматско пријављивање</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
@@ -39,7 +39,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation>Онемогући Аутоматско Пријављивање</translation>
+			<translation>Онемогући аутоматско пријављивање</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
@@ -49,7 +49,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation>Омогући Пријављивање без лозинке</translation>
+			<translation>Омогући пријављивање без лозинке</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
@@ -59,7 +59,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation>Онемогући Пријављивање без лозинке</translation>
+			<translation>Онемогући пријављивање без лозинке</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>

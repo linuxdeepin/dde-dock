@@ -4,15 +4,15 @@
 # 
 # Translators:
 # Galin Iskrenov <loot270@abv.bg>, 2016-2018
-# Kiril Kirilov <cybercop_montana@abv.bg>, 2017
+# Kiril Kirilov <cybercop_montana@abv.bg>, 2017-2018
 # Tony Ivanov <duskull88@fastmail.fm>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-11 12:25+0000\n"
-"Last-Translator: Galin Iskrenov <loot270@abv.bg>\n"
+"PO-Revision-Date: 2018-07-31 05:42+0000\n"
+"Last-Translator: Kiril Kirilov <cybercop_montana@abv.bg>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -191,7 +191,7 @@ msgstr "Заключи екран"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Покаж/Скрий докинг станцията"
+msgstr "Покажи/Скрий док лентата"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
@@ -243,7 +243,7 @@ msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "Смена на подредба"
+msgstr "Смяна на подредба"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
@@ -279,7 +279,7 @@ msgstr "Превключи прозорците на обратно "
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Покажи Работен плот"
+msgstr "Покажи Работния плот"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
@@ -331,7 +331,7 @@ msgstr "Покажи прозорците в текущия плот"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Покажи работен плот"
+msgstr "Покажи работното място"
 
 #: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
@@ -369,19 +369,19 @@ msgstr "Повторен опит"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
-msgstr "%q инсталиран успешно."
+msgstr "%q е инсталиран успешно."
 
 #: ../../lastore/notify.go:85
 msgid "%q failed to install."
-msgstr "%q неуспешен за инсталиране."
+msgstr "%q не може да бъде инсталиран."
 
 #: ../../lastore/notify.go:93
 msgid "%q removed successfully."
-msgstr "%q премахнати успешно."
+msgstr "%q е премахнат успешно."
 
 #: ../../lastore/notify.go:95
 msgid "%q failed to remove."
-msgstr "%q неосъществено премахване."
+msgstr "%q не може да бъде премахнат."
 
 #: ../../lastore/notify.go:102
 msgid ""
@@ -400,11 +400,11 @@ msgstr "Вашият системен източник е променен, мо
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr "%q успешно премахнат"
+msgstr "%q е успешно премахнат"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr "Неуспешно инсталиране на %q"
+msgstr "Неуспешно деинсталиране на %q"
 
 #: ../../network/agent.go:396
 msgid "Password required to connect %q"

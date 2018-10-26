@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-08-10 06:44+0000\n"
+"PO-Revision-Date: 2018-10-24 17:29+0000\n"
 "Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "Обавештење о пристиглим порукама"
 #: ../../bluetooth/utils_notify.go:52 ../../network/dev_test.go:116
 #: ../../network/dev_test.go:132 ../../network/utils_notify.go:107
 msgid "Connected"
-msgstr "Повезан"
+msgstr "Повезани сте"
 
 #: ../../bluetooth/utils_notify.go:55 ../../network/dev_test.go:120
 #: ../../network/dev_test.go:123 ../../network/dev_test.go:126
@@ -134,7 +134,7 @@ msgstr "Нисте поевзани"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
-msgstr "Проверите да је %q укључен и да је у опсегу"
+msgstr "Проверите да ли је %q укључен и да је у опсегу"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
@@ -146,7 +146,7 @@ msgstr "Блутут повезивање неуспело"
 
 #: ../../dock/app_entry_menu.go:101
 msgid "_Open"
-msgstr "_Отвори"
+msgstr "_Покрени"
 
 #: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
@@ -182,7 +182,7 @@ msgstr "Терминал"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Дипин снимач екрана"
+msgstr "Дипин Снимач Екрана"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -194,7 +194,7 @@ msgstr "Прикажи/Сакриј док"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr "Сучеље гашења"
+msgstr "Сучеље искључивања"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -222,7 +222,7 @@ msgstr "Управник датотека"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Онемогући Додирну Таблу"
+msgstr "Онемогући додирну таблу"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -278,11 +278,11 @@ msgstr "Промена прозора обрнутим редоследом"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Приказ радне површи"
+msgstr "Приказ радне површине"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr "Увећај прозор"
+msgstr "Максимизуј прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
@@ -290,7 +290,7 @@ msgstr "Врати прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr "Спусти прозор"
+msgstr "Миниимизуј прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
@@ -302,7 +302,7 @@ msgstr "Помери прозор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr "Промена величине прозора"
+msgstr "Промени величину прозора"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
@@ -338,7 +338,7 @@ msgstr "Аутентификација је неопходна за промен
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr "Промена системског језика неуспела, молимо покушајте касније"
+msgstr "Промена системског језика неуспешна, молимо покушајте касније"
 
 #: ../../langselector/locale.go:374
 msgid ""
@@ -385,7 +385,7 @@ msgstr "%q уклањање неуспешно."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Прикључите пуњач да би сте успешно ажурирали и избегли самостално искључивање."
+msgstr "Прикључите пуњач да бисте успешно ажурирали и избегли самостално искључивање."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -395,11 +395,11 @@ msgstr "Кеш пакета уклоњен"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
+msgstr "Системски извор је промењен, молимо вратите се на званични извор за нормално коришћење."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr "%q уклоњен успешно"
+msgstr "%q уклањање успешно"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
@@ -431,19 +431,19 @@ msgstr "Аутоматски"
 #: ../../network/nm_setting_vpn_openvpn.go:250
 #: ../../network/nm_setting_vpn_vpnc.go:161
 msgid "None"
-msgstr "Ниједно"
+msgstr "Ништа"
 
 #: ../../network/manager_active.go:339
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "ВЕП 40/128-bit Кључ"
 
 #: ../../network/manager_active.go:341
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "ВПА/ВПА2 Лично"
 
 #: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
@@ -459,22 +459,22 @@ msgstr "МД5"
 #: ../../network/manager_active.go:353 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
-msgstr ""
+msgstr "ЛЕАП"
 
 #: ../../network/manager_active.go:355 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
-msgstr ""
+msgstr "ФАСТ"
 
 #: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr ""
+msgstr "Тунелни ТЛС"
 
 #: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
-msgstr ""
+msgstr "Заштићени ЕАП"
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
@@ -490,15 +490,15 @@ msgstr "Бежична веза"
 
 #: ../../network/nm_custom_type.go:232
 msgid "Wireless Ad-Hoc"
-msgstr ""
+msgstr "Бежични Ад-Хок"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr "Бежична АП-Врућа тачка"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
-msgstr ""
+msgstr "ПППоЕ Веза"
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
@@ -530,11 +530,11 @@ msgstr "ВПН отворенВПН"
 
 #: ../../network/nm_custom_type.go:252
 msgid "VPN PPTP"
-msgstr "ВПН PPTP"
+msgstr "ВПН ППТП"
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
@@ -546,7 +546,7 @@ msgstr "ПАП"
 
 #: ../../network/nm_setting_802_1x.go:35
 msgid "CHAP"
-msgstr ""
+msgstr "CHAP"
 
 #: ../../network/nm_setting_802_1x.go:36
 msgid "MSCHAP"
@@ -558,11 +558,11 @@ msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:38
 msgid "GTC"
-msgstr ""
+msgstr "ГТЦ"
 
 #: ../../network/nm_setting_802_1x.go:39
 msgid "OTP"
-msgstr ""
+msgstr "ОТП"
 
 #: ../../network/nm_setting_802_1x.go:139
 #: ../../network/nm_setting_ip4_config.go:42
@@ -613,23 +613,23 @@ msgstr "Унутрашња мрежа"
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr ""
+msgstr "МАК адр. уређаја"
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr ""
+msgstr "Клонирана МАК адр."
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
 msgid "Customize MTU"
-msgstr ""
+msgstr "Прилагоди МТУ"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:138
 #: ../../network/nm_setting_beans_gen.go:361
 msgid "MTU"
-msgstr ""
+msgstr "МТУ"
 
 #: ../../network/nm_setting_beans_gen.go:58
 #: ../../network/nm_setting_beans_gen.go:80
@@ -643,21 +643,21 @@ msgstr "Држава или регион"
 
 #: ../../network/nm_setting_beans_gen.go:61
 msgid "Provider"
-msgstr ""
+msgstr "Provider"
 
 #: ../../network/nm_setting_beans_gen.go:62
 msgid "Plan"
-msgstr ""
+msgstr "Plan"
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
-msgstr ""
+msgstr "Тип услуге"
 
 #: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:65
 #: ../../network/nm_setting_beans_gen.go:82
 msgid "APN"
-msgstr ""
+msgstr "АПН"
 
 #: ../../network/nm_setting_beans_gen.go:66
 #: ../../network/nm_setting_beans_gen.go:72
@@ -729,7 +729,7 @@ msgstr "Безбедност"
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
-msgstr ""
+msgstr "Обезбеђење неопходно"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
@@ -839,7 +839,7 @@ msgstr "Канал"
 
 #: ../../network/nm_setting_beans_gen.go:144
 msgid "PPPoE"
-msgstr "PPPoE"
+msgstr "ПППоЕ"
 
 #: ../../network/nm_setting_beans_gen.go:147
 msgid "Service"
@@ -857,67 +857,67 @@ msgstr "Употреби МППЕ"
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "128-bit MPPE"
-msgstr ""
+msgstr "128-bit МППЕ"
 
 #: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Stateful MPPE"
-msgstr ""
+msgstr "Stateful MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse EAP Authentication"
-msgstr ""
+msgstr "Одбиј ЕАП аутентификацију"
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse PAP Authentication"
-msgstr ""
+msgstr "Одбиј ПАП аутентификацију"
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:266
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse CHAP Authentication"
-msgstr ""
+msgstr "Refuse CHAP Authentication"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:267
 #: ../../network/nm_setting_beans_gen.go:391
 msgid "Refuse MSCHAP Authentication"
-msgstr ""
+msgstr "Refuse MSCHAP Authentication"
 
 #: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:268
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr ""
+msgstr "Refuse MSCHAPv2 Authentication"
 
 #: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:269
 #: ../../network/nm_setting_beans_gen.go:393
 msgid "No BSD Data Compression"
-msgstr ""
+msgstr "No BSD Data Compression"
 
 #: ../../network/nm_setting_beans_gen.go:165
 #: ../../network/nm_setting_beans_gen.go:270
 #: ../../network/nm_setting_beans_gen.go:394
 msgid "No Deflate Data Compression"
-msgstr ""
+msgstr "No Deflate Data Compression"
 
 #: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:271
 #: ../../network/nm_setting_beans_gen.go:395
 msgid "No TCP Header Compression"
-msgstr ""
+msgstr "No TCP Header Compression"
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:274
 #: ../../network/nm_setting_beans_gen.go:396
 msgid "Send PPP Echo Packets"
-msgstr ""
+msgstr "Send PPP Echo Packets"
 
 #: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:234
@@ -931,7 +931,7 @@ msgstr "ВПН"
 
 #: ../../network/nm_setting_beans_gen.go:176
 msgid "Need VPN Plugin"
-msgstr ""
+msgstr "Потребан ВПН прикључак"
 
 #: ../../network/nm_setting_beans_gen.go:177
 #: ../../network/nm_setting_beans_gen.go:182
@@ -955,7 +955,7 @@ msgstr "Везни чвор"
 #: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:377
 msgid "NT Domain"
-msgstr ""
+msgstr "НТ Домен"
 
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:284
@@ -1015,17 +1015,17 @@ msgstr "Локални ИП"
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "Request an Inner IP Address"
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:412
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "Enforce UDP Encapsulation"
 
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:413
 msgid "Use IP Compression"
-msgstr ""
+msgstr "Користи ИП компресију"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:424
@@ -1036,12 +1036,12 @@ msgstr "Корисничка лозинка"
 #: ../../network/nm_setting_beans_gen.go:249
 #: ../../network/nm_setting_beans_gen.go:425
 msgid "Group Name"
-msgstr "Име скупа"
+msgstr "Име групе"
 
 #: ../../network/nm_setting_beans_gen.go:226
 #: ../../network/nm_setting_beans_gen.go:427
 msgid "Group Pwd"
-msgstr "Лозинка скупа"
+msgstr "Лозинка групе"
 
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:428
@@ -1055,7 +1055,7 @@ msgstr "CA податак"
 
 #: ../../network/nm_setting_beans_gen.go:246
 msgid "VPN IPsec"
-msgstr ""
+msgstr "VPN IPsec"
 
 #: ../../network/nm_setting_beans_gen.go:248
 msgid "Enable IPsec"
@@ -1063,7 +1063,7 @@ msgstr "Омогуђи ИПсек"
 
 #: ../../network/nm_setting_beans_gen.go:250
 msgid "Group ID"
-msgstr "ИД скупа"
+msgstr "ИД групе"
 
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
@@ -1072,11 +1072,11 @@ msgstr "Унапредно-дељени кључ"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
-msgstr ""
+msgstr "Фаза1 Алгоритми"
 
 #: ../../network/nm_setting_beans_gen.go:253
 msgid "Phase2 Algorithms"
-msgstr ""
+msgstr "Фаза2 Алгоритми"
 
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
@@ -1085,11 +1085,11 @@ msgstr "ВПН ППП"
 
 #: ../../network/nm_setting_beans_gen.go:272
 msgid "No Protocol Field Compression"
-msgstr ""
+msgstr "No Protocol Field Compression"
 
 #: ../../network/nm_setting_beans_gen.go:273
 msgid "No Address/Control Compression"
-msgstr ""
+msgstr "No Address/Control Compression"
 
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "VPN Security"
@@ -1097,27 +1097,27 @@ msgstr "ВПН Безбедност"
 
 #: ../../network/nm_setting_beans_gen.go:319
 msgid "Cipher"
-msgstr ""
+msgstr "Cipher"
 
 #: ../../network/nm_setting_beans_gen.go:320
 msgid "HMAC Auth"
-msgstr ""
+msgstr "HMAC Auth"
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "VPN TLS Authentication"
-msgstr ""
+msgstr "ВПН ТЛС Аутентификација"
 
 #: ../../network/nm_setting_beans_gen.go:328
 msgid "Subject Match"
-msgstr ""
+msgstr "Subject Match"
 
 #: ../../network/nm_setting_beans_gen.go:329
 msgid "Remote Cert Type"
-msgstr ""
+msgstr "Remote Cert Type"
 
 #: ../../network/nm_setting_beans_gen.go:330
 msgid "Key File"
-msgstr ""
+msgstr "Key File"
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "VPN Proxies"
@@ -1137,7 +1137,7 @@ msgstr "Порт"
 
 #: ../../network/nm_setting_beans_gen.go:343
 msgid "Retry Indefinitely When Failed"
-msgstr ""
+msgstr "Retry Indefinitely When Failed"
 
 #: ../../network/nm_setting_beans_gen.go:351
 #: ../../network/nm_setting_beans_gen.go:435
@@ -1146,51 +1146,51 @@ msgstr "ВПН Напредно"
 
 #: ../../network/nm_setting_beans_gen.go:353
 msgid "Customize Gateway Port"
-msgstr ""
+msgstr "Customize Gateway Port"
 
 #: ../../network/nm_setting_beans_gen.go:354
 msgid "Gateway Port"
-msgstr ""
+msgstr "Gateway Port"
 
 #: ../../network/nm_setting_beans_gen.go:355
 msgid "Customize Renegotiation Interval"
-msgstr ""
+msgstr "Customize Renegotiation Interval"
 
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "Renegotiation Interval"
-msgstr ""
+msgstr "Интервал преговарања"
 
 #: ../../network/nm_setting_beans_gen.go:357
 msgid "Use LZO data compression"
-msgstr ""
+msgstr "Користи ЛЗО компресију података"
 
 #: ../../network/nm_setting_beans_gen.go:358
 msgid "Use TCP connection"
-msgstr ""
+msgstr "Користи ТЦП везу"
 
 #: ../../network/nm_setting_beans_gen.go:359
 msgid "Use TAP device"
-msgstr ""
+msgstr "Користи ТАП уређај"
 
 #: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize Tunnel MTU"
-msgstr ""
+msgstr "Customize Tunnel MTU"
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Customize UDP Fragment Size"
-msgstr ""
+msgstr "Customize UDP Fragment Size"
 
 #: ../../network/nm_setting_beans_gen.go:363
 msgid "UDP Fragment Size"
-msgstr ""
+msgstr "УДП Величина фрагмента"
 
 #: ../../network/nm_setting_beans_gen.go:364
 msgid "Restrict Tunnel TCP MSS"
-msgstr ""
+msgstr "Restrict Tunnel TCP MSS"
 
 #: ../../network/nm_setting_beans_gen.go:365
 msgid "Randomize Remote Hosts"
-msgstr ""
+msgstr "Randomize Remote Hosts"
 
 #: ../../network/nm_setting_beans_gen.go:437
 msgid "Domain"
@@ -1198,7 +1198,7 @@ msgstr "Домен"
 
 #: ../../network/nm_setting_beans_gen.go:438
 msgid "Vendor"
-msgstr ""
+msgstr "Vendor"
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "Version"
@@ -1210,15 +1210,15 @@ msgstr "Шифровање"
 
 #: ../../network/nm_setting_beans_gen.go:441
 msgid "NAT Traversal"
-msgstr ""
+msgstr "NAT Traversal"
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "IKE DH Group"
-msgstr ""
+msgstr "IKE DH Group"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Forward Secrecy"
-msgstr ""
+msgstr "Forward Secrecy"
 
 #: ../../network/nm_setting_beans_gen.go:444
 msgid "Local Port"
@@ -1226,7 +1226,7 @@ msgstr "Локални Прикључак"
 
 #: ../../network/nm_setting_beans_gen.go:445
 msgid "Disable Dead Peer Detection"
-msgstr ""
+msgstr "Disable Dead Peer Detection"
 
 #: ../../network/nm_setting_beans_gen.go:451
 msgid "IPv4"
@@ -1259,7 +1259,7 @@ msgstr "Други ДНС"
 #: ../../network/nm_setting_beans_gen.go:459
 #: ../../network/nm_setting_beans_gen.go:473
 msgid "Only applied in corresponding resources"
-msgstr ""
+msgstr "Only applied in corresponding resources"
 
 #: ../../network/nm_setting_beans_gen.go:465
 msgid "IPv6"
@@ -1292,7 +1292,7 @@ msgstr "Аутоматски"
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip6_config.go:40
 msgid "Link-Local Only"
-msgstr ""
+msgstr "Link-Local Only"
 
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip6_config.go:41
@@ -1311,15 +1311,15 @@ msgstr "Занемари"
 
 #: ../../network/nm_setting_ip6_config.go:39
 msgid "DHCP"
-msgstr ""
+msgstr "ДХКП"
 
 #: ../../network/nm_setting_virtual_key.go:164
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "ГСМ (ГПРС, УМТС)"
 
 #: ../../network/nm_setting_virtual_key.go:165
 msgid "CDMA (1xRTT, EVDO)"
-msgstr ""
+msgstr "ЦДМА (1xРТТ, ЕВДО)"
 
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "L2TP"
@@ -1343,12 +1343,12 @@ msgstr "ВПНЦ"
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
-msgstr ""
+msgstr "WPA/WPA2 Enterprise"
 
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:215
 msgid "All Available (default)"
-msgstr ""
+msgstr "All Available (default)"
 
 #: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:216
@@ -1388,15 +1388,15 @@ msgstr "Увек Питај"
 #: ../../network/nm_setting_vpn_pptp.go:39
 #: ../../network/nm_setting_vpn_vpnc.go:38 ../../network/utils_dbus_nm.go:181
 msgid "Not Required"
-msgstr ""
+msgstr "Није неопходно"
 
 #: ../../network/nm_setting_vpn_openvpn.go:113
 msgid "Certificates (TLS)"
-msgstr ""
+msgstr "Сертификати (ТЛС)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:115
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "Сертификати са лозинком (ТЛС)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:120
 #: ../../network/nm_setting_vpn_openvpn.go:286
@@ -1410,99 +1410,99 @@ msgstr "1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:230
 msgid "DES-CBC"
-msgstr ""
+msgstr "ДЕС-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:231
 msgid "RC2-CBC"
-msgstr ""
+msgstr "РЦ2-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:232
 msgid "DES-EDE-CBC"
-msgstr ""
+msgstr "ДЕС-ЕДЕ-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:233
 msgid "DES-EDE3-CBC"
-msgstr ""
+msgstr "ДЕС-ЕДЕ3-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:234
 msgid "DESX-CBC"
-msgstr ""
+msgstr "DESX-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:235
 msgid "BF-CBC"
-msgstr ""
+msgstr "БФ-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:236
 msgid "RC2-40-CBC"
-msgstr ""
+msgstr "РЦ2-40-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:237
 msgid "CAST5-CBC"
-msgstr ""
+msgstr "ЦАСТ5-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:238
 msgid "RC2-64-CBC"
-msgstr ""
+msgstr "РЦ2-64-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:239
 msgid "AES-128-CBC"
-msgstr ""
+msgstr "AES-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:240
 msgid "AES-192-CBC"
-msgstr ""
+msgstr "AES-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:241
 msgid "AES-256-CBC"
-msgstr ""
+msgstr "AES-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:242
 msgid "CAMELLIA-128-CBC"
-msgstr ""
+msgstr "CAMELLIA-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:243
 msgid "CAMELLIA-192-CBC"
-msgstr ""
+msgstr "CAMELLIA-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:244
 msgid "CAMELLIA-256-CBC"
-msgstr ""
+msgstr "CAMELLIA-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:245
 msgid "SEED-CBC"
-msgstr ""
+msgstr "СЕЕД-ЦБЦ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "RSA MD-4"
-msgstr ""
+msgstr "РСА МД-4"
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "MD-5"
-msgstr ""
+msgstr "МД-5"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "SHA-1"
-msgstr ""
+msgstr "SHA-1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "SHA-224"
-msgstr ""
+msgstr "SHA-224"
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
 msgid "SHA-256"
-msgstr ""
+msgstr "SHA-256"
 
 #: ../../network/nm_setting_vpn_openvpn.go:256
 msgid "SHA-384"
-msgstr ""
+msgstr "SHA-384"
 
 #: ../../network/nm_setting_vpn_openvpn.go:257
 msgid "SHA-512"
-msgstr ""
+msgstr "SHA-512"
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 msgid "RIPEMD-160"
-msgstr ""
+msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:281
 msgid "Client"
@@ -1522,15 +1522,15 @@ msgstr "СОКС"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr ""
+msgstr "SSH Agent"
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
-msgstr ""
+msgstr "Smartcard"
 
 #: ../../network/nm_setting_vpn_strongswan.go:81
 msgid "EAP"
-msgstr ""
+msgstr "ЕАП"
 
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Cisco (default)"
@@ -1538,15 +1538,15 @@ msgstr "Cisco (подразумевано)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:143
 msgid "Netscreen"
-msgstr ""
+msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "NAT-T When Available (default)"
-msgstr ""
+msgstr "NAT-T When Available (default)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "NAT-T Always"
-msgstr ""
+msgstr "NAT-T Always"
 
 #: ../../network/nm_setting_vpn_vpnc.go:149
 msgid "Cisco UDP"
@@ -1555,16 +1555,16 @@ msgstr "Cisco УДП"
 #: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:162
 msgid "DH Group 1"
-msgstr ""
+msgstr "DH Group 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:155
 msgid "DH Group 2 (default)"
-msgstr ""
+msgstr "DH Group 2 (default)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:156
 #: ../../network/nm_setting_vpn_vpnc.go:164
 msgid "DH Group 5"
-msgstr ""
+msgstr "DH Group 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:160
 msgid "Server (default)"
@@ -1572,7 +1572,7 @@ msgstr "Сервер (подразумевано)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:163
 msgid "DH Group 2"
-msgstr ""
+msgstr "DH Group 2"
 
 #: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
@@ -1580,7 +1580,7 @@ msgstr "Инфраструктура"
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
-msgstr ""
+msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
@@ -1588,39 +1588,39 @@ msgstr "АП-Врућа тачка"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
-msgstr ""
+msgstr "ВЕП"
 
 #: ../../network/nm_setting_wireless_security.go:66
 msgid "Dynamic WEP"
-msgstr ""
+msgstr "Dynamic WEP"
 
 #: ../../network/nm_setting_wireless_security.go:67
 msgid "Ad-Hoc WPA-PSK"
-msgstr ""
+msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:68
 msgid "WPA-PSK Infrastructure"
-msgstr ""
+msgstr "ВПА-ПСК Инфраструктура"
 
 #: ../../network/nm_setting_wireless_security.go:69
 msgid "WPA Enterprise"
-msgstr ""
+msgstr "WPA Enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:73
 msgid "WEP40"
-msgstr ""
+msgstr "ВЕП40"
 
 #: ../../network/nm_setting_wireless_security.go:74
 msgid "WEP104"
-msgstr ""
+msgstr "ВЕП104"
 
 #: ../../network/nm_setting_wireless_security.go:75
 msgid "TKIP"
-msgstr ""
+msgstr "ТКИП"
 
 #: ../../network/nm_setting_wireless_security.go:76
 msgid "CCMP"
-msgstr ""
+msgstr "ЦЦМП"
 
 #: ../../network/nm_setting_wireless_security.go:80
 msgid "Open"
@@ -1649,7 +1649,7 @@ msgstr "Уређај није припремљен за конфигурациј
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "IP configuration could not be reserved (no available address, timeout, etc)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid"
@@ -1663,223 +1663,223 @@ msgstr "Лозинке су биле потребне, али нису прил�
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "The 802.1X supplicant disconnected from the access point or authentication server"
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Configuration of the 802.1X supplicant failed"
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "The 802.1X supplicant quitted or failed unexpectedly"
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "The 802.1X supplicant took too long time to authenticate"
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "ППП услуга се није покренула у оквиру дозвољеног времена"
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "The PPP service disconnected unexpectedly"
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "The PPP service quitted or failed unexpectedly"
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "The DHCP service failed to start within the allowed time"
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "The DHCP service reported an unexpected error"
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "The DHCP service quitted or failed unexpectedly"
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Услуга дељене везе се није покренула"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "The shared connection service quitted or failed unexpectedly"
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "Услуга АутоИП се није покренула"
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "The AutoIP service reported an unexpected error"
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "The AutoIP service quitted or failed unexpectedly"
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "Позивање је неуспешно због заузетих линија"
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "Dialing failed due to no dial tone"
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "Dialing failed due to the carrier"
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Dialing timed out"
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed"
-msgstr ""
+msgstr "Dialing failed"
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Modem initialization failed"
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "Failed to select the specified GSM APN"
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched"
-msgstr ""
+msgstr "No networks searched"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Регистрација мреже одбијена"
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Време за регистрацију мреже истекло"
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed"
-msgstr ""
+msgstr "Register to the requested GSM network failed"
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed"
-msgstr ""
+msgstr "PIN check failed"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "Necessary firmware for the device may be missed"
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
-msgstr ""
+msgstr "Уређај је уклоњен"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "Управник Мреже је заспао"
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "The device's active connection was removed or disappeared"
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "A user or client requested to disconnect"
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "The device's carrier/link changed"
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "The device's existing connection was assumed"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "The 802.1x supplicant is now available"
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
-msgstr ""
+msgstr "Модем није пронађен"
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "The Bluetooth connection timed out or failed"
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "GSM Modem's SIM Card was not inserted"
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "GSM Modem's SIM PIN required"
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "GSM Modem's SIM PUK required"
 
 #: ../../network/state_handler.go:82
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "SIM card error in GSM Modem"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "InfiniBand device does not support connected mode"
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr ""
+msgstr "A connection dependency failed"
 
 #: ../../network/state_handler.go:85
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgstr "RFC 2684 Ethernet bridging error to ADSL"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "ModemManager did not run or quitted unexpectedly"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "The 802.11 Wi-Fi network could not be found"
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "A secondary connection of the base connection failed"
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "DCB or FCoE setup failed"
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "Network teaming control failed"
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "Modem failed to run or not available"
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Modem now ready and available"
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "SIM PIN is incorrect"
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "New connection activation is enqueuing"
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed"
-msgstr ""
+msgstr "Parent device changed"
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Management status of parent device changed"
 
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged"
@@ -1887,12 +1887,12 @@ msgstr "Мрежни кабл је ископчан"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Please make sure SIM card has been inserted with mobile network signal"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "Please make sure a correct plan was selected without arrearage of SIM card"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
@@ -1904,47 +1904,47 @@ msgstr "Активација ВПН везе није успела"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
+msgstr "The VPN connection changed state due to disconnection from users"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
+msgstr "The VPN connection changed state due to disconnection from devices"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
-msgstr ""
+msgstr "VPN service stopped"
 
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "The IP config of VPN connection was invalid"
 
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Време за покушај повезивања на ВПН услугу је истекло"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "The VPN service start timed out"
 
 #: ../../network/state_handler.go:114
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "The VPN service failed to start"
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
+msgstr "Necessary password for the VPN connection was not provided"
 
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Authentication to VPN server failed"
 
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "Веза је обрисана из подешавања"
 
 #: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Покушајте укључивање вруће тачке"
 
 #: ../../network/state_handler.go:227
 msgid "Try connecting %q"
@@ -1952,15 +1952,15 @@ msgstr "Повезивање %q"
 
 #: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Дељење вруће тачке укључено"
 
 #: ../../network/state_handler.go:237
 msgid "%q connected"
-msgstr "%q повезано"
+msgstr "%q повезан"
 
 #: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Дељење вруће тачке искључено"
 
 #: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
@@ -1968,19 +1968,19 @@ msgstr "%q нисте поевзани"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Unable to share hotspot, please check dnsmasq settings"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Неуспешно повезивање на %q, будите ближе бежичном рутеру"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "Неуспешно повезивање на %q, проверите ваш рутер или мрежни кабл."
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Неуспешно повезивање на %q, погрешна лозинка"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -1996,7 +1996,7 @@ msgstr "Авионски режим укључен."
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr ""
+msgstr "Access Point mode is not supported by this device."
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
@@ -2006,7 +2006,7 @@ msgstr "Мрежа"
 #: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "The hardware switch of WLAN Card is off, please switch on as necessary."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -2018,20 +2018,20 @@ msgstr "Системски посредник је отказан."
 
 #: ../../session/power/manager_events.go:133
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "Батерија критично испражњена"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "Рачунар ће обуставити рад ускоро, укључите пуњач одмах"
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
-msgstr "Батерија При Крају"
+msgstr "Батерија при крају"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "Рачунар ће обуставити рад ускоро, укључите пуњач"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
@@ -2045,13 +2045,13 @@ msgstr "Аутентификација је неопходна за подеша
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "Authentication is required to control whether network time synchronization shall be enabled."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "Authentication is required to control whether the RTC stores the local or UTC time."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."

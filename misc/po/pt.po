@@ -7,14 +7,14 @@
 # Gabriel Vicente <gabrielvicent98@gmail.com>, 2017
 # Luís Lima <geral@liqensoft.com>, 2016
 # Luís Lima <geral@liqensoft.com>, 2017-2018
-# Manuela Silva <manuela.silva@sky.com>, 2017
+# MS, 2017-2018
 # Ricardo Simões <xmcorporation@gmail.com>, 2016-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-14 12:08+0000\n"
+"PO-Revision-Date: 2018-10-12 05:14+0000\n"
 "Last-Translator: Ricardo Simões <xmcorporation@gmail.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -25,13 +25,13 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr "Por favor insira uma palavra-passe não inferior a 8 caratéres"
+msgstr "Por favor, insira uma palavra-passe não inferior a 8 carateres"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "A palavra-passe tem de conter letras Inglesas (sensível a maiúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "A palavra-passe tem de conter letras inglesas (sensível a maiúsculas/minúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:59
 msgid "Username can not be empty."

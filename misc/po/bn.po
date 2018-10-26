@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Deepin <justfortest16162215@gmail.com>, 2017
+# Md. Emruz Hossain <hossainemruz@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-10 08:48+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2018-10-12 05:14+0000\n"
+"Last-Translator: Md. Emruz Hossain <hossainemruz@gmail.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -137,7 +138,7 @@ msgstr "নিশ্চিত করুন যে% q চালু এবং প�
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "%q এ সংযুক্ত হতে পারেনি, যুক্ত করা ব্যর্থ হয়েছে"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -153,7 +154,7 @@ msgstr "_সব বন্ধ করা"
 
 #: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
-msgstr ""
+msgstr "_জোর করেই বন্ধ করুন"
 
 #: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
@@ -165,7 +166,7 @@ msgstr "_ডকমুক্ত করুন"
 
 #: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
-msgstr ""
+msgstr "_সকল উইন্ডো"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -225,7 +226,7 @@ msgstr "টাচপ্যাড অক্ষম করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr "উইন্ডো প্রভাব সুইচ করুন"
+msgstr "উইন্ডো ইফেক্ট পরিবর্তন করুন"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
@@ -355,7 +356,7 @@ msgstr "সিস্টেম ভাষা পরিবর্তিত হয়
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
-msgstr ""
+msgstr "পুনরুদ্ধার করুন"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
@@ -363,38 +364,38 @@ msgstr "বাতিল"
 
 #: ../../lastore/lastore.go:233
 msgid "Retry"
-msgstr ""
+msgstr "পুনরায় চেষ্টা করুন"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
-msgstr ""
+msgstr "%q সফলভাবে ইনস্টল হয়েছে"
 
 #: ../../lastore/notify.go:85
 msgid "%q failed to install."
-msgstr ""
+msgstr "%q ইনস্টল করতে ব্যর্থ হয়েছে"
 
 #: ../../lastore/notify.go:93
 msgid "%q removed successfully."
-msgstr ""
+msgstr "%q সফলভাবে মুছে ফেলা হয়েছে।"
 
 #: ../../lastore/notify.go:95
 msgid "%q failed to remove."
-msgstr ""
+msgstr "%q মুছে ফেলতে ব্যর্থ হয়েছে"
 
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
+msgstr "স্বয়ংক্রিয়ভাবে বন্ধ হয়ে যাওয়া প্রতিরোধ করার জন্য, অনুগ্রহ করে স্বাভাবিক আপডেট নির্বাচন করুন।"
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
-msgstr ""
+msgstr "প্যাকেজ ক্যাশ মুছে ফেলা হয়েছে"
 
 #: ../../lastore/notify.go:112
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
+msgstr "আপনার সিস্টেমের source ফাইলটি পরিবর্তন করা হয়েছে, স্বাভাবিক ব্যবহারের জন্য অনুগ্রহ করে অফিশিয়াল source ফাইলে ফিরে যান"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -1071,11 +1072,11 @@ msgstr "প্রাক-ভাগ করা কী"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
-msgstr ""
+msgstr "পর্ব 1 এর অ্যালগরিদম সমূহ"
 
 #: ../../network/nm_setting_beans_gen.go:253
 msgid "Phase2 Algorithms"
-msgstr ""
+msgstr "পর্ব 2 এর অ্যালগরিদম সমূহ"
 
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
@@ -1822,164 +1823,164 @@ msgstr "জিএসএম মোডেমের সিম পিইউকে �
 
 #: ../../network/state_handler.go:82
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "GSM মোডেমের SIM কার্ডে ত্রুটি"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "InfiniBand এর ডিভাইস সমূহ সংযুক্ত মোডকে সমর্থন করে না"
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr ""
+msgstr "সংযোগ যাদের উপর নির্ভর করে তাদের একটি ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:85
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgstr "ADSL এর সময় RFC 2684 Ethernet bridging ত্রুটি ঘটেছে"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "মোডেম ম্যানেজার চালু হয়নি অথবা অপ্রত্যাশিতভাবে বন্ধ হয়ে গেছে"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "802.11 ওয়াই-ফাই নেটওয়ার্ক পাওয়া যায়নি"
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "মূল সংযোগের একটি দ্বিতীয় পর্যায়ের সংযোগ ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "DCB অথবা FCoE সেটআপ ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "নেটওয়ার্ক টিমিং কন্ট্রোল ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "মোডেম চলতে ব্যর্থ হয়েছে অথবা পাওয়া যায়নি"
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "এখন মডেম পাওয়া গেছে এবং প্রস্তুত"
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "SIM এর PIN ভুল"
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "নতুন সংযোগ অ্যাক্টিভেশন করার জন্য পাঠানো হয়েছে"
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed"
-msgstr ""
+msgstr "মূল ডিভাইস পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "মূল ডিভাইসের ব্যবস্থাপনা অবস্থা পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "নেটওয়ার্কের তার খুলে রাখা হয়েছে"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "দয়া করে নিশ্চিত করুন যে মোবাইল নেটওয়ার্ক সংকেতসহ SIM কার্ড ঢোকানো হয়েছে"
 
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "অনুগ্রহ করে নিশ্চিত করুন যে সিম কার্ডের বকেয়া ছাড়া একটি সঠিক পরিকল্পনা নির্বাচন করা হয়েছে"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
-msgstr ""
+msgstr "ভিপিএন সংযোগ সক্রিয় করতে ব্যর্থ হয়েছে, কারণ অজানা"
 
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed"
-msgstr ""
+msgstr "ভিপিএন সংযোগ সক্রিয় করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
+msgstr "ব্যবহারকারী সংযোগ বিচ্ছিন্ন করার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
+msgstr "ডিভাইস সমূহ হতে সংযোগ বিচ্ছিন্ন হওয়ার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped"
-msgstr ""
+msgstr "ভিপিএন সেবা বন্ধ করা হয়েছে"
 
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "ভিপিএন সংযোগের IP কনফিগারটি ভুল ছিল"
 
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "ভিপিএন পরিষেবাটির সাথে সংযোগ প্রচেষ্টার সময় শেষ হয়েছে"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "ভিপিএন সেবা আরম্ভের সময় শেষ হয়েছে"
 
 #: ../../network/state_handler.go:114
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "ভিপিএন পরিষেবা শুরু করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
+msgstr "ভিপিএন সংযোগের জন্য প্রয়োজনীয় পাসওয়ার্ড সরবরাহ করা হয়নি"
 
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "ভিপিএন সার্ভারে প্রমাণীকরণ ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "সেটিংস থেকে সংযোগটি মুছে ফেলা হয়েছে"
 
 #: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "হটস্পট সক্রিয় করে চেষ্টা করুন"
 
 #: ../../network/state_handler.go:227
 msgid "Try connecting %q"
-msgstr ""
+msgstr "%q এ সংযুক্ত হয়ে চেষ্টা করুন"
 
 #: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "হটস্পট শেয়ার করা চালু হয়েছে"
 
 #: ../../network/state_handler.go:237
 msgid "%q connected"
-msgstr ""
+msgstr "%q সংযুক্ত হয়েছে"
 
 #: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "হটস্পট শেয়ার করা বন্ধ হয়েছে"
 
 #: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
-msgstr ""
+msgstr "% q সংযোগ বিচ্ছিন্ন হয়েছে"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "হটস্পট শেয়ার করতে অক্ষম, দয়া করে dnsmasq সেটিংস চেক করুন"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে ওয়ারলেস রাউটারের কাছাকাছি রাখুন"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে রাউটার বা নেটওয়ার্কের তার চেক করুন"
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "সংযোগ ব্যর্থ হয়েছে, %q এর সাথে সংযুক্ত করতে অক্ষম, ভুল পাসওয়ার্ড"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -1987,71 +1988,71 @@ msgstr "অজানা"
 
 #: ../../network/utils_notify.go:80
 msgid "You are now offline."
-msgstr ""
+msgstr "আপনি এখন অফলাইনে।"
 
 #: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "বিমান মোড সক্রিয় করা হয়েছে।"
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr ""
+msgstr "এই ডিভাইস অ্যাক্সেস পয়েন্ট মোড সমর্থন করেনা।"
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
 msgid "Network"
-msgstr ""
+msgstr "নেটওয়ার্ক"
 
 #: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "WLAN কার্ড এর হার্ডওয়্যার সুইচ বন্ধ, অনুগ্রহ করে প্রয়োজন অনুযায়ী চালু করুন।"
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "সিস্টেমের প্রক্সি সফলভাবে সেট করা হয়েছে।"
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "সিস্টেমের প্রক্সি বাতিল করা হয়েছে।"
 
 #: ../../session/power/manager_events.go:133
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "ব্যাটারি অত্যন্ত কম"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "কম্পিউটার খুব শীঘ্রই সাময়িক ভাবে বন্ধ হয়ে যাবে, অনুগ্রহ করে এখনই চার্জার সংযুক্ত করুন"
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
-msgstr ""
+msgstr "ব্যাটারি কম"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "কম্পিউটার শীঘ্রই সাময়িক ভাবে বন্ধ হয়ে যাবে, অনুগ্রহ করে এখনই চার্জার সংযুক্ত করুন"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "ব্যাটারি কম, অনুগ্রহ করে চার্জার সংযুক্ত করুন"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "সিস্টেমের সময় সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "আবহাওয়ার খবর নিয়ন্ত্রণ করার জন্য প্রমাণীকরণের প্রয়োজন, নেটওয়ার্ক সাথে সময় সিনক্রোনাইজেশন চালু থাকা উচিত।"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "আবহাওয়ার খবর নিয়ন্ত্রণ করার জন্য প্রমাণীকরণের প্রয়োজন, RTC স্থানীয় সময় অথবা UTC সময় সংরক্ষণ করে।"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "সিস্টেমের টাইমজোন সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"

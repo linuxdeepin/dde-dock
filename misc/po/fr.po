@@ -4,21 +4,21 @@
 # 
 # Translators:
 # Aestan <anthony.margerand@gmail.com>, 2018
-# iderr, 2016
+# 7413e64ff2211e446031d0f5c23d5cf9, 2016
 # Charles Monzat <c.monzat@laposte.net>, 2017-2018
 # iderr, 2016
 # lexross <mais@techie.com>, 2016-2017
 # Joselito 8 <morbihan8pool@gmail.com>, 2018
 # Quentin D <heziode@protonmail.com>, 2017
-# Sami G.-D. <samgd14@live.ca>, 2017
+# Sami G.-D., 2017
 # zwpwjwtz <zwpwjwtz@126.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-16 05:49+0000\n"
-"Last-Translator: Joselito 8 <morbihan8pool@gmail.com>\n"
+"PO-Revision-Date: 2018-10-12 05:14+0000\n"
+"Last-Translator: lexross <mais@techie.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

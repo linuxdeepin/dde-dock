@@ -24,22 +24,22 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation>Необходима е идентификация за разрешаване на автоматично влизане</translation>
+			<translation>Необходима е идентификация за включване на автоматичното влизане</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation>Разреши автоматично влизане</translation>
+			<translation>Включи автоматично влизане</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation>Необходима е идентификация за премахване на автоматично влизане</translation>
+			<translation>Необходима е идентификация за изключване на автоматичното влизане</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation>Премахни автоматично влизане</translation>
+			<translation>Изключи автоматичното влизане</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
@@ -54,22 +54,22 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Необходима е идентификация за премахване на влизане без парола</translation>
+			<translation>Необходима е идентификация за изключване на влизането без парола</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation>Премахване на влизане без парола</translation>
+			<translation>Изключване на влизането без парола</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation>Удостоверяване е нужно за да промените клавиатурната подредба </translation>
+			<translation>Изисква се идентификация за да зададете клавиатурна подредба </translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation>настройване на клавиатурна подредба</translation>
+			<translation>Задаване на клавиатурна подредба</translation>
 		</message>
 	</context>
 </TS>

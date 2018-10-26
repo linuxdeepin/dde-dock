@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Cal autenticació per canviar les dades d&apos;usuari pròpies</translation>
+			<translation>Cal autenticació per canviar les dades d&apos;usuari pròpies.</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
 			<source>Authentication is required to change user data</source>
-			<translation>Cal autenticació per canviar les dades d&apos;usuari</translation>
+			<translation>Cal autenticació per canviar les dades d&apos;usuari.</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
@@ -64,12 +64,12 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation>Cal autenticació per establir el disseny del teclat</translation>
+			<translation>Cal autenticació per establir la disposició del teclat.</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation>Estableix el disseny del teclat</translation>
+			<translation>Establiu la disposició del teclat.</translation>
 		</message>
 	</context>
 </TS>

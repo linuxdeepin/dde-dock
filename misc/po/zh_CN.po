@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-07-16 00:55+0000\n"
+"PO-Revision-Date: 2018-10-25 07:32+0000\n"
 "Last-Translator: Cindy0514 <zhuxiujuan@deepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -738,7 +738,7 @@ msgstr "安全"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
-msgstr "秘钥"
+msgstr "密钥"
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
@@ -980,7 +980,7 @@ msgstr "CSD 脚本"
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:289
 msgid "Use FSID for Key Passphrase"
-msgstr "为秘钥口令句使用FSID"
+msgstr "为密钥口令句使用FSID"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
@@ -993,19 +993,19 @@ msgstr "认证类型"
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_vpn_openvpn.go:116
 msgid "Static Key"
-msgstr "静态秘钥"
+msgstr "静态密钥"
 
 #: ../../network/nm_setting_beans_gen.go:201
 #: ../../network/nm_setting_beans_gen.go:308
 #: ../../network/nm_setting_beans_gen.go:331
 msgid "Customize Key Direction"
-msgstr "自定义秘钥方向"
+msgstr "自定义密钥方向"
 
 #: ../../network/nm_setting_beans_gen.go:202
 #: ../../network/nm_setting_beans_gen.go:309
 #: ../../network/nm_setting_beans_gen.go:332
 msgid "Key Direction"
-msgstr "秘钥方向"
+msgstr "密钥方向"
 
 #: ../../network/nm_setting_beans_gen.go:203
 #: ../../network/nm_setting_beans_gen.go:310
@@ -1073,7 +1073,7 @@ msgstr "组ID"
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr "预共享秘钥"
+msgstr "预共享密钥"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
