@@ -84,8 +84,7 @@ Suggests:
  network-manager-vpnc,
  xserver-xorg-input-wacom,
  xserver-xorg-input-synaptics,
- miraclecast,
- grub-themes-deepin
+ miraclecast
 Description: daemon handling the DDE session settings
  This package contains the daemon which is responsible for setting the
  various parameters of a DDE session and the applications that run
