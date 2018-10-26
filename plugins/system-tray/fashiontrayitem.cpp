@@ -20,6 +20,7 @@
  */
 
 #include "fashiontrayitem.h"
+#include "system-trays/abstractsystemtraywidget.h"
 
 #include <QDebug>
 #include <QResizeEvent>
@@ -153,6 +154,7 @@ void FashionTrayItem::setDockPostion(Dock::Position pos)
     m_dockPosistion = pos;
 
     m_controlWidget->setDockPostion(m_dockPosistion);
+    AbstractSystemTrayWidget::setDockPostion(m_dockPosistion);
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);

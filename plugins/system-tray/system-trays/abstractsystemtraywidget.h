@@ -34,12 +34,15 @@ public:
     virtual ~AbstractSystemTrayWidget();
 
     void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
+    inline TrayType trayTyep() const Q_DECL_OVERRIDE { return TrayType::SystemTray; }
 
     virtual inline QWidget *trayTipsWidget() { return nullptr; }
     virtual inline QWidget *trayPopupApplet() { return nullptr; }
     virtual inline const QString trayClickCommand() { return QString(); }
     virtual inline const QString contextMenu() const {return QString(); }
     virtual inline void invokedMenuItem(const QString &menuId, const bool checked) { Q_UNUSED(menuId); Q_UNUSED(checked); }
+
+    static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
 
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;

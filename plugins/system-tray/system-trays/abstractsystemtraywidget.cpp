@@ -69,12 +69,8 @@ void AbstractSystemTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     switch (mouseButton) {
     case XCB_BUTTON_INDEX_1: {
-        if (trayPopupApplet()) {
-            showPopupApplet(trayPopupApplet());
-        }
-        if (!trayClickCommand().isEmpty()) {
-            QProcess::startDetached(trayClickCommand());
-        }
+        showPopupApplet(trayPopupApplet());
+        QProcess::startDetached(trayClickCommand());
         break;
     }
     case XCB_BUTTON_INDEX_2:
