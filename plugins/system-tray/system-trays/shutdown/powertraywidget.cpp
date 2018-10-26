@@ -38,6 +38,8 @@ PowerTrayWidget::PowerTrayWidget(QWidget *parent)
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerTrayWidget::updateIcon);
     connect(m_powerInter, &DBusPower::BatteryStateChanged, this, &PowerTrayWidget::updateIcon);
     connect(m_powerInter, &DBusPower::OnBatteryChanged, this, &PowerTrayWidget::updateIcon);
+
+    updateIcon();
 }
 
 void PowerTrayWidget::setActive(const bool active)
