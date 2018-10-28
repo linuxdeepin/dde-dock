@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>关机按钮</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50.0009524%" y1="99.9990476%" x2="50.0009524%" y2="-0.000952380952%" id="linearGradient-1">
+            <stop stop-color="#5F00F4" offset="0%"></stop>
+            <stop stop-color="#AF4DEB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="关机按钮">
+            <image id="Bitmap" x="1" y="2" width="46" height="46" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAAABGdBTUEAA1teXP8meAAAA25JREFUaAXV2IlunTAQheGm+6LuUtv3f8Xuazof4Vgm4SJocnPpSBMbGNv/HAZD7tmd69vZOEVah33f8bk/o6WfNuc3tZcXWDs447T87jgQTO9OJyatc3/KE+d4cxIm22KJBxrY39UHssWMvTcOMDbjVycQkDWLiu2Bf64ZtCLmwRiTBFbBrwEXE2jtr/JVk49Aaxrz3h/nlYD5F9fI7aq4WQt0JgV9LAOcElqEBrAEHpVBq2N+bEutW3PRDoH30Go5Ey5OdkMXqW09tX9Q+TnwlIeBSuM2oWu5iVF+dv05cHWWAbdRHhPS7oDafc1P1HehN2pLRnvMB7Ffc6mvTHumFtsrLkAiSuR7izh9R6k8LJ+UzGXFJSJgclvq+JSGBVMv8qAwqKittn84sTPDhI3QWBu4voxktye1cbFwNdVTKrKQ0U19f1jspg0bxqa4DpfEHnaSwpg1bCmVsyieh3J2xI5Otoc0GaS+d8Q4i6LWsTbFJTDZJ2eHnf4kxqFKUipq/H8BnzycEjjld8nae4kRayuVIYu1o08c1xQPR9vcc2KHbWNMjedp3SHrBKntfsBBt/1xEra/A+BYz3vFvU73bhgJfbEnViuL/L7h/F4N47Btp1SyFe4ZPmxYW6k48M37tHyvhg3jIHIUVze+vh6V73FPx4QNI9ameMBl87x8b4YJW8DbwwnUBf8kPyvPblPdkxsWTNiGMkHU3kQORrPluC3fcuLE7ata307ytRz4ZDus48FcEPC4fA8PKgYsga7uhc0pnmsvqzO5PblwS63fUt6Wfy4Px6C29Q+BuzVqC/yX8jag+rdhuN6XU9r6rUSqP9ghcKDgXX9drt7bg1H9YxqlP5RTmdr+u78i3CHwih2Cozx4W9Gxf76we7wrp3QPvQm8xg6q5zYpG69dSlyZqM5dx5Tlm/IX5YADTbjZtZYUrzGDGUxtrSfcAt5kEriumcd2R2X2qVxNpzxmoQWueb2L4ZKk+JPRqUSZj+Vbf29Ux96GSoMgSoMDzh0+CF0xq8DFMfBgJWBhL6l4FpdAngUt80KTsNY4iZvHHYvn48k8i8B1fbA1iidWm/gkACZggZOY64kFAoiSSYqy+tx519kqaIGZXH+LZZyWg+2B58D7BC6Xw2rgQAYgx//SZo605uj7jnuw9NO6vtn+AqnV1gO6qnTBAAAAAElFTkSuQmCC"></image>
+            <path d="M3,24 C3,12.421 12.42,3 24,3 C35.579,3 45,12.421 45,24 C45,35.579 35.579,45 24,45 C12.42,45 3,35.579 3,24 Z" id="path-2" fill="url(#linearGradient-1)"></path>
+            <path d="M23.968,24 C23.416,24 22.968,23.552 22.968,23 L22.968,13 C22.968,12.448 23.416,12 23.968,12 C24.52,12 24.968,12.448 24.968,13 L24.968,23 C24.968,23.552 24.52,24 23.968,24 L23.968,24 L23.968,24 Z" id="path14594" fill="#FFFFFF"></path>
+            <path d="M29.963,15.98 C32.395,17.804 33.968,20.711 33.968,23.984 C33.968,29.507 29.491,33.984 23.968,33.984 C18.445,33.984 13.968,29.507 13.968,23.984 C13.968,20.713 15.539,17.808 17.968,15.984" id="path14596" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>

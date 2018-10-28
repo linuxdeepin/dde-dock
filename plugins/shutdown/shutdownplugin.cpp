@@ -1,0 +1,226 @@
+/*
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     sbw <sbw@sbw.so>
+ *
+ * Maintainer: sbw <sbw@sbw.so>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "shutdownplugin.h"
+#include "dbus/dbusaccount.h"
+
+#include <QIcon>
+#include <QSettings>
+
+#define PLUGIN_STATE_KEY    "enable"
+
+ShutdownPlugin::ShutdownPlugin(QObject *parent)
+    : QObject(parent),
+
+      m_pluginLoaded(false),
+      m_settings("deepin", "dde-dock-shutdown"),
+      m_tipsLabel(new TipsWidget)
+{
+    m_tipsLabel->setText(tr("Shutdown"));
+    m_tipsLabel->setVisible(false);
+}
+
+const QString ShutdownPlugin::pluginName() const
+{
+    return "shutdown";
+}
+
+const QString ShutdownPlugin::pluginDisplayName() const
+{
+    return tr("Shutdown");
+}
+
+QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_shutdownWidget;
+}
+
+QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_tipsLabel;
+}
+
+void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
+{
+    m_proxyInter = proxyInter;
+
+    if (!pluginIsDisable()) {
+        loadPlugin();
+    }
+}
+
+void ShutdownPlugin::pluginStateSwitched()
+{
+    m_settings.setValue(PLUGIN_STATE_KEY, !m_settings.value(PLUGIN_STATE_KEY, true).toBool());
+
+    if (pluginIsDisable())
+    {
+        m_proxyInter->itemRemoved(this, QString());
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        m_proxyInter->itemAdded(this, QString());
+    }
+}
+
+bool ShutdownPlugin::pluginIsDisable()
+{
+    return !m_settings.value(PLUGIN_STATE_KEY, true).toBool();
+}
+
+const QString ShutdownPlugin::itemCommand(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+}
+
+const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
+{
+    QList<QVariant> items;
+    items.reserve(6);
+
+    QMap<QString, QVariant> shutdown;
+    shutdown["itemId"] = "Shutdown";
+    shutdown["itemText"] = tr("Shut down");
+    shutdown["isActive"] = true;
+    items.push_back(shutdown);
+
+    QMap<QString, QVariant> reboot;
+    reboot["itemId"] = "Restart";
+    reboot["itemText"] = tr("Restart");
+    reboot["isActive"] = true;
+    items.push_back(reboot);
+
+    QMap<QString, QVariant> suspend;
+    suspend["itemId"] = "Suspend";
+    suspend["itemText"] = tr("Suspend");
+    suspend["isActive"] = true;
+    items.push_back(suspend);
+
+    QMap<QString, QVariant> lock;
+    lock["itemId"] = "Lock";
+    lock["itemText"] = tr("Lock");
+    lock["isActive"] = true;
+    items.push_back(lock);
+
+    QMap<QString, QVariant> logout;
+    logout["itemId"] = "Logout";
+    logout["itemText"] = tr("Log out");
+    logout["isActive"] = true;
+    items.push_back(logout);
+
+    if (DBusAccount().userList().count() > 1)
+    {
+        QMap<QString, QVariant> switchUser;
+        switchUser["itemId"] = "SwitchUser";
+        switchUser["itemText"] = tr("Switch account");
+        switchUser["isActive"] = true;
+        items.push_back(switchUser);
+    }
+
+    QMap<QString, QVariant> power;
+    power["itemId"] = "power";
+    power["itemText"] = tr("Power settings");
+    power["isActive"] = true;
+    items.push_back(power);
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(itemKey)
+    Q_UNUSED(checked)
+
+    if (menuId == "power")
+        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+    else if (menuId == "Lock")
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                                           << "--dest=com.deepin.dde.lockFront"
+                                                           << "/com/deepin/dde/lockFront"
+                                                           << QString("com.deepin.dde.lockFront.Show"));
+    else
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                                           << "--dest=com.deepin.dde.shutdownFront"
+                                                           << "/com/deepin/dde/shutdownFront"
+                                                           << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
+}
+
+void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
+{
+    Q_UNUSED(displayMode);
+
+    m_shutdownWidget->update();
+}
+
+int ShutdownPlugin::itemSortKey(const QString &itemKey)
+{
+    Dock::DisplayMode mode = displayMode();
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
+
+    //if (mode == Dock::DisplayMode::Fashion) {
+        //return m_settings.value(key, 4).toInt();
+    //} else {
+        //return m_settings.value(key, 4).toInt();
+    //}
+
+    return m_settings.value(key, 4).toInt();
+}
+
+void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    m_settings.setValue(key, order);
+}
+
+void ShutdownPlugin::requestContextMenu(const QString &itemKey)
+{
+    m_proxyInter->requestContextMenu(this, itemKey);
+}
+
+void ShutdownPlugin::loadPlugin()
+{
+    if (m_pluginLoaded) {
+        qDebug() << "shutdown plugin has been loaded! return";
+        return;
+    }
+
+    m_pluginLoaded = true;
+
+    m_shutdownWidget = new PluginWidget;
+
+    connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
+
+    m_proxyInter->itemAdded(this, QString());
+    displayModeChanged(displayMode());
+}
