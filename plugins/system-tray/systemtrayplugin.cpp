@@ -148,6 +148,10 @@ bool SystemTrayPlugin::itemAllowContainer(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey);
+
+    return trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray ? false : true;
+
     return true;
 }
 
