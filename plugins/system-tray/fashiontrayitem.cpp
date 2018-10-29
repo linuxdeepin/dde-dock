@@ -282,6 +282,7 @@ void FashionTrayItem::onTrayAttentionChanged(const bool attention)
         } else {
             moveInAttionTray();
             m_currentAttentionTray = nullptr;
+            requestResize();
         }
     }
 }
