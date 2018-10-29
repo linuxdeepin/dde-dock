@@ -23,6 +23,9 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <DHiDPIHelper>
+
+DWIDGET_USE_NAMESPACE
 
 #define ExpandedKey "fashion-tray-expanded"
 
@@ -93,10 +96,15 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
     path.addRoundedRect(rect(), 10, 10);
     painter.fillPath(path, color);
 
+    // reset opacity
+    painter.setOpacity(1);
+
     // draw arrow pixmap
-    QRect r = QRect(QPoint(0, 0), m_arrowPix.size());
-    r.moveCenter(rect().center());
-    painter.drawPixmap(r, m_arrowPix);
+    QRectF rf = QRectF(rect());
+    QRectF rfp = QRectF(m_arrowPix.rect());
+    QPointF p = rf.center() - rfp.center() / m_arrowPix.devicePixelRatioF();
+
+    painter.drawPixmap(p, m_arrowPix);
 }
 
 void FashionTrayControlWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -139,18 +147,22 @@ void FashionTrayControlWidget::leaveEvent(QEvent *event)
 
 void FashionTrayControlWidget::refreshArrowPixmap()
 {
+    QString iconPath;
+
     switch (m_dockPosition) {
     case Dock::Top:
     case Dock::Bottom:
-        m_arrowPix.load(m_expanded ? ":/icons/resources/arrow_left_light.svg" : ":/icons/resources/arrow_right_dark.svg");
+        iconPath = m_expanded ? ":/icons/resources/arrow_left_light.svg" : ":/icons/resources/arrow_right_dark.svg";
         break;
     case Dock::Left:
     case Dock::Right:
-        m_arrowPix.load(m_expanded ? ":/icons/resources/arrow_up_light.svg" : ":/icons/resources/arrow_down_dark.svg");
+        iconPath = m_expanded ? ":/icons/resources/arrow_up_light.svg" : ":/icons/resources/arrow_down_dark.svg";
         break;
     default:
         break;
     }
+
+    m_arrowPix = DHiDPIHelper::loadNxPixmap(iconPath);
 
     update();
 }
