@@ -238,7 +238,7 @@ void MainWindow::internalAnimationMove(int x, int y)
     if (state == QPropertyAnimation::Stopped && p == tp)
         return;
 
-    if (state == QPropertyAnimation::Running && m_posChangeAni->endValue() != tp)
+    if (state == QPropertyAnimation::Running && p != tp)
         return m_posChangeAni->setEndValue(QPoint(x, y));
 
     m_posChangeAni->setStartValue(pos());

@@ -29,6 +29,8 @@
 
 class AbstractSystemTrayWidget : public AbstractTrayWidget
 {
+    Q_OBJECT
+
 public:
     AbstractSystemTrayWidget(QWidget *parent = nullptr);
     virtual ~AbstractSystemTrayWidget();
@@ -43,6 +45,10 @@ public:
     virtual inline void invokedMenuItem(const QString &menuId, const bool checked) { Q_UNUSED(menuId); Q_UNUSED(checked); }
 
     static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
+
+Q_SIGNALS:
+    void requestWindowAutoHide(const bool autoHide) const;
+    void requestRefershWindowVisible() const;
 
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
@@ -64,6 +70,7 @@ protected:
 
 protected Q_SLOTS:
     void showContextMenu();
+    void onContextMenuAccepted();
 
 private:
     void updatePopupPosition();

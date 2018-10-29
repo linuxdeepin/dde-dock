@@ -168,7 +168,7 @@ void AbstractSystemTrayWidget::hidePopup()
     PopupWindow->hide();
 
     emit PopupWindow->accept();
-//    emit requestWindowAutoHide(true);
+    emit requestWindowAutoHide(true);
 }
 
 void AbstractSystemTrayWidget::hideNonModel()
@@ -206,8 +206,8 @@ void AbstractSystemTrayWidget::showPopupWindow(QWidget * const content, const bo
     m_popupShown = true;
     m_lastPopupWidget = content;
 
-//    if (model)
-//        emit requestWindowAutoHide(false);
+    if (model)
+        emit requestWindowAutoHide(false);
 
     DockPopupWindow *popup = PopupWindow.data();
     QWidget *lastContent = popup->getContent();
@@ -287,12 +287,18 @@ void AbstractSystemTrayWidget::showContextMenu()
 
     connect(menuInter, &DBusMenu::ItemInvoked, this, &AbstractSystemTrayWidget::invokedMenuItem);
     connect(menuInter, &DBusMenu::ItemInvoked, menuInter, &DBusMenu::deleteLater);
-//    connect(menuInter, &DBusMenu::MenuUnregistered, this, &AbstractSystemTrayWidget::onContextMenuAccepted, Qt::QueuedConnection);
+    connect(menuInter, &DBusMenu::MenuUnregistered, this, &AbstractSystemTrayWidget::onContextMenuAccepted, Qt::QueuedConnection);
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
 
     hidePopup();
-    //    emit requestWindowAutoHide(false);
+    emit requestWindowAutoHide(false);
+}
+
+void AbstractSystemTrayWidget::onContextMenuAccepted()
+{
+    emit requestRefershWindowVisible();
+    emit requestWindowAutoHide(true);
 }
 
 void AbstractSystemTrayWidget::updatePopupPosition()

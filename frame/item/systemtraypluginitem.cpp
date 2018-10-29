@@ -34,9 +34,15 @@ bool SystemTrayPluginItem::eventFilter(QObject *watched, QEvent *e)
     // 监听插件Widget的"FashionSystemTraySize"属性
     // 当接收到这个属性变化的事件后，重新计算和设置dock的大小
 
-    if (watched == centralWidget() && e->type() == QEvent::DynamicPropertyChange
-            && static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "FashionSystemTraySize") {
-        Q_EMIT fashionSystemTraySizeChanged(watched->property("FashionSystemTraySize").toSize());
+    if (watched == centralWidget() && e->type() == QEvent::DynamicPropertyChange) {
+        const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName();
+        if (propertyName == "FashionSystemTraySize") {
+            Q_EMIT fashionSystemTraySizeChanged(watched->property("FashionSystemTraySize").toSize());
+        } else if (propertyName == "RequestWindowAutoHide") {
+            Q_EMIT requestWindowAutoHide(watched->property("RequestWindowAutoHide").toBool());
+        } else if (propertyName == "RequestRefershWindowVisible") {
+            Q_EMIT requestRefershWindowVisible();
+        }
     }
 
     return PluginsItem::eventFilter(watched, e);
