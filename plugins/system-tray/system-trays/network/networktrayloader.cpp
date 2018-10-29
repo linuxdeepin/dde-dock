@@ -139,7 +139,7 @@ void NetworkTrayLoader::onDeviceListChanged(const QList<dde::network::NetworkDev
 
     int wirelessItemCount = wirelessTrayList.size();
     for (int i = 0; i < wirelessItemCount; ++i) {
-        QTimer::singleShot(1, [=] {
+        QTimer::singleShot(0, this, [=] {
             wirelessTrayList.at(i)->setDeviceInfo(wirelessItemCount == 1 ? -1 : i + 1);
         });
     }

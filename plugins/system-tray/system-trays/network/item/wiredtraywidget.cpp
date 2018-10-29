@@ -129,10 +129,11 @@ void WiredTrayWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    const auto ratio = qApp->devicePixelRatio();
-    const int x = rect().center().x() - m_icon.rect().center().x() / ratio;
-    const int y = rect().center().y() - m_icon.rect().center().y() / ratio;
-    painter.drawPixmap(x, y, m_icon);
+
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_icon.rect());
+    const QPointF &p = rf.center() - rfp.center() / m_icon.devicePixelRatioF();
+    painter.drawPixmap(p, m_icon);
 }
 
 void WiredTrayWidget::resizeEvent(QResizeEvent *e)

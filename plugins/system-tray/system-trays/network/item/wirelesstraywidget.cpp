@@ -59,7 +59,8 @@ WirelessTrayWidget::WirelessTrayWidget(WirelessDevice *device, QWidget *parent)
         updateIcon();
     });
 
-    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+//    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+    init();
 }
 
 WirelessTrayWidget::~WirelessTrayWidget()
@@ -176,10 +177,12 @@ void WirelessTrayWidget::paintEvent(QPaintEvent *e)
 {
     AbstractNetworkTrayWidget::paintEvent(e);
 
-    const auto ratio = qApp->devicePixelRatio();
-
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_pixmap.rect().center() / ratio, m_pixmap);
+
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_pixmap.rect());
+    const QPointF &p = rf.center() - rfp.center() / m_pixmap.devicePixelRatioF();
+    painter.drawPixmap(p, m_pixmap);
 
     if (m_reloadIcon)
         m_reloadIcon = false;

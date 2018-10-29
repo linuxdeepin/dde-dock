@@ -121,7 +121,9 @@ void XWindowTrayWidget::paintEvent(QPaintEvent *e)
 //    painter.fillRect(rect(), Qt::red);
 #endif
 
-    const QPoint p = rect().center() - m_image.rect().center() / m_image.devicePixelRatioF();
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_image.rect());
+    const QPointF &p = rf.center() - rfp.center() / m_image.devicePixelRatioF();
     painter.drawImage(p, m_image);
 
     painter.end();

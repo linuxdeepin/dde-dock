@@ -155,5 +155,9 @@ void ShutdownTrayWidget::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_pixmap.rect().center() / qApp->devicePixelRatio(), m_pixmap);
+
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_pixmap.rect());
+    const QPointF &p = rf.center() - rfp.center() / m_pixmap.devicePixelRatioF();
+    painter.drawPixmap(p, m_pixmap);
 }

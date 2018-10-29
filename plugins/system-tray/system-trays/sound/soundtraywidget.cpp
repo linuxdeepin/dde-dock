@@ -178,7 +178,11 @@ void SoundTrayWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_iconPixmap.rect().center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
+
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_iconPixmap.rect());
+    const QPointF &p = rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF();
+    painter.drawPixmap(p, m_iconPixmap);
 }
 
 void SoundTrayWidget::refreshTips(const bool force)

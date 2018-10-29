@@ -189,10 +189,12 @@ void SNITrayWidget::paintEvent(QPaintEvent *e)
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 #ifdef QT_DEBUG
-    //painter.fillRect(rect(), Qt::red);
+//    painter.fillRect(rect(), Qt::red);
 #endif
 
-    const QPoint p = rect().center() - m_pixmap.rect().center() / m_pixmap.devicePixelRatioF();
+    const QRectF &rf = QRect(rect());
+    const QRectF &rfp = QRect(m_pixmap.rect());
+    const QPointF &p = rf.center() - rfp.center() / m_pixmap.devicePixelRatioF();
     painter.drawPixmap(p, m_pixmap);
 
     if (!m_overlayPixmap.isNull()) {
