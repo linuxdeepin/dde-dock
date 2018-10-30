@@ -136,18 +136,27 @@ const QPoint AbstractSystemTrayWidget::popupMarkPoint() const
     QPoint p(topleftPoint());
 
     const QRect r = rect();
-    const int offset = 2;
-    switch (DockPosition)
-    {
-    case Dock::Position::Top:       p += QPoint(r.width() / 2, r.height() + offset);      break;
-    case Dock::Position::Bottom:    p += QPoint(r.width() / 2, 0 - offset);               break;
-    case Dock::Position::Left:      p += QPoint(r.width() + offset, r.height() / 2);      break;
-    case Dock::Position::Right:     p += QPoint(0 - offset, r.height() / 2);              break;
+    const QRect wr = window()->rect();
+
+    switch (DockPosition) {
+    case Dock::Position::Top:
+        p += QPoint(r.width() / 2, r.height() + (wr.height() - r.height()) / 2);
+        break;
+    case Dock::Position::Bottom:
+        p += QPoint(r.width() / 2, 0 - (wr.height() - r.height()) / 2);
+        break;
+    case Dock::Position::Left:
+        p += QPoint(r.width() + (wr.width() - r.width()) / 2, r.height() / 2);
+        break;
+    case Dock::Position::Right:
+        p += QPoint(0 - (wr.width() - r.width()) / 2, r.height() / 2);
+        break;
     }
 
     return p;
 }
 
+// 获取在最外层的窗口(MainWindow)中的位置
 const QPoint AbstractSystemTrayWidget::topleftPoint() const
 {
     QPoint p;
@@ -224,7 +233,7 @@ void AbstractSystemTrayWidget::showPopupWindow(QWidget * const content, const bo
     popup->resize(content->sizeHint());
     popup->setContent(content);
 
-    const QPoint p = popupMarkPoint();
+    QPoint p = popupMarkPoint();
     if (!popup->isVisible())
         QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
     else

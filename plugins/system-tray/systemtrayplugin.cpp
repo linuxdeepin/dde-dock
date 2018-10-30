@@ -118,11 +118,7 @@ QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-#ifdef DOCK_TRAY_USE_NATIVE_POPUP
     return nullptr;
-#else
-    return m_tipsLabel;
-#endif
 }
 
 QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
@@ -150,7 +146,9 @@ bool SystemTrayPlugin::itemAllowContainer(const QString &itemKey)
 
     AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey);
 
-    return trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray ? false : true;
+    if (trayWidget && trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+        return false;
+    }
 
     return true;
 }
