@@ -264,9 +264,11 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         RequestDockItem = nullptr;
     }
 
-    DockItem::ItemType type = DraggingItem->itemType();
-    if (DraggingItem && type != DockItem::Plugins && type != DockItem::SystemTrayPlugin)
-        DraggingItem->hide();
+    if (DraggingItem) {
+        DockItem::ItemType type = DraggingItem->itemType();
+        if (type != DockItem::Plugins && type != DockItem::SystemTrayPlugin)
+            DraggingItem->hide();
+    }
 }
 
 void MainPanel::dropEvent(QDropEvent *e)
