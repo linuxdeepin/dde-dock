@@ -21,11 +21,14 @@ package grub2
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -395,4 +398,119 @@ func (g *Grub2) getSenderLang(sender dbus.Sender) (string, error) {
 	}
 
 	return environ.Get("LANG"), nil
+}
+
+type Resolution struct {
+	width  int
+	height int
+}
+
+type Resolutions []Resolution
+
+func (v Resolutions) Len() int {
+	return len(v)
+}
+
+func (v Resolutions) Less(i, j int) bool {
+	a := v[i]
+	b := v[j]
+
+	if a.width < b.width {
+		return true
+	} else if a.width == b.width {
+		return a.height < b.height
+	}
+	return false
+}
+
+func (v Resolutions) Swap(i, j int) {
+	v[i], v[j] = v[j], v[i]
+}
+
+func (v Resolutions) add(r Resolution) Resolutions {
+	var found bool
+	for _, r0 := range v {
+		if r0 == r {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return append(v, r)
+	}
+	return v
+}
+
+var vbeResolutionsCache Resolutions
+var vbeResolutionsOnce sync.Once
+
+func getVbeResolutions() Resolutions {
+	vbeResolutionsOnce.Do(
+		func() {
+			var err error
+			vbeResolutionsCache, err = getVbeResolutions0()
+			if err != nil {
+				logger.Warning(err)
+			}
+		})
+	if len(vbeResolutionsCache) == 0 {
+		return Resolutions{
+			{1920, 1080},
+			{1366, 768},
+			{1024, 768},
+			{800, 600},
+		}
+	}
+	return vbeResolutionsCache
+}
+
+func getVbeResolutions0() (Resolutions, error) {
+	output, err := exec.Command("hwinfo", "--vbe").Output()
+	if err != nil {
+		return nil, err
+	}
+	var resolutions Resolutions
+
+	add := func(w, h []byte) {
+		width, _ := strconv.Atoi(string(w))
+		height, _ := strconv.Atoi(string(h))
+
+		if height == 0 || width == 0 {
+			return
+		}
+		resolutions = resolutions.add(Resolution{
+			width:  width,
+			height: height,
+		})
+	}
+
+	//  Mode 0x0311: 640x480 (+1280), 16 bits
+	var regMode = regexp.MustCompile(`Mode .*: (\d+)x(\d+) .*\d+ bits`)
+
+	// Resolution: 720x400@70Hz
+	var regResolution = regexp.MustCompile(`Resolution: (\d+)x(\d+)@\d+Hz`)
+
+	scanner := bufio.NewScanner(bytes.NewReader(output))
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		match := regMode.FindSubmatch(line)
+		if len(match) == 3 {
+			width := match[1]
+			height := match[2]
+			add(width, height)
+			continue
+		}
+
+		match = regResolution.FindSubmatch(line)
+		if len(match) == 3 {
+			width := match[1]
+			height := match[2]
+			add(width, height)
+			continue
+		}
+	}
+
+	resolutions = resolutions.add(Resolution{1024, 768})
+	sort.Sort(sort.Reverse(resolutions))
+	return resolutions, nil
 }

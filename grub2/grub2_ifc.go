@@ -20,8 +20,8 @@
 package grub2
 
 import (
-	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 
 	"pkg.deepin.io/lib/dbus1"
@@ -60,18 +60,14 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, *dbus.Error) {
 	return entryTitles, nil
 }
 
-func (grub *Grub2) GetAvailableResolutions() (modeJSON string, err *dbus.Error) {
+func (grub *Grub2) GetAvailableResolutions() ([]string, *dbus.Error) {
 	grub.service.DelayAutoQuit()
-	// TODO
-	type mode struct {
-		Text, Value string
+	resolutions := getVbeResolutions()
+	result := make([]string, len(resolutions))
+	for idx, r := range resolutions {
+		result[idx] = fmt.Sprintf("%dx%d", r.width, r.height)
 	}
-	var modes []mode
-	modes = append(modes, mode{Text: "Auto", Value: "auto"})
-	modes = append(modes, mode{Text: "1024x768", Value: "1024x768"})
-	modes = append(modes, mode{Text: "800x600", Value: "800x600"})
-	data, _ := json.Marshal(modes)
-	return string(data), nil
+	return result, nil
 }
 
 func (g *Grub2) SetDefaultEntry(sender dbus.Sender, entry string) *dbus.Error {
