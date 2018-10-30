@@ -54,21 +54,23 @@ func newCard(card *pulse.Card) *Card {
 	return info
 }
 
+func getCardName(card *pulse.Card) (name string) {
+	propAlsaCardName := card.PropList["alsa.card_name"]
+	propDeviceApi := card.PropList["device.api"]
+	propDeviceDesc := card.PropList["device.description"]
+	if propDeviceApi == "bluez" && propDeviceDesc != "" {
+		name = propDeviceDesc
+	} else if propAlsaCardName != "" {
+		name = propAlsaCardName
+	} else {
+		name = card.Name
+	}
+	return
+}
+
 func (c *Card) update(card *pulse.Card) {
 	c.Id = card.Index
-	propDeviceProductName := card.PropList["device.product.name"]
-	propAlsaCardName := card.PropList["alsa.card_name"]
-	propDeviceDescription := card.PropList["device.description"]
-	if propDeviceProductName != "" {
-		c.Name = propDeviceProductName
-	} else if propAlsaCardName != "" {
-		c.Name = propAlsaCardName
-	} else if propDeviceDescription != "" {
-		c.Name = propDeviceDescription
-	} else {
-		c.Name = card.Name
-	}
-
+	c.Name = getCardName(card)
 	c.ActiveProfile = newProfile(card.ActiveProfile)
 	sort.Sort(card.Profiles)
 	c.Profiles = newProfileList(card.Profiles)
