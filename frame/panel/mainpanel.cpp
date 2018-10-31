@@ -438,13 +438,13 @@ void MainPanel::adjustItemSize()
                 if (item->itemType() == DockItem::SystemTrayPlugin) {
                     FSTrayItem = static_cast<SystemTrayPluginItem *>(item.data());
                     if (m_position == Dock::Top || m_position == Dock::Bottom) {
-                        item->setFixedWidth(FSTrayTotalSize.width());
-                        item->setFixedHeight(itemSize.height());
+//                        item->setFixedWidth(FSTrayTotalSize.width());
+//                        item->setFixedHeight(itemSize.height());
                         totalWidth += FSTrayTotalSize.width();
                         totalHeight += itemSize.height();
                     } else {
-                        item->setFixedWidth(itemSize.width());
-                        item->setFixedHeight(FSTrayTotalSize.height());
+//                        item->setFixedWidth(itemSize.width());
+//                        item->setFixedHeight(FSTrayTotalSize.height());
                         totalWidth += itemSize.width();
                         totalHeight += FSTrayTotalSize.height();
                     }

@@ -68,6 +68,7 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     m_mainBoxLayout->setAlignment(m_controlWidget, Qt::AlignCenter);
     m_mainBoxLayout->setAlignment(m_rightSpliter, Qt::AlignCenter);
 
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_mainBoxLayout);
 
     m_attentionDelayTimer->setInterval(3000);
@@ -135,7 +136,7 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
                 m_trayBoxLayout->removeWidget(it.value());
             }
             // do not delete real tray object, just delete it's wrapper object
-            // the real tray object should be deleted in SystemTrayPlugin
+            // the real tray object should be deleted in TrayPlugin class
             trayWidget->setParent(nullptr);
             it.value()->deleteLater();
             m_trayWidgetWrapperMap.remove(it.key());
@@ -185,26 +186,19 @@ void FashionTrayItem::setDockPostion(Dock::Position pos)
 
 void FashionTrayItem::onTrayListExpandChanged(const bool expand)
 {
-    if (m_currentAttentionTray) {
-        if (expand) {
-            m_mainBoxLayout->removeWidget(m_currentAttentionTray);
-            m_trayBoxLayout->addWidget(m_currentAttentionTray);
-        }
+    if (!isVisible())
+        return;
 
-        m_currentAttentionTray = nullptr;
+    if (expand) {
+        refreshTraysVisible();
+    } else {
+        // hide all tray widget delay for fold animation
+        QTimer::singleShot(350, this, [=] {refreshTraysVisible();});
+        requestResize();
     }
-
-    for (auto i = m_trayWidgetWrapperMap.begin(); i != m_trayWidgetWrapperMap.end(); ++i) {
-        i.value()->setVisible(expand);
-        i.value()->setAttention(false);
-    }
-
-    m_attentionDelayTimer->start();
-
-    requestResize();
 }
 
-// used by QMetaObject::invokeMethod in SystemTrayPluginItem / MainPanel
+// used by QMetaObject::invokeMethod in SystemTrayPluginItem / MainPanel class
 void FashionTrayItem::setSuggestIconSize(QSize size)
 {
     size = size * 0.6;
@@ -371,8 +365,7 @@ void FashionTrayItem::requestResize()
 {
     // reset property "FashionSystemTraySize" to notify dock resize
     // DockPluginsController will watch this property
-
-    setProperty("FashionSystemTraySize", isVisible() ? wantedTotalSize() : QSize(0, 0));
+    setProperty("FashionSystemTraySize", sizeHint());
 }
 
 void FashionTrayItem::moveOutAttionTray()
@@ -428,4 +421,28 @@ void FashionTrayItem::requestRefershWindowVisible()
     // TODO: 考虑新增插件接口
 
     setProperty("RequestRefershWindowVisible", !property("RequestRefershWindowVisible").toBool());
+}
+
+void FashionTrayItem::refreshTraysVisible()
+{
+    const bool expand = m_controlWidget->expanded();
+
+    if (m_currentAttentionTray) {
+        if (expand) {
+            m_mainBoxLayout->removeWidget(m_currentAttentionTray);
+            m_trayBoxLayout->addWidget(m_currentAttentionTray);
+        }
+
+        m_currentAttentionTray = nullptr;
+    }
+
+    for (auto i = m_trayWidgetWrapperMap.begin(); i != m_trayWidgetWrapperMap.end(); ++i) {
+        i.value()->setVisible(expand);
+        // reset all tray item attention state
+        i.value()->setAttention(false);
+    }
+
+    m_attentionDelayTimer->start();
+
+    requestResize();
 }

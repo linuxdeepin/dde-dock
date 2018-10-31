@@ -70,6 +70,9 @@ private Q_SLOTS:
     void switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper);
     void requestWindowAutoHide(const bool autoHide);
     void requestRefershWindowVisible();
+    void expandWithAnimation();
+    void foldWithAnimation();
+    void refreshTraysVisible();
 
 private:
     QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> m_trayWidgetWrapperMap;
