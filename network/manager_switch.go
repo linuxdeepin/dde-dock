@@ -22,10 +22,12 @@ package network
 import (
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 type switchHandler struct {
-	config *config
+	sysSigLoop *dbusutil.SignalLoop
+	config     *config
 
 	NetworkingEnabled bool // airplane mode for NetworkManager
 	WirelessEnabled   bool
@@ -34,8 +36,11 @@ type switchHandler struct {
 	VpnEnabled        bool
 }
 
-func newSwitchHandler(c *config) (sh *switchHandler) {
-	sh = &switchHandler{config: c}
+func newSwitchHandler(c *config, sysSigLoop *dbusutil.SignalLoop) (sh *switchHandler) {
+	sh = &switchHandler{
+		config:     c,
+		sysSigLoop: sysSigLoop,
+	}
 	sh.init()
 
 	// connect global switch signals
@@ -382,32 +387,25 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 }
 
 func (sh *switchHandler) restoreVpnConnectionState(uuid string) (err error) {
-	vpnConfig, err := sh.config.getVpnConfig(uuid)
-	if err != nil {
-		return
-	}
-	if vpnConfig.lastActivated || vpnConfig.AutoConnect {
+	if isConnAutoConnect(uuid) {
 		sh.activateVpnConnection(uuid)
 	} else {
 		err = manager.deactivateConnection(uuid)
 	}
 	return
 }
+
 func (sh *switchHandler) activateVpnConnection(uuid string) {
 	if _, err := nmGetActiveConnectionByUuid(uuid); err == nil {
 		// connection already activated
 		return
 	}
-	nmRunOnceUtilNetworkAvailable(func() {
+	nmRunOnceUtilNetworkAvailable(sh.sysSigLoop, func() {
 		manager.activateConnection(uuid, "/")
 	})
 }
+
 func (sh *switchHandler) deactivateVpnConnection(uuid string) (err error) {
-	vpnConfig, err := sh.config.getVpnConfig(uuid)
-	if err != nil {
-		return
-	}
-	vpnConfig.lastActivated = vpnConfig.activated
 	err = manager.deactivateConnection(uuid)
 	sh.config.save()
 	return

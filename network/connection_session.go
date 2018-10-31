@@ -160,7 +160,6 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	// disable vpn autoconnect default
 	if isVpnConnection(s.data) {
-		manager.config.addVpnConfig(s.Uuid)
 		logicSetSettingVkVpnAutoconnect(s.data, false)
 	}
 
@@ -459,13 +458,6 @@ func (s *ConnectionSession) isErrorOccurred() bool {
 func (s *ConnectionSession) Close() *dbus.Error {
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
-	// clean up vpn config if abort the new connection
-	if !s.connectionExists {
-		if isVpnConnection(s.data) {
-			manager.config.removeVpnConfig(s.Uuid)
-		}
-	}
-
 	manager.removeConnectionSession(s)
 	return nil
 }

@@ -259,16 +259,6 @@ func isSettingExists(data connectionData, setting string) bool {
 	return ok
 }
 
-func generalSetSettingAutoconnect(data connectionData, autoConnect bool) {
-	switch getSettingConnectionType(data) {
-	case nm.NM_SETTING_VPN_SETTING_NAME:
-		uuid := getSettingConnectionUuid(data)
-		manager.config.setVpnConnectionAutoConnect(uuid, autoConnect)
-	default:
-		setSettingConnectionAutoconnect(data, autoConnect)
-	}
-}
-
 // operator for cache section
 func getSettingCacheKey(data connectionData, section, key string) (value interface{}) {
 	return doGetSettingKey(data, sectionCache, section+"/"+key)

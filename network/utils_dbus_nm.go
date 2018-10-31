@@ -24,6 +24,8 @@ import (
 	"sort"
 	"strings"
 
+	"pkg.deepin.io/lib/dbusutil"
+
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
@@ -421,26 +423,6 @@ func nmGeneralIsUsbDevice(devPath dbus.ObjectPath) bool {
 		return false
 	}
 	return udevIsUsbDevice(sysPath)
-}
-
-func nmGeneralGetConnectionAutoconnect(cpath dbus.ObjectPath) (autoConnect bool) {
-	switch nmGetConnectionType(cpath) {
-	case nm.NM_SETTING_VPN_SETTING_NAME:
-		uuid, _ := nmGetConnectionUuid(cpath)
-		autoConnect = manager.config.isVpnConnectionAutoConnect(uuid)
-	default:
-		autoConnect = nmGetConnectionAutoconnect(cpath)
-	}
-	return
-}
-func nmGeneralSetConnectionAutoconnect(cpath dbus.ObjectPath, autoConnect bool) {
-	switch nmGetConnectionType(cpath) {
-	case nm.NM_SETTING_VPN_SETTING_NAME:
-		uuid, _ := nmGetConnectionUuid(cpath)
-		manager.config.setVpnConnectionAutoConnect(uuid, autoConnect)
-	default:
-		nmSetConnectionAutoconnect(cpath, autoConnect)
-	}
 }
 
 // New network manager objects
@@ -1027,6 +1009,16 @@ func nmGetOtherConnectionIds(origUuid string) (ids []string) {
 	return
 }
 
+func isConnAutoConnect(uuid string) bool {
+	connPath, err := nmGetConnectionByUuid(uuid)
+	if err != nil {
+		logger.Warning(err)
+		return false
+	}
+
+	return nmGetConnectionAutoconnect(connPath)
+}
+
 // TODO: dispatch connection permission
 func nmGetAddressableConnectionIds() (ids []string) {
 	return
@@ -1535,18 +1527,20 @@ func (m *Manager) nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func
 	}
 }
 
-func nmRunOnceUtilNetworkAvailable(cb func()) {
+func nmRunOnceUtilNetworkAvailable(sysSigLoop *dbusutil.SignalLoop, cb func()) {
 	manager, err := nmNewManager()
 	if err != nil {
 		return
 	}
 	state, _ := manager.State().Get(0)
-	if state >= nm.NM_STATE_CONNECTED_LOCAL {
+	const connectedState uint32 = nm.NM_STATE_CONNECTED_LOCAL
+	if state >= connectedState {
 		cb()
 	} else {
 		hasRun := false
+		manager.InitSignalExt(sysSigLoop, true)
 		manager.ConnectStateChanged(func(state uint32) {
-			if !hasRun && state >= nm.NM_STATE_CONNECTED_LOCAL {
+			if !hasRun && state >= connectedState {
 				cb()
 				nmDestroyManager(manager)
 				hasRun = true

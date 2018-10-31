@@ -138,9 +138,6 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 		return
 	}
 
-	// update vpn config
-	m.config.setVpnConnectionActivated(aconn.Uuid, isVpnConnectionStateInActivating(state))
-
 	// notification for vpn
 	if isVpnConnectionStateActivated(state) {
 		// FIXME: looks like a NetworkManger issue, when user

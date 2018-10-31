@@ -39,7 +39,6 @@ type config struct {
 	LastVpnEnabled      bool
 
 	Devices           map[string]*deviceConfig // config for each device
-	VpnConnections    map[string]*vpnConfig    // config for each vpn connection
 	MobileConnections map[string]*mobileConfig // config for each mobile connection
 }
 
@@ -47,15 +46,6 @@ type deviceConfig struct {
 	Enabled            bool
 	LastEnabled        bool
 	LastConnectionUuid string
-}
-
-type vpnConfig struct {
-	AutoConnect bool
-
-	// don't need to save activated state, so the variable names are
-	// lowercase
-	activated     bool
-	lastActivated bool
 }
 
 type mobileConfig struct {
@@ -69,7 +59,6 @@ func newConfig() (c *config) {
 	c.core.SetConfigName("network")
 	logger.Info("config file:", c.core.GetConfigFile())
 	c.Devices = make(map[string]*deviceConfig)
-	c.VpnConnections = make(map[string]*vpnConfig)
 	c.MobileConnections = make(map[string]*mobileConfig)
 	c.WiredEnabled = true
 	c.VpnEnabled = false
@@ -95,14 +84,6 @@ func newDeviceConfig() (d *deviceConfig) {
 	return
 }
 
-func newVpnConfig() (v *vpnConfig) {
-	v = &vpnConfig{}
-	v.AutoConnect = false
-	v.activated = false
-	v.lastActivated = v.activated
-	return
-}
-
 func newMobileConfig() (m *mobileConfig) {
 	m = &mobileConfig{}
 	return
@@ -114,12 +95,6 @@ func (c *config) clearSpareConfig() {
 	for id, _ := range c.Devices {
 		if !isStringInArray(id, devIds) {
 			c.removeDeviceConfig(id)
-		}
-	}
-	vpnUuids := nmGetConnectionUuidsByType(nm.NM_SETTING_VPN_SETTING_NAME)
-	for uuid, _ := range c.VpnConnections {
-		if !isStringInArray(uuid, vpnUuids) {
-			c.removeVpnConfig(uuid)
 		}
 	}
 	mobileUuids := nmGetConnectionUuidsByType(nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME)
@@ -205,7 +180,6 @@ func (c *config) removeConnection(uuid string) {
 			devConfig.LastConnectionUuid = ""
 		}
 	}
-	c.removeVpnConfig(uuid)
 	c.save()
 }
 
@@ -337,61 +311,6 @@ func (c *config) restoreDeviceState(devPath dbus.ObjectPath) {
 	}
 	if devConfig.Enabled != devConfig.LastEnabled {
 		devConfig.Enabled = devConfig.LastEnabled
-		c.save()
-	}
-}
-
-// vpnConfig
-func (c *config) isVpnConfigExists(uuid string) (ok bool) {
-	_, ok = c.VpnConnections[uuid]
-	return
-}
-func (c *config) getVpnConfig(uuid string) (v *vpnConfig, err error) {
-	if !c.isVpnConfigExists(uuid) {
-		err = fmt.Errorf("vpn config for %s not exists", uuid)
-		logger.Warning(err)
-		return
-	}
-	v, _ = c.VpnConnections[uuid]
-	return
-}
-func (c *config) addVpnConfig(uuid string) {
-	if !c.isVpnConfigExists(uuid) {
-		vpnConfig := newVpnConfig()
-		c.VpnConnections[uuid] = vpnConfig
-		c.save()
-	}
-}
-func (c *config) removeVpnConfig(uuid string) {
-	if c.isVpnConfigExists(uuid) {
-		delete(c.VpnConnections, uuid)
-		c.save()
-	}
-}
-func (c *config) setVpnConnectionActivated(uuid string, activated bool) {
-	vpnConfig, err := c.getVpnConfig(uuid)
-	if err != nil {
-		return
-	}
-	if vpnConfig.activated != activated {
-		vpnConfig.activated = activated
-		c.save()
-	}
-}
-func (c *config) isVpnConnectionAutoConnect(uuid string) bool {
-	vpnConfig, err := c.getVpnConfig(uuid)
-	if err != nil {
-		return false
-	}
-	return vpnConfig.AutoConnect
-}
-func (c *config) setVpnConnectionAutoConnect(uuid string, autoConnect bool) {
-	vpnConfig, err := c.getVpnConfig(uuid)
-	if err != nil {
-		return
-	}
-	if vpnConfig.AutoConnect != autoConnect {
-		vpnConfig.AutoConnect = autoConnect
 		c.save()
 	}
 }

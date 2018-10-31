@@ -325,9 +325,8 @@ func unmarshalVpnPluginKey(valueStr string, t ktype) (value interface{}) {
 
 // Virtual key
 func getSettingVkVpnAutoconnect(data connectionData) (value bool) {
-	return manager.config.isVpnConnectionAutoConnect(getSettingConnectionUuid(data))
+	return false
 }
 func logicSetSettingVkVpnAutoconnect(data connectionData, value bool) (err error) {
-	manager.config.setVpnConnectionAutoConnect(getSettingConnectionUuid(data), value)
 	return
 }

@@ -180,7 +180,7 @@ func (m *Manager) init() {
 	defer enableNotify()
 
 	m.config = newConfig()
-	m.switchHandler = newSwitchHandler(m.config)
+	m.switchHandler = newSwitchHandler(m.config, m.sysSigLoop)
 	m.dbusWatcher = newDbusWatcher(true)
 	m.stateHandler = newStateHandler(m.config, m.sysSigLoop)
 

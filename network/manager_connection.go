@@ -81,10 +81,6 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 	conn.nmConn = nmConn
 	conn.updateProps()
 
-	if conn.connType == connectionVpn {
-		m.config.addVpnConfig(conn.Uuid)
-	}
-
 	// connect signals
 	nmConn.InitSignalExt(m.sysSigLoop, true)
 	nmConn.ConnectUpdated(func() {
