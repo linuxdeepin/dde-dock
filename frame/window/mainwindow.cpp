@@ -93,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent)
     setAccessibleName("dock-mainwindow");
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
+    setMouseTracking(true);
     setAcceptDrops(true);
 
     DPlatformWindowHandle::enableDXcbForWindow(this, true);
@@ -286,8 +287,9 @@ void MainWindow::compositeChanged()
 
 void MainWindow::internalMove(const QPoint &p)
 {
+    const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
     const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
-                             m_settings->hideState() == HideState::Hide &&
+                             isHide &&
                              m_posChangeAni->state() == QVariantAnimation::Stopped;
     if (!pos_adjust)
         return QWidget::move(p);
@@ -306,7 +308,7 @@ void MainWindow::internalMove(const QPoint &p)
 
     int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
-        m_settings->hideState() == HideState::Hide &&
+        isHide &&
         m_panelHideAni->state() == QVariantAnimation::Stopped &&
         m_panelShowAni->state() == QVariantAnimation::Stopped)
     {
@@ -445,8 +447,9 @@ void MainWindow::updateGeometry()
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     bool animation = true;
+    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
 
-    if (m_settings->hideState() == Hide)
+    if (isHide)
     {
         m_sizeChangeAni->stop();
         m_posChangeAni->stop();
@@ -466,7 +469,7 @@ void MainWindow::updateGeometry()
         setFixedSize(size);
     }
 
-    const QRect windowRect = m_settings->windowRect(position, m_settings->hideState() == Hide);
+    const QRect windowRect = m_settings->windowRect(position, isHide);
 
     if (animation)
         internalAnimationMove(windowRect.x(), windowRect.y());
