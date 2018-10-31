@@ -32,11 +32,11 @@
 
 FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     : QWidget(parent),
-      m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this)),
-      m_trayBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this)),
-      m_leftSpliter(new QLabel(this)),
-      m_rightSpliter(new QLabel(this)),
-      m_controlWidget(new FashionTrayControlWidget(pos, this)),
+      m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
+      m_trayBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
+      m_leftSpliter(new QLabel),
+      m_rightSpliter(new QLabel),
+      m_controlWidget(new FashionTrayControlWidget(pos)),
       m_currentAttentionTray(nullptr),
       m_dockPosistion(pos)
 {
@@ -74,6 +74,8 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
 
 void FashionTrayItem::setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList)
 {
+    clearTrayWidgets();
+
     for (auto widget : trayWidgetList) {
         trayWidgetAdded(widget);
     }
@@ -112,8 +114,9 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
     auto it = m_trayWidgetWrapperMap.constBegin();
 
     for (; it != m_trayWidgetWrapperMap.constEnd(); ++it) {
+        // found the removed tray
         if (it.key() == trayWidget) {
-            // removing the attention tray
+            // the removed tray is a attention tray
             if (m_currentAttentionTray == it.value()) {
                 if (m_controlWidget->expanded()) {
                     m_trayBoxLayout->removeWidget(m_currentAttentionTray);
@@ -124,6 +127,9 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
             } else {
                 m_trayBoxLayout->removeWidget(it.value());
             }
+            // do not delete real tray object, just delete it's wrapper object
+            // the real tray object should be deleted in SystemTrayPlugin
+            trayWidget->setParent(nullptr);
             it.value()->deleteLater();
             m_trayWidgetWrapperMap.remove(it.key());
             break;
@@ -131,7 +137,8 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
     }
 
     if (it == m_trayWidgetWrapperMap.constEnd()) {
-        qDebug() << "can not find the tray widget in fashion tray list:" << trayWidget;
+        qDebug() << "can not find the tray widget in fashion tray list";
+        Q_UNREACHABLE();
         return;
     }
 
@@ -140,14 +147,10 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 
 void FashionTrayItem::clearTrayWidgets()
 {
-    if (m_currentAttentionTray) {
-        m_mainBoxLayout->removeWidget(m_currentAttentionTray);
-        m_currentAttentionTray = nullptr;
-    }
+    QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> mMap = m_trayWidgetWrapperMap;
 
-    for (auto wrapper : m_trayWidgetWrapperMap.values()) {
-        m_trayBoxLayout->removeWidget(wrapper);
-        wrapper->deleteLater();
+    for (auto it = mMap.begin(); it != mMap.end(); ++it) {
+        trayWidgetRemoved(it.key());
     }
 
     m_trayWidgetWrapperMap.clear();

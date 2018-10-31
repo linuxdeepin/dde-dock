@@ -320,9 +320,20 @@ void SystemTrayPlugin::trayRemoved(const QString &itemKey)
     }
 
     AbstractTrayWidget *widget = m_trayMap.take(itemKey);
-    m_fashionItem->trayWidgetRemoved(widget);
-    m_proxyInter->itemRemoved(this, itemKey);
-    widget->deleteLater();
+
+    if (displayMode() == Dock::Efficient) {
+        m_proxyInter->itemRemoved(this, itemKey);
+    } else {
+        m_fashionItem->trayWidgetRemoved(widget);
+    }
+
+    // only delete tray object when it is a tray of applications
+    // set the parent of the tray object to avoid be deconstructed by parent(DockItem/PluginsItem/SystemTrayPluginsItem)
+    if (widget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+        widget->setParent(nullptr);
+    } else {
+        widget->deleteLater();
+    }
 
     if (m_trayApplet->isVisible()) {
         updateTipsContent();

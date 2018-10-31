@@ -115,7 +115,7 @@ void PluginsItem::refershIcon()
     m_pluginInter->refershIcon(m_itemKey);
 }
 
-QWidget *PluginsItem::centralWidget()
+QWidget *PluginsItem::centralWidget() const
 {
     return m_centralWidget;
 }

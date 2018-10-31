@@ -49,11 +49,12 @@ public:
     inline ItemType itemType() const override {return Plugins;}
     QSize sizeHint() const override;
 
+    QWidget *centralWidget() const;
+
 public slots:
     void refershIcon() override;
 
 protected:
-    QWidget *centralWidget();
     bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
