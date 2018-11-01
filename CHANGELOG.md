@@ -1,3 +1,13 @@
+[3.4.0] 2018-11-01
+*   fix(network): call ActivateAccessPoint causes dbus conn close
+*   fix(network): vpn connection auto connect dose not work
+*   fix(grub2): func GetAvailableResolutions is not implemented
+*   fix(audio): the sound card name is too long
+*   chore: remove grub-themes-deepin from suggests
+*   auto sync po files from transifex
+*   fix: compile errors under networkmanager 1.14+
+*   refactor: fix a typo
+
 [3.3.0] 2018-10-25
 *   feat(grub2): use adjust-grub-theme to adjust theme
 *   feat(network): add new secert agent
