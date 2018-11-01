@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
 <context>
     <name>AbstractNetworkTrayWidget</name>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="49"/>
         <source>Enable network</source>
-        <translation>ネットワークを有効にする</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="51"/>
         <source>Disable network</source>
-        <translation>ネットワークを無効にする</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="57"/>
         <source>Network settings</source>
-        <translation>ネットワーク設定</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="135"/>
         <source>12 Hour Time</source>
-        <translation>12時間表示</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="137"/>
         <source>24 Hour Time</source>
-        <translation>24時間表示</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="143"/>
         <source>Time Settings</source>
-        <translation>時間設定</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -53,17 +53,17 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="55"/>
         <source>Enable network</source>
-        <translation>ネットワークを有効にする</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="57"/>
         <source>Disable network</source>
-        <translation>ネットワークを無効にする</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="63"/>
         <source>Network settings</source>
-        <translation>ネットワーク設定</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -76,17 +76,17 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
-        <translation>削除</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
-        <translation>この操作は元に戻す事ができません</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -94,12 +94,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation>不明なデバイス</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation>不明なボリューム</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -107,17 +107,17 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
-        <translation>ディスク</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>開く</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation>すべてアンマウント</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -125,87 +125,87 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Fashion Mode</source>
-        <translation>ファッション・モード</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Efficient Mode</source>
-        <translation>エフィシェント・モード</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Top</source>
-        <translation>上</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Bottom</source>
-        <translation>下</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Left</source>
-        <translation>左</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Right</source>
-        <translation>右</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Large</source>
-        <translation>大</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Medium</source>
-        <translation>中</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Small</source>
-        <translation>小</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Keep Shown</source>
-        <translation>表示を保つ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Hidden</source>
-        <translation>非表示を保つ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Smart Hide</source>
-        <translation>スマート非表示</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Mode</source>
-        <translation>モード</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="104"/>
         <source>Location</source>
-        <translation>位置</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="111"/>
         <source>Size</source>
-        <translation>サイズ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="118"/>
         <source>Status</source>
-        <translation>状態</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="122"/>
         <source>Plugins</source>
-        <translation>プラグイン</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -213,7 +213,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="108"/>
         <source>Launcher</source>
-        <translation>ランチャー</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/networkplugin.cpp" line="50"/>
         <source>Network</source>
-        <translation>ネットワーク</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -229,27 +229,27 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="95"/>
         <source>Shut down</source>
-        <translation>シャットダウン</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="103"/>
         <source>Remaining Capacity %1</source>
-        <translation>残容量 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="109"/>
         <source>Charged %1</source>
-        <translation>充電完了 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="111"/>
         <source>Charging %1</source>
-        <translation>充電中 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="129"/>
         <source>Power settings</source>
-        <translation>電源設定</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -259,69 +259,69 @@
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="143"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="109"/>
         <source>Shut down</source>
-        <translation>シャットダウン</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="76"/>
         <source>Remaining Capacity %1</source>
-        <translation>残容量 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="82"/>
         <source>Charged %1</source>
-        <translation>充電完了 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="84"/>
         <source>Charging %1</source>
-        <translation>充電中 %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="149"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="115"/>
         <source>Restart</source>
-        <translation>再起動</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="161"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="127"/>
         <source>Lock</source>
-        <translation>ロック</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="167"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
         <source>Log out</source>
-        <translation>ログアウト</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="155"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
         <source>Suspend</source>
-        <translation>サスペンド</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="48"/>
         <source>Power</source>
-        <translation>パワー</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="175"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
         <source>Switch account</source>
-        <translation>アカウントの切り替え</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="185"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Power settings</source>
-        <translation>電源設定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="37"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
         <source>Shutdown</source>
-        <translation>シャットダウン</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,32 +330,32 @@
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="34"/>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="87"/>
         <source>Shut down</source>
-        <translation>シャットダウン</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="93"/>
         <source>Restart</source>
-        <translation>再起動</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="99"/>
         <source>Suspend</source>
-        <translation>サスペンド</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="105"/>
         <source>Lock</source>
-        <translation>ロック</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="111"/>
         <source>Log out</source>
-        <translation>ログアウト</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="119"/>
         <source>Switch account</source>
-        <translation>アカウントの切り替え</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -363,12 +363,12 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundapplet.cpp" line="54"/>
         <source>Device</source>
-        <translation>デバイス</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundapplet.cpp" line="72"/>
         <source>Application</source>
-        <translation>アプリケーション</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -376,22 +376,22 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation>消音解除</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
-        <translation>消音</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation>音の設定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="221"/>
         <source>Current Volume %1</source>
-        <translation>現在の音量 %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -399,7 +399,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
-        <translation>サウンド</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -407,22 +407,22 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="120"/>
         <source>Unmute</source>
-        <translation>消音解除</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="122"/>
         <source>Mute</source>
-        <translation>消音</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="128"/>
         <source>Audio Settings</source>
-        <translation>音の設定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="205"/>
         <source>Current Volume %1</source>
-        <translation>現在の音量 %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="50"/>
         <source>System Tray</source>
-        <translation>システムトレイ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -451,12 +451,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="71"/>
         <source>Open</source>
-        <translation>開く</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="79"/>
         <source>Empty</source>
-        <translation>空</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -464,17 +464,17 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="55"/>
         <source>Unknown</source>
-        <translation>不明</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="60"/>
         <source>No Network</source>
-        <translation>ネットワークなし</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="70"/>
         <source>Wired connection: %1</source>
-        <translation>有線接続: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -482,17 +482,17 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="101"/>
         <source>Unknown</source>
-        <translation>不明</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="106"/>
         <source>No Network</source>
-        <translation>ネットワークなし</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="116"/>
         <source>Wired connection: %1</source>
-        <translation>有線接続: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -500,12 +500,12 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wirelessitem.cpp" line="81"/>
         <source>No Network</source>
-        <translation>ネットワークなし</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wirelessitem.cpp" line="91"/>
         <source>Wireless Connection: %1</source>
-        <translation>無線接続: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -513,12 +513,12 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/applet/wirelesslist.cpp" line="154"/>
         <source>Wireless Network</source>
-        <translation>無線ネットワーク</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network %1</source>
-        <translation>無線接続 %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -526,12 +526,12 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wirelesstraywidget.cpp" line="128"/>
         <source>No Network</source>
-        <translation>ネットワークなし</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wirelesstraywidget.cpp" line="138"/>
         <source>Wireless Connection: %1</source>
-        <translation>無線接続: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

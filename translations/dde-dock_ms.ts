@@ -1,5 +1,23 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
 <context>
+    <name>AbstractNetworkTrayWidget</name>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="49"/>
+        <source>Enable network</source>
+        <translation>Benarkan rangkaian</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="51"/>
+        <source>Disable network</source>
+        <translation>Lumpuhkan rangkaian</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="57"/>
+        <source>Network settings</source>
+        <translation>Tetapan rangkaian</translation>
+    </message>
+</context>
+<context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
@@ -10,22 +28,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="56"/>
         <source>Datetime</source>
         <translation>Tarikhwaktu</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="135"/>
         <source>12 Hour Time</source>
         <translation>Waktu 12 Jam</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="137"/>
         <source>24 Hour Time</source>
         <translation>Waktu 24 Jam</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="143"/>
         <source>Time Settings</source>
         <translation>Tetapan Waktu</translation>
     </message>
@@ -33,19 +51,42 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="55"/>
         <source>Enable network</source>
         <translation>Benarkan rangkaian</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="57"/>
         <source>Disable network</source>
         <translation>Lumpuhkan rangkaian</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="63"/>
         <source>Network settings</source>
         <translation>Tetapan rangkaian</translation>
+    </message>
+</context>
+<context>
+    <name>DialogManager</name>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
+        <source>Are you sure to empty %1 items?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
+        <source>Delete</source>
+        <translation>Padam</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
+        <source>This action cannot be restored</source>
+        <translation>Tindakan ini tidak dapat dipulihkan</translation>
     </message>
 </context>
 <context>
@@ -142,27 +183,27 @@
         <translation>Sembunyi Pintar</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="94"/>
+        <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Mode</source>
         <translation>Mod</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="102"/>
+        <location filename="../frame/util/docksettings.cpp" line="104"/>
         <source>Location</source>
         <translation>Lokasi</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="111"/>
         <source>Size</source>
         <translation>Saiz</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="116"/>
+        <location filename="../frame/util/docksettings.cpp" line="118"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="120"/>
+        <location filename="../frame/util/docksettings.cpp" line="122"/>
         <source>Plugins</source>
         <translation>Pemalam</translation>
     </message>
@@ -170,7 +211,7 @@
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="38"/>
+        <location filename="../frame/item/launcheritem.cpp" line="108"/>
         <source>Launcher</source>
         <translation>Pelancar</translation>
     </message>
@@ -178,107 +219,154 @@
 <context>
     <name>NetworkPlugin</name>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="46"/>
+        <location filename="../plugins/system-tray/system-trays/network/networkplugin.cpp" line="50"/>
         <source>Network</source>
         <translation>Rangkaian</translation>
     </message>
 </context>
 <context>
-    <name>PopupControlWidget</name>
+    <name>PowerTrayWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Cancel</source>
-        <translation>Batal</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Empty</source>
-        <translation>Kosong</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
-        <source>This action cannot be restored</source>
-        <translation>Tindakan ini tidak dapat dipulihkan</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
-        <source>Are you sure to empty 1 item ?</source>
-        <translation>Anda pasti mahu kosongkan 1 item ?</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
-        <source>Are you sure to empty %1 items ?</source>
-        <translation>Anda pasti mahu kosongkan %1 item ?</translation>
-    </message>
-</context>
-<context>
-    <name>ShutdownPlugin</name>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="95"/>
         <source>Shut down</source>
         <translation>Matikan</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="103"/>
         <source>Remaining Capacity %1</source>
         <translation>Kapasiti %1 berbaki</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="109"/>
         <source>Charged %1</source>
         <translation>%1 dicaskan</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="111"/>
         <source>Charging %1</source>
         <translation>Mengecas %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
-        <source>Restart</source>
-        <translation>Mula semula</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
-        <source>Lock</source>
-        <translation>Kunci</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
-        <source>Log out</source>
-        <translation>Daftar  keluar</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
-        <source>Suspend</source>
-        <translation>Tangguh</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
-        <source>Power</source>
-        <translation>Kuasa</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
-        <source>Switch account</source>
-        <translation>Tukar akaun</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="129"/>
         <source>Power settings</source>
         <translation>Tetapan kuasa</translation>
     </message>
 </context>
 <context>
+    <name>ShutdownPlugin</name>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="68"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="143"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="109"/>
+        <source>Shut down</source>
+        <translation>Matikan</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="76"/>
+        <source>Remaining Capacity %1</source>
+        <translation>Kapasiti %1 berbaki</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="82"/>
+        <source>Charged %1</source>
+        <translation>%1 dicaskan</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="84"/>
+        <source>Charging %1</source>
+        <translation>Mengecas %1</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="149"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="115"/>
+        <source>Restart</source>
+        <translation>Mula semula</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="161"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="127"/>
+        <source>Lock</source>
+        <translation>Kunci</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="167"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <source>Log out</source>
+        <translation>Daftar  keluar</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="155"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
+        <source>Suspend</source>
+        <translation>Tangguh</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="48"/>
+        <source>Power</source>
+        <translation>Kuasa</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="175"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
+        <source>Switch account</source>
+        <translation>Tukar akaun</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="185"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
+        <source>Power settings</source>
+        <translation>Tetapan kuasa</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="37"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
+        <source>Shutdown</source>
+        <translation>Matikan</translation>
+    </message>
+</context>
+<context>
+    <name>ShutdownTrayWidget</name>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="34"/>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="87"/>
+        <source>Shut down</source>
+        <translation>Matikan</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="93"/>
+        <source>Restart</source>
+        <translation>Mula semula</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="99"/>
+        <source>Suspend</source>
+        <translation>Tangguh</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="105"/>
+        <source>Lock</source>
+        <translation>Kunci</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="111"/>
+        <source>Log out</source>
+        <translation>Daftar  keluar</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="119"/>
+        <source>Switch account</source>
+        <translation>Tukar akaun</translation>
+    </message>
+</context>
+<context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
+        <location filename="../plugins/system-tray/system-trays/sound/soundapplet.cpp" line="54"/>
         <source>Device</source>
         <translation>Peranti</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
+        <location filename="../plugins/system-tray/system-trays/sound/soundapplet.cpp" line="72"/>
         <source>Application</source>
         <translation>Aplikasi</translation>
     </message>
@@ -286,22 +374,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
+        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
         <translation>Suarakan</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
+        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>Senyap</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
+        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
         <translation>Tetapan Audio</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="215"/>
+        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="221"/>
         <source>Current Volume %1</source>
         <translation>Volum Semasa %1</translation>
     </message>
@@ -309,15 +397,38 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="41"/>
+        <location filename="../plugins/system-tray/system-trays/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
         <translation>Bunyi</translation>
     </message>
 </context>
 <context>
+    <name>SoundTrayWidget</name>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="120"/>
+        <source>Unmute</source>
+        <translation>Suarakan</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="122"/>
+        <source>Mute</source>
+        <translation>Senyap</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="128"/>
+        <source>Audio Settings</source>
+        <translation>Tetapan Audio</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="205"/>
+        <source>Current Volume %1</source>
+        <translation>Volum Semasa %1</translation>
+    </message>
+</context>
+<context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="50"/>
         <source>System Tray</source>
         <translation>Talam Sistem</translation>
     </message>
@@ -325,12 +436,12 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="77"/>
         <source>Trash - %1 file</source>
         <translation>Fail %1- disampahkan</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="79"/>
         <source>Trash - %1 files</source>
         <translation>Fail %1- disampahkan</translation>
     </message>
@@ -338,12 +449,12 @@
 <context>
     <name>TrashWidget</name>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
+        <location filename="../plugins/trash/trashwidget.cpp" line="71"/>
         <source>Open</source>
         <translation>Buka</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
+        <location filename="../plugins/trash/trashwidget.cpp" line="79"/>
         <source>Empty</source>
         <translation>Kosong</translation>
     </message>
@@ -351,17 +462,35 @@
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="55"/>
         <source>Unknown</source>
         <translation>Tidak diketahui</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="60"/>
         <source>No Network</source>
         <translation>Tiada Rangkaian</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="70"/>
+        <source>Wired connection: %1</source>
+        <translation>Sambungan berwayar: %1</translation>
+    </message>
+</context>
+<context>
+    <name>WiredTrayWidget</name>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="101"/>
+        <source>Unknown</source>
+        <translation>Tidak diketahui</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="106"/>
+        <source>No Network</source>
+        <translation>Tiada Rangkaian</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="116"/>
         <source>Wired connection: %1</source>
         <translation>Sambungan berwayar: %1</translation>
     </message>
@@ -369,12 +498,12 @@
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/wirelessitem.cpp" line="81"/>
         <source>No Network</source>
         <translation>Tiada Rangkaian</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/wirelessitem.cpp" line="91"/>
         <source>Wireless Connection: %1</source>
         <translation>Sambungan Tanpa Wayar: %1</translation>
     </message>
@@ -382,34 +511,27 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
-        <source>Auto-connect</source>
-        <translation>Auto-sambung</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
-        <source>Connect</source>
-        <translation>Sambung</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
-        <source>Cancel</source>
-        <translation>Batal</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/applet/wirelesslist.cpp" line="154"/>
         <source>Wireless Network</source>
         <translation>Rangkaian Tanpa Wayar</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
+        <location filename="../plugins/system-tray/system-trays/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network %1</source>
         <translation>Sambungan Tanpa Wayar %1</translation>
     </message>
+</context>
+<context>
+    <name>WirelessTrayWidget</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
-        <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Kata laluan diperlukan untuk sambung ke &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <location filename="../plugins/system-tray/system-trays/network/item/wirelesstraywidget.cpp" line="128"/>
+        <source>No Network</source>
+        <translation>Tiada Rangkaian</translation>
+    </message>
+    <message>
+        <location filename="../plugins/system-tray/system-trays/network/item/wirelesstraywidget.cpp" line="138"/>
+        <source>Wireless Connection: %1</source>
+        <translation>Sambungan Tanpa Wayar: %1</translation>
     </message>
 </context>
 </TS>
