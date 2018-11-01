@@ -278,6 +278,9 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 	var err error
 	cpath, err = m.activateAccessPoint(uuid, apPath, devPath)
 	busErr = dbusutil.ToError(err)
+	if cpath == "" {
+		cpath = "/"
+	}
 	return
 }
 
@@ -297,15 +300,17 @@ func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		}
 
 		uuid = utils.GenUuid()
-		ssid, err := nmAp.Ssid().Get(0)
+		var ssid []byte
+		ssid, err = nmAp.Ssid().Get(0)
 		if err != nil {
 			logger.Warning("failed to get Ap Ssid:", err)
+			return
 		}
 
 		data := newWirelessConnectionData(decodeSsid(ssid), uuid, ssid, getApSecType(nmAp))
 		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 		if err != nil {
-			logger.Warning("temp debug err is:", err)
+			return
 		}
 	}
 	return
