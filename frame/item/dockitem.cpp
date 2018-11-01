@@ -124,8 +124,13 @@ void DockItem::mousePressEvent(QMouseEvent *e)
     m_popupTipsDelayTimer->stop();
     hideNonModel();
 
-    if (e->button() == Qt::RightButton)
+    if (e->button() == Qt::RightButton) {
+        if (itemType() == ItemType::Container) {
+            // ignore this event to MainPanel/MainWindow to show context menu of MainWindow
+            return e->ignore();
+        }
         return showContextMenu();
+    }
 }
 
 void DockItem::enterEvent(QEvent *e)
