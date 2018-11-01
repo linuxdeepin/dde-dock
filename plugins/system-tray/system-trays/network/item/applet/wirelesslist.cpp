@@ -46,8 +46,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
       m_activeAP(),
 
       m_updateAPTimer(new QTimer(this)),
-      m_pwdDialog(new DInputDialog(nullptr)),
-      m_autoConnBox(new QCheckBox),
 
       m_centralLayout(new QVBoxLayout),
       m_centralWidget(new QWidget),
@@ -57,20 +55,9 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
     m_currentClickAPW = nullptr;
 
-    m_autoConnBox->setText(tr("Auto-connect"));
-
     const auto ratio = qApp->devicePixelRatio();
     QPixmap iconPix = QIcon::fromTheme("notification-network-wireless-full").pixmap(QSize(48, 48) * ratio);
     iconPix.setDevicePixelRatio(ratio);
-
-    m_pwdDialog->setTextEchoMode(QLineEdit::Password);
-    m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Dialog);
-    m_pwdDialog->setTextEchoMode(DLineEdit::Password);
-    m_pwdDialog->setIconPixmap(iconPix);
-    m_pwdDialog->addSpacing(10);
-    m_pwdDialog->addContent(m_autoConnBox, Qt::AlignLeft);
-    m_pwdDialog->setOkButtonText(tr("Connect"));
-    m_pwdDialog->setCancelButtonText(tr("Cancel"));
 
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
@@ -97,8 +84,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_device, &WirelessDevice::apAdded, this, &WirelessList::APAdded);
     connect(m_device, &WirelessDevice::apRemoved, this, &WirelessList::APRemoved);
     connect(m_device, &WirelessDevice::apInfoChanged, this, &WirelessList::APPropertiesChanged);
-    connect(m_device, &WirelessDevice::needSecrets, this, &WirelessList::onNeedSecrets);
-    connect(m_device, &WirelessDevice::needSecretsFinished, this, &WirelessList::onNeedSecretsFinished);
     connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
     connect(m_device, &WirelessDevice::activateAccessPointFailed, this, &WirelessList::onActivateApFailed);
 
@@ -109,10 +94,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
     connect(m_device, &WirelessDevice::activeConnectionChanged, this, &WirelessList::onActiveConnectionChanged);
     connect(m_device, static_cast<void (WirelessDevice:: *) (NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-
-    connect(m_pwdDialog, &DInputDialog::textValueChanged, this, &WirelessList::onPwdDialogTextChanged);
-    connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessList::pwdDialogCanceled);
-    connect(m_pwdDialog, &DInputDialog::accepted, this, &WirelessList::pwdDialogAccepted);
 
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [=] {
         if (!m_currentClickAPW) return;
@@ -126,7 +107,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
 WirelessList::~WirelessList()
 {
-    m_pwdDialog->deleteLater();
 }
 
 QWidget *WirelessList::controlPanel()
@@ -294,41 +274,6 @@ void WirelessList::onEnableButtonToggle(const bool enable)
     m_updateAPTimer->start();
 }
 
-void WirelessList::pwdDialogAccepted()
-{
-    if (m_pwdDialog->textValue().isEmpty())
-        return m_pwdDialog->setTextAlert(true);
-
-    Q_EMIT feedSecret(m_lastConnPath, m_lastConnSecurity, m_pwdDialog->textValue(), m_autoConnBox->isChecked());
-}
-
-void WirelessList::pwdDialogCanceled()
-{
-    Q_EMIT cancelSecret(m_lastConnPath, m_lastConnSecurity);
-    m_pwdDialog->close();
-}
-
-void WirelessList::onPwdDialogTextChanged(const QString &text)
-{
-    m_pwdDialog->setTextAlert(false);
-
-    do {
-        if (text.isEmpty())
-            break;
-        const int len = text.length();
-
-        // in wpa, password length must >= 8
-        if (len < 8 && m_lastConnSecurityType.startsWith("wifi-wpa"))
-            break;
-        if (!(len == 5 || len == 13 || len == 16) && m_lastConnSecurityType.startsWith("wifi-wep"))
-            break;
-
-        return m_pwdDialog->setOkButtonEnabled(true);
-    } while (false);
-
-    m_pwdDialog->setOkButtonEnabled(false);
-}
-
 void WirelessList::onDeviceEnableChanged(const bool enable)
 {
     m_controlPanel->setDeviceEnabled(enable);
@@ -357,55 +302,6 @@ void WirelessList::activateAP(const QString &apPath, const QString &ssid)
 void WirelessList::deactiveAP()
 {
     Q_EMIT requestDeactiveAP(m_device->path());
-}
-
-void WirelessList::onNeedSecrets(const QString &info)
-{
-    const QJsonObject infoObject = QJsonDocument::fromJson(info.toUtf8()).object();
-    const QString connPath = infoObject.value("ConnectionPath").toString();
-    const QString security = infoObject.value("SettingName").toString();
-    const QString securityType = infoObject.value("KeyType").toString();
-    const QString ssid = infoObject.value("ConnectionId").toString();
-    const bool defaultAutoConnect = infoObject.value("AutoConnect").toBool();
-
-    // check is our device' ap
-    QString connHwAddr;
-    QList<QJsonObject> connections = m_device->connections();
-    for (auto item : connections) {
-        if (item.value("Path").toString() != connPath)
-            continue;
-        connHwAddr = item.value("HwAddress").toString();
-        break;
-    }
-    if (connHwAddr != m_device->usingHwAdr())
-        return;
-
-    m_lastConnPath = connPath;
-    m_lastConnSecurity = security;
-    m_lastConnSecurityType = securityType;
-
-    m_autoConnBox->setChecked(defaultAutoConnect);
-    m_pwdDialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
-
-    // clear old config
-    m_pwdDialog->setTextValue(QString());
-    m_pwdDialog->setTextAlert(true);
-    m_pwdDialog->setOkButtonEnabled(false);
-
-    // check if controlcenter handle this request
-//    QDBusInterface iface("com.deepin.dde.ControlCenter",
-//                         "/com/deepin/dde/ControlCenter/Network",
-//                         "com.deepin.dde.ControlCenter.Network");
-//    if (iface.isValid() && iface.call("active").arguments().first().toBool())
-//        return m_pwdDialog->hide();
-
-    if (!m_pwdDialog->isVisible())
-        m_pwdDialog->show();
-}
-
-void WirelessList::onNeedSecretsFinished(const QString &info0, const QString &info1)
-{
-    m_pwdDialog->close();
 }
 
 void WirelessList::updateIndicatorPos()

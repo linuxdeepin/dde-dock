@@ -148,16 +148,6 @@ QWidget *WirelessTrayWidget::trayPopupApplet()
     return m_wirelessApplet;
 }
 
-void WirelessTrayWidget::onNeedSecrets(const QString &info)
-{
-    m_APList->onNeedSecrets(info);
-}
-
-void WirelessTrayWidget::onNeedSecretsFinished(const QString &info0, const QString &info1)
-{
-    m_APList->onNeedSecretsFinished(info0, info1);
-}
-
 void WirelessTrayWidget::setDeviceInfo(const int index)
 {
     m_APList->setDeviceInfo(index);
@@ -220,11 +210,7 @@ void WirelessTrayWidget::init()
     connect(m_APList, &WirelessList::requestSetDeviceEnable, this, &WirelessTrayWidget::requestSetDeviceEnable);
     connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessTrayWidget::requestActiveAP);
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessTrayWidget::requestDeactiveAP);
-    connect(m_APList, &WirelessList::feedSecret, this, &WirelessTrayWidget::feedSecret);
-    connect(m_APList, &WirelessList::cancelSecret, this, &WirelessTrayWidget::cancelSecret);
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessTrayWidget::requestWirelessScan);
-    connect(m_APList, &WirelessList::queryConnectionSession, this, &WirelessTrayWidget::queryConnectionSession);
-    connect(m_APList, &WirelessList::createApConfig, this, &WirelessTrayWidget::createApConfig);
 
     QTimer::singleShot(0, this, [=]() {
         m_refershTimer->start();

@@ -29,11 +29,8 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QTimer>
-#include <QCheckBox>
-#include <QDBusObjectPath>
 
 #include <dpicturesequenceview.h>
-#include <dinputdialog.h>
 #include <WirelessDevice>
 
 DWIDGET_USE_NAMESPACE
@@ -50,19 +47,13 @@ public:
     QWidget *controlPanel();
 
 public Q_SLOTS:
-    void onNeedSecrets(const QString &info);
-    void onNeedSecretsFinished(const QString &info0, const QString &info1);
     void setDeviceInfo(const int index);
 
 signals:
     void requestSetDeviceEnable(const QString &path, const bool enable) const;
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
-    void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
-    void cancelSecret(const QString &connectionPath, const QString &settingName);
     void requestWirelessScan();
-    void createApConfig(const QString &devPath, const QString &apPath);
-    void queryConnectionSession( const QString &devPath, const QString &uuid );
 
 private slots:
     void loadAPList();
@@ -71,9 +62,6 @@ private slots:
     void APPropertiesChanged(const QJsonObject &apInfo);
     void updateAPList();
     void onEnableButtonToggle(const bool enable);
-    void pwdDialogAccepted();
-    void pwdDialogCanceled();
-    void onPwdDialogTextChanged(const QString &text);
     void onDeviceEnableChanged(const bool enable);
     void activateAP(const QString &apPath, const QString &ssid);
     void deactiveAP();
@@ -90,17 +78,11 @@ private:
     QList<AccessPointWidget*> m_apwList;
 
     QTimer *m_updateAPTimer;
-    Dtk::Widget::DInputDialog *m_pwdDialog;
-    QCheckBox *m_autoConnBox;
     Dtk::Widget::DPictureSequenceView *m_indicator;
     AccessPointWidget *m_currentClickAPW;
     AccessPoint m_currentClickAP;
 
-    QString m_lastConnPath;
-    QString m_lastConnSecurity;
-    QString m_lastConnSecurityType;
-
-    QJsonObject m_editConnectionData;;
+    QJsonObject m_editConnectionData;
 
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;

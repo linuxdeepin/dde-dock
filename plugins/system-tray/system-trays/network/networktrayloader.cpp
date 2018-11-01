@@ -103,11 +103,6 @@ void NetworkTrayLoader::onDeviceListChanged(const QList<dde::network::NetworkDev
                     connect(static_cast<WirelessTrayWidget *>(networkTray), &WirelessTrayWidget::queryConnectionSession,
                             m_networkWorker, &NetworkWorker::queryConnectionSession);
 
-                    connect(m_networkModel, &NetworkModel::needSecrets,
-                            static_cast<WirelessTrayWidget *>(networkTray), &WirelessTrayWidget::onNeedSecrets);
-                    connect(m_networkModel, &NetworkModel::needSecretsFinished,
-                            static_cast<WirelessTrayWidget *>(networkTray), &WirelessTrayWidget::onNeedSecretsFinished);
-
                     m_networkWorker->queryAccessPoints(path);
                     m_networkWorker->requestWirelessScan();
                     break;

@@ -45,8 +45,6 @@ public:
     QWidget *itemTips();
 
 public Q_SLOTS:
-    void onNeedSecrets(const QString &info);
-    void onNeedSecretsFinished(const QString &info0, const QString &info1);
     // set the device name displayed
     // in the top-left corner of the applet
     void setDeviceInfo(const int index);

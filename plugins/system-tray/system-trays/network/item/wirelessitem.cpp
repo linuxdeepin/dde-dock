@@ -96,16 +96,6 @@ QWidget *WirelessItem::itemTips()
     return m_wirelessPopup;
 }
 
-void WirelessItem::onNeedSecrets(const QString &info)
-{
-    m_APList->onNeedSecrets(info);
-}
-
-void WirelessItem::onNeedSecretsFinished(const QString &info0, const QString &info1)
-{
-    m_APList->onNeedSecretsFinished(info0, info1);
-}
-
 void WirelessItem::setDeviceInfo(const int index)
 {
     m_APList->setDeviceInfo(index);
@@ -240,11 +230,7 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::requestSetDeviceEnable, this, &WirelessItem::requestSetDeviceEnable);
     connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessItem::requestActiveAP);
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
-    connect(m_APList, &WirelessList::feedSecret, this, &WirelessItem::feedSecret);
-    connect(m_APList, &WirelessList::cancelSecret, this, &WirelessItem::cancelSecret);
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
-    connect(m_APList, &WirelessList::queryConnectionSession, this, &WirelessItem::queryConnectionSession);
-    connect(m_APList, &WirelessList::createApConfig, this, &WirelessItem::createApConfig);
 
     QTimer::singleShot(0, this, [=]() {
         m_refershTimer->start();

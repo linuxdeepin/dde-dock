@@ -207,11 +207,6 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
                             m_networkWorker, &NetworkWorker::queryConnectionSession);
 
-                    connect(m_networkModel, &NetworkModel::needSecrets,
-                            static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecrets);
-                    connect(m_networkModel, &NetworkModel::needSecretsFinished,
-                            static_cast<WirelessItem *>(item), &WirelessItem::onNeedSecretsFinished);
-
                     m_networkWorker->queryAccessPoints(path);
                     m_networkWorker->requestWirelessScan();
                     break;
