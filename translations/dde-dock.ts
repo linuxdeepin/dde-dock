@@ -211,15 +211,6 @@
     </message>
 </context>
 <context>
-    <name>InformationWidget</name>
-    <message>
-        <location filename="../plugins/plugin-guide/home_monitor/informationwidget.cpp" line="32"/>
-        <source>Home:
-%1G/%2G</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>LauncherItem</name>
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="108"/>

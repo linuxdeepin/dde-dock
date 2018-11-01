@@ -29,5 +29,5 @@ void InformationWidget::refreshInfo()
     const int total = 100;
 
     // update display
-    m_infoLabel->setText(tr("Home:\n%1G/%2G").arg(remain).arg(total));
+    m_infoLabel->setText(QString("Home:\n%1G/%2G").arg(remain).arg(total));
 }
