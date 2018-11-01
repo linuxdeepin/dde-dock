@@ -1,3 +1,25 @@
+<a name="4.7.5"></a>
+## 4.7.5 (2018-11-01)
+
+
+#### Bug Fixes
+
+*   the context menu can not be shown when container item is clicked ([22119b98](https://github.com/linuxdeepin/dde-dock/commit/22119b989a2466ef0223c832f679238b0d4c185f))
+*   crash when drag desktop file leave ([ade41a05](https://github.com/linuxdeepin/dde-dock/commit/ade41a05056c746785f0f06d2bf326508e1d9418))
+*   the dock is hidden when the tray area is expanded/closed ([ef6b78cc](https://github.com/linuxdeepin/dde-dock/commit/ef6b78ccbfac578476faf1b09b73672cc9062a34))
+*   postion error of tip and applet of system trays ([26328147](https://github.com/linuxdeepin/dde-dock/commit/263281478f2a2ad89ed262e6e5745a6d3dd78ab3))
+* **icon:**  limit min icon size to 24 ([297e0b57](https://github.com/linuxdeepin/dde-dock/commit/297e0b57f228afbadd3eb8b86de2fb44638d7a6c))
+* **system-tray:**
+  *  crash when refresh wired tray visible ([5c042701](https://github.com/linuxdeepin/dde-dock/commit/5c042701e1fbaafaef04013f5b1dcea88bd5342e))
+  *  system tray icon tips and applet position ([d94da603](https://github.com/linuxdeepin/dde-dock/commit/d94da6033fa7b2c2d0ca99bf11b1140b702ccfcc))
+  *  dock visible when context menu and tips of system tray is shown ([6ffd34ef](https://github.com/linuxdeepin/dde-dock/commit/6ffd34ef337b3ecdde827a495a8b7106f82e5a73))
+  *  control widget icon hihdpi ([93f0ee27](https://github.com/linuxdeepin/dde-dock/commit/93f0ee27479ac64983bbe1111ded1856cfb42a63))
+  *  system trays should not be drag into container ([d4641059](https://github.com/linuxdeepin/dde-dock/commit/d464105975b7761b24e68c11fe919fb4ab927f31))
+  *  should resize system-tray after tray inactived ([cf72371f](https://github.com/linuxdeepin/dde-dock/commit/cf72371fd91d0976c6544318afcfbb33ed460f0a))
+  *  icons position in hihdpi ([bd4bdfda](https://github.com/linuxdeepin/dde-dock/commit/bd4bdfdaebbd7df6518220d8f2248bf1d9ed9812))
+
+
+
 <a name="4.7.4"></a>
 ## 4.7.4 (2018-10-26)
 
