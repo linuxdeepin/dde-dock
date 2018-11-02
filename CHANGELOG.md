@@ -1,3 +1,13 @@
+<a name="4.7.5.1"></a>
+## 4.7.5.1 (2018-11-02)
+
+
+#### Bug Fixes
+
+*   translation of sound system tray load failed ([3ff8f35f](https://github.com/linuxdeepin/dde-dock/commit/3ff8f35ff49c81e7c838c65c13215b01fed88c43))
+
+
+
 <a name="4.7.5"></a>
 ## 4.7.5 (2018-11-01)
 
