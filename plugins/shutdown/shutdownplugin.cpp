@@ -180,7 +180,9 @@ void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
     Q_UNUSED(displayMode);
 
-    m_shutdownWidget->update();
+    if (!pluginIsDisable()) {
+        m_shutdownWidget->update();
+    }
 }
 
 int ShutdownPlugin::itemSortKey(const QString &itemKey)
