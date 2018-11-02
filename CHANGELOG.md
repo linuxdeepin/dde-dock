@@ -1,3 +1,13 @@
+<a name="4.7.5.2"></a>
+## 4.7.5.2 (2018-11-02)
+
+
+#### Bug Fixes
+
+*   dock crash by shutdown plugin config file ([e7677b6f](https://github.com/linuxdeepin/dde-dock/commit/e7677b6f9141b071037334fbf30ca93825259f98))
+
+
+
 <a name="4.7.5.1"></a>
 ## 4.7.5.1 (2018-11-02)
 
