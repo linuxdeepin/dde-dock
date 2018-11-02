@@ -31,6 +31,8 @@
 class TipsWidget;
 class SoundTrayWidget : public AbstractSystemTrayWidget
 {
+    Q_OBJECT
+
 public:
     SoundTrayWidget(QWidget *parent = nullptr);
 
