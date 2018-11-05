@@ -103,7 +103,7 @@ void AccessPointWidget::updateAP(const AccessPoint &ap)
 
     if (!ap.secured()) {
         m_securityIcon->clear();
-        m_securityIcon->setFixedSize(m_securityIconSize);
+        m_securityIcon->setFixedSize(m_securityIconSize / qApp->devicePixelRatio());
     }
 
     // reset state
