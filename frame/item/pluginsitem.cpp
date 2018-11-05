@@ -128,11 +128,7 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
         MousePressPoint = e->pos();
 
-    const QPoint dis = e->pos() - rect().center();
-    if (dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
-        QWidget::mousePressEvent(e);
-    else
-        DockItem::mousePressEvent(e);
+    QWidget::mousePressEvent(e);
 }
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)

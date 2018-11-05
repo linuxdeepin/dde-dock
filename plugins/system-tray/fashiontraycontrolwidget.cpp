@@ -123,6 +123,11 @@ void FashionTrayControlWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void FashionTrayControlWidget::mousePressEvent(QMouseEvent *event)
 {
+    if (event->button() != Qt::LeftButton) {
+        event->ignore();
+        return QWidget::mousePressEvent(event);
+    }
+
     m_pressed = true;
     update();
 
