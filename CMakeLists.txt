@@ -11,6 +11,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
+include(GNUInstallDirs)
+
 if (DEFINED DOCK_TRAY_USE_NATIVE_POPUP)
     add_definitions(-DDOCK_TRAY_USE_NATIVE_POPUP)
 endif ()
@@ -50,9 +52,15 @@ install(FILES ${QM_FILES}
         DESTINATION share/dde-dock/translations)
 
 ## dev files
-install (FILES ${INTERFACES}
-         DESTINATION include/dde-dock)
+install(FILES ${INTERFACES}
+        DESTINATION include/dde-dock)
+
+install(FILES "dde-dock.pc"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+
+install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
 ## services files
 install(FILES frame/com.deepin.dde.Dock.service
-     DESTINATION /usr/share/dbus-1/services)
+        DESTINATION /usr/share/dbus-1/services)
