@@ -359,13 +359,14 @@ void AppItem::resizeEvent(QResizeEvent *e)
 void AppItem::dragEnterEvent(QDragEnterEvent *e)
 {
     // ignore drag from panel
-    if (e->source())
-        return;
+    if (e->source()) {
+        return e->ignore();
+    }
 
     // ignore request dock event
     QString draggingMimeKey = e->mimeData()->formats().contains("RequestDock") ? "RequestDock" : "text/plain";
     if (QMimeDatabase().mimeTypeForFile(e->mimeData()->data(draggingMimeKey)).name() == "application/x-desktop") {
-        return;
+        return e->ignore();
     }
 
     e->accept();

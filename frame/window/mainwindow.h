@@ -44,6 +44,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    friend class MainPanel;
+
 public slots:
     void launch();
 

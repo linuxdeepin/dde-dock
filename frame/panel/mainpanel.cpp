@@ -29,6 +29,8 @@
 #include <QScreen>
 #include <QGraphicsView>
 
+#include <window/mainwindow.h>
+
 static DockItem *DraggingItem = nullptr;
 static PlaceholderItem *RequestDockItem = nullptr;
 
@@ -44,6 +46,7 @@ MainPanel::MainPanel(QWidget *parent)
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
       m_showDesktopItem(new ShowDesktopItem(this)),
       m_itemAdjustTimer(new QTimer(this)),
+      m_checkMouseLeaveTimer(new QTimer(this)),
       m_itemController(DockItemController::instance(this)),
       m_appDragWidget(nullptr)
 {
@@ -57,6 +60,7 @@ MainPanel::MainPanel(QWidget *parent)
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
     setObjectName("MainPanel");
+    setMouseTracking(true);
 
     QFile qssFile(":/qss/frame.qss");
 
@@ -72,10 +76,14 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
+    connect(m_checkMouseLeaveTimer, &QTimer::timeout, this, &MainPanel::checkMouseReallyLeave, Qt::QueuedConnection);
     connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainPanel::setMaskAlpha);
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
+
+    m_checkMouseLeaveTimer->setSingleShot(true);
+    m_checkMouseLeaveTimer->setInterval(300);
 
     const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -210,6 +218,12 @@ void MainPanel::resizeEvent(QResizeEvent *e)
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 {
+    // 不知道为什么有可能会收不到dragLeaveEvent，因此使用timer来检测鼠标是否已经离开dock
+    m_checkMouseLeaveTimer->start();
+
+    // call dragEnterEvent of MainWindow to show dock when dock is hidden
+    static_cast<MainWindow *>(window())->dragEnterEvent(e);
+
     DockItem *item = itemAt(e->pos());
     if (item && item->itemType() == DockItem::Container)
         return;
@@ -273,8 +287,6 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
 
 void MainPanel::dropEvent(QDropEvent *e)
 {
-    Q_UNUSED(e)
-
     DraggingItem = nullptr;
 
     if (RequestDockItem)
@@ -665,4 +677,15 @@ void MainPanel::handleDragMove(QDragMoveEvent *e, bool isFilter)
             m_itemController->itemMove(RequestDockItem, dst);
         }
     }
+}
+
+void MainPanel::checkMouseReallyLeave()
+{
+    if (window()->geometry().contains(QCursor::pos())) {
+        return m_checkMouseLeaveTimer->start();
+    }
+
+    m_checkMouseLeaveTimer->stop();
+
+    dragLeaveEvent(new QDragLeaveEvent);
 }

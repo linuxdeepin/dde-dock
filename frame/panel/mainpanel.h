@@ -86,6 +86,7 @@ private slots:
     void itemDragStarted();
     void itemDropped(QObject *destnation);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
+    void checkMouseReallyLeave();
 
 private:
     Position m_position;
@@ -94,6 +95,7 @@ private:
     ShowDesktopItem *m_showDesktopItem;
 
     QTimer *m_itemAdjustTimer;
+    QTimer *m_checkMouseLeaveTimer;
     DockItemController *m_itemController;
 
     QWidget *m_appDragWidget;

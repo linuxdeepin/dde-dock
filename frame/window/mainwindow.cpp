@@ -211,8 +211,9 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     QWidget::dragEnterEvent(e);
 
-    if (m_settings->hideState() != Show)
+    if (m_settings->hideState() != Show) {
         m_expandDelayTimer->start();
+    }
 }
 
 void MainWindow::setFixedSize(const QSize &size)
