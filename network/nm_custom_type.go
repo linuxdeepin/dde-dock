@@ -27,7 +27,7 @@ import (
 	"strings"
 )
 
-// Custom device types, use sting instead of number, used by front-end
+// Custom device types, use string instead of number, used by front-end
 const (
 	deviceUnknown    = "unknown"
 	deviceEthernet   = "wired"
@@ -45,6 +45,7 @@ const (
 	deviceBridge     = "bridge"
 	deviceGeneric    = "generic"
 	deviceTeam       = "team"
+	deviceTun        = "tun"
 )
 
 func getCustomDeviceType(devType uint32) (customDevType string) {
@@ -79,6 +80,8 @@ func getCustomDeviceType(devType uint32) (customDevType string) {
 		return deviceGeneric
 	case nm.NM_DEVICE_TYPE_TEAM:
 		return deviceTeam
+	case nm.NM_DEVICE_TYPE_TUN:
+		return deviceTun
 	case nm.NM_DEVICE_TYPE_UNKNOWN:
 	default:
 		logger.Error("unknown device type", devType)
