@@ -147,6 +147,10 @@ void SNITrayWidget::refreshIcon()
     m_pixmap = pix;
     update();
     Q_EMIT iconChanged();
+
+    if (!isVisible()) {
+        Q_EMIT needAttention();
+    }
 }
 
 void SNITrayWidget::refreshOverlayIcon()
@@ -159,6 +163,10 @@ void SNITrayWidget::refreshOverlayIcon()
     m_overlayPixmap = pix;
     update();
     Q_EMIT iconChanged();
+
+    if (!isVisible()) {
+        Q_EMIT needAttention();
+    }
 }
 
 void SNITrayWidget::refreshAttentionIcon()
@@ -172,6 +180,10 @@ void SNITrayWidget::refreshAttentionIcon()
     m_pixmap = pix;
     update();
     Q_EMIT iconChanged();
+
+    if (!isVisible()) {
+        Q_EMIT needAttention();
+    }
 }
 
 QSize SNITrayWidget::sizeHint() const

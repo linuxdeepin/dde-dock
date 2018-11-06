@@ -41,6 +41,7 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
       m_rightSpliter(new QLabel),
       m_controlWidget(new FashionTrayControlWidget(pos)),
       m_currentAttentionTray(nullptr),
+      m_attentionDelayTimer(new QTimer(this)),
       m_dockPosistion(pos)
 {
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
@@ -68,6 +69,9 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     m_mainBoxLayout->setAlignment(m_rightSpliter, Qt::AlignCenter);
 
     setLayout(m_mainBoxLayout);
+
+    m_attentionDelayTimer->setInterval(3000);
+    m_attentionDelayTimer->setSingleShot(true);
 
     setDockPostion(pos);
     onTrayListExpandChanged(m_controlWidget->expanded());
@@ -101,7 +105,7 @@ void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
         setCurrentAttentionTray(wrapper);
     }
 
-    connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &FashionTrayItem::onTrayAttentionChanged, Qt::UniqueConnection);
+    connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &FashionTrayItem::onTrayAttentionChanged, static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 
     if (trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         AbstractSystemTrayWidget * sysTrayWidget = static_cast<AbstractSystemTrayWidget *>(trayWidget);
@@ -185,20 +189,17 @@ void FashionTrayItem::onTrayListExpandChanged(const bool expand)
         if (expand) {
             m_mainBoxLayout->removeWidget(m_currentAttentionTray);
             m_trayBoxLayout->addWidget(m_currentAttentionTray);
-        } else {
-            m_trayBoxLayout->removeWidget(m_currentAttentionTray);
-            m_mainBoxLayout->insertWidget(m_mainBoxLayout->indexOf(m_controlWidget) + 1, m_currentAttentionTray);
         }
-    }
 
-    m_mainBoxLayout->setAlignment(m_currentAttentionTray, Qt::AlignCenter);
+        m_currentAttentionTray = nullptr;
+    }
 
     for (auto i = m_trayWidgetWrapperMap.begin(); i != m_trayWidgetWrapperMap.end(); ++i) {
-        if (i.value() == m_currentAttentionTray) {
-            continue;
-        }
         i.value()->setVisible(expand);
+        i.value()->setAttention(false);
     }
+
+    m_attentionDelayTimer->start();
 
     requestResize();
 }
@@ -305,6 +306,13 @@ QSize FashionTrayItem::wantedTotalSize() const
 
 void FashionTrayItem::onTrayAttentionChanged(const bool attention)
 {
+    // 设置attention为false之后，启动timer，在timer处于Active状态期间不重设attention为true
+    if (!attention) {
+        m_attentionDelayTimer->start();
+    } else if (attention && m_attentionDelayTimer->isActive()) {
+        return;
+    }
+
     FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
 
     Q_ASSERT(wrapper);
@@ -377,7 +385,8 @@ void FashionTrayItem::moveInAttionTray()
 
     m_mainBoxLayout->removeWidget(m_currentAttentionTray);
     m_trayBoxLayout->addWidget(m_currentAttentionTray);
-    m_currentAttentionTray->setVisible(m_controlWidget->expanded());
+    m_currentAttentionTray->setVisible(false);
+    m_currentAttentionTray->setAttention(false);
 }
 
 void FashionTrayItem::switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper)

@@ -78,6 +78,7 @@ private:
     QLabel *m_rightSpliter;
     FashionTrayControlWidget *m_controlWidget;
     FashionTrayWidgetWrapper *m_currentAttentionTray;
+    QTimer *m_attentionDelayTimer;
 
     Dock::Position m_dockPosistion;
 

@@ -340,7 +340,11 @@ void XWindowTrayWidget::refershIconImage()
     m_image.setDevicePixelRatio(ratio);
 
     update();
-    emit iconChanged();
+    Q_EMIT iconChanged();
+
+    if (!isVisible()) {
+        Q_EMIT needAttention();
+    }
 }
 
 void XWindowTrayWidget::setX11PassMouseEvent(const bool pass)

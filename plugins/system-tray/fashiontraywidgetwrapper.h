@@ -26,7 +26,6 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QTimer>
 
 class FashionTrayWidgetWrapper : public QWidget
 {
@@ -37,6 +36,7 @@ public:
     AbstractTrayWidget *absTrayWidget() const;
 
     bool attention() const;
+    void setAttention(bool attention);
 
 Q_SIGNALS:
     void attentionChanged(const bool attention);
@@ -45,8 +45,7 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    void setAttention(bool attention);
-    void onTrayWidgetIconChanged();
+    void onTrayWidgetNeedAttention();
     void onTrayWidgetClicked();
 
 private:

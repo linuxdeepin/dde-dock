@@ -41,7 +41,7 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(AbstractTrayWidget *absTrayWi
 
     setLayout(m_layout);
 
-    connect(m_absTrayWidget, &AbstractTrayWidget::iconChanged, this, &FashionTrayWidgetWrapper::onTrayWidgetIconChanged);
+    connect(m_absTrayWidget, &AbstractTrayWidget::needAttention, this, &FashionTrayWidgetWrapper::onTrayWidgetNeedAttention);
     connect(m_absTrayWidget, &AbstractTrayWidget::clicked, this, &FashionTrayWidgetWrapper::onTrayWidgetClicked);
 }
 
@@ -52,7 +52,6 @@ AbstractTrayWidget *FashionTrayWidgetWrapper::absTrayWidget() const
 
 void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
 {
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setOpacity(0.5);
@@ -62,7 +61,7 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
     painter.fillPath(path, QColor::fromRgb(40, 40, 40));
 }
 
-void FashionTrayWidgetWrapper::onTrayWidgetIconChanged()
+void FashionTrayWidgetWrapper::onTrayWidgetNeedAttention()
 {
     setAttention(true);
 }

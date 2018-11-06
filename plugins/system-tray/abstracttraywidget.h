@@ -45,6 +45,7 @@ public:
 Q_SIGNALS:
     void iconChanged();
     void clicked();
+    void needAttention();
 
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
