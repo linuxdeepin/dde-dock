@@ -66,9 +66,10 @@ private:
     AccessPoint m_ap;
     QPushButton *m_ssidBtn;
     Dtk::Widget::DImageButton *m_disconnectBtn;
-    QLabel *m_securityIcon;
-    QLabel *m_strengthIcon;
+    QLabel *m_securityLabel;
+    QLabel *m_strengthLabel;
 
+    QPixmap m_securityPixmap;
     QSize m_securityIconSize;
 };
 

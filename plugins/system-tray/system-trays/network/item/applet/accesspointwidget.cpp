@@ -37,8 +37,8 @@ AccessPointWidget::AccessPointWidget()
       m_activeState(NetworkDevice::Unknow),
       m_ssidBtn(new QPushButton(this)),
       m_disconnectBtn(new DImageButton(this)),
-      m_securityIcon(new QLabel),
-      m_strengthIcon(new QLabel)
+      m_securityLabel(new QLabel),
+      m_strengthLabel(new QLabel)
 {
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -49,14 +49,15 @@ AccessPointWidget::AccessPointWidget()
     m_disconnectBtn->setHoverPic(":/icons/system-trays/network/resources/wireless/disconnect_hover.svg");
     m_disconnectBtn->setPressPic(":/icons/system-trays/network/resources/wireless/disconnect_press.svg");
 
-    QPixmap iconPix = Utils::renderSVG(":/icons/system-trays/network/resources/wireless/security.svg", QSize(16, 16));
-    m_securityIconSize = iconPix.size();
-    m_securityIcon->setPixmap(iconPix);
+    m_securityPixmap = Utils::renderSVG(":/icons/system-trays/network/resources/wireless/security.svg", QSize(16, 16));
+    m_securityIconSize = m_securityPixmap.size();
+    m_securityLabel->setPixmap(m_securityPixmap);
+    m_securityLabel->setFixedSize(m_securityIconSize / qApp->devicePixelRatio());
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
-    infoLayout->addWidget(m_securityIcon);
+    infoLayout->addWidget(m_securityLabel);
     infoLayout->addSpacing(5);
-    infoLayout->addWidget(m_strengthIcon);
+    infoLayout->addWidget(m_strengthLabel);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_ssidBtn);
     infoLayout->addWidget(m_disconnectBtn);
@@ -102,8 +103,9 @@ void AccessPointWidget::updateAP(const AccessPoint &ap)
     setStrengthIcon(ap.strength());
 
     if (!ap.secured()) {
-        m_securityIcon->clear();
-        m_securityIcon->setFixedSize(m_securityIconSize / qApp->devicePixelRatio());
+        m_securityLabel->clear();
+    } else if(!m_securityLabel->pixmap()) {
+        m_securityLabel->setPixmap(m_securityPixmap);
     }
 
     // reset state
@@ -154,7 +156,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
 
     iconPix = Utils::renderSVG(QString(":/icons/system-trays/network/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
 
-    m_strengthIcon->setPixmap(iconPix);
+    m_strengthLabel->setPixmap(iconPix);
 }
 
 void AccessPointWidget::ssidClicked()
