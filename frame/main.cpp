@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
+    app.setTheme("dark");
     app.loadTranslator();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
