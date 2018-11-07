@@ -88,7 +88,7 @@ private:
     QRectF m_snapshotSrcRect;
 
     TipsWidget *m_title;
-
+    QTimer *m_waitLeaveTimer;
     DImageButton *m_closeBtn;
     DWindowManagerHelper *m_wmHelper;
 };

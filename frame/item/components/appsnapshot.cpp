@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QSizeF>
+#include <QTimer>
 
 struct SHMInfo
 {
@@ -51,14 +52,12 @@ struct SHMInfo
 };
 
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
-    : QWidget(parent),
-
-      m_wid(wid),
-
-      m_title(new TipsWidget),
-      m_closeBtn(new DImageButton),
-
-      m_wmHelper(DWindowManagerHelper::instance())
+    : QWidget(parent)
+    , m_wid(wid)
+    , m_title(new TipsWidget)
+    , m_closeBtn(new DImageButton)
+    , m_waitLeaveTimer(new QTimer(this))
+    , m_wmHelper(DWindowManagerHelper::instance())
 {
     m_closeBtn->setFixedSize(24, 24);
     m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.svg");
@@ -66,6 +65,9 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
     m_closeBtn->setVisible(false);
     m_title->setObjectName("AppSnapshotTitle");
+
+    m_waitLeaveTimer->setInterval(200);
+    m_waitLeaveTimer->setSingleShot(true);
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_title);
@@ -79,7 +81,9 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     connect(m_closeBtn, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
-
+    connect(m_waitLeaveTimer, &QTimer::timeout, this, [=] {
+        emit entered(wid);
+    });
     QTimer::singleShot(1, this, &AppSnapshot::compositeChanged);
 }
 
@@ -198,10 +202,12 @@ void AppSnapshot::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    if (!m_wmHelper->hasComposite())
+    if (!m_wmHelper->hasComposite()) {
         m_closeBtn->setVisible(true);
-    else
-        emit entered(m_wid);
+    }
+    else {
+        m_waitLeaveTimer->start();
+    }
 
     update();
 }
@@ -211,6 +217,7 @@ void AppSnapshot::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_closeBtn->setVisible(false);
+    m_waitLeaveTimer->stop();
 
     update();
 }
