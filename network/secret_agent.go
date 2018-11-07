@@ -20,9 +20,12 @@ import (
 
 const (
 	nmSecretDialogBin              = "/usr/lib/deepin-daemon/dnetwork-secret-dialog"
-	getSecretsFlagAllowInteraction = 1
+	getSecretsFlagAllowInteraction = 0x1
+	getSecretsFlagRequestNew       = 0x2
+	getSecretsFlagUserRequested    = 0x4
 
 	secretFlagNone          = 0 // save for all user
+	secretFlagNoneStr       = "0"
 	secretFlagAgentOwned    = 1 // save for me
 	secretFlagAgentOwnedStr = "1"
 	secretFlagAsk           = 2 // always ask
@@ -375,9 +378,14 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 	logger.Debug("call getSecrets")
 
 	var allowInteraction bool
+	var requestNew bool
 	if flags&getSecretsFlagAllowInteraction != 0 {
 		logger.Debug("allow interaction")
 		allowInteraction = true
+	}
+	if flags&getSecretsFlagRequestNew != 0 {
+		logger.Debug("request new")
+		requestNew = true
 	}
 
 	logger.Debug("connection path:", connectionPath)
@@ -412,7 +420,8 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 
 		var askItems []string
 		for _, secretKey := range vpnSecretKeys {
-			if vpnDataMap[getSecretFlagsKeyName(secretKey)] == secretFlagAskStr {
+			secretFlag := vpnDataMap[getSecretFlagsKeyName(secretKey)]
+			if secretFlag == secretFlagAskStr {
 				logger.Debug("ask for password", settingName, secretKey)
 				askItems = append(askItems, secretKey)
 			}
@@ -460,6 +469,11 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 			} else if secretFlags == secretFlagNone {
 				secretStr, _ := getConnectionDataString(connectionData, settingName,
 					secretKey)
+
+				if requestNew {
+					secretStr = ""
+				}
+
 				if secretStr != "" {
 					setting[secretKey] = dbus.MakeVariant(secretStr)
 				} else if allowInteraction &&
