@@ -27,8 +27,11 @@
 
 #define SpliterSize 2
 #define TraySpace 10
-#define TrayWidgetWidth 28
-#define TrayWidgetHeight 28
+#define TrayWidgetWidthMin 24
+#define TrayWidgetHeightMin 24
+
+int FashionTrayItem::TrayWidgetWidth = TrayWidgetWidthMin;
+int FashionTrayItem::TrayWidgetHeight = TrayWidgetHeightMin;
 
 FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     : QWidget(parent),
@@ -195,6 +198,33 @@ void FashionTrayItem::onTrayListExpandChanged(const bool expand)
             continue;
         }
         i.value()->setVisible(expand);
+    }
+
+    requestResize();
+}
+
+// used by QMetaObject::invokeMethod in SystemTrayPluginItem / MainPanel
+void FashionTrayItem::setSuggestIconSize(QSize size)
+{
+    size = size * 0.6;
+
+    int length = qMin(size.width(), size.height());
+    // 设置最小值
+//    length = qMax(length, TrayWidgetWidthMin);
+
+    if (length == TrayWidgetWidth || length == TrayWidgetHeight) {
+        return;
+    }
+
+    TrayWidgetWidth = length;
+    TrayWidgetHeight = length;
+
+    QSize newSize(length, length);
+
+    m_controlWidget->setFixedSize(newSize);
+
+    for (auto wrapper : m_trayWidgetWrapperMap.values()) {
+        wrapper->setFixedSize(newSize);
     }
 
     requestResize();

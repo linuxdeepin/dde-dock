@@ -33,6 +33,8 @@ public:
 
     inline ItemType itemType() const Q_DECL_OVERRIDE {return ItemType::SystemTrayPlugin;}
 
+    void setSuggestIconSize(QSize size);
+
 Q_SIGNALS:
     void fashionSystemTraySizeChanged(const QSize &systemTraySize) const;
 

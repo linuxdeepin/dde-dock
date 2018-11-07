@@ -28,6 +28,12 @@ SystemTrayPluginItem::SystemTrayPluginItem(PluginsItemInterface * const pluginIn
 {
 }
 
+void SystemTrayPluginItem::setSuggestIconSize(QSize size)
+{
+    // invoke the method "setSuggestIconSize" of FashionTrayItem class
+    QMetaObject::invokeMethod(centralWidget(), "setSuggestIconSize", Qt::QueuedConnection, Q_ARG(QSize, size));
+}
+
 bool SystemTrayPluginItem::eventFilter(QObject *watched, QEvent *e)
 {
     // 时尚模式下

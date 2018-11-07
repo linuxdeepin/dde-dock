@@ -49,6 +49,7 @@ public:
 
 public slots:
     void onTrayListExpandChanged(const bool expand);
+    void setSuggestIconSize(QSize size);
 
 protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
@@ -79,6 +80,9 @@ private:
     FashionTrayWidgetWrapper *m_currentAttentionTray;
 
     Dock::Position m_dockPosistion;
+
+    static int TrayWidgetWidth;
+    static int TrayWidgetHeight;
 };
 
 #endif // FASHIONTRAYITEM_H

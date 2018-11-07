@@ -31,6 +31,8 @@
 
 #include <window/mainwindow.h>
 
+#include <item/systemtraypluginitem.h>
+
 static DockItem *DraggingItem = nullptr;
 static PlaceholderItem *RequestDockItem = nullptr;
 
@@ -375,7 +377,12 @@ void MainPanel::adjustItemSize()
     int totalWidth = 0;
     int totalHeight = 0;
     const auto &itemList = m_itemController->itemList();
-    const QSize &fashionSystemTraySize = DockSettings::Instance().fashionSystemTraySize();
+
+    // FSTray: FashionSystemTray
+    const QSize &FSTrayTotalSize = DockSettings::Instance().fashionSystemTraySize(); // the total size of FSTray
+    SystemTrayPluginItem *FSTrayItem = nullptr; // the FSTray item object
+    QSize FSTraySuggestIconSize = itemSize; // the suggested size of FStray icons
+
     for (auto item : itemList)
     {
         const auto itemType = item->itemType();
@@ -402,16 +409,17 @@ void MainPanel::adjustItemSize()
             if (m_displayMode == Fashion) {
                 // 特殊处理时尚模式下的托盘插件
                 if (item->itemType() == DockItem::SystemTrayPlugin) {
+                    FSTrayItem = static_cast<SystemTrayPluginItem *>(item.data());
                     if (m_position == Dock::Top || m_position == Dock::Bottom) {
-                        item->setFixedWidth(fashionSystemTraySize.width());
+                        item->setFixedWidth(FSTrayTotalSize.width());
                         item->setFixedHeight(itemSize.height());
-                        totalWidth += fashionSystemTraySize.width();
+                        totalWidth += FSTrayTotalSize.width();
                         totalHeight += itemSize.height();
                     } else {
                         item->setFixedWidth(itemSize.width());
-                        item->setFixedHeight(fashionSystemTraySize.height());
+                        item->setFixedHeight(FSTrayTotalSize.height());
                         totalWidth += itemSize.width();
-                        totalHeight += fashionSystemTraySize.height();
+                        totalHeight += FSTrayTotalSize.height();
                     }
                 } else {
                     item->setFixedSize(itemSize);
@@ -471,8 +479,12 @@ void MainPanel::adjustItemSize()
     }
 
     // abort adjust.
-    if (containsCompletely)
+    if (containsCompletely) {
+        if (FSTrayItem) {
+            FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
+        }
         return;
+    }
 
     // now, we need to decrease item size to fit panel size
     int overflow;
@@ -504,11 +516,23 @@ void MainPanel::adjustItemSize()
                 continue;
         }
         if (itemType == DockItem::SystemTrayPlugin) {
+            if (m_displayMode == Dock::Fashion) {
+                switch (m_position) {
+                case Dock::Top:
+                case Dock::Bottom:
+                    FSTraySuggestIconSize.setWidth(itemSize.width() - decrease);
+                    break;
+
+                case Dock::Left:
+                case Dock::Right:
+                    FSTraySuggestIconSize.setHeight(itemSize.height() - decrease);
+                    break;
+                }
+            }
             continue;
         }
 
-        switch (m_position)
-        {
+        switch (m_position) {
         case Dock::Top:
         case Dock::Bottom:
             item->setFixedWidth(item->width() - decrease - bool(extraDecrease));
@@ -522,6 +546,10 @@ void MainPanel::adjustItemSize()
 
         if (extraDecrease)
             --extraDecrease;
+    }
+
+    if (FSTrayItem) {
+        FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
     }
 
     // ensure all extra space assigned
