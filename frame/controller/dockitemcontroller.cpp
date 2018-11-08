@@ -24,6 +24,8 @@
 #include "item/stretchitem.h"
 #include "item/launcheritem.h"
 #include "item/pluginsitem.h"
+#include "item/systemtraypluginitem.h"
+#include "util/docksettings.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -128,6 +130,8 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
     // for app move, index 0 is launcher item, need to pass it.
     if (moveType == DockItem::App && replaceType == DockItem::App)
         m_appInter->MoveEntry(moveIndex - 1, replaceIndex - 1);
+
+    refreshFSTItemSpliterVisible();
 }
 
 void DockItemController::itemDroppedIntoContainer(DockItem * const item)
@@ -190,6 +194,22 @@ void DockItemController::placeholderItemRemoved(PlaceholderItem *item)
     emit itemRemoved(item);
 
     m_itemList.removeOne(item);
+}
+
+// refresh right spliter visible of fashion system tray plugin item
+void DockItemController::refreshFSTItemSpliterVisible()
+{
+    if (DockSettings::Instance().displayMode() != Dock::DisplayMode::Fashion) {
+        return;
+    }
+
+    for (int i = 0; i < m_itemList.size(); ++i) {
+        if (m_itemList.at(i)->itemType() == DockItem::ItemType::SystemTrayPlugin) {
+            static_cast<SystemTrayPluginItem *>(m_itemList.at(i).data())
+                    ->setRightSplitVisible(i != (m_itemList.size() - 1));
+            break;
+        }
+    }
 }
 
 DockItemController::DockItemController(QObject *parent)
@@ -334,10 +354,10 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
         }
     }
 
-//    qDebug() << insertIndex << item;
-
     m_itemList.insert(insertIndex, item);
     emit itemInserted(insertIndex, item);
+
+    refreshFSTItemSpliterVisible();
 }
 
 void DockItemController::pluginItemRemoved(PluginsItem *item)

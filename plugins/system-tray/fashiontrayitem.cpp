@@ -231,6 +231,15 @@ void FashionTrayItem::setSuggestIconSize(QSize size)
     requestResize();
 }
 
+void FashionTrayItem::setRightSplitVisible(const bool visible)
+{
+    if (visible) {
+        m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
+    } else {
+        m_rightSpliter->setStyleSheet("background-color: transparent;");
+    }
+}
+
 void FashionTrayItem::showEvent(QShowEvent *event)
 {
     requestResize();

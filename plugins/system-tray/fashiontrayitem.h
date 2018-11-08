@@ -50,6 +50,7 @@ public:
 public slots:
     void onTrayListExpandChanged(const bool expand);
     void setSuggestIconSize(QSize size);
+    void setRightSplitVisible(const bool visible);
 
 protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;

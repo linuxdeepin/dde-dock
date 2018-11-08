@@ -34,6 +34,12 @@ void SystemTrayPluginItem::setSuggestIconSize(QSize size)
     QMetaObject::invokeMethod(centralWidget(), "setSuggestIconSize", Qt::QueuedConnection, Q_ARG(QSize, size));
 }
 
+void SystemTrayPluginItem::setRightSplitVisible(const bool visible)
+{
+    // invoke the method "setRightSplitVisible" of FashionTrayItem class
+    QMetaObject::invokeMethod(centralWidget(), "setRightSplitVisible", Qt::QueuedConnection, Q_ARG(bool, visible));
+}
+
 bool SystemTrayPluginItem::eventFilter(QObject *watched, QEvent *e)
 {
     // 时尚模式下

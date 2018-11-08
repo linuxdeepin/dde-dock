@@ -65,6 +65,7 @@ public slots:
     void placeholderItemAdded(PlaceholderItem *item, DockItem *position);
     void placeholderItemDocked(const QString &appDesktop, DockItem *position);
     void placeholderItemRemoved(PlaceholderItem *item);
+    void refreshFSTItemSpliterVisible();
 
 private:
     explicit DockItemController(QObject *parent = nullptr);

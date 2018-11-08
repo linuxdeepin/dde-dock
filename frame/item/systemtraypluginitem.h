@@ -34,6 +34,7 @@ public:
     inline ItemType itemType() const Q_DECL_OVERRIDE {return ItemType::SystemTrayPlugin;}
 
     void setSuggestIconSize(QSize size);
+    void setRightSplitVisible(const bool visible);
 
 Q_SIGNALS:
     void fashionSystemTraySizeChanged(const QSize &systemTraySize) const;
