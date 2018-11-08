@@ -500,7 +500,7 @@ void MainPanel::adjustItemSize()
         base = h;
     }
 
-    const int decrease = double(overflow - base) / totalAppItemCount;
+    const double decrease = double(overflow - base) / totalAppItemCount;
     int extraDecrease = overflow - base - decrease * totalAppItemCount;
 
     for (auto item : itemList)
