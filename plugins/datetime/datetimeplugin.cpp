@@ -30,8 +30,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
       m_dateTipsLabel(new TipsWidget),
 
-      m_refershTimer(new QTimer(this)),
-      m_settings("deepin", "dde-dock-datetime")
+      m_refershTimer(new QTimer(this))
 {
     m_dateTipsLabel->setObjectName("datetime");
 
@@ -60,6 +59,15 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    // transfer config
+    QSettings settings("deepin", "dde-dock-datetime");
+    if (QFile::exists(settings.fileName())) {
+        Dock::DisplayMode mode = displayMode();
+        const QString     key  = QString("pos_%1").arg(mode);
+        proxyInter->saveValue(this, key, settings.value(key, mode == Dock::DisplayMode::Fashion ? 5 : -1));
+        QFile::remove(settings.fileName());
+    }
+
     if (m_centralWidget->enabled())
         m_proxyInter->itemAdded(this, QString());
 }
@@ -87,9 +95,9 @@ int DatetimePlugin::itemSortKey(const QString &itemKey)
     const QString key = QString("pos_%1").arg(mode);
 
     if (mode == Dock::DisplayMode::Fashion) {
-        return m_settings.value(key, 5).toInt();
+        return m_proxyInter->getValue(this, key, 5).toInt();
     } else {
-        return m_settings.value(key, -1).toInt();
+        return m_proxyInter->getValue(this, key, -1).toInt();
     }
 }
 
@@ -98,7 +106,7 @@ void DatetimePlugin::setSortKey(const QString &itemKey, const int order)
     Q_UNUSED(itemKey);
 
     const QString key = QString("pos_%1").arg(displayMode());
-    m_settings.setValue(key, order);
+    m_proxyInter->saveValue(this, key, order);
 }
 
 QWidget *DatetimePlugin::itemWidget(const QString &itemKey)

@@ -61,7 +61,6 @@ private:
 
 private:
     bool m_pluginLoaded;
-    QSettings m_settings;
 
     PluginWidget *m_shutdownWidget;
     TipsWidget *m_tipsLabel;

@@ -87,8 +87,6 @@ private:
 
     TrayApplet *m_trayApplet;
     TipsWidget *m_tipsLabel;
-
-    QSettings *m_containerSettings;
 };
 
 #endif // SYSTEMTRAYPLUGIN_H

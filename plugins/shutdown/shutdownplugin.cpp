@@ -31,7 +31,6 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
-      m_settings("deepin", "dde-dock-shutdown"),
       m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setText(tr("Shutdown"));
@@ -66,6 +65,12 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    // transfer config
+    QSettings settings("deepin", "dde-dock-shutdown");
+    if (QFile::exists(settings.fileName())) {
+        QFile::remove(settings.fileName());
+    }
+
     if (!pluginIsDisable()) {
         loadPlugin();
     }
@@ -73,7 +78,7 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 
 void ShutdownPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(PLUGIN_STATE_KEY, !m_settings.value(PLUGIN_STATE_KEY, true).toBool());
+    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
 
     if (pluginIsDisable())
     {
@@ -83,13 +88,13 @@ void ShutdownPlugin::pluginStateSwitched()
             loadPlugin();
             return;
         }
-        m_proxyInter->itemAdded(this, QString());
+        m_proxyInter->itemAdded(this, pluginName());
     }
 }
 
 bool ShutdownPlugin::pluginIsDisable()
 {
-    return !m_settings.value(PLUGIN_STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
 }
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)
@@ -196,13 +201,13 @@ int ShutdownPlugin::itemSortKey(const QString &itemKey)
         //return m_settings.value(key, 4).toInt();
     //}
 
-    return m_settings.value(key, 4).toInt();
+    return m_proxyInter->getValue(this, key, 4).toInt();
 }
 
 void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    m_settings.setValue(key, order);
+    m_proxyInter->saveValue(this, key, order);
 }
 
 void ShutdownPlugin::requestContextMenu(const QString &itemKey)
@@ -223,6 +228,6 @@ void ShutdownPlugin::loadPlugin()
 
     connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
 
-    m_proxyInter->itemAdded(this, QString());
+    m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());
 }

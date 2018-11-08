@@ -33,8 +33,7 @@ DWIDGET_USE_NAMESPACE
 TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent),
       m_trashWidget(new TrashWidget),
-      m_tipsLabel(new QLabel),
-      m_settings("deepin", "dde-dock-trash")
+      m_tipsLabel(new QLabel)
 {
     m_tipsLabel->setObjectName("trash");
     m_tipsLabel->setStyleSheet("color:white;"
@@ -50,6 +49,15 @@ const QString TrashPlugin::pluginName() const
 
 void TrashPlugin::init(PluginProxyInterface *proxyInter)
 {
+    // transfex config
+    QSettings settings("deepin", "dde-dock-trash");
+    if (QFile::exists(settings.fileName())) {
+        const QString &key = QString("pos_%1_%2").arg(pluginName()).arg(displayMode());
+        proxyInter->saveValue(this, key, settings.value(key));
+
+        QFile::remove(settings.fileName());
+    }
+
     // blumia: we are using i10n translation from DFM so...
     QString applicationName = qApp->applicationName();
     qApp->setApplicationName("dde-file-manager");
@@ -121,24 +129,24 @@ void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 int TrashPlugin::itemSortKey(const QString &itemKey)
 {
     const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    return m_settings.value(key, -1).toInt();
+    return m_proxyInter->getValue(this, key, -1).toInt();
 }
 
 void TrashPlugin::setSortKey(const QString &itemKey, const int order)
 {
     const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    m_settings.setValue(key, order);
+    m_proxyInter->saveValue(this, key, order);
 }
 
 void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
     if (displayMode == Dock::Fashion)
-        m_proxyInter->itemAdded(this, QString());
+        m_proxyInter->itemAdded(this, pluginName());
     else
-        m_proxyInter->itemRemoved(this, QString());
+        m_proxyInter->itemRemoved(this, pluginName());
 }
 
 void TrashPlugin::showContextMenu()
 {
-    m_proxyInter->requestContextMenu(this, QString());
+    m_proxyInter->requestContextMenu(this, pluginName());
 }

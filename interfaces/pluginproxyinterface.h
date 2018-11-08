@@ -62,6 +62,18 @@ public:
     /// request show context menu
     ///
     virtual void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
+
+    ///
+    /// \brief saveValue
+    /// save module config to .config/deepin/dde-dock.conf
+    ///
+    virtual void saveValue(PluginsItemInterface * const itemInter, const QString &itemKey, const QVariant &value) = 0;
+
+    ///
+    /// \brief getValue
+    /// return value from .config/deepin/dde-dock.conf
+    ///
+    virtual const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant()) = 0;
 };
 
 #endif // PLUGINPROXYINTERFACE_H

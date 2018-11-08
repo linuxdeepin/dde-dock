@@ -63,7 +63,6 @@ private:
 private:
     TrashWidget *m_trashWidget;
     QLabel *m_tipsLabel;
-    QSettings m_settings;
 };
 
 #endif // TRASHPLUGIN_H

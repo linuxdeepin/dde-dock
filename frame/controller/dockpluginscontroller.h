@@ -46,6 +46,8 @@ public:
     void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
     void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
     void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey);
+    void saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value);
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant());
 
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
@@ -68,6 +70,7 @@ private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
     DockItemController *m_itemControllerInter;
+    QSettings           m_pluginsSetting;
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

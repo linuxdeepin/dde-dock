@@ -30,10 +30,12 @@
 
 #define API_VERSION "1.0"
 
-DockPluginsController::DockPluginsController(DockItemController *itemControllerInter)
-    : QObject(itemControllerInter),
-      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
-      m_itemControllerInter(itemControllerInter)
+DockPluginsController::DockPluginsController(
+    DockItemController *itemControllerInter)
+    : QObject(itemControllerInter)
+    , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
+    , m_itemControllerInter(itemControllerInter)
+    , m_pluginsSetting("deepin", "dde-dock")
 {
     qApp->installEventFilter(this);
 }
@@ -218,4 +220,17 @@ PluginsItem *DockPluginsController::pluginItemAt(PluginsItemInterface * const it
         return nullptr;
 
     return m_pluginList[itemInter][itemKey];
+}
+
+void DockPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) {
+    m_pluginsSetting.beginGroup(itemInter->pluginName());
+    m_pluginsSetting.setValue(itemKey, value);
+    m_pluginsSetting.endGroup();
+}
+
+const QVariant DockPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback) {
+    m_pluginsSetting.beginGroup(itemInter->pluginName());
+    QVariant value { std::move(m_pluginsSetting.value(itemKey, failback)) };
+    m_pluginsSetting.endGroup();
+    return std::move(value);
 }

@@ -39,9 +39,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
       m_trayInter(new DBusTrayManager(this)),
       m_systemTraysLoader(new SystemTraysManager(this)),
       m_trayApplet(new TrayApplet),
-      m_tipsLabel(new TipsWidget),
-
-      m_containerSettings(new QSettings("deepin", "dde-dock-tray"))
+      m_tipsLabel(new TipsWidget)
 {
     m_trayApplet->setObjectName("sys-tray");
     m_fashionItem = new FashionTrayItem(position());
@@ -58,7 +56,15 @@ const QString SystemTrayPlugin::pluginName() const
 
 void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 {
-    if (!m_containerSettings->value("enable", true).toBool()) {
+    // transfex config
+    QSettings settings("deepin", "dde-dock-shutdown");
+    if (QFile::exists(settings.fileName())) {
+        proxyInter->saveValue(this, "enable", settings.value("enable", true));
+
+        QFile::remove(settings.fileName());
+    }
+
+    if (!proxyInter->getValue(this, "enable", true).toBool()) {
         qDebug() << "hide tray from config disable!!";
         return;
     }
@@ -93,7 +99,7 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 
 void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 {
-    if (!m_containerSettings->value("enable", true).toBool()) {
+    if (!m_proxyInter->getValue(this, "enable", true).toBool()) {
         return;
     }
 
@@ -156,10 +162,10 @@ bool SystemTrayPlugin::itemAllowContainer(const QString &itemKey)
 bool SystemTrayPlugin::itemIsInContainer(const QString &itemKey)
 {
     const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
-    if (!widKey.isEmpty())
-        return m_containerSettings->value(widKey, false).toBool();
-    else
-        return m_containerSettings->value(itemKey, false).toBool();
+
+    return m_proxyInter
+        ->getValue(this, widKey.isEmpty() ? itemKey : widKey, false)
+        .toBool();
 }
 
 int SystemTrayPlugin::itemSortKey(const QString &itemKey)
@@ -167,26 +173,22 @@ int SystemTrayPlugin::itemSortKey(const QString &itemKey)
     Dock::DisplayMode mode = displayMode();
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
 
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_containerSettings->value(key, 3).toInt();
-    } else {
-        return m_containerSettings->value(key, 1).toInt();
-    }
+    return m_proxyInter
+        ->getValue(this, key, mode == Dock::DisplayMode::Fashion ? 3 : 1)
+        .toInt();
 }
 
 void SystemTrayPlugin::setSortKey(const QString &itemKey, const int order)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    m_containerSettings->setValue(key, order);
+    m_proxyInter->saveValue(this, key, order);
 }
 
 void SystemTrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
 {
     const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
-    if (widKey.isEmpty())
-        m_containerSettings->setValue(itemKey, container);
-    else
-        m_containerSettings->setValue(widKey, container);
+
+    m_proxyInter->saveValue(this, widKey.isEmpty() ? itemKey : widKey, container);
 }
 
 void SystemTrayPlugin::updateTipsContent()
