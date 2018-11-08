@@ -29,6 +29,12 @@ type Daemon struct {
 	manager *Manager
 }
 
+const (
+	dbusServiceName = "com.deepin.daemon.Gesture"
+	dbusServicePath = "/com/deepin/daemon/Gesture"
+	dbusServiceIFC  = dbusServiceName
+)
+
 var (
 	logger = log.NewLogger("gesture")
 )
@@ -58,7 +64,24 @@ func (d *Daemon) Start() error {
 		logger.Error("Failed to initialize gesture manager:", err)
 		return err
 	}
+
+	service := loader.GetService()
+	err = service.Export(dbusServicePath, d.manager)
+	if err != nil {
+		logger.Error("Failed to export gesture:", err)
+		return err
+	}
+
+	err = service.RequestName(dbusServiceName)
+	if err != nil {
+		d.manager.destroy()
+		service.StopExport(d.manager)
+		logger.Error("Failed to request gesture name:", err)
+		return err
+	}
+
 	d.manager.init()
+
 	return nil
 }
 

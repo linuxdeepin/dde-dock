@@ -20,6 +20,12 @@
 #ifndef __GESTURE_CORE_H__
 #define __GESTURE_CORE_H__
 
+// only supported single finger
+#define TOUCH_TYPE_RIGHT_BUTTON 50
+
+#define BUTTON_TYPE_DOWN 501
+#define BUTTON_TYPE_UP 502
+
 #define GESTURE_TYPE_SWIPE 100
 #define GESTURE_TYPE_PINCH 101
 #define GESTURE_TYPE_TAP 102
@@ -35,7 +41,8 @@
 #define GESTURE_DIRECTION_IN 14
 #define GESTURE_DIRECTION_OUT 15
 
-int start_loop();
-void quit_loop();
+int start_loop(void);
+void quit_loop(void);
+void set_timer_duration(int duration);
 
 #endif

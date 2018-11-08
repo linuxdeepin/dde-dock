@@ -38,6 +38,7 @@ const (
 )
 
 type GestureType int32
+type TouchType int32
 
 var (
 	GestureTypeSwipe = GestureType(C.GESTURE_TYPE_SWIPE)
@@ -51,6 +52,11 @@ var (
 	GestureDirectionRight = GestureType(C.GESTURE_DIRECTION_RIGHT)
 	GestureDirectionIn    = GestureType(C.GESTURE_DIRECTION_IN)
 	GestureDirectionOut   = GestureType(C.GESTURE_DIRECTION_OUT)
+
+	TouchTypeRightButton = TouchType(C.TOUCH_TYPE_RIGHT_BUTTON)
+
+	ButtonTypeDown = TouchType(C.BUTTON_TYPE_DOWN)
+	ButtonTypeUp   = TouchType(C.BUTTON_TYPE_UP)
 )
 
 func (t GestureType) String() string {
@@ -75,6 +81,18 @@ func (t GestureType) String() string {
 		return "in"
 	case GestureDirectionOut:
 		return "out"
+	}
+	return "Unknown"
+}
+
+func (t TouchType) String() string {
+	switch t {
+	case TouchTypeRightButton:
+		return "touch right button"
+	case ButtonTypeDown:
+		return "down"
+	case ButtonTypeUp:
+		return "up"
 	}
 	return "Unknown"
 }
@@ -127,6 +145,14 @@ func handleGestureEvent(ty, direction, fingers C.int) {
 		int32(fingers))
 }
 
+//export handleTouchEvent
+func handleTouchEvent(ty, btn C.int) {
+	logger.Debug("Emit touch event:", TouchType(ty).String(),
+		TouchType(btn).String())
+	_m.service.Emit(_m, "Event", TouchType(ty).String(),
+		TouchType(btn).String(), 0)
+}
+
 func (*Daemon) Start() error {
 	logger.BeginTracing()
 	logger.Info("Start gesture daemon")
@@ -162,4 +188,8 @@ func (*Daemon) Stop() error {
 
 	_m = nil
 	return nil
+}
+
+func (*Daemon) SetLongPressDuration(duration int) {
+	C.set_timer_duration(C.int(duration))
 }

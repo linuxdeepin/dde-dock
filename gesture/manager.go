@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.daemon"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.gesture"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"pkg.deepin.io/lib/dbus1"
@@ -19,16 +20,28 @@ import (
 	dutils "pkg.deepin.io/lib/utils"
 )
 
+const (
+	tsSchemaID           = "com.deepin.dde.touchscreen"
+	tsSchemaKeyLongPress = "longpress-duration"
+)
+
 type Manager struct {
 	wm            *wm.Wm
+	sysDaemon     *daemon.Daemon
 	systemSigLoop *dbusutil.SignalLoop
 	mu            sync.RWMutex
 	userFile      string
 	builtinSets   map[string]func() error
 	gesture       *gesture.Gesture
 	setting       *gio.Settings
+	tsSetting     *gio.Settings
 	enabled       bool
 	Infos         gestureInfos
+
+	methods *struct {
+		SetLongPressDuration func() `in:"duration"`
+		GetLongPressDuration func() `out:"duration"`
+	}
 }
 
 func newManager() (*Manager, error) {
@@ -51,18 +64,44 @@ func newManager() (*Manager, error) {
 	if err != nil {
 		return nil, err
 	}
+	// for touch long press
+	infos = append(infos, &gestureInfo{
+		Name:      "touch right button",
+		Direction: "down",
+		Fingers:   0,
+		Action: ActionInfo{
+			Type:   ActionTypeCommandline,
+			Action: "xdotool mousedown 3",
+		},
+	})
+	infos = append(infos, &gestureInfo{
+		Name:      "touch right button",
+		Direction: "up",
+		Fingers:   0,
+		Action: ActionInfo{
+			Type:   ActionTypeCommandline,
+			Action: "xdotool mouseup 3",
+		},
+	})
 
 	setting, err := dutils.CheckAndNewGSettings(gestureSchemaId)
 	if err != nil {
 		return nil, err
 	}
 
+	tsSetting, err := dutils.CheckAndNewGSettings(tsSchemaID)
+	if err != nil {
+		return nil, err
+	}
+
 	m := &Manager{
-		userFile: configUserPath,
-		Infos:    infos,
-		setting:  setting,
-		enabled:  setting.GetBoolean(gsKeyEnabled),
-		wm:       wm.NewWm(sessionConn),
+		userFile:  configUserPath,
+		Infos:     infos,
+		setting:   setting,
+		tsSetting: tsSetting,
+		enabled:   setting.GetBoolean(gsKeyEnabled),
+		wm:        wm.NewWm(sessionConn),
+		sysDaemon: daemon.NewDaemon(systemConn),
 	}
 
 	m.gesture = gesture.NewGesture(systemConn)
@@ -78,6 +117,7 @@ func (m *Manager) destroy() {
 
 func (m *Manager) init() {
 	m.initBuiltinSets()
+	m.sysDaemon.SetLongPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyLongPress)))
 	m.systemSigLoop.Start()
 	m.gesture.InitSignalExt(m.systemSigLoop, true)
 	m.gesture.ConnectEvent(func(name string, direction string, fingers int32) {
@@ -106,7 +146,8 @@ func (m *Manager) Exec(name, direction string, fingers int32) error {
 
 	logger.Debug("[Exec] action info:", info.Name, info.Direction, info.Fingers,
 		info.Action.Type, info.Action.Action)
-	if isKbdAlreadyGrabbed() {
+	// allow right button up when kbd grabbed
+	if (info.Name != "touch right button" || info.Direction != "up") && isKbdAlreadyGrabbed() {
 		return fmt.Errorf("another process grabbed keyboard, not exec action")
 	}
 	var cmd = info.Action.Action
@@ -157,4 +198,8 @@ func (m *Manager) handleBuiltinAction(cmd string) error {
 		return fmt.Errorf("invalid built-in action %q", cmd)
 	}
 	return fn()
+}
+
+func (*Manager) GetInterfaceName() string {
+	return dbusServiceIFC
 }

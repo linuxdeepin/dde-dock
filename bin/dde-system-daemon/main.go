@@ -39,7 +39,8 @@ import (
 
 type Daemon struct {
 	methods *struct {
-		ScalePlymouth func() `in:"scale"`
+		ScalePlymouth        func() `in:"scale"`
+		SetLongPressDuration func() `in:"duration"`
 	}
 }
 
