@@ -1,3 +1,7 @@
+[3.5.0] 2018-11-08
+*   fix(network): secret agent didn't notice the requst new flag
+*   network: suppress errors on tun device
+
 [3.4.0] 2018-11-01
 *   fix(network): call ActivateAccessPoint causes dbus conn close
 *   fix(network): vpn connection auto connect dose not work
