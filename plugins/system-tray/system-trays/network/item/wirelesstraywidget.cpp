@@ -46,9 +46,6 @@ WirelessTrayWidget::WirelessTrayWidget(WirelessDevice *device, QWidget *parent)
     m_wirelessPopup->setObjectName("wireless-" + m_device->path());
     m_wirelessPopup->setVisible(false);
 
-    connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeApInfoChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_refershTimer, &QTimer::timeout, [=] {
         WirelessDevice *dev = static_cast<WirelessDevice *>(m_device);
         // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
@@ -58,6 +55,9 @@ WirelessTrayWidget::WirelessTrayWidget(WirelessDevice *device, QWidget *parent)
         }
         updateIcon();
     });
+    connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeApInfoChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refershTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
 
 //    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     init();
