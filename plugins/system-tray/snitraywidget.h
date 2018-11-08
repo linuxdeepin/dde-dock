@@ -58,6 +58,7 @@ private Q_SLOTS:
     void refreshIcon();
     void refreshOverlayIcon();
     void refreshAttentionIcon();
+    void showContextMenu(int x, int y);
 
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;

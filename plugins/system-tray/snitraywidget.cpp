@@ -31,6 +31,7 @@
 
 const QStringList ItemCategoryList {"ApplicationStatus" , "Communications" , "SystemServices", "Hardware"};
 const QStringList ItemStatusList {"ApplicationStatus" , "Communications" , "SystemServices", "Hardware"};
+const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     : AbstractTrayWidget(parent),
@@ -84,19 +85,18 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     switch (mouseButton) {
         case XCB_BUTTON_INDEX_1:
-            m_sniInter->Activate(x, y);
+            // left button click invalid
+            if (LeftClickInvalidIdList.contains(m_sniInter->id())) {
+                showContextMenu(x, y);
+            } else {
+                m_sniInter->Activate(x, y);
+            }
             break;
         case XCB_BUTTON_INDEX_2:
             m_sniInter->SecondaryActivate(x, y);
             break;
         case XCB_BUTTON_INDEX_3:
-            // ContextMenu does not work
-            if (m_sniInter->menu().path().startsWith("/NO_DBUSMENU")) {
-                m_sniInter->ContextMenu(x, y);
-            }
-            else {
-                m_menu->popup(QPoint(x, y));
-            }
+            showContextMenu(x, y);
             break;
         default:
             qDebug() << "unknown mouse button key";
@@ -183,6 +183,16 @@ void SNITrayWidget::refreshAttentionIcon()
 
     if (!isVisible()) {
         Q_EMIT needAttention();
+    }
+}
+
+void SNITrayWidget::showContextMenu(int x, int y)
+{
+    // ContextMenu does not work
+    if (m_sniInter->menu().path().startsWith("/NO_DBUSMENU")) {
+        m_sniInter->ContextMenu(x, y);
+    } else {
+        m_menu->popup(QPoint(x, y));
     }
 }
 
