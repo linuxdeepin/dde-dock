@@ -20,11 +20,13 @@
 package accounts
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -39,13 +41,21 @@ import (
 )
 
 const (
-	polkitActionUserAdministration   = "com.deepin.daemon.accounts.user-administration"
-	polkitActionChangeOwnData        = "com.deepin.daemon.accounts.change-own-user-data"
-	polkitActionEnableAutoLogin      = "com.deepin.daemon.accounts.enable-auto-login"
-	polkitActionDisableAutoLogin     = "com.deepin.daemon.accounts.disable-auto-login"
-	polkitActionEnableNoPasswdLogin  = "com.deepin.daemon.accounts.enable-nopass-login"
-	polkitActionDisableNoPasswdLogin = "com.deepin.daemon.accounts.disable-nopass-login"
-	polkitActionSetKeyboardLayout    = "com.deepin.daemon.accounts.set-keyboard-layout"
+	polkitActionUserAdministration     = "com.deepin.daemon.accounts.user-administration"
+	polkitActionChangeOwnData          = "com.deepin.daemon.accounts.change-own-user-data"
+	polkitActionEnableAutoLogin        = "com.deepin.daemon.accounts.enable-auto-login"
+	polkitActionDisableAutoLogin       = "com.deepin.daemon.accounts.disable-auto-login"
+	polkitActionEnableNoPasswordLogin  = "com.deepin.daemon.accounts.enable-nopass-login"
+	polkitActionDisableNoPasswordLogin = "com.deepin.daemon.accounts.disable-nopass-login"
+	polkitActionSetKeyboardLayout      = "com.deepin.daemon.accounts.set-keyboard-layout"
+
+	systemLocaleFile  = "/etc/default/locale"
+	systemdLocaleFile = "/etc/locale.conf"
+	defaultLocale     = "en_US.UTF-8"
+
+	layoutDelimiter   = ";"
+	defaultLayout     = "us" + layoutDelimiter
+	defaultLayoutFile = "/etc/default/keyboard"
 )
 
 type ErrCodeType int32
@@ -176,6 +186,24 @@ func getUidByPid(pid uint32) (string, error) {
 	return euid, nil
 }
 
+func getDefaultLocale() (locale string) {
+	files := [...]string{
+		systemLocaleFile,
+		systemdLocaleFile,
+	}
+	for _, file := range files {
+		locale = getLocaleFromFile(file)
+		if locale != "" {
+			// get locale success
+			break
+		}
+	}
+	if locale == "" {
+		return defaultLocale
+	}
+	return locale
+}
+
 func getLocaleFromFile(file string) string {
 	f, err := os.Open(file)
 	if err != nil {
@@ -200,6 +228,66 @@ func getLocaleFromFile(file string) string {
 		}
 	}
 	return ""
+}
+
+func getDefaultLayout() string {
+	layout, err := getSystemLayout(defaultLayoutFile)
+	if err != nil {
+		logger.Warning("failed to get system default layout:", err)
+		return defaultLayout
+	}
+	return layout
+}
+
+func getSystemLayout(file string) (string, error) {
+	fr, err := os.Open(file)
+	if err != nil {
+		return "", err
+	}
+	defer fr.Close()
+
+	var (
+		found   int
+		layout  string
+		variant string
+
+		regLayout  = regexp.MustCompile(`^XKBLAYOUT=`)
+		regVariant = regexp.MustCompile(`^XKBVARIANT=`)
+
+		scanner = bufio.NewScanner(fr)
+	)
+	for scanner.Scan() {
+		if found == 2 {
+			break
+		}
+
+		var line = scanner.Text()
+		if regLayout.MatchString(line) {
+			layout = strings.Trim(getValueFromLine(line, "="), "\"")
+			found += 1
+			continue
+		}
+
+		if regVariant.MatchString(line) {
+			variant = strings.Trim(getValueFromLine(line, "="), "\"")
+			found += 1
+		}
+	}
+
+	if len(layout) == 0 {
+		return "", fmt.Errorf("not found default layout")
+	}
+
+	return layout + layoutDelimiter + variant, nil
+}
+
+func getValueFromLine(line, delim string) string {
+	array := strings.Split(line, delim)
+	if len(array) != 2 {
+		return ""
+	}
+
+	return strings.TrimSpace(array[1])
 }
 
 // Get available shells from '/etc/shells'

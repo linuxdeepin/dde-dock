@@ -20,15 +20,12 @@
 package accounts
 
 import (
-	"bufio"
 	"bytes"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"sync"
 
@@ -46,9 +43,6 @@ const (
 )
 
 const (
-	layoutDelim              = ";"
-	defaultLayout            = "us" + layoutDelim
-	defaultLayoutFile        = "/etc/default/keyboard"
 	defaultUserIcon          = "file:///var/lib/AccountsService/icons/default.png"
 	defaultUserBackgroundDir = "/usr/share/wallpapers/deepin/"
 
@@ -181,8 +175,8 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		xSession, _ := users.GetDefaultXSession()
 		u.XSession = xSession
 		u.SystemAccount = false
-		u.Layout = u.getDefaultLayout()
-		u.Locale = getLocaleFromFile(defaultLayoutFile)
+		u.Layout = getDefaultLayout()
+		u.Locale = getDefaultLocale()
 		u.IconFile = defaultUserIcon
 		defaultUserBackground := getDefaultUserBackground()
 		u.DesktopBackgrounds = []string{defaultUserBackground}
@@ -209,13 +203,13 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	locale, _ := kf.GetString(confGroupUser, confKeyLocale)
 	u.Locale = locale
 	if locale == "" {
-		u.Locale = getLocaleFromFile(defaultLocaleFile)
+		u.Locale = getDefaultLocale()
 		isSave = true
 	}
 	layout, _ := kf.GetString(confGroupUser, confKeyLayout)
 	u.Layout = layout
 	if layout == "" {
-		u.Layout = u.getDefaultLayout()
+		u.Layout = getDefaultLayout()
 		isSave = true
 	}
 	icon, _ := kf.GetString(confGroupUser, confKeyIcon)
@@ -446,9 +440,9 @@ func (u *User) checkAuthAutoLogin(sender dbus.Sender, enabled bool) error {
 func (u *User) checkAuthNoPasswdLogin(sender dbus.Sender, enabled bool) error {
 	var actionId string
 	if enabled {
-		actionId = polkitActionEnableNoPasswdLogin
+		actionId = polkitActionEnableNoPasswordLogin
 	} else {
-		actionId = polkitActionDisableNoPasswdLogin
+		actionId = polkitActionDisableNoPasswordLogin
 	}
 	return u.checkAuth(sender, false, actionId)
 }
@@ -474,15 +468,6 @@ func (u *User) clearData() {
 			logger.Warning("remove user custom icon failed:", err)
 		}
 	}
-}
-
-func (u *User) getDefaultLayout() string {
-	layout, err := getSystemLayout(defaultLayoutFile)
-	if err != nil {
-		logger.Warning("Failed to get system default layout:", err)
-		return defaultLayout
-	}
-	return layout
 }
 
 // userPath must be composed with 'userDBusPath + uid'
@@ -527,57 +512,6 @@ func getTempFile() (string, error) {
 	name := tmpfile.Name()
 	tmpfile.Close()
 	return name, nil
-}
-
-func getSystemLayout(file string) (string, error) {
-	fr, err := os.Open(file)
-	if err != nil {
-		return "", err
-	}
-	defer fr.Close()
-
-	var (
-		found   int
-		layout  string
-		variant string
-
-		regLayout  = regexp.MustCompile(`^XKBLAYOUT=`)
-		regVariant = regexp.MustCompile(`^XKBVARIANT=`)
-
-		scanner = bufio.NewScanner(fr)
-	)
-	for scanner.Scan() {
-		if found == 2 {
-			break
-		}
-
-		var line = scanner.Text()
-		if regLayout.MatchString(line) {
-			layout = strings.Trim(getValueFromLine(line, "="), "\"")
-			found += 1
-			continue
-		}
-
-		if regVariant.MatchString(line) {
-			variant = strings.Trim(getValueFromLine(line, "="), "\"")
-			found += 1
-		}
-	}
-
-	if len(layout) == 0 {
-		return "", fmt.Errorf("Not found default layout")
-	}
-
-	return layout + layoutDelim + variant, nil
-}
-
-func getValueFromLine(line, delim string) string {
-	array := strings.Split(line, delim)
-	if len(array) != 2 {
-		return ""
-	}
-
-	return strings.TrimSpace(array[1])
 }
 
 func getUserSession(homeDir string) string {
