@@ -1,3 +1,30 @@
+<a name="4.7.6"></a>
+## 4.7.6 (2018-11-09)
+
+
+#### Features
+
+*   integrating plugins config files ([4837c9dd](https://github.com/linuxdeepin/dde-dock/commit/4837c9dd35e23ff8a08d063bc7a57fc03086ae20))
+*   prevent unexpected trigger ([7ea3341a](https://github.com/linuxdeepin/dde-dock/commit/7ea3341aca124cf4f67cfced4acc3c04c6c7fca4))
+*   auto adjust the icon size of fashion system tray ([598978d3](https://github.com/linuxdeepin/dde-dock/commit/598978d35043695e85e36e8ba70fb62ddf00061b))
+*   support dde-dock.pc ([71b237bf](https://github.com/linuxdeepin/dde-dock/commit/71b237bfb9f4077e9158d0b0dd68dbbb42f62173))
+
+#### Bug Fixes
+
+*   not change dock visible in time ([93db674b](https://github.com/linuxdeepin/dde-dock/commit/93db674bb2ed5ead4527e273a4b85a10f0054c1d))
+*   active connection info of device may not set ([bddcad5e](https://github.com/linuxdeepin/dde-dock/commit/bddcad5e6b92aae06b32921dd8114f93df850c93))
+*   left click on sogou tray ([213db421](https://github.com/linuxdeepin/dde-dock/commit/213db42172176826f1f6d24238d51f79c3182f26))
+*   backgroud of appitem ([949849af](https://github.com/linuxdeepin/dde-dock/commit/949849af62e2a0b6ba8b0d9bfe594329c1b757ec))
+*   secret pixmap of wireless ap not be refresh ([084477f2](https://github.com/linuxdeepin/dde-dock/commit/084477f2082510bbc1a353c9199c4815d01bb5ad))
+*   can not show context menu on system-tray control button ([bffcc3a1](https://github.com/linuxdeepin/dde-dock/commit/bffcc3a18573f252d8c0cc7711933518457dc517))
+*   set the default theme to "dark" ([714c3ff1](https://github.com/linuxdeepin/dde-dock/commit/714c3ff1fa1e549cf85ac42fb45516494a23bb84))
+*   duplicate include file ([0ff728b8](https://github.com/linuxdeepin/dde-dock/commit/0ff728b83f8ac5c7f053d17754c3f4cc8382c602))
+*   non secret wireless align in hihdpi ([ce9dad99](https://github.com/linuxdeepin/dde-dock/commit/ce9dad99929cfb29028e1c389193b3f757330483))
+*   place holder item still display in dock after drag leave ([725891a6](https://github.com/linuxdeepin/dde-dock/commit/725891a6b1cf9e141505d45e4280671f6debf2e4))
+* **system-tray:**  new tray need attention policy ([cf5e0bc2](https://github.com/linuxdeepin/dde-dock/commit/cf5e0bc2d552303afbe9dc53e5af617c475984d6))
+
+
+
 <a name="4.7.5.2"></a>
 ## 4.7.5.2 (2018-11-02)
 
