@@ -1,3 +1,13 @@
+<a name="4.7.7"></a>
+### 4.7.7 (2018-11-09)
+
+
+#### Bug Fixes
+
+*   change min icon size ([8af71fae](https://github.com/linuxdeepin/dde-dock/commit/8af71faef3440ac18c1bb8c0c8a1141ca1b30378))
+
+
+
 <a name="4.7.6"></a>
 ## 4.7.6 (2018-11-09)
 
