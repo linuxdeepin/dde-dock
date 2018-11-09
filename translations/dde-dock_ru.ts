@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Вы уверены, что хотите очистить %1 объектов?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>

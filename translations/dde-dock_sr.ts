@@ -474,7 +474,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="70"/>
         <source>Wired connection: %1</source>
-        <translation>Жична веза: %1</translation>
+        <translation>Жичана веза: %1</translation>
     </message>
 </context>
 <context>
@@ -492,7 +492,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="116"/>
         <source>Wired connection: %1</source>
-        <translation>Жична веза: %1</translation>
+        <translation>Жичана веза: %1</translation>
     </message>
 </context>
 <context>

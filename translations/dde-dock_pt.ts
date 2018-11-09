@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Tem a certeza que quer esvaziar %1 itens?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
@@ -345,7 +345,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="105"/>
         <source>Lock</source>
-        <translation>Bloquear</translation>
+        <translation>Trancar</translation>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="111"/>

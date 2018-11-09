@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>%1 öge boşaltılsın mı?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="122"/>
         <source>Mute</source>
-        <translation>Sessiz</translation>
+        <translation>Sesi kapat</translation>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="128"/>

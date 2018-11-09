@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Biztosan töröljük ezt az %1 elemet?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
@@ -376,7 +376,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation>Elnémítás törlése</translation>
+        <translation>Némítás visszavonása</translation>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="81"/>
@@ -407,7 +407,7 @@
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="120"/>
         <source>Unmute</source>
-        <translation>Elnémítás törlése</translation>
+        <translation>Némítás visszavonása</translation>
     </message>
     <message>
         <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="122"/>

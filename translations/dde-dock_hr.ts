@@ -22,7 +22,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Kliknite za prikaz skrivene ikone</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="56"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Datum vrijeme</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="135"/>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Jeste li sigurni da želite isprazniti %1 stavki?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
