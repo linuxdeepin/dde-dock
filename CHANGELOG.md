@@ -1,3 +1,6 @@
+[3.6.0] 2018-11-08
+*   fix(accounts): new user locale is empty
+
 [3.5.0] 2018-11-08
 *   fix(network): secret agent didn't notice the requst new flag
 *   network: suppress errors on tun device
