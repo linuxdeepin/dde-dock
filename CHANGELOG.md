@@ -1,3 +1,6 @@
+[3.7.0] 2018-11-12
+*   fix(dock): dde-launcher show on dock
+
 [3.6.0] 2018-11-08
 *   fix(accounts): new user locale is empty
 
