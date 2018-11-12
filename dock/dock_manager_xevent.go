@@ -256,9 +256,16 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 		return
 	}
 
+	atomName, err := globalXConn.GetAtomName(ev.Atom)
+	if err != nil {
+		logger.Warning(err)
+	}
+	logger.Debugf("winInfo %d property %s changed", winInfo.window, atomName)
+
 	switch ev.Atom {
 	case atomNetWMState:
 		winInfo.updateWmState()
+		m.attachOrDetachWindow(winInfo)
 
 	case atomNetWMName:
 		winInfo.updateWmName()
@@ -268,6 +275,22 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 
 	case atomNetWmAllowedActions:
 		winInfo.updateWmAllowedActions()
+
+	case x.AtomWMClass:
+		winInfo.updateWmClass()
+		m.attachOrDetachWindow(winInfo)
+
+	case atomXEmbedInfo:
+		winInfo.updateHasXEmbedInfo()
+		m.attachOrDetachWindow(winInfo)
+
+	case atomNetWMWindowType:
+		winInfo.updateWmWindowType()
+		m.attachOrDetachWindow(winInfo)
+
+	case x.AtomWMTransientFor:
+		winInfo.updateHasWmTransientFor()
+		m.attachOrDetachWindow(winInfo)
 	}
 
 	entry := m.Entries.getByWindowId(ev.Window)
