@@ -500,7 +500,13 @@ void MainPanel::adjustItemSize()
         base = h;
     }
 
-    const double decrease = double(overflow - base) / totalAppItemCount;
+    // FIXME:
+    // 时尚模式下使用整形否则会出现图标大小计算不正确的问题
+    // 高校模式下使用浮点数否则会出现图标背景色连到一起的问题
+    const double decrease = m_displayMode == Dock::Fashion ?
+                int(overflow - base) / totalAppItemCount :
+                double(overflow - base) / totalAppItemCount;
+
     int extraDecrease = overflow - base - decrease * totalAppItemCount;
 
     for (auto item : itemList)
