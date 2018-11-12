@@ -548,7 +548,8 @@ void MainPanel::adjustItemSize()
             --extraDecrease;
     }
 
-    if (FSTrayItem) {
+    // 如果dock的大小已经是最大的则不再调整时尚模式托盘图标的大小,以避免递归调整dock与托盘的大小
+    if (!DockSettings::Instance().isMaxSize() && FSTrayItem) {
         FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
     }
 

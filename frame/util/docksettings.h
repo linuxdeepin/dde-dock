@@ -72,6 +72,7 @@ public:
     inline int expandTimeout() const { return m_dockInter->showTimeout(); }
     inline int narrowTimeout() const { return 100; }
     inline bool autoHide() const { return m_autoHide; }
+    inline bool isMaxSize() const { return m_isMaxSize; }
     inline const QRect primaryRect() const { return m_primaryRect; }
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
     inline const QRect frontendWindowRect() const { return m_frontendRect; }
@@ -124,6 +125,7 @@ private:
 private:
     int m_iconSize;
     bool m_autoHide;
+    bool m_isMaxSize;
     int m_screenRawHeight;
     int m_screenRawWidth;
     double m_opacity;

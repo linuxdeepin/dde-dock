@@ -41,6 +41,7 @@ extern const QPoint rawXPosition(const QPoint &scaledPos);
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_autoHide(true)
+    , m_isMaxSize(false)
     , m_opacity(0.4)
     , m_fashionSystemTraySize(QSize(0, 0))
     , m_fashionModeAct(tr("Fashion Mode"), this)
@@ -586,20 +587,24 @@ void DockSettings::calculateWindowConfig()
 
         const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionSystemTraySize.width();
         const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionSystemTraySize.height();
-        const int calcWidth = qMin(m_primaryRect.width() - FASHION_MODE_PADDING * 2, perfectWidth);
-        const int calcHeight = qMin(m_primaryRect.height() - FASHION_MODE_PADDING * 2, perfectHeight);
+        const int maxWidth = m_primaryRect.width() - FASHION_MODE_PADDING * 2;
+        const int maxHeight = m_primaryRect.height() - FASHION_MODE_PADDING * 2;
+        const int calcWidth = qMin(maxWidth, perfectWidth);
+        const int calcHeight = qMin(maxHeight, perfectHeight);
         switch (m_position)
         {
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
             m_mainWindowSize.setWidth(calcWidth);
+            m_isMaxSize = (calcWidth == maxWidth);
             break;
 
         case Left:
         case Right:
             m_mainWindowSize.setHeight(calcHeight);
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
+            m_isMaxSize = (calcHeight == maxHeight);
             break;
 
         default:
