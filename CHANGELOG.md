@@ -1,3 +1,13 @@
+<a name="4.7.9"></a>
+## 4.7.9 (2018-11-12)
+
+
+#### Bug Fixes
+
+*   error value of decrease fashion icon size ([92ac6dc3](https://github.com/linuxdeepin/dde-dock/commit/92ac6dc377fd49abc57db494516160a123b0e235))
+
+
+
 <a name="4.7.8"></a>
 ## 4.7.8 (2018-11-12)
 
