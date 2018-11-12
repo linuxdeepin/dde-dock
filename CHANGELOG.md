@@ -1,3 +1,13 @@
+<a name="4.7.8"></a>
+## 4.7.8 (2018-11-12)
+
+
+#### Bug Fixes
+
+*   resize dock and fashion system tray recursively ([738f41aa](https://github.com/linuxdeepin/dde-dock/commit/738f41aa1728dacc2e1f94688c6f6a41c435e822))
+
+
+
 <a name="4.7.7"></a>
 ### 4.7.7 (2018-11-09)
 
