@@ -54,7 +54,15 @@ func (l *Lastore) createSourceModifiedActions() []NotifyAction {
 				err := l.core.RestoreSystemSource(0)
 				if err != nil {
 					logger.Warningf("failed to restore source:", err)
+					return
 				}
+
+				jobPath, err := l.core.UpdateSource(0)
+				if err != nil {
+					logger.Warning(err)
+					return
+				}
+				logger.Debug("update source job path:", jobPath)
 			},
 		},
 		{
