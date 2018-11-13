@@ -28,6 +28,7 @@
 
 #include <QFrame>
 #include <QPointer>
+#include <QGestureEvent>
 
 #include <memory>
 
@@ -88,6 +89,9 @@ protected:
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();
 
+    bool checkAndResetTapHoldGestureState();
+    virtual void gestureEvent(QGestureEvent *event);
+
 protected slots:
     void showContextMenu();
     void onContextMenuAccepted();
@@ -98,6 +102,7 @@ private:
 protected:
     bool m_hover;
     bool m_popupShown;
+    bool m_tapAndHold;
 
     QPointer<QWidget> m_lastPopupWidget;
     QPointer<HoverHighlightEffect> m_hoverEffect;

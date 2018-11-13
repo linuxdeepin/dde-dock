@@ -87,20 +87,17 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
     hidePopup();
 
-    if (e->button() == Qt::RightButton/* && !perfectIconRect().contains(e->pos())*/)
-        return QWidget::mousePressEvent(e);
+    return QWidget::mousePressEvent(e);
+}
 
+void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
+{
     if (e->button() != Qt::LeftButton)
         return;
-
-    QProcess *proc = new QProcess;
-
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
 
     if (!m_launcherInter->IsVisible()) {
         m_launcherInter->Show();
     }
-
 }
 
 QWidget *LauncherItem::popupTips()

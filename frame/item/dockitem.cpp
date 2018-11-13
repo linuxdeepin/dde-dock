@@ -35,6 +35,7 @@ DockItem::DockItem(QWidget *parent)
     : QWidget(parent),
       m_hover(false),
       m_popupShown(false),
+      m_tapAndHold(false),
 
       m_hoverEffect(new HoverHighlightEffect(this)),
 
@@ -65,6 +66,8 @@ DockItem::DockItem(QWidget *parent)
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
+
+    grabGesture(Qt::TapAndHoldGesture);
 }
 
 DockItem::~DockItem()
@@ -83,6 +86,21 @@ void DockItem::setDockDisplayMode(const DisplayMode mode)
     DockDisplayMode = mode;
 }
 
+void DockItem::gestureEvent(QGestureEvent *event)
+{
+    if (!event)
+        return;
+
+    QGesture *gesture = event->gesture(Qt::TapAndHoldGesture);
+
+    if (!gesture)
+        return;
+
+    qDebug() << "got TapAndHoldGesture";
+
+    m_tapAndHold = true;
+}
+
 bool DockItem::event(QEvent *event)
 {
     if (m_popupShown)
@@ -96,6 +114,9 @@ bool DockItem::event(QEvent *event)
         default:;
         }
     }
+
+    if (event->type() == QEvent::Gesture)
+        gestureEvent(static_cast<QGestureEvent*>(event));
 
     return QWidget::event(event);
 }
@@ -305,6 +326,18 @@ const QString DockItem::contextMenu() const
 QWidget *DockItem::popupTips()
 {
     return nullptr;
+}
+
+/*!
+ * \brief DockItem::checkAndResetTapHoldGestureState checks if a QTapAndHoldGesture
+ * happens during the mouse press and release event pair.
+ * \return true if yes, otherwise false.
+ */
+bool DockItem::checkAndResetTapHoldGestureState()
+{
+    bool ret = m_tapAndHold;
+    m_tapAndHold = false;
+    return ret;
 }
 
 const QPoint DockItem::popupMarkPoint() const

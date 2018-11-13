@@ -150,6 +150,11 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    if (checkAndResetTapHoldGestureState()) {
+        qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
+        return;
+    }
+
     e->accept();
 
     const QPoint distance = e->pos() - MousePressPoint;

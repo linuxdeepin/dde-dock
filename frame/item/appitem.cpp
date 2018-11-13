@@ -290,6 +290,11 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::MiddleButton) {
         m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
     } else if (e->button() == Qt::LeftButton) {
+        if (checkAndResetTapHoldGestureState()) {
+            qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
+            return;
+        }
+
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
             << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 

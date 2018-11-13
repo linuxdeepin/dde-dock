@@ -44,6 +44,7 @@ private:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
     QWidget *popupTips();
 
