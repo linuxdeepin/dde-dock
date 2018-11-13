@@ -82,7 +82,7 @@ void ShutdownPlugin::pluginStateSwitched()
 
     if (pluginIsDisable())
     {
-        m_proxyInter->itemRemoved(this, QString());
+        m_proxyInter->itemRemoved(this, pluginName());
     } else {
         if (!m_pluginLoaded) {
             loadPlugin();
