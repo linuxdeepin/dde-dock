@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>resources/trayicon.svg</file>
+        <file>resources/arrow_left_light.svg</file>
+        <file>resources/arrow_down_dark.svg</file>
+        <file>resources/arrow_right_dark.svg</file>
+        <file>resources/arrow_up_light.svg</file>
+    </qresource>
+</RCC>
