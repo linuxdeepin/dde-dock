@@ -62,6 +62,9 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
+    void setFixedSize(const QSize &size);
+    void setComposite(const bool hasComposite);
+
 signals:
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
@@ -91,16 +94,18 @@ private slots:
 private:
     Position m_position;
     DisplayMode m_displayMode;
-    QBoxLayout *m_itemLayout;
-    ShowDesktopItem *m_showDesktopItem;
 
+    QBoxLayout *m_itemLayout;
     QTimer *m_itemAdjustTimer;
     QTimer *m_checkMouseLeaveTimer;
+    QWidget *m_appDragWidget;
+    QVariantAnimation *m_sizeChangeAni;
+
+    ShowDesktopItem *m_showDesktopItem;
     DockItemController *m_itemController;
 
-    QWidget *m_appDragWidget;
-
     QString m_draggingMimeKey;
+    QSize m_destSize;
 };
 
 #endif // MAINPANEL_H

@@ -280,7 +280,8 @@ void MainWindow::compositeChanged()
     m_posChangeAni->setDuration(duration);
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
-    m_mainPanel->setEffectEnabled(composite);
+
+    m_mainPanel->setComposite(composite);
 
     m_shadowMaskOptimizeTimer->start();
     m_positionUpdateTimer->start();
@@ -356,11 +357,9 @@ void MainWindow::initConnections()
     connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
-//    // to fix qt animation bug, sometimes window size not change
-    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
-        const QSize size = m_sizeChangeAni->currentValue().toSize();
-
-        QWidget::setFixedSize(size);
+    // to fix qt animation bug, sometimes window size not change
+    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [=](const QVariant &value) {
+        QWidget::setFixedSize(value.toSize());
     });
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
@@ -444,19 +443,13 @@ void MainWindow::updateGeometry()
     const Position position = m_settings->position();
     QSize size = m_settings->windowSize();
 
-    m_mainPanel->setFixedSize(m_settings->panelSize());
-    m_mainPanel->updateDockPosition(position);
-    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
-
     bool animation = true;
     bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
 
-    if (isHide)
-    {
+    if (isHide) {
         m_sizeChangeAni->stop();
         m_posChangeAni->stop();
-        switch (position)
-        {
+        switch (position) {
         case Top:
         case Bottom:    size.setHeight(2);      break;
         case Left:
@@ -465,10 +458,32 @@ void MainWindow::updateGeometry()
         animation = false;
         m_sizeChangeAni->setEndValue(size);
         QWidget::setFixedSize(size);
-    }
-    else
-    {
-        setFixedSize(size);
+    } else {
+        // this->setFixedSize has been overrided for size animation
+        // 如果要增大则直接设置大小, 如果要缩小则使用重写的setFixedSize函数使用动画缩小
+        // 因为缩小时如果也直接设置大小则会无法正常显示panel的缩小动画
+        switch (position) {
+        case Dock::Position::Top:
+        case Dock::Position::Bottom: {
+            if (size.width() >= this->size().width()) {
+                QWidget::setFixedSize(size);
+            } else {
+                setFixedSize(size);
+            }
+            break;
+        }
+        case Dock::Position::Left:
+        case Dock::Position::Right: {
+            if (size.height() >= this->size().height()) {
+                QWidget::setFixedSize(size);
+            } else {
+                setFixedSize(size);
+            }
+            break;
+        }
+        default:
+            break;
+        }
     }
 
     const QRect windowRect = m_settings->windowRect(position, isHide);
@@ -477,6 +492,11 @@ void MainWindow::updateGeometry()
         internalAnimationMove(windowRect.x(), windowRect.y());
     else
         internalMove(windowRect.topLeft());
+
+    // this->setFixedSize has been overrided for size animation
+    m_mainPanel->setFixedSize(m_settings->panelSize());
+    m_mainPanel->updateDockPosition(position);
+    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     m_mainPanel->update();
     m_shadowMaskOptimizeTimer->start();

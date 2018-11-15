@@ -46,11 +46,12 @@ MainPanel::MainPanel(QWidget *parent)
       m_position(Dock::Top),
       m_displayMode(Dock::Fashion),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
-      m_showDesktopItem(new ShowDesktopItem(this)),
       m_itemAdjustTimer(new QTimer(this)),
       m_checkMouseLeaveTimer(new QTimer(this)),
-      m_itemController(DockItemController::instance(this)),
-      m_appDragWidget(nullptr)
+      m_appDragWidget(nullptr),
+      m_sizeChangeAni(new QVariantAnimation(this)),
+      m_showDesktopItem(new ShowDesktopItem(this)),
+      m_itemController(DockItemController::instance(this))
 {
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
@@ -72,14 +73,21 @@ MainPanel::MainPanel(QWidget *parent)
         qssFile.close();
     }
 
+    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
     connect(m_checkMouseLeaveTimer, &QTimer::timeout, this, &MainPanel::checkMouseReallyLeave, Qt::QueuedConnection);
     connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainPanel::setMaskAlpha);
+
+    m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
+    connect(m_sizeChangeAni, &QPropertyAnimation::finished, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    // to fix qt animation bug, sometimes widget size not change
+    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [=](const QVariant &value) {
+        QWidget::setFixedSize(value.toSize());
+    });
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
@@ -123,8 +131,6 @@ void MainPanel::updateDockPosition(const Position dockPosition)
         m_showDesktopItem->setFixedSize(width(), 10);
         break;
     }
-
-    m_itemAdjustTimer->start();
 }
 
 ///
@@ -201,6 +207,32 @@ bool MainPanel::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
+void MainPanel::setFixedSize(const QSize &size)
+{
+    m_destSize = size;
+    // in order to make the panel resizing animation work better, resize the icon first here
+    adjustItemSize();
+
+    const QPropertyAnimation::State state = m_sizeChangeAni->state();
+
+    if (state == QPropertyAnimation::Stopped && this->size() == size)
+        return;
+
+    if (state == QPropertyAnimation::Running)
+        return m_sizeChangeAni->setEndValue(size);
+
+    m_sizeChangeAni->setStartValue(this->size());
+    m_sizeChangeAni->setEndValue(size);
+    m_sizeChangeAni->start();
+}
+
+void MainPanel::setComposite(const bool hasComposite)
+{
+    setEffectEnabled(hasComposite);
+
+    m_sizeChangeAni->setDuration(hasComposite ? 300 : 0);
+}
+
 void MainPanel::moveEvent(QMoveEvent* e)
 {
     DBlurEffectWidget::moveEvent(e);
@@ -211,9 +243,6 @@ void MainPanel::moveEvent(QMoveEvent* e)
 void MainPanel::resizeEvent(QResizeEvent *e)
 {
     DBlurEffectWidget::resizeEvent(e);
-
-    m_itemAdjustTimer->start();
-//    m_effectWidget->resize(e->size());
 
     QTimer::singleShot(500, this, &MainPanel::geometryChanged);
 }
@@ -344,8 +373,6 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 ///
 void MainPanel::adjustItemSize()
 {
-    Q_ASSERT(sender() == m_itemAdjustTimer);
-
     // ensure all item is update, whatever layout is changed
     QTimer::singleShot(1, this, static_cast<void (MainPanel::*)()>(&MainPanel::update));
 
@@ -356,14 +383,14 @@ void MainPanel::adjustItemSize()
     {
     case Top:
     case Bottom:
-        itemSize.setHeight(height() - PANEL_BORDER);
+        itemSize.setHeight(m_destSize.height() - PANEL_BORDER);
         itemSize.setWidth(std::round(qreal(AppItem::itemBaseWidth()) / ratio));
         break;
 
     case Left:
     case Right:
         itemSize.setHeight(std::round(qreal(AppItem::itemBaseHeight()) / ratio));
-        itemSize.setWidth(width() - PANEL_BORDER);
+        itemSize.setWidth(m_destSize.width() - PANEL_BORDER);
         break;
 
     default:
@@ -392,7 +419,7 @@ void MainPanel::adjustItemSize()
             itemType == DockItem::Container)
             continue;
 
-        QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
+//        QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
 
         switch (item->itemType())
         {
@@ -459,8 +486,8 @@ void MainPanel::adjustItemSize()
         }
     }
 
-    const int w = width() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
-    const int h = height() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
+    const int w = m_destSize.width() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
+    const int h = m_destSize.height() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
 
     // test if panel can display all items completely
     bool containsCompletely = false;
@@ -580,6 +607,8 @@ void MainPanel::itemInserted(const int index, DockItem *item)
     m_itemLayout->insertWidget(index, item);
 
     m_itemAdjustTimer->start();
+
+    QTimer::singleShot(300, [=] { item->setVisible(true);});
 }
 
 ///
