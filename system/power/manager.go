@@ -241,7 +241,9 @@ func (m *Manager) handleUEvent(client *gudev.Client, action string, device *gude
 		// ignore add mains
 
 	case "remove":
-		m.removeBattery(device)
+		if powersupply.IsSystemBattery(device) {
+			m.removeBattery(device)
+		}
 	}
 
 }
