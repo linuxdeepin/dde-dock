@@ -419,7 +419,7 @@ void MainPanel::adjustItemSize()
             itemType == DockItem::Container)
             continue;
 
-//        QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
+        QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
 
         switch (item->itemType())
         {
@@ -607,8 +607,6 @@ void MainPanel::itemInserted(const int index, DockItem *item)
     m_itemLayout->insertWidget(index, item);
 
     m_itemAdjustTimer->start();
-
-    QTimer::singleShot(300, [=] { item->setVisible(true);});
 }
 
 ///
