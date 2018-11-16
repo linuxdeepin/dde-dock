@@ -31,8 +31,8 @@
 #include "../widgets/tipswidget.h"
 
 // menu actions
-#define MUTE    "mute"
-#define SETTINS "settings"
+#define MUTE     "mute"
+#define SETTINGS "settings"
 
 DWIDGET_USE_NAMESPACE
 
@@ -83,7 +83,7 @@ const QString SoundItem::contextMenu() const
     items.push_back(open);
 
     QMap<QString, QVariant> settings;
-    settings["itemId"] = SETTINS;
+    settings["itemId"] = SETTINGS;
     settings["itemText"] = tr("Audio Settings");
     settings["isActive"] = true;
     items.push_back(settings);
@@ -102,7 +102,7 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
 
     if (menuId == MUTE)
         m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
-    else if (menuId == SETTINS)
+    else if (menuId == SETTINGS)
         DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
