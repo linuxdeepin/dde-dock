@@ -443,10 +443,11 @@ void MainWindow::updateGeometry()
     const Position position = m_settings->position();
     QSize size = m_settings->windowSize();
 
+    // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
+    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
+    m_mainPanel->updateDockPosition(position);
     // this->setFixedSize has been overrided for size animation
     m_mainPanel->setFixedSize(m_settings->panelSize());
-    m_mainPanel->updateDockPosition(position);
-    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     bool animation = true;
     bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
