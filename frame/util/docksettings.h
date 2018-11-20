@@ -78,7 +78,7 @@ public:
     inline const QRect frontendWindowRect() const { return m_frontendRect; }
     inline const QSize windowSize() const { return m_mainWindowSize; }
     inline const quint8 Opacity() const { return m_opacity * 255; }
-    inline const QSize fashionSystemTraySize() const { return m_fashionSystemTraySize; }
+    inline const QSize fashionTraySize() const { return m_fashionTraySize; }
 
     const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
@@ -111,7 +111,7 @@ private slots:
     void resetFrontendGeometry();
     void updateForbidPostions();
     void onOpacityChanged(const double value);
-    void onFashionSystemTraySizeChanged(const QSize &systemTraySize);
+    void onFashionTraySizeChanged(const QSize &traySize);
 
 private:
     DockSettings(QWidget *parent = 0);
@@ -138,7 +138,7 @@ private:
     QRect m_primaryRawRect;
     QRect m_frontendRect;
     QSize m_mainWindowSize;
-    QSize m_fashionSystemTraySize;
+    QSize m_fashionTraySize;
 
     WhiteMenu m_settingsMenu;
     WhiteMenu *m_hideSubMenu;

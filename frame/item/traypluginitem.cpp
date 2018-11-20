@@ -19,37 +19,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "systemtraypluginitem.h"
+#include "traypluginitem.h"
 
 #include <QEvent>
 
-SystemTrayPluginItem::SystemTrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
+TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : PluginsItem(pluginInter, itemKey, parent)
 {
 }
 
-void SystemTrayPluginItem::setSuggestIconSize(QSize size)
+void TrayPluginItem::setSuggestIconSize(QSize size)
 {
     // invoke the method "setSuggestIconSize" of FashionTrayItem class
     QMetaObject::invokeMethod(centralWidget(), "setSuggestIconSize", Qt::QueuedConnection, Q_ARG(QSize, size));
 }
 
-void SystemTrayPluginItem::setRightSplitVisible(const bool visible)
+void TrayPluginItem::setRightSplitVisible(const bool visible)
 {
     // invoke the method "setRightSplitVisible" of FashionTrayItem class
     QMetaObject::invokeMethod(centralWidget(), "setRightSplitVisible", Qt::QueuedConnection, Q_ARG(bool, visible));
 }
 
-bool SystemTrayPluginItem::eventFilter(QObject *watched, QEvent *e)
+bool TrayPluginItem::eventFilter(QObject *watched, QEvent *e)
 {
     // 时尚模式下
-    // 监听插件Widget的"FashionSystemTraySize"属性
+    // 监听插件Widget的"FashionTraySize"属性
     // 当接收到这个属性变化的事件后，重新计算和设置dock的大小
 
     if (watched == centralWidget() && e->type() == QEvent::DynamicPropertyChange) {
         const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName();
-        if (propertyName == "FashionSystemTraySize") {
-            Q_EMIT fashionSystemTraySizeChanged(watched->property("FashionSystemTraySize").toSize());
+        if (propertyName == "FashionTraySize") {
+            Q_EMIT fashionTraySizeChanged(watched->property("FashionTraySize").toSize());
         } else if (propertyName == "RequestWindowAutoHide") {
             Q_EMIT requestWindowAutoHide(watched->property("RequestWindowAutoHide").toBool());
         } else if (propertyName == "RequestRefershWindowVisible") {

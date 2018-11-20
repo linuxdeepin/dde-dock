@@ -40,7 +40,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
       m_popupAdjustDelayTimer(new QTimer(this)),
       m_itemKey(itemKey)
 {
-    qDebug() << "load system tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
+    qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);

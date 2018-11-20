@@ -42,14 +42,14 @@ TrayPlugin::TrayPlugin(QObject *parent)
 {
     m_fashionItem = new FashionTrayItem(position());
 
-    m_tipsLabel->setObjectName("sys-tray");
+    m_tipsLabel->setObjectName("tray");
     m_tipsLabel->setText(tr("System Tray"));
     m_tipsLabel->setVisible(false);
 }
 
 const QString TrayPlugin::pluginName() const
 {
-    return "system-tray";
+    return "tray";
 }
 
 void TrayPlugin::init(PluginProxyInterface *proxyInter)
@@ -308,7 +308,7 @@ void TrayPlugin::trayRemoved(const QString &itemKey)
     }
 
     // only delete tray object when it is a tray of applications
-    // set the parent of the tray object to avoid be deconstructed by parent(DockItem/PluginsItem/SystemTrayPluginsItem)
+    // set the parent of the tray object to avoid be deconstructed by parent(DockItem/PluginsItem/TrayPluginsItem)
     if (widget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         widget->setParent(nullptr);
     } else {

@@ -24,7 +24,7 @@
 #include "item/stretchitem.h"
 #include "item/launcheritem.h"
 #include "item/pluginsitem.h"
-#include "item/systemtraypluginitem.h"
+#include "item/traypluginitem.h"
 #include "util/docksettings.h"
 
 #include <QDebug>
@@ -89,7 +89,7 @@ void DockItemController::updatePluginsItemOrderKey()
     for (auto item : m_itemList)
     {
         DockItem::ItemType tyep = item->itemType();
-        if (item.isNull() || (tyep != DockItem::Plugins && tyep != DockItem::SystemTrayPlugin))
+        if (item.isNull() || (tyep != DockItem::Plugins && tyep != DockItem::TrayPlugin))
             continue;
         static_cast<PluginsItem *>(item.data())->setItemSortKey(++index);
     }
@@ -108,8 +108,8 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
             return;
 
     // plugins move
-    if (moveType == DockItem::Plugins || moveType == DockItem::SystemTrayPlugin)
-        if (replaceType != DockItem::Plugins && replaceType != DockItem::SystemTrayPlugin)
+    if (moveType == DockItem::Plugins || moveType == DockItem::TrayPlugin)
+        if (replaceType != DockItem::Plugins && replaceType != DockItem::TrayPlugin)
             return;
 
     const int moveIndex = m_itemList.indexOf(moveItem);
@@ -124,7 +124,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 
     // update plugins sort key if order changed
     if (moveType == DockItem::Plugins || replaceType == DockItem::Plugins
-            || moveType == DockItem::SystemTrayPlugin || replaceType == DockItem::SystemTrayPlugin)
+            || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin)
         m_updatePluginsOrderTimer->start();
 
     // for app move, index 0 is launcher item, need to pass it.
@@ -136,7 +136,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 
 void DockItemController::itemDroppedIntoContainer(DockItem * const item)
 {
-    Q_ASSERT(item->itemType() == DockItem::Plugins || item->itemType() == DockItem::SystemTrayPlugin);
+    Q_ASSERT(item->itemType() == DockItem::Plugins || item->itemType() == DockItem::TrayPlugin);
 
     PluginsItem *pi = static_cast<PluginsItem *>(item);
 
@@ -167,7 +167,7 @@ void DockItemController::itemDragOutFromContainer(DockItem * const item)
     switch (item->itemType())
     {
     case DockItem::Plugins:
-    case DockItem::SystemTrayPlugin:
+    case DockItem::TrayPlugin:
         static_cast<PluginsItem *>(item)->setInContainer(false);
         pluginItemInserted(static_cast<PluginsItem *>(item));
         break;
@@ -196,7 +196,7 @@ void DockItemController::placeholderItemRemoved(PlaceholderItem *item)
     m_itemList.removeOne(item);
 }
 
-// refresh right spliter visible of fashion system tray plugin item
+// refresh right spliter visible of fashion tray plugin item
 void DockItemController::refreshFSTItemSpliterVisible()
 {
     if (DockSettings::Instance().displayMode() != Dock::DisplayMode::Fashion) {
@@ -204,8 +204,8 @@ void DockItemController::refreshFSTItemSpliterVisible()
     }
 
     for (int i = 0; i < m_itemList.size(); ++i) {
-        if (m_itemList.at(i)->itemType() == DockItem::ItemType::SystemTrayPlugin) {
-            static_cast<SystemTrayPluginItem *>(m_itemList.at(i).data())
+        if (m_itemList.at(i)->itemType() == DockItem::ItemType::TrayPlugin) {
+            static_cast<TrayPluginItem *>(m_itemList.at(i).data())
                     ->setRightSplitVisible(i != (m_itemList.size() - 1));
             break;
         }
@@ -250,7 +250,7 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginItemInserted, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemController::pluginItemRemoved, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemController::itemUpdated, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::fashionSystemTraySizeChanged, this, &DockItemController::fashionSystemTraySizeChanged, Qt::QueuedConnection);
+    connect(m_pluginsInter, &DockPluginsController::fashionTraySizeChanged, this, &DockItemController::fashionTraySizeChanged, Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
 }
@@ -318,7 +318,7 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
     for (int i(0); i != m_itemList.size(); ++i)
     {
         DockItem::ItemType type = m_itemList[i]->itemType();
-        if (type != DockItem::Plugins && type != DockItem::SystemTrayPlugin)
+        if (type != DockItem::Plugins && type != DockItem::TrayPlugin)
             continue;
 
         firstPluginPosition = i;
@@ -390,7 +390,7 @@ void DockItemController::sortPluginItems()
     for (int i(0); i != m_itemList.size(); ++i)
     {
         DockItem::ItemType type = m_itemList[i]->itemType();
-        if (type == DockItem::Plugins || type == DockItem::SystemTrayPlugin)
+        if (type == DockItem::Plugins || type == DockItem::TrayPlugin)
         {
             firstPluginIndex = i;
             break;

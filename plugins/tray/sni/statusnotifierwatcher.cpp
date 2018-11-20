@@ -65,9 +65,9 @@ void StatusNotifierWatcher::RegisterStatusNotifierItem(const QString &serviceOrP
     QString notifierItemId = service + path;
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered(service).value() &&
         !m_registeredServices.contains(notifierItemId)) {
-        qDebug()<<"Registering" << notifierItemId << "to system tray";
+        qDebug()<<"Registering" << notifierItemId << "to tray";
 
-        //check if the service has registered a SystemTray object
+        //check if the service has registered a Tray object
         com::deepin::dde::StatusNotifierItem trayclient(service, path,
                                                 QDBusConnection::sessionBus());
         if (trayclient.isValid()) {
@@ -112,7 +112,7 @@ void StatusNotifierWatcher::RegisterStatusNotifierHost(const QString &service)
     if (service.contains(QStringLiteral("org.kde.StatusNotifierHost-")) &&
         QDBusConnection::sessionBus().interface()->isServiceRegistered(service).value() &&
         !m_statusNotifierHostServices.contains(service)) {
-        qDebug()<<"Registering"<<service<<"as system tray";
+        qDebug()<<"Registering"<<service<<"as tray";
 
         m_statusNotifierHostServices.insert(service);
         m_serviceWatcher->addWatchedService(service);

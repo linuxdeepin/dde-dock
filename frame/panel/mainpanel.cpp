@@ -31,7 +31,7 @@
 
 #include <window/mainwindow.h>
 
-#include <item/systemtraypluginitem.h>
+#include <item/traypluginitem.h>
 
 static DockItem *DraggingItem = nullptr;
 static PlaceholderItem *RequestDockItem = nullptr;
@@ -311,7 +311,7 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
 
     if (DraggingItem) {
         DockItem::ItemType type = DraggingItem->itemType();
-        if (type != DockItem::Plugins && type != DockItem::SystemTrayPlugin)
+        if (type != DockItem::Plugins && type != DockItem::TrayPlugin)
             DraggingItem->hide();
     }
 }
@@ -405,9 +405,9 @@ void MainPanel::adjustItemSize()
     int totalHeight = 0;
     const auto &itemList = m_itemController->itemList();
 
-    // FSTray: FashionSystemTray
-    const QSize &FSTrayTotalSize = DockSettings::Instance().fashionSystemTraySize(); // the total size of FSTray
-    SystemTrayPluginItem *FSTrayItem = nullptr; // the FSTray item object
+    // FTray: FashionTray
+    const QSize &FSTrayTotalSize = DockSettings::Instance().fashionTraySize(); // the total size of FSTray
+    TrayPluginItem *FSTrayItem = nullptr; // the FSTray item object
     QSize FSTraySuggestIconSize = itemSize; // the suggested size of FStray icons
 
     for (auto item : itemList)
@@ -432,11 +432,11 @@ void MainPanel::adjustItemSize()
             totalHeight += itemSize.height();
             break;
         case DockItem::Plugins:
-        case DockItem::SystemTrayPlugin:
+        case DockItem::TrayPlugin:
             if (m_displayMode == Fashion) {
                 // 特殊处理时尚模式下的托盘插件
-                if (item->itemType() == DockItem::SystemTrayPlugin) {
-                    FSTrayItem = static_cast<SystemTrayPluginItem *>(item.data());
+                if (item->itemType() == DockItem::TrayPlugin) {
+                    FSTrayItem = static_cast<TrayPluginItem *>(item.data());
                     if (m_position == Dock::Top || m_position == Dock::Bottom) {
 //                        item->setFixedWidth(FSTrayTotalSize.width());
 //                        item->setFixedHeight(itemSize.height());
@@ -548,7 +548,7 @@ void MainPanel::adjustItemSize()
             if (m_itemController->itemIsInContainer(item))
                 continue;
         }
-        if (itemType == DockItem::SystemTrayPlugin) {
+        if (itemType == DockItem::TrayPlugin) {
             if (m_displayMode == Dock::Fashion) {
                 switch (m_position) {
                 case Dock::Top:
@@ -651,7 +651,7 @@ void MainPanel::itemDragStarted()
         static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
     }
 
-    if (draggingTyep == DockItem::Plugins || draggingTyep == DockItem::SystemTrayPlugin)
+    if (draggingTyep == DockItem::Plugins || draggingTyep == DockItem::TrayPlugin)
     {
         if (static_cast<PluginsItem *>(DraggingItem)->allowContainer())
         {
@@ -688,7 +688,7 @@ void MainPanel::itemDropped(QObject *destnation)
 
     // drag from container
     if (itemIsInContainer
-            && (src->itemType() == DockItem::Plugins || src->itemType() == DockItem::SystemTrayPlugin)
+            && (src->itemType() == DockItem::Plugins || src->itemType() == DockItem::TrayPlugin)
             && destnation == this)
         m_itemController->itemDragOutFromContainer(src);
 

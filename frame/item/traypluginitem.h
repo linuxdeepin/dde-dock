@@ -19,28 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYSTEMTRAYPLUGINITEM_H
-#define SYSTEMTRAYPLUGINITEM_H
+#ifndef TRAYPLUGINITEM_H
+#define TRAYPLUGINITEM_H
 
 #include "pluginsitem.h"
 
-class SystemTrayPluginItem : public PluginsItem
+class TrayPluginItem : public PluginsItem
 {
     Q_OBJECT
 
 public:
-    SystemTrayPluginItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent = 0);
+    TrayPluginItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent = 0);
 
-    inline ItemType itemType() const Q_DECL_OVERRIDE {return ItemType::SystemTrayPlugin;}
+    inline ItemType itemType() const Q_DECL_OVERRIDE {return ItemType::TrayPlugin;}
 
     void setSuggestIconSize(QSize size);
     void setRightSplitVisible(const bool visible);
 
 Q_SIGNALS:
-    void fashionSystemTraySizeChanged(const QSize &systemTraySize) const;
+    void fashionTraySizeChanged(const QSize &traySize) const;
 
 private:
     bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
 };
 
-#endif // SYSTEMTRAYPLUGINITEM_H
+#endif // TRAYPLUGINITEM_H

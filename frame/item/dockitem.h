@@ -47,7 +47,7 @@ public:
         Plugins,
         Container,
         Placeholder,
-        SystemTrayPlugin,
+        TrayPlugin,
     };
 
 public:

@@ -53,7 +53,7 @@ signals:
     void itemMoved(DockItem *item, const int index) const;
     void itemManaged(DockItem *item) const;
     void itemUpdated(DockItem *item) const;
-    void fashionSystemTraySizeChanged(const QSize &systemTraySize) const;
+    void fashionTraySizeChanged(const QSize &traySize) const;
 
 public slots:
     void refershItemsIcon();

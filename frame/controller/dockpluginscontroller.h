@@ -53,7 +53,7 @@ signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
-    void fashionSystemTraySizeChanged(const QSize &systemTraySize) const;
+    void fashionTraySizeChanged(const QSize &traySize) const;
 
 private slots:
     void startLoader();

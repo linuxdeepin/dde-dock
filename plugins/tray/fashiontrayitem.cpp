@@ -198,7 +198,7 @@ void FashionTrayItem::onTrayListExpandChanged(const bool expand)
     }
 }
 
-// used by QMetaObject::invokeMethod in SystemTrayPluginItem / MainPanel class
+// used by QMetaObject::invokeMethod in TrayPluginItem / MainPanel class
 void FashionTrayItem::setSuggestIconSize(QSize size)
 {
     size = size * 0.6;
@@ -363,9 +363,9 @@ void FashionTrayItem::setCurrentAttentionTray(FashionTrayWidgetWrapper *attentio
 
 void FashionTrayItem::requestResize()
 {
-    // reset property "FashionSystemTraySize" to notify dock resize
+    // reset property "FashionTraySize" to notify dock resize
     // DockPluginsController will watch this property
-    setProperty("FashionSystemTraySize", sizeHint());
+    setProperty("FashionTraySize", sizeHint());
 }
 
 void FashionTrayItem::moveOutAttionTray()
