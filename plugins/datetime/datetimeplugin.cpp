@@ -25,6 +25,9 @@
 #include <QLabel>
 #include <QDebug>
 
+#define PLUGIN_STATE_KEY "enable"
+#define TIME_FORMAT_KEY "24HourFormat"
+
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent),
 
@@ -58,6 +61,7 @@ const QString DatetimePlugin::pluginDisplayName() const
 void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
+    m_centralWidget->set24HourFormat(m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool());
 
     // transfer config
     QSettings settings("deepin", "dde-dock-datetime");
@@ -68,15 +72,15 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
         QFile::remove(settings.fileName());
     }
 
-    if (m_centralWidget->enabled())
+    if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, QString());
 }
 
 void DatetimePlugin::pluginStateSwitched()
 {
-    m_centralWidget->setEnabled(!m_centralWidget->enabled());
+    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
-    if (m_centralWidget->enabled())
+    if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, QString());
     else
         m_proxyInter->itemRemoved(this, QString());
@@ -84,7 +88,7 @@ void DatetimePlugin::pluginStateSwitched()
 
 bool DatetimePlugin::pluginIsDisable()
 {
-    return !m_centralWidget->enabled();
+    return !(m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
 }
 
 int DatetimePlugin::itemSortKey(const QString &itemKey)
@@ -174,7 +178,9 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
             .arg(QString("datetime"))
             .call();
     } else {
-        m_centralWidget->toggleHourFormat();
+        const bool value = m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool();
+        m_proxyInter->saveValue(this, TIME_FORMAT_KEY, !value);
+        m_centralWidget->set24HourFormat(!value);
     }
 }
 

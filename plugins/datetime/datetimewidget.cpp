@@ -31,35 +31,25 @@
 #define PLUGIN_STATE_KEY    "enable"
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
-    : QWidget(parent),
-
-    m_settings("deepin", "dde-dock-datetime"),
-
-    m_24HourFormat(m_settings.value("24HourFormat", true).toBool())
+    : QWidget(parent)
 {
 
 }
 
-bool DatetimeWidget::enabled()
+void DatetimeWidget::set24HourFormat(const bool value)
 {
-    return m_settings.value(PLUGIN_STATE_KEY, true).toBool();
-}
+    if (m_24HourFormat == value) {
+        return;
+    }
 
-void DatetimeWidget::setEnabled(const bool b)
-{
-    m_settings.setValue(PLUGIN_STATE_KEY, b);
-}
-
-void DatetimeWidget::toggleHourFormat()
-{
-    m_24HourFormat = !m_24HourFormat;
-
-    m_settings.setValue("24HourFormat", m_24HourFormat);
+    m_24HourFormat = value;
 
     m_cachedTime.clear();
     update();
 
-    emit requestUpdateGeometry();
+    if (isVisible()) {
+        emit requestUpdateGeometry();
+    }
 }
 
 QSize DatetimeWidget::sizeHint() const
