@@ -24,6 +24,8 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
+
+	"pkg.deepin.io/dde/daemon/grub_common"
 )
 
 const (
@@ -87,7 +89,7 @@ func (m *modifyManager) start(tasks ...modifyTask) {
 	logger.Infof("modifyManager start")
 	defer logger.Infof("modifyManager start return")
 
-	params, _ := loadGrubParams()
+	params, _ := grub_common.LoadGrubParams()
 
 	logger.Debug("modifyManager.start len(tasks):", len(tasks))
 	var adjustTheme bool
@@ -134,16 +136,20 @@ func (m *modifyManager) update(adjustTheme bool, adjustThemeLang string) {
 	}
 
 	logJobStart(logJobMkConfig)
-	cmd := exec.Command(grubMkconfigCmd, "-o", grubScriptFile)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	logger.Debugf("$ %s -o %s", grubMkconfigCmd, grubScriptFile)
-	err := cmd.Run()
+	err := runGrubMkconfig()
 	if err != nil {
 		logger.Warning("failed to make config:", err)
 	}
 	logJobEnd(logJobMkConfig, err)
 	m.updateEnd()
+}
+
+func runGrubMkconfig() error {
+	cmd := exec.Command(grubMkconfigCmd, "-o", grubScriptFile)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	logger.Debugf("$ %s -o %s", grubMkconfigCmd, grubScriptFile)
+	return cmd.Run()
 }
 
 func (m *modifyManager) updateEnd() {

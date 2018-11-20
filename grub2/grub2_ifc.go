@@ -21,9 +21,10 @@ package grub2
 
 import (
 	"errors"
-	"fmt"
+	"io/ioutil"
 	"strings"
 
+	"pkg.deepin.io/dde/daemon/grub_common"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -32,6 +33,9 @@ const (
 	dbusServiceName = "com.deepin.daemon.Grub2"
 	dbusPath        = "/com/deepin/daemon/Grub2"
 	dbusInterface   = "com.deepin.daemon.Grub2"
+
+	polikitActionIdCommon               = "com.deepin.daemon.Grub2"
+	polikitActionIdPrepareGfxmodeDetect = "com.deepin.daemon.grub2.prepare-gfxmode-detect"
 
 	timeoutMax = 10
 )
@@ -60,12 +64,17 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, *dbus.Error) {
 	return entryTitles, nil
 }
 
-func (grub *Grub2) GetAvailableResolutions() ([]string, *dbus.Error) {
-	grub.service.DelayAutoQuit()
-	resolutions := getVbeResolutions()
-	result := make([]string, len(resolutions))
-	for idx, r := range resolutions {
-		result[idx] = fmt.Sprintf("%dx%d", r.width, r.height)
+func (g *Grub2) GetAvailableGfxmodes(sender dbus.Sender) ([]string, *dbus.Error) {
+	g.service.DelayAutoQuit()
+	gfxmodes, err := g.getAvailableGfxmodes(sender)
+	if err != nil {
+		logger.Warning(err)
+		return nil, dbusutil.ToError(err)
+	}
+	gfxmodes.SortDesc()
+	result := make([]string, len(gfxmodes))
+	for idx, m := range gfxmodes {
+		result[idx] = m.String()
 	}
 	return result, nil
 }
@@ -73,7 +82,7 @@ func (grub *Grub2) GetAvailableResolutions() ([]string, *dbus.Error) {
 func (g *Grub2) SetDefaultEntry(sender dbus.Sender, entry string) *dbus.Error {
 	g.service.DelayAutoQuit()
 
-	err := g.checkAuth(sender)
+	err := g.checkAuth(sender, polikitActionIdCommon)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -91,10 +100,12 @@ func (g *Grub2) SetDefaultEntry(sender dbus.Sender, entry string) *dbus.Error {
 	return nil
 }
 
+var errInGfxmodeDetect = errors.New("in gfxmode detection mode")
+
 func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 	g.service.DelayAutoQuit()
 
-	err := g.checkAuth(sender)
+	err := g.checkAuth(sender, polikitActionIdCommon)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -105,22 +116,29 @@ func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 	}
 
 	g.PropsMu.Lock()
+
+	if g.gfxmodeDetect {
+		g.PropsMu.Unlock()
+		return dbusutil.ToError(errInGfxmodeDetect)
+	}
+
 	if g.setPropEnableTheme(enabled) {
 		g.addModifyTask(getModifyTaskEnableTheme(enabled, lang))
 	}
+
 	g.PropsMu.Unlock()
 	return nil
 }
 
-func (g *Grub2) SetResolution(sender dbus.Sender, resolution string) *dbus.Error {
+func (g *Grub2) SetGfxmode(sender dbus.Sender, gfxmode string) *dbus.Error {
 	g.service.DelayAutoQuit()
 
-	err := g.checkAuth(sender)
+	err := g.checkAuth(sender, polikitActionIdCommon)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
 
-	err = checkResolution(resolution)
+	err = checkGfxmode(gfxmode)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -131,8 +149,13 @@ func (g *Grub2) SetResolution(sender dbus.Sender, resolution string) *dbus.Error
 	}
 
 	g.PropsMu.Lock()
-	if g.setPropResolution(resolution) {
-		g.addModifyTask(getModifyTaskResolution(resolution, lang))
+	if g.gfxmodeDetect {
+		g.PropsMu.Unlock()
+		return dbusutil.ToError(errInGfxmodeDetect)
+	}
+
+	if g.setPropGfxmode(gfxmode) {
+		g.addModifyTask(getModifyTaskGfxmode(gfxmode, lang))
 	}
 	g.PropsMu.Unlock()
 	return nil
@@ -141,7 +164,7 @@ func (g *Grub2) SetResolution(sender dbus.Sender, resolution string) *dbus.Error
 func (g *Grub2) SetTimeout(sender dbus.Sender, timeout uint32) *dbus.Error {
 	g.service.DelayAutoQuit()
 
-	err := g.checkAuth(sender)
+	err := g.checkAuth(sender, polikitActionIdCommon)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -164,7 +187,7 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 
 	const defaultEnableTheme = true
 
-	err := g.checkAuth(sender)
+	err := g.checkAuth(sender, polikitActionIdCommon)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
@@ -204,5 +227,44 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 		})
 	}
 
+	return nil
+}
+
+func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
+	g.service.DelayAutoQuit()
+
+	err := g.checkAuth(sender, polikitActionIdPrepareGfxmodeDetect)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	g.PropsMu.RLock()
+	gfxmodeDetect := g.gfxmodeDetect
+	g.PropsMu.RUnlock()
+
+	if gfxmodeDetect {
+		return dbusutil.ToError(errors.New("already in detection mode"))
+	}
+
+	gfxmodes, err := g.getAvailableGfxmodes(sender)
+	if err != nil {
+		logger.Warning("failed to get available gfxmodes:", err)
+	}
+
+	err = ioutil.WriteFile(grub_common.GfxmodeDetectReadyPath, nil, 0644)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	gfxmodesStr := joinGfxmodesForDetect(gfxmodes)
+
+	g.PropsMu.Lock()
+
+	g.gfxmodeDetect = true
+	g.setPropEnableTheme(false)
+	g.setPropGfxmode(gfxmodesStr)
+	g.addModifyTask(getModifyTaskPrepareGfxmodeDetect(gfxmodesStr))
+
+	g.PropsMu.Unlock()
 	return nil
 }

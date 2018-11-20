@@ -147,6 +147,7 @@ func (s *SessionDaemon) initModules() {
 		"miracast", // need network
 		"systeminfo",
 		"lastore",
+		"grub-gfx",
 		"calltrace",
 		"debug",
 	}

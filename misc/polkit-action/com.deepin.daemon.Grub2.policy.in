@@ -16,4 +16,14 @@
     </defaults>
   </action>
 
+  <action id="com.deepin.daemon.grub2.prepare-gfxmode-detect">
+    <description>Prepare grub2 display resolution detection</description>
+    <message>Authentication is required to prepare grub2 display resolution detection</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
 </policyconfig>

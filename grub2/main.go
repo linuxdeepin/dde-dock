@@ -20,8 +20,11 @@
 package grub2
 
 import (
+	"errors"
+	"io/ioutil"
 	"time"
 
+	"pkg.deepin.io/dde/daemon/grub_common"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -33,7 +36,7 @@ func RunAsDaemon() {
 	if err != nil {
 		logger.Fatal("failed to new system service", err)
 	}
-	_g = New(service)
+	_g = NewGrub2(service)
 
 	err = service.Export(dbusPath, _g)
 	if err != nil {
@@ -54,14 +57,39 @@ func RunAsDaemon() {
 	service.Wait()
 }
 
-// write default /etc/default/grub
-// generate theme background image file
-// call from deepin-installer hooks/in_chroot/*_setup_bootloader_x86.job
-func Setup(resolution string) error {
-	return nil
-}
+func PrepareGfxmodeDetect() error {
+	params, err := grub_common.LoadGrubParams()
+	if err != nil {
+		logger.Warning(err)
+	}
 
-// call from grub-themes-deepin debian/postinst
-func SetupTheme() error {
+	if grub_common.InGfxmodeDetectionMode(params) {
+		return errors.New("already in detection mode")
+	}
+
+	gfxmodes, err := grub_common.GetGfxmodesFromXRandr()
+	if err != nil {
+		return err
+	}
+	gfxmodes.SortDesc()
+	logger.Debug("gfxmodes:", gfxmodes)
+	gfxmodesStr := joinGfxmodesForDetect(gfxmodes)
+	getModifyFuncPrepareGfxmodeDetect(gfxmodesStr)(params)
+
+	err = ioutil.WriteFile(grub_common.GfxmodeDetectReadyPath, nil, 0644)
+	if err != nil {
+		return err
+	}
+
+	err = writeGrubParams(params)
+	if err != nil {
+		return err
+	}
+
+	err = runGrubMkconfig()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

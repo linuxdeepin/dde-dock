@@ -26,19 +26,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
 	"sync"
 	"unicode"
 
-	"pkg.deepin.io/lib/procfs"
-
+	"pkg.deepin.io/dde/daemon/grub_common"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/procfs"
 )
 
 const grubScriptFile = "/boot/grub/grub.cfg"
@@ -55,21 +53,23 @@ type Grub2 struct {
 	modifyManager *modifyManager
 	entries       []Entry
 	theme         *Theme
+	gfxmodeDetect bool
+	inhibitFd     dbus.UnixFD
 	PropsMu       sync.RWMutex
 	// props:
 	DefaultEntry string
 	EnableTheme  bool
-	Resolution   string
+	Gfxmode      string
 	Timeout      uint32
 	Updating     bool
 
 	methods *struct {
-		GetSimpleEntryTitles    func() `out:"titles"` // ([]string, *dbus.Error) {
-		GetAvailableResolutions func() `out:"modeJSON"`
-		SetDefaultEntry         func() `in:"entry"`
-		SetEnableTheme          func() `in:"enabled"`
-		SetResolution           func() `in:"resolution"`
-		SetTimeout              func() `in:"timeout"`
+		GetSimpleEntryTitles func() `out:"titles"` // ([]string, *dbus.Error) {
+		GetAvailableGfxmodes func() `out:"gfxmodes"`
+		SetDefaultEntry      func() `in:"entry"`
+		SetEnableTheme       func() `in:"enabled"`
+		SetGfxmode           func() `in:"gfxmode"`
+		SetTimeout           func() `in:"timeout"`
 	}
 }
 
@@ -93,6 +93,10 @@ func (g *Grub2) defaultEntryIdx2Str(idx int) (string, error) {
 }
 
 func (g *Grub2) applyParams(params map[string]string) {
+	if grub_common.InGfxmodeDetectionMode(params) {
+		g.gfxmodeDetect = true
+	}
+
 	//timeout
 	timeout := getTimeout(params)
 	if timeout < 0 {
@@ -108,8 +112,7 @@ func (g *Grub2) applyParams(params map[string]string) {
 	}
 	g.EnableTheme = enableTheme
 
-	// resolution
-	g.Resolution = getGfxMode(params)
+	g.Gfxmode = getGfxMode(params)
 
 	// default entry
 	defaultEntry := getDefaultEntry(params)
@@ -166,7 +169,7 @@ func getModifyTaskTimeout(timeout uint32) modifyTask {
 	}
 }
 
-func getModifyTaskResolution(val string, lang string) modifyTask {
+func getModifyTaskGfxmode(val string, lang string) modifyTask {
 	f := func(params map[string]string) {
 		params[grubGfxMode] = quoteString(val)
 	}
@@ -186,14 +189,53 @@ func getModifyTaskDefaultEntry(idx int) modifyTask {
 	}
 }
 
-func New(service *dbusutil.Service) *Grub2 {
+func joinGfxmodesForDetect(gfxmodes grub_common.Gfxmodes) string {
+	const gfxmodeDelimiter = ","
+	var buf bytes.Buffer
+	for _, m := range gfxmodes {
+		buf.WriteString(m.String())
+		buf.WriteString(gfxmodeDelimiter)
+	}
+
+	buf.WriteString("auto")
+	return buf.String()
+}
+
+func getModifyFuncPrepareGfxmodeDetect(gfxmodesStr string) func(map[string]string) {
+	f := func(params map[string]string) {
+		if decodeShellValue(params[grubTheme]) == defaultGrubTheme {
+			params[deepinThemeEnabled] = "1"
+			params[grubTheme] = fallbackGrubTheme
+			params[grubBackground] = fallbackGrubTheme
+		} else {
+			params[deepinThemeEnabled] = "0"
+			delete(params, grubTheme)
+			delete(params, grubBackground)
+		}
+
+		params[grub_common.DeepinGfxmodeDetect] = "1"
+		delete(params, grub_common.DeepinGfxmodeAdjusted)
+		params[grubGfxMode] = gfxmodesStr
+	}
+	return f
+}
+
+func getModifyTaskPrepareGfxmodeDetect(gfxmodesStr string) modifyTask {
+	f := getModifyFuncPrepareGfxmodeDetect(gfxmodesStr)
+	return modifyTask{
+		paramsModifyFunc: f,
+	}
+}
+
+func NewGrub2(service *dbusutil.Service) *Grub2 {
 	g := &Grub2{
-		service: service,
+		service:   service,
+		inhibitFd: -1,
 	}
 
 	g.readEntries()
 
-	params, err := loadGrubParams()
+	params, err := grub_common.LoadGrubParams()
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -201,28 +243,70 @@ func New(service *dbusutil.Service) *Grub2 {
 	g.applyParams(params)
 	g.modifyManager = newModifyManager(func(running bool) {
 		// state change callback
+		if running {
+			g.preventShutdown()
+		} else {
+			g.enableShutdown()
+		}
+		g.PropsMu.Lock()
 		g.setPropUpdating(running)
+		g.PropsMu.Unlock()
 	})
 	go g.modifyManager.loop()
 
 	// init theme
 	g.theme = NewTheme(g)
 
-	jobLog, err := loadLog()
-	if err != nil {
-		if !os.IsNotExist(err) {
-			logger.Warning(err)
-		}
-	}
-	if jobLog != nil {
-		if !jobLog.isJobDone(logJobMkConfig) {
-			task := modifyTask{}
+	if grub_common.ShouldFinishGfxmodeDetect(params) {
+		logger.Debug("finish gfxmode detect")
 
-			if jobLog.hasJob(logJobAdjustTheme) &&
-				!jobLog.isJobDone(logJobAdjustTheme) {
-				task.adjustTheme = true
+		currentGfxmode, _, err := grub_common.GetBootArgDeepinGfxmode()
+		if err != nil {
+			logger.Warning("failed to get current gfxmode:", err)
+			currentGfxmode = grub_common.Gfxmode{
+				Width:  1024,
+				Height: 768,
 			}
-			g.addModifyTask(task)
+		}
+
+		themeEnabled := params[deepinThemeEnabled] == "1"
+
+		g.gfxmodeDetect = false
+		g.EnableTheme = themeEnabled
+		currentGfxmodeStr := currentGfxmode.String()
+		g.Gfxmode = currentGfxmodeStr
+		task := modifyTask{
+			paramsModifyFunc: func(params map[string]string) {
+				if themeEnabled {
+					params[grubTheme] = quoteString(defaultGrubTheme)
+					params[grubBackground] = quoteString(defaultGrubBackground)
+				}
+				delete(params, deepinThemeEnabled)
+				params[grubGfxMode] = currentGfxmodeStr
+				params[grub_common.DeepinGfxmodeAdjusted] = "1"
+				delete(params, grub_common.DeepinGfxmodeDetect)
+			},
+			adjustTheme: themeEnabled,
+		}
+		g.addModifyTask(task)
+
+	} else {
+		jobLog, err := loadLog()
+		if err != nil {
+			if !os.IsNotExist(err) {
+				logger.Warning(err)
+			}
+		}
+		if jobLog != nil {
+			if !jobLog.isJobDone(logJobMkConfig) {
+				task := modifyTask{}
+
+				if jobLog.hasJob(logJobAdjustTheme) &&
+					!jobLog.isJobDone(logJobAdjustTheme) {
+					task.adjustTheme = true
+				}
+				g.addModifyTask(task)
+			}
 		}
 	}
 
@@ -352,26 +436,22 @@ func parseTitle(line string) (string, bool) {
 	}
 }
 
-func (g *Grub2) getScreenWidthHeight() (w, h uint16, err error) {
-	return parseResolution(g.Resolution)
-}
-
 func (g *Grub2) canSafelyExit() bool {
 	logger.Debug("call canSafelyExit")
-	if g.modifyManager.IsRunning() {
-		return false
-	}
-	return true
+	g.PropsMu.RLock()
+	can := !g.Updating
+	g.PropsMu.RUnlock()
+	return can
 }
 
-func (g *Grub2) checkAuth(sender dbus.Sender) error {
+func (g *Grub2) checkAuth(sender dbus.Sender, actionId string) error {
 	if noCheckAuth {
 		logger.Warning("check auth disabled")
 		return nil
 	}
 
 	pid, err := g.service.GetConnPID(string(sender))
-	isAuthorized, err := checkAuthWithPid(pid)
+	isAuthorized, err := checkAuthWithPid(pid, actionId)
 	if err != nil {
 		return err
 	}
@@ -400,117 +480,58 @@ func (g *Grub2) getSenderLang(sender dbus.Sender) (string, error) {
 	return environ.Get("LANG"), nil
 }
 
-type Resolution struct {
-	width  int
-	height int
-}
-
-type Resolutions []Resolution
-
-func (v Resolutions) Len() int {
-	return len(v)
-}
-
-func (v Resolutions) Less(i, j int) bool {
-	a := v[i]
-	b := v[j]
-
-	if a.width < b.width {
-		return true
-	} else if a.width == b.width {
-		return a.height < b.height
-	}
-	return false
-}
-
-func (v Resolutions) Swap(i, j int) {
-	v[i], v[j] = v[j], v[i]
-}
-
-func (v Resolutions) add(r Resolution) Resolutions {
-	var found bool
-	for _, r0 := range v {
-		if r0 == r {
-			found = true
-			break
-		}
-	}
-	if !found {
-		return append(v, r)
-	}
-	return v
-}
-
-var vbeResolutionsCache Resolutions
-var vbeResolutionsOnce sync.Once
-
-func getVbeResolutions() Resolutions {
-	vbeResolutionsOnce.Do(
-		func() {
-			var err error
-			vbeResolutionsCache, err = getVbeResolutions0()
-			if err != nil {
-				logger.Warning(err)
-			}
-		})
-	if len(vbeResolutionsCache) == 0 {
-		return Resolutions{
-			{1920, 1080},
-			{1366, 768},
-			{1024, 768},
-			{800, 600},
-		}
-	}
-	return vbeResolutionsCache
-}
-
-func getVbeResolutions0() (Resolutions, error) {
-	output, err := exec.Command("hwinfo", "--vbe").Output()
+func getXEnvWithSender(service *dbusutil.Service, sender dbus.Sender) (map[string]string, error) {
+	environ := make(map[string]string)
+	pid, err := service.GetConnPID(string(sender))
 	if err != nil {
 		return nil, err
 	}
-	var resolutions Resolutions
+	p := procfs.Process(pid)
+	envVars, err := p.Environ()
+	if err != nil {
+		return nil, err
+	}
+	environ["DISPLAY"] = envVars.Get("DISPLAY")
+	environ["XAUTHORITY"] = envVars.Get("XAUTHORITY")
+	return environ, nil
+}
 
-	add := func(w, h []byte) {
-		width, _ := strconv.Atoi(string(w))
-		height, _ := strconv.Atoi(string(h))
-
-		if height == 0 || width == 0 {
-			return
-		}
-		resolutions = resolutions.add(Resolution{
-			width:  width,
-			height: height,
-		})
+func (g *Grub2) getGfxmodesFromXRandr(sender dbus.Sender) (grub_common.Gfxmodes, error) {
+	xEnv, err := getXEnvWithSender(g.service, sender)
+	if err != nil {
+		return nil, err
+	}
+	for key, value := range xEnv {
+		os.Setenv(key, value)
 	}
 
-	//  Mode 0x0311: 640x480 (+1280), 16 bits
-	var regMode = regexp.MustCompile(`Mode .*: (\d+)x(\d+) .*\d+ bits`)
+	return grub_common.GetGfxmodesFromXRandr()
+}
 
-	// Resolution: 720x400@70Hz
-	var regResolution = regexp.MustCompile(`Resolution: (\d+)x(\d+)@\d+Hz`)
+func (g *Grub2) getAvailableGfxmodes(sender dbus.Sender) (grub_common.Gfxmodes, error) {
+	randrGfxmodes, err := g.getGfxmodesFromXRandr(sender)
+	if err != nil {
+		return nil, err
+	}
+	logger.Debug("randrGfxmodes:", randrGfxmodes)
 
-	scanner := bufio.NewScanner(bytes.NewReader(output))
-	for scanner.Scan() {
-		line := scanner.Bytes()
-		match := regMode.FindSubmatch(line)
-		if len(match) == 3 {
-			width := match[1]
-			height := match[2]
-			add(width, height)
-			continue
-		}
+	grubGfxmodes, err := getGfxmodesFromBootArg()
+	if err != nil {
+		logger.Warning(err)
+	}
+	logger.Debug("grubGfxmodes:", grubGfxmodes)
 
-		match = regResolution.FindSubmatch(line)
-		if len(match) == 3 {
-			width := match[1]
-			height := match[2]
-			add(width, height)
-			continue
-		}
+	if len(grubGfxmodes) == 0 {
+		return randrGfxmodes, nil
 	}
 
-	resolutions = resolutions.add(Resolution{1024, 768})
-	sort.Sort(sort.Reverse(resolutions))
-	return resolutions, nil
+	return randrGfxmodes.Intersection(grubGfxmodes), nil
+}
+
+func getGfxmodesFromBootArg() (grub_common.Gfxmodes, error) {
+	_, allGfxmodes, err := grub_common.GetBootArgDeepinGfxmode()
+	if err != nil {
+		return nil, err
+	}
+	return allGfxmodes, nil
 }

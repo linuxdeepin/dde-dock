@@ -18,6 +18,16 @@ linkJavaFallbackFont () {
     fi
 }
 
+prepareGfxmodeDetect () {
+	if [ -f /etc/default/grub ]; then
+		. /etc/default/grub
+		if [ "$DEEPIN_GFXMODE_ADJUSTED" = 1 -o "$DEEPIN_GFXMODE_DETECT" = 1 ] ;then
+			return
+		fi
+		/usr/lib/deepin-daemon/grub2 -prepare-gfxmode-detect || true
+	fi
+}
+
 case "$1" in
     configure)
     if [ -x /usr/lib/deepin-daemon/default-terminal ];then
@@ -32,6 +42,7 @@ case "$1" in
         sed -i 's/Enabled=.*$/Enabled=False/' /usr/share/fcitx/addon/fcitx-xkb.conf || true
     fi
     linkJavaFallbackFont
+	prepareGfxmodeDetect
     ;;
     triggered)
     if [ -f /etc/systemd/logind.conf ];then

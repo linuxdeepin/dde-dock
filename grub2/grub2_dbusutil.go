@@ -28,17 +28,17 @@ func (v *Grub2) emitPropChangedEnableTheme(value bool) error {
 	return v.service.EmitPropertyChanged(v, "EnableTheme", value)
 }
 
-func (v *Grub2) setPropResolution(value string) (changed bool) {
-	if v.Resolution != value {
-		v.Resolution = value
-		v.emitPropChangedResolution(value)
+func (v *Grub2) setPropGfxmode(value string) (changed bool) {
+	if v.Gfxmode != value {
+		v.Gfxmode = value
+		v.emitPropChangedGfxmode(value)
 		return true
 	}
 	return false
 }
 
-func (v *Grub2) emitPropChangedResolution(value string) error {
-	return v.service.EmitPropertyChanged(v, "Resolution", value)
+func (v *Grub2) emitPropChangedGfxmode(value string) error {
+	return v.service.EmitPropertyChanged(v, "Gfxmode", value)
 }
 
 func (v *Grub2) setPropTimeout(value uint32) (changed bool) {

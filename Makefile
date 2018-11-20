@@ -102,6 +102,12 @@ install: build translate install-dde-data install-icons
 	mkdir -pv ${DESTDIR}/etc/pam.d/
 	cp -f misc/etc/pam.d/* ${DESTDIR}/etc/pam.d/
 
+	mkdir -pv ${DESTDIR}/etc/default/grub.d
+	cp -f misc/etc/default/grub.d/* ${DESTDIR}/etc/default/grub.d
+
+	mkdir -pv ${DESTDIR}/etc/grub.d
+	cp -f misc/etc/grub.d/* ${DESTDIR}/etc/grub.d
+
 install-dde-data:
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde/
 	cp -r misc/data ${DESTDIR}${PREFIX}/share/dde/

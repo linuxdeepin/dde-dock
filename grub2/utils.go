@@ -26,7 +26,8 @@ import (
 	"io"
 	"os"
 	"strconv"
-	"strings"
+
+	"pkg.deepin.io/dde/daemon/grub_common"
 
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"pkg.deepin.io/lib/dbus1"
@@ -36,56 +37,12 @@ func quoteString(str string) string {
 	return strconv.Quote(str)
 }
 
-type InvalidResolutionError struct {
-	Resolution string
-}
-
-func (err InvalidResolutionError) Error() string {
-	return fmt.Sprintf("invalid resolution %q", err.Resolution)
-}
-
-func parseResolution(v string) (w, h uint16, err error) {
-	if v == "auto" {
-		err = errors.New("unknown auto")
-		return
-	}
-
-	arr := strings.Split(v, "x")
-	if len(arr) != 2 {
-		err = InvalidResolutionError{v}
-		return
-	}
-	// parse width
-	tmpw, err := strconv.ParseUint(arr[0], 10, 16)
-	if err != nil {
-		err = InvalidResolutionError{v}
-		return
-	}
-
-	// parse height
-	tmph, err := strconv.ParseUint(arr[1], 10, 16)
-	if err != nil {
-		err = InvalidResolutionError{v}
-		return
-	}
-
-	w = uint16(tmpw)
-	h = uint16(tmph)
-
-	if w == 0 || h == 0 {
-		err = InvalidResolutionError{v}
-		return
-	}
-
-	return
-}
-
-func checkResolution(v string) error {
+func checkGfxmode(v string) error {
 	if v == "auto" {
 		return nil
 	}
 
-	_, _, err := parseResolution(v)
+	_, err := grub_common.ParseGfxmode(v)
 	return err
 }
 
@@ -107,7 +64,7 @@ func allowNoCheckAuth() {
 	}
 }
 
-func checkAuthWithPid(pid uint32) (bool, error) {
+func checkAuthWithPid(pid uint32, actionId string) (bool, error) {
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return false, err
@@ -116,7 +73,6 @@ func checkAuthWithPid(pid uint32) (bool, error) {
 	subject := polkit.MakeSubject(polkit.SubjectKindUnixProcess)
 	subject.SetDetail("pid", pid)
 	subject.SetDetail("start-time", uint64(0))
-	const actionId = dbusServiceName
 	result, err := authority.CheckAuthorization(0, subject, actionId, nil,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {
