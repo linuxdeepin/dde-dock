@@ -153,7 +153,9 @@ void SoundItem::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_iconPixmap.rect().center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_iconPixmap.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
 }
 
 void SoundItem::refershIcon()

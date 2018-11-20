@@ -84,8 +84,10 @@ void WiredItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     const auto ratio = qApp->devicePixelRatio();
-    const int x = rect().center().x() - m_icon.rect().center().x() / ratio;
-    const int y = rect().center().y() - m_icon.rect().center().y() / ratio;
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_icon.rect());
+    const int x = rf.center().x() - rfp.center().x() / ratio;
+    const int y = rf.center().y() - rfp.center().y() / ratio;
     painter.drawPixmap(x, y, m_icon);
 }
 

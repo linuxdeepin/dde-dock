@@ -50,7 +50,9 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
     const auto ratio = devicePixelRatioF();
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - icon.rect().center() / ratio, icon);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(icon.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / ratio, icon);
 }
 
 void PowerStatusWidget::mousePressEvent(QMouseEvent *e)

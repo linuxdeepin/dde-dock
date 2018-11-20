@@ -130,7 +130,9 @@ void WirelessItem::paintEvent(QPaintEvent *e)
         pixmap.setDevicePixelRatio(ratio);
         painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
     }
-    painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(pixmap.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / ratio, pixmap);
 
     if (m_reloadIcon)
         m_reloadIcon = false;
