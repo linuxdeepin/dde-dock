@@ -122,13 +122,14 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
 
 void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 {
-    auto it = m_wrapperList.constBegin();
+    auto it = m_wrapperList.begin();
 
-    for (; it != m_wrapperList.constEnd(); ++it) {
+    for (; it != m_wrapperList.end(); ++it) {
+        auto wrapper = (*it);
         // found the removed tray
-        if ((*it)->absTrayWidget() == trayWidget) {
+        if (wrapper->absTrayWidget() == trayWidget) {
             // the removed tray is a attention tray
-            if (m_currentAttentionTray == (*it)) {
+            if (m_currentAttentionTray == wrapper) {
                 if (m_controlWidget->expanded()) {
                     m_trayBoxLayout->removeWidget(m_currentAttentionTray);
                 } else {
@@ -136,13 +137,13 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
                 }
                 m_currentAttentionTray = nullptr;
             } else {
-                m_trayBoxLayout->removeWidget((*it));
+                m_trayBoxLayout->removeWidget(wrapper);
             }
             // do not delete real tray object, just delete it's wrapper object
             // the real tray object should be deleted in TrayPlugin class
             trayWidget->setParent(nullptr);
-            m_wrapperList.removeAll((*it));
-            (*it)->deleteLater();
+            wrapper->deleteLater();
+            m_wrapperList.erase(it);
             break;
         }
     }

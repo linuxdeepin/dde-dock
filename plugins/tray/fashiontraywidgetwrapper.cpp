@@ -26,10 +26,10 @@
 
 FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
     : QWidget(parent),
-      m_itemKey(itemKey),
       m_absTrayWidget(absTrayWidget),
       m_layout(new QVBoxLayout(this)),
-      m_attention(false)
+      m_attention(false),
+      m_itemKey(itemKey)
 
 {
     m_absTrayWidget->setVisible(true);
