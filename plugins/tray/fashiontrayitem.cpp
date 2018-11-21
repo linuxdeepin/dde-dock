@@ -124,10 +124,9 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
 
 void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 {
-    auto it = m_wrapperList.begin();
+    bool founded = false;
 
-    for (; it != m_wrapperList.end(); ++it) {
-        auto wrapper = (*it);
+    for (auto wrapper : m_wrapperList) {
         // found the removed tray
         if (wrapper->absTrayWidget() == trayWidget) {
             // the removed tray is a attention tray
@@ -145,12 +144,13 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
             // the real tray object should be deleted in TrayPlugin class
             trayWidget->setParent(nullptr);
             wrapper->deleteLater();
-            m_wrapperList.erase(it);
+            m_wrapperList.removeAll(wrapper);
+            founded = true;
             break;
         }
     }
 
-    if (it == m_wrapperList.constEnd()) {
+    if (!founded) {
         qDebug() << "Error! can not find the tray widget in fashion tray list" << trayWidget;
     }
 
