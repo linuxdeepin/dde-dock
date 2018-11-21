@@ -1,23 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
 <context>
-    <name>AbstractNetworkTrayWidget</name>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="49"/>
-        <source>Enable network</source>
-        <translation>नेटवर्क सक्रिय करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="51"/>
-        <source>Disable network</source>
-        <translation>नेटवर्क निष्क्रिय करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/abstractnetworktraywidget.cpp" line="57"/>
-        <source>Network settings</source>
-        <translation>नेटवर्क सेटिंग्स</translation>
-    </message>
-</context>
-<context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
@@ -28,22 +10,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="56"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="58"/>
         <source>Datetime</source>
         <translation>दिनांक व समय</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="135"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="147"/>
         <source>12 Hour Time</source>
         <translation>12 घंटे का समय</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="137"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="149"/>
         <source>24 Hour Time</source>
         <translation>24 घंटे का समय</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="143"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="155"/>
         <source>Time Settings</source>
         <translation>समय संबंधी सेटिंग्स</translation>
     </message>
@@ -51,17 +33,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="55"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="55"/>
         <source>Enable network</source>
         <translation>नेटवर्क सक्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="57"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="57"/>
         <source>Disable network</source>
         <translation>नेटवर्क निष्क्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/deviceitem.cpp" line="63"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="63"/>
         <source>Network settings</source>
         <translation>नेटवर्क सेटिंग्स</translation>
     </message>
@@ -123,87 +105,87 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="46"/>
+        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Fashion Mode</source>
         <translation>फैशन मोड</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="47"/>
+        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Efficient Mode</source>
         <translation>कुशल मोड</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="48"/>
+        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Top</source>
         <translation>ऊपर</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="49"/>
+        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Bottom</source>
         <translation>नीचे</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="50"/>
+        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Left</source>
         <translation>बाएँ</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="51"/>
+        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Right</source>
         <translation>दाएँ</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="52"/>
+        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Large</source>
         <translation>बड़ा</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="53"/>
+        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Medium</source>
         <translation>मध्यम</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="54"/>
+        <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Small</source>
         <translation>छोटा</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="55"/>
+        <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Shown</source>
         <translation>दृश्यमान रखें</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="56"/>
+        <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Keep Hidden</source>
         <translation>छिपाएँ रखें</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="57"/>
+        <location filename="../frame/util/docksettings.cpp" line="58"/>
         <source>Smart Hide</source>
         <translation>उपयोग के अनुरूप छिपाएँ</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="96"/>
+        <location filename="../frame/util/docksettings.cpp" line="97"/>
         <source>Mode</source>
         <translation>मोड </translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="104"/>
+        <location filename="../frame/util/docksettings.cpp" line="105"/>
         <source>Location</source>
         <translation>स्थान</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="111"/>
+        <location filename="../frame/util/docksettings.cpp" line="112"/>
         <source>Size</source>
         <translation>आकार</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="118"/>
+        <location filename="../frame/util/docksettings.cpp" line="119"/>
         <source>Status</source>
         <translation>स्थिति</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="122"/>
+        <location filename="../frame/util/docksettings.cpp" line="123"/>
         <source>Plugins</source>
         <translation>प्लगिन</translation>
     </message>
@@ -211,7 +193,7 @@
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="108"/>
+        <location filename="../frame/item/launcheritem.cpp" line="105"/>
         <source>Launcher</source>
         <translation>लॉन्चर </translation>
     </message>
@@ -219,35 +201,35 @@
 <context>
     <name>NetworkPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/networkplugin.cpp" line="50"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="49"/>
         <source>Network</source>
         <translation>नेटवर्क </translation>
     </message>
 </context>
 <context>
-    <name>PowerTrayWidget</name>
+    <name>PowerPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="95"/>
-        <source>Shut down</source>
-        <translation>बंद करें</translation>
+        <location filename="../plugins/power/powerplugin.cpp" line="46"/>
+        <source>Power</source>
+        <translation>पॉवर</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="103"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="71"/>
         <source>Remaining Capacity %1</source>
         <translation>शेष क्षमता %1</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="109"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="76"/>
         <source>Charged %1</source>
         <translation>चार्ज है %1</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="111"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="78"/>
         <source>Charging %1</source>
         <translation>चार्ज हो रहा है %1</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/powertraywidget.cpp" line="129"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="132"/>
         <source>Power settings</source>
         <translation>पॉवर सेटिंग्स</translation>
     </message>
@@ -255,118 +237,56 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="68"/>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="143"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="109"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Shut down</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="76"/>
-        <source>Remaining Capacity %1</source>
-        <translation>शेष क्षमता %1</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="82"/>
-        <source>Charged %1</source>
-        <translation>चार्ज है %1</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="84"/>
-        <source>Charging %1</source>
-        <translation>चार्ज हो रहा है %1</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="149"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="115"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="120"/>
         <source>Restart</source>
         <translation>पुनः आरंभ करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="161"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="127"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Lock</source>
         <translation>लॉक स्क्रीन</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="167"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="138"/>
         <source>Log out</source>
         <translation>लॉग आउट</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="155"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="126"/>
         <source>Suspend</source>
         <translation>स्थगित करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="48"/>
-        <source>Power</source>
-        <translation>पॉवर</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="175"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
         <source>Switch account</source>
         <translation>खाता बदलें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdownplugin.cpp" line="185"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="153"/>
         <source>Power settings</source>
         <translation>पॉवर सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="37"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="36"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
         <source>Shutdown</source>
         <translation>बंद करें</translation>
     </message>
 </context>
 <context>
-    <name>ShutdownTrayWidget</name>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="34"/>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="87"/>
-        <source>Shut down</source>
-        <translation>बंद करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="93"/>
-        <source>Restart</source>
-        <translation>पुनः आरंभ करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="99"/>
-        <source>Suspend</source>
-        <translation>स्थगित करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="105"/>
-        <source>Lock</source>
-        <translation>लॉक स्क्रीन</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="111"/>
-        <source>Log out</source>
-        <translation>लॉग आउट</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/shutdown/shutdowntraywidget.cpp" line="119"/>
-        <source>Switch account</source>
-        <translation>खाता बदलें</translation>
-    </message>
-</context>
-<context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundapplet.cpp" line="54"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="54"/>
         <source>Device</source>
         <translation>डिवाइस</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundapplet.cpp" line="72"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="72"/>
         <source>Application</source>
         <translation>अनुप्रयोग</translation>
     </message>
@@ -374,22 +294,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="79"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
         <translation>ध्वनि चालू करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="81"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>ध्वनि बंद करें</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="87"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
         <translation>ऑडियो सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/sounditem.cpp" line="221"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="224"/>
         <source>Current Volume %1</source>
         <translation>वर्तमान ध्वनि का स्तर %1</translation>
     </message>
@@ -397,51 +317,20 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundplugin.cpp" line="41"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
         <translation>ध्वनि</translation>
     </message>
 </context>
 <context>
-    <name>SoundTrayWidget</name>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="120"/>
-        <source>Unmute</source>
-        <translation>ध्वनि चालू करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="122"/>
-        <source>Mute</source>
-        <translation>ध्वनि बंद करें</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="128"/>
-        <source>Audio Settings</source>
-        <translation>ऑडियो सेटिंग्स</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/sound/soundtraywidget.cpp" line="205"/>
-        <source>Current Volume %1</source>
-        <translation>वर्तमान ध्वनि का स्तर %1</translation>
-    </message>
-</context>
-<context>
-    <name>SystemTrayPlugin</name>
-    <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="50"/>
-        <source>System Tray</source>
-        <translation>सिस्टम ट्रे</translation>
-    </message>
-</context>
-<context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="77"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
         <source>Trash - %1 file</source>
         <translation>कचरा - %1 फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="79"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="87"/>
         <source>Trash - %1 files</source>
         <translation>कचरा - %1 फ़ाइलें</translation>
     </message>
@@ -460,37 +349,22 @@
     </message>
 </context>
 <context>
-    <name>WiredItem</name>
+    <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="55"/>
-        <source>Unknown</source>
-        <translation>अज्ञात</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="60"/>
-        <source>No Network</source>
-        <translation>कोई नेटवर्क नहीं</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wireditem.cpp" line="70"/>
-        <source>Wired connection: %1</source>
-        <translation>तार वाला कनेक्शन : %1</translation>
+        <location filename="../plugins/tray/trayplugin.cpp" line="47"/>
+        <source>System Tray</source>
+        <translation>सिस्टम ट्रे</translation>
     </message>
 </context>
 <context>
-    <name>WiredTrayWidget</name>
+    <name>WiredItem</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="101"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="106"/>
-        <source>No Network</source>
-        <translation>कोई नेटवर्क नहीं</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wiredtraywidget.cpp" line="116"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="203"/>
         <source>Wired connection: %1</source>
         <translation>तार वाला कनेक्शन : %1</translation>
     </message>
@@ -498,12 +372,12 @@
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wirelessitem.cpp" line="81"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="81"/>
         <source>No Network</source>
         <translation>कोई नेटवर्क नहीं</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wirelessitem.cpp" line="91"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="91"/>
         <source>Wireless Connection: %1</source>
         <translation>बेतार कनेक्शन : %1</translation>
     </message>
@@ -511,27 +385,14 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/applet/wirelesslist.cpp" line="154"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="154"/>
         <source>Wireless Network</source>
         <translation>बेतार नेटवर्क</translation>
     </message>
     <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/applet/wirelesslist.cpp" line="156"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network %1</source>
         <translation>बेतार नेटवर्क %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessTrayWidget</name>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wirelesstraywidget.cpp" line="128"/>
-        <source>No Network</source>
-        <translation>कोई नेटवर्क नहीं</translation>
-    </message>
-    <message>
-        <location filename="../plugins/system-tray/system-trays/network/item/wirelesstraywidget.cpp" line="138"/>
-        <source>Wireless Connection: %1</source>
-        <translation>बेतार कनेक्शन : %1</translation>
     </message>
 </context>
 </TS>
