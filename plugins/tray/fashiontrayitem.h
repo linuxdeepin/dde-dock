@@ -40,8 +40,8 @@ class FashionTrayItem : public QWidget
 public:
     explicit FashionTrayItem(Dock::Position pos, QWidget *parent = 0);
 
-    void setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList);
-    void trayWidgetAdded(AbstractTrayWidget *trayWidget);
+    void setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap);
+    void trayWidgetAdded(const QString &itemKey, AbstractTrayWidget *trayWidget);
     void trayWidgetRemoved(AbstractTrayWidget *trayWidget);
     void clearTrayWidgets();
 
@@ -75,7 +75,7 @@ private Q_SLOTS:
     void refreshTraysVisible();
 
 private:
-    QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> m_trayWidgetWrapperMap;
+    QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
     QBoxLayout *m_mainBoxLayout;
     QBoxLayout *m_trayBoxLayout;
     QLabel *m_leftSpliter;

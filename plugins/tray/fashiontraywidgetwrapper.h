@@ -31,9 +31,10 @@ class FashionTrayWidgetWrapper : public QWidget
 {
     Q_OBJECT
 public:
-    FashionTrayWidgetWrapper(AbstractTrayWidget *absTrayWidget, QWidget *parent = nullptr);
+    FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent = nullptr);
 
     AbstractTrayWidget *absTrayWidget() const;
+    QString itemKey() const;
 
     bool attention() const;
     void setAttention(bool attention);
@@ -53,6 +54,7 @@ private:
     QVBoxLayout *m_layout;
 
     bool m_attention;
+    QString m_itemKey;
 };
 
 #endif //FASHIONTRAYWIDGETWRAPPER_H

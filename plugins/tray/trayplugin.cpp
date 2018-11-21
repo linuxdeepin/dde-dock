@@ -247,7 +247,7 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         m_proxyInter->itemAdded(this, itemKey);
     } else {
         m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
-        m_fashionItem->trayWidgetAdded(trayWidget);
+        m_fashionItem->trayWidgetAdded(itemKey, trayWidget);
     }
 }
 
@@ -341,7 +341,7 @@ void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
         if (m_trayMap.isEmpty()) {
             m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
         } else {
-            m_fashionItem->setTrayWidgets(m_trayMap.values());
+            m_fashionItem->setTrayWidgets(m_trayMap);
             m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
         }
     } else {

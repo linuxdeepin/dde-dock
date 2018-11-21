@@ -24,8 +24,9 @@
 #include <QPainter>
 #include <QDebug>
 
-FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(AbstractTrayWidget *absTrayWidget, QWidget *parent)
+FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
     : QWidget(parent),
+      m_itemKey(itemKey),
       m_absTrayWidget(absTrayWidget),
       m_layout(new QVBoxLayout(this)),
       m_attention(false)
@@ -48,6 +49,11 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(AbstractTrayWidget *absTrayWi
 AbstractTrayWidget *FashionTrayWidgetWrapper::absTrayWidget() const
 {
     return m_absTrayWidget;
+}
+
+QString FashionTrayWidgetWrapper::itemKey() const
+{
+    return m_itemKey;
 }
 
 void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)

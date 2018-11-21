@@ -80,25 +80,28 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onTrayListExpandChanged);
 }
 
-void FashionTrayItem::setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList)
+void FashionTrayItem::setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap)
 {
     clearTrayWidgets();
 
-    for (auto widget : trayWidgetList) {
-        trayWidgetAdded(widget);
+    for (auto it = itemTrayMap.constBegin(); it != itemTrayMap.constEnd(); ++it) {
+        trayWidgetAdded(it.key(), it.value());
     }
 }
 
-void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
+void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget *trayWidget)
 {
-    if (m_trayWidgetWrapperMap.keys().contains(trayWidget)) {
-        return;
+    for (auto w : m_wrapperList) {
+        if (w->absTrayWidget() == trayWidget) {
+            qDebug() << "Reject! want to isert duplicate trayWidget:" << itemKey << trayWidget;
+            return;
+        }
     }
 
-    FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(trayWidget);
+    FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(itemKey, trayWidget);
     wrapper->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
 
-    m_trayWidgetWrapperMap.insert(trayWidget, wrapper);
+    m_wrapperList.append(wrapper);
     m_trayBoxLayout->addWidget(wrapper);
     wrapper->setVisible(m_controlWidget->expanded());
 
@@ -119,13 +122,13 @@ void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
 
 void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 {
-    auto it = m_trayWidgetWrapperMap.constBegin();
+    auto it = m_wrapperList.constBegin();
 
-    for (; it != m_trayWidgetWrapperMap.constEnd(); ++it) {
+    for (; it != m_wrapperList.constEnd(); ++it) {
         // found the removed tray
-        if (it.key() == trayWidget) {
+        if ((*it)->absTrayWidget() == trayWidget) {
             // the removed tray is a attention tray
-            if (m_currentAttentionTray == it.value()) {
+            if (m_currentAttentionTray == (*it)) {
                 if (m_controlWidget->expanded()) {
                     m_trayBoxLayout->removeWidget(m_currentAttentionTray);
                 } else {
@@ -133,20 +136,19 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
                 }
                 m_currentAttentionTray = nullptr;
             } else {
-                m_trayBoxLayout->removeWidget(it.value());
+                m_trayBoxLayout->removeWidget((*it));
             }
             // do not delete real tray object, just delete it's wrapper object
             // the real tray object should be deleted in TrayPlugin class
             trayWidget->setParent(nullptr);
-            it.value()->deleteLater();
-            m_trayWidgetWrapperMap.remove(it.key());
+            m_wrapperList.removeAll((*it));
+            (*it)->deleteLater();
             break;
         }
     }
 
-    if (it == m_trayWidgetWrapperMap.constEnd()) {
+    if (it == m_wrapperList.constEnd()) {
         qDebug() << "can not find the tray widget in fashion tray list";
-        Q_UNREACHABLE();
         return;
     }
 
@@ -155,13 +157,13 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 
 void FashionTrayItem::clearTrayWidgets()
 {
-    QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> mMap = m_trayWidgetWrapperMap;
+    QList<QPointer<FashionTrayWidgetWrapper>> mList = m_wrapperList;
 
-    for (auto it = mMap.begin(); it != mMap.end(); ++it) {
-        trayWidgetRemoved(it.key());
+    for (auto wrapper : mList) {
+        trayWidgetRemoved(wrapper->absTrayWidget());
     }
 
-    m_trayWidgetWrapperMap.clear();
+    m_wrapperList.clear();
 
     requestResize();
 }
@@ -218,7 +220,7 @@ void FashionTrayItem::setSuggestIconSize(QSize size)
 
     m_controlWidget->setFixedSize(newSize);
 
-    for (auto wrapper : m_trayWidgetWrapperMap.values()) {
+    for (auto wrapper : m_wrapperList) {
         wrapper->setFixedSize(newSize);
     }
 
@@ -274,19 +276,19 @@ QSize FashionTrayItem::wantedTotalSize() const
 
     if (m_controlWidget->expanded()) {
         if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
-            size.setWidth(m_trayWidgetWrapperMap.size() * TrayWidgetWidth // 所有插件
+            size.setWidth(m_wrapperList.size() * TrayWidgetWidth // 所有插件
                           + TrayWidgetWidth // 控制按钮
                           + SpliterSize * 2 // 两个分隔条
                           + 3 * TraySpace // MainBoxLayout所有space
-                          + (m_trayWidgetWrapperMap.size() - 1) * TraySpace); // TrayBoxLayout所有space
+                          + (m_wrapperList.size() - 1) * TraySpace); // TrayBoxLayout所有space
             size.setHeight(height());
         } else {
             size.setWidth(width());
-            size.setHeight(m_trayWidgetWrapperMap.size() * TrayWidgetHeight // 所有插件
+            size.setHeight(m_wrapperList.size() * TrayWidgetHeight // 所有插件
                           + TrayWidgetHeight // 控制按钮
                           + SpliterSize * 2 // 两个分隔条
                           + 3 * TraySpace // MainBoxLayout所有space
-                          + (m_trayWidgetWrapperMap.size() - 1) * TraySpace); // TrayBoxLayout所有space
+                          + (m_wrapperList.size() - 1) * TraySpace); // TrayBoxLayout所有space
         }
     } else {
         if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
@@ -436,10 +438,10 @@ void FashionTrayItem::refreshTraysVisible()
         m_currentAttentionTray = nullptr;
     }
 
-    for (auto i = m_trayWidgetWrapperMap.begin(); i != m_trayWidgetWrapperMap.end(); ++i) {
-        i.value()->setVisible(expand);
+    for (auto wrapper : m_wrapperList) {
+        wrapper->setVisible(expand);
         // reset all tray item attention state
-        i.value()->setAttention(false);
+        wrapper->setAttention(false);
     }
 
     m_attentionDelayTimer->start();
