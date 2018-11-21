@@ -195,13 +195,11 @@ int ShutdownPlugin::itemSortKey(const QString &itemKey)
     Dock::DisplayMode mode = displayMode();
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
 
-    //if (mode == Dock::DisplayMode::Fashion) {
-        //return m_settings.value(key, 4).toInt();
-    //} else {
-        //return m_settings.value(key, 4).toInt();
-    //}
-
-    return m_proxyInter->getValue(this, key, 4).toInt();
+    if (mode == Dock::DisplayMode::Fashion) {
+        return m_proxyInter->getValue(this, key, 2).toInt();
+    } else {
+        return m_proxyInter->getValue(this, key, 4).toInt();
+    }
 }
 
 void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)

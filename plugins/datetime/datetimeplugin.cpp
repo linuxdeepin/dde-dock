@@ -99,7 +99,7 @@ int DatetimePlugin::itemSortKey(const QString &itemKey)
     const QString key = QString("pos_%1").arg(mode);
 
     if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 5).toInt();
+        return m_proxyInter->getValue(this, key, 3).toInt();
     } else {
         return m_proxyInter->getValue(this, key, -1).toInt();
     }

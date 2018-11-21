@@ -160,7 +160,7 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
 
     return m_proxyInter
-        ->getValue(this, key, mode == Dock::DisplayMode::Fashion ? 3 : 1)
+        ->getValue(this, key, mode == Dock::DisplayMode::Fashion ? 1 : 1)
         .toInt();
 }
 
