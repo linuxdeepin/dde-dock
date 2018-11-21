@@ -25,8 +25,6 @@
 #include "pluginsiteminterface.h"
 #include "sounditem.h"
 
-#include <QSettings>
-
 class SoundPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -54,7 +52,6 @@ public:
     void setSortKey(const QString &itemKey, const int order);
 
 private:
-    QSettings m_settings;
     SoundItem *m_soundItem;
 };
 

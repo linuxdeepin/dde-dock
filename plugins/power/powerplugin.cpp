@@ -23,7 +23,6 @@
 #include "dbus/dbusaccount.h"
 
 #include <QIcon>
-#include <QSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
 
@@ -31,7 +30,6 @@ PowerPlugin::PowerPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
-      m_settings("deepin", "dde-dock-power"),
       m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
@@ -94,7 +92,7 @@ void PowerPlugin::init(PluginProxyInterface *proxyInter)
 
 void PowerPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(PLUGIN_STATE_KEY, !m_settings.value(PLUGIN_STATE_KEY, true).toBool());
+    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
     if (pluginIsDisable()) {
         m_proxyInter->itemRemoved(this, POWER_KEY);
@@ -109,7 +107,7 @@ void PowerPlugin::pluginStateSwitched()
 
 bool PowerPlugin::pluginIsDisable()
 {
-    return !m_settings.value(PLUGIN_STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
 }
 
 const QString PowerPlugin::itemCommand(const QString &itemKey)
@@ -154,22 +152,16 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
 int PowerPlugin::itemSortKey(const QString &itemKey)
 {
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
-    //if (mode == Dock::DisplayMode::Fashion) {
-        //return m_settings.value(key, 4).toInt();
-    //} else {
-        //return m_settings.value(key, 4).toInt();
-    //}
-
-    return m_settings.value(key, 4).toInt();
+    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 3 : 3).toInt();
 }
 
 void PowerPlugin::setSortKey(const QString &itemKey, const int order)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    m_settings.setValue(key, order);
+
+    m_proxyInter->saveValue(this, key, order);
 }
 
 void PowerPlugin::updateBatteryVisible()

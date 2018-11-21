@@ -25,7 +25,6 @@
 #include "pluginsiteminterface.h"
 #include "item/deviceitem.h"
 
-#include <QSettings>
 #include <NetworkWorker>
 #include <NetworkModel>
 
@@ -70,7 +69,6 @@ private:
 
     QMap<QString, DeviceItem *> m_itemsMap;
     QTimer *m_delayRefreshTimer;
-    QSettings m_settings;
 
     bool m_pluginLoaded;
 };

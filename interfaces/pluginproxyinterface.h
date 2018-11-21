@@ -66,14 +66,20 @@ public:
     ///
     /// \brief saveValue
     /// save module config to .config/deepin/dde-dock.conf
+    /// all key-values of all plugins will be save to that file
+    /// and grouped by the returned value of pluginName() function which is defined in PluginsItemInterface
+    /// \param itemInter the plugin object
+    /// \param key the key of data
+    /// \param value the data
     ///
-    virtual void saveValue(PluginsItemInterface * const itemInter, const QString &itemKey, const QVariant &value) = 0;
+    virtual void saveValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &value) = 0;
 
     ///
     /// \brief getValue
+    /// SeeAlse: saveValue
     /// return value from .config/deepin/dde-dock.conf
     ///
-    virtual const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant()) = 0;
+    virtual const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) = 0;
 };
 
 #endif // PLUGINPROXYINTERFACE_H

@@ -27,7 +27,7 @@ using namespace dde::network;
 
 #define WIRED_ITEM      "wired"
 #define WIRELESS_ITEM   "wireless"
-#define STATE_KEY       "disabled"
+#define STATE_KEY       "enabled"
 
 NetworkPlugin::NetworkPlugin(QObject *parent)
     : QObject(parent),
@@ -35,7 +35,6 @@ NetworkPlugin::NetworkPlugin(QObject *parent)
       m_networkModel(nullptr),
       m_networkWorker(nullptr),
       m_delayRefreshTimer(new QTimer),
-      m_settings("deepin", "dde-dock-network"),
       m_pluginLoaded(false)
 {
 }
@@ -87,7 +86,14 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 
 void NetworkPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(STATE_KEY, !pluginIsDisable());
+    m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
+
+    if (pluginIsDisable()) {
+        for (auto itemKey : m_itemsMap.keys()) {
+            m_proxyInter->itemRemoved(this, itemKey);
+        }
+        return;
+    }
 
     if (!m_pluginLoaded) {
         loadPlugin();
@@ -99,7 +105,7 @@ void NetworkPlugin::pluginStateSwitched()
 
 bool NetworkPlugin::pluginIsDisable()
 {
-    return m_settings.value(STATE_KEY, false).toBool();
+    return !m_proxyInter->getValue(this, STATE_KEY, true).toBool();
 }
 
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
@@ -153,20 +159,16 @@ QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 
 int NetworkPlugin::itemSortKey(const QString &itemKey)
 {
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_settings.value(key, 2).toInt();
-    } else {
-        return m_settings.value(key, 3).toInt();
-    }
+    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 2 : 2).toInt();
 }
 
 void NetworkPlugin::setSortKey(const QString &itemKey, const int order)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    m_settings.setValue(key, order);
+
+    m_proxyInter->saveValue(this, key, order);
 }
 
 void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)

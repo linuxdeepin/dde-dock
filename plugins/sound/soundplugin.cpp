@@ -26,7 +26,6 @@
 
 SoundPlugin::SoundPlugin(QObject *parent)
     : QObject(parent),
-      m_settings("deepin", "dde-dock-sound"),
       m_soundItem(nullptr)
 {
 }
@@ -48,23 +47,23 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     m_soundItem = new SoundItem;
     connect(m_soundItem, &SoundItem::requestContextMenu, [this] { m_proxyInter->requestContextMenu(this, SOUND_KEY); });
 
-    if (m_settings.value(STATE_KEY, true).toBool())
+    if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, SOUND_KEY);
 }
 
 void SoundPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
+    m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
 
-    if (m_settings.value(STATE_KEY).toBool())
-        m_proxyInter->itemAdded(this, SOUND_KEY);
-    else
+    if (pluginIsDisable())
         m_proxyInter->itemRemoved(this, SOUND_KEY);
+    else
+        m_proxyInter->itemAdded(this, SOUND_KEY);
 }
 
 bool SoundPlugin::pluginIsDisable()
 {
-    return !m_settings.value(STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, STATE_KEY, true).toBool();
 }
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
@@ -104,22 +103,14 @@ void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
 int SoundPlugin::itemSortKey(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1").arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_settings.value(key, 1).toInt();
-    } else {
-        return m_settings.value(key, 2).toInt();
-    }
+    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 1 : 1).toInt();
 }
 
 void SoundPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    Q_UNUSED(itemKey);
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
-    const QString key = QString("pos_%1").arg(displayMode());
-    m_settings.setValue(key, order);
+    m_proxyInter->saveValue(this, key, order);
 }
