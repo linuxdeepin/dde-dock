@@ -65,6 +65,7 @@ public:
 private:
     void loadIndicator();
     const QString getWindowClass(quint32 winId);
+    bool isSystemTrayItem(const QString &itemKey);
 
 private slots:
     void addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayWidget);

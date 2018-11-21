@@ -156,6 +156,11 @@ bool TrayPlugin::itemIsInContainer(const QString &itemKey)
 
 int TrayPlugin::itemSortKey(const QString &itemKey)
 {
+    // 如果是系统托盘图标则调用内部插件的相应接口
+    if (isSystemTrayItem(itemKey)) {
+        return m_systemTraysController->systemTrayItemSortKey(itemKey);
+    }
+
     Dock::DisplayMode mode = displayMode();
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
 
@@ -164,6 +169,11 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
 
 void TrayPlugin::setSortKey(const QString &itemKey, const int order)
 {
+    // 如果是系统托盘图标则调用内部插件的相应接口
+    if (isSystemTrayItem(itemKey)) {
+        return m_systemTraysController->setSystemTrayItemSortKey(itemKey, order);
+    }
+
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
     m_proxyInter->saveValue(this, key, order);
 }
@@ -199,6 +209,17 @@ const QString TrayPlugin::getWindowClass(quint32 winId)
     delete error;
 
     return ret;
+}
+
+bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
+{
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+
+    if (trayWidget && trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+        return true;
+    }
+
+    return false;
 }
 
 void TrayPlugin::sniItemsChanged()
