@@ -676,12 +676,15 @@ void MainPanel::itemDropped(QObject *destnation)
     m_itemController->setDropping(false);
 
     DockItem *src = qobject_cast<DockItem *>(sender());
-//    DockItem *dst = qobject_cast<DockItem *>(destnation);
 
     if (m_displayMode == Dock::Fashion)
         return;
 
     if (!src)
+        return;
+
+    // 忽略拖拽到了容器item上, 也就是拖拽时出现的箭头
+    if (qobject_cast<ContainerItem *>(destnation))
         return;
 
     const bool itemIsInContainer = m_itemController->itemIsInContainer(src);
