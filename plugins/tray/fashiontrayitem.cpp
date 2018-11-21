@@ -103,7 +103,8 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
     wrapper->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
 
     m_wrapperList.append(wrapper);
-    m_trayBoxLayout->addWidget(wrapper);
+    m_trayBoxLayout->insertWidget(whereToInsert(wrapper), wrapper);
+
     wrapper->setVisible(m_controlWidget->expanded());
 
     if (wrapper->attention()) {
@@ -150,8 +151,7 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
     }
 
     if (it == m_wrapperList.constEnd()) {
-        qDebug() << "can not find the tray widget in fashion tray list";
-        return;
+        qDebug() << "Error! can not find the tray widget in fashion tray list" << trayWidget;
     }
 
     requestResize();
@@ -311,6 +311,47 @@ QSize FashionTrayItem::wantedTotalSize() const
     return size;
 }
 
+int FashionTrayItem::whereToInsert(FashionTrayWidgetWrapper *wrapper) const
+{
+    int insertIndex = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    int firstSystemTrayIndex = 0;
+
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+            continue;
+        }
+        firstSystemTrayIndex = i;
+        break;
+    }
+
+    if (insertIndex < -1) {
+        insertIndex = 0;
+    }
+
+    switch (wrapper->absTrayWidget()->trayTyep()) {
+    case AbstractTrayWidget::TrayType::ApplicationTray:
+        // 应用图标的位置不允许超过第一个系统图标
+        if (insertIndex == -1 || insertIndex > firstSystemTrayIndex) {
+            insertIndex = firstSystemTrayIndex;
+        }
+        break;
+    case AbstractTrayWidget::TrayType::SystemTray:
+        if (insertIndex == -1 || insertIndex > m_wrapperList.size()) {
+            insertIndex = m_wrapperList.size();
+        } else if (insertIndex == 0) {
+            insertIndex = firstSystemTrayIndex;
+        } else {
+            insertIndex += firstSystemTrayIndex;
+        }
+        break;
+    default:
+        insertIndex = 0;
+        break;
+    }
+
+    return insertIndex;
+}
+
 void FashionTrayItem::onTrayAttentionChanged(const bool attention)
 {
     // 设置attention为false之后，启动timer，在timer处于Active状态期间不重设attention为true
@@ -390,7 +431,7 @@ void FashionTrayItem::moveInAttionTray()
     }
 
     m_mainBoxLayout->removeWidget(m_currentAttentionTray);
-    m_trayBoxLayout->addWidget(m_currentAttentionTray);
+    m_trayBoxLayout->insertWidget(whereToInsert(m_currentAttentionTray), m_currentAttentionTray);
     m_currentAttentionTray->setVisible(false);
     m_currentAttentionTray->setAttention(false);
 }
@@ -403,7 +444,7 @@ void FashionTrayItem::switchAttionTray(FashionTrayWidgetWrapper *attentionWrappe
 
     m_mainBoxLayout->replaceWidget(m_currentAttentionTray, attentionWrapper);
     m_trayBoxLayout->removeWidget(attentionWrapper);
-    m_trayBoxLayout->addWidget(m_currentAttentionTray);
+    m_trayBoxLayout->insertWidget(whereToInsert(m_currentAttentionTray), m_currentAttentionTray);
 
     attentionWrapper->setVisible(true);
     m_currentAttentionTray->setVisible(m_controlWidget->expanded());
@@ -434,7 +475,7 @@ void FashionTrayItem::refreshTraysVisible()
     if (m_currentAttentionTray) {
         if (expand) {
             m_mainBoxLayout->removeWidget(m_currentAttentionTray);
-            m_trayBoxLayout->addWidget(m_currentAttentionTray);
+            m_trayBoxLayout->insertWidget(whereToInsert(m_currentAttentionTray), m_currentAttentionTray);
         }
 
         m_currentAttentionTray = nullptr;

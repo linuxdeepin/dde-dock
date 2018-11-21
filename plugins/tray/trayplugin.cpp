@@ -161,10 +161,13 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
         return m_systemTraysController->systemTrayItemSortKey(itemKey);
     }
 
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
+    if (itemKey == FASHION_MODE_ITEM) {
+        return 1;
+    }
 
-    return m_proxyInter->getValue(this, key, mode == Dock::DisplayMode::Fashion ? 1 : 0).toInt();
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+
+    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 0 : 0).toInt();
 }
 
 void TrayPlugin::setSortKey(const QString &itemKey, const int order)
