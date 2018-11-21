@@ -33,16 +33,17 @@
 int FashionTrayItem::TrayWidgetWidth = TrayWidgetWidthMin;
 int FashionTrayItem::TrayWidgetHeight = TrayWidgetHeightMin;
 
-FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
+FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
       m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
       m_trayBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
       m_leftSpliter(new QLabel),
       m_rightSpliter(new QLabel),
-      m_controlWidget(new FashionTrayControlWidget(pos)),
-      m_currentAttentionTray(nullptr),
       m_attentionDelayTimer(new QTimer(this)),
-      m_dockPosistion(pos)
+      m_dockPosistion(trayPlugin->dockPosition()),
+      m_trayPlugin(trayPlugin),
+      m_controlWidget(new FashionTrayControlWidget(m_dockPosistion)),
+      m_currentAttentionTray(nullptr)
 {
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
@@ -74,7 +75,7 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     m_attentionDelayTimer->setInterval(3000);
     m_attentionDelayTimer->setSingleShot(true);
 
-    setDockPostion(pos);
+    setDockPostion(m_dockPosistion);
     onTrayListExpandChanged(m_controlWidget->expanded());
 
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onTrayListExpandChanged);

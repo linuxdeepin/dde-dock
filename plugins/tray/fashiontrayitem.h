@@ -23,6 +23,7 @@
 #define FASHIONTRAYITEM_H
 
 #include "constants.h"
+#include "trayplugin.h"
 #include "fashiontraywidgetwrapper.h"
 #include "fashiontraycontrolwidget.h"
 
@@ -38,7 +39,7 @@ class FashionTrayItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit FashionTrayItem(Dock::Position pos, QWidget *parent = 0);
+    explicit FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent = 0);
 
     void setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap);
     void trayWidgetAdded(const QString &itemKey, AbstractTrayWidget *trayWidget);
@@ -75,16 +76,19 @@ private Q_SLOTS:
     void refreshTraysVisible();
 
 private:
-    QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
     QBoxLayout *m_mainBoxLayout;
     QBoxLayout *m_trayBoxLayout;
     QLabel *m_leftSpliter;
     QLabel *m_rightSpliter;
-    FashionTrayControlWidget *m_controlWidget;
-    FashionTrayWidgetWrapper *m_currentAttentionTray;
     QTimer *m_attentionDelayTimer;
 
     Dock::Position m_dockPosistion;
+
+    TrayPlugin *m_trayPlugin;
+    FashionTrayControlWidget *m_controlWidget;
+    FashionTrayWidgetWrapper *m_currentAttentionTray;
+
+    QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;

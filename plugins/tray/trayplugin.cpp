@@ -40,7 +40,7 @@ TrayPlugin::TrayPlugin(QObject *parent)
       m_systemTraysController(new SystemTraysController(this)),
       m_tipsLabel(new TipsWidget)
 {
-    m_fashionItem = new FashionTrayItem(position());
+    m_fashionItem = new FashionTrayItem(this);
 
     m_tipsLabel->setObjectName("tray");
     m_tipsLabel->setText(tr("System Tray"));
@@ -173,6 +173,11 @@ void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool contain
     const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
 
     m_proxyInter->saveValue(this, widKey.isEmpty() ? itemKey : widKey, container);
+}
+
+Dock::Position TrayPlugin::dockPosition() const
+{
+    return position();
 }
 
 const QString TrayPlugin::getWindowClass(quint32 winId)
