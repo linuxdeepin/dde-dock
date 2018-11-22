@@ -46,7 +46,6 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
 
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);
-    m_centralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_centralWidget);
@@ -162,15 +161,6 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
         mouseClicked();
 }
 
-bool PluginsItem::eventFilter(QObject *o, QEvent *e)
-{
-    if (m_dragging)
-        if (o == m_centralWidget && e->type() == QEvent::Paint)
-            return true;
-
-    return DockItem::eventFilter(o, e);
-}
-
 void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
@@ -199,6 +189,7 @@ void PluginsItem::startDrag()
     const QPixmap pixmap = grab();
 
     m_dragging = true;
+    m_centralWidget->setVisible(false);
     update();
 
     QMimeData *mime = new QMimeData;
@@ -215,6 +206,7 @@ void PluginsItem::startDrag()
     emit itemDropped(drag->target());
 
     m_dragging = false;
+    m_centralWidget->setVisible(true);
     setVisible(true);
     update();
 }

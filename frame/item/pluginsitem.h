@@ -54,9 +54,6 @@ public:
 public slots:
     void refershIcon() override;
 
-protected:
-    bool eventFilter(QObject *o, QEvent *e) override;
-
 private:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
