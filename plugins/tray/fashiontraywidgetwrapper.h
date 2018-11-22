@@ -44,6 +44,9 @@ Q_SIGNALS:
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void onTrayWidgetNeedAttention();
@@ -55,6 +58,7 @@ private:
 
     bool m_attention;
     QString m_itemKey;
+    QPoint MousePressPoint;
 };
 
 #endif //FASHIONTRAYWIDGETWRAPPER_H

@@ -23,6 +23,11 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QMouseEvent>
+#include <QDrag>
+#include <QMimeData>
+
+#define TRAY_ITEM_DRAG_THRESHOLD      20
 
 FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
     : QWidget(parent),
@@ -32,7 +37,10 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
       m_itemKey(itemKey)
 
 {
+    setStyleSheet("background: transparent;");
+
     m_absTrayWidget->setVisible(true);
+    m_absTrayWidget->installEventFilter(this);
 
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
@@ -58,6 +66,8 @@ QString FashionTrayWidgetWrapper::itemKey() const
 
 void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setOpacity(0.5);
@@ -65,6 +75,50 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
     QPainterPath path;
     path.addRoundedRect(rect(), 10, 10);
     painter.fillPath(path, QColor::fromRgb(40, 40, 40));
+}
+
+bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_absTrayWidget) {
+        if (event->type() == QEvent::Type::MouseButtonPress) {
+            mousePressEvent(static_cast<QMouseEvent *>(event));
+        } else if (event->type() == QEvent::Type::MouseMove) {
+            mouseMoveEvent(static_cast<QMouseEvent *>(event));
+        }
+    }
+
+    return false;
+}
+
+void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::MouseButton::LeftButton) {
+        MousePressPoint = event->pos();
+    }
+
+    QWidget::mousePressEvent(event);
+}
+
+void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() != Qt::MouseButton::LeftButton) {
+        return QWidget::mouseMoveEvent(event);
+    }
+
+    if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
+//        return QWidget::mouseMoveEvent(event);
+    }
+
+    event->accept();
+
+    QDrag drag(this);
+    QMimeData *mimeData = new QMimeData;
+    QPixmap pixmap = grab();
+
+    drag.setMimeData(mimeData);
+    drag.setPixmap(pixmap);
+    drag.setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
+    drag.exec();
 }
 
 void FashionTrayWidgetWrapper::onTrayWidgetNeedAttention()

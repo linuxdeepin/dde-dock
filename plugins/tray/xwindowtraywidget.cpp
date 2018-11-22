@@ -82,8 +82,6 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
     connect(m_sendHoverEvent, &QTimer::timeout, this, &XWindowTrayWidget::sendHoverEvent);
 #endif
 
-    setMouseTracking(true);
-
     m_updateTimer->start();
 }
 
@@ -131,7 +129,7 @@ void XWindowTrayWidget::paintEvent(QPaintEvent *e)
 
 void XWindowTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    QWidget::mouseMoveEvent(e);
+    AbstractTrayWidget::mouseMoveEvent(e);
 
     m_sendHoverEvent->start();
 }
