@@ -594,22 +594,25 @@ void DockSettings::calculateWindowConfig()
         switch (m_position)
         {
         case Top:
-        case Bottom:
+        case Bottom: {
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
             m_mainWindowSize.setWidth(calcWidth);
             m_isMaxSize = (calcWidth == maxWidth);
             break;
-
+        }
         case Left:
-        case Right:
+        case Right: {
             m_mainWindowSize.setHeight(calcHeight);
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             m_isMaxSize = (calcHeight == maxHeight);
             break;
-
+        }
         default:
             Q_ASSERT(false);
         }
+
+        // used by FashionTrayItem of TrayPlugin
+        qApp->setProperty("DockIsMaxiedSize", m_isMaxSize);
     } else {
         Q_ASSERT(false);
     }

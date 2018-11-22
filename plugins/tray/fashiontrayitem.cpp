@@ -196,8 +196,14 @@ void FashionTrayItem::onTrayListExpandChanged(const bool expand)
     if (expand) {
         refreshTraysVisible();
     } else {
-        // hide all tray widget delay for fold animation
-        QTimer::singleShot(350, this, [=] {refreshTraysVisible();});
+        // hide all tray immediately if Dock is in maxed size
+        // the property "DockIsMaxiedSize" of qApp is set by DockSettings class
+        if (qApp->property("DockIsMaxiedSize").toBool()) {
+            refreshTraysVisible();
+        } else {
+            // hide all tray widget delay for fold animation
+            QTimer::singleShot(350, this, [=] {refreshTraysVisible();});
+        }
         requestResize();
     }
 }
