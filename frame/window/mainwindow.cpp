@@ -335,7 +335,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::autoHideChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
     connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
@@ -358,7 +358,7 @@ void MainWindow::initConnections()
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
     // to fix qt animation bug, sometimes window size not change
-    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [=](const QVariant &value) {
+    connect(m_sizeChangeAni, &QVariantAnimation::valueChanged, [=](const QVariant &value) {
         QWidget::setFixedSize(value.toSize());
     });
 
@@ -466,30 +466,7 @@ void MainWindow::updateGeometry()
         QWidget::setFixedSize(size);
     } else {
         // this->setFixedSize has been overrided for size animation
-        // 如果要增大则直接设置大小, 如果要缩小则使用重写的setFixedSize函数使用动画缩小
-        // 因为缩小时如果也直接设置大小则会无法正常显示panel的缩小动画
-        switch (position) {
-        case Dock::Position::Top:
-        case Dock::Position::Bottom: {
-            if (size.width() >= this->size().width()) {
-                QWidget::setFixedSize(size);
-            } else {
-                setFixedSize(size);
-            }
-            break;
-        }
-        case Dock::Position::Left:
-        case Dock::Position::Right: {
-            if (size.height() >= this->size().height()) {
-                QWidget::setFixedSize(size);
-            } else {
-                setFixedSize(size);
-            }
-            break;
-        }
-        default:
-            break;
-        }
+        setFixedSize(size);
     }
 
     const QRect windowRect = m_settings->windowRect(position, isHide);
