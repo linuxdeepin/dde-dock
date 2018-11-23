@@ -43,8 +43,8 @@ public:
     void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
     void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
     void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value);
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant());
+    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value);
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& failback = QVariant());
 
 public slots:
     void startLoader();

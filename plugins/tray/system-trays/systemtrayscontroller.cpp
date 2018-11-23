@@ -190,15 +190,15 @@ SystemTrayItem *SystemTraysController::pluginItemAt(PluginsItemInterface * const
     return m_pluginList[itemInter][itemKey];
 }
 
-void SystemTraysController::saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) {
+void SystemTraysController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
     m_pluginsSetting.beginGroup(itemInter->pluginName());
-    m_pluginsSetting.setValue(itemKey, value);
+    m_pluginsSetting.setValue(key, value);
     m_pluginsSetting.endGroup();
 }
 
-const QVariant SystemTraysController::getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback) {
+const QVariant SystemTraysController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
     m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value { std::move(m_pluginsSetting.value(itemKey, failback)) };
+    QVariant value { std::move(m_pluginsSetting.value(key, fallback)) };
     m_pluginsSetting.endGroup();
     return std::move(value);
 }
