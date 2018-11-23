@@ -1,3 +1,9 @@
+[3.8.0] 2018-11-23
+*   fix: some types
+*   fix: only remove batteries
+*   feat(gesture): make touch long press as right button
+*   fix(lastore): restore source no call UpdateSource
+
 [3.7.0] 2018-11-12
 *   fix(dock): dde-launcher show on dock
 
