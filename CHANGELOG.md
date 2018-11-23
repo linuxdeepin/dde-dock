@@ -1,3 +1,30 @@
+<a name="4.8.1"></a>
+## 4.8.1 (2018-11-23)
+
+
+#### Bug Fixes
+
+*   var name typo ([2304a7f5](https://github.com/linuxdeepin/dde-dock/commit/2304a7f506f619403d48d3f288314d034775145c))
+*   tray strange fold animation when dock size is maxied ([57f5e5c7](https://github.com/linuxdeepin/dde-dock/commit/57f5e5c75cbc949b09380eed1bff387584e092e5))
+*   the end value of window size animation is error ([7354cf51](https://github.com/linuxdeepin/dde-dock/commit/7354cf5166c658983d97615f02ddbc380b5aa9b0))
+*   system tray icon still be shown while dragging ([9bfb8eee](https://github.com/linuxdeepin/dde-dock/commit/9bfb8eee372811355140dc49e8be7a634d4e452b))
+*   drop to container item careless ([c61b620d](https://github.com/linuxdeepin/dde-dock/commit/c61b620debfb7fa1055eb3b58e3c9ebf803b733c))
+*   date-time plugin enable status ([2d925fe7](https://github.com/linuxdeepin/dde-dock/commit/2d925fe74ed1fb2a62b5a857a1a5c6d472320bf8))
+*   tray icon pixmap align ([d1fa5364](https://github.com/linuxdeepin/dde-dock/commit/d1fa5364065a4da924a4a2fe7346952706743162))
+*   dock resize do not in time ([efd8e01e](https://github.com/linuxdeepin/dde-dock/commit/efd8e01e6ac508167d3110fcbb393db02d31109e))
+*   invalid tray size when change display mode ([c7f953e1](https://github.com/linuxdeepin/dde-dock/commit/c7f953e121a600b24560b27718001628a34a7c69))
+*   some types ([074e0ba4](https://github.com/linuxdeepin/dde-dock/commit/074e0ba4dbc2a5c181ba2ad4a952b7dac98131cb))
+*   invalid icon size after dock size changed ([8dc212bc](https://github.com/linuxdeepin/dde-dock/commit/8dc212bc3a69913a1aa93d95b48dc8ca7e7336e4))
+*   dock crash while loading plugins ([a06b7f9d](https://github.com/linuxdeepin/dde-dock/commit/a06b7f9dcd9ffcd03122b9007208300590afbc5a))
+
+#### Features
+
+*   touchscreen support ([ca085678](https://github.com/linuxdeepin/dde-dock/commit/ca085678617a5d4319924ecd0ba88b9fe6fe99a7))
+*   optimiza size change animation of dock ([1a4652ca](https://github.com/linuxdeepin/dde-dock/commit/1a4652cab713d4824179d6d1bac0ca4c09675920))
+* **system-tray:**  add animation for system tray expand and fold ([8090ef44](https://github.com/linuxdeepin/dde-dock/commit/8090ef445ebdd3653382540cf2858704626d3322))
+
+
+
 <a name="4.8.0"></a>
 ## 4.8.0 (2018-11-13)
 
