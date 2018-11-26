@@ -35,10 +35,12 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
       m_absTrayWidget(absTrayWidget),
       m_layout(new QVBoxLayout(this)),
       m_attention(false),
+      m_dragging(false),
       m_itemKey(itemKey)
 
 {
     setStyleSheet("background: transparent;");
+    setAcceptDrops(true);
 
     m_absTrayWidget->setVisible(true);
     m_absTrayWidget->installEventFilter(this);
@@ -68,6 +70,10 @@ QString FashionTrayWidgetWrapper::itemKey() const
 void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+
+    if (m_dragging) {
+        return;
+    }
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -120,7 +126,28 @@ void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
     drag.setMimeData(mimeData);
     drag.setPixmap(pixmap);
     drag.setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
+
+    m_absTrayWidget->setVisible(false);
+    m_dragging = true;
+    Q_EMIT dragStart();
+
+    // start drag
     drag.exec();
+
+    m_absTrayWidget->setVisible(true);
+    m_dragging = false;
+    Q_EMIT dragStop();
+}
+
+void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat(TRAY_ITEM_DRAG_MIMEDATA)) {
+        event->accept();
+        Q_EMIT requestSwapWithDragging();
+        return;
+    }
+
+    QWidget::dragEnterEvent(event);
 }
 
 void FashionTrayWidgetWrapper::onTrayWidgetNeedAttention()

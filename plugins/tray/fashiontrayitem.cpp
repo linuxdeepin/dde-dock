@@ -43,7 +43,8 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
       m_dockPosistion(trayPlugin->dockPosition()),
       m_trayPlugin(trayPlugin),
       m_controlWidget(new FashionTrayControlWidget(m_dockPosistion)),
-      m_currentAttentionTray(nullptr)
+      m_currentAttentionTray(nullptr),
+      m_currentDraggingTray(nullptr)
 {
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
@@ -113,6 +114,9 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
     }
 
     connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &FashionTrayItem::onTrayAttentionChanged, static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+    connect(wrapper, &FashionTrayWidgetWrapper::dragStart, this, &FashionTrayItem::onItemDragStart, Qt::UniqueConnection);
+    connect(wrapper, &FashionTrayWidgetWrapper::dragStop, this, &FashionTrayItem::onItemDragStop, Qt::UniqueConnection);
+    connect(wrapper, &FashionTrayWidgetWrapper::requestSwapWithDragging, this, &FashionTrayItem::onItemRequestSwapWithDragging, Qt::UniqueConnection);
 
     if (trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         SystemTrayItem * sysTrayWidget = static_cast<SystemTrayItem *>(trayWidget);
@@ -563,4 +567,46 @@ void FashionTrayItem::refreshTraysVisible()
     m_attentionDelayTimer->start();
 
     requestResize();
+}
+
+void FashionTrayItem::onItemDragStart()
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    if (!wrapper) {
+        return;
+    }
+
+    m_currentDraggingTray = wrapper;
+}
+
+void FashionTrayItem::onItemDragStop()
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    if (!wrapper) {
+        return;
+    }
+
+    if (m_currentDraggingTray == wrapper) {
+        m_currentDraggingTray = nullptr;
+    }
+}
+
+void FashionTrayItem::onItemRequestSwapWithDragging()
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    if (!wrapper || !m_currentDraggingTray || wrapper == m_currentDraggingTray) {
+        return;
+    }
+
+    int indexOfDest = m_trayBoxLayout->indexOf(wrapper);
+    int indexOfDragging = m_trayBoxLayout->indexOf(m_currentDraggingTray);
+
+    m_trayBoxLayout->removeWidget(wrapper);
+    m_trayBoxLayout->insertWidget(indexOfDragging, wrapper);
+
+    m_trayBoxLayout->removeWidget(m_currentDraggingTray);
+    m_trayBoxLayout->insertWidget(indexOfDest, m_currentDraggingTray);
 }

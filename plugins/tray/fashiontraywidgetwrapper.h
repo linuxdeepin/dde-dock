@@ -41,12 +41,16 @@ public:
 
 Q_SIGNALS:
     void attentionChanged(const bool attention);
+    void dragStart();
+    void dragStop();
+    void requestSwapWithDragging();
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void onTrayWidgetNeedAttention();
@@ -57,6 +61,7 @@ private:
     QVBoxLayout *m_layout;
 
     bool m_attention;
+    bool m_dragging;
     QString m_itemKey;
     QPoint MousePressPoint;
 };

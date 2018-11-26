@@ -77,6 +77,9 @@ private Q_SLOTS:
     void expandWithAnimation();
     void foldWithAnimation();
     void refreshTraysVisible();
+    void onItemDragStart();
+    void onItemDragStop();
+    void onItemRequestSwapWithDragging();
 
 private:
     QBoxLayout *m_mainBoxLayout;
@@ -90,6 +93,7 @@ private:
     TrayPlugin *m_trayPlugin;
     FashionTrayControlWidget *m_controlWidget;
     FashionTrayWidgetWrapper *m_currentAttentionTray;
+    FashionTrayWidgetWrapper *m_currentDraggingTray;
 
     QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
 
