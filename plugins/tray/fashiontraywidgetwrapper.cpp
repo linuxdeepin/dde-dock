@@ -27,7 +27,8 @@
 #include <QDrag>
 #include <QMimeData>
 
-#define TRAY_ITEM_DRAG_THRESHOLD      20
+#define TRAY_ITEM_DRAG_THRESHOLD 20
+#define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
 
 FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
     : QWidget(parent),
@@ -105,14 +106,15 @@ void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
         return QWidget::mouseMoveEvent(event);
     }
 
-    if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
+//    if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
 //        return QWidget::mouseMoveEvent(event);
-    }
+//    }
 
     event->accept();
 
     QDrag drag(this);
     QMimeData *mimeData = new QMimeData;
+    mimeData->setData(TRAY_ITEM_DRAG_MIMEDATA, m_itemKey.toLocal8Bit());
     QPixmap pixmap = grab();
 
     drag.setMimeData(mimeData);

@@ -102,8 +102,9 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
     FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(itemKey, trayWidget);
     wrapper->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
 
-    m_wrapperList.append(wrapper);
-    m_trayBoxLayout->insertWidget(whereToInsert(wrapper), wrapper);
+    const int index = whereToInsert(wrapper);
+    m_trayBoxLayout->insertWidget(index, wrapper);
+    m_wrapperList.insert(index, wrapper);
 
     wrapper->setVisible(m_controlWidget->expanded());
 
@@ -319,40 +320,106 @@ QSize FashionTrayItem::wantedTotalSize() const
 
 int FashionTrayItem::whereToInsert(FashionTrayWidgetWrapper *wrapper) const
 {
-    int insertIndex = m_trayPlugin->itemSortKey(wrapper->itemKey());
-    int firstSystemTrayIndex = 0;
+    int index = 0;
+    switch (wrapper->absTrayWidget()->trayTyep()) {
+    case AbstractTrayWidget::TrayType::ApplicationTray:
+        index = whereToInsertAppTray(wrapper);
+        break;
+    case AbstractTrayWidget::TrayType::SystemTray:
+        index = whereToInsertSystemTray(wrapper);
+        break;
+    default:
+        Q_UNREACHABLE();
+        break;
+    }
+    return index;
+}
 
+int FashionTrayItem::whereToInsertAppTray(FashionTrayWidgetWrapper *wrapper) const
+{
+    if (m_wrapperList.isEmpty() || wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+        return 0;
+    }
+
+    int lastAppTrayIndex = -1;
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::ApplicationTray) {
+            lastAppTrayIndex = i;
+            continue;
+        }
+        break;
+    }
+    // there is no AppTray
+    if (lastAppTrayIndex == -1) {
+        return 0;
+    }
+    // the inserting tray is not a AppTray
+    if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+        return lastAppTrayIndex + 1;
+    }
+
+    int insertIndex = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    // invalid index
+    if (insertIndex < -1) {
+        return 0;
+    }
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+            insertIndex = i;
+            break;
+        }
+        if (insertIndex > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+            continue;
+        }
+        insertIndex = i;
+        break;
+    }
+    if (insertIndex > lastAppTrayIndex + 1) {
+        insertIndex = lastAppTrayIndex + 1;
+    }
+
+    return insertIndex;
+}
+
+int FashionTrayItem::whereToInsertSystemTray(FashionTrayWidgetWrapper *wrapper) const
+{
+    if (m_wrapperList.isEmpty()) {
+        return 0;
+    }
+
+    int firstSystemTrayIndex = -1;
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+            firstSystemTrayIndex = i;
+            break;
+        }
+    }
+    // there is no SystemTray
+    if (firstSystemTrayIndex == -1) {
+        return m_wrapperList.size();
+    }
+    // the inserting tray is not a SystemTray
+    if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+        return firstSystemTrayIndex;
+    }
+
+    int insertIndex = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    // invalid index
+    if (insertIndex < -1) {
+        return firstSystemTrayIndex;
+    }
     for (int i = 0; i < m_wrapperList.size(); ++i) {
         if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
             continue;
         }
-        firstSystemTrayIndex = i;
+        if (insertIndex > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+            continue;
+        }
+        insertIndex = i;
         break;
     }
-
-    if (insertIndex < -1) {
-        insertIndex = 0;
-    }
-
-    switch (wrapper->absTrayWidget()->trayTyep()) {
-    case AbstractTrayWidget::TrayType::ApplicationTray:
-        // 应用图标的位置不允许超过第一个系统图标
-        if (insertIndex == -1 || insertIndex > firstSystemTrayIndex) {
-            insertIndex = firstSystemTrayIndex;
-        }
-        break;
-    case AbstractTrayWidget::TrayType::SystemTray:
-        if (insertIndex == -1 || insertIndex > m_wrapperList.size()) {
-            insertIndex = m_wrapperList.size();
-        } else if (insertIndex == 0) {
-            insertIndex = firstSystemTrayIndex;
-        } else {
-            insertIndex += firstSystemTrayIndex;
-        }
-        break;
-    default:
-        insertIndex = 0;
-        break;
+    if (insertIndex < firstSystemTrayIndex) {
+        return firstSystemTrayIndex;
     }
 
     return insertIndex;
