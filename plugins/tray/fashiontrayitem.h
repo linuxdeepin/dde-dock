@@ -62,8 +62,11 @@ private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     QSize wantedTotalSize() const;
     int whereToInsert(FashionTrayWidgetWrapper *wrapper) const;
-    int whereToInsertAppTray(FashionTrayWidgetWrapper *wrapper) const;
-    int whereToInsertSystemTray(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    void saveCurrentOrderToConfig();
 
 private Q_SLOTS:
     void onTrayAttentionChanged(const bool attention);

@@ -61,6 +61,7 @@ public:
     void setItemIsInContainer(const QString &itemKey, const bool container) Q_DECL_OVERRIDE;
 
     Dock::Position dockPosition() const;
+    bool traysSortedInFashionMode();
 
 private:
     void loadIndicator();

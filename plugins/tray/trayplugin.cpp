@@ -33,6 +33,7 @@
 #include "xcb/xcb_icccm.h"
 
 #define FASHION_MODE_ITEM   "fashion-mode-item"
+#define FASHION_MODE_TRAYS_SORTED   "fashion-mode-trays-sorted"
 
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent),
@@ -172,6 +173,10 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
 
 void TrayPlugin::setSortKey(const QString &itemKey, const int order)
 {
+    if (displayMode() == Dock::DisplayMode::Fashion && !traysSortedInFashionMode()) {
+        m_proxyInter->saveValue(this, FASHION_MODE_TRAYS_SORTED, true);
+    }
+
     // 如果是系统托盘图标则调用内部插件的相应接口
     if (isSystemTrayItem(itemKey)) {
         return m_systemTraysController->setSystemTrayItemSortKey(itemKey, order);
@@ -191,6 +196,11 @@ void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool contain
 Dock::Position TrayPlugin::dockPosition() const
 {
     return position();
+}
+
+bool TrayPlugin::traysSortedInFashionMode()
+{
+    return m_proxyInter->getValue(this, FASHION_MODE_TRAYS_SORTED, false).toBool();
 }
 
 const QString TrayPlugin::getWindowClass(quint32 winId)
