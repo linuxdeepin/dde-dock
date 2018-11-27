@@ -112,6 +112,7 @@ type Manager struct {
 		MoveEntry                 func() `in:"index,newIndex"`
 		IsOnDock                  func() `in:"desktopFile" out:"value"`
 		QueryWindowIdentifyMethod func() `in:"win" out:"identifyMethod"`
+		GetDockedAppsDesktopFiles func() `out:"desktopFiles"`
 	}
 }
 
@@ -363,4 +364,14 @@ func (m *Manager) QueryWindowIdentifyMethod(wid uint32) (string, *dbus.Error) {
 		}
 	}
 	return "", dbusutil.ToError(fmt.Errorf("window %d not found", wid))
+}
+
+func (m *Manager) GetDockedAppsDesktopFiles() ([]string, *dbus.Error) {
+	var result []string
+	for _, entry := range m.Entries.FilterDocked() {
+		if entry.appInfo != nil {
+			result = append(result, entry.appInfo.GetFileName())
+		}
+	}
+	return result, nil
 }
