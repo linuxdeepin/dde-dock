@@ -602,10 +602,6 @@ void FashionTrayItem::onItemRequestSwapWithDragging()
     }
 
     int indexOfDest = m_trayBoxLayout->indexOf(wrapper);
-    int indexOfDragging = m_trayBoxLayout->indexOf(m_currentDraggingTray);
-
-    m_trayBoxLayout->removeWidget(wrapper);
-    m_trayBoxLayout->insertWidget(indexOfDragging, wrapper);
 
     m_trayBoxLayout->removeWidget(m_currentDraggingTray);
     m_trayBoxLayout->insertWidget(indexOfDest, m_currentDraggingTray);
