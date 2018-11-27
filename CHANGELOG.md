@@ -1,3 +1,7 @@
+[3.9.0] 2018-11-27
+*   fix(appearance): do not fallback to default icon theme
+*   feat(dock): add method GetDockedAppsDesktopFiles
+
 [3.8.0] 2018-11-23
 *   fix: some types
 *   fix: only remove batteries
