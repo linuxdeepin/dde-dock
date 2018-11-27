@@ -74,6 +74,9 @@ const (
 	gsKeyBackgroundURIs = "background-uris"
 	gsKeyOpacity        = "opacity"
 
+	defaultIconTheme      = "deepin"
+	defaultGtkTheme       = "deepin"
+	defaultCursorTheme    = "deepin"
 	defaultStandardFont   = "Noto Sans"
 	defaultMonospaceFont  = "Noto Mono"
 	defaultFontConfigFile = "/usr/share/deepin-default-settings/fontconfig.json"
@@ -314,9 +317,32 @@ func (m *Manager) init() {
 		logger.Warning("load default font config failed:", err)
 	}
 
-	m.doSetGtkTheme(m.GtkTheme.Get())
-	m.doSetIconTheme(m.IconTheme.Get())
-	m.doSetCursorTheme(m.CursorTheme.Get())
+	// set gtk theme
+	gtkThemes := subthemes.ListGtkTheme()
+	currentGtkTheme := m.GtkTheme.Get()
+	if gtkThemes.Get(currentGtkTheme) == nil {
+		m.GtkTheme.Set(defaultGtkTheme)
+		currentGtkTheme = defaultGtkTheme
+	}
+	m.doSetGtkTheme(currentGtkTheme)
+
+	// set icon theme
+	iconThemes := subthemes.ListIconTheme()
+	currentIconTheme := m.IconTheme.Get()
+	if iconThemes.Get(currentIconTheme) == nil {
+		m.IconTheme.Set(defaultIconTheme)
+		currentIconTheme = defaultIconTheme
+	}
+	m.doSetIconTheme(currentIconTheme)
+
+	// set cursor theme
+	cursorThemes := subthemes.ListCursorTheme()
+	currentCursorTheme := m.CursorTheme.Get()
+	if cursorThemes.Get(currentCursorTheme) == nil {
+		m.CursorTheme.Set(defaultCursorTheme)
+		currentCursorTheme = defaultCursorTheme
+	}
+	m.doSetCursorTheme(currentCursorTheme)
 
 	// Init theme list
 	time.AfterFunc(time.Second*10, func() {
@@ -326,9 +352,6 @@ func (m *Manager) init() {
 			m.correctFontName()
 		}
 
-		subthemes.ListGtkTheme()
-		subthemes.ListIconTheme()
-		subthemes.ListCursorTheme()
 		background.ListBackground()
 		fonts.GetFamilyTable()
 

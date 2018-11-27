@@ -58,6 +58,7 @@ func (*Daemon) Start() error {
 	service := loader.GetService()
 
 	_m = newManager(service)
+	_m.init()
 	err := service.Export(dbusPath, _m)
 	if err != nil {
 		_m.destroy()
@@ -70,8 +71,6 @@ func (*Daemon) Start() error {
 		service.StopExport(_m)
 		return err
 	}
-
-	_m.init()
 
 	go _m.listenCursorChanged()
 	go _m.handleThemeChanged()
