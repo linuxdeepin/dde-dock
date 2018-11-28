@@ -24,6 +24,7 @@ import (
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
@@ -52,14 +53,26 @@ func (m *Manager) initDbusObjects() {
 
 }
 
-func (m *Manager) initDBusDaemon() {
+var sysSigLoop *dbusutil.SignalLoop
+
+func initSysSignalLoop() {
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+	sysSigLoop.Start()
+}
+
+func initDBusDaemon() {
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		logger.Error(err)
 		return
 	}
 	dbusDaemon = dbusmgr.NewDBus(systemBus)
-	dbusDaemon.InitSignalExt(m.sysSigLoop, true)
+	dbusDaemon.InitSignalExt(sysSigLoop, true)
 }
 
 func destroyDBusDaemon() {

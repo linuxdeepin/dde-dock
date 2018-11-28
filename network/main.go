@@ -58,6 +58,7 @@ func (d *Daemon) Start() error {
 	initSlices() // initialize slice code
 	service := loader.GetService()
 
+	initSysSignalLoop()
 	manager = NewManager(service)
 	manager.init()
 
@@ -90,7 +91,7 @@ func (d *Daemon) Start() error {
 	}
 
 	go func() {
-		manager.initDBusDaemon()
+		initDBusDaemon()
 		watchNetworkManagerRestart(manager)
 	}()
 	return nil
@@ -110,7 +111,7 @@ func (d *Daemon) Stop() error {
 
 	manager.destroy()
 	destroyDBusDaemon()
-	manager.sysSigLoop.Stop()
+	sysSigLoop.Stop()
 	service.StopExport(manager)
 
 	if manager.proxyChainsManager != nil {

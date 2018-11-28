@@ -172,8 +172,7 @@ func (m *Manager) init() {
 		return
 	}
 
-	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
-	m.sysSigLoop.Start()
+	m.sysSigLoop = sysSigLoop
 	m.initDbusObjects()
 
 	disableNotify()
