@@ -55,6 +55,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    void handleMouseMove(QMouseEvent *event);
     void onTrayWidgetNeedAttention();
     void onTrayWidgetClicked();
 

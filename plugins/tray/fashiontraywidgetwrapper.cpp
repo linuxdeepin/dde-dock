@@ -89,8 +89,7 @@ bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::Type::MouseButtonPress) {
             mousePressEvent(static_cast<QMouseEvent *>(event));
         } else if (event->type() == QEvent::Type::MouseMove) {
-            mouseMoveEvent(static_cast<QMouseEvent *>(event));
-            return false;
+            handleMouseMove(static_cast<QMouseEvent *>(event));
         }
     }
 
@@ -107,6 +106,22 @@ void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)
 }
 
 void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
+{
+    return QWidget::mouseMoveEvent(event);
+}
+
+void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat(TRAY_ITEM_DRAG_MIMEDATA)) {
+        event->accept();
+        Q_EMIT requestSwapWithDragging();
+        return;
+    }
+
+    QWidget::dragEnterEvent(event);
+}
+
+void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
 {
     if (event->buttons() != Qt::MouseButton::LeftButton) {
         return QWidget::mouseMoveEvent(event);
@@ -137,17 +152,6 @@ void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
     m_absTrayWidget->setVisible(true);
     m_dragging = false;
     Q_EMIT dragStop();
-}
-
-void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->mimeData()->hasFormat(TRAY_ITEM_DRAG_MIMEDATA)) {
-        event->accept();
-        Q_EMIT requestSwapWithDragging();
-        return;
-    }
-
-    QWidget::dragEnterEvent(event);
 }
 
 void FashionTrayWidgetWrapper::onTrayWidgetNeedAttention()
