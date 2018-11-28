@@ -46,6 +46,9 @@ public:
     void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value);
     const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& failback = QVariant());
 
+    int systemTrayItemSortKey(const QString &itemKey);
+    void setSystemTrayItemSortKey(const QString &itemKey, const int order);
+
 public slots:
     void startLoader();
 
@@ -63,10 +66,12 @@ private slots:
 private:
     bool eventFilter(QObject *o, QEvent *e);
     SystemTrayItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
+    PluginsItemInterface *pluginInterAt(const QString &itemKey) const;
+    PluginsItemInterface *pluginInterAt(SystemTrayItem *systemTrayItem) const;
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
-    QMap<PluginsItemInterface *, QMap<QString, SystemTrayItem *>> m_pluginList;
+    QMap<PluginsItemInterface *, QMap<QString, SystemTrayItem *>> m_pluginsMap;
 
     QSettings m_pluginsSetting;
 };

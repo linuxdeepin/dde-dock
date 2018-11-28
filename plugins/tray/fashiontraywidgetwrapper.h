@@ -27,24 +27,35 @@
 #include <QWidget>
 #include <QVBoxLayout>
 
+#define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
+
 class FashionTrayWidgetWrapper : public QWidget
 {
     Q_OBJECT
 public:
-    FashionTrayWidgetWrapper(AbstractTrayWidget *absTrayWidget, QWidget *parent = nullptr);
+    FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent = nullptr);
 
     AbstractTrayWidget *absTrayWidget() const;
+    QString itemKey() const;
 
     bool attention() const;
     void setAttention(bool attention);
 
 Q_SIGNALS:
     void attentionChanged(const bool attention);
+    void dragStart();
+    void dragStop();
+    void requestSwapWithDragging();
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    void handleMouseMove(QMouseEvent *event);
     void onTrayWidgetNeedAttention();
     void onTrayWidgetClicked();
 
@@ -53,6 +64,9 @@ private:
     QVBoxLayout *m_layout;
 
     bool m_attention;
+    bool m_dragging;
+    QString m_itemKey;
+    QPoint MousePressPoint;
 };
 
 #endif //FASHIONTRAYWIDGETWRAPPER_H

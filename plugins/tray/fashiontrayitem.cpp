@@ -33,17 +33,21 @@
 int FashionTrayItem::TrayWidgetWidth = TrayWidgetWidthMin;
 int FashionTrayItem::TrayWidgetHeight = TrayWidgetHeightMin;
 
-FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
+FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
       m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
       m_trayBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
       m_leftSpliter(new QLabel),
       m_rightSpliter(new QLabel),
-      m_controlWidget(new FashionTrayControlWidget(pos)),
-      m_currentAttentionTray(nullptr),
       m_attentionDelayTimer(new QTimer(this)),
-      m_dockPosistion(pos)
+      m_dockPosistion(trayPlugin->dockPosition()),
+      m_trayPlugin(trayPlugin),
+      m_controlWidget(new FashionTrayControlWidget(m_dockPosistion)),
+      m_currentAttentionTray(nullptr),
+      m_currentDraggingTray(nullptr)
 {
+    setAcceptDrops(true);
+
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
 
@@ -74,32 +78,37 @@ FashionTrayItem::FashionTrayItem(Dock::Position pos, QWidget *parent)
     m_attentionDelayTimer->setInterval(3000);
     m_attentionDelayTimer->setSingleShot(true);
 
-    setDockPostion(pos);
+    setDockPostion(m_dockPosistion);
     onTrayListExpandChanged(m_controlWidget->expanded());
 
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onTrayListExpandChanged);
 }
 
-void FashionTrayItem::setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList)
+void FashionTrayItem::setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap)
 {
     clearTrayWidgets();
 
-    for (auto widget : trayWidgetList) {
-        trayWidgetAdded(widget);
+    for (auto it = itemTrayMap.constBegin(); it != itemTrayMap.constEnd(); ++it) {
+        trayWidgetAdded(it.key(), it.value());
     }
 }
 
-void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
+void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget *trayWidget)
 {
-    if (m_trayWidgetWrapperMap.keys().contains(trayWidget)) {
-        return;
+    for (auto w : m_wrapperList) {
+        if (w->absTrayWidget() == trayWidget) {
+            qDebug() << "Reject! want to isert duplicate trayWidget:" << itemKey << trayWidget;
+            return;
+        }
     }
 
-    FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(trayWidget);
+    FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(itemKey, trayWidget);
     wrapper->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
 
-    m_trayWidgetWrapperMap.insert(trayWidget, wrapper);
-    m_trayBoxLayout->addWidget(wrapper);
+    const int index = whereToInsert(wrapper);
+    m_trayBoxLayout->insertWidget(index, wrapper);
+    m_wrapperList.insert(index, wrapper);
+
     wrapper->setVisible(m_controlWidget->expanded());
 
     if (wrapper->attention()) {
@@ -107,6 +116,9 @@ void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
     }
 
     connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &FashionTrayItem::onTrayAttentionChanged, static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+    connect(wrapper, &FashionTrayWidgetWrapper::dragStart, this, &FashionTrayItem::onItemDragStart, Qt::UniqueConnection);
+    connect(wrapper, &FashionTrayWidgetWrapper::dragStop, this, &FashionTrayItem::onItemDragStop, Qt::UniqueConnection);
+    connect(wrapper, &FashionTrayWidgetWrapper::requestSwapWithDragging, this, &FashionTrayItem::onItemRequestSwapWithDragging, Qt::UniqueConnection);
 
     if (trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         SystemTrayItem * sysTrayWidget = static_cast<SystemTrayItem *>(trayWidget);
@@ -119,13 +131,13 @@ void FashionTrayItem::trayWidgetAdded(AbstractTrayWidget *trayWidget)
 
 void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 {
-    auto it = m_trayWidgetWrapperMap.constBegin();
+    bool founded = false;
 
-    for (; it != m_trayWidgetWrapperMap.constEnd(); ++it) {
+    for (auto wrapper : m_wrapperList) {
         // found the removed tray
-        if (it.key() == trayWidget) {
+        if (wrapper->absTrayWidget() == trayWidget) {
             // the removed tray is a attention tray
-            if (m_currentAttentionTray == it.value()) {
+            if (m_currentAttentionTray == wrapper) {
                 if (m_controlWidget->expanded()) {
                     m_trayBoxLayout->removeWidget(m_currentAttentionTray);
                 } else {
@@ -133,21 +145,20 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
                 }
                 m_currentAttentionTray = nullptr;
             } else {
-                m_trayBoxLayout->removeWidget(it.value());
+                m_trayBoxLayout->removeWidget(wrapper);
             }
             // do not delete real tray object, just delete it's wrapper object
             // the real tray object should be deleted in TrayPlugin class
             trayWidget->setParent(nullptr);
-            it.value()->deleteLater();
-            m_trayWidgetWrapperMap.remove(it.key());
+            wrapper->deleteLater();
+            m_wrapperList.removeAll(wrapper);
+            founded = true;
             break;
         }
     }
 
-    if (it == m_trayWidgetWrapperMap.constEnd()) {
-        qDebug() << "can not find the tray widget in fashion tray list";
-        Q_UNREACHABLE();
-        return;
+    if (!founded) {
+        qDebug() << "Error! can not find the tray widget in fashion tray list" << trayWidget;
     }
 
     requestResize();
@@ -155,13 +166,13 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 
 void FashionTrayItem::clearTrayWidgets()
 {
-    QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> mMap = m_trayWidgetWrapperMap;
+    QList<QPointer<FashionTrayWidgetWrapper>> mList = m_wrapperList;
 
-    for (auto it = mMap.begin(); it != mMap.end(); ++it) {
-        trayWidgetRemoved(it.key());
+    for (auto wrapper : mList) {
+        trayWidgetRemoved(wrapper->absTrayWidget());
     }
 
-    m_trayWidgetWrapperMap.clear();
+    m_wrapperList.clear();
 
     requestResize();
 }
@@ -224,7 +235,7 @@ void FashionTrayItem::setSuggestIconSize(QSize size)
 
     m_controlWidget->setFixedSize(newSize);
 
-    for (auto wrapper : m_trayWidgetWrapperMap.values()) {
+    for (auto wrapper : m_wrapperList) {
         wrapper->setFixedSize(newSize);
     }
 
@@ -269,6 +280,18 @@ void FashionTrayItem::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
+void FashionTrayItem::dragEnterEvent(QDragEnterEvent *event)
+{
+    // accept but do not handle the trays drag event
+    // in order to avoid the for forbidden label displayed on the mouse
+    if (event->mimeData()->hasFormat(TRAY_ITEM_DRAG_MIMEDATA)) {
+        event->accept();
+        return;
+    }
+
+    QWidget::dragEnterEvent(event);
+}
+
 QSize FashionTrayItem::sizeHint() const
 {
     return wantedTotalSize();
@@ -280,19 +303,19 @@ QSize FashionTrayItem::wantedTotalSize() const
 
     if (m_controlWidget->expanded()) {
         if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
-            size.setWidth(m_trayWidgetWrapperMap.size() * TrayWidgetWidth // 所有插件
+            size.setWidth(m_wrapperList.size() * TrayWidgetWidth // 所有插件
                           + TrayWidgetWidth // 控制按钮
                           + SpliterSize * 2 // 两个分隔条
                           + 3 * TraySpace // MainBoxLayout所有space
-                          + (m_trayWidgetWrapperMap.size() - 1) * TraySpace); // TrayBoxLayout所有space
+                          + (m_wrapperList.size() - 1) * TraySpace); // TrayBoxLayout所有space
             size.setHeight(height());
         } else {
             size.setWidth(width());
-            size.setHeight(m_trayWidgetWrapperMap.size() * TrayWidgetHeight // 所有插件
+            size.setHeight(m_wrapperList.size() * TrayWidgetHeight // 所有插件
                           + TrayWidgetHeight // 控制按钮
                           + SpliterSize * 2 // 两个分隔条
                           + 3 * TraySpace // MainBoxLayout所有space
-                          + (m_trayWidgetWrapperMap.size() - 1) * TraySpace); // TrayBoxLayout所有space
+                          + (m_wrapperList.size() - 1) * TraySpace); // TrayBoxLayout所有space
         }
     } else {
         if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
@@ -311,6 +334,162 @@ QSize FashionTrayItem::wantedTotalSize() const
     }
 
     return size;
+}
+
+int FashionTrayItem::whereToInsert(FashionTrayWidgetWrapper *wrapper) const
+{
+    // 如果已经对图标进行过排序则完全按照从配置文件中获取的顺序来插入图标
+    if (m_trayPlugin->traysSortedInFashionMode()) {
+        return whereToInsertBySortKey(wrapper);
+    }
+
+    // 如果没有对图标进行过排序则使用下面的默认排序算法:
+    // 所有应用图标在系统图标的左侧
+    // 新的应用图标在最左侧的应用图标处插入
+    // 新的系统图标在最左侧的系统图标处插入
+    return whereToInsertByDefault(wrapper);
+}
+
+int FashionTrayItem::whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) const
+{
+    if (m_wrapperList.isEmpty()) {
+        return 0;
+    }
+
+    const int destSortKey = m_trayPlugin->itemSortKey(wrapper->itemKey());
+
+    if (destSortKey < -1) {
+        return 0;
+    }
+    if (destSortKey == -1) {
+        return m_wrapperList.size();
+    }
+
+    // 当目标插入位置为列表的大小时将从最后面追加到列表中
+    int destIndex = m_wrapperList.size();
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (destSortKey > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+            continue;
+        }
+        destIndex = i;
+        break;
+    }
+
+    return destIndex;
+}
+
+int FashionTrayItem::whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const
+{
+    int index = 0;
+    switch (wrapper->absTrayWidget()->trayTyep()) {
+    case AbstractTrayWidget::TrayType::ApplicationTray:
+        index = whereToInsertAppTrayByDefault(wrapper);
+        break;
+    case AbstractTrayWidget::TrayType::SystemTray:
+        index = whereToInsertSystemTrayByDefault(wrapper);
+        break;
+    default:
+        Q_UNREACHABLE();
+        break;
+    }
+    return index;
+}
+
+int FashionTrayItem::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const
+{
+    if (m_wrapperList.isEmpty() || wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+        return 0;
+    }
+
+    int lastAppTrayIndex = -1;
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::ApplicationTray) {
+            lastAppTrayIndex = i;
+            continue;
+        }
+        break;
+    }
+    // there is no AppTray
+    if (lastAppTrayIndex == -1) {
+        return 0;
+    }
+    // the inserting tray is not a AppTray
+    if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+        return lastAppTrayIndex + 1;
+    }
+
+    int insertIndex = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    // invalid index
+    if (insertIndex < -1) {
+        return 0;
+    }
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+            insertIndex = i;
+            break;
+        }
+        if (insertIndex > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+            continue;
+        }
+        insertIndex = i;
+        break;
+    }
+    if (insertIndex > lastAppTrayIndex + 1) {
+        insertIndex = lastAppTrayIndex + 1;
+    }
+
+    return insertIndex;
+}
+
+int FashionTrayItem::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const
+{
+    if (m_wrapperList.isEmpty()) {
+        return 0;
+    }
+
+    int firstSystemTrayIndex = -1;
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+            firstSystemTrayIndex = i;
+            break;
+        }
+    }
+    // there is no SystemTray
+    if (firstSystemTrayIndex == -1) {
+        return m_wrapperList.size();
+    }
+    // the inserting tray is not a SystemTray
+    if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+        return firstSystemTrayIndex;
+    }
+
+    int insertIndex = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    // invalid index
+    if (insertIndex < -1) {
+        return firstSystemTrayIndex;
+    }
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+            continue;
+        }
+        if (insertIndex > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+            continue;
+        }
+        insertIndex = i;
+        break;
+    }
+    if (insertIndex < firstSystemTrayIndex) {
+        return firstSystemTrayIndex;
+    }
+
+    return insertIndex;
+}
+
+void FashionTrayItem::saveCurrentOrderToConfig()
+{
+    for (int i = 0; i < m_wrapperList.size(); ++i) {
+        m_trayPlugin->setSortKey(m_wrapperList.at(i)->itemKey(), i + 1);
+    }
 }
 
 void FashionTrayItem::onTrayAttentionChanged(const bool attention)
@@ -392,7 +571,7 @@ void FashionTrayItem::moveInAttionTray()
     }
 
     m_mainBoxLayout->removeWidget(m_currentAttentionTray);
-    m_trayBoxLayout->addWidget(m_currentAttentionTray);
+    m_trayBoxLayout->insertWidget(whereToInsert(m_currentAttentionTray), m_currentAttentionTray);
     m_currentAttentionTray->setVisible(false);
     m_currentAttentionTray->setAttention(false);
 }
@@ -405,7 +584,7 @@ void FashionTrayItem::switchAttionTray(FashionTrayWidgetWrapper *attentionWrappe
 
     m_mainBoxLayout->replaceWidget(m_currentAttentionTray, attentionWrapper);
     m_trayBoxLayout->removeWidget(attentionWrapper);
-    m_trayBoxLayout->addWidget(m_currentAttentionTray);
+    m_trayBoxLayout->insertWidget(whereToInsert(m_currentAttentionTray), m_currentAttentionTray);
 
     attentionWrapper->setVisible(true);
     m_currentAttentionTray->setVisible(m_controlWidget->expanded());
@@ -436,19 +615,64 @@ void FashionTrayItem::refreshTraysVisible()
     if (m_currentAttentionTray) {
         if (expand) {
             m_mainBoxLayout->removeWidget(m_currentAttentionTray);
-            m_trayBoxLayout->addWidget(m_currentAttentionTray);
+            m_trayBoxLayout->insertWidget(whereToInsert(m_currentAttentionTray), m_currentAttentionTray);
         }
 
         m_currentAttentionTray = nullptr;
     }
 
-    for (auto i = m_trayWidgetWrapperMap.begin(); i != m_trayWidgetWrapperMap.end(); ++i) {
-        i.value()->setVisible(expand);
+    for (auto wrapper : m_wrapperList) {
+        wrapper->setVisible(expand);
         // reset all tray item attention state
-        i.value()->setAttention(false);
+        wrapper->setAttention(false);
     }
 
     m_attentionDelayTimer->start();
 
     requestResize();
+}
+
+void FashionTrayItem::onItemDragStart()
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    if (!wrapper) {
+        return;
+    }
+
+    m_currentDraggingTray = wrapper;
+}
+
+void FashionTrayItem::onItemDragStop()
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    if (!wrapper) {
+        return;
+    }
+
+    if (m_currentDraggingTray == wrapper) {
+        m_currentDraggingTray = nullptr;
+    } else {
+        Q_UNREACHABLE();
+    }
+
+    saveCurrentOrderToConfig();
+}
+
+void FashionTrayItem::onItemRequestSwapWithDragging()
+{
+    FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
+
+    if (!wrapper || !m_currentDraggingTray || wrapper == m_currentDraggingTray) {
+        return;
+    }
+
+    const int indexOfDest = m_trayBoxLayout->indexOf(wrapper);
+    const int indexOfDragging = m_trayBoxLayout->indexOf(m_currentDraggingTray);
+
+    m_trayBoxLayout->removeWidget(m_currentDraggingTray);
+    m_trayBoxLayout->insertWidget(indexOfDest, m_currentDraggingTray);
+
+    m_wrapperList.insert(indexOfDest, m_wrapperList.takeAt(indexOfDragging));
 }

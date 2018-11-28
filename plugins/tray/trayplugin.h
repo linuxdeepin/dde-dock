@@ -60,9 +60,13 @@ public:
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void setItemIsInContainer(const QString &itemKey, const bool container) Q_DECL_OVERRIDE;
 
+    Dock::Position dockPosition() const;
+    bool traysSortedInFashionMode();
+
 private:
     void loadIndicator();
     const QString getWindowClass(quint32 winId);
+    bool isSystemTrayItem(const QString &itemKey);
 
 private slots:
     void addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayWidget);

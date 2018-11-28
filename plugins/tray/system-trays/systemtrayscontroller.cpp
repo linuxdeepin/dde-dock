@@ -39,15 +39,15 @@ SystemTraysController::SystemTraysController(QObject *parent)
 void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // check if same item added
-    if (m_pluginList.contains(itemInter))
-        if (m_pluginList[itemInter].contains(itemKey))
+    if (m_pluginsMap.contains(itemInter))
+        if (m_pluginsMap[itemInter].contains(itemKey))
             return;
 
     SystemTrayItem *item = new SystemTrayItem(itemInter, itemKey);
 
     item->setVisible(false);
 
-    m_pluginList[itemInter][itemKey] = item;
+    m_pluginsMap[itemInter][itemKey] = item;
 
     emit systemTrayAdded(itemKey, item);
 }
@@ -74,7 +74,7 @@ void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, 
 
     emit systemTrayRemoved(itemKey);
 
-    m_pluginList[itemInter].remove(itemKey);
+    m_pluginsMap[itemInter].remove(itemKey);
 
     // do not delete the itemWidget object(specified in the plugin interface)
     item->centralWidget()->setParent(nullptr);
@@ -104,7 +104,7 @@ void SystemTraysController::startLoader()
 void SystemTraysController::displayModeChanged()
 {
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const auto inters = m_pluginList.keys();
+    const auto inters = m_pluginsMap.keys();
 
     for (auto inter : inters)
         inter->displayModeChanged(displayMode);
@@ -113,7 +113,7 @@ void SystemTraysController::displayModeChanged()
 void SystemTraysController::positionChanged()
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    const auto inters = m_pluginList.keys();
+    const auto inters = m_pluginsMap.keys();
 
     for (auto inter : inters)
         inter->positionChanged(position);
@@ -138,7 +138,7 @@ void SystemTraysController::loadPlugin(const QString &pluginFile)
         return;
     }
 
-    m_pluginList.insert(interface, QMap<QString, SystemTrayItem *>());
+    m_pluginsMap.insert(interface, QMap<QString, SystemTrayItem *>());
 
     QString dbusService = meta.value("depends-daemon-dbus-service").toString();
     if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
@@ -184,10 +184,36 @@ bool SystemTraysController::eventFilter(QObject *o, QEvent *e)
 
 SystemTrayItem *SystemTraysController::pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const
 {
-    if (!m_pluginList.contains(itemInter))
+    if (!m_pluginsMap.contains(itemInter))
         return nullptr;
 
-    return m_pluginList[itemInter][itemKey];
+    return m_pluginsMap[itemInter][itemKey];
+}
+
+PluginsItemInterface *SystemTraysController::pluginInterAt(const QString &itemKey) const
+{
+    for (auto it = m_pluginsMap.constBegin(); it != m_pluginsMap.constEnd(); ++it) {
+        for (auto key : it.value().keys()) {
+            if (key == itemKey) {
+                return it.key();
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+PluginsItemInterface *SystemTraysController::pluginInterAt(SystemTrayItem *systemTrayItem) const
+{
+    for (auto it = m_pluginsMap.constBegin(); it != m_pluginsMap.constEnd(); ++it) {
+        for (auto item : it.value().values()) {
+            if (item == systemTrayItem) {
+                return it.key();
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 void SystemTraysController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
@@ -201,4 +227,26 @@ const QVariant SystemTraysController::getValue(PluginsItemInterface *const itemI
     QVariant value { std::move(m_pluginsSetting.value(key, fallback)) };
     m_pluginsSetting.endGroup();
     return std::move(value);
+}
+
+int SystemTraysController::systemTrayItemSortKey(const QString &itemKey)
+{
+    auto inter = pluginInterAt(itemKey);
+
+    if (!inter) {
+        return -1;
+    }
+
+    return inter->itemSortKey(itemKey);
+}
+
+void SystemTraysController::setSystemTrayItemSortKey(const QString &itemKey, const int order)
+{
+    auto inter = pluginInterAt(itemKey);
+
+    if (!inter) {
+        return;
+    }
+
+    inter->setSortKey(itemKey, order);
 }

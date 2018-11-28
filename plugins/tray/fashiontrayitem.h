@@ -23,6 +23,7 @@
 #define FASHIONTRAYITEM_H
 
 #include "constants.h"
+#include "trayplugin.h"
 #include "fashiontraywidgetwrapper.h"
 #include "fashiontraycontrolwidget.h"
 
@@ -38,10 +39,10 @@ class FashionTrayItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit FashionTrayItem(Dock::Position pos, QWidget *parent = 0);
+    explicit FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent = 0);
 
-    void setTrayWidgets(const QList<AbstractTrayWidget *> &trayWidgetList);
-    void trayWidgetAdded(AbstractTrayWidget *trayWidget);
+    void setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap);
+    void trayWidgetAdded(const QString &itemKey, AbstractTrayWidget *trayWidget);
     void trayWidgetRemoved(AbstractTrayWidget *trayWidget);
     void clearTrayWidgets();
 
@@ -56,10 +57,17 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     QSize wantedTotalSize() const;
+    int whereToInsert(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    int whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    void saveCurrentOrderToConfig();
 
 private Q_SLOTS:
     void onTrayAttentionChanged(const bool attention);
@@ -73,18 +81,25 @@ private Q_SLOTS:
     void expandWithAnimation();
     void foldWithAnimation();
     void refreshTraysVisible();
+    void onItemDragStart();
+    void onItemDragStop();
+    void onItemRequestSwapWithDragging();
 
 private:
-    QMap<AbstractTrayWidget *, FashionTrayWidgetWrapper *> m_trayWidgetWrapperMap;
     QBoxLayout *m_mainBoxLayout;
     QBoxLayout *m_trayBoxLayout;
     QLabel *m_leftSpliter;
     QLabel *m_rightSpliter;
-    FashionTrayControlWidget *m_controlWidget;
-    FashionTrayWidgetWrapper *m_currentAttentionTray;
     QTimer *m_attentionDelayTimer;
 
     Dock::Position m_dockPosistion;
+
+    TrayPlugin *m_trayPlugin;
+    FashionTrayControlWidget *m_controlWidget;
+    FashionTrayWidgetWrapper *m_currentAttentionTray;
+    FashionTrayWidgetWrapper *m_currentDraggingTray;
+
+    QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;

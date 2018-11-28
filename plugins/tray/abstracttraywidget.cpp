@@ -28,7 +28,6 @@
 AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
-
 }
 
 AbstractTrayWidget::~AbstractTrayWidget()
@@ -38,6 +37,8 @@ AbstractTrayWidget::~AbstractTrayWidget()
 
 void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
 {
+    // do not call Parent::mousePressEvent or the DockItem will catch this event
+    // and show dock-context-menu immediately when right button of mouse is pressed
     event->accept();
 }
 
