@@ -28,7 +28,6 @@
 #include <QMimeData>
 
 #define TRAY_ITEM_DRAG_THRESHOLD 20
-#define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
 
 FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
     : QWidget(parent),
@@ -91,6 +90,7 @@ bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
             mousePressEvent(static_cast<QMouseEvent *>(event));
         } else if (event->type() == QEvent::Type::MouseMove) {
             mouseMoveEvent(static_cast<QMouseEvent *>(event));
+            return false;
         }
     }
 

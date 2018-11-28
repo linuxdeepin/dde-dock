@@ -27,6 +27,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 
+#define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
+
 class FashionTrayWidgetWrapper : public QWidget
 {
     Q_OBJECT

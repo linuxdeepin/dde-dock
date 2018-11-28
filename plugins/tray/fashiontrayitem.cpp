@@ -46,6 +46,8 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
       m_currentAttentionTray(nullptr),
       m_currentDraggingTray(nullptr)
 {
+    setAcceptDrops(true);
+
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
 
@@ -276,6 +278,18 @@ void FashionTrayItem::resizeEvent(QResizeEvent *event)
     }
 
     QWidget::resizeEvent(event);
+}
+
+void FashionTrayItem::dragEnterEvent(QDragEnterEvent *event)
+{
+    // accept but do not handle the trays drag event
+    // in order to avoid the for forbidden label displayed on the mouse
+    if (event->mimeData()->hasFormat(TRAY_ITEM_DRAG_MIMEDATA)) {
+        event->accept();
+        return;
+    }
+
+    QWidget::dragEnterEvent(event);
 }
 
 QSize FashionTrayItem::sizeHint() const
