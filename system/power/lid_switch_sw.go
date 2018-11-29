@@ -33,18 +33,14 @@ const (
 
 const swLidStateFile = "/sys/bus/platform/devices/liddev/lid_state"
 
-func (m *Manager) initLidSwitchSW() {
+func isSWLidStateFileExist() bool {
 	_, err := os.Stat(swLidStateFile)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			logger.Warning(err)
-			return
-		}
-		// else err is Not Exist Error, ignore it
-	} else {
-		m.HasLidSwitch = true
-		go m.swLidSwitchCheckLoop()
-	}
+	return err == nil
+}
+
+func (m *Manager) initLidSwitchSW() {
+	m.HasLidSwitch = true
+	go m.swLidSwitchCheckLoop()
 }
 
 func (m *Manager) swLidSwitchCheckLoop() {

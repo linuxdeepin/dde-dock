@@ -24,7 +24,7 @@ import (
 )
 
 func (m *Manager) initLidSwitch() {
-	if arch.Get() == arch.Sunway {
+	if arch.Get() == arch.Sunway && isSWLidStateFileExist() {
 		m.initLidSwitchSW()
 	} else {
 		m.initLidSwitchCommon()
