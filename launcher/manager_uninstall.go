@@ -79,6 +79,12 @@ func isWineApp(appInfo *desktopappinfo.DesktopAppInfo) bool {
 		strings.Contains(appInfo.GetCommandline(), "env WINEPREFIX=")
 }
 
+func isCrossOver(appInfo *desktopappinfo.DesktopAppInfo) bool {
+	execBase := filepath.Base(appInfo.GetExecutable())
+	return strings.Contains(appInfo.GetId(), "CrossOver") &&
+		(execBase == "crossover" || execBase == "cxuninstall")
+}
+
 func (m *Manager) uninstallDeepinWineApp(item *Item) error {
 	logger.Debug("uninstallDeepinWineApp", item.Path)
 	cmd := exec.Command("/opt/deepinwine/tools/uninstall.sh", item.Path)
@@ -220,6 +226,12 @@ func (m *Manager) uninstall(id string) error {
 	if isChromeShortcut(item) {
 		logger.Debug("item is chrome shortcut")
 		return m.uninstallDesktopFile(item)
+	}
+
+	// uninstall CrossOver
+	if isCrossOver(appInfo) {
+		logger.Debug("item is CrossOver")
+		return m.uninstallSystemPackage(item.Name, "crossover")
 	}
 
 	// uninstall wine app
