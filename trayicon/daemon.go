@@ -22,12 +22,16 @@ package trayicon
 import (
 	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
 type Daemon struct {
 	*loader.ModuleBase
 	manager *TrayManager
+	snw     *StatusNotifierWatcher
+	sigLoop *dbusutil.SignalLoop // session bus signal loop
 }
 
 const moduleName = "trayicon"
@@ -58,7 +62,22 @@ func (d *Daemon) Start() error {
 	service := loader.GetService()
 	d.manager = NewTrayManager(service)
 
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		return err
+	}
+
+	d.sigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	d.sigLoop.Start()
+	d.snw = newStatusNotifierWatcher(service, d.sigLoop)
+	d.snw.listenDBusNameOwnerChanged()
+
 	err = service.Export(dbusPath, d.manager)
+	if err != nil {
+		return err
+	}
+
+	err = service.Export(snwDBusPath, d.snw)
 	if err != nil {
 		return err
 	}
@@ -70,6 +89,12 @@ func (d *Daemon) Start() error {
 		return err
 	}
 	service.Emit(d.manager, "Inited")
+
+	err = service.RequestName(snwDBusServiceName)
+	if err != nil {
+		logger.Warning("failed to request name:", err)
+		return nil
+	}
 
 	return nil
 }

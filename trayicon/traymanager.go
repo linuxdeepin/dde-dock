@@ -37,7 +37,7 @@ const (
 	OpcodeSystemTrayCancelMessage
 )
 
-//go:generate dbusutil-gen -type TrayManager traymanager.go
+//go:generate dbusutil-gen -type TrayManager,StatusNotifierWatcher traymanager.go status-notifier-watcher.go
 
 // TrayManager为系统托盘的管理器。
 type TrayManager struct {
