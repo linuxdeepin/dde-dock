@@ -264,6 +264,8 @@ func (sa *SecretAgent) askPasswords(connPath dbus.ObjectPath,
 	connectionData map[string]map[string]dbus.Variant,
 	connUUID, settingName string, settingKeys []string) (map[string]string, error) {
 
+	logger.Debugf("askPasswords settingName: %v, settingKeys: %v",
+		settingName, settingKeys)
 	connId, _ := getConnectionDataString(connectionData, "connection", "id")
 
 	connType, _ := getConnectionDataString(connectionData, "connection", "type")
@@ -363,9 +365,22 @@ func isMustAsk(data connectionData, settingName, secretKey string) bool {
 		}
 
 	case nm.NM_SETTING_802_1X_SETTING_NAME:
-		if mgmt == "wpa-eap" && secretKey == "password" {
-			return true
+		eap := getSetting8021xEap(data)
+		var eap0 string
+		if len(eap) >= 1 {
+			eap0 = eap[0]
 		}
+		switch eap0 {
+		case "md5", "fast", "ttls", "peap", "leap":
+			if secretKey == "password" {
+				return true
+			}
+		case "tls":
+			if secretKey == "private-key-password" {
+				return true
+			}
+		}
+
 	}
 
 	return false
