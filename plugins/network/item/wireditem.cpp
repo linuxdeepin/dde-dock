@@ -154,7 +154,6 @@ void WiredItem::reloadIcon()
         default:;
         }
     } else {
-        // TODO: change icon
         iconName.append("disabled");
     }
 
@@ -163,7 +162,7 @@ void WiredItem::reloadIcon()
     }
 
     if (m_device->obtainIpFailed()) {
-        // TODO: change icon
+        iconName = "network-warning";
     }
 
     m_delayTimer->stop();

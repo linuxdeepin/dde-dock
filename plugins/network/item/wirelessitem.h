@@ -74,14 +74,17 @@ private slots:
     void init();
     void adjustHeight();
     void refreshIcon();
+    void refreshTips();
+    void deviceStateChanged();
+    void onRefreshTimeout();
 
 private:
     QHash<QString, QPixmap> m_icons;
     bool m_reloadIcon;
 
-    QTimer *m_refershTimer;
+    QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
-    TipsWidget *m_wirelessPopup;
+    TipsWidget *m_wirelessTips;
     WirelessList *m_APList;
 };
 
