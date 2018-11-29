@@ -50,6 +50,7 @@ private slots:
     void refreshIcon() override;
     void reloadIcon();
     void deviceStateChanged();
+    void refreshTips();
 
 private:
     QPixmap m_icon;

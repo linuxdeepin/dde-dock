@@ -54,6 +54,8 @@ public:
     int itemSortKey(const QString &itemKey);
     void setSortKey(const QString &itemKey, const int order);
 
+    static bool isConnectivity();
+
 private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
     void refreshWiredItemVisible();

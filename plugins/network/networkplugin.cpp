@@ -171,6 +171,11 @@ void NetworkPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
+bool NetworkPlugin::isConnectivity()
+{
+    return NetworkModel::connectivity() == Connectivity::Full;
+}
+
 void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 {
     QList<QString> mPaths = m_itemsMap.keys();
@@ -224,6 +229,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 
             connect(item, &DeviceItem::requestContextMenu, this, &NetworkPlugin::contextMenuRequested);
             connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
+            connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshIcon);
         }
     }
 

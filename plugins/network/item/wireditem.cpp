@@ -22,6 +22,7 @@
 
 #include "constants.h"
 #include "wireditem.h"
+#include "networkplugin.h"
 #include "../util/imageutil.h"
 #include "../widgets/tipswidget.h"
 
@@ -38,37 +39,23 @@ WiredItem::WiredItem(WiredDevice *device)
       m_itemTips(new TipsWidget(this)),
       m_delayTimer(new QTimer(this))
 {
-//    QIcon::setThemeName("deepin");
-
-    m_delayTimer->setSingleShot(false);
+    m_delayTimer->setSingleShot(true);
     m_delayTimer->setInterval(200);
 
     m_itemTips->setObjectName("wired-" + m_device->path());
     m_itemTips->setVisible(false);
+    m_itemTips->setText(tr("Unknown"));
 
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
+
+    QMetaObject::invokeMethod(this, &WiredItem::refreshTips, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &WiredItem::refreshIcon, Qt::QueuedConnection);
 }
 
 QWidget *WiredItem::itemTips()
 {
-    m_itemTips->setText(tr("Unknown"));
-
-    do {
-        if (m_device->status() != NetworkDevice::Activated)
-        {
-            m_itemTips->setText(tr("No Network"));
-            break;
-        }
-
-        const QJsonObject info = static_cast<WiredDevice *>(m_device)->activeConnection();
-        if (!info.contains("Ip4"))
-            break;
-        const QJsonObject ipv4 = info.value("Ip4").toObject();
-        if (!ipv4.contains("Address"))
-            break;
-        m_itemTips->setText(tr("Wired connection: %1").arg(ipv4.value("Address").toString()));
-    } while (false);
+    refreshTips();
 
     return m_itemTips;
 }
@@ -116,6 +103,8 @@ void WiredItem::mousePressEvent(QMouseEvent *e)
 void WiredItem::refreshIcon()
 {
     m_delayTimer->start();
+
+    refreshTips();
 }
 
 void WiredItem::reloadIcon()
@@ -127,14 +116,25 @@ void WiredItem::reloadIcon()
 
     QString iconName = "network-";
     NetworkDevice::DeviceStatus devState = m_device->status();
-    if (devState != NetworkDevice::Activated)
-    {
-        if (devState < NetworkDevice::Disconnected)
+
+    if (m_device->enabled()) {
+        switch (devState) {
+        case NetworkDevice::DeviceStatus::Unknow:
+        case NetworkDevice::DeviceStatus::Unmanaged:
+        case NetworkDevice::DeviceStatus::Unavailable: {
             iconName.append("error");
-        else
-            iconName.append("offline");
-    } else {
-        if (devState >= NetworkDevice::Prepare && devState <= NetworkDevice::Secondaries) {
+            break;
+        }
+        case NetworkDevice::DeviceStatus::Disconnected: {
+            iconName.append("none");
+            break;
+        }
+        case NetworkDevice::DeviceStatus::Prepare:
+        case NetworkDevice::DeviceStatus::Config:
+        case NetworkDevice::DeviceStatus::NeedAuth:
+        case NetworkDevice::DeviceStatus::IpConfig:
+        case NetworkDevice::DeviceStatus::IpCheck:
+        case NetworkDevice::DeviceStatus::Secondaries: {
             m_delayTimer->start();
             const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
             const int num = (index % 5) + 1;
@@ -142,11 +142,28 @@ void WiredItem::reloadIcon()
             update();
             return;
         }
-
-        if (devState == NetworkDevice::Activated)
+        case NetworkDevice::DeviceStatus::Activated: {
             iconName.append("online");
-        else
-            iconName.append("idle");
+            break;
+        }
+        case NetworkDevice::DeviceStatus::Deactivation:
+        case NetworkDevice::DeviceStatus::Failed: {
+            iconName.append("none");
+            break;
+        }
+        default:;
+        }
+    } else {
+        // TODO: change icon
+        iconName.append("disabled");
+    }
+
+    if (devState == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) {
+        iconName = "network-offline";
+    }
+
+    if (m_device->obtainIpFailed()) {
+        // TODO: change icon
     }
 
     m_delayTimer->stop();
@@ -163,5 +180,27 @@ void WiredItem::reloadIcon()
 
 void WiredItem::deviceStateChanged()
 {
+    refreshTips();
+
     m_delayTimer->start();
+}
+
+void WiredItem::refreshTips()
+{
+    m_itemTips->setText(m_device->statusStringDetail());
+
+    if (NetworkPlugin::isConnectivity()) {
+        do {
+            if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
+                break;
+            }
+            const QJsonObject info = static_cast<WiredDevice *>(m_device)->activeConnection();
+            if (!info.contains("Ip4"))
+                break;
+            const QJsonObject ipv4 = info.value("Ip4").toObject();
+            if (!ipv4.contains("Address"))
+                break;
+            m_itemTips->setText(tr("Wired connection: %1").arg(ipv4.value("Address").toString()));
+        } while (false);
+    }
 }
