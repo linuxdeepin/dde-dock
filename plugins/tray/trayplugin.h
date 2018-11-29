@@ -24,12 +24,12 @@
 #define TRAYPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "sni/statusnotifierwatcher.h"
 #include "dbus/dbustraymanager.h"
 #include "xwindowtraywidget.h"
 #include "indicatortray.h"
 #include "indicatortraywidget.h"
 #include "system-trays/systemtrayscontroller.h"
+#include "dbus/sni/statusnotifierwatcher_interface.h"
 
 #include <QSettings>
 #include <QLabel>
@@ -79,15 +79,18 @@ private slots:
     void trayChanged(quint32 winId);
     void sniItemIconChanged();
     void switchToMode(const Dock::DisplayMode mode);
+    void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
 
 private:
     DBusTrayManager *m_trayInter;
-    StatusNotifierWatcher *m_sniWatcher;
+    org::kde::StatusNotifierWatcher *m_sniWatcher;
     FashionTrayItem *m_fashionItem;
     SystemTraysController *m_systemTraysController;
+    QDBusConnectionInterface *m_dbusDaemonInterface;
 
     QMap<QString, AbstractTrayWidget *> m_trayMap;
     QMap<QString, IndicatorTray*> m_indicatorMap;
+    QString m_sniHostService;
 
     TipsWidget *m_tipsLabel;
 };

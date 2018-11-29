@@ -35,10 +35,16 @@
 #define FASHION_MODE_ITEM   "fashion-mode-item"
 #define FASHION_MODE_TRAYS_SORTED   "fashion-mode-trays-sorted"
 
+#define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
+#define SNI_WATCHER_PATH "/StatusNotifierWatcher"
+
+using org::kde::StatusNotifierWatcher;
+
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
       m_systemTraysController(new SystemTraysController(this)),
+      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
       m_tipsLabel(new TipsWidget)
 {
     m_fashionItem = new FashionTrayItem(this);
@@ -70,12 +76,20 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
-    m_sniWatcher = new StatusNotifierWatcher(this);
+    // registor dock as SNI Host on dbus
     QDBusConnection dbusConn = QDBusConnection::sessionBus();
-    const QString &host = QString("org.kde.StatusNotifierHost-") + QString::number(qApp->applicationPid());
-    dbusConn.registerService(host);
+    m_sniHostService = QString("org.kde.StatusNotifierHost-") + QString::number(qApp->applicationPid());
+    dbusConn.registerService(m_sniHostService);
     dbusConn.registerObject("/StatusNotifierHost", this);
-    m_sniWatcher->RegisterStatusNotifierHost(host);
+
+    m_sniWatcher = new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this);
+    if (m_sniWatcher->isValid()) {
+        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
+    } else {
+        qDebug() << "Tray:" << SNI_WATCHER_SERVICE << "SNI watcher daemon is not exist for now!";
+    }
+
+    connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &TrayPlugin::onDbusNameOwnerChanged);
 
     connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, &TrayPlugin::sniItemsChanged);
     connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, &TrayPlugin::sniItemsChanged);
@@ -248,7 +262,7 @@ bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
 
 void TrayPlugin::sniItemsChanged()
 {
-    const QStringList &itemServicePaths = m_sniWatcher->RegisteredStatusNotifierItems();
+    const QStringList &itemServicePaths = m_sniWatcher->registeredStatusNotifierItems();
     QStringList sinTrayKeyList;
 
     for (auto item : itemServicePaths) {
@@ -400,6 +414,16 @@ void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
         for (auto itemKey : m_trayMap.keys()) {
             m_proxyInter->itemAdded(this, itemKey);
         }
+    }
+}
+
+void TrayPlugin::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
+{
+    Q_UNUSED(oldOwner);
+
+    if (name == SNI_WATCHER_SERVICE && !newOwner.isEmpty()) {
+        qDebug() << "Tray:" << SNI_WATCHER_SERVICE << "SNI watcher daemon started, register dock to watcher as SNI Host";
+        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
     }
 }
 
