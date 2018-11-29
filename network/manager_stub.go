@@ -74,6 +74,11 @@ func (m *Manager) updatePropState() {
 	m.service.EmitPropertyChanged(m, "State", m.State)
 }
 
+func (m *Manager) updatePropConnectivity() {
+	m.Connectivity, _ = nmManager.Connectivity().Get(0)
+	m.service.EmitPropertyChanged(m, "Connectivity", m.Connectivity)
+}
+
 func (m *Manager) updatePropDevices() {
 	filteredDevices := make(map[string][]*device)
 	for key, devices := range m.devices {

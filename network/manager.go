@@ -49,7 +49,8 @@ type Manager struct {
 
 	PropsMu sync.RWMutex
 	// update by manager.go
-	State uint32 // global networking state
+	State        uint32 // global networking state
+	Connectivity uint32
 
 	NetworkingEnabled bool `prop:"access:rw"` // airplane mode for NetworkManager
 	VpnEnabled        bool `prop:"access:rw"`
@@ -223,6 +224,12 @@ func (m *Manager) init() {
 		m.updatePropState()
 	})
 	m.updatePropState()
+
+	// update property Connectivity
+	nmManager.Connectivity().ConnectChanged(func(hasValue bool, value uint32) {
+		m.updatePropConnectivity()
+	})
+	m.updatePropConnectivity()
 
 	// TODO: notifications issue when resume from suspend
 
