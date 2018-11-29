@@ -144,6 +144,13 @@ void XWindowTrayWidget::configContainerPosition()
     xcb_configure_window(c, m_containerWid,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          containerVals);
+
+
+    // move the actual tray window to {0,0}, because tray icons from some wine
+    // applications (QQ, TIM, etc...) may somehow moved to very long distance positions.
+    const uint32_t trayVals[2] = { 0, 0 };
+    xcb_configure_window(c, m_windowId, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y, trayVals);
+
     xcb_flush(c);
 }
 
