@@ -149,7 +149,7 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    if (checkAndResetTapHoldGestureState()) {
+    if (checkAndResetTapHoldGestureState()&& e->source() == Qt::MouseEventSynthesizedByQt) {
         qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
         return;
     }
