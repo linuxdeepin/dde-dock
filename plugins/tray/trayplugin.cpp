@@ -203,6 +203,17 @@ bool TrayPlugin::traysSortedInFashionMode()
     return m_proxyInter->getValue(this, FASHION_MODE_TRAYS_SORTED, false).toBool();
 }
 
+void TrayPlugin::saveValue(const QString &key, const QVariant &value)
+{
+    m_proxyInter->saveValue(this, key, value);
+}
+
+const QVariant TrayPlugin::getValue(const QString &key, const QVariant &fallback)
+{
+//    return m_proxyInter->getValue(this, key, fallback);
+    return true;
+}
+
 const QString TrayPlugin::getWindowClass(quint32 winId)
 {
     auto *connection = QX11Info::connection();

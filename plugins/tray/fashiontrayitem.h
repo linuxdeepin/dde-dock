@@ -58,9 +58,10 @@ protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 private:
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    void init();
     QSize wantedTotalSize() const;
     int whereToInsert(FashionTrayWidgetWrapper *wrapper) const;
     int whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) const;

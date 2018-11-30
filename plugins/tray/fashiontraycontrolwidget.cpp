@@ -31,9 +31,8 @@ DWIDGET_USE_NAMESPACE
 
 FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWidget *parent)
     : QWidget(parent),
-      m_settings(new QSettings("deepin", "dde-dock-tray")),
       m_dockPosition(position),
-      m_expanded(m_settings->value(ExpandedKey, true).toBool()),
+      m_expanded(true),
       m_hover(false),
       m_pressed(false)
 {
@@ -60,8 +59,6 @@ void FashionTrayControlWidget::setExpanded(const bool &expanded)
 
     m_expanded = expanded;
     refreshArrowPixmap();
-
-    m_settings->setValue(ExpandedKey, m_expanded);
 
     Q_EMIT expandChanged(m_expanded);
 }

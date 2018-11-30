@@ -30,6 +30,8 @@
 #define TrayWidgetWidthMin 24
 #define TrayWidgetHeightMin 24
 
+#define ExpandedKey "fashion-tray-expanded"
+
 int FashionTrayItem::TrayWidgetWidth = TrayWidgetWidthMin;
 int FashionTrayItem::TrayWidgetHeight = TrayWidgetHeightMin;
 
@@ -78,10 +80,10 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     m_attentionDelayTimer->setInterval(3000);
     m_attentionDelayTimer->setSingleShot(true);
 
-    setDockPostion(m_dockPosistion);
-    onTrayListExpandChanged(m_controlWidget->expanded());
-
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onTrayListExpandChanged);
+
+    // do not call init immediately the TrayPlugin has not be constructed for now
+    QMetaObject::invokeMethod(this, &FashionTrayItem::init, Qt::QueuedConnection);
 }
 
 void FashionTrayItem::setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap)
@@ -197,6 +199,8 @@ void FashionTrayItem::setDockPostion(Dock::Position pos)
 
 void FashionTrayItem::onTrayListExpandChanged(const bool expand)
 {
+    m_trayPlugin->saveValue(ExpandedKey, expand);
+
     if (!isVisible())
         return;
 
@@ -295,6 +299,14 @@ void FashionTrayItem::dragEnterEvent(QDragEnterEvent *event)
 QSize FashionTrayItem::sizeHint() const
 {
     return wantedTotalSize();
+}
+
+void FashionTrayItem::init()
+{
+    qDebug() << "init Fashion mode tray plugin item";
+    m_controlWidget->setExpanded(m_trayPlugin->getValue(ExpandedKey, true).toBool());
+    setDockPostion(m_dockPosistion);
+    onTrayListExpandChanged(m_controlWidget->expanded());
 }
 
 QSize FashionTrayItem::wantedTotalSize() const

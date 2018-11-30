@@ -25,7 +25,6 @@
 #include "constants.h"
 
 #include <QLabel>
-#include <QSettings>
 
 class FashionTrayControlWidget : public QWidget
 {
@@ -53,7 +52,6 @@ private:
     void refreshArrowPixmap();
 
 private:
-    QSettings *m_settings;
     QPixmap m_arrowPix;
 
     Dock::Position m_dockPosition;
