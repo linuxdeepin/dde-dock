@@ -1,3 +1,9 @@
+[3.10.0] 2018-11-30
+*   fix(launcher): failed to uninstall CrossOver
+*   feat(network): add property Connectivity
+*   chore(default-terminal): pass command line options directly
+*   fix(network): failed to watch network manager restart
+
 [3.9.0] 2018-11-27
 *   fix(appearance): do not fallback to default icon theme
 *   feat(dock): add method GetDockedAppsDesktopFiles
