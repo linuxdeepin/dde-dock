@@ -289,6 +289,11 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MiddleButton) {
         m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
+
+        // play launch effect
+        if (m_windowInfos.isEmpty())
+            playSwingEffect();
+
     } else if (e->button() == Qt::LeftButton) {
         if (checkAndResetTapHoldGestureState()) {
             qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
