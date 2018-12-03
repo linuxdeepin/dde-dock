@@ -1,3 +1,36 @@
+<a name="4.8.2"></a>
+## 4.8.2 (2018-12-03)
+
+
+#### Features
+
+*   more detail network status ([a84ef9d4](https://github.com/linuxdeepin/dde-dock/commit/a84ef9d4a8614938d3bc0f4bc96f39d674fa7b49))
+*   save sort order to config and optimize sort algorithm ([805b5b56](https://github.com/linuxdeepin/dde-dock/commit/805b5b56e06f7431bfaefca4c55ff063502fadc7))
+*   support drag and swap position ([b928e6fb](https://github.com/linuxdeepin/dde-dock/commit/b928e6fb4d919deba64086f384057ab932255ba1))
+*   support drag fashion tray icon ([12434288](https://github.com/linuxdeepin/dde-dock/commit/124342881786a789f2e86bba5ea2393538958fb6))
+*   fashion trays default sort order ([0f7a583d](https://github.com/linuxdeepin/dde-dock/commit/0f7a583d081f1f2c8a98ce9825e267ad9fce164f))
+*   support item sort key interface of TrayPlugin inner plugin ([2ebef72a](https://github.com/linuxdeepin/dde-dock/commit/2ebef72a1845da199927a5cf84fbc1cbcde2faef))
+
+#### Bug Fixes
+
+*   remove unimplemented slots ([a244ea56](https://github.com/linuxdeepin/dde-dock/commit/a244ea567a7a9d60a75c0102c5541e3e7a15664d))
+*   save fashion tray item  expand config in public config file ([a6e2546e](https://github.com/linuxdeepin/dde-dock/commit/a6e2546efcd2d55d67960e7413852e02cd5b29c3))
+*   click item is ignored ([5e9886fa](https://github.com/linuxdeepin/dde-dock/commit/5e9886fa97ab413d32b22f47134029fbe492f9c8))
+*   play swing effect when open app with mouse middle button ([fd3f5025](https://github.com/linuxdeepin/dde-dock/commit/fd3f502529a6f6bba14daa9bd9357fa04df44a6a))
+*   connect to signal failed ([1dba9484](https://github.com/linuxdeepin/dde-dock/commit/1dba9484f2e64300874565d915f9242e30662bfa))
+*   click on trays of wine app ([10da46b6](https://github.com/linuxdeepin/dde-dock/commit/10da46b64b07c7aacf22bab1daf93f0028a8df39))
+*   handle tray mouseMoveEvent ([e025070a](https://github.com/linuxdeepin/dde-dock/commit/e025070ac557bacdf8c38471ead9b94c16787c0d))
+*   forbidden lable when darg tray and move in fashion tray ([77f75382](https://github.com/linuxdeepin/dde-dock/commit/77f75382fdd0aa2958169c4fbb7139017749f7c8))
+*   method of drag and swap item ([72a3d2d5](https://github.com/linuxdeepin/dde-dock/commit/72a3d2d52321f7987b81271cb5276ac0ef0e0ed5))
+*   find the dest insert index ([83673322](https://github.com/linuxdeepin/dde-dock/commit/83673322caaa9f48b2e7cef43d1a89772e71313e))
+*   tray strange fold animation when dock size is maxied ([7c76f8bf](https://github.com/linuxdeepin/dde-dock/commit/7c76f8bf4c580efab23d10eae79089d49eadc19e))
+*   the end value of window size animation is error ([93601e9a](https://github.com/linuxdeepin/dde-dock/commit/93601e9aeb7e6a0f788acbc9058d74fc3b6267f2))
+*   system tray icon still be shown while dragging ([7833bc93](https://github.com/linuxdeepin/dde-dock/commit/7833bc9344550a618872418d343927f8564c3b6c))
+*   found removed fashion tray failed ([1272d9f9](https://github.com/linuxdeepin/dde-dock/commit/1272d9f9223663c0ddc80b5baf25adaacdd610e7))
+*   crash after remove tray item from fashion tray ([6e883538](https://github.com/linuxdeepin/dde-dock/commit/6e883538091e39522a27e8ddc38f3c16205bd5c9))
+
+
+
 <a name="4.8.1"></a>
 ## 4.8.1 (2018-11-23)
 
