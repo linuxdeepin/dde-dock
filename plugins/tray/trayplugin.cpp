@@ -246,6 +246,19 @@ bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
     return false;
 }
 
+QString TrayPlugin::itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget)
+{
+    QString itemKey;
+
+    if (displayMode() == Dock::DisplayMode::Fashion) {
+        itemKey = FASHION_MODE_ITEM;
+    } else {
+        itemKey = m_trayMap.key(trayWidget);
+    }
+
+    return itemKey;
+}
+
 void TrayPlugin::sniItemsChanged()
 {
     const QStringList &itemServicePaths = m_sniWatcher->RegisteredStatusNotifierItems();
@@ -288,6 +301,15 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
     if (!trayWidget) {
         return;
     }
+
+    connect(trayWidget, &AbstractTrayWidget::requestWindowAutoHide, this, [=](const bool autoHide) {
+        const QString &key = displayMode() == Dock::DisplayMode::Fashion ? FASHION_MODE_ITEM : itemKey;
+        m_proxyInter->requestWindowAutoHide(this, key, autoHide);
+    }, Qt::UniqueConnection);
+    connect(trayWidget, &AbstractTrayWidget::requestRefershWindowVisible, this, [=] {
+        const QString &key = displayMode() == Dock::DisplayMode::Fashion ? FASHION_MODE_ITEM : itemKey;
+        m_proxyInter->requestRefershWindowVisible(this, key);
+    }, Qt::UniqueConnection);
 
     if (!m_trayMap.values().contains(trayWidget)) {
         m_trayMap.insert(itemKey, trayWidget);
@@ -401,6 +423,28 @@ void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
             m_proxyInter->itemAdded(this, itemKey);
         }
     }
+}
+
+void TrayPlugin::onRequestWindowAutoHide(const bool autoHide)
+{
+    const QString &itemKey = itemKeyOfTrayWidget(static_cast<AbstractTrayWidget *>(sender()));
+
+    if (itemKey.isEmpty()) {
+        return;
+    }
+
+    m_proxyInter->requestWindowAutoHide(this, itemKey, autoHide);
+}
+
+void TrayPlugin::onRequestRefershWindowVisible()
+{
+    const QString &itemKey = itemKeyOfTrayWidget(static_cast<AbstractTrayWidget *>(sender()));
+
+    if (itemKey.isEmpty()) {
+        return;
+    }
+
+    m_proxyInter->requestRefershWindowVisible(this, itemKey);
 }
 
 void TrayPlugin::loadIndicator()

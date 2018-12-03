@@ -69,6 +69,7 @@ private:
     void loadIndicator();
     const QString getWindowClass(quint32 winId);
     bool isSystemTrayItem(const QString &itemKey);
+    QString itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget);
 
 private slots:
     void addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayWidget);
@@ -79,6 +80,8 @@ private slots:
     void trayChanged(quint32 winId);
     void sniItemIconChanged();
     void switchToMode(const Dock::DisplayMode mode);
+    void onRequestWindowAutoHide(const bool autoHide);
+    void onRequestRefershWindowVisible();
 
 private:
     DBusTrayManager *m_trayInter;

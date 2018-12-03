@@ -77,8 +77,6 @@ private Q_SLOTS:
     void moveOutAttionTray();
     void moveInAttionTray();
     void switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper);
-    void requestWindowAutoHide(const bool autoHide);
-    void requestRefershWindowVisible();
     void refreshTraysVisible();
     void onItemDragStart();
     void onItemDragStop();

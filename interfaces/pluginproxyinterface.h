@@ -63,6 +63,9 @@ public:
     ///
     virtual void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
 
+    virtual void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) = 0;
+    virtual void requestRefershWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
+
     ///
     /// \brief saveValue
     /// save module config to .config/deepin/dde-dock.conf

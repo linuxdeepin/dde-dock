@@ -122,12 +122,6 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
     connect(wrapper, &FashionTrayWidgetWrapper::dragStop, this, &FashionTrayItem::onItemDragStop, Qt::UniqueConnection);
     connect(wrapper, &FashionTrayWidgetWrapper::requestSwapWithDragging, this, &FashionTrayItem::onItemRequestSwapWithDragging, Qt::UniqueConnection);
 
-    if (trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
-        SystemTrayItem * sysTrayWidget = static_cast<SystemTrayItem *>(trayWidget);
-        connect(sysTrayWidget, &SystemTrayItem::requestWindowAutoHide, this, &FashionTrayItem::requestWindowAutoHide, Qt::UniqueConnection);
-        connect(sysTrayWidget, &SystemTrayItem::requestRefershWindowVisible, this, &FashionTrayItem::requestRefershWindowVisible, Qt::UniqueConnection);
-    }
-
     requestResize();
 }
 
@@ -602,22 +596,6 @@ void FashionTrayItem::switchAttionTray(FashionTrayWidgetWrapper *attentionWrappe
     m_currentAttentionTray->setVisible(m_controlWidget->expanded());
 
     m_currentAttentionTray = attentionWrapper;
-}
-
-void FashionTrayItem::requestWindowAutoHide(const bool autoHide)
-{
-    // reset property "RequestWindowAutoHide" to EMIT the signal of DockItem
-    // TODO: 考虑新增插件接口
-
-    setProperty("RequestWindowAutoHide", autoHide);
-}
-
-void FashionTrayItem::requestRefershWindowVisible()
-{
-    // reset property "RequestRefershWindowVisible" to EMIT the signal of DockItem
-    // TODO: 考虑新增插件接口
-
-    setProperty("RequestRefershWindowVisible", !property("RequestRefershWindowVisible").toBool());
 }
 
 void FashionTrayItem::refreshTraysVisible()
