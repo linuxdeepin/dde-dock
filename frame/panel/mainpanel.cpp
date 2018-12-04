@@ -337,7 +337,7 @@ void MainPanel::manageItem(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted, Qt::UniqueConnection);
     connect(item, &DockItem::itemDropped, this, &MainPanel::itemDropped, Qt::UniqueConnection);
-    connect(item, &DockItem::requestRefershWindowVisible, this, &MainPanel::requestRefershWindowVisible, Qt::UniqueConnection);
+    connect(item, &DockItem::requestRefreshWindowVisible, this, &MainPanel::requestRefershWindowVisible, Qt::UniqueConnection);
     connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide, Qt::UniqueConnection);
 }
 

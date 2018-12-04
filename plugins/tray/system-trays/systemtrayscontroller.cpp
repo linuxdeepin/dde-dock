@@ -99,7 +99,7 @@ void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const i
     Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
-void SystemTraysController::requestRefershWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+void SystemTraysController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
     Q_ASSERT(item);

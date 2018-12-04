@@ -44,7 +44,7 @@ public:
     void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
     void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey);
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
-    void requestRefershWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value);
     const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& failback = QVariant());
 

@@ -239,7 +239,7 @@ void DockItem::showContextMenu()
 
 void DockItem::onContextMenuAccepted()
 {
-    emit requestRefershWindowVisible();
+    emit requestRefreshWindowVisible();
     emit requestWindowAutoHide(true);
 }
 

@@ -110,12 +110,12 @@ void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const i
     Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
-void DockPluginsController::requestRefershWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     PluginsItem *item = pluginItemAt(itemInter, itemKey);
     Q_ASSERT(item);
 
-    Q_EMIT item->requestRefershWindowVisible();
+    Q_EMIT item->requestRefreshWindowVisible();
 }
 
 void DockPluginsController::startLoader()

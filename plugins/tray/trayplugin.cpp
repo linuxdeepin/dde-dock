@@ -302,15 +302,6 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         return;
     }
 
-    connect(trayWidget, &AbstractTrayWidget::requestWindowAutoHide, this, [=](const bool autoHide) {
-        const QString &key = displayMode() == Dock::DisplayMode::Fashion ? FASHION_MODE_ITEM : itemKey;
-        m_proxyInter->requestWindowAutoHide(this, key, autoHide);
-    }, Qt::UniqueConnection);
-    connect(trayWidget, &AbstractTrayWidget::requestRefershWindowVisible, this, [=] {
-        const QString &key = displayMode() == Dock::DisplayMode::Fashion ? FASHION_MODE_ITEM : itemKey;
-        m_proxyInter->requestRefershWindowVisible(this, key);
-    }, Qt::UniqueConnection);
-
     if (!m_trayMap.values().contains(trayWidget)) {
         m_trayMap.insert(itemKey, trayWidget);
     }
@@ -321,6 +312,9 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
         m_fashionItem->trayWidgetAdded(itemKey, trayWidget);
     }
+
+    connect(trayWidget, &AbstractTrayWidget::requestWindowAutoHide, this, &TrayPlugin::onRequestWindowAutoHide, Qt::UniqueConnection);
+    connect(trayWidget, &AbstractTrayWidget::requestRefershWindowVisible, this, &TrayPlugin::onRequestRefershWindowVisible, Qt::UniqueConnection);
 }
 
 void TrayPlugin::trayAdded(const QString &itemKey)
@@ -444,7 +438,7 @@ void TrayPlugin::onRequestRefershWindowVisible()
         return;
     }
 
-    m_proxyInter->requestRefershWindowVisible(this, itemKey);
+    m_proxyInter->requestRefreshWindowVisible(this, itemKey);
 }
 
 void TrayPlugin::loadIndicator()
