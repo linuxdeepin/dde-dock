@@ -1,3 +1,13 @@
+<a name="4.8.2.2"></a>
+## 4.8.2.2 (2018-12-04)
+
+
+#### Features
+
+*   cherry-pick "561ed99 feat: more detail network status" ([c079511c](https://github.com/linuxdeepin/dde-dock/commit/c079511c6947ee9b1d00177b572720501cf43abf))
+
+
+
 <a name="4.8.2.1"></a>
 ## 4.8.2.1 (2018-12-04)
 
