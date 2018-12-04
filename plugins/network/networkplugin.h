@@ -41,7 +41,7 @@ public:
     const QString pluginDisplayName() const;
     void init(PluginProxyInterface *proxyInter);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
-    void refershIcon(const QString &itemKey);
+    void refreshIcon(const QString &itemKey);
     void pluginStateSwitched();
     bool pluginIsAllowDisable() { return true; }
     bool pluginIsDisable();

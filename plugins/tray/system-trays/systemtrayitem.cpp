@@ -90,7 +90,7 @@ void SystemTrayItem::setActive(const bool active)
 
 void SystemTrayItem::updateIcon()
 {
-    m_pluginInter->refershIcon(m_itemKey);
+    m_pluginInter->refreshIcon(m_itemKey);
 }
 
 const QImage SystemTrayItem::trayImage()

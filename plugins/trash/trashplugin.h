@@ -50,7 +50,7 @@ public:
     QWidget *itemPopupApplet(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
     const QString itemContextMenu(const QString &itemKey);
-    void refershIcon(const QString &itemKey);
+    void refreshIcon(const QString &itemKey);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
 
     int itemSortKey(const QString &itemKey) override;
