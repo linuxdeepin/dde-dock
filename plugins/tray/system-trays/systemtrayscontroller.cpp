@@ -26,7 +26,7 @@
 #include <QDebug>
 #include <QDir>
 
-#define API_VERSION "1.0"
+#define API_VERSION "1.1"
 
 SystemTraysController::SystemTraysController(QObject *parent)
     : QObject(parent)

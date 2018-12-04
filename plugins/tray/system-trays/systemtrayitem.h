@@ -54,10 +54,6 @@ public:
     QWidget *centralWidget() const;
     void detachPluginWidget();
 
-//Q_SIGNALS:
-//    void requestWindowAutoHide(const bool autoHide) const;
-//    void requestRefershWindowVisible() const;
-
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
