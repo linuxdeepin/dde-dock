@@ -111,7 +111,7 @@ QSize PluginsItem::sizeHint() const
 
 void PluginsItem::refershIcon()
 {
-    m_pluginInter->refershIcon(m_itemKey);
+    m_pluginInter->refreshIcon(m_itemKey);
 }
 
 QWidget *PluginsItem::centralWidget() const

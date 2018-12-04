@@ -75,7 +75,7 @@ void NetworkPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNREACHABLE();
 }
 
-void NetworkPlugin::refershIcon(const QString &itemKey)
+void NetworkPlugin::refreshIcon(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
