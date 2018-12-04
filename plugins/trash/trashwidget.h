@@ -43,7 +43,7 @@ public:
 
     QWidget *popupApplet();
 
-    QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
     const QString contextMenu() const;
     int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
@@ -53,12 +53,12 @@ signals:
     void requestContextMenu() const;
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    void dragMoveEvent(QDragMoveEvent *e) override;
-    void dropEvent(QDropEvent *e)  override;
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void removeApp(const QString &appKey);

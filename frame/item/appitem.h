@@ -55,7 +55,7 @@ public:
     QWidget *appDragWidget();
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
-    inline ItemType itemType() const { return App; }
+    inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -77,17 +77,17 @@ private:
     void leaveEvent(QEvent *e) override;
     void showEvent(QShowEvent *e) override;
 
-    void showHoverTips();
-    void invokedMenuItem(const QString &itemId, const bool checked);
-    const QString contextMenu() const;
-    QWidget *popupTips();
+    void showHoverTips() Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &itemId, const bool checked) Q_DECL_OVERRIDE;
+    const QString contextMenu() const Q_DECL_OVERRIDE;
+    QWidget *popupTips() Q_DECL_OVERRIDE;
 
     void startDrag();
     bool hasAttention() const;
 
 private slots:
     void updateWindowInfos(const WindowInfoMap &info);
-    void refershIcon();
+    void refershIcon() Q_DECL_OVERRIDE;
     void activeChanged();
     void showPreview();
     void cancelAndHidePreview();

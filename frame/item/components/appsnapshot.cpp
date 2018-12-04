@@ -236,7 +236,6 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     if (m_snapshot.isNull())
         return;
 
-    const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
     const auto ratio = devicePixelRatioF();
 
     // draw attention background

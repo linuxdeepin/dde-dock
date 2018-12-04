@@ -55,8 +55,8 @@ public:
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 
-    int itemSortKey(const QString &itemKey);
-    void setSortKey(const QString &itemKey, const int order);
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
 private:
     void updateBatteryVisible();

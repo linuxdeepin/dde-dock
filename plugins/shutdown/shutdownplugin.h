@@ -52,8 +52,8 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
-    int itemSortKey(const QString &itemKey);
-    void setSortKey(const QString &itemKey, const int order);
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
 private:
     void requestContextMenu(const QString &itemKey);

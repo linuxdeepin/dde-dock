@@ -109,7 +109,7 @@ public:
 
 void IndicatorTrayPrivate::init()
 {
-    Q_Q(IndicatorTray);
+    //Q_Q(IndicatorTray);
 
     indicatorTrayWidget = new IndicatorTrayWidget(itemKey);
 
