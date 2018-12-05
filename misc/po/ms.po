@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-08-09 08:44+0000\n"
+"PO-Revision-Date: 2018-12-01 21:13+0000\n"
 "Last-Translator: abuyop <abuyop@gmail.com>\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
@@ -493,7 +493,7 @@ msgstr "Ad-Hoc Tanpa Wayar"
 
 #: ../../network/nm_custom_type.go:234
 msgid "Wireless Ap-Hotspot"
-msgstr "Hotspot-AP Tanpa Wayar"
+msgstr "Kawasan-Khas-AP Tanpa Wayar"
 
 #: ../../network/nm_custom_type.go:236
 msgid "PPPoE Connection"
@@ -1583,7 +1583,7 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:206
 msgid "AP-Hotspot"
-msgstr "Hotspot-AP"
+msgstr "Kawasan-Khas-AP"
 
 #: ../../network/nm_setting_wireless_security.go:65
 msgid "WEP"
@@ -1943,7 +1943,7 @@ msgstr "Sambungan telah dipadam dari tetapan"
 
 #: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
-msgstr "Cuba membenarkan hotspot"
+msgstr "Cuba membenarkan kawasan khas"
 
 #: ../../network/state_handler.go:227
 msgid "Try connecting %q"
@@ -1959,7 +1959,7 @@ msgstr "%q bersambung"
 
 #: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
-msgstr "Perkongsian kawasan panas dimatikan"
+msgstr "Perkongsian kawasan khas dimatikan"
 
 #: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
@@ -1967,7 +1967,7 @@ msgstr "%q terputus"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Tidak boleh berkongsi kawasan panas, sila periksa tetapan dnsmasq"
+msgstr "Tidak boleh berkongsi kawasan khas, sila periksa tetapan dnsmasq"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"

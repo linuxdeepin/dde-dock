@@ -4,14 +4,15 @@
 # 
 # Translators:
 # ふうせん Fu-sen. | BALLOON a.k.a. Fu-sen., 2016
+# Katabame Ayame <katabamia@gmail.com>, 2018
 # Pedro Lopes <pedrocvl112358@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-10-12 05:14+0000\n"
-"Last-Translator: ふうせん Fu-sen. | BALLOON a.k.a. Fu-sen.\n"
+"PO-Revision-Date: 2018-11-28 17:37+0000\n"
+"Last-Translator: Katabame Ayame <katabamia@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,15 +56,15 @@ msgstr "ユーザー名の長さが制限を超えています"
 
 #: ../../appearance/scale.go:49
 msgid "Display scaling"
-msgstr ""
+msgstr "ディスプレイスケーリング"
 
 #: ../../appearance/scale.go:50
 msgid "Setting display scaling"
-msgstr ""
+msgstr "ディスプレイスケーリングを設定"
 
 #: ../../appearance/scale.go:86
 msgid "Set successfully"
-msgstr ""
+msgstr "設定しました"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
@@ -138,7 +139,7 @@ msgstr "%q が ON になっていて、範囲内にあることをご確認下�
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "%q とのペアリング接続に失敗しました"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -154,7 +155,7 @@ msgstr "すべて閉じる (_C)"
 
 #: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
-msgstr ""
+msgstr "強制終了 (_F)"
 
 #: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
@@ -170,7 +171,7 @@ msgstr "すべてのウインドウ (_A)"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "ディスク容量が不足しています、クリーンアップしてください！"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -182,7 +183,7 @@ msgstr "ターミナル"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin スクリーンレコーダー"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -194,7 +195,7 @@ msgstr "Dock の表示・非表示"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "シャットダウンインターフェース"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -234,11 +235,11 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr "Deepinシステモモニター"
+msgstr "Deepinシステムモニター"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr "Deepinピカー"
+msgstr "Deepinピッカー"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
@@ -334,7 +335,7 @@ msgstr "ワークスペースを表示"
 
 #: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
-msgstr "言語を変わるには権限が必要です"
+msgstr "言語を変更するには権限が必要です"
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
@@ -352,11 +353,11 @@ msgstr "システム言語を変更しています。お待ちください..."
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "システム言語を変更しました。ログアウトし、再度ログインして下さい。"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
-msgstr ""
+msgstr "復元"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
@@ -395,19 +396,19 @@ msgstr "パッケージキャッシュが消去される"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
+msgstr "システムソースが変更されています、通常利用には公式ソースに復元してください"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr "%q 正常に削除されました。"
+msgstr "%q は正常に削除されました。"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "%q のアンインストールに失敗しました"
 
 #: ../../network/agent.go:396
 msgid "Password required to connect %q"
-msgstr "%q に接続にはパスワードが必要です"
+msgstr "%q に接続するにはパスワードが必要です"
 
 #: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
@@ -1964,15 +1965,15 @@ msgstr ""
 
 #: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q から切断されました"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "ホットスポットの共有に失敗しました、dnsmasqの設定を確認してください"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "%q への接続に失敗しました、ワイヤレスルーターの付近から離れないようにしてください"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
@@ -2018,11 +2019,11 @@ msgstr "システムプロキシはキャンセルされました"
 
 #: ../../session/power/manager_events.go:133
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "バッテリー残量がごくわずかです"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "コンピュータはすぐにサスペンドされます、今すぐ電源に接続してください"
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
@@ -2031,11 +2032,11 @@ msgstr "バッテリが少なくなっています"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "コンピュータは間もなくサスペンドされます、電源に接続してください"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "バッテリが少なくなっています、電源に接続してください"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."

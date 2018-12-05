@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# byStarTW (pan93412) <pan93412@gmail.com>, 2018
 # 凡凡不想平凡 <freddy4212@gmail.com>, 2016
 # jjzrh2 <jjzrh2@126.com>, 2017
 # Julian Lai <laichiaheng@outlook.com>, 2017
@@ -17,8 +18,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-10-12 05:14+0000\n"
-"Last-Translator: 凡凡不想平凡 <freddy4212@gmail.com>\n"
+"PO-Revision-Date: 2018-11-28 16:38+0000\n"
+"Last-Translator: byStarTW (pan93412) <pan93412@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,15 +67,15 @@ msgstr "畫面縮放"
 
 #: ../../appearance/scale.go:50
 msgid "Setting display scaling"
-msgstr ""
+msgstr "設定螢幕縮放率"
 
 #: ../../appearance/scale.go:86
 msgid "Set successfully"
-msgstr ""
+msgstr "成功設定"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
-msgstr ""
+msgstr "設定螢幕縮放率後，請登出方可檢視效果"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -82,7 +83,7 @@ msgstr "串列埠"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr "正在連線"
+msgstr "撥號連線"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
@@ -98,11 +99,11 @@ msgstr "耳機語音裝置"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr "接收檔案"
+msgstr "傳送檔案"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr "傳送檔案"
+msgstr "檔案傳輸"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
@@ -114,7 +115,7 @@ msgstr "存取電話簿"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr "存取電話簿客戶端"
+msgstr "電話簿存取客戶端"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
@@ -137,7 +138,7 @@ msgstr "已連線"
 #: ../../network/utils_notify.go:110 ../../network/utils_notify.go:113
 #: ../../network/utils_notify.go:202
 msgid "Disconnected"
-msgstr "連線中斷"
+msgstr "已斷線"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
@@ -145,7 +146,7 @@ msgstr "確認 %q 已開啟且在範圍內"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "無法連線到 %q，配對失敗"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -153,31 +154,31 @@ msgstr "藍牙連線失敗"
 
 #: ../../dock/app_entry_menu.go:101
 msgid "_Open"
-msgstr "開啟"
+msgstr "開啟(_O)"
 
 #: ../../dock/app_entry_menu.go:108
 msgid "_Close All"
-msgstr "關閉全部"
+msgstr "關閉全部(_C)"
 
 #: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
-msgstr ""
+msgstr "強制退出(_F)"
 
 #: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
-msgstr "建立 Dock 捷徑"
+msgstr "建立 Dock 捷徑(_D)"
 
 #: ../../dock/app_entry_menu.go:131
 msgid "_Undock"
-msgstr "移除 Dock 捷徑"
+msgstr "移除 Dock 捷徑(_U)"
 
 #: ../../dock/app_entry_menu.go:138
 msgid "_All windows"
-msgstr "檢視所有視窗"
+msgstr "所有視窗(_A)"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "磁碟機空間不足，請即時清理！"
+msgstr "磁碟機空間不足，請趕快清理！"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -193,7 +194,7 @@ msgstr "Deepin 螢幕錄影"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "鎖定"
+msgstr "鎖定螢幕"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
@@ -201,11 +202,11 @@ msgstr "顯示╱隱藏 Dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr ""
+msgstr "關機介面"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "雷神模式"
+msgstr "終端器雷神模式"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -225,11 +226,11 @@ msgstr "延時截圖"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr "檔案"
+msgstr "檔案管理器"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "關閉觸控板"
+msgstr "停用觸控板"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -241,47 +242,47 @@ msgstr "快速關閉螢幕"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Deepin 系統監視器"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Deepin 取色器"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "切換鍵盤佈局"
+msgstr "切換佈局"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "切換工作區（左側）"
+msgstr "切換到左側工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr "切換工作區（右側）"
+msgstr "切換到右側工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr "切換工作區（頂部）"
+msgstr "切換到頂部工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr "切換工作區（底部）"
+msgstr "切換到底部工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
-msgstr "切換相同大小視窗（順向）"
+msgstr "順向切換相似視窗"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr "切換相同大小視窗（逆向）"
+msgstr "逆向切換相似視窗"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
-msgstr "切換視窗（順向）"
+msgstr "順向切換視窗"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr "切換視窗（逆向）"
+msgstr "逆向切換視窗"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
@@ -313,31 +314,31 @@ msgstr "調整視窗大小"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "將視窗移動工作區（左側）"
+msgstr "移動到左側工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "將視窗移動工作區（右側）"
+msgstr "移動到右側工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr "將視窗移動工作區（頂部）"
+msgstr "移動到頂部工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr "將視窗移動工作區（底部）"
+msgstr "移動到底部工作區"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr "檢視視窗（所有工作區）"
+msgstr "檢視所有工作區的視窗"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr "檢視視窗（目前工作區）"
+msgstr "僅顯示目前工作區視窗"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "檢視工作區"
+msgstr "顯示工作區"
 
 #: ../../langselector/locale.go:60
 msgid "Authentication is required to switch language"
@@ -363,7 +364,7 @@ msgstr "切換語言成功，請重新登入。"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
-msgstr ""
+msgstr "還原"
 
 #: ../../lastore/check_source.go:62 ../../lastore/lastore.go:241
 msgid "Cancel"
@@ -392,17 +393,17 @@ msgstr "%q 移除失敗。"
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "更新期間請接上電源，防止自動關機。"
+msgstr "為防止自動關機，請在更新期間接上電源。"
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
-msgstr "已清除軟體套件快取"
+msgstr "已清除軟體包快取"
 
 #: ../../lastore/notify.go:112
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
+msgstr "您的系統來源已被變更過，請重設到官方來源以讓您能正常使用"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -414,7 +415,7 @@ msgstr "%q 解除安裝失敗"
 
 #: ../../network/agent.go:396
 msgid "Password required to connect %q"
-msgstr ""
+msgstr "連線到 %q 需要密碼"
 
 #: ../../network/manager_active.go:317
 #: ../../network/nm_setting_wireless.go:211
@@ -476,12 +477,12 @@ msgstr "FAST"
 #: ../../network/manager_active.go:357 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
-msgstr "Tunneled TLS"
+msgstr "隧道 TLS"
 
 #: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
-msgstr "Protected EAP"
+msgstr "受保護 EAP"
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
@@ -509,7 +510,7 @@ msgstr "PPPoE 連線"
 
 #: ../../network/nm_custom_type.go:238
 msgid "Mobile Connection"
-msgstr "行動網路連線"
+msgstr "行動數據連線"
 
 #: ../../network/nm_custom_type.go:240
 msgid "Mobile GSM Connection"
@@ -541,7 +542,7 @@ msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:254
 msgid "VPN StrongSwan"
-msgstr "VPN strongSwan"
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:256
 msgid "VPN VPNC"
@@ -575,7 +576,7 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_vpn_vpnc.go:150
 msgid "Disabled"
-msgstr "已關閉"
+msgstr "已停用"
 
 #: ../../network/nm_setting_802_1x.go:140
 msgid "Anonymous"
@@ -599,7 +600,7 @@ msgstr "第 1 版"
 
 #: ../../network/nm_setting_beans_gen.go:37
 msgid "General"
-msgstr "基本訊息"
+msgstr "一般"
 
 #: ../../network/nm_setting_beans_gen.go:39
 msgid "Name"
@@ -615,17 +616,17 @@ msgstr "適用所有使用者"
 
 #: ../../network/nm_setting_beans_gen.go:47
 msgid "Ethernet"
-msgstr "乙太網路"
+msgstr "有線網路"
 
 #: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "Device MAC Addr"
-msgstr "網卡（MAC）位址"
+msgstr "裝置 MAC 位址"
 
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:136
 msgid "Cloned MAC Addr"
-msgstr "複製網卡（MAC）位址"
+msgstr "複製裝置 MAC 位址"
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:137
@@ -642,7 +643,7 @@ msgstr "MTU"
 #: ../../network/nm_setting_beans_gen.go:80
 #: ../../network/nm_setting_beans_gen.go:94
 msgid "Mobile"
-msgstr "行動網路"
+msgstr "行動數據"
 
 #: ../../network/nm_setting_beans_gen.go:60
 msgid "Country or region"
@@ -654,7 +655,7 @@ msgstr "電信業者"
 
 #: ../../network/nm_setting_beans_gen.go:62
 msgid "Plan"
-msgstr "網路流量"
+msgstr "方案"
 
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "Service Type"
@@ -720,19 +721,19 @@ msgstr "網路 ID"
 #: ../../network/nm_setting_beans_gen.go:70
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Home Network Only"
-msgstr "僅用於家庭網絡"
+msgstr "僅用於家用網路"
 
 #: ../../network/nm_setting_beans_gen.go:71
 #: ../../network/nm_setting_beans_gen.go:88
 msgid "PIN"
-msgstr "PIN"
+msgstr "PIN 碼"
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:107
 #: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:386
 msgid "Security"
-msgstr "安全"
+msgstr "安全性"
 
 #: ../../network/nm_setting_beans_gen.go:106
 msgid "Security Required"
@@ -740,11 +741,11 @@ msgstr "安全性要求"
 
 #: ../../network/nm_setting_beans_gen.go:108
 msgid "Key"
-msgstr "密碼"
+msgstr "金鑰"
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "EAP Auth"
-msgstr "EAP 授權"
+msgstr "EAP 憑證"
 
 #: ../../network/nm_setting_beans_gen.go:111
 msgid "Identity"
@@ -786,7 +787,7 @@ msgstr "密碼"
 #: ../../network/nm_setting_beans_gen.go:409
 #: ../../network/nm_setting_vpn_strongswan.go:78
 msgid "Private Key"
-msgstr "金鑰"
+msgstr "私鑰"
 
 #: ../../network/nm_setting_beans_gen.go:118
 #: ../../network/nm_setting_beans_gen.go:183
@@ -796,7 +797,7 @@ msgstr "金鑰"
 #: ../../network/nm_setting_beans_gen.go:302
 #: ../../network/nm_setting_beans_gen.go:405
 msgid "CA Cert"
-msgstr "CA 認證"
+msgstr "CA 憑證"
 
 #: ../../network/nm_setting_beans_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:187
@@ -806,11 +807,11 @@ msgstr "CA 認證"
 #: ../../network/nm_setting_beans_gen.go:303
 #: ../../network/nm_setting_beans_gen.go:408
 msgid "User Cert"
-msgstr "使用者認證"
+msgstr "使用者憑證"
 
 #: ../../network/nm_setting_beans_gen.go:120
 msgid "Provisioning"
-msgstr "設定"
+msgstr "自動 PAC 設定"
 
 #: ../../network/nm_setting_beans_gen.go:121
 msgid "PAC file"
@@ -822,7 +823,7 @@ msgstr "PEAP 版本"
 
 #: ../../network/nm_setting_beans_gen.go:123
 msgid "Inner Auth"
-msgstr "內部授權"
+msgstr "內部驗證"
 
 #: ../../network/nm_setting_beans_gen.go:129
 msgid "Wi-Fi"
@@ -850,7 +851,7 @@ msgstr "PPPoE"
 
 #: ../../network/nm_setting_beans_gen.go:147
 msgid "Service"
-msgstr "網路業者"
+msgstr "服務"
 
 #: ../../network/nm_setting_beans_gen.go:154
 msgid "PPP"
@@ -870,37 +871,37 @@ msgstr "128 位 MPPE"
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "Stateful MPPE"
-msgstr "MPPE 狀態"
+msgstr "包含狀態的 MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:388
 msgid "Refuse EAP Authentication"
-msgstr "不允許 EAP 驗證"
+msgstr "拒絕 EAP 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:389
 msgid "Refuse PAP Authentication"
-msgstr "不允許 PAP 驗證"
+msgstr "拒絕 PAP 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:266
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Refuse CHAP Authentication"
-msgstr "不允許 CHAP 驗證"
+msgstr "拒絕 CHAP 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:267
 #: ../../network/nm_setting_beans_gen.go:391
 msgid "Refuse MSCHAP Authentication"
-msgstr "不允許 MSCHAP 驗證"
+msgstr "拒絕 MSCHAP 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:268
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "不允許 MSCHAPv2 驗證"
+msgstr "拒絕 MSCHAPv2 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:269
@@ -918,7 +919,7 @@ msgstr "無 Deflate 資料壓縮"
 #: ../../network/nm_setting_beans_gen.go:271
 #: ../../network/nm_setting_beans_gen.go:395
 msgid "No TCP Header Compression"
-msgstr "無 TCP 報頭壓縮"
+msgstr "無 TCP 標頭壓縮"
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:274
@@ -967,7 +968,7 @@ msgstr "NT 網域"
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:284
 msgid "Proxy"
-msgstr "Proxy"
+msgstr "代理伺服器"
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:285
@@ -982,14 +983,14 @@ msgstr "CSD 指令碼"
 #: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:289
 msgid "Use FSID for Key Passphrase"
-msgstr "為金鑰通關密碼使用 FSID"
+msgstr "為金鑰密碼使用 FSID"
 
 #: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:212
 #: ../../network/nm_setting_beans_gen.go:298
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "Auth Type"
-msgstr "授權類型"
+msgstr "驗證類型"
 
 #: ../../network/nm_setting_beans_gen.go:200
 #: ../../network/nm_setting_beans_gen.go:307
@@ -1022,7 +1023,7 @@ msgstr "本機 IP"
 #: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:411
 msgid "Request an Inner IP Address"
-msgstr "需要一個內部 IP 位址"
+msgstr "請求一個內部 IP 位址"
 
 #: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:412
@@ -1032,7 +1033,7 @@ msgstr "強制 UDP 封裝"
 #: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:413
 msgid "Use IP Compression"
-msgstr "使用IP檔頭壓縮"
+msgstr "使用 IP 壓縮"
 
 #: ../../network/nm_setting_beans_gen.go:223
 #: ../../network/nm_setting_beans_gen.go:424
@@ -1053,7 +1054,7 @@ msgstr "群組密碼"
 #: ../../network/nm_setting_beans_gen.go:227
 #: ../../network/nm_setting_beans_gen.go:428
 msgid "Use Hybrid Authentication"
-msgstr "使用混合授權"
+msgstr "使用混合驗證"
 
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:429
@@ -1075,15 +1076,15 @@ msgstr "群組 ID"
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr "已分享的密碼"
+msgstr "預先分享金鑰"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
-msgstr ""
+msgstr "Phase1 算法"
 
 #: ../../network/nm_setting_beans_gen.go:253
 msgid "Phase2 Algorithms"
-msgstr ""
+msgstr "Phase2 算法"
 
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
@@ -1092,7 +1093,7 @@ msgstr "VPN PPP"
 
 #: ../../network/nm_setting_beans_gen.go:272
 msgid "No Protocol Field Compression"
-msgstr "無協定項目壓縮"
+msgstr "無協定欄位壓縮"
 
 #: ../../network/nm_setting_beans_gen.go:273
 msgid "No Address/Control Compression"
@@ -1108,31 +1109,31 @@ msgstr "加密"
 
 #: ../../network/nm_setting_beans_gen.go:320
 msgid "HMAC Auth"
-msgstr "HMAC Auth"
+msgstr "HMAC 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:326
 msgid "VPN TLS Authentication"
-msgstr "VPN TLS Authentication"
+msgstr "VPN TLS 驗證"
 
 #: ../../network/nm_setting_beans_gen.go:328
 msgid "Subject Match"
-msgstr "主題匹配"
+msgstr "主旨相符"
 
 #: ../../network/nm_setting_beans_gen.go:329
 msgid "Remote Cert Type"
-msgstr "遠端 Cert 類型"
+msgstr "遠端憑證類型"
 
 #: ../../network/nm_setting_beans_gen.go:330
 msgid "Key File"
-msgstr "金鑰檔"
+msgstr "金鑰檔案"
 
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "VPN Proxies"
-msgstr "VPN Proxy"
+msgstr "VPN 代理伺服器"
 
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "Proxy Type"
-msgstr "Proxy 類型"
+msgstr "代理伺服器類型"
 
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Server IP"
@@ -1144,7 +1145,7 @@ msgstr "連接埠"
 
 #: ../../network/nm_setting_beans_gen.go:343
 msgid "Retry Indefinitely When Failed"
-msgstr "失敗時重試"
+msgstr "失敗時重試無限次"
 
 #: ../../network/nm_setting_beans_gen.go:351
 #: ../../network/nm_setting_beans_gen.go:435
@@ -1181,7 +1182,7 @@ msgstr "使用 TAP 裝置"
 
 #: ../../network/nm_setting_beans_gen.go:360
 msgid "Customize Tunnel MTU"
-msgstr "自訂最大傳輸單元（MTU）"
+msgstr "自訂隧道 MTU"
 
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "Customize UDP Fragment Size"
@@ -1205,7 +1206,7 @@ msgstr "網域"
 
 #: ../../network/nm_setting_beans_gen.go:438
 msgid "Vendor"
-msgstr "廠商"
+msgstr "提供商"
 
 #: ../../network/nm_setting_beans_gen.go:439
 msgid "Version"
@@ -1217,7 +1218,7 @@ msgstr "加密"
 
 #: ../../network/nm_setting_beans_gen.go:441
 msgid "NAT Traversal"
-msgstr "NAT穿越"
+msgstr "NAT 穿越"
 
 #: ../../network/nm_setting_beans_gen.go:442
 msgid "IKE DH Group"
@@ -1225,7 +1226,7 @@ msgstr "IKE DH 群組"
 
 #: ../../network/nm_setting_beans_gen.go:443
 msgid "Forward Secrecy"
-msgstr "完全正向保密"
+msgstr "正向加密"
 
 #: ../../network/nm_setting_beans_gen.go:444
 msgid "Local Port"
@@ -1266,7 +1267,7 @@ msgstr "次要 DNS"
 #: ../../network/nm_setting_beans_gen.go:459
 #: ../../network/nm_setting_beans_gen.go:473
 msgid "Only applied in corresponding resources"
-msgstr ""
+msgstr "僅套用到相對應來源"
 
 #: ../../network/nm_setting_beans_gen.go:465
 msgid "IPv6"
@@ -1350,7 +1351,7 @@ msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Enterprise"
+msgstr "WPA/WPA2 企業版"
 
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:215
@@ -1529,7 +1530,7 @@ msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
 msgid "SSH Agent"
-msgstr "SSH Agent"
+msgstr "SSH 代理程式"
 
 #: ../../network/nm_setting_vpn_strongswan.go:80
 msgid "Smartcard"
@@ -1583,7 +1584,7 @@ msgstr "DH Group 2"
 
 #: ../../network/nm_setting_wireless.go:204
 msgid "Infrastructure"
-msgstr "Infrastructure"
+msgstr "基礎架構"
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "Ad-Hoc"
@@ -1599,7 +1600,7 @@ msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:66
 msgid "Dynamic WEP"
-msgstr "Dynamic WEP"
+msgstr "動態式 WEP"
 
 #: ../../network/nm_setting_wireless_security.go:67
 msgid "Ad-Hoc WPA-PSK"
@@ -1607,11 +1608,11 @@ msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:68
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infrastructure"
+msgstr "WPA-PSK 基礎架構"
 
 #: ../../network/nm_setting_wireless_security.go:69
 msgid "WPA Enterprise"
-msgstr "WPA Enterprise"
+msgstr "WPA 企業版"
 
 #: ../../network/nm_setting_wireless_security.go:73
 msgid "WEP40"
@@ -1639,15 +1640,15 @@ msgstr "裝置狀態已更改"
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason"
-msgstr "裝置狀態已更改，未知原因"
+msgstr "裝置狀態已更改，原因未知"
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed"
-msgstr "裝置正在運作"
+msgstr "裝置現已受管理"
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed"
-msgstr "裝置不再運作"
+msgstr "裝置已不受管理"
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration"
@@ -1726,7 +1727,7 @@ msgstr "自動 IP 服務報告了一個未知原因錯誤。"
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr "自動IP服務異常結束或失敗。"
+msgstr "自動 IP 服務異常結束或失敗。"
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines"
@@ -1778,11 +1779,11 @@ msgstr "PIN 檢查失敗。"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed"
-msgstr "設備必要固件可能已丟失"
+msgstr "設備必要韌體可能已丟失"
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed"
-msgstr "裝置已刪除。"
+msgstr "裝置已移除。"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep"
@@ -1798,63 +1799,63 @@ msgstr "使用者或客戶端請求中斷連線"
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "已變更裝置的載體╱連線"
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "已假設裝置存在的連線"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "802.1x 客戶端現可使用"
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found"
-msgstr ""
+msgstr "找不到數據機"
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "藍牙連線逾時或失敗"
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "未插入 GSM 數據機的 SIM 卡"
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "需要 GSM 數據機的 SIM PIN 碼"
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "需要 GSM 數據機的 SIM PUK 碼"
 
 #: ../../network/state_handler.go:82
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "GSM 數據機中的 SIM 卡發生錯誤"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "InfiniBand 裝置不支援連線的模式"
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed"
-msgstr ""
+msgstr "解決連線依賴關係失敗"
 
 #: ../../network/state_handler.go:85
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgstr "RFC 2684 有線網路橋接到 ADSL 失敗"
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "ModemManager 未啟動或意外退出"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "找不到 802.11 Wi-Fi 網路"
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "連線到此基礎連線的次要連線失敗"
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed"
@@ -1862,15 +1863,15 @@ msgstr "DCB 或 FCoE 設定失敗"
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "網路連線匯整控制失敗"
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "數據機啟動失敗或不支援"
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "數據機已就緒且已可供使用"
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
@@ -1882,15 +1883,15 @@ msgstr "正在建立新連線"
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed"
-msgstr ""
+msgstr "已變更主裝置"
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "已變更主裝置的管理狀態"
 
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged"
-msgstr "網路線拔除"
+msgstr "已拔除網路線"
 
 #: ../../network/state_handler.go:102
 msgid "Please make sure SIM card has been inserted with mobile network signal"
@@ -1899,11 +1900,11 @@ msgstr "請確認附有行動網路訊號的 SIM 卡已插入"
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "請確認正確的計劃以免 SIM 卡破費"
+msgstr "請確保選擇了正確的計劃以免 SIM 卡破費"
 
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason"
-msgstr "VPN 連線失敗，未知原因"
+msgstr "VPN 連線啟動失敗，原因未知"
 
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed"
@@ -1927,7 +1928,7 @@ msgstr "VPN 連線的 IP 設定無效"
 
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out"
-msgstr "VPN 服務嘗試連線逾時"
+msgstr "VPN 服務連線嘗試逾時"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out"
@@ -1947,47 +1948,47 @@ msgstr "驗證 VPN 伺服器失敗"
 
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings"
-msgstr "此連線已刪除"
+msgstr "此連線已從設定中刪除"
 
 #: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "嘗試啟用熱點功能"
 
 #: ../../network/state_handler.go:227
 msgid "Try connecting %q"
-msgstr ""
+msgstr "嘗試連線到 %q"
 
 #: ../../network/state_handler.go:235
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "已啟用熱點分享功能"
 
 #: ../../network/state_handler.go:237
 msgid "%q connected"
-msgstr ""
+msgstr "已連線到 %q 網路"
 
 #: ../../network/state_handler.go:248 ../../network/state_handler.go:299
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "已關閉熱點分享功能"
 
 #: ../../network/state_handler.go:301 ../../network/state_handler.go:316
 msgid "%q disconnected"
-msgstr ""
+msgstr "已斷開到 %q 的連線"
 
 #: ../../network/state_handler.go:307
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "無法分享熱點，請檢查 dnsmasq 設定"
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "無法連線到 %q 網路，請離無線網路路由器更近點"
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "無法連線到 %q 網路，請檢查路由器或網路線"
 
 #: ../../network/state_handler.go:314
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "連線失敗：無法連線到 %q 網路，原因：密碼錯誤"
 
 #: ../../network/utils_dbus_nm.go:345
 msgid "Unknown"
@@ -1995,7 +1996,7 @@ msgstr "未知"
 
 #: ../../network/utils_notify.go:80
 msgid "You are now offline."
-msgstr "目前離線。"
+msgstr "已離線。"
 
 #: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
@@ -2003,7 +2004,7 @@ msgstr "已開啟飛航模式。"
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr "裝置不支援熱點功能。"
+msgstr "裝置不支援存取點功能。"
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
@@ -2013,53 +2014,53 @@ msgstr "網路"
 #: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "無線網路硬體關閉，如需使用請先開啟。"
+msgstr "無線網卡的硬體開關為關閉狀態，如要使用請先開啟。"
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
-msgstr "系統 Proxy 設定成功。"
+msgstr "系統代理伺服器設定成功。"
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
-msgstr "系統 Proxy 已取消。"
+msgstr "系統代理伺服器已被取消。"
 
 #: ../../session/power/manager_events.go:133
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "電量過低"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "電腦將在不久後休眠，請立即接上電源"
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
-msgstr "低電量"
+msgstr "電量偏低"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "電腦將在不久後休眠，請接上電源"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "電量剩餘不多，請接上電源"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
-msgstr ""
+msgstr "設定系統時間需要身份核對。"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled."
-msgstr ""
+msgstr "控制是否要啟用網路時間同步殼層需要身份核對。"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time."
-msgstr ""
+msgstr "控制是否要讓 RTC 儲存本機或 UTC 時間需要身份核對。"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone."
-msgstr ""
+msgstr "設定系統時區需要身份核對。"

@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Deepin <justfortest16162215@gmail.com>, 2017
+# Siam Sami <justfortest16162215@gmail.com>, 2017
 # Md. Emruz Hossain <hossainemruz@gmail.com>, 2018
 msgid ""
 msgstr ""

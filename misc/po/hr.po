@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Ivica  Kolić <ikoli@yahoo.com>, 2016
+# Ivica  Kolić <ikoli@yahoo.com>, 2016,2018
 # dpnlin, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-10-12 05:13+0000\n"
+"PO-Revision-Date: 2018-11-07 22:22+0000\n"
 "Last-Translator: Ivica  Kolić <ikoli@yahoo.com>\n"
 "Language-Team: Croatian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hr/)\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: ../../appearance/scale.go:86
 msgid "Set successfully"
-msgstr ""
+msgstr "Uspješno postavljeno"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
@@ -154,7 +154,7 @@ msgstr "_Zatvori sve"
 
 #: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
-msgstr ""
+msgstr "_Prisili izlaz"
 
 #: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
@@ -170,7 +170,7 @@ msgstr "_Svi prozori"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Nedovoljno prostora na disku, molim očistite na vrijeme!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -338,7 +338,7 @@ msgstr "Potrebna je ovjera za promjenu jezika"
 
 #: ../../langselector/locale.go:350
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "Neuspjela promjena jezika sustava, molim pokušajte kasnije"
 
 #: ../../langselector/locale.go:374
 msgid ""
@@ -399,7 +399,7 @@ msgstr ""
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q uspješno uklonjen"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
@@ -1863,11 +1863,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Modem je spreman i dostupan"
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "SIM PIN je ispravan"
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing"

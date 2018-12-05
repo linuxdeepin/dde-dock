@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Autentifikation kræves for at ændre dine egne brugerdata</translation>
+			<translation>Der kræves autentifikation for at ændre dine egne brugerdata</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
 			<source>Authentication is required to change user data</source>
-			<translation>Autentifikation kræves for at ændre brugerdata</translation>
+			<translation>Der kræves autentifikation for at ændre brugerdata</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
@@ -24,7 +24,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation>Autentifikation kræves for at aktivere automatisk login</translation>
+			<translation>Der kræves autentifikation for at aktivere automatisk login</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
@@ -34,7 +34,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation>Autentifikation kræves for at deaktivere automatisk login</translation>
+			<translation>Der kræves autentifikation for at deaktivere automatisk login</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
@@ -44,7 +44,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Autentifikation kræves for at aktivere login uden adgangskode</translation>
+			<translation>Der kræves autentifikation for at aktivere login uden adgangskode</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
@@ -54,7 +54,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Autentifikation kræves for at deaktivere login uden adgangskode</translation>
+			<translation>Der kræves autentifikation for at deaktivere login uden adgangskode</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
@@ -64,7 +64,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation>Autentifikation kræves for at sætte tastaturlayout</translation>
+			<translation>Der kræves autentifikation for at sætte tastaturlayout</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>

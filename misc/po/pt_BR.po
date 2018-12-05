@@ -5,7 +5,7 @@
 # Translators:
 # Alex Wender, 2017
 # Bruno Gama <brunnogama@gmail.com>, 2017
-# Bruno Lopes da Silva, 2018
+# 58fae44c6c4ff84516f8c8656a7fb14d, 2018
 # Bruno Melnic Incao <brunomelnic@gmail.com>, 2017
 # Carlos Stenzel <betinhostenzel@hotmail.com>, 2016
 # Cleber Teixeira, 2017
@@ -20,7 +20,7 @@
 # Marco Araujo <marco.araujo.junior@gmail.com>, 2017
 # Matheus Campagnol <mate175@gmail.com>, 2017
 # Peterson SB <manitiolo@outlook.com>, 2018
-# Rafael Ramos <rbr.ramos@gmail.com>, 2017
+# cfbf5006c0257e233b15e3cdf09c3c3f, 2017
 # Raphael Miquelis <raphaelmiquelis@gmail.com>, 2016-2017
 # Raphael Pereira <raphaelmatheus.exp@gmail.com>, 2018
 msgid ""
@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-10-12 05:14+0000\n"
+"PO-Revision-Date: 2018-11-28 11:26+0000\n"
 "Last-Translator: Paulo Schopf <pschopf@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"

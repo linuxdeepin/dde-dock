@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Aestan <anthony.margerand@gmail.com>, 2018
+# Aestan <anthony.margerand@protonmail.com>, 2018
 # 7413e64ff2211e446031d0f5c23d5cf9, 2016
 # Charles Monzat <c.monzat@laposte.net>, 2017-2018
 # iderr, 2016
 # lexross <mais@techie.com>, 2016-2017
-# Joselito 8 <morbihan8pool@gmail.com>, 2018
+# Joselito 8, 2018
+# lexross <mais@techie.com>, 2018
 # Quentin D <heziode@protonmail.com>, 2017
 # Sami G.-D., 2017
 # zwpwjwtz <zwpwjwtz@126.com>, 2017
@@ -17,7 +18,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-10-12 05:14+0000\n"
+"PO-Revision-Date: 2018-10-30 10:41+0000\n"
 "Last-Translator: lexross <mais@techie.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -74,7 +75,7 @@ msgstr "Établit avec succès"
 
 #: ../../appearance/scale.go:87
 msgid "View by logging out after set display scaling"
-msgstr "Veuillez vous déconnecter et vous reconnecter après avoir ajusté l'échelle d'écran."
+msgstr "Veuillez vous déconnecter et vous reconnecter après avoir ajusté l'échelle d'affichage."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -145,7 +146,7 @@ msgstr "Assurez-vous que %q est sous tension "
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr "Échec de la connexion %q, échec de l'appariement"
+msgstr "Échec de la connexion %q, appariement échoué"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -201,7 +202,7 @@ msgstr "Afficher/Masquer le dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown Interface"
-msgstr "L'interface de déconnexion"
+msgstr "Interface de fermeture"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -241,7 +242,7 @@ msgstr "Extinction rapide écran"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr "Moniteur système Deepin"
+msgstr "Moniteur Système Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -375,7 +376,7 @@ msgstr "Réessayer"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
-msgstr "%q Installation terminée."
+msgstr "%q a été installé avec succès."
 
 #: ../../lastore/notify.go:85
 msgid "%q failed to install."
@@ -1979,7 +1980,7 @@ msgstr "Impossible de partager le point d'accès, veuillez vérifier les paramè
 
 #: ../../network/state_handler.go:309
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Impossible de se connecter à% q, veuillez vous rapprocher du routeur sans fil."
+msgstr "Impossible de se connecter à %q, veuillez vous rapprocher du routeur sans fil."
 
 #: ../../network/state_handler.go:311
 msgid "Unable to connect %q, please check your router or net cable."
@@ -2029,7 +2030,7 @@ msgstr "Niveau de batterie critique"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr "L'ordinateur sera bientôt suspendu, veuillez le brancher maintenant"
+msgstr "L'ordinateur va se mettre en veille, veuillez le brancher immédiatement "
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
@@ -2038,7 +2039,7 @@ msgstr "Batterie faible"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr "L'ordinateur va bientôt être suspendu, veuillez le brancher"
+msgstr "L'ordinateur va bientôt se mettre en veille, veuillez le brancher"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"

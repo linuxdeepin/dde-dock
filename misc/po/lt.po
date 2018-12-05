@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-10-12 05:14+0000\n"
+"PO-Revision-Date: 2018-12-03 19:28+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -155,7 +155,7 @@ msgstr "_Užverti visus"
 
 #: ../../dock/app_entry_menu.go:117
 msgid "_Force Quit"
-msgstr ""
+msgstr "Pri_verstinai išjungti"
 
 #: ../../dock/app_entry_menu.go:124
 msgid "_Dock"
@@ -1073,11 +1073,11 @@ msgstr "Iš anksto padalintas raktas"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
-msgstr ""
+msgstr "Phase1 algoritmai"
 
 #: ../../network/nm_setting_beans_gen.go:253
 msgid "Phase2 Algorithms"
-msgstr ""
+msgstr "Phase2 algoritmai"
 
 #: ../../network/nm_setting_beans_gen.go:259
 #: ../../network/nm_setting_beans_gen.go:383
@@ -1945,7 +1945,7 @@ msgstr "Ryšys buvo ištrintas iš nustatymų"
 
 #: ../../network/state_handler.go:225
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Pabandykite įjungti prieigos tašką"
 
 #: ../../network/state_handler.go:227
 msgid "Try connecting %q"
@@ -2019,24 +2019,24 @@ msgstr "Sistemos įgaliotasis serveris buvo atšauktas."
 
 #: ../../session/power/manager_events.go:133
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "Kritiškai žema baterijos įkrova"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "Kompiuteris netrukus bus pristabdytas, prijunkite maitinimą dabar"
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
 msgid "Battery Low"
-msgstr "Baterija senka"
+msgstr "Baterija baigia išsikrauti"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "Kompiuteris greitu metu bus pristabdytas, prijunkite maitinimą"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Baterija baigia išsikrauti, prijunkite maitinimą"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
