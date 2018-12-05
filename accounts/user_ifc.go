@@ -30,7 +30,7 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
-	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/imgutil"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -568,11 +568,11 @@ func (u *User) GetLargeIcon() string {
 	return dutils.EncodeURI(filename, dutils.SCHEME_FILE)
 }
 
-var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
+var supportedFormats = strv.Strv([]string{"gif", "jpeg", "png", "bmp", "tiff"})
 
 func isBackgroundValid(file string) bool {
 	file = dutils.DecodeURI(file)
-	format, err := graphic.SniffImageFormat(file)
+	format, err := imgutil.SniffFormat(file)
 	if err != nil {
 		return false
 	}

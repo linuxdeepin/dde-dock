@@ -24,27 +24,11 @@ import (
 	"os"
 	"os/exec"
 
-	"pkg.deepin.io/lib/strv"
-
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/imgutil"
 	"pkg.deepin.io/lib/utils"
 )
-
-var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
-
-func isBackgroundValid(file string) bool {
-	format, err := graphic.SniffImageFormat(file)
-	if err != nil {
-		return false
-	}
-
-	if supportedFormats.Contains(format) {
-		return true
-	}
-	return false
-}
 
 const (
 	themeDBusPath      = dbusPath + "/Theme"
@@ -68,8 +52,10 @@ func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string)
 	}
 
 	filename = utils.DecodeURI(filename)
-	if !isBackgroundValid(filename) {
-		return dbusutil.ToError(errors.New("unsupported image file"))
+	if !imgutil.CanDecodeConfig(filename) {
+		err = errors.New("failed to decode config")
+		logger.Warning(err)
+		return dbusutil.ToError(err)
 	}
 
 	cmd := exec.Command(adjustThemeCmd, "-set-background", filename)

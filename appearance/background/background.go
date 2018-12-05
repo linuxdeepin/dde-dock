@@ -26,7 +26,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/imgutil"
+
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
@@ -105,16 +106,16 @@ func NotifyChanged() {
 	backgroundsCacheMu.Unlock()
 }
 
-var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
+var uiSupportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff", "gif"})
 
 func IsBackgroundFile(file string) bool {
 	file = dutils.DecodeURI(file)
-	format, err := graphic.SniffImageFormat(file)
+	format, err := imgutil.SniffFormat(file)
 	if err != nil {
 		return false
 	}
 
-	if supportedFormats.Contains(format) {
+	if uiSupportedFormats.Contains(format) {
 		return true
 	}
 	return false
