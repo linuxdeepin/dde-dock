@@ -55,6 +55,7 @@ public:
     static QString toSNIServicePath(QString itemKey) { return itemKey.remove("sni:"); }
 
 private Q_SLOTS:
+    void initMenu();
     void refreshIcon();
     void refreshOverlayIcon();
     void refreshAttentionIcon();
@@ -73,6 +74,9 @@ private:
 
     QMenu *m_menu;
     QTimer *m_updateTimer;
+
+    QString m_dbusService;
+    QString m_dbusPath;
 
     QPixmap m_pixmap;
     QPixmap m_overlayPixmap;

@@ -44,18 +44,15 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     }
 
     QPair<QString, QString> pair = serviceAndPath(sniServicePath);
-    const QString &service = pair.first;
-    const QString &path = pair.second;
+    m_dbusService = pair.first;
+    m_dbusPath = pair.second;
 
-    m_sniInter = new StatusNotifierItem(service, path, QDBusConnection::sessionBus(), this);
+    m_sniInter = new StatusNotifierItem(m_dbusService, m_dbusPath, QDBusConnection::sessionBus(), this);
 
     if (!m_sniInter->isValid()) {
+        qDebug() << "SNI dbus interface is invalid!" << m_dbusService << m_dbusPath << m_sniInter->lastError();
         return;
     }
-
-    const QString &menuPath = m_sniInter->menu().path();
-    m_dbusMenuImporter = new DBusMenuImporter(service, menuPath, SYNCHRONOUS, this);
-    m_menu = m_dbusMenuImporter->menu();
 
     m_updateTimer->setInterval(100);
     m_updateTimer->setSingleShot(true);
@@ -66,6 +63,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, this, &SNITrayWidget::refreshAttentionIcon);
 
     QTimer::singleShot(0, this, &SNITrayWidget::refreshIcon);
+    QTimer::singleShot(300, this, &SNITrayWidget::initMenu);
 }
 
 SNITrayWidget::~SNITrayWidget()
@@ -112,6 +110,13 @@ const QImage SNITrayWidget::trayImage()
 bool SNITrayWidget::isValid()
 {
     return m_sniInter->isValid();
+}
+
+void SNITrayWidget::initMenu()
+{
+    const QString &menuPath = m_sniInter->menu().path();
+    m_dbusMenuImporter = new DBusMenuImporter(m_dbusService, menuPath, SYNCHRONOUS, this);
+    m_menu = m_dbusMenuImporter->menu();
 }
 
 /*
