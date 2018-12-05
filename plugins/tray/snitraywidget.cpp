@@ -275,15 +275,17 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
             break;
     }
 
+    const auto ratio = qApp->devicePixelRatio();
+    const int iconSize = IconSize * ratio;
+
     do {
         if (!iconName.isEmpty()) {
-            pixmap = ThemeAppIcon::getIcon(iconName, IconSize);
+            pixmap = ThemeAppIcon::getIcon(iconName, iconSize);
             if (!pixmap.isNull()) {
                 break;
             }
         }
 
-        const auto ratio = qApp->devicePixelRatio();
         if (!dbusImageList.isEmpty()) {
             for (DBusImage dbusImage : dbusImageList) {
                 char *image_data = dbusImage.pixels.data();
@@ -295,7 +297,7 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
                 }
 
                 QImage image((const uchar*)dbusImage.pixels.constData(), dbusImage.width, dbusImage.height, QImage::Format_ARGB32);
-                pixmap = QPixmap::fromImage(image.scaled(IconSize, IconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                pixmap = QPixmap::fromImage(image.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 pixmap.setDevicePixelRatio(ratio);
                 if (!pixmap.isNull()) {
                     break;
