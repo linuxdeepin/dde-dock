@@ -55,8 +55,8 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
     , m_title(new TipsWidget)
-    , m_closeBtn(new DImageButton)
     , m_waitLeaveTimer(new QTimer(this))
+    , m_closeBtn(new DImageButton)
     , m_wmHelper(DWindowManagerHelper::instance())
 {
     m_closeBtn->setFixedSize(24, 24);

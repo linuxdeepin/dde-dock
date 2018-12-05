@@ -42,14 +42,14 @@ public:
     explicit DockPluginsController(DockItemController *itemControllerInter = 0);
 
     // implements PluginProxyInterface
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey);
+    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
-    void saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value);
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant());
+    void saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) Q_DECL_OVERRIDE;
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant()) Q_DECL_OVERRIDE;
 
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
@@ -65,7 +65,7 @@ private slots:
     void initPlugin(PluginsItemInterface *interface);
 
 private:
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
     PluginsItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
 
 private:

@@ -240,9 +240,9 @@ void SystemTraysController::saveValue(PluginsItemInterface *const itemInter, con
 
 const QVariant SystemTraysController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
     m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value { std::move(m_pluginsSetting.value(key, fallback)) };
+    QVariant value(m_pluginsSetting.value(key, fallback));
     m_pluginsSetting.endGroup();
-    return std::move(value);
+    return value;
 }
 
 int SystemTraysController::systemTrayItemSortKey(const QString &itemKey)

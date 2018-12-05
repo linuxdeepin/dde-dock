@@ -39,14 +39,14 @@ public:
     explicit SystemTraysController(QObject *parent = nullptr);
 
     // implements PluginProxyInterface
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey);
+    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
-    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value);
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& failback = QVariant());
+    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) Q_DECL_OVERRIDE;
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& failback = QVariant()) Q_DECL_OVERRIDE;
 
     int systemTrayItemSortKey(const QString &itemKey);
     void setSystemTrayItemSortKey(const QString &itemKey, const int order);
@@ -66,7 +66,7 @@ private slots:
     void initPlugin(PluginsItemInterface *interface);
 
 private:
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
     SystemTrayItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
     PluginsItemInterface *pluginInterAt(const QString &itemKey) const;
     PluginsItemInterface *pluginInterAt(SystemTrayItem *systemTrayItem) const;

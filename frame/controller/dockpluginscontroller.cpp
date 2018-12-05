@@ -225,7 +225,7 @@ void DockPluginsController::saveValue(PluginsItemInterface *const itemInter, con
 
 const QVariant DockPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback) {
     m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value { std::move(m_pluginsSetting.value(itemKey, failback)) };
+    QVariant value(m_pluginsSetting.value(itemKey, failback));
     m_pluginsSetting.endGroup();
-    return std::move(value);
+    return value;
 }
