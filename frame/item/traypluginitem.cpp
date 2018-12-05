@@ -51,10 +51,6 @@ bool TrayPluginItem::eventFilter(QObject *watched, QEvent *e)
         const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName();
         if (propertyName == "FashionTraySize") {
             Q_EMIT fashionTraySizeChanged(watched->property("FashionTraySize").toSize());
-        } else if (propertyName == "RequestWindowAutoHide") {
-            Q_EMIT requestWindowAutoHide(watched->property("RequestWindowAutoHide").toBool());
-        } else if (propertyName == "RequestRefershWindowVisible") {
-            Q_EMIT requestRefershWindowVisible();
         }
     }
 

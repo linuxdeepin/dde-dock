@@ -26,7 +26,7 @@
 #include <QDebug>
 #include <QDir>
 
-#define API_VERSION "1.0"
+#define API_VERSION "1.1"
 
 SystemTraysController::SystemTraysController(QObject *parent)
     : QObject(parent)
@@ -88,7 +88,23 @@ void SystemTraysController::requestContextMenu(PluginsItemInterface * const item
     SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
     Q_ASSERT(item);
 
-//    item->showContextMenu();
+    //    item->showContextMenu();
+}
+
+void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
+{
+    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
+
+    Q_EMIT item->requestWindowAutoHide(autoHide);
+}
+
+void SystemTraysController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
+
+    Q_EMIT item->requestRefershWindowVisible();
 }
 
 void SystemTraysController::startLoader()

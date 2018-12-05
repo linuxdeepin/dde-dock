@@ -66,7 +66,7 @@ signals:
     void dragStarted() const;
     void itemDropped(QObject *destination) const;
     void requestWindowAutoHide(const bool autoHide) const;
-    void requestRefershWindowVisible() const;
+    void requestRefreshWindowVisible() const;
 
 protected:
     bool event(QEvent *event);

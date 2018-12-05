@@ -260,6 +260,19 @@ bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
     return false;
 }
 
+QString TrayPlugin::itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget)
+{
+    QString itemKey;
+
+    if (displayMode() == Dock::DisplayMode::Fashion) {
+        itemKey = FASHION_MODE_ITEM;
+    } else {
+        itemKey = m_trayMap.key(trayWidget);
+    }
+
+    return itemKey;
+}
+
 void TrayPlugin::sniItemsChanged()
 {
     const QStringList &itemServicePaths = m_sniWatcher->registeredStatusNotifierItems();
@@ -313,6 +326,9 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
         m_fashionItem->trayWidgetAdded(itemKey, trayWidget);
     }
+
+    connect(trayWidget, &AbstractTrayWidget::requestWindowAutoHide, this, &TrayPlugin::onRequestWindowAutoHide, Qt::UniqueConnection);
+    connect(trayWidget, &AbstractTrayWidget::requestRefershWindowVisible, this, &TrayPlugin::onRequestRefershWindowVisible, Qt::UniqueConnection);
 }
 
 void TrayPlugin::trayAdded(const QString &itemKey)
@@ -425,6 +441,28 @@ void TrayPlugin::onDbusNameOwnerChanged(const QString &name, const QString &oldO
         qDebug() << "Tray:" << SNI_WATCHER_SERVICE << "SNI watcher daemon started, register dock to watcher as SNI Host";
         m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
     }
+}
+
+void TrayPlugin::onRequestWindowAutoHide(const bool autoHide)
+{
+    const QString &itemKey = itemKeyOfTrayWidget(static_cast<AbstractTrayWidget *>(sender()));
+
+    if (itemKey.isEmpty()) {
+        return;
+    }
+
+    m_proxyInter->requestWindowAutoHide(this, itemKey, autoHide);
+}
+
+void TrayPlugin::onRequestRefershWindowVisible()
+{
+    const QString &itemKey = itemKeyOfTrayWidget(static_cast<AbstractTrayWidget *>(sender()));
+
+    if (itemKey.isEmpty()) {
+        return;
+    }
+
+    m_proxyInter->requestRefreshWindowVisible(this, itemKey);
 }
 
 void TrayPlugin::loadIndicator()

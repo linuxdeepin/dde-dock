@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <QDir>
 
-#define API_VERSION "1.0"
+#define API_VERSION "1.1"
 
 DockPluginsController::DockPluginsController(
     DockItemController *itemControllerInter)
@@ -94,19 +94,6 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
-//void DockPluginsController::requestRefershWindowVisible()
-//{
-//    for (auto list : m_pluginList.values())
-//    {
-//        for (auto item : list.values())
-//        {
-//            Q_ASSERT(item);
-//            emit item->requestRefershWindowVisible();
-//            return;
-//        }
-//    }
-//}
-
 void DockPluginsController::requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     PluginsItem *item = pluginItemAt(itemInter, itemKey);
@@ -115,13 +102,21 @@ void DockPluginsController::requestContextMenu(PluginsItemInterface * const item
     item->showContextMenu();
 }
 
-//void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
-//{
-//    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
+{
+    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
 
-//    Q_ASSERT(item);
-//    item->showPopupApplet();
-//}
+    Q_EMIT item->requestWindowAutoHide(autoHide);
+}
+
+void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
+
+    Q_EMIT item->requestRefreshWindowVisible();
+}
 
 void DockPluginsController::startLoader()
 {
