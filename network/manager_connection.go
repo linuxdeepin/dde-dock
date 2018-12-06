@@ -246,25 +246,11 @@ func (m *Manager) GetSupportedConnectionTypes() (types []string, err *dbus.Error
 	return supportedConnectionTypes, nil
 }
 
-// TODO: remove, use device.UniqueUuid instead
-// GetWiredConnectionUuid return connection uuid for target wired device.
-func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string, err *dbus.Error) {
-	// this interface will be called by front-end always if user try
-	// to connect or edit the wired connection, so ensure the
-	// connection exists here is a good choice
-	m.ensureWiredConnectionExists(wiredDevPath, false)
-	uuid = nmGeneralGetDeviceUniqueUuid(wiredDevPath)
-	return
-}
-
-func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
+func (m *Manager) ensureUniqueConnectionExists(devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
 	cpath = "/"
 	switch nmGetDeviceType(devPath) {
 	case nm.NM_DEVICE_TYPE_ETHERNET:
 		cpath, exists, err = m.ensureWiredConnectionExists(devPath, active)
-	case nm.NM_DEVICE_TYPE_WIFI: // ignore
-	case nm.NM_DEVICE_TYPE_MODEM:
-		cpath, exists, err = m.ensureMobileConnectionExists(devPath, active)
 	}
 	return
 }
@@ -273,32 +259,28 @@ func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, a
 // target device exists, if not, create one.
 func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
 	uuid := nmGeneralGetDeviceUniqueUuid(wiredDevPath)
-	var id string
-	if nmGeneralIsUsbDevice(wiredDevPath) {
-		id = nmGeneralGetDeviceDesc(wiredDevPath)
-	} else {
-		id = Tr("Wired Connection")
-	}
 
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
 		// try get uuid from active or available connection
-		logger.Info("-----------Try get uuid, src:", uuid)
-		uuid = getWiredDeviceConnectionUuid(wiredDevPath)
-		logger.Info("-----------Try get uuid, result:", uuid)
-		if uuid != "" {
-			cpath, err = nmGetConnectionByUuid(uuid)
+		existedUuid := getWiredDeviceConnectionUuid(wiredDevPath)
+		if existedUuid != "" {
+			cpath, err = nmGetConnectionByUuid(existedUuid)
 		}
 	}
 	if err != nil {
 		// connection not exists, create one
+		logger.Debug("connection not exist, create one, uuid:", uuid)
 		exists = false
+		var id string
+		if nmGeneralIsUsbDevice(wiredDevPath) {
+			id = nmGeneralGetDeviceDesc(wiredDevPath)
+		} else {
+			id = Tr("Wired Connection")
+		}
 		cpath, err = newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
 	} else {
-		// connection already exists, reset its name to keep
-		// consistent with current system's language
 		exists = true
-		//nmSetConnectionId(cpath, id)
 	}
 	return
 }
@@ -327,22 +309,6 @@ func getWiredDeviceConnectionUuid(wiredDevPath dbus.ObjectPath) string {
 	return ""
 }
 
-// ensureMobileConnectionExists will check if mobile connection for
-// target device exists, if not, create one.
-func (m *Manager) ensureMobileConnectionExists(modemDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
-	uuid := nmGeneralGetDeviceUniqueUuid(modemDevPath)
-	cpath, err = nmGetConnectionByUuid(uuid)
-	if err == nil {
-		// connection already exists
-		exists = true
-		return
-	}
-	// connection id will be reset when setting up plans, so here just give
-	// an optional name like "mobile"
-	cpath, err = newMobileConnectionForDevice("mobile", uuid, modemDevPath, active)
-	return
-}
-
 // ensureWirelessHotspotConnectionExists will check if wireless hotspot connection for
 // target device exists, if not, create one.
 func (m *Manager) ensureWirelessHotspotConnectionExists(wirelessDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
@@ -357,127 +323,6 @@ func (m *Manager) ensureWirelessHotspotConnectionExists(wirelessDevPath dbus.Obj
 	// connection not exists, create one
 	cpath, err = newWirelessHotspotConnectionForDevice("hotspot", uuid, wirelessDevPath, active)
 	return
-}
-
-// CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
-func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (sessionPath dbus.ObjectPath,
-	busErr *dbus.Error) {
-	logger.Debug("CreateConnection", connType, devPath)
-	session, err := newConnectionSessionByCreate(connType, devPath, m.service)
-	if err != nil {
-		logger.Warning(err)
-		return "/", dbusutil.ToError(err)
-	}
-	m.addConnectionSession(session)
-	return session.sessionPath, nil
-}
-
-// EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
-func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (
-	sessionPath dbus.ObjectPath, busErr *dbus.Error) {
-	session, err := m.editConnection(uuid, devPath)
-	if err != nil {
-		return "/", dbusutil.ToError(err)
-	}
-	return session.sessionPath, nil
-}
-
-func (m *Manager) editConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	logger.Debug("EditConnection", uuid, devPath)
-	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
-		m.generalEnsureUniqueConnectionExists(devPath, false)
-	}
-	session, err = newConnectionSessionByOpen(uuid, devPath, m.service)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	m.addConnectionSession(session)
-	return
-}
-
-func (m *Manager) addConnectionSession(session *ConnectionSession) {
-	m.connectionSessionsLock.Lock()
-	defer m.connectionSessionsLock.Unlock()
-
-	// install dbus session
-	err := m.service.Export(session.sessionPath, session)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	m.connectionSessions = append(m.connectionSessions, session)
-}
-func (m *Manager) removeConnectionSession(session *ConnectionSession) {
-	m.connectionSessionsLock.Lock()
-	defer m.connectionSessionsLock.Unlock()
-
-	m.service.StopExport(session)
-
-	i := m.getConnectionSessionIndex(session)
-	if i < 0 {
-		logger.Warning("connection session index is -1", session.sessionPath)
-		return
-	}
-
-	copy(m.connectionSessions[i:], m.connectionSessions[i+1:])
-	newlen := len(m.connectionSessions) - 1
-	m.connectionSessions[newlen] = nil
-	m.connectionSessions = m.connectionSessions[:newlen]
-}
-func (m *Manager) getConnectionSessionIndex(session *ConnectionSession) int {
-	for i, s := range m.connectionSessions {
-		if s.sessionPath == session.sessionPath {
-			return i
-		}
-	}
-	return -1
-}
-func (m *Manager) clearConnectionSessions() {
-	m.connectionSessionsLock.Lock()
-	defer m.connectionSessionsLock.Unlock()
-	for _, session := range m.connectionSessions {
-		m.service.StopExport(session)
-	}
-	m.connectionSessions = nil
-}
-
-func (m *Manager) uninstallConnectionSession(uuid string, activating bool) {
-	m.connectionSessionsLock.Lock()
-	defer m.connectionSessionsLock.Unlock()
-
-	var (
-		s   *ConnectionSession
-		idx int
-	)
-	for i, session := range m.connectionSessions {
-		if session.Uuid != uuid {
-			continue
-		}
-
-		s = session
-		idx = i
-		break
-	}
-
-	if s == nil {
-		logger.Warning("Failed to uninstall connection session: not found", uuid)
-		return
-	}
-
-	copy(m.connectionSessions[idx:], m.connectionSessions[idx+1:])
-	newlen := len(m.connectionSessions) - 1
-	m.connectionSessions[newlen] = nil
-	m.connectionSessions = m.connectionSessions[:newlen]
-
-	if activating && s.Type == connectionWirelessHotspot {
-		// The device maybe not ready switch from AP mode, so reset managed
-		logger.Debug("[uninstallConnectionSession] Will uninstall hotspot connection, reset managed state:", s.devPath)
-		m.setDeviceManaged(string(s.devPath), false)
-		m.setDeviceManaged(string(s.devPath), true)
-	}
-	m.service.StopExport(s)
-	s = nil
 }
 
 // DeleteConnection delete a connection through uuid.
@@ -496,10 +341,6 @@ func (m *Manager) deleteConnection(uuid string) (err error) {
 	if err != nil {
 		return
 	}
-
-	// uninstall opened connection session
-	activating := isConnectionInActivating(uuid)
-	defer m.uninstallConnectionSession(uuid, activating)
 
 	return nmConn.Delete(0)
 }
@@ -525,9 +366,9 @@ func (m *Manager) activateConnection(uuid string, devPath dbus.ObjectPath) (cpat
 
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
-		// connection will be activated in generalEnsureUniqueConnectionExists() if not exists
+		// connection will be activated in ensureUniqueConnectionExists() if not exists
 		if devPath != "/" && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
-			cpath, _, err = m.generalEnsureUniqueConnectionExists(devPath, true)
+			cpath, _, err = m.ensureUniqueConnectionExists(devPath, true)
 		}
 		return
 	}
@@ -627,10 +468,4 @@ func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 		}
 	}
 	return
-}
-
-// IsPasswordValid check if password value for target connection types
-// is valid. This will be used by the front-end password input dialog.
-func (m *Manager) IsPasswordValid(passType, value string) (ok bool, err *dbus.Error) {
-	return isPasswordValid(passType, value), nil
 }

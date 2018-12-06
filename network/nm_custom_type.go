@@ -20,11 +20,10 @@
 package network
 
 import (
+	"strconv"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
-	"pkg.deepin.io/lib/utils"
-	"strconv"
-	"strings"
 )
 
 // Custom device types, use string instead of number, used by front-end
@@ -112,11 +111,6 @@ const (
 	connectionMobile = "mobile" // wrapper for gsm and cdma
 	connectionVpn    = "vpn"    // wrapper for all vpn types
 )
-
-// key-map values for internationalization
-type connectionType struct {
-	Value, Text string
-}
 
 var supportedConnectionTypes = []string{
 	connectionWired,
@@ -268,153 +262,6 @@ func genConnectionId(connType string) (id string) {
 	return
 }
 
-func isConnectionAlwaysAsk(data connectionData, settingName string) (ask bool) {
-	sectionData, ok := data[settingName]
-	if !ok {
-		ask = false
-		return
-	}
-	// query all secret key flags that should be suffixed with
-	// "-flags" and check if is marked as ask user always
-	for key, variant := range sectionData {
-		if strings.HasSuffix(key, "-flags") {
-			value := variant.Value()
-			if flag, ok := value.(uint32); ok {
-				if flag == nm.NM_SETTING_SECRET_FLAG_NONE {
-					ask = true
-				}
-			}
-		}
-	}
-	return
-}
-
 const (
-	nmKeyErrorMissingValue       = "missing value"
-	nmKeyErrorEmptyValue         = "value is empty"
-	nmKeyErrorInvalidValue       = "invalid value"
-	nmKeyErrorIp4MethodConflict  = `%s cannot be used with the 'shared', 'link-local', or 'disabled' methods`
-	nmKeyErrorIp4AddressesStruct = "echo IPv4 address structure is composed of 3 32-bit values, address, prefix and gateway"
-	// nm.NM_KEY_ERROR_IP4_ADDRESSES_PREFIX = "IPv4 prefix's value should be 1-32"
-	nmKeyErrorIp6MethodConflict     = `%s cannot be used with the 'shared', 'link-local', or 'ignore' methods`
-	nmKeyErrorMissingSection        = "missing section %s"
-	nmKeyErrorEmptySection          = "section %s is empty"
-	nmKeyErrorMissingDependsKey     = "missing depends key %s"
-	nmKeyErrorMissingDependsPackage = "missing depends package %s"
+	nmKeyErrorInvalidValue = "invalid value"
 )
-
-func rememberError(errs sectionErrors, section, key, errMsg string) {
-	relatedVks := getRelatedVkeys(section, key)
-	if len(relatedVks) > 0 {
-		rememberVkError(errs, section, key, errMsg)
-		return
-	}
-	doRememberError(errs, key, errMsg)
-}
-
-func rememberVkError(errs sectionErrors, section, key, errMsg string) {
-	vks := getRelatedVkeys(section, key)
-	for _, vk := range vks {
-		if !isOptionalVkey(section, vk) {
-			doRememberError(errs, vk, errMsg)
-		}
-	}
-}
-
-func doRememberError(errs sectionErrors, key, errMsg string) {
-	if _, ok := errs[key]; ok {
-		// error already exists for this key
-		return
-	}
-	errs[key] = errMsg
-}
-
-// start with "file://", end with null byte
-func ensureByteArrayUriPathExistsFor8021x(errs sectionErrors, section, key string, bytePath []byte) {
-	path := byteArrayToStrPath(bytePath)
-	if !utils.IsURI(path) {
-		rememberError(errs, section, key, nmKeyErrorInvalidValue)
-		return
-	}
-	ensureFileExists(errs, section, key, toLocalPathFor8021x(path))
-}
-
-func ensureFileExists(errs sectionErrors, section, key, file string) {
-	file = toLocalPath(file)
-	if !utils.IsFileExist(file) {
-		rememberError(errs, section, key, nmKeyErrorInvalidValue)
-	}
-}
-
-// Custom device types, use sting instead of number, used by front-end
-const (
-	passTypeGeneral           = "general"
-	passTypeWifiWepKey        = "wifi-wep-key"
-	passTypeWifiWepPassphrase = "wifi-wep-passphrase"
-	passTypeWifiWpaPsk        = "wifi-wpa-psk"
-	passTypeWifiWpaEap        = "wifi-wpa-eap"
-)
-
-func getSettingPassKeyType(data connectionData, settingName string) (passType string) {
-	switch settingName {
-	case nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		switch getSettingVkWirelessSecurityKeyMgmt(data) {
-		case "wep":
-			wepKeyType := getSettingWirelessSecurityWepKeyType(data)
-			if wepKeyType == nm.NM_WEP_KEY_TYPE_KEY {
-				passType = passTypeWifiWepKey
-			} else if wepKeyType == nm.NM_WEP_KEY_TYPE_PASSPHRASE {
-				passType = passTypeWifiWepPassphrase
-			}
-		case "wpa-psk":
-			passType = passTypeWifiWpaPsk
-		case "wpa-eap":
-			passType = passTypeWifiWpaEap
-		}
-	default:
-		passType = passTypeGeneral
-	}
-	if len(passType) == 0 {
-		logger.Errorf("Unknown password key type for data[%s]", settingName)
-	}
-	return
-}
-
-func isPasswordValid(passType, value string) (ok bool) {
-	switch passType {
-	case passTypeWifiWepKey:
-		// If wep key type set to 1 and the keys are hexadecimal, they
-		// must be either 10 or 26 characters in length. If set to 1
-		// and the keys are ASCII keys, they must be either 5 or 13
-		// characters in length.
-		if len(value) != 10 && len(value) != 26 && len(value) != 5 && len(value) != 13 {
-			ok = false
-		} else {
-			ok = true
-		}
-	case passTypeWifiWepPassphrase:
-		// If wep key type set to 2, the passphrase is hashed using
-		// the de-facto MD5 method to derive the actual WEP key.
-		if len(value) == 0 {
-			ok = false
-		} else {
-			ok = true
-		}
-	case passTypeWifiWpaPsk:
-		// If the wpa-psk key is 64-characters long, it must contain
-		// only hexadecimal characters and is interpreted as a
-		// hexadecimal WPA key. Otherwise, the key must be between 8
-		// and 63 ASCII characters (as specified in the 802.11i
-		// standard) and is interpreted as a WPA passphrase
-		if len(value) < 8 || len(value) > 64 {
-			ok = false
-		} else {
-			ok = true
-		}
-	case passTypeGeneral:
-		ok = true
-	default:
-		ok = true
-	}
-	return
-}

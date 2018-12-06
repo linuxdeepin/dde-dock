@@ -25,10 +25,11 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/iw"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/utils"
-	"strings"
 )
 
 func isStringInArray(s string, list []string) bool {
@@ -216,7 +217,7 @@ func execWithIO(name string, arg ...string) (process *os.Process, stdin io.Write
 	return
 }
 
-func isWirelessDeviceSuportHotspot(macAddress string) bool {
+func isWirelessDeviceSupportHotspot(macAddress string) bool {
 	devices, err := iw.ListWirelessInfo()
 	if err != nil {
 		logger.Warning("Failed to detect hotspot:", macAddress, err)

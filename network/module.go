@@ -32,24 +32,25 @@ var (
 )
 
 func init() {
+	loader.Register(newModule(logger))
 	proxychains.SetLogger(logger)
 }
 
-type Daemon struct {
+type Module struct {
 	*loader.ModuleBase
 }
 
-func NewDaemon(logger *log.Logger) *Daemon {
-	daemon := new(Daemon)
-	daemon.ModuleBase = loader.NewModuleBase("network", daemon, logger)
-	return daemon
+func newModule(logger *log.Logger) *Module {
+	module := new(Module)
+	module.ModuleBase = loader.NewModuleBase("network", module, logger)
+	return module
 }
 
-func (d *Daemon) GetDependencies() []string {
+func (d *Module) GetDependencies() []string {
 	return []string{}
 }
 
-func (d *Daemon) Start() error {
+func (d *Module) Start() error {
 	libnotify.Init("dde-session-daemon")
 	if manager != nil {
 		return nil
@@ -97,7 +98,7 @@ func (d *Daemon) Start() error {
 	return nil
 }
 
-func (d *Daemon) Stop() error {
+func (d *Module) Stop() error {
 	if manager == nil {
 		return nil
 	}

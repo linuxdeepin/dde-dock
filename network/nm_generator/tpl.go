@@ -31,9 +31,6 @@ const nmSettingBeansHeader = `
 package network
 
 import (
-	"fmt"
-	. "pkg.deepin.io/lib/gettext"
-	"pkg.deepin.io/dde/daemon/network/nm"
 )
 `
 
@@ -47,82 +44,6 @@ const ({{range .}}
 const ({{range .}}{{range .Keys}}{{if ne .VKeyInfo.VirtualKeyName ""}}
 	{{.VKeyInfo.VirtualKeyName}} = "{{.KeyValue}}"{{end}}{{end}}{{end}}
 )
-`
-
-const tplNMVirtualSettings = `
-// Virtual section data
-var virtualSections = make(map[string]VsectionInfo)
-
-func initVirtualSections() { {{range .}}
-	virtualSections["{{.Value}}"] = VsectionInfo{
-		VirtualSection:"{{.Value}}",
-		relatedSections:[]string{ {{range $s := GetVsRelatedSettings .VirtaulSectionName}}"{{$s}}",{{end}} },
-		Name: Tr` + `("{{.DisplayName}}"),
-		Keys: []*GeneralKeyInfo { {{range .Keys}}
-			&GeneralKeyInfo{Section:"{{.Section}}", Key:"{{.KeyValue}}", {{if ne .DisplayName ""}}Name:Tr` + `("{{.DisplayName}}"), {{end}}WidgetType:"{{.WidgetType}}", AlwaysUpdate:{{.AlwaysUpdate}}, UseValueRange:{{.UseValueRange}}, MinValue:{{.MinValue}}, MaxValue:{{.MaxValue}} }, {{end}}
-		},
-	}{{end}}
-}
-
-// Virtual key data
-var virtualKeys = []vkeyInfo{ {{range .}}{{range .Keys}}{{if ne .VKeyInfo.VirtualKeyName ""}}
-	{value:"{{.KeyValue}}", ktype:{{.VKeyInfo.Type}}, vkType:{{.VKeyInfo.VkType}}, relatedSection:"{{.Section}}", relatedKeys:[]string{ {{range $k := .VKeyInfo.RelatedKeys}}nm.{{$k}},{{end}} }, childKey:{{.VKeyInfo.ChildKey}}, optional:{{.VKeyInfo.Optional}} },{{end}}{{end}}{{end}}
-}
-
-// Virtual key general JSON getter
-func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON string) { {{range .}}{{range .Keys}}{{if ne .VKeyInfo.VirtualKeyName ""}}
-	if section == "{{.Section}}" && key == "{{.KeyValue}}" {
-		return get{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}JSON(data)
-	}{{end}}{{end}}{{end}}
-	logger.Error("invalid virtual key:", section, key)
-	return
-}
-
-// Virtual key general JSON setter
-func generalSetVkeyJSON(data connectionData, section, key string, valueJSON string) (err error) {
-	if isJSONValueMeansToDeleteKey(valueJSON, getSettingVkeyType(section, key)) && !isChildVkey(section, key) {
-		logger.Debugf("json value means to remove key, data[%s][%s]=%#v", section, key, valueJSON)
-		removeVirtualKey(data, section, key)
-		return
-	}
-	// each virtual key owns a logic setter{{range .}}{{range .Keys}}{{if ne .VKeyInfo.VirtualKeyName ""}}
-	if section == "{{.Section}}" && key == "{{.KeyValue}}" {
-		err = logicSet{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}JSON(data, valueJSON)
-		return
-	}{{end}}{{end}}{{end}}
-	logger.Error("invalid virtual key:", section, key)
-	return
-}
-
-// Virtual key JSON getter{{range .}}{{range .Keys}}{{if ne .VKeyInfo.VirtualKeyName ""}}
-func get{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}JSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(get{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}(data))
-	return
-}{{end}}{{end}}{{end}}
-
-// Virtual key JSON logic setter{{range .}}{{range .Keys}}{{if ne .VKeyInfo.VirtualKeyName ""}}
-func logicSet{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}JSON(data connectionData, valueJSON string) (err error) {
-	value, _ := jsonToKeyValue{{GetKeyTypeShortName .VKeyInfo.Type}}(valueJSON)
-	return logicSet{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}(data, value)
-}{{end}}{{end}}{{end}}
-
-// Getter for enable wrapper virtual key{{range .}}{{range .Keys}}{{if eq .VKeyInfo.VkType "vkTypeEnableWrapper"}}
-func get{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}(data connectionData) (value bool) { {{range $key := .VKeyInfo.RelatedKeys}}
-	if !is{{GetKeyFuncBaseName $key}}Exists(data) {
-		return false
-	}{{end}}
-	return true
-}{{end}}{{end}}{{end}}
-
-// Setter for key's enable wrapper{{range .}}{{range .Keys}}{{if eq .VKeyInfo.VkType "vkTypeEnableWrapper"}}
-func logicSet{{GetKeyFuncBaseName .VKeyInfo.VirtualKeyName}}(data connectionData, value bool) (err error) {
-	if value { {{range $key := .VKeyInfo.RelatedKeys}}
-		set{{GetKeyFuncBaseName $key}}(data, {{GetKeyDefaultValue $key}}){{end}}
-	} else { {{range $key := .VKeyInfo.RelatedKeys}}
-		remove{{GetKeyFuncBaseName $key}}(data){{end}}
-	}
-	return
-}{{end}}{{end}}{{end}}
 `
 
 const tplNMConsts = `
@@ -143,88 +64,6 @@ const ({{range .Keys}}
 `
 
 const tplNMBeans = `
-func getAliasSettingRealName(aliasSetting string) (realSetting string) {
-	realSetting = aliasSetting
-	switch aliasSetting { {{range .NMSettings}}{{if ne .RealSettingName ""}}
-	case nm.{{.Name}}:
-		realSetting = nm.{{.RealSettingName}}{{end}}{{end}}
-	}
-	return
-}
-
-// General check is key should be available for target setting
-func generalIsKeyShouldInSettingSection(section, key string) bool {
-	if isVirtualKey(section, key) {
-		return true
-	}
-	switch section { {{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		switch key { {{range .Keys}}
-		case "{{.Value}}":
-			return true{{end}}
-		}{{end}}
-	}
-	return false
-}
-
-// General get virtual section setting key type
-func generalGetSettingKeyType(section, key string) (t ktype) {
-	if isVirtualKey(section, key) {
-		t = getSettingVkeyType(section, key)
-		return
-	}
-	switch section {
-	default:
-		t = ktypeUnknown{{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		switch key {
-		default:
-			t = ktypeUnknown{{range .Keys}}
-		case "{{.Value}}":
-			t = {{.Type}}{{end}}
-		}{{end}}
-	}
-	return
-}
-
-// General get virtual section setting available keys
-func generalGetSettingAvailableKeys(data connectionData, section string) (keys []string) {
-	if isVirtualSection(section) {
-		keys = generalGetSettingVsectionAvailableKeys(data, section)
-		return
-	}
-	switch section { {{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		keys = get{{.SettingClass}}AvailableKeys(data){{end}}
-	}
-	return
-}
-
-// General get virtual section setting key's available values
-func generalGetSettingAvailableValues(data connectionData, section, key string) (values []kvalue) {
-	if isVirtualKey(section, key) {
-		values = generalGetSettingVkeyAvailableValues(data, section, key)
-		return
-	}
-	switch section { {{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		values = get{{.SettingClass}}AvailableValues(data, key){{end}}
-	}
-	return
-}
-
-// General check setting key values if is valid
-func generalCheckSettingValues(data connectionData, section string) (errs sectionErrors) {
-	if isVirtualSection(section) {
-		return
-	}
-	switch section { {{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		errs = check{{.SettingClass}}Values(data){{end}}
-	}
-	return
-}
-
 // General get setting key default value
 func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 	switch setting {
@@ -240,68 +79,6 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 	}
 	return
 }
-
-// Generally JSON getter
-func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJSON string) {
-	if isVirtualKey(section, key) {
-		valueJSON = generalGetVkeyJSON(data, section, key)
-		return
-	}
-	switch section {
-	default:
-		logger.Error("getSettingKeyJSON: invalide key", section, key){{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		switch key {
-		default:
-			logger.Error("getSettingKeyJSON: invalide key", section, key){{range .Keys}}
-		case "{{.Value}}":
-			valueJSON = get{{.CapcaseName}}JSON(data){{end}}
-		}{{end}}
-	}
-	return
-}
-
-// Generally JSON setter
-func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON string) (err error) {
-	if isVirtualKey(section, key) {
-		err = generalSetVkeyJSON(data, section, key, valueJSON)
-		return
-	}
-	switch section {
-	default:
-		err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
-		logger.Error(err){{range $i, $setting := .NMSettings}}
-	case "{{$setting.Value}}":
-		switch key {
-		default:
-			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
-			logger.Error(err){{range .Keys}}
-		case "{{.Value}}":
-			err = {{if IsLogicSetKey .KeyName}}logicSet{{else}}set{{end}}{{.CapcaseName}}JSON(data, valueJSON){{end}}
-		}{{end}}
-	}
-	return
-}
-
-// Ensure setting and key exists and not empty{{range $i, $setting := .NMSettings}}
-func ensureSection{{$setting.SettingClass}}Exists(data connectionData, errs sectionErrors, relatedKey string) {
-	if !isSettingExists(data, "{{$setting.Value}}") {
-		rememberError(errs, relatedKey, "{{$setting.Value}}", fmt.Sprintf(nmKeyErrorMissingSection, "{{$setting.Value}}"))
-	}
-	sectionData, _ := data["{{$setting.Value}}"]
-	if len(sectionData) == 0 {
-		rememberError(errs, relatedKey, "{{$setting.Value}}", fmt.Sprintf(nmKeyErrorEmptySection, "{{$setting.Value}}"))
-	}
-}{{range .Keys}}
-func ensure{{.CapcaseName}}NoEmpty(data connectionData, errs sectionErrors) {
-	if !is{{.CapcaseName}}Exists(data) {
-		rememberError(errs, "{{$setting.Value}}", "{{.Value}}", nmKeyErrorMissingValue)
-	}{{if IfNeedCheckValueLength .Type}}
-	value := get{{.CapcaseName}}(data)
-	if len(value) == 0 {
-		rememberError(errs, "{{$setting.Value}}", "{{.Value}}", nmKeyErrorEmptyValue)
-	}{{end}}
-}{{end}}{{end}}
 
 // Check is key exists{{range $i, $setting := .NMSettings}}{{range .Keys}}
 func is{{.CapcaseName}}Exists(data connectionData) bool {
@@ -319,30 +96,6 @@ func get{{.CapcaseName}}(data connectionData) (value {{GetKeyTypeGoSyntax .Type}
 func set{{.CapcaseName}}(data connectionData, value {{GetKeyTypeGoSyntax .Type}}) {
 	setSettingKey(data, "{{$setting.Value}}", "{{.Value}}", value)
 }{{end}}{{end}}
-
-// JSON Getter{{range $i, $setting := .NMSettings}}{{range .Keys}}
-func get{{.CapcaseName}}JSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, "{{$setting.Value}}", "{{.Value}}", {{.Type}})
-	return
-}{{end}}{{end}}
-
-// JSON Setter{{range $i, $setting := .NMSettings}}{{range .Keys}}
-func set{{.CapcaseName}}JSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, "{{$setting.Value}}", "{{.Value}}", valueJSON, {{.Type}})
-}{{end}}{{end}}
-
-// JSON logical setter{{range $i, $setting := .NMSettings}}{{range .Keys}}{{if IsLogicSetKey .KeyName}}
-func logicSet{{.CapcaseName}}JSON(data connectionData, valueJSON string) (err error) {
-	err = set{{.CapcaseName}}JSON(data, valueJSON)
-	if err != nil {
-		return
-	}
-	if is{{.CapcaseName}}Exists(data) {
-		value := get{{.CapcaseName}}(data)
-		err = logicSet{{.CapcaseName}}(data, value)
-	}
-	return
-}{{end}}{{end}}{{end}}
 
 // Remover{{range $i, $setting := .NMSettings}}{{range .Keys}}
 func remove{{.CapcaseName}}(data connectionData) {

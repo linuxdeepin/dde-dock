@@ -263,10 +263,11 @@ func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, busErr *dbus.Error) {
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
-	filteredAccessPoints := make([]*accessPoint, 0)
-	for _, aconn := range m.accessPoints[path] {
-		if !aconn.shouldBeIgnore() {
-			filteredAccessPoints = append(filteredAccessPoints, aconn)
+	accessPoints := m.accessPoints[path]
+	filteredAccessPoints := make([]*accessPoint, 0, len(m.accessPoints))
+	for _, ap := range accessPoints {
+		if !ap.shouldBeIgnore() {
+			filteredAccessPoints = append(filteredAccessPoints, ap)
 		}
 	}
 	apsJSON, err := marshalJSON(filteredAccessPoints)
@@ -289,7 +290,7 @@ func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 	logger.Debugf("ActivateAccessPoint: uuid=%s, apPath=%s, devPath=%s", uuid, apPath, devPath)
 	defer logger.Debugf("ActivateAccessPoint end")
 
-	if len(uuid) > 0 {
+	if uuid != "" {
 		cpath, err = m.activateConnection(uuid, devPath)
 	} else {
 		// if there is no connection for current access point, create one
@@ -313,53 +314,5 @@ func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 			return
 		}
 	}
-	return
-}
-
-// CreateConnectionForAccessPoint will crate connection for target
-// access point, it will set the right SSID and secret method
-// automatically.
-func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (
-	sessionPath dbus.ObjectPath, busErr *dbus.Error) {
-	session, err := m.createConnectionForAccessPoint(apPath, devPath)
-	if err != nil {
-		return "/", dbusutil.ToError(err)
-	}
-	return session.sessionPath, nil
-}
-
-func (m *Manager) createConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (
-	session *ConnectionSession, err error) {
-	session, err = newConnectionSessionByCreate(connectionWireless, devPath, m.service)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-
-	// setup access point data
-	nmAp, err := nmNewAccessPoint(apPath)
-	if err != nil {
-		return
-	}
-
-	ssid, _ := nmAp.Ssid().Get(0)
-	setSettingConnectionId(session.data, decodeSsid(ssid))
-	setSettingWirelessSsid(session.data, ssid)
-	secType := getApSecType(nmAp)
-	switch secType {
-	case apSecNone:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "none")
-	case apSecWep:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wep")
-	case apSecPsk:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-psk")
-	case apSecEap:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-eap")
-	}
-	session.setProps()
-	session.setPropAllowDelete(false)
-
-	// install dbus session
-	m.addConnectionSession(session)
 	return
 }

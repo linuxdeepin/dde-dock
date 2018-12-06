@@ -3730,6 +3730,8 @@ NMEnums:
       Value: "lacp"
     - Name: NM_SETTING_TEAM_RUNNER_LOADBALANCE
       Value: "loadbalance"
+    - Name: NM_SETTING_TEAM_RUNNER_RANDOM
+      Value: "random"
     - Name: NM_SETTING_TEAM_RUNNER_ROUNDROBIN
       Value: "roundrobin"
     - Name: NM_SETTING_WIRELESS_MODE_ADHOC

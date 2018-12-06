@@ -175,7 +175,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		})
 		dev.ActiveAp, _ = nmDevWireless.ActiveAccessPoint().Get(0)
 		permHwAddress, _ := nmDevWireless.PermHwAddress().Get(0)
-		dev.SupportHotspot = isWirelessDeviceSuportHotspot(permHwAddress)
+		dev.SupportHotspot = isWirelessDeviceSupportHotspot(permHwAddress)
 
 		nmDevWireless.HwAddress().ConnectChanged(func(hasValue bool, value string) {
 			if !hasValue {
@@ -205,7 +205,6 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			err = fmt.Errorf("modem device is not properly identified, please re-plugin it")
 			return
 		}
-		m.ensureMobileConnectionExists(dev.Path, false)
 		go func() {
 			// disable autoconnect property for mobile devices
 			// notice: sleep is necessary seconds before setting dbus values

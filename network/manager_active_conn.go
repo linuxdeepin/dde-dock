@@ -199,10 +199,6 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32) 
 		logger.Infof("remove active connection %#v", aconn)
 		// vpn's active connection will be removed after giving a
 		// notification
-		//if !aconn.Vpn {
-		//delete(m.activeConnections, apath)
-		//needUpdated = true
-		//}
 	}
 
 	m.updatePropActiveConnections()

@@ -57,33 +57,3 @@ func initSettingSectionWired(data connectionData) {
 	addSetting(data, nm.NM_SETTING_WIRED_SETTING_NAME)
 	setSettingWiredDuplex(data, "full")
 }
-
-// Get available keys
-func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_MTU)
-	if isSettingWiredMtuExists(data) {
-		keys = append(keys, nm.NM_SETTING_WIRED_MTU)
-	}
-	return
-}
-
-// Get available values
-func getSettingWiredAvailableValues(data connectionData, key string) (values []kvalue) {
-	switch key {
-	case nm.NM_SETTING_WIRED_MAC_ADDRESS:
-		// get all wired devices mac address
-		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(nm.NM_DEVICE_TYPE_ETHERNET) {
-			values = append(values, kvalue{hwAddr, hwAddr + " (" + iface + ")"})
-		}
-	}
-	return
-}
-
-// Check whether the values are correct
-func checkSettingWiredValues(data connectionData) (errs sectionErrors) {
-	errs = make(map[string]string)
-	// hardware address will be checked when setting key
-	return
-}

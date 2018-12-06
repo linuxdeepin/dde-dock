@@ -119,7 +119,6 @@ func genNMConstsCode() (content string) {
 
 func genNMBeansCode() (content string) {
 	content = nmSettingBeansHeader
-	content += genTpl(nmVirtualSections, tplNMVirtualSettings)
 	content += genTpl(nmConsts, tplNMBeans)
 	return
 }
