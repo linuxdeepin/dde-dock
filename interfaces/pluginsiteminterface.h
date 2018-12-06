@@ -191,8 +191,6 @@ public:
     ///
     virtual void refreshIcon(const QString &itemKey) { Q_UNUSED(itemKey); }
 
-
-protected:
     ///
     /// \brief displayMode
     /// get current dock display mode
