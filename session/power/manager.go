@@ -62,17 +62,21 @@ type Manager struct {
 	// 电池状态
 	BatteryState map[string]uint32
 
-	// 接通电源时，不做任何操作，到关闭屏幕需要的时间
+	// 接通电源时，不做任何操作，到显示屏保的时间
+	LinePowerScreensaverDelay gsprop.Int `prop:"access:rw"`
+	// 接通电源时，不做任何操作，到关闭屏幕的时间
 	LinePowerScreenBlackDelay gsprop.Int `prop:"access:rw"`
-	// 接通电源时，不做任何操作，从黑屏到睡眠的时间
+	// 接通电源时，不做任何操作，到睡眠的时间
 	LinePowerSleepDelay gsprop.Int `prop:"access:rw"`
 
-	// 使用电池时，不做任何操作，到关闭屏幕需要的时间
+	// 使用电池时，不做任何操作，到显示屏保的时间
+	BatteryScreensaverDelay gsprop.Int `prop:"access:rw"`
+	// 使用电池时，不做任何操作，到关闭屏幕的时间
 	BatteryScreenBlackDelay gsprop.Int `prop:"access:rw"`
-	// 使用电池时，不做任何操作，从黑屏到睡眠的时间
+	// 使用电池时，不做任何操作，到睡眠的时间
 	BatterySleepDelay gsprop.Int `prop:"access:rw"`
 
-	// 关闭显示器前是否锁定
+	// 关闭屏幕前是否锁定
 	ScreenBlackLock gsprop.Bool `prop:"access:rw"`
 	// 睡眠前是否锁定
 	SleepLock gsprop.Bool `prop:"access:rw"`
@@ -107,8 +111,10 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.settings = gio.NewSettings(gsSchemaPower)
 	m.warnLevelConfig = NewWarnLevelConfigManager(m.settings)
 
+	m.LinePowerScreensaverDelay.Bind(m.settings, settingKeyLinePowerScreensaverDelay)
 	m.LinePowerScreenBlackDelay.Bind(m.settings, settingKeyLinePowerScreenBlackDelay)
 	m.LinePowerSleepDelay.Bind(m.settings, settingKeyLinePowerSleepDelay)
+	m.BatteryScreensaverDelay.Bind(m.settings, settingKeyBatteryScreensaverDelay)
 	m.BatteryScreenBlackDelay.Bind(m.settings, settingKeyBatteryScreenBlackDelay)
 	m.BatterySleepDelay.Bind(m.settings, settingKeyBatterySleepDelay)
 	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)

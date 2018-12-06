@@ -22,9 +22,11 @@ package power
 const (
 	gsSchemaPower = "com.deepin.dde.power"
 	// settingKeys
+	settingKeyBatteryScreensaverDelay = "battery-screensaver-delay"
 	settingKeyBatteryScreenBlackDelay = "battery-screen-black-delay"
 	settingKeyBatterySleepDelay       = "battery-sleep-delay"
 
+	settingKeyLinePowerScreensaverDelay = "line-power-screensaver-delay"
 	settingKeyLinePowerScreenBlackDelay = "line-power-screen-black-delay"
 	settingKeyLinePowerSleepDelay       = "line-power-sleep-delay"
 

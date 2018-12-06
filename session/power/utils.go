@@ -27,6 +27,7 @@ import (
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/api/soundutils"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) findWindow(wmClassInstance, wmClassClass string) x.Window {
@@ -185,4 +186,19 @@ func (m *Manager) sendNotify(icon, summary, body string) {
 func playSound(name string) {
 	logger.Debug("play system sound", name)
 	go soundutils.PlaySystemSound(name, "")
+}
+
+func startScreensaver() {
+	logger.Info("start screenSaver")
+	bus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	obj := bus.Object("com.deepin.ScreenSaver", "/com/deepin/ScreenSaver")
+	err = obj.Call("com.deepin.ScreenSaver.Start", 0).Err
+	if err != nil {
+		logger.Warning(err)
+	}
 }

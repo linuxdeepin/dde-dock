@@ -24,63 +24,66 @@ import (
 	"time"
 )
 
-type TimeAfterTaskState uint
+type delayedTaskState uint
 
 const (
-	TimeAfterTaskStateReady TimeAfterTaskState = iota
-	TimeAfterTaskStateRunning
-	TimeAfterTaskStateDone
+	delayedTaskStateReady delayedTaskState = iota
+	delayedTaskStateRunning
+	delayedTaskStateDone
 )
 
-type TimeAfterTask struct {
-	State      TimeAfterTaskState
+type delayedTask struct {
+	state      delayedTaskState
 	mu         sync.Mutex
 	fn         func()
 	cancelable bool
 	timer      *time.Timer
+	name       string
 }
 
-func NewTimeAfterTask(delay time.Duration, fn func()) *TimeAfterTask {
-	t := &TimeAfterTask{
-		State:      TimeAfterTaskStateReady,
+func newDelayedTask(name string, delay time.Duration, fn func()) *delayedTask {
+	t := &delayedTask{
+		state:      delayedTaskStateReady,
 		cancelable: true,
+		name:       name,
 	}
 	t.timer = time.AfterFunc(delay, func() {
 		t.mu.Lock()
 		t.cancelable = false
-		t.State = TimeAfterTaskStateRunning
+		t.state = delayedTaskStateRunning
 		t.mu.Unlock()
 
 		fn()
 
 		t.mu.Lock()
-		t.State = TimeAfterTaskStateDone
+		t.state = delayedTaskStateDone
 		t.mu.Unlock()
 	})
 	return t
 }
 
-func (t *TimeAfterTask) Cancel() {
+func (t *delayedTask) Cancel() {
 	t.mu.Lock()
 	if t.cancelable {
 		t.timer.Stop()
-		t.State = TimeAfterTaskStateDone
+		t.state = delayedTaskStateDone
+		logger.Debugf("delayedTask %s cancelled", t.name)
 	}
 	t.mu.Unlock()
 }
 
-type TimeAfterTasks []*TimeAfterTask
+type delayedTasks []*delayedTask
 
-func (tasks TimeAfterTasks) Wait(delay time.Duration, countMax int) {
+func (tasks delayedTasks) Wait(delay time.Duration, countMax int) {
 	count := 0
 	for {
 		allDone := true
 		for _, task := range tasks {
 			task.mu.Lock()
-			state := task.State
+			state := task.state
 			task.mu.Unlock()
 
-			if state != TimeAfterTaskStateDone {
+			if state != delayedTaskStateDone {
 				allDone = false
 				break
 			}
@@ -93,7 +96,7 @@ func (tasks TimeAfterTasks) Wait(delay time.Duration, countMax int) {
 	}
 }
 
-func (tasks TimeAfterTasks) CancelAll() {
+func (tasks delayedTasks) CancelAll() {
 	for _, task := range tasks {
 		task.Cancel()
 	}
