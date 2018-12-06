@@ -35,6 +35,8 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
       m_layout(new QVBoxLayout(this)),
       m_attention(false),
       m_dragging(false),
+      m_hover(false),
+      m_pressed(false),
       m_itemKey(itemKey)
 
 {
@@ -78,9 +80,17 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setOpacity(0.5);
 
+    QColor color = QColor::fromRgb(40, 40, 40);;
+    if (m_hover) {
+        color = QColor::fromRgb(60, 60, 60);
+    }
+    if (m_pressed) {
+        color = QColor::fromRgb(20, 20, 20);
+    }
+
     QPainterPath path;
     path.addRoundedRect(rect(), 10, 10);
-    painter.fillPath(path, QColor::fromRgb(40, 40, 40));
+    painter.fillPath(path, color);
 }
 
 bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
@@ -88,6 +98,8 @@ bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_absTrayWidget) {
         if (event->type() == QEvent::Type::MouseButtonPress) {
             mousePressEvent(static_cast<QMouseEvent *>(event));
+        } else if (event->type() == QEvent::Type::MouseButtonRelease) {
+            mouseReleaseEvent(static_cast<QMouseEvent *>(event));
         } else if (event->type() == QEvent::Type::MouseMove) {
             handleMouseMove(static_cast<QMouseEvent *>(event));
         }
@@ -102,12 +114,23 @@ void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)
         MousePressPoint = event->pos();
     }
 
+    m_pressed = true;
+    update();
+
     QWidget::mousePressEvent(event);
 }
 
 void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
 {
     return QWidget::mouseMoveEvent(event);
+}
+
+void FashionTrayWidgetWrapper::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_pressed = false;
+    update();
+
+    QWidget::mouseReleaseEvent(event);
 }
 
 void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
@@ -119,6 +142,23 @@ void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
     }
 
     QWidget::dragEnterEvent(event);
+}
+
+void FashionTrayWidgetWrapper::enterEvent(QEvent *event)
+{
+    m_hover = true;
+    update();
+
+    QWidget::enterEvent(event);
+}
+
+void FashionTrayWidgetWrapper::leaveEvent(QEvent *event)
+{
+    m_hover = false;
+    m_pressed = false;
+    update();
+
+    QWidget::leaveEvent(event);
 }
 
 void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)

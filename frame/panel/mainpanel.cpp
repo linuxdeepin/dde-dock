@@ -103,6 +103,7 @@ MainPanel::MainPanel(QWidget *parent)
     }
 
     m_showDesktopItem->setFixedSize(10, height());
+    m_itemLayout->addSpacing(1);
     m_itemLayout->addWidget(m_showDesktopItem);
 
     setLayout(m_itemLayout);

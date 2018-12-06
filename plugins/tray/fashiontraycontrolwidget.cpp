@@ -142,6 +142,7 @@ void FashionTrayControlWidget::enterEvent(QEvent *event)
 void FashionTrayControlWidget::leaveEvent(QEvent *event)
 {
     m_hover = false;
+    m_pressed = false;
     update();
 
     QWidget::leaveEvent(event);

@@ -48,16 +48,19 @@ public:
 
     inline ItemType itemType() const override {return Plugins;}
     QSize sizeHint() const override;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     QWidget *centralWidget() const;
 
 public slots:
     void refershIcon() override;
 
-private:
+protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
     void showPopupWindow(QWidget * const content, const bool model = false) override;
@@ -74,6 +77,7 @@ private:
 
     const QString m_itemKey;
     bool m_dragging;
+    bool m_hover;
 
     static QPoint MousePressPoint;
 };

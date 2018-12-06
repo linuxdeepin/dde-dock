@@ -40,7 +40,8 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
       m_pluginInter(pluginInter),
       m_centralWidget(m_pluginInter->itemWidget(itemKey)),
       m_itemKey(itemKey),
-      m_dragging(false)
+      m_dragging(false),
+      m_hover(false)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -109,6 +110,33 @@ QSize PluginsItem::sizeHint() const
     return m_centralWidget->sizeHint();
 }
 
+void PluginsItem::paintEvent(QPaintEvent *event)
+{
+    DisplayMode displayMode = m_pluginInter->displayMode();
+
+    if (displayMode == Dock::DisplayMode::Fashion) {
+        return;
+    }
+    if (!m_hover) {
+        return;
+    }
+
+    QRect destRect;
+    destRect.setSize(m_centralWidget->sizeHint());
+    destRect.moveCenter(rect().center());
+
+    QPainterPath path;
+    path.addRoundedRect(destRect, 6, 6);
+
+    QColor color;
+    color = QColor::fromRgb(255, 255, 255);
+
+    QPainter painter(this);
+    painter.setOpacity(0.1);
+
+    painter.fillPath(path, color);
+}
+
 void PluginsItem::refershIcon()
 {
     m_pluginInter->refreshIcon(m_itemKey);
@@ -159,6 +187,22 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     const QPoint distance = e->pos() - MousePressPoint;
     if (distance.manhattanLength() < PLUGIN_ITEM_DRAG_THRESHOLD)
         mouseClicked();
+}
+
+void PluginsItem::enterEvent(QEvent *event)
+{
+    m_hover = true;
+    update();
+
+    DockItem::enterEvent(event);
+}
+
+void PluginsItem::leaveEvent(QEvent *event)
+{
+    m_hover = false;
+    update();
+
+    DockItem::leaveEvent(event);
 }
 
 void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
