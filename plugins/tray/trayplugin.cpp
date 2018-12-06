@@ -211,6 +211,23 @@ void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool contain
     m_proxyInter->saveValue(this, widKey.isEmpty() ? itemKey : widKey, container);
 }
 
+void TrayPlugin::refreshIcon(const QString &itemKey)
+{
+    if (itemKey == FASHION_MODE_ITEM) {
+        for (auto trayWidget : m_trayMap.values()) {
+            if (trayWidget) {
+                trayWidget->updateIcon();
+            }
+        }
+        return;
+    }
+
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey);
+    if (trayWidget) {
+        trayWidget->updateIcon();
+    }
+}
+
 Dock::Position TrayPlugin::dockPosition() const
 {
     return position();

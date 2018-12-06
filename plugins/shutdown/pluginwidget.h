@@ -47,9 +47,6 @@ private:
     const QPixmap loadSvg(const QString &fileName, const QSize &size) const;
 
 private:
-    void refershIconPixmap();
-
-private:
     bool m_hover;
     Dock::DisplayMode m_displayMode;
 };

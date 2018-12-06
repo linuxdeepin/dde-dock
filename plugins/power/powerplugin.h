@@ -44,17 +44,15 @@ public:
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
-
     void pluginStateSwitched() override;
     bool pluginIsAllowDisable() override { return true; }
     bool pluginIsDisable() override;
-
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     const QString itemCommand(const QString &itemKey) override;
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
-
+    void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 

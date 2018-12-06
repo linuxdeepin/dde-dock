@@ -43,6 +43,8 @@ public:
     const QString contextMenu() const;
     void invokeMenuItem(const QString menuId, const bool checked);
 
+    void refreshIcon();
+
 signals:
     void requestContextMenu() const;
 
@@ -54,8 +56,7 @@ protected:
     void paintEvent(QPaintEvent *e);
 
 private slots:
-    void refershIcon();
-    void refershTips(const bool force = false);
+    void refreshTips(const bool force = false);
     void sinkChanged(DBusSink *sink);
 
 private:

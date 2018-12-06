@@ -35,6 +35,8 @@ class PowerStatusWidget : public QWidget
 public:
     explicit PowerStatusWidget(QWidget *parent = 0);
 
+    void refreshIcon();
+
 signals:
     void requestContextMenu(const QString &itemKey) const;
 

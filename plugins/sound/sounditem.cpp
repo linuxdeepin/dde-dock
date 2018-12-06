@@ -49,13 +49,12 @@ SoundItem::SoundItem(QWidget *parent)
     m_applet->setVisible(false);
 
     connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
-    connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refershTips, Qt::QueuedConnection);
-    connect(static_cast<DApplication*>(qApp), &DApplication::iconThemeChanged, this, &SoundItem::refershIcon);
+    connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refreshTips, Qt::QueuedConnection);
 }
 
 QWidget *SoundItem::tipsWidget()
 {
-    refershTips(true);
+    refreshTips(true);
 
     m_tipsLabel->resize(m_tipsLabel->sizeHint().width() + 10,
                         m_tipsLabel->sizeHint().height());
@@ -121,7 +120,7 @@ void SoundItem::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
 
-    refershIcon();
+    refreshIcon();
 }
 
 void SoundItem::mousePressEvent(QMouseEvent *e)
@@ -158,7 +157,7 @@ void SoundItem::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
 }
 
-void SoundItem::refershIcon()
+void SoundItem::refreshIcon()
 {
     if (!m_sinkInter)
         return;
@@ -204,7 +203,7 @@ void SoundItem::refershIcon()
     update();
 }
 
-void SoundItem::refershTips(const bool force)
+void SoundItem::refreshTips(const bool force)
 {
     if (!force && !m_tipsLabel->isVisible())
         return;
@@ -228,7 +227,7 @@ void SoundItem::sinkChanged(DBusSink *sink)
 {
     m_sinkInter = sink;
 
-    connect(m_sinkInter, &DBusSink::MuteChanged, this, &SoundItem::refershIcon);
-    connect(m_sinkInter, &DBusSink::VolumeChanged, this, &SoundItem::refershIcon);
-    refershIcon();
+    connect(m_sinkInter, &DBusSink::MuteChanged, this, &SoundItem::refreshIcon);
+    connect(m_sinkInter, &DBusSink::VolumeChanged, this, &SoundItem::refreshIcon);
+    refreshIcon();
 }

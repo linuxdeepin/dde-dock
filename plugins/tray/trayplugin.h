@@ -49,16 +49,15 @@ public:
     void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
     void displayModeChanged(const Dock::DisplayMode mode) Q_DECL_OVERRIDE;
     void positionChanged(const Dock::Position position) Q_DECL_OVERRIDE;
-
     QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
-
     bool itemAllowContainer(const QString &itemKey) Q_DECL_OVERRIDE;
     bool itemIsInContainer(const QString &itemKey) Q_DECL_OVERRIDE;
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void setItemIsInContainer(const QString &itemKey, const bool container) Q_DECL_OVERRIDE;
+    void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
 
     Dock::Position dockPosition() const;
     bool traysSortedInFashionMode();

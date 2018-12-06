@@ -150,6 +150,13 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
 }
 
+void PowerPlugin::refreshIcon(const QString &itemKey)
+{
+    if (itemKey == POWER_KEY) {
+        m_powerStatusWidget->refreshIcon();
+    }
+}
+
 int PowerPlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());

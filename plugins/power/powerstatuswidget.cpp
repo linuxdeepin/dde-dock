@@ -37,6 +37,11 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
     connect(m_powerInter, &DBusPower::OnBatteryChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
 }
 
+void PowerStatusWidget::refreshIcon()
+{
+    update();
+}
+
 QSize PowerStatusWidget::sizeHint() const
 {
     return QSize(26, 26);

@@ -68,37 +68,45 @@ bool SoundPlugin::pluginIsDisable()
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem;
+    }
 
-    return m_soundItem;
+    return nullptr;
 }
 
 QWidget *SoundPlugin::itemTipsWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem->tipsWidget();
+    }
 
-    return m_soundItem->tipsWidget();
+    return nullptr;
 }
 
 QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem->popupApplet();
+    }
 
-    return m_soundItem->popupApplet();
+    return nullptr;
 }
 
 const QString SoundPlugin::itemContextMenu(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem->contextMenu();
+    }
 
-    return m_soundItem->contextMenu();
+    return QString();
 }
 
 void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
-    Q_UNUSED(itemKey);
-
-    m_soundItem->invokeMenuItem(menuId, checked);
+    if (itemKey == SOUND_KEY) {
+        m_soundItem->invokeMenuItem(menuId, checked);
+    }
 }
 
 int SoundPlugin::itemSortKey(const QString &itemKey)
@@ -113,4 +121,11 @@ void SoundPlugin::setSortKey(const QString &itemKey, const int order)
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
     m_proxyInter->saveValue(this, key, order);
+}
+
+void SoundPlugin::refreshIcon(const QString &itemKey)
+{
+    if (itemKey == SOUND_KEY) {
+        m_soundItem->refreshIcon();
+    }
 }
