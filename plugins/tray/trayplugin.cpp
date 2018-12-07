@@ -69,12 +69,12 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
         QFile::remove(settings.fileName());
     }
 
+    m_proxyInter = proxyInter;
+
     if (!proxyInter->getValue(this, "enable", true).toBool()) {
         qDebug() << "hide tray from config disable!!";
         return;
     }
-
-    m_proxyInter = proxyInter;
 
     // registor dock as SNI Host on dbus
     QDBusConnection dbusConn = QDBusConnection::sessionBus();
@@ -121,6 +121,10 @@ void TrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 
 void TrayPlugin::positionChanged(const Dock::Position position)
 {
+    if (!m_proxyInter->getValue(this, "enable", true).toBool()) {
+        return;
+    }
+
     m_fashionItem->setDockPostion(position);
 }
 
