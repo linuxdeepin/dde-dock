@@ -1,3 +1,27 @@
+<a name="4.8.3"></a>
+## 4.8.3 (2018-12-07)
+
+
+#### Bug Fixes
+
+*   tray icon do not change after system icon theme has changed ([16f10b66](https://github.com/linuxdeepin/dde-dock/commit/16f10b665c0136a984be882279494e3271a252be))
+*   hover background while dragging ([3ee25e36](https://github.com/linuxdeepin/dde-dock/commit/3ee25e36b1d27a7b9ec69b78ef40738d2b8293f4))
+*   sni tray icon size in hihdpi ([74cd9594](https://github.com/linuxdeepin/dde-dock/commit/74cd9594f9ae9a045ebe85d26cb2f0a26299c477))
+*   sometimes got a invalid dbus menu path of some application sni tray ([717b30bc](https://github.com/linuxdeepin/dde-dock/commit/717b30bcec3883f3bd841c36f8e93a1654eab002))
+*   build warning 2 ([dc1d415d](https://github.com/linuxdeepin/dde-dock/commit/dc1d415dc34ab1d3b4a02f0c3328392ad31820fc))
+*   build warning ([61197b9d](https://github.com/linuxdeepin/dde-dock/commit/61197b9d3d9028a062edb72c1487b214600cceda))
+*   typo2 ([63dc1029](https://github.com/linuxdeepin/dde-dock/commit/63dc102939072cfbf6a364498c1cbe55e5f13d0e))
+*   typo2 ([9c372657](https://github.com/linuxdeepin/dde-dock/commit/9c3726571302a40f36e6db38e56d63402a8bc137))
+*   typo ([a87911ce](https://github.com/linuxdeepin/dde-dock/commit/a87911ce8051dcd4ad74a5a8e379ba1e10c63f50))
+*   dock hide problem and remove old imp ([091b52bc](https://github.com/linuxdeepin/dde-dock/commit/091b52bccddaa2ea9795b4542aca892d7a27c849))
+* **TrayPlugin:**  send hover event to XEmbed trays ([dfa4dd9d](https://github.com/linuxdeepin/dde-dock/commit/dfa4dd9d24afa9577d92c78adeceb38bec529a8c))
+
+#### Features
+
+*   tray icon hover state ([caede05f](https://github.com/linuxdeepin/dde-dock/commit/caede05fe7bb395e080299e58ca4e5e2e4528205))
+
+
+
 <a name="4.8.2.2"></a>
 ## 4.8.2.2 (2018-12-04)
 
