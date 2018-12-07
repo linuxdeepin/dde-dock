@@ -112,15 +112,18 @@ QSize PluginsItem::sizeHint() const
 
 void PluginsItem::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     DisplayMode displayMode = m_pluginInter->displayMode();
 
     if (displayMode == Dock::DisplayMode::Fashion) {
         return;
     }
-    if (!m_hover) {
+    if (!m_hover || m_dragging) {
         return;
     }
 
+    // draw hover background
     QRect destRect;
     destRect.setSize(m_centralWidget->sizeHint());
     destRect.moveCenter(rect().center());
