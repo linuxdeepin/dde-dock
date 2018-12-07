@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QIcon>
 
 PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent),
@@ -42,20 +43,18 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     QPixmap pixmap;
-    do
-    {
-        const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    QString iconName = "system-shutdown";
+    int iconSize;
+    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
-        if (displayMode == Dock::Efficient)
-        {
-            pixmap = loadSvg(":/icons/resources/icons/normal.svg", QSize(16, 16));
-            break;
-        }
+    if (displayMode == Dock::Efficient) {
+        iconName = iconName + "-symbolic";
+        iconSize = 16;
+    } else {
+        iconSize = std::min(width(), height()) * 0.8;
+    }
 
-        const int iconSize = std::min(width(), height()) * 0.8;
-        pixmap = loadSvg(":/icons/resources/icons/fashion.svg", QSize(iconSize, iconSize));
-
-    } while (false);
+    pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
 
     QPainter painter(this);
     painter.drawPixmap(rect().center() - pixmap.rect().center() / qApp->devicePixelRatio(), pixmap);
@@ -92,15 +91,8 @@ const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) 
 {
     const auto ratio = qApp->devicePixelRatio();
 
-    QPixmap pixmap(size * ratio);
-    QSvgRenderer renderer(fileName);
-    pixmap.fill(Qt::transparent);
-
-    QPainter painter;
-    painter.begin(&pixmap);
-    renderer.render(&painter);
-    painter.end();
-
+    QPixmap pixmap;
+    pixmap = QIcon::fromTheme(fileName).pixmap(size * ratio);
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
