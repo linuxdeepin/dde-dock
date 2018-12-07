@@ -78,7 +78,10 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
     m_sendHoverEvent->setSingleShot(true);
 
     connect(m_updateTimer, &QTimer::timeout, this, &XWindowTrayWidget::refershIconImage);
+
+// DOCK_TRAY_USE_NATIVE_POPUP is defined in debian/rules
 #ifdef DOCK_TRAY_USE_NATIVE_POPUP
+    setMouseTracking(true);
     connect(m_sendHoverEvent, &QTimer::timeout, this, &XWindowTrayWidget::sendHoverEvent);
 #endif
 
@@ -255,6 +258,10 @@ void XWindowTrayWidget::wrapWindow()
 
 void XWindowTrayWidget::sendHoverEvent()
 {
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+        return;
+    }
+
     // fake enter event
     const QPoint p(rawXPosition(QCursor::pos()));
     configContainerPosition();

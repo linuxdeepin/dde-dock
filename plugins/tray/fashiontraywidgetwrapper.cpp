@@ -154,9 +154,15 @@ void FashionTrayWidgetWrapper::enterEvent(QEvent *event)
 
 void FashionTrayWidgetWrapper::leaveEvent(QEvent *event)
 {
-    m_hover = false;
-    m_pressed = false;
-    update();
+    // Note:
+    // here we should check the mouse position to ensure the mouse is realy leaved
+    // because this leaveEvent will alse be called if setX11PassMouseEvent(false) is invoked
+    // in XWindowTrayWidget::sendHoverEvent()
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+        m_hover = false;
+        m_pressed = false;
+        update();
+    }
 
     QWidget::leaveEvent(event);
 }

@@ -199,8 +199,14 @@ void PluginsItem::enterEvent(QEvent *event)
 
 void PluginsItem::leaveEvent(QEvent *event)
 {
-    m_hover = false;
-    update();
+    // Note:
+    // here we should check the mouse position to ensure the mouse is realy leaved
+    // because this leaveEvent will alse be called if setX11PassMouseEvent(false) is invoked
+    // in XWindowTrayWidget::sendHoverEvent()
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+        m_hover = false;
+        update();
+    }
 
     DockItem::leaveEvent(event);
 }
