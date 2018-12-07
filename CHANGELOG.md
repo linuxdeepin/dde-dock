@@ -1,3 +1,9 @@
+[3.11.0] 2018-12-07
+*   auto sync po files from transifex
+*   chore(grub2): use lib imgutil
+*   feat: add new module grub-gfx
+*   feat(trayicon): add StatusNotifierWatcher
+
 [3.10.0] 2018-11-30
 *   fix(launcher): failed to uninstall CrossOver
 *   feat(network): add property Connectivity
