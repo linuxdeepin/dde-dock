@@ -275,12 +275,10 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
             break;
     }
 
-    const auto ratio = qApp->devicePixelRatio();
-    const int iconSize = IconSize * ratio;
-
     do {
         if (!iconName.isEmpty()) {
-            pixmap = ThemeAppIcon::getIcon(iconName, iconSize);
+            // ThemeAppIcon::getIcon 会处理高分屏缩放问题
+            pixmap = ThemeAppIcon::getIcon(iconName, IconSize);
             if (!pixmap.isNull()) {
                 break;
             }
@@ -296,6 +294,8 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
                     }
                 }
 
+                const auto ratio = qApp->devicePixelRatio();
+                const int iconSize = IconSize * ratio;
                 QImage image((const uchar*)dbusImage.pixels.constData(), dbusImage.width, dbusImage.height, QImage::Format_ARGB32);
                 pixmap = QPixmap::fromImage(image.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 pixmap.setDevicePixelRatio(ratio);
