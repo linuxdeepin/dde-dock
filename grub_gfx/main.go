@@ -30,10 +30,6 @@ func detectChange() {
 		return
 	}
 	logger.Debug("currentGfxmode:", currentGfxmode)
-
-	adjusted := params[grub_common.DeepinGfxmodeAdjusted] == "1"
-	logger.Debug("adjusted:", adjusted)
-
 	logger.Debug("allGrubGfxmodes:", allGrubGfxmodes)
 
 	randrGfxmodes, err := grub_common.GetGfxmodesFromXRandr()
@@ -47,6 +43,12 @@ func detectChange() {
 	maxGfxmode := randrGfxmodes.Intersection(allGrubGfxmodes).Max()
 	logger.Debug("maxGfxmode:", maxGfxmode)
 
+	var maxNotSupported bool
+	if params[grub_common.DeepinGfxmodeNotSupported] == maxGfxmode.String() {
+		maxNotSupported = true
+	}
+	logger.Debug("maxNotSupported:", maxNotSupported)
+
 	cfgGfxmodeStr := grub_common.DecodeShellValue(params["GRUB_GFXMODE"])
 	logger.Debug("cfgGfxmodeStr:", cfgGfxmodeStr)
 	cfgGfxmode, cfgGfxmodeErr := grub_common.ParseGfxmode(cfgGfxmodeStr)
@@ -55,7 +57,7 @@ func detectChange() {
 	} else {
 		logger.Debug("cfgGfxmode:", cfgGfxmode)
 	}
-	need := needDetect(cfgGfxmode, cfgGfxmodeErr, currentGfxmode, maxGfxmode, adjusted)
+	need := needDetect(cfgGfxmode, cfgGfxmodeErr, currentGfxmode, maxGfxmode, maxNotSupported)
 	logger.Debug("need detect:", need)
 	if need {
 		err = prepareGfxmodeDetect()
@@ -66,11 +68,11 @@ func detectChange() {
 }
 
 func needDetect(cfgGfxmode grub_common.Gfxmode, cfgGfxmodeErr error,
-	currentGfxmode, maxGfxmode grub_common.Gfxmode, adjusted bool) bool {
+	currentGfxmode, maxGfxmode grub_common.Gfxmode, maxNotSupported bool) bool {
 
 	return cfgGfxmodeErr != nil ||
 		cfgGfxmode != currentGfxmode ||
-		(currentGfxmode != maxGfxmode && !adjusted)
+		(currentGfxmode != maxGfxmode && !maxNotSupported)
 }
 
 func startSysGrubService() error {

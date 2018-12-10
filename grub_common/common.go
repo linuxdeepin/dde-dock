@@ -16,10 +16,11 @@ import (
 )
 
 const (
-	GrubParamsFile         = "/etc/default/grub"
-	GfxmodeDetectReadyPath = "/tmp/deepin-gfxmode-detect-ready"
-	DeepinGfxmodeDetect    = "DEEPIN_GFXMODE_DETECT"
-	DeepinGfxmodeAdjusted  = "DEEPIN_GFXMODE_ADJUSTED"
+	GrubParamsFile            = "/etc/default/grub"
+	GfxmodeDetectReadyPath    = "/tmp/deepin-gfxmode-detect-ready"
+	DeepinGfxmodeDetect       = "DEEPIN_GFXMODE_DETECT"
+	DeepinGfxmodeAdjusted     = "DEEPIN_GFXMODE_ADJUSTED"
+	DeepinGfxmodeNotSupported = "DEEPIN_GFXMODE_NOT_SUPPORTED"
 )
 
 func LoadGrubParams() (map[string]string, error) {

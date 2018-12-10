@@ -171,7 +171,7 @@ func getModifyTaskTimeout(timeout uint32) modifyTask {
 
 func getModifyTaskGfxmode(val string, lang string) modifyTask {
 	f := func(params map[string]string) {
-		params[grubGfxMode] = quoteString(val)
+		params[grubGfxmode] = quoteString(val)
 	}
 	return modifyTask{
 		paramsModifyFunc: f,
@@ -206,7 +206,7 @@ func getModifyFuncPrepareGfxmodeDetect(gfxmodesStr string) func(map[string]strin
 		if decodeShellValue(params[grubTheme]) == defaultGrubTheme {
 			params[deepinThemeEnabled] = "1"
 			params[grubTheme] = fallbackGrubTheme
-			params[grubBackground] = fallbackGrubTheme
+			params[grubBackground] = fallbackGrubGackground
 		} else {
 			params[deepinThemeEnabled] = "0"
 			delete(params, grubTheme)
@@ -215,7 +215,8 @@ func getModifyFuncPrepareGfxmodeDetect(gfxmodesStr string) func(map[string]strin
 
 		params[grub_common.DeepinGfxmodeDetect] = "1"
 		delete(params, grub_common.DeepinGfxmodeAdjusted)
-		params[grubGfxMode] = gfxmodesStr
+		delete(params, grub_common.DeepinGfxmodeNotSupported)
+		params[grubGfxmode] = gfxmodesStr
 	}
 	return f
 }
@@ -268,6 +269,21 @@ func NewGrub2(service *dbusutil.Service) *Grub2 {
 				Height: 768,
 			}
 		}
+		logger.Debug("currentGfxmode:", currentGfxmode)
+
+		var maxGfxmode grub_common.Gfxmode
+		detectGfxmodes := strings.Split(params[grubGfxmode], ",")
+		logger.Debug("detectGfxmodes:", detectGfxmodes)
+		if len(detectGfxmodes) > 0 {
+			maxGfxmode, err = grub_common.ParseGfxmode(detectGfxmodes[0])
+			if err != nil {
+				logger.Warning(err)
+			}
+		} else {
+			logger.Warning("failed to get detect gfxmodes")
+		}
+		logger.Debug("maxGfxmode:", maxGfxmode)
+		notMax := maxGfxmode.Width != 0 && currentGfxmode != maxGfxmode
 
 		themeEnabled := params[deepinThemeEnabled] == "1"
 
@@ -282,9 +298,12 @@ func NewGrub2(service *dbusutil.Service) *Grub2 {
 					params[grubBackground] = quoteString(defaultGrubBackground)
 				}
 				delete(params, deepinThemeEnabled)
-				params[grubGfxMode] = currentGfxmodeStr
+				params[grubGfxmode] = currentGfxmodeStr
 				params[grub_common.DeepinGfxmodeAdjusted] = "1"
 				delete(params, grub_common.DeepinGfxmodeDetect)
+				if notMax {
+					params[grub_common.DeepinGfxmodeNotSupported] = maxGfxmode.String()
+				}
 			},
 			adjustTheme: themeEnabled,
 		}

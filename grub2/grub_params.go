@@ -16,7 +16,7 @@ const (
 const (
 	grubBackground     = "GRUB_BACKGROUND"
 	grubDefault        = "GRUB_DEFAULT"
-	grubGfxMode        = "GRUB_GFXMODE"
+	grubGfxmode        = "GRUB_GFXMODE"
 	grubTheme          = "GRUB_THEME"
 	grubTimeout        = "GRUB_TIMEOUT"
 	deepinThemeEnabled = "DEEPIN_THEME_ENABLED"
@@ -50,7 +50,7 @@ func getTimeout(params map[string]string) int {
 }
 
 func getGfxMode(params map[string]string) (val string) {
-	val = decodeShellValue(params[grubGfxMode])
+	val = decodeShellValue(params[grubGfxmode])
 	if val == "" {
 		val = defaultGrubGfxMode
 	}
