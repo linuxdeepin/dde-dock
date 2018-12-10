@@ -61,6 +61,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) override;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
     void showPopupWindow(QWidget * const content, const bool model = false) override;

@@ -128,6 +128,7 @@ void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
 void FashionTrayWidgetWrapper::mouseReleaseEvent(QMouseEvent *event)
 {
     m_pressed = false;
+    m_hover = false;
     update();
 
     QWidget::mouseReleaseEvent(event);
@@ -197,6 +198,8 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
 
     m_absTrayWidget->setVisible(true);
     m_dragging = false;
+    m_hover = false;
+    m_pressed = false;
     Q_EMIT dragStop();
 }
 

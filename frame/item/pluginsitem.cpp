@@ -47,6 +47,7 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
 
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);
+    m_centralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_centralWidget);
@@ -152,6 +153,9 @@ QWidget *PluginsItem::centralWidget() const
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
+    m_hover = false;
+    update();
+
     if (!isInContainer() && PopupWindow->isVisible())
         hideNonModel();
 
@@ -214,6 +218,18 @@ void PluginsItem::leaveEvent(QEvent *event)
     DockItem::leaveEvent(event);
 }
 
+bool PluginsItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_centralWidget) {
+        if (event->type() == QEvent::MouseButtonRelease) {
+            m_hover = false;
+            update();
+        }
+    }
+
+    return false;
+}
+
 void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
@@ -259,6 +275,7 @@ void PluginsItem::startDrag()
     emit itemDropped(drag->target());
 
     m_dragging = false;
+    m_hover = false;
     m_centralWidget->setVisible(true);
     setVisible(true);
     update();
