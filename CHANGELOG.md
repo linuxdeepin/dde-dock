@@ -1,3 +1,17 @@
+<a name="4.8.3.1"></a>
+## 4.8.3.1 (2018-12-10)
+
+
+#### Bug Fixes
+
+*   compile failed in debian stable repo ([fc64302b](https://github.com/linuxdeepin/dde-dock/commit/fc64302b9e2b148faf3f66afa47e70a222633f23))
+*   touch screen drag/drop tray icons to tray container by mistake ([0a3eb2b6](https://github.com/linuxdeepin/dde-dock/commit/0a3eb2b61922815b3cfe14fdcd8ee7faa4aa0534))
+*   wired tray icon in hihdpi ([a9998b6c](https://github.com/linuxdeepin/dde-dock/commit/a9998b6cf2acf01fb39394ca3a23d2b278c6734e))
+*   tray icon size in hidpi ([5b5d55d9](https://github.com/linuxdeepin/dde-dock/commit/5b5d55d9dbeb730e2636e62b62cb0b3b5dd6b6b9))
+*   tray hover state not refresh after some mouse event ([4d8e0772](https://github.com/linuxdeepin/dde-dock/commit/4d8e077243bba234bd154b18b18dd874ad928cdd))
+
+
+
 <a name="4.8.3"></a>
 ## 4.8.3 (2018-12-07)
 
