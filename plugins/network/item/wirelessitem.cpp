@@ -54,7 +54,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
 
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(this, &WirelessItem::refreshTips, Qt::QueuedConnection);
+    QTimer::singleShot(0, this, &WirelessItem::refreshTips);
     init();
 }
 

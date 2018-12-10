@@ -83,7 +83,7 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onTrayListExpandChanged);
 
     // do not call init immediately the TrayPlugin has not be constructed for now
-    QMetaObject::invokeMethod(this, &FashionTrayItem::init, Qt::QueuedConnection);
+    QTimer::singleShot(0, this, &FashionTrayItem::init);
 }
 
 void FashionTrayItem::setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &itemTrayMap)

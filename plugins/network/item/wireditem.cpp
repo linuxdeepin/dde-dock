@@ -49,8 +49,8 @@ WiredItem::WiredItem(WiredDevice *device)
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
 
-    QMetaObject::invokeMethod(this, &WiredItem::refreshTips, Qt::QueuedConnection);
-    QMetaObject::invokeMethod(this, &WiredItem::refreshIcon, Qt::QueuedConnection);
+    QTimer::singleShot(0, this, &WiredItem::refreshTips);
+    QTimer::singleShot(0, this, &WiredItem::refreshIcon);
 }
 
 QWidget *WiredItem::itemTips()
