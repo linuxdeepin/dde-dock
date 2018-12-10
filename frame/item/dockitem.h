@@ -64,7 +64,7 @@ public slots:
 
 signals:
     void dragStarted() const;
-    void itemDropped(QObject *destination) const;
+    void itemDropped(QObject *destination, const QPoint &dropPoint) const;
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefreshWindowVisible() const;
 

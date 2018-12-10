@@ -87,7 +87,7 @@ private slots:
     void itemRemoved(DockItem *item);
     void itemMoved(DockItem *item, const int index);
     void itemDragStarted();
-    void itemDropped(QObject *destnation);
+    void itemDropped(QObject *destnation, const QPoint &dropPoint);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
     void checkMouseReallyLeave();
 

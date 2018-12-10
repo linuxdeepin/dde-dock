@@ -672,7 +672,7 @@ void MainPanel::itemDragStarted()
 /// \brief MainPanel::itemDropped handle managed item dropped.
 /// \param destnation
 ///
-void MainPanel::itemDropped(QObject *destnation)
+void MainPanel::itemDropped(QObject *destnation, const QPoint &dropPoint)
 {
     m_itemController->setDropping(false);
 
@@ -689,15 +689,16 @@ void MainPanel::itemDropped(QObject *destnation)
         return;
 
     const bool itemIsInContainer = m_itemController->itemIsInContainer(src);
+    const bool dropInDock = rect().contains(mapFromGlobal(dropPoint));
 
     // drag from container
     if (itemIsInContainer
             && (src->itemType() == DockItem::Plugins || src->itemType() == DockItem::TrayPlugin)
-            && destnation == this)
+            && dropInDock)
         m_itemController->itemDragOutFromContainer(src);
 
     // drop to container
-    if (!itemIsInContainer && src->parent() == this && destnation != this)
+    if (!itemIsInContainer && src->parent() == this && !dropInDock)
         m_itemController->itemDroppedIntoContainer(src);
 
     m_itemAdjustTimer->start();
