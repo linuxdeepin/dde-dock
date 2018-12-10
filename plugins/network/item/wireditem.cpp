@@ -113,6 +113,8 @@ void WiredItem::reloadIcon()
 
 //    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
+    const auto ratio = qApp->devicePixelRatio();
+    const int iconSize = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
 
     QString iconName = "network-";
     NetworkDevice::DeviceStatus devState = m_device->status();
@@ -138,7 +140,9 @@ void WiredItem::reloadIcon()
             m_delayTimer->start();
             const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
             const int num = (index % 5) + 1;
-            m_icon = QPixmap(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num));
+            m_icon = QIcon(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num))
+                    .pixmap(iconSize * ratio, iconSize * ratio);
+            m_icon.setDevicePixelRatio(ratio);
             update();
             return;
         }
@@ -170,9 +174,7 @@ void WiredItem::reloadIcon()
     if (displayMode == Dock::Efficient)
         iconName.append("-symbolic");
 
-    const auto ratio = qApp->devicePixelRatio();
-    const int size = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
-    m_icon = QIcon::fromTheme(iconName).pixmap(size * ratio, size * ratio);
+    m_icon = QIcon::fromTheme(iconName).pixmap(iconSize * ratio, iconSize * ratio);
     m_icon.setDevicePixelRatio(ratio);
     update();
 }
