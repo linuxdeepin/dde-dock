@@ -23,6 +23,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 )
 
@@ -81,9 +82,8 @@ func NewAppInfoFromFile(file string) *AppInfo {
 	}
 
 	if !dai.IsInstalled() {
-		createdBy, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-CreatedBy")
-		if createdBy != "" {
-			appId, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-AppID")
+		appId, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-AppID")
+		if appId != "" {
 			dai1 := desktopappinfo.NewDesktopAppInfo(appId)
 			if dai1 != nil {
 				dai = dai1

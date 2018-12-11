@@ -298,21 +298,32 @@ func (m *Manager) IsDocked(desktopFile string) (bool, *dbus.Error) {
 }
 
 func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Error) {
+	logger.Debug("RequestDock", desktopFile, index)
 	desktopFile = toLocalPath(desktopFile)
 	appInfo := NewAppInfoFromFile(desktopFile)
 	if appInfo == nil {
 		return false, dbusutil.ToError(errors.New("invalid desktopFilePath"))
 	}
+	var newlyCreated bool
 	entry := m.Entries.GetByInnerId(appInfo.innerId)
-
 	if entry == nil {
 		entry = newAppEntry(m, appInfo.innerId, appInfo)
-		err := m.exportAppEntry(entry)
-		if err == nil {
-			m.Entries.Insert(entry, int(index))
-		}
+		newlyCreated = true
 	}
-	dockResult := m.dockEntry(entry)
+
+	dockResult, err := m.dockEntry(entry)
+	if err != nil {
+		return false, dbusutil.ToError(err)
+	}
+
+	if newlyCreated {
+		err := m.exportAppEntry(entry)
+		if err != nil {
+			return false, dbusutil.ToError(err)
+		}
+		m.Entries.Insert(entry, int(index))
+	}
+
 	return dockResult, nil
 }
 

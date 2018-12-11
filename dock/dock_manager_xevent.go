@@ -256,11 +256,11 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 		return
 	}
 
-	atomName, err := globalXConn.GetAtomName(ev.Atom)
-	if err != nil {
-		logger.Warning(err)
-	}
-	logger.Debugf("winInfo %d property %s changed", winInfo.window, atomName)
+	//atomName, err := globalXConn.GetAtomName(ev.Atom)
+	//if err != nil {
+	//	logger.Warning(err)
+	//}
+	//logger.Debugf("winInfo %d property %s changed", winInfo.window, atomName)
 
 	switch ev.Atom {
 	case atomNetWMState:

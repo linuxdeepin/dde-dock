@@ -109,8 +109,8 @@ func (e *AppEntry) HandleDragDrop(timestamp uint32, files []string) *dbus.Error 
 
 // RequestDock 驻留
 func (entry *AppEntry) RequestDock() *dbus.Error {
-	entry.manager.dockEntry(entry)
-	return nil
+	_, err := entry.manager.dockEntry(entry)
+	return dbusutil.ToError(err)
 }
 
 // RequestUndock 取消驻留

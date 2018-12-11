@@ -80,6 +80,11 @@ func removeScratchFiles(desktopFile string) {
 }
 
 func createScratchDesktopFileWithAppEntry(entry *AppEntry) (string, error) {
+	err := os.MkdirAll(scratchDir, 0755)
+	if err != nil {
+		return "", err
+	}
+
 	if entry.appInfo != nil {
 		desktopFile := entry.appInfo.GetFileName()
 		newDesktopFile := filepath.Join(scratchDir, entry.appInfo.innerId+".desktop")
@@ -92,9 +97,6 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) (string, error) {
 
 	if entry.current == nil {
 		return "", errors.New("entry.current is nil")
-	}
-	if err := os.MkdirAll(scratchDir, 0755); err != nil {
-		return "", err
 	}
 	appId := entry.current.innerId
 	title := entry.current.getDisplayName()
@@ -116,7 +118,7 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) (string, error) {
 	// cmd
 	scriptContent := entry.getExec(false)
 	scriptFile := filepath.Join(scratchDir, appId+".sh")
-	err := ioutil.WriteFile(scriptFile, []byte(scriptContent), 0744)
+	err = ioutil.WriteFile(scriptFile, []byte(scriptContent), 0744)
 	if err != nil {
 		return "", err
 	}
@@ -160,33 +162,34 @@ func needScratchDesktop(appInfo *AppInfo) bool {
 	return true
 }
 
-func (m *Manager) dockEntry(entry *AppEntry) bool {
+func (m *Manager) dockEntry(entry *AppEntry) (bool, error) {
 	entry.PropsMu.Lock()
+
 	if entry.IsDocked {
 		logger.Warningf("dockEntry failed: entry %v is docked", entry.Id)
 		entry.PropsMu.Unlock()
-		return false
+		return false, nil
 	}
 	if needScratchDesktop(entry.appInfo) {
 		file, err := createScratchDesktopFileWithAppEntry(entry)
-		if err == nil {
-			logger.Debug("dockEntry: createScratchDesktopFile successfully", file)
-			appInfo := NewAppInfoFromFile(file)
-			entry.setAppInfo(appInfo)
-			entry.updateIcon()
-			entry.innerId = entry.appInfo.innerId
-		} else {
+		if err != nil {
 			logger.Warning("createScratchDesktopFileWithAppEntry failed", err)
 			entry.PropsMu.Unlock()
-			return false
+			return false, err
 		}
+		logger.Debug("dockEntry: createScratchDesktopFile successfully", file)
+		appInfo := NewAppInfoFromFile(file)
+		entry.setAppInfo(appInfo)
+		entry.updateIcon()
+		entry.innerId = entry.appInfo.innerId
 	}
 
 	entry.setPropIsDocked(true)
 	entry.updateMenu()
 	entry.PropsMu.Unlock()
+
 	m.saveDockedApps()
-	return true
+	return true, nil
 }
 
 func isFileInDir(file, dir string) bool {
