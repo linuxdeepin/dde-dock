@@ -82,14 +82,5 @@ func PrepareGfxmodeDetect() error {
 	}
 
 	err = writeGrubParams(params)
-	if err != nil {
-		return err
-	}
-
-	err = runGrubMkconfig()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
