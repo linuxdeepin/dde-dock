@@ -38,8 +38,13 @@ AbstractTrayWidget::~AbstractTrayWidget()
 void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
 {
     // do not call Parent::mousePressEvent or the DockItem will catch this event
-    // and show dock-context-menu immediately when right button of mouse is pressed
-    event->accept();
+    // and show dock-context-menu immediately when right button of mouse is pressed in fashion mode
+    if (event->buttons() == Qt::RightButton) {
+        event->accept();
+        return;
+    }
+
+    QWidget::mousePressEvent(event);
 }
 
 void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)

@@ -100,8 +100,6 @@ bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
             mousePressEvent(static_cast<QMouseEvent *>(event));
         } else if (event->type() == QEvent::Type::MouseButtonRelease) {
             mouseReleaseEvent(static_cast<QMouseEvent *>(event));
-        } else if (event->type() == QEvent::Type::MouseMove) {
-            handleMouseMove(static_cast<QMouseEvent *>(event));
         }
     }
 
@@ -122,7 +120,7 @@ void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)
 
 void FashionTrayWidgetWrapper::mouseMoveEvent(QMouseEvent *event)
 {
-    return QWidget::mouseMoveEvent(event);
+    handleMouseMove(event);
 }
 
 void FashionTrayWidgetWrapper::mouseReleaseEvent(QMouseEvent *event)
@@ -174,9 +172,9 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
         return QWidget::mouseMoveEvent(event);
     }
 
-//    if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
-//        return QWidget::mouseMoveEvent(event);
-//    }
+    if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
+        return;
+    }
 
     event->accept();
 

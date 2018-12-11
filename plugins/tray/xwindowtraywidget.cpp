@@ -40,8 +40,6 @@
 
 static const qreal iconSize = 16;
 
-#define DRAG_THRESHOLD  20
-
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
     QRect g = qApp->primaryScreen()->geometry();
