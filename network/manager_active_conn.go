@@ -20,6 +20,8 @@
 package network
 
 import (
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -27,8 +29,9 @@ import (
 )
 
 type activeConnection struct {
-	path dbus.ObjectPath
-	typ  string
+	path      dbus.ObjectPath
+	typ       string
+	vpnFailed bool
 
 	Devices []dbus.ObjectPath
 	Id      string
@@ -73,47 +76,63 @@ type hotspotConnectionInfo struct {
 
 func (m *Manager) initActiveConnectionManage() {
 	m.initActiveConnections()
-
-	// custom dbus watcher to catch all signals about active
-	// connection, including vpn connection
 	senderNm := "org.freedesktop.NetworkManager"
-	pathNm := "/org/freedesktop/NetworkManager"
-	interfaceNm := senderNm
 	interfaceActive := "org.freedesktop.NetworkManager.Connection.Active"
 	interfaceVpn := "org.freedesktop.NetworkManager.VPN.Connection"
-	memberProperties := "PropertiesChanged"
 	memberStateChanged := "StateChanged"
-	memberVpnState := "VpnStateChanged"
-	m.dbusWatcher.watch("type=signal," + "path=" + pathNm + ",interface=" + interfaceNm + ",member=" + memberProperties)
-	m.dbusWatcher.watch("type=signal,sender=" + senderNm + ",interface=" + interfaceActive + ",member=" + memberStateChanged)
-	m.dbusWatcher.watch("type=signal,sender=" + senderNm + ",interface=" + interfaceVpn + ",member=" + memberVpnState)
+	memberVpnStateChanged := "VpnStateChanged"
 
-	// update active connection properties
-	m.dbusWatcher.connect(func(s *dbus.Signal) {
-		if s.Name == interfaceNm+"."+memberProperties && len(s.Body) == 1 {
-			var props = make(map[string]dbus.Variant)
-			props, _ = s.Body[0].(map[string]dbus.Variant)
-			for prop, value := range props {
-				if prop == "ActiveConnections" {
-					// rebuild ActiveConnections prop
-					m.rebuildActiveConnections(value.Value().([]dbus.ObjectPath))
-				}
+	err := dbusutil.NewMatchRuleBuilder().
+		Sender(senderNm).
+		Interface(interfaceActive).
+		Member(memberStateChanged).Build().
+		AddTo(m.sysSigLoop.Conn())
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = dbusutil.NewMatchRuleBuilder().
+		Sender(senderNm).
+		Interface(interfaceVpn).
+		Member(memberVpnStateChanged).Build().
+		AddTo(m.sysSigLoop.Conn())
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	sysSigLoop.AddHandler(&dbusutil.SignalRule{
+		Name: interfaceActive + "." + memberStateChanged,
+	}, func(sig *dbus.Signal) {
+		if strings.HasPrefix(string(sig.Path),
+			"/org/freedesktop/NetworkManager/ActiveConnection/") &&
+			len(sig.Body) >= 2 {
+
+			state, ok := sig.Body[0].(uint32)
+			if ok {
+				logger.Debugf("active connection %s stateChanged %v", sig.Path, state)
+				m.updateActiveConnState(sig.Path, state)
 			}
-			return
-		}
-
-		if s.Name == interfaceActive+"."+memberStateChanged && len(s.Body) >= 2 {
-			state, _ := s.Body[0].(uint32)
-			m.doUpdateActiveConnection(s.Path, state)
 		}
 	})
 
 	// handle notification for vpn connections
-	m.dbusWatcher.connect(func(s *dbus.Signal) {
-		if s.Name == interfaceVpn+"."+memberVpnState && len(s.Body) >= 2 {
-			state, _ := s.Body[0].(uint32)
-			reason, _ := s.Body[1].(uint32)
-			m.doHandleVpnNotification(s.Path, state, reason)
+	sysSigLoop.AddHandler(&dbusutil.SignalRule{
+		Name: interfaceVpn + "." + memberVpnStateChanged,
+	}, func(sig *dbus.Signal) {
+		if strings.HasPrefix(string(sig.Path),
+			"/org/freedesktop/NetworkManager/ActiveConnection/") &&
+			len(sig.Body) >= 2 {
+
+			state, ok := sig.Body[0].(uint32)
+			if !ok {
+				return
+			}
+			reason, ok := sig.Body[1].(uint32)
+			if !ok {
+				return
+			}
+			logger.Debug(sig.Path, "vpn state changed", state, reason)
+			m.doHandleVpnNotification(sig.Path, state, reason)
 		}
 	})
 }
@@ -133,73 +152,40 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 	defer m.activeConnectionsLock.Unlock()
 
 	// get the corresponding active connection
-	aconn, ok := m.activeConnections[apath]
+	aConn, ok := m.activeConnections[apath]
 	if !ok {
 		return
 	}
 
 	// notification for vpn
-	if isVpnConnectionStateActivated(state) {
-		// FIXME: looks like a NetworkManger issue, when user
-		// disconnect a connectiong vpn, the vpn state will changed to
-		// nm.NM_VPN_CONNECTION_STATE_ACTIVATED first
-		if reason != nm.NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED {
-			notifyVpnConnected(aconn.Id)
+	switch state {
+	case nm.NM_VPN_CONNECTION_STATE_ACTIVATED:
+		notifyVpnConnected(aConn.Id)
+	case nm.NM_VPN_CONNECTION_STATE_DISCONNECTED:
+		if aConn.vpnFailed {
+			aConn.vpnFailed = false
+		} else {
+			notifyVpnDisconnected(aConn.Id)
 		}
-	} else if isVpnConnectionStateDeactivate(state) {
-		notifyVpnDisconnected(aconn.Id)
-	} else if isVpnConnectionStateFailed(state) {
-		notifyVpnFailed(aconn.Id, reason)
-	}
-
-	if isVpnConnectionStateInActivating(state) {
-		m.switchHandler.doEnableVpn(true)
-	} else {
-		// if vpn authentication dialog pop-up, notify to kill them
-		connPath, _ := nmGetConnectionByUuid(aconn.Uuid)
-		// TODO:
-		//m.agent.cancelVpnAuthDialog(connPath)
-		_ = connPath
-
-		delete(m.activeConnections, apath)
+	case nm.NM_VPN_CONNECTION_STATE_FAILED:
+		notifyVpnFailed(aConn.Id, reason)
+		aConn.vpnFailed = true
+	default:
+		if isVpnConnectionStateInActivating(state) {
+			m.switchHandler.doEnableVpn(true)
+		}
 	}
 }
-func (m *Manager) rebuildActiveConnections(apaths []dbus.ObjectPath) {
-	m.clearActiveConnections()
 
-	m.activeConnectionsLock.Lock()
-	defer m.activeConnectionsLock.Unlock()
-	for _, apath := range apaths {
-		aconn := m.newActiveConnection(apath)
-		m.activeConnections[apath] = aconn
-	}
-
-	m.updatePropActiveConnections()
-}
-func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, state uint32) {
+func (m *Manager) updateActiveConnState(apath dbus.ObjectPath, state uint32) {
 	m.activeConnectionsLock.Lock()
 	defer m.activeConnectionsLock.Unlock()
 
-	aconn, ok := m.activeConnections[apath]
+	aConn, ok := m.activeConnections[apath]
 	if !ok {
 		return
 	}
-
-	switch state {
-	case nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATING,
-		nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED:
-		// re-get all the active date especially vpn state for the
-		// new connection
-		aconn = m.newActiveConnection(apath)
-		logger.Infof("add active connection %#v", aconn)
-		m.activeConnections[apath] = aconn
-	case nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATING,
-		nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATED:
-		// nothing to do
-		logger.Infof("remove active connection %#v", aconn)
-		// vpn's active connection will be removed after giving a
-		// notification
-	}
+	aConn.State = state
 
 	m.updatePropActiveConnections()
 }

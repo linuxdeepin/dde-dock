@@ -252,40 +252,50 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	}
 
 	// connect signals
-	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
-		logger.Infof("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
+	dev.nmDev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
+		logger.Infof("device state changed, %d => %d, reason[%d] %s",
+			oldState, newState, reason, deviceErrorTable[reason])
+
 		if !m.isDeviceExists(devPath) {
 			return
 		}
 
+		dev.State = newState
 		m.devicesLock.Lock()
-		defer m.devicesLock.Unlock()
-		if reason == nm.NM_DEVICE_STATE_REASON_REMOVED && !isNmDeviceObjectExists(dev.Path) {
-			// check if device dbus object exists for that if device
-			// was set to unmanaged it will notify device removed, too
+		m.updatePropDevices()
+		m.devicesLock.Unlock()
+
+		m.config.updateDeviceConfig(dev.Path, newState)
+		m.config.syncDeviceState(dev.Path, newState)
+	})
+
+	dev.nmDev.Interface().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
 			return
 		}
-		dev.State = newState
-		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
 
-		// need get device vendor again for that some usb device may
-		// not ready before
-		dev.Interface, _ = dev.nmDev.Interface().Get(0)
-		dev.Vendor = nmGeneralGetDeviceDesc(dev.Path)
-		dev.UsbDevice = nmGeneralIsUsbDevice(dev.Path)
-
+		dev.Interface = value
+		m.devicesLock.Lock()
 		m.updatePropDevices()
-
-		m.config.updateDeviceConfig(dev.Path)
-		m.config.syncDeviceState(dev.Path)
+		m.devicesLock.Unlock()
 	})
-	dev.State, _ = dev.nmDev.State().Get(0)
+
+	dev.nmDev.Managed().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+
+		dev.Managed = value
+		m.devicesLock.Lock()
+		m.updatePropDevices()
+		m.devicesLock.Unlock()
+	})
 
 	m.config.addDeviceConfig(devPath)
 	m.switchHandler.initDeviceState(devPath)
-
 	return
 }
+
 func (m *Manager) destroyDevice(dev *device) {
 	// destroy object to reset all property connects
 	if dev.mmDevModem != nil {

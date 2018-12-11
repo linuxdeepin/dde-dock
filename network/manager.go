@@ -23,12 +23,13 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/dbus1"
-
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
+	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -47,7 +48,8 @@ type Manager struct {
 	service    *dbusutil.Service
 	config     *config
 
-	PropsMu sync.RWMutex
+	nmObjManager *nmdbus.ObjectManager
+	PropsMu      sync.RWMutex
 	// update by manager.go
 	State        uint32 // global networking state
 	Connectivity uint32
@@ -80,7 +82,6 @@ type Manager struct {
 
 	secretAgent   *SecretAgent
 	stateHandler  *stateHandler
-	dbusWatcher   *dbusWatcher
 	switchHandler *switchHandler
 
 	proxyChainsManager *proxychains.Manager
@@ -160,7 +161,6 @@ func (m *Manager) init() {
 
 	m.config = newConfig()
 	m.switchHandler = newSwitchHandler(m.config, m.sysSigLoop)
-	m.dbusWatcher = newDbusWatcher(true)
 	m.stateHandler = newStateHandler(m.config, m.sysSigLoop)
 
 	sysService, err := dbusutil.NewSystemService()
@@ -185,7 +185,7 @@ func (m *Manager) init() {
 	}
 
 	// register secret agent
-	nmAgentManager := networkmanager.NewAgentManager(systemBus)
+	nmAgentManager := nmdbus.NewAgentManager(systemBus)
 	err = nmAgentManager.Register(0, "com.deepin.daemon.network.SecretAgent")
 	if err != nil {
 		logger.Debug("failed to register secret agent:", err)
@@ -194,6 +194,7 @@ func (m *Manager) init() {
 	}
 
 	// initialize device and connection handlers
+	m.initNMObjManager(systemBus)
 	m.initDeviceManage()
 	m.initConnectionManage()
 	m.initActiveConnectionManage()
@@ -229,10 +230,9 @@ func (m *Manager) init() {
 
 func (m *Manager) destroy() {
 	logger.Info("destroy network")
+	m.nmObjManager.RemoveHandler(proxy.RemoveAllHandlers)
 	destroyDbusObjects()
-	//destroyAgent(m.agent)
 	destroyStateHandler(m.stateHandler)
-	destroyDbusWatcher(m.dbusWatcher)
 	m.clearDevices()
 	m.clearAccessPoints()
 	m.clearConnections()
@@ -259,6 +259,36 @@ func watchNetworkManagerRestart(m *Manager) {
 				logger.Info("network-manager stopped")
 				m.destroy()
 			}
+		}
+	})
+}
+
+func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
+	objManager := nmdbus.NewObjectManager(systemBus)
+	m.nmObjManager = objManager
+	objManager.InitSignalExt(m.sysSigLoop, true)
+	objManager.ConnectInterfacesAdded(func(objectPath dbus.ObjectPath, interfacesAndProperties map[string]map[string]dbus.Variant) {
+		_, ok := interfacesAndProperties["org.freedesktop.NetworkManager.Connection.Active"]
+		if ok {
+			// add active connection
+			m.activeConnectionsLock.Lock()
+			defer m.activeConnectionsLock.Unlock()
+
+			logger.Debug("add active connection", objectPath)
+			aConn := m.newActiveConnection(objectPath)
+			m.activeConnections[objectPath] = aConn
+			m.updatePropActiveConnections()
+		}
+	})
+	objManager.ConnectInterfacesRemoved(func(objectPath dbus.ObjectPath, interfaces []string) {
+		if strv.Strv(interfaces).Contains("org.freedesktop.NetworkManager.Connection.Active") {
+			// remove active connection
+			m.activeConnectionsLock.Lock()
+			defer m.activeConnectionsLock.Unlock()
+
+			logger.Debug("remove active connection", objectPath)
+			delete(m.activeConnections, objectPath)
+			m.updatePropActiveConnections()
 		}
 	})
 }

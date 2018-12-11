@@ -223,12 +223,11 @@ func (c *config) removeDeviceConfig(devId string) {
 	delete(c.Devices, devId)
 	c.save()
 }
-func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
+func (c *config) updateDeviceConfig(devPath dbus.ObjectPath, devState uint32) {
 	devConfig, err := c.getDeviceConfigForPath(devPath)
 	if err != nil {
 		return
 	}
-	devState := nmGetDeviceState(devPath)
 	if devConfig.Enabled {
 		if isDeviceStateInActivating(devState) {
 			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
@@ -236,12 +235,11 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 		}
 	}
 }
-func (c *config) syncDeviceState(devPath dbus.ObjectPath) {
+func (c *config) syncDeviceState(devPath dbus.ObjectPath, devState uint32) {
 	devConfig, err := c.getDeviceConfigForPath(devPath)
 	if err != nil {
 		return
 	}
-	devState := nmGetDeviceState(devPath)
 	if isDeviceStateInActivating(devState) {
 		// sync device state
 		if !devConfig.Enabled {
@@ -249,6 +247,7 @@ func (c *config) syncDeviceState(devPath dbus.ObjectPath) {
 		}
 	}
 }
+
 func (c *config) getDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
 	devConfig, err := c.getDeviceConfigForPath(devPath)
 	if err != nil {

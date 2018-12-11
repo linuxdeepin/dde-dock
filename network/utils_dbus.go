@@ -61,7 +61,7 @@ func initSysSignalLoop() {
 		logger.Error(err)
 		return
 	}
-	sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+	sysSigLoop = dbusutil.NewSignalLoop(systemBus, 50)
 	sysSigLoop.Start()
 }
 
