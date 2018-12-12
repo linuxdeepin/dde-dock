@@ -20,6 +20,7 @@
 package network
 
 import (
+	"errors"
 	"fmt"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
@@ -42,6 +43,27 @@ func getSettingVkWirelessSecurityKeyMgmt(data connectionData) (value string) {
 	}
 	return
 }
+
+func getApSecTypeFromConnData(data connectionData) (apSecType, error) {
+	if !isSettingExists(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME) {
+		return apSecNone, nil
+	}
+	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
+	switch keyMgmt {
+	case "none":
+		if "open" == getSettingWirelessSecurityAuthAlg(data) {
+			return apSecWep, nil
+		}
+	case "wpa-psk":
+		return apSecPsk, nil
+
+	case "wpa-eap":
+		return apSecEap, nil
+	}
+
+	return apSecNone, errors.New("unknown apSecType")
+}
+
 func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string) (err error) {
 	switch value {
 	default:

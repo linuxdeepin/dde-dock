@@ -194,10 +194,10 @@ func (m *Manager) init() {
 	}
 
 	// initialize device and connection handlers
-	m.initNMObjManager(systemBus)
 	m.initDeviceManage()
 	m.initConnectionManage()
 	m.initActiveConnectionManage()
+	m.initNMObjManager(systemBus)
 
 	// update property "State"
 	nmManager.State().ConnectChanged(func(hasValue bool, value uint32) {

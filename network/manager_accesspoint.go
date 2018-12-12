@@ -20,10 +20,10 @@
 package network
 
 import (
-	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
-
+	"errors"
 	"fmt"
 
+	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -38,6 +38,21 @@ const (
 	apSecPsk
 	apSecEap
 )
+
+func (v apSecType) String() string {
+	switch v {
+	case apSecNone:
+		return "none"
+	case apSecWep:
+		return "wep"
+	case apSecPsk:
+		return "wpa-psk"
+	case apSecEap:
+		return "wpa-eap"
+	default:
+		return fmt.Sprintf("<invalid apSecType %d>", v)
+	}
+}
 
 type accessPoint struct {
 	nmAp    *nmdbus.AccessPoint
@@ -275,31 +290,94 @@ func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, busErr 
 	return
 }
 
-func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, busErr *dbus.Error) {
+func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (dbus.ObjectPath,
+	*dbus.Error) {
 	var err error
-	cpath, err = m.activateAccessPoint(uuid, apPath, devPath)
-	busErr = dbusutil.ToError(err)
-	if cpath == "" {
-		cpath = "/"
+	cpath, err := m.activateAccessPoint(uuid, apPath, devPath)
+	if err != nil {
+		logger.Warning("failed to activate access point:", err)
+		return "/", dbusutil.ToError(err)
 	}
+	return cpath, nil
+}
+
+func fixApSecTypeChange(uuid string, secType apSecType) (needUserEdit bool, err error) {
+	var cpath dbus.ObjectPath
+	cpath, err = nmGetConnectionByUuid(uuid)
+	if err != nil {
+		return
+	}
+
+	var conn *nmdbus.ConnectionSettings
+	conn, err = nmNewSettingsConnection(cpath)
+	if err != nil {
+		return
+	}
+	var connData connectionData
+	connData, err = conn.GetSettings(0)
+	if err != nil {
+		return
+	}
+
+	secTypeOld, err := getApSecTypeFromConnData(connData)
+	if err != nil {
+		logger.Warning("failed to get apSecType from connData")
+		return false, nil
+	}
+
+	if secTypeOld == secType {
+		return
+	}
+	logger.Debug("apSecType change to", secType)
+
+	switch secType {
+	case apSecNone:
+		logicSetSettingVkWirelessSecurityKeyMgmt(connData, "none")
+	case apSecWep:
+		logicSetSettingVkWirelessSecurityKeyMgmt(connData, "wep")
+	case apSecPsk:
+		logicSetSettingVkWirelessSecurityKeyMgmt(connData, "wpa-psk")
+	case apSecEap:
+		needUserEdit = true
+		return
+	}
+
+	// fix ipv6 addresses and routes data structure, interface{}
+	if isSettingIP6ConfigAddressesExists(connData) {
+		setSettingIP6ConfigAddresses(connData, getSettingIP6ConfigAddresses(connData))
+	}
+	if isSettingIP6ConfigRoutesExists(connData) {
+		setSettingIP6ConfigRoutes(connData, getSettingIP6ConfigRoutes(connData))
+	}
+
+	err = conn.Update(0, connData)
 	return
 }
 
 // ActivateAccessPoint add and activate connection for access point.
 func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateAccessPoint: uuid=%s, apPath=%s, devPath=%s", uuid, apPath, devPath)
-	defer logger.Debugf("ActivateAccessPoint end")
 
+	cpath = "/"
+	var nmAp *nmdbus.AccessPoint
+	nmAp, err = nmNewAccessPoint(apPath)
+	if err != nil {
+		return
+	}
+	secType := getApSecType(nmAp)
 	if uuid != "" {
-		cpath, err = m.activateConnection(uuid, devPath)
-	} else {
-		// if there is no connection for current access point, create one
-		var nmAp *nmdbus.AccessPoint
-		nmAp, err = nmNewAccessPoint(apPath)
+		var needUserEdit bool
+		needUserEdit, err = fixApSecTypeChange(uuid, secType)
 		if err != nil {
 			return
 		}
-
+		if needUserEdit {
+			err = errors.New("need user edit")
+			return
+		}
+		cpath, err = m.activateConnection(uuid, devPath)
+	} else {
+		// if there is no connection for current access point, create one
 		uuid = utils.GenUuid()
 		var ssid []byte
 		ssid, err = nmAp.Ssid().Get(0)
@@ -308,7 +386,7 @@ func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 			return
 		}
 
-		data := newWirelessConnectionData(decodeSsid(ssid), uuid, ssid, getApSecType(nmAp))
+		data := newWirelessConnectionData(decodeSsid(ssid), uuid, ssid, secType)
 		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 		if err != nil {
 			return
