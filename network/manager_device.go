@@ -475,15 +475,17 @@ func (m *Manager) listDeviceConnections(devPath dbus.ObjectPath) ([]dbus.ObjectP
 }
 
 // RequestWirelessScan request all wireless devices re-scan access point list.
-func (m *Manager) RequestWirelessScan() (err *dbus.Error) {
-	go func() {
-		m.devicesLock.Lock()
-		defer m.devicesLock.Unlock()
-		if devs, ok := m.devices[deviceWifi]; ok {
-			for _, dev := range devs {
-				nmRequestWirelessScan(dev.Path)
+func (m *Manager) RequestWirelessScan() *dbus.Error {
+	m.devicesLock.Lock()
+	defer m.devicesLock.Unlock()
+
+	if devices, ok := m.devices[deviceWifi]; ok {
+		for _, dev := range devices {
+			err := dev.nmDev.RequestScan(0, nil)
+			if err != nil {
+				logger.Debug(err)
 			}
 		}
-	}()
-	return
+	}
+	return nil
 }
