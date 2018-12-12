@@ -90,22 +90,23 @@ func newMobileConfig() (m *mobileConfig) {
 }
 
 func (c *config) clearSpareConfig() {
-	// remove spare device and vpn config
+	// remove spare device config
 	devIds := nmGetDeviceIdentifiers()
-	for id, _ := range c.Devices {
+	for id := range c.Devices {
 		if !isStringInArray(id, devIds) {
 			c.removeDeviceConfig(id)
 		}
 	}
-	mobileUuids := nmGetConnectionUuidsByType(nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME)
-	for uuid, _ := range c.MobileConnections {
+	mobileUuids := nmGetConnectionUuidsByType(nm.NM_SETTING_GSM_SETTING_NAME,
+		nm.NM_SETTING_CDMA_SETTING_NAME)
+	for uuid := range c.MobileConnections {
 		if !isStringInArray(uuid, mobileUuids) {
 			c.removeMobileConfig(uuid)
 		}
 	}
 }
 
-func (c *config) getLastGlobalSwithes() bool {
+func (c *config) getLastGlobalSwitches() bool {
 	return c.LastWirelessEnabled
 }
 func (c *config) getLastWirelessEnabled() bool {
@@ -121,7 +122,7 @@ func (c *config) getLastVpnEnabled() bool {
 	return c.LastVpnEnabled
 }
 
-func (c *config) setLastGlobalSwithes(enabled bool) {
+func (c *config) setLastGlobalSwitches(enabled bool) {
 	c.LastWirelessEnabled = enabled
 	c.LastWwanEnabled = enabled
 	c.LastWiredEnabled = enabled
@@ -219,30 +220,23 @@ func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
 func (c *config) removeDeviceConfig(devId string) {
 	if !c.isDeviceConfigExists(devId) {
 		logger.Errorf("device config for %s not exists", devId)
+		return
 	}
 	delete(c.Devices, devId)
 	c.save()
 }
-func (c *config) updateDeviceConfig(devPath dbus.ObjectPath, devState uint32) {
+
+func (c *config) handleDeviceStateChanged(devPath dbus.ObjectPath, state uint32) {
 	devConfig, err := c.getDeviceConfigForPath(devPath)
 	if err != nil {
 		return
 	}
-	if devConfig.Enabled {
-		if isDeviceStateInActivating(devState) {
+
+	if isDeviceStateInActivating(state) {
+		if devConfig.Enabled {
 			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 			c.save()
-		}
-	}
-}
-func (c *config) syncDeviceState(devPath dbus.ObjectPath, devState uint32) {
-	devConfig, err := c.getDeviceConfigForPath(devPath)
-	if err != nil {
-		return
-	}
-	if isDeviceStateInActivating(devState) {
-		// sync device state
-		if !devConfig.Enabled {
+		} else {
 			manager.doDisconnectDevice(devPath)
 		}
 	}

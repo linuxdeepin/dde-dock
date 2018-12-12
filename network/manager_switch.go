@@ -86,7 +86,7 @@ func (sh *switchHandler) setWirelessEnabled(enabled bool) {
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
 		// current global device switch alive
-		sh.config.setLastGlobalSwithes(false)
+		sh.config.setLastGlobalSwitches(false)
 		sh.config.setLastWirelessEnabled(true)
 		sh.setNetworkingEnabled(true)
 	}
@@ -97,7 +97,7 @@ func (sh *switchHandler) setWwanEnabled(enabled bool) {
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
 		// current global device switch alive
-		sh.config.setLastGlobalSwithes(false)
+		sh.config.setLastGlobalSwitches(false)
 		sh.config.setLastWwanEnabled(true)
 		sh.setNetworkingEnabled(true)
 	}
@@ -108,7 +108,7 @@ func (sh *switchHandler) setWiredEnabled(enabled bool) {
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
 		// current global device switch alive
-		sh.config.setLastGlobalSwithes(false)
+		sh.config.setLastGlobalSwitches(false)
 		sh.config.setLastWiredEnabled(true)
 		sh.setNetworkingEnabled(true)
 	}
@@ -120,7 +120,7 @@ func (sh *switchHandler) setVpnEnabled(enabled bool) {
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
 		// current global device switch alive
-		sh.config.setLastGlobalSwithes(false)
+		sh.config.setLastGlobalSwitches(false)
 		sh.config.setLastVpnEnabled(true)
 		sh.setNetworkingEnabled(true)
 	}
@@ -329,7 +329,7 @@ func (sh *switchHandler) enableDevice(devPath dbus.ObjectPath, enabled bool) (er
 	return sh.doEnableDevice(devPath, enabled)
 }
 func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	if enabled && sh.trunOnGlobalDeviceSwitchIfNeed(devPath) {
+	if enabled && sh.turnOnGlobalDeviceSwitchIfNeed(devPath) {
 		return
 	}
 	devConfig, err := sh.config.getDeviceConfigForPath(devPath)
@@ -342,7 +342,7 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 	if enabled {
 		// try to active last connection
 		uuids := nmGetConnectionUuidsForAutoConnect(devPath, devConfig.LastConnectionUuid)
-		var uuidToActive string
+		var uuidToActivate string
 
 		switch nmGetDeviceType(devPath) {
 		case nm.NM_DEVICE_TYPE_WIFI:
@@ -362,21 +362,21 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 				if !isStringInArray(ssid, ssids) {
 					continue
 				} else {
-					uuidToActive = uuid
+					uuidToActivate = uuid
 					break
 				}
 			}
 		default:
 			if len(uuids) > 0 {
-				uuidToActive = uuids[0]
+				uuidToActivate = uuids[0]
 			}
 		}
 
-		if len(uuidToActive) > 0 {
+		if uuidToActivate != "" {
 			activeUuid, _ := nmGetDeviceActiveConnectionUuid(devPath)
-			if uuidToActive != activeUuid {
+			if uuidToActivate != activeUuid {
 				manager.nmRunOnceUntilDeviceAvailable(devPath, func() {
-					manager.activateConnection(uuidToActive, devPath)
+					manager.activateConnection(uuidToActivate, devPath)
 				})
 			}
 		}
@@ -411,10 +411,10 @@ func (sh *switchHandler) deactivateVpnConnection(uuid string) (err error) {
 	return
 }
 
-func (sh *switchHandler) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need bool) {
+func (sh *switchHandler) turnOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need bool) {
 	// if global device switch is off, turn it on, and only keep
 	// current device alive
-	need = (sh.generalGetGlobalDeviceEnabled(devPath) == false)
+	need = sh.generalGetGlobalDeviceEnabled(devPath) == false
 	if !need {
 		return
 	}

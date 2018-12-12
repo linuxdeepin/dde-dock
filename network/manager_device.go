@@ -265,8 +265,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		m.updatePropDevices()
 		m.devicesLock.Unlock()
 
-		m.config.updateDeviceConfig(dev.Path, newState)
-		m.config.syncDeviceState(dev.Path, newState)
+		m.config.handleDeviceStateChanged(dev.Path, newState)
 	})
 
 	dev.nmDev.Interface().ConnectChanged(func(hasValue bool, value string) {
