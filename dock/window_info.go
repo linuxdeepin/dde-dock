@@ -167,16 +167,18 @@ func (winInfo *WindowInfo) isValidModal() bool {
 }
 
 // 通过 wmClass 判断是否需要隐藏此窗口
-func (winInfo *WindowInfo) isWmClassOk() bool {
+func (winInfo *WindowInfo) shouldSkipWithWMClass() bool {
 	wmClass := winInfo.wmClass
-	logger.Debugf("wmClass: %#v", wmClass)
 	if wmClass == nil {
-		return true
-	}
-	if wmClass.Instance == "explorer.exe" && wmClass.Class == "Wine" {
 		return false
 	}
-	return true
+	if wmClass.Instance == "explorer.exe" && wmClass.Class == "Wine" {
+		return true
+	} else if wmClass.Class == "dde-launcher" {
+		return true
+	}
+
+	return false
 }
 
 func (winInfo *WindowInfo) getDisplayName() string {
@@ -269,8 +271,8 @@ var skipTaskBarWindowTypes = []string{
 	"_NET_WM_WINDOW_TYPE_TOOLTIP",
 }
 
-func (winInfo *WindowInfo) canShowOnDock() bool {
-	logger.Debug("canShowOnDock win", winInfo.window)
+func (winInfo *WindowInfo) shouldSkip() bool {
+	logger.Debugf("win %d shouldSkip?", winInfo.window)
 	if !winInfo.firstUpdate {
 		winInfo.update()
 		winInfo.firstUpdate = true
@@ -279,22 +281,23 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 	logger.Debugf("hasXEmbedInfo: %v", winInfo.hasXEmbedInfo)
 	logger.Debugf("wmWindowType: %#v", winInfo.wmWindowType)
 	logger.Debugf("wmState: %#v", winInfo.wmState)
+	logger.Debugf("wmClass: %#v", winInfo.wmClass)
 
 	if winInfo.hasWmStateSkipTaskBar() || winInfo.isValidModal() ||
-		winInfo.hasXEmbedInfo || !winInfo.isWmClassOk() {
-		return false
+		winInfo.hasXEmbedInfo || winInfo.shouldSkipWithWMClass() {
+		return true
 	}
 
 	for _, winType := range winInfo.wmWindowType {
 		winTypeStr, _ := getAtomName(winType)
 		if winType == atomNetWmWindowTypeDialog &&
 			!winInfo.isActionMinimizeAllowed() {
-			return false
+			return true
 		} else if strSliceContains(skipTaskBarWindowTypes, winTypeStr) {
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func (winInfo *WindowInfo) initProcessInfo() {

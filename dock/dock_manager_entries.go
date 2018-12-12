@@ -58,12 +58,12 @@ func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 
 	isReg := m.isWindowRegistered(win)
 	clientListContains := m.clientList.Contains(win)
-	winInfoCanShow := winInfo.canShowOnDock()
+	shouldSkip := winInfo.shouldSkip()
 	isGood := isGoodWindow(win)
-	logger.Debugf("isReg: %v, client list contains: %v, winInfo can show: %v, isGood: %v",
-		isReg, clientListContains, winInfoCanShow, isGood)
+	logger.Debugf("isReg: %v, client list contains: %v, shouldSkip: %v, isGood: %v",
+		isReg, clientListContains, shouldSkip, isGood)
 
-	showOnDock := isReg && clientListContains && isGood && winInfoCanShow
+	showOnDock := isReg && clientListContains && isGood && !shouldSkip
 	logger.Debugf("win %v showOnDock? %v", win, showOnDock)
 	entry := winInfo.entry
 	if entry != nil {
