@@ -1,3 +1,17 @@
+[3.12.0] 2018-12-13
+*   fix(appearance): panic if user object is nil
+*   chore(network): change the log level of request scan error to debug
+*   feat(network): can handle the change of the security type of the access point
+*   refactor(network): fix typo
+*   chore(network): remove dbus watcher
+*   chore(network): remove unused code
+*   chore(dock): specially stated that dde-launcher should not be displayed
+*   fix(dock): call RequestDock failed
+*   chore(grub2): -prepare-gfxmode-detect do not update grub cfg
+*   fix: The resolution of the display has changed, but the resolution of the grub theme has not been adjusted in time.
+*   chore(debian): modify recommends proxychains-ng to proxychains4
+*   feat(session/power): screensaver supported
+
 [3.11.0] 2018-12-07
 *   auto sync po files from transifex
 *   chore(grub2): use lib imgutil
