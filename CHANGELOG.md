@@ -1,3 +1,7 @@
+[3.13.0] 2018-12-13
+*   fix(dock): dock app but not saved
+*   chore(trayicon): add env var for disable status notifier watcher
+
 [3.12.0] 2018-12-13
 *   fix(appearance): panic if user object is nil
 *   chore(network): change the log level of request scan error to debug
