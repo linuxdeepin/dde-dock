@@ -69,6 +69,35 @@ PluginsItem 是一个对外来控件的包装类，所以在这里面大多工�
 
 `Popup Window` 是一个特殊的控件。它是所有 Item 中用来显示提示信息，或是显示弹出式控件、列表的一个容器。但是考虑到这种控件使用频率非常高，如果在每个 Item 中创建多个的话很浪费内存，所以将 `PopupWindow` 设计为一个全局的控件，所有的 Item 共用这个控件。
 
+### Item 鼠标事件的处理以及两种右键菜单
+
+先说有哪两种右键菜单, 以便下文提及时有一个清晰地概念:
+
+1. dock 的右键菜单, 目前是白色的, 用于设置 dock 显示模式, 大小, 位置等
+2. item 的右键菜单, 目前是带箭头黑色的, 使用 DBusMenuManager 通过 DBus 调用传入菜单数据(json)显示菜单 (DBusMenuManager 若不熟悉也不影响阅读下文)
+3. (还要知道:) dock 上其实还有另一种右键菜单, 即应用托盘图标的右键菜单, 不过这个是目前由托盘插件内部处理, 所以这里暂不详述
+
+item 的右键又分为两种:
+
+1. AppItem 的右键菜单, 用于显示应用的菜单, 菜单的内容是从后端获取的, 点击菜单项之后的动作也由后端处理
+2. PluginsItem 的右键菜单, 用于显示插件的菜单, 菜单的内容是从插件的接口 `itemContextMenu()` 获取的, 点击菜单项之后的动作也通过插件的接口 `itemContextMenu()` 交由插件自己处理
+
+由于 AppItem 和 PluginsItem 都继承自 DockItem, 而且它们三者都会重写鼠标相关事件(press/release/move), 因此鼠标事件处理的逻辑就会显得比较复杂, 在这里描述一下目前的处理逻辑:
+
+1. 左键以及中键的点击事件在 mouseReleaseEvent 中处理, 而且是由 DockItem 的子类 AppItem/PluginsItem 分别自行处理, AppItem 会打开应用, PluginsItem 会显示 PopupApplet 或执行点击命令
+2. 右键点击事件在 mousePressEvent 中处理, 主要逻辑都在 DockItem 中实现, 子类 AppItem/PluginsItem 只需要在自己重写的 `mousePressEvent` 中调用 `DockItem::mousePressEvent` 即可, 当然也可以直接调用 `DockItem::showContextMenu`
+3. 那么何时/如何显示 **dock 的右键菜单** 呢? 首先要知道显示 dock 右键菜单的逻辑是在 MainWindow 类中的 mousePressEvent 中处理的, Item 相关的类不能直接调用, 所以需要在 AppItem/PluginsItem 重写的 `mousePressEvent` 中调用 `QWidget::mousePressEvent`, 这样 Qt 的事件分发机制就会把这个右键事件一直向下传递到 MainWindow 类, 就会显示 **dock 的右键菜单**, **注意:** 与上一条不同的是这里调用的是 **QWidget**::mousePressEvent, 具体何时调用 DockItem::mousePressEvent 何时调用 QWidget::mousePressEvent 这个由 AppItem 或者 PluginsItem 自己决定, 比如 AppItem 就计算了一个区域, 在这个区域内的右键点击事件就认为是显示 AppItem 的右键菜单, 在这个区域外的右键点击事件就去显示 dock 的右键菜单
+
+上面第三条比较详细的描述的 dock 的右键菜单的触发条件, 下面是关于 item 的右键菜单的实现:
+
+DockItem 里只重写了 press 事件, 在其中实现了统一的通用的显示 item 右键菜单的逻辑. DockItem 定义了一个 `contextMenu()` 虚函数, 因此其子类 AppItem/PluginsItem 只需要重写 `contextMenu()` 并将菜单数据返回即可, 同时 DockItem 还定义了虚函数: `invokedMenuItem`, 用于处理菜单项点击之后的逻辑, 这个虚函数也需要由子类 AppItem/PluginsItem 重写并处理自己的菜单点击逻辑.
+
+如何触发显示菜单上面第二条以及第三条中已经说明, 但是 PluginsItem 比较特殊, **PluginsItem 封装了一个插件提供的 itemWidget,** 当要显示 item 右键菜单时插件的控制类会调用插件的 **proxy 接口: requestContextMenu()**, 这个接口在 DockPluginsController 中实现, 会调用 DockItem 的 showContextMenu 函数, 感觉这里搞的很混乱, 这个 requestContextMenu 接口或许可以废弃掉, 这样插件就不必处理何时显示右键菜单的逻辑, 只需要提供菜单数据以及菜单项的调用处理即可, 将何时显示 item 菜单的逻辑 放在 PluginsItem 里处理, 这样就可以保持与 AppItem 的一致性.
+
+而现在的逻辑是这样的:
+
+PluginsItem 的 mousePressEvent 中只直接调用了 QWidget::mousePressEvent 去显示 dock 的右键菜单, 所以 PluginsItem 封装的插件的 itemWidget 在需要显示 item 右键菜单时就需要吃掉 mousePressEvent, 即调用 QEvent::accept 或者直接 return 掉, 不去调用 QWidget::mousePressEvent, 这样这个事件才不会分发传递给 PluginsItem. 所以目前 PluginsItem 不像 AppItem 一样可以随意控制显示 item 菜单还是显示 dock 菜单.
+
 ## 插件
 
 插件是符合标准的 Qt Plugins。插件的开发不必熟悉 dock 的所有代码，只需要熟悉一般的 Qt 插件开发过程，并了解 dock 所提供的接口。dock 的接口安装 `dde-dock-dev` 包即可。这也是方便插件开发者在无需配置完整的 dock 开发环境的情况下，更方便的进行 dock 插件的开发。
