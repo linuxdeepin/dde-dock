@@ -20,6 +20,8 @@
 package trayicon
 
 import (
+	"os"
+
 	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus1"
@@ -69,15 +71,8 @@ func (d *Daemon) Start() error {
 
 	d.sigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 	d.sigLoop.Start()
-	d.snw = newStatusNotifierWatcher(service, d.sigLoop)
-	d.snw.listenDBusNameOwnerChanged()
 
 	err = service.Export(dbusPath, d.manager)
-	if err != nil {
-		return err
-	}
-
-	err = service.Export(snwDBusPath, d.snw)
 	if err != nil {
 		return err
 	}
@@ -90,12 +85,21 @@ func (d *Daemon) Start() error {
 	}
 	service.Emit(d.manager, "Inited")
 
-	err = service.RequestName(snwDBusServiceName)
-	if err != nil {
-		logger.Warning("failed to request name:", err)
-		return nil
+	if os.Getenv("DDE_DISABLE_STATUS_NOTIFIER_WATCHER") != "1" {
+		d.snw = newStatusNotifierWatcher(service, d.sigLoop)
+		d.snw.listenDBusNameOwnerChanged()
+		err = service.Export(snwDBusPath, d.snw)
+		if err != nil {
+			return err
+		}
+		err = service.RequestName(snwDBusServiceName)
+		if err != nil {
+			logger.Warning("failed to request name:", err)
+			return nil
+		}
+	} else {
+		logger.Info("disable status notifier watcher")
 	}
-
 	return nil
 }
 
