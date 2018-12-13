@@ -311,7 +311,7 @@ func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Erro
 		newlyCreated = true
 	}
 
-	dockResult, err := m.dockEntry(entry)
+	docked, err := m.dockEntry(entry)
 	if err != nil {
 		return false, dbusutil.ToError(err)
 	}
@@ -324,7 +324,11 @@ func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Erro
 		m.Entries.Insert(entry, int(index))
 	}
 
-	return dockResult, nil
+	if docked {
+		// need to save after insert
+		m.saveDockedApps()
+	}
+	return docked, nil
 }
 
 func (m *Manager) RequestUndock(desktopFile string) (bool, *dbus.Error) {

@@ -187,8 +187,6 @@ func (m *Manager) dockEntry(entry *AppEntry) (bool, error) {
 	entry.setPropIsDocked(true)
 	entry.updateMenu()
 	entry.PropsMu.Unlock()
-
-	m.saveDockedApps()
 	return true, nil
 }
 
