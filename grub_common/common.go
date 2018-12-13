@@ -95,7 +95,7 @@ func GetBootArgDeepinGfxmode() (cur Gfxmode, all Gfxmodes, err error) {
 	return
 }
 
-func parseBootArgDeepinGfxmode(str string) (cur Gfxmode, all []Gfxmode, err error) {
+func parseBootArgDeepinGfxmode(str string) (cur Gfxmode, all Gfxmodes, err error) {
 	fields := strings.Split(str, ",")
 	if len(fields) < 2 {
 		err = errors.New("length of fields < 2")
@@ -151,12 +151,7 @@ func (v Gfxmodes) Less(i, j int) bool {
 	a := v[i]
 	b := v[j]
 
-	if a.Width < b.Width {
-		return true
-	} else if a.Width == b.Width {
-		return a.Height < b.Height
-	}
-	return false
+	return a.Width*a.Height < b.Width*b.Height
 }
 
 func (v Gfxmodes) Swap(i, j int) {

@@ -250,12 +250,7 @@ func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
 	if err != nil {
 		logger.Warning("failed to get available gfxmodes:", err)
 	}
-
-	err = ioutil.WriteFile(grub_common.GfxmodeDetectReadyPath, nil, 0644)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
+	gfxmodes.SortDesc()
 	gfxmodesStr := joinGfxmodesForDetect(gfxmodes)
 
 	g.PropsMu.Lock()
@@ -266,5 +261,10 @@ func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
 	g.addModifyTask(getModifyTaskPrepareGfxmodeDetect(gfxmodesStr))
 
 	g.PropsMu.Unlock()
+
+	err = ioutil.WriteFile(grub_common.GfxmodeDetectReadyPath, nil, 0644)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
 	return nil
 }
