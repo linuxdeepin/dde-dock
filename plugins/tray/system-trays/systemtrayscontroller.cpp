@@ -88,7 +88,7 @@ void SystemTraysController::requestContextMenu(PluginsItemInterface * const item
     SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
     Q_ASSERT(item);
 
-    //    item->showContextMenu();
+    item->showContextMenu();
 }
 
 void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)

@@ -26,8 +26,13 @@
 #include <QDebug>
 
 AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, f)
+    : QWidget(parent, f),
+    m_handleMouseReleaseTimer(new QTimer(this))
 {
+    m_handleMouseReleaseTimer->setSingleShot(true);
+    m_handleMouseReleaseTimer->setInterval(100);
+
+    connect(m_handleMouseReleaseTimer, &QTimer::timeout, this, &AbstractTrayWidget::handleMouseRelease);
 }
 
 AbstractTrayWidget::~AbstractTrayWidget()
@@ -39,7 +44,7 @@ void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
 {
     // do not call Parent::mousePressEvent or the DockItem will catch this event
     // and show dock-context-menu immediately when right button of mouse is pressed in fashion mode
-    if (event->buttons() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton) {
         event->accept();
         return;
     }
@@ -49,16 +54,34 @@ void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
 
 void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    const QPoint point(e->pos() - rect().center());
-    if (point.manhattanLength() > 24)
+    //e->accept();
+
+    // 由于 XWindowTrayWidget 中对 发送鼠标事件到X窗口的函数, 如 sendClick/sendHoverEvent 中
+    // 使用了 setX11PassMouseEvent, 而每次调用 setX11PassMouseEvent 时都会导致产生 mousePress 和 mouseRelease 事件
+    // 因此如果直接在这里处理事件会导致一些问题, 所以使用 Timer 来延迟处理 100 毫秒内的最后一个事件
+    m_lastMouseReleaseData.first = e->pos();
+    m_lastMouseReleaseData.second = e->button();
+
+    m_handleMouseReleaseTimer->start();
+}
+
+
+void AbstractTrayWidget::handleMouseRelease() {
+
+    Q_ASSERT(sender() == m_handleMouseReleaseTimer);
+
+    // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
+    if (trayTyep() == SystemTray)
         return;
 
-    e->accept();
+    const QPoint point(m_lastMouseReleaseData.first - rect().center());
+    if (point.manhattanLength() > 24)
+        return;
 
     QPoint globalPos = QCursor::pos();
     uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
 
-    switch (e->button()) {
+    switch (m_lastMouseReleaseData.second) {
     case Qt:: MiddleButton:
         buttonIndex = XCB_BUTTON_INDEX_2;
         break;

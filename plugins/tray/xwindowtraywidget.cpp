@@ -132,6 +132,11 @@ void XWindowTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
     AbstractTrayWidget::mouseMoveEvent(e);
 
+    // ignore the touchEvent
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        return;
+    }
+
     m_sendHoverEvent->start();
 }
 

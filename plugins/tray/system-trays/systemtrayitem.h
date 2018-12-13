@@ -28,6 +28,8 @@
 #include "dbus/dbusmenumanager.h"
 #include "pluginsiteminterface.h"
 
+#include <QGestureEvent>
+
 class SystemTrayItem : public AbstractTrayWidget
 {
     Q_OBJECT
@@ -53,12 +55,14 @@ public:
 
     QWidget *centralWidget() const;
     void detachPluginWidget();
+    void showContextMenu();
 
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 protected:
     const QPoint popupMarkPoint() const;
@@ -72,8 +76,10 @@ protected:
     virtual void showPopupWindow(QWidget * const content, const bool model = false);
     virtual void showHoverTips();
 
+    bool checkAndResetTapHoldGestureState();
+    virtual void gestureEvent(QGestureEvent *event);
+
 protected Q_SLOTS:
-    void showContextMenu();
     void onContextMenuAccepted();
 
 private:
@@ -81,6 +87,7 @@ private:
 
 private:
     bool m_popupShown;
+    bool m_tapAndHold;
 
     PluginsItemInterface* m_pluginInter;
     DBusMenuManager *m_menuManagerInter;

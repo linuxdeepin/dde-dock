@@ -33,6 +33,7 @@ QPointer<DockPopupWindow> SystemTrayItem::PopupWindow = nullptr;
 SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : AbstractTrayWidget(parent),
       m_popupShown(false),
+      m_tapAndHold(false),
       m_pluginInter(pluginInter),
       m_menuManagerInter(new DBusMenuManager(this)),
       m_centralWidget(m_pluginInter->itemWidget(itemKey)),
@@ -75,6 +76,8 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemTrayItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
+
+    grabGesture(Qt::TapAndHoldGesture);
 }
 
 SystemTrayItem::~SystemTrayItem()
@@ -100,22 +103,12 @@ const QImage SystemTrayItem::trayImage()
 
 void SystemTrayItem::sendClick(uint8_t mouseButton, int x, int y)
 {
-    switch (mouseButton) {
-    case XCB_BUTTON_INDEX_1: {
-        showPopupApplet(trayPopupApplet());
-        QProcess::startDetached(trayClickCommand());
-        break;
-    }
-    case XCB_BUTTON_INDEX_2:
-        break;
-    case XCB_BUTTON_INDEX_3: {
-        showContextMenu();
-        break;
-    }
-    default:
-        qDebug() << "unknown mouse button key";
-        break;
-    }
+    Q_UNUSED(mouseButton);
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+
+    // do not process this callback
+    // handle all mouse event in override mouse function
 }
 
 QWidget *SystemTrayItem::trayTipsWidget()
@@ -169,6 +162,9 @@ bool SystemTrayItem::event(QEvent *event)
         }
     }
 
+    if (event->type() == QEvent::Gesture)
+        gestureEvent(static_cast<QGestureEvent*>(event));
+
     return AbstractTrayWidget::event(event);
 }
 
@@ -199,6 +195,28 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
     hideNonModel();
 
     AbstractTrayWidget::mousePressEvent(event);
+}
+
+void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
+
+    if (checkAndResetTapHoldGestureState()&& event->source() == Qt::MouseEventSynthesizedByQt) {
+        qDebug() << "SystemTray: tap and hold gesture detected, ignore the synthesized mouse release event";
+        return;
+    }
+
+    event->accept();
+
+    showPopupApplet(trayPopupApplet());
+
+    if (!trayClickCommand().isEmpty()) {
+        QProcess::startDetached(trayClickCommand());
+    }
+
+    AbstractTrayWidget::mouseReleaseEvent(event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const
@@ -328,6 +346,31 @@ void SystemTrayItem::showHoverTips()
         return;
 
     showPopupWindow(content);
+}
+
+/*!
+ * \sa DockItem::checkAndResetTapHoldGestureState
+ */
+bool SystemTrayItem::checkAndResetTapHoldGestureState()
+{
+    bool ret = m_tapAndHold;
+    m_tapAndHold = false;
+    return ret;
+}
+
+void SystemTrayItem::gestureEvent(QGestureEvent *event)
+{
+    if (!event)
+        return;
+
+    QGesture *gesture = event->gesture(Qt::TapAndHoldGesture);
+
+    if (!gesture)
+        return;
+
+    qDebug() << "SystemTray: got TapAndHoldGesture";
+
+    m_tapAndHold = true;
 }
 
 void SystemTrayItem::showContextMenu()

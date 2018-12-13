@@ -22,6 +22,8 @@
 #pragma once
 
 #include <QWidget>
+#include <QTimer>
+#include <QPair>
 
 class QDBusMessage;
 class AbstractTrayWidget: public QWidget
@@ -52,5 +54,12 @@ Q_SIGNALS:
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+
+    void handleMouseRelease();
+
+private:
+    QTimer *m_handleMouseReleaseTimer;
+
+    QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
 };
 
