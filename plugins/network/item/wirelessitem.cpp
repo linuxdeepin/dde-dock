@@ -300,6 +300,8 @@ void WirelessItem::onRefreshTimeout()
         Q_EMIT queryActiveConnInfo();
         return;
     }
+
+    refreshTips();
     update();
 }
 
