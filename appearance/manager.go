@@ -176,6 +176,10 @@ func newManager(service *dbusutil.Service) *Manager {
 
 func (m *Manager) initCurrentBgs() {
 	m.currentDesktopBgs = m.setting.GetStrv(gsKeyBackgroundURIs)
+
+	if m.userObj == nil {
+		return
+	}
 	greeterBg, err := m.userObj.GreeterBackground().Get(0)
 	if err == nil {
 		m.currentGreeterBg = greeterBg
@@ -275,7 +279,7 @@ func (m *Manager) initUserObj(systemConn *dbus.Conn) {
 	}
 	m.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
 	if err != nil {
-		logger.Warning("failed to new user object", err)
+		logger.Warning("failed to new user object:", err)
 		return
 	}
 
@@ -476,7 +480,7 @@ func (m *Manager) doSetBackground(value string) error {
 
 func (m *Manager) doSetGreeterBackground(value string) error {
 	if m.userObj == nil {
-		return fmt.Errorf("create user object failed")
+		return errors.New("user object is nil")
 	}
 
 	return m.userObj.SetGreeterBackground(0, value)
