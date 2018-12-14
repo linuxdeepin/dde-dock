@@ -63,7 +63,6 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, this, &SNITrayWidget::refreshAttentionIcon);
 
     QTimer::singleShot(0, this, &SNITrayWidget::refreshIcon);
-    QTimer::singleShot(300, this, &SNITrayWidget::initMenu);
 }
 
 SNITrayWidget::~SNITrayWidget()
@@ -114,9 +113,19 @@ bool SNITrayWidget::isValid()
 
 void SNITrayWidget::initMenu()
 {
+    qDebug() << "using sni service path:" << m_dbusService;
+
     const QString &menuPath = m_sniInter->menu().path();
-    m_dbusMenuImporter = new DBusMenuImporter(m_dbusService, menuPath, SYNCHRONOUS, this);
+
+    qDebug() << "using sni menu path:" << menuPath;
+
+    m_dbusMenuImporter = new DBusMenuImporter(m_dbusService, menuPath, ASYNCHRONOUS, this);
+
+    qDebug() << "generate the sni menu object";
+
     m_menu = m_dbusMenuImporter->menu();
+
+    qDebug() << "the sni menu obect is:" << m_menu;
 }
 
 /*
@@ -197,6 +206,10 @@ void SNITrayWidget::showContextMenu(int x, int y)
     if (m_sniInter->menu().path().startsWith("/NO_DBUSMENU")) {
         m_sniInter->ContextMenu(x, y);
     } else {
+        if (!m_menu) {
+            qDebug() << "context menu has not be ready, init menu";
+            initMenu();
+        }
         m_menu->popup(QPoint(x, y));
     }
 }
