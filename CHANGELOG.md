@@ -1,3 +1,7 @@
+[3.14.0] 2018-12-14
+*   fix(grub2): call dbus method PrepareGfxmodeDetect gfxmodes not sort
+*   fix(network): the state changed signal of the active connection is not monitored
+
 [3.13.0] 2018-12-13
 *   fix(dock): dock app but not saved
 *   chore(trayicon): add env var for disable status notifier watcher
