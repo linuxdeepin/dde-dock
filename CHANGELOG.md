@@ -1,3 +1,16 @@
+<a name="4.8.4"></a>
+## 4.8.4 (2018-12-14)
+
+
+#### Bug Fixes
+
+*   context menu invoke in touch screen ([77570b60](https://github.com/linuxdeepin/dde-dock/commit/77570b609a9666025b626cf5c98dc4024b9e9c17))
+*   tips of network item not refresh ([635d4152](https://github.com/linuxdeepin/dde-dock/commit/635d41525f3390dfc09e2bdef28b54214bed5d5a))
+*   sni tray context menu can not be initialize correctly after reboot ([8870cbc7](https://github.com/linuxdeepin/dde-dock/commit/8870cbc799b88f4350cd5ed5d882648c3d5c7496))
+*   threshold to emit drag event ([06ca6df2](https://github.com/linuxdeepin/dde-dock/commit/06ca6df2057861fb70fca2ed212c8d41f458a601))
+
+
+
 <a name="4.8.3.1"></a>
 ## 4.8.3.1 (2018-12-10)
 
