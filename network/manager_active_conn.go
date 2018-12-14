@@ -77,23 +77,27 @@ type hotspotConnectionInfo struct {
 func (m *Manager) initActiveConnectionManage() {
 	m.initActiveConnections()
 	senderNm := "org.freedesktop.NetworkManager"
-	interfaceActive := "org.freedesktop.NetworkManager.Connection.Active"
-	interfaceVpn := "org.freedesktop.NetworkManager.VPN.Connection"
-	memberStateChanged := "StateChanged"
+	interfaceActiveConnection := "org.freedesktop.NetworkManager.Connection.Active"
+	interfaceVpnConnection := "org.freedesktop.NetworkManager.VPN.Connection"
+	interfaceDBusProps := "org.freedesktop.DBus.Properties"
+	memberPropsChanged := "PropertiesChanged"
 	memberVpnStateChanged := "VpnStateChanged"
 
 	err := dbusutil.NewMatchRuleBuilder().
+		Type("signal").
 		Sender(senderNm).
-		Interface(interfaceActive).
-		Member(memberStateChanged).Build().
+		Interface(interfaceDBusProps).
+		Member(memberPropsChanged).
+		ArgNamespace(0, interfaceActiveConnection).Build().
 		AddTo(m.sysSigLoop.Conn())
 	if err != nil {
 		logger.Warning(err)
 	}
 
 	err = dbusutil.NewMatchRuleBuilder().
+		Type("signal").
 		Sender(senderNm).
-		Interface(interfaceVpn).
+		Interface(interfaceVpnConnection).
 		Member(memberVpnStateChanged).Build().
 		AddTo(m.sysSigLoop.Conn())
 	if err != nil {
@@ -101,23 +105,42 @@ func (m *Manager) initActiveConnectionManage() {
 	}
 
 	sysSigLoop.AddHandler(&dbusutil.SignalRule{
-		Name: interfaceActive + "." + memberStateChanged,
+		Name: interfaceDBusProps + "." + memberPropsChanged,
 	}, func(sig *dbus.Signal) {
 		if strings.HasPrefix(string(sig.Path),
 			"/org/freedesktop/NetworkManager/ActiveConnection/") &&
-			len(sig.Body) >= 2 {
+			len(sig.Body) == 3 {
 
-			state, ok := sig.Body[0].(uint32)
-			if ok {
-				logger.Debugf("active connection %s stateChanged %v", sig.Path, state)
-				m.updateActiveConnState(sig.Path, state)
+			ifc, ok := sig.Body[0].(string)
+			if !ok {
+				return
 			}
+
+			if ifc != interfaceActiveConnection {
+				return
+			}
+
+			props, ok := sig.Body[1].(map[string]dbus.Variant)
+			if !ok {
+				return
+			}
+
+			stateVar, ok := props["State"]
+			if !ok {
+				return
+			}
+			state, ok := stateVar.Value().(uint32)
+			if !ok {
+				return
+			}
+			logger.Debugf("active connection %s state changed %v", sig.Path, state)
+			m.updateActiveConnState(sig.Path, state)
 		}
 	})
 
 	// handle notification for vpn connections
 	sysSigLoop.AddHandler(&dbusutil.SignalRule{
-		Name: interfaceVpn + "." + memberVpnStateChanged,
+		Name: interfaceVpnConnection + "." + memberVpnStateChanged,
 	}, func(sig *dbus.Signal) {
 		if strings.HasPrefix(string(sig.Path),
 			"/org/freedesktop/NetworkManager/ActiveConnection/") &&
