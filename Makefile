@@ -3,16 +3,6 @@ GOPATH_DIR = gopath
 GOPKG_PREFIX = pkg.deepin.io/dde/daemon
 GOBUILD = go build
 
-ARCH=$(shell uname -m)
-
-ifdef USE_GCCGO
-	extra_gccgo_flags = -Os -O2
-	ifeq ($(ARCH), sw_64)
-		extra_gccgo_flags += -mieee
-	endif
-	GOBUILD=gccgo_build.pl -p "gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libpulse-simple alsa libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 fontconfig librsvg-2.0 gudev-1.0 libinput xcb xcb-record libnl-genl-3.0" -f "$(extra_gccgo_flags)" -l "crypt pam m"
-endif
-
 BINARIES =  \
 	    dde-session-daemon \
 	    dde-system-daemon \

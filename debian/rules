@@ -1,9 +1,6 @@
 #!/usr/bin/make -f
 
 export GOPATH := /usr/share/gocode
-ifeq ($(DEB_BUILD_ARCH), sw_64)
-	export USE_GCCGO=1
-endif
 
 SYSTYPE=Desktop
 SYSTYPE=$(shell cat /etc/deepin-version | grep Type= | awk -F'=' '{print $$2}')
