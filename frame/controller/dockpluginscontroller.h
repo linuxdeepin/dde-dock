@@ -45,9 +45,9 @@ public:
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
-    void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) Q_DECL_OVERRIDE;
     void saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) Q_DECL_OVERRIDE;
     const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant()) Q_DECL_OVERRIDE;
 

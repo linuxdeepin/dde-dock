@@ -45,7 +45,6 @@ public:
     virtual void invokeMenuItem(const QString &menuId);
 
 signals:
-    void requestContextMenu() const;
     void requestSetDeviceEnable(const QString &path, const bool enable) const;
 
 protected:

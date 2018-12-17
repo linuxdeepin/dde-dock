@@ -58,7 +58,6 @@ protected:
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void removeApp(const QString &appKey);

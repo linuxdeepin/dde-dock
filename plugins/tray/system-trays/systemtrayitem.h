@@ -57,6 +57,9 @@ public:
     void detachPluginWidget();
     void showContextMenu();
 
+    void showPopupApplet(QWidget * const applet);
+    void hidePopup();
+
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
@@ -68,10 +71,8 @@ protected:
     const QPoint popupMarkPoint() const;
     const QPoint topleftPoint() const;
 
-    void hidePopup();
     void hideNonModel();
     void popupWindowAccept();
-    void showPopupApplet(QWidget * const applet);
 
     virtual void showPopupWindow(QWidget * const content, const bool model = false);
     virtual void showHoverTips();

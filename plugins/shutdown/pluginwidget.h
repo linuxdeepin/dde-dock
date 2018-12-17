@@ -39,7 +39,6 @@ signals:
 protected:
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
 

@@ -44,7 +44,6 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     setAcceptDrops(true);
 
     m_absTrayWidget->setVisible(true);
-    m_absTrayWidget->installEventFilter(this);
 
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
@@ -91,19 +90,6 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
     QPainterPath path;
     path.addRoundedRect(rect(), 10, 10);
     painter.fillPath(path, color);
-}
-
-bool FashionTrayWidgetWrapper::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == m_absTrayWidget) {
-        if (event->type() == QEvent::Type::MouseButtonPress) {
-            mousePressEvent(static_cast<QMouseEvent *>(event));
-        } else if (event->type() == QEvent::Type::MouseButtonRelease) {
-            mouseReleaseEvent(static_cast<QMouseEvent *>(event));
-        }
-    }
-
-    return false;
 }
 
 void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)

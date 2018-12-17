@@ -45,7 +45,6 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
 
     m_soundItem = new SoundItem;
-    connect(m_soundItem, &SoundItem::requestContextMenu, [this] { m_proxyInter->requestContextMenu(this, SOUND_KEY); });
 
     if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, SOUND_KEY);

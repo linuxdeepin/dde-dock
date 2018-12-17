@@ -63,6 +63,8 @@ void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
     m_lastMouseReleaseData.second = e->button();
 
     m_handleMouseReleaseTimer->start();
+
+    QWidget::mouseReleaseEvent(e);
 }
 
 

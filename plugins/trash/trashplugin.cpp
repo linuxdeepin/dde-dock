@@ -38,8 +38,6 @@ TrashPlugin::TrashPlugin(QObject *parent)
     m_tipsLabel->setObjectName("trash");
     m_tipsLabel->setStyleSheet("color:white;"
                                "padding: 0 3px;");
-
-    connect(m_trashWidget, &TrashWidget::requestContextMenu, this, &TrashPlugin::showContextMenu);
 }
 
 const QString TrashPlugin::pluginName() const
@@ -144,9 +142,4 @@ void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
         m_proxyInter->itemAdded(this, pluginName());
     else
         m_proxyInter->itemRemoved(this, pluginName());
-}
-
-void TrashPlugin::showContextMenu()
-{
-    m_proxyInter->requestContextMenu(this, pluginName());
 }

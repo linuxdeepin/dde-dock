@@ -125,21 +125,6 @@ void WirelessItem::resizeEvent(QResizeEvent *e)
     m_icons.clear();
 }
 
-void WirelessItem::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() != Qt::RightButton)
-        return e->ignore();
-
-    const QPoint p(e->pos() - rect().center());
-    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
-    {
-        emit requestContextMenu();
-        return;
-    }
-
-    return QWidget::mousePressEvent(e);
-}
-
 const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)
 {
     QString type;
@@ -244,6 +229,7 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessItem::requestActiveAP);
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
+    connect(m_APList, &WirelessList::requestSetAppletVisible, this, &WirelessItem::requestSetAppletVisible);
 
     QTimer::singleShot(0, this, [=]() {
         m_refreshTimer->start();

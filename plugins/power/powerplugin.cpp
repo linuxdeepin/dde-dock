@@ -181,11 +181,6 @@ void PowerPlugin::updateBatteryVisible()
         m_proxyInter->itemAdded(this, POWER_KEY);
 }
 
-void PowerPlugin::requestContextMenu(const QString &itemKey)
-{
-    m_proxyInter->requestContextMenu(this, itemKey);
-}
-
 void PowerPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -199,7 +194,6 @@ void PowerPlugin::loadPlugin()
     m_powerInter = new DBusPower(this);
 
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerPlugin::updateBatteryVisible);
-    connect(m_powerStatusWidget, &PowerStatusWidget::requestContextMenu, this, &PowerPlugin::requestContextMenu);
 
     updateBatteryVisible();
 }

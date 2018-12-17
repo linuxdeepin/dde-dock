@@ -150,8 +150,13 @@ void DockItem::mousePressEvent(QMouseEvent *e)
             // ignore this event to MainPanel/MainWindow to show context menu of MainWindow
             return e->ignore();
         }
-        return showContextMenu();
+        if (perfectIconRect().contains(e->pos())) {
+            return showContextMenu();
+        }
     }
+
+    // same as e->ignore above
+    QWidget::mousePressEvent(e);
 }
 
 void DockItem::enterEvent(QEvent *e)

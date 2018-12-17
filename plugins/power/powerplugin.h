@@ -58,7 +58,6 @@ public:
 
 private:
     void updateBatteryVisible();
-    void requestContextMenu(const QString &itemKey);
     void loadPlugin();
 
 private:

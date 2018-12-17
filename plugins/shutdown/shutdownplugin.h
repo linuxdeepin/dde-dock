@@ -56,7 +56,6 @@ public:
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
 private:
-    void requestContextMenu(const QString &itemKey);
     void loadPlugin();
 
 private:

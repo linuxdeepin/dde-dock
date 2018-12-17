@@ -52,6 +52,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
+    void requestSetAppletVisible(const bool visible) const;
     void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
     void cancelSecret(const QString &connectionPath, const QString &settingName);
     void queryActiveConnInfo();
@@ -63,7 +64,6 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
 
 private:
     const QPixmap iconPix(const Dock::DisplayMode displayMode, const int size);

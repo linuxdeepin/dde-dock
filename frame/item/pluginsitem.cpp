@@ -162,7 +162,8 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
         MousePressPoint = e->pos();
 
-    QWidget::mousePressEvent(e);
+    // context menu will handle in DockItem
+    DockItem::mousePressEvent(e);
 }
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)

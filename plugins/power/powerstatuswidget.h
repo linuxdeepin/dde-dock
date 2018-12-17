@@ -43,7 +43,6 @@ signals:
 protected:
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
 
 private:
     QPixmap getBatteryIcon();

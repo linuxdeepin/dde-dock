@@ -62,6 +62,9 @@ public:
 public slots:
     virtual void refershIcon() {}
 
+    void showPopupApplet(QWidget * const applet);
+    void hidePopup();
+
 signals:
     void dragStarted() const;
     void itemDropped(QObject *destination, const QPoint &dropPoint) const;
@@ -79,10 +82,8 @@ protected:
     const QPoint popupMarkPoint() const;
     const QPoint topleftPoint() const;
 
-    void hidePopup();
     void hideNonModel();
     void popupWindowAccept();
-    void showPopupApplet(QWidget * const applet);
     virtual void showPopupWindow(QWidget * const content, const bool model = false);
     virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);

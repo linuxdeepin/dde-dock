@@ -61,10 +61,12 @@ public:
     /// \brief requestContextMenu
     /// request show context menu
     ///
-    virtual void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
+    //virtual void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
 
     virtual void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) = 0;
     virtual void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
+
+    virtual void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) = 0;
 
     ///
     /// \brief saveValue
