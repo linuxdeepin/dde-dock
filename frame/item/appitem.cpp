@@ -356,7 +356,9 @@ void AppItem::wheelEvent(QWheelEvent *e)
 {
     QWidget::wheelEvent(e);
 
-    m_itemEntryInter->PresentWindows();
+    if (qAbs(e->angleDelta().y()) > 20) {
+        m_itemEntryInter->PresentWindows();
+    }
 }
 
 void AppItem::resizeEvent(QResizeEvent *e)
