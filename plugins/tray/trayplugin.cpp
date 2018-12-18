@@ -180,10 +180,6 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
         return m_systemTraysController->systemTrayItemSortKey(itemKey);
     }
 
-    if (itemKey == FASHION_MODE_ITEM) {
-        return 1;
-    }
-
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
     return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 0 : 0).toInt();
