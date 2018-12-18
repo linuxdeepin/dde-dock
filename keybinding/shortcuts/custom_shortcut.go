@@ -20,6 +20,7 @@
 package shortcuts
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 
@@ -37,6 +38,18 @@ type CustomShortcut struct {
 	BaseShortcut
 	manager *CustomShortcutManager
 	Cmd     string `json:"Exec"`
+}
+
+func (cs *CustomShortcut) Marshal() (string, error) {
+	cs.mu.Lock()
+	defer cs.mu.Unlock()
+
+	bytes, err := json.Marshal(cs)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes), nil
 }
 
 func (cs *CustomShortcut) getKeystrokesStrv() []string {
