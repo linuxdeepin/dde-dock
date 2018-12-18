@@ -41,7 +41,7 @@
 #define GESTURE_DIRECTION_IN 14
 #define GESTURE_DIRECTION_OUT 15
 
-int start_loop(void);
+int start_loop(int verbose, double distance);
 void quit_loop(void);
 void set_timer_duration(int duration);
 

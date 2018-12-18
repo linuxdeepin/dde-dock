@@ -28,7 +28,9 @@
 #include "_cgo_export.h"
 
 #define ALARM_TIMEOUT_DEFAULT 700 // 700ms
-#define LONG_PRESS_MAX_DISTANCE 5
+#define LONG_PRESS_MAX_DISTANCE 1
+#define SCREEN_WIDTH 100;
+#define SCREEN_HEIGHT 100;
 
 struct raw_multitouch_event {
     double dx_unaccel, dy_unaccel;
@@ -58,17 +60,26 @@ static struct _long_press_timer {
     guint fingers;
     gint sent; // mousedown event sent
     double x, y;
+    uint32_t width;
+    uint32_t height;
 } touch_timer;
 static int longpress_duration = ALARM_TIMEOUT_DEFAULT;
+static double longpress_distance = LONG_PRESS_MAX_DISTANCE;
 
 int
-start_loop(void)
+start_loop(int verbose, double distance)
 {
-    struct libinput *li = open_from_udev("seat0", NULL, 0);
+    struct libinput *li = open_from_udev("seat0", NULL, verbose);
     if (!li) {
         return -1;
     }
 
+	if (verbose) {
+		g_setenv("G_MESSAGES_DEBUG", "all", TRUE);
+	}
+	if (distance > 0) {
+		longpress_distance = distance;
+	}
     ev_table = g_hash_table_new_full(g_str_hash,
                                      g_str_equal,
                                      (GDestroyNotify)g_free,
@@ -203,7 +214,7 @@ valid_long_press_touch(double x, double y)
 
     double dx = x - touch_timer.x;
     double dy = y - touch_timer.y;
-    return fabs(dx) < LONG_PRESS_MAX_DISTANCE && fabs(dy) < LONG_PRESS_MAX_DISTANCE;
+    return fabs(dx) < longpress_distance && fabs(dy) < longpress_distance;
 }
 
 /**
@@ -325,9 +336,9 @@ handle_touch_events(struct libinput_event *ev, int ty)
 		}
 		struct libinput_event_touch *touch = libinput_event_get_touch_event(ev);
 		// only suupurted events: down and motion
-		double x = libinput_event_touch_get_x(touch);
-		double y = libinput_event_touch_get_y(touch);
-		g_debug("\tX: %lf, Y: %lf", x, y);
+		double x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
+		double y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
+		g_debug("\t[Transformed] X: %lf, Y: %lf", x, y);
 		if (valid_long_press_touch(x, y) == 1) {
 			break;
 		}
@@ -356,12 +367,23 @@ handle_touch_events(struct libinput_event *ev, int ty)
 			break;
 		}
 		struct libinput_event_touch *touch = libinput_event_get_touch_event(ev);
-		touch_timer.x = libinput_event_touch_get_x(touch);
-		touch_timer.y = libinput_event_touch_get_y(touch);
-		g_debug("\tX: %lf, Y: %lf", touch_timer.x, touch_timer.y);
 		start_touch_timer();
 		touch_timer.fingers = 1;
 		touch_timer.sent = 0;
+		touch_timer.width = SCREEN_WIDTH;
+		touch_timer.height = SCREEN_HEIGHT;
+		double w, h;
+		libinput_device_get_size(dev, &w, &h);
+		// TODO(jouyouyun): save device size to cache
+		if (w > 1) {
+			touch_timer.width = w;
+		}
+		if (h >1) {
+			touch_timer.height = h;
+		}
+		touch_timer.x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
+		touch_timer.y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
+		g_debug("\t[Transformed] X: %lf, Y: %lf", touch_timer.x, touch_timer.y);
 		break;
     }
     case LIBINPUT_EVENT_TOUCH_FRAME:

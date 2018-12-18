@@ -170,8 +170,12 @@ func (*Daemon) Start() error {
 		return err
 	}
 
-	// TODO: debug level
-	go C.start_loop()
+	conf, err := loadConfig(getConfigPath())
+	if err != nil {
+		logger.Warning("Failed to load gesture config:", err)
+		conf = &Config{}
+	}
+	go C.start_loop(C.int(conf.Verbose), C.double(conf.LongPressDistance))
 	return nil
 }
 
