@@ -1,3 +1,14 @@
+<a name="4.8.4.1"></a>
+## 4.8.4.1 (2018-12-19)
+
+
+#### Bug Fixes
+
+*   fashion tray item sort key do not work ([ff0d9f08](https://github.com/linuxdeepin/dde-dock/commit/ff0d9f0804cb19ac4da8711d739503e7b1bfd931))
+*   threshold of wheel on app item ([c45df026](https://github.com/linuxdeepin/dde-dock/commit/c45df0263ddc5b42fa4335ca1ad9d8c1b0bfda33))
+
+
+
 <a name="4.8.4"></a>
 ## 4.8.4 (2018-12-14)
 
