@@ -8,8 +8,7 @@ import (
 func getGfxmodesWithOutput(modes drandr.ModeInfos, output drandr.OutputInfo) (result Gfxmodes) {
 	for _, modeId := range output.Modes {
 		modeInfo := modes.Query(modeId)
-		// skip invalid modeInfo
-		if modeInfo.Width < 799 || modeInfo.Height == 0 {
+		if modeInfo.Width < 1024 || modeInfo.Height < 720 {
 			continue
 		}
 
@@ -49,5 +48,10 @@ func GetGfxmodesFromXRandr() (Gfxmodes, error) {
 			result = result.Add(mode)
 		}
 	}
+
+	if len(result) == 0 {
+		result = Gfxmodes{Gfxmode{Width: 1024, Height: 768}}
+	}
+
 	return result, nil
 }

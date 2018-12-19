@@ -7,6 +7,11 @@ import (
 )
 
 func detectChange() {
+	if !grub_common.HasDeepinGfxmodeMod() {
+		logger.Debug("not found grub module deepin_gfxmode")
+		return
+	}
+
 	params, err := grub_common.LoadGrubParams()
 	if err != nil {
 		logger.Warning(err)
@@ -26,7 +31,13 @@ func detectChange() {
 
 	currentGfxmode, allGrubGfxmodes, err := grub_common.GetBootArgDeepinGfxmode()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning("failed to get boot arg DEEPIN_GFXMODE:", err)
+		if !grub_common.IsGfxmodeDetectFailed(params) {
+			err = prepareGfxmodeDetect()
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
 		return
 	}
 	logger.Debug("currentGfxmode:", currentGfxmode)
@@ -97,6 +108,7 @@ func getSysGrubObj() (dbus.BusObject, error) {
 }
 
 func prepareGfxmodeDetect() error {
+	logger.Debug("prepare gfxmode detect")
 	sysGrubObj, err := getSysGrubObj()
 	if err != nil {
 		return err

@@ -29,7 +29,7 @@ const DefaultThemeDir = "/boot/grub/themes/deepin"
 
 var (
 	themeDir    = DefaultThemeDir
-	themeBgFile = themeDir + "/background.png"
+	themeBgFile = themeDir + "/background.jpg"
 )
 
 // Theme is a dbus object which provide properties and methods to

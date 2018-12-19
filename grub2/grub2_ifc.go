@@ -117,13 +117,8 @@ func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 
 	g.PropsMu.Lock()
 
-	if g.gfxmodeDetect {
-		g.PropsMu.Unlock()
-		return dbusutil.ToError(errInGfxmodeDetect)
-	}
-
 	if g.setPropEnableTheme(enabled) {
-		g.addModifyTask(getModifyTaskEnableTheme(enabled, lang))
+		g.addModifyTask(getModifyTaskEnableTheme(enabled, lang, g.gfxmodeDetectState))
 	}
 
 	g.PropsMu.Unlock()
@@ -149,7 +144,7 @@ func (g *Grub2) SetGfxmode(sender dbus.Sender, gfxmode string) *dbus.Error {
 	}
 
 	g.PropsMu.Lock()
-	if g.gfxmodeDetect {
+	if g.gfxmodeDetectState == gfxmodeDetectStateDetecting {
 		g.PropsMu.Unlock()
 		return dbusutil.ToError(errInGfxmodeDetect)
 	}
@@ -206,7 +201,7 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 
 	if g.setPropEnableTheme(defaultEnableTheme) {
 		modifyTasks = append(modifyTasks,
-			getModifyTaskEnableTheme(defaultEnableTheme, lang))
+			getModifyTaskEnableTheme(defaultEnableTheme, lang, g.gfxmodeDetectState))
 	}
 
 	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(defaultGrubDefaultInt)
@@ -238,24 +233,41 @@ func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	g.PropsMu.RLock()
-	gfxmodeDetect := g.gfxmodeDetect
-	g.PropsMu.RUnlock()
-
-	if gfxmodeDetect {
-		return dbusutil.ToError(errors.New("already in detection mode"))
-	}
-
-	gfxmodes, err := g.getAvailableGfxmodes(sender)
+	gfxmodes, err := g.getGfxmodesFromXRandr(sender)
 	if err != nil {
-		logger.Warning("failed to get available gfxmodes:", err)
+		logger.Warning("failed to get gfxmodes from XRandr:", err)
+		return dbusutil.ToError(err)
 	}
+
 	gfxmodes.SortDesc()
 	gfxmodesStr := joinGfxmodesForDetect(gfxmodes)
 
+	g.PropsMu.RLock()
+	gfxmodeDetectState := g.gfxmodeDetectState
+	g.PropsMu.RUnlock()
+
+	if gfxmodeDetectState == gfxmodeDetectStateDetecting {
+		return dbusutil.ToError(errors.New("already in detection mode"))
+	} else if gfxmodeDetectState == gfxmodeDetectStateFailed {
+		cur, _, err := grub_common.GetBootArgDeepinGfxmode()
+		if err == nil {
+			params, err := grub_common.LoadGrubParams()
+			if err != nil {
+				logger.Warning("failed to load grub params:", err)
+				return dbusutil.ToError(err)
+			}
+
+			if params[grubGfxmode] == gfxmodesStr ||
+				(len(gfxmodes) > 0 && gfxmodes[0] == cur) {
+				g.finishGfxmodeDetect(params)
+				return nil
+			}
+		}
+	}
+
 	g.PropsMu.Lock()
 
-	g.gfxmodeDetect = true
+	g.gfxmodeDetectState = gfxmodeDetectStateDetecting
 	g.setPropEnableTheme(false)
 	g.setPropGfxmode(gfxmodesStr)
 	g.addModifyTask(getModifyTaskPrepareGfxmodeDetect(gfxmodesStr))

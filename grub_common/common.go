@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strconv"
@@ -211,4 +212,20 @@ func ShouldFinishGfxmodeDetect(params map[string]string) bool {
 
 func InGfxmodeDetectionMode(params map[string]string) bool {
 	return params[DeepinGfxmodeDetect] == "1"
+}
+
+func IsGfxmodeDetectFailed(params map[string]string) bool {
+	return params[DeepinGfxmodeDetect] == "2"
+}
+
+func HasDeepinGfxmodeMod() bool {
+	dir := "/boot/grub"
+	for _, platform := range []string{"i386-pc", "x86_64-efi"} {
+		modFile := filepath.Join(dir, platform, "deepin_gfxmode.mod")
+		_, err := os.Stat(modFile)
+		if err == nil {
+			return true
+		}
+	}
+	return false
 }

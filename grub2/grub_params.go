@@ -14,21 +14,18 @@ const (
 )
 
 const (
-	grubBackground     = "GRUB_BACKGROUND"
-	grubDefault        = "GRUB_DEFAULT"
-	grubGfxmode        = "GRUB_GFXMODE"
-	grubTheme          = "GRUB_THEME"
-	grubTimeout        = "GRUB_TIMEOUT"
-	deepinThemeEnabled = "DEEPIN_THEME_ENABLED"
+	grubBackground = "GRUB_BACKGROUND"
+	grubDefault    = "GRUB_DEFAULT"
+	grubGfxmode    = "GRUB_GFXMODE"
+	grubTheme      = "GRUB_THEME"
+	grubTimeout    = "GRUB_TIMEOUT"
 
-	defaultGrubBackground  = "/boot/grub/themes/deepin/background.png"
-	defaultGrubTheme       = "/boot/grub/themes/deepin/theme.txt"
-	fallbackGrubTheme      = "/boot/grub/themes/deepin-fallback/theme.txt"
-	fallbackGrubGackground = "/boot/grub/themes/deepin-fallback/background.png"
-	defaultGrubDefault     = "0"
-	defaultGrubDefaultInt  = 0
-	defaultGrubGfxMode     = "auto"
-	defaultGrubTimeoutInt  = 5
+	defaultGrubTheme      = "/boot/grub/themes/deepin/theme.txt"
+	fallbackGrubTheme     = "/boot/grub/themes/deepin-fallback/theme.txt"
+	defaultGrubDefault    = "0"
+	defaultGrubDefaultInt = 0
+	defaultGrubGfxMode    = "auto"
+	defaultGrubTimeoutInt = 5
 )
 
 func decodeShellValue(in string) string {
@@ -66,7 +63,7 @@ func getDefaultEntry(params map[string]string) (val string) {
 }
 
 func getTheme(params map[string]string) string {
-	return decodeShellValue(params[grubBackground])
+	return decodeShellValue(params[grubTheme])
 }
 
 func getGrubParamsContent(params map[string]string) []byte {

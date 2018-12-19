@@ -39,9 +39,6 @@ func (*Theme) GetInterfaceName() string {
 	return themeDBusInterface
 }
 
-// SetBackgroundSourceFile setup the background source file, then
-// generate the background to fit the screen resolution, support png
-// and jpeg image format.
 func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string) *dbus.Error {
 	theme.service.DelayAutoQuit()
 
