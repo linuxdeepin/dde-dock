@@ -241,8 +241,7 @@ void TrayPlugin::saveValue(const QString &key, const QVariant &value)
 
 const QVariant TrayPlugin::getValue(const QString &key, const QVariant &fallback)
 {
-//    return m_proxyInter->getValue(this, key, fallback);
-    return true;
+    return m_proxyInter->getValue(this, key, fallback);
 }
 
 const QString TrayPlugin::getWindowClass(quint32 winId)
