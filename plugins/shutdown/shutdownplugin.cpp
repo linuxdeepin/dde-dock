@@ -198,7 +198,7 @@ int ShutdownPlugin::itemSortKey(const QString &itemKey)
     if (mode == Dock::DisplayMode::Fashion) {
         return m_proxyInter->getValue(this, key, 2).toInt();
     } else {
-        return m_proxyInter->getValue(this, key, 4).toInt();
+        return m_proxyInter->getValue(this, key, 5).toInt();
     }
 }
 

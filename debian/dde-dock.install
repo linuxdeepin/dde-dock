@@ -1,4 +1,9 @@
 /usr/share
 /usr/bin
-/usr/lib/dde-dock
+/usr/lib/dde-dock/plugins/libdatetime.so
+/usr/lib/dde-dock/plugins/libkeyboard-layout.so
+/usr/lib/dde-dock/plugins/libshutdown.so
+/usr/lib/dde-dock/plugins/libtrash.so
+/usr/lib/dde-dock/plugins/libtray.so
+/usr/lib/dde-dock/plugins/system-trays
 /etc/dde-dock

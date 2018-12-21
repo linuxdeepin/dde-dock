@@ -19,7 +19,7 @@ Homepage: http://www.deepin.org/
 Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, deepin-menu
-Recommends: dde-disk-mount-plugin
+Recommends: dde-disk-mount-plugin, dde-dock-onboard-plugin
 Conflicts:
  dde-workspace (<< 2.90.5),
  dde-dock-applets,
@@ -35,3 +35,9 @@ Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: deepin desktop-environment - dock module development files
  Deepin desktop environment - dock module development files.
+
+Package: dde-dock-onboard-plugin
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
+Description: deepin desktop-environment - dock plugin
+ Deepin desktop environment - dock plugin for onboard
