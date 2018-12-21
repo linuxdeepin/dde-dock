@@ -124,13 +124,22 @@ func (m *Manager) doLock() {
 }
 
 func (m *Manager) doSuspend() {
-	logger.Debug("Suspend")
 	sessionManager := m.helper.SessionManager
-	if sessionManager != nil {
-		err := sessionManager.RequestSuspend(0)
-		if err != nil {
-			logger.Error("Suspend failed:", err)
-		}
+	can, err := sessionManager.CanSuspend(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not suspend")
+		return
+	}
+
+	logger.Debug("suspend")
+	err = sessionManager.RequestSuspend(0)
+	if err != nil {
+		logger.Warning("failed to suspend:", err)
 	}
 }
 
