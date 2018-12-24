@@ -207,6 +207,20 @@
     </message>
 </context>
 <context>
+    <name>OnboardPlugin</name>
+    <message>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="35"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="46"/>
+        <source>Onboard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>PowerPlugin</name>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="46"/>
@@ -294,22 +308,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="78"/>
         <source>Unmute</source>
         <translation>Zhlasit</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="80"/>
         <source>Mute</source>
         <translation>Ztlumit</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Audio Settings</source>
         <translation>Nastavení zvuku</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="224"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
         <source>Current Volume %1</source>
         <translation>Hlasitost %1</translation>
     </message>
@@ -351,7 +365,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="47"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="53"/>
         <source>System Tray</source>
         <translation>Systémová lišta</translation>
     </message>
@@ -364,7 +378,7 @@
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="203"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="206"/>
         <source>Wired connection: %1</source>
         <translation>Drátové připojení: %1</translation>
     </message>
@@ -372,12 +386,12 @@
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="81"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="49"/>
         <source>No Network</source>
         <translation>Žádná síť</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="91"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="281"/>
         <source>Wireless Connection: %1</source>
         <translation>Bezdrátové připojení: %1</translation>
     </message>
