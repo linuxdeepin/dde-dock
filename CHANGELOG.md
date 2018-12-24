@@ -1,3 +1,17 @@
+<a name="4.8.5"></a>
+## 4.8.5 (2018-12-24)
+
+
+#### Features
+
+*   add new plugin for onboard ([06d55e20](https://github.com/linuxdeepin/dde-dock/commit/06d55e20d636812a920d5fcdbf691e9b8e77dbe2))
+
+#### Bug Fixes
+
+*   fashion mode tray expand config can not read ([3ab60d06](https://github.com/linuxdeepin/dde-dock/commit/3ab60d0633e2e48cc1a5deb2d5cc4ca6bf1e5a66))
+
+
+
 <a name="4.8.4.1"></a>
 ## 4.8.4.1 (2018-12-19)
 
