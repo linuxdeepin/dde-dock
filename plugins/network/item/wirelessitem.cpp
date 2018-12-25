@@ -50,8 +50,8 @@ WirelessItem::WirelessItem(WirelessDevice *device)
 
     connect(m_refreshTimer, &QTimer::timeout, this, &WirelessItem::onRefreshTimeout);
     connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
-    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device), &WirelessDevice::activeConnectionChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeConnectionChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
 
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     QTimer::singleShot(0, this, &WirelessItem::refreshTips);
@@ -142,6 +142,10 @@ void WirelessItem::mousePressEvent(QMouseEvent *e)
 
 const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)
 {
+    if (m_device.isNull()) {
+        return QPixmap();
+    }
+
     QString type;
     const auto state = m_device->status();
 
@@ -169,7 +173,7 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
             break;
         }
         case NetworkDevice::DeviceStatus::Activated: {
-            const auto &activeApInfo = static_cast<WirelessDevice *>(m_device)->activeApInfo();
+            const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
             if (activeApInfo.isEmpty()) {
                 strength = 100;
                 m_refreshTimer->start();
@@ -229,7 +233,7 @@ const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 
 void WirelessItem::init()
 {
-    m_APList = new WirelessList(static_cast<WirelessDevice *>(m_device));
+    m_APList = new WirelessList(static_cast<WirelessDevice *>(m_device.data()));
     m_APList->installEventFilter(this);
     m_APList->setObjectName("wireless-" + m_device->path());
 
@@ -265,6 +269,10 @@ void WirelessItem::refreshIcon()
 
 void WirelessItem::refreshTips()
 {
+    if (m_device.isNull()) {
+        return;
+    }
+
     m_wirelessTips->setText(m_device->statusStringDetail());
 
     if (NetworkPlugin::isConnectivity()) {
@@ -272,7 +280,7 @@ void WirelessItem::refreshTips()
             if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
                 break;
             }
-            const QJsonObject info = static_cast<WirelessDevice *>(m_device)->activeConnectionInfo();
+            const QJsonObject info = static_cast<WirelessDevice *>(m_device.data())->activeConnectionInfo();
             if (!info.contains("Ip4"))
                 break;
             const QJsonObject ipv4 = info.value("Ip4").toObject();
@@ -294,7 +302,11 @@ void WirelessItem::onRefreshTimeout()
 {
     Q_ASSERT(sender() == m_refreshTimer);
 
-    WirelessDevice *dev = static_cast<WirelessDevice *>(m_device);
+    if (m_device.isNull()) {
+        return;
+    }
+
+    WirelessDevice *dev = static_cast<WirelessDevice *>(m_device.data());
     // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
     if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled()) {
         Q_EMIT queryActiveConnInfo();

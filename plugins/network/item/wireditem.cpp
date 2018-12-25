@@ -48,8 +48,8 @@ WiredItem::WiredItem(WiredDevice *device)
 
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
-    connect(static_cast<WiredDevice *>(m_device), &WiredDevice::connectionsChanged, this, &WiredItem::deviceStateChanged);
-    connect(static_cast<WiredDevice *>(m_device), &WiredDevice::activeConnectionChanged, this, &WiredItem::deviceStateChanged);
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::connectionsChanged, this, &WiredItem::deviceStateChanged);
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeConnectionChanged, this, &WiredItem::deviceStateChanged);
 
     QTimer::singleShot(0, this, &WiredItem::refreshTips);
     QTimer::singleShot(0, this, &WiredItem::refreshIcon);
@@ -112,6 +112,10 @@ void WiredItem::refreshIcon()
 void WiredItem::reloadIcon()
 {
     Q_ASSERT(sender() == m_delayTimer);
+
+    if (m_device.isNull()) {
+        return;
+    }
 
 //    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
@@ -190,6 +194,10 @@ void WiredItem::deviceStateChanged()
 
 void WiredItem::refreshTips()
 {
+    if (m_device.isNull()) {
+        return;
+    }
+
     m_itemTips->setText(m_device->statusStringDetail());
 
     if (NetworkPlugin::isConnectivity()) {
@@ -197,7 +205,7 @@ void WiredItem::refreshTips()
             if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
                 break;
             }
-            const QJsonObject info = static_cast<WiredDevice *>(m_device)->activeConnection();
+            const QJsonObject info = static_cast<WiredDevice *>(m_device.data())->activeConnection();
             if (!info.contains("Ip4"))
                 break;
             const QJsonObject ipv4 = info.value("Ip4").toObject();

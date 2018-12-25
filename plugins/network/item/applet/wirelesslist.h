@@ -29,6 +29,7 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QTimer>
+#include <QPointer>
 
 #include <dpicturesequenceview.h>
 #include <WirelessDevice>
@@ -71,7 +72,7 @@ private slots:
 
 
 private:
-    dde::network::WirelessDevice *m_device;
+    QPointer<dde::network::WirelessDevice> m_device;
 
     AccessPoint m_activeAP;
     QList<AccessPoint> m_apList;

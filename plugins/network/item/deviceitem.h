@@ -23,6 +23,7 @@
 #define DEVICEITEM_H
 
 #include <QWidget>
+#include <QPointer>
 
 #include <NetworkDevice>
 
@@ -35,7 +36,7 @@ public:
 
     const QString &path() const { return m_path; }
 
-    inline const dde::network::NetworkDevice * device() { return m_device; }
+    inline const QPointer<dde::network::NetworkDevice> device() { return m_device; }
 
     virtual void refreshIcon() = 0;
     virtual const QString itemCommand() const;
@@ -52,7 +53,7 @@ protected:
     QSize sizeHint() const;
 
 protected:
-    dde::network::NetworkDevice *m_device;
+    QPointer<dde::network::NetworkDevice> m_device;
 
 private:
     QString m_path;

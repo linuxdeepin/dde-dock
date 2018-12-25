@@ -268,7 +268,7 @@ void NetworkPlugin::refreshWiredItemVisible()
     QList<WiredItem *> wiredItems;
 
     for (auto item : m_itemsMap.values()) {
-        if (item->device()->type() == NetworkDevice::Wireless) {
+        if (!item->device().isNull() && item->device()->type() == NetworkDevice::Wireless) {
             hasWireless = true;
         } else {
             wiredItems.append(static_cast<WiredItem *>(item));
@@ -280,7 +280,7 @@ void NetworkPlugin::refreshWiredItemVisible()
     }
 
     for (auto wiredItem : wiredItems) {
-        if (!wiredItem->device()->enabled()) {
+        if (!wiredItem->device().isNull() && !wiredItem->device()->enabled()) {
             m_proxyInter->itemRemoved(this, wiredItem->path());
         } else {
             m_proxyInter->itemAdded(this, wiredItem->path());

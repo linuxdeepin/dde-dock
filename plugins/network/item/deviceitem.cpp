@@ -46,6 +46,10 @@ const QString DeviceItem::itemCommand() const
 
 const QString DeviceItem::itemContextMenu()
 {
+    if (m_device.isNull()) {
+        return QString();
+    }
+
     QList<QVariant> items;
     items.reserve(2);
 
@@ -79,6 +83,10 @@ QWidget *DeviceItem::itemTips()
 
 void DeviceItem::invokeMenuItem(const QString &menuId)
 {
+    if (m_device.isNull()) {
+        return;
+    }
+
     if (menuId == "settings")
         //QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
         DDBusSender()
