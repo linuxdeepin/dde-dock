@@ -57,6 +57,10 @@ public:
     inline QString iconName() const
     { return qvariant_cast< QString >(property("IconName")); }
 
+    Q_PROPERTY(QString IconThemePath READ iconThemePath)
+    inline QString iconThemePath() const
+    { return qvariant_cast< QString >(property("IconThemePath")); }
+
     Q_PROPERTY(DBusImageList IconPixmap READ iconPixmap)
     inline DBusImageList iconPixmap() const
     { return qvariant_cast< DBusImageList >(property("IconPixmap")); }

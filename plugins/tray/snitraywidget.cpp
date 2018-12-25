@@ -268,6 +268,8 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
     QString iconName;
     DBusImageList dbusImageList;
 
+    QString iconThemePath = m_sniInter->iconThemePath();
+
     switch (iconType) {
         case Icon:
             iconName = m_sniInter->iconName();
@@ -288,15 +290,10 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
             break;
     }
 
+    const auto ratio = qApp->devicePixelRatio();
+    const int iconSizeScaled = IconSize * ratio;
     do {
-        if (!iconName.isEmpty()) {
-            // ThemeAppIcon::getIcon 会处理高分屏缩放问题
-            pixmap = ThemeAppIcon::getIcon(iconName, IconSize);
-            if (!pixmap.isNull()) {
-                break;
-            }
-        }
-
+        // load icon from sni dbus
         if (!dbusImageList.isEmpty()) {
             for (DBusImage dbusImage : dbusImageList) {
                 char *image_data = dbusImage.pixels.data();
@@ -307,14 +304,41 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
                     }
                 }
 
-                const auto ratio = qApp->devicePixelRatio();
-                const int iconSize = IconSize * ratio;
                 QImage image((const uchar*)dbusImage.pixels.constData(), dbusImage.width, dbusImage.height, QImage::Format_ARGB32);
-                pixmap = QPixmap::fromImage(image.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                pixmap = QPixmap::fromImage(image.scaled(iconSizeScaled, iconSizeScaled, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 pixmap.setDevicePixelRatio(ratio);
                 if (!pixmap.isNull()) {
                     break;
                 }
+            }
+        }
+
+        // load icon from specified file
+        if (!iconThemePath.isEmpty() && !iconName.isEmpty()) {
+            QFileInfoList fileInfoList = QDir(iconThemePath).entryInfoList(QDir::Filter::Files);
+            for (auto fileInfo : fileInfoList) {
+                if (fileInfo.fileName().startsWith(iconName, Qt::CaseInsensitive)) {
+                    QImage image(fileInfo.absoluteFilePath());
+                    pixmap = QPixmap::fromImage(image.scaled(iconSizeScaled, iconSizeScaled, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                    pixmap.setDevicePixelRatio(ratio);
+                    if (!pixmap.isNull()) {
+                        break;
+                    }
+                }
+            }
+            if (!pixmap.isNull()) {
+                break;
+            }
+        }
+
+        // load icon from theme
+        // Note: this will ensure return a None-Null pixmap
+        // so, it should be the last fallback
+        if (!iconName.isEmpty()) {
+            // ThemeAppIcon::getIcon 会处理高分屏缩放问题
+            pixmap = ThemeAppIcon::getIcon(iconName, IconSize);
+            if (!pixmap.isNull()) {
+                break;
             }
         }
 
