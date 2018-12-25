@@ -1,3 +1,12 @@
+[3.15.0] 2018-12-25
+*   feat: rewrite clipboard module
+*   refactor: replace abs coordinate with relative
+*   feat(power): call CanSupsend before suspend
+*   feat(grub2): gfxmode detect failed fallback to deepin-falback
+*   fix(system/power): not found lid switch under the `sw_64` arch
+*   fix(keybinding): GetShortcut missing Exec field for custom shortcut
+*   chore: compile with sw arch no longer needs to use gccgo
+
 [3.14.0] 2018-12-14
 *   fix(grub2): call dbus method PrepareGfxmodeDetect gfxmodes not sort
 *   fix(network): the state changed signal of the active connection is not monitored
