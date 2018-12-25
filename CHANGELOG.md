@@ -1,3 +1,16 @@
+<a name="4.8.5.2"></a>
+## 4.8.5.2 (2018-12-25)
+
+
+#### Bug Fixes
+
+*   there is an empty AppItem in dock ([c10a6e9e](https://github.com/linuxdeepin/dde-dock/commit/c10a6e9eb2a5980bc187466925a6415fff301a6e))
+*   SNI icon search fallback ([11ad21f8](https://github.com/linuxdeepin/dde-dock/commit/11ad21f8d0e9540de27d2552d0b4600c0e3a558c))
+*   there is an empty AppItem in dock ([8674c055](https://github.com/linuxdeepin/dde-dock/commit/8674c0552eb25cde29995fea37443badb3378c0f))
+*   crash because NetworkDevice has been deleted in network library ([18f4f2d6](https://github.com/linuxdeepin/dde-dock/commit/18f4f2d69a9b0e6cf38c852ab96d53858038e418))
+
+
+
 <a name="4.8.5.1"></a>
 ## 4.8.5.1 (2018-12-24)
 
