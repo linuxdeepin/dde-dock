@@ -46,6 +46,7 @@ public:
     ~AppItem();
 
     const QString appId() const;
+    const bool isValid() const;
     void updateWindowIconGeometries();
     static void setIconBaseSize(const int size);
     static int iconBaseSize();

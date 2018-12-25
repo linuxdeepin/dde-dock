@@ -120,6 +120,11 @@ const QString AppItem::appId() const
     return m_id;
 }
 
+const bool AppItem::isValid() const
+{
+    return m_itemEntryInter->isValid() && !m_itemEntryInter->id().isEmpty();
+}
+
 // Update _NET_WM_ICON_GEOMETRY property for windows that every item
 // that manages, so that WM can do proper animations for specific
 // window behaviors like minimization.
