@@ -288,13 +288,12 @@ void DockItemController::appItemRemoved(const QString &appId)
             continue;
 
         AppItem *app = static_cast<AppItem *>(m_itemList[i].data());
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>" << app << app->appId();
-        if (!app) {
+        if (!app || app->appId() != appId)
             continue;
-        }
-        if (app->appId().isEmpty() || app->appId() == appId) {
-            appItemRemoved(app);
-        }
+
+        appItemRemoved(app);
+
+        break;
     }
 }
 
