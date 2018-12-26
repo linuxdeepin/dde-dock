@@ -26,6 +26,7 @@
 #include "trayplugin.h"
 #include "fashiontraywidgetwrapper.h"
 #include "fashiontraycontrolwidget.h"
+#include "fashiontrayholdcontainer.h"
 
 #include <QWidget>
 #include <QPointer>
@@ -47,6 +48,9 @@ public:
     void clearTrayWidgets();
 
     void setDockPostion(Dock::Position pos);
+
+    inline static int trayWidgetWidth() {return TrayWidgetWidth;}
+    inline static int trayWidgetHeight() {return TrayWidgetHeight;}
 
 public slots:
     void onTrayListExpandChanged(const bool expand);
@@ -77,6 +81,7 @@ private Q_SLOTS:
     void moveOutAttionTray();
     void moveInAttionTray();
     void switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper);
+    void refreshHoldContainerPosition();
     void refreshTraysVisible();
     void onItemDragStart();
     void onItemDragStop();
@@ -95,6 +100,7 @@ private:
     FashionTrayControlWidget *m_controlWidget;
     FashionTrayWidgetWrapper *m_currentAttentionTray;
     FashionTrayWidgetWrapper *m_currentDraggingTray;
+    FashionTrayHoldContainer *m_holdContainer;
 
     QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
 
