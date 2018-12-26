@@ -99,7 +99,10 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
         return;
     }
 
-    const QString currentTimeString = current.toString(m_24HourFormat ? "hhmm" : "hhmma");
+    // use language Chinese to fix can not find image resources which will be drawn
+    const QString currentTimeString = QLocale(QLocale::Chinese, QLocale::system().country())
+            .toString(current, m_24HourFormat ? "hhmm" : "hhmma");
+
     // check cache valid
     if (m_cachedTime != currentTimeString)
     {
