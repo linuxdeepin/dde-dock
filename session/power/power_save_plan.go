@@ -47,6 +47,7 @@ type powerSavePlan struct {
 	oldBrightnessTable map[string]float64
 	mu                 sync.Mutex
 	idleOn             bool
+	screensaverRunning bool
 
 	atomNetWMStateFullscreen    x.Atom
 	atomNetWMStateFocused       x.Atom
@@ -248,7 +249,7 @@ func (psp *powerSavePlan) Update(screenSaverStartDelay, screenBlackDelay, sleepD
 			name:  "screenSaverStart",
 			step:  0,
 			delay: screenSaverStartDelay,
-			fn:    startScreensaver,
+			fn:    psp.startScreensaver,
 		})
 	}
 
@@ -266,12 +267,7 @@ func (psp *powerSavePlan) Update(screenSaverStartDelay, screenBlackDelay, sleepD
 			name:  "sleep",
 			step:  2,
 			delay: sleepDelay,
-			fn: func() {
-				logger.Info("sleep")
-				psp.manager.setDPMSModeOn()
-				psp.resetBrightness()
-				psp.manager.doSuspend()
-			},
+			fn:    psp.makeSystemSleep,
 		})
 	}
 
@@ -341,6 +337,27 @@ func (psp *powerSavePlan) resetBrightness() {
 	}
 }
 
+func (psp *powerSavePlan) startScreensaver() {
+	startScreensaver()
+	psp.screensaverRunning = true
+}
+
+func (psp *powerSavePlan) stopScreensaver() {
+	if !psp.screensaverRunning {
+		return
+	}
+	stopScreensaver()
+	psp.screensaverRunning = false
+}
+
+func (psp *powerSavePlan) makeSystemSleep() {
+	psp.stopScreensaver()
+	logger.Info("sleep")
+	psp.manager.setDPMSModeOn()
+	psp.resetBrightness()
+	psp.manager.doSuspend()
+}
+
 // 降低显示器亮度，最终关闭显示器
 func (psp *powerSavePlan) screenBlack() {
 	manager := psp.manager
@@ -370,6 +387,7 @@ func (psp *powerSavePlan) screenBlack() {
 	// full black
 	const fullBlackTime = 5000 * time.Millisecond
 	taskF := newDelayedTask("screenFullBlack", fullBlackTime, func() {
+		psp.stopScreensaver()
 		logger.Info("Screen full black")
 		if manager.ScreenBlackLock.Get() {
 			manager.lockWaitShow(2 * time.Second)

@@ -197,16 +197,37 @@ func playSound(name string) {
 	go soundutils.PlaySystemSound(name, "")
 }
 
+const (
+	deepinScreensaverDBusServiceName = "com.deepin.ScreenSaver"
+	deepinScreensaverDBusPath        = "/com/deepin/ScreenSaver"
+	deepinScreensaverDBusInterface   = deepinScreensaverDBusServiceName
+)
+
 func startScreensaver() {
-	logger.Info("start screenSaver")
+	logger.Info("start screensaver")
 	bus, err := dbus.SessionBus()
 	if err != nil {
 		logger.Warning(err)
 		return
 	}
 
-	obj := bus.Object("com.deepin.ScreenSaver", "/com/deepin/ScreenSaver")
-	err = obj.Call("com.deepin.ScreenSaver.Start", 0).Err
+	obj := bus.Object(deepinScreensaverDBusServiceName, deepinScreensaverDBusPath)
+	err = obj.Call(deepinScreensaverDBusInterface+".Start", 0).Err
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func stopScreensaver() {
+	logger.Info("stop screensaver")
+	bus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	obj := bus.Object(deepinScreensaverDBusServiceName, deepinScreensaverDBusPath)
+	err = obj.Call(deepinScreensaverDBusInterface+".Stop", 0).Err
 	if err != nil {
 		logger.Warning(err)
 	}
