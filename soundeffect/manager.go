@@ -20,6 +20,7 @@
 package soundeffect
 
 import (
+	"errors"
 	"sync"
 
 	"gir/gio-2.0"
@@ -47,7 +48,8 @@ type Manager struct {
 	Enabled gsprop.Bool `prop:"access:rw"`
 
 	methods *struct {
-		PlaySystemSound func() `in:"event"`
+		PlaySystemSound    func() `in:"event"`
+		GetSystemSoundFile func() `in:"event" out:"file"`
 	}
 }
 
@@ -88,6 +90,15 @@ func (m *Manager) PlaySystemSound(event string) *dbus.Error {
 		m.countMu.Unlock()
 	}()
 	return nil
+}
+
+func (m *Manager) GetSystemSoundFile(event string) (string, *dbus.Error) {
+	file := soundutils.GetSystemSoundFile(event)
+	if file == "" {
+		return "", dbusutil.ToError(errors.New("sound file not found"))
+	}
+
+	return file, nil
 }
 
 func (m *Manager) canQuit() bool {
