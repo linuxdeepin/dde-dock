@@ -21,7 +21,7 @@
  */
 
 #include "trayplugin.h"
-#include "fashiontrayitem.h"
+#include "fashiontray/fashiontrayitem.h"
 #include "snitraywidget.h"
 
 #include <QDir>
@@ -125,7 +125,7 @@ void TrayPlugin::positionChanged(const Dock::Position position)
         return;
     }
 
-    m_fashionItem->setDockPostion(position);
+    m_fashionItem->setDockPosition(position);
 }
 
 QWidget *TrayPlugin::itemWidget(const QString &itemKey)

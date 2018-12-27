@@ -26,7 +26,8 @@
 #include "trayplugin.h"
 #include "fashiontraywidgetwrapper.h"
 #include "fashiontraycontrolwidget.h"
-#include "fashiontrayholdcontainer.h"
+#include "containers/normalcontainer.h"
+#include "containers/attentioncontainer.h"
 
 #include <QWidget>
 #include <QPointer>
@@ -47,13 +48,13 @@ public:
     void trayWidgetRemoved(AbstractTrayWidget *trayWidget);
     void clearTrayWidgets();
 
-    void setDockPostion(Dock::Position pos);
+    void setDockPosition(Dock::Position pos);
 
     inline static int trayWidgetWidth() {return TrayWidgetWidth;}
     inline static int trayWidgetHeight() {return TrayWidgetHeight;}
 
 public slots:
-    void onTrayListExpandChanged(const bool expand);
+    void onExpandChanged(const bool expand);
     void setSuggestIconSize(QSize size);
     void setRightSplitVisible(const bool visible);
 
@@ -67,43 +68,26 @@ protected:
 private:
     void init();
     QSize wantedTotalSize() const;
-    int whereToInsert(FashionTrayWidgetWrapper *wrapper) const;
-    int whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) const;
-    int whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const;
-    int whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
-    int whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
-    void saveCurrentOrderToConfig();
 
 private Q_SLOTS:
-    void onTrayAttentionChanged(const bool attention);
-    void setCurrentAttentionTray(FashionTrayWidgetWrapper *attentionWrapper);
+    void onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention);
+    void attentionWrapperToNormalWrapper();
+    void normalWrapperToAttentionWrapper(FashionTrayWidgetWrapper *wrapper);
     void requestResize();
-    void moveOutAttionTray();
-    void moveInAttionTray();
-    void switchAttionTray(FashionTrayWidgetWrapper *attentionWrapper);
     void refreshHoldContainerPosition();
-    void refreshTraysVisible();
-    void onItemDragStart();
-    void onItemDragStop();
-    void onItemRequestSwapWithDragging();
 
 private:
     QBoxLayout *m_mainBoxLayout;
-    QBoxLayout *m_trayBoxLayout;
     QLabel *m_leftSpliter;
     QLabel *m_rightSpliter;
     QTimer *m_attentionDelayTimer;
 
-    Dock::Position m_dockPosistion;
-
     TrayPlugin *m_trayPlugin;
     FashionTrayControlWidget *m_controlWidget;
-    FashionTrayWidgetWrapper *m_currentAttentionTray;
     FashionTrayWidgetWrapper *m_currentDraggingTray;
-    FashionTrayHoldContainer *m_holdContainer;
 
-    QList<QPointer<FashionTrayWidgetWrapper>> m_totalWrapperList;
-    QList<QPointer<FashionTrayWidgetWrapper>> m_normalWrapperList;
+    NormalContainer *m_normalContainer;
+    AttentionContainer *m_attentionContainer;
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;
