@@ -47,7 +47,7 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
       m_controlWidget(new FashionTrayControlWidget(m_dockPosistion)),
       m_currentAttentionTray(nullptr),
       m_currentDraggingTray(nullptr),
-      m_holdContainer(new FashionTrayHoldContainer(m_dockPosistion))
+      m_holdContainer(new FashionTrayHoldContainer(m_trayPlugin))
 {
     setAcceptDrops(true);
 
@@ -100,9 +100,9 @@ void FashionTrayItem::setTrayWidgets(const QMap<QString, AbstractTrayWidget *> &
 
 void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget *trayWidget)
 {
-    for (auto w : m_wrapperList) {
+    for (auto w : m_totalWrapperList) {
         if (w->absTrayWidget() == trayWidget) {
-            qDebug() << "Reject! want to isert duplicate trayWidget:" << itemKey << trayWidget;
+            qDebug() << "Reject! want to insert duplicate trayWidget:" << itemKey << trayWidget;
             return;
         }
     }
@@ -112,7 +112,7 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
 
     const int index = whereToInsert(wrapper);
     m_trayBoxLayout->insertWidget(index, wrapper);
-    m_wrapperList.insert(index, wrapper);
+    m_normalWrapperList.insert(index, wrapper);
 
     wrapper->setVisible(m_controlWidget->expanded());
 
@@ -132,7 +132,7 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 {
     bool founded = false;
 
-    for (auto wrapper : m_wrapperList) {
+    for (auto wrapper : m_normalWrapperList) {
         // found the removed tray
         if (wrapper->absTrayWidget() == trayWidget) {
             // the removed tray is a attention tray
@@ -150,7 +150,7 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
             // the real tray object should be deleted in TrayPlugin class
             trayWidget->setParent(nullptr);
             wrapper->deleteLater();
-            m_wrapperList.removeAll(wrapper);
+            m_normalWrapperList.removeAll(wrapper);
             founded = true;
             break;
         }
@@ -165,13 +165,13 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
 
 void FashionTrayItem::clearTrayWidgets()
 {
-    QList<QPointer<FashionTrayWidgetWrapper>> mList = m_wrapperList;
+    QList<QPointer<FashionTrayWidgetWrapper>> mList = m_normalWrapperList;
 
     for (auto wrapper : mList) {
         trayWidgetRemoved(wrapper->absTrayWidget());
     }
 
-    m_wrapperList.clear();
+    m_normalWrapperList.clear();
 
     requestResize();
 }
@@ -241,7 +241,7 @@ void FashionTrayItem::setSuggestIconSize(QSize size)
 
     m_controlWidget->setFixedSize(newSize);
 
-    for (auto wrapper : m_wrapperList) {
+    for (auto wrapper : m_normalWrapperList) {
         wrapper->setFixedSize(newSize);
     }
 
@@ -319,22 +319,22 @@ QSize FashionTrayItem::wantedTotalSize() const
     if (m_controlWidget->expanded()) {
         if (m_dockPosistion == Dock::Position::Top || m_dockPosistion == Dock::Position::Bottom) {
             size.setWidth(
-                        m_wrapperList.size() * TrayWidgetWidth // 所有托盘图标
+                        m_normalWrapperList.size() * TrayWidgetWidth // 所有托盘图标
                         + TrayWidgetWidth // 控制按钮
                         + SpliterSize * 2 // 两个分隔条
                         + TraySpace * 2 // 两个分隔条旁边的 space
-                        + m_wrapperList.size() * TraySpace // TrayBoxLayout 中所有 space + 后面跟一个 space
+                        + m_normalWrapperList.size() * TraySpace // TrayBoxLayout 中所有 space + 后面跟一个 space
                         + m_holdContainer->sizeHint().width() // 保留区域的宽
                         );
             size.setHeight(height());
         } else {
             size.setWidth(width());
             size.setHeight(
-                        m_wrapperList.size() * TrayWidgetHeight // 所有托盘图标
+                        m_normalWrapperList.size() * TrayWidgetHeight // 所有托盘图标
                         + TrayWidgetHeight // 控制按钮
                         + SpliterSize * 2 // 两个分隔条
                         + TraySpace * 2 // 两个分隔条旁边的 space
-                        + m_wrapperList.size() * TraySpace // TrayBoxLayout 中所有 space + 后面跟一个 space
+                        + m_normalWrapperList.size() * TraySpace // TrayBoxLayout 中所有 space + 后面跟一个 space
                         + m_holdContainer->sizeHint().height() // 保留区域的高
                         );
         }
@@ -381,7 +381,7 @@ int FashionTrayItem::whereToInsert(FashionTrayWidgetWrapper *wrapper) const
 
 int FashionTrayItem::whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) const
 {
-    if (m_wrapperList.isEmpty()) {
+    if (m_normalWrapperList.isEmpty()) {
         return 0;
     }
 
@@ -391,13 +391,13 @@ int FashionTrayItem::whereToInsertBySortKey(FashionTrayWidgetWrapper *wrapper) c
         return 0;
     }
     if (destSortKey == -1) {
-        return m_wrapperList.size();
+        return m_normalWrapperList.size();
     }
 
     // 当目标插入位置为列表的大小时将从最后面追加到列表中
-    int destIndex = m_wrapperList.size();
-    for (int i = 0; i < m_wrapperList.size(); ++i) {
-        if (destSortKey > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+    int destIndex = m_normalWrapperList.size();
+    for (int i = 0; i < m_normalWrapperList.size(); ++i) {
+        if (destSortKey > m_trayPlugin->itemSortKey(m_normalWrapperList.at(i)->itemKey())) {
             continue;
         }
         destIndex = i;
@@ -426,13 +426,13 @@ int FashionTrayItem::whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) c
 
 int FashionTrayItem::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const
 {
-    if (m_wrapperList.isEmpty() || wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+    if (m_normalWrapperList.isEmpty() || wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
         return 0;
     }
 
     int lastAppTrayIndex = -1;
-    for (int i = 0; i < m_wrapperList.size(); ++i) {
-        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::ApplicationTray) {
+    for (int i = 0; i < m_normalWrapperList.size(); ++i) {
+        if (m_normalWrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::ApplicationTray) {
             lastAppTrayIndex = i;
             continue;
         }
@@ -452,12 +452,12 @@ int FashionTrayItem::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wra
     if (insertIndex < -1) {
         return 0;
     }
-    for (int i = 0; i < m_wrapperList.size(); ++i) {
-        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+    for (int i = 0; i < m_normalWrapperList.size(); ++i) {
+        if (m_normalWrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
             insertIndex = i;
             break;
         }
-        if (insertIndex > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+        if (insertIndex > m_trayPlugin->itemSortKey(m_normalWrapperList.at(i)->itemKey())) {
             continue;
         }
         insertIndex = i;
@@ -472,20 +472,20 @@ int FashionTrayItem::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wra
 
 int FashionTrayItem::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const
 {
-    if (m_wrapperList.isEmpty()) {
+    if (m_normalWrapperList.isEmpty()) {
         return 0;
     }
 
     int firstSystemTrayIndex = -1;
-    for (int i = 0; i < m_wrapperList.size(); ++i) {
-        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+    for (int i = 0; i < m_normalWrapperList.size(); ++i) {
+        if (m_normalWrapperList.at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
             firstSystemTrayIndex = i;
             break;
         }
     }
     // there is no SystemTray
     if (firstSystemTrayIndex == -1) {
-        return m_wrapperList.size();
+        return m_normalWrapperList.size();
     }
     // the inserting tray is not a SystemTray
     if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
@@ -497,11 +497,11 @@ int FashionTrayItem::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *
     if (insertIndex < -1) {
         return firstSystemTrayIndex;
     }
-    for (int i = 0; i < m_wrapperList.size(); ++i) {
-        if (m_wrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+    for (int i = 0; i < m_normalWrapperList.size(); ++i) {
+        if (m_normalWrapperList.at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
             continue;
         }
-        if (insertIndex > m_trayPlugin->itemSortKey(m_wrapperList.at(i)->itemKey())) {
+        if (insertIndex > m_trayPlugin->itemSortKey(m_normalWrapperList.at(i)->itemKey())) {
             continue;
         }
         insertIndex = i;
@@ -516,8 +516,8 @@ int FashionTrayItem::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *
 
 void FashionTrayItem::saveCurrentOrderToConfig()
 {
-    for (int i = 0; i < m_wrapperList.size(); ++i) {
-        m_trayPlugin->setSortKey(m_wrapperList.at(i)->itemKey(), i + 1);
+    for (int i = 0; i < m_normalWrapperList.size(); ++i) {
+        m_trayPlugin->setSortKey(m_normalWrapperList.at(i)->itemKey(), i + 1);
     }
 }
 
@@ -642,7 +642,7 @@ void FashionTrayItem::refreshTraysVisible()
         m_currentAttentionTray = nullptr;
     }
 
-    for (auto wrapper : m_wrapperList) {
+    for (auto wrapper : m_normalWrapperList) {
         wrapper->setVisible(expand);
         // reset all tray item attention state
         wrapper->setAttention(false);
@@ -695,5 +695,5 @@ void FashionTrayItem::onItemRequestSwapWithDragging()
     m_trayBoxLayout->removeWidget(m_currentDraggingTray);
     m_trayBoxLayout->insertWidget(indexOfDest, m_currentDraggingTray);
 
-    m_wrapperList.insert(indexOfDest, m_wrapperList.takeAt(indexOfDragging));
+    m_normalWrapperList.insert(indexOfDest, m_normalWrapperList.takeAt(indexOfDragging));
 }

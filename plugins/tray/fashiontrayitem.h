@@ -102,7 +102,8 @@ private:
     FashionTrayWidgetWrapper *m_currentDraggingTray;
     FashionTrayHoldContainer *m_holdContainer;
 
-    QList<QPointer<FashionTrayWidgetWrapper>> m_wrapperList;
+    QList<QPointer<FashionTrayWidgetWrapper>> m_totalWrapperList;
+    QList<QPointer<FashionTrayWidgetWrapper>> m_normalWrapperList;
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;

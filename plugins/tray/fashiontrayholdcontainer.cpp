@@ -4,11 +4,12 @@
 #define SpliterSize 2
 #define TraySpace 10
 
-FashionTrayHoldContainer::FashionTrayHoldContainer(Dock::Position dockPosistion, QWidget *parent)
+FashionTrayHoldContainer::FashionTrayHoldContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
       m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
       m_holdSpliter(new QLabel),
-      m_dockPosistion(dockPosistion)
+      m_trayPlugin(trayPlugin),
+      m_dockPosistion(trayPlugin->dockPosition())
 {
     setAcceptDrops(true);
 
@@ -57,6 +58,66 @@ void FashionTrayHoldContainer::setTrayExpand(const bool expand)
 //            }
 //        }
     });
+}
+
+bool FashionTrayHoldContainer::exists(FashionTrayWidgetWrapper *wrapper) const
+{
+    for (auto w : m_holdWrapperList) {
+
+    }
+    return false;
+}
+
+bool FashionTrayHoldContainer::isHoldTrayWrapper(FashionTrayWidgetWrapper *wrapper) const
+{
+    const QString &key = QString("%1_hold").arg(wrapper->itemKey());
+    return m_trayPlugin->getValue(key, false).toBool();
+}
+
+void FashionTrayHoldContainer::addTrayWrapper(FashionTrayWidgetWrapper *wrapper)
+{
+    const QString &key = QString("%1_hold").arg(wrapper->itemKey());
+    m_trayPlugin->saveValue(key, true);
+
+    const int index = whereToInsert(wrapper);
+    m_mainBoxLayout->insertWidget(index, wrapper);
+    m_holdWrapperList.insert(index, wrapper);
+}
+
+bool FashionTrayHoldContainer::removeTrayWrapper(FashionTrayWidgetWrapper *wrapper)
+{
+    return false;
+
+    const QString &key = QString("%1_hold").arg(wrapper->itemKey());
+    m_trayPlugin->saveValue(key, false);
+}
+
+int FashionTrayHoldContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper) const
+{
+    if (m_holdWrapperList.isEmpty()) {
+        return 0;
+    }
+
+    const int destSortKey = m_trayPlugin->itemSortKey(wrapper->itemKey());
+
+    if (destSortKey < -1) {
+        return 0;
+    }
+    if (destSortKey == -1) {
+        return m_holdWrapperList.size();
+    }
+
+    // 当目标插入位置为列表的大小时将从最后面追加到列表中
+    int destIndex = m_holdWrapperList.size();
+    for (int i = 0; i < m_holdWrapperList.size(); ++i) {
+        if (destSortKey > m_trayPlugin->itemSortKey(m_holdWrapperList.at(i)->itemKey())) {
+            continue;
+        }
+        destIndex = i;
+        break;
+    }
+
+    return destIndex;
 }
 
 QSize FashionTrayHoldContainer::sizeHint() const
