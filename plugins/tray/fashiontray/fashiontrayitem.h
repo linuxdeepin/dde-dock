@@ -28,6 +28,7 @@
 #include "fashiontraycontrolwidget.h"
 #include "containers/normalcontainer.h"
 #include "containers/attentioncontainer.h"
+#include "containers/holdcontainer.h"
 
 #include <QWidget>
 #include <QPointer>
@@ -35,6 +36,8 @@
 #include <QLabel>
 
 #include <abstracttraywidget.h>
+
+#define FASHION_MODE_ITEM_KEY   "fashion-mode-item"
 
 class FashionTrayItem : public QWidget
 {
@@ -75,6 +78,7 @@ private Q_SLOTS:
     void normalWrapperToAttentionWrapper(FashionTrayWidgetWrapper *wrapper);
     void requestResize();
     void refreshHoldContainerPosition();
+    void onRequireDraggingWrapper();
 
 private:
     QBoxLayout *m_mainBoxLayout;
@@ -88,6 +92,7 @@ private:
 
     NormalContainer *m_normalContainer;
     AttentionContainer *m_attentionContainer;
+    HoldContainer *m_holdContainer;
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;

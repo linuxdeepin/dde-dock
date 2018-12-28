@@ -46,10 +46,13 @@ public:
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) Q_DECL_OVERRIDE;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& failback = QVariant()) Q_DECL_OVERRIDE;
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) Q_DECL_OVERRIDE;
 
     int systemTrayItemSortKey(const QString &itemKey);
     void setSystemTrayItemSortKey(const QString &itemKey, const int order);
+
+    const QVariant getValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant& fallback = QVariant());
+    void saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value);
 
 public slots:
     void startLoader();

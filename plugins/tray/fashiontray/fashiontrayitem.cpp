@@ -41,7 +41,8 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
       m_controlWidget(new FashionTrayControlWidget(trayPlugin->dockPosition())),
       m_currentDraggingTray(nullptr),
       m_normalContainer(new NormalContainer(m_trayPlugin)),
-      m_attentionContainer(new AttentionContainer(m_trayPlugin))
+      m_attentionContainer(new AttentionContainer(m_trayPlugin)),
+      m_holdContainer(new HoldContainer(m_trayPlugin))
 {
     setAcceptDrops(true);
 
@@ -49,8 +50,10 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
 
     m_controlWidget->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
+
     m_normalContainer->setVisible(false);
     m_attentionContainer->setVisible(false);
+    m_holdContainer->setVisible(false);
 
     m_mainBoxLayout->setMargin(0);
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -58,15 +61,13 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
 
     m_mainBoxLayout->addWidget(m_leftSpliter);
     m_mainBoxLayout->addWidget(m_normalContainer);
+    m_mainBoxLayout->addWidget(m_holdContainer);
     m_mainBoxLayout->addWidget(m_controlWidget);
     m_mainBoxLayout->addWidget(m_attentionContainer);
     m_mainBoxLayout->addWidget(m_rightSpliter);
 
-    m_mainBoxLayout->setAlignment(Qt::AlignCenter);
     m_mainBoxLayout->setAlignment(m_leftSpliter, Qt::AlignCenter);
-    m_mainBoxLayout->setAlignment(m_normalContainer, Qt::AlignCenter);
     m_mainBoxLayout->setAlignment(m_controlWidget, Qt::AlignCenter);
-    m_mainBoxLayout->setAlignment(m_attentionContainer, Qt::AlignCenter);
     m_mainBoxLayout->setAlignment(m_rightSpliter, Qt::AlignCenter);
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -78,6 +79,8 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onExpandChanged);
     connect(m_normalContainer, &NormalContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
     connect(m_attentionContainer, &NormalContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
+    connect(m_normalContainer, &NormalContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
+    connect(m_holdContainer, &NormalContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
 
     // do not call init immediately the TrayPlugin has not be constructed for now
     QTimer::singleShot(0, this, &FashionTrayItem::init);
@@ -102,6 +105,10 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
     FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(itemKey, trayWidget);
 
     do {
+        if (m_holdContainer->acceptWrapper(wrapper)) {
+            m_holdContainer->addWrapper(wrapper);
+            break;
+        }
         if (m_normalContainer->acceptWrapper(wrapper)) {
             m_normalContainer->addWrapper(wrapper);
             break;
@@ -124,6 +131,10 @@ void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
             deleted = true;
             break;
         }
+        if (m_holdContainer->removeWrapperByTrayWidget(trayWidget)) {
+            deleted = true;
+            break;
+        }
     } while (false);
 
     if (!deleted) {
@@ -137,6 +148,7 @@ void FashionTrayItem::clearTrayWidgets()
 {
     m_normalContainer->clearWrapper();
     m_attentionContainer->clearWrapper();
+    m_holdContainer->clearWrapper();
 
     requestResize();
 }
@@ -148,6 +160,7 @@ void FashionTrayItem::setDockPosition(Dock::Position pos)
 
     m_normalContainer->setDockPosition(pos);
     m_attentionContainer->setDockPosition(pos);
+    m_holdContainer->setDockPosition(pos);
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);
@@ -160,7 +173,7 @@ void FashionTrayItem::setDockPosition(Dock::Position pos)
 
 void FashionTrayItem::onExpandChanged(const bool expand)
 {
-    m_trayPlugin->saveValue(ExpandedKey, expand);
+    m_trayPlugin->saveValue(FASHION_MODE_ITEM_KEY, ExpandedKey, expand);
 
     refreshHoldContainerPosition();
 
@@ -180,6 +193,7 @@ void FashionTrayItem::onExpandChanged(const bool expand)
     }
 
     m_attentionContainer->setExpand(expand);
+    m_holdContainer->setExpand(expand);
 
     m_attentionDelayTimer->start();
 
@@ -210,6 +224,7 @@ void FashionTrayItem::setSuggestIconSize(QSize size)
 
     m_normalContainer->setWrapperSize(newSize);
     m_attentionContainer->setWrapperSize(newSize);
+    m_holdContainer->setWrapperSize(newSize);
 
     requestResize();
 }
@@ -273,7 +288,7 @@ QSize FashionTrayItem::sizeHint() const
 void FashionTrayItem::init()
 {
     qDebug() << "init Fashion mode tray plugin item";
-    m_controlWidget->setExpanded(m_trayPlugin->getValue(ExpandedKey, true).toBool());
+    m_controlWidget->setExpanded(m_trayPlugin->getValue(FASHION_MODE_ITEM_KEY, ExpandedKey, true).toBool());
     setDockPosition(m_trayPlugin->dockPosition());
     onExpandChanged(m_controlWidget->expanded());
 }
@@ -290,7 +305,7 @@ QSize FashionTrayItem::wantedTotalSize() const
                         + TraySpace * 2 // 两个分隔条旁边的 space
                         + TrayWidgetWidth // 控制按钮
                         + m_normalContainer->sizeHint().width() // 普通区域
-//                        + m_holdContainer->sizeHint().width() // 保留区域
+                        + m_holdContainer->sizeHint().width() // 保留区域
                         + m_attentionContainer->sizeHint().width() // 活动区域
                         );
             size.setHeight(height());
@@ -301,7 +316,7 @@ QSize FashionTrayItem::wantedTotalSize() const
                         + TraySpace * 2 // 两个分隔条旁边的 space
                         + TrayWidgetWidth // 控制按钮
                         + m_normalContainer->sizeHint().height() // 普通区域
-//                        + m_holdContainer->sizeHint().height() // 保留区域
+                        + m_holdContainer->sizeHint().height() // 保留区域
                         + m_attentionContainer->sizeHint().height() // 活动区域
                         );
         }
@@ -311,7 +326,7 @@ QSize FashionTrayItem::wantedTotalSize() const
                         SpliterSize * 2 // 两个分隔条
                         + TraySpace * 2 // 两个分隔条旁边的 space
                         + TrayWidgetWidth // 控制按钮
-//                        + m_holdContainer->sizeHint().width() // 保留区域
+                        + m_holdContainer->sizeHint().width() // 保留区域
                         + m_attentionContainer->sizeHint().width() // 活动区域
                         );
             size.setHeight(height());
@@ -321,7 +336,7 @@ QSize FashionTrayItem::wantedTotalSize() const
                         SpliterSize * 2 // 两个分隔条
                         + TraySpace * 2 // 两个分隔条旁边的 space
                         + TrayWidgetWidth // 控制按钮
-//                        + m_holdContainer->sizeHint().height() // 保留区域
+                        + m_holdContainer->sizeHint().height() // 保留区域
                         + m_attentionContainer->sizeHint().height() // 活动区域
                         );
         }
@@ -389,8 +404,41 @@ void FashionTrayItem::requestResize()
 
 void FashionTrayItem::refreshHoldContainerPosition()
 {
-//    const int destIndex = m_mainBoxLayout->indexOf(m_controlWidget)
-//            + (m_controlWidget->expanded() ? 0 : 1);
+    m_mainBoxLayout->removeWidget(m_holdContainer);
 
-//    m_mainBoxLayout->insertWidget(destIndex, m_holdContainer);
+    int destIndex = 0;
+    if (m_controlWidget->expanded()) {
+        destIndex = m_mainBoxLayout->indexOf(m_controlWidget);
+    } else {
+        destIndex = m_mainBoxLayout->indexOf(m_attentionContainer);
+    }
+
+    m_mainBoxLayout->insertWidget(destIndex, m_holdContainer);
+}
+
+void FashionTrayItem::onRequireDraggingWrapper()
+{
+    AbstractContainer *container = dynamic_cast<AbstractContainer *>(sender());
+
+    if (!container) {
+        return;
+    }
+
+    FashionTrayWidgetWrapper *draggingWrapper = nullptr;
+    do {
+        draggingWrapper = m_normalContainer->takeDraggingWrapper();
+        if (draggingWrapper) {
+            break;
+        }
+        draggingWrapper = m_holdContainer->takeDraggingWrapper();
+        if (draggingWrapper) {
+            break;
+        }
+    } while (false);
+
+    if (!draggingWrapper) {
+        return;
+    }
+
+    container->addDraggingWrapper(draggingWrapper);
 }

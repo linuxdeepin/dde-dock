@@ -34,8 +34,12 @@ public:
     bool containsWrapperByTrayWidget(AbstractTrayWidget *trayWidget);
     FashionTrayWidgetWrapper *wrapperByTrayWidget(AbstractTrayWidget *trayWidget);
 
+    void addDraggingWrapper(FashionTrayWidgetWrapper *wrapper);
+    FashionTrayWidgetWrapper *takeDraggingWrapper();
+
 Q_SIGNALS:
     void attentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention);
+    void requestDraggingWrapper();
 
 protected:
     virtual int whereToInsert(FashionTrayWidgetWrapper *wrapper);
@@ -43,9 +47,13 @@ protected:
     TrayPlugin *trayPlugin() const;
     QList<QPointer<FashionTrayWidgetWrapper>> wrapperList() const;
     QBoxLayout *wrapperLayout() const;
+    void setWrapperLayout(QBoxLayout *layout);
     bool expand() const;
     Dock::Position dockPosition() const;
     QSize wrapperSize() const;
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void onWrapperAttentionhChanged(const bool attention);

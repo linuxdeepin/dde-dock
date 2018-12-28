@@ -10,6 +10,8 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
       m_dockPosition(Dock::Position::Bottom),
       m_wrapperSize(QSize(TrayWidgetWidthMin, TrayWidgetHeightMin))
 {
+    setAcceptDrops(true);
+
     m_wrapperLayout->setMargin(0);
     m_wrapperLayout->setContentsMargins(0, 0, 0, 0);
     m_wrapperLayout->setSpacing(TraySpace);
@@ -22,10 +24,6 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
 void AbstractContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
 {
-    if (!acceptWrapper(wrapper)) {
-        return;
-    }
-
     if (containsWrapper(wrapper)) {
         return;
     }
@@ -76,6 +74,10 @@ FashionTrayWidgetWrapper *AbstractContainer::takeWrapper(FashionTrayWidgetWrappe
 {
     if (!containsWrapper(wrapper)) {
         return nullptr;
+    }
+
+    if (m_currentDraggingWrapper == wrapper) {
+        m_currentDraggingWrapper = nullptr;
     }
 
     wrapper->disconnect();
@@ -173,7 +175,7 @@ bool AbstractContainer::isEmpty()
 bool AbstractContainer::containsWrapper(FashionTrayWidgetWrapper *wrapper)
 {
     for (auto w : m_wrapperList) {
-        if (w->absTrayWidget() == wrapper->absTrayWidget()) {
+        if (w == wrapper) {
             return true;
         }
     }
@@ -199,6 +201,24 @@ FashionTrayWidgetWrapper *AbstractContainer::wrapperByTrayWidget(AbstractTrayWid
     }
 
     return nullptr;
+}
+
+void AbstractContainer::addDraggingWrapper(FashionTrayWidgetWrapper *wrapper)
+{
+    addWrapper(wrapper);
+
+    if (containsWrapper(wrapper)) {
+        m_currentDraggingWrapper = wrapper;
+    }
+}
+
+FashionTrayWidgetWrapper *AbstractContainer::takeDraggingWrapper()
+{
+    if (!m_currentDraggingWrapper) {
+        return nullptr;
+    }
+
+    return takeWrapper(m_currentDraggingWrapper);
 }
 
 int AbstractContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
@@ -245,6 +265,14 @@ QBoxLayout *AbstractContainer::wrapperLayout() const
     return m_wrapperLayout;
 }
 
+// replace current WrapperLayout by "layout"
+// but will not setLayout here, so the caller should handle the new WrapperLayout
+void AbstractContainer::setWrapperLayout(QBoxLayout *layout)
+{
+    delete m_wrapperLayout;
+    m_wrapperLayout = layout;
+}
+
 bool AbstractContainer::expand() const
 {
     return m_expand;
@@ -258,6 +286,17 @@ Dock::Position AbstractContainer::dockPosition() const
 QSize AbstractContainer::wrapperSize() const
 {
     return m_wrapperSize;
+}
+
+void AbstractContainer::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat(TRAY_ITEM_DRAG_MIMEDATA) && !m_currentDraggingWrapper) {
+        event->accept();
+        Q_EMIT requestDraggingWrapper();
+        return;
+    }
+
+    QWidget::dragEnterEvent(event);
 }
 
 void AbstractContainer::onWrapperAttentionhChanged(const bool attention)
@@ -302,8 +341,19 @@ void AbstractContainer::onWrapperRequestSwapWithDragging()
 {
     FashionTrayWidgetWrapper *wrapper = static_cast<FashionTrayWidgetWrapper *>(sender());
 
-    if (!wrapper || !m_currentDraggingWrapper || wrapper == m_currentDraggingWrapper) {
+    if (!wrapper || wrapper == m_currentDraggingWrapper) {
         return;
+    }
+
+    // the current dragging wrapper is null means that the dragging wrapper is contains by
+    // another container, so this container need to emit requireDraggingWrapper() signal
+    // to notify FashionTrayItem, the FashionTrayItem will move the dragging wrapper to this container
+    if (!m_currentDraggingWrapper) {
+        Q_EMIT requestDraggingWrapper();
+        // here have to give up if dragging wrapper is still null
+        if (!m_currentDraggingWrapper) {
+            return;
+        }
     }
 
     const int indexOfDest = m_wrapperLayout->indexOf(wrapper);

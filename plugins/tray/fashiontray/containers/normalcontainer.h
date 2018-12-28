@@ -12,6 +12,7 @@ public:
     // AbstractContainer interface
 public:
     bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
+    void addWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
     void refreshVisible() Q_DECL_OVERRIDE;
     void setExpand(const bool expand) Q_DECL_OVERRIDE;
 

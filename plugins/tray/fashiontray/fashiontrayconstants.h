@@ -8,6 +8,9 @@ namespace Dock {
 #define TrayWidgetWidthMin 24
 #define TrayWidgetHeightMin 24
 
+
+#define HoldKeySuffix "-holded"
+
 }
 
 #endif // FASHIONTRAYCONSTANTS_H

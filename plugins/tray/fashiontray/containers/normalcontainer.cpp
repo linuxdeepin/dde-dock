@@ -1,4 +1,5 @@
 #include "normalcontainer.h"
+#include "../fashiontrayconstants.h"
 
 NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : AbstractContainer(trayPlugin, parent)
@@ -11,6 +12,16 @@ bool NormalContainer::acceptWrapper(FashionTrayWidgetWrapper *wrapper)
     Q_UNUSED(wrapper);
 
     return true;
+}
+
+void NormalContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
+{
+    AbstractContainer::addWrapper(wrapper);
+
+    if (containsWrapper(wrapper)) {
+        const QString &key = wrapper->itemKey() + HoldKeySuffix;
+        trayPlugin()->saveValue(wrapper->itemKey(), key, false);
+    }
 }
 
 void NormalContainer::refreshVisible()
