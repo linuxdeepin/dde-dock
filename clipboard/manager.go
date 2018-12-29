@@ -490,7 +490,9 @@ func (m *Manager) saveTargets(targets []x.Atom, ts x.Timestamp) {
 		logger.Debugf("save target %s %d", targetName, target)
 
 		if strings.HasPrefix(targetName, "image/") {
-			if targetName != "image/jpeg" && targetName != "image/png" {
+			switch targetName {
+			case "image/jpeg", "image/png", "image/bmp":
+			default:
 				logger.Debug("ignore this target")
 				continue
 			}
