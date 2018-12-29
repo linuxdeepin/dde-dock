@@ -40,6 +40,7 @@ public:
 Q_SIGNALS:
     void attentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention);
     void requestDraggingWrapper();
+    void draggingStateChanged(FashionTrayWidgetWrapper *wrapper, const bool dragging);
 
 protected:
     virtual int whereToInsert(FashionTrayWidgetWrapper *wrapper);

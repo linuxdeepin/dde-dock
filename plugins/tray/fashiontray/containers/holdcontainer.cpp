@@ -4,10 +4,8 @@
 HoldContainer::HoldContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : AbstractContainer(trayPlugin, parent),
       m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
-      m_holdSpliter(new QLabel)
+      m_holdSpliter(new SpliterAnimated(this))
 {
-    m_holdSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
-
     m_mainBoxLayout->setMargin(0);
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_mainBoxLayout->setSpacing(TraySpace);
@@ -58,6 +56,8 @@ void HoldContainer::setDockPosition(const Dock::Position pos)
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::TopToBottom);
     }
 
+    m_holdSpliter->setDockPosition(pos);
+
     AbstractContainer::setDockPosition(pos);
 }
 
@@ -93,16 +93,32 @@ QSize HoldContainer::totalSize() const
     return size;
 }
 
+void HoldContainer::setDragging(const bool dragging)
+{
+    if (dragging) {
+        m_holdSpliter->startAnimation();
+    } else {
+        m_holdSpliter->stopAnimation();
+    }
+}
+
 void HoldContainer::resizeEvent(QResizeEvent *event)
 {
     const QSize &mSize = event->size();
     const Dock::Position dockPosition = trayPlugin()->dockPosition();
 
     if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
-        m_holdSpliter->setFixedSize(SpliterSize, mSize.height() * 0.3);
+        m_holdSpliterMiniSize = QSize(SpliterSize, mSize.height() * 0.3);
+        m_holdSpliterMaxSize = QSize(SpliterSize, mSize.height() * 0.5);
+        m_holdSpliter->setFixedSize(SpliterSize, mSize.height());
     } else{
-        m_holdSpliter->setFixedSize(mSize.width() * 0.3, SpliterSize);
+        m_holdSpliterMiniSize = QSize(mSize.width() * 0.3, SpliterSize);
+        m_holdSpliterMaxSize = QSize(mSize.width() * 0.5, SpliterSize);
+        m_holdSpliter->setFixedSize(mSize.width(), SpliterSize);
     }
+
+    m_holdSpliter->setStartValue(m_holdSpliterMiniSize);
+    m_holdSpliter->setEndValue(m_holdSpliterMaxSize);
 
     AbstractContainer::resizeEvent(event);
 }

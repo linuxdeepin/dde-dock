@@ -318,6 +318,8 @@ void AbstractContainer::onWrapperDragStart()
     }
 
     m_currentDraggingWrapper = wrapper;
+
+    Q_EMIT draggingStateChanged(wrapper, true);
 }
 
 void AbstractContainer::onWrapperDragStop()
@@ -335,6 +337,8 @@ void AbstractContainer::onWrapperDragStop()
     }
 
     saveCurrentOrderToConfig();
+
+    Q_EMIT draggingStateChanged(wrapper, false);
 }
 
 void AbstractContainer::onWrapperRequestSwapWithDragging()

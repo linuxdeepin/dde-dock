@@ -78,9 +78,11 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
 
     connect(m_controlWidget, &FashionTrayControlWidget::expandChanged, this, &FashionTrayItem::onExpandChanged);
     connect(m_normalContainer, &NormalContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
-    connect(m_attentionContainer, &NormalContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
+    connect(m_attentionContainer, &AttentionContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
     connect(m_normalContainer, &NormalContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
-    connect(m_holdContainer, &NormalContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
+    connect(m_holdContainer, &HoldContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
+    connect(m_normalContainer, &NormalContainer::draggingStateChanged, this, &FashionTrayItem::onContainerDraggingStateChanged);
+    connect(m_holdContainer, &HoldContainer::draggingStateChanged, this, &FashionTrayItem::onContainerDraggingStateChanged);
 
     // do not call init immediately the TrayPlugin has not be constructed for now
     QTimer::singleShot(0, this, &FashionTrayItem::init);
@@ -441,4 +443,11 @@ void FashionTrayItem::onRequireDraggingWrapper()
     }
 
     container->addDraggingWrapper(draggingWrapper);
+}
+
+void FashionTrayItem::onContainerDraggingStateChanged(FashionTrayWidgetWrapper *wrapper, const bool dragging)
+{
+    Q_UNUSED(wrapper);
+
+    m_holdContainer->setDragging(dragging);
 }
