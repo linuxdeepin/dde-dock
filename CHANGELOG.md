@@ -1,3 +1,8 @@
+[3.16.0] 2018-12-29
+*   fix(clipboard): cannot copy pictures to the wine program
+*   feat(soundeffect): add method GetSystemSoundFile
+*   feat(power): stop screensaver before turn off screen
+
 [3.15.0] 2018-12-25
 *   feat: rewrite clipboard module
 *   refactor: replace abs coordinate with relative
