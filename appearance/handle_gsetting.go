@@ -57,7 +57,7 @@ func (m *Manager) listenGSettingChanged() {
 		case gsKeyFontMonospace:
 			ty = TypeMonospaceFont
 			value = m.setting.GetString(key)
-			err = m.doSetMonnospaceFont(value)
+			err = m.doSetMonospaceFont(value)
 		case gsKeyFontSize:
 			ty = TypeFontSize
 			size := m.setting.GetDouble(key)

@@ -31,6 +31,8 @@ import (
 	"sync"
 	"time"
 
+	"pkg.deepin.io/lib/dbusutil/gsprop"
+
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
@@ -41,12 +43,12 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/strv"
@@ -108,6 +110,7 @@ type Manager struct {
 	sessionSigLoop *dbusutil.SignalLoop
 	sysSigLoop     *dbusutil.SignalLoop
 	xConn          *x.Conn
+	syncConfig     *dsync.Config
 
 	GtkTheme      gsprop.String
 	IconTheme     gsprop.String
@@ -205,7 +208,7 @@ func newManager(service *dbusutil.Service) *Manager {
 }
 
 func (m *Manager) initCurrentBgs() {
-	m.currentDesktopBgs = m.setting.GetStrv(gsKeyBackgroundURIs)
+	m.currentDesktopBgs = m.getBackgroundURIs()
 
 	if m.userObj == nil {
 		return
@@ -216,6 +219,10 @@ func (m *Manager) initCurrentBgs() {
 	} else {
 		logger.Warning(err)
 	}
+}
+
+func (m *Manager) getBackgroundURIs() []string {
+	return m.setting.GetStrv(gsKeyBackgroundURIs)
 }
 
 func (m *Manager) isBgInUse(file string) bool {
@@ -254,6 +261,7 @@ func (m *Manager) listBackground() background.Backgrounds {
 func (m *Manager) destroy() {
 	m.sessionSigLoop.Stop()
 	m.xSettings.RemoveHandler(proxy.RemoveAllHandlers)
+	m.syncConfig.Destroy()
 
 	m.sysSigLoop.Stop()
 	m.login1Manager.RemoveHandler(proxy.RemoveAllHandlers)
@@ -457,6 +465,8 @@ func (m *Manager) init() error {
 
 	m.initUserObj(systemBus)
 	m.initCurrentBgs()
+	m.syncConfig = dsync.NewConfig(&syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
+
 	return nil
 }
 
@@ -570,7 +580,7 @@ func (m *Manager) doSetStandardFont(value string) error {
 	return m.writeDQtTheme(dQtKeyFont, value)
 }
 
-func (m *Manager) doSetMonnospaceFont(value string) error {
+func (m *Manager) doSetMonospaceFont(value string) error {
 	if !fonts.IsFontFamily(value) {
 		return fmt.Errorf("invalid font family '%v'", value)
 	}

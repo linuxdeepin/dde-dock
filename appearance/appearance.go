@@ -61,7 +61,8 @@ func (*Module) start() error {
 		logger.Warning(err)
 		return err
 	}
-	err = service.Export(dbusPath, _m)
+
+	err = service.Export(dbusPath, _m, _m.syncConfig)
 	if err != nil {
 		_m.destroy()
 		return err
@@ -72,6 +73,11 @@ func (*Module) start() error {
 		_m.destroy()
 		service.StopExport(_m)
 		return err
+	}
+
+	err = _m.syncConfig.Register()
+	if err != nil {
+		logger.Warning(err)
 	}
 
 	go _m.listenCursorChanged()

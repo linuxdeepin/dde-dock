@@ -164,7 +164,7 @@ func (m *Manager) set(ty, value string) error {
 		if m.MonospaceFont.Get() == value {
 			return nil
 		}
-		err = m.doSetMonnospaceFont(value)
+		err = m.doSetMonospaceFont(value)
 		if err == nil {
 			m.MonospaceFont.Set(value)
 		}
