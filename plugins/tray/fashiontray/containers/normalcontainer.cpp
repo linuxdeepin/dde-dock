@@ -4,7 +4,6 @@
 NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : AbstractContainer(trayPlugin, parent)
 {
-
 }
 
 bool NormalContainer::acceptWrapper(FashionTrayWidgetWrapper *wrapper)
@@ -26,7 +25,16 @@ void NormalContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
 
 void NormalContainer::refreshVisible()
 {
-    setVisible(expand() && !isEmpty());
+    if (isEmpty()) {
+        // set the minimum size to 1 to avoid can not drag back wrappers when
+        // all wrappers has been drag out
+        setMinimumSize(1, 1);
+    } else {
+        // set the minimum size back to 0 in order to make the fold animation works correctly
+        setMinimumSize(0, 0);
+    }
+
+    setVisible(expand());
 }
 
 void NormalContainer::setExpand(const bool expand)
