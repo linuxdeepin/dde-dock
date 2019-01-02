@@ -23,6 +23,7 @@ import (
 const (
 	tsSchemaID           = "com.deepin.dde.touchscreen"
 	tsSchemaKeyLongPress = "longpress-duration"
+	tsSchemaKeyBlacklist = "longpress-blacklist"
 )
 
 type Manager struct {
@@ -149,6 +150,14 @@ func (m *Manager) Exec(name, direction string, fingers int32) error {
 	// allow right button up when kbd grabbed
 	if (info.Name != "touch right button" || info.Direction != "up") && isKbdAlreadyGrabbed() {
 		return fmt.Errorf("another process grabbed keyboard, not exec action")
+	}
+	// TODO(jouyouyun): improve touch right button handler
+	if info.Name == "touch right button" {
+		// filter google chrome
+		if isInWindowBlacklist(getCurrentActionWindowCmd(), m.tsSetting.GetStrv(tsSchemaKeyBlacklist)) {
+			logger.Debug("The current active window in blacklist")
+			return nil
+		}
 	}
 	var cmd = info.Action.Action
 	switch info.Action.Type {

@@ -20,11 +20,14 @@
 package gesture
 
 import (
+	"fmt"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"io/ioutil"
 	"pkg.deepin.io/lib/dbus1"
+	"strings"
 )
 
 var (
@@ -34,12 +37,8 @@ var (
 )
 
 func isKbdAlreadyGrabbed() bool {
-	if xconn == nil {
-		conn, err := x.NewConn()
-		if err != nil {
-			return false
-		}
-		xconn = conn
+	if getX11Conn() == nil {
+		return false
 	}
 
 	var grabWin x.Window
@@ -77,6 +76,25 @@ func isKbdAlreadyGrabbed() bool {
 	return false
 }
 
+func getCurrentActionWindowCmd() string {
+	win, err := ewmh.GetActiveWindow(xconn).Reply(xconn)
+	if err != nil {
+		logger.Warning("Failed to get current active window:", err)
+		return ""
+	}
+	pid, err := ewmh.GetWMPid(xconn, win).Reply(xconn)
+	if err != nil {
+		logger.Warning("Failed to get current window pid:", err)
+		return ""
+	}
+	data, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
+	if err != nil {
+		logger.Warning("Failed to read cmdline:", err)
+		return ""
+	}
+	return string(data)
+}
+
 func isSessionActive() bool {
 	if _dconn == nil {
 		conn, err := dbus.SystemBus()
@@ -102,4 +120,24 @@ func isSessionActive() bool {
 		return false
 	}
 	return active
+}
+
+func getX11Conn() *x.Conn {
+	if xconn == nil {
+		conn, err := x.NewConn()
+		if err != nil {
+			return nil
+		}
+		xconn = conn
+	}
+	return xconn
+}
+
+func isInWindowBlacklist(cmd string, list []string) bool {
+	for _, v := range list {
+		if strings.Contains(cmd, v) {
+			return true
+		}
+	}
+	return false
 }
