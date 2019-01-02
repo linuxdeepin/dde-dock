@@ -105,5 +105,7 @@ func (m *Manager) handlePopPushOps() {
 
 func (m *Manager) destroy() {
 	m.appsObj.RemoveHandler(proxy.RemoveAllHandlers)
+	m.syncConfig.Destroy()
 	m.sysSigLoop.Stop()
+	m.sessionSigLoop.Stop()
 }

@@ -29,11 +29,12 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	libPinyin "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -65,10 +66,12 @@ const (
 )
 
 type Manager struct {
-	service    *dbusutil.Service
-	sysSigLoop *dbusutil.SignalLoop
-	items      map[string]*Item
-	itemsMutex sync.Mutex
+	service        *dbusutil.Service
+	sysSigLoop     *dbusutil.SignalLoop
+	sessionSigLoop *dbusutil.SignalLoop
+	syncConfig     *dsync.Config
+	items          map[string]*Item
+	itemsMutex     sync.Mutex
 
 	appsObj        *libApps.Apps
 	notification   *notify.Notification
@@ -243,6 +246,10 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 		}
 		m.service.Emit(m, "NewAppLaunched", item.ID)
 	})
+
+	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
+	m.sessionSigLoop.Start()
+	m.syncConfig = dsync.NewConfig(&syncConfig{m: m}, m.sessionSigLoop, dbusObjPath, logger)
 	return m, nil
 }
 
