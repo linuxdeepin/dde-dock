@@ -22,6 +22,8 @@ package dock
 import (
 	"time"
 
+	"pkg.deepin.io/dde/daemon/common/dsync"
+
 	// dbus interfaces
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.daemon.launcher"
@@ -224,10 +226,8 @@ func (m *Manager) init() error {
 	m.registerIdentifyWindowFuncs()
 	m.initEntries()
 
-	err = m.service.Export(dbusPath, m)
-	if err != nil {
-		return err
-	}
+	m.syncConfig = dsync.NewConfig("dock", &syncConfig{m: m}, m.sessionSigLoop,
+		dbusPath, logger)
 
 	// 强制将 ClassicMode 转为 EfficientMode
 	if m.DisplayMode.Get() == int32(DisplayModeClassicMode) {
@@ -235,5 +235,6 @@ func (m *Manager) init() error {
 	}
 
 	go m.eventHandleLoop()
+	m.listenRootWindowXEvent()
 	return nil
 }

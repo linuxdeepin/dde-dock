@@ -249,7 +249,7 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 
 	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	m.sessionSigLoop.Start()
-	m.syncConfig = dsync.NewConfig(&syncConfig{m: m}, m.sessionSigLoop, dbusObjPath, logger)
+	m.syncConfig = dsync.NewConfig("launcher", &syncConfig{m: m}, m.sessionSigLoop, dbusObjPath, logger)
 	return m, nil
 }
 

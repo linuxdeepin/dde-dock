@@ -80,10 +80,6 @@ func (sc *syncConfig) Set(data []byte) error {
 	return nil
 }
 
-func (*syncConfig) Name() string {
-	return "appearance"
-}
-
 // version: 1.0
 type syncData struct {
 	Version        string   `json:"version"`

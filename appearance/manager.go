@@ -465,8 +465,7 @@ func (m *Manager) init() error {
 
 	m.initUserObj(systemBus)
 	m.initCurrentBgs()
-	m.syncConfig = dsync.NewConfig(&syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
-
+	m.syncConfig = dsync.NewConfig("appearance", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
 	return nil
 }
 

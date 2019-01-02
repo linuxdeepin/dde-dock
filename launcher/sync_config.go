@@ -6,10 +6,6 @@ type syncConfig struct {
 	m *Manager
 }
 
-func (*syncConfig) Name() string {
-	return "launcher"
-}
-
 func (sc *syncConfig) Get() (interface{}, error) {
 	var v syncData
 	v.Version = "1.0"

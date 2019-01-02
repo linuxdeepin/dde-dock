@@ -81,7 +81,11 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	dockManager.listenRootWindowXEvent()
+	err = dockManager.service.Export(dbusPath, dockManager, dockManager.syncConfig)
+	if err != nil {
+		d.startFailed()
+		return err
+	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
@@ -89,7 +93,15 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	service.Emit(dockManager, "ServiceRestarted")
+	err = dockManager.syncConfig.Register()
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = service.Emit(dockManager, "ServiceRestarted")
+	if err != nil {
+		logger.Warning(err)
+	}
 	return nil
 }
 

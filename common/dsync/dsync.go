@@ -13,10 +13,10 @@ import (
 type Interface interface {
 	Get() (interface{}, error)
 	Set(data []byte) error
-	Name() string
 }
 
 type Config struct {
+	name       string
 	core       Interface
 	dbusDaemon *ofdbus.DBus
 	path       dbus.ObjectPath
@@ -28,9 +28,10 @@ type Config struct {
 	}
 }
 
-func NewConfig(core Interface, sessionSigLoop *dbusutil.SignalLoop, path dbus.ObjectPath,
-	logger *log.Logger) *Config {
+func NewConfig(name string, core Interface, sessionSigLoop *dbusutil.SignalLoop,
+	path dbus.ObjectPath, logger *log.Logger) *Config {
 	c := &Config{
+		name:    name,
 		core:    core,
 		sigLoop: sessionSigLoop,
 		path:    path,
@@ -61,9 +62,8 @@ func (c *Config) Register() error {
 		return err
 	}
 
-	name := c.core.Name()
 	obj := sessionBus.Object("com.deepin.sync.Daemon", "/com/deepin/sync/Daemon")
-	err = obj.Call("com.deepin.sync.Daemon.Register", 0, name, c.path).Err
+	err = obj.Call("com.deepin.sync.Daemon.Register", 0, c.name, c.path).Err
 	return err
 }
 
