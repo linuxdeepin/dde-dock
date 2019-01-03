@@ -1,3 +1,6 @@
+[3.17.0] 2019-01-03
+*   feat(geature): add longpress blacklist
+
 [3.16.0] 2018-12-29
 *   fix(clipboard): cannot copy pictures to the wine program
 *   feat(soundeffect): add method GetSystemSoundFile
