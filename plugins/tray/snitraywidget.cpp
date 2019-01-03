@@ -315,10 +315,11 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
 
         // load icon from specified file
         if (!iconThemePath.isEmpty() && !iconName.isEmpty()) {
-            QFileInfoList fileInfoList = QDir(iconThemePath).entryInfoList(QDir::Filter::Files);
-            for (auto fileInfo : fileInfoList) {
-                if (fileInfo.fileName().startsWith(iconName, Qt::CaseInsensitive)) {
-                    QImage image(fileInfo.absoluteFilePath());
+            QDirIterator it(iconThemePath, QDirIterator::Subdirectories);
+            while (it.hasNext()) {
+                it.next();
+                if (it.fileName().startsWith(iconName, Qt::CaseInsensitive)) {
+                    QImage image(it.filePath());
                     pixmap = QPixmap::fromImage(image.scaled(iconSizeScaled, iconSizeScaled, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                     pixmap.setDevicePixelRatio(ratio);
                     if (!pixmap.isNull()) {
