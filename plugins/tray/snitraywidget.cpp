@@ -111,6 +111,42 @@ bool SNITrayWidget::isValid()
     return m_sniInter->isValid();
 }
 
+QString SNITrayWidget::toSNIKey(const QString &sniServicePath)
+{
+    QString key;
+
+    do {
+        const QPair<QString, QString> &sap = serviceAndPath(sniServicePath);
+        key = QDBusInterface(sap.first, sap.second).property("Id").toString();
+        if (!key.isEmpty()) {
+            break;
+        }
+
+        key = sniServicePath;
+    } while (false);
+
+    return QString("sni:%1").arg(key);
+}
+
+bool SNITrayWidget::isSNIKey(const QString &itemKey)
+{
+    return itemKey.startsWith("sni:");
+}
+
+QPair<QString, QString> SNITrayWidget::serviceAndPath(const QString &servicePath)
+{
+    QStringList list = servicePath.split("/");
+    QPair<QString, QString> pair;
+    pair.first = list.takeFirst();
+
+    for (auto i : list) {
+        pair.second.append("/");
+        pair.second.append(i);
+    }
+
+    return pair;
+}
+
 void SNITrayWidget::initMenu()
 {
     qDebug() << "using sni service path:" << m_dbusService;
@@ -242,20 +278,6 @@ void SNITrayWidget::paintEvent(QPaintEvent *e)
     }
 
     painter.end();
-}
-
-QPair<QString, QString> SNITrayWidget::serviceAndPath(const QString &servicePath)
-{
-    QStringList list = servicePath.split("/");
-    QPair<QString, QString> pair;
-    pair.first = list.takeFirst();
-
-    for (auto i : list) {
-        pair.second.append("/");
-        pair.second.append(i);
-    }
-
-    return pair;
 }
 
 QPixmap SNITrayWidget::newIconPixmap(IconType iconType)

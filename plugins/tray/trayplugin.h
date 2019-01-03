@@ -66,7 +66,6 @@ public:
 
 private:
     void loadIndicator();
-    const QString getWindowClass(quint32 winId);
     bool isSystemTrayItem(const QString &itemKey);
     QString itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget);
 
@@ -74,7 +73,9 @@ private slots:
     void addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayWidget);
     void sniItemsChanged();
     void trayListChanged();
-    void trayAdded(const QString &itemKey);
+    void trayXWindowAdded(const QString &itemKey, quint32 winId);
+    void traySNIAdded(const QString &itemKey, const QString &sniServicePath);
+    void trayIndicatorAdded(const QString &itemKey);
     void trayRemoved(const QString &itemKey);
     void trayChanged(quint32 winId);
     void sniItemIconChanged();

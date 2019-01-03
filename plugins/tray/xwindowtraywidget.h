@@ -22,10 +22,10 @@
 #ifndef TRAYWIDGET_H
 #define TRAYWIDGET_H
 
+#include "abstracttraywidget.h"
+
 #include <QWidget>
 #include <QTimer>
-
-#include <abstracttraywidget.h>
 
 class XWindowTrayWidget : public AbstractTrayWidget
 {
@@ -40,9 +40,9 @@ public:
     const QImage trayImage() Q_DECL_OVERRIDE;
     void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
 
-    static QString toTrayWidgetId(quint32 winId) { return QString("window:%1").arg(winId); }
-    static bool isWinIdKey(const QString &itemKey) { return itemKey.startsWith("window:"); }
-    static quint32 toWinId(QString itemKey) { return itemKey.remove("window:").toUInt() ; }
+    static QString getWindowProperty(quint32 winId, QString propName);
+    static QString toTrayWidgetId(quint32 winId);
+    static bool isXWindowKey(const QString &itemKey);
 
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;

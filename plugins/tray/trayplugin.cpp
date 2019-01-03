@@ -166,11 +166,9 @@ bool TrayPlugin::itemAllowContainer(const QString &itemKey)
 
 bool TrayPlugin::itemIsInContainer(const QString &itemKey)
 {
-    const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
+    const QString &key = "container_" + itemKey;
 
-    return m_proxyInter
-        ->getValue(this, widKey.isEmpty() ? itemKey : widKey, false)
-        .toBool();
+    return m_proxyInter->getValue(this, key, false).toBool();
 }
 
 int TrayPlugin::itemSortKey(const QString &itemKey)
@@ -202,9 +200,9 @@ void TrayPlugin::setSortKey(const QString &itemKey, const int order)
 
 void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
 {
-    const QString widKey = getWindowClass(XWindowTrayWidget::toWinId(itemKey));
+    const QString &key = "container_" + itemKey;
 
-    m_proxyInter->saveValue(this, widKey.isEmpty() ? itemKey : widKey, container);
+    m_proxyInter->saveValue(this, key, container);
 }
 
 void TrayPlugin::refreshIcon(const QString &itemKey)
@@ -244,27 +242,6 @@ const QVariant TrayPlugin::getValue(const QString &key, const QVariant &fallback
     return m_proxyInter->getValue(this, key, fallback);
 }
 
-const QString TrayPlugin::getWindowClass(quint32 winId)
-{
-    auto *connection = QX11Info::connection();
-
-    auto *reply = new xcb_icccm_get_wm_class_reply_t;
-    auto *error = new xcb_generic_error_t;
-    auto cookie = xcb_icccm_get_wm_class(connection, winId);
-    auto result = xcb_icccm_get_wm_class_reply(connection, cookie, reply, &error);
-
-    QString ret;
-    if (result == 1) {
-        ret = QString("%1-%2").arg(reply->class_name).arg(reply->instance_name);
-        xcb_icccm_get_wm_class_reply_wipe(reply);
-    }
-
-    delete reply;
-    delete error;
-
-    return ret;
-}
-
 bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
 {
     AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
@@ -297,32 +274,34 @@ void TrayPlugin::sniItemsChanged()
     for (auto item : itemServicePaths) {
         sinTrayKeyList << SNITrayWidget::toSNIKey(item);
     }
-    for (auto itemKey : m_trayMap.keys())
+    for (auto itemKey : m_trayMap.keys()) {
         if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
             trayRemoved(itemKey);
         }
+    }
 
-    for (auto tray : sinTrayKeyList) {
-        trayAdded(tray);
+    for (int i = 0; i < sinTrayKeyList.size(); ++i) {
+        traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
     }
 }
 
 void TrayPlugin::trayListChanged()
 {
     QList<quint32> winidList = m_trayInter->trayIcons();
-    QStringList trayList;
+    QStringList trayKeyList;
 
     for (auto winid : winidList) {
-        trayList << XWindowTrayWidget::toTrayWidgetId(winid);
+        trayKeyList << XWindowTrayWidget::toTrayWidgetId(winid);
     }
 
-    for (auto tray : m_trayMap.keys())
-        if (!trayList.contains(tray) && XWindowTrayWidget::isWinIdKey(tray)) {
+    for (auto tray : m_trayMap.keys()) {
+        if (!trayKeyList.contains(tray) && XWindowTrayWidget::isXWindowKey(tray)) {
             trayRemoved(tray);
         }
+    }
 
-    for (auto tray : trayList) {
-        trayAdded(tray);
+    for (int i = 0; i < trayKeyList.size(); ++i) {
+        trayXWindowAdded(trayKeyList.at(i), winidList.at(i));
     }
 }
 
@@ -347,44 +326,53 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
     connect(trayWidget, &AbstractTrayWidget::requestRefershWindowVisible, this, &TrayPlugin::onRequestRefershWindowVisible, Qt::UniqueConnection);
 }
 
-void TrayPlugin::trayAdded(const QString &itemKey)
+void TrayPlugin::trayXWindowAdded(const QString &itemKey, quint32 winId)
 {
-    if (m_trayMap.contains(itemKey)) {
+    if (m_trayMap.contains(itemKey) || !XWindowTrayWidget::isXWindowKey(itemKey)) {
         return;
     }
 
-    if (XWindowTrayWidget::isWinIdKey(itemKey)) {
-        auto winId = XWindowTrayWidget::toWinId(itemKey);
-        getWindowClass(winId);
-        AbstractTrayWidget *trayWidget = new XWindowTrayWidget(winId);
-        addTrayWidget(itemKey, trayWidget);
-    } else if (SNITrayWidget::isSNIKey(itemKey)) {
-        const QString &sniServicePath = SNITrayWidget::toSNIServicePath(itemKey);
-        AbstractTrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
-        connect(trayWidget, &AbstractTrayWidget::iconChanged, this, &TrayPlugin::sniItemIconChanged);
-        addTrayWidget(itemKey, trayWidget);
-    } else if (IndicatorTrayWidget::isIndicatorKey(itemKey)) {
-        IndicatorTray *trayWidget = nullptr;
-        QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
+    AbstractTrayWidget *trayWidget = new XWindowTrayWidget(winId);
+    addTrayWidget(itemKey, trayWidget);
+}
 
-        if (!m_indicatorMap.keys().contains(itemKey)) {
-            trayWidget = new IndicatorTray(indicatorKey);
-            m_indicatorMap[indicatorKey] = trayWidget;
-        }
-        else {
-            trayWidget = m_indicatorMap[itemKey];
-        }
-
-        connect(trayWidget, &IndicatorTray::delayLoaded,
-        trayWidget, [ = ]() {
-            addTrayWidget(itemKey, trayWidget->widget());
-        });
-
-        connect(trayWidget, &IndicatorTray::removed, this, [=] {
-            trayRemoved(itemKey);
-            trayWidget->removeWidget();
-        });
+void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
+{
+    if (m_trayMap.contains(itemKey) || !SNITrayWidget::isSNIKey(itemKey)) {
+        return;
     }
+
+    AbstractTrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
+    connect(trayWidget, &AbstractTrayWidget::iconChanged, this, &TrayPlugin::sniItemIconChanged);
+    addTrayWidget(itemKey, trayWidget);
+}
+
+void TrayPlugin::trayIndicatorAdded(const QString &itemKey)
+{
+    if (m_trayMap.contains(itemKey) || !IndicatorTrayWidget::isIndicatorKey(itemKey)) {
+        return;
+    }
+
+    IndicatorTray *trayWidget = nullptr;
+    QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
+
+    if (!m_indicatorMap.keys().contains(itemKey)) {
+        trayWidget = new IndicatorTray(indicatorKey);
+        m_indicatorMap[indicatorKey] = trayWidget;
+    }
+    else {
+        trayWidget = m_indicatorMap[itemKey];
+    }
+
+    connect(trayWidget, &IndicatorTray::delayLoaded,
+    trayWidget, [ = ]() {
+        addTrayWidget(itemKey, trayWidget->widget());
+    });
+
+    connect(trayWidget, &IndicatorTray::removed, this, [=] {
+        trayRemoved(itemKey);
+        trayWidget->removeWidget();
+    });
 }
 
 void TrayPlugin::trayRemoved(const QString &itemKey)
@@ -486,6 +474,6 @@ void TrayPlugin::loadIndicator()
     QDir indicatorConfDir("/etc/dde-dock/indicator");
 
     for (auto fileInfo : indicatorConfDir.entryInfoList({"*.json"}, QDir::Files | QDir::NoDotAndDotDot)) {
-        trayAdded(IndicatorTrayWidget::toTrayWidgetId(fileInfo.baseName()));
+        trayIndicatorAdded(IndicatorTrayWidget::toTrayWidgetId(fileInfo.baseName()));
     }
 }

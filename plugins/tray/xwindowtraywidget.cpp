@@ -38,6 +38,9 @@
 #include <xcb/composite.h>
 #include <xcb/xcb_image.h>
 
+#define NORMAL_WINDOW_PROP_NAME "WM_CLASS"
+#define WINE_WINDOW_PROP_NAME "__wine_prefix"
+
 static const qreal iconSize = 16;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
@@ -316,6 +319,68 @@ void XWindowTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);
     XFlush(QX11Info::display());
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
+}
+
+// NOTE: WM_NAME may can not obtain successfully
+QString XWindowTrayWidget::getWindowProperty(quint32 winId, QString propName)
+{
+    const auto display = QX11Info::display();
+
+    Atom atom_prop = XInternAtom(display, propName.toLocal8Bit(), true);
+    if (!atom_prop) {
+        qDebug() << "Error: get window property failed, invalid property atom";
+        return QString();
+    }
+
+    Atom actual_type_return;
+    int actual_format_return;
+    unsigned long nitems_return;
+    unsigned long bytes_after_return;
+    unsigned char *prop_return;
+
+    int r = XGetWindowProperty(display, winId, atom_prop, 0, 100, false, AnyPropertyType,
+            &actual_type_return, &actual_format_return, &nitems_return,
+            &bytes_after_return, &prop_return);
+
+    Q_UNUSED(r);
+
+//    qDebug() << (r == Success)
+//             << actual_type_return
+//             << actual_format_return
+//             << nitems_return
+//             << bytes_after_return
+//             << QString::fromLocal8Bit((char*)prop_return);
+
+    return QString::fromLocal8Bit((char*)prop_return);
+}
+
+QString XWindowTrayWidget::toTrayWidgetId(quint32 winId)
+{
+    QString key;
+
+    do {
+        // is wine application
+        key = getWindowProperty(winId, WINE_WINDOW_PROP_NAME).split("/").last();
+        if (!key.isEmpty()) {
+            break;
+        }
+
+        // is normal application
+        key = getWindowProperty(winId, NORMAL_WINDOW_PROP_NAME);
+        if (!key.isEmpty()) {
+            break;
+        }
+
+        // fallback to window id
+        key = QString::number(winId);
+    } while (false);
+
+    return QString("window:%1").arg(key);
+}
+
+bool XWindowTrayWidget::isXWindowKey(const QString &itemKey)
+{
+    return itemKey.startsWith("window:");
 }
 
 void XWindowTrayWidget::setActive(const bool active)

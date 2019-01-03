@@ -50,9 +50,9 @@ public:
 
     bool isValid();
 
-    static QString toSNIKey(const QString &sniServicePath) { return QString("sni:%1").arg(sniServicePath); }
-    static bool isSNIKey(const QString &itemKey) { return itemKey.startsWith("sni:"); }
-    static QString toSNIServicePath(QString itemKey) { return itemKey.remove("sni:"); }
+    static QString toSNIKey(const QString &sniServicePath);
+    static bool isSNIKey(const QString &itemKey);
+    static QPair<QString, QString> serviceAndPath(const QString &servicePath);
 
 private Q_SLOTS:
     void initMenu();
@@ -64,7 +64,6 @@ private Q_SLOTS:
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    QPair<QString, QString> serviceAndPath(const QString &servicePath);
     QPixmap newIconPixmap(IconType iconType);
 
 private:
