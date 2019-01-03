@@ -33,7 +33,7 @@
 
 #include <item/traypluginitem.h>
 
-static DockItem *DraggingItem = nullptr;
+static QPointer<DockItem> DraggingItem = nullptr;
 static PlaceholderItem *RequestDockItem = nullptr;
 
 const char *RequestDockKey = "RequestDock";
@@ -654,9 +654,10 @@ void MainPanel::itemDragStarted()
 
     if (draggingTyep == DockItem::Plugins || draggingTyep == DockItem::TrayPlugin)
     {
-        if (static_cast<PluginsItem *>(DraggingItem)->allowContainer())
+        PluginsItem *pluginItem = qobject_cast<PluginsItem *>(DraggingItem);
+        if (pluginItem && pluginItem->allowContainer())
         {
-            qobject_cast<PluginsItem *>(DraggingItem)->hidePopup();
+            pluginItem->hidePopup();
             m_itemController->setDropping(true);
         }
     }
