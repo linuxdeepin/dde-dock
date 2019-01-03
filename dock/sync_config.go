@@ -1,6 +1,11 @@
 package dock
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"os"
+	"reflect"
+	"time"
+)
 
 type syncConfig struct {
 	m *Manager
@@ -13,9 +18,70 @@ func (sc *syncConfig) Get() (interface{}, error) {
 	v.DisplayMode = sc.m.DisplayMode.GetString()
 	v.HideMode = sc.m.HideMode.GetString()
 	v.Position = sc.m.Position.GetString()
-	// TODO: docked apps
-	//v.DockedApps = sc.m.DockedApps.Get()
+	v.DockedApps = sc.m.DockedApps.Get()
+
+	pluginSettingsJsonStr := sc.m.settings.GetString(settingKeyPluginSettings)
+	err := json.Unmarshal([]byte(pluginSettingsJsonStr), &v.Plugins)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	return v, nil
+}
+
+func (sc *syncConfig) setPluginSettings(settings pluginSettings) {
+	m := sc.m
+	pluginSettingsJsonStr := m.settings.GetString(settingKeyPluginSettings)
+	var pluginSettings pluginSettings
+	err := json.Unmarshal([]byte(pluginSettingsJsonStr), &pluginSettings)
+	if err == nil && reflect.DeepEqual(settings, pluginSettings) {
+		return
+	}
+
+	newSettingsData, err := json.Marshal(settings)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	ok := m.settings.SetString(settingKeyPluginSettings, string(newSettingsData))
+	if !ok {
+		logger.Warning("failed to save plugin settings")
+		return
+	}
+
+	ts := time.Now().UnixNano()
+	err = m.service.Emit(m, "PluginSettingsUpdated", ts)
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func (sc *syncConfig) setDockedApps(dockedApps []string) {
+	m := sc.m
+	added, removed := diffStrSlice(m.DockedApps.Get(), dockedApps)
+
+	for _, value := range added {
+		desktopFile := unzipDesktopPath(value)
+		_, err := os.Stat(desktopFile)
+		if err == nil {
+			_, err = m.requestDock(desktopFile, -1)
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
+	}
+
+	for _, value := range removed {
+		desktopFile := unzipDesktopPath(value)
+
+		_, err := m.requestUndock(desktopFile)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
+	m.DockedApps.Set(dockedApps)
 }
 
 func (sc *syncConfig) Set(data []byte) error {
@@ -29,23 +95,48 @@ func (sc *syncConfig) Set(data []byte) error {
 	m.DisplayMode.SetString(v.DisplayMode)
 	m.HideMode.SetString(v.HideMode)
 	m.Position.SetString(v.Position)
-	// TODO: docked apps
+	sc.setDockedApps(v.DockedApps)
+	sc.setPluginSettings(v.Plugins)
 	return nil
+}
+
+func diffStrSlice(a, b []string) (added, removed []string) {
+	// from a to b
+	toMap := func(slice []string) map[string]struct{} {
+		m := make(map[string]struct{})
+		for _, value := range slice {
+			m[value] = struct{}{}
+		}
+		return m
+	}
+	mapA := toMap(a)
+	mapB := toMap(b)
+
+	for keyB := range mapB {
+		_, ok := mapA[keyB]
+		if !ok {
+			added = append(added, keyB)
+		}
+	}
+
+	for keyA := range mapA {
+		_, ok := mapB[keyA]
+		if !ok {
+			removed = append(removed, keyA)
+		}
+	}
+	return
 }
 
 // version: 1.0
 type syncData struct {
-	Version     string            `json:"version"` // such as "1.0.0"
-	IconSize    uint32            `json:"icon_size"`
-	DisplayMode string            `json:"display_mode"`
-	HideMode    string            `json:"hide_mode"`
-	Position    string            `json:"position"`
-	DockedApps  DockedAppInfoList `json:"docked_apps"`
+	Version     string         `json:"version"` // such as "1.0.0"
+	IconSize    uint32         `json:"icon_size"`
+	DisplayMode string         `json:"display_mode"`
+	HideMode    string         `json:"hide_mode"`
+	Position    string         `json:"position"`
+	DockedApps  []string       `json:"docked_apps"`
+	Plugins     pluginSettings `json:"plugins"`
 }
 
-type DockedAppInfo struct {
-	Key  string `json:"key"`
-	File string `json:"file"`
-}
-
-type DockedAppInfoList []*DockedAppInfo
+type pluginSettings map[string]map[string]interface{}
