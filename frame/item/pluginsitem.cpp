@@ -136,6 +136,7 @@ void PluginsItem::paintEvent(QPaintEvent *event)
     color = QColor::fromRgb(255, 255, 255);
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setOpacity(0.1);
 
     painter.fillPath(path, color);
