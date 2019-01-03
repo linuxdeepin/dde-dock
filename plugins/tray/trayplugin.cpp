@@ -22,7 +22,6 @@
 
 #include "trayplugin.h"
 #include "fashiontrayitem.h"
-#include "snitraywidget.h"
 
 #include <QDir>
 #include <QWindow>
@@ -98,7 +97,7 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_trayInter, &DBusTrayManager::Changed, this, &TrayPlugin::trayChanged);
 
     connect(m_systemTraysController, &SystemTraysController::systemTrayAdded, this, &TrayPlugin::addTrayWidget);
-    connect(m_systemTraysController, &SystemTraysController::systemTrayRemoved, this, &TrayPlugin::trayRemoved);
+    connect(m_systemTraysController, &SystemTraysController::systemTrayRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
 
     m_trayInter->Manage();
 
@@ -342,9 +341,14 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
         return;
     }
 
-    AbstractTrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
-    connect(trayWidget, &AbstractTrayWidget::iconChanged, this, &TrayPlugin::sniItemIconChanged);
-    addTrayWidget(itemKey, trayWidget);
+    SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
+    if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
+        m_trayMap.insert(itemKey, trayWidget);
+    } else {
+        addTrayWidget(itemKey, trayWidget);
+    }
+
+    connect(trayWidget, &SNITrayWidget::statusChanged, this, &TrayPlugin::onSNIItemStatusChanged);
 }
 
 void TrayPlugin::trayIndicatorAdded(const QString &itemKey)
@@ -375,13 +379,13 @@ void TrayPlugin::trayIndicatorAdded(const QString &itemKey)
     });
 }
 
-void TrayPlugin::trayRemoved(const QString &itemKey)
+void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
 {
     if (!m_trayMap.contains(itemKey)) {
         return;
     }
 
-    AbstractTrayWidget *widget = m_trayMap.take(itemKey);
+    AbstractTrayWidget *widget = m_trayMap.value(itemKey);
 
     if (displayMode() == Dock::Efficient) {
         m_proxyInter->itemRemoved(this, itemKey);
@@ -393,7 +397,8 @@ void TrayPlugin::trayRemoved(const QString &itemKey)
     // set the parent of the tray object to avoid be deconstructed by parent(DockItem/PluginsItem/TrayPluginsItem)
     if (widget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         widget->setParent(nullptr);
-    } else {
+    } else if (deleteObject) {
+        m_trayMap.remove(itemKey);
         widget->deleteLater();
     }
 }
@@ -406,14 +411,6 @@ void TrayPlugin::trayChanged(quint32 winId)
     }
 
     m_trayMap.value(itemKey)->updateIcon();
-}
-
-void TrayPlugin::sniItemIconChanged()
-{
-    AbstractTrayWidget *trayWidget = static_cast<AbstractTrayWidget *>(sender());
-    if (!m_trayMap.values().contains(trayWidget)) {
-        return;
-    }
 }
 
 void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
@@ -467,6 +464,29 @@ void TrayPlugin::onRequestRefershWindowVisible()
     }
 
     m_proxyInter->requestRefreshWindowVisible(this, itemKey);
+}
+
+void TrayPlugin::onSNIItemStatusChanged(SNITrayWidget::ItemStatus status)
+{
+    SNITrayWidget *trayWidget = static_cast<SNITrayWidget *>(sender());
+    const QString &itemKey = m_trayMap.key(trayWidget);
+    if (!trayWidget || itemKey.isEmpty()) {
+        return;
+    }
+
+    switch (status) {
+    case SNITrayWidget::Passive: {
+        trayRemoved(itemKey, false);
+        break;
+    }
+    case SNITrayWidget::Active:
+    case SNITrayWidget::NeedsAttention: {
+        addTrayWidget(itemKey, trayWidget);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void TrayPlugin::loadIndicator()

@@ -30,7 +30,7 @@
 #define IconSize 16
 
 const QStringList ItemCategoryList {"ApplicationStatus" , "Communications" , "SystemServices", "Hardware"};
-const QStringList ItemStatusList {"ApplicationStatus" , "Communications" , "SystemServices", "Hardware"};
+const QStringList ItemStatusList {"Passive" , "Active" , "NeedsAttention"};
 const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
@@ -61,6 +61,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::NewIcon, m_updateTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
     connect(m_sniInter, &StatusNotifierItem::NewOverlayIcon, this, &SNITrayWidget::refreshOverlayIcon);
     connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, this, &SNITrayWidget::refreshAttentionIcon);
+    connect(m_sniInter, &StatusNotifierItem::NewStatus, this, &SNITrayWidget::onStatusChanged);
 
     QTimer::singleShot(0, this, &SNITrayWidget::refreshIcon);
 }
@@ -109,6 +110,26 @@ const QImage SNITrayWidget::trayImage()
 bool SNITrayWidget::isValid()
 {
     return m_sniInter->isValid();
+}
+
+SNITrayWidget::ItemStatus SNITrayWidget::status()
+{
+    const QString &status = m_sniInter->status();
+    if (!ItemStatusList.contains(status)) {
+        return ItemStatus::Active;
+    }
+
+    return static_cast<ItemStatus>(ItemStatusList.indexOf(status));
+}
+
+SNITrayWidget::ItemCategory SNITrayWidget::category()
+{
+    const QString &category = m_sniInter->category();
+    if (!ItemCategoryList.contains(category)) {
+        return UnknownCategory;
+    }
+
+    return static_cast<ItemCategory>(ItemCategoryList.indexOf(category));
 }
 
 QString SNITrayWidget::toSNIKey(const QString &sniServicePath)
@@ -163,29 +184,6 @@ void SNITrayWidget::initMenu()
 
     qDebug() << "the sni menu obect is:" << m_menu;
 }
-
-/*
- *ItemCategory SNITrayWidget::category()
- *{
- *    const QString &category = m_sniInter->category();
- *    if (!ItemCategoryList.contains(category)) {
- *        return UnknownCategory;
- *    }
- *
- *    return static_cast<ItemCategory>(ItemCategoryList.indexOf(category));
- *}
- *
- *ItemStatus SNITrayWidget::status()
- *{
- *    const QString &status = m_sniInter->status();
- *    if (!ItemStatusList.contains(status)) {
- *        return UnknownStatus;
- *    }
- *
- *    return static_cast<ItemStatus>(ItemStatusList.indexOf(status));
- *}
- *
- */
 
 void SNITrayWidget::refreshIcon()
 {
@@ -248,6 +246,15 @@ void SNITrayWidget::showContextMenu(int x, int y)
         }
         m_menu->popup(QPoint(x, y));
     }
+}
+
+void SNITrayWidget::onStatusChanged(const QString &status)
+{
+    if (!ItemStatusList.contains(status)) {
+        return;
+    }
+
+    Q_EMIT statusChanged(static_cast<SNITrayWidget::ItemStatus>(ItemStatusList.indexOf(status)));
 }
 
 QSize SNITrayWidget::sizeHint() const

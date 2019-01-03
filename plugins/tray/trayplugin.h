@@ -28,6 +28,7 @@
 #include "xwindowtraywidget.h"
 #include "indicatortray.h"
 #include "indicatortraywidget.h"
+#include "snitraywidget.h"
 #include "system-trays/systemtrayscontroller.h"
 #include "dbus/sni/statusnotifierwatcher_interface.h"
 
@@ -76,13 +77,13 @@ private slots:
     void trayXWindowAdded(const QString &itemKey, quint32 winId);
     void traySNIAdded(const QString &itemKey, const QString &sniServicePath);
     void trayIndicatorAdded(const QString &itemKey);
-    void trayRemoved(const QString &itemKey);
+    void trayRemoved(const QString &itemKey, const bool deleteObject = true);
     void trayChanged(quint32 winId);
-    void sniItemIconChanged();
     void switchToMode(const Dock::DisplayMode mode);
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
     void onRequestWindowAutoHide(const bool autoHide);
     void onRequestRefershWindowVisible();
+    void onSNIItemStatusChanged(SNITrayWidget::ItemStatus status);
 
 private:
     DBusTrayManager *m_trayInter;

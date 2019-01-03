@@ -32,13 +32,15 @@
 
 using namespace com::deepin::dde;
 
-enum ItemCategory {UnknownCategory = -1, ApplicationStatus, Communications, SystemServices, Hardware};
-enum ItemStatus {UnknownStatus = -1, Passive, Active, NeedsAttention};
-enum IconType {UnknownIconType = -1, Icon, OverlayIcon, AttentionIcon, AttentionMovieIcon};
-
 class SNITrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
+
+public:
+    enum ItemCategory {UnknownCategory = -1, ApplicationStatus, Communications, SystemServices, Hardware};
+    enum ItemStatus {Passive, Active, NeedsAttention};
+    enum IconType {UnknownIconType = -1, Icon, OverlayIcon, AttentionIcon, AttentionMovieIcon};
+
 public:
     SNITrayWidget(const QString &sniServicePath, QWidget *parent = Q_NULLPTR);
     virtual ~SNITrayWidget();
@@ -49,10 +51,15 @@ public:
     const QImage trayImage() Q_DECL_OVERRIDE;
 
     bool isValid();
+    SNITrayWidget::ItemStatus status();
+    SNITrayWidget::ItemCategory category();
 
     static QString toSNIKey(const QString &sniServicePath);
     static bool isSNIKey(const QString &itemKey);
     static QPair<QString, QString> serviceAndPath(const QString &servicePath);
+
+Q_SIGNALS:
+    void statusChanged(SNITrayWidget::ItemStatus status);
 
 private Q_SLOTS:
     void initMenu();
@@ -60,6 +67,7 @@ private Q_SLOTS:
     void refreshOverlayIcon();
     void refreshAttentionIcon();
     void showContextMenu(int x, int y);
+    void onStatusChanged(const QString &status);
 
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
