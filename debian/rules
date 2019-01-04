@@ -15,7 +15,3 @@ endif
 %:
 	dh $@ --parallel
 
-override_dh_auto_configure:
-	dh_auto_configure -- \
-		-DDOCK_TRAY_USE_NATIVE_POPUP=YES
-

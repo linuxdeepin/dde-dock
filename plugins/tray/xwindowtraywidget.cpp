@@ -80,11 +80,8 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
 
     connect(m_updateTimer, &QTimer::timeout, this, &XWindowTrayWidget::refershIconImage);
 
-// DOCK_TRAY_USE_NATIVE_POPUP is defined in debian/rules
-#ifdef DOCK_TRAY_USE_NATIVE_POPUP
     setMouseTracking(true);
     connect(m_sendHoverEvent, &QTimer::timeout, this, &XWindowTrayWidget::sendHoverEvent);
-#endif
 
     m_updateTimer->start();
 }
