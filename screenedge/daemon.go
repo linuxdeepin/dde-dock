@@ -50,7 +50,7 @@ func (d *Daemon) Start() error {
 	service := loader.GetService()
 	d.manager = newManager(service)
 
-	err := service.Export(dbusPath, d.manager)
+	err := service.Export(dbusPath, d.manager, d.manager.syncConfig)
 	if err != nil {
 		return err
 	}
@@ -58,6 +58,11 @@ func (d *Daemon) Start() error {
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		return err
+	}
+
+	err = d.manager.syncConfig.Register()
+	if err != nil {
+		logger.Warning(err)
 	}
 	return nil
 }

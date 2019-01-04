@@ -21,6 +21,7 @@ package screenedge
 
 import (
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -38,9 +39,11 @@ const (
 )
 
 type Manager struct {
-	service  *dbusutil.Service
-	settings *Settings
-	wm       *wm.Wm
+	service        *dbusutil.Service
+	settings       *Settings
+	wm             *wm.Wm
+	sessionSigLoop *dbusutil.SignalLoop
+	syncConfig     *dsync.Config
 
 	methods *struct {
 		EnableZoneDetected func() `in:"enabled"`
@@ -60,6 +63,10 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.service = service
 	m.settings = NewSettings()
 	m.wm = wm.NewWm(service.Conn())
+	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
+	m.sessionSigLoop.Start()
+	m.syncConfig = dsync.NewConfig("screenedge", &syncConfig{m: m},
+		m.sessionSigLoop, dbusPath, logger)
 	return m
 }
 
@@ -67,6 +74,9 @@ func (m *Manager) destory() {
 	if m.settings != nil {
 		m.settings.Destroy()
 		m.settings = nil
+	}
+	if m.sessionSigLoop != nil {
+		m.sessionSigLoop.Stop()
 	}
 }
 
