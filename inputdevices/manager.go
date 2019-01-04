@@ -26,6 +26,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -56,6 +57,9 @@ type Manager struct {
 	trackPoint *TrackPoint
 	tpad       *Touchpad
 	wacom      *Wacom
+
+	sessionSigLoop *dbusutil.SignalLoop
+	syncConfig     *dsync.Config
 }
 
 func NewManager(service *dbusutil.Service) *Manager {
@@ -92,6 +96,10 @@ func NewManager(service *dbusutil.Service) *Manager {
 	m.mouse = newMouse(service, m.tpad)
 
 	m.trackPoint = newTrackPoint(service)
+
+	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
+	m.syncConfig = dsync.NewConfig("peripherals", &syncConfig{m: m},
+		m.sessionSigLoop, dbusPath, logger)
 
 	return m
 }
@@ -193,4 +201,6 @@ func (m *Manager) init() {
 
 	m.setWheelSpeed(true)
 	m.handleGSettings()
+
+	m.sessionSigLoop.Start()
 }

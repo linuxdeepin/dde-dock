@@ -56,7 +56,7 @@ func (*Daemon) Start() error {
 	service := loader.GetService()
 	_manager = NewManager(service)
 
-	err := service.Export(dbusPath, _manager)
+	err := service.Export(dbusPath, _manager, _manager.syncConfig)
 	if err != nil {
 		return err
 	}
@@ -95,6 +95,10 @@ func (*Daemon) Start() error {
 
 	go func() {
 		_manager.init()
+		err := _manager.syncConfig.Register()
+		if err != nil {
+			logger.Warning(err)
+		}
 		startDeviceListener()
 	}()
 	return nil
