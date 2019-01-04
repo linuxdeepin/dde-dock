@@ -40,8 +40,10 @@ import (
 
 type Daemon struct {
 	methods *struct {
-		ScalePlymouth        func() `in:"scale"`
-		SetLongPressDuration func() `in:"duration"`
+		ScalePlymouth         func() `in:"scale"`
+		SetLongPressDuration  func() `in:"duration"`
+		NetworkGetConnections func() `out:"data"`
+		NetworkSetConnections func() `in:"data"`
 	}
 }
 

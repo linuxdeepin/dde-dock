@@ -26,6 +26,7 @@ import (
 	sysNetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/lib/dbus1"
@@ -84,6 +85,9 @@ type Manager struct {
 	secretAgent        *SecretAgent
 	stateHandler       *stateHandler
 	proxyChainsManager *proxychains.Manager
+
+	sessionSigLoop *dbusutil.SignalLoop
+	syncConfig     *dsync.Config
 
 	signals *struct {
 		AccessPointAdded, AccessPointRemoved, AccessPointPropertiesChanged struct {
@@ -229,6 +233,11 @@ func (m *Manager) init() {
 	if err != nil {
 		logger.Warning(err)
 	}
+
+	m.sessionSigLoop = dbusutil.NewSignalLoop(m.service.Conn(), 10)
+	m.sessionSigLoop.Start()
+	m.syncConfig = dsync.NewConfig("network", &syncConfig{m: m},
+		m.sessionSigLoop, dbusPath, logger)
 }
 
 func (m *Manager) destroy() {

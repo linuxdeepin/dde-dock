@@ -71,7 +71,8 @@ func (d *Module) start() error {
 		return err
 	}
 
-	err = managerServerObj.Export()
+	// err = managerServerObj.Export()
+	err = service.Export(dbusPath, manager, manager.syncConfig)
 	if err != nil {
 		logger.Error("failed to export manager:", err)
 		manager = nil
