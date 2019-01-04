@@ -1,3 +1,21 @@
+<a name="4.8.6"></a>
+## 4.8.6 (2019-01-04)
+
+
+#### Features
+
+*   support SNI tray status property ([6c7498a7](https://github.com/linuxdeepin/dde-dock/commit/6c7498a7a742bbb9c8f0d8c99e4cd00c5487ff25))
+
+#### Bug Fixes
+
+*   hover background of plugins item in Efficient mode ([a5cf0155](https://github.com/linuxdeepin/dde-dock/commit/a5cf01551a31e1e885dcdb67460112db63ea8cba))
+*   tray item identify ([f7699e35](https://github.com/linuxdeepin/dde-dock/commit/f7699e3596471a0cf2125960aecb3201b8242fd4))
+*   crash after drag app item to undock ([3c134e55](https://github.com/linuxdeepin/dde-dock/commit/3c134e55832fcda7e2f7e2ce4a70bc56c0d87f7d))
+*   sni icon search path not recursive ([c002c839](https://github.com/linuxdeepin/dde-dock/commit/c002c839844dea59fec0a18129a0a07f436edc51))
+*   time not display in fashion mode when using some special language ([395de03e](https://github.com/linuxdeepin/dde-dock/commit/395de03ee6c38e1e9235702f4855f57f265972dd))
+
+
+
 <a name="4.8.5.2"></a>
 ## 4.8.5.2 (2018-12-25)
 
