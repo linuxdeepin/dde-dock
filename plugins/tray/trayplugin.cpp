@@ -96,8 +96,9 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &TrayPlugin::trayListChanged);
     connect(m_trayInter, &DBusTrayManager::Changed, this, &TrayPlugin::trayChanged);
 
-    connect(m_systemTraysController, &SystemTraysController::systemTrayAdded, this, &TrayPlugin::addTrayWidget);
-    connect(m_systemTraysController, &SystemTraysController::systemTrayRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
+    connect(m_systemTraysController, &SystemTraysController::pluginItemAdded, this, &TrayPlugin::addTrayWidget);
+    connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this,
+            [=](const QString &itemKey, AbstractTrayWidget *pluginItem) { Q_UNUSED(pluginItem); trayRemoved(itemKey); });
 
     m_trayInter->Manage();
 
