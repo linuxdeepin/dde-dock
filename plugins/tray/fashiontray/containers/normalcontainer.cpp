@@ -18,7 +18,7 @@ void NormalContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
     AbstractContainer::addWrapper(wrapper);
 
     if (containsWrapper(wrapper)) {
-        const QString &key = wrapper->itemKey() + HoldKeySuffix;
+        const QString &key = HoldKeyPrefix + wrapper->itemKey();
         trayPlugin()->saveValue(wrapper->itemKey(), key, false);
     }
 }

@@ -25,10 +25,14 @@
 #include "item/pluginsitem.h"
 #include "pluginproxyinterface.h"
 
+#include <com_deepin_dde_daemon_dock.h>
+
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
 #include <QDBusConnectionInterface>
+
+using DockDaemonInter = com::deepin::dde::daemon::Dock;
 
 class DockItemController;
 class PluginsItemInterface;
@@ -48,8 +52,8 @@ public:
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) Q_DECL_OVERRIDE;
-    void saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) Q_DECL_OVERRIDE;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback = QVariant()) Q_DECL_OVERRIDE;
+    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) Q_DECL_OVERRIDE;
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) Q_DECL_OVERRIDE;
 
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
@@ -63,6 +67,7 @@ private slots:
     void positionChanged();
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
+    void refreshPluginSettings(qlonglong ts);
 
 private:
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
@@ -70,9 +75,11 @@ private:
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
-    QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
     DockItemController *m_itemControllerInter;
-    QSettings           m_pluginsSetting;
+    DockDaemonInter *m_dockDaemonInter;
+
+    QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
+    QJsonObject m_pluginSettingsObject;
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

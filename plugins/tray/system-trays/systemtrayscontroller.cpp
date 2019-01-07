@@ -29,9 +29,13 @@
 SystemTraysController::SystemTraysController(QObject *parent)
     : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
-    , m_pluginsSetting("deepin", "dde-dock")
+    , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
     qApp->installEventFilter(this);
+
+    refreshPluginSettings(QDateTime::currentMSecsSinceEpoch() / 1000 / 1000);
+
+    connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsUpdated, this, &SystemTraysController::refreshPluginSettings);
 }
 
 void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -182,6 +186,33 @@ void SystemTraysController::initPlugin(PluginsItemInterface *interface) {
     qDebug() << "SystemTray:" << "init plugin finished: " << interface->pluginName();
 }
 
+void SystemTraysController::refreshPluginSettings(qlonglong ts)
+{
+    // TODO: handle nano seconds
+
+    const QString &pluginSettings = m_dockDaemonInter->GetPluginSettings().value();
+    if (pluginSettings.isEmpty()) {
+        qDebug() << "Error! get plugin settings from dbus failed!";
+        return;
+    }
+
+    const QJsonObject &settingsObject = QJsonDocument::fromJson(pluginSettings.toLocal8Bit()).object();
+    if (settingsObject.isEmpty()) {
+        qDebug() << "Error! parse plugin settings from json failed!";
+        return;
+    }
+
+    m_pluginSettingsObject = settingsObject;
+
+    // not notify plugins to refresh settings if this update is not emit by dock daemon
+    if (sender() != m_dockDaemonInter) {
+        return;
+    }
+
+//    static_cast<DockDaemonInter *>(sender())
+    // TODO: notify all plugins to reload plugin settings
+}
+
 bool SystemTraysController::eventFilter(QObject *o, QEvent *e)
 {
     if (o != qApp)
@@ -235,16 +266,21 @@ PluginsItemInterface *SystemTraysController::pluginInterAt(SystemTrayItem *syste
 }
 
 void SystemTraysController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    m_pluginsSetting.setValue(key, value);
-    m_pluginsSetting.endGroup();
+    QJsonObject valueObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
+    valueObject.insert(key, value.toJsonValue());
+    m_pluginSettingsObject.insert(itemInter->pluginName(), valueObject);
+
+    m_dockDaemonInter->SetPluginSettings(
+                QDateTime::currentMSecsSinceEpoch() / 1000 / 1000,
+                QJsonDocument(m_pluginSettingsObject).toJson());
 }
 
 const QVariant SystemTraysController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value(m_pluginsSetting.value(key, fallback));
-    m_pluginsSetting.endGroup();
-    return value;
+    QVariant v = m_pluginSettingsObject.value(itemInter->pluginName()).toObject().value(key).toVariant();
+    if (v.isNull() || !v.isValid()) {
+        v = fallback;
+    }
+    return v;
 }
 
 int SystemTraysController::systemTrayItemSortKey(const QString &itemKey)

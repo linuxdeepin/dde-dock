@@ -33,9 +33,13 @@ DockPluginsController::DockPluginsController(
     : QObject(itemControllerInter)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
     , m_itemControllerInter(itemControllerInter)
-    , m_pluginsSetting("deepin", "dde-dock")
+    , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
     qApp->installEventFilter(this);
+
+    refreshPluginSettings(QDateTime::currentMSecsSinceEpoch() / 1000 / 1000);
+
+    connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsUpdated, this, &DockPluginsController::refreshPluginSettings);
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -193,6 +197,32 @@ void DockPluginsController::initPlugin(PluginsItemInterface *interface) {
     qDebug() << "init plugin finished: " << interface->pluginName();
 }
 
+void DockPluginsController::refreshPluginSettings(qlonglong ts)
+{
+    // TODO: handle nano seconds
+
+    const QString &pluginSettings = m_dockDaemonInter->GetPluginSettings().value();
+    if (pluginSettings.isEmpty()) {
+        qDebug() << "Error! get plugin settings from dbus failed!";
+        return;
+    }
+
+    const QJsonObject &settingsObject = QJsonDocument::fromJson(pluginSettings.toLocal8Bit()).object();
+    if (settingsObject.isEmpty()) {
+        qDebug() << "Error! parse plugin settings from json failed!";
+        return;
+    }
+
+    m_pluginSettingsObject = settingsObject;
+
+    // not notify plugins to refresh settings if this update is not emit by dock daemon
+    if (sender() != m_dockDaemonInter) {
+        return;
+    }
+
+    // TODO: notify all plugins to reload plugin settings
+}
+
 bool DockPluginsController::eventFilter(QObject *o, QEvent *e)
 {
     if (o != qApp)
@@ -219,15 +249,20 @@ PluginsItem *DockPluginsController::pluginItemAt(PluginsItemInterface * const it
     return m_pluginList[itemInter][itemKey];
 }
 
-void DockPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    m_pluginsSetting.setValue(itemKey, value);
-    m_pluginsSetting.endGroup();
+void DockPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
+    QJsonObject valueObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
+    valueObject.insert(key, value.toJsonValue());
+    m_pluginSettingsObject.insert(itemInter->pluginName(), valueObject);
+
+    m_dockDaemonInter->SetPluginSettings(
+                QDateTime::currentMSecsSinceEpoch() / 1000 / 1000,
+                QJsonDocument(m_pluginSettingsObject).toJson());
 }
 
-const QVariant DockPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value(m_pluginsSetting.value(itemKey, failback));
-    m_pluginsSetting.endGroup();
-    return value;
+const QVariant DockPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
+    QVariant v = m_pluginSettingsObject.value(itemInter->pluginName()).toObject().value(key).toVariant();
+    if (v.isNull() || !v.isValid()) {
+        v = fallback;
+    }
+    return v;
 }

@@ -25,10 +25,14 @@
 #include "systemtrayitem.h"
 #include "pluginproxyinterface.h"
 
+#include <com_deepin_dde_daemon_dock.h>
+
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
 #include <QDBusConnectionInterface>
+
+using DockDaemonInter = com::deepin::dde::daemon::Dock;
 
 class PluginsItemInterface;
 class SystemTraysController : public QObject, PluginProxyInterface
@@ -67,6 +71,7 @@ private slots:
     void positionChanged();
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
+    void refreshPluginSettings(qlonglong ts);
 
 private:
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
@@ -77,8 +82,9 @@ private:
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     QMap<PluginsItemInterface *, QMap<QString, SystemTrayItem *>> m_pluginsMap;
+    DockDaemonInter *m_dockDaemonInter;
 
-    QSettings m_pluginsSetting;
+    QJsonObject m_pluginSettingsObject;
 };
 
 #endif // SYSTEMTRAYSCONTROLLER_H
