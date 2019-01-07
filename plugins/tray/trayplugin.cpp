@@ -21,7 +21,8 @@
  */
 
 #include "trayplugin.h"
-#include "fashiontrayitem.h"
+#include "fashiontray/fashiontrayitem.h"
+#include "snitraywidget.h"
 
 #include <QDir>
 #include <QWindow>
@@ -31,7 +32,6 @@
 #include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
 
-#define FASHION_MODE_ITEM   "fashion-mode-item"
 #define FASHION_MODE_TRAYS_SORTED   "fashion-mode-trays-sorted"
 
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
@@ -124,12 +124,12 @@ void TrayPlugin::positionChanged(const Dock::Position position)
         return;
     }
 
-    m_fashionItem->setDockPostion(position);
+    m_fashionItem->setDockPosition(position);
 }
 
 QWidget *TrayPlugin::itemWidget(const QString &itemKey)
 {
-    if (itemKey == FASHION_MODE_ITEM) {
+    if (itemKey == FASHION_MODE_ITEM_KEY) {
         return m_fashionItem;
     }
 
@@ -206,7 +206,7 @@ void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool contain
 
 void TrayPlugin::refreshIcon(const QString &itemKey)
 {
-    if (itemKey == FASHION_MODE_ITEM) {
+    if (itemKey == FASHION_MODE_ITEM_KEY) {
         for (auto trayWidget : m_trayMap.values()) {
             if (trayWidget) {
                 trayWidget->updateIcon();
@@ -231,13 +231,23 @@ bool TrayPlugin::traysSortedInFashionMode()
     return m_proxyInter->getValue(this, FASHION_MODE_TRAYS_SORTED, false).toBool();
 }
 
-void TrayPlugin::saveValue(const QString &key, const QVariant &value)
+void TrayPlugin::saveValue(const QString &itemKey, const QString &key, const QVariant &value)
 {
+    // 如果是系统托盘图标则调用内部插件的相应接口
+    if (isSystemTrayItem(itemKey)) {
+        return m_systemTraysController->saveValueSystemTrayItem(itemKey, key, value);
+    }
+
     m_proxyInter->saveValue(this, key, value);
 }
 
-const QVariant TrayPlugin::getValue(const QString &key, const QVariant &fallback)
+const QVariant TrayPlugin::getValue(const QString &itemKey, const QString &key, const QVariant &fallback)
 {
+    // 如果是系统托盘图标则调用内部插件的相应接口
+    if (isSystemTrayItem(itemKey)) {
+        return m_systemTraysController->getValueSystemTrayItem(itemKey, key, fallback);
+    }
+
     return m_proxyInter->getValue(this, key, fallback);
 }
 
@@ -257,7 +267,7 @@ QString TrayPlugin::itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget)
     QString itemKey;
 
     if (displayMode() == Dock::DisplayMode::Fashion) {
-        itemKey = FASHION_MODE_ITEM;
+        itemKey = FASHION_MODE_ITEM_KEY;
     } else {
         itemKey = m_trayMap.key(trayWidget);
     }
@@ -317,7 +327,7 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
     if (displayMode() == Dock::Efficient) {
         m_proxyInter->itemAdded(this, itemKey);
     } else {
-        m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
+        m_proxyInter->itemAdded(this, FASHION_MODE_ITEM_KEY);
         m_fashionItem->trayWidgetAdded(itemKey, trayWidget);
     }
 
@@ -420,14 +430,14 @@ void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
             m_proxyInter->itemRemoved(this, itemKey);
         }
         if (m_trayMap.isEmpty()) {
-            m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
+            m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM_KEY);
         } else {
             m_fashionItem->setTrayWidgets(m_trayMap);
-            m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
+            m_proxyInter->itemAdded(this, FASHION_MODE_ITEM_KEY);
         }
     } else {
         m_fashionItem->clearTrayWidgets();
-        m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
+        m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM_KEY);
         for (auto itemKey : m_trayMap.keys()) {
             m_proxyInter->itemAdded(this, itemKey);
         }

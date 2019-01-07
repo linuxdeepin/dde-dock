@@ -62,8 +62,8 @@ public:
 
     Dock::Position dockPosition() const;
     bool traysSortedInFashionMode();
-    void saveValue(const QString &key, const QVariant &value);
-    const QVariant getValue(const QString &key, const QVariant& fallback = QVariant());
+    void saveValue(const QString &itemKey, const QString &key, const QVariant &value);
+    const QVariant getValue(const QString &itemKey, const QString &key, const QVariant& fallback = QVariant());
 
 private:
     void loadIndicator();

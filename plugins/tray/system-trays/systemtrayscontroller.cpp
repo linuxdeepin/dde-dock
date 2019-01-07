@@ -268,3 +268,25 @@ void SystemTraysController::setSystemTrayItemSortKey(const QString &itemKey, con
 
     inter->setSortKey(itemKey, order);
 }
+
+const QVariant SystemTraysController::getValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &fallback)
+{
+    auto inter = pluginInterAt(itemKey);
+
+    if (!inter) {
+        return QVariant();
+    }
+
+    return getValue(inter, key, fallback);
+}
+
+void SystemTraysController::saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value)
+{
+    auto inter = pluginInterAt(itemKey);
+
+    if (!inter) {
+        return;
+    }
+
+    saveValue(inter, key, value);
+}
