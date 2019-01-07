@@ -214,6 +214,9 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
                             m_networkWorker, &NetworkWorker::queryConnectionSession);
 
+                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestSetAppletVisible,
+                            this, &NetworkPlugin::onItemRequestSetAppletVisible);
+
                     m_networkWorker->queryAccessPoints(path);
                     m_networkWorker->requestWirelessScan();
                     break;
@@ -227,7 +230,6 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             connect(device, &dde::network::NetworkDevice::enableChanged,
                     m_delayRefreshTimer, static_cast<void (QTimer:: *)()>(&QTimer::start));
 
-            connect(item, &DeviceItem::requestContextMenu, this, &NetworkPlugin::contextMenuRequested);
             connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
             connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshIcon);
         }
@@ -320,10 +322,10 @@ void NetworkPlugin::loadPlugin()
     onDeviceListChanged(m_networkModel->devices());
 }
 
-void NetworkPlugin::contextMenuRequested()
+void NetworkPlugin::onItemRequestSetAppletVisible(const bool visible)
 {
     DeviceItem *item = qobject_cast<DeviceItem *>(sender());
     Q_ASSERT(item);
 
-    m_proxyInter->requestContextMenu(this, item->path());
+    m_proxyInter->requestSetAppletVisible(this, item->path(), visible);
 }

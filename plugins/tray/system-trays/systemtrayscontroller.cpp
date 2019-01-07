@@ -26,8 +26,6 @@
 #include <QDebug>
 #include <QDir>
 
-#define API_VERSION "1.1"
-
 SystemTraysController::SystemTraysController(QObject *parent)
     : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
@@ -83,14 +81,6 @@ void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
-void SystemTraysController::requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey)
-{
-    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
-
-    item->showContextMenu();
-}
-
 void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
     SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
@@ -105,6 +95,18 @@ void SystemTraysController::requestRefreshWindowVisible(PluginsItemInterface * c
     Q_ASSERT(item);
 
     Q_EMIT item->requestRefershWindowVisible();
+}
+
+void SystemTraysController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+{
+    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
+
+    if (visible) {
+        item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
+    } else {
+        item->hidePopup();
+    }
 }
 
 void SystemTraysController::startLoader()
@@ -139,9 +141,9 @@ void SystemTraysController::loadPlugin(const QString &pluginFile)
 {
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
     const auto meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (!meta.contains("api") || meta["api"].toString() != API_VERSION)
+    if (!meta.contains("api") || meta["api"].toString() != DOCK_PLUGIN_API_VERSION)
     {
-        qWarning() << "plugin api version not matched!" << pluginFile;
+        qWarning() << "plugin api version not matched! expect version:" << DOCK_PLUGIN_API_VERSION << pluginFile;
         return;
     }
 

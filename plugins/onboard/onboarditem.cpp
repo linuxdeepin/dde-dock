@@ -28,8 +28,7 @@
 #include <QIcon>
 
 OnboardItem::OnboardItem(QWidget *parent)
-    : QWidget(parent),
-      m_hover(false)
+    : QWidget(parent)
 {
 }
 
@@ -58,33 +57,6 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     painter.drawPixmap(rect().center() - pixmap.rect().center() / qApp->devicePixelRatio(), pixmap);
-}
-
-void OnboardItem::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() != Qt::RightButton)
-        return QWidget::mousePressEvent(e);
-
-    const QPoint p(e->pos() - rect().center());
-    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
-    {
-        emit requestContextMenu();
-        return;
-    }
-
-    return QWidget::mousePressEvent(e);
-}
-
-void OnboardItem::enterEvent(QEvent *e)
-{
-    e->accept();
-    m_hover = true;
-}
-
-void OnboardItem::leaveEvent(QEvent *e)
-{
-    e->accept();
-    m_hover = false;
 }
 
 const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) const

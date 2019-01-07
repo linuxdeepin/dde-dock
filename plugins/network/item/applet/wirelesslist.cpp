@@ -393,5 +393,7 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
                 .arg(QString("network"))
                 .arg(QString(QJsonDocument(m_editConnectionData).toJson()))
                 .call();
+
+        Q_EMIT requestSetAppletVisible(false);
     }
 }

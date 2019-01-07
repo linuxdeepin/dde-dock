@@ -151,11 +151,6 @@ void OnboardPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void OnboardPlugin::requestContextMenu()
-{
-    m_proxyInter->requestContextMenu(this, pluginName());
-}
-
 void OnboardPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -166,8 +161,6 @@ void OnboardPlugin::loadPlugin()
     m_pluginLoaded = true;
 
     m_onboardItem = new OnboardItem;
-
-    connect(m_onboardItem, &OnboardItem::requestContextMenu, this, &OnboardPlugin::requestContextMenu);
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());

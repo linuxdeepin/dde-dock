@@ -55,6 +55,7 @@ signals:
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
     void requestWirelessScan();
+    void requestSetAppletVisible(const bool visible) const;
 
 private slots:
     void loadAPList();

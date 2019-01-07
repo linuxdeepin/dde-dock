@@ -60,21 +60,6 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / ratio, icon);
 }
 
-void PowerStatusWidget::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() == Qt::LeftButton)
-        return QWidget::mousePressEvent(e);
-
-    const QPoint p(e->pos() - rect().center());
-    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
-    {
-        emit requestContextMenu(POWER_KEY);
-        return;
-    }
-
-    return QWidget::mousePressEvent(e);
-}
-
 QPixmap PowerStatusWidget::getBatteryIcon()
 {
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();

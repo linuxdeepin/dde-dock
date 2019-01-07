@@ -208,11 +208,6 @@ void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void ShutdownPlugin::requestContextMenu(const QString &itemKey)
-{
-    m_proxyInter->requestContextMenu(this, itemKey);
-}
-
 void ShutdownPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -223,8 +218,6 @@ void ShutdownPlugin::loadPlugin()
     m_pluginLoaded = true;
 
     m_shutdownWidget = new PluginWidget;
-
-    connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());

@@ -59,7 +59,7 @@ public:
 private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
     void refreshWiredItemVisible();
-    void contextMenuRequested();
+    void onItemRequestSetAppletVisible(const bool visible);
 
 private:
     DeviceItem *itemByPath(const QString &path);

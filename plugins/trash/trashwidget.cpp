@@ -180,15 +180,6 @@ void TrashWidget::resizeEvent(QResizeEvent *e)
     updateIcon();
 }
 
-void TrashWidget::mousePressEvent(QMouseEvent *e)
-{
-    const QPoint dis = e->pos() - rect().center();
-    if (e->button() != Qt::RightButton || dis.manhattanLength() > std::min(width(), height()) * 0.8 * 0.5)
-        return QWidget::mousePressEvent(e);
-
-    emit requestContextMenu();
-}
-
 void TrashWidget::updateIcon()
 {
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();

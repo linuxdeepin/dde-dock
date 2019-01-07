@@ -58,9 +58,6 @@ public:
     void displayModeChanged(const Dock::DisplayMode displayMode) Q_DECL_OVERRIDE;
 
 private:
-    void showContextMenu();
-
-private:
     TrashWidget *m_trashWidget;
     QLabel *m_tipsLabel;
 };

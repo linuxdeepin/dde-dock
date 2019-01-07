@@ -321,19 +321,11 @@ void AppItem::mousePressEvent(QMouseEvent *e)
     m_updateIconGeometryTimer->stop();
     hidePopup();
 
-    if (e->button() == Qt::RightButton)
-    {
-        if (perfectIconRect().contains(e->pos()))
-        {
-            QMetaObject::invokeMethod(this, "showContextMenu", Qt::QueuedConnection);
-            return;
-        } else {
-            return QWidget::mousePressEvent(e);
-        }
-    }
-
     if (e->button() == Qt::LeftButton)
         MousePressPos = e->pos();
+
+    // context menu will handle in DockItem
+    DockItem::mousePressEvent(e);
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *e)

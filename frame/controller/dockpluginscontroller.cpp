@@ -28,8 +28,6 @@
 #include <QDebug>
 #include <QDir>
 
-#define API_VERSION "1.1"
-
 DockPluginsController::DockPluginsController(
     DockItemController *itemControllerInter)
     : QObject(itemControllerInter)
@@ -94,14 +92,6 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
-void DockPluginsController::requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey)
-{
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
-
-    item->showContextMenu();
-}
-
 void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
     PluginsItem *item = pluginItemAt(itemInter, itemKey);
@@ -116,6 +106,18 @@ void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * c
     Q_ASSERT(item);
 
     Q_EMIT item->requestRefreshWindowVisible();
+}
+
+void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+{
+    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
+
+    if (visible) {
+        item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
+    } else {
+        item->hidePopup();
+    }
 }
 
 void DockPluginsController::startLoader()
@@ -150,9 +152,9 @@ void DockPluginsController::loadPlugin(const QString &pluginFile)
 {
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
     const auto meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (!meta.contains("api") || meta["api"].toString() != API_VERSION)
+    if (!meta.contains("api") || meta["api"].toString() != DOCK_PLUGIN_API_VERSION)
     {
-        qWarning() << "plugin api version not matched!" << pluginFile;
+        qWarning() << "plugin api version not matched! expect version:" << DOCK_PLUGIN_API_VERSION << pluginFile;
         return;
     }
 

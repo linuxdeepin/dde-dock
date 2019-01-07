@@ -42,8 +42,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
     m_centralWidget = new DatetimeWidget;
 
-    connect(m_centralWidget, &DatetimeWidget::requestContextMenu, [this] { m_proxyInter->requestContextMenu(this, QString()); });
-    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, QString()); });
+    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
 
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
@@ -73,7 +72,7 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
     }
 
     if (!pluginIsDisable())
-        m_proxyInter->itemAdded(this, QString());
+        m_proxyInter->itemAdded(this, pluginName());
 }
 
 void DatetimePlugin::pluginStateSwitched()
@@ -81,9 +80,9 @@ void DatetimePlugin::pluginStateSwitched()
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
     if (!pluginIsDisable())
-        m_proxyInter->itemAdded(this, QString());
+        m_proxyInter->itemAdded(this, pluginName());
     else
-        m_proxyInter->itemRemoved(this, QString());
+        m_proxyInter->itemRemoved(this, pluginName());
 }
 
 bool DatetimePlugin::pluginIsDisable()

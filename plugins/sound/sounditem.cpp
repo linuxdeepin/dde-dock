@@ -123,22 +123,6 @@ void SoundItem::resizeEvent(QResizeEvent *e)
     refreshIcon();
 }
 
-void SoundItem::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() != Qt::RightButton)
-        return QWidget::mousePressEvent(e);
-
-    const QPoint p(e->pos() - rect().center());
-    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
-    {
-        e->accept();
-        emit requestContextMenu();
-        return;
-    }
-
-    return QWidget::mousePressEvent(e);
-}
-
 void SoundItem::wheelEvent(QWheelEvent *e)
 {
     QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers());
