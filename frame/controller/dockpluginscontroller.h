@@ -34,7 +34,6 @@
 
 using DockDaemonInter = com::deepin::dde::daemon::Dock;
 
-class DockItemController;
 class PluginsItemInterface;
 class DockPluginsController : public QObject, PluginProxyInterface
 {
@@ -43,7 +42,7 @@ class DockPluginsController : public QObject, PluginProxyInterface
     friend class DockItemController;
 
 public:
-    explicit DockPluginsController(DockItemController *itemControllerInter = 0);
+    explicit DockPluginsController(QObject *parent = 0);
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
@@ -75,7 +74,6 @@ private:
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
-    DockItemController *m_itemControllerInter;
     DockDaemonInter *m_dockDaemonInter;
 
     QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;

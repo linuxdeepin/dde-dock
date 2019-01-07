@@ -21,18 +21,15 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "dockitemcontroller.h"
 #include "dockpluginloader.h"
 #include "item/traypluginitem.h"
 
 #include <QDebug>
 #include <QDir>
 
-DockPluginsController::DockPluginsController(
-    DockItemController *itemControllerInter)
-    : QObject(itemControllerInter)
+DockPluginsController::DockPluginsController(QObject *parent)
+    : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
-    , m_itemControllerInter(itemControllerInter)
     , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
     qApp->installEventFilter(this);
