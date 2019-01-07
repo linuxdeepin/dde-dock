@@ -214,10 +214,8 @@ void DockItemController::refreshFSTItemSpliterVisible()
 
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
-
       m_updatePluginsOrderTimer(new QTimer(this)),
-
-      m_appInter(new DBusDock(this)),
+      m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this)),
       m_pluginsInter(new DockPluginsController(this)),
       m_placeholderItem(new StretchItem),
       m_containerItem(new ContainerItem)

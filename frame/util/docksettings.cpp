@@ -57,7 +57,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_keepHiddenAct(tr("Keep Hidden"), this)
     , m_smartHideAct(tr("Smart Hide"), this)
     , m_displayInter(new DBusDisplay(this))
-    , m_dockInter(new DBusDock(this))
+    , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_itemController(DockItemController::instance(this))
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
 {

@@ -24,14 +24,17 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "dbus/dbusdock.h"
 #include "item/dockitem.h"
 #include "item/stretchitem.h"
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
 #include "item/containeritem.h"
 
+#include <com_deepin_dde_daemon_dock.h>
+
 #include <QObject>
+
+using DBusDock = com::deepin::dde::daemon::Dock;
 
 class DockItemController : public QObject
 {
@@ -77,16 +80,15 @@ private:
     void reloadAppItems();
 
 private:
-    QList<QPointer<DockItem>> m_itemList;
-
     QTimer *m_updatePluginsOrderTimer;
-
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
     StretchItem *m_placeholderItem;
     ContainerItem *m_containerItem;
 
     static DockItemController *INSTANCE;
+
+    QList<QPointer<DockItem>> m_itemList;
 };
 
 #endif // DOCKITEMCONTROLLER_H
