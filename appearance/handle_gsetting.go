@@ -66,7 +66,7 @@ func (m *Manager) listenGSettingChanged() {
 		case gsKeyBackgroundURIs:
 			ty = TypeBackground
 			bgs := m.setting.GetStrv(key)
-			m.currentDesktopBgs = bgs
+			m.desktopBgs = bgs
 			m.setDesktopBackgrounds(bgs)
 			value = strings.Join(bgs, ";")
 

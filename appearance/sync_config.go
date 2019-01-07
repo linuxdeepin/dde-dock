@@ -20,6 +20,7 @@ func (sc *syncConfig) Get() (interface{}, error) {
 	v.FontStandard = sc.m.StandardFont.Get()
 	v.FontMonospace = sc.m.MonospaceFont.Get()
 	v.BackgroundURIs = sc.m.getBackgroundURIs()
+	v.GreeterBackground = sc.m.greeterBg
 	return v, nil
 }
 
@@ -77,17 +78,26 @@ func (sc *syncConfig) Set(data []byte) error {
 	if !strv.Strv(bgs).Equal(v.BackgroundURIs) {
 		m.setting.SetStrv(gsKeyBackgroundURIs, v.BackgroundURIs)
 	}
+
+	if m.greeterBg != v.GreeterBackground {
+		err = m.doSetGreeterBackground(v.GreeterBackground)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
 	return nil
 }
 
 // version: 1.0
 type syncData struct {
-	Version        string   `json:"version"`
-	FontSize       float64  `json:"font_size"`
-	GTK            string   `json:"gtk"`
-	Icon           string   `json:"icon"`
-	Cursor         string   `json:"cursor"`
-	FontStandard   string   `json:"font_standard"`
-	FontMonospace  string   `json:"font_monospace"`
-	BackgroundURIs []string `json:"background_uris"`
+	Version           string   `json:"version"`
+	FontSize          float64  `json:"font_size"`
+	GTK               string   `json:"gtk"`
+	Icon              string   `json:"icon"`
+	Cursor            string   `json:"cursor"`
+	FontStandard      string   `json:"font_standard"`
+	FontMonospace     string   `json:"font_monospace"`
+	BackgroundURIs    []string `json:"background_uris"`
+	GreeterBackground string   `json:"greeter_background"`
 }

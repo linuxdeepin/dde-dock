@@ -28,8 +28,6 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-
-	dutils "pkg.deepin.io/lib/utils"
 )
 
 // Reset reset all themes and fonts settings to default values
@@ -151,7 +149,6 @@ func (m *Manager) set(ty, value string) error {
 		}
 	case TypeGreeterBackground:
 		err = m.doSetGreeterBackground(value)
-		m.currentGreeterBg = dutils.EncodeURI(value, dutils.SCHEME_FILE)
 	case TypeStandardFont:
 		if m.StandardFont.Get() == value {
 			return nil
