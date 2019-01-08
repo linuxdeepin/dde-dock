@@ -288,6 +288,12 @@ void TrayPlugin::sniItemsChanged()
             trayRemoved(itemKey);
         }
     }
+    const QList<QString> &passiveSNIKeyList = m_passiveSNITrayMap.keys();
+    for (auto itemKey : passiveSNIKeyList) {
+        if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
+            m_passiveSNITrayMap.take(itemKey)->deleteLater();
+        }
+    }
 
     for (int i = 0; i < sinTrayKeyList.size(); ++i) {
         traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
@@ -347,13 +353,13 @@ void TrayPlugin::trayXWindowAdded(const QString &itemKey, quint32 winId)
 
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
 {
-    if (m_trayMap.contains(itemKey) || !SNITrayWidget::isSNIKey(itemKey)) {
+    if (m_trayMap.contains(itemKey) || !SNITrayWidget::isSNIKey(itemKey) || m_passiveSNITrayMap.contains(itemKey)) {
         return;
     }
 
     SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
     if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
-        m_trayMap.insert(itemKey, trayWidget);
+        m_passiveSNITrayMap.insert(itemKey, trayWidget);
     } else {
         addTrayWidget(itemKey, trayWidget);
     }
@@ -395,7 +401,7 @@ void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
         return;
     }
 
-    AbstractTrayWidget *widget = m_trayMap.value(itemKey);
+    AbstractTrayWidget *widget = m_trayMap.take(itemKey);
 
     if (displayMode() == Dock::Efficient) {
         m_proxyInter->itemRemoved(this, itemKey);
@@ -408,7 +414,6 @@ void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
     if (widget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         widget->setParent(nullptr);
     } else if (deleteObject) {
-        m_trayMap.remove(itemKey);
         widget->deleteLater();
     }
 }
@@ -479,18 +484,33 @@ void TrayPlugin::onRequestRefershWindowVisible()
 void TrayPlugin::onSNIItemStatusChanged(SNITrayWidget::ItemStatus status)
 {
     SNITrayWidget *trayWidget = static_cast<SNITrayWidget *>(sender());
-    const QString &itemKey = m_trayMap.key(trayWidget);
-    if (!trayWidget || itemKey.isEmpty()) {
+    if (!trayWidget) {
         return;
     }
 
+    QString itemKey;
+    do {
+        itemKey = m_trayMap.key(trayWidget);
+        if (!itemKey.isEmpty()) {
+            break;
+        }
+
+        itemKey = m_passiveSNITrayMap.key(trayWidget);
+        if (itemKey.isEmpty()) {
+            qDebug() << "Error! not found the status changed SNI tray!";
+            return;
+        }
+    } while (false);
+
     switch (status) {
     case SNITrayWidget::Passive: {
+        m_passiveSNITrayMap.insert(itemKey, trayWidget);
         trayRemoved(itemKey, false);
         break;
     }
     case SNITrayWidget::Active:
     case SNITrayWidget::NeedsAttention: {
+        m_passiveSNITrayMap.remove(itemKey);
         addTrayWidget(itemKey, trayWidget);
         break;
     }

@@ -138,7 +138,7 @@ QString SNITrayWidget::toSNIKey(const QString &sniServicePath)
 
     do {
         const QPair<QString, QString> &sap = serviceAndPath(sniServicePath);
-        key = QDBusInterface(sap.first, sap.second).property("Id").toString();
+        key = QDBusInterface(sap.first, sap.second, StatusNotifierItem::staticInterfaceName()).property("Id").toString();
         if (!key.isEmpty()) {
             break;
         }

@@ -93,6 +93,7 @@ private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
 
     QMap<QString, AbstractTrayWidget *> m_trayMap;
+    QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;
     QMap<QString, IndicatorTray*> m_indicatorMap;
     QString m_sniHostService;
 
