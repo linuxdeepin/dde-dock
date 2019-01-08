@@ -130,7 +130,7 @@ func controlImWheel(speed uint32) error {
 		return exec.Command(imWheelBin, "-k", "-q").Run()
 	}
 	// restart
-	return exec.Command(imWheelBin, "-k").Run()
+	return exec.Command(imWheelBin, "-k", "-b", "4 5").Run()
 }
 
 func writeImWheelConfig(file string, speed uint32) error {
