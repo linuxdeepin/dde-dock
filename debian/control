@@ -37,7 +37,7 @@ Description: deepin desktop-environment - dock module development files
  Deepin desktop environment - dock module development files.
 
 Package: dde-dock-onboard-plugin
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dock plugin
  Deepin desktop environment - dock plugin for onboard
