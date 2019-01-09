@@ -1,3 +1,24 @@
+<a name="4.8.7"></a>
+## 4.8.7 (2019-01-09)
+
+
+#### Features
+
+*   animation of hold spliter ([9dde0f6d](https://github.com/linuxdeepin/dde-dock/commit/9dde0f6d305f0486753722b16a42235cba6f3e37))
+*   add hold container ([fea60742](https://github.com/linuxdeepin/dde-dock/commit/fea60742c5208a8b542e2aebe49ec608e93fca8c))
+*   add hold container ([902cb327](https://github.com/linuxdeepin/dde-dock/commit/902cb3271fb02327818b13a922332d30a36d1222))
+*   add a container widget for hold on trays ([aae408d5](https://github.com/linuxdeepin/dde-dock/commit/aae408d5b71a12e094ff751f146e2afa18edf38f))
+*   update plugin API version ([7a5501e5](https://github.com/linuxdeepin/dde-dock/commit/7a5501e53d2089307dfb14e72059f28bee6d1c14))
+
+#### Bug Fixes
+
+*   xembed tray click response ([05babb8d](https://github.com/linuxdeepin/dde-dock/commit/05babb8d5212ab5369a6a094c4d8aaa1a124cec3))
+*   build package ([b8ecc616](https://github.com/linuxdeepin/dde-dock/commit/b8ecc6165292b201be5fb5bbedf776edfb63132c))
+*   dock crash and sni tray status property process ([8ed1aa96](https://github.com/linuxdeepin/dde-dock/commit/8ed1aa962f15df8da10edb3fa05138507298381c))
+*   can not drag back to normal container ([f39a678d](https://github.com/linuxdeepin/dde-dock/commit/f39a678d04bdc68536efddd8c01dd8dbd6ef5c26))
+
+
+
 <a name="4.8.6"></a>
 ## 4.8.6 (2019-01-04)
 
