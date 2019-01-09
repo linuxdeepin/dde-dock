@@ -1,3 +1,6 @@
+[3.18.0] 2019-01-09
+*   feat(inputdevices): limit imwheel to only grab wheel up and down
+
 [3.17.0] 2019-01-03
 *   feat(geature): add longpress blacklist
 
