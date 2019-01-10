@@ -111,36 +111,6 @@ void SystemTraysController::requestSetAppletVisible(PluginsItemInterface * const
     }
 }
 
-PluginsItemInterface *SystemTraysController::pluginInterAt(const QString &itemKey)
-{
-    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
-
-    for (auto it = mPluginsMap.constBegin(); it != mPluginsMap.constEnd(); ++it) {
-        for (auto key : it.value().keys()) {
-            if (key == itemKey) {
-                return it.key();
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-PluginsItemInterface *SystemTraysController::pluginInterAt(SystemTrayItem *systemTrayItem)
-{
-    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
-
-    for (auto it = mPluginsMap.constBegin(); it != mPluginsMap.constEnd(); ++it) {
-        for (auto item : it.value().values()) {
-            if (item == systemTrayItem) {
-                return it.key();
-            }
-        }
-    }
-
-    return nullptr;
-}
-
 int SystemTraysController::systemTrayItemSortKey(const QString &itemKey)
 {
     auto inter = pluginInterAt(itemKey);

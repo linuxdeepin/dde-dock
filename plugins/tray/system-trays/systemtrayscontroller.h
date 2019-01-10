@@ -33,8 +33,6 @@
 #include <QMap>
 #include <QDBusConnectionInterface>
 
-using DockDaemonInter = com::deepin::dde::daemon::Dock;
-
 class PluginsItemInterface;
 class SystemTraysController : public AbstractPluginsController
 {
@@ -63,10 +61,6 @@ signals:
     void pluginItemAdded(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
     void pluginItemRemoved(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
     void pluginItemUpdated(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
-
-private:
-    PluginsItemInterface *pluginInterAt(const QString &itemKey);
-    PluginsItemInterface *pluginInterAt(SystemTrayItem *systemTrayItem);
 };
 
 #endif // SYSTEMTRAYSCONTROLLER_H

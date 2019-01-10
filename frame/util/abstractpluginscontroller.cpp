@@ -69,6 +69,32 @@ QObject *AbstractPluginsController::pluginItemAt(PluginsItemInterface * const it
     return m_pluginsMap[itemInter][itemKey];
 }
 
+PluginsItemInterface *AbstractPluginsController::pluginInterAt(const QString &itemKey)
+{
+    for (auto it = m_pluginsMap.constBegin(); it != m_pluginsMap.constEnd(); ++it) {
+        for (auto key : it.value().keys()) {
+            if (key == itemKey) {
+                return it.key();
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem)
+{
+    for (auto it = m_pluginsMap.constBegin(); it != m_pluginsMap.constEnd(); ++it) {
+        for (auto item : it.value().values()) {
+            if (item == destItem) {
+                return it.key();
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 void AbstractPluginsController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
