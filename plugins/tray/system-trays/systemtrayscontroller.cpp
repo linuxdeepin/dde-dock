@@ -21,7 +21,6 @@
 
 #include "systemtrayscontroller.h"
 #include "pluginsiteminterface.h"
-#include "systemtrayloader.h"
 
 #include <QDebug>
 #include <QDir>
