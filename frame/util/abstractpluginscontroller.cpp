@@ -45,7 +45,7 @@ void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter,
 
     m_dockDaemonInter->SetPluginSettings(
                 QDateTime::currentMSecsSinceEpoch() / 1000 / 1000,
-                QJsonDocument(m_pluginSettingsObject).toJson());
+                QJsonDocument(m_pluginSettingsObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 
 const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
