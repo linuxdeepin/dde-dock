@@ -1,3 +1,13 @@
+<a name="4.8.7.1"></a>
+## 4.8.7.1 (2019-01-10)
+
+
+#### Bug Fixes
+
+*   warning when get window property for xembed tray ([eb151202](https://github.com/linuxdeepin/dde-dock/commit/eb151202b53843d16463e699fdff8783e6a2c1f9))
+
+
+
 <a name="4.8.7"></a>
 ## 4.8.7 (2019-01-09)
 
