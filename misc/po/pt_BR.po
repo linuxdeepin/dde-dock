@@ -22,7 +22,7 @@
 # Peterson SB <manitiolo@outlook.com>, 2018
 # cfbf5006c0257e233b15e3cdf09c3c3f, 2017
 # Raphael Miquelis <raphaelmiquelis@gmail.com>, 2016-2017
-# Raphael Pereira <raphaelmatheus.exp@gmail.com>, 2018
+# Raphael Matheus Pereira <raphaelmatheus.exp@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"

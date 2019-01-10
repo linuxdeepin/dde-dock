@@ -5,13 +5,13 @@
 # Translators:
 # kolera <koleramilan@gmail.com>, 2017
 # Марко Пејовић <3acejax@gmail.com>, 2018
-# Марко Пејовић <3acejax@gmail.com>, 2018
+# Марко Пејовић <3acejax@gmail.com>, 2018-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-10 16:46+0800\n"
-"PO-Revision-Date: 2018-12-03 21:30+0000\n"
+"PO-Revision-Date: 2019-01-01 07:50+0000\n"
 "Last-Translator: Марко Пејовић <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:54
 msgid "Please enter a password not less than 8 characters"
-msgstr "Молимо унесите лозинку дужу од 8 карактера"
+msgstr "Молимо унесите лозинку од најмање 8 карактера"
 
 #: ../../accounts/checkers/password.go:56
 msgid ""
@@ -96,7 +96,7 @@ msgstr "Object push"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr "Пренос датотеке"
+msgstr "Пренос датотека"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
@@ -143,7 +143,7 @@ msgstr "Неуспешно повезивање са %q, упаривање не
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr "Блутут повезивање неуспело"
+msgstr "Блутут повезивање неуспешно"
 
 #: ../../dock/app_entry_menu.go:101
 msgid "_Open"
@@ -353,7 +353,7 @@ msgstr "Промена системског језика у току, молим
 
 #: ../../langselector/locale.go:425
 msgid "System language has been changed, please log in again after logged out"
-msgstr "Системски језик је промењен, молимо одјавите и након тога се пријавите ради примена измена подешавања"
+msgstr "Системски језик је промењен, молимо одјавите се па се пријавите"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -479,7 +479,7 @@ msgstr "Заштићени ЕАП"
 
 #: ../../network/manager_connection.go:282 ../../network/nm_custom_type.go:228
 msgid "Wired Connection"
-msgstr "Жична веза"
+msgstr "Жичана веза"
 
 #: ../../network/nm_custom_type.go:226
 msgid "Connection"
@@ -1069,7 +1069,7 @@ msgstr "ИД групе"
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_vpn_strongswan.go:82
 msgid "Pre-Shared Key"
-msgstr "Унапредно-дељени кључ"
+msgstr "Унапред-дељени кључ"
 
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "Phase1 Algorithms"
@@ -2036,7 +2036,7 @@ msgstr "Рачунар ће обуставити рад ускоро, укључ
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr "Батерија при крају, молимо укључите пуњач"
+msgstr "Батерија при крају, прикључите пуњач"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time."
