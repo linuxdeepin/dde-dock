@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ne" version="2.1">
 <context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation>Cliquer pour afficher les icônes cachées</translation>
+        <translation>लुकेका प्रतिमा प्रदर्शन गर्न क्लिक गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -12,22 +12,22 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="58"/>
         <source>Datetime</source>
-        <translation>Date et heure</translation>
+        <translation>मिति समय</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="147"/>
         <source>12 Hour Time</source>
-        <translation>12 Heures</translation>
+        <translation>12 घण्टाको समय</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="149"/>
         <source>24 Hour Time</source>
-        <translation>24 Heures</translation>
+        <translation>24 घण्टाको समय</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="155"/>
         <source>Time Settings</source>
-        <translation>Réglages de l&apos;heure</translation>
+        <translation>समय सेटिंग्स</translation>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="55"/>
         <source>Enable network</source>
-        <translation>Activer le réseau</translation>
+        <translation>नेटवर्क एनबल गर्नुहोस</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="57"/>
         <source>Disable network</source>
-        <translation>Désactiver le réseau</translation>
+        <translation>नेटवर्क डिएबल</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="63"/>
         <source>Network settings</source>
-        <translation>Paramètres du réseau</translation>
+        <translation>नेटवर्क सेटिंग्स</translation>
     </message>
 </context>
 <context>
@@ -53,22 +53,22 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation>Êtes-vous sûr de vider %1 éléments ?</translation>
+        <translation>के तपाईँ% 1 वस्तुहरू खाली गर्न निश्चित हुनुहुन्छ?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation>मेटाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
-        <translation>Cette action ne peut être restaurée</translation>
+        <translation>यो क्रियाकलाप पुनर्स्थापित गर्न सकिँदैन</translation>
     </message>
 </context>
 <context>
@@ -76,12 +76,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation>Périphérique inconnu</translation>
+        <translation>अज्ञात उपकरण</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation>Partition inconnue</translation>
+        <translation>अज्ञात भोल्युम</translation>
     </message>
 </context>
 <context>
@@ -89,17 +89,17 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
-        <translation>Disque</translation>
+        <translation>डिस्क</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation>खोल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation>Tout démonter </translation>
+        <translation>सबै अनमाउन्ट गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -107,87 +107,87 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Fashion Mode</source>
-        <translation>Mode dock</translation>
+        <translation>फैशन मोड</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Efficient Mode</source>
-        <translation>Mode étendu </translation>
+        <translation>दक्ष मोड</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Top</source>
-        <translation>Haut</translation>
+        <translation>माथि</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Bottom</source>
-        <translation>Bas</translation>
+        <translation>तल</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Left</source>
-        <translation>Gauche</translation>
+        <translation>बाँया</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Right</source>
-        <translation>Droite</translation>
+        <translation>दाँया</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Large</source>
-        <translation>Grand</translation>
+        <translation>लार्ज </translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Medium</source>
-        <translation>Moyen</translation>
+        <translation>मेडियम</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Small</source>
-        <translation>Petit</translation>
+        <translation>सानो</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Shown</source>
-        <translation>Maintenir affiché</translation>
+        <translation>देखाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Keep Hidden</source>
-        <translation>Maintenir caché</translation>
+        <translation>लुकाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="58"/>
         <source>Smart Hide</source>
-        <translation>Masquer intelligemment</translation>
+        <translation>स्मार्ट हाईड</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="97"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation>मोड</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="105"/>
         <source>Location</source>
-        <translation>Emplacement</translation>
+        <translation>स्थान</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="112"/>
         <source>Size</source>
-        <translation>Taille</translation>
+        <translation>आकार</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="119"/>
         <source>Status</source>
-        <translation>Status </translation>
+        <translation>स्थिति</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="123"/>
         <source>Plugins</source>
-        <translation>Extensions</translation>
+        <translation>प्लगइनहरू</translation>
     </message>
 </context>
 <context>
@@ -195,7 +195,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="105"/>
         <source>Launcher</source>
-        <translation>Lanceur</translation>
+        <translation>लन्चर</translation>
     </message>
 </context>
 <context>
@@ -203,7 +203,7 @@
     <message>
         <location filename="../plugins/network/networkplugin.cpp" line="49"/>
         <source>Network</source>
-        <translation>Réseau</translation>
+        <translation>नेटवर्क</translation>
     </message>
 </context>
 <context>
@@ -212,12 +212,12 @@
         <location filename="../plugins/onboard/onboardplugin.cpp" line="35"/>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="46"/>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>अन-बोर्ड</translation>
     </message>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation>सेटिंग्स</translation>
     </message>
 </context>
 <context>
@@ -225,27 +225,27 @@
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="46"/>
         <source>Power</source>
-        <translation>Alimentation</translation>
+        <translation>पावर</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="71"/>
         <source>Remaining Capacity %1</source>
-        <translation>Charge disponible %1</translation>
+        <translation>बाँकी क्षमता% 1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="76"/>
         <source>Charged %1</source>
-        <translation>Chargé à %1</translation>
+        <translation>चार्ज % 1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="78"/>
         <source>Charging %1</source>
-        <translation>En charge %1</translation>
+        <translation>चार्ज गर्दै% 1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation>Options d&apos;alimentation</translation>
+        <translation>पावर सेटिङहरू</translation>
     </message>
 </context>
 <context>
@@ -253,43 +253,43 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Shut down</source>
-        <translation>Arrêter</translation>
+        <translation>बन्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="120"/>
         <source>Restart</source>
-        <translation>Redémarrer</translation>
+        <translation>फेरि शुरु गर्नु</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Lock</source>
-        <translation>Verrouiller</translation>
+        <translation>लक</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="138"/>
         <source>Log out</source>
-        <translation>Déconnexion</translation>
+        <translation>बाहिर निस्कनुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="126"/>
         <source>Suspend</source>
-        <translation>Mettre en veille </translation>
+        <translation>निलम्बन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
         <source>Switch account</source>
-        <translation>Changer de compte</translation>
+        <translation>खाता स्विच गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="153"/>
         <source>Power settings</source>
-        <translation>Options d&apos;alimentation</translation>
+        <translation>पावर सेटिङहरू</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="36"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
         <source>Shutdown</source>
-        <translation>Arrêter</translation>
+        <translation>बन्द गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -297,12 +297,12 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="54"/>
         <source>Device</source>
-        <translation>Périphérique</translation>
+        <translation>उपकरण</translation>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="72"/>
         <source>Application</source>
-        <translation>Applications</translation>
+        <translation>Application</translation>
     </message>
 </context>
 <context>
@@ -310,22 +310,22 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="78"/>
         <source>Unmute</source>
-        <translation>Réactiver le son</translation>
+        <translation>अनम्यूट गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="80"/>
         <source>Mute</source>
-        <translation>Muet</translation>
+        <translation>म्यूट गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Audio Settings</source>
-        <translation>Paramètres audio</translation>
+        <translation>अडियो सेटिंग्स</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="223"/>
         <source>Current Volume %1</source>
-        <translation>Volume actuel %1</translation>
+        <translation>हालको भोल्युम% 1</translation>
     </message>
 </context>
 <context>
@@ -333,7 +333,7 @@
     <message>
         <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
-        <translation>Son</translation>
+        <translation>ध्वनि</translation>
     </message>
 </context>
 <context>
@@ -341,12 +341,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
         <source>Trash - %1 file</source>
-        <translation>Corbeille - %1 fichier</translation>
+        <translation>रद्दीटोकरी -% 1 फाइल</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="87"/>
         <source>Trash - %1 files</source>
-        <translation>Corbeille - %1 fichiers</translation>
+        <translation>रद्दीटोकरी -% 1 फाइलहरू</translation>
     </message>
 </context>
 <context>
@@ -354,12 +354,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="71"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation>खोल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="79"/>
         <source>Empty</source>
-        <translation>Vider</translation>
+        <translation>खाली गर्नु</translation>
     </message>
 </context>
 <context>
@@ -367,7 +367,7 @@
     <message>
         <location filename="../plugins/tray/trayplugin.cpp" line="53"/>
         <source>System Tray</source>
-        <translation>Zone de notification</translation>
+        <translation>सिस्टम ट्रे</translation>
     </message>
 </context>
 <context>
@@ -375,12 +375,12 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
         <source>Unknown</source>
-        <translation>Inconnu</translation>
+        <translation>अज्ञात</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="206"/>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire: %1</translation>
+        <translation>वायर्ड जडान:% 1</translation>
     </message>
 </context>
 <context>
@@ -388,12 +388,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="49"/>
         <source>No Network</source>
-        <translation>Pas de réseau</translation>
+        <translation>नेटवर्क छैन</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="281"/>
         <source>Wireless Connection: %1</source>
-        <translation>Connexion sans fil: %1</translation>
+        <translation>वायरलेस जडान:% 1</translation>
     </message>
 </context>
 <context>
@@ -401,12 +401,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="154"/>
         <source>Wireless Network</source>
-        <translation>Réseau sans fil</translation>
+        <translation>वायरलेस नेटवर्क</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network %1</source>
-        <translation>Réseau sans fil %1</translation>
+        <translation>वायरलेस नेटवर्क% 1</translation>
     </message>
 </context>
 </TS>

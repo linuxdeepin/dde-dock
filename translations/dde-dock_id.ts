@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="58"/>
         <source>Datetime</source>
-        <translation>Tanggal waktu</translation>
+        <translation>Tanggalwaktu</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="147"/>
@@ -212,12 +212,12 @@
         <location filename="../plugins/onboard/onboardplugin.cpp" line="35"/>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="46"/>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Pada papan</translation>
     </message>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Pengaturan</translation>
     </message>
 </context>
 <context>
@@ -235,12 +235,12 @@
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="76"/>
         <source>Charged %1</source>
-        <translation>Muatan %1</translation>
+        <translation>Terisi %1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="78"/>
         <source>Charging %1</source>
-        <translation>Memuat %1</translation>
+        <translation>Mengisi %1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="132"/>
