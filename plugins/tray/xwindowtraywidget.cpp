@@ -40,6 +40,7 @@
 
 #define NORMAL_WINDOW_PROP_NAME "WM_CLASS"
 #define WINE_WINDOW_PROP_NAME "__wine_prefix"
+#define IS_WINE_WINDOW_BY_WM_CLASS "explorer.exe"
 
 static const qreal iconSize = 16;
 
@@ -356,14 +357,14 @@ QString XWindowTrayWidget::toTrayWidgetId(quint32 winId)
     QString key;
 
     do {
-        // is wine application
-        key = getWindowProperty(winId, WINE_WINDOW_PROP_NAME).split("/").last();
-        if (!key.isEmpty()) {
+        // is normal application
+        key = getWindowProperty(winId, NORMAL_WINDOW_PROP_NAME);
+        if (!key.isEmpty() && key != IS_WINE_WINDOW_BY_WM_CLASS) {
             break;
         }
 
-        // is normal application
-        key = getWindowProperty(winId, NORMAL_WINDOW_PROP_NAME);
+        // is wine application
+        key = getWindowProperty(winId, WINE_WINDOW_PROP_NAME).split("/").last();
         if (!key.isEmpty()) {
             break;
         }
