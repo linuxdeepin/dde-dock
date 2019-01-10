@@ -26,6 +26,8 @@
 #include <QDir>
 #include <QGSettings>
 
+qlonglong currentNanoTime() { return QDateTime::currentMSecsSinceEpoch() / 1000 / 1000; }
+
 AbstractPluginsController::AbstractPluginsController(QObject *parent)
     : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
@@ -33,18 +35,19 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
 {
     qApp->installEventFilter(this);
 
-    refreshPluginSettings(QDateTime::currentMSecsSinceEpoch() / 1000 / 1000);
+    refreshPluginSettings(currentNanoTime());
 
-    connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsUpdated, this, &AbstractPluginsController::refreshPluginSettings);
+    connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsUpdated, this, &AbstractPluginsController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
 void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
+    refreshPluginSettings(currentNanoTime());
+
     QJsonObject valueObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
     valueObject.insert(key, value.toJsonValue());
     m_pluginSettingsObject.insert(itemInter->pluginName(), valueObject);
 
-    m_dockDaemonInter->SetPluginSettings(
-                QDateTime::currentMSecsSinceEpoch() / 1000 / 1000,
+    m_dockDaemonInter->SetPluginSettings(currentNanoTime(),
                 QJsonDocument(m_pluginSettingsObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 
@@ -53,6 +56,7 @@ const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const i
     if (v.isNull() || !v.isValid()) {
         v = fallback;
     }
+
     return v;
 }
 
@@ -181,11 +185,18 @@ void AbstractPluginsController::refreshPluginSettings(qlonglong ts)
 
     const QJsonObject &settingsObject = QJsonDocument::fromJson(pluginSettings.toLocal8Bit()).object();
     if (settingsObject.isEmpty()) {
-        qDebug() << "Error! parse plugin settings from json failed!";
         return;
     }
 
-    m_pluginSettingsObject = settingsObject;
+    for (auto pluginsIt = settingsObject.constBegin(); pluginsIt != settingsObject.constEnd(); ++pluginsIt) {
+        const QString &pluginName = pluginsIt.key();
+        const QJsonObject &settingsObject = pluginsIt.value().toObject();
+        QJsonObject newSettingsObject = m_pluginSettingsObject.value(pluginName).toObject();
+        for (auto settingsIt = settingsObject.constBegin(); settingsIt != settingsObject.constEnd(); ++settingsIt) {
+            newSettingsObject.insert(settingsIt.key(), settingsIt.value());
+        }
+        m_pluginSettingsObject.insert(pluginName, newSettingsObject);
+    }
 
     // not notify plugins to refresh settings if this update is not emit by dock daemon
     if (sender() != m_dockDaemonInter) {

@@ -70,6 +70,7 @@ private:
     DockDaemonInter *m_dockDaemonInter;
 
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> m_pluginsMap;
+
     QJsonObject m_pluginSettingsObject;
 };
 
