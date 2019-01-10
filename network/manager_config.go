@@ -236,8 +236,6 @@ func (c *config) handleDeviceStateChanged(devPath dbus.ObjectPath, state uint32)
 		if devConfig.Enabled {
 			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 			c.save()
-		} else {
-			manager.doDisconnectDevice(devPath)
 		}
 	}
 }
