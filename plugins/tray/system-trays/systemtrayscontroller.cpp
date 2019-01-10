@@ -34,7 +34,7 @@ SystemTraysController::SystemTraysController(QObject *parent)
 
 void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    auto mPluginsMap = pluginsMap();
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
 
     // check if same item added
     if (mPluginsMap.contains(itemInter))
@@ -71,7 +71,7 @@ void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, 
 
     emit pluginItemRemoved(itemKey, item);
 
-    auto mPluginsMap = pluginsMap();
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
     mPluginsMap[itemInter].remove(itemKey);
 
     // do not delete the itemWidget object(specified in the plugin interface)
@@ -114,7 +114,7 @@ void SystemTraysController::requestSetAppletVisible(PluginsItemInterface * const
 
 PluginsItemInterface *SystemTraysController::pluginInterAt(const QString &itemKey)
 {
-    auto mPluginsMap = pluginsMap();
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
 
     for (auto it = mPluginsMap.constBegin(); it != mPluginsMap.constEnd(); ++it) {
         for (auto key : it.value().keys()) {
@@ -129,7 +129,7 @@ PluginsItemInterface *SystemTraysController::pluginInterAt(const QString &itemKe
 
 PluginsItemInterface *SystemTraysController::pluginInterAt(SystemTrayItem *systemTrayItem)
 {
-    auto mPluginsMap = pluginsMap();
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
 
     for (auto it = mPluginsMap.constBegin(); it != mPluginsMap.constEnd(); ++it) {
         for (auto item : it.value().values()) {
