@@ -1,3 +1,7 @@
+[3.19.0] 2019-01-10
+*   chore: do not disconnect device when device activating
+*   auto sync po files from transifex
+
 [3.18.0] 2019-01-09
 *   feat(inputdevices): limit imwheel to only grab wheel up and down
 
