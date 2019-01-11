@@ -3,8 +3,6 @@ package dock
 import (
 	"encoding/json"
 	"os"
-	"reflect"
-	"time"
 )
 
 type syncConfig struct {
@@ -31,27 +29,12 @@ func (sc *syncConfig) Get() (interface{}, error) {
 
 func (sc *syncConfig) setPluginSettings(settings pluginSettings) {
 	m := sc.m
-	pluginSettingsJsonStr := m.settings.GetString(settingKeyPluginSettings)
-	var pluginSettings pluginSettings
-	err := json.Unmarshal([]byte(pluginSettingsJsonStr), &pluginSettings)
-	if err == nil && reflect.DeepEqual(settings, pluginSettings) {
+	if m.pluginSettings.equal(settings) {
 		return
 	}
-
-	newSettingsData, err := json.Marshal(settings)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-
-	ok := m.settings.SetString(settingKeyPluginSettings, string(newSettingsData))
-	if !ok {
-		logger.Warning("failed to save plugin settings")
-		return
-	}
-
-	ts := time.Now().UnixNano()
-	err = m.service.Emit(m, "PluginSettingsUpdated", ts)
+	m.pluginSettings.set(settings)
+	// emit signal
+	err := m.service.Emit(m, "PluginSettingsSynced")
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -138,5 +121,3 @@ type syncData struct {
 	DockedApps  []string       `json:"docked_apps"`
 	Plugins     pluginSettings `json:"plugins"`
 }
-
-type pluginSettings map[string]map[string]interface{}

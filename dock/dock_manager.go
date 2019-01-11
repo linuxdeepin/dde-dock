@@ -64,6 +64,7 @@ type Manager struct {
 	windowInfoMapMutex sync.RWMutex
 	settings           *gio.Settings
 	appearanceSettings *gio.Settings
+	pluginSettings     *pluginSettingsStorage
 
 	rootWindow      x.Window
 	activeWindow    x.Window
@@ -102,9 +103,7 @@ type Manager struct {
 			entryId string
 		}
 
-		PluginSettingsUpdated struct {
-			ts int64
-		}
+		PluginSettingsSynced struct{}
 	}
 
 	methods *struct {
@@ -124,8 +123,9 @@ type Manager struct {
 		IsOnDock                  func() `in:"desktopFile" out:"value"`
 		QueryWindowIdentifyMethod func() `in:"win" out:"identifyMethod"`
 		GetDockedAppsDesktopFiles func() `out:"desktopFiles"`
-		SetPluginSettings         func() `in:"ts,jsonStr"`
+		SetPluginSettings         func() `in:"jsonStr"`
 		GetPluginSettings         func() `out:"jsonStr"`
+		MergePluginSettings       func() `in:"jsonStr"`
 	}
 }
 
@@ -418,37 +418,30 @@ func (m *Manager) GetDockedAppsDesktopFiles() ([]string, *dbus.Error) {
 }
 
 func (m *Manager) GetPluginSettings() (string, *dbus.Error) {
-	jsonStr := m.settings.GetString(settingKeyPluginSettings)
-	var v pluginSettings
-	err := json.Unmarshal([]byte(jsonStr), &v)
+	jsonStr, err := m.pluginSettings.getJsonStr()
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
 	return jsonStr, nil
 }
 
-func (m *Manager) SetPluginSettings(ts int64, jsonStr string) *dbus.Error {
-	if ts == 0 {
-		ts = time.Now().UnixNano()
+func (m *Manager) SetPluginSettings(jsonStr string) *dbus.Error {
+	var v pluginSettings
+	err := json.Unmarshal([]byte(jsonStr), &v)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
+	m.pluginSettings.set(v)
+	return nil
+}
 
+func (m *Manager) MergePluginSettings(jsonStr string) *dbus.Error {
 	var v pluginSettings
 	err := json.Unmarshal([]byte(jsonStr), &v)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
 
-	ok := m.settings.SetString(settingKeyPluginSettings, jsonStr)
-	if !ok {
-		err = errors.New("failed to save plugin settings")
-		logger.Warning(err)
-		return dbusutil.ToError(err)
-	}
-
-	err = m.service.Emit(m, "PluginSettingsUpdated", ts)
-	if err != nil {
-		logger.Warning(err)
-	}
-
+	m.pluginSettings.merge(v)
 	return nil
 }
