@@ -56,6 +56,9 @@ private:
 //    void hideIcon();
     void refershIconImage();
 
+    static QString getAppNameForWindow(quint32 winId);
+    static int getTrayWidgetKeySuffix(const QString &appName, quint32 winId);
+
 private slots:
     void setX11PassMouseEvent(const bool pass);
     void setWindowOnTop(const bool top);
@@ -66,6 +69,7 @@ private:
     WId m_windowId;
     WId m_containerWid;
     QImage m_image;
+    QString m_appName;
 
     QTimer *m_updateTimer;
     QTimer *m_sendHoverEvent;

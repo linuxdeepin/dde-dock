@@ -30,6 +30,7 @@
 #include <QThread>
 #include <QApplication>
 #include <QScreen>
+#include <QMap>
 
 #include <X11/extensions/shape.h>
 #include <X11/extensions/XTest.h>
@@ -43,6 +44,14 @@
 #define IS_WINE_WINDOW_BY_WM_CLASS "explorer.exe"
 
 static const qreal iconSize = 16;
+
+// this static var hold all suffix of tray widget keys.
+// that is in order to fix can not show multiple trays provide by one application,
+// so only one property: AppName is not enough to identify all trays.
+// here we add a suffix for every tray to fix this problem.
+// the first suffix is 1, second is 2, etc.
+// NOTE: the first suffix will be omit when construct the key of tray widget.
+static QMap<QString, QMap<quint32, int>> AppWinidSuffixMap;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
@@ -66,8 +75,9 @@ void sni_cleanup_xcb_image(void *data)
 }
 
 XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
-    : AbstractTrayWidget(parent),
-      m_windowId(winId)
+    : AbstractTrayWidget(parent)
+    , m_windowId(winId)
+    , m_appName(getAppNameForWindow(winId))
 {
     wrapWindow();
 
@@ -89,6 +99,7 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
 
 XWindowTrayWidget::~XWindowTrayWidget()
 {
+    AppWinidSuffixMap[m_appName].remove(m_windowId);
 }
 
 const QImage XWindowTrayWidget::trayImage()
@@ -354,26 +365,17 @@ QString XWindowTrayWidget::getWindowProperty(quint32 winId, QString propName)
 
 QString XWindowTrayWidget::toTrayWidgetId(quint32 winId)
 {
+    const QString &appName = getAppNameForWindow(winId);
+    int suffix = getTrayWidgetKeySuffix(appName, winId);
+
     QString key;
+    if (suffix == 1) {
+        key = QString("window:%1").arg(appName);
+    } else {
+        key = QString("window:%1-%2").arg(appName).arg(suffix);
+    }
 
-    do {
-        // is normal application
-        key = getWindowProperty(winId, NORMAL_WINDOW_PROP_NAME);
-        if (!key.isEmpty() && key != IS_WINE_WINDOW_BY_WM_CLASS) {
-            break;
-        }
-
-        // is wine application
-        key = getWindowProperty(winId, WINE_WINDOW_PROP_NAME).split("/").last();
-        if (!key.isEmpty()) {
-            break;
-        }
-
-        // fallback to window id
-        key = QString::number(winId);
-    } while (false);
-
-    return QString("window:%1").arg(key);
+    return key;
 }
 
 bool XWindowTrayWidget::isXWindowKey(const QString &itemKey)
@@ -423,6 +425,68 @@ void XWindowTrayWidget::refershIconImage()
     if (!isVisible()) {
         Q_EMIT needAttention();
     }
+}
+
+QString XWindowTrayWidget::getAppNameForWindow(quint32 winId)
+{
+    QString appName;
+    do {
+        // is normal application
+        appName = getWindowProperty(winId, NORMAL_WINDOW_PROP_NAME);
+        if (!appName.isEmpty() && appName != IS_WINE_WINDOW_BY_WM_CLASS) {
+            break;
+        }
+
+        // is wine application
+        appName = getWindowProperty(winId, WINE_WINDOW_PROP_NAME).split("/").last();
+        if (!appName.isEmpty()) {
+            break;
+        }
+
+        // fallback to window id
+        appName = QString::number(winId);
+    } while (false);
+
+    return appName;
+}
+
+int XWindowTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 winId)
+{
+    int suffix = AppWinidSuffixMap.value(appName).value(winId, 0);
+
+    // return the exist suffix
+    if (suffix != 0) {
+        return suffix;
+    }
+
+    // it is the first window for this application
+    if (!AppWinidSuffixMap.contains(appName)) {
+        QMap<quint32, int> winIdSuffixMap;
+        winIdSuffixMap.insert(winId, 1);
+        AppWinidSuffixMap.insert(appName, winIdSuffixMap);
+        return 1;
+    }
+
+    QMap<quint32, int> subMap = AppWinidSuffixMap.value(appName);
+    QList<int> suffixList = subMap.values();
+
+    // suffix will never be 0
+    suffixList.removeAll(0);
+    std::sort(suffixList.begin(), suffixList.end());
+
+    // get the minimum of useable suffix
+    int index = 0;
+    for (; index < suffixList.size(); ++index) {
+        if (suffixList.at(index) != index + 1) {
+            break;
+        }
+    }
+    suffix = index + 1;
+
+    subMap.insert(winId, suffix);
+    AppWinidSuffixMap.insert(appName, subMap);
+
+    return suffix;
 }
 
 void XWindowTrayWidget::setX11PassMouseEvent(const bool pass)
