@@ -44,7 +44,11 @@ func (sc *syncConfig) Set(data []byte) error {
 	if err != nil {
 		return err
 	}
-	sc.m.mouse.NaturalScroll.Set(info.Mouse.NaturalScroll)
-	sc.m.tpad.NaturalScroll.Set(info.Touchpad.NaturalScroll)
+	if info.Mouse != nil {
+		sc.m.mouse.NaturalScroll.Set(info.Mouse.NaturalScroll)
+	}
+	if info.Touchpad != nil {
+		sc.m.tpad.NaturalScroll.Set(info.Touchpad.NaturalScroll)
+	}
 	return nil
 }

@@ -60,7 +60,7 @@ func (m *Module) start() error {
 
 	m.audio = newAudio(ctx, service)
 	m.audio.init()
-	err := service.Export(dbusPath, m.audio)
+	err := service.Export(dbusPath, m.audio, m.audio.syncConfig)
 	if err != nil {
 		return err
 	}
@@ -68,7 +68,10 @@ func (m *Module) start() error {
 	if err != nil {
 		return err
 	}
-
+	err = m.audio.syncConfig.Register()
+	if err != nil {
+		logger.Warning("Failed to register sync bus:", err)
+	}
 	initDefaultVolume(m.audio)
 	return nil
 }
