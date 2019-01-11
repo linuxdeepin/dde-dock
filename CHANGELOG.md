@@ -1,3 +1,13 @@
+<a name="4.8.7.2"></a>
+## 4.8.7.2 (2019-01-11)
+
+
+#### Bug Fixes
+
+*   can not show mutiple tray of one application ([f0b11152](https://github.com/linuxdeepin/dde-dock/commit/f0b11152de4db0e27303783ae096de2d05f49777))
+
+
+
 <a name="4.8.7.1"></a>
 ## 4.8.7.1 (2019-01-10)
 
