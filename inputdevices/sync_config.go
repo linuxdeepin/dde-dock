@@ -17,12 +17,18 @@ type syncTPadData struct {
 }
 
 type syncData struct {
+	Version  string         `json:"version"`
 	Mouse    *syncMouseData `json:"mouse"`
 	Touchpad *syncTPadData  `json:"touchpad"`
 }
 
+const (
+	syncVersion = "1.0"
+)
+
 func (sc *syncConfig) Get() (interface{}, error) {
 	return &syncData{
+		Version: syncVersion,
 		Mouse: &syncMouseData{
 			NaturalScroll: sc.m.mouse.NaturalScroll.Get(),
 		},

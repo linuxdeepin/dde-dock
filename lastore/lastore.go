@@ -10,6 +10,7 @@ import (
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -28,6 +29,8 @@ type Lastore struct {
 	core          *lastore.Lastore
 	sysDBusDaemon *ofdbus.DBus
 	notifications *notifications.Notifications
+
+	syncConfig *dsync.Config
 
 	notifiedBattery     bool
 	notifyIdHidMap      map[uint32]dbusutil.SignalHandlerId
@@ -84,6 +87,9 @@ func newLastore(service *dbusutil.Service) (*Lastore, error) {
 	l.initNotify(sessionBus)
 	l.initSysDBusDaemon(systemBus)
 	l.initPower(systemBus)
+
+	l.syncConfig = dsync.NewConfig("updater", &syncConfig{l: l},
+		l.sessionSigLoop, dbusPath, logger)
 	return l, nil
 }
 

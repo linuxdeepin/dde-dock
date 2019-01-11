@@ -57,7 +57,7 @@ func (d *Module) start() error {
 	manager = NewManager(service)
 	manager.init()
 
-	managerServerObj, err := service.NewServerObject(dbusPath, manager)
+	managerServerObj, err := service.NewServerObject(dbusPath, manager, manager.syncConfig)
 	if err != nil {
 		return err
 	}
@@ -71,8 +71,7 @@ func (d *Module) start() error {
 		return err
 	}
 
-	// err = managerServerObj.Export()
-	err = service.Export(dbusPath, manager, manager.syncConfig)
+	err = managerServerObj.Export()
 	if err != nil {
 		logger.Error("failed to export manager:", err)
 		manager = nil
@@ -90,6 +89,11 @@ func (d *Module) start() error {
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		return err
+	}
+
+	err = manager.syncConfig.Register()
+	if err != nil {
+		logger.Warning("Failed to register sync service:", err)
 	}
 
 	initDBusDaemon()

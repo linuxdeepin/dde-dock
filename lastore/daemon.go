@@ -40,7 +40,7 @@ func (d *Daemon) Start() error {
 	}
 	d.lastore = lastore
 
-	err = service.Export(dbusPath, lastore)
+	err = service.Export(dbusPath, lastore, lastore.syncConfig)
 	if err != nil {
 		return err
 	}
@@ -52,6 +52,10 @@ func (d *Daemon) Start() error {
 
 	if lastore.SourceCheckEnabled {
 		go lastore.checkSource()
+	}
+	err = lastore.syncConfig.Register()
+	if err != nil {
+		logger.Warning("Failed to register sync service:", err)
 	}
 	return nil
 }

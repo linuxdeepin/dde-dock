@@ -21,6 +21,8 @@ const (
 	kfKeyMacBlacklist   = "mac-address-blacklist"
 	kfKeySeenBSSID      = "seen-bssids"
 	kfKeyInterfaceName  = "interface-name"
+
+	nmSyncVersion = "1.0"
 )
 
 func (*Daemon) NetworkGetConnections() ([]byte, *dbus.Error) {
@@ -29,6 +31,7 @@ func (*Daemon) NetworkGetConnections() ([]byte, *dbus.Error) {
 		return nil, dbusutil.ToError(err)
 	}
 	var info = NetworkData{
+		Version:     nmSyncVersion,
 		Connections: list,
 	}
 	data, err := json.Marshal(&info)

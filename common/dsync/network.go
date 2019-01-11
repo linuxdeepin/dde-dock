@@ -15,6 +15,7 @@ type Connection struct {
 type ConnectionList []*Connection
 
 type NetworkData struct {
+	Version     string         `json:"version"`
 	Connections ConnectionList `json:"connections"`
 }
 
