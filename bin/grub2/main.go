@@ -34,26 +34,31 @@ func init() {
 }
 
 var (
-	argPrepareGfxmodeDetect bool
-	argDebug                bool
+	optPrepareGfxmodeDetect bool
+	optSetupTheme           bool
+	optDebug                bool
 )
 
 func main() {
-	flag.BoolVar(&argDebug, "debug", false, "debug mode")
-	flag.BoolVar(&argPrepareGfxmodeDetect, "prepare-gfxmode-detect", false,
+	flag.BoolVar(&optDebug, "debug", false, "debug mode")
+	flag.BoolVar(&optPrepareGfxmodeDetect, "prepare-gfxmode-detect", false,
 		"prepare gfxmode detect")
+	flag.BoolVar(&optSetupTheme, "setup-theme", false, "do nothing")
 	flag.Parse()
-	if argDebug {
+	if optDebug {
 		logger.SetLogLevel(log.LevelDebug)
 	}
 
-	if argPrepareGfxmodeDetect {
+	if optPrepareGfxmodeDetect {
 		logger.Debug("mode: prepare gfxmode detect")
 		err := grub2.PrepareGfxmodeDetect()
 		if err != nil {
 			logger.Warning(err)
 			os.Exit(2)
 		}
+	} else if optSetupTheme {
+		// for compatibility
+		return
 	} else {
 		logger.Debug("mode: daemon")
 		grub2.RunAsDaemon()
