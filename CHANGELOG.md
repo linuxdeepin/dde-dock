@@ -1,3 +1,7 @@
+[3.20.0] 2019-01-14
+*   fix(launcher): panic: assignment to entry in nil map
+*   chore(grub2): add option -setup-theme for compatibility
+
 [3.19.0] 2019-01-10
 *   chore: do not disconnect device when device activating
 *   auto sync po files from transifex
