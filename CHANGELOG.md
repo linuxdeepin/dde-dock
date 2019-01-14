@@ -1,3 +1,13 @@
+<a name="4.8.7.3"></a>
+## 4.8.7.3 (2019-01-14)
+
+
+#### Bug Fixes
+
+*   show dock menu when click on some area out of tray ([2d61405d](https://github.com/linuxdeepin/dde-dock/commit/2d61405db991edb61ec5bfb8f6bb59b7df02a59d))
+
+
+
 <a name="4.8.7.2"></a>
 ## 4.8.7.2 (2019-01-11)
 
