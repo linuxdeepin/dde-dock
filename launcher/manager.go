@@ -158,6 +158,7 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	}
 
 	// init fsWatcher
+	m.fsEventTimers = make(map[string]*time.Timer)
 	m.fsWatcher, err = fsnotify.NewWatcher()
 	if err == nil {
 		err = m.fsWatcher.Watch(lastoreDataDir)
@@ -208,8 +209,6 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	// init popPushOpChan
 	m.popPushOpChan = make(chan *popPushOp, 50)
 	go m.handlePopPushOps()
-
-	m.fsEventTimers = make(map[string]*time.Timer)
 
 	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 100)
 	m.sysSigLoop.Start()
