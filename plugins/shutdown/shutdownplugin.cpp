@@ -127,6 +127,14 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     suspend["isActive"] = true;
     items.push_back(suspend);
 
+    if (checkSwap()) {
+        QMap<QString, QVariant> hibernate;
+        hibernate["itemId"] = "Hibernate";
+        hibernate["itemText"] = tr("Hibernate");
+        hibernate["isActive"] = true;
+        items.push_back(hibernate);
+    }
+
     QMap<QString, QVariant> lock;
     lock["itemId"] = "Lock";
     lock["itemText"] = tr("Lock");
@@ -221,4 +229,18 @@ void ShutdownPlugin::loadPlugin()
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());
+}
+
+bool ShutdownPlugin::checkSwap()
+{
+    QFile file("/proc/swaps");
+    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+        const QString &body = file.readAll();
+        file.close();
+        QRegularExpression re("\\spartition\\s");
+        QRegularExpressionMatch match = re.match(body);
+        return match.hasMatch();
+    }
+
+    return false;
 }

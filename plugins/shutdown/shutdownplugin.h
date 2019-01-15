@@ -57,6 +57,7 @@ public:
 
 private:
     void loadPlugin();
+    bool checkSwap();
 
 private:
     bool m_pluginLoaded;
