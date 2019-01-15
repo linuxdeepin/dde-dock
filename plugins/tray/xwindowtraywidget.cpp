@@ -95,14 +95,11 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
     connect(m_sendHoverEvent, &QTimer::timeout, this, &XWindowTrayWidget::sendHoverEvent);
 
     m_updateTimer->start();
-
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>new xwindow" << winId;
 }
 
 XWindowTrayWidget::~XWindowTrayWidget()
 {
     AppWinidSuffixMap[m_appName].remove(m_windowId);
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>destory xwindow" << m_windowId;
 }
 
 const QImage XWindowTrayWidget::trayImage()
