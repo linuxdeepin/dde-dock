@@ -32,11 +32,12 @@ SystemTrayLoader::SystemTrayLoader(QObject *parent)
 
 void SystemTrayLoader::run()
 {
-#ifdef QT_DEBUG
-    const QDir pluginsDir("../plugins/system-trays");
-#else
-    const QDir pluginsDir("../lib/dde-dock/plugins/system-trays");
-#endif
+    QDir pluginsDir("../plugins/system-trays");
+    if (!pluginsDir.exists()) {
+        pluginsDir.setPath("/usr/lib/dde-dock/plugins/system-trays");
+    }
+    qDebug() << "using system tray plugins dir:" << pluginsDir.absolutePath();
+
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
 
     for (const QString file : plugins)
