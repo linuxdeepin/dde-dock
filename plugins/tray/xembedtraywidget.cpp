@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "xwindowtraywidget.h"
+#include "xembedtraywidget.h"
 
 #include <QWindow>
 #include <QPainter>
@@ -74,7 +74,7 @@ void sni_cleanup_xcb_image(void *data)
     xcb_image_destroy(static_cast<xcb_image_t*>(data));
 }
 
-XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
+XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, QWidget *parent)
     : AbstractTrayWidget(parent)
     , m_windowId(winId)
     , m_appName(getAppNameForWindow(winId))
@@ -89,37 +89,37 @@ XWindowTrayWidget::XWindowTrayWidget(quint32 winId, QWidget *parent)
     m_sendHoverEvent->setInterval(100);
     m_sendHoverEvent->setSingleShot(true);
 
-    connect(m_updateTimer, &QTimer::timeout, this, &XWindowTrayWidget::refershIconImage);
+    connect(m_updateTimer, &QTimer::timeout, this, &XEmbedTrayWidget::refershIconImage);
 
     setMouseTracking(true);
-    connect(m_sendHoverEvent, &QTimer::timeout, this, &XWindowTrayWidget::sendHoverEvent);
+    connect(m_sendHoverEvent, &QTimer::timeout, this, &XEmbedTrayWidget::sendHoverEvent);
 
     m_updateTimer->start();
 }
 
-XWindowTrayWidget::~XWindowTrayWidget()
+XEmbedTrayWidget::~XEmbedTrayWidget()
 {
     AppWinidSuffixMap[m_appName].remove(m_windowId);
 }
 
-const QImage XWindowTrayWidget::trayImage()
+const QImage XEmbedTrayWidget::trayImage()
 {
     return m_image;
 }
 
-QSize XWindowTrayWidget::sizeHint() const
+QSize XEmbedTrayWidget::sizeHint() const
 {
     return QSize(26, 26);
 }
 
-void XWindowTrayWidget::showEvent(QShowEvent *e)
+void XEmbedTrayWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
     m_updateTimer->start();
 }
 
-void XWindowTrayWidget::paintEvent(QPaintEvent *e)
+void XEmbedTrayWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
     if (m_image.isNull())
@@ -140,7 +140,7 @@ void XWindowTrayWidget::paintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void XWindowTrayWidget::mouseMoveEvent(QMouseEvent *e)
+void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
     AbstractTrayWidget::mouseMoveEvent(e);
 
@@ -152,7 +152,7 @@ void XWindowTrayWidget::mouseMoveEvent(QMouseEvent *e)
     m_sendHoverEvent->start();
 }
 
-void XWindowTrayWidget::configContainerPosition()
+void XEmbedTrayWidget::configContainerPosition()
 {
     auto c = QX11Info::connection();
 
@@ -172,7 +172,7 @@ void XWindowTrayWidget::configContainerPosition()
     xcb_flush(c);
 }
 
-void XWindowTrayWidget::wrapWindow()
+void XEmbedTrayWidget::wrapWindow()
 {
     auto c = QX11Info::connection();
 
@@ -271,7 +271,7 @@ void XWindowTrayWidget::wrapWindow()
     setX11PassMouseEvent(true);
 }
 
-void XWindowTrayWidget::sendHoverEvent()
+void XEmbedTrayWidget::sendHoverEvent()
 {
     if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
         return;
@@ -287,7 +287,7 @@ void XWindowTrayWidget::sendHoverEvent()
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
-void XWindowTrayWidget::updateIcon()
+void XEmbedTrayWidget::updateIcon()
 {
 //    if (!isVisible() && !m_active)
 //        return;
@@ -310,7 +310,7 @@ void XWindowTrayWidget::updateIcon()
 //    hide();
 //}
 
-void XWindowTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
+void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     if (isBadWindow())
         return;
@@ -331,7 +331,7 @@ void XWindowTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 }
 
 // NOTE: WM_NAME may can not obtain successfully
-QString XWindowTrayWidget::getWindowProperty(quint32 winId, QString propName)
+QString XEmbedTrayWidget::getWindowProperty(quint32 winId, QString propName)
 {
     const auto display = QX11Info::display();
 
@@ -363,7 +363,7 @@ QString XWindowTrayWidget::getWindowProperty(quint32 winId, QString propName)
     return QString::fromLocal8Bit((char*)prop_return);
 }
 
-QString XWindowTrayWidget::toTrayWidgetId(quint32 winId)
+QString XEmbedTrayWidget::toXEmbedKey(quint32 winId)
 {
     const QString &appName = getAppNameForWindow(winId);
     int suffix = getTrayWidgetKeySuffix(appName, winId);
@@ -378,18 +378,18 @@ QString XWindowTrayWidget::toTrayWidgetId(quint32 winId)
     return key;
 }
 
-bool XWindowTrayWidget::isXWindowKey(const QString &itemKey)
+bool XEmbedTrayWidget::isXEmbedKey(const QString &itemKey)
 {
     return itemKey.startsWith("window:");
 }
 
-void XWindowTrayWidget::setActive(const bool active)
+void XEmbedTrayWidget::setActive(const bool active)
 {
     m_active = active;
     m_updateTimer->start();
 }
 
-void XWindowTrayWidget::refershIconImage()
+void XEmbedTrayWidget::refershIconImage()
 {
     const auto ratio = devicePixelRatioF();
     auto c = QX11Info::connection();
@@ -427,7 +427,7 @@ void XWindowTrayWidget::refershIconImage()
     }
 }
 
-QString XWindowTrayWidget::getAppNameForWindow(quint32 winId)
+QString XEmbedTrayWidget::getAppNameForWindow(quint32 winId)
 {
     QString appName;
     do {
@@ -450,7 +450,7 @@ QString XWindowTrayWidget::getAppNameForWindow(quint32 winId)
     return appName;
 }
 
-int XWindowTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 winId)
+int XEmbedTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 winId)
 {
     int suffix = AppWinidSuffixMap.value(appName).value(winId, 0);
 
@@ -489,7 +489,7 @@ int XWindowTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 wi
     return suffix;
 }
 
-void XWindowTrayWidget::setX11PassMouseEvent(const bool pass)
+void XEmbedTrayWidget::setX11PassMouseEvent(const bool pass)
 {
     if (pass)
     {
@@ -511,7 +511,7 @@ void XWindowTrayWidget::setX11PassMouseEvent(const bool pass)
     XFlush(QX11Info::display());
 }
 
-void XWindowTrayWidget::setWindowOnTop(const bool top)
+void XEmbedTrayWidget::setWindowOnTop(const bool top)
 {
     auto c = QX11Info::connection();
     const uint32_t stackAboveData[] = {top ? XCB_STACK_MODE_ABOVE : XCB_STACK_MODE_BELOW};
@@ -519,7 +519,7 @@ void XWindowTrayWidget::setWindowOnTop(const bool top)
     xcb_flush(c);
 }
 
-bool XWindowTrayWidget::isBadWindow()
+bool XEmbedTrayWidget::isBadWindow()
 {
     auto c = QX11Info::connection();
 

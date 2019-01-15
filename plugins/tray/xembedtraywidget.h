@@ -19,21 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRAYWIDGET_H
-#define TRAYWIDGET_H
+#ifndef XEMBEDTRAYWIDGET_H
+#define XEMBEDTRAYWIDGET_H
 
 #include "abstracttraywidget.h"
 
 #include <QWidget>
 #include <QTimer>
 
-class XWindowTrayWidget : public AbstractTrayWidget
+class XEmbedTrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
 
 public:
-    explicit XWindowTrayWidget(quint32 winId, QWidget *parent = 0);
-    ~XWindowTrayWidget();
+    explicit XEmbedTrayWidget(quint32 winId, QWidget *parent = 0);
+    ~XEmbedTrayWidget();
 
     void updateIcon() Q_DECL_OVERRIDE;
     void setActive(const bool active) Q_DECL_OVERRIDE;
@@ -41,8 +41,8 @@ public:
     void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
 
     static QString getWindowProperty(quint32 winId, QString propName);
-    static QString toTrayWidgetId(quint32 winId);
-    static bool isXWindowKey(const QString &itemKey);
+    static QString toXEmbedKey(quint32 winId);
+    static bool isXEmbedKey(const QString &itemKey);
 
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
@@ -75,4 +75,4 @@ private:
     QTimer *m_sendHoverEvent;
 };
 
-#endif // TRAYWIDGET_H
+#endif // XEMBEDTRAYWIDGET_H

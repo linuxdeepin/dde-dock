@@ -42,11 +42,18 @@ using org::kde::StatusNotifierWatcher;
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
+      m_fashionItem (new FashionTrayItem(this)),
       m_systemTraysController(new SystemTraysController(this)),
       m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
+      m_refreshXEmbedItemsTimer(new QTimer(this)),
+      m_refreshSNIItemsTimer(new QTimer(this)),
       m_tipsLabel(new TipsWidget)
 {
-    m_fashionItem = new FashionTrayItem(this);
+    m_refreshXEmbedItemsTimer->setInterval(500);
+    m_refreshXEmbedItemsTimer->setSingleShot(true);
+
+    m_refreshSNIItemsTimer->setInterval(500);
+    m_refreshSNIItemsTimer->setSingleShot(true);
 
     m_tipsLabel->setObjectName("tray");
     m_tipsLabel->setText(tr("System Tray"));
@@ -90,12 +97,6 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &TrayPlugin::onDbusNameOwnerChanged);
 
-    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, &TrayPlugin::sniItemsChanged);
-    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, &TrayPlugin::sniItemsChanged);
-
-    connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &TrayPlugin::trayListChanged, Qt::QueuedConnection);
-    connect(m_trayInter, &DBusTrayManager::Changed, this, &TrayPlugin::trayChanged);
-
     connect(m_systemTraysController, &SystemTraysController::systemTrayAdded, this, &TrayPlugin::addTrayWidget);
     connect(m_systemTraysController, &SystemTraysController::systemTrayRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
 
@@ -103,10 +104,11 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     switchToMode(displayMode());
 
-    QTimer::singleShot(0, this, &TrayPlugin::trayListChanged);
     QTimer::singleShot(0, this, &TrayPlugin::loadIndicator);
-    QTimer::singleShot(0, this, &TrayPlugin::sniItemsChanged);
     QTimer::singleShot(0, m_systemTraysController, &SystemTraysController::startLoader);
+
+    QTimer::singleShot(3000, this, &TrayPlugin::initSNI);
+    QTimer::singleShot(4000, this, &TrayPlugin::initXEmbed);
 }
 
 void TrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
@@ -275,6 +277,24 @@ QString TrayPlugin::itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget)
     return itemKey;
 }
 
+void TrayPlugin::initXEmbed()
+{
+    connect(m_refreshXEmbedItemsTimer, &QTimer::timeout, this, &TrayPlugin::xembedItemsChanged);
+    connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, [=] {m_refreshXEmbedItemsTimer->start();});
+    connect(m_trayInter, &DBusTrayManager::Changed, this, &TrayPlugin::xembedItemChanged);
+
+    m_refreshXEmbedItemsTimer->start();
+}
+
+void TrayPlugin::initSNI()
+{
+    connect(m_refreshSNIItemsTimer, &QTimer::timeout, this, &TrayPlugin::sniItemsChanged);
+    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, [=] {m_refreshSNIItemsTimer->start();});
+    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, [=] {m_refreshSNIItemsTimer->start();});
+
+    m_refreshSNIItemsTimer->start();
+}
+
 void TrayPlugin::sniItemsChanged()
 {
     const QStringList &itemServicePaths = m_sniWatcher->registeredStatusNotifierItems();
@@ -300,23 +320,23 @@ void TrayPlugin::sniItemsChanged()
     }
 }
 
-void TrayPlugin::trayListChanged()
+void TrayPlugin::xembedItemsChanged()
 {
     QList<quint32> winidList = m_trayInter->trayIcons();
     QStringList trayKeyList;
 
     for (auto winid : winidList) {
-        trayKeyList << XWindowTrayWidget::toTrayWidgetId(winid);
+        trayKeyList << XEmbedTrayWidget::toXEmbedKey(winid);
     }
 
     for (auto tray : m_trayMap.keys()) {
-        if (!trayKeyList.contains(tray) && XWindowTrayWidget::isXWindowKey(tray)) {
+        if (!trayKeyList.contains(tray) && XEmbedTrayWidget::isXEmbedKey(tray)) {
             trayRemoved(tray);
         }
     }
 
     for (int i = 0; i < trayKeyList.size(); ++i) {
-        trayXWindowAdded(trayKeyList.at(i), winidList.at(i));
+        trayXEmbedAdded(trayKeyList.at(i), winidList.at(i));
     }
 }
 
@@ -341,13 +361,13 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
     connect(trayWidget, &AbstractTrayWidget::requestRefershWindowVisible, this, &TrayPlugin::onRequestRefershWindowVisible, Qt::UniqueConnection);
 }
 
-void TrayPlugin::trayXWindowAdded(const QString &itemKey, quint32 winId)
+void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
 {
-    if (m_trayMap.contains(itemKey) || !XWindowTrayWidget::isXWindowKey(itemKey)) {
+    if (m_trayMap.contains(itemKey) || !XEmbedTrayWidget::isXEmbedKey(itemKey)) {
         return;
     }
 
-    AbstractTrayWidget *trayWidget = new XWindowTrayWidget(winId);
+    AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
     addTrayWidget(itemKey, trayWidget);
 }
 
@@ -418,9 +438,9 @@ void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
     }
 }
 
-void TrayPlugin::trayChanged(quint32 winId)
+void TrayPlugin::xembedItemChanged(quint32 winId)
 {
-    QString itemKey = XWindowTrayWidget::toTrayWidgetId(winId);
+    QString itemKey = XEmbedTrayWidget::toXEmbedKey(winId);
     if (!m_trayMap.contains(itemKey)) {
         return;
     }
