@@ -42,9 +42,9 @@ using org::kde::StatusNotifierWatcher;
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
+      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
       m_fashionItem (new FashionTrayItem(this)),
       m_systemTraysController(new SystemTraysController(this)),
-      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
       m_refreshXEmbedItemsTimer(new QTimer(this)),
       m_refreshSNIItemsTimer(new QTimer(this)),
       m_tipsLabel(new TipsWidget)
@@ -81,21 +81,6 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
         qDebug() << "hide tray from config disable!!";
         return;
     }
-
-    // registor dock as SNI Host on dbus
-    QDBusConnection dbusConn = QDBusConnection::sessionBus();
-    m_sniHostService = QString("org.kde.StatusNotifierHost-") + QString::number(qApp->applicationPid());
-    dbusConn.registerService(m_sniHostService);
-    dbusConn.registerObject("/StatusNotifierHost", this);
-
-    m_sniWatcher = new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this);
-    if (m_sniWatcher->isValid()) {
-        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
-    } else {
-        qDebug() << "Tray:" << SNI_WATCHER_SERVICE << "SNI watcher daemon is not exist for now!";
-    }
-
-    connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &TrayPlugin::onDbusNameOwnerChanged);
 
     connect(m_systemTraysController, &SystemTraysController::systemTrayAdded, this, &TrayPlugin::addTrayWidget);
     connect(m_systemTraysController, &SystemTraysController::systemTrayRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
@@ -466,16 +451,6 @@ void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
         for (auto itemKey : m_trayMap.keys()) {
             m_proxyInter->itemAdded(this, itemKey);
         }
-    }
-}
-
-void TrayPlugin::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
-{
-    Q_UNUSED(oldOwner);
-
-    if (name == SNI_WATCHER_SERVICE && !newOwner.isEmpty()) {
-        qDebug() << "Tray:" << SNI_WATCHER_SERVICE << "SNI watcher daemon started, register dock to watcher as SNI Host";
-        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
     }
 }
 

@@ -35,6 +35,11 @@
 #include <X11/X.h>
 #include <X11/Xutil.h>
 
+#define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
+#define SNI_WATCHER_PATH "/StatusNotifierWatcher"
+
+using org::kde::StatusNotifierWatcher;
+
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
     QRect g = qApp->primaryScreen()->geometry();
@@ -87,8 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
       m_posChangeAni(new QVariantAnimation(this)),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
-      m_xcbMisc(XcbMisc::instance())
-
+      m_xcbMisc(XcbMisc::instance()),
+      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
+      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
 {
     setAccessibleName("dock-mainwindow");
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
@@ -107,6 +113,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
 
+    initSNIHost();
     initComponents();
     initConnections();
 
@@ -248,6 +255,21 @@ void MainWindow::internalAnimationMove(int x, int y)
     m_posChangeAni->start();
 }
 
+void MainWindow::initSNIHost()
+{
+    // registor dock as SNI Host on dbus
+    QDBusConnection dbusConn = QDBusConnection::sessionBus();
+    m_sniHostService = QString("org.kde.StatusNotifierHost-") + QString::number(qApp->applicationPid());
+    dbusConn.registerService(m_sniHostService);
+    dbusConn.registerObject("/StatusNotifierHost", this);
+
+    if (m_sniWatcher->isValid()) {
+        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
+    } else {
+        qDebug() << SNI_WATCHER_SERVICE << "SNI watcher daemon is not exist for now!";
+    }
+}
+
 void MainWindow::initComponents()
 {
     m_positionUpdateTimer->setSingleShot(true);
@@ -364,6 +386,8 @@ void MainWindow::initConnections()
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+
+    connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -725,4 +749,14 @@ void MainWindow::positionCheck()
 
     // this may cause some position error and animation caton
     //internalMove();
+}
+
+void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
+{
+    Q_UNUSED(oldOwner);
+
+    if (name == SNI_WATCHER_SERVICE && !newOwner.isEmpty()) {
+        qDebug() << SNI_WATCHER_SERVICE << "SNI watcher daemon started, register dock to watcher as SNI Host";
+        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
+    }
 }

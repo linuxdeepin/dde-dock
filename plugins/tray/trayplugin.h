@@ -82,7 +82,6 @@ private slots:
     void trayRemoved(const QString &itemKey, const bool deleteObject = true);
     void xembedItemChanged(quint32 winId);
     void switchToMode(const Dock::DisplayMode mode);
-    void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
     void onRequestWindowAutoHide(const bool autoHide);
     void onRequestRefershWindowVisible();
     void onSNIItemStatusChanged(SNITrayWidget::ItemStatus status);
@@ -92,14 +91,12 @@ private:
     org::kde::StatusNotifierWatcher *m_sniWatcher;
     FashionTrayItem *m_fashionItem;
     SystemTraysController *m_systemTraysController;
-    QDBusConnectionInterface *m_dbusDaemonInterface;
     QTimer *m_refreshXEmbedItemsTimer;
     QTimer *m_refreshSNIItemsTimer;
 
     QMap<QString, AbstractTrayWidget *> m_trayMap;
     QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;
     QMap<QString, IndicatorTray*> m_indicatorMap;
-    QString m_sniHostService;
 
     TipsWidget *m_tipsLabel;
 };

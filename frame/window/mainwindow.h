@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
@@ -25,6 +25,7 @@
 #include "xcb/xcb_misc.h"
 #include "dbus/dbusdisplay.h"
 #include "dbus/dbusdockadaptors.h"
+#include "dbus/sni/statusnotifierwatcher_interface.h"
 #include "util/docksettings.h"
 
 #include <QWidget>
@@ -61,6 +62,7 @@ private:
 
     void setFixedSize(const QSize &size);
     void internalAnimationMove(int x, int y);
+    void initSNIHost();
     void initComponents();
     void initConnections();
 
@@ -89,6 +91,8 @@ private slots:
     void adjustShadowMask();
     void positionCheck();
 
+    void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
+
 private:
     bool m_launched;
     bool m_updatePanelVisible;
@@ -108,6 +112,10 @@ private:
 
     XcbMisc *m_xcbMisc;
     DockSettings *m_settings;
+
+    QDBusConnectionInterface *m_dbusDaemonInterface;
+    org::kde::StatusNotifierWatcher *m_sniWatcher;
+    QString m_sniHostService;
 };
 
 #endif // MAINWINDOW_H
