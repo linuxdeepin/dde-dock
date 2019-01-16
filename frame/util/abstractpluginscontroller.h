@@ -60,7 +60,7 @@ private slots:
     void positionChanged();
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
-    void refreshPluginSettings(qlonglong ts);
+    void refreshPluginSettings();
 
 private:
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;

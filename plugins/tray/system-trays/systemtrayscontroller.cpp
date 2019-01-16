@@ -157,11 +157,11 @@ void SystemTraysController::saveValueSystemTrayItem(const QString &itemKey, cons
 
 void SystemTraysController::startLoader()
 {
-#ifdef QT_DEBUG
-    const QString pluginsDir("../plugins/system-trays");
-#else
-    const QString pluginsDir("../lib/dde-dock/plugins/system-trays");
-#endif
+    QString pluginsDir("../plugins/system-trays");
+    if (!QDir(pluginsDir).exists()) {
+        pluginsDir = "/usr/lib/dde-dock/plugins/system-trays";
+    }
+    qDebug() << "using system tray plugins dir:" << pluginsDir;
 
     AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }

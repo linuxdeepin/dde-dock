@@ -26,8 +26,6 @@
 #include <QDir>
 #include <QGSettings>
 
-qlonglong currentNanoTime() { return QDateTime::currentMSecsSinceEpoch() / 1000 / 1000; }
-
 AbstractPluginsController::AbstractPluginsController(QObject *parent)
     : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
@@ -35,23 +33,28 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
 {
     qApp->installEventFilter(this);
 
-    refreshPluginSettings(currentNanoTime());
+    refreshPluginSettings();
 
-    connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsUpdated, this, &AbstractPluginsController::refreshPluginSettings, Qt::QueuedConnection);
+    connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsSynced, this, &AbstractPluginsController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
 void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
-    refreshPluginSettings(currentNanoTime());
+    refreshPluginSettings();
 
-    QJsonObject valueObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
-    valueObject.insert(key, value.toJsonValue());
-    m_pluginSettingsObject.insert(itemInter->pluginName(), valueObject);
+    // save to local cache
+    QJsonObject localObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
+    localObject.insert(key, value.toJsonValue());
+    m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
 
-    m_dockDaemonInter->SetPluginSettings(currentNanoTime(),
-                QJsonDocument(m_pluginSettingsObject).toJson(QJsonDocument::JsonFormat::Compact));
+    // save to daemon
+    QJsonObject remoteObject, remoteObjectInter;
+    remoteObjectInter.insert(key, value.toJsonValue());
+    remoteObject.insert(itemInter->pluginName(), remoteObjectInter);
+    m_dockDaemonInter->MergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 
 const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
+    // load from local cache
     QVariant v = m_pluginSettingsObject.value(itemInter->pluginName()).toObject().value(key).toVariant();
     if (v.isNull() || !v.isValid()) {
         v = fallback;
@@ -173,10 +176,8 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface) {
     qDebug() << objectName() << "init plugin finished: " << interface->pluginName();
 }
 
-void AbstractPluginsController::refreshPluginSettings(qlonglong ts)
+void AbstractPluginsController::refreshPluginSettings()
 {
-    // TODO: handle nano seconds
-
     const QString &pluginSettings = m_dockDaemonInter->GetPluginSettings().value();
     if (pluginSettings.isEmpty()) {
         qDebug() << "Error! get plugin settings from dbus failed!";

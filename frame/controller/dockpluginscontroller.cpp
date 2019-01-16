@@ -122,11 +122,11 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const
 
 void DockPluginsController::startLoader()
 {
-#ifdef QT_DEBUG
-    const QString pluginsDir("../plugins");
-#else
-    const QString pluginsDir("../lib/dde-dock/plugins");
-#endif
+    QString pluginsDir("../plugins");
+    if (!QDir(pluginsDir).exists()) {
+        pluginsDir = "/usr/lib/dde-dock/plugins";
+    }
+    qDebug() << "using dock plugins dir:" << pluginsDir;
 
     AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }
