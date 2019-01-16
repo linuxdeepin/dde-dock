@@ -59,7 +59,6 @@ DockSettings::DockSettings(QWidget *parent)
     , m_displayInter(new DBusDisplay(this))
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_itemController(DockItemController::instance(this))
-    , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
 {
     m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -75,8 +74,6 @@ DockSettings::DockSettings(QWidget *parent)
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
-
-    m_appearanceInter->setSync(false, false);
 
     m_fashionModeAct.setCheckable(true);
     m_efficientModeAct.setCheckable(true);
@@ -130,15 +127,6 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(hideSubMenuAct);
     m_settingsMenu.setTitle("Settings Menu");
 
-    auto onDaemonIsvalid = [=] (bool isValid) {
-        if (isValid) {
-            onOpacityChanged(m_appearanceInter->opacity());
-        }
-        else {
-            m_appearanceInter->startServiceProcess();
-        }
-    };
-
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
@@ -146,6 +134,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
+    connect(m_dockInter, &DBusDock::OpacityChanged, this, &DockSettings::onOpacityChanged);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -154,12 +143,6 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-
-    connect(m_appearanceInter, &Appearance::serviceStartFinished, this, [=] {
-        onDaemonIsvalid(m_appearanceInter->isValid());
-    });
-    connect(m_appearanceInter, &Appearance::serviceValidChanged, this, onDaemonIsvalid);
-    connect(m_appearanceInter, &Appearance::OpacityChanged, this, &DockSettings::onOpacityChanged);
 
     DApplication *app = qobject_cast<DApplication*>(qApp);
     if (app) {
@@ -170,7 +153,7 @@ DockSettings::DockSettings(QWidget *parent)
     updateForbidPostions();
     resetFrontendGeometry();
 
-    onDaemonIsvalid(m_appearanceInter->isValid());
+    QTimer::singleShot(0, this, [=] {onOpacityChanged(m_dockInter->opacity());});
 }
 
 DockSettings &DockSettings::Instance()
