@@ -20,6 +20,8 @@
 package launcher
 
 import (
+	"time"
+
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
@@ -27,46 +29,55 @@ import (
 var logger = log.NewLogger("daemon/launcher")
 
 func init() {
-	loader.Register(NewDaemon(logger))
+	loader.Register(NewModule(logger))
 }
 
-type Daemon struct {
+type Module struct {
 	*loader.ModuleBase
 	manager *Manager
 }
 
-func NewDaemon(logger *log.Logger) *Daemon {
-	daemon := new(Daemon)
+func NewModule(logger *log.Logger) *Module {
+	daemon := new(Module)
 	daemon.ModuleBase = loader.NewModuleBase("launcher", daemon, logger)
 	return daemon
 }
 
-func (d *Daemon) GetDependencies() []string {
+func (d *Module) GetDependencies() []string {
 	return []string{}
 }
 
-func (d *Daemon) Start() (err error) {
+func (d *Module) start() error {
 	service := loader.GetService()
 
+	var err error
 	d.manager, err = NewManager(service)
 	if err != nil {
-		return
+		return err
 	}
 
 	err = service.Export(dbusObjPath, d.manager)
 	if err != nil {
-		return
+		return err
 	}
 
 	err = service.RequestName(dbusServiceName)
-	if err != nil {
-		return
-	}
-
-	return
+	return err
 }
 
-func (d *Daemon) Stop() error {
+func (d *Module) Start() error {
+	go func() {
+		t0 := time.Now()
+		err := d.start()
+		if err != nil {
+			logger.Warning(err)
+		}
+		logger.Info("start launcher module cost", time.Since(t0))
+	}()
+	return nil
+}
+
+func (d *Module) Stop() error {
 	if d.manager == nil {
 		return nil
 	}

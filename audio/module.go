@@ -20,6 +20,8 @@
 package audio
 
 import (
+	"time"
+
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
@@ -30,29 +32,25 @@ var (
 )
 
 func init() {
-	loader.Register(NewAudioDaemon(logger))
+	loader.Register(NewModule(logger))
 }
 
-type Daemon struct {
+type Module struct {
 	*loader.ModuleBase
 	audio *Audio
 }
 
-func NewAudioDaemon(logger *log.Logger) *Daemon {
-	var d = new(Daemon)
+func NewModule(logger *log.Logger) *Module {
+	var d = new(Module)
 	d.ModuleBase = loader.NewModuleBase("audio", d, logger)
 	return d
 }
 
-func (*Daemon) GetDependencies() []string {
+func (*Module) GetDependencies() []string {
 	return []string{}
 }
 
-func (d *Daemon) Start() error {
-	if d.audio != nil {
-		return nil
-	}
-
+func (m *Module) start() error {
 	service := loader.GetService()
 	ctx := pulse.GetContext()
 	if ctx == nil {
@@ -60,9 +58,9 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	d.audio = newAudio(ctx, service)
+	m.audio = newAudio(ctx, service)
 
-	err := service.Export(dbusPath, d.audio)
+	err := service.Export(dbusPath, m.audio)
 	if err != nil {
 		return err
 	}
@@ -71,21 +69,37 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	go d.audio.handleEvent()
-	go d.audio.handleStateChanged()
-	initDefaultVolume(d.audio)
+	go m.audio.handleEvent()
+	go m.audio.handleStateChanged()
+	initDefaultVolume(m.audio)
 	return nil
 }
 
-func (d *Daemon) Stop() error {
-	if d.audio == nil {
+func (m *Module) Start() error {
+	if m.audio != nil {
 		return nil
 	}
 
-	d.audio.destroy()
+	go func() {
+		t0 := time.Now()
+		err := m.start()
+		if err != nil {
+			logger.Warning(err)
+		}
+		logger.Info("start audio module cost", time.Since(t0))
+	}()
+	return nil
+}
+
+func (m *Module) Stop() error {
+	if m.audio == nil {
+		return nil
+	}
+
+	m.audio.destroy()
 
 	service := loader.GetService()
-	err := service.StopExport(d.audio)
+	err := service.StopExport(m.audio)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -95,6 +109,6 @@ func (d *Daemon) Stop() error {
 		logger.Warning(err)
 	}
 
-	d.audio = nil
+	m.audio = nil
 	return nil
 }

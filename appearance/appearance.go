@@ -21,6 +21,8 @@
 package appearance
 
 import (
+	"time"
+
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
@@ -31,30 +33,26 @@ var (
 	logger = log.NewLogger("daemon/appearance")
 )
 
-type Daemon struct {
+type Module struct {
 	*loader.ModuleBase
 }
 
 func init() {
 	background.SetLogger(logger)
-	loader.Register(NewAppearanceDaemon(logger))
+	loader.Register(NewModule(logger))
 }
 
-func NewAppearanceDaemon(logger *log.Logger) *Daemon {
-	var d = new(Daemon)
+func NewModule(logger *log.Logger) *Module {
+	var d = new(Module)
 	d.ModuleBase = loader.NewModuleBase("appearance", d, logger)
 	return d
 }
 
-func (*Daemon) GetDependencies() []string {
+func (*Module) GetDependencies() []string {
 	return []string{}
 }
 
-func (*Daemon) Start() error {
-	if _m != nil {
-		return nil
-	}
-
+func (*Module) start() error {
 	service := loader.GetService()
 
 	_m = newManager(service)
@@ -75,11 +73,26 @@ func (*Daemon) Start() error {
 	go _m.listenCursorChanged()
 	go _m.handleThemeChanged()
 	_m.listenGSettingChanged()
-
 	return nil
 }
 
-func (*Daemon) Stop() error {
+func (m *Module) Start() error {
+	if _m != nil {
+		return nil
+	}
+
+	go func() {
+		t0 := time.Now()
+		err := m.start()
+		if err != nil {
+			logger.Warning(err)
+		}
+		logger.Info("start appearance module cost", time.Since(t0))
+	}()
+	return nil
+}
+
+func (*Module) Stop() error {
 	if _m == nil {
 		return nil
 	}

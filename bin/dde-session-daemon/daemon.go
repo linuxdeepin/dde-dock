@@ -128,14 +128,14 @@ func (s *SessionDaemon) initModules() {
 	part2ModuleNames := []string{
 		"network",
 		"audio",
+		"launcher",
+		"appearance",
 		"screensaver",
 		"sessionwatcher",
 		"power", // need screensaver and sessionwatcher
-		"launcher",
 		"service-trigger",
 		"clipboard",
 		"keybinding",
-		"appearance",
 		"inputdevices",
 		"gesture",
 		"housekeeping",

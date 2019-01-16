@@ -20,6 +20,8 @@
 package network
 
 import (
+	"time"
+
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/lib/log"
@@ -50,16 +52,8 @@ func (d *Module) GetDependencies() []string {
 	return []string{}
 }
 
-func (d *Module) Start() error {
-	libnotify.Init("dde-session-daemon")
-	if manager != nil {
-		return nil
-	}
-
-	initSlices() // initialize slice code
+func (d *Module) start() error {
 	service := loader.GetService()
-
-	initSysSignalLoop()
 	manager = NewManager(service)
 	manager.init()
 
@@ -91,10 +85,28 @@ func (d *Module) Start() error {
 		return err
 	}
 
+	initDBusDaemon()
+	watchNetworkManagerRestart(manager)
+	return nil
+}
+
+func (d *Module) Start() error {
+	libnotify.Init("dde-session-daemon")
+	if manager != nil {
+		return nil
+	}
+
+	initSlices() // initialize slice code
+	initSysSignalLoop()
 	go func() {
-		initDBusDaemon()
-		watchNetworkManagerRestart(manager)
+		t0 := time.Now()
+		err := d.start()
+		if err != nil {
+			logger.Warning(err)
+		}
+		logger.Info("start network module cost", time.Since(t0))
 	}()
+
 	return nil
 }
 
