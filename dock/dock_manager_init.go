@@ -169,6 +169,8 @@ func (m *Manager) init() error {
 	m.ShowTimeout.Bind(m.settings, settingKeyShowTimeout)
 	m.HideTimeout.Bind(m.settings, settingKeyHideTimeout)
 	m.DockedApps.Bind(m.settings, settingKeyDockedApps)
+	m.appearanceSettings = gio.NewSettings(appearanceSchema)
+	m.Opacity.Bind(m.appearanceSettings, settingKeyOpacity)
 
 	m.FrontendWindowRect = NewRect()
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)

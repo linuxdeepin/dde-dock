@@ -50,6 +50,7 @@ type Manager struct {
 	ShowTimeout        gsprop.Uint `prop:"access:rw"`
 	HideTimeout        gsprop.Uint `prop:"access:rw"`
 	DockedApps         gsprop.Strv
+	Opacity            gsprop.Double
 	HideState          HideStateType
 	FrontendWindowRect *Rect
 
@@ -59,6 +60,7 @@ type Manager struct {
 	windowInfoMap      map[x.Window]*WindowInfo
 	windowInfoMapMutex sync.RWMutex
 	settings           *gio.Settings
+	appearanceSettings *gio.Settings
 
 	rootWindow      x.Window
 	activeWindow    x.Window
@@ -118,6 +120,7 @@ type Manager struct {
 
 const (
 	dockSchema                     = "com.deepin.dde.dock"
+	appearanceSchema               = "com.deepin.dde.appearance"
 	settingKeyHideMode             = "hide-mode"
 	settingKeyDisplayMode          = "display-mode"
 	settingKeyPosition             = "position"
@@ -126,6 +129,7 @@ const (
 	settingKeyShowTimeout          = "show-timeout"
 	settingKeyHideTimeout          = "hide-timeout"
 	settingKeyWinIconPreferredApps = "win-icon-preferred-apps"
+	settingKeyOpacity              = "opacity"
 
 	frontendWindowWmClass = "dde-dock"
 
