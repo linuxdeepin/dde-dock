@@ -10,22 +10,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="58"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="57"/>
         <source>Datetime</source>
         <translation>Tarih saat</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="147"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
         <source>12 Hour Time</source>
         <translation>12 Saatlik Zaman</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="149"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
         <source>24 Hour Time</source>
         <translation>24 Saatlik Zaman</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="155"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
         <source>Time Settings</source>
         <translation>Zaman Ayarları</translation>
     </message>
@@ -33,17 +33,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="55"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Enable network</source>
         <translation>Ağı etkinleştir</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="57"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="61"/>
         <source>Disable network</source>
         <translation>Ağı devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="63"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="67"/>
         <source>Network settings</source>
         <translation>Ağ ayarları</translation>
     </message>
@@ -261,12 +261,17 @@
         <translation>Yeniden Başlat</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <source>Hibernate</source>
+        <translation>Uyut</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Lock</source>
         <translation>Kilitle</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="138"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
         <source>Log out</source>
         <translation>Oturumu Kapat</translation>
     </message>
@@ -276,12 +281,12 @@
         <translation>Uyut</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Switch account</source>
         <translation>Hesap değiştir</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="153"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
         <source>Power settings</source>
         <translation>Güç ayarları</translation>
     </message>
@@ -323,7 +328,7 @@
         <translation>Ses Ayarları</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="207"/>
         <source>Current Volume %1</source>
         <translation>Geçerli Ses Düzeyi %1</translation>
     </message>
@@ -339,12 +344,12 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="83"/>
         <source>Trash - %1 file</source>
         <translation>Çöp Kutusu - %1 dosya</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="87"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
         <source>Trash - %1 files</source>
         <translation>Çöp Kutusu - %1 dosya</translation>
     </message>
@@ -365,7 +370,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="53"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="52"/>
         <source>System Tray</source>
         <translation>Sistem Tepsisi</translation>
     </message>
@@ -378,7 +383,7 @@
         <translation>Bilinmiyor</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="206"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="199"/>
         <source>Wired connection: %1</source>
         <translation>Kablolu Bağlantı: %1</translation>
     </message>
@@ -391,7 +396,7 @@
         <translation>Herhangi Bir Ağ Yok</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="281"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="275"/>
         <source>Wireless Connection: %1</source>
         <translation>Kablosuz Bağlantı: %1</translation>
     </message>
@@ -399,12 +404,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="154"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network</source>
         <translation>Kablosuz Ağ</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
         <source>Wireless Network %1</source>
         <translation>Kablosuz Ağ %1</translation>
     </message>
