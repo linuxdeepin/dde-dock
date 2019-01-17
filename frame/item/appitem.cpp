@@ -163,17 +163,27 @@ void AppItem::undock()
 
 QWidget *AppItem::appDragWidget()
 {
-    return static_cast<AppDrag *>(m_drag)->appDragWidget();
+    if (m_drag) {
+        return m_drag->appDragWidget();
+    }
+
+    return nullptr;
 }
 
 void AppItem::setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry)
 {
-    static_cast<AppDrag *>(m_drag)->appDragWidget()->setDockInfo(dockPosition, dockGeometry);
+    if (m_drag) {
+        m_drag->appDragWidget()->setDockInfo(dockPosition, dockGeometry);
+    }
 }
 
 void AppItem::moveEvent(QMoveEvent *e)
 {
     DockItem::moveEvent(e);
+
+    if (m_drag) {
+        m_drag->appDragWidget()->setOriginPos(mapToGlobal(appIconPosition()));
+    }
 
     m_updateIconGeometryTimer->start();
 }
@@ -278,16 +288,10 @@ void AppItem::paintEvent(QPaintEvent *e)
         return;
 
     // icon
-    const QPixmap &pixmap = m_appIcon;
-    if (pixmap.isNull())
+    if (m_appIcon.isNull())
         return;
 
-    // icon pos
-    const auto ratio = qApp->devicePixelRatio();
-    const int iconX = itemRect.center().x() - pixmap.rect().center().x() / ratio;
-    const int iconY = itemRect.center().y() - pixmap.rect().center().y() / ratio;
-
-    painter.drawPixmap(iconX, iconY, pixmap);
+    painter.drawPixmap(appIconPosition(), m_appIcon);
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -468,8 +472,16 @@ void AppItem::startDrag()
     m_drag = new AppDrag(this);
     m_drag->setMimeData(new QMimeData);
 
+    // handle drag finished here
+    connect(m_drag->appDragWidget(), &AppDragWidget::destroyed, this, [=] {
+        m_dragging = false;
+        setVisible(true);
+        update();
+    });
+
     if (m_wmHelper->hasComposite()) {
         m_drag->setPixmap(dragPix);
+        m_drag->appDragWidget()->setOriginPos(mapToGlobal(appIconPosition()));
         emit dragStarted();
         m_drag->exec(Qt::MoveAction);
     } else {
@@ -487,10 +499,6 @@ void AppItem::startDrag()
             m_itemEntryInter->RequestUndock();
         }
     }
-
-    m_dragging = false;
-    setVisible(true);
-    update();
 }
 
 bool AppItem::hasAttention() const
@@ -499,6 +507,17 @@ bool AppItem::hasAttention() const
         if (info.attention)
             return true;
     return false;
+}
+
+QPoint AppItem::appIconPosition() const
+{
+    const auto ratio = qApp->devicePixelRatio();
+    const QRectF itemRect = rect();
+    const QRectF iconRect = m_appIcon.rect();
+    const qreal iconX = itemRect.center().x() - iconRect.center().x() / ratio;
+    const qreal iconY = itemRect.center().y() - iconRect.center().y() / ratio;
+
+    return QPoint(iconX, iconY);
 }
 
 void AppItem::updateWindowInfos(const WindowInfoMap &info)

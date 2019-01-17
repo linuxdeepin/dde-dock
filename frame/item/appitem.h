@@ -86,6 +86,8 @@ private:
     void startDrag();
     bool hasAttention() const;
 
+    QPoint appIconPosition() const;
+
 private slots:
     void updateWindowInfos(const WindowInfoMap &info);
     void refershIcon() Q_DECL_OVERRIDE;
@@ -106,7 +108,7 @@ private:
 
     DWindowManagerHelper *m_wmHelper;
 
-    AppDrag *m_drag;
+    QPointer<AppDrag> m_drag;
 
     bool m_dragging;
     bool m_active;

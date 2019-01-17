@@ -40,13 +40,10 @@ public:
     Qt::DropAction exec(Qt::DropActions supportedActions = Qt::MoveAction);
     Qt::DropAction exec(Qt::DropActions supportedActions, Qt::DropAction defaultAction);
 
-    void setOpacity(qreal opacity);
-    void showDropAnim();
-
     AppDragWidget *appDragWidget();
 
 private:
-    AppDragWidget *m_appDragWidget;
+    QPointer<AppDragWidget> m_appDragWidget;
 };
 
 #endif /* DRAGAPP_H */

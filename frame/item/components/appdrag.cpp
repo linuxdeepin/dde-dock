@@ -25,9 +25,15 @@ AppDrag::AppDrag(QObject *dragSource) : QDrag(dragSource)
 {
     // delete by itself
     m_appDragWidget = new AppDragWidget;
+    m_appDragWidget->setVisible(false);
 }
 
-AppDrag::~AppDrag() { }
+AppDrag::~AppDrag() {
+    // delete when AppDragWidget is invisible
+    if (m_appDragWidget && !m_appDragWidget->isVisible()) {
+        m_appDragWidget->deleteLater();
+    }
+}
 
 void AppDrag::setPixmap(const QPixmap &pix)
 {

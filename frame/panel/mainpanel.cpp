@@ -312,8 +312,9 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
 
     if (DraggingItem) {
         DockItem::ItemType type = DraggingItem->itemType();
-        if (type != DockItem::Plugins && type != DockItem::TrayPlugin)
+        if (type != DockItem::Plugins && type != DockItem::TrayPlugin) {
             DraggingItem->hide();
+        }
     }
 }
 
