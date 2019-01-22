@@ -69,6 +69,11 @@ func (m *Manager) listenGSettingChanged() {
 			m.currentDesktopBgs = bgs
 			m.setDesktopBackgrounds(bgs)
 			value = strings.Join(bgs, ";")
+
+		case gsKeyWallpaperSlideshow:
+			policy := m.setting.GetString(key)
+			m.updateWSPolicy(policy)
+
 		default:
 			return
 		}
@@ -94,11 +99,13 @@ func (m *Manager) listenBgGSettings() {
 
 		logger.Debug(wrapBgSchema, "changed")
 		value := m.wrapBgSetting.GetString(key)
-		err := m.doSetBackground(value)
+		file, err := m.doSetBackground(value)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
+
+		m.wsLoop.AddToShowed(file)
 	})
 
 	if m.gnomeBgSetting == nil {
@@ -111,10 +118,12 @@ func (m *Manager) listenBgGSettings() {
 
 		logger.Debug(gnomeBgSchema, "changed")
 		value := m.gnomeBgSetting.GetString(gsKeyBackground)
-		err := m.doSetBackground(value)
+		file, err := m.doSetBackground(value)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
+
+		m.wsLoop.AddToShowed(file)
 	})
 }

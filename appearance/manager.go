@@ -24,10 +24,16 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/user"
+	"path/filepath"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+
+	"pkg.deepin.io/lib/xdg/basedir"
 
 	"gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
@@ -64,15 +70,19 @@ const (
 	gnomeBgSchema   = "org.gnome.desktop.background"
 	gsKeyBackground = "picture-uri"
 
-	appearanceSchema    = "com.deepin.dde.appearance"
-	gsKeyGtkTheme       = "gtk-theme"
-	gsKeyIconTheme      = "icon-theme"
-	gsKeyCursorTheme    = "cursor-theme"
-	gsKeyFontStandard   = "font-standard"
-	gsKeyFontMonospace  = "font-monospace"
-	gsKeyFontSize       = "font-size"
-	gsKeyBackgroundURIs = "background-uris"
-	gsKeyOpacity        = "opacity"
+	appearanceSchema        = "com.deepin.dde.appearance"
+	gsKeyGtkTheme           = "gtk-theme"
+	gsKeyIconTheme          = "icon-theme"
+	gsKeyCursorTheme        = "cursor-theme"
+	gsKeyFontStandard       = "font-standard"
+	gsKeyFontMonospace      = "font-monospace"
+	gsKeyFontSize           = "font-size"
+	gsKeyBackgroundURIs     = "background-uris"
+	gsKeyOpacity            = "opacity"
+	gsKeyWallpaperSlideshow = "wallpaper-slideshow"
+
+	wsPolicyLogin  = "login"
+	wsPolicyWakeup = "wakeup"
 
 	defaultIconTheme      = "deepin"
 	defaultGtkTheme       = "deepin"
@@ -86,11 +96,14 @@ const (
 	dbusInterface   = dbusServiceName
 )
 
+var wrConfigFile = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/appearance/wallpaper-slideshow.json")
+
 // Manager shows current themes and fonts settings, emit 'Changed' signal if modified
 // if themes list changed will emit 'Refreshed' signal
 type Manager struct {
-	service *dbusutil.Service
-	sigLoop *dbusutil.SignalLoop
+	service        *dbusutil.Service
+	sessionSigLoop *dbusutil.SignalLoop
+	sysSigLoop     *dbusutil.SignalLoop
 
 	GtkTheme      gsprop.String
 	IconTheme     gsprop.String
@@ -100,11 +113,16 @@ type Manager struct {
 	MonospaceFont gsprop.String
 	Opacity       gsprop.Double `prop:"access:rw"`
 
-	FontSize gsprop.Double `prop:"access:rw"`
+	FontSize           gsprop.Double `prop:"access:rw"`
+	WallpaperSlideShow gsprop.String `prop:"access:rw"`
 
-	userObj   *accounts.User
-	imageBlur *accounts.ImageBlur
-	xSettings *sessionmanager.XSettings
+	wsLoop      *WSLoop
+	wsScheduler *WSScheduler
+
+	userObj       *accounts.User
+	imageBlur     *accounts.ImageBlur
+	xSettings     *sessionmanager.XSettings
+	login1Manager *login1.Manager
 
 	setting        *gio.Settings
 	wrapBgSetting  *gio.Settings
@@ -160,6 +178,10 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.Background.Bind(m.wrapBgSetting, gsKeyBackground)
 	m.FontSize.Bind(m.setting, gsKeyFontSize)
 	m.Opacity.Bind(m.setting, gsKeyOpacity)
+	m.WallpaperSlideShow.Bind(m.setting, gsKeyWallpaperSlideshow)
+
+	m.wsLoop = newWSLoop()
+	m.wsScheduler = newWSScheduler()
 
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
@@ -222,8 +244,13 @@ func (m *Manager) listBackground() background.Backgrounds {
 }
 
 func (m *Manager) destroy() {
-	m.sigLoop.Stop()
+	m.sessionSigLoop.Stop()
 	m.xSettings.RemoveHandler(proxy.RemoveAllHandlers)
+
+	m.sysSigLoop.Stop()
+	m.login1Manager.RemoveHandler(proxy.RemoveAllHandlers)
+
+	m.wsScheduler.stop()
 
 	if m.setting != nil {
 		m.setting.Unref()
@@ -306,17 +333,33 @@ func (m *Manager) init() {
 	})
 
 	sessionBus := m.service.Conn()
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
 	m.wm = wm.NewWm(sessionBus)
+	m.imageBlur = accounts.NewImageBlur(systemBus)
 
 	m.xSettings = sessionmanager.NewXSettings(sessionBus)
 	theme_thumb.Init(m.getScaleFactor())
 
-	m.sigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
-	m.xSettings.InitSignalExt(m.sigLoop, true)
-	m.xSettings.ConnectSetScaleFactorDone(m.handleSetScaleFactorDone)
-	m.sigLoop.Start()
+	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	m.sessionSigLoop.Start()
+	m.xSettings.InitSignalExt(m.sessionSigLoop, true)
+	_, err = m.xSettings.ConnectSetScaleFactorDone(m.handleSetScaleFactorDone)
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	err := m.loadDefaultFontConfig(defaultFontConfigFile)
+	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+	m.sysSigLoop.Start()
+	m.login1Manager = login1.NewManager(systemBus)
+	m.login1Manager.InitSignalExt(m.sysSigLoop, true)
+	m.initWallpaperSlideshow()
+
+	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
 		logger.Warning("load default font config failed:", err)
 	}
@@ -356,7 +399,6 @@ func (m *Manager) init() {
 			m.correctFontName()
 		}
 
-		background.ListBackground()
 		fonts.GetFamilyTable()
 
 		setDQtTheme(dQtFile, dQtSectionTheme,
@@ -377,15 +419,8 @@ func (m *Manager) init() {
 		}
 	})
 
-	systemConn, err := dbus.SystemBus()
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-
-	m.initUserObj(systemConn)
+	m.initUserObj(systemBus)
 	m.initCurrentBgs()
-	m.imageBlur = accounts.NewImageBlur(systemConn)
 }
 
 func (m *Manager) correctFontName() {
@@ -457,15 +492,15 @@ func (m *Manager) doSetCursorTheme(value string) error {
 	return subthemes.SetCursorTheme(value)
 }
 
-func (m *Manager) doSetBackground(value string) error {
+func (m *Manager) doSetBackground(value string) (string, error) {
 	logger.Debugf("call doSetBackground %q", value)
 	if !background.IsBackgroundFile(value) {
-		return errors.New("invalid background")
+		return "", errors.New("invalid background")
 	}
 
 	file, err := background.Prepare(value)
 	if err != nil {
-		return err
+		return "", err
 	}
 	logger.Debug("prepare result:", file)
 	uri := dutils.EncodeURI(file, dutils.SCHEME_FILE)
@@ -475,7 +510,7 @@ func (m *Manager) doSetBackground(value string) error {
 	if err != nil {
 		logger.Warning("call imageBlur.Get err:", err)
 	}
-	return nil
+	return file, nil
 }
 
 func (m *Manager) doSetGreeterBackground(value string) error {
@@ -579,4 +614,109 @@ func (m *Manager) setDesktopBackgrounds(val []string) {
 
 func (*Manager) GetInterfaceName() string {
 	return dbusInterface
+}
+
+func (m *Manager) saveWSConfig(t time.Time) error {
+	cfg := &WSConfig{
+		LastChange: t,
+		Showed:     m.wsLoop.GetShowed(),
+	}
+
+	return cfg.save(wrConfigFile)
+}
+
+func (m *Manager) autoChangeBg(t time.Time) {
+	logger.Debug("autoChangeBg", t)
+	file := m.wsLoop.GetNext()
+	if file == "" {
+		logger.Warning("file is empty")
+		return
+	}
+
+	_, err := m.doSetBackground(file)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = m.saveWSConfig(t)
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func (m *Manager) initWallpaperSlideshow() {
+	_, err := m.login1Manager.ConnectPrepareForSleep(func(before bool) {
+		if !before {
+			// after sleep
+			if m.WallpaperSlideShow.Get() == wsPolicyWakeup {
+				m.autoChangeBg(time.Now())
+			}
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.wsScheduler.fn = m.autoChangeBg
+
+	policy := m.WallpaperSlideShow.Get()
+
+	if isValidWSPolicy(policy) {
+		m.loadWSConfig()
+	}
+
+	if policy == wsPolicyLogin {
+		runDir, err := basedir.GetUserRuntimeDir(true)
+		if err != nil {
+			logger.Warning(err)
+		} else {
+			markFile := filepath.Join(runDir, "dde-daemon-wallpaper-slideshow-login")
+			_, err = os.Stat(markFile)
+			if os.IsNotExist(err) {
+				m.autoChangeBg(time.Now())
+				err = touchFile(markFile)
+				if err != nil {
+					logger.Warning(err)
+				}
+			} else if err != nil {
+				logger.Warning(err)
+			}
+		}
+
+	} else {
+		nSec, err := strconv.ParseUint(policy, 10, 32)
+		if err == nil {
+			m.wsScheduler.updateInterval(time.Duration(nSec) * time.Second)
+		}
+	}
+}
+
+func (m *Manager) loadWSConfig() {
+	cfg := loadWSConfigSafe(wrConfigFile)
+	logger.Debug("loadWSConfig lastChange:", cfg.LastChange)
+
+	m.wsScheduler.mu.Lock()
+	m.wsScheduler.lastRun = cfg.LastChange
+	m.wsScheduler.mu.Unlock()
+
+	m.wsLoop.mu.Lock()
+	for _, file := range cfg.Showed {
+		m.wsLoop.showed[file] = struct{}{}
+	}
+	m.wsLoop.mu.Unlock()
+}
+
+func (m *Manager) updateWSPolicy(policy string) {
+	if isValidWSPolicy(policy) {
+		m.loadWSConfig()
+	}
+	nSec, err := strconv.ParseUint(policy, 10, 32)
+	if err == nil {
+		m.wsScheduler.updateInterval(time.Duration(nSec) * time.Second)
+	} else {
+		m.wsScheduler.stop()
+	}
+}
+
+func touchFile(filename string) error {
+	return ioutil.WriteFile(filename, nil, 0644)
 }

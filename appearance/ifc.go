@@ -145,7 +145,10 @@ func (m *Manager) set(ty, value string) error {
 			m.CursorTheme.Set(value)
 		}
 	case TypeBackground:
-		err = m.doSetBackground(value)
+		file, err := m.doSetBackground(value)
+		if err == nil {
+			m.wsLoop.AddToShowed(file)
+		}
 	case TypeGreeterBackground:
 		err = m.doSetGreeterBackground(value)
 		m.currentGreeterBg = dutils.EncodeURI(value, dutils.SCHEME_FILE)
