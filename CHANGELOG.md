@@ -1,3 +1,9 @@
+[3.21.0] 2019-01-23
+*   fix(network): wired connection auto connect logic is wrong
+*   chore(systeminfo): update test data
+*   feat: speed up dde-session-daemon part2 startup
+*   feat(dock): add property Opacity
+
 [3.20.0] 2019-01-14
 *   fix(launcher): panic: assignment to entry in nil map
 *   chore(grub2): add option -setup-theme for compatibility
