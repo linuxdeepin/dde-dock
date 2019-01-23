@@ -1135,7 +1135,7 @@ func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionU
 		if cdata, err := nmGetConnectionData(cpath); err == nil {
 			uuid := getSettingConnectionUuid(cdata)
 			switch getCustomConnectionType(cdata) {
-			case connectionWired, connectionMobileGsm, connectionMobileCdma:
+			case connectionMobileGsm, connectionMobileCdma:
 				if devRelatedUuid != uuid {
 					// ignore connections that not matching the
 					// device, etc wired connections that create in
