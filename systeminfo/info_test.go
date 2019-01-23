@@ -37,7 +37,7 @@ func TestCPUInfo(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		cpu, err = GetCPUInfo("testdata/loonson3-cpuinfo")
-		So(cpu, ShouldEqual, "ICT Loongson-3B V0.7 FPU V0.1 x 6")
+		So(cpu, ShouldEqual, "Loongson-3B V0.7 FPU V0.1 x 6")
 		So(err, ShouldBeNil)
 
 		cpu, err = GetCPUInfo("testdata/arm-cpuinfo")
