@@ -302,7 +302,10 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         const QRect r(static_cast<QWidget *>(parent())->pos(), size());
         const QPoint p(QCursor::pos());
 
-        if (r.contains(p))
+        // remove margins to fix a touch screen bug:
+        // the mouse point position will stay on this rect's margins after
+        // drag move to the edge of screen
+        if (r.marginsRemoved(QMargins(1,1,1,1)).contains(p))
             return;
 
         m_itemController->placeholderItemRemoved(RequestDockItem);
