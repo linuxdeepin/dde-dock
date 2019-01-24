@@ -212,7 +212,7 @@
         <location filename="../plugins/onboard/onboardplugin.cpp" line="35"/>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="46"/>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>A bord</translation>
     </message>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>Hiberner</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>

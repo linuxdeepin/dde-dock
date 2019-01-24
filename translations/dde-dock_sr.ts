@@ -330,7 +330,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="207"/>
         <source>Current Volume %1</source>
-        <translation>Тренутна јачина %1</translation>
+        <translation>Ниво гласности %1</translation>
     </message>
 </context>
 <context>

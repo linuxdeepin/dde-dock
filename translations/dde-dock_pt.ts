@@ -364,7 +364,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="79"/>
         <source>Empty</source>
-        <translation>Vazio</translation>
+        <translation>Esvaziar</translation>
     </message>
 </context>
 <context>
@@ -372,7 +372,7 @@
     <message>
         <location filename="../plugins/tray/trayplugin.cpp" line="52"/>
         <source>System Tray</source>
-        <translation>Tray do Sistema</translation>
+        <translation>Bandeja do Sistema</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="199"/>
         <source>Wired connection: %1</source>
-        <translation>Ligação cablada: %1</translation>
+        <translation>Ligação por cabo: %1</translation>
     </message>
 </context>
 <context>

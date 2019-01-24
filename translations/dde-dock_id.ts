@@ -263,7 +263,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>Hibernasi</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
