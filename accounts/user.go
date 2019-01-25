@@ -20,7 +20,6 @@
 package accounts
 
 import (
-	"bytes"
 	"errors"
 	"io/ioutil"
 	"os"
@@ -63,28 +62,14 @@ const (
 	confKeyHistoryLayout      = "HistoryLayout"
 )
 
-var (
-	defaultUserBackgroundOnce  sync.Once
-	cacheDefaultUserBackground string
-)
-
 func getDefaultUserBackground() string {
-	defaultUserBackgroundOnce.Do(func() {
-		var baseName = "desktop.jpg"
-		content, err := ioutil.ReadFile(filepath.Join(defaultUserBackgroundDir,
-			"default.conf"))
-		content = bytes.TrimSpace(content)
-		if err == nil && len(content) != 0 {
-			contentStr := string(content)
-			_, err := os.Stat(filepath.Join(defaultUserBackgroundDir, contentStr))
-			if err == nil {
-				baseName = contentStr
-			}
-		}
-		cacheDefaultUserBackground = "file://" + defaultUserBackgroundDir + baseName
-		logger.Debug("default user background:", cacheDefaultUserBackground)
-	})
-	return cacheDefaultUserBackground
+	filename := filepath.Join(defaultUserBackgroundDir, "desktop.bmp")
+	_, err := os.Stat(filename)
+	if err == nil {
+		return "file://" + filename
+	}
+
+	return "file://" + filepath.Join(defaultUserBackgroundDir, "desktop.jpg")
 }
 
 type User struct {
