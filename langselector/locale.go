@@ -31,6 +31,8 @@ import (
 	"sync"
 	"time"
 
+	"pkg.deepin.io/dde/api/userenv"
+
 	// dbus services:
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.localehelper"
 	libnetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.network"
@@ -49,7 +51,6 @@ import (
 const (
 	systemLocaleFile     = "/etc/default/locale"
 	systemdLocaleFile    = "/etc/locale.conf"
-	userLocaleFilePamEnv = ".pam_environment"
 	userLocaleConfigFile = ".config/locale.conf"
 
 	defaultLocale = "en_US.UTF-8"
@@ -232,18 +233,19 @@ func isNetworkEnable() (bool, error) {
 }
 
 func getCurrentUserLocale() (locale string) {
-	files := [3]string{
-		filepath.Join(basedir.GetUserHomeDir(), userLocaleFilePamEnv),
-		systemLocaleFile,
-		systemdLocaleFile, // It is used by systemd to store system-wide locale settings
-	}
+	locale, _ = userenv.Get("LANG")
+	if locale == "" {
+		files := []string{
+			systemLocaleFile,
+			systemdLocaleFile, // It is used by systemd to store system-wide locale settings
+		}
 
-	var err error
-	for _, file := range files {
-		locale, err = getLocaleFromFile(file)
-		if err == nil && locale != "" {
-			// get locale success
-			break
+		for _, file := range files {
+			locale, _ = getLocaleFromFile(file)
+			if locale != "" {
+				// get locale success
+				break
+			}
 		}
 	}
 	if locale == "" {
@@ -254,13 +256,14 @@ func getCurrentUserLocale() (locale string) {
 
 func writeUserLocale(locale string) error {
 	homeDir := basedir.GetUserHomeDir()
-	pamEnvFile := filepath.Join(homeDir, userLocaleFilePamEnv)
-	var err error
-	// only for lightdm
-	err = writeLocaleEnvFile(locale, pamEnvFile)
+	err := userenv.Modify(func(m map[string]string) {
+		m["LANG"] = locale
+		m["LANGUAGE"] = strings.Split(locale, ".")[0]
+	})
 	if err != nil {
 		return err
 	}
+
 	localeConfigFile := filepath.Join(homeDir, userLocaleConfigFile)
 	err = writeLocaleEnvFile(locale, localeConfigFile)
 	if err != nil {

@@ -25,10 +25,16 @@ package main
 //void init(){XInitThreads();gtk_init(0,0);}
 import "C"
 import (
+	"bufio"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"os/user"
+	"path/filepath"
 	"runtime"
+	"strings"
 
+	"pkg.deepin.io/dde/api/userenv"
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
 	"pkg.deepin.io/lib/dbus1"
@@ -37,6 +43,7 @@ import (
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
 	"pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 var logger = log.NewLogger("daemon/dde-session-daemon")
@@ -146,7 +153,109 @@ func main() {
 		os.Exit(1)
 	}
 
+	err = migrateUserEnv()
+	if err != nil {
+		logger.Warning("failed to migrate user env:", err)
+	}
+
 	if needRunMainLoop {
 		runMainLoop()
 	}
+}
+
+// migrate user env from ~/.pam_environment to ~/.dde-env
+func migrateUserEnv() error {
+	_, err := os.Stat(userenv.DefaultFile())
+	if os.IsNotExist(err) {
+		// when ~/.dde-env does not exist, read ~/.pam_environment,
+		// remove the key we set before, and save it back.
+		pamEnvFile := filepath.Join(basedir.GetUserHomeDir(), ".pam_environment")
+		pamEnv, err := loadPamEnv(pamEnvFile)
+		if os.IsNotExist(err) {
+			return nil
+		} else if err != nil {
+			return err
+		}
+
+		var reservedPamEnv []pamEnvKeyValue
+		for _, kv := range pamEnv {
+			switch kv.key {
+			case "LANG", "LANGUAGE", "QT_SCALE_FACTOR", "_JAVA_OPTIONS":
+			// ignore it
+			default:
+				reservedPamEnv = append(reservedPamEnv, kv)
+			}
+		}
+
+		if len(reservedPamEnv) == 0 {
+			err = os.Remove(pamEnvFile)
+		} else {
+			err = savePamEnv(pamEnvFile, reservedPamEnv)
+		}
+		if err != nil {
+			return err
+		}
+
+		// save the current env to ~/.dde-env
+		currentEnv := make(map[string]string)
+		for _, envKey := range []string{"LANG", "LANGUAGE", "QT_SCALE_FACTOR"} {
+			envValue, ok := os.LookupEnv(envKey)
+			if ok {
+				currentEnv[envKey] = envValue
+			}
+		}
+		err = userenv.Save(currentEnv)
+		return err
+	} else if err != nil {
+		return err
+	}
+	return nil
+}
+
+type pamEnvKeyValue struct {
+	key, value string
+}
+
+func loadPamEnv(filename string) ([]pamEnvKeyValue, error) {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	lines := strings.Split(string(content), "\n")
+	var result []pamEnvKeyValue
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" || line[0] == '#' {
+			continue
+		}
+
+		fields := strings.SplitN(line, "=", 2)
+		if len(fields) == 2 {
+			result = append(result, pamEnvKeyValue{
+				key:   fields[0],
+				value: fields[1],
+			})
+		}
+	}
+	return result, nil
+}
+
+func savePamEnv(filename string, pamEnv []pamEnvKeyValue) error {
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	bw := bufio.NewWriterSize(f, 256)
+	for _, kv := range pamEnv {
+		_, err = fmt.Fprintf(bw, "%s=%s\n", kv.key, kv.value)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = bw.Flush()
+	return err
 }
