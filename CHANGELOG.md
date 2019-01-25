@@ -1,3 +1,7 @@
+[3.22.0] 2019-01-25
+*   feat: use dde-api package userenv
+*   chore(accounts): get default background do not read file default.conf
+
 [3.21.0] 2019-01-23
 *   fix(network): wired connection auto connect logic is wrong
 *   chore(systeminfo): update test data
