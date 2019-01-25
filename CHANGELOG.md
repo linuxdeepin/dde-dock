@@ -1,3 +1,19 @@
+<a name="4.8.9"></a>
+## 4.8.9 (2019-01-25)
+
+
+#### Features
+
+*   shutdown plugin support hibernate ([60b5d9e0](https://github.com/linuxdeepin/dde-dock/commit/60b5d9e0c2dc528a419b39e9cc8d8c3bb3de9666))
+
+#### Bug Fixes
+
+*   place holder item not be removed after drag leave in touch screen ([12cf14a8](https://github.com/linuxdeepin/dde-dock/commit/12cf14a8638197fb16d6349a818c8a020f2e98dd))
+*   tips widget size not change after system font size changed ([2d39e69e](https://github.com/linuxdeepin/dde-dock/commit/2d39e69ee80c107d3bcb472e6c90c26262b02e04))
+*   obtain opacity value too frequently when startup ([176d58e9](https://github.com/linuxdeepin/dde-dock/commit/176d58e9f9b88faa83e49d79d98bd35f29e482ae))
+
+
+
 <a name="4.8.7.3"></a>
 ## 4.8.7.3 (2019-01-14)
 
