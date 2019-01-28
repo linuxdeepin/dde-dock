@@ -1,3 +1,70 @@
+<a name="4.8.9"></a>
+## 4.8.9 (2019-01-25)
+
+
+#### Features
+
+*   shutdown plugin support hibernate ([60b5d9e0](https://github.com/linuxdeepin/dde-dock/commit/60b5d9e0c2dc528a419b39e9cc8d8c3bb3de9666))
+
+#### Bug Fixes
+
+*   place holder item not be removed after drag leave in touch screen ([12cf14a8](https://github.com/linuxdeepin/dde-dock/commit/12cf14a8638197fb16d6349a818c8a020f2e98dd))
+*   tips widget size not change after system font size changed ([2d39e69e](https://github.com/linuxdeepin/dde-dock/commit/2d39e69ee80c107d3bcb472e6c90c26262b02e04))
+*   obtain opacity value too frequently when startup ([176d58e9](https://github.com/linuxdeepin/dde-dock/commit/176d58e9f9b88faa83e49d79d98bd35f29e482ae))
+
+
+
+<a name="4.8.7.3"></a>
+## 4.8.7.3 (2019-01-14)
+
+
+#### Bug Fixes
+
+*   show dock menu when click on some area out of tray ([2d61405d](https://github.com/linuxdeepin/dde-dock/commit/2d61405db991edb61ec5bfb8f6bb59b7df02a59d))
+
+
+
+<a name="4.8.7.2"></a>
+## 4.8.7.2 (2019-01-11)
+
+
+#### Bug Fixes
+
+*   can not show mutiple tray of one application ([f0b11152](https://github.com/linuxdeepin/dde-dock/commit/f0b11152de4db0e27303783ae096de2d05f49777))
+
+
+
+<a name="4.8.7.1"></a>
+## 4.8.7.1 (2019-01-10)
+
+
+#### Bug Fixes
+
+*   warning when get window property for xembed tray ([eb151202](https://github.com/linuxdeepin/dde-dock/commit/eb151202b53843d16463e699fdff8783e6a2c1f9))
+
+
+
+<a name="4.8.7"></a>
+## 4.8.7 (2019-01-09)
+
+
+#### Features
+
+*   animation of hold spliter ([9dde0f6d](https://github.com/linuxdeepin/dde-dock/commit/9dde0f6d305f0486753722b16a42235cba6f3e37))
+*   add hold container ([fea60742](https://github.com/linuxdeepin/dde-dock/commit/fea60742c5208a8b542e2aebe49ec608e93fca8c))
+*   add hold container ([902cb327](https://github.com/linuxdeepin/dde-dock/commit/902cb3271fb02327818b13a922332d30a36d1222))
+*   add a container widget for hold on trays ([aae408d5](https://github.com/linuxdeepin/dde-dock/commit/aae408d5b71a12e094ff751f146e2afa18edf38f))
+*   update plugin API version ([7a5501e5](https://github.com/linuxdeepin/dde-dock/commit/7a5501e53d2089307dfb14e72059f28bee6d1c14))
+
+#### Bug Fixes
+
+*   xembed tray click response ([05babb8d](https://github.com/linuxdeepin/dde-dock/commit/05babb8d5212ab5369a6a094c4d8aaa1a124cec3))
+*   build package ([b8ecc616](https://github.com/linuxdeepin/dde-dock/commit/b8ecc6165292b201be5fb5bbedf776edfb63132c))
+*   dock crash and sni tray status property process ([8ed1aa96](https://github.com/linuxdeepin/dde-dock/commit/8ed1aa962f15df8da10edb3fa05138507298381c))
+*   can not drag back to normal container ([f39a678d](https://github.com/linuxdeepin/dde-dock/commit/f39a678d04bdc68536efddd8c01dd8dbd6ef5c26))
+
+
+
 <a name="4.8.6"></a>
 ## 4.8.6 (2019-01-04)
 

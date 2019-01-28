@@ -92,7 +92,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
-    connect(m_device, &WirelessDevice::activeConnectionChanged, this, &WirelessList::onActiveConnectionChanged);
+    connect(m_device, &WirelessDevice::activeWirelessConnectionChanged, this, &WirelessList::onActiveConnectionChanged);
     connect(m_device, static_cast<void (WirelessDevice:: *) (NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [=] {

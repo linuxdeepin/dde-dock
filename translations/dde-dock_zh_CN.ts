@@ -10,22 +10,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="58"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="57"/>
         <source>Datetime</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="147"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
         <source>12 Hour Time</source>
         <translation>12小时制</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="149"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
         <source>24 Hour Time</source>
         <translation>24小时制</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="155"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
         <source>Time Settings</source>
         <translation>时间设置</translation>
     </message>
@@ -33,17 +33,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="55"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Enable network</source>
         <translation>启用网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="57"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="61"/>
         <source>Disable network</source>
         <translation>关闭网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="63"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="67"/>
         <source>Network settings</source>
         <translation>网络设置</translation>
     </message>
@@ -261,12 +261,17 @@
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <source>Hibernate</source>
+        <translation>休眠</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Lock</source>
         <translation>锁定</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="138"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
         <source>Log out</source>
         <translation>注销</translation>
     </message>
@@ -276,12 +281,12 @@
         <translation>待机</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Switch account</source>
         <translation>切换帐户</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="153"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
         <source>Power settings</source>
         <translation>电源设置</translation>
     </message>
@@ -323,7 +328,7 @@
         <translation>音量设置</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="207"/>
         <source>Current Volume %1</source>
         <translation>当前音量%1</translation>
     </message>
@@ -339,12 +344,12 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="83"/>
         <source>Trash - %1 file</source>
         <translation>回收站 - %1个文件</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="87"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
         <source>Trash - %1 files</source>
         <translation>回收站 - %1个文件</translation>
     </message>
@@ -365,7 +370,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="53"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="52"/>
         <source>System Tray</source>
         <translation>系统托盘</translation>
     </message>
@@ -378,7 +383,7 @@
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="206"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="199"/>
         <source>Wired connection: %1</source>
         <translation>有线连接：%1</translation>
     </message>
@@ -391,7 +396,7 @@
         <translation>无网络访问</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="281"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="275"/>
         <source>Wireless Connection: %1</source>
         <translation>无线连接：%1</translation>
     </message>
@@ -399,12 +404,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="154"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network</source>
         <translation>无线网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
         <source>Wireless Network %1</source>
         <translation>无线网络%1</translation>
     </message>

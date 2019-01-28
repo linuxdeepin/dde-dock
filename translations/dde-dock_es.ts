@@ -10,22 +10,22 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="58"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="57"/>
         <source>Datetime</source>
         <translation>Fecha y hora</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="147"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
         <source>12 Hour Time</source>
         <translation>Horario de 12 horas</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="149"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
         <source>24 Hour Time</source>
         <translation>Horario de 24 horas</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="155"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
         <source>Time Settings</source>
         <translation>Ajustes de tiempo</translation>
     </message>
@@ -33,17 +33,17 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="55"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Enable network</source>
         <translation>Habilitar red</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="57"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="61"/>
         <source>Disable network</source>
         <translation>Deshabilitar red</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="63"/>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="67"/>
         <source>Network settings</source>
         <translation>Ajustes de red</translation>
     </message>
@@ -212,12 +212,12 @@
         <location filename="../plugins/onboard/onboardplugin.cpp" line="35"/>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="46"/>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Onboard</translation>
     </message>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ajustes</translation>
     </message>
 </context>
 <context>
@@ -261,12 +261,17 @@
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <source>Hibernate</source>
+        <translation>Hibernar</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="138"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
         <source>Log out</source>
         <translation>Cerrar sesión</translation>
     </message>
@@ -276,12 +281,12 @@
         <translation>Suspender</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
         <source>Switch account</source>
         <translation>Cambiar cuenta</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="153"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
         <source>Power settings</source>
         <translation>Ajustes de energía</translation>
     </message>
@@ -323,7 +328,7 @@
         <translation>Ajustes audio</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="207"/>
         <source>Current Volume %1</source>
         <translation>Volumen actual %1</translation>
     </message>
@@ -339,12 +344,12 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="83"/>
         <source>Trash - %1 file</source>
         <translation>Papelera - %1 archivo</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="87"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
         <source>Trash - %1 files</source>
         <translation>Papelera - %1 archivos</translation>
     </message>
@@ -365,7 +370,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="53"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="52"/>
         <source>System Tray</source>
         <translation>Bandeja de sistema</translation>
     </message>
@@ -378,7 +383,7 @@
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="206"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="199"/>
         <source>Wired connection: %1</source>
         <translation>Conexión cableada: %1</translation>
     </message>
@@ -391,7 +396,7 @@
         <translation>Sin red</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="281"/>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="275"/>
         <source>Wireless Connection: %1</source>
         <translation>Conexión inalámbrica: %1</translation>
     </message>
@@ -399,12 +404,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="154"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network</source>
         <translation>Red inalámbrica</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
         <source>Wireless Network %1</source>
         <translation>Red inalámbrica %1</translation>
     </message>

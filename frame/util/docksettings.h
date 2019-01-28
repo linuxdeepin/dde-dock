@@ -27,7 +27,6 @@
 #include "dbus/dbusdisplay.h"
 #include "controller/dockitemcontroller.h"
 
-#include <com_deepin_daemon_appearance.h>
 #include <com_deepin_dde_daemon_dock.h>
 
 #include <QAction>
@@ -41,7 +40,6 @@
 DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
-using Appearance = com::deepin::daemon::Appearance;
 using DBusDock = com::deepin::dde::daemon::Dock;
 
 class WhiteMenu : public QMenu
@@ -160,7 +158,6 @@ private:
     DBusDisplay *m_displayInter;
     DBusDock *m_dockInter;
     DockItemController *m_itemController;
-    Appearance* m_appearanceInter;
 };
 
 #endif // DOCKSETTINGS_H

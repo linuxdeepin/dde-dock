@@ -33,7 +33,6 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
       m_pluginLoaded(false),
       m_tipsLabel(new TipsWidget)
 {
-    m_tipsLabel->setText(tr("Shutdown"));
     m_tipsLabel->setVisible(false);
 }
 
@@ -57,6 +56,10 @@ QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
+
+    // reset text every time to avoid size of LabelWidget not change after
+    // font size be changed in ControlCenter
+    m_tipsLabel->setText(tr("Shutdown"));
 
     return m_tipsLabel;
 }
@@ -126,6 +129,14 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     suspend["itemText"] = tr("Suspend");
     suspend["isActive"] = true;
     items.push_back(suspend);
+
+    if (checkSwap()) {
+        QMap<QString, QVariant> hibernate;
+        hibernate["itemId"] = "Hibernate";
+        hibernate["itemText"] = tr("Hibernate");
+        hibernate["isActive"] = true;
+        items.push_back(hibernate);
+    }
 
     QMap<QString, QVariant> lock;
     lock["itemId"] = "Lock";
@@ -221,4 +232,18 @@ void ShutdownPlugin::loadPlugin()
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());
+}
+
+bool ShutdownPlugin::checkSwap()
+{
+    QFile file("/proc/swaps");
+    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+        const QString &body = file.readAll();
+        file.close();
+        QRegularExpression re("\\spartition\\s");
+        QRegularExpressionMatch match = re.match(body);
+        return match.hasMatch();
+    }
+
+    return false;
 }

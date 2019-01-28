@@ -42,9 +42,11 @@ AbstractTrayWidget::~AbstractTrayWidget()
 
 void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
 {
-    // do not call Parent::mousePressEvent or the DockItem will catch this event
-    // and show dock-context-menu immediately when right button of mouse is pressed in fashion mode
-    if (event->button() == Qt::RightButton) {
+    // call QWidget::mousePressEvent means to show dock-context-menu
+    // when right button of mouse is pressed immediately in fashion mode
+
+    // here we hide the right button press event when it is click in the special area
+    if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos())) {
         event->accept();
         return;
     }
@@ -100,4 +102,17 @@ void AbstractTrayWidget::handleMouseRelease() {
     if (buttonIndex == XCB_BUTTON_INDEX_1) {
         Q_EMIT clicked();
     }
+}
+
+const QRect AbstractTrayWidget::perfectIconRect() const
+{
+    const QRect itemRect = rect();
+    const int iconSize = std::min(itemRect.width(), itemRect.height()) * 0.8;
+
+    QRect iconRect;
+    iconRect.setWidth(iconSize);
+    iconRect.setHeight(iconSize);
+    iconRect.moveTopLeft(itemRect.center() - iconRect.center());
+
+    return iconRect;
 }
