@@ -21,7 +21,6 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "dockpluginloader.h"
 #include "item/traypluginitem.h"
 
 #include <QDebug>
