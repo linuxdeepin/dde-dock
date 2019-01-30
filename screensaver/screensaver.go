@@ -247,10 +247,11 @@ func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 	// query dpms ext version
 	dpmsVersion, err := dpms.GetVersion(s.xConn, 1, 1).Reply(s.xConn)
 	if err != nil {
-		return nil, err
+		logger.Warning("failed to get dpms ext version:", err)
+	} else {
+		logger.Debugf("dpms ext version %d.%d", dpmsVersion.ServerMajorVersion,
+			dpmsVersion.ServerMinorVersion)
 	}
-	logger.Debugf("dpms ext version %d.%d", dpmsVersion.ServerMajorVersion,
-		dpmsVersion.ServerMinorVersion)
 
 	root := s.xConn.GetDefaultScreen().Root
 	err = screensaver.SelectInputChecked(s.xConn, x.Drawable(root), screensaver.EventNotifyMask|
