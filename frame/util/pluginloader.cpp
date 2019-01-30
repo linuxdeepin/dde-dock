@@ -33,12 +33,7 @@ PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
 
 void PluginLoader::run()
 {
-    QDir pluginsDir("../plugins");
-    if (!pluginsDir.exists()) {
-        pluginsDir.setPath("/usr/lib/dde-dock/plugins");
-    }
-    qDebug() << "using dock plugins dir:" << pluginsDir.absolutePath();
-
+    QDir pluginsDir(m_pluginDirPath);
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
 
     for (const QString file : plugins)

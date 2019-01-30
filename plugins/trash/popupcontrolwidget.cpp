@@ -111,7 +111,7 @@ void PopupControlWidget::clearTrashFloder()
 
         d.setTitle(ClearTrashMutliple.arg(count));
         d.setMessage(qApp->translate("DialogManager", "This action cannot be restored"));
-        d.setIcon(m_dialogTrashFullIcon);
+        d.setIcon(m_dialogTrashFullIcon, QSize(64, 64));
         d.addButton(buttonTexts[0], true, DDialog::ButtonNormal);
         d.addButton(buttonTexts[1], false, DDialog::ButtonWarning);
         d.setDefaultButton(1);

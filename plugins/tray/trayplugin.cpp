@@ -82,8 +82,8 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
         return;
     }
 
-    connect(m_systemTraysController, &SystemTraysController::systemTrayAdded, this, &TrayPlugin::addTrayWidget);
-    connect(m_systemTraysController, &SystemTraysController::systemTrayRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
+    connect(m_systemTraysController, &SystemTraysController::pluginItemAdded, this, &TrayPlugin::addTrayWidget);
+    connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
 
     m_trayInter->Manage();
 
