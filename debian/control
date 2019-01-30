@@ -83,6 +83,7 @@ Suggests:
  network-manager-openconnect,
  network-manager-openvpn,
  network-manager-vpnc,
+ network-manager-sstp,
  xserver-xorg-input-wacom,
  xserver-xorg-input-synaptics,
  miraclecast
