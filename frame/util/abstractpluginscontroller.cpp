@@ -26,6 +26,11 @@
 #include <QDir>
 #include <QGSettings>
 
+static const QStringList CompatiblePluginApiList {
+    "1.1.1",
+    DOCK_PLUGIN_API_VERSION
+};
+
 AbstractPluginsController::AbstractPluginsController(QObject *parent)
     : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
@@ -134,10 +139,14 @@ void AbstractPluginsController::positionChanged()
 void AbstractPluginsController::loadPlugin(const QString &pluginFile)
 {
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
-    const auto meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (!meta.contains("api") || meta["api"].toString() != DOCK_PLUGIN_API_VERSION)
+    const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
+    const QString &pluginApi = meta.value("api").toString();
+    if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi))
     {
-        qWarning() << objectName() << "plugin api version not matched! expect version:" << DOCK_PLUGIN_API_VERSION << pluginFile;
+        qWarning() << objectName()
+                   << "plugin api version not matched! expect versions:" << CompatiblePluginApiList
+                   << ", got version:" << pluginApi
+                   << ", the plugin file is:" << pluginFile;
         return;
     }
 
@@ -204,7 +213,10 @@ void AbstractPluginsController::refreshPluginSettings()
         return;
     }
 
-    // TODO: notify all plugins to reload plugin settings
+    // notify all plugins to reload plugin settings
+    for (PluginsItemInterface *pluginInter : m_pluginsMap.keys()) {
+        pluginInter->pluginSettingsChanged();
+    }
 }
 
 bool AbstractPluginsController::eventFilter(QObject *o, QEvent *e)
