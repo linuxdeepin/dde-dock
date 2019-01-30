@@ -22,6 +22,7 @@ package langselector
 import (
 	"fmt"
 
+	"pkg.deepin.io/dde/api/language_support"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -90,4 +91,15 @@ func (lang *LangSelector) Reset() *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	return lang.SetLocale(locale)
+}
+
+func (lang *LangSelector) GetLanguageSupportPackages(locale string) ([]string, *dbus.Error) {
+	ls, err := language_support.NewLanguageSupport()
+	if err != nil {
+		return nil, dbusutil.ToError(err)
+	}
+
+	pkgs := ls.ByLocale(locale, false)
+	ls.Destroy()
+	return pkgs, nil
 }

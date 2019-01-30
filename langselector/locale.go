@@ -101,9 +101,10 @@ type LangSelector struct {
 	LocaleState int32
 
 	methods *struct {
-		SetLocale            func() `in:"locale"`
-		GetLocaleList        func() `out:"locales"`
-		GetLocaleDescription func() `in:"locale" out:"description"`
+		SetLocale                  func() `in:"locale"`
+		GetLocaleList              func() `out:"locales"`
+		GetLocaleDescription       func() `in:"locale" out:"description"`
+		GetLanguageSupportPackages func() `in:"locale" out:"packages"`
 	}
 
 	signals *struct {
