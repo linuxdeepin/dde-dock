@@ -83,16 +83,7 @@ void ShutdownPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
 
-    if (pluginIsDisable())
-    {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        m_proxyInter->itemAdded(this, pluginName());
-    }
+    refreshPluginItemsVisible();
 }
 
 bool ShutdownPlugin::pluginIsDisable()
@@ -219,6 +210,11 @@ void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
+void ShutdownPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
 void ShutdownPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -246,4 +242,18 @@ bool ShutdownPlugin::checkSwap()
     }
 
     return false;
+}
+
+void ShutdownPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable())
+    {
+        m_proxyInter->itemRemoved(this, pluginName());
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        m_proxyInter->itemAdded(this, pluginName());
+    }
 }

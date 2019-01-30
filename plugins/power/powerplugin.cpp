@@ -94,15 +94,7 @@ void PowerPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        updateBatteryVisible();
-    }
+    refreshPluginItemsVisible();
 }
 
 bool PowerPlugin::pluginIsDisable()
@@ -171,6 +163,11 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
+void PowerPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
 void PowerPlugin::updateBatteryVisible()
 {
     const bool exist = !m_powerInter->batteryPercentage().isEmpty();
@@ -196,4 +193,17 @@ void PowerPlugin::loadPlugin()
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerPlugin::updateBatteryVisible);
 
     updateBatteryVisible();
+}
+
+void PowerPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable()) {
+        m_proxyInter->itemRemoved(this, POWER_KEY);
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        updateBatteryVisible();
+    }
 }

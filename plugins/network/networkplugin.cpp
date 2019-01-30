@@ -88,19 +88,7 @@ void NetworkPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
 
-    if (pluginIsDisable()) {
-        for (auto itemKey : m_itemsMap.keys()) {
-            m_proxyInter->itemRemoved(this, itemKey);
-        }
-        return;
-    }
-
-    if (!m_pluginLoaded) {
-        loadPlugin();
-        return;
-    }
-
-    onDeviceListChanged(m_networkModel->devices());
+    refreshPluginItemsVisible();
 }
 
 bool NetworkPlugin::pluginIsDisable()
@@ -169,6 +157,11 @@ void NetworkPlugin::setSortKey(const QString &itemKey, const int order)
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
     m_proxyInter->saveValue(this, key, order);
+}
+
+void NetworkPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
 }
 
 bool NetworkPlugin::isConnectivity()
@@ -328,4 +321,21 @@ void NetworkPlugin::onItemRequestSetAppletVisible(const bool visible)
     Q_ASSERT(item);
 
     m_proxyInter->requestSetAppletVisible(this, item->path(), visible);
+}
+
+void NetworkPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable()) {
+        for (auto itemKey : m_itemsMap.keys()) {
+            m_proxyInter->itemRemoved(this, itemKey);
+        }
+        return;
+    }
+
+    if (!m_pluginLoaded) {
+        loadPlugin();
+        return;
+    }
+
+    onDeviceListChanged(m_networkModel->devices());
 }

@@ -54,10 +54,7 @@ void SoundPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
 
-    if (pluginIsDisable())
-        m_proxyInter->itemRemoved(this, SOUND_KEY);
-    else
-        m_proxyInter->itemAdded(this, SOUND_KEY);
+    refreshPluginItemsVisible();
 }
 
 bool SoundPlugin::pluginIsDisable()
@@ -127,4 +124,17 @@ void SoundPlugin::refreshIcon(const QString &itemKey)
     if (itemKey == SOUND_KEY) {
         m_soundItem->refreshIcon();
     }
+}
+
+void SoundPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
+void SoundPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable())
+        m_proxyInter->itemRemoved(this, SOUND_KEY);
+    else
+        m_proxyInter->itemAdded(this, SOUND_KEY);
 }

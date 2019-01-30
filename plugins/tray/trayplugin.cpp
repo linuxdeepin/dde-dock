@@ -32,6 +32,7 @@
 #include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
 
+#define PLUGIN_ENABLED_KEY "enable"
 #define FASHION_MODE_TRAYS_SORTED   "fashion-mode-trays-sorted"
 
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
@@ -77,7 +78,7 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
-    if (!proxyInter->getValue(this, "enable", true).toBool()) {
+    if (pluginIsDisable()) {
         qDebug() << "hide tray from config disable!!";
         return;
     }
@@ -96,9 +97,14 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
     QTimer::singleShot(4000, this, &TrayPlugin::initXEmbed);
 }
 
+bool TrayPlugin::pluginIsDisable()
+{
+    return !m_proxyInter->getValue(this, PLUGIN_ENABLED_KEY, true).toBool();
+}
+
 void TrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 {
-    if (!m_proxyInter->getValue(this, "enable", true).toBool()) {
+    if (pluginIsDisable()) {
         return;
     }
 
@@ -107,7 +113,7 @@ void TrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 
 void TrayPlugin::positionChanged(const Dock::Position position)
 {
-    if (!m_proxyInter->getValue(this, "enable", true).toBool()) {
+    if (pluginIsDisable()) {
         return;
     }
 
@@ -205,6 +211,19 @@ void TrayPlugin::refreshIcon(const QString &itemKey)
     AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey);
     if (trayWidget) {
         trayWidget->updateIcon();
+    }
+}
+
+void TrayPlugin::pluginSettingsChanged()
+{
+    if (pluginIsDisable()) {
+        return;
+    }
+
+    if (displayMode() == Dock::DisplayMode::Fashion) {
+        m_fashionItem->onPluginSettingsChanged();
+        m_fashionItem->clearTrayWidgets();
+        m_fashionItem->setTrayWidgets(m_trayMap);
     }
 }
 

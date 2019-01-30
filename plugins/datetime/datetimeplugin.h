@@ -58,8 +58,11 @@ public:
 
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 
+    void pluginSettingsChanged() override;
+
 private slots:
     void updateCurrentTimeString();
+    void refreshPluginItemsVisible();
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
