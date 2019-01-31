@@ -181,8 +181,14 @@ func (winInfo *WindowInfo) shouldSkipWithWMClass() bool {
 	return false
 }
 
-func (winInfo *WindowInfo) getDisplayName() string {
-	return strings.Title(winInfo.getDisplayName0())
+func (winInfo *WindowInfo) getDisplayName() (name string) {
+	name = winInfo.getDisplayName0()
+	nameTitle := strings.Title(name)
+	// NOTE: although name is valid, nameTitle is not necessarily valid.
+	if utf8.ValidString(nameTitle) {
+		name = nameTitle
+	}
+	return
 }
 
 func (winInfo *WindowInfo) getDisplayName0() string {

@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"sort"
 	"sync"
+	"unicode/utf8"
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/dbusutil"
@@ -270,9 +271,15 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
 func (entry *AppEntry) getName() (name string) {
 	if entry.appInfo != nil {
 		name = entry.appInfo.GetDisplayName()
-	} else if entry.current != nil {
+		if !utf8.ValidString(name) {
+			name = ""
+		}
+	}
+
+	if name == "" && entry.current != nil {
 		name = entry.current.getDisplayName()
 	}
+
 	return
 }
 

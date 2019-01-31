@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"fmt"
 
 	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/xfixes"
@@ -105,7 +106,7 @@ func (m *Manager) start() error {
 		return err
 	}
 	if owner != 0 {
-		return errors.New("another clipboard manager is already running")
+		return fmt.Errorf("another clipboard manager is already running, owner: %d", owner)
 	}
 
 	m.window, err = createWindow(m.xConn)
