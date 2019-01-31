@@ -44,7 +44,8 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
 }
 
 void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
-    refreshPluginSettings();
+    // is it necessary?
+//    refreshPluginSettings();
 
     // save to local cache
     QJsonObject localObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
@@ -193,18 +194,24 @@ void AbstractPluginsController::refreshPluginSettings()
         return;
     }
 
-    const QJsonObject &settingsObject = QJsonDocument::fromJson(pluginSettings.toLocal8Bit()).object();
-    if (settingsObject.isEmpty()) {
+    const QJsonObject &pluginSettingsObject = QJsonDocument::fromJson(pluginSettings.toLocal8Bit()).object();
+    if (pluginSettingsObject.isEmpty()) {
         return;
     }
 
-    for (auto pluginsIt = settingsObject.constBegin(); pluginsIt != settingsObject.constEnd(); ++pluginsIt) {
+    // nothing changed
+    if (pluginSettingsObject == m_pluginSettingsObject) {
+        return;
+    }
+
+    for (auto pluginsIt = pluginSettingsObject.constBegin(); pluginsIt != pluginSettingsObject.constEnd(); ++pluginsIt) {
         const QString &pluginName = pluginsIt.key();
         const QJsonObject &settingsObject = pluginsIt.value().toObject();
         QJsonObject newSettingsObject = m_pluginSettingsObject.value(pluginName).toObject();
         for (auto settingsIt = settingsObject.constBegin(); settingsIt != settingsObject.constEnd(); ++settingsIt) {
             newSettingsObject.insert(settingsIt.key(), settingsIt.value());
         }
+        // TODO: remove not exists key-values
         m_pluginSettingsObject.insert(pluginName, newSettingsObject);
     }
 
@@ -216,6 +223,18 @@ void AbstractPluginsController::refreshPluginSettings()
     // notify all plugins to reload plugin settings
     for (PluginsItemInterface *pluginInter : m_pluginsMap.keys()) {
         pluginInter->pluginSettingsChanged();
+    }
+
+    // reload all plugin items for sort order or container
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> pluginsMapTemp = m_pluginsMap;
+    for (auto it = pluginsMapTemp.constBegin(); it != pluginsMapTemp.constEnd(); ++it) {
+        const QList<QString> &itemKeyList = it.value().keys();
+        for (auto key : itemKeyList) {
+            itemRemoved(it.key(), key);
+        }
+        for (auto key : itemKeyList) {
+            itemAdded(it.key(), key);
+        }
     }
 }
 
