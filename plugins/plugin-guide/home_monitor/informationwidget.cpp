@@ -11,6 +11,7 @@ InformationWidget::InformationWidget(QWidget *parent)
     m_infoLabel->setStyleSheet("QLabel {"
                                "color: white;"
                                "}");
+    m_infoLabel->setAlignment(Qt::AlignCenter);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_infoLabel);
