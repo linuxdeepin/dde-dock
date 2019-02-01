@@ -184,6 +184,7 @@ func (l *Lastore) initCore(systemBus *dbus.Conn) {
 func (l *Lastore) destroy() {
 	l.sessionSigLoop.Stop()
 	l.sysSigLoop.Stop()
+	l.syncConfig.Destroy()
 
 	systemBus := l.sysSigLoop.Conn()
 	err := l.lastoreRule.RemoveFrom(systemBus)

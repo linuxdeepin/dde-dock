@@ -254,6 +254,8 @@ func (a *Audio) destroyCtxRelated() {
 }
 
 func (a *Audio) destroy() {
+	a.sessionSigLoop.Stop()
+	a.syncConfig.Destroy()
 	close(a.quit)
 	a.destroyCtxRelated()
 }

@@ -82,7 +82,7 @@ func (d *Daemon) Stop() error {
 		return err
 	}
 
-	d.manager.destory()
+	d.manager.destroy()
 	d.manager = nil
 	return nil
 }

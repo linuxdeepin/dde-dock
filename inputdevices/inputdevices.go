@@ -109,6 +109,9 @@ func (*Daemon) Stop() error {
 		return nil
 	}
 
+	_manager.sessionSigLoop.Stop()
+	_manager.syncConfig.Destroy()
+
 	if _manager.kbd != nil {
 		_manager.kbd.destroy()
 		_manager.kbd = nil

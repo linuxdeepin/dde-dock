@@ -31,8 +31,6 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/dbusutil/gsprop"
-
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
@@ -49,6 +47,7 @@ import (
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/strv"

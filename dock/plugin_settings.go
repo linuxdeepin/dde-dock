@@ -105,6 +105,26 @@ func (s *pluginSettingsStorage) merge(v pluginSettings) {
 	s.requestSave()
 }
 
+func (s *pluginSettingsStorage) remove(key1 string, key2List []string) {
+	s.dataMu.Lock()
+
+	if len(key2List) == 0 {
+		delete(s.data, key1)
+	} else {
+		if value1, ok := s.data[key1]; ok {
+			for _, key2 := range key2List {
+				delete(value1, key2)
+			}
+			if len(value1) == 0 {
+				delete(s.data, key1)
+			}
+		}
+	}
+
+	s.dataMu.Unlock()
+	s.requestSave()
+}
+
 func (s *pluginSettingsStorage) equal(v pluginSettings) bool {
 	s.dataMu.Lock()
 	defer s.dataMu.Unlock()

@@ -56,13 +56,21 @@ func (d *Module) start() error {
 		return err
 	}
 
-	err = service.Export(dbusObjPath, d.manager)
+	err = service.Export(dbusObjPath, d.manager, d.manager.syncConfig)
 	if err != nil {
 		return err
 	}
 
 	err = service.RequestName(dbusServiceName)
-	return err
+	if err != nil {
+		return err
+	}
+
+	err = d.manager.syncConfig.Register()
+	if err != nil {
+		logger.Warning(err)
+	}
+	return nil
 }
 
 func (d *Module) Start() error {

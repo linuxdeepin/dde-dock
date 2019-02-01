@@ -126,6 +126,7 @@ type Manager struct {
 		SetPluginSettings         func() `in:"jsonStr"`
 		GetPluginSettings         func() `out:"jsonStr"`
 		MergePluginSettings       func() `in:"jsonStr"`
+		RemovePluginSettings      func() `in:"key1,key2List"`
 	}
 }
 
@@ -178,8 +179,12 @@ func (m *Manager) destroy() {
 	m.launcher.RemoveHandler(proxy.RemoveAllHandlers)
 	m.ddeLauncher.RemoveHandler(proxy.RemoveAllHandlers)
 	m.sessionSigLoop.Stop()
+	m.syncConfig.Destroy()
 
-	m.service.StopExport(m)
+	err := m.service.StopExport(m)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) launch(desktopFile string, timestamp uint32, files []string) {
@@ -443,5 +448,10 @@ func (m *Manager) MergePluginSettings(jsonStr string) *dbus.Error {
 	}
 
 	m.pluginSettings.merge(v)
+	return nil
+}
+
+func (m *Manager) RemovePluginSettings(key1 string, key2List []string) *dbus.Error {
+	m.pluginSettings.remove(key1, key2List)
 	return nil
 }

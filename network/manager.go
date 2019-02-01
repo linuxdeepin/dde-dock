@@ -242,6 +242,8 @@ func (m *Manager) init() {
 
 func (m *Manager) destroy() {
 	logger.Info("destroy network")
+	m.sessionSigLoop.Stop()
+	m.syncConfig.Destroy()
 	m.nmObjManager.RemoveHandler(proxy.RemoveAllHandlers)
 	m.sysNetwork.RemoveHandler(proxy.RemoveAllHandlers)
 	destroyDbusObjects()

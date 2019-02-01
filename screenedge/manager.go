@@ -70,14 +70,10 @@ func newManager(service *dbusutil.Service) *Manager {
 	return m
 }
 
-func (m *Manager) destory() {
-	if m.settings != nil {
-		m.settings.Destroy()
-		m.settings = nil
-	}
-	if m.sessionSigLoop != nil {
-		m.sessionSigLoop.Stop()
-	}
+func (m *Manager) destroy() {
+	m.settings.Destroy()
+	m.sessionSigLoop.Stop()
+	m.syncConfig.Destroy()
 }
 
 func (*Manager) GetInterfaceName() string {
