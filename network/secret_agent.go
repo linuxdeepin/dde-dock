@@ -48,9 +48,10 @@ type saveSecretsTask struct {
 }
 
 type SecretAgent struct {
-	secretService     *secrets.Service
-	secretSessionPath dbus.ObjectPath
-	defaultCollection *secrets.Collection
+	secretService       *secrets.Service
+	secretSessionPath   dbus.ObjectPath
+	defaultCollection   *secrets.Collection
+	defaultCollectionMu sync.Mutex
 
 	saveSecretsTasks   map[saveSecretsTaskKey]saveSecretsTask
 	saveSecretsTasksMu sync.Mutex
@@ -99,30 +100,46 @@ func (sa *SecretAgent) getSaveSecretsTaskProcess(connPath dbus.ObjectPath,
 	return task.process
 }
 
-func newSecretAgent(sessionBus *dbus.Conn, secServiceObj *secrets.Service) (*SecretAgent, error) {
+func (sa *SecretAgent) getDefaultCollection() (*secrets.Collection, error) {
+	sa.defaultCollectionMu.Lock()
+	defer sa.defaultCollectionMu.Unlock()
 
-	_, sessionPath, err := secServiceObj.OpenSession(0, "plain", dbus.MakeVariant(""))
+	if sa.defaultCollection != nil {
+		return sa.defaultCollection, nil
+	}
+
+	collectionPath, err := sa.secretService.ReadAlias(0, "default")
 	if err != nil {
 		return nil, err
 	}
 
-	collectionPath, err := secServiceObj.ReadAlias(0, "default")
+	if collectionPath == "/" {
+		return nil, errors.New("failed to get default collection path")
+	}
+
+	sessionBus, err := dbus.SessionBus()
 	if err != nil {
 		return nil, err
 	}
 
 	collectionObj, err := secrets.NewCollection(sessionBus, collectionPath)
+	if err == nil {
+		sa.defaultCollection = collectionObj
+	}
+	return collectionObj, err
+}
+
+func newSecretAgent(secServiceObj *secrets.Service) (*SecretAgent, error) {
+	_, sessionPath, err := secServiceObj.OpenSession(0, "plain", dbus.MakeVariant(""))
 	if err != nil {
 		return nil, err
 	}
 
 	sa := &SecretAgent{}
-	sa.defaultCollection = collectionObj
 	sa.secretSessionPath = sessionPath
 	sa.secretService = secServiceObj
 	sa.saveSecretsTasks = make(map[saveSecretsTaskKey]saveSecretsTask)
 	logger.Debug("session path:", sessionPath)
-	logger.Debug("default collection path:", collectionPath)
 	return sa, nil
 }
 
@@ -131,7 +148,12 @@ func (sa *SecretAgent) deleteAll(uuid string) error {
 		keyringTagConnUUID: uuid,
 	}
 
-	items, err := sa.defaultCollection.SearchItems(0, attributes)
+	defaultCollection, err := sa.getDefaultCollection()
+	if err != nil {
+		return err
+	}
+
+	items, err := defaultCollection.SearchItems(0, attributes)
 	if err != nil {
 		return err
 	}
@@ -158,7 +180,12 @@ func (sa *SecretAgent) getAll(uuid, settingName string) (map[string]string, erro
 		keyringTagConnUUID:    uuid,
 		keyringTagSettingName: settingName,
 	}
-	items, err := sa.defaultCollection.SearchItems(0, attributes)
+	defaultCollection, err := sa.getDefaultCollection()
+	if err != nil {
+		return nil, err
+	}
+
+	items, err := defaultCollection.SearchItems(0, attributes)
 	if err != nil {
 		return nil, err
 	}
@@ -194,8 +221,12 @@ func (sa *SecretAgent) delete(uuid, settingName, settingKey string) error {
 		keyringTagSettingName: settingName,
 		keyringTagSettingKey:  settingKey,
 	}
+	defaultCollection, err := sa.getDefaultCollection()
+	if err != nil {
+		return err
+	}
 
-	items, err := sa.defaultCollection.SearchItems(0, attributes)
+	items, err := defaultCollection.SearchItems(0, attributes)
 	if err != nil {
 		return err
 	}
@@ -239,7 +270,11 @@ func (sa *SecretAgent) set(label, uuid, settingName, settingKey, value string) e
 		}),
 	}
 
-	_, _, err := sa.defaultCollection.CreateItem(0, properties, itemSecret, true)
+	defaultCollection, err := sa.getDefaultCollection()
+	if err != nil {
+		return err
+	}
+	_, _, err = defaultCollection.CreateItem(0, properties, itemSecret, true)
 	return err
 }
 

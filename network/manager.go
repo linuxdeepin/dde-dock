@@ -170,7 +170,7 @@ func (m *Manager) init() {
 	}
 
 	secServiceObj := secrets.NewService(sessionBus)
-	sa, err := newSecretAgent(sessionBus, secServiceObj)
+	sa, err := newSecretAgent(secServiceObj)
 	if err != nil {
 		logger.Warning(err)
 		return
