@@ -28,6 +28,8 @@ import (
 	"strings"
 	"sync"
 
+	"gir/glib-2.0"
+
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -224,9 +226,10 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		isSave = true
 	}
 
-	greeterBg, _ := kf.GetString(confGroupUser, confKeyGreeterBackground)
-	u.GreeterBackground = greeterBg
-	if greeterBg == "" {
+	greeterBg, ok := getUserGreeterBackground(kf)
+	if ok {
+		u.GreeterBackground = greeterBg
+	} else {
 		u.GreeterBackground = getDefaultUserBackground()
 		isSave = true
 	}
@@ -234,11 +237,27 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	_, u.HistoryLayout, _ = kf.GetStringList(confGroupUser, confKeyHistoryLayout)
 
 	if isSave {
-		u.writeUserConfig()
+		err := u.writeUserConfig()
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	u.checkLeftSpace()
 	return u, nil
+}
+
+func getUserGreeterBackground(kf *glib.KeyFile) (string, bool) {
+	greeterBg, _ := kf.GetString(confGroupUser, confKeyGreeterBackground)
+	if greeterBg == "" {
+		return "", false
+	}
+	_, err := os.Stat(dutils.DecodeURI(greeterBg))
+	if err != nil {
+		logger.Warning(err)
+		return "", false
+	}
+	return greeterBg, true
 }
 
 func (u *User) updateIconList() {
