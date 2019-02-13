@@ -35,7 +35,7 @@ AccessPointWidget::AccessPointWidget()
     : QFrame(nullptr),
 
       m_activeState(NetworkDevice::Unknow),
-      m_ssidBtn(new QPushButton(this)),
+      m_ssidBtn(new SsidButton(this)),
       m_disconnectBtn(new DImageButton(this)),
       m_securityLabel(new QLabel),
       m_strengthLabel(new QLabel)
@@ -89,8 +89,8 @@ AccessPointWidget::AccessPointWidget()
 //                  "color:#2ca7f8;"
                   "}");
 
-    connect(m_ssidBtn, &QPushButton::clicked, this, &AccessPointWidget::clicked);
-    connect(m_ssidBtn, &QPushButton::clicked, this, &AccessPointWidget::ssidClicked);
+    connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::clicked);
+    connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::ssidClicked);
     connect(m_disconnectBtn, &DImageButton::clicked, this, &AccessPointWidget::disconnectBtnClicked);
 }
 
