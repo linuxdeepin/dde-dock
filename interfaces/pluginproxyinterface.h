@@ -85,6 +85,14 @@ public:
     /// return value from .config/deepin/dde-dock.conf
     ///
     virtual const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) = 0;
+
+    ///
+    /// \brief removeValue
+    /// remove the values specified by keyList
+    /// remove all values of itemInter if keyList is empty
+    /// SeeAlse: saveValue
+    ///
+    virtual void removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList) = 0;
 };
 
 #endif // PLUGINPROXYINTERFACE_H

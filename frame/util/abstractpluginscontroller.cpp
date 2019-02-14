@@ -28,6 +28,7 @@
 
 static const QStringList CompatiblePluginApiList {
     "1.1.1",
+    "1.2",
     DOCK_PLUGIN_API_VERSION
 };
 
@@ -67,6 +68,21 @@ const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const i
     }
 
     return v;
+}
+
+void AbstractPluginsController::removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList)
+{
+    if (keyList.isEmpty()) {
+        m_pluginSettingsObject.remove(itemInter->pluginName());
+    } else {
+        QJsonObject localObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
+        for (auto key : keyList) {
+            localObject.remove(key);
+        }
+        m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
+    }
+
+    m_dockDaemonInter->RemovePluginSettings(itemInter->pluginName(), keyList);
 }
 
 QMap<PluginsItemInterface *, QMap<QString, QObject *> > &AbstractPluginsController::pluginsMap()

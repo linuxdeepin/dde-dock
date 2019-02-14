@@ -45,6 +45,7 @@ public:
     // implements PluginProxyInterface
     void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) Q_DECL_OVERRIDE;
     const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) Q_DECL_OVERRIDE;
+    void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
 
 protected:
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();

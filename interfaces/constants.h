@@ -27,7 +27,7 @@
 namespace Dock {
 
 #define DOCK_PLUGIN_MIME    "dock/plugin"
-#define DOCK_PLUGIN_API_VERSION    "1.2"
+#define DOCK_PLUGIN_API_VERSION    "1.2.1"
 
 #define PROP_DISPLAY_MODE   "DisplayMode"
 ///
