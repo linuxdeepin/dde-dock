@@ -37,7 +37,9 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     : AbstractTrayWidget(parent),
         m_dbusMenuImporter(nullptr),
         m_menu(nullptr),
-        m_updateTimer(new QTimer(this))
+        m_updateIconTimer(new QTimer(this)),
+        m_updateOverlayIconTimer(new QTimer(this)),
+        m_updateAttentionIconTimer(new QTimer(this))
 {
     if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
         return;
@@ -48,22 +50,69 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     m_dbusPath = pair.second;
 
     m_sniInter = new StatusNotifierItem(m_dbusService, m_dbusPath, QDBusConnection::sessionBus(), this);
+    m_sniInter->setSync(false);
 
     if (!m_sniInter->isValid()) {
         qDebug() << "SNI dbus interface is invalid!" << m_dbusService << m_dbusPath << m_sniInter->lastError();
         return;
     }
 
-    m_updateTimer->setInterval(100);
-    m_updateTimer->setSingleShot(true);
+    m_updateIconTimer->setInterval(100);
+    m_updateIconTimer->setSingleShot(true);
+    m_updateOverlayIconTimer->setInterval(500);
+    m_updateOverlayIconTimer->setSingleShot(true);
+    m_updateAttentionIconTimer->setInterval(1000);
+    m_updateAttentionIconTimer->setSingleShot(true);
 
-    connect(m_updateTimer, &QTimer::timeout, this, &SNITrayWidget::refreshIcon);
-    connect(m_sniInter, &StatusNotifierItem::NewIcon, m_updateTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(m_sniInter, &StatusNotifierItem::NewOverlayIcon, this, &SNITrayWidget::refreshOverlayIcon);
-    connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, this, &SNITrayWidget::refreshAttentionIcon);
-    connect(m_sniInter, &StatusNotifierItem::NewStatus, this, &SNITrayWidget::onStatusChanged);
+    connect(m_updateIconTimer, &QTimer::timeout, this, &SNITrayWidget::refreshIcon);
+    connect(m_updateOverlayIconTimer, &QTimer::timeout, this, &SNITrayWidget::refreshOverlayIcon);
+    connect(m_updateAttentionIconTimer, &QTimer::timeout, this, &SNITrayWidget::refreshAttentionIcon);
 
-    QTimer::singleShot(0, this, &SNITrayWidget::refreshIcon);
+    // SNI property change
+    // thses signals of properties may not be emit automatically!!
+    // since the SniInter in on async mode we can not call property's getter function to obtain property directly
+    // the way to refresh properties(emit the following signals) is call property's getter function and wait these signals
+    connect(m_sniInter, &StatusNotifierItem::AttentionIconNameChanged, this, &SNITrayWidget::onSNIAttentionIconNameChanged);
+    connect(m_sniInter, &StatusNotifierItem::AttentionIconPixmapChanged, this, &SNITrayWidget::onSNIAttentionIconPixmapChanged);
+    connect(m_sniInter, &StatusNotifierItem::AttentionMovieNameChanged, this, &SNITrayWidget::onSNIAttentionMovieNameChanged);
+    connect(m_sniInter, &StatusNotifierItem::CategoryChanged, this, &SNITrayWidget::onSNICategoryChanged);
+    connect(m_sniInter, &StatusNotifierItem::IconNameChanged, this, &SNITrayWidget::onSNIIconNameChanged);
+    connect(m_sniInter, &StatusNotifierItem::IconPixmapChanged, this, &SNITrayWidget::onSNIIconPixmapChanged);
+    connect(m_sniInter, &StatusNotifierItem::IconThemePathChanged, this, &SNITrayWidget::onSNIIconThemePathChanged);
+    connect(m_sniInter, &StatusNotifierItem::IdChanged, this, &SNITrayWidget::onSNIIdChanged);
+    connect(m_sniInter, &StatusNotifierItem::MenuChanged, this, &SNITrayWidget::onSNIMenuChanged);
+    connect(m_sniInter, &StatusNotifierItem::OverlayIconNameChanged, this, &SNITrayWidget::onSNIOverlayIconNameChanged);
+    connect(m_sniInter, &StatusNotifierItem::OverlayIconPixmapChanged, this, &SNITrayWidget::onSNIOverlayIconPixmapChanged);
+    connect(m_sniInter, &StatusNotifierItem::StatusChanged, this, &SNITrayWidget::onSNIStatusChanged);
+
+    // the following signals can be emit automatically
+    // need refresh cached properties in these slots
+    connect(m_sniInter, &StatusNotifierItem::NewIcon, [=] {
+        m_sniIconName = m_sniInter->iconName();
+        m_sniIconPixmap = m_sniInter->iconPixmap();
+        m_sniIconThemePath = m_sniInter->iconThemePath();
+
+        m_updateIconTimer->start();
+    });
+    connect(m_sniInter, &StatusNotifierItem::NewOverlayIcon, [=] {
+        m_sniOverlayIconName = m_sniInter->overlayIconName();
+        m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
+        m_sniIconThemePath = m_sniInter->iconThemePath();
+
+        m_updateOverlayIconTimer->start();
+    });
+    connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, [=] {
+        m_sniAttentionIconName = m_sniInter->attentionIconName();
+        m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
+        m_sniIconThemePath = m_sniInter->iconThemePath();
+
+        m_updateAttentionIconTimer->start();
+    });
+    connect(m_sniInter, &StatusNotifierItem::NewStatus, [=] {
+        onSNIStatusChanged(m_sniInter->status());
+    });
+
+    initSNIPropertys();
 }
 
 SNITrayWidget::~SNITrayWidget()
@@ -76,7 +125,7 @@ void SNITrayWidget::setActive(const bool active)
 
 void SNITrayWidget::updateIcon()
 {
-    m_updateTimer->start();
+    m_updateIconTimer->start();
 }
 
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
@@ -84,7 +133,7 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     switch (mouseButton) {
         case XCB_BUTTON_INDEX_1:
             // left button click invalid
-            if (LeftClickInvalidIdList.contains(m_sniInter->id())) {
+            if (LeftClickInvalidIdList.contains(m_sniId)) {
                 showContextMenu(x, y);
             } else {
                 m_sniInter->Activate(x, y);
@@ -114,22 +163,21 @@ bool SNITrayWidget::isValid()
 
 SNITrayWidget::ItemStatus SNITrayWidget::status()
 {
-    const QString &status = m_sniInter->status();
-    if (!ItemStatusList.contains(status)) {
+    if (!ItemStatusList.contains(m_sniStatus)) {
+        m_sniStatus = "Active";
         return ItemStatus::Active;
     }
 
-    return static_cast<ItemStatus>(ItemStatusList.indexOf(status));
+    return static_cast<ItemStatus>(ItemStatusList.indexOf(m_sniStatus));
 }
 
 SNITrayWidget::ItemCategory SNITrayWidget::category()
 {
-    const QString &category = m_sniInter->category();
-    if (!ItemCategoryList.contains(category)) {
+    if (!ItemCategoryList.contains(m_sniCategory)) {
         return UnknownCategory;
     }
 
-    return static_cast<ItemCategory>(ItemCategoryList.indexOf(category));
+    return static_cast<ItemCategory>(ItemCategoryList.indexOf(m_sniCategory));
 }
 
 QString SNITrayWidget::toSNIKey(const QString &sniServicePath)
@@ -168,15 +216,37 @@ QPair<QString, QString> SNITrayWidget::serviceAndPath(const QString &servicePath
     return pair;
 }
 
+void SNITrayWidget::initSNIPropertys()
+{
+    m_sniAttentionIconName = m_sniInter->attentionIconName();
+    m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
+    m_sniAttentionMovieName = m_sniInter->attentionMovieName();
+    m_sniCategory = m_sniInter->category();
+    m_sniIconName = m_sniInter->iconName();
+    m_sniIconPixmap = m_sniInter->iconPixmap();
+    m_sniIconThemePath = m_sniInter->iconThemePath();
+    m_sniId = m_sniInter->id();
+    m_sniMenuPath = m_sniInter->menu();
+    m_sniOverlayIconName = m_sniInter->overlayIconName();
+    m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
+    m_sniStatus = m_sniInter->status();
+
+    m_updateIconTimer->start();
+//    m_updateOverlayIconTimer->start();
+//    m_updateAttentionIconTimer->start();
+}
+
 void SNITrayWidget::initMenu()
 {
-    qDebug() << "using sni service path:" << m_dbusService;
+    const QString &sniMenuPath = m_sniMenuPath.path();
+    if (sniMenuPath.isEmpty()) {
+        qDebug() << "Error: current sni menu path is empty of dbus service:" << m_dbusService << "id:" << m_sniId;
+        return;
+    }
 
-    const QString &menuPath = m_sniInter->menu().path();
+    qDebug() << "using sni service path:" << m_dbusService << "menu path:" << sniMenuPath;
 
-    qDebug() << "using sni menu path:" << menuPath;
-
-    m_dbusMenuImporter = new DBusMenuImporter(m_dbusService, menuPath, ASYNCHRONOUS, this);
+    m_dbusMenuImporter = new DBusMenuImporter(m_dbusService, sniMenuPath, ASYNCHRONOUS, this);
 
     qDebug() << "generate the sni menu object";
 
@@ -237,7 +307,7 @@ void SNITrayWidget::refreshAttentionIcon()
 void SNITrayWidget::showContextMenu(int x, int y)
 {
     // ContextMenu does not work
-    if (m_sniInter->menu().path().startsWith("/NO_DBUSMENU")) {
+    if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
         m_sniInter->ContextMenu(x, y);
     } else {
         if (!m_menu) {
@@ -248,11 +318,84 @@ void SNITrayWidget::showContextMenu(int x, int y)
     }
 }
 
-void SNITrayWidget::onStatusChanged(const QString &status)
+void SNITrayWidget::onSNIAttentionIconNameChanged(const QString &value)
 {
-    if (!ItemStatusList.contains(status)) {
+    m_sniAttentionIconName = value;
+
+    m_updateAttentionIconTimer->start();
+}
+
+void SNITrayWidget::onSNIAttentionIconPixmapChanged(DBusImageList value)
+{
+    m_sniAttentionIconPixmap = value;
+
+    m_updateAttentionIconTimer->start();
+}
+
+void SNITrayWidget::onSNIAttentionMovieNameChanged(const QString &value)
+{
+    m_sniAttentionMovieName = value;
+
+    m_updateAttentionIconTimer->start();
+}
+
+void SNITrayWidget::onSNICategoryChanged(const QString &value)
+{
+    m_sniCategory = value;
+}
+
+void SNITrayWidget::onSNIIconNameChanged(const QString &value)
+{
+    m_sniIconName = value;
+
+    m_updateIconTimer->start();
+}
+
+void SNITrayWidget::onSNIIconPixmapChanged(DBusImageList value)
+{
+    m_sniIconPixmap = value;
+
+    m_updateIconTimer->start();
+}
+
+void SNITrayWidget::onSNIIconThemePathChanged(const QString &value)
+{
+    m_sniIconThemePath = value;
+
+    m_updateIconTimer->start();
+}
+
+void SNITrayWidget::onSNIIdChanged(const QString &value)
+{
+    m_sniId = value;
+}
+
+void SNITrayWidget::onSNIMenuChanged(const QDBusObjectPath &value)
+{
+    m_sniMenuPath = value;
+}
+
+void SNITrayWidget::onSNIOverlayIconNameChanged(const QString &value)
+{
+    m_sniOverlayIconName = value;
+
+    m_updateOverlayIconTimer->start();
+}
+
+void SNITrayWidget::onSNIOverlayIconPixmapChanged(DBusImageList value)
+{
+    m_sniOverlayIconPixmap = value;
+
+    m_updateOverlayIconTimer->start();
+}
+
+void SNITrayWidget::onSNIStatusChanged(const QString &status)
+{
+    if (!ItemStatusList.contains(status) || m_sniStatus == status) {
         return;
     }
+
+    m_sniStatus = status;
 
     Q_EMIT statusChanged(static_cast<SNITrayWidget::ItemStatus>(ItemStatusList.indexOf(status)));
 }
@@ -297,23 +440,23 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
     QString iconName;
     DBusImageList dbusImageList;
 
-    QString iconThemePath = m_sniInter->iconThemePath();
+    QString iconThemePath = m_sniIconThemePath;
 
     switch (iconType) {
         case Icon:
-            iconName = m_sniInter->iconName();
-            dbusImageList = m_sniInter->iconPixmap();
+            iconName = m_sniIconName;
+            dbusImageList = m_sniIconPixmap;
             break;
         case OverlayIcon:
-            iconName = m_sniInter->overlayIconName();
-            dbusImageList = m_sniInter->overlayIconPixmap();
+            iconName = m_sniOverlayIconName;
+            dbusImageList = m_sniOverlayIconPixmap;
             break;
         case AttentionIcon:
-            iconName = m_sniInter->attentionIconName();
-            dbusImageList = m_sniInter->attentionIconPixmap();
+            iconName = m_sniAttentionIconName;
+            dbusImageList = m_sniAttentionIconPixmap;
             break;
         case AttentionMovieIcon:
-            iconName = m_sniInter->attentionMovieName();
+            iconName = m_sniAttentionMovieName;
             break;
         default:
             break;
@@ -323,7 +466,7 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
     const int iconSizeScaled = IconSize * ratio;
     do {
         // load icon from sni dbus
-        if (!dbusImageList.isEmpty()) {
+        if (!dbusImageList.isEmpty() && !dbusImageList.first().pixels.isEmpty()) {
             for (DBusImage dbusImage : dbusImageList) {
                 char *image_data = dbusImage.pixels.data();
 
@@ -373,7 +516,7 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
         }
 
         if (pixmap.isNull()) {
-            qDebug() << "get icon faild!";
+            qDebug() << "get icon faild!" << iconType;
         }
     } while (false);
 
