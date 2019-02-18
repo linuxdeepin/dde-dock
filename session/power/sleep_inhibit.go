@@ -28,10 +28,6 @@ import (
 type sleepInhibitor struct {
 	loginManager *login1.Manager
 	fd           int
-	what         string
-	who          string
-	why          string
-	mode         string
 
 	OnWakeup        func()
 	OnBeforeSuspend func()
@@ -41,10 +37,6 @@ func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 	inhibitor := &sleepInhibitor{
 		loginManager: login1Manager,
 		fd:           -1,
-		what:         "sleep",
-		who:          "com.deepin.daemon.Power",
-		why:          "run screen lock",
-		mode:         "delay",
 	}
 
 	login1Manager.ConnectPrepareForSleep(func(before bool) {
@@ -66,14 +58,14 @@ func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 }
 
 func (inhibitor *sleepInhibitor) block() error {
-	logger.Debug("Block", inhibitor.what)
+	logger.Debug("block sleep")
 	if inhibitor.fd != -1 {
 		return nil
 	}
 	fd, err := inhibitor.loginManager.Inhibit(0,
-		inhibitor.what, inhibitor.who, inhibitor.why, inhibitor.mode)
+		"sleep", dbusServiceName, "run screen lock", "delay")
 	if err != nil {
-		logger.Error("inbhibit block failed:", err)
+		logger.Warning("inhibitor block failed:", err)
 		return err
 	}
 	inhibitor.fd = int(fd)
@@ -84,11 +76,11 @@ func (inhibitor *sleepInhibitor) unblock() error {
 	if inhibitor.fd == -1 {
 		return nil
 	}
-	logger.Debug("Unblock", inhibitor.what)
+	logger.Debug("unblock sleep")
 	err := syscall.Close(inhibitor.fd)
 	inhibitor.fd = -1
 	if err != nil {
-		logger.Error("close fd error:", err)
+		logger.Warning("failed to close fd:", err)
 		return err
 	}
 	return nil

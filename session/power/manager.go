@@ -21,6 +21,7 @@ package power
 
 import (
 	"sync"
+	"syscall"
 
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
@@ -41,6 +42,7 @@ type Manager struct {
 	warnLevelConfig      *WarnLevelConfigManager
 	submodules           map[string]submodule
 	inhibitor            *sleepInhibitor
+	inhibitFd            dbus.UnixFD
 
 	PropsMu sync.RWMutex
 	// 是否有盖子，一般笔记本电脑才有
@@ -101,6 +103,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	sessionBus := service.Conn()
 	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 	m.systemSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
+	m.inhibitFd = -1
 
 	helper, err := newHelper(systemBus, sessionBus)
 	if err != nil {
@@ -219,6 +222,7 @@ func (m *Manager) init() {
 	m.initOnBatteryChangedHandler()
 	m.initSubmodules()
 	m.startSubmodules()
+	m.inhibitLogind()
 }
 
 func (m *Manager) initPowerModule() {
@@ -247,6 +251,7 @@ func (m *Manager) isX11SessionActive() (bool, error) {
 func (m *Manager) destroy() {
 	m.destroySubmodules()
 	m.releaseAmbientLight()
+	m.permitLogind()
 
 	if m.helper != nil {
 		m.helper.Destroy()
@@ -285,4 +290,26 @@ func (m *Manager) Reset() *dbus.Error {
 		m.settings.Reset(key)
 	}
 	return nil
+}
+
+func (m *Manager) inhibitLogind() {
+	fd, err := m.helper.LoginManager.Inhibit(0,
+		"handle-power-key:handle-lid-switch", dbusServiceName,
+		"handling key press and lid switch close", "block")
+	logger.Debug("inhibitLogind fd:", fd)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	m.inhibitFd = fd
+}
+
+func (m *Manager) permitLogind() {
+	if m.inhibitFd != -1 {
+		err := syscall.Close(int(m.inhibitFd))
+		if err != nil {
+			logger.Warning("failed to close inhibitFd:", err)
+		}
+		m.inhibitFd = -1
+	}
 }
