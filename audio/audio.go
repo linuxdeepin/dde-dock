@@ -272,8 +272,8 @@ func (a *Audio) findSourceByCardIndexPortName(cardId uint32, portName string) *p
 	return nil
 }
 
-// try set default sink and sink active port
-func (a *Audio) trySetDefaultSink(cardId uint32, portName string) error {
+// set default sink and sink active port
+func (a *Audio) setDefaultSinkWithPort(cardId uint32, portName string) error {
 	logger.Debugf("trySetDefaultSink card #%d port %q", cardId, portName)
 	sink := a.findSinkByCardIndexPortName(cardId, portName)
 	if sink == nil {
@@ -315,8 +315,8 @@ func (a *Audio) getDefaultSourceActivePortName() string {
 	return name
 }
 
-// try set default source and source active port
-func (a *Audio) trySetDefaultSource(cardId uint32, portName string) error {
+// set default source and source active port
+func (a *Audio) setDefaultSourceWithPort(cardId uint32, portName string) error {
 	logger.Debugf("trySetDefaultSource card #%d port %q", cardId, portName)
 	source := a.findSourceByCardIndexPortName(cardId, portName)
 	if source == nil {
@@ -350,7 +350,6 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.E
 
 func (a *Audio) setPort(cardId uint32, portName string, direction int32) error {
 	var (
-		curCard           *Card
 		oppositePort      string
 		oppositeDirection int
 	)
@@ -363,73 +362,52 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int32) error {
 	} else {
 		return fmt.Errorf("invalid port direction: %d", direction)
 	}
+
 	a.mu.Lock()
-	curCard, _ = a.cards.get(cardId)
+	card, _ := a.cards.get(cardId)
 	a.mu.Unlock()
-	if curCard != nil {
-		_, err := curCard.Ports.Get(oppositePort, oppositeDirection)
-		// curCard does not have the port
-		if err != nil {
-			curCard = nil
-		}
+	if card == nil {
+		return fmt.Errorf("not found card #%d", cardId)
 	}
 
-	var (
-		destCard     *Card
-		destPortInfo pulse.CardPortInfo
-		destProfile  string
+	var err error
+	targetPortInfo, err := card.Ports.Get(portName, int(direction))
+	if err != nil {
+		return err
+	}
 
-		oppositePortInfo pulse.CardPortInfo
-		commonProfiles   pulse.ProfileInfos2
-	)
-	if curCard != nil {
-		portInfo, err := curCard.Ports.Get(portName, int(direction))
-		if err != nil {
-			return err
+	setDefaultPort := func() error {
+		if int(direction) == pulse.DirectionSink {
+			return a.setDefaultSinkWithPort(cardId, portName)
 		}
-		if portInfo.Profiles.Exists(curCard.ActiveProfile.Name) {
-			goto setPort
-		}
-		destCard = curCard
-		destPortInfo = portInfo
-	} else {
-		a.mu.Lock()
-		tmpCard, err := a.cards.get(cardId)
-		a.mu.Unlock()
-		if err != nil {
-			return err
-		}
-		portInfo, err := tmpCard.Ports.Get(portName, int(direction))
-		if err != nil {
-			return err
-		}
-		destCard = tmpCard
-		destPortInfo = portInfo
+		return a.setDefaultSourceWithPort(cardId, portName)
+	}
+
+	if targetPortInfo.Profiles.Exists(card.ActiveProfile.Name) {
+		// no need to change profile
+		return setDefaultPort()
 	}
 
 	// match the common profile contain sinkPort and sourcePort
-	oppositePortInfo, _ = destCard.Ports.Get(oppositePort, oppositeDirection)
-	commonProfiles = getCommonProfiles(destPortInfo, oppositePortInfo)
+	oppositePortInfo, _ := card.Ports.Get(oppositePort, oppositeDirection)
+	commonProfiles := getCommonProfiles(targetPortInfo, oppositePortInfo)
+	var targetProfile string
 	if len(commonProfiles) != 0 {
-		destProfile = commonProfiles[0].Name
+		targetProfile = commonProfiles[0].Name
 	} else {
-		name, err := destCard.tryGetProfileByPort(portName)
+		name, err := card.tryGetProfileByPort(portName)
 		if err != nil {
 			return err
 		}
-		destProfile = name
+		targetProfile = name
 	}
 	// workaround for bluetooth, set profile to 'a2dp_sink' when port direction is output
-	if int(direction) == pulse.DirectionSink && destPortInfo.Profiles.Exists("a2dp_sink") {
-		destProfile = "a2dp_sink"
+	if int(direction) == pulse.DirectionSink && targetPortInfo.Profiles.Exists("a2dp_sink") {
+		targetProfile = "a2dp_sink"
 	}
-	destCard.core.SetProfile(destProfile)
-
-setPort:
-	if int(direction) == pulse.DirectionSink {
-		return a.trySetDefaultSink(cardId, portName)
-	}
-	return a.trySetDefaultSource(cardId, portName)
+	card.core.SetProfile(targetProfile)
+	logger.Debug("set profile", targetProfile)
+	return setDefaultPort()
 }
 
 func (a *Audio) resetSinksVolume() {
@@ -439,7 +417,6 @@ func (a *Audio) resetSinksVolume() {
 			0).SetFade(s.ChannelMap, 0)
 		a.ctx.SetSinkVolumeByIndex(s.Index, cv)
 	}
-
 }
 
 func (a *Audio) resetSourceVolume() {
