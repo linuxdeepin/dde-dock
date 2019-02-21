@@ -24,6 +24,7 @@ import (
 	"sort"
 
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -39,14 +40,19 @@ func (m *Manager) allocEntryId() string {
 }
 
 func (m *Manager) markAppLaunched(appInfo *AppInfo) {
-	if appInfo == nil {
+	if !m.clientListInited || appInfo == nil {
 		return
 	}
 	file := appInfo.GetFileName()
 	logger.Debug("markAppLaunched", file)
 
 	go func() {
-		err := m.appsObj.MarkLaunched(0, file)
+		err := common.ActivateSysDaemonService(m.appsObj.ServiceName_())
+		if err != nil {
+			logger.Warning(err)
+		}
+
+		err = m.appsObj.MarkLaunched(0, file)
 		if err != nil {
 			logger.Debug(err)
 		}
@@ -97,6 +103,7 @@ func (m *Manager) initClientList() {
 	for _, win := range winSlice {
 		m.registerWindow(win)
 	}
+	m.clientListInited = true
 }
 
 func (m *Manager) initDockedApps() {

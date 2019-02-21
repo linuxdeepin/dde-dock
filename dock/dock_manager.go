@@ -57,6 +57,7 @@ type Manager struct {
 	service            *dbusutil.Service
 	sessionSigLoop     *dbusutil.SignalLoop
 	clientList         windowSlice
+	clientListInited   bool
 	windowInfoMap      map[x.Window]*WindowInfo
 	windowInfoMapMutex sync.RWMutex
 	settings           *gio.Settings

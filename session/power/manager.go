@@ -24,6 +24,7 @@ import (
 	"syscall"
 
 	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -127,6 +128,11 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		settingKeyAmbientLightAdjuestBrightness)
 
 	power := m.helper.Power
+	err = common.ActivateSysDaemonService(power.ServiceName_())
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	m.LidIsPresent, err = power.HasLidSwitch().Get(0)
 	if err != nil {
 		logger.Warning(err)

@@ -29,11 +29,11 @@ import (
 	"sync"
 	"time"
 
+	"gir/gio-2.0"
 	libPinyin "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
-
-	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -212,6 +212,12 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 
 	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 100)
 	m.sysSigLoop.Start()
+
+	err = common.ActivateSysDaemonService(m.appsObj.ServiceName_())
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	m.appsObj.InitSignalExt(m.sysSigLoop, true)
 	m.appsObj.ConnectEvent(func(filename string, _ uint32) {
 		if shouldCheckDesktopFile(filename) {
@@ -220,7 +226,10 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 		}
 	})
 
-	m.appsObj.WatchDirs(0, getDataDirsForWatch())
+	err = m.appsObj.WatchDirs(0, getDataDirsForWatch())
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	m.appsObj.ConnectServiceRestarted(func() {
 		if m.appsObj != nil {

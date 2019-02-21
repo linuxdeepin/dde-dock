@@ -31,19 +31,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-
-	"pkg.deepin.io/lib/xdg/basedir"
-
 	"gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -51,6 +49,7 @@ import (
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 // The supported types
@@ -304,6 +303,12 @@ func (m *Manager) initUserObj(systemConn *dbus.Conn) {
 		logger.Warning("failed to get current user:", err)
 		return
 	}
+
+	err = common.ActivateSysDaemonService("com.deepin.daemon.Accounts")
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	m.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
 	if err != nil {
 		logger.Warning("failed to new user object:", err)
