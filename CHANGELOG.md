@@ -1,3 +1,16 @@
+[3.23.0] 2019-02-22
+*   remove usage of qdbus command
+*   refactor(audio): simplify method setPort
+*   fix: failed to init keyboard layout when auto login enabled
+*   feat(appearance): wallpaper slideshow supported
+*   feat(session/power): inhibits logind handle power key and lid switch on runtime
+*   chore(accounts): check user greeter background validity
+*   fix(network): secret agent save wrong default collection path
+*   fix(dock): lost dbus conn when name of app entry is invalid utf8 string
+*   chore: add network-manager-sstp to suggests
+*   fix(screensaver): module start failed if x ext dpms not present
+*   feat(langselector): add method GetLanguageSupportPackages for debug
+
 [3.22.0] 2019-01-25
 *   feat: use dde-api package userenv
 *   chore(accounts): get default background do not read file default.conf
