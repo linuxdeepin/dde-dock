@@ -470,7 +470,7 @@ void MainWindow::updateGeometry()
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
     m_mainPanel->updateDockPosition(position);
-    // this->setFixedSize has been overrided for size animation
+    // this->setFixedSize has been overridden for size animation
     m_mainPanel->setFixedSize(m_settings->panelSize());
 
     bool animation = true;
@@ -489,7 +489,7 @@ void MainWindow::updateGeometry()
         m_sizeChangeAni->setEndValue(size);
         QWidget::setFixedSize(size);
     } else {
-        // this->setFixedSize has been overrided for size animation
+        // this->setFixedSize has been overridden for size animation
         setFixedSize(size);
     }
 
