@@ -64,7 +64,8 @@ func main() {
 		logger.Fatal("failed to call NameHasOwner:", err)
 	}
 	if hasOwner {
-		logger.Fatalf("name %q already has the owner", dbusServiceName)
+		logger.Warningf("name %q already has the owner", dbusServiceName)
+		os.Exit(1)
 	}
 
 	// fix no PATH when was launched by dbus
