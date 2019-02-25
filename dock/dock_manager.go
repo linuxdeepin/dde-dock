@@ -25,6 +25,8 @@ import (
 	"sync"
 	"time"
 
+	"pkg.deepin.io/lib/strv"
+
 	// dbus interfaces:
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.daemon.launcher"
@@ -77,6 +79,8 @@ type Manager struct {
 	entryCount         uint
 	identifyWindowFuns []*IdentifyWindowFunc
 	windowPatterns     WindowPatterns
+
+	tempUndockedFiles strv.Strv
 
 	// dbus objects:
 	launcher     *launcher.Launcher
@@ -302,12 +306,12 @@ func (m *Manager) IsDocked(desktopFile string) (bool, *dbus.Error) {
 	return entry != nil, nil
 }
 
-func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Error) {
-	logger.Debug("RequestDock", desktopFile, index)
+func (m *Manager) requestDock(desktopFile string, index int32) (bool, error) {
+	logger.Debug("requestDock", desktopFile, index)
 	desktopFile = toLocalPath(desktopFile)
 	appInfo := NewAppInfoFromFile(desktopFile)
 	if appInfo == nil {
-		return false, dbusutil.ToError(errors.New("invalid desktopFilePath"))
+		return false, errors.New("invalid desktopFilePath")
 	}
 	var newlyCreated bool
 	entry := m.Entries.GetByInnerId(appInfo.innerId)
@@ -318,13 +322,13 @@ func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Erro
 
 	docked, err := m.dockEntry(entry)
 	if err != nil {
-		return false, dbusutil.ToError(err)
+		return false, err
 	}
 
 	if newlyCreated {
 		err := m.exportAppEntry(entry)
 		if err != nil {
-			return false, dbusutil.ToError(err)
+			return false, err
 		}
 		m.Entries.Insert(entry, int(index))
 	}
@@ -334,6 +338,11 @@ func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Erro
 		m.saveDockedApps()
 	}
 	return docked, nil
+}
+
+func (m *Manager) RequestDock(desktopFile string, index int32) (bool, *dbus.Error) {
+	docked, err := m.requestDock(desktopFile, index)
+	return docked, dbusutil.ToError(err)
 }
 
 func (m *Manager) RequestUndock(desktopFile string) (bool, *dbus.Error) {

@@ -111,32 +111,49 @@ func (m *Manager) is3DWM() (ret bool) {
 	return
 }
 
-func (m *Manager) listenLauncherSignal() {
-	m.launcher.InitSignalExt(m.sessionSigLoop, true)
-	m.launcher.ConnectItemChanged(func(status string, itemInfo launcher.ItemInfo,
-		categoryID int64) {
-		if status != "deleted" {
+func (m *Manager) handleLauncherItemDeleted(itemInfo launcher.ItemInfo) {
+	dockedEntries := m.Entries.FilterDocked()
+	for _, entry := range dockedEntries {
+		file := entry.appInfo.GetFileName()
+		if file == itemInfo.Path {
+			m.tempUndockedFiles, _ = m.tempUndockedFiles.Add(file)
+			m.undockEntry(entry)
 			return
 		}
-		// item deleted
-		dockedEntries := m.Entries.FilterDocked()
-		for _, entry := range dockedEntries {
-			file := entry.appInfo.GetFileName()
-			if file == itemInfo.Path {
-				m.undockEntry(entry)
-				return
-			}
-		}
+	}
+}
 
-		// try app id
-		entry := getByAppId(dockedEntries, itemInfo.ID)
-		if entry != nil {
-			m.undockEntry(entry)
+func (m *Manager) handleLauncherItemCreated(itemInfo launcher.ItemInfo) {
+	if m.tempUndockedFiles.Contains(itemInfo.Path) {
+		_, err := m.requestDock(itemInfo.Path, -1)
+		if err != nil {
+			logger.Warning(err)
+		}
+		m.tempUndockedFiles, _ = m.tempUndockedFiles.Delete(itemInfo.Path)
+	}
+}
+
+func (m *Manager) listenLauncherSignal() {
+	m.launcher.InitSignalExt(m.sessionSigLoop, true)
+	_, err := m.launcher.ConnectItemChanged(func(status string, itemInfo launcher.ItemInfo,
+		categoryID int64) {
+		logger.Debugf("launcher item changed status: %s, itemInfo: %#v",
+			status, itemInfo)
+		switch status {
+		case "deleted":
+			m.handleLauncherItemDeleted(itemInfo)
+		case "created":
+			m.handleLauncherItemCreated(itemInfo)
+		case "updated":
+			// TODO: handle launcher item updated
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	m.ddeLauncher.InitSignalExt(m.sessionSigLoop, true)
-	m.ddeLauncher.ConnectVisibleChanged(func(visible bool) {
+	_, err = m.ddeLauncher.ConnectVisibleChanged(func(visible bool) {
 		logger.Debug("dde-launcher visible changed", visible)
 		m.ddeLauncherVisibleMu.Lock()
 		m.ddeLauncherVisible = visible
@@ -144,6 +161,9 @@ func (m *Manager) listenLauncherSignal() {
 
 		m.updateHideState(false)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) isDDELauncherVisible() bool {

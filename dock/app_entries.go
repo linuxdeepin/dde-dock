@@ -23,7 +23,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"strings"
 	"sync"
 
 	x "github.com/linuxdeepin/go-x11-client"
@@ -197,27 +196,6 @@ func (entries *AppEntries) getByWindowId(winId x.Window) *AppEntry {
 	}
 	// not found
 	return nil
-}
-
-func getByAppId(items []*AppEntry, id string) *AppEntry {
-	for _, entry := range items {
-		if entry.appInfo == nil {
-			continue
-		}
-
-		eAppId := entry.appInfo.GetId()
-		if strings.EqualFold(id, eAppId) {
-			return entry
-		}
-	}
-	return nil
-}
-
-func (entries *AppEntries) GetByAppId(id string) *AppEntry {
-	entries.mu.RLock()
-	e := getByAppId(entries.items, id)
-	entries.mu.RUnlock()
-	return e
 }
 
 func getByDesktopFilePath(entriesItems []*AppEntry, desktopFilePath string) (*AppEntry, error) {
