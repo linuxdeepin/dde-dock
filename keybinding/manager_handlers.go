@@ -47,7 +47,7 @@ func (m *Manager) initHandlers() {
 		}
 
 		go func() {
-			err := m.execCmd(arg.Cmd)
+			err := m.execCmd(arg.Cmd, true)
 			if err != nil {
 				logger.Warning("execCmd error:", err)
 			}
@@ -103,7 +103,7 @@ func (m *Manager) initHandlers() {
 		}
 
 		go func() {
-			err := m.execCmd(queryCommandByMime(mimeType))
+			err := m.execCmd(queryCommandByMime(mimeType), true)
 			if err != nil {
 				logger.Warning("execCmd error:", err)
 			}
@@ -132,7 +132,7 @@ func (m *Manager) initHandlers() {
 		cmd := getPowerButtonPressedExec()
 
 		go func() {
-			err := execCmd(cmd)
+			err := m.execCmd(cmd, false)
 			if err != nil {
 				logger.Warning("execCmd error:", err)
 			}

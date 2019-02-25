@@ -25,7 +25,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -58,16 +57,6 @@ func doMarshal(v interface{}) (string, error) {
 	}
 
 	return string(bytes), nil
-}
-
-func execCmd(cmd string) error {
-	if len(cmd) == 0 {
-		logger.Debug("cmd is empty")
-		return nil
-	}
-
-	logger.Debugf("len environ: %d, exec cmd: %q", len(os.Environ()), cmd)
-	return exec.Command("/bin/sh", "-c", cmd).Run()
 }
 
 func showOSD(signal string) {

@@ -345,18 +345,18 @@ func (m *Manager) listenGSettingsChanged(schema string, settings *gio.Settings, 
 	})
 }
 
-func (m *Manager) execCmd(cmd string) error {
-	if len(cmd) == 0 {
+func (m *Manager) execCmd(cmd string, viaStartdde bool) error {
+	if cmd == "" {
 		logger.Debug("cmd is empty")
 		return nil
 	}
-	if strings.HasPrefix(cmd, "dbus-send ") {
+	if strings.HasPrefix(cmd, "dbus-send ") || !viaStartdde {
 		logger.Debug("run cmd:", cmd)
-		return exec.Command("sh", "-c", cmd).Run()
+		return exec.Command("/bin/sh", "-c", cmd).Run()
 	}
 
 	logger.Debug("startdde run cmd:", cmd)
-	return m.startManager.RunCommand(0, "sh", []string{"-c", cmd})
+	return m.startManager.RunCommand(0, "/bin/sh", []string{"-c", cmd})
 }
 
 func (m *Manager) eliminateKeystrokeConflict() {
