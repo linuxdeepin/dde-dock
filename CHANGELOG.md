@@ -1,3 +1,18 @@
+<a name="4.9.0"></a>
+## 4.9.0 (2019-02-25)
+
+
+#### Bug Fixes
+
+*   wireless item display problem when ssid contains "&" ([ecea16f8](https://github.com/linuxdeepin/dde-dock/commit/ecea16f89a6d17bd66fe2ace87f4d713a7135055))
+*   fashion tray expand error after double click control widget ([49b84eb0](https://github.com/linuxdeepin/dde-dock/commit/49b84eb0ccf785e1abae9881f84f06963d36fc60))
+
+#### Features
+
+*   optimize plugin guide ([3962f474](https://github.com/linuxdeepin/dde-dock/commit/3962f474e9eb6764362a843bfc70b10dc0d02047))
+
+
+
 <a name="4.8.9"></a>
 ## 4.8.9 (2019-01-25)
 
