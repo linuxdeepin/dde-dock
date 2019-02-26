@@ -23,6 +23,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"unicode/utf8"
 
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/fsnotify"
@@ -96,6 +97,12 @@ func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
 	w.fsWatcher.handleEvent(event)
 	ev := NewFileEvent(event)
 	file := ev.Name
+
+	if !utf8.ValidString(file) {
+		logger.Warningf("ignore file %q event, invalid utf8 string", file)
+		return
+	}
+
 	if (ev.IsCreate() || ev.IsRename()) && ev.IsDir {
 		// it exist and is dir
 		w.addRecursive(file, true)

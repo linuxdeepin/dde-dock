@@ -21,6 +21,7 @@ package launcher
 
 import (
 	"path/filepath"
+	"unicode/utf8"
 
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -42,6 +43,7 @@ func (m *Manager) initItems() {
 	allApps := desktopappinfo.GetAll(skipDirs)
 	for _, ai := range allApps {
 		if !ai.IsExecutableOk() ||
+			!utf8.ValidString(ai.GetId()) ||
 			isDeepinCustomDesktopFile(ai.GetFileName()) {
 			continue
 		}

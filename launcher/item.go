@@ -58,20 +58,23 @@ const (
 	desktopExt = ".desktop"
 )
 
-func getAppId(desktopId string) string {
-	return strings.TrimSuffix(desktopId, desktopExt)
-}
-
 func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
-	if appInfo == nil {
-		return nil
-	}
 	enName, _ := appInfo.GetString(desktopappinfo.MainSection, desktopappinfo.KeyName)
 	enComment, _ := appInfo.GetString(desktopappinfo.MainSection, desktopappinfo.KeyComment)
 	xDeepinCategory, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Deepin-Category")
+
+	name := appInfo.GetName()
+	if name == "" {
+		if enName != "" {
+			name = enName
+		} else {
+			name = appInfo.GetId()
+		}
+	}
+
 	item := &Item{
 		Path:            appInfo.GetFileName(),
-		Name:            appInfo.GetName(),
+		Name:            name,
 		enName:          enName,
 		Icon:            appInfo.GetIcon(),
 		exec:            appInfo.GetCommandline(),
