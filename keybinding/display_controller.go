@@ -20,7 +20,7 @@
 package keybinding
 
 import (
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.display"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"

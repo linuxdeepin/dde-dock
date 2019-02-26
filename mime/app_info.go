@@ -21,9 +21,10 @@ package mime
 
 import (
 	"fmt"
-	"gir/gio-2.0"
 	"os"
 	"path"
+
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/mime"
 	dutils "pkg.deepin.io/lib/utils"
 )

@@ -20,7 +20,7 @@
 package screenedge
 
 import (
-	gio "gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 )
 
 type Settings struct {

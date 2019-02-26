@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.daemon"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.gesture"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"

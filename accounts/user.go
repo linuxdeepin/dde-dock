@@ -28,7 +28,7 @@ import (
 	"strings"
 	"sync"
 
-	"gir/glib-2.0"
+	"pkg.deepin.io/gir/glib-2.0"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus1"

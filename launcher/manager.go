@@ -29,7 +29,7 @@ import (
 	"sync"
 	"time"
 
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	libPinyin "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"

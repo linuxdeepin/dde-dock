@@ -20,7 +20,7 @@
 package shortcuts
 
 import (
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 )
 
 type GSettingsShortcut struct {

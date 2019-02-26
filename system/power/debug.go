@@ -24,7 +24,7 @@ package power
 import (
 	"time"
 
-	"gir/gudev-1.0"
+	"pkg.deepin.io/gir/gudev-1.0"
 	"pkg.deepin.io/lib/dbus1"
 )
 

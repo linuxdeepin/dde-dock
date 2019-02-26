@@ -22,7 +22,7 @@ package fonts
 import (
 	"crypto/md5"
 	"fmt"
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	"path"
 	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/xdg/basedir"

@@ -24,7 +24,7 @@ import (
 	"sync"
 	"time"
 
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/log"
 
 	x "github.com/linuxdeepin/go-x11-client"

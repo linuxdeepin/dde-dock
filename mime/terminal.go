@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"strings"
 
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/strv"
 )

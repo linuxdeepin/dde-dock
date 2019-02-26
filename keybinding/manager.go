@@ -29,7 +29,7 @@ import (
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 
-	"gir/gio-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"

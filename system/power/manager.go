@@ -28,7 +28,7 @@ import (
 	"sync"
 	"time"
 
-	"gir/gudev-1.0"
+	"pkg.deepin.io/gir/gudev-1.0"
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
 	"pkg.deepin.io/lib/arch"

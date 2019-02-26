@@ -25,8 +25,8 @@ import (
 	"os"
 	"sync"
 
-	"gir/gio-2.0"
-	"gir/glib-2.0"
+	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/dde/api/session"
 	"pkg.deepin.io/dde/daemon/calltrace"
 	"pkg.deepin.io/dde/daemon/loader"
