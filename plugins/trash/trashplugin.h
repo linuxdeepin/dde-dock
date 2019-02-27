@@ -43,6 +43,7 @@ public:
     explicit TrashPlugin(QObject *parent = 0);
 
     const QString pluginName() const Q_DECL_OVERRIDE;
+    const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
 
     QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
@@ -52,7 +53,9 @@ public:
     const QString itemContextMenu(const QString &itemKey) Q_DECL_OVERRIDE;
     void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
-
+    bool pluginIsAllowDisable() override { return true; }
+    bool pluginIsDisable() override;
+    void pluginStateSwitched() override;
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void displayModeChanged(const Dock::DisplayMode displayMode) Q_DECL_OVERRIDE;

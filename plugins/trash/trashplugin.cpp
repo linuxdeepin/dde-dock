@@ -28,6 +28,8 @@
 
 #include <DApplication>
 
+#define PLUGIN_STATE_KEY    "enable"
+
 DWIDGET_USE_NAMESPACE
 
 TrashPlugin::TrashPlugin(QObject *parent)
@@ -43,6 +45,11 @@ TrashPlugin::TrashPlugin(QObject *parent)
 const QString TrashPlugin::pluginName() const
 {
     return "trash";
+}
+
+const QString TrashPlugin::pluginDisplayName() const
+{
+    return tr("Trash");
 }
 
 void TrashPlugin::init(PluginProxyInterface *proxyInter)
@@ -124,6 +131,25 @@ void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
     m_trashWidget->invokeMenuItem(menuId, checked);
 }
 
+bool TrashPlugin::pluginIsDisable()
+{
+    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
+}
+
+void TrashPlugin::pluginStateSwitched()
+{
+    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
+
+    if (pluginIsDisable()) {
+        m_proxyInter->itemRemoved(this, pluginName());
+        return;
+    }
+
+    if (m_trashWidget && displayMode() == Dock::Fashion) {
+        m_proxyInter->itemAdded(this, pluginName());
+    }
+}
+
 int TrashPlugin::itemSortKey(const QString &itemKey)
 {
     const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
@@ -138,6 +164,10 @@ void TrashPlugin::setSortKey(const QString &itemKey, const int order)
 
 void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
+    if (pluginIsDisable()) {
+        return;
+    }
+
     if (displayMode == Dock::Fashion)
         m_proxyInter->itemAdded(this, pluginName());
     else
