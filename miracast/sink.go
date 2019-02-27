@@ -20,17 +20,16 @@
 package miracast
 
 import (
-	"dbus/com/deepin/daemon/audio"
-	"dbus/org/freedesktop/miracle/wfd"
-	"dbus/org/freedesktop/miracle/wifi"
 	"fmt"
 	"os"
 	"strings"
 	"sync"
 
-	ddbus "pkg.deepin.io/dde/daemon/dbus"
-	oldDBusLib "pkg.deepin.io/lib/dbus"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.audio"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wfd"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wifi"
 	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 type SinkInfo struct {
@@ -47,18 +46,27 @@ type SinkInfo struct {
 }
 type SinkInfos []*SinkInfo
 
-func newSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
-	core, err := wfd.NewSink(wfdDBusServiceName, oldDBusLib.ObjectPath(dpath))
+func newSinkInfo(objPath dbus.ObjectPath) (*SinkInfo, error) {
+	sysBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
-	peer, err := wifi.NewPeer(wifiDBusServiceName, core.Peer.Get())
+	core, err := wfd.NewSink(sysBus, objPath)
 	if err != nil {
-		wfd.DestroySink(core)
+		return nil, err
+	}
+
+	peerPath, err := core.Peer().Get(0)
+	if err != nil {
+		return nil, err
+	}
+
+	peer, err := wifi.NewPeer(sysBus, peerPath)
+	if err != nil {
 		return nil, err
 	}
 	var sink = &SinkInfo{
-		Path: dpath,
+		Path: objPath,
 		core: core,
 		peer: peer,
 	}
@@ -67,15 +75,26 @@ func newSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
 }
 
 func destroySinkInfo(info *SinkInfo) {
-	info.locker.Lock()
-	defer info.locker.Unlock()
-	if info.core != nil {
-		wfd.DestroySink(info.core)
-		info.core = nil
-	}
-	if info.peer != nil {
-		wifi.DestroyPeer(info.peer)
-		info.peer = nil
+	info.peer.RemoveHandler(proxy.RemoveAllHandlers)
+}
+
+func (sink *SinkInfo) connectSignal(m *Miracast) {
+	sink.peer.InitSignalExt(m.sysSigLoop, true)
+	err := sink.peer.Connected().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+
+		if value {
+			sink.Connected = true
+			m.emitSignalEvent(EventSinkConnected, sink.Path)
+		} else {
+			sink.Connected = false
+			m.emitSignalEvent(EventSinkDisconnected, sink.Path)
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
 	}
 }
 
@@ -85,11 +104,11 @@ func (sink *SinkInfo) update() {
 	if sink.core == nil || sink.peer == nil {
 		return
 	}
-	sink.Name = sink.peer.FriendlyName.Get()
-	sink.P2PMac = sink.peer.P2PMac.Get()
-	sink.Interface = sink.peer.Interface.Get()
-	sink.Connected = sink.peer.Connected.Get()
-	sink.LinkPath = dbus.ObjectPath(sink.peer.Link.Get())
+	sink.Name, _ = sink.peer.FriendlyName().Get(0)
+	sink.P2PMac, _ = sink.peer.P2PMac().Get(0)
+	sink.Interface, _ = sink.peer.Interface().Get(0)
+	sink.Connected, _ = sink.peer.Connected().Get(0)
+	sink.LinkPath, _ = sink.peer.Link().Get(0)
 }
 
 func (sink *SinkInfo) StartSession(x, y, w, h uint32) error {
@@ -100,48 +119,53 @@ func (sink *SinkInfo) StartSession(x, y, w, h uint32) error {
 		audioSink = getAudioSink()
 	)
 	logger.Debug("[StartSession] args:", xauth, dpy, x, y, w, h, audioSink)
-	stateId, err := sink.core.StartSession(xauth, dpy, x, y, w, h, audioSink)
+	sessionPath, err := sink.core.StartSession(0, xauth, dpy, x, y, w, h, audioSink)
 	if err != nil {
 		return err
 	}
-	// TODO: handle state
-	logger.Debug("[StartSession] state id:", stateId)
+	logger.Debug("[StartSession] session path:", sessionPath)
 	return nil
 }
 
-func (sink *SinkInfo) Teardown() error {
-	var p = sink.core.Session.Get()
-	if p == "/" {
-		return fmt.Errorf("No session found")
-	}
-
-	session, err := wfd.NewSession(wfdDBusServiceName, p)
+func (sink *SinkInfo) TeardownSession() error {
+	p, err := sink.core.Session().Get(0)
 	if err != nil {
 		return err
 	}
-	defer wfd.DestroySession(session)
-	return session.Teardown()
+	if p == "/" {
+		return fmt.Errorf("no session found")
+	}
+
+	sysBus, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+	session, err := wfd.NewSession(sysBus, p)
+	if err != nil {
+		return err
+	}
+	return session.Teardown(0)
 }
 
-func (sinks SinkInfos) Get(dpath dbus.ObjectPath) *SinkInfo {
-	if !isSinkObjectPath(dpath) {
+func (sinks SinkInfos) Get(objPath dbus.ObjectPath) *SinkInfo {
+	if !isSinkObjectPath(objPath) {
 		return nil
 	}
 	for _, sink := range sinks {
-		if sink.Path == dpath {
+		if sink.Path == objPath {
 			return sink
 		}
 	}
 	return nil
 }
 
-func (sinks SinkInfos) Remove(dpath dbus.ObjectPath) (SinkInfos, bool) {
+func (sinks SinkInfos) Remove(objPath dbus.ObjectPath) (SinkInfos, bool) {
 	var (
 		tmp    SinkInfos
 		exists bool
 	)
 	for _, sink := range sinks {
-		if sink.Path == dpath {
+		if sink.Path == objPath {
 			exists = true
 			continue
 		}
@@ -150,31 +174,35 @@ func (sinks SinkInfos) Remove(dpath dbus.ObjectPath) (SinkInfos, bool) {
 	return tmp, exists
 }
 
-func isSinkObjectPath(dpath dbus.ObjectPath) bool {
-	return strings.Contains(string(dpath), sinkDBusPath)
+func isSinkObjectPath(objPath dbus.ObjectPath) bool {
+	return strings.HasPrefix(string(objPath), sinkDBusPathPrefix)
+}
+
+func isSessionObjectPath(objPath dbus.ObjectPath) bool {
+	return strings.HasPrefix(string(objPath), sessionDBusPathPrefix)
 }
 
 func getAudioSink() string {
-	obj, err := audio.NewAudio("com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio")
+	sessionBus, err := dbus.SessionBus()
 	if err != nil {
 		return ""
 	}
-	defer audio.DestroyAudio(obj)
 
-	if !ddbus.IsSessionBusActivated(obj.DestName) {
-		return ""
-	}
+	obj := audio.NewAudio(sessionBus)
 
-	sink, err := audio.NewAudioSink("com.deepin.daemon.Audio",
-		obj.DefaultSink.Get())
+	defaultSinkPath, err := obj.DefaultSink().Get(0)
 	if err != nil {
 		return ""
 	}
-	defer audio.DestroyAudioSink(sink)
-	return sink.Name.Get() + ".monitor"
-}
 
-func isPeerObjectPath(dpath dbus.ObjectPath) bool {
-	return strings.Contains(string(dpath), peerDBusPath)
+	sink, err := audio.NewSink(sessionBus, defaultSinkPath)
+	if err != nil {
+		return ""
+	}
+
+	name, err := sink.Name().Get(0)
+	if err != nil {
+		return ""
+	}
+	return name + ".monitor"
 }

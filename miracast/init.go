@@ -44,13 +44,14 @@ func (*Daemon) GetDependencies() []string {
 
 var (
 	_m     *Miracast
-	logger = log.NewLogger(dbusServiceName)
+	logger = log.NewLogger("daemon/miracast")
 )
 
 func (d *Daemon) Start() error {
 	if _m != nil {
 		return nil
 	}
+	logger.Debug("start miracast")
 	service := loader.GetService()
 
 	m, err := newMiracast(service)
@@ -58,11 +59,6 @@ func (d *Daemon) Start() error {
 		logger.Error("Failed to new manager:", err)
 		return err
 	}
-	// fix dbus timeout
-	// go func() {
-	// 	m.init()
-	// 	m.ensureMiracleActive()
-	// }()
 	_m = m
 
 	err = service.Export(dbusPath, m)

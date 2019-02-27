@@ -21,7 +21,6 @@ package miracast
 
 import (
 	"fmt"
-	"time"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -36,6 +35,7 @@ const (
 )
 
 func (m *Miracast) ListLinks() (LinkInfos, *dbus.Error) {
+	logger.Debug("call ListLinks")
 	m.init()
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
@@ -43,6 +43,7 @@ func (m *Miracast) ListLinks() (LinkInfos, *dbus.Error) {
 }
 
 func (m *Miracast) ListSinks() (SinkInfos, *dbus.Error) {
+	logger.Debug("call ListSinks")
 	m.init()
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
@@ -50,64 +51,70 @@ func (m *Miracast) ListSinks() (SinkInfos, *dbus.Error) {
 }
 
 func (m *Miracast) Enable(linkPath dbus.ObjectPath, enabled bool) *dbus.Error {
+	logger.Debug("call Enable", linkPath, enabled)
+	m.init()
 	err := m.enable(linkPath, enabled)
 	return dbusutil.ToError(err)
 }
 
 func (m *Miracast) enable(linkPath dbus.ObjectPath, enabled bool) error {
 	if !isLinkObjectPath(linkPath) {
-		return fmt.Errorf("Invalid link dpath: %v", linkPath)
+		return fmt.Errorf("invalid link objPath: %v", linkPath)
 	}
 
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
 	link := m.links.Get(linkPath)
 	if link == nil {
-		logger.Warning("Not found the link:", linkPath)
-		return fmt.Errorf("Not found the link: %v", linkPath)
+		logger.Warning("not found the link:", linkPath)
+		return fmt.Errorf("not found the link: %v", linkPath)
 	}
-
-	if link.core.Managed.Get() == enabled {
-		logger.Debug("Work right, nothing to do:", enabled)
-		return nil
-	}
-
-	if v, ok := m.managingLinks[linkPath]; ok && v == enabled {
-		logger.Debug("Link's managed '%s' has been setting to ", enabled)
-		return nil
-	}
-	m.managingLinks[linkPath] = enabled
 
 	if enabled {
-		err := m.enableWirelessManaged(link.MacAddress, false)
+		err := m.enableWirelessManaged(link.interfaceName, false)
 		if err != nil {
-			delete(m.managingLinks, linkPath)
-			logger.Error("Failed to disable manage wireless device:", err)
+			logger.Warning("failed to disable manage wireless device:", err)
 			return err
 		}
-		time.Sleep(time.Millisecond * 500)
+	} else {
+		err := m.enableWirelessManaged(link.interfaceName, true)
+		if err != nil {
+			logger.Warning("failed to enable manage wireless device:", err)
+			return err
+		}
 	}
 
-	m.handleLinkManaged(link)
+	managed, err := link.core.Managed().Get(0)
+	if err != nil {
+		return err
+	}
+	if managed == enabled {
+		logger.Debug("work right, nothing to do:", enabled)
+		return nil
+	}
+
+	link.myManaged = enabled
 	return link.EnableManaged(enabled)
 }
 
 func (m *Miracast) SetLinkName(linkPath dbus.ObjectPath, name string) *dbus.Error {
+	logger.Debug("call SetLinkName", linkPath, name)
+	m.init()
 	err := m.setLinkName(linkPath, name)
 	return dbusutil.ToError(err)
 }
 
 func (m *Miracast) setLinkName(linkPath dbus.ObjectPath, name string) error {
 	if !isLinkObjectPath(linkPath) {
-		return fmt.Errorf("Invalid link dpath: %v", linkPath)
+		return fmt.Errorf("invalid link objPath: %v", linkPath)
 	}
 
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
 	link := m.links.Get(linkPath)
 	if link == nil {
-		logger.Warning("Not found the link:", linkPath)
-		return fmt.Errorf("Not found the link: %v", linkPath)
+		logger.Warning("not found the link:", linkPath)
+		return fmt.Errorf("not found the link: %v", linkPath)
 	}
 
 	link.SetName(name)
@@ -115,78 +122,121 @@ func (m *Miracast) setLinkName(linkPath dbus.ObjectPath, name string) error {
 }
 
 func (m *Miracast) Scanning(linkPath dbus.ObjectPath, enabled bool) *dbus.Error {
+	logger.Debug("call Scanning", linkPath, enabled)
+	m.init()
 	err := m.scanning(linkPath, enabled)
 	return dbusutil.ToError(err)
 }
 
 func (m *Miracast) scanning(linkPath dbus.ObjectPath, enabled bool) error {
 	if !isLinkObjectPath(linkPath) {
-		return fmt.Errorf("Invalid link dpath: %v", linkPath)
+		return fmt.Errorf("invalid link objPath: %v", linkPath)
 	}
 
 	m.linkLocker.Lock()
 	defer m.linkLocker.Unlock()
 	link := m.links.Get(linkPath)
 	if link == nil {
-		logger.Warning("Not found the link:", linkPath)
-		return fmt.Errorf("Not found the link: %v", linkPath)
+		logger.Warning("not found the link:", linkPath)
+		return fmt.Errorf("not found the link: %v", linkPath)
+	}
+
+	if !link.myManaged {
+		logger.Debug("not allow scan")
+		return nil
+	}
+
+	logger.Debug("manage link", linkPath)
+	err := link.EnableManaged(true)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = link.waitManaged(true)
+	if err != nil {
+		logger.Warning(err)
+		return err
 	}
 
 	link.EnableP2PScanning(enabled)
-	// TODO: wait P2PScanning changed
 	link.update()
 	return nil
 }
 
 func (m *Miracast) Connect(sinkPath dbus.ObjectPath, x, y, w, h uint32) *dbus.Error {
+	logger.Debug("call Connect", sinkPath, x, y, w, h)
+	m.init()
 	err := m.connect(sinkPath, x, y, w, h)
 	return dbusutil.ToError(err)
 }
 
 func (m *Miracast) connect(sinkPath dbus.ObjectPath, x, y, w, h uint32) error {
 	if !isSinkObjectPath(sinkPath) {
-		return fmt.Errorf("Invalid sink dpath: %v", sinkPath)
+		return fmt.Errorf("invalid sink objPath: %v", sinkPath)
 	}
 
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
 	sink := m.sinks.Get(sinkPath)
 	if sink == nil {
-		logger.Warning("Not found the sink:", sinkPath)
-		return fmt.Errorf("Not found the sink: %v", sinkPath)
+		logger.Warning("not found sink", sinkPath)
+		return fmt.Errorf("not found sink %v", sinkPath)
 	}
 
-	if sink.peer.Connected.Get() {
-		logger.Debug("Has connected, start session")
-		m.doConnect(sink, x, y, w, h)
-		return nil
-	}
-
-	if v, ok := m.connectingSinks[sinkPath]; ok && v {
-		logger.Debug("[ConnectSink] sink has connecting:", sinkPath)
-		return nil
-	}
-	m.connectingSinks[sinkPath] = true
-
-	m.handleSinkConnected(sink, x, y, w, h)
-	err := sink.peer.Connect("auto", "")
+	linkPath, err := sink.peer.Link().Get(0)
 	if err != nil {
-		delete(m.connectingSinks, sinkPath)
+		logger.Warning(err)
+	}
+
+	m.linkLocker.Lock()
+	link := m.links.Get(linkPath)
+	m.linkLocker.Unlock()
+	if link == nil {
+		logger.Warning("not found link", linkPath)
+		return fmt.Errorf("not found link %v", linkPath)
+	}
+
+	err = link.EnableManaged(true)
+	if err != nil {
+		logger.Warning(err)
+		return err
+	}
+	err = link.waitManaged(true)
+	if err != nil {
+		logger.Warning(err)
+		return err
+	}
+	link.EnableP2PScanning(false)
+	link.ConfigureForManaged()
+
+	connected, err := sink.peer.Connected().Get(0)
+	if connected {
+		logger.Debug("Has connected, start session")
+		m.startSession(sink, x, y, w, h)
+		return nil
+	}
+
+	err = sink.peer.Connect(0, "auto", "")
+	if err != nil {
 		logger.Error("Failed to connect sink:", err)
 		return err
 	}
 
+	go func() {
+		err := waitPeerConnected(sink.peer, true)
+		if err == nil {
+			m.startSession(sink, x, y, w, h)
+		} else {
+			logger.Warning(err)
+			m.emitSignalEvent(EventSinkConnectedFailed, sink.Path)
+		}
+	}()
 	return nil
 }
 
 func (m *Miracast) Disconnect(sinkPath dbus.ObjectPath) *dbus.Error {
-	err := m.disconnect(sinkPath)
+	logger.Debug("call Disconnect", sinkPath)
+	m.init()
+	err := m.disconnectSink(sinkPath)
 	return dbusutil.ToError(err)
-}
-
-func (m *Miracast) disconnect(sinkPath dbus.ObjectPath) error {
-	if !isSinkObjectPath(sinkPath) {
-		return fmt.Errorf("Invalid sink dpath: %v", sinkPath)
-	}
-	return m.disconnectSink(sinkPath)
 }
