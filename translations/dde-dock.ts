@@ -105,6 +105,14 @@
     </message>
 </context>
 <context>
+    <name>DockPluginsController</name>
+    <message>
+        <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DockSettings</name>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
