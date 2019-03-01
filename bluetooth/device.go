@@ -75,9 +75,10 @@ type device struct {
 	RSSI    int16
 	Address string
 
-	connected    bool
-	connecting   bool
-	agentWorking bool
+	connected     bool
+	connectedTime time.Time
+	connecting    bool
+	agentWorking  bool
 
 	connectPhase      connectPhase
 	disconnectPhase   disconnectPhase
@@ -203,23 +204,32 @@ func (d *device) destroy() {
 
 func (d *device) notifyDeviceAdded() {
 	logger.Debug("DeviceAdded", d)
-	globalBluetooth.service.Emit(globalBluetooth, "DeviceAdded", marshalJSON(d))
+	err := globalBluetooth.service.Emit(globalBluetooth, "DeviceAdded", marshalJSON(d))
+	if err != nil {
+		logger.Warning(err)
+	}
 	globalBluetooth.updateState()
 }
 
 func (d *device) notifyDeviceRemoved() {
 	logger.Debug("DeviceRemoved", d)
-	globalBluetooth.service.Emit(globalBluetooth, "DeviceRemoved", marshalJSON(d))
+	err := globalBluetooth.service.Emit(globalBluetooth, "DeviceRemoved", marshalJSON(d))
+	if err != nil {
+		logger.Warning(err)
+	}
 	globalBluetooth.updateState()
 }
 
 func (d *device) notifyDevicePropertiesChanged() {
-	globalBluetooth.service.Emit(globalBluetooth, "DevicePropertiesChanged", marshalJSON(d))
+	err := globalBluetooth.service.Emit(globalBluetooth, "DevicePropertiesChanged", marshalJSON(d))
+	if err != nil {
+		logger.Warning(err)
+	}
 	globalBluetooth.updateState()
 }
 
 func (d *device) connectProperties() {
-	d.core.Connected().ConnectChanged(func(hasValue bool, connected bool) {
+	err := d.core.Connected().ConnectChanged(func(hasValue bool, connected bool) {
 		if !hasValue {
 			return
 		}
@@ -227,7 +237,18 @@ func (d *device) connectProperties() {
 		d.connected = connected
 
 		needNotify := true
-		if !connected {
+
+		if connected {
+			d.connectedTime = time.Now()
+		} else {
+			// when disconnected quickly after connecting, automatically try to connect
+			sinceConnected := time.Since(d.connectedTime)
+			logger.Debug("sinceConnected:", sinceConnected)
+
+			if sinceConnected < 300*time.Millisecond {
+				go d.Connect()
+			}
+
 			select {
 			case d.disconnectChan <- struct{}{}:
 				logger.Debugf("%s disconnectChan send done", d)
@@ -244,8 +265,11 @@ func (d *device) connectProperties() {
 		}
 		return
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	d.core.Name().ConnectChanged(func(hasValue bool, value string) {
+	_ = d.core.Name().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -254,7 +278,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.Alias().ConnectChanged(func(hasValue bool, value string) {
+	_ = d.core.Alias().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -263,7 +287,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.Address().ConnectChanged(func(hasValue bool, value string) {
+	_ = d.core.Address().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -272,7 +296,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.Trusted().ConnectChanged(func(hasValue bool, value bool) {
+	_ = d.core.Trusted().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -281,7 +305,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.Paired().ConnectChanged(func(hasValue bool, value bool) {
+	_ = d.core.Paired().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -290,7 +314,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.ServicesResolved().ConnectChanged(func(hasValue bool, value bool) {
+	_ = d.core.ServicesResolved().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -299,7 +323,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.Icon().ConnectChanged(func(hasValue bool, value string) {
+	_ = d.core.Icon().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -308,7 +332,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.UUIDs().ConnectChanged(func(hasValue bool, value []string) {
+	_ = d.core.UUIDs().ConnectChanged(func(hasValue bool, value []string) {
 		if !hasValue {
 			return
 		}
@@ -317,7 +341,7 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.RSSI().ConnectChanged(func(hasValue bool, value int16) {
+	_ = d.core.RSSI().ConnectChanged(func(hasValue bool, value int16) {
 		if !hasValue {
 			d.RSSI = 0
 			logger.Debugf("%s RSSI invalidated", d)
@@ -328,14 +352,14 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 	})
 
-	d.core.LegacyPairing().ConnectChanged(func(hasValue bool, value bool) {
+	_ = d.core.LegacyPairing().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
 		logger.Debugf("%s LegacyPairing: %v", d, value)
 	})
 
-	d.core.Blocked().ConnectChanged(func(hasValue bool, value bool) {
+	_ = d.core.Blocked().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -514,14 +538,11 @@ func (d *device) Disconnect() {
 	ch := d.goWaitDisconnect()
 
 	d.setDisconnectPhase(disconnectPhaseDisconnectStart)
-	d.core.Disconnect(0)
-	d.setDisconnectPhase(disconnectPhaseDisconnectEnd)
-
-	if d.Icon == "phone" || d.Icon == "computer" {
-		// do not block phone or computer
-	} else {
-		d.core.Blocked().Set(0, true)
+	err = d.core.Disconnect(0)
+	if err != nil {
+		logger.Warningf("failed to disconnect %s: %v", d, err)
 	}
+	d.setDisconnectPhase(disconnectPhaseDisconnectEnd)
 
 	<-ch
 	notifyDisconnected(d.Alias)
