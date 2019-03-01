@@ -1,3 +1,12 @@
+[3.23.1] 2019-03-01
+*   feat(bluetooth): when disconnected quickly after connecting, automatically try to connect
+*   chore(miracast): use go-dbus-factory
+*   chore: use pkg.deepin.io/gir
+*   fix(launcher) lost dbus conn when file name is invalid utf8 string
+*   fix(dock): items removed when application updated
+*   chore: change log level to warn
+*   refactor(keybinding): extend execCmd method
+
 [3.23.0] 2019-02-22
 *   remove usage of qdbus command
 *   refactor(audio): simplify method setPort
