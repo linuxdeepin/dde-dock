@@ -21,10 +21,7 @@ package network
 
 import (
 	"fmt"
-	"sort"
 	"strings"
-
-	"pkg.deepin.io/lib/dbusutil"
 
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 
@@ -52,15 +49,6 @@ var nmPermissions map[string]string
 func isNmObjectPathValid(p dbus.ObjectPath) bool {
 	str := string(p)
 	if len(str) == 0 || str == "/" {
-		return false
-	}
-	return true
-}
-
-func isNmDeviceObjectExists(devPath dbus.ObjectPath) bool {
-	// TODO: 这个方法有问题， 只能判断 devPath 是否是合法path
-	_, err := nmNewDevice(devPath)
-	if err != nil {
 		return false
 	}
 	return true
@@ -116,65 +104,6 @@ func isConnectionStateInActivating(state uint32) bool {
 	}
 	return false
 }
-func isConnectionStateActivated(state uint32) bool {
-	if state == nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
-		return true
-	}
-	return false
-}
-func isConnectionStateInDeactivating(state uint32) bool {
-	if state == nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATING ||
-		state == nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATED {
-		return true
-	}
-	return false
-}
-func isConnectionStateDeactivate(state uint32) bool {
-	if state == nm.NM_ACTIVE_CONNECTION_STATE_DEACTIVATED {
-		return true
-	}
-	return false
-}
-
-func isConnectionInActivating(uuid string) bool {
-	apaths, err := nmGetActiveConnectionByUuid(uuid)
-	if err != nil || len(apaths) == 0 {
-		return false
-	}
-	for _, apath := range apaths {
-		if isConnectionStateInActivating(nmGetActiveConnectionState(apath)) {
-			return true
-		}
-	}
-	return false
-}
-
-// check if vpn connection activating or activated
-func isVpnConnectionStateInActivating(state uint32) bool {
-	if state >= nm.NM_VPN_CONNECTION_STATE_PREPARE &&
-		state <= nm.NM_VPN_CONNECTION_STATE_ACTIVATED {
-		return true
-	}
-	return false
-}
-func isVpnConnectionStateActivated(state uint32) bool {
-	if state == nm.NM_VPN_CONNECTION_STATE_ACTIVATED {
-		return true
-	}
-	return false
-}
-func isVpnConnectionStateDeactivate(state uint32) bool {
-	if state == nm.NM_VPN_CONNECTION_STATE_DISCONNECTED {
-		return true
-	}
-	return false
-}
-func isVpnConnectionStateFailed(state uint32) bool {
-	if state == nm.NM_VPN_CONNECTION_STATE_FAILED {
-		return true
-	}
-	return false
-}
 
 func isVirtualDeviceIfc(dev *nmdbus.Device) bool {
 	driver, _ := dev.Driver().Get(0)
@@ -195,27 +124,6 @@ func isVirtualDeviceIfc(dev *nmdbus.Device) bool {
 	return false
 }
 
-// General function wrappers for network manager
-func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
-	allHwAddr = make(map[string]string)
-	for _, devPath := range nmGetDevices() {
-		dev, err := nmNewDevice(devPath)
-		if err != nil {
-			continue
-		}
-		deviceType, _ := dev.DeviceType().Get(0)
-
-		if deviceType == devType {
-			hwAddr, err := nmGeneralGetDeviceHwAddr(devPath, true)
-			// filter all virtual devices
-			if err == nil && !isVirtualDeviceIfc(dev) {
-				devInterface, _ := dev.Interface().Get(0)
-				allHwAddr[devInterface] = hwAddr
-			}
-		}
-	}
-	return
-}
 func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath, perm bool) (hwAddr string, err error) {
 	hwAddr = "00:00:00:00:00:00"
 	dev, err := nmNewDevice(devPath)
@@ -282,15 +190,6 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath, perm bool) (hwAddr string
 	return
 }
 
-func nmGetDeviceIdentifiers() (devIds []string) {
-	for _, devPath := range nmGetDevices() {
-		id, err := nmGeneralGetDeviceIdentifier(devPath)
-		if err == nil {
-			devIds = append(devIds, id)
-		}
-	}
-	return
-}
 func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
 	// get device unique identifier, use hardware address if exists
 	dev, err := nmNewDevice(devPath)
@@ -453,26 +352,6 @@ func nmNewActiveConnection(apath dbus.ObjectPath) (aconn *nmdbus.ActiveConnectio
 	}
 	return
 }
-func nmNewAgentManager() (manager *nmdbus.AgentManager, err error) {
-	systemBus, err := dbus.SystemBus()
-	if err != nil {
-		return
-	}
-	manager = nmdbus.NewAgentManager(systemBus)
-	return
-}
-func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nmdbus.Dhcp4Config, err error) {
-	systemBus, err := dbus.SystemBus()
-	if err != nil {
-		return
-	}
-	dhcp4, err = nmdbus.NewDhcp4Config(systemBus, path)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
 
 func nmNewIP4Config(path dbus.ObjectPath) (ip4config *nmdbus.IP4Config, err error) {
 	systemBus, err := dbus.SystemBus()
@@ -505,19 +384,6 @@ func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nmdbus.ConnectionSett
 		return
 	}
 	conn, err = nmdbus.NewConnectionSettings(systemBus, cpath)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-func nmNewVpnConnection(apath dbus.ObjectPath) (vpnConn *nmdbus.VpnConnection, err error) {
-	systemBus, err := dbus.SystemBus()
-	if err != nil {
-		return
-	}
-	vpnConn, err =
-		nmdbus.NewVpnConnection(systemBus, apath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -599,18 +465,6 @@ func nmGetDevices() (devPaths []dbus.ObjectPath) {
 	return
 }
 
-func nmGetDevicesByType(devType uint32) (specDevPaths []dbus.ObjectPath) {
-	for _, p := range nmGetDevices() {
-		if dev, err := nmNewDevice(p); err == nil {
-			deviceType, _ := dev.DeviceType().Get(0)
-			if deviceType == devType {
-				specDevPaths = append(specDevPaths, p)
-			}
-		}
-	}
-	return
-}
-
 func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
@@ -618,17 +472,6 @@ func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 	}
 
 	devInterface, _ = dev.Interface().Get(0)
-	return
-}
-
-func nmGetDeviceModemCapabilities(devPath dbus.ObjectPath) (capabilities uint32) {
-	dev, err := nmNewDevice(devPath)
-	if err != nil {
-		return
-	}
-	devModem := dev.Modem()
-
-	capabilities, _ = devModem.CurrentCapabilities().Get(0)
 	return
 }
 
@@ -723,16 +566,6 @@ func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
 	return
 }
 
-func nmGetAccessPointSsids(devPath dbus.ObjectPath) (ssids []string) {
-	for _, apPath := range nmGetAccessPoints(devPath) {
-		if ap, err := nmNewAccessPoint(apPath); err == nil {
-			ssid, _ := ap.Ssid().Get(0)
-			ssids = append(ssids, decodeSsid(ssid))
-		}
-	}
-	return
-}
-
 func nmGetManagerState() (state uint32) {
 	state, _ = nmManager.State().Get(0)
 	return
@@ -773,15 +606,6 @@ func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error)
 		logger.Error(err)
 		return
 	}
-	return
-}
-
-func nmGetConnectionAutoconnect(cpath dbus.ObjectPath) (autoConnect bool) {
-	data, err := nmGetConnectionData(cpath)
-	if err != nil {
-		return
-	}
-	autoConnect = getSettingConnectionAutoconnect(data)
 	return
 }
 
@@ -827,32 +651,11 @@ func nmGetConnectionList() (connections []dbus.ObjectPath) {
 	return
 }
 
-func nmGetConnectionUuidsByType(connTypes ...string) (uuids []string) {
-	for _, cpath := range nmGetConnectionList() {
-		if isStringInArray(nmGetConnectionType(cpath), connTypes) {
-			if uuid, err := nmGetConnectionUuid(cpath); err == nil {
-				uuids = append(uuids, uuid)
-			}
-		}
-	}
-	return
-}
-
 func nmGetConnectionIds() (ids []string) {
 	for _, cpath := range nmGetConnectionList() {
 		ids = append(ids, nmGetConnectionId(cpath))
 	}
 	return
-}
-
-func isConnAutoConnect(uuid string) bool {
-	connPath, err := nmGetConnectionByUuid(uuid)
-	if err != nil {
-		logger.Warning(err)
-		return false
-	}
-
-	return nmGetConnectionAutoconnect(connPath)
 }
 
 func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
@@ -1009,26 +812,6 @@ func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPat
 	return
 }
 
-func nmGetDeviceAvailableConnections(devPath dbus.ObjectPath) (paths []dbus.ObjectPath) {
-	dev, err := nmNewDevice(devPath)
-	if err != nil {
-		return
-	}
-	paths, _ = dev.AvailableConnections().Get(0)
-	return
-}
-
-func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err error) {
-	acPath := nmGetDeviceActiveConnection(devPath)
-	aconn, err := nmNewActiveConnection(acPath)
-	if err != nil {
-		return
-	}
-
-	uuid, err = aconn.Uuid().Get(0)
-	return
-}
-
 func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionData, err error) {
 	if !isDeviceStateInActivating(nmGetDeviceState(devPath)) {
 		err = fmt.Errorf("device is inactivated %s", devPath)
@@ -1054,14 +837,6 @@ func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionDa
 	return
 }
 
-func nmManagerEnable(enable bool) (err error) {
-	err = nmManager.Enable(0, enable)
-	if err != nil {
-		logger.Error(err)
-	}
-	return
-}
-
 func nmGetPrimaryConnection() (cpath dbus.ObjectPath) {
 	cpath, _ = nmManager.PrimaryConnection().Get(0)
 	return
@@ -1074,111 +849,6 @@ func nmGetNetworkEnabled() bool {
 func nmGetWirelessHardwareEnabled() bool {
 	enabled, _ := nmManager.WirelessHardwareEnabled().Get(0)
 	return enabled
-}
-
-func nmSetNetworkingEnabled(enabled bool) {
-	if nmGetNetworkEnabled() != enabled {
-		nmManagerEnable(enabled)
-	} else {
-		logger.Warning("NetworkingEnabled already set as", enabled)
-	}
-	return
-}
-
-func nmSetWirelessEnabled(enabled bool) {
-	currentEnabled, err := nmManager.WirelessEnabled().Get(0)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	if currentEnabled != enabled {
-		nmManager.WirelessEnabled().Set(0, enabled)
-	} else {
-		logger.Warning("WirelessEnabled already set as", enabled)
-	}
-	return
-}
-
-func nmSetWwanEnabled(enabled bool) {
-	currentEnabled, err := nmManager.WwanEnabled().Get(0)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	if currentEnabled != enabled {
-		nmManager.WwanEnabled().Set(0, enabled)
-	} else {
-		logger.Warning("WwanEnabled already set as", enabled)
-	}
-}
-
-type autoConnectConn struct {
-	id        string
-	uuid      string
-	timestamp uint64
-}
-type autoConnectConns []autoConnectConn
-
-func (acs autoConnectConns) Len() int {
-	return len(acs)
-}
-func (acs autoConnectConns) Swap(i, j int) {
-	acs[i], acs[j] = acs[j], acs[i]
-}
-func (acs autoConnectConns) Less(i, j int) bool {
-	return acs[i].timestamp < acs[j].timestamp
-}
-func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionUuid string) (uuids []string) {
-	acs := make(autoConnectConns, 0)
-	devRelatedUuid := nmGeneralGetDeviceUniqueUuid(devPath)
-	for _, cpath := range nmGetDeviceAvailableConnections(devPath) {
-		if cdata, err := nmGetConnectionData(cpath); err == nil {
-			uuid := getSettingConnectionUuid(cdata)
-			switch getCustomConnectionType(cdata) {
-			case connectionMobileGsm, connectionMobileCdma:
-				if devRelatedUuid != uuid {
-					// ignore connections that not matching the
-					// device, etc wired connections that create in
-					// other ways
-					continue
-				}
-			}
-			if uuid == lastConnectionUuid {
-				// the last activated connection will be dispatch
-				// specially
-				continue
-			}
-			if getSettingConnectionAutoconnect(cdata) {
-				id := getSettingConnectionId(cdata)
-				timestamp := getSettingConnectionTimestamp(cdata)
-				if timestamp > 0 {
-					// only collect connections that connected before
-					ac := autoConnectConn{
-						id:        id,
-						uuid:      uuid,
-						timestamp: timestamp,
-					}
-					acs = append(acs, ac)
-				}
-			}
-		}
-	}
-	sort.Sort(sort.Reverse(acs))
-	logger.Debugf("autoconnect connections for device type %s, %v",
-		getCustomDeviceType(nmGetDeviceType(devPath)), acs)
-	if len(lastConnectionUuid) > 0 {
-		// the last activated connection has the highest priority if
-		// exists and the auto-connect property enabled
-		if cpath, err := nmGetConnectionByUuid(lastConnectionUuid); err == nil {
-			if nmGetConnectionAutoconnect(cpath) {
-				uuids = []string{lastConnectionUuid}
-			}
-		}
-	}
-	for _, ac := range acs {
-		uuids = append(uuids, ac.uuid)
-	}
-	return
 }
 
 func (m *Manager) nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
@@ -1197,28 +867,6 @@ func (m *Manager) nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func
 			if !hasRun && isDeviceStateAvailable(newState) {
 				cb()
 				nmDestroyDevice(dev)
-				hasRun = true
-			}
-		})
-	}
-}
-
-func nmRunOnceUtilNetworkAvailable(sysSigLoop *dbusutil.SignalLoop, cb func()) {
-	manager, err := nmNewManager()
-	if err != nil {
-		return
-	}
-	state, _ := manager.State().Get(0)
-	const connectedState uint32 = nm.NM_STATE_CONNECTED_LOCAL
-	if state >= connectedState {
-		cb()
-	} else {
-		hasRun := false
-		manager.InitSignalExt(sysSigLoop, true)
-		manager.ConnectStateChanged(func(state uint32) {
-			if !hasRun && state >= connectedState {
-				cb()
-				nmDestroyManager(manager)
 				hasRun = true
 			}
 		})

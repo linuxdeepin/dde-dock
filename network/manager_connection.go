@@ -136,7 +136,6 @@ func (conn *connection) updateProps() {
 }
 
 func (m *Manager) destroyConnection(conn *connection) {
-	m.config.removeConnection(conn.Uuid)
 	nmDestroySettingsConnection(conn.nmConn)
 }
 
@@ -164,7 +163,7 @@ func (m *Manager) addConnection(cpath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	logger.Infof("add connection %#v", conn)
+	logger.Debug("add connection", cpath)
 	switch conn.connType {
 	case connectionUnknown:
 	default:

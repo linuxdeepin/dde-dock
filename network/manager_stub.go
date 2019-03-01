@@ -20,35 +20,41 @@
 package network
 
 import (
+	"errors"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
 func (m *Manager) networkingEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
-	enabled, ok := write.Value.(bool)
-	if !ok {
-		logger.Warning("type of value is not bool")
-		return nil
-	}
-	m.switchHandler.setNetworkingEnabled(enabled)
+	// currently not need
 	return nil
 }
 
 func (m *Manager) vpnEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
 	enabled, ok := write.Value.(bool)
 	if !ok {
-		logger.Warning("type of value is not bool")
-		return nil
+		err := errors.New("type of value is not bool")
+		logger.Warning(err)
+		return dbusutil.ToError(err)
 	}
-	m.switchHandler.setVpnEnabled(enabled)
+	err := m.sysNetwork.VpnEnabled().Set(0, enabled)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
 	return nil
 }
 
 func (m *Manager) setPropNetworkingEnabled(value bool) {
 	m.NetworkingEnabled = value
-	m.service.EmitPropertyChanged(m, "NetworkingEnabled", value)
+	err := m.service.EmitPropertyChanged(m, "NetworkingEnabled", value)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
+
 func (m *Manager) setPropWirelessEnabled(value bool) {
 	m.wirelessEnabled = value
 }
@@ -61,7 +67,10 @@ func (m *Manager) setPropWiredEnabled(value bool) {
 
 func (m *Manager) setPropVpnEnabled(value bool) {
 	m.VpnEnabled = value
-	m.service.EmitPropertyChanged(m, "VpnEnabled", value)
+	err := m.service.EmitPropertyChanged(m, "VpnEnabled", value)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) updatePropActiveConnections() {

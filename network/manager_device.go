@@ -78,13 +78,19 @@ func (m *Manager) initDeviceManage() {
 	m.accessPoints = make(map[dbus.ObjectPath][]*accessPoint)
 	m.accessPointsLock.Unlock()
 
-	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
+	_, err := nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		m.addDevice(path)
 	})
-	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	_, err = nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		notifyDeviceRemoved(path)
 		m.removeDevice(path)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 	for _, path := range nmGetDevices() {
 		m.addDevice(path)
 	}
@@ -134,7 +140,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	case nm.NM_DEVICE_TYPE_ETHERNET:
 		// for mac address clone
 		nmDevWired := nmDev.Wired()
-		nmDevWired.HwAddress().ConnectChanged(func(hasValue bool, value string) {
+		err = nmDevWired.HwAddress().ConnectChanged(func(hasValue bool, value string) {
 			if !hasValue {
 				return
 			}
@@ -144,6 +150,9 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			dev.ClonedAddress = value
 			m.updatePropDevices()
 		})
+		if err != nil {
+			logger.Warning(err)
+		}
 		dev.ClonedAddress, _ = nmDevWired.HwAddress().Get(0)
 		dev.HwAddress, _ = nmDevWired.PermHwAddress().Get(0)
 
@@ -152,7 +161,10 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		}
 
 		if nmHasSystemSettingsModifyPermission() {
-			m.ensureWiredConnectionExists(dev.Path, true)
+			_, _, err = m.ensureWiredConnectionExists(dev.Path, true)
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	case nm.NM_DEVICE_TYPE_WIFI:
 		nmDevWireless := nmDev.Wireless()
@@ -160,7 +172,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		dev.HwAddress, _ = nmDevWireless.PermHwAddress().Get(0)
 
 		// connect property, about wireless active access point
-		nmDevWireless.ActiveAccessPoint().ConnectChanged(func(hasValue bool,
+		err = nmDevWireless.ActiveAccessPoint().ConnectChanged(func(hasValue bool,
 			value dbus.ObjectPath) {
 			if !hasValue {
 				return
@@ -173,11 +185,14 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			dev.ActiveAp = value
 			m.updatePropDevices()
 		})
+		if err != nil {
+			logger.Warning(err)
+		}
 		dev.ActiveAp, _ = nmDevWireless.ActiveAccessPoint().Get(0)
 		permHwAddress, _ := nmDevWireless.PermHwAddress().Get(0)
 		dev.SupportHotspot = isWirelessDeviceSupportHotspot(permHwAddress)
 
-		nmDevWireless.HwAddress().ConnectChanged(func(hasValue bool, value string) {
+		err = nmDevWireless.HwAddress().ConnectChanged(func(hasValue bool, value string) {
 			if !hasValue {
 				return
 			}
@@ -187,13 +202,23 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			dev.ClonedAddress = value
 			m.updatePropDevices()
 		})
+		if err != nil {
+			logger.Warning(err)
+		}
 		// connect signals AccessPointAdded() and AccessPointRemoved()
-		nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
+		_, err = nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			m.addAccessPoint(dev.Path, apPath)
 		})
-		nmDevWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
+		if err != nil {
+			logger.Warning(err)
+		}
+
+		_, err = nmDevWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
 			m.removeAccessPoint(dev.Path, apPath)
 		})
+		if err != nil {
+			logger.Warning(err)
+		}
 		for _, apPath := range nmGetAccessPoints(dev.Path) {
 			m.addAccessPoint(dev.Path, apPath)
 		}
@@ -217,7 +242,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			dev.mmDevModem = mmDevModem
 
 			// connect properties
-			dev.mmDevModem.AccessTechnologies().ConnectChanged(func(hasValue bool,
+			err = dev.mmDevModem.AccessTechnologies().ConnectChanged(func(hasValue bool,
 				value uint32) {
 				if !m.isDeviceExists(devPath) {
 					return
@@ -230,10 +255,13 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				dev.MobileNetworkType = mmDoGetModemMobileNetworkType(value)
 				m.updatePropDevices()
 			})
+			if err != nil {
+				logger.Warning(err)
+			}
 			accessTech, _ := mmDevModem.AccessTechnologies().Get(0)
 			dev.MobileNetworkType = mmDoGetModemMobileNetworkType(accessTech)
 
-			dev.mmDevModem.SignalQuality().ConnectChanged(func(hasValue bool,
+			err = dev.mmDevModem.SignalQuality().ConnectChanged(func(hasValue bool,
 				value mmdbus.ModemSignalQuality) {
 				if !m.isDeviceExists(devPath) {
 					return
@@ -247,13 +275,16 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				dev.MobileSignalQuality = value.Quality
 				m.updatePropDevices()
 			})
+			if err != nil {
+				logger.Warning(err)
+			}
 			dev.MobileSignalQuality = mmDoGetModemDeviceSignalQuality(mmDevModem)
 		}
 	}
 
 	// connect signals
-	dev.nmDev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
-		logger.Infof("device state changed, %d => %d, reason[%d] %s",
+	_, err = dev.nmDev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
+		logger.Debugf("device state changed, %d => %d, reason[%d] %s",
 			oldState, newState, reason, deviceErrorTable[reason])
 
 		if !m.isDeviceExists(devPath) {
@@ -265,10 +296,12 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		m.updatePropDevices()
 		m.devicesLock.Unlock()
 
-		m.config.handleDeviceStateChanged(dev.Path, newState)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	dev.nmDev.Interface().ConnectChanged(func(hasValue bool, value string) {
+	err = dev.nmDev.Interface().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -278,8 +311,11 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		m.updatePropDevices()
 		m.devicesLock.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	dev.nmDev.Managed().ConnectChanged(func(hasValue bool, value bool) {
+	err = dev.nmDev.Managed().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -289,9 +325,10 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		m.updatePropDevices()
 		m.devicesLock.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.config.addDeviceConfig(devPath)
-	m.switchHandler.initDeviceState(devPath)
 	return
 }
 
@@ -327,7 +364,7 @@ func (m *Manager) addDevice(devPath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	logger.Infof("add device %#v", dev)
+	logger.Debug("add device", devPath)
 	devType := getCustomDeviceType(dev.nmDevType)
 	m.devices[devType] = append(m.devices[devType], dev)
 	m.updatePropDevices()
@@ -383,9 +420,9 @@ func (m *Manager) getDeviceIndex(devPath dbus.ObjectPath) (devType string, index
 	return "", -1
 }
 
-func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err *dbus.Error) {
-	enabled = m.config.getDeviceEnabled(devPath)
-	return
+func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (bool, *dbus.Error) {
+	b, err := m.sysNetwork.IsDeviceEnabled(0, string(devPath))
+	return b, dbusutil.ToError(err)
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) *dbus.Error {
@@ -394,10 +431,11 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) *dbus.Erro
 }
 
 func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	err = m.switchHandler.enableDevice(devPath, enabled)
+	err = m.sysNetwork.EnableDevice(0, string(devPath), enabled)
 	if err != nil {
 		return
 	}
+
 	m.stateHandler.locker.Lock()
 	defer m.stateHandler.locker.Unlock()
 	dsi, ok := m.stateHandler.devices[devPath]

@@ -26,12 +26,13 @@ import (
 	_ "pkg.deepin.io/dde/daemon/accounts"
 	_ "pkg.deepin.io/dde/daemon/apps"
 	_ "pkg.deepin.io/dde/daemon/system/gesture"
+	_ "pkg.deepin.io/dde/daemon/system/network"
 	_ "pkg.deepin.io/dde/daemon/system/power"
 	_ "pkg.deepin.io/dde/daemon/system/swapsched"
 	_ "pkg.deepin.io/dde/daemon/system/timedated"
 
-	"pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
@@ -71,7 +72,10 @@ func main() {
 	// fix no PATH when was launched by dbus
 	if os.Getenv("PATH") == "" {
 		logger.Warning("No PATH found, manual special")
-		os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+		err = os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	InitI18n()

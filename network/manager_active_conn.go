@@ -193,10 +193,6 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 	case nm.NM_VPN_CONNECTION_STATE_FAILED:
 		notifyVpnFailed(aConn.Id, reason)
 		aConn.vpnFailed = true
-	default:
-		if isVpnConnectionStateInActivating(state) {
-			m.switchHandler.doEnableVpn(true)
-		}
 	}
 }
 

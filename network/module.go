@@ -62,8 +62,14 @@ func (d *Module) start() error {
 		return err
 	}
 
-	managerServerObj.SetWriteCallback(manager, "NetworkingEnabled", manager.networkingEnabledWriteCb)
-	managerServerObj.SetWriteCallback(manager, "VpnEnabled", manager.vpnEnabledWriteCb)
+	err = managerServerObj.SetWriteCallback(manager, "NetworkingEnabled", manager.networkingEnabledWriteCb)
+	if err != nil {
+		return err
+	}
+	err = managerServerObj.SetWriteCallback(manager, "VpnEnabled", manager.vpnEnabledWriteCb)
+	if err != nil {
+		return err
+	}
 
 	err = managerServerObj.Export()
 	if err != nil {
@@ -125,10 +131,16 @@ func (d *Module) Stop() error {
 	manager.destroy()
 	destroyDBusDaemon()
 	sysSigLoop.Stop()
-	service.StopExport(manager)
+	err = service.StopExport(manager)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	if manager.proxyChainsManager != nil {
-		service.StopExport(manager.proxyChainsManager)
+		err = service.StopExport(manager.proxyChainsManager)
+		if err != nil {
+			logger.Warning(err)
+		}
 		manager.proxyChainsManager = nil
 	}
 

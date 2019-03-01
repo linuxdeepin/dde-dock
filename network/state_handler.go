@@ -123,10 +123,10 @@ func initNmStateReasons() {
 }
 
 type stateHandler struct {
+	m       *Manager
 	devices map[dbus.ObjectPath]*deviceStateInfo
 	locker  sync.Mutex
 
-	conf       *config
 	sysSigLoop *dbusutil.SignalLoop
 }
 
@@ -139,28 +139,38 @@ type deviceStateInfo struct {
 	connectionType string
 }
 
-func newStateHandler(c *config, sysSigLoop *dbusutil.SignalLoop) (sh *stateHandler) {
-	sh = &stateHandler{}
-	sh.devices = make(map[dbus.ObjectPath]*deviceStateInfo)
-	sh.conf = c
-	sh.sysSigLoop = sysSigLoop
+func newStateHandler(sysSigLoop *dbusutil.SignalLoop, m *Manager) (sh *stateHandler) {
+	sh = &stateHandler{
+		m:          m,
+		sysSigLoop: sysSigLoop,
+		devices:    make(map[dbus.ObjectPath]*deviceStateInfo),
+	}
 
-	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
+	_, err := nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		sh.remove(path)
 	})
-	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	_, err = nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		sh.watch(path)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 	for _, path := range nmGetDevices() {
 		sh.watch(path)
 	}
 
-	nmManager.NetworkingEnabled().ConnectChanged(func(hasValue bool, value bool) {
+	err = nmManager.NetworkingEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		if !nmGetNetworkEnabled() {
 			notifyAirplanModeEnabled()
 		}
 	})
-	nmManager.WirelessHardwareEnabled().ConnectChanged(func(hasValue bool, value bool) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	_ = nmManager.WirelessHardwareEnabled().ConnectChanged(func(hasValue bool, value bool) {
 		if !nmGetWirelessHardwareEnabled() {
 			notifyWirelessHardSwitchOff()
 		}
@@ -201,7 +211,13 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 	sh.devices[path] = &deviceStateInfo{nmDev: nmDev}
 	sh.devices[path].devType = deviceType
 	sh.devices[path].devUdi, _ = nmDev.Udi().Get(0)
-	sh.devices[path].enabled = sh.conf.getDeviceEnabled(path)
+	enabled, err := sh.m.sysNetwork.IsDeviceEnabled(0, string(path))
+	if err == nil {
+		sh.devices[path].enabled = enabled
+	} else {
+		logger.Warning(err)
+	}
+
 	if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 		// remember active connection id and type if exists
 		sh.devices[path].aconnId = getSettingConnectionId(data)
@@ -210,7 +226,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 
 	// connect signals
 	nmDev.InitSignalExt(sh.sysSigLoop, true)
-	nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+	_, err = nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 		logger.Debugf("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
 		sh.locker.Lock()
 		defer sh.locker.Unlock()
@@ -333,6 +349,9 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			}
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (sh *stateHandler) remove(path dbus.ObjectPath) {

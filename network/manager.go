@@ -23,9 +23,11 @@ import (
 	"sync"
 	"time"
 
+	sysNetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
+	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -44,10 +46,9 @@ type connectionData map[string]map[string]dbus.Variant
 
 // Manager is the main DBus object for network module.
 type Manager struct {
-	sysSigLoop *dbusutil.SignalLoop
-	service    *dbusutil.Service
-	config     *config
-
+	sysSigLoop   *dbusutil.SignalLoop
+	service      *dbusutil.Service
+	sysNetwork   *sysNetwork.Network
 	nmObjManager *nmdbus.ObjectManager
 	PropsMu      sync.RWMutex
 	// update by manager.go
@@ -80,10 +81,8 @@ type Manager struct {
 	activeConnections     map[dbus.ObjectPath]*activeConnection
 	ActiveConnections     string // array of connections that activated and marshaled by json
 
-	secretAgent   *SecretAgent
-	stateHandler  *stateHandler
-	switchHandler *switchHandler
-
+	secretAgent        *SecretAgent
+	stateHandler       *stateHandler
 	proxyChainsManager *proxychains.Manager
 
 	signals *struct {
@@ -159,10 +158,6 @@ func (m *Manager) init() {
 	disableNotify()
 	defer enableNotify()
 
-	m.config = newConfig()
-	m.switchHandler = newSwitchHandler(m.config, m.sysSigLoop)
-	m.stateHandler = newStateHandler(m.config, m.sysSigLoop)
-
 	sysService, err := dbusutil.NewSystemService()
 	if err != nil {
 		logger.Warning(err)
@@ -198,15 +193,21 @@ func (m *Manager) init() {
 	m.initConnectionManage()
 	m.initActiveConnectionManage()
 	m.initNMObjManager(systemBus)
+	m.initSysNetwork(systemBus)
+
+	m.stateHandler = newStateHandler(m.sysSigLoop, m)
 
 	// update property "State"
-	nmManager.State().ConnectChanged(func(hasValue bool, value uint32) {
+	err = nmManager.State().ConnectChanged(func(hasValue bool, value uint32) {
 		m.updatePropState()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 	m.updatePropState()
 
 	// update property Connectivity
-	nmManager.Connectivity().ConnectChanged(func(hasValue bool, value uint32) {
+	_ = nmManager.Connectivity().ConnectChanged(func(hasValue bool, value uint32) {
 		m.updatePropConnectivity()
 	})
 	m.updatePropConnectivity()
@@ -214,23 +215,26 @@ func (m *Manager) init() {
 	// TODO: notifications issue when resume from suspend
 
 	// connect computer suspend signal
-	loginManager.ConnectPrepareForSleep(func(active bool) {
+	_, err = loginManager.ConnectPrepareForSleep(func(active bool) {
 		if active {
 			// suspend
 			disableNotify()
 		} else {
 			// restore
-			m.switchHandler.init()
 			enableNotify()
 
-			m.RequestWirelessScan()
+			_ = m.RequestWirelessScan()
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) destroy() {
 	logger.Info("destroy network")
 	m.nmObjManager.RemoveHandler(proxy.RemoveAllHandlers)
+	m.sysNetwork.RemoveHandler(proxy.RemoveAllHandlers)
 	destroyDbusObjects()
 	destroyStateHandler(m.stateHandler)
 	m.clearDevices()
@@ -244,7 +248,7 @@ func (m *Manager) destroy() {
 }
 
 func watchNetworkManagerRestart(m *Manager) {
-	dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
+	_, err := dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
 		if name == "org.freedesktop.NetworkManager" {
 			// if a new dbus session was installed, the name and newOwner
 			// will be no empty, if a dbus session was uninstalled, the
@@ -261,13 +265,56 @@ func watchNetworkManagerRestart(m *Manager) {
 			}
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func (m *Manager) initSysNetwork(sysBus *dbus.Conn) {
+	m.sysNetwork = sysNetwork.NewNetwork(sysBus)
+	m.sysNetwork.InitSignalExt(m.sysSigLoop, true)
+	err := common.ActivateSysDaemonService(m.sysNetwork.ServiceName_())
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = m.sysNetwork.ConnectDeviceEnabled(func(devPath dbus.ObjectPath, enabled bool) {
+		err := m.service.Emit(manager, "DeviceEnabled", string(devPath), enabled)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	vpnEnabled, err := m.sysNetwork.VpnEnabled().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	} else {
+		m.VpnEnabled = vpnEnabled
+	}
+
+	err = m.sysNetwork.VpnEnabled().ConnectChanged(func(hasValue bool, value bool) {
+		if !hasValue {
+			return
+		}
+
+		m.PropsMu.Lock()
+		m.setPropVpnEnabled(value)
+		m.PropsMu.Unlock()
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 	objManager := nmdbus.NewObjectManager(systemBus)
 	m.nmObjManager = objManager
 	objManager.InitSignalExt(m.sysSigLoop, true)
-	objManager.ConnectInterfacesAdded(func(objectPath dbus.ObjectPath, interfacesAndProperties map[string]map[string]dbus.Variant) {
+	_, err := objManager.ConnectInterfacesAdded(func(objectPath dbus.ObjectPath,
+		interfacesAndProperties map[string]map[string]dbus.Variant) {
 		_, ok := interfacesAndProperties["org.freedesktop.NetworkManager.Connection.Active"]
 		if ok {
 			// add active connection
@@ -280,7 +327,10 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 			m.updatePropActiveConnections()
 		}
 	})
-	objManager.ConnectInterfacesRemoved(func(objectPath dbus.ObjectPath, interfaces []string) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	_, err = objManager.ConnectInterfacesRemoved(func(objectPath dbus.ObjectPath, interfaces []string) {
 		if strv.Strv(interfaces).Contains("org.freedesktop.NetworkManager.Connection.Active") {
 			// remove active connection
 			m.activeConnectionsLock.Lock()
@@ -291,4 +341,7 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 			m.updatePropActiveConnections()
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
