@@ -22,6 +22,9 @@ package audio
 import (
 	"time"
 
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
+	"pkg.deepin.io/lib/asound"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 )
 
@@ -183,6 +186,62 @@ func (a *Audio) doSaveConfig() {
 	if err != nil {
 		logger.Warning("Save config file failed:", info.string(), err)
 	}
+
+	err = a.saveAudioState()
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func (a *Audio) saveAudioState() error {
+	sysBus, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+
+	sink := a.getDefaultSink()
+	sink.PropsMu.RLock()
+	device := sink.props["alsa.device"]
+	card := sink.props["alsa.card"]
+	mute := sink.Mute
+	sink.PropsMu.RUnlock()
+
+	cardId, err := toALSACardId(card)
+	if err != nil {
+		return err
+	}
+
+	activePlayback := map[string]dbus.Variant{
+		"card":   dbus.MakeVariant(cardId),
+		"device": dbus.MakeVariant(device),
+		"mute":   dbus.MakeVariant(mute),
+	}
+
+	player := soundthemeplayer.NewSoundThemePlayer(sysBus)
+	err = player.SaveAudioState(0, activePlayback)
+	return err
+}
+
+func toALSACardId(idx string) (cardId string, err error) {
+	ctl, err := asound.CTLOpen("hw:"+idx, 0)
+	if err != nil {
+		return
+	}
+	defer ctl.Close()
+
+	cardInfo, err := asound.NewCTLCardInfo()
+	if err != nil {
+		return
+	}
+	defer cardInfo.Free()
+
+	err = ctl.CardInfo(cardInfo)
+	if err != nil {
+		return
+	}
+
+	cardId = cardInfo.GetID()
+	return
 }
 
 func (a *Audio) isConfigValid(cfg *config) bool {

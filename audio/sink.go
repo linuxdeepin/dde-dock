@@ -66,6 +66,8 @@ type Sink struct {
 	// 声卡的索引
 	Card uint32
 
+	props map[string]string
+
 	methods *struct {
 		SetVolume  func() `in:"value,isPlay"`
 		SetBalance func() `in:"value,isPlay"`
@@ -81,6 +83,7 @@ func newSink(sinkInfo *pulse.Sink, audio *Audio) *Sink {
 		audio:   audio,
 		service: audio.service,
 		index:   sinkInfo.Index,
+		props:   sinkInfo.PropList,
 	}
 	s.update(sinkInfo)
 	return s
@@ -195,6 +198,7 @@ func (s *Sink) update(sinkInfo *pulse.Sink) {
 	activePortChanged := s.setPropActivePort(newActivePort)
 
 	s.setPropPorts(toPorts(sinkInfo.Ports))
+	s.props = sinkInfo.PropList
 	s.PropsMu.Unlock()
 
 	if activePortChanged {
