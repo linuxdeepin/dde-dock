@@ -175,7 +175,7 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorKey)
 
         const QJsonObject action = config.value("action").toObject();
         if (!action.isEmpty())
-            q->connect(indicatorTrayWidget, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t /*button_index*/, int /*x*/, int /*y*/) {
+            q->connect(indicatorTrayWidget, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t button_index, int x, int y) {
                 auto triggerConfig = action.value("trigger").toObject();
                 auto dbusService = triggerConfig.value("dbus_service").toString();
                 auto dbusPath = triggerConfig.value("dbus_path").toString();
@@ -185,7 +185,7 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorKey)
                 auto bus = isSystemBus ? QDBusConnection::systemBus() : QDBusConnection::sessionBus();
 
                 QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus, q);
-                interface.asyncCall(methodName);
+                interface.asyncCall(methodName, button_index, x, y);
             });
     });
 }
