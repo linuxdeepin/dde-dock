@@ -35,6 +35,10 @@ func Run() {
 		logger.Fatal("failed to new session service:", err)
 	}
 	m := NewManager(service)
+	err = m.init()
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	err = service.Export(dbusPath, m)
 	if err != nil {
