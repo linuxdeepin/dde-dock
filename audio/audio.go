@@ -106,18 +106,14 @@ type Audio struct {
 
 func newAudio(ctx *pulse.Context, service *dbusutil.Service) *Audio {
 	a := &Audio{
-		ctx:       ctx,
-		service:   service,
-		meters:    make(map[string]*Meter),
-		eventChan: make(chan *pulse.Event, 100),
-		stateChan: make(chan int, 10),
-		quit:      make(chan struct{}),
+		ctx:         ctx,
+		service:     service,
+		meters:      make(map[string]*Meter),
+		eventChan:   make(chan *pulse.Event, 100),
+		stateChan:   make(chan int, 10),
+		quit:        make(chan struct{}),
+		MaxUIVolume: pulse.VolumeUIMax,
 	}
-	a.MaxUIVolume = pulse.VolumeUIMax
-
-	a.applyConfig()
-	a.fixActivePortNotAvailable()
-	a.init()
 	return a
 }
 
@@ -202,8 +198,13 @@ func (a *Audio) init() {
 
 	a.mu.Unlock()
 
-	a.moveSinkInputsToDefaultSink()
 	a.initCtxChan()
+	go a.handleEvent()
+	go a.handleStateChanged()
+
+	a.fixActivePortNotAvailable()
+	a.applyConfig()
+	a.moveSinkInputsToDefaultSink()
 }
 
 func (a *Audio) destroyCtxRelated() {
@@ -212,22 +213,34 @@ func (a *Audio) destroyCtxRelated() {
 	a.ctx.RemoveStateChan(a.stateChan)
 
 	for _, sink := range a.sinks {
-		a.service.StopExport(sink)
+		err := a.service.StopExport(sink)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	a.sinks = nil
 
 	for _, source := range a.sources {
-		a.service.StopExport(source)
+		err := a.service.StopExport(source)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	a.sources = nil
 
 	for _, sinkInput := range a.sinkInputs {
-		a.service.StopExport(sinkInput)
+		err := a.service.StopExport(sinkInput)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	a.sinkInputs = nil
 
 	for _, meter := range a.meters {
-		a.service.StopExport(meter)
+		err := a.service.StopExport(meter)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	a.mu.Unlock()
 }
@@ -342,24 +355,25 @@ func (a *Audio) setDefaultSourceWithPort(cardId uint32, portName string) error {
 func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.Error {
 	logger.Debugf("Audio.SetPort card idx: %d, port name: %q, direction: %d",
 		cardId, portName, direction)
-	a.portLocker.Lock()
-	err := a.setPort(cardId, portName, direction)
-	a.portLocker.Unlock()
+	err := a.setPort(cardId, portName, int(direction))
 	return dbusutil.ToError(err)
 }
 
-func (a *Audio) setPort(cardId uint32, portName string, direction int32) error {
+func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
+	a.portLocker.Lock()
+	defer a.portLocker.Unlock()
 	var (
 		oppositePort      string
 		oppositeDirection int
 	)
-	if int(direction) == pulse.DirectionSink {
+	switch direction {
+	case pulse.DirectionSink:
 		oppositePort = a.getDefaultSourceActivePortName()
 		oppositeDirection = pulse.DirectionSource
-	} else if int(direction) == pulse.DirectionSource {
+	case pulse.DirectionSource:
 		oppositePort = a.getDefaultSinkActivePortName()
 		oppositeDirection = pulse.DirectionSink
-	} else {
+	default:
 		return fmt.Errorf("invalid port direction: %d", direction)
 	}
 
@@ -371,7 +385,7 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int32) error {
 	}
 
 	var err error
-	targetPortInfo, err := card.Ports.Get(portName, int(direction))
+	targetPortInfo, err := card.Ports.Get(portName, direction)
 	if err != nil {
 		return err
 	}
@@ -402,7 +416,7 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int32) error {
 		targetProfile = name
 	}
 	// workaround for bluetooth, set profile to 'a2dp_sink' when port direction is output
-	if int(direction) == pulse.DirectionSink && targetPortInfo.Profiles.Exists("a2dp_sink") {
+	if direction == pulse.DirectionSink && targetPortInfo.Profiles.Exists("a2dp_sink") {
 		targetProfile = "a2dp_sink"
 	}
 	card.core.SetProfile(targetProfile)

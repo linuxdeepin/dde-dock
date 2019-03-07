@@ -35,7 +35,6 @@ func (a *Audio) applyConfig() {
 	if !a.isConfigValid(cfg) {
 		logger.Warning("Invalid config:", cfg.string())
 		a.trySelectBestPort()
-		a.saveConfig()
 		return
 	}
 
@@ -105,21 +104,26 @@ func (a *Audio) applyConfig() {
 }
 
 func (a *Audio) trySelectBestPort() {
-	sinkId, sinkPort := a.cards.getAvailablePort(pulse.DirectionSink)
-	if sinkPort.Name != "" {
-		logger.Debugf("Will switch to sink: %#v", sinkPort)
-		err := a.SetPort(sinkId, sinkPort.Name, int32(sinkPort.Direction))
+	logger.Debug("trySelectBestPort")
+	cardId, sinkPort := a.cards.getPassablePort(pulse.DirectionSink)
+	if sinkPort != nil {
+		logger.Debugf("switch to sink port %s, avail: %s",
+			sinkPort.Name, portAvailToString(sinkPort.Available))
+		err := a.setPort(cardId, sinkPort.Name, sinkPort.Direction)
 		if err != nil {
-			logger.Warningf("Failed to switch to sink port: %#v, error: %v", sinkPort, err)
+			logger.Warningf("failed to switch to sink port %s: %v",
+				sinkPort.Name, err)
 		}
 	}
 
-	sourceId, sourcePort := a.cards.getAvailablePort(pulse.DirectionSource)
-	if sourcePort.Name != "" && sourceId == sinkId {
-		logger.Debugf("Will switch to source: %#v", sourcePort)
-		err := a.SetPort(sourceId, sourcePort.Name, int32(sourcePort.Direction))
+	cardId, sourcePort := a.cards.getPassablePort(pulse.DirectionSource)
+	if sourcePort != nil {
+		logger.Debugf("switch to source port %s, avail: %s",
+			sourcePort.Name, portAvailToString(sourcePort.Available))
+		err := a.setPort(cardId, sourcePort.Name, pulse.DirectionSource)
 		if err != nil {
-			logger.Warningf("Failed to switch to source port: %#v, error: %v", sourcePort, err)
+			logger.Warningf("failed to switch to source port %s: %v",
+				sourcePort.Name, err)
 		}
 	}
 }

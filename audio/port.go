@@ -31,20 +31,25 @@ type Port struct {
 	Available   byte // Unknow:0, No:1, Yes:2
 }
 
+func portAvailToString(v int) string {
+	switch v {
+	case pulse.AvailableTypeUnknow:
+		return "Unknown"
+	case pulse.AvailableTypeNo:
+		return "No"
+	case pulse.AvailableTypeYes:
+		return "Yes"
+	default:
+		return fmt.Sprintf("<invalid available %d>", v)
+	}
+}
+
 func (p *Port) String() string {
 	if p == nil {
 		return "<nil>"
 	}
 
-	availableStr := "Invalid"
-	switch int(p.Available) {
-	case pulse.AvailableTypeUnknow:
-		availableStr = "Unknow"
-	case pulse.AvailableTypeNo:
-		availableStr = "No"
-	case pulse.AvailableTypeYes:
-		availableStr = "Yes"
-	}
+	availableStr := portAvailToString(int(p.Available))
 	return fmt.Sprintf("<Port name=%q desc=%q available=%s>", p.Name, p.Description, availableStr)
 }
 

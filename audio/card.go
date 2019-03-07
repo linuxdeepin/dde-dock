@@ -110,9 +110,9 @@ func newCardList(cards []*pulse.Card) CardList {
 	return result
 }
 
-func (cl CardList) string() string {
+func (cards CardList) string() string {
 	var list []CardExport
-	for _, cardInfo := range cl {
+	for _, cardInfo := range cards {
 		var ports []CardPortExport
 		for _, portInfo := range cardInfo.Ports {
 			ports = append(ports, CardPortExport{
@@ -131,8 +131,8 @@ func (cl CardList) string() string {
 	return toJSON(list)
 }
 
-func (cl CardList) get(id uint32) (*Card, error) {
-	for _, info := range cl {
+func (cards CardList) get(id uint32) (*Card, error) {
+	for _, info := range cards {
 		if info.Id == id {
 			return info, nil
 		}
@@ -140,21 +140,21 @@ func (cl CardList) get(id uint32) (*Card, error) {
 	return nil, fmt.Errorf("invalid card id: %v", id)
 }
 
-func (cl CardList) add(info *Card) (CardList, bool) {
-	card, _ := cl.get(info.Id)
+func (cards CardList) add(info *Card) (CardList, bool) {
+	card, _ := cards.get(info.Id)
 	if card != nil {
-		return cl, false
+		return cards, false
 	}
 
-	return append(cl, info), true
+	return append(cards, info), true
 }
 
-func (cl CardList) delete(id uint32) (CardList, bool) {
+func (cards CardList) delete(id uint32) (CardList, bool) {
 	var (
 		ret     CardList
 		deleted bool
 	)
-	for _, info := range cl {
+	for _, info := range cards {
 		if info.Id == id {
 			deleted = true
 			continue
@@ -164,63 +164,50 @@ func (cl CardList) delete(id uint32) (CardList, bool) {
 	return ret, deleted
 }
 
-func (cl CardList) getAvailablePort(direction int) (uint32, pulse.CardPortInfo) {
-	var (
-		idY   uint32
-		id    uint32
-		portY pulse.CardPortInfo // Yes state
-		port  pulse.CardPortInfo
-	)
-	for _, info := range cl {
-		v := hasPortAvailable(info.Ports, direction, true)
-		if v.Name != "" {
-			if portY.Priority < v.Priority || portY.Name == "" {
-				portY = v
-				idY = info.Id
-			}
-			continue
-		}
-
-		vv := hasPortAvailable(info.Ports, direction, false)
-		if port.Priority < vv.Priority || port.Name == "" {
-			port = vv
-			id = info.Id
-		}
+func portAvailForCompare(v int) int {
+	switch v {
+	case pulse.AvailableTypeNo:
+		return 0
+	case pulse.AvailableTypeUnknow:
+		return 1
+	case pulse.AvailableTypeYes:
+		return 2
+	default:
+		return -1
 	}
-
-	if portY.Name != "" {
-		return idY, portY
-	}
-	return id, port
 }
 
-func hasPortAvailable(infos pulse.CardPortInfos, direction int, onlyYes bool) pulse.CardPortInfo {
-	var (
-		portY pulse.CardPortInfo // Yes state
-		portU pulse.CardPortInfo // Unknown state
-	)
-	for _, v := range infos {
-		if v.Direction != direction {
+func (cards CardList) getPassablePort(direction int) (cardId uint32,
+	port *pulse.CardPortInfo) {
+
+	for _, card := range cards {
+		p := getPassablePort(card.Ports, direction)
+		if p == nil {
 			continue
 		}
 
-		if v.Available == pulse.AvailableTypeYes {
-			if portY.Priority < v.Priority || portY.Name == "" {
-				portY = v
-			}
-		} else if v.Available == pulse.AvailableTypeUnknow {
-			if portU.Priority < v.Priority || portU.Name == "" {
-				portU = v
-			}
+		if port == nil ||
+			portAvailForCompare(p.Available) > portAvailForCompare(port.Available) ||
+			(p.Available == port.Available && p.Priority > port.Priority) {
+			cardId = card.Id
+			port = p
 		}
 	}
+	return
+}
 
-	if onlyYes {
-		return portY
-	}
+func getPassablePort(ports pulse.CardPortInfos, direction int) (port *pulse.CardPortInfo) {
+	for idx := range ports {
+		p := &ports[idx]
+		if p.Direction != direction {
+			continue
+		}
 
-	if portY.Name != "" {
-		return portY
+		if port == nil ||
+			portAvailForCompare(p.Available) > portAvailForCompare(port.Available) ||
+			(p.Available == port.Available && p.Priority > port.Priority) {
+			port = p
+		}
 	}
-	return portU
+	return port
 }

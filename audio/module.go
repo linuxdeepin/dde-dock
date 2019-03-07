@@ -59,7 +59,7 @@ func (m *Module) start() error {
 	}
 
 	m.audio = newAudio(ctx, service)
-
+	m.audio.init()
 	err := service.Export(dbusPath, m.audio)
 	if err != nil {
 		return err
@@ -69,8 +69,6 @@ func (m *Module) start() error {
 		return err
 	}
 
-	go m.audio.handleEvent()
-	go m.audio.handleStateChanged()
 	initDefaultVolume(m.audio)
 	return nil
 }
