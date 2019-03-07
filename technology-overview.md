@@ -114,6 +114,58 @@ PluginsItem 的 mousePressEvent 中只直接调用了 QWidget::mousePressEvent �
 
 如果插件可以成功加载，即可使用 gdb 等程序进行调试。
 
+### 托盘插件
+
+托盘插件是目前所有插件中最为复杂的一个。
+
+为了满足一些需求并减少代码量托盘插件也会加载一些插件，使用的插件接口或者说机制和 dock 本身一样，比如系统相关的插件：
+
+- 声音
+- 网络
+- 电池
+- 挂载
+
+dock 要加载的插件所在的目录是 `/usr/lib/dde-dock/plugins`，而托盘插件要加载的插件所在的目录是 `/usr/lib/dde-dock/plugins/system-trays`。
+为 dock 编写的插件几乎不用做任何改动就可以放到 `system-trays` 目录下让托盘插件去加载，在代码上唯一要改动的地方是不必再为时尚模式改变控件的样式，因为时尚模式和高效模式下托盘插件内的控件样式是一样的，不需要发生改变。
+
+除了这些“插件内插件”，托盘插件还会提供以下两种类型应用托盘和一种托盘插件自定义的托盘类型，即指示器：
+
+- XEmbed 协议
+- SNI 协议
+- Indicator
+
+关于前两种应用托盘关键是要理解各自协议的概念，这个可以去 freedesktop 去查阅，当概念理解了之后，实现也就容易懂了。值得一提的是 Indicator 这个自定义的托盘类型。
+
+#### 托盘插件之 Indicator
+
+Indicator 的主要目的是为了实现一种只需要在托盘上动态或静态显示一些文字，图标，并且不需要很多的可定制性而出现的。
+
+keyboard-layout 插件就符合这种需求，它只需要显示当前使用的键盘布局在托盘上就行了。
+
+Indicator 的实现主要有以下三个部分组成，可以将其理解为 MVC 结构，以 keyboard-layout 插件为例：
+
+- KeyboardLayoutPlugin (Model)
+- IndicatorTrayWidget (View)
+- IndicatorTray (Controller)
+
+既然从 MVC 的角度来看，那么 Model 就是可以随意更换的，View 和 Controller 则都是通用的，只要 Model 提供的数据符合规范它们就能正常工作。
+
+下面分别来看 MVC 都做了什么：
+
+**Model：** 负责提供 Indicator 所需要的所有数据，Model 虽然切实作为 dock 的一个插件存在，但其本身不向 dock 提供 item 控件去显示，仅通过 dock 的插件机制初始化自己。
+
+需要提供的数据有：
+
+- 一个 DBus 服务 (具体地说应该是 DBus 服务上的一个 Property)
+- 一个描述上述服务的 JSON 文件
+
+JSON 文件应该被安装到 `/etc/dde-dock/indicator/` 目录下，托盘插件在加载 Indicator 组件时回去检测这个目录下的所有 JSON 文件，一个 JSON 文件对应一个托盘上的 Indicator。
+文件的内容可以参考 `/etc/dde-dock/indicator/keyboard_layout.json` 文件。
+
+**IndicatorTrayWidget：** 这个类是 View 层，是用于显示数据的实体即一个托盘控件，除了显示数据，这个类也会接收用户动作。
+
+**IndicatorTray：** 每当 dock 在上述目录下检测到一个 JSON 文件，就会交个 IndicatorTray 类去处理，IndicatorTray 会解析文件内容，根据指定的服务，路径，接口从 DBus 上获取指定 Property 的数据并创建与其的信号槽连接，当 DBus 上的数据发生变动时通知 View 层发生改变，View 层控件也是在这里创建的。此外 View 层接收到的用户的动作比如点击，也会交给这个类处理。
+
 # 接口设计
 
 ## 插件接口
