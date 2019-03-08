@@ -10,6 +10,14 @@
     </message>
 </context>
 <context>
+    <name>DBusAdaptors</name>
+    <message>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="138"/>
+        <source>Add keyboard layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="57"/>
