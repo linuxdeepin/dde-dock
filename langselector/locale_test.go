@@ -59,6 +59,4 @@ func (t *TestWrapper) TestWriteUserLocale(c *C.C) {
 	c.Check(writeLocaleEnvFile("zh_CN.UTF-8", "testdata/pam"),
 		C.Not(C.NotNil))
 	os.RemoveAll("testdata/pam")
-	c.Check(writeLocaleEnvFile("zh_CN.UTF-8", "/xxxxxxxxx"),
-		C.NotNil)
 }
