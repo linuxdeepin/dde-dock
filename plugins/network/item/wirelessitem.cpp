@@ -51,7 +51,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(m_refreshTimer, &QTimer::timeout, this, &WirelessItem::onRefreshTimeout);
     connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
 
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     QTimer::singleShot(0, this, &WirelessItem::refreshTips);

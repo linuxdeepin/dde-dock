@@ -43,6 +43,8 @@ public:
     int strength() const;
     bool secured() const;
 
+    bool isEmpty() const;
+
 private:
     void loadApInfo(const QJsonObject &apInfo);
 

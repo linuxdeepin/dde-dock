@@ -49,7 +49,7 @@ WiredItem::WiredItem(WiredDevice *device)
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::connectionsChanged, this, &WiredItem::deviceStateChanged);
-    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionChanged, this, &WiredItem::deviceStateChanged);
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged, this, &WiredItem::deviceStateChanged);
 
     QTimer::singleShot(0, this, &WiredItem::refreshTips);
     QTimer::singleShot(0, this, &WiredItem::refreshIcon);
