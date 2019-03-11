@@ -1,5 +1,0 @@
-# get the username
-auth	optional	pam_debug.so
-auth	[success=1 ignore=1 default=bad]	pam_exec.so	seteuid expose_authtok /usr/lib/deepin-daemon/dde-authority-pam
-auth	requisite	pam_deny.so
-auth	required	pam_permit.so

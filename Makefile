@@ -83,6 +83,9 @@ install: build translate install-dde-data install-icons
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r misc/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
 
+	mkdir -pv ${DESTDIR}${PREFIX}/share/pam-configs
+	cp -r misc/pam-configs/* ${DESTDIR}${PREFIX}/share/pam-configs
+
 	mkdir -pv ${DESTDIR}/var/cache/appearance
 	cp -r misc/thumbnail ${DESTDIR}/var/cache/appearance/
 

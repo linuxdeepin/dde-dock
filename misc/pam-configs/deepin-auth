@@ -1,0 +1,7 @@
+Name: Deepin authentication
+Default: yes
+Priority: 500
+Conflicts:
+Auth-Type: Primary
+Auth:
+	[success=end default=ignore]	pam_exec.so quiet seteuid expose_authtok /usr/lib/deepin-daemon/dde-authority-pam
