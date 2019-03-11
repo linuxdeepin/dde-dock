@@ -56,8 +56,12 @@ func (*Module) start() error {
 	service := loader.GetService()
 
 	_m = newManager(service)
-	_m.init()
-	err := service.Export(dbusPath, _m)
+	err := _m.init()
+	if err != nil {
+		logger.Warning(err)
+		return err
+	}
+	err = service.Export(dbusPath, _m)
 	if err != nil {
 		_m.destroy()
 		return err

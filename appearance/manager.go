@@ -31,17 +31,19 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/dde/daemon/session/common"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -70,6 +72,8 @@ const (
 	gsKeyBackground = "picture-uri"
 
 	appearanceSchema        = "com.deepin.dde.appearance"
+	xSettingsSchema         = "com.deepin.xsettings"
+	gsKeyIndividualScaling  = "individual-scaling"
 	gsKeyGtkTheme           = "gtk-theme"
 	gsKeyIconTheme          = "icon-theme"
 	gsKeyCursorTheme        = "cursor-theme"
@@ -103,6 +107,7 @@ type Manager struct {
 	service        *dbusutil.Service
 	sessionSigLoop *dbusutil.SignalLoop
 	sysSigLoop     *dbusutil.SignalLoop
+	xConn          *x.Conn
 
 	GtkTheme      gsprop.String
 	IconTheme     gsprop.String
@@ -124,6 +129,7 @@ type Manager struct {
 	login1Manager *login1.Manager
 
 	setting        *gio.Settings
+	xSettingsGs    *gio.Settings
 	wrapBgSetting  *gio.Settings
 	gnomeBgSetting *gio.Settings
 
@@ -152,13 +158,15 @@ type Manager struct {
 	}
 
 	methods *struct {
-		Delete         func() `in:"type,name"`
-		GetScaleFactor func() `out:"scale_factor"`
-		List           func() `in:"type" out:"list"`
-		Set            func() `in:"type,value"`
-		SetScaleFactor func() `in:"scale_factor"`
-		Show           func() `in:"type,names" out:"detail"`
-		Thumbnail      func() `in:"type,name" out:"file"`
+		Delete                func() `in:"type,name"`
+		GetScaleFactor        func() `out:"scale_factor"`
+		List                  func() `in:"type" out:"list"`
+		Set                   func() `in:"type,value"`
+		SetScaleFactor        func() `in:"scale_factor"`
+		Show                  func() `in:"type,names" out:"detail"`
+		Thumbnail             func() `in:"type,name" out:"file"`
+		SetScreenScaleFactors func() `in:"scaleFactors"`
+		GetScreenScaleFactors func() `out:"scaleFactors"`
 	}
 }
 
@@ -167,6 +175,7 @@ func newManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
 	m.service = service
 	m.setting = gio.NewSettings(appearanceSchema)
+	m.xSettingsGs = gio.NewSettings(xSettingsSchema)
 	m.wrapBgSetting = gio.NewSettings(wrapBgSchema)
 
 	m.GtkTheme.Bind(m.setting, gsKeyGtkTheme)
@@ -268,8 +277,16 @@ func (m *Manager) destroy() {
 
 	if m.watcher != nil {
 		close(m.endWatcher)
-		m.watcher.Close()
+		err := m.watcher.Close()
+		if err != nil {
+			logger.Warning(err)
+		}
 		m.watcher = nil
+	}
+
+	if m.xConn != nil {
+		m.xConn.Close()
+		m.xConn = nil
 	}
 
 	m.endCursorChangedHandler()
@@ -328,7 +345,7 @@ func (m *Manager) initUserObj(systemConn *dbus.Conn) {
 	}
 }
 
-func (m *Manager) init() {
+func (m *Manager) init() error {
 	background.SetCustomWallpaperDeleteCallback(func(file string) {
 		logger.Debug("imageBlur delete", file)
 		err := m.imageBlur.Delete(0, file)
@@ -340,8 +357,18 @@ func (m *Manager) init() {
 	sessionBus := m.service.Conn()
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
+		return err
+	}
+
+	m.xConn, err = x.NewConn()
+	if err != nil {
+		return err
+	}
+
+	_, err = randr.QueryVersion(m.xConn, randr.MajorVersion,
+		randr.MinorVersion).Reply(m.xConn)
+	if err != nil {
 		logger.Warning(err)
-		return
 	}
 
 	m.wm = wm.NewWm(sessionBus)
@@ -426,6 +453,7 @@ func (m *Manager) init() {
 
 	m.initUserObj(systemBus)
 	m.initCurrentBgs()
+	return nil
 }
 
 func (m *Manager) correctFontName() {

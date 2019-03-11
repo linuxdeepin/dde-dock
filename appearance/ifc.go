@@ -239,5 +239,21 @@ func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
 
 func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
 	err := m.setScaleFactor(scale)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func (m *Manager) SetScreenScaleFactors(v map[string]float64) *dbus.Error {
+	err := m.setScreenScaleFactors(v)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return dbusutil.ToError(err)
+}
+
+func (m *Manager) GetScreenScaleFactors() (map[string]float64, *dbus.Error) {
+	return m.getScreenScaleFactors(), nil
 }
