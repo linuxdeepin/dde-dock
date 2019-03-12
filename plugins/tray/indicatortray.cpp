@@ -232,9 +232,6 @@ void IndicatorTray::textPropertyChanged(const QDBusMessage &message)
             Q_EMIT removed();
             return;
         }
-        else {
-            Q_EMIT delayLoaded();
-        }
 
         d->indicatorTrayWidget->setText(value.toByteArray());
     });
@@ -249,9 +246,7 @@ void IndicatorTray::iconPropertyChanged(const QDBusMessage &message)
             Q_EMIT removed();
             return;
         }
-        else {
-            Q_EMIT delayLoaded();
-        }
+
         d->indicatorTrayWidget->setPixmapData(value.toByteArray());
     });
 }

@@ -331,9 +331,11 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         return;
     }
 
-    if (!m_trayMap.values().contains(trayWidget)) {
-        m_trayMap.insert(itemKey, trayWidget);
+    if (m_trayMap.contains(itemKey) || m_trayMap.values().contains(trayWidget)) {
+        return;
     }
+
+    m_trayMap.insert(itemKey, trayWidget);
 
     if (displayMode() == Dock::Efficient) {
         m_proxyInter->itemAdded(this, itemKey);
