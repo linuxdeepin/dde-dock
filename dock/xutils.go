@@ -27,6 +27,7 @@ import (
 	"image/png"
 	"math"
 	"strings"
+	"time"
 
 	"github.com/nfnt/resize"
 
@@ -66,6 +67,7 @@ func maximizeWindow(win x.Window) error {
 }
 
 func minimizeWindow(win x.Window) error {
+	logger.Debug("minimizeWindow", win)
 	return icccm.RequestChangeWMState(globalXConn, win, icccm.StateIconic).Check(globalXConn)
 }
 
@@ -499,8 +501,21 @@ func activateWindow(win x.Window) error {
 	if err != nil {
 		return err
 	}
-	return ewmh.RequestChangeActiveWindow(globalXConn, win,
+	err = ewmh.RequestChangeActiveWindow(globalXConn, win,
 		2, 0, 0).Check(globalXConn)
+	if err != nil {
+		return err
+	}
+
+	time.AfterFunc(50*time.Millisecond, func() {
+		err := ewmh.RequestRestackWindow(globalXConn, win, 0,
+			x.StackModeAbove).Check(globalXConn)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+
+	return nil
 }
 
 func isHiddenPre(win x.Window) bool {

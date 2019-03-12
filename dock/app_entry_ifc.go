@@ -23,7 +23,6 @@ import (
 	"errors"
 
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -61,27 +60,28 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	if atomsContains(state, atomNetWmStateFocused) {
-		s, err := icccm.GetWMState(globalXConn, win).Reply(globalXConn)
-		if err != nil {
-			logger.Warning("Get icccm WmState failed win:", win)
-			return dbusutil.ToError(err)
-		}
-		switch s.State {
-		case icccm.StateIconic:
-			activateWindow(win)
-		case icccm.StateNormal:
+	activeWin := entry.manager.getActiveWindow()
+
+	if win == activeWin {
+		if atomsContains(state, atomNetWmStateHidden) {
+			err = activateWindow(win)
+		} else {
 			if len(entry.windows) == 1 {
-				minimizeWindow(win)
+				err = minimizeWindow(win)
 			} else if entry.manager.getActiveWindow() == win {
 				nextWin := entry.findNextLeader()
-				activateWindow(nextWin)
+				err = activateWindow(nextWin)
 			}
 		}
 	} else {
-		activateWindow(win)
+		err = activateWindow(win)
 	}
-	return nil
+
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	return dbusutil.ToError(err)
 }
 
 func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) *dbus.Error {
