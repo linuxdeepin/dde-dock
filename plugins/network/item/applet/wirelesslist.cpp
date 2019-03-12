@@ -281,6 +281,8 @@ void WirelessList::updateAPList()
     const int contentHeight = avaliableAPCount * ITEM_HEIGHT;
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
+
+    updateIndicatorPos();
 }
 
 void WirelessList::onEnableButtonToggle(const bool enable)
