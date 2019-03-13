@@ -1,3 +1,21 @@
+<a name="4.9.1"></a>
+## 4.9.1 (2019-03-13)
+
+
+#### Bug Fixes
+
+*   indicator not display ([b1d0fd4a](https://github.com/linuxdeepin/dde-dock/commit/b1d0fd4ad4af7e3fcf7a1ceb2728a3fc1b03b066))
+*   added multiple indicator tray of one indicator provider ([4cd74405](https://github.com/linuxdeepin/dde-dock/commit/4cd74405ce9bba827d70ec515b2b98d5b68dd69b))
+*   activating indicator not show when activate a wireless from other place ([5f11a013](https://github.com/linuxdeepin/dde-dock/commit/5f11a0134aeb4e97fff9edd7d3b5d318491398b1))
+
+#### Features
+
+*   keyboard layout indicator support context menu ([89446d70](https://github.com/linuxdeepin/dde-dock/commit/89446d70223382a79f6909eb6b18c905dd698534))
+*   send a notify when plugin is not compatible ([f30e28cf](https://github.com/linuxdeepin/dde-dock/commit/f30e28cf81257898666c79efa9e83c64bd820307))
+*   trash plugin enable be disable ([fc06a6a0](https://github.com/linuxdeepin/dde-dock/commit/fc06a6a0788875ed73e9e0e860b4222a3ecc7cdc))
+
+
+
 <a name="4.9.0"></a>
 ## 4.9.0 (2019-02-25)
 
