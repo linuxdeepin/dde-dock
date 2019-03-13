@@ -70,7 +70,7 @@ func sendNotify(summary, body, icon string) {
 
 func (m *Manager) handleSetScaleFactorDone() {
 	sendNotify(gettext.Tr("Set successfully"),
-		gettext.Tr("View by logging out after set display scaling"), "dialog-window-scale")
+		gettext.Tr("Please log back in to view the changes"), "dialog-window-scale")
 }
 
 const (

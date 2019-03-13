@@ -37,7 +37,7 @@ var deviceErrorTable = make(map[uint32]string)
 func initNmStateReasons() {
 	// device error table
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed")
-	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, reason unknown")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONFIG_FAILED] = Tr("The device has not been ready for configuration")
@@ -69,7 +69,7 @@ func initNmStateReasons() {
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING] = Tr("No networks searched")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED] = Tr("Network registration was denied")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT] = Tr("Network registration timed out")
-	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED] = Tr("Register to the requested GSM network failed")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED] = Tr("Failed to register to the requested GSM network")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED] = Tr("PIN check failed")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_FIRMWARE_MISSING] = Tr("Necessary firmware for the device may be missed")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_REMOVED] = Tr("The device was removed")
@@ -86,7 +86,7 @@ func initNmStateReasons() {
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED] = Tr("GSM Modem's SIM PUK required")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_WRONG] = Tr("SIM card error in GSM Modem")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_INFINIBAND_MODE] = Tr("InfiniBand device does not support connected mode")
-	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED] = Tr("A connection dependency failed")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED] = Tr("A dependency of the connection failed")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_BR2684_FAILED] = Tr("RFC 2684 Ethernet bridging error to ADSL") // TODO translate
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE] = Tr("ModemManager did not run or quitted unexpectedly")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SSID_NOT_FOUND] = Tr("The 802.11 Wi-Fi network could not be found")
@@ -108,16 +108,16 @@ func initNmStateReasons() {
 	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN] = Tr("Please make sure a correct plan was selected without arrearage of SIM card")
 
 	// vpn error table
-	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason")
-	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed")
-	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from users")
-	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from devices")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Failed to activate VPN connection, reason unknown")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Failed to activate VPN connection")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED] = Tr("The VPN connection state changed due to being disconnected by users")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED] = Tr("The VPN connection state changed due to being disconnected from devices")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED] = Tr("VPN service stopped")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID] = Tr("The IP config of VPN connection was invalid")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT] = Tr("The connection attempt to VPN service timed out")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT] = Tr("The VPN service start timed out")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED] = Tr("The VPN service failed to start")
-	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS] = Tr("Necessary password for the VPN connection was not provided")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS] = Tr("The VPN connection password was not provided")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED] = Tr("Authentication to VPN server failed")
 	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED] = Tr("The connection was deleted from settings")
 }

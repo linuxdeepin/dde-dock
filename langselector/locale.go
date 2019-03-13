@@ -351,7 +351,7 @@ func readEnvFile(file string) (envInfos, error) {
 
 func (lang *LangSelector) setLocaleFailed(oldLocale string) {
 	sendNotify(localeIconFailed, "",
-		Tr("System language failed to change, please try later"))
+		Tr("Failed to change system language, please try later"))
 	// restore CurrentLocale
 	lang.PropsMu.Lock()
 	lang.setPropCurrentLocale(oldLocale)
@@ -375,10 +375,10 @@ func (lang *LangSelector) setLocale(locale string) {
 
 	if networkEnabled {
 		sendNotify(localeIconStart, "",
-			Tr("System language is being changed with an installation of lacked language packages, please wait..."))
+			Tr("Changing system language and installing the required language packages, please wait..."))
 	} else {
 		sendNotify(localeIconStart, "",
-			Tr("System language is being changed, please wait..."))
+			Tr("Changing system language, please wait..."))
 	}
 
 	// generate locale
@@ -426,7 +426,7 @@ func (lang *LangSelector) setLocale(locale string) {
 	}
 
 	sendNotify(localeIconFinished, "",
-		Tr("System language has been changed, please log in again after logged out"))
+		Tr("System language changed, please log out and then log in"))
 
 	// end
 	lang.PropsMu.Lock()
