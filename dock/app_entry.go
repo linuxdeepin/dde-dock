@@ -251,16 +251,21 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
 	defer entry.PropsMu.Unlock()
 
 	delete(entry.windows, win)
-	if len(entry.windows) == 0 && !entry.IsDocked {
-		// no window and not docked
-		return true
+
+	if len(entry.windows) == 0 {
+		if !entry.IsDocked {
+			// no window and not docked
+			return true
+		}
+		entry.setCurrentWindowInfo(nil)
+	} else {
+		for _, winInfo := range entry.windows {
+			// select first
+			entry.setCurrentWindowInfo(winInfo)
+			break
+		}
 	}
 
-	for _, winInfo := range entry.windows {
-		// select first
-		entry.setCurrentWindowInfo(winInfo)
-		break
-	}
 	entry.updateWindowInfos()
 	entry.updateIcon()
 	entry.updateIsActive()

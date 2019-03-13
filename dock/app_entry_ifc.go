@@ -56,7 +56,7 @@ func (entry *AppEntry) Activate(timestamp uint32) *dbus.Error {
 	win := entry.current.window
 	state, err := ewmh.GetWMState(globalXConn, win).Reply(globalXConn)
 	if err != nil {
-		logger.Warning("Get ewmh wmState failed win:", win)
+		logger.Warningf("failed to get ewmh WMState for win %d: %v", win, err)
 		return dbusutil.ToError(err)
 	}
 
