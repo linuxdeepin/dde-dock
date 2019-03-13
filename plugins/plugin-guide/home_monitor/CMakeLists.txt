@@ -17,6 +17,9 @@ set(CMAKE_AUTOMOC ON)
 # 启用 qrc 资源文件的支持
 set(CMAKE_AUTORCC ON)
 
+# generate a compile commands file as complete database for vim-YouCompleteMe or some other similar tools
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # 指定所有源码文件
 # 使用了 cmake 的 file 命令，递归查找项目目录下所有头文件和源码文件，
 # 并将结果放入 SRCS 变量中，SRCS 变量可用于后续使用
