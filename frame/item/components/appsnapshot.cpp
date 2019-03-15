@@ -75,6 +75,8 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     centralLayout->setSpacing(5);
     centralLayout->setMargin(0);
 
+    centralLayout->setAlignment(m_closeBtn, Qt::AlignRight);
+
     setLayout(centralLayout);
     setAcceptDrops(true);
     resize(SNAP_WIDTH, SNAP_HEIGHT);
