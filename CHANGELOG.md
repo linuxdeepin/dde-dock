@@ -1,3 +1,16 @@
+[3.24.0] 2019-03-15
+*   auto sync po files from transifex
+*   chore: copywriting optimization
+*   fix(dock): CurrentWindow prop of entry wrong after window detach
+*   fix(dock): some bugs when use kwin as wm
+*   change(api): appearance add methods GetScreenScaleFactors and SetScreenScaleFactors
+*   feat: add pam-config for deepin-auth
+*   feat(audo): also save the state of alsa when saving the config
+*   chore(langselector): remove failed test
+*   fix(audio): trySelectBestPort do not work
+*   change(api): sound effect add more functions
+*   change(api): add sytem service com.deepin.system.Network
+
 [3.23.1] 2019-03-01
 *   feat(bluetooth): when disconnected quickly after connecting, automatically try to connect
 *   chore(miracast): use go-dbus-factory
