@@ -44,7 +44,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Otentikasi diperlukan untuk mengaktifkan masuk otomatis tanpa dengan kata sandi</translation>
+			<translation>Otentikasi diperlukan untuk mengaktifkan masuk otomatis tanpa dengan sandi lewat</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
@@ -69,7 +69,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation>Set tata letak papan ketik</translation>
+			<translation>Atur tata letak papan ketik</translation>
 		</message>
 	</context>
 </TS>

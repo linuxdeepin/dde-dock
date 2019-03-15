@@ -11,5 +11,15 @@
 			<source>Change the grub2 configuration</source>
 			<translation>grub2 की विन्यास सेटिंग्स बदलें</translation>
 		</message>
+		<message>
+			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
+			<source>Authentication is required to prepare grub2 display resolution detection</source>
+			<translation type="unfinished"/>
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>
+			<source>Prepare grub2 display resolution detection</source>
+			<translation type="unfinished"/>
+		</message>
 	</context>
 </TS>

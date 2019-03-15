@@ -4,12 +4,12 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Hitelesítés szükséges a saját felhasználói adatai módosításához</translation>
+			<translation>Hitelesítés szükséges az adataid módosításához.</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
 			<source>Change your own user data</source>
-			<translation>Saját felhasználói adatainak módosítása</translation>
+			<translation>Saját adataid módosítása</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>

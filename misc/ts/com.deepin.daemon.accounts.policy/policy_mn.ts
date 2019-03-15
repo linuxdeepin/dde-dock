@@ -1,75 +1,75 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="mn" version="2.1">
 	<context>
 		<name>policy</name>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Omien käyttäjätietojen muuttaminen vaatii tunnistautumisen</translation>
+			<translation>Өөрийн хэрэглэгчийн өгөгдлийг өөрчлөхөд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
 			<source>Change your own user data</source>
-			<translation>Muuta omia käyttäjätietojasi</translation>
+			<translation>Өөрийн хэрэглэгчийн өгөгдлийг өөрчлөх</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
 			<source>Authentication is required to change user data</source>
-			<translation>Käyttäjätietojen muuttaminen vaatii tunnistautumisen</translation>
+			<translation>Хэрэглэгчийн өгөгдлийг өөрчлөхийн тулд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
 			<source>Manage user accounts</source>
-			<translation>Hallitse käyttäjätilejä</translation>
+			<translation>Хэрэглэгчийн бүртгэлийн зохицуулах</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation>Automaattisen kirjautumisen käyttöönotto vaatii tunnistautumisen</translation>
+			<translation>Автоматаар нэвтрэхийг идэвхжүүлэхийн тулд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation>Ota käyttöön automaattinen kirjautuminen</translation>
+			<translation>Автоматаар нэвтэрхийг идэвхжүүлэх</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation>Automaattisen kirjautumisen poisto vaatii tunnistautumisen</translation>
+			<translation>Автоматаар нэвтрэхийг цуцлахын тулд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation>Ota automaattinen kirjautuminen pois käytöstä</translation>
+			<translation>Автоматаар нэвтэрхийг цуцлах</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Kirjautumisen käyttöönotto ilman salasanaa vaatii tunnistautumisen</translation>
+			<translation>Нууц үг ашиглалгүйгээр нэвтэрхийг идэвхжүүлэхийн тулд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation>Ota käyttöön kirjautuminen ilman salasanaa</translation>
+			<translation>Нууц үг ашиглахгүйгээр нэвтрэхийг идэвхжүүлэх</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Kirjautumisen käytöstäpoisto ilman salasanaa vaatii tunnistautumisen</translation>
+			<translation>Нууц үг ашиглалгүйгээр нэвтэрхийг цуцлахын тулд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation>Poista käytöstä kirjautuminen ilman salasanaa</translation>
+			<translation>Нууц үг ашиглахгүйгээр нэвтрэхийг цуцлах</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation>Näppäimistön asetukset vaatii tunnistautumisen</translation>
+			<translation>Гарын байрлалыг тохируулхын тулд баталгаажуулалт шаардлагатай</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation>Aseta näppäimistöasettelu</translation>
+			<translation>Гарын байрлал тохируулах</translation>
 		</message>
 	</context>
 </TS>

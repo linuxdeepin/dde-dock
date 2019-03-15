@@ -1,15 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="mn" version="2.1">
 	<context>
 		<name>policy</name>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!message" line="0"/>
 			<source>Authentication is required to change the grub2 configuration</source>
-			<translation>Pengesahihan diperlukan untuk mengubah konfigurasi grub2</translation>
+			<translation>grub2-ийн тохиргоог өөрчлөхийн тулд батгалгаажуулалт шаардана</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation>Ubah konfigurasi grub2</translation>
+			<translation>grub2-ийн тохиргоог өөрчлөх</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>

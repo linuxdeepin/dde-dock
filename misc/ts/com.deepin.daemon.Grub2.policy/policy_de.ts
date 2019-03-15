@@ -11,5 +11,15 @@
 			<source>Change the grub2 configuration</source>
 			<translation>Grub2-Konfiguration ändern</translation>
 		</message>
+		<message>
+			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
+			<source>Authentication is required to prepare grub2 display resolution detection</source>
+			<translation>Authentifizierung ist erforderlich, um die Erkennung der grub2-Display-Auflösung vorzubereiten.</translation>
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>
+			<source>Prepare grub2 display resolution detection</source>
+			<translation>Prepare grub2 display resolution detection</translation>
+		</message>
 	</context>
 </TS>
