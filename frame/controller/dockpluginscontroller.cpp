@@ -48,6 +48,9 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
     PluginsItem *item = nullptr;
     if (itemInter->pluginName() == "tray") {
         item = new TrayPluginItem(itemInter, itemKey);
+        if (item->graphicsEffect()) {
+            item->graphicsEffect()->setEnabled(false);
+        }
         connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::fashionTraySizeChanged,
                 this, &DockPluginsController::fashionTraySizeChanged, Qt::UniqueConnection);
     } else {
