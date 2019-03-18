@@ -297,6 +297,12 @@
         <translation>Uyut</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <source>Power</source>
+        <translation>Güç</translation>
+    </message>
+    <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>Hesap değiştir</translation>
@@ -305,12 +311,6 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>Güç ayarları</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
-        <source>Shutdown</source>
-        <translation>Kapat</translation>
     </message>
 </context>
 <context>

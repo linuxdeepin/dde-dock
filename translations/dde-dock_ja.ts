@@ -297,6 +297,12 @@
         <translation>サスペンド</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <source>Power</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>アカウントの切り替え</translation>
@@ -305,12 +311,6 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>電源設定</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
-        <source>Shutdown</source>
-        <translation>シャットダウン</translation>
     </message>
 </context>
 <context>

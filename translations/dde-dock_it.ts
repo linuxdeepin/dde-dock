@@ -297,6 +297,12 @@
         <translation>Sospendi</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <source>Power</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>Cambia account</translation>
@@ -305,12 +311,6 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>Impostazioni Alimentazione</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
-        <source>Shutdown</source>
-        <translation>Spegni</translation>
     </message>
 </context>
 <context>

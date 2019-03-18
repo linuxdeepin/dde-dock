@@ -297,6 +297,12 @@
         <translation>Обустави</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <source>Power</source>
+        <translation>Напајање</translation>
+    </message>
+    <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>Промени корисника</translation>
@@ -305,12 +311,6 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>Поставке напајања</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
-        <source>Shutdown</source>
-        <translation>Искључи</translation>
     </message>
 </context>
 <context>
@@ -346,7 +346,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="207"/>
         <source>Current Volume %1</source>
-        <translation>Ниво гласности %1</translation>
+        <translation>Јачина звука %1</translation>
     </message>
 </context>
 <context>

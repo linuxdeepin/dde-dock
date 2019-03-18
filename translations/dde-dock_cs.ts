@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="138"/>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Přidat rozvržení klávesnice</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Přídavný modul %1 není slučitelný se systémem.</translation>
     </message>
 </context>
 <context>
@@ -297,6 +297,12 @@
         <translation>Uspat</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <source>Power</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>Přepnout účet</translation>
@@ -305,12 +311,6 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>Správa napájení</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
-        <source>Shutdown</source>
-        <translation>Vypnout</translation>
     </message>
 </context>
 <context>
@@ -362,7 +362,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="52"/>
         <source>Trash</source>
-        <translation type="unfinished"/>
+        <translation>Koš</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="90"/>

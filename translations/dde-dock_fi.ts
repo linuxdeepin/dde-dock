@@ -123,12 +123,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Fashion Mode</source>
-        <translation>Muotitila</translation>
+        <translation>Keskitetty</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Efficient Mode</source>
-        <translation>Tehokkuustila</translation>
+        <translation>Alavalikko</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
@@ -297,6 +297,12 @@
         <translation>Valmiustila</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <source>Power</source>
+        <translation>Virta</translation>
+    </message>
+    <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>Vaihda käyttäjää</translation>
@@ -305,12 +311,6 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>Virta-asetukset</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
-        <source>Shutdown</source>
-        <translation>Sammuta</translation>
     </message>
 </context>
 <context>
