@@ -115,7 +115,7 @@
     <message>
         <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>%1插件和系统版本不兼容。</translation>
+        <translation>插件%1和系统版本不兼容。</translation>
     </message>
 </context>
 <context>
