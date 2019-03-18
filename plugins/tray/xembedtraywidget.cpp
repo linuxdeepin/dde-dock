@@ -102,6 +102,11 @@ XEmbedTrayWidget::~XEmbedTrayWidget()
     AppWinidSuffixMap[m_appName].remove(m_windowId);
 }
 
+QString XEmbedTrayWidget::itemKeyForConfig()
+{
+    return QString("window:%1").arg(getAppNameForWindow(m_windowId));
+}
+
 const QImage XEmbedTrayWidget::trayImage()
 {
     return m_image;
@@ -365,17 +370,7 @@ QString XEmbedTrayWidget::getWindowProperty(quint32 winId, QString propName)
 
 QString XEmbedTrayWidget::toXEmbedKey(quint32 winId)
 {
-    const QString &appName = getAppNameForWindow(winId);
-    int suffix = getTrayWidgetKeySuffix(appName, winId);
-
-    QString key;
-    if (suffix == 1) {
-        key = QString("window:%1").arg(appName);
-    } else {
-        key = QString("window:%1-%2").arg(appName).arg(suffix);
-    }
-
-    return key;
+    return QString("window:%1").arg(winId);
 }
 
 bool XEmbedTrayWidget::isXEmbedKey(const QString &itemKey)

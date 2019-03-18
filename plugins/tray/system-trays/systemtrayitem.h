@@ -39,6 +39,7 @@ public:
     virtual ~SystemTrayItem();
 
 public:
+    QString itemKeyForConfig() override;
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;

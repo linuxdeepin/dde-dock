@@ -47,6 +47,7 @@ public:
     SNITrayWidget(const QString &sniServicePath, QWidget *parent = Q_NULLPTR);
     virtual ~SNITrayWidget();
 
+    QString itemKeyForConfig() override;
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
     void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
@@ -99,6 +100,7 @@ private:
     QTimer *m_updateOverlayIconTimer;
     QTimer *m_updateAttentionIconTimer;
 
+    QString m_sniServicePath;
     QString m_dbusService;
     QString m_dbusPath;
 

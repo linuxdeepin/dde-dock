@@ -35,6 +35,7 @@ public:
     explicit XEmbedTrayWidget(quint32 winId, QWidget *parent = 0);
     ~XEmbedTrayWidget();
 
+    QString itemKeyForConfig() override;
     void updateIcon() Q_DECL_OVERRIDE;
     void setActive(const bool active) Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;

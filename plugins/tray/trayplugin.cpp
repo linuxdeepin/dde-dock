@@ -152,7 +152,12 @@ bool TrayPlugin::itemAllowContainer(const QString &itemKey)
 
 bool TrayPlugin::itemIsInContainer(const QString &itemKey)
 {
-    const QString &key = "container_" + itemKey;
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    if (trayWidget == nullptr) {
+        return false;
+    }
+
+    const QString &key = "container_" + trayWidget->itemKeyForConfig();
 
     return m_proxyInter->getValue(this, key, false).toBool();
 }
@@ -164,9 +169,16 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
         return m_systemTraysController->systemTrayItemSortKey(itemKey);
     }
 
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const int defaultSort = displayMode() == Dock::DisplayMode::Fashion ? 0 : 0;
 
-    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 0 : 0).toInt();
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    if (trayWidget == nullptr) {
+        return defaultSort;
+    }
+
+    const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(displayMode());
+
+    return m_proxyInter->getValue(this, key, defaultSort).toInt();
 }
 
 void TrayPlugin::setSortKey(const QString &itemKey, const int order)
@@ -180,13 +192,23 @@ void TrayPlugin::setSortKey(const QString &itemKey, const int order)
         return m_systemTraysController->setSystemTrayItemSortKey(itemKey, order);
     }
 
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    if (trayWidget == nullptr) {
+        return;
+    }
+
+    const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(displayMode());
     m_proxyInter->saveValue(this, key, order);
 }
 
 void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
 {
-    const QString &key = "container_" + itemKey;
+    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    if (trayWidget == nullptr) {
+        return;
+    }
+
+    const QString &key = "container_" + trayWidget->itemKeyForConfig();
 
     m_proxyInter->saveValue(this, key, container);
 }

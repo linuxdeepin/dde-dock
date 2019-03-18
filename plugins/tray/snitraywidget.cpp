@@ -39,13 +39,15 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
         m_menu(nullptr),
         m_updateIconTimer(new QTimer(this)),
         m_updateOverlayIconTimer(new QTimer(this)),
-        m_updateAttentionIconTimer(new QTimer(this))
+        m_updateAttentionIconTimer(new QTimer(this)),
+        m_sniServicePath(sniServicePath)
 {
-    if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
+    if (m_sniServicePath.startsWith("/") || !m_sniServicePath.contains("/")) {
+        qDebug() << "SNI service path invalid";
         return;
     }
 
-    QPair<QString, QString> pair = serviceAndPath(sniServicePath);
+    QPair<QString, QString> pair = serviceAndPath(m_sniServicePath);
     m_dbusService = pair.first;
     m_dbusPath = pair.second;
 
@@ -119,6 +121,28 @@ SNITrayWidget::~SNITrayWidget()
 {
 }
 
+QString SNITrayWidget::itemKeyForConfig()
+{
+    QString key;
+
+    do {
+        key = m_sniId;
+        if (!key.isEmpty()) {
+            break;
+        }
+
+        key = QDBusInterface(m_dbusService, m_dbusPath, StatusNotifierItem::staticInterfaceName())
+                .property("Id").toString();
+        if (!key.isEmpty()) {
+            break;
+        }
+
+        key = m_sniServicePath;
+    } while (false);
+
+    return QString("sni:%1").arg(key);
+}
+
 void SNITrayWidget::setActive(const bool active)
 {
 }
@@ -182,19 +206,7 @@ SNITrayWidget::ItemCategory SNITrayWidget::category()
 
 QString SNITrayWidget::toSNIKey(const QString &sniServicePath)
 {
-    QString key;
-
-    do {
-        const QPair<QString, QString> &sap = serviceAndPath(sniServicePath);
-        key = QDBusInterface(sap.first, sap.second, StatusNotifierItem::staticInterfaceName()).property("Id").toString();
-        if (!key.isEmpty()) {
-            break;
-        }
-
-        key = sniServicePath;
-    } while (false);
-
-    return QString("sni:%1").arg(key);
+    return QString("sni:%1").arg(sniServicePath);
 }
 
 bool SNITrayWidget::isSNIKey(const QString &itemKey)

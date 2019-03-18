@@ -10,7 +10,7 @@ class IndicatorTray : public QObject
 {
     Q_OBJECT
 public:
-    explicit IndicatorTray(const QString &itemKey, QObject *parent = nullptr);
+    explicit IndicatorTray(const QString &indicatorName, QObject *parent = nullptr);
     ~IndicatorTray();
 
     IndicatorTrayWidget *widget();

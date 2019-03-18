@@ -30,9 +30,10 @@ class IndicatorTrayWidget: public AbstractTrayWidget
 {
     Q_OBJECT
 public:
-    explicit IndicatorTrayWidget(const QString &itemKey, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit IndicatorTrayWidget(const QString &indicatorName, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
     ~IndicatorTrayWidget();
 
+    QString itemKeyForConfig() override;
     void setActive(const bool active) Q_DECL_OVERRIDE;
     void updateIcon() Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;
@@ -53,5 +54,7 @@ Q_SIGNALS:
 
 private:
     QLabel *m_label;
+
+    QString m_indicatorName;
 };
 

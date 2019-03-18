@@ -21,7 +21,7 @@ public:
 
     void updateContent();
 
-    void initDBus(const QString &indicatorKey);
+    void initDBus(const QString &indicatorName);
 
     template<typename Func>
     void featData(const QString &key,
@@ -99,7 +99,7 @@ public:
     }
 
     IndicatorTrayWidget*    indicatorTrayWidget = Q_NULLPTR;
-    QString                 itemKey;
+    QString                 indicatorName;
     QMap<QString, QString>  propertyNames;
     QMap<QString, QString>  propertyInterfaceNames;
 
@@ -111,9 +111,9 @@ void IndicatorTrayPrivate::init()
 {
     //Q_Q(IndicatorTray);
 
-    indicatorTrayWidget = new IndicatorTrayWidget(itemKey);
+    indicatorTrayWidget = new IndicatorTrayWidget(indicatorName);
 
-    initDBus(itemKey);
+    initDBus(indicatorName);
     updateContent();
 }
 
@@ -124,11 +124,11 @@ void IndicatorTrayPrivate::updateContent()
     Q_EMIT indicatorTrayWidget->iconChanged();
 }
 
-void IndicatorTrayPrivate::initDBus(const QString &indicatorKey)
+void IndicatorTrayPrivate::initDBus(const QString &indicatorName)
 {
     Q_Q(IndicatorTray);
 
-    QString filepath = QString("/etc/dde-dock/indicator/%1.json").arg(indicatorKey);
+    QString filepath = QString("/etc/dde-dock/indicator/%1.json").arg(indicatorName);
     QFile confFile(filepath);
     if (!confFile.open(QIODevice::ReadOnly)) {
         qCritical() << "read indicator config Error";
@@ -140,7 +140,7 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorKey)
 
     auto delay = config.value("delay").toInt(0);
 
-    qDebug() << "delay load" << delay << indicatorKey << q;
+    qDebug() << "delay load" << delay << indicatorName << q;
 
     QTimer::singleShot(delay, [ = ]() {
         auto data = config.value("data").toObject();
@@ -190,13 +190,13 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorKey)
     });
 }
 
-IndicatorTray::IndicatorTray(const QString &itemKey, QObject *parent)
+IndicatorTray::IndicatorTray(const QString &indicatorName, QObject *parent)
     : QObject(parent)
     , d_ptr(new IndicatorTrayPrivate(this))
 {
     Q_D(IndicatorTray);
 
-    d->itemKey = itemKey;
+    d->indicatorName = indicatorName;
     d->init();
 }
 

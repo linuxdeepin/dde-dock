@@ -38,7 +38,7 @@ public:
     explicit AbstractTrayWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
     virtual ~AbstractTrayWidget();
 
-//    virtual QString itemKeyForConfig() = 0;
+    virtual QString itemKeyForConfig() = 0;
     virtual void setActive(const bool active) = 0;
     virtual void updateIcon() = 0;
     virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;

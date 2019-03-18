@@ -28,8 +28,9 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 
-IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorKey, QWidget *parent, Qt::WindowFlags f)
+IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorName, QWidget *parent, Qt::WindowFlags f)
     : AbstractTrayWidget(parent, f)
+    , m_indicatorName(indicatorName)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -48,8 +49,8 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorKey, QWidget *p
     setLayout(layout);
 
     // register dbus
-    auto path = QString("/com/deepin/dde/Dock/Indicator/") + indicatorKey;
-    auto interface =  QString("com.deepin.dde.Dock.Indicator.") + indicatorKey;
+    auto path = QString("/com/deepin/dde/Dock/Indicator/") + m_indicatorName;
+    auto interface =  QString("com.deepin.dde.Dock.Indicator.") + m_indicatorName;
     auto sessionBus = QDBusConnection::sessionBus();
     sessionBus.registerObject(path,
                               interface,
@@ -59,6 +60,11 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorKey, QWidget *p
 
 IndicatorTrayWidget::~IndicatorTrayWidget()
 {
+}
+
+QString IndicatorTrayWidget::itemKeyForConfig()
+{
+    return toIndicatorKey(m_indicatorName);
 }
 
 void IndicatorTrayWidget::setActive(const bool)

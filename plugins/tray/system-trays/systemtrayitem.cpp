@@ -86,6 +86,11 @@ SystemTrayItem::~SystemTrayItem()
         popupWindowAccept();
 }
 
+QString SystemTrayItem::itemKeyForConfig()
+{
+    return m_itemKey;
+}
+
 void SystemTrayItem::setActive(const bool active)
 {
     Q_UNUSED(active);
