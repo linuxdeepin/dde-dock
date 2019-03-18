@@ -142,7 +142,8 @@ void AppDragWidget::hideEvent(QHideEvent *event)
 
 void AppDragWidget::setAppPixmap(const QPixmap &pix)
 {
-    setFixedSize(pix.size());
+    // QSize(3, 3) to fix pixmap be cliped
+    setFixedSize(pix.size() + QSize(3, 3));
 
     m_object->setAppPixmap(pix);
     m_object->setTransformOriginPoint(pix.rect().center());
