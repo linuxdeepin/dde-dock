@@ -43,6 +43,7 @@ public:
 
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
+    void setOriginPos(const QPoint position);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -54,6 +55,7 @@ protected:
 private:
     void initAnimations();
     void showRemoveAnimation();
+    void showGoBackAnimation();
     void onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
             QAbstractAnimation::State oldState);
     bool isRemoveAble();
@@ -66,10 +68,11 @@ private:
     QPropertyAnimation *m_animRotation;
     QPropertyAnimation *m_animOpacity;
     QParallelAnimationGroup *m_animGroup;
+    QPropertyAnimation *m_goBackAnim;
 
     Dock::Position m_dockPosition;
     QRect m_dockGeometry;
-    QPoint m_dragStartPoint;
+    QPoint m_originPoint;
 };
 
 #endif /* APPDRAGWIDGET_H */
