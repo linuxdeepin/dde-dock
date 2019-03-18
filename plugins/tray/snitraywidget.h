@@ -23,14 +23,16 @@
 #define SNITRAYWIDGET_H
 
 #include "abstracttraywidget.h"
-#include "dbus/sni/statusnotifieritem_interface.h"
+//#include "dbus/sni/statusnotifieritem_interface.h"
 
+#include <org_kde_statusnotifieritem.h>
 #include <dbusmenu-qt5/dbusmenuimporter.h>
 
 #include <QMenu>
 #include <QDBusObjectPath>
 
-using namespace com::deepin::dde;
+//using namespace com::deepin::dde;
+using namespace org::kde;
 
 class SNITrayWidget : public AbstractTrayWidget
 {
@@ -62,12 +64,25 @@ Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
 
 private Q_SLOTS:
+    void initSNIPropertys();
     void initMenu();
     void refreshIcon();
     void refreshOverlayIcon();
     void refreshAttentionIcon();
     void showContextMenu(int x, int y);
-    void onStatusChanged(const QString &status);
+    // SNI property change slot
+    void onSNIAttentionIconNameChanged(const QString & value);
+    void onSNIAttentionIconPixmapChanged(DBusImageList  value);
+    void onSNIAttentionMovieNameChanged(const QString & value);
+    void onSNICategoryChanged(const QString & value);
+    void onSNIIconNameChanged(const QString & value);
+    void onSNIIconPixmapChanged(DBusImageList  value);
+    void onSNIIconThemePathChanged(const QString & value);
+    void onSNIIdChanged(const QString & value);
+    void onSNIMenuChanged(const QDBusObjectPath & value);
+    void onSNIOverlayIconNameChanged(const QString & value);
+    void onSNIOverlayIconPixmapChanged(DBusImageList  value);
+    void onSNIStatusChanged(const QString & value);
 
 private:
     QSize sizeHint() const Q_DECL_OVERRIDE;
@@ -80,13 +95,29 @@ private:
     DBusMenuImporter *m_dbusMenuImporter;
 
     QMenu *m_menu;
-    QTimer *m_updateTimer;
+    QTimer *m_updateIconTimer;
+    QTimer *m_updateOverlayIconTimer;
+    QTimer *m_updateAttentionIconTimer;
 
     QString m_dbusService;
     QString m_dbusPath;
 
     QPixmap m_pixmap;
     QPixmap m_overlayPixmap;
+
+    // SNI propertys
+    QString m_sniAttentionIconName;
+    DBusImageList m_sniAttentionIconPixmap;
+    QString m_sniAttentionMovieName;
+    QString m_sniCategory;
+    QString m_sniIconName;
+    DBusImageList m_sniIconPixmap;
+    QString m_sniIconThemePath;
+    QString m_sniId;
+    QDBusObjectPath m_sniMenuPath;
+    QString m_sniOverlayIconName;
+    DBusImageList m_sniOverlayIconPixmap;
+    QString m_sniStatus;
 };
 
 #endif /* SNIWIDGET_H */

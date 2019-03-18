@@ -154,6 +154,10 @@ void DockPluginsController::loadPlugin(const QString &pluginFile)
     const auto meta = pluginLoader->metaData().value("MetaData").toObject();
     if (!meta.contains("api") || meta["api"].toString() != DOCK_PLUGIN_API_VERSION)
     {
+        QString notifyMessage(tr("The plugin %1 is not compatible with the system."));
+        QProcess::startDetached("notify-send", QStringList()
+                                << "-i" << "dialog-warning"
+                                << notifyMessage.arg(QFileInfo(pluginFile).fileName()));
         qWarning() << "plugin api version not matched! expect version:" << DOCK_PLUGIN_API_VERSION << pluginFile;
         return;
     }

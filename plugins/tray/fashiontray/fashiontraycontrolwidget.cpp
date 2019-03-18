@@ -31,11 +31,15 @@ DWIDGET_USE_NAMESPACE
 
 FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWidget *parent)
     : QWidget(parent),
+      m_expandDelayTimer(new QTimer(this)),
       m_dockPosition(position),
       m_expanded(true),
       m_hover(false),
       m_pressed(false)
 {
+    m_expandDelayTimer->setInterval(400);
+    m_expandDelayTimer->setSingleShot(true);
+
     setDockPostion(m_dockPosition);
     setExpanded(m_expanded);
 }
@@ -106,6 +110,12 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
 
 void FashionTrayControlWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (m_expandDelayTimer->isActive()) {
+        return;
+    }
+
+    m_expandDelayTimer->start();
+
     m_pressed = false;
     update();
 

@@ -4,7 +4,15 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Дараад нуугдсан дүрсүүдийг харах</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAdaptors</name>
+    <message>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="138"/>
+        <source>Add keyboard layout</source>
+        <translation>Гарын байрлал нэмэх</translation>
     </message>
 </context>
 <context>
@@ -12,22 +20,22 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="57"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Огноо</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 цагаар</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 цагаар</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>Цагны тохиргоо</translation>
     </message>
 </context>
 <context>
@@ -35,17 +43,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>Сүлжээг идэвхижүүлэх</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="61"/>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>Сүлжээг идэвхгүй болгох</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="67"/>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>Сүлээний тохиргоо</translation>
     </message>
 </context>
 <context>
@@ -53,7 +61,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>%1 эд зүйлсийг хоослохдоо итгэлтэй байна уу?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
@@ -76,12 +84,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Тодорхойгүй төхөөрөмж</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Тодорхойгүй дууны хэм</translation>
     </message>
 </context>
 <context>
@@ -89,17 +97,25 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Диск</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Нээх</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>Бүгдийг салгах</translation>
+    </message>
+</context>
+<context>
+    <name>DockPluginsController</name>
+    <message>
+        <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation>%1 нэмэлт нь үйлдэлийн үйлдэлийн системтэй нийцэхгүй байна.</translation>
     </message>
 </context>
 <context>
@@ -107,22 +123,22 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>Загварлаг горим</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>Ашигтай горим</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Дээр</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Доор</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
@@ -137,7 +153,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>Том</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="54"/>
@@ -147,47 +163,47 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="55"/>
         <source>Small</source>
-        <translation type="unfinished"/>
+        <translation>Жижиг</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="56"/>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>Үргэлж харах</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="57"/>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Үргэлж нуух</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="58"/>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>Ухаалгаар нуух</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="97"/>
+        <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>Горим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="105"/>
+        <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
-        <translation type="unfinished"/>
+        <translation>Байршил</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="112"/>
+        <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
         <translation>Хэмжээ</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="119"/>
+        <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>Төлөв</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="123"/>
+        <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Нэмэлтүүд</translation>
     </message>
 </context>
 <context>
@@ -195,7 +211,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="105"/>
         <source>Launcher</source>
-        <translation>Нээгч</translation>
+        <translation>Эхлүүлэгч</translation>
     </message>
 </context>
 <context>
@@ -212,12 +228,12 @@
         <location filename="../plugins/onboard/onboardplugin.cpp" line="35"/>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="46"/>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Дэлгэцийн гар</translation>
     </message>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Тохиргоо</translation>
     </message>
 </context>
 <context>
@@ -225,74 +241,74 @@
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="46"/>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Цэнэг</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="71"/>
         <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Үлдсэн цэнэг %1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="76"/>
         <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 цэнэглэсэн</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="78"/>
         <source>Charging %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 цэнэглэж байна</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>Цэнэгийн тохиргоо</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Shut down</source>
         <translation>Унтраах</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="120"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="123"/>
         <source>Restart</source>
         <translation>Дахин эхлүүлэх</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>Амраах</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
         <source>Lock</source>
-        <translation>Цоожлох</translation>
+        <translation>Түгжих</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="149"/>
         <source>Log out</source>
         <translation>Гарах</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="126"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="129"/>
         <source>Suspend</source>
         <translation>Түр зогсоох</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>Хэрэглэгчийн бүртгэл солих</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>Цэнэгийн тохиргоо</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="36"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Shutdown</source>
         <translation>Унтраах</translation>
     </message>
@@ -307,7 +323,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="72"/>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>Програм</translation>
     </message>
 </context>
 <context>
@@ -315,22 +331,22 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="78"/>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>Дуу нээх</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="80"/>
         <source>Mute</source>
-        <translation type="unfinished"/>
+        <translation>Дуу хаах</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>Дууны тохиргоо</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="207"/>
         <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Одоогийн дууны хэм %1</translation>
     </message>
 </context>
 <context>
@@ -338,20 +354,25 @@
     <message>
         <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
-        <translation type="unfinished"/>
+        <translation>Дуу</translation>
     </message>
 </context>
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="83"/>
-        <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="52"/>
+        <source>Trash</source>
+        <translation>Хогийн сав</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="90"/>
+        <source>Trash - %1 file</source>
+        <translation>Хогийн сав - %1 файлтай</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="92"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Хогийн сав - %1 файлтай</translation>
     </message>
 </context>
 <context>
@@ -359,7 +380,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="71"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Нээх</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="79"/>
@@ -370,9 +391,9 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="52"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="59"/>
         <source>System Tray</source>
-        <translation type="unfinished"/>
+        <translation>Системийн тавиур</translation>
     </message>
 </context>
 <context>
@@ -385,7 +406,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="199"/>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Утастай холболт: %1</translation>
     </message>
 </context>
 <context>
@@ -393,12 +414,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="49"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>Сүлжээ байхгүй</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="275"/>
         <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Утасгүй холболт: %1</translation>
     </message>
 </context>
 <context>
@@ -406,12 +427,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network</source>
-        <translation type="unfinished"/>
+        <translation>Утасгүй сүлжээ</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Утасгүй сүлжээ %1</translation>
     </message>
 </context>
 </TS>

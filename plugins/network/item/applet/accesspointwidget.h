@@ -32,6 +32,24 @@
 #include <dimagebutton.h>
 #include <NetworkDevice>
 
+class SsidButton : public QLabel
+{
+    Q_OBJECT
+public:
+    SsidButton(QWidget *parent = nullptr) : QLabel(parent){}
+    virtual ~SsidButton() {}
+
+signals:
+    void clicked();
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *event) override {
+        QLabel::mouseReleaseEvent(event);
+
+        Q_EMIT clicked();
+    }
+};
+
 class AccessPointWidget : public QFrame
 {
     Q_OBJECT
@@ -64,7 +82,7 @@ private:
     dde::network::NetworkDevice::DeviceStatus m_activeState;
 
     AccessPoint m_ap;
-    QPushButton *m_ssidBtn;
+    SsidButton *m_ssidBtn;
     Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityLabel;
     QLabel *m_strengthLabel;

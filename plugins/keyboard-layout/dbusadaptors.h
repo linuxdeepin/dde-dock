@@ -20,6 +20,7 @@
 #ifndef DBUSADAPTORS_H
 #define DBUSADAPTORS_H
 
+#include <QMenu>
 #include <QtDBus/QtDBus>
 #include <com_deepin_daemon_inputdevice_keyboard.h>
 
@@ -29,14 +30,14 @@ class DBusAdaptors : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.Keyboard")
-    Q_CLASSINFO("D-Bus Introspection", ""
-                "  <interface name=\"com.deepin.dde.Keyboard\">\n"
-                "    <property access=\"read\" type=\"s\" name=\"layout\"/>\n"
-                "    <signal name=\"layoutChanged\">"
-                "        <arg name=\"layout\" type=\"s\"/>"
-                "    </signal>"
-                "  </interface>\n"
-                "")
+//    Q_CLASSINFO("D-Bus Introspection", ""
+//                "  <interface name=\"com.deepin.dde.Keyboard\">\n"
+//                "    <property access=\"read\" type=\"s\" name=\"layout\"/>\n"
+//                "    <signal name=\"layoutChanged\">"
+//                "        <arg name=\"layout\" type=\"s\"/>"
+//                "    </signal>"
+//                "  </interface>\n"
+//                "")
 
 public:
      DBusAdaptors(QObject *parent = nullptr);
@@ -47,13 +48,31 @@ public:
     QString layout() const;
 
 public slots:
-    void onLayoutChanged();
+    void onClicked(int button, int x, int y);
 
 signals:
     void layoutChanged(QString text);
 
+private slots:
+    void onCurrentLayoutChanged(const QString & value);
+    void onUserLayoutListChanged(const QStringList & value);
+    void initAllLayoutList();
+    void refreshMenu();
+    void refreshMenuSelection();
+    void handleActionTriggered(QAction *action);
+
+private:
+    QString duplicateCheck(const QString &kb);
+
 private:
     Keyboard *m_keyboard;
+    QMenu *m_menu;
+    QAction *m_addLayoutAction;
+
+    QString m_currentLayoutRaw;
+    QString m_currentLayout;
+    QStringList m_userLayoutList;
+    KeyboardLayoutList m_allLayoutList;
 };
 
 #endif

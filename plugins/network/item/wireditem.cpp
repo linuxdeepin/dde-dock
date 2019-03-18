@@ -49,7 +49,7 @@ WiredItem::WiredItem(WiredDevice *device)
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::connectionsChanged, this, &WiredItem::deviceStateChanged);
-    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeConnectionChanged, this, &WiredItem::deviceStateChanged);
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged, this, &WiredItem::deviceStateChanged);
 
     QTimer::singleShot(0, this, &WiredItem::refreshTips);
     QTimer::singleShot(0, this, &WiredItem::refreshIcon);
@@ -190,7 +190,7 @@ void WiredItem::refreshTips()
             if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
                 break;
             }
-            const QJsonObject info = static_cast<WiredDevice *>(m_device.data())->activeConnection();
+            const QJsonObject info = static_cast<WiredDevice *>(m_device.data())->activeWiredConnectionInfo();
             if (!info.contains("Ip4"))
                 break;
             const QJsonObject ipv4 = info.value("Ip4").toObject();

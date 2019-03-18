@@ -24,10 +24,20 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
     : QDBusAbstractAdaptor(parent),
       m_keyboard(new Keyboard("com.deepin.daemon.InputDevices",
                               "/com/deepin/daemon/InputDevice/Keyboard",
-                              QDBusConnection::sessionBus(), this))
+                              QDBusConnection::sessionBus(), this)),
+      m_menu(new QMenu())
 {
-    connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onLayoutChanged);
-    connect(m_keyboard, &Keyboard::UserLayoutListChanged, this, &DBusAdaptors::onLayoutChanged);
+    m_keyboard->setSync(false);
+
+    connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onCurrentLayoutChanged);
+    connect(m_keyboard, &Keyboard::UserLayoutListChanged, this, &DBusAdaptors::onUserLayoutListChanged);
+
+    connect(m_menu, &QMenu::triggered, this, &DBusAdaptors::handleActionTriggered);
+
+    // init data
+    initAllLayoutList();
+    onCurrentLayoutChanged(m_keyboard->currentLayout());
+    onUserLayoutListChanged(m_keyboard->userLayoutList());
 }
 
 DBusAdaptors::~DBusAdaptors()
@@ -36,25 +46,132 @@ DBusAdaptors::~DBusAdaptors()
 
 QString DBusAdaptors::layout() const
 {
-    QStringList layouts = m_keyboard->userLayoutList();
-    if (layouts.size() < 2) {
+    if (m_userLayoutList.size() < 2) {
         // do NOT show keyboard indicator
         return QString();
     }
 
-    QString currentLayout = m_keyboard->currentLayout().split(';').first();
-    if (!currentLayout.isEmpty())
-        return currentLayout;
+    if (m_currentLayout.isEmpty()) {
+        // refetch data
+        QTimer::singleShot(1000, m_keyboard, &Keyboard::currentLayout);
+        qWarning() << Q_FUNC_INFO << "currentLayout is Empty!!";
+    }
 
-    qWarning() << Q_FUNC_INFO << "currentLayout is Empty!!";
-
-    // re-fetch data.
-    QTimer::singleShot(1000, this, &DBusAdaptors::onLayoutChanged);
-
-    return QString();
+    return m_currentLayout;
 }
 
-void DBusAdaptors::onLayoutChanged()
+void DBusAdaptors::onClicked(int button, int x, int y)
 {
+//    button value means(XCB_BUTTON_INDEX):
+//    0, Any of the following (or none)
+//    1, The left mouse button.
+//    2, The right mouse button.
+//    3, The middle mouse button.
+//    4, Scroll wheel. TODO: direction?
+//    5, Scroll wheel. TODO: direction?
+
+    Q_UNUSED(button);
+
+    if (m_menu && m_userLayoutList.size() >= 2) {
+        m_menu->exec(QPoint(x, y));
+    }
+}
+
+void DBusAdaptors::onCurrentLayoutChanged(const QString &value)
+{
+    m_currentLayoutRaw = value;
+    m_currentLayout = value.split(';').first();
+
+    refreshMenuSelection();
+
     emit layoutChanged(layout());
+}
+
+void DBusAdaptors::onUserLayoutListChanged(const QStringList &value)
+{
+    m_userLayoutList = value;
+
+    refreshMenu();
+}
+
+void DBusAdaptors::initAllLayoutList()
+{
+    QDBusPendingCall call = m_keyboard->LayoutList();
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [=] {
+        if (call.isError()) {
+            qWarning() << "failed to get all keyboard list: " << call.error().message();
+        } else {
+            QDBusReply<KeyboardLayoutList> reply = call.reply();
+            m_allLayoutList = reply.value();
+            refreshMenu();
+        }
+
+        watcher->deleteLater();
+    });
+}
+
+void DBusAdaptors::refreshMenu()
+{
+    if (!m_menu || m_userLayoutList.size() < 2) {
+        return;
+    }
+
+    // all action object will be deleted
+    m_menu->clear();
+
+    for (const QString &layoutRawName : m_userLayoutList) {
+        const QString layoutName = duplicateCheck(layoutRawName);
+        const QString layoutLocalizedName = m_allLayoutList.value(layoutRawName);
+        const QString text = QString("%1 (%2)").arg(layoutLocalizedName).arg(layoutName);
+
+        QAction *action = new QAction(text, m_menu);
+        action->setObjectName(layoutRawName);
+        action->setCheckable(true);
+        action->setChecked(layoutRawName == m_currentLayoutRaw);
+        m_menu->addAction(action);
+    }
+
+    m_menu->addSeparator();
+
+    // will be deleted after QMenu->clear() above
+    m_addLayoutAction = new QAction(tr("Add keyboard layout"), m_menu);
+
+    m_menu->addAction(m_addLayoutAction);
+}
+
+void DBusAdaptors::refreshMenuSelection()
+{
+    for (QAction *action : m_menu->actions()) {
+        action->setChecked(action->objectName() == m_currentLayoutRaw);
+    }
+}
+
+void DBusAdaptors::handleActionTriggered(QAction *action)
+{
+    if (action == m_addLayoutAction) {
+        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter "
+                                "/com/deepin/dde/ControlCenter "
+                                "com.deepin.dde.ControlCenter.ShowModule string:keyboard");
+    }
+
+    const QString layout = action->objectName();
+    if (m_userLayoutList.contains(layout)) {
+        m_keyboard->setCurrentLayout(layout);
+    }
+}
+
+QString DBusAdaptors::duplicateCheck(const QString &kb)
+{
+    QStringList list;
+    const QString kbFirst = kb.split(";").first();
+    for (const QString &data : m_userLayoutList) {
+        if (data.split(";").first() == kbFirst) {
+            list << data;
+        }
+    }
+
+    const QString kblayout = kb.split(";").first().mid(0, 2);
+
+    return kblayout + (list.count() > 1 ? QString::number(list.indexOf(kb) + 1) : "");
 }

@@ -68,27 +68,31 @@ private slots:
     void activateAP(const QString &apPath, const QString &ssid);
     void deactiveAP();
     void updateIndicatorPos();
-    void onActiveConnectionChanged();
+    void onActiveConnectionInfoChanged();
     void onActivateApFailed(const QString &apPath, const QString &uuid);
 
+private:
+    AccessPoint accessPointBySsid(const QString &ssid);
+    AccessPointWidget *accessPointWidgetByAp(const AccessPoint ap);
 
 private:
     QPointer<dde::network::WirelessDevice> m_device;
 
     AccessPoint m_activeAP;
+    AccessPoint m_activatingAP;
     QList<AccessPoint> m_apList;
     QList<AccessPointWidget*> m_apwList;
 
     QTimer *m_updateAPTimer;
     Dtk::Widget::DPictureSequenceView *m_indicator;
-    AccessPointWidget *m_currentClickAPW;
-    AccessPoint m_currentClickAP;
 
     QJsonObject m_editConnectionData;
 
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;
     DeviceControlWidget *m_controlPanel;
+
+    AccessPointWidget *m_clickedAPW;
 };
 
 #endif // WIRELESSAPPLET_H

@@ -52,6 +52,7 @@ private:
     void refreshArrowPixmap();
 
 private:
+    QTimer *m_expandDelayTimer;
     QPixmap m_arrowPix;
 
     Dock::Position m_dockPosition;

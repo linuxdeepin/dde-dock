@@ -92,6 +92,11 @@ bool AccessPoint::secured() const
     return m_secured;
 }
 
+bool AccessPoint::isEmpty() const
+{
+    return m_path.isEmpty();
+}
+
 void AccessPoint::loadApInfo(const QJsonObject &apInfo)
 {
     m_strength = apInfo.value("Strength").toInt();

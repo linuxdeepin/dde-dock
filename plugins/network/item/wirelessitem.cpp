@@ -51,7 +51,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(m_refreshTimer, &QTimer::timeout, this, &WirelessItem::onRefreshTimeout);
     connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeConnectionChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
 
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     QTimer::singleShot(0, this, &WirelessItem::refreshTips);
@@ -266,7 +266,7 @@ void WirelessItem::refreshTips()
             if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
                 break;
             }
-            const QJsonObject info = static_cast<WirelessDevice *>(m_device.data())->activeConnectionInfo();
+            const QJsonObject info = static_cast<WirelessDevice *>(m_device.data())->activeWirelessConnectionInfo();
             if (!info.contains("Ip4"))
                 break;
             const QJsonObject ipv4 = info.value("Ip4").toObject();

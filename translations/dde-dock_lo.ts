@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="af" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="lo" version="2.1">
 <context>
     <name>ContainerItem</name>
     <message>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
-        <translation>Kanselleer</translation>
+        <translation>ຍົກເລີກ</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
-        <translation>Verwyder</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
@@ -97,12 +97,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
-        <translation>Skyf</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>Oop</translation>
+        <translation>ເປີດ</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
@@ -143,12 +143,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Left</source>
-        <translation>Links</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Right</source>
-        <translation>Regs</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="53"/>
@@ -183,7 +183,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
-        <translation>Modus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="102"/>
@@ -193,7 +193,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
-        <translation>Grootte</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="116"/>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="105"/>
         <source>Launcher</source>
-        <translation>Lanseerder</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -219,7 +219,7 @@
     <message>
         <location filename="../plugins/network/networkplugin.cpp" line="49"/>
         <source>Network</source>
-        <translation>Netwerk</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -241,7 +241,7 @@
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="46"/>
         <source>Power</source>
-        <translation>Krag</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="71"/>
@@ -269,32 +269,32 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Shut down</source>
-        <translation>Skakel af</translation>
+        <translation>ປິດ​ເຄື່ອງ</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="123"/>
         <source>Restart</source>
-        <translation>Herlaai</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>ນອນ</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>ລ໊ອກ</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="149"/>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>ອອກ​ຈາກ​ລະ​ບົບ</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="129"/>
         <source>Suspend</source>
-        <translation>Opskort</translation>
+        <translation>ຢຸດໄວ້</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
@@ -310,7 +310,7 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Shutdown</source>
-        <translation>Afskakel</translation>
+        <translation>ປີດລະບົບ</translation>
     </message>
 </context>
 <context>
@@ -318,7 +318,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="54"/>
         <source>Device</source>
-        <translation>Toestel</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="72"/>
@@ -336,7 +336,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="80"/>
         <source>Mute</source>
-        <translation>Demp</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="86"/>
@@ -354,7 +354,7 @@
     <message>
         <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
-        <translation>Klank</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="71"/>
         <source>Open</source>
-        <translation>Oop</translation>
+        <translation>ເປີດ</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="79"/>
@@ -401,7 +401,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
         <source>Unknown</source>
-        <translation>Onbekend</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="199"/>
@@ -427,7 +427,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network</source>
-        <translation>Draadlose Netwerk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>

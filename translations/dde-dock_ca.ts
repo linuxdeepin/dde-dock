@@ -8,6 +8,14 @@
     </message>
 </context>
 <context>
+    <name>DBusAdaptors</name>
+    <message>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="138"/>
+        <source>Add keyboard layout</source>
+        <translation>Afegeix una disposició de teclat</translation>
+    </message>
+</context>
+<context>
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="57"/>
@@ -103,6 +111,14 @@
     </message>
 </context>
 <context>
+    <name>DockPluginsController</name>
+    <message>
+        <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation>El connector %1 no és compatible amb el sistema.</translation>
+    </message>
+</context>
+<context>
     <name>DockSettings</name>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="47"/>
@@ -165,27 +181,27 @@
         <translation>Ocultació intel·ligent</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="97"/>
+        <location filename="../frame/util/docksettings.cpp" line="94"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="105"/>
+        <location filename="../frame/util/docksettings.cpp" line="102"/>
         <source>Location</source>
         <translation>Ubicació</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="112"/>
+        <location filename="../frame/util/docksettings.cpp" line="109"/>
         <source>Size</source>
         <translation>Mida</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="119"/>
+        <location filename="../frame/util/docksettings.cpp" line="116"/>
         <source>Status</source>
         <translation>Estat</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="123"/>
+        <location filename="../frame/util/docksettings.cpp" line="120"/>
         <source>Plugins</source>
         <translation>Connectors</translation>
     </message>
@@ -251,48 +267,48 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Shut down</source>
         <translation>Atura</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="120"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="123"/>
         <source>Restart</source>
         <translation>Reinicia</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="133"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>Hiberna</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
         <source>Lock</source>
         <translation>Bloqueja</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="146"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="149"/>
         <source>Log out</source>
         <translation>Surt de la sessió</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="126"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="129"/>
         <source>Suspend</source>
         <translation>Suspèn</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Switch account</source>
         <translation>Canvi de compte</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="161"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Power settings</source>
         <translation>Configuració de l&apos;energia</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="36"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Shutdown</source>
         <translation>Atura</translation>
     </message>
@@ -344,12 +360,17 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="83"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="52"/>
+        <source>Trash</source>
+        <translation>Paperera</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="90"/>
         <source>Trash - %1 file</source>
         <translation>Paperera: %1 fitxers</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="85"/>
+        <location filename="../plugins/trash/trashplugin.cpp" line="92"/>
         <source>Trash - %1 files</source>
         <translation>Paperera: %1 fitxers</translation>
     </message>
@@ -370,7 +391,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="52"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="59"/>
         <source>System Tray</source>
         <translation>Safata del sistema</translation>
     </message>

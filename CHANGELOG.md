@@ -1,3 +1,58 @@
+<a name="4.9.1.1"></a>
+## 4.9.1.1 (2019-03-13)
+
+
+
+
+<a name="4.9.1"></a>
+## 4.9.1 (2019-03-13)
+
+
+#### Bug Fixes
+
+*   indicator not display ([b1d0fd4a](https://github.com/linuxdeepin/dde-dock/commit/b1d0fd4ad4af7e3fcf7a1ceb2728a3fc1b03b066))
+*   added multiple indicator tray of one indicator provider ([4cd74405](https://github.com/linuxdeepin/dde-dock/commit/4cd74405ce9bba827d70ec515b2b98d5b68dd69b))
+*   activating indicator not show when activate a wireless from other place ([5f11a013](https://github.com/linuxdeepin/dde-dock/commit/5f11a0134aeb4e97fff9edd7d3b5d318491398b1))
+
+#### Features
+
+*   keyboard layout indicator support context menu ([89446d70](https://github.com/linuxdeepin/dde-dock/commit/89446d70223382a79f6909eb6b18c905dd698534))
+*   send a notify when plugin is not compatible ([f30e28cf](https://github.com/linuxdeepin/dde-dock/commit/f30e28cf81257898666c79efa9e83c64bd820307))
+*   trash plugin enable be disable ([fc06a6a0](https://github.com/linuxdeepin/dde-dock/commit/fc06a6a0788875ed73e9e0e860b4222a3ecc7cdc))
+
+
+
+<a name="4.9.0"></a>
+## 4.9.0 (2019-02-25)
+
+
+#### Bug Fixes
+
+*   wireless item display problem when ssid contains "&" ([ecea16f8](https://github.com/linuxdeepin/dde-dock/commit/ecea16f89a6d17bd66fe2ace87f4d713a7135055))
+*   fashion tray expand error after double click control widget ([49b84eb0](https://github.com/linuxdeepin/dde-dock/commit/49b84eb0ccf785e1abae9881f84f06963d36fc60))
+
+#### Features
+
+*   optimize plugin guide ([3962f474](https://github.com/linuxdeepin/dde-dock/commit/3962f474e9eb6764362a843bfc70b10dc0d02047))
+
+
+
+<a name="4.8.9"></a>
+## 4.8.9 (2019-01-25)
+
+
+#### Features
+
+*   shutdown plugin support hibernate ([60b5d9e0](https://github.com/linuxdeepin/dde-dock/commit/60b5d9e0c2dc528a419b39e9cc8d8c3bb3de9666))
+
+#### Bug Fixes
+
+*   place holder item not be removed after drag leave in touch screen ([12cf14a8](https://github.com/linuxdeepin/dde-dock/commit/12cf14a8638197fb16d6349a818c8a020f2e98dd))
+*   tips widget size not change after system font size changed ([2d39e69e](https://github.com/linuxdeepin/dde-dock/commit/2d39e69ee80c107d3bcb472e6c90c26262b02e04))
+*   obtain opacity value too frequently when startup ([176d58e9](https://github.com/linuxdeepin/dde-dock/commit/176d58e9f9b88faa83e49d79d98bd35f29e482ae))
+
+
+
 <a name="4.8.7.3"></a>
 ## 4.8.7.3 (2019-01-14)
 

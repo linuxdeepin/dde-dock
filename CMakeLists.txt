@@ -11,6 +11,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
+# generate a compile commands file as complete database for vim-YouCompleteMe or some other similar tools
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 include(GNUInstallDirs)
 
 if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
