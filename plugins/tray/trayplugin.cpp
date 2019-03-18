@@ -374,32 +374,30 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
     connect(trayWidget, &SNITrayWidget::statusChanged, this, &TrayPlugin::onSNIItemStatusChanged);
 }
 
-void TrayPlugin::trayIndicatorAdded(const QString &itemKey)
+void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indicatorName)
 {
     if (m_trayMap.contains(itemKey) || !IndicatorTrayWidget::isIndicatorKey(itemKey)) {
         return;
     }
 
-    IndicatorTray *trayWidget = nullptr;
-    QString indicatorKey = IndicatorTrayWidget::toIndicatorId(itemKey);
-
-    if (!m_indicatorMap.keys().contains(itemKey)) {
-        trayWidget = new IndicatorTray(indicatorKey);
-        m_indicatorMap[indicatorKey] = trayWidget;
+    IndicatorTray *indicatorTray = nullptr;
+    if (!m_indicatorMap.keys().contains(indicatorName)) {
+        indicatorTray = new IndicatorTray(indicatorName);
+        m_indicatorMap[indicatorName] = indicatorTray;
     }
     else {
-        trayWidget = m_indicatorMap[itemKey];
+        indicatorTray = m_indicatorMap[itemKey];
     }
 
-    connect(trayWidget, &IndicatorTray::delayLoaded,
-    trayWidget, [ = ]() {
-        addTrayWidget(itemKey, trayWidget->widget());
-    });
+    connect(indicatorTray, &IndicatorTray::delayLoaded,
+    indicatorTray, [ = ]() {
+        addTrayWidget(itemKey, indicatorTray->widget());
+    }, Qt::UniqueConnection);
 
-    connect(trayWidget, &IndicatorTray::removed, this, [=] {
+    connect(indicatorTray, &IndicatorTray::removed, this, [=] {
         trayRemoved(itemKey);
-        trayWidget->removeWidget();
-    });
+        indicatorTray->removeWidget();
+    }, Qt::UniqueConnection);
 }
 
 void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
@@ -520,7 +518,8 @@ void TrayPlugin::loadIndicator()
 {
     QDir indicatorConfDir("/etc/dde-dock/indicator");
 
-    for (auto fileInfo : indicatorConfDir.entryInfoList({"*.json"}, QDir::Files | QDir::NoDotAndDotDot)) {
-        trayIndicatorAdded(IndicatorTrayWidget::toTrayWidgetId(fileInfo.baseName()));
+    for (const QFileInfo &fileInfo : indicatorConfDir.entryInfoList({"*.json"}, QDir::Files | QDir::NoDotAndDotDot)) {
+        const QString &indicatorName = fileInfo.baseName();
+        trayIndicatorAdded(IndicatorTrayWidget::toIndicatorKey(indicatorName), indicatorName);
     }
 }

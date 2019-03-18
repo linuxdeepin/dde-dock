@@ -78,7 +78,7 @@ private slots:
     void xembedItemsChanged();
     void trayXEmbedAdded(const QString &itemKey, quint32 winId);
     void traySNIAdded(const QString &itemKey, const QString &sniServicePath);
-    void trayIndicatorAdded(const QString &itemKey);
+    void trayIndicatorAdded(const QString &itemKey, const QString &indicatorName);
     void trayRemoved(const QString &itemKey, const bool deleteObject = true);
     void xembedItemChanged(quint32 winId);
     void switchToMode(const Dock::DisplayMode mode);

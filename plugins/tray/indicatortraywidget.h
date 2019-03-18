@@ -40,8 +40,7 @@ public:
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
-    static QString toTrayWidgetId(const QString &indicatorKey) { return QString("indicator:%1").arg(indicatorKey); }
-    static QString toIndicatorId(QString itemKey) { return itemKey.remove("indicator:"); }
+    static QString toIndicatorKey(const QString &indicatorName) { return QString("indicator:%1").arg(indicatorName); }
     static bool isIndicatorKey(const QString &itemKey) { return itemKey.startsWith("indicator:"); }
 
 public Q_SLOTS:
