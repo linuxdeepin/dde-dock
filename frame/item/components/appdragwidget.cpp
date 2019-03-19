@@ -26,7 +26,7 @@
 class AppGraphicsObject : public QGraphicsObject
 {
 public:
-    AppGraphicsObject(QGraphicsItem *parent = Q_NULLPTR) : QGraphicsObject(parent) {};
+    AppGraphicsObject(QGraphicsItem *parent = Q_NULLPTR) : QGraphicsObject(parent) {}
     ~AppGraphicsObject() { }
 
     void setAppPixmap(QPixmap pix)
@@ -47,14 +47,14 @@ public:
     QRectF boundingRect() const Q_DECL_OVERRIDE
     {
         return m_appPixmap.rect();
-    };
+    }
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE
     {
         Q_ASSERT(!m_appPixmap.isNull());
 
         painter->drawPixmap(QPoint(0, 0), m_appPixmap);
-    };
+    }
 
 private:
     QPixmap m_appPixmap;
@@ -68,7 +68,8 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_animScale(new QPropertyAnimation(m_object, "scale", this)),
     m_animRotation(new QPropertyAnimation(m_object, "rotation", this)),
     m_animOpacity(new QPropertyAnimation(m_object, "opacity", this)),
-    m_animGroup(new QParallelAnimationGroup(this))
+    m_animGroup(new QParallelAnimationGroup(this)),
+    m_goBackAnim(new QPropertyAnimation(this, "pos", this))
 {
     m_scene->addItem(m_object);
     setScene(m_scene);
@@ -92,20 +93,22 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_followMouseTimer->start();
 }
 
-AppDragWidget::~AppDragWidget() { }
+AppDragWidget::~AppDragWidget() {
+}
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseMoveEvent(event);
     // hide widget when receiving mouseMoveEvent because this means drag-and-drop has been finished
-    hide();
+    if (m_goBackAnim->state() != QPropertyAnimation::State::Running
+            && m_animGroup->state() != QParallelAnimationGroup::Running) {
+        hide();
+    }
 }
 
 void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
-
-    m_dragStartPoint = event->pos();
 }
 
 void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
@@ -128,7 +131,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
         AppItem *appItem = static_cast<AppItem *>(event->source());
         appItem->undock();
     } else {
-        hide();
+        showGoBackAnimation();;
     }
 }
 
@@ -139,7 +142,8 @@ void AppDragWidget::hideEvent(QHideEvent *event)
 
 void AppDragWidget::setAppPixmap(const QPixmap &pix)
 {
-    setFixedSize(pix.size() + QSize(10,10));
+    // QSize(3, 3) to fix pixmap be cliped
+    setFixedSize(pix.size() + QSize(3, 3));
 
     m_object->setAppPixmap(pix);
     m_object->setTransformOriginPoint(pix.rect().center());
@@ -149,6 +153,11 @@ void AppDragWidget::setDockInfo(Dock::Position dockPosition, const QRect &dockGe
 {
     m_dockPosition = dockPosition;
     m_dockGeometry = dockGeometry;
+}
+
+void AppDragWidget::setOriginPos(const QPoint position)
+{
+    m_originPoint = position;
 }
 
 void AppDragWidget::initAnimations()
@@ -171,6 +180,7 @@ void AppDragWidget::initAnimations()
 
     connect(m_animGroup, &QParallelAnimationGroup::stateChanged,
             this, &AppDragWidget::onRemoveAnimationStateChanged);
+    connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
 }
 
 void AppDragWidget::showRemoveAnimation()
@@ -180,6 +190,14 @@ void AppDragWidget::showRemoveAnimation()
     }
     m_object->resetProperty();
     m_animGroup->start();
+}
+
+void AppDragWidget::showGoBackAnimation()
+{
+    m_goBackAnim->setDuration(300);
+    m_goBackAnim->setStartValue(pos());
+    m_goBackAnim->setEndValue(m_originPoint);
+    m_goBackAnim->start();
 }
 
 void AppDragWidget::onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
