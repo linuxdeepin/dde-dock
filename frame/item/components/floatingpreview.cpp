@@ -29,23 +29,23 @@
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent),
 
-      m_closeBtn(new DImageButton)
+      m_closeBtn3D(new DImageButton)
 {
-    m_closeBtn->setFixedSize(24, 24);
-    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.svg");
-    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.svg");
-    m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
+    m_closeBtn3D->setFixedSize(24, 24);
+    m_closeBtn3D->setNormalPic(":/icons/resources/close_round_normal.svg");
+    m_closeBtn3D->setHoverPic(":/icons/resources/close_round_hover.svg");
+    m_closeBtn3D->setPressPic(":/icons/resources/close_round_press.svg");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(m_closeBtn);
-    centralLayout->setAlignment(m_closeBtn, Qt::AlignRight | Qt::AlignTop);
+    centralLayout->addWidget(m_closeBtn3D);
+    centralLayout->setAlignment(m_closeBtn3D, Qt::AlignRight | Qt::AlignTop);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
     setLayout(centralLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
-    connect(m_closeBtn, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
+    connect(m_closeBtn3D, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
 }
 
 WId FloatingPreview::trackedWid() const
@@ -66,7 +66,7 @@ void FloatingPreview::trackWindow(AppSnapshot * const snap)
         m_tracked->removeEventFilter(this);
     snap->installEventFilter(this);
     m_tracked = snap;
-    m_closeBtn->setVisible(m_tracked->closeAble());
+    m_closeBtn3D->setVisible(m_tracked->closeAble());
 
     const QRect r = rect();
     const QRect sr = snap->geometry();

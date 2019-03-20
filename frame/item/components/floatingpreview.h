@@ -58,7 +58,7 @@ private slots:
 private:
     QPointer<AppSnapshot> m_tracked;
 
-    DImageButton *m_closeBtn;
+    DImageButton *m_closeBtn3D;
 };
 
 #endif // FLOATINGPREVIEW_H

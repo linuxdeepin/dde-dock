@@ -89,7 +89,7 @@ private:
 
     TipsWidget *m_title;
     QTimer *m_waitLeaveTimer;
-    DImageButton *m_closeBtn;
+    DImageButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
 };
 
