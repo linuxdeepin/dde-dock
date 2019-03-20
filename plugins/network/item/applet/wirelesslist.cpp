@@ -84,6 +84,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_device, &WirelessDevice::apInfoChanged, this, &WirelessList::APPropertiesChanged);
     connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
     connect(m_device, &WirelessDevice::activateAccessPointFailed, this, &WirelessList::onActivateApFailed);
+    connect(m_device, &WirelessDevice::hotspotEnabledChanged, this, &WirelessList::onHotspotEnabledChanged);
 
     connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
     connect(m_controlPanel, &DeviceControlWidget::requestRefresh, this, &WirelessList::requestWirelessScan);
@@ -208,6 +209,11 @@ void WirelessList::updateAPList()
     //if (m_networkInter->IsDeviceEnabled(m_device.dbusPath()))
     if (m_device->enabled())
     {
+        if (m_device->hotspotEnabled()) {
+            m_apList.clear();
+            m_apList.append(m_activeHotspotAP);
+        }
+
         // sort ap list by strength
         // std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
         //        const bool wirelessActived = m_device.state() == NetworkDevice::Activated;
@@ -422,6 +428,15 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
 
         Q_EMIT requestSetAppletVisible(false);
     }
+}
+
+void WirelessList::onHotspotEnabledChanged(const bool enabled)
+{
+    // Note: the obtained hotspot info is not complete
+    m_activeHotspotAP = enabled ? AccessPoint(m_device->activeHotspotInfo().value("Hotspot").toObject())
+                                : AccessPoint();
+
+    m_updateAPTimer->start();
 }
 
 AccessPoint WirelessList::accessPointBySsid(const QString &ssid)
