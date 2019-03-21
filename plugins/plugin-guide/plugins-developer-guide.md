@@ -661,7 +661,7 @@ dde-dock 在发现鼠标悬停在插件的控件上时就会调用这个接口�
 
 上面的 tips 显示的控件在鼠标移开之后就会消失，如果插件需要长时间显示一个窗体及时鼠标离开也会保持显示状态来做一些提示或功能的话那就需要使用 applet，applet 控件在左键点击后显示，点击控件以外的其他地方后消失。
 
-applet 控件其实跟 tip 控件一样都是一个普通的 widget，但是可以在 applet 控件中显示交互性的内容，比如按钮，输入框等等。出于篇幅的原因这里 applet 控件就添加交互性的特性了，只用来显示一些文字，所以依然使用一个 lable 控件。
+applet 控件其实跟 tip 控件一样都是一个普通的 widget，但是可以在 applet 控件中显示交互性的内容，比如按钮，输入框等等。出于篇幅的原因这里 applet 控件就没有添加交互性的特性了，只用来显示一些文字，所以依然使用一个 lable 控件。
 
 在插件核心类中添加一个文本控件作为 applet 控件：
 
@@ -727,7 +727,7 @@ QWidget *HomeMonitorPlugin::itemPopupApplet(const QString &itemKey)
 
 ## 支持右键菜单
 
-增减右键菜单功能需要实现以下两个接口：
+增加右键菜单功能需要实现以下两个接口：
 
 - itemContextMenu
 - invokedMenuItem
