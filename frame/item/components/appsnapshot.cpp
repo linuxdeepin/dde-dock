@@ -56,14 +56,14 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_wid(wid)
     , m_title(new TipsWidget)
     , m_waitLeaveTimer(new QTimer(this))
-    , m_closeBtn(new DImageButton)
+    , m_closeBtn2D(new DImageButton)
     , m_wmHelper(DWindowManagerHelper::instance())
 {
-    m_closeBtn->setFixedSize(24, 24);
-    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.svg");
-    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.svg");
-    m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
-    m_closeBtn->setVisible(false);
+    m_closeBtn2D->setFixedSize(24, 24);
+    m_closeBtn2D->setNormalPic(":/icons/resources/close_round_normal.svg");
+    m_closeBtn2D->setHoverPic(":/icons/resources/close_round_hover.svg");
+    m_closeBtn2D->setPressPic(":/icons/resources/close_round_press.svg");
+    m_closeBtn2D->setVisible(false);
     m_title->setObjectName("AppSnapshotTitle");
 
     m_waitLeaveTimer->setInterval(200);
@@ -71,17 +71,17 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_title);
-    centralLayout->addWidget(m_closeBtn);
+    centralLayout->addWidget(m_closeBtn2D);
     centralLayout->setSpacing(5);
     centralLayout->setMargin(0);
 
-    centralLayout->setAlignment(m_closeBtn, Qt::AlignRight);
+    centralLayout->setAlignment(m_closeBtn2D, Qt::AlignRight);
 
     setLayout(centralLayout);
     setAcceptDrops(true);
     resize(SNAP_WIDTH, SNAP_HEIGHT);
 
-    connect(m_closeBtn, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
+    connect(m_closeBtn2D, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
     connect(m_waitLeaveTimer, &QTimer::timeout, this, [=] {
         emit entered(wid);
@@ -205,7 +205,7 @@ void AppSnapshot::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 
     if (!m_wmHelper->hasComposite()) {
-        m_closeBtn->setVisible(true);
+        m_closeBtn2D->setVisible(true);
     }
     else {
         m_waitLeaveTimer->start();
@@ -218,7 +218,7 @@ void AppSnapshot::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
-    m_closeBtn->setVisible(false);
+    m_closeBtn2D->setVisible(false);
     m_waitLeaveTimer->stop();
 
     update();
