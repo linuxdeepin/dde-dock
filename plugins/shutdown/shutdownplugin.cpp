@@ -124,6 +124,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     reboot["isActive"] = true;
     items.push_back(reboot);
 
+#ifndef DISABLE_POWER_OPTIONS
     QMap<QString, QVariant> suspend;
     suspend["itemId"] = "Suspend";
     suspend["itemText"] = tr("Suspend");
@@ -137,6 +138,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         hibernate["isActive"] = true;
         items.push_back(hibernate);
     }
+#endif
 
     QMap<QString, QVariant> lock;
     lock["itemId"] = "Lock";
@@ -159,11 +161,13 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         items.push_back(switchUser);
     }
 
+#ifndef DISABLE_POWER_OPTIONS
     QMap<QString, QVariant> power;
     power["itemId"] = "power";
     power["itemText"] = tr("Power settings");
     power["isActive"] = true;
     items.push_back(power);
+#endif
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;

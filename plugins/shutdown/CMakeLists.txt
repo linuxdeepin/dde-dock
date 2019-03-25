@@ -12,6 +12,10 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
+if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+    add_definitions("-DDISABLE_POWER_OPTIONS")
+endif()
+
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PLUGIN_NAME} SHARED ${SRCS} shutdown.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
