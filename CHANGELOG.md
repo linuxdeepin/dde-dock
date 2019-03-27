@@ -1,3 +1,6 @@
+[3.24.1] 2019-03-27
+*   chore: auto pull translation files from transifex
+
 [3.24.0] 2019-03-15
 *   auto sync po files from transifex
 *   chore: copywriting optimization
