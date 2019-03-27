@@ -152,9 +152,14 @@ void OverlayWarningPlugin::loadPlugin()
 bool OverlayWarningPlugin::isOverlayRoot()
 {
     // ignore live/recovery mode
-    if (QString(QFile("/proc/cmdline").readAll()).contains("boot=live")) {
+    QFile cmdline("/proc/cmdline");
+    cmdline.open(QFile::ReadOnly);
+    QString content(cmdline.readAll());
+    cmdline.close();
+    if (content.contains("boot=live")) {
         return false;
     }
+
     return QString(QStorageInfo::root().fileSystemType()) == OverlayFileSystemType;
 }
 
