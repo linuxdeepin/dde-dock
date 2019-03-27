@@ -8,6 +8,7 @@
 # Charles Monzat <c.monzat@laposte.net>, 2017-2018
 # iderr, 2016
 # lexross <mais@techie.com>, 2016-2017
+# Jean-Philippe Paumier <paumierj@hotmail.com>, 2019
 # Joselito 8, 2018
 # lexross <mais@techie.com>, 2018
 # Quentin D <heziode@protonmail.com>, 2017
@@ -18,8 +19,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 08:34+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-03-22 11:13+0000\n"
+"Last-Translator: Jean-Philippe Paumier <paumierj@hotmail.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,7 +76,7 @@ msgstr "Établit avec succès"
 
 #: ../../appearance/scale.go:73
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Veuillez vous reconnecter pour voir les changements"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -342,21 +343,21 @@ msgstr "L'authentification est requise pour changer la langue"
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Impossible de changer la langue système, veuillez réessayer plus tard"
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Changement de la langue système et installation des composants linguistiques en cours, veuillez patienter..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Changement de la langue système en cours, veuillez patienter..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Langue système changée, veuillez vous déconnecter , puis vous reconnecter"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -528,7 +529,7 @@ msgstr "L'état du périphérique a changé"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Changement de l'état du périphérique, raison inconnue"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -659,7 +660,7 @@ msgstr "Le délai de l'enregistrement sur le réseau est dépassé"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Impossible de s'associer au réseau GSM demandé"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -727,7 +728,7 @@ msgstr "Les périphériques InfiniBand ne supportent pas le mode connecté"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "Une dépendance de la connexion a échoué"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -792,20 +793,20 @@ msgstr "Veuillez vous assurer qu'un plan corect a été sélectionné sans arri�
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Impossible d'activer la connexion VPN, raison inconnue"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Impossible d'activer la connexion VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "L'état de la connnexion VPN a changé du fait d'une déconnexion due aux utilisateurs"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "L'état de la connnexion VPN a changé du fait d'une déconnexion des périphériques"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -829,7 +830,7 @@ msgstr "Le démarrage du service VPN a échoué"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Le mot de passe nécessaire à la connexion VPN n'a pas été fourni"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"

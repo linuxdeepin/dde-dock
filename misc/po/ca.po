@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Jaime Muñoz Martín <jmmartin_5@outlook.com>, 2018
-# Davidmp <medipas@gmail.com>, 2017-2018
+# Davidmp <medipas@gmail.com>, 2017-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 08:34+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-03-19 19:28+0000\n"
+"Last-Translator: Davidmp <medipas@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,7 +67,7 @@ msgstr "Establiment correcte"
 
 #: ../../appearance/scale.go:73
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Si us plau, torneu a entrar per veure'n els canvis."
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -334,21 +334,21 @@ msgstr "Cal autenticació per canviar la llengua."
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més tard."
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Es canvia la llengua del sistema i s'instal·len els paquets de llengua necessaris. Espereu, si us plau..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Es canvia la llengua del sistema. Espereu, si us plau..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "S'ha canviat la llengua del sistema. Si us plau, sortiu de la sessió i torneu-hi a entrar."
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -520,7 +520,7 @@ msgstr "Ha canviat l'estat del dispositiu."
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Ha canviat l'estat del dispositiu. No se'n sap el motiu."
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -651,7 +651,7 @@ msgstr "El registre de xarxa ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Ha fallat connectar-se a la xarxa GSM sol·licitada."
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -719,7 +719,7 @@ msgstr "El dispositiu InfiniBand no admet el mode connectat."
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "Ha fallat una dependència de la connexió."
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -784,20 +784,20 @@ msgstr "Si us plau, assegureu-vos que teniu una contractació correcta sense un 
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Ha fallat activar la connexió de VPN. No se'n sap el motiu."
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Ha fallat activar la connexió de VPN."
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió feta per usuaris."
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió de dispositius."
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -821,7 +821,7 @@ msgstr "El servei de VPN ha fallat l'inici."
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "No s'ha proporcionat la contrasenya de la connexió de VPN."
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"

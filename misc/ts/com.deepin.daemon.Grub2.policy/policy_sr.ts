@@ -14,12 +14,12 @@
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
 			<source>Authentication is required to prepare grub2 display resolution detection</source>
-			<translation type="unfinished"/>
+			<translation>Аутентификација је неопходна за пипрему grub2 откривања резолуције екрана</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>
 			<source>Prepare grub2 display resolution detection</source>
-			<translation type="unfinished"/>
+			<translation>Припрема grub2 откривања резолуције екрана</translation>
 		</message>
 	</context>
 </TS>
