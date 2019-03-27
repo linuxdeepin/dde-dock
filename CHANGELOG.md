@@ -1,3 +1,23 @@
+<a name="4.9.2"></a>
+## 4.9.2 (2019-03-27)
+
+
+#### Bug Fixes
+
+*   cmdline read failed ([10ae2022](https://github.com/linuxdeepin/dde-dock/commit/10ae2022b229c60ab391ddeb5f82f07c788bc6f5))
+*   not detect hotspot enabled ([e4ba1463](https://github.com/linuxdeepin/dde-dock/commit/e4ba1463ffb5d01fd7aae5fb43aa7f76d5b6f038))
+*   close button alignment in 2D mode ([6a45395e](https://github.com/linuxdeepin/dde-dock/commit/6a45395ef6a070378ed3e5ebea4095c79814ed7b))
+*   pixmap be clipped ([4b8e6d89](https://github.com/linuxdeepin/dde-dock/commit/4b8e6d89697644b42a0895f485dbacfb453fb4bb))
+* **preview:**  hovering preview picture size adjust ([6417a625](https://github.com/linuxdeepin/dde-dock/commit/6417a6255c5e5dca94122770a523ed17bcd05fc9))
+
+#### Features
+
+*   add overlay warning plugin ([da3b42a8](https://github.com/linuxdeepin/dde-dock/commit/da3b42a85e879dbbbd0bfd299400cc07c6a75ab7))
+*   enable CMAKE_EXPORT_COMPILE_COMMANDS by default ([f218a3b6](https://github.com/linuxdeepin/dde-dock/commit/f218a3b672d8f066b2a86559676546e5f2621e2a))
+*   add cancel animation for drag to undock operation ([bc4608b8](https://github.com/linuxdeepin/dde-dock/commit/bc4608b858882b0888c947962dff2b87b2f1249d))
+
+
+
 <a name="4.9.1.1"></a>
 ## 4.9.1.1 (2019-03-13)
 
