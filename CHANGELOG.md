@@ -1,3 +1,13 @@
+<a name="4.9.2.1"></a>
+## 4.9.2.1 (2019-03-28)
+
+
+#### Bug Fixes
+
+*   exec pkexec failed cause the Polkit dbus is not startup when just login ([d1642d1f](https://github.com/linuxdeepin/dde-dock/commit/d1642d1f629d9bbe216103881aa5029b3b770a94))
+
+
+
 <a name="4.9.2"></a>
 ## 4.9.2 (2019-03-27)
 
