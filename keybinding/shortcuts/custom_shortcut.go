@@ -52,15 +52,6 @@ func (cs *CustomShortcut) Marshal() (string, error) {
 	return string(bytes), nil
 }
 
-func (cs *CustomShortcut) getKeystrokesStrv() []string {
-	keystrokes := cs.GetKeystrokes()
-	strv := make([]string, len(keystrokes))
-	for i, ks := range keystrokes {
-		strv[i] = ks.String()
-	}
-	return strv
-}
-
 func (cs *CustomShortcut) SaveKeystrokes() error {
 	section := cs.GetId()
 	csm := cs.manager
@@ -77,6 +68,10 @@ func (cs *CustomShortcut) ReloadKeystrokes() bool {
 		return true
 	}
 	return false
+}
+
+func (cs *CustomShortcut) ShouldEmitSignalChanged() bool {
+	return true
 }
 
 func (cs *CustomShortcut) Save() error {
@@ -105,7 +100,10 @@ type CustomShortcutManager struct {
 
 func NewCustomShortcutManager(file string) *CustomShortcutManager {
 	kfile := keyfile.NewKeyFile()
-	kfile.LoadFromFile(file)
+	err := kfile.LoadFromFile(file)
+	if err != nil && !os.IsNotExist(err) {
+		logger.Warning(err)
+	}
 
 	m := &CustomShortcutManager{
 		file:  file,
@@ -141,7 +139,10 @@ func (csm *CustomShortcutManager) List() []Shortcut {
 }
 
 func (csm *CustomShortcutManager) Save() error {
-	os.MkdirAll(filepath.Dir(csm.file), 0755)
+	err := os.MkdirAll(filepath.Dir(csm.file), 0755)
+	if err != nil {
+		return err
+	}
 	return csm.kfile.SaveToFile(csm.file)
 }
 

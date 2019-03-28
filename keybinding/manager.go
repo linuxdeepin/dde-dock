@@ -28,11 +28,12 @@ import (
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -84,6 +85,7 @@ type Manager struct {
 	backlightHelper *backlight.Backlight
 	keyboard        *inputdevices.Keyboard
 	keyboardLayout  string
+	wm              *wm.Wm
 
 	// controllers
 	audioController       *AudioController
@@ -161,7 +163,8 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		return nil, err
 	}
 
-	systemConn, err := dbus.SystemBus()
+	sessionBus := service.Conn()
+	sysBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
@@ -173,8 +176,8 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		keySymbols: keysyms.NewKeySymbols(conn),
 	}
 
-	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
-	m.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
+	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	m.systemSigLoop = dbusutil.NewSignalLoop(sysBus, 10)
 
 	m.gsKeyboard = gio.NewSettings(gsSchemaKeyboard)
 	m.NumLockState.Bind(m.gsKeyboard, gsKeyNumLockState)
@@ -202,25 +205,31 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	// init settings
 	m.gsSystem = gio.NewSettings(gsSchemaSystem)
 	m.gsMediaKey = gio.NewSettings(gsSchemaMediaKey)
-	m.gsGnomeWM = gio.NewSettings(gsSchemaGnomeWM)
 
 	m.shortcutManager = shortcuts.NewShortcutManager(m.conn, m.keySymbols, m.handleKeyEvent)
 	m.shortcutManager.AddSpecial()
 	m.shortcutManager.AddSystem(m.gsSystem)
 	m.shortcutManager.AddMedia(m.gsMediaKey)
-	m.shortcutManager.AddWM(m.gsGnomeWM)
+
+	m.wm = wm.NewWm(sessionBus)
+
+	if shouldUseDDEKwin() {
+		m.shortcutManager.AddKwin(m.wm)
+	} else {
+		m.gsGnomeWM = gio.NewSettings(gsSchemaGnomeWM)
+		m.shortcutManager.AddWM(m.gsGnomeWM)
+	}
 
 	customConfigFilePath := filepath.Join(basedir.GetUserConfigDir(), customConfigFile)
 	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
 	m.shortcutManager.AddCustom(m.customShortcutManager)
 
-	sessionConn := m.sessionConn()
-	m.backlightHelper = backlight.NewBacklight(m.systemConn())
-	m.audioController = NewAudioController(sessionConn, m.backlightHelper)
-	m.mediaPlayerController = NewMediaPlayerController(m.systemSigLoop, sessionConn)
+	m.backlightHelper = backlight.NewBacklight(sysBus)
+	m.audioController = NewAudioController(sessionBus, m.backlightHelper)
+	m.mediaPlayerController = NewMediaPlayerController(m.systemSigLoop, sessionBus)
 
-	m.startManager = sessionmanager.NewStartManager(sessionConn)
-	m.keyboard = inputdevices.NewKeyboard(sessionConn)
+	m.startManager = sessionmanager.NewStartManager(sessionBus)
+	m.keyboard = inputdevices.NewKeyboard(sessionBus)
 	m.keyboard.InitSignalExt(m.sessionSigLoop, true)
 	m.keyboard.CurrentLayout().ConnectChanged(func(hasValue bool, layout string) {
 		if !hasValue {
@@ -233,9 +242,9 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		}
 	})
 
-	m.displayController = NewDisplayController(m.backlightHelper, sessionConn)
+	m.displayController = NewDisplayController(m.backlightHelper, sessionBus)
 	m.kbdLightController = NewKbdLightController(m.backlightHelper)
-	m.touchPadController = NewTouchPadController(sessionConn)
+	m.touchPadController = NewTouchPadController(sessionBus)
 
 	return &m, nil
 }
@@ -315,13 +324,12 @@ func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
 	}
 }
 
-func shouldEmitSignalChanged(shortcut shortcuts.Shortcut) bool {
-	return shortcut.GetType() == shortcuts.ShortcutTypeCustom
-}
-
 func (m *Manager) emitShortcutSignal(signalName string, shortcut shortcuts.Shortcut) {
 	logger.Debug("emit DBus signal", signalName, shortcut.GetId(), shortcut.GetType())
-	m.service.Emit(m, signalName, shortcut.GetId(), shortcut.GetType())
+	err := m.service.Emit(m, signalName, shortcut.GetId(), shortcut.GetType())
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) enableListenGSettingsChanged(val bool) {

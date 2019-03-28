@@ -72,6 +72,15 @@ func (sb *BaseShortcut) GetKeystrokes() []*Keystroke {
 	return sb.Keystrokes
 }
 
+func (sb *BaseShortcut) getKeystrokesStrv() []string {
+	keystrokes := sb.GetKeystrokes()
+	strv := make([]string, len(keystrokes))
+	for i, k := range keystrokes {
+		strv[i] = k.String()
+	}
+	return strv
+}
+
 func (sb *BaseShortcut) setKeystrokes(val []*Keystroke) {
 	sb.mu.Lock()
 	sb.Keystrokes = val
@@ -92,6 +101,10 @@ func (sb *BaseShortcut) GetAction() *Action {
 
 func (sb *BaseShortcut) GetKeystrokesModifiable() bool {
 	return sb.Type != ShortcutTypeFake
+}
+
+func (sb *BaseShortcut) ShouldEmitSignalChanged() bool {
+	return false
 }
 
 const (
@@ -117,6 +130,7 @@ type Shortcut interface {
 
 	GetAction() *Action
 	Marshal() (string, error)
+	ShouldEmitSignalChanged() bool
 }
 
 // errors:

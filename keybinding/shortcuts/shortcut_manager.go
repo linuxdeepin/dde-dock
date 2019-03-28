@@ -20,18 +20,19 @@
 package shortcuts
 
 import (
+	"encoding/json"
 	"strings"
 	"sync"
 	"time"
 
-	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/log"
-
-	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/record"
 	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/lib/log"
 )
 
 var logger *log.Logger
@@ -722,4 +723,37 @@ func (sm *ShortcutManager) AddSpecial() {
 	s0.Name = idNameMap[s0.Id]
 	s0.Keystrokes = []*Keystroke{ks}
 	sm.AddWithoutLock(s0)
+}
+
+type kwinAccel struct {
+	Id         string
+	Keystrokes []string `json:"Accels"`
+}
+
+func (sm *ShortcutManager) AddKwin(wmObj *wm.Wm) {
+	logger.Debug("AddKwin")
+	allJson, err := wmObj.GetAllAccels(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	var v []kwinAccel
+	err = json.Unmarshal([]byte(allJson), &v)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	idNameMap := getWMIdNameMap()
+
+	for _, accel := range v {
+		name := idNameMap[accel.Id]
+		if name == "" {
+			name = accel.Id
+		}
+
+		ks := NewKwinShortcut(accel.Id, name, accel.Keystrokes, wmObj)
+		sm.AddWithoutLock(ks)
+	}
 }

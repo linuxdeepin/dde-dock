@@ -71,7 +71,10 @@ func (m *Manager) Reset() *dbus.Error {
 	resetGSettings(m.gsGnomeWM)
 
 	// disable all custom shortcuts
-	m.customShortcutManager.DisableAll()
+	err := m.customShortcutManager.DisableAll()
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	changes := m.shortcutManager.ReloadAllShortcutsKeystrokes()
 	m.enableListenGSettingsChanged(true)
@@ -154,7 +157,7 @@ func (m *Manager) ClearShortcutKeystrokes(id string, type0 int32) *dbus.Error {
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	if shouldEmitSignalChanged(shortcut) {
+	if shortcut.ShouldEmitSignalChanged() {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	}
 	return nil
@@ -264,7 +267,7 @@ func (m *Manager) AddShortcutKeystroke(id string, type0 int32, keystroke string)
 		if err != nil {
 			return dbusutil.ToError(err)
 		}
-		if shouldEmitSignalChanged(shortcut) {
+		if shortcut.ShouldEmitSignalChanged() {
 			m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 		}
 	} else if conflictKeystroke.Shortcut != shortcut {
@@ -295,7 +298,7 @@ func (m *Manager) DeleteShortcutKeystroke(id string, type0 int32, keystroke stri
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	if shouldEmitSignalChanged(shortcut) {
+	if shortcut.ShouldEmitSignalChanged() {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	}
 	return nil
