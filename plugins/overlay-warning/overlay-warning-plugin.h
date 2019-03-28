@@ -65,12 +65,14 @@ private:
     bool isOverlayRoot();
 
 private slots:
+    void showCloseOverlayDialogPre();
     void showCloseOverlayDialog();
 
 private:
     bool m_pluginLoaded;
 
     PluginWidget *m_warningWidget;
+    QTimer *m_showDisableOverlayDialogTimer;
 };
 
 #endif // SHUTDOWNPLUGIN_H

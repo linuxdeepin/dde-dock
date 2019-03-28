@@ -24,18 +24,27 @@
 
 #include <QIcon>
 #include <QStorageInfo>
+#include <QDBusConnectionInterface>
+#include <QTimer>
 
 #include <ddialog.h>
 
 #define PLUGIN_STATE_KEY    "enable"
 #define OverlayFileSystemType    "overlay"
+#define AuthAgentDbusService "com.deepin.Polkit1AuthAgent"
 
 DWIDGET_USE_NAMESPACE
+
+int WaitingAuthAgentTimes = 0;
 
 OverlayWarningPlugin::OverlayWarningPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_showDisableOverlayDialogTimer(new QTimer(this))
 {
+    m_showDisableOverlayDialogTimer->setInterval(6000);
+
+    connect(m_showDisableOverlayDialogTimer, &QTimer::timeout, this, &OverlayWarningPlugin::showCloseOverlayDialogPre);
 }
 
 const QString OverlayWarningPlugin::pluginName() const
@@ -96,7 +105,7 @@ const QString OverlayWarningPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    showCloseOverlayDialog();
+    m_showDisableOverlayDialogTimer->start(300);
 
     return QString();
 }
@@ -146,7 +155,7 @@ void OverlayWarningPlugin::loadPlugin()
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());
 
-    QTimer::singleShot(3000, this, &OverlayWarningPlugin::showCloseOverlayDialog);
+    QTimer::singleShot(0, m_showDisableOverlayDialogTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
 }
 
 bool OverlayWarningPlugin::isOverlayRoot()
@@ -163,13 +172,35 @@ bool OverlayWarningPlugin::isOverlayRoot()
     return QString(QStorageInfo::root().fileSystemType()) == OverlayFileSystemType;
 }
 
+void OverlayWarningPlugin::showCloseOverlayDialogPre()
+{
+    Q_ASSERT(sender() == m_showDisableOverlayDialogTimer);
+
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(AuthAgentDbusService)) {
+        m_showDisableOverlayDialogTimer->stop();
+        WaitingAuthAgentTimes = 0;
+        showCloseOverlayDialog();
+        return;
+    }
+    WaitingAuthAgentTimes++;
+    qDebug() << "Waiting for AuthAgent service" << WaitingAuthAgentTimes << "times";
+    if (WaitingAuthAgentTimes > 10) {
+        qDebug() << "AuthAgent service timeout...";
+        m_showDisableOverlayDialogTimer->stop();
+        return;
+    }
+}
+
+// Do not call this method directly
+// It should be called by delay timer
+// In order to check the Polkit dbus service is running
 void OverlayWarningPlugin::showCloseOverlayDialog()
 {
+    qDebug() << "start disable overlayroot process";
     const int result = QProcess::execute("/usr/bin/pkexec overlayroot-disable");
-
     if (result == 0) {
         QProcess::startDetached("reboot");
     } else {
-        qDebug() << "close overlayroot failed, the return code is" << result;
+        qDebug() << "disable overlayroot failed, the return code is" << result;
     }
 }
