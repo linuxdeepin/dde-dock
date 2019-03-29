@@ -60,7 +60,6 @@ DockSettings::DockSettings(QWidget *parent)
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_itemController(DockItemController::instance(this))
 {
-    m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
@@ -162,6 +161,17 @@ DockSettings &DockSettings::Instance()
     return settings;
 }
 
+const QRect DockSettings::primaryRect() const
+{
+    QRect rect = m_primaryRawRect;
+    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+
+    rect.setWidth(std::round(qreal(rect.width()) / scale));
+    rect.setHeight(std::round(qreal(rect.height()) / scale));
+
+    return rect;
+}
+
 const QSize DockSettings::panelSize() const
 {
     switch (m_position)
@@ -191,7 +201,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
         }
     }
 
-    const QRect primaryRect = m_primaryRect;
+    const QRect primaryRect = this->primaryRect();
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
 
@@ -404,7 +414,6 @@ void DockSettings::dockItemCountChanged()
 void DockSettings::primaryScreenChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
-    m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
@@ -537,12 +546,12 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER + WINDOW_OVERFLOW);
-            m_mainWindowSize.setWidth(m_primaryRect.width());
+            m_mainWindowSize.setWidth(primaryRect().width());
             break;
 
         case Left:
         case Right:
-            m_mainWindowSize.setHeight(m_primaryRect.height());
+            m_mainWindowSize.setHeight(primaryRect().height());
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER + WINDOW_OVERFLOW);
             break;
 
@@ -570,8 +579,9 @@ void DockSettings::calculateWindowConfig()
 
         const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionTraySize.width();
         const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionTraySize.height();
-        const int maxWidth = m_primaryRect.width() - FASHION_MODE_PADDING * 2;
-        const int maxHeight = m_primaryRect.height() - FASHION_MODE_PADDING * 2;
+        const QRect &primaryRect = this->primaryRect();
+        const int maxWidth = primaryRect.width() - FASHION_MODE_PADDING * 2;
+        const int maxHeight = primaryRect.height() - FASHION_MODE_PADDING * 2;
         const int calcWidth = qMin(maxWidth, perfectWidth);
         const int calcHeight = qMin(maxHeight, perfectHeight);
         switch (m_position)
