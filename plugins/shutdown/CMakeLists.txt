@@ -12,7 +12,7 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+if (${CMAKE_SYSTEM_PROCESSOR}  STREQUAL "aarch64")
     add_definitions("-DDISABLE_POWER_OPTIONS")
 endif()
 
