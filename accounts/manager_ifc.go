@@ -75,16 +75,15 @@ func (m *Manager) CreateUser(sender dbus.Sender,
 		close(ch)
 	}()
 
-	if err := users.CreateUser(name, fullName, "", ty); err != nil {
+	if err := users.CreateUser(name, fullName, ""); err != nil {
 		logger.Warningf("DoAction: create user '%s' failed: %v\n",
 			name, err)
 		return nilObjPath, dbusutil.ToError(err)
 	}
 
-	if err := users.SetUserType(ty, name); err != nil {
-		logger.Warningf("DoAction: set user type '%s' failed: %v\n",
-			name, err)
-		return nilObjPath, dbusutil.ToError(err)
+	err = users.AddToGroups(name)
+	if err != nil {
+		logger.Warningf("failed to add user %s to groups: %v", name, err)
 	}
 
 	// create user success

@@ -163,29 +163,6 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 	return nil
 }
 
-func (u *User) SetAccountType(sender dbus.Sender, ty int32) *dbus.Error {
-	logger.Debug("[SetAccountType] type:", ty)
-
-	err := u.checkAuth(sender, false, polkitActionUserAdministration)
-	if err != nil {
-		logger.Debug("[SetAccountType] access denied:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if u.AccountType != ty {
-		if err := users.SetUserType(ty, u.UserName); err != nil {
-			logger.Warning("DoAction: set user type failed:", err)
-			return dbusutil.ToError(err)
-		}
-		u.AccountType = ty
-		u.emitPropChangedAccountType(ty)
-	}
-	return nil
-}
-
 func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 	logger.Debug("[SetLocked] locked:", locked)
 
