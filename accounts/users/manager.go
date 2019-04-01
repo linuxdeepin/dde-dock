@@ -21,14 +21,8 @@ package users
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"regexp"
-)
-
-const (
-	UserTypeStandard int32 = iota
-	UserTypeAdmin
 )
 
 const (
@@ -40,7 +34,7 @@ const (
 	defaultConfigShell = "/etc/adduser.conf"
 )
 
-func CreateUser(username, fullname, shell string, ty int32) error {
+func CreateUser(username, fullname, shell string) error {
 	if len(username) == 0 {
 		return errInvalidParam
 	}
@@ -62,6 +56,31 @@ func CreateUser(username, fullname, shell string, ty int32) error {
 	return doAction(userCmdAdd, args)
 }
 
+func AddToGroups(username string) error {
+	groups := []string{
+		"lp",
+		"lpadmin",
+		"netdev",
+		"network",
+		"sambashare",
+		"scanner",
+		"storage",
+		"users",
+	}
+	adminGroups, _, _ := getAdmGroupAndUser(userFileSudoers)
+	groups = append(groups, adminGroups...)
+
+	for _, group := range groups {
+		if isGroupExists(group) {
+			err := doAction(userCmdGroup, []string{"-a", username, group})
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func DeleteUser(rmFiles bool, username string) error {
 	var args = []string{"-f"}
 	if rmFiles {
@@ -80,33 +99,6 @@ func LockedUser(locked bool, username string) error {
 		arg = "-U"
 	}
 	return doAction(userCmdModify, []string{arg, username})
-}
-
-func SetUserType(ty int32, username string) error {
-	groups, _, _ := getAdmGroupAndUser(userFileSudoers)
-	if len(groups) == 0 {
-		return fmt.Errorf("No privilege user group exists")
-	}
-	var args []string
-	switch ty {
-	case UserTypeStandard:
-		if !IsAdminUser(username) {
-			return nil
-		}
-
-		// TODO: remove user from all privilege groups
-		args = []string{"-d", username, groups[0]}
-	case UserTypeAdmin:
-		if IsAdminUser(username) {
-			return nil
-		}
-
-		args = []string{"-a", username, groups[0]}
-	default:
-		return errInvalidParam
-	}
-
-	return doAction(userCmdGroup, args)
 }
 
 // Default config: /etc/adduser.conf
