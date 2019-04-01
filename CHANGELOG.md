@@ -1,3 +1,6 @@
+[3.20.0.1] 2019-04-01
+*   fix(accounts): user was not added to some groups when creating user
+
 [3.20.0] 2019-01-14
 *   fix(launcher): panic: assignment to entry in nil map
 *   chore(grub2): add option -setup-theme for compatibility
