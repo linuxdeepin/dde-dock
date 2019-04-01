@@ -160,7 +160,7 @@ func getModifyTaskEnableTheme(enable bool, lang string, gfxmodeDetectState gfxmo
 				// detecting or failed
 				params[grubTheme] = quoteString(fallbackGrubTheme)
 			}
-			delete(params, grubBackground)
+			params[grubBackground] = ""
 		}
 		return modifyTask{
 			paramsModifyFunc: f,
@@ -320,7 +320,8 @@ func NewGrub2(service *dbusutil.Service) *Grub2 {
 	}
 
 	g.applyParams(params)
-	g.modifyManager = newModifyManager(func(running bool) {
+	g.modifyManager = newModifyManager()
+	g.modifyManager.stateChangeCb = func(running bool) {
 		// state change callback
 		if running {
 			g.preventShutdown()
@@ -330,7 +331,7 @@ func NewGrub2(service *dbusutil.Service) *Grub2 {
 		g.PropsMu.Lock()
 		g.setPropUpdating(running)
 		g.PropsMu.Unlock()
-	})
+	}
 	go g.modifyManager.loop()
 
 	// init theme

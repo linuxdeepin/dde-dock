@@ -45,23 +45,22 @@ type modifyManager struct {
 	ch          chan modifyTask
 	modifyTasks []modifyTask
 
-	running     bool
-	stateChange func(running bool)
+	running       bool
+	stateChangeCb func(running bool)
 
 	mu sync.Mutex
 }
 
-func newModifyManager(stateChange func(bool)) *modifyManager {
+func newModifyManager() *modifyManager {
 	m := &modifyManager{
-		ch:          make(chan modifyTask),
-		stateChange: stateChange,
+		ch: make(chan modifyTask),
 	}
 	return m
 }
 
 func (m *modifyManager) notifyStateChange() {
-	if m.stateChange != nil {
-		m.stateChange(m.running)
+	if m.stateChangeCb != nil {
+		m.stateChangeCb(m.running)
 	}
 }
 
