@@ -129,6 +129,11 @@ func (m *Manager) setScreenScaleFactors(factors map[string]float64) error {
 		}
 	}
 
+	err := m.greeter.SetScreenScaleFactors(0, factors)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	return nil
 }
 

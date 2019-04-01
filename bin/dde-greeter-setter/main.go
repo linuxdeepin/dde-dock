@@ -37,7 +37,6 @@ func main() {
 
 	var m = &Manager{
 		service: service,
-		quit:    true,
 	}
 
 	err = service.Export(dbusPath, m)
@@ -51,7 +50,7 @@ func main() {
 		logger.Errorf("failed to request name:", err)
 		return
 	}
-	service.SetAutoQuitHandler(time.Second*30, m.canQuit)
+	service.SetAutoQuitHandler(time.Second*30, nil)
 	service.Wait()
 	return
 }

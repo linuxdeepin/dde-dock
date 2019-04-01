@@ -20,12 +20,13 @@
 package main
 
 import (
+	"encoding/json"
+	"os"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
-	"pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -36,29 +37,39 @@ const (
 	greeterConfigFile = "/etc/lightdm/lightdm-deepin-greeter.conf"
 	kfGroupGeneral    = "General"
 	kfKeyScaleFactor  = "ScreenScaleFactor"
+	kfKeyScaleFactors = "ScreenScaleFactors"
 )
 
 type Manager struct {
 	service *dbusutil.Service
-	quit    bool
-	locker  sync.Mutex
+	mu      sync.Mutex
+	kf      *keyfile.KeyFile
 
 	methods *struct {
-		SetScaleFactor func() `in:"factor"`
-		GetScaleFactor func() `out:"factor"`
+		SetScaleFactor        func() `in:"factor"`
+		GetScaleFactor        func() `out:"factor"`
+		SetScreenScaleFactors func() `in:"factors"`
+		GetScreenScaleFactors func() `out:"factors"`
 	}
 }
 
-func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
-	m.setQuitFlag(false)
-	defer m.setQuitFlag(true)
-	m.service.DelayAutoQuit()
-
-	kf, err := newKeyfile(greeterConfigFile)
-	if err != nil {
-		return dbusutil.ToError(err)
+func (m *Manager) getKeyFile() *keyfile.KeyFile {
+	if m.kf == nil {
+		m.kf = keyfile.NewKeyFile()
+		err := m.kf.LoadFromFile(greeterConfigFile)
+		if err != nil && !os.IsNotExist(err) {
+			logger.Warning(err)
+		}
 	}
+	return m.kf
+}
 
+func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
+	m.service.DelayAutoQuit()
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	kf := m.getKeyFile()
 	value, err := kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
 	if err == nil && (value > scale-0.01 && value < scale+0.01) {
 		return nil
@@ -69,57 +80,59 @@ func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
 }
 
 func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
-	m.setQuitFlag(false)
-	defer m.setQuitFlag(true)
 	m.service.DelayAutoQuit()
+	m.mu.Lock()
+	defer m.mu.Unlock()
 
-	kf, err := newKeyfile(greeterConfigFile)
-	if err != nil {
-		return 0, dbusutil.ToError(err)
-	}
-
+	kf := m.getKeyFile()
 	value, err := kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
 	if err != nil {
-		return 0, dbusutil.ToError(err)
+		return 1, nil
 	}
 	return value, nil
 }
 
+func (m *Manager) GetScreenScaleFactors() (map[string]float64, *dbus.Error) {
+	m.service.DelayAutoQuit()
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	var factors map[string]float64
+	kf := m.getKeyFile()
+	value, err := kf.GetString(kfGroupGeneral, kfKeyScaleFactors)
+	if err != nil {
+		logger.Warning(err)
+		return nil, nil
+	}
+	err = json.Unmarshal([]byte(value), &factors)
+	if err != nil {
+		logger.Warning(err)
+		return nil, dbusutil.ToError(err)
+	}
+
+	return factors, nil
+}
+
+func (m *Manager) SetScreenScaleFactors(factors map[string]float64) *dbus.Error {
+	m.service.DelayAutoQuit()
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	kf := m.getKeyFile()
+	value, err := json.Marshal(factors)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+	kf.SetString(kfGroupGeneral, kfKeyScaleFactors, string(value))
+	err = kf.SaveToFile(greeterConfigFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
 func (*Manager) GetInterfaceName() string {
 	return dbusInterface
-}
-
-func (m *Manager) setQuitFlag(v bool) {
-	m.locker.Lock()
-	m.quit = v
-	m.locker.Unlock()
-}
-
-func (m *Manager) canQuit() bool {
-	m.locker.Lock()
-	defer m.locker.Unlock()
-	return m.quit
-}
-
-var _kf *keyfile.KeyFile
-
-func newKeyfile(file string) (*keyfile.KeyFile, error) {
-	if _kf != nil {
-		return _kf, nil
-	}
-
-	if !utils.IsFileExist(file) {
-		err := utils.CreateFile(file)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	_kf = keyfile.NewKeyFile()
-	err := _kf.LoadFromFile(file)
-	if err != nil {
-		_kf = nil
-		return nil, err
-	}
-	return _kf, nil
 }

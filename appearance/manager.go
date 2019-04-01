@@ -32,6 +32,7 @@ import (
 	"time"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.greeter"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
@@ -127,6 +128,7 @@ type Manager struct {
 	imageBlur     *accounts.ImageBlur
 	xSettings     *sessionmanager.XSettings
 	login1Manager *login1.Manager
+	greeter       *greeter.Greeter
 
 	setting        *gio.Settings
 	xSettingsGs    *gio.Settings
@@ -373,6 +375,7 @@ func (m *Manager) init() error {
 
 	m.wm = wm.NewWm(sessionBus)
 	m.imageBlur = accounts.NewImageBlur(systemBus)
+	m.greeter = greeter.NewGreeter(systemBus)
 
 	m.xSettings = sessionmanager.NewXSettings(sessionBus)
 	theme_thumb.Init(m.getScaleFactor())
