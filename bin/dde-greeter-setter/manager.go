@@ -20,8 +20,10 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"os"
+	"strconv"
+	"strings"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
@@ -97,19 +99,18 @@ func (m *Manager) GetScreenScaleFactors() (map[string]float64, *dbus.Error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	var factors map[string]float64
 	kf := m.getKeyFile()
-	value, err := kf.GetString(kfGroupGeneral, kfKeyScaleFactors)
+	value, err := kf.GetValue(kfGroupGeneral, kfKeyScaleFactors)
 	if err != nil {
 		logger.Warning(err)
 		return nil, nil
 	}
-	err = json.Unmarshal([]byte(value), &factors)
+	value, err = strconv.Unquote(value)
 	if err != nil {
 		logger.Warning(err)
-		return nil, dbusutil.ToError(err)
+		return nil, nil
 	}
-
+	factors := parseIndividualScaling(value)
 	return factors, nil
 }
 
@@ -119,13 +120,10 @@ func (m *Manager) SetScreenScaleFactors(factors map[string]float64) *dbus.Error 
 	defer m.mu.Unlock()
 
 	kf := m.getKeyFile()
-	value, err := json.Marshal(factors)
-	if err != nil {
-		logger.Warning(err)
-		return dbusutil.ToError(err)
-	}
-	kf.SetString(kfGroupGeneral, kfKeyScaleFactors, string(value))
-	err = kf.SaveToFile(greeterConfigFile)
+	value := joinIndividualScaling(factors)
+	value = strconv.Quote(value)
+	kf.SetValue(kfGroupGeneral, kfKeyScaleFactors, value)
+	err := kf.SaveToFile(greeterConfigFile)
 	if err != nil {
 		logger.Warning(err)
 		return dbusutil.ToError(err)
@@ -135,4 +133,35 @@ func (m *Manager) SetScreenScaleFactors(factors map[string]float64) *dbus.Error 
 
 func (*Manager) GetInterfaceName() string {
 	return dbusInterface
+}
+
+func parseIndividualScaling(str string) map[string]float64 {
+	pairs := strings.Split(str, ";")
+	result := make(map[string]float64)
+	for _, value := range pairs {
+		kv := strings.SplitN(value, "=", 2)
+		if len(kv) != 2 {
+			continue
+		}
+
+		value, err := strconv.ParseFloat(kv[1], 64)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+
+		result[kv[0]] = value
+	}
+
+	return result
+}
+
+func joinIndividualScaling(v map[string]float64) string {
+	pairs := make([]string, len(v))
+	idx := 0
+	for key, value := range v {
+		pairs[idx] = fmt.Sprintf("%s=%.2f", key, value)
+		idx++
+	}
+	return strings.Join(pairs, ";")
 }
