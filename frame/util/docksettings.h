@@ -65,15 +65,13 @@ public:
     inline HideMode hideMode() const { return m_hideMode; }
     inline HideState hideState() const { return m_hideState; }
     inline Position position() const { return m_position; }
-    inline int screenHeight() const { return m_displayInter->screenHeight(); }
-    inline int screenWidth() const { return m_displayInter->screenWidth(); }
     inline int screenRawHeight() const { return m_screenRawHeight; }
     inline int screenRawWidth() const { return m_screenRawWidth; }
     inline int expandTimeout() const { return m_dockInter->showTimeout(); }
     inline int narrowTimeout() const { return 100; }
     inline bool autoHide() const { return m_autoHide; }
     inline bool isMaxSize() const { return m_isMaxSize; }
-    inline const QRect primaryRect() const { return m_primaryRect; }
+    const QRect primaryRect() const;
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
     inline const QRect frontendWindowRect() const { return m_frontendRect; }
     inline const QSize windowSize() const { return m_mainWindowSize; }
@@ -134,7 +132,6 @@ private:
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
-    QRect m_primaryRect;
     QRect m_primaryRawRect;
     QRect m_frontendRect;
     QSize m_mainWindowSize;

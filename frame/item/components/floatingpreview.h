@@ -38,6 +38,7 @@ public:
     explicit FloatingPreview(QWidget *parent = 0);
 
     WId trackedWid() const;
+    AppSnapshot *trackedWindow();
 
 signals:
     void requestMove(const QPoint &p) const;
@@ -46,9 +47,10 @@ public slots:
     void trackWindow(AppSnapshot * const snap);
 
 private:
-    void paintEvent(QPaintEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    bool eventFilter(QObject *watched, QEvent *event);
+    void paintEvent(QPaintEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private slots:
     void onCloseBtnClicked();
@@ -56,7 +58,7 @@ private slots:
 private:
     QPointer<AppSnapshot> m_tracked;
 
-    DImageButton *m_closeBtn;
+    DImageButton *m_closeBtn3D;
 };
 
 #endif // FLOATINGPREVIEW_H

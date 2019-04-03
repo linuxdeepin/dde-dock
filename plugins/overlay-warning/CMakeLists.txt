@@ -1,5 +1,5 @@
 
-set(PLUGIN_NAME "shutdown")
+set(PLUGIN_NAME "overlay-warning")
 
 project(${PLUGIN_NAME})
 
@@ -12,12 +12,8 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-if (${CMAKE_SYSTEM_PROCESSOR}  STREQUAL "aarch64")
-    add_definitions("-DDISABLE_POWER_OPTIONS")
-endif()
-
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} shutdown.qrc)
+add_library(${PLUGIN_NAME} SHARED ${SRCS} overlay-warning.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
@@ -29,3 +25,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
+
+# policy kit
+install(FILES com.deepin.dde.dock.overlay.policy
+        DESTINATION share/polkit-1/actions/)

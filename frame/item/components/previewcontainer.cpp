@@ -185,6 +185,7 @@ void PreviewContainer::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
+    m_floatingPreview->setVisible(false);
     m_mouseLeaveTimer->start();
 }
 
@@ -213,10 +214,21 @@ void PreviewContainer::previewEntered(const WId wid)
         return;
 
     AppSnapshot *snap = static_cast<AppSnapshot *>(sender());
+    if (!snap) {
+        return;
+    }
+    snap->setContentsMargins(100, 0, 100, 0);
 
-    m_floatingPreview->trackWindow(snap);
-    m_floatingPreview->setVisible(true);
-    m_floatingPreview->raise();
+    AppSnapshot *preSnap = m_floatingPreview->trackedWindow();
+    if (preSnap && preSnap != snap) {
+        preSnap->setContentsMargins(0, 0, 0, 0);
+    }
+
+    QTimer::singleShot(0, [=] {
+        m_floatingPreview->trackWindow(snap);
+        m_floatingPreview->setVisible(true);
+        m_floatingPreview->raise();
+    });
 
     emit requestPreviewWindow(wid);
 }

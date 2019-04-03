@@ -70,6 +70,7 @@ private slots:
     void updateIndicatorPos();
     void onActiveConnectionInfoChanged();
     void onActivateApFailed(const QString &apPath, const QString &uuid);
+    void onHotspotEnabledChanged(const bool enabled);
 
 private:
     AccessPoint accessPointBySsid(const QString &ssid);
@@ -80,6 +81,7 @@ private:
 
     AccessPoint m_activeAP;
     AccessPoint m_activatingAP;
+    AccessPoint m_activeHotspotAP;
     QList<AccessPoint> m_apList;
     QList<AccessPointWidget*> m_apwList;
 

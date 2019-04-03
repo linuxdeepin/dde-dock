@@ -21,8 +21,8 @@ Build-Depends: debhelper (>= 8.0.0),
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
  cmake,
- libdde-network-utils-dev (>= 0.1.0),
- libdde-network-utils-dev (<< 0.1.1),
+ libdde-network-utils-dev (>= 0.1.1),
+ libdde-network-utils-dev (<< 0.1.2),
  libdbusmenu-qt5-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Deepin</vendor>
+  <action id="com.deepin.dde.dock.overlay">
+    <icon_name>dialog-warning</icon_name>
+    <message>The system is in overlay mode, and all your work will not be saved. Do you want to exit this mode and restart?</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <message xml:lang="zh_CN">本次启动处于 overlay 保护模式下，您的所有操作将不会被保存，是否要关闭此模式并重启？</message>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/sbin/overlayroot-disable</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+</policyconfig>
