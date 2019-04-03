@@ -27,38 +27,31 @@ import (
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/keyfile"
 )
-
-const plymouthConfig = "/etc/plymouth/plymouthd.conf"
 
 var plymouthLocker sync.Mutex
 
 func (*Daemon) ScalePlymouth(scale uint32) *dbus.Error {
 	plymouthLocker.Lock()
 	defer plymouthLocker.Unlock()
+
+	logger.Debug("ScalePlymouth", scale)
+	defer logger.Debug("end ScalePlymouth", scale)
+
 	var (
 		out []byte
 		err error
 	)
 
 	// TODO: inhibit poweroff
-	theme, e := getPlymouthTheme(plymouthConfig)
-	logger.Debug("The current plymouth theme:", theme, e)
 	switch scale {
 	case 1:
-		if theme == "deepin-logo" || theme == "deepin-ssd-logo" {
-			return nil
-		}
 		var name = "deepin-logo"
 		if isSSD() {
 			name = "deepin-ssd-logo"
 		}
 		out, err = exec.Command("plymouth-set-default-theme", name).CombinedOutput()
 	case 2:
-		if theme == "deepin-hidpi-logo" {
-			return nil
-		}
 		var name = "deepin-hidpi-logo"
 		if isSSD() {
 			name = "deepin-hidpi-ssd-logo"
@@ -83,16 +76,6 @@ func (*Daemon) ScalePlymouth(scale uint32) *dbus.Error {
 	}
 	logger.Debug("Plymouth update result:", string(out))
 	return nil
-}
-
-func getPlymouthTheme(file string) (string, error) {
-	var kf = keyfile.NewKeyFile()
-	err := kf.LoadFromFile(file)
-	if err != nil {
-		return "", err
-	}
-
-	return kf.GetString("Daemon", "Theme")
 }
 
 var _ssd = -1

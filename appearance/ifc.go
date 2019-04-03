@@ -255,5 +255,6 @@ func (m *Manager) SetScreenScaleFactors(v map[string]float64) *dbus.Error {
 }
 
 func (m *Manager) GetScreenScaleFactors() (map[string]float64, *dbus.Error) {
-	return m.getScreenScaleFactors(), nil
+	v, err := m.getScreenScaleFactors()
+	return v, dbusutil.ToError(err)
 }

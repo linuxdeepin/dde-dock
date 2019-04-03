@@ -20,148 +20,57 @@
 package main
 
 import (
-	"fmt"
+	"io"
 	"os"
-	"strconv"
-	"strings"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/keyfile"
 )
 
 const (
 	dbusServiceName = "com.deepin.daemon.Greeter"
 	dbusPath        = "/com/deepin/daemon/Greeter"
 	dbusInterface   = dbusServiceName
-
-	greeterConfigFile = "/etc/lightdm/lightdm-deepin-greeter.conf"
-	kfGroupGeneral    = "General"
-	kfKeyScaleFactor  = "ScreenScaleFactor"
-	kfKeyScaleFactors = "ScreenScaleFactors"
 )
 
 type Manager struct {
 	service *dbusutil.Service
 	mu      sync.Mutex
-	kf      *keyfile.KeyFile
 
 	methods *struct {
-		SetScaleFactor        func() `in:"factor"`
-		GetScaleFactor        func() `out:"factor"`
-		SetScreenScaleFactors func() `in:"factors"`
-		GetScreenScaleFactors func() `out:"factors"`
+		UpdateGreeterQtTheme func() `in:"fd"`
 	}
 }
 
-func (m *Manager) getKeyFile() *keyfile.KeyFile {
-	if m.kf == nil {
-		m.kf = keyfile.NewKeyFile()
-		err := m.kf.LoadFromFile(greeterConfigFile)
-		if err != nil && !os.IsNotExist(err) {
-			logger.Warning(err)
-		}
-	}
-	return m.kf
-}
-
-func (m *Manager) SetScaleFactor(scale float64) *dbus.Error {
+func (m *Manager) UpdateGreeterQtTheme(fd dbus.UnixFD) *dbus.Error {
 	m.service.DelayAutoQuit()
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	kf := m.getKeyFile()
-	value, err := kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
-	if err == nil && (value > scale-0.01 && value < scale+0.01) {
-		return nil
-	}
-	kf.SetFloat64(kfGroupGeneral, kfKeyScaleFactor, scale)
-	err = kf.SaveToFile(greeterConfigFile)
+	err := updateGreeterQtTheme(fd)
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) GetScaleFactor() (float64, *dbus.Error) {
-	m.service.DelayAutoQuit()
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	kf := m.getKeyFile()
-	value, err := kf.GetFloat64(kfGroupGeneral, kfKeyScaleFactor)
+func updateGreeterQtTheme(fd dbus.UnixFD) error {
+	f := os.NewFile(uintptr(fd), "")
+	defer f.Close()
+	err := os.MkdirAll("/etc/lightdm/deepin", 0755)
 	if err != nil {
-		return 1, nil
+		return err
 	}
-	return value, nil
-}
-
-func (m *Manager) GetScreenScaleFactors() (map[string]float64, *dbus.Error) {
-	m.service.DelayAutoQuit()
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	kf := m.getKeyFile()
-	value, err := kf.GetValue(kfGroupGeneral, kfKeyScaleFactors)
+	const (
+		themeFile     = "/etc/lightdm/deepin/qt-theme.ini"
+		themeFileTemp = themeFile + ".tmp"
+	)
+	dest, err := os.Create(themeFileTemp)
+	// limit file size: 100KB
+	src := io.LimitReader(f, 1024*100)
+	_, err = io.Copy(dest, src)
 	if err != nil {
-		logger.Warning(err)
-		return nil, nil
+		return err
 	}
-	value, err = strconv.Unquote(value)
-	if err != nil {
-		logger.Warning(err)
-		return nil, nil
-	}
-	factors := parseIndividualScaling(value)
-	return factors, nil
-}
-
-func (m *Manager) SetScreenScaleFactors(factors map[string]float64) *dbus.Error {
-	m.service.DelayAutoQuit()
-	m.mu.Lock()
-	defer m.mu.Unlock()
-
-	kf := m.getKeyFile()
-	value := joinIndividualScaling(factors)
-	value = strconv.Quote(value)
-	kf.SetValue(kfGroupGeneral, kfKeyScaleFactors, value)
-	err := kf.SaveToFile(greeterConfigFile)
-	if err != nil {
-		logger.Warning(err)
-		return dbusutil.ToError(err)
-	}
-	return nil
+	err = os.Rename(themeFileTemp, themeFile)
+	return err
 }
 
 func (*Manager) GetInterfaceName() string {
 	return dbusInterface
-}
-
-func parseIndividualScaling(str string) map[string]float64 {
-	pairs := strings.Split(str, ";")
-	result := make(map[string]float64)
-	for _, value := range pairs {
-		kv := strings.SplitN(value, "=", 2)
-		if len(kv) != 2 {
-			continue
-		}
-
-		value, err := strconv.ParseFloat(kv[1], 64)
-		if err != nil {
-			logger.Warning(err)
-			continue
-		}
-
-		result[kv[0]] = value
-	}
-
-	return result
-}
-
-func joinIndividualScaling(v map[string]float64) string {
-	pairs := make([]string, len(v))
-	idx := 0
-	for key, value := range v {
-		pairs[idx] = fmt.Sprintf("%s=%.2f", key, value)
-		idx++
-	}
-	return strings.Join(pairs, ";")
 }
