@@ -9,7 +9,7 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation>Cambia la configuración de grub2</translation>
+			<translation>Cambiar la configuración de grub2</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>

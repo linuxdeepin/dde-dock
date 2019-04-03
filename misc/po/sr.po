@@ -4,15 +4,15 @@
 # 
 # Translators:
 # kolera <koleramilan@gmail.com>, 2017
-# Један Пријатељ <3acejax@gmail.com>, 2018-2019
-# Један Пријатељ <3acejax@gmail.com>, 2018-2019
+# Марко Пејовић <3acejax@gmail.com>, 2018-2019
+# Марко Пејовић <3acejax@gmail.com>, 2018-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-13 16:06+0800\n"
 "PO-Revision-Date: 2019-03-17 09:01+0000\n"
-"Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
+"Last-Translator: Марко Пејовић <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
