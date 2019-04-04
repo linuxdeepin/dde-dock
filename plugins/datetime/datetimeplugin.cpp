@@ -79,10 +79,7 @@ void DatetimePlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
-    if (!pluginIsDisable())
-        m_proxyInter->itemAdded(this, pluginName());
-    else
-        m_proxyInter->itemRemoved(this, pluginName());
+    refreshPluginItemsVisible();
 }
 
 bool DatetimePlugin::pluginIsDisable()
@@ -183,6 +180,13 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     }
 }
 
+void DatetimePlugin::pluginSettingsChanged()
+{
+    m_centralWidget->set24HourFormat(m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool());
+
+    refreshPluginItemsVisible();
+}
+
 void DatetimePlugin::updateCurrentTimeString()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
@@ -199,4 +203,12 @@ void DatetimePlugin::updateCurrentTimeString()
 
     m_currentTimeString = currentString;
     m_centralWidget->update();
+}
+
+void DatetimePlugin::refreshPluginItemsVisible()
+{
+    if (!pluginIsDisable())
+        m_proxyInter->itemAdded(this, pluginName());
+    else
+        m_proxyInter->itemRemoved(this, pluginName());
 }

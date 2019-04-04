@@ -24,6 +24,9 @@
 
 #include "systemtrayitem.h"
 #include "pluginproxyinterface.h"
+#include "util/abstractpluginscontroller.h"
+
+#include <com_deepin_dde_daemon_dock.h>
 
 #include <QPluginLoader>
 #include <QList>
@@ -31,7 +34,7 @@
 #include <QDBusConnectionInterface>
 
 class PluginsItemInterface;
-class SystemTraysController : public QObject, PluginProxyInterface
+class SystemTraysController : public AbstractPluginsController
 {
     Q_OBJECT
 
@@ -45,8 +48,6 @@ public:
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) Q_DECL_OVERRIDE;
-    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) Q_DECL_OVERRIDE;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) Q_DECL_OVERRIDE;
 
     int systemTrayItemSortKey(const QString &itemKey);
     void setSystemTrayItemSortKey(const QString &itemKey, const int order);
@@ -54,31 +55,12 @@ public:
     const QVariant getValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant& fallback = QVariant());
     void saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value);
 
-public slots:
     void startLoader();
 
 signals:
-    void systemTrayAdded(const QString &itemKey, AbstractTrayWidget *trayWidget) const;
-    void systemTrayRemoved(const QString &itemKey) const;
-    void systemTrayUpdated(const QString &itemKey) const;
-
-private slots:
-    void displayModeChanged();
-    void positionChanged();
-    void loadPlugin(const QString &pluginFile);
-    void initPlugin(PluginsItemInterface *interface);
-
-private:
-    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
-    SystemTrayItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
-    PluginsItemInterface *pluginInterAt(const QString &itemKey) const;
-    PluginsItemInterface *pluginInterAt(SystemTrayItem *systemTrayItem) const;
-
-private:
-    QDBusConnectionInterface *m_dbusDaemonInterface;
-    QMap<PluginsItemInterface *, QMap<QString, SystemTrayItem *>> m_pluginsMap;
-
-    QSettings m_pluginsSetting;
+    void pluginItemAdded(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
+    void pluginItemRemoved(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
+    void pluginItemUpdated(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
 };
 
 #endif // SYSTEMTRAYSCONTROLLER_H

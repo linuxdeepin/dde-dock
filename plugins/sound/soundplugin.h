@@ -48,6 +48,10 @@ public:
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
+    void pluginSettingsChanged() override;
+
+private:
+    void refreshPluginItemsVisible();
 
 private:
     SoundItem *m_soundItem;

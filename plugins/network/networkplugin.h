@@ -54,12 +54,15 @@ public:
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
+    void pluginSettingsChanged() override;
+
     static bool isConnectivity();
 
 private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
     void refreshWiredItemVisible();
     void onItemRequestSetAppletVisible(const bool visible);
+    void refreshPluginItemsVisible();
 
 private:
     DeviceItem *itemByPath(const QString &path);

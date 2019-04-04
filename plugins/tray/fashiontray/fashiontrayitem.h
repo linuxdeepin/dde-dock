@@ -60,6 +60,7 @@ public slots:
     void onExpandChanged(const bool expand);
     void setSuggestIconSize(QSize size);
     void setRightSplitVisible(const bool visible);
+    void onPluginSettingsChanged();
 
 protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;

@@ -29,7 +29,7 @@ HoldContainer::HoldContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
 bool HoldContainer::acceptWrapper(FashionTrayWidgetWrapper *wrapper)
 {
-    const QString &key = wrapper->absTrayWidget()->itemKeyForConfig() + HoldKeySuffix;
+    const QString &key = HoldKeyPrefix + wrapper->absTrayWidget()->itemKeyForConfig();
 
     return trayPlugin()->getValue(wrapper->itemKey(), key, false).toBool();
 }
@@ -39,7 +39,7 @@ void HoldContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
     AbstractContainer::addWrapper(wrapper);
 
     if (containsWrapper(wrapper)) {
-        const QString &key = wrapper->absTrayWidget()->itemKeyForConfig() + HoldKeySuffix;
+        const QString &key = HoldKeyPrefix + wrapper->absTrayWidget()->itemKeyForConfig();
         trayPlugin()->saveValue(wrapper->itemKey(), key, true);
     }
 }

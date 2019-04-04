@@ -19,17 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYSTEMTRAYLOADER_H
-#define SYSTEMTRAYLOADER_H
+#ifndef PLUGINLOADER_H
+#define PLUGINLOADER_H
 
 #include <QThread>
 
-class SystemTrayLoader : public QThread
+class PluginLoader : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit SystemTrayLoader(QObject *parent);
+    explicit PluginLoader(const QString &pluginDirPath, QObject *parent);
 
 signals:
     void finished() const;
@@ -37,6 +37,9 @@ signals:
 
 protected:
     void run();
+
+private:
+    QString m_pluginDirPath;
 };
 
-#endif // SYSTEMTRAYLOADER_H
+#endif // PLUGINLOADER_H
