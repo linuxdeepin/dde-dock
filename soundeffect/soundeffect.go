@@ -29,31 +29,46 @@ import (
 
 var logger = log.NewLogger("daemon/soundeffect")
 
-func Run() {
+func run() error {
 	service, err := dbusutil.NewSessionService()
 	if err != nil {
-		logger.Fatal("failed to new session service:", err)
+		return err
 	}
 	m := NewManager(service)
 	err = m.init()
 	if err != nil {
-		logger.Fatal(err)
+		return err
 	}
 
-	err = service.Export(dbusPath, m)
+	gsettings.StartMonitor()
+
+	serverObj, err := service.NewServerObject(dbusPath, m)
 	if err != nil {
-		logger.Fatal("failed to export:", err)
+		return err
 	}
 
-	err = gsettings.StartMonitor()
+	err = serverObj.SetWriteCallback(m, "Enabled", m.enabledWriteCb)
 	if err != nil {
-		logger.Fatal("failed to start monitor gsettings changed:", err)
+		return err
 	}
+	err = serverObj.Export()
+	if err != nil {
+		return err
+	}
+
 	err = service.RequestName(DBusServiceName)
 	if err != nil {
-		logger.Fatal("failed to request name:", err)
+		return err
 	}
 
 	service.SetAutoQuitHandler(30*time.Second, m.canQuit)
 	service.Wait()
+	return nil
+}
+
+func Run() {
+	err := run()
+	if err != nil {
+		logger.Fatal(err)
+	}
 }

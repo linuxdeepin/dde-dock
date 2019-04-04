@@ -194,7 +194,7 @@ func (m *Manager) EnableSound(name string, enabled bool) *dbus.Error {
 		return dbusutil.ToError(errors.New("invalid sound event"))
 	}
 
-	if name == "desktop-login" {
+	if name == soundutils.EventDesktopLogin {
 		err := m.syncConfigToSoundThemePlayer(enabled)
 		if err != nil {
 			return dbusutil.ToError(err)
@@ -219,4 +219,18 @@ func (m *Manager) GetSoundEnabledMap() (map[string]bool, *dbus.Error) {
 		result[name] = m.soundEffectGs.GetBoolean(name)
 	}
 	return result, nil
+}
+
+func (m *Manager) enabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
+	enabled := write.Value.(bool)
+
+	loginEnabled := false
+	if enabled {
+		loginEnabled = m.soundEffectGs.GetBoolean(soundutils.EventDesktopLogin)
+	}
+	err := m.syncConfigToSoundThemePlayer(loginEnabled)
+	if err != nil {
+		logger.Warning(err)
+	}
+	return nil
 }
