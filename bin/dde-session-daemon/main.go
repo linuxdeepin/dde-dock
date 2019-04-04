@@ -34,6 +34,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
+	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/dde/api/userenv"
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
@@ -158,6 +160,11 @@ func main() {
 		logger.Warning("failed to migrate user env:", err)
 	}
 
+	err = syncConfigToSoundThemePlayer()
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	if needRunMainLoop {
 		runMainLoop()
 	}
@@ -257,5 +264,16 @@ func savePamEnv(filename string, pamEnv []pamEnvKeyValue) error {
 	}
 
 	err = bw.Flush()
+	return err
+}
+
+func syncConfigToSoundThemePlayer() error {
+	sysBus, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+	loginEnabled := soundutils.CanPlayEvent(soundutils.EventDesktopLogin)
+	player := soundthemeplayer.NewSoundThemePlayer(sysBus)
+	err = player.EnableSoundDesktopLogin(0, loginEnabled)
 	return err
 }
