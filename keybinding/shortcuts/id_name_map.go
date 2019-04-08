@@ -30,7 +30,7 @@ func getSystemIdNameMap() map[string]string {
 		"deepin-screen-recorder": gettext.Tr("Deepin Screen Recorder"),
 		"lock-screen":            gettext.Tr("Lock screen"),
 		"show-dock":              gettext.Tr("Show/Hide the dock"),
-		"logout":                 gettext.Tr("Shutdown Interface"),
+		"logout":                 gettext.Tr("Shutdown interface"),
 		"terminal-quake":         gettext.Tr("Terminal Quake Window"),
 		"screenshot":             gettext.Tr("Screenshot"),
 		"screenshot-fullscreen":  gettext.Tr("Full screenshot"),

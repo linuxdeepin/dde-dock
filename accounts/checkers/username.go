@@ -23,10 +23,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/user"
-	. "pkg.deepin.io/lib/gettext"
 	"regexp"
 	"strconv"
 	"strings"
+
+	. "pkg.deepin.io/lib/gettext"
 )
 
 const (
@@ -56,15 +57,15 @@ func (code ErrorCode) Error() *ErrorInfo {
 	var err error
 	switch code {
 	case ErrCodeEmpty:
-		err = fmt.Errorf(Tr("Username can not be empty."))
+		err = fmt.Errorf(Tr("Username cannot be empty"))
 	case ErrCodeInvalidChar:
-		err = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _."))
+		err = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _"))
 	case ErrCodeFirstNotLower:
-		err = fmt.Errorf(Tr("The first character must be in lower case."))
+		err = fmt.Errorf(Tr("The first character must be in lower case"))
 	case ErrCodeExist:
-		err = fmt.Errorf(Tr("The username exists."))
+		err = fmt.Errorf(Tr("The username exists"))
 	case ErrCodeSystemUsed:
-		err = fmt.Errorf(Tr("The username has been used by system."))
+		err = fmt.Errorf(Tr("The username has been used by system"))
 	case ErrCodeLenMoreThen:
 		err = fmt.Errorf(Tr("The username's length exceeds the limit"))
 	default:
