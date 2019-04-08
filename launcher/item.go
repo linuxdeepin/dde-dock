@@ -62,14 +62,21 @@ func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
 	enName, _ := appInfo.GetString(desktopappinfo.MainSection, desktopappinfo.KeyName)
 	enComment, _ := appInfo.GetString(desktopappinfo.MainSection, desktopappinfo.KeyComment)
 	xDeepinCategory, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Deepin-Category")
+	xDeepinVendor, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Deepin-Vendor")
 
-	name := appInfo.GetName()
-	if name == "" {
-		if enName != "" {
-			name = enName
-		} else {
-			name = appInfo.GetId()
+	var name string
+	if xDeepinVendor == "deepin" {
+		name, _ = appInfo.GetLocaleString(desktopappinfo.MainSection,
+			desktopappinfo.KeyGenericName, "")
+		if name == "" {
+			name = appInfo.GetName()
 		}
+	} else {
+		name = appInfo.GetName()
+	}
+
+	if name == "" {
+		name = appInfo.GetId()
 	}
 
 	item := &Item{
