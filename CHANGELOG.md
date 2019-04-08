@@ -1,3 +1,14 @@
+<a name="4.9.3"></a>
+## 4.9.3 (2019-04-08)
+
+
+#### Bug Fixes
+
+*   dock position and size is wrong on multiple screens and the screens have different device scale ratio ([5be4c59e](https://github.com/linuxdeepin/dde-dock/commit/5be4c59e5116f03389a2f32c2e850572e0c2e07a))
+* **arm:**  disable power module ([cd04dea6](https://github.com/linuxdeepin/dde-dock/commit/cd04dea6352a8f4e220a841cecb69fa940ca448c))
+
+
+
 <a name="4.9.2.1"></a>
 ## 4.9.2.1 (2019-03-28)
 
