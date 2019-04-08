@@ -1,3 +1,28 @@
+[3.25.0] 2019-04-08
+*   chore: update tranlations
+*   feat(launcher): process X-Deepin-Vendor field
+*   feat(dock): add method RemovePluginSettings
+*   feat(dock): add method MergePluginSettings
+*   feat(audio): add sync supported
+*   feat(lastore): add sync supported
+*   feat(appearance): add greeter background for deepin sync
+*   feat(network): add sync supported
+*   feat(inputdevices): add sync supported
+*   feat(screenedge): add sync supported
+*   feat(dock): continue to support deepin sync
+*   feat(dock): support deepin sync
+*   feat(appearance): support deepin sync
+*   feat(launcher): support deepin sync
+*   feat(dde-session-daemon): sync login sound config after all module started
+*   fix(soundeffect): still play login sound even if sound effect switch is off
+*   chore: auto pull translation files from transifex
+*   change(api): com.deepin.daemon.Greeter add method UpdateGreeterQtTheme
+*   fix: ScreenScaleFactors cannot be easily parsed by greeter
+*   feat: also set the screen scale factors of the greeter
+*   fix(accounts): user was not added to some groups when creating user
+*   feat(grub2): keep GRUB_BACKGROUND empty if enable theme
+*   feat(keybinding): add support for dde-kwin shortucts
+
 [3.24.1] 2019-03-27
 *   chore: auto pull translation files from transifex
 
