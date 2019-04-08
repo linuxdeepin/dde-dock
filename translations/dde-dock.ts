@@ -62,7 +62,7 @@
     <name>DialogManager</name>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Are you sure to empty %1 items?</source>
+        <source>Are you sure you want to empty %1 items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -115,7 +115,7 @@
 <context>
     <name>DockPluginsController</name>
     <message>
-        <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
+        <location filename="../frame/controller/dockpluginscontroller.cpp" line="160"/>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -183,27 +183,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="94"/>
+        <location filename="../frame/util/docksettings.cpp" line="93"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="102"/>
+        <location filename="../frame/util/docksettings.cpp" line="101"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="108"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="116"/>
+        <location filename="../frame/util/docksettings.cpp" line="115"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="120"/>
+        <location filename="../frame/util/docksettings.cpp" line="119"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
@@ -279,22 +279,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="137"/>
         <source>Hibernate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="145"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="149"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Log out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="129"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
         <source>Suspend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,12 +305,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="159"/>
         <source>Switch account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="167"/>
         <source>Power settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -427,12 +427,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="159"/>
         <source>Wireless Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="161"/>
         <source>Wireless Network %1</source>
         <translation type="unfinished"></translation>
     </message>
