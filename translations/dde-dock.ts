@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>AbstractPluginsController</name>
+    <message>
+        <location filename="../frame/util/abstractpluginscontroller.cpp" line="163"/>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
@@ -25,17 +33,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="143"/>
         <source>12 Hour Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="145"/>
         <source>24 Hour Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="151"/>
         <source>Time Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -109,14 +117,6 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DockPluginsController</name>
-    <message>
-        <location filename="../frame/controller/dockpluginscontroller.cpp" line="160"/>
-        <source>The plugin %1 is not compatible with the system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -233,7 +233,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="97"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -261,7 +261,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="132"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="124"/>
         <source>Power settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,32 +269,32 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
         <source>Shut down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="123"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="137"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="128"/>
         <source>Hibernate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="145"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Log out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
         <source>Suspend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,12 +305,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="159"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
         <source>Switch account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="167"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="158"/>
         <source>Power settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -393,7 +393,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="59"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="60"/>
         <source>System Tray</source>
         <translation type="unfinished"></translation>
     </message>
