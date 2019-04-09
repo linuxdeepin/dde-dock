@@ -21,6 +21,7 @@
 
 #include "abstractpluginscontroller.h"
 #include "pluginsiteminterface.h"
+#include "DNotifySender"
 
 #include <QDebug>
 #include <QDir>
@@ -160,6 +161,9 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     const QString &pluginApi = meta.value("api").toString();
     if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi))
     {
+        QString notifyMessage(tr("The plugin %1 is not compatible with the system."));
+        Dtk::Core::DUtil::DNotifySender(notifyMessage.arg(QFileInfo(pluginFile).fileName())).appIcon("dialog-warning").call();
+
         qWarning() << objectName()
                    << "plugin api version not matched! expect versions:" << CompatiblePluginApiList
                    << ", got version:" << pluginApi
@@ -183,6 +187,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         qDebug() << objectName() << dbusService << "daemon has not started, waiting for signal";
         connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this,
             [=](const QString &name, const QString &oldOwner, const QString &newOwner) {
+                Q_UNUSED(oldOwner);
                 if (name == dbusService && !newOwner.isEmpty()) {
                     qDebug() << objectName() << dbusService << "daemon started, init plugin and disconnect";
                     initPlugin(interface);
