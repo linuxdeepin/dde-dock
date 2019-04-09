@@ -46,6 +46,9 @@ type Manager struct {
 func (m *Manager) UpdateGreeterQtTheme(fd dbus.UnixFD) *dbus.Error {
 	m.service.DelayAutoQuit()
 	err := updateGreeterQtTheme(fd)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return dbusutil.ToError(err)
 }
 
@@ -61,12 +64,25 @@ func updateGreeterQtTheme(fd dbus.UnixFD) error {
 		themeFileTemp = themeFile + ".tmp"
 	)
 	dest, err := os.Create(themeFileTemp)
+	if err != nil {
+		return err
+	}
 	// limit file size: 100KB
 	src := io.LimitReader(f, 1024*100)
 	_, err = io.Copy(dest, src)
 	if err != nil {
+		closeErr := dest.Close()
+		if closeErr != nil {
+			logger.Warning(closeErr)
+		}
 		return err
 	}
+
+	err = dest.Close()
+	if err != nil {
+		return err
+	}
+
 	err = os.Rename(themeFileTemp, themeFile)
 	return err
 }
