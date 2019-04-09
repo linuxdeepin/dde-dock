@@ -513,6 +513,21 @@ func (m *Manager) doSetGtkTheme(value string) error {
 		return fmt.Errorf("invalid gtk theme '%v'", value)
 	}
 
+	// set dde-kwin decoration theme
+	var ddeKWinTheme string
+	switch value {
+	case "deepin":
+		ddeKWinTheme = "light"
+	case "deepin-dark":
+		ddeKWinTheme = "dark"
+	}
+	if ddeKWinTheme != "" {
+		err := m.wm.SetDecorationDeepinTheme(0, ddeKWinTheme)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
 	return subthemes.SetGtkTheme(value)
 }
 
