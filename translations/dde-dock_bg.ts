@@ -1,5 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
 <context>
+    <name>AbstractPluginsController</name>
+    <message>
+        <location filename="../frame/util/abstractpluginscontroller.cpp" line="163"/>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
@@ -12,7 +20,7 @@
     <message>
         <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="138"/>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Добавяне на клавиатурна подредба</translation>
     </message>
 </context>
 <context>
@@ -23,17 +31,17 @@
         <translation>Дата и час</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="143"/>
         <source>12 Hour Time</source>
         <translation>12 часово време</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="145"/>
         <source>24 Hour Time</source>
         <translation>24 часово време</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="151"/>
         <source>Time Settings</source>
         <translation>Настройки на времето</translation>
     </message>
@@ -60,8 +68,8 @@
     <name>DialogManager</name>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Are you sure to empty %1 items?</source>
-        <translation>Сигурни ли сте за премахването на %1 обекта?</translation>
+        <source>Are you sure you want to empty %1 items?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
@@ -108,14 +116,6 @@
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
         <translation>Демонтирай всички</translation>
-    </message>
-</context>
-<context>
-    <name>DockPluginsController</name>
-    <message>
-        <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
-        <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -181,27 +181,27 @@
         <translation>Интелигентно скриване</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="94"/>
+        <location filename="../frame/util/docksettings.cpp" line="93"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="102"/>
+        <location filename="../frame/util/docksettings.cpp" line="101"/>
         <source>Location</source>
         <translation>Местоположение</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="108"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="116"/>
+        <location filename="../frame/util/docksettings.cpp" line="115"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="120"/>
+        <location filename="../frame/util/docksettings.cpp" line="119"/>
         <source>Plugins</source>
         <translation>Добавки</translation>
     </message>
@@ -231,7 +231,7 @@
         <translation>На борда</translation>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="97"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
@@ -259,7 +259,7 @@
         <translation>Зареждане %1</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="132"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="124"/>
         <source>Power settings</source>
         <translation>Настройки на захранването</translation>
     </message>
@@ -267,32 +267,32 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
         <source>Shut down</source>
         <translation>Изключване</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="123"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Restart</source>
         <translation>Рестартиране</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="128"/>
         <source>Hibernate</source>
         <translation>Хибернация</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
         <source>Lock</source>
         <translation>3аключване</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="149"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Log out</source>
         <translation>Излизане</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="129"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
         <source>Suspend</source>
         <translation>Приспиване</translation>
     </message>
@@ -300,15 +300,15 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="46"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Захранване</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
         <source>Switch account</source>
         <translation>Смяна на акаунта</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="158"/>
         <source>Power settings</source>
         <translation>Настройки на захранването</translation>
     </message>
@@ -362,7 +362,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="52"/>
         <source>Trash</source>
-        <translation type="unfinished"/>
+        <translation>Кошче</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="90"/>
@@ -391,7 +391,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="59"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="60"/>
         <source>System Tray</source>
         <translation>Зона за уведомяване</translation>
     </message>
@@ -425,12 +425,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="159"/>
         <source>Wireless Network</source>
         <translation>Безжична мрежа</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="161"/>
         <source>Wireless Network %1</source>
         <translation>Безжична връзка %1</translation>
     </message>
