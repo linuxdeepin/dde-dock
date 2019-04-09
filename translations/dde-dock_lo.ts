@@ -1,5 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="lo" version="2.1">
 <context>
+    <name>AbstractPluginsController</name>
+    <message>
+        <location filename="../frame/util/abstractpluginscontroller.cpp" line="163"/>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ContainerItem</name>
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
@@ -12,7 +20,7 @@
     <message>
         <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="138"/>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>ເພີ່ມຮູບແບບແປ້ນພິມ</translation>
     </message>
 </context>
 <context>
@@ -23,17 +31,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="146"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="143"/>
         <source>12 Hour Time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="148"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="145"/>
         <source>24 Hour Time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="154"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="151"/>
         <source>Time Settings</source>
         <translation type="unfinished"/>
     </message>
@@ -60,7 +68,7 @@
     <name>DialogManager</name>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Are you sure to empty %1 items?</source>
+        <source>Are you sure you want to empty %1 items?</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -107,14 +115,6 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>DockPluginsController</name>
-    <message>
-        <location filename="../frame/controller/dockpluginscontroller.cpp" line="157"/>
-        <source>The plugin %1 is not compatible with the system.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -181,27 +181,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="94"/>
+        <location filename="../frame/util/docksettings.cpp" line="93"/>
         <source>Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="102"/>
+        <location filename="../frame/util/docksettings.cpp" line="101"/>
         <source>Location</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="108"/>
         <source>Size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="116"/>
+        <location filename="../frame/util/docksettings.cpp" line="115"/>
         <source>Status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="120"/>
+        <location filename="../frame/util/docksettings.cpp" line="119"/>
         <source>Plugins</source>
         <translation type="unfinished"/>
     </message>
@@ -231,7 +231,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="106"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="97"/>
         <source>Settings</source>
         <translation type="unfinished"/>
     </message>
@@ -259,7 +259,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="132"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="124"/>
         <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
@@ -267,32 +267,32 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
         <source>Shut down</source>
         <translation>ປິດ​ເຄື່ອງ</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="123"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Restart</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="128"/>
         <source>Hibernate</source>
         <translation>ນອນ</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="143"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="136"/>
         <source>Lock</source>
         <translation>ລ໊ອກ</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="149"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Log out</source>
         <translation>ອອກ​ຈາກ​ລະ​ບົບ</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="129"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
         <source>Suspend</source>
         <translation>ຢຸດໄວ້</translation>
     </message>
@@ -303,12 +303,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
         <source>Switch account</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="158"/>
         <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
@@ -391,7 +391,7 @@
 <context>
     <name>TrayPlugin</name>
     <message>
-        <location filename="../plugins/tray/trayplugin.cpp" line="59"/>
+        <location filename="../plugins/tray/trayplugin.cpp" line="60"/>
         <source>System Tray</source>
         <translation type="unfinished"/>
     </message>
@@ -425,12 +425,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="159"/>
         <source>Wireless Network</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="160"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="161"/>
         <source>Wireless Network %1</source>
         <translation type="unfinished"/>
     </message>
