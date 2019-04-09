@@ -1,3 +1,7 @@
+[3.25.1] 2019-04-09
+*   feat(appearance): support set kwin window decoration theme
+*   fix(greeter-setter): UpdateGreeterQtTheme rename failed
+
 [3.25.0] 2019-04-08
 *   chore: update tranlations
 *   feat(launcher): process X-Deepin-Vendor field
