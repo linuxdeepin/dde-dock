@@ -1,3 +1,23 @@
+<a name="4.9.4"></a>
+## 4.9.4 (2019-04-09)
+
+
+#### Bug Fixes
+
+*   not send plugin incompatible notify ([d03b29a7](https://github.com/linuxdeepin/dde-dock/commit/d03b29a7bcb25471f1872dad684dcbac34549642))
+*   plugin settings lost after save to daemon dbus ([cfec30b0](https://github.com/linuxdeepin/dde-dock/commit/cfec30b03e49cc4e6ddc8f6af7d104c950a03076))
+*   duplicate wired item tray ([9d1375f6](https://github.com/linuxdeepin/dde-dock/commit/9d1375f6f06cbf1506e87919d84db08ba4c8c9dc))
+
+#### Features
+
+*   update dock plugin version ([e7002b8f](https://github.com/linuxdeepin/dde-dock/commit/e7002b8f285c06cf6c6292701d6ac096b6dd1d43))
+*   refresh sort order and container after DeepinSync ([040dca5e](https://github.com/linuxdeepin/dde-dock/commit/040dca5e1a8c31d8582a758cab32150478b7bb30))
+*   update all plugins to support take effect in time for Deepin-Sync ([8ae30ec2](https://github.com/linuxdeepin/dde-dock/commit/8ae30ec2d1b1777cbb87562892de0e65a2c7d3c9))
+*   update plugin interface version ([07e87753](https://github.com/linuxdeepin/dde-dock/commit/07e87753716626da87e93f08019342949de46f6d))
+*   access plugin settings from dock dbus daemon ([57f8e6ee](https://github.com/linuxdeepin/dde-dock/commit/57f8e6ee0a2a057149e514285ec2268e68d18101))
+
+
+
 <a name="4.9.3"></a>
 ## 4.9.3 (2019-04-08)
 
