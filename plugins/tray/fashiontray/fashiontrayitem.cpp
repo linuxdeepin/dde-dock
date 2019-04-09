@@ -240,6 +240,11 @@ void FashionTrayItem::setRightSplitVisible(const bool visible)
     }
 }
 
+void FashionTrayItem::onPluginSettingsChanged()
+{
+    m_controlWidget->setExpanded(m_trayPlugin->getValue(FASHION_MODE_ITEM_KEY, ExpandedKey, true).toBool());
+}
+
 void FashionTrayItem::showEvent(QShowEvent *event)
 {
     requestResize();

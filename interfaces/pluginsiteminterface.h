@@ -211,6 +211,12 @@ public:
         return qApp->property(PROP_POSITION).value<Dock::Position>();
     }
 
+    ///
+    /// \brief settingsChanged
+    /// override this function to receive plugin settings changed signal(DeepinSync)
+    ///
+    virtual void pluginSettingsChanged() {}
+
 protected:
     ///
     /// \brief m_proxyInter

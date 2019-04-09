@@ -21,58 +21,57 @@
 
 #include "systemtrayscontroller.h"
 #include "pluginsiteminterface.h"
-#include "systemtrayloader.h"
 
 #include <QDebug>
 #include <QDir>
 
 SystemTraysController::SystemTraysController(QObject *parent)
-    : QObject(parent)
-    , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
-    , m_pluginsSetting("deepin", "dde-dock")
+    : AbstractPluginsController(parent)
 {
-    qApp->installEventFilter(this);
+    setObjectName("SystemTray");
 }
 
 void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+
     // check if same item added
-    if (m_pluginsMap.contains(itemInter))
-        if (m_pluginsMap[itemInter].contains(itemKey))
+    if (mPluginsMap.contains(itemInter))
+        if (mPluginsMap[itemInter].contains(itemKey))
             return;
 
     SystemTrayItem *item = new SystemTrayItem(itemInter, itemKey);
 
     item->setVisible(false);
 
-    m_pluginsMap[itemInter][itemKey] = item;
+    mPluginsMap[itemInter][itemKey] = item;
 
-    emit systemTrayAdded(itemKey, item);
+    emit pluginItemAdded(itemKey, item);
 }
 
 void SystemTraysController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
-
-    Q_ASSERT(item);
+    SystemTrayItem *item = static_cast<SystemTrayItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     item->update();
 
-    emit systemTrayUpdated(itemKey);
+    emit pluginItemUpdated(itemKey, item);
 }
 
 void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
-
+    SystemTrayItem *item = static_cast<SystemTrayItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
         return;
 
     item->detachPluginWidget();
 
-    emit systemTrayRemoved(itemKey);
+    emit pluginItemRemoved(itemKey, item);
 
-    m_pluginsMap[itemInter].remove(itemKey);
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+    mPluginsMap[itemInter].remove(itemKey);
 
     // do not delete the itemWidget object(specified in the plugin interface)
     item->centralWidget()->setParent(nullptr);
@@ -83,168 +82,33 @@ void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, 
 
 void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
-    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    SystemTrayItem *item = static_cast<SystemTrayItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
 void SystemTraysController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    SystemTrayItem *item = static_cast<SystemTrayItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     Q_EMIT item->requestRefershWindowVisible();
 }
 
 void SystemTraysController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
 {
-    SystemTrayItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    SystemTrayItem *item = static_cast<SystemTrayItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     if (visible) {
         item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
     } else {
         item->hidePopup();
     }
-}
-
-void SystemTraysController::startLoader()
-{
-    SystemTrayLoader *loader = new SystemTrayLoader(this);
-
-    connect(loader, &SystemTrayLoader::finished, loader, &SystemTrayLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &SystemTrayLoader::pluginFounded, this, &SystemTraysController::loadPlugin, Qt::QueuedConnection);
-
-    QTimer::singleShot(1, loader, [=] { loader->start(QThread::LowestPriority); });
-}
-
-void SystemTraysController::displayModeChanged()
-{
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const auto inters = m_pluginsMap.keys();
-
-    for (auto inter : inters)
-        inter->displayModeChanged(displayMode);
-}
-
-void SystemTraysController::positionChanged()
-{
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    const auto inters = m_pluginsMap.keys();
-
-    for (auto inter : inters)
-        inter->positionChanged(position);
-}
-
-void SystemTraysController::loadPlugin(const QString &pluginFile)
-{
-    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
-    const auto meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (!meta.contains("api") || meta["api"].toString() != DOCK_PLUGIN_API_VERSION)
-    {
-        qWarning() << "plugin api version not matched! expect version:" << DOCK_PLUGIN_API_VERSION << pluginFile;
-        return;
-    }
-
-    PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
-    if (!interface)
-    {
-        qWarning() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
-        pluginLoader->unload();
-        pluginLoader->deleteLater();
-        return;
-    }
-
-    m_pluginsMap.insert(interface, QMap<QString, SystemTrayItem *>());
-
-    QString dbusService = meta.value("depends-daemon-dbus-service").toString();
-    if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
-        qDebug() << "SystemTray:" << dbusService << "daemon has not started, waiting for signal";
-        connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this,
-            [=](const QString &name, const QString &oldOwner, const QString &newOwner) {
-                if (name == dbusService && !newOwner.isEmpty()) {
-                    qDebug() << "SystemTray:" << dbusService << "daemon started, init plugin and disconnect";
-                    initPlugin(interface);
-                    disconnect(m_dbusDaemonInterface);
-                }
-            }
-        );
-        return;
-    }
-
-    initPlugin(interface);
-}
-
-void SystemTraysController::initPlugin(PluginsItemInterface *interface) {
-    qDebug() << "SystemTray:" << "init plugin: " << interface->pluginName();
-    interface->init(this);
-    qDebug() << "SystemTray:" << "init plugin finished: " << interface->pluginName();
-}
-
-bool SystemTraysController::eventFilter(QObject *o, QEvent *e)
-{
-    if (o != qApp)
-        return false;
-    if (e->type() != QEvent::DynamicPropertyChange)
-        return false;
-
-    QDynamicPropertyChangeEvent * const dpce = static_cast<QDynamicPropertyChangeEvent *>(e);
-    const QString propertyName = dpce->propertyName();
-
-    if (propertyName == PROP_POSITION)
-        positionChanged();
-    else if (propertyName == PROP_DISPLAY_MODE)
-        displayModeChanged();
-
-    return false;
-}
-
-SystemTrayItem *SystemTraysController::pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const
-{
-    if (!m_pluginsMap.contains(itemInter))
-        return nullptr;
-
-    return m_pluginsMap[itemInter][itemKey];
-}
-
-PluginsItemInterface *SystemTraysController::pluginInterAt(const QString &itemKey) const
-{
-    for (auto it = m_pluginsMap.constBegin(); it != m_pluginsMap.constEnd(); ++it) {
-        for (auto key : it.value().keys()) {
-            if (key == itemKey) {
-                return it.key();
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-PluginsItemInterface *SystemTraysController::pluginInterAt(SystemTrayItem *systemTrayItem) const
-{
-    for (auto it = m_pluginsMap.constBegin(); it != m_pluginsMap.constEnd(); ++it) {
-        for (auto item : it.value().values()) {
-            if (item == systemTrayItem) {
-                return it.key();
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-void SystemTraysController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    m_pluginsSetting.setValue(key, value);
-    m_pluginsSetting.endGroup();
-}
-
-const QVariant SystemTraysController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value(m_pluginsSetting.value(key, fallback));
-    m_pluginsSetting.endGroup();
-    return value;
 }
 
 int SystemTraysController::systemTrayItemSortKey(const QString &itemKey)
@@ -289,4 +153,15 @@ void SystemTraysController::saveValueSystemTrayItem(const QString &itemKey, cons
     }
 
     saveValue(inter, key, value);
+}
+
+void SystemTraysController::startLoader()
+{
+    QString pluginsDir("../plugins/system-trays");
+    if (!QDir(pluginsDir).exists()) {
+        pluginsDir = "/usr/lib/dde-dock/plugins/system-trays";
+    }
+    qDebug() << "using system tray plugins dir:" << pluginsDir;
+
+    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }

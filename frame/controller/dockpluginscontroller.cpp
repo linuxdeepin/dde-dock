@@ -21,28 +21,24 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "dockitemcontroller.h"
-#include "dockpluginloader.h"
 #include "item/traypluginitem.h"
 
 #include <QDebug>
 #include <QDir>
 
-DockPluginsController::DockPluginsController(
-    DockItemController *itemControllerInter)
-    : QObject(itemControllerInter)
-    , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
-    , m_itemControllerInter(itemControllerInter)
-    , m_pluginsSetting("deepin", "dde-dock")
+DockPluginsController::DockPluginsController(QObject *parent)
+    : AbstractPluginsController(parent)
 {
-    qApp->installEventFilter(this);
+    setObjectName("DockPlugin");
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+
     // check if same item added
-    if (m_pluginList.contains(itemInter))
-        if (m_pluginList[itemInter].contains(itemKey))
+    if (mPluginsMap.contains(itemInter))
+        if (mPluginsMap[itemInter].contains(itemKey))
             return;
 
     PluginsItem *item = nullptr;
@@ -59,16 +55,16 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
 
     item->setVisible(false);
 
-    m_pluginList[itemInter][itemKey] = item;
+    mPluginsMap[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);
 }
 
 void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-
-    Q_ASSERT(item);
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     item->update();
 
@@ -77,8 +73,7 @@ void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, c
 
 void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
         return;
 
@@ -86,7 +81,8 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
 
     emit pluginItemRemoved(item);
 
-    m_pluginList[itemInter].remove(itemKey);
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+    mPluginsMap[itemInter].remove(itemKey);
 
     // do not delete the itemWidget object(specified in the plugin interface)
     item->centralWidget()->setParent(nullptr);
@@ -97,24 +93,27 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
 
 void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
 void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     Q_EMIT item->requestRefreshWindowVisible();
 }
 
 void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     if (visible) {
         item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
@@ -125,116 +124,11 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const
 
 void DockPluginsController::startLoader()
 {
-    DockPluginLoader *loader = new DockPluginLoader(this);
-
-    connect(loader, &DockPluginLoader::finished, loader, &DockPluginLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &DockPluginLoader::pluginFounded, this, &DockPluginsController::loadPlugin, Qt::QueuedConnection);
-
-    QTimer::singleShot(1, loader, [=] { loader->start(QThread::LowestPriority); });
-}
-
-void DockPluginsController::displayModeChanged()
-{
-    const DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const auto inters = m_pluginList.keys();
-
-    for (auto inter : inters)
-        inter->displayModeChanged(displayMode);
-}
-
-void DockPluginsController::positionChanged()
-{
-    const Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    const auto inters = m_pluginList.keys();
-
-    for (auto inter : inters)
-        inter->positionChanged(position);
-}
-
-void DockPluginsController::loadPlugin(const QString &pluginFile)
-{
-    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
-    const auto meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (!meta.contains("api") || meta["api"].toString() != DOCK_PLUGIN_API_VERSION)
-    {
-        QString notifyMessage(tr("The plugin %1 is not compatible with the system."));
-        QProcess::startDetached("notify-send", QStringList()
-                                << "-i" << "dialog-warning"
-                                << notifyMessage.arg(QFileInfo(pluginFile).fileName()));
-        qWarning() << "plugin api version not matched! expect version:" << DOCK_PLUGIN_API_VERSION << pluginFile;
-        return;
+    QString pluginsDir("../plugins");
+    if (!QDir(pluginsDir).exists()) {
+        pluginsDir = "/usr/lib/dde-dock/plugins";
     }
+    qDebug() << "using dock plugins dir:" << pluginsDir;
 
-    PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
-    if (!interface)
-    {
-        qWarning() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
-        pluginLoader->unload();
-        pluginLoader->deleteLater();
-        return;
-    }
-
-    m_pluginList.insert(interface, QMap<QString, PluginsItem *>());
-
-    QString dbusService = meta.value("depends-daemon-dbus-service").toString();
-    if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
-        qDebug() << dbusService << "daemon has not started, waiting for signal";
-        connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this,
-            [=](const QString &name, const QString &oldOwner, const QString &newOwner) {
-                if (name == dbusService && !newOwner.isEmpty()) {
-                    qDebug() << dbusService << "daemon started, init plugin and disconnect";
-                    initPlugin(interface);
-                    disconnect(m_dbusDaemonInterface);
-                }
-            }
-        );
-        return;
-    }
-
-    initPlugin(interface);
-}
-
-void DockPluginsController::initPlugin(PluginsItemInterface *interface) {
-    qDebug() << "init plugin: " << interface->pluginName();
-    interface->init(this);
-    qDebug() << "init plugin finished: " << interface->pluginName();
-}
-
-bool DockPluginsController::eventFilter(QObject *o, QEvent *e)
-{
-    if (o != qApp)
-        return false;
-    if (e->type() != QEvent::DynamicPropertyChange)
-        return false;
-
-    QDynamicPropertyChangeEvent * const dpce = static_cast<QDynamicPropertyChangeEvent *>(e);
-    const QString propertyName = dpce->propertyName();
-
-    if (propertyName == PROP_POSITION)
-        positionChanged();
-    else if (propertyName == PROP_DISPLAY_MODE)
-        displayModeChanged();
-
-    return false;
-}
-
-PluginsItem *DockPluginsController::pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const
-{
-    if (!m_pluginList.contains(itemInter))
-        return nullptr;
-
-    return m_pluginList[itemInter][itemKey];
-}
-
-void DockPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant &value) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    m_pluginsSetting.setValue(itemKey, value);
-    m_pluginsSetting.endGroup();
-}
-
-const QVariant DockPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &itemKey, const QVariant& failback) {
-    m_pluginsSetting.beginGroup(itemInter->pluginName());
-    QVariant value(m_pluginsSetting.value(itemKey, failback));
-    m_pluginsSetting.endGroup();
-    return value;
+    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }

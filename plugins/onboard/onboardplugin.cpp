@@ -73,16 +73,7 @@ void OnboardPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
-    if (pluginIsDisable())
-    {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        m_proxyInter->itemAdded(this, pluginName());
-    }
+    refreshPluginItemsVisible();
 }
 
 bool OnboardPlugin::pluginIsDisable()
@@ -151,6 +142,11 @@ void OnboardPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
+void OnboardPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
 void OnboardPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -164,4 +160,18 @@ void OnboardPlugin::loadPlugin()
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());
+}
+
+void OnboardPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable())
+    {
+        m_proxyInter->itemRemoved(this, pluginName());
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        m_proxyInter->itemAdded(this, pluginName());
+    }
 }

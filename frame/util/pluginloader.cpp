@@ -19,25 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "systemtrayloader.h"
-#include "systemtrayscontroller.h"
+#include "pluginloader.h"
 
+#include <QDir>
 #include <QDebug>
+#include <QLibrary>
 
-SystemTrayLoader::SystemTrayLoader(QObject *parent)
+PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
     : QThread(parent)
+    , m_pluginDirPath(pluginDirPath)
 {
-
 }
 
-void SystemTrayLoader::run()
+void PluginLoader::run()
 {
-    QDir pluginsDir("../plugins/system-trays");
-    if (!pluginsDir.exists()) {
-        pluginsDir.setPath("/usr/lib/dde-dock/plugins/system-trays");
-    }
-    qDebug() << "using system tray plugins dir:" << pluginsDir.absolutePath();
-
+    QDir pluginsDir(m_pluginDirPath);
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
 
     for (const QString file : plugins)

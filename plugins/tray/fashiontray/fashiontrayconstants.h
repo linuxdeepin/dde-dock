@@ -9,7 +9,7 @@ namespace Dock {
 #define TrayWidgetHeightMin 24
 
 
-#define HoldKeySuffix "-holded"
+#define HoldKeyPrefix "holded_"
 
 }
 
