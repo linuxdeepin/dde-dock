@@ -69,7 +69,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Êtes-vous sûr de vouloir vider %1 éléments ?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
