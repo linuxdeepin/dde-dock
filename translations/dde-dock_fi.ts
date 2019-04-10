@@ -12,7 +12,7 @@
     <message>
         <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation>Paina näyttääksesi piilotetut kuvakket</translation>
+        <translation>Näytä piilotettut kuvakeet napsauttamalla</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="61"/>
         <source>Disable network</source>
-        <translation>Poista verkkoyhteys käytöstä</translation>
+        <translation>Poista verkkoyhteys</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="67"/>
