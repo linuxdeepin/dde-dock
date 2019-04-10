@@ -1,3 +1,7 @@
+[3.25.2] 2019-04-10
+*   chore: auto pull translation files from transifex
+*   chore: update depends for wm
+
 [3.25.1] 2019-04-09
 *   feat(appearance): support set kwin window decoration theme
 *   fix(greeter-setter): UpdateGreeterQtTheme rename failed
