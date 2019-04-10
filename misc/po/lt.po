@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 11:23+0000\n"
+"POT-Creation-Date: 2019-04-08 16:38+0800\n"
+"PO-Revision-Date: 2019-04-09 01:14+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -30,45 +30,45 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), skaičiai ar ypatingi simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr "Naudotojo vardas negali būti tuščias."
+#: ../../accounts/checkers/username.go:60
+msgid "Username cannot be empty"
+msgstr "Naudotojo vardas negali būti tuščias"
 
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Naudotojo vardas turi būti sudarytas iš a~z, 0~9, - ar _."
+#: ../../accounts/checkers/username.go:62
+msgid "Username must comprise a~z, 0~9, - or _"
+msgstr "Naudotojo vardas turi būti sudarytas iš a~z, 0~9, - ar _"
 
-#: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
-msgstr "Pirma raidė turi būti žemoji."
+#: ../../accounts/checkers/username.go:64
+msgid "The first character must be in lower case"
+msgstr "Pirmoji raidė turi būti mažoji"
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
-msgstr "Naudotojo vardas yra."
+#: ../../accounts/checkers/username.go:66
+msgid "The username exists"
+msgstr "Naudotojo vardas yra"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
-msgstr "Naudotojo vardas naudojamas sistemos."
+#: ../../accounts/checkers/username.go:68
+msgid "The username has been used by system"
+msgstr "Naudotojo vardas naudojamas sistemos"
 
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
 msgstr "Naudotojo vardo ilgis viršija leidžiamą ribą"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr "Ekrano mastelis"
-
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr "Nustatomas ekrano mastelis"
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:61
 msgid "Set successfully"
 msgstr "Sėkmingai nustatyta"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
 msgstr "Norėdami peržiūrėti pakeitimus, atsijunkite ir vėl prisijunkite"
+
+#: ../../appearance/scale.go:66
+msgid "Display scaling"
+msgstr "Ekrano mastelis"
+
+#: ../../appearance/scale.go:67
+msgid "Setting display scaling"
+msgstr "Nustatomas ekrano mastelis"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -190,7 +190,7 @@ msgid "Show/Hide the dock"
 msgstr "Rodyti/Slėpti doką"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
+msgid "Shutdown interface"
 msgstr "Išjungimo sąsaja"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
@@ -355,11 +355,11 @@ msgstr "Sistemos kalba pakeista, atsijunkite ir vėl prisijunkite"
 msgid "Restore"
 msgstr "Atkurti"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
 msgstr "Atsisakyti"
 
-#: ../../lastore/lastore.go:233
+#: ../../lastore/lastore.go:240
 msgid "Retry"
 msgstr "Bandyti vėl"
 
@@ -928,21 +928,21 @@ msgid "Battery low, please plug in"
 msgstr "Baterija baigia išsikrauti, prijunkite maitinimą"
 
 #: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
-msgstr "Norint nustatyti sistemos laiką, reikalingas tapatybės nustatymas."
+msgid "Authentication is required to set the system time"
+msgstr "Norint nustatyti sistemos laiką, reikalingas tapatybės nustatymas"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "Norint valdyti ar tinklo laiko sinchronizavimas turėtų būti įjungtas, reikalingas tapatybės nustatymas."
+"shall be enabled"
+msgstr "Norint valdyti ar tinklo laiko sinchronizavimas turėtų būti įjungtas, reikalingas tapatybės nustatymas"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
+"UTC time"
 msgstr "Norint valdyti ar RTC bus laikomas vietinis ar suderintasis pasaulinis laikas (UTC), reikalingas tapatybės nustatymas"
 
 #: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
-msgstr "Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas."
+msgid "Authentication is required to set the system timezone"
+msgstr "Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas"

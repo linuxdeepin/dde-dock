@@ -29,7 +29,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation>Ota käyttöön automaattinen kirjautuminen</translation>
+			<translation>Käytä automaattista kirjautumista</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
@@ -39,7 +39,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation>Ota automaattinen kirjautuminen pois käytöstä</translation>
+			<translation>Poista automaattinen kirjautuminen</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
@@ -49,7 +49,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation>Ota käyttöön kirjautuminen ilman salasanaa</translation>
+			<translation>Salli kirjautuminen ilman salasanaa</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
@@ -59,7 +59,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation>Poista käytöstä kirjautuminen ilman salasanaa</translation>
+			<translation>Poista kirjautuminen ilman salasanaa</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>

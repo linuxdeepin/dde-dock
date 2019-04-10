@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-23 12:50+0000\n"
+"POT-Creation-Date: 2019-04-08 16:38+0800\n"
+"PO-Revision-Date: 2019-04-09 01:14+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -30,45 +30,45 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr "Brugernavn må ikke være tomt."
+#: ../../accounts/checkers/username.go:60
+msgid "Username cannot be empty"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Brugernavn skal består af a~z, 0~9, - eller _."
+#: ../../accounts/checkers/username.go:62
+msgid "Username must comprise a~z, 0~9, - or _"
+msgstr "Brugernavn skal indeholde a~z, 0~9, - eller _"
 
-#: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
-msgstr "Det første tegn skal være med småt."
+#: ../../accounts/checkers/username.go:64
+msgid "The first character must be in lower case"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
-msgstr "Brugernavnet findes allerede."
+#: ../../accounts/checkers/username.go:66
+msgid "The username exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
-msgstr "Brugernavnet er blevet brugt af systemet."
+#: ../../accounts/checkers/username.go:68
+msgid "The username has been used by system"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
 msgstr "Brugernavnets længde overskrider grænsen"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr "Skærmskalering"
-
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr "Sætter skærmskalering"
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:61
 msgid "Set successfully"
 msgstr "Sat"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
 msgstr "Log venligst ind igen for at vise ændringerne"
+
+#: ../../appearance/scale.go:66
+msgid "Display scaling"
+msgstr "Skærmskalering"
+
+#: ../../appearance/scale.go:67
+msgid "Setting display scaling"
+msgstr "Sætter skærmskalering"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -190,8 +190,8 @@ msgid "Show/Hide the dock"
 msgstr "Vis/skjul dokken"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
-msgstr "Luk ned-grænseflade"
+msgid "Shutdown interface"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -355,11 +355,11 @@ msgstr "Systemsproget blev ændret. Log venligst ud og ind igen"
 msgid "Restore"
 msgstr "Genskab"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
 msgstr "Annuller"
 
-#: ../../lastore/lastore.go:233
+#: ../../lastore/lastore.go:240
 msgid "Retry"
 msgstr "Prøv igen"
 
@@ -928,21 +928,21 @@ msgid "Battery low, please plug in"
 msgstr "Batteriet er lavt. Tilslut venligst strømforsyningen"
 
 #: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
-msgstr "Autentifikation kræves for at sætte systemets tid."
+msgid "Authentication is required to set the system time"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres."
+"shall be enabled"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
-msgstr "Der kræves autentifikation for at styre om RTC'en lagre den lokale tid eller UTC-tiden."
+"UTC time"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
-msgstr "Autentifikation kræves for at sætte systemets tidszone."
+msgid "Authentication is required to set the system timezone"
+msgstr ""

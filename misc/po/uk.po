@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
-# Marck Hrin <marck741@gmail.com>, 2017
+# Marck Hrin <marck741@gmail.com>, 2017,2019
 # Yevhenii Miziev <zmekinski@yahoo.com>, 2017
 # Yuri Chornoivan <yurchor@ukr.net>, 2018
 # Максим Назаренко <mnaz261295@gmail.com>, 2018
@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 08:34+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-04-08 16:38+0800\n"
+"PO-Revision-Date: 2019-04-09 01:14+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,45 +32,45 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Пароль повинен містити англійські літери (чутливі до регістру), цифри або спеціальні символи(~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr "Ім'я користувача не може бути пустим."
+#: ../../accounts/checkers/username.go:60
+msgid "Username cannot be empty"
+msgstr "Поле, призначене для імені користувача, не може бути пустим"
 
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Ім‘я користувача має включати в себе a~z, 0~9, - або _."
+#: ../../accounts/checkers/username.go:62
+msgid "Username must comprise a~z, 0~9, - or _"
+msgstr "Ім'я користувача повинне містити такі символи, як a~z, 0~9, - або _"
 
-#: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
+#: ../../accounts/checkers/username.go:64
+msgid "The first character must be in lower case"
 msgstr "Перший символ має бути у нижньому регістрі."
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
+#: ../../accounts/checkers/username.go:66
+msgid "The username exists"
 msgstr "Таке ім'я користувача вже існує."
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
+#: ../../accounts/checkers/username.go:68
+msgid "The username has been used by system"
 msgstr "Це ім'я користувача вже використовувалося в системі."
 
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
 msgstr "Ім’я користувача задовге"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr "Маштабування дисплею"
-
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr "Налаштування масштабування зображення"
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:61
 msgid "Set successfully"
 msgstr "Успішно встановлено"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Увійдіть знову, щоб переглянути зміни"
+
+#: ../../appearance/scale.go:66
+msgid "Display scaling"
+msgstr "Маштабування дисплею"
+
+#: ../../appearance/scale.go:67
+msgid "Setting display scaling"
+msgstr "Налаштування масштабування зображення"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -192,7 +192,7 @@ msgid "Show/Hide the dock"
 msgstr "Показати/Приховати панель завдань"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
+msgid "Shutdown interface"
 msgstr "Інтерфейс завершення роботи"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
@@ -337,31 +337,31 @@ msgstr "Аутентифікація потрібна для перемикан�
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Змінюється мова системи та встановлюються необхідні мовні пакети, зачекайте..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Зміна мови системи, зачекайте..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Змінено мову системи, вийдіть із системи та увійдіть"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
 msgstr "Відновити"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: ../../lastore/lastore.go:233
+#: ../../lastore/lastore.go:240
 msgid "Retry"
 msgstr "Спробувати ще раз"
 
@@ -523,7 +523,7 @@ msgstr "Стан пристрою змінено."
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Стан пристрою змінено, причина невідома"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -654,7 +654,7 @@ msgstr "Час очікування реєстрації в мережі мин�
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Не вдалося зареєструватися до запитаної мережі GSM"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -722,7 +722,7 @@ msgstr "Пристрій InfiniBand не підтримує режим з'єдн
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "Збій залежності з'єднання"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -787,20 +787,20 @@ msgstr "Будь ласка, упевніться, що був обраний п
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Не вдалося активувати підключення VPN, причина невідома"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Не вдалося активувати з'єднання VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "Стан з'єднання VPN змінено через відключення користувачів"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "Стан з'єднання VPN змінено через відключення від пристроїв"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -824,7 +824,7 @@ msgstr "Службу VPN не вдалося запустити."
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Пароль з'єднання VPN не надано"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
@@ -930,21 +930,21 @@ msgid "Battery low, please plug in"
 msgstr "Низький рівень заряду акумулятора, будь ласка, увімкніть комп'ютер до мережі живлення"
 
 #: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
+msgid "Authentication is required to set the system time"
 msgstr "Аутентифікація потрібна для встановлення системного часу."
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
+"shall be enabled"
 msgstr "Аутентифікація необхідна для того, щоб контролювати, чи має бути включена синхронізація часу мережі."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
+"UTC time"
 msgstr "Аутентифікація необхідна для контролю того, чи зберігає RTC місцевий або UTC час ."
 
 #: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
+msgid "Authentication is required to set the system timezone"
 msgstr "Аутентифікація потрібна для встановлення системного часового поясу."

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 09:16+0000\n"
+"POT-Creation-Date: 2019-04-08 16:38+0800\n"
+"PO-Revision-Date: 2019-04-09 01:14+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -30,45 +30,45 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Пароль должен содержать латинские буквы (с учетом регистра), цифры или специальные символы (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr "Имя пользователя не может быть пустым."
+#: ../../accounts/checkers/username.go:60
+msgid "Username cannot be empty"
+msgstr "Имя пользователя не может быть пустым"
 
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Имя пользователя должно содержать a...z, 0...9, - или _."
+#: ../../accounts/checkers/username.go:62
+msgid "Username must comprise a~z, 0~9, - or _"
+msgstr "Имя пользователя должно содержать a~z, 0~9, - или _"
 
-#: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
+#: ../../accounts/checkers/username.go:64
+msgid "The first character must be in lower case"
 msgstr "Первый символ должен быть в нижнем регистре!"
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
+#: ../../accounts/checkers/username.go:66
+msgid "The username exists"
 msgstr "Имя пользователя уже существует."
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
-msgstr "Это имя пользователя используется системой!"
+#: ../../accounts/checkers/username.go:68
+msgid "The username has been used by system"
+msgstr "Имя пользователя было использовано системой"
 
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
 msgstr "Превышен лимит длинны имени пользователя"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr "Масштабирование дисплея"
-
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr "Настройка масштабирования дисплея"
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:61
 msgid "Set successfully"
 msgstr "Задано успешно"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
 msgstr "Пожалуйста, войдите в систему, чтобы просмотреть изменения"
+
+#: ../../appearance/scale.go:66
+msgid "Display scaling"
+msgstr "Масштабирование дисплея"
+
+#: ../../appearance/scale.go:67
+msgid "Setting display scaling"
+msgstr "Настройка масштабирования дисплея"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -190,8 +190,8 @@ msgid "Show/Hide the dock"
 msgstr "Показать/Скрыть док"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
-msgstr "Интерфейс Выключения"
+msgid "Shutdown interface"
+msgstr "Интерфейс выключения"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -355,11 +355,11 @@ msgstr " Язык системы был изменен, пожалуйста в�
 msgid "Restore"
 msgstr "Восстановить"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ../../lastore/lastore.go:233
+#: ../../lastore/lastore.go:240
 msgid "Retry"
 msgstr "Повторить"
 
@@ -928,21 +928,21 @@ msgid "Battery low, please plug in"
 msgstr "Низкий заряд батареи, пожалуйста подключите питание"
 
 #: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
+msgid "Authentication is required to set the system time"
 msgstr "Для установки системного времени требуется аутентификация."
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
+"shall be enabled"
 msgstr "Для управления включением синхронизации времени по сети требуется аутентификация."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
+"UTC time"
 msgstr "Аутентификация требуется для контроля того, сохраняет ли RTC местное время или время UTC."
 
 #: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
-msgstr "Для установки системного часового пояса требуется аутентификация."
+msgid "Authentication is required to set the system timezone"
+msgstr "Для установки часового пояса системы требуется аутентификация"

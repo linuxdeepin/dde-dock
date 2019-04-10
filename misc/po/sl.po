@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 08:34+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-04-08 16:38+0800\n"
+"PO-Revision-Date: 2019-04-09 01:14+0000\n"
+"Last-Translator: Gorzy Gorup <gorupgorazd@gmail.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,45 +30,45 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Geslo mora vsebovati angleške črke (veliksot črk je pomembna), številke ali posebne simbole (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr "Uporabniško ime ne sme ostati prazno."
+#: ../../accounts/checkers/username.go:60
+msgid "Username cannot be empty"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Uporabniško ime morajo sestavljati znaki a~z, 0~9, - ali _."
+#: ../../accounts/checkers/username.go:62
+msgid "Username must comprise a~z, 0~9, - or _"
+msgstr "Uporabniško ime mora biti sestavljeno iz a~z, 0~9, - ali _"
 
-#: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
-msgstr "Prvi znak mora biti majhna črka."
+#: ../../accounts/checkers/username.go:64
+msgid "The first character must be in lower case"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
-msgstr "Uporabniško ime že obstaja."
+#: ../../accounts/checkers/username.go:66
+msgid "The username exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
-msgstr "Uporabniško ime je bilo uporabljeno v sistemu."
+#: ../../accounts/checkers/username.go:68
+msgid "The username has been used by system"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
 msgstr "Uporabniško ime je daljše, kot je dovoljeno"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr "Spreminjanje velikosti prikaza"
-
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr "Nastavljanje spreminjanja velikosti"
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:61
 msgid "Set successfully"
 msgstr "Uspešno nastavljeno"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
 msgstr ""
+
+#: ../../appearance/scale.go:66
+msgid "Display scaling"
+msgstr "Spreminjanje velikosti prikaza"
+
+#: ../../appearance/scale.go:67
+msgid "Setting display scaling"
+msgstr "Nastavljanje spreminjanja velikosti"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -190,8 +190,8 @@ msgid "Show/Hide the dock"
 msgstr "Prikaži/skrij pristan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
-msgstr "Vmesnik ob izklopu"
+msgid "Shutdown interface"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -355,11 +355,11 @@ msgstr ""
 msgid "Restore"
 msgstr "Obnovi"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: ../../lastore/lastore.go:233
+#: ../../lastore/lastore.go:240
 msgid "Retry"
 msgstr "Poskusi ponovno"
 
@@ -928,21 +928,21 @@ msgid "Battery low, please plug in"
 msgstr ""
 
 #: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
-msgstr "Za nastavitev sistemskega časa je potrebna avtentikacija."
+msgid "Authentication is required to set the system time"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "Za omogočanje uravnavanja omrežnega časa je potrebna avtentikacija."
+"shall be enabled"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
-msgstr "Za nadzor, ali naj RTC shranjuje lokalni ali UTC čas, je potrebna avtentikacija."
+"UTC time"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
-msgstr "Za nastavitev sistemskega časovnega pasu je potrebna avtentikacija."
+msgid "Authentication is required to set the system timezone"
+msgstr ""

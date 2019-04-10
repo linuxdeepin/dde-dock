@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 08:34+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-04-08 16:38+0800\n"
+"PO-Revision-Date: 2019-04-09 01:14+0000\n"
+"Last-Translator: MUHAAB SHAAM <muhaab.org@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,45 +33,45 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr "لا يمكن ترك خانة اسم المستخدم فارغة"
+#: ../../accounts/checkers/username.go:60
+msgid "Username cannot be empty"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "يجب أن يحوي اسم المستخدم على الأحرف من a إلى z , والأرقام من 0 إلى 9 , و - أو _ ."
+#: ../../accounts/checkers/username.go:62
+msgid "Username must comprise a~z, 0~9, - or _"
+msgstr "يجب أن يتكون اسم استخدم من المحارف التالية : a-z, 0-9, -, _ "
 
-#: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
-msgstr "الحرف الأول يجب أن يكون صغيراً."
+#: ../../accounts/checkers/username.go:64
+msgid "The first character must be in lower case"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
-msgstr "اسم المستخدم موجود."
+#: ../../accounts/checkers/username.go:66
+msgid "The username exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
-msgstr "اسم المستخدم مستخدم من قبل النظام."
+#: ../../accounts/checkers/username.go:68
+msgid "The username has been used by system"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
 msgstr "اسم المستخدم تجاوز طوله الحد الأقصى"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr "عرض الشاشة"
-
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr "إعدادات تحجيم العرض"
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:61
 msgid "Set successfully"
 msgstr "تم اﻹعداد بنجاح"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
 msgstr ""
+
+#: ../../appearance/scale.go:66
+msgid "Display scaling"
+msgstr "عرض الشاشة"
+
+#: ../../appearance/scale.go:67
+msgid "Setting display scaling"
+msgstr "إعدادات تحجيم العرض"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -193,8 +193,8 @@ msgid "Show/Hide the dock"
 msgstr "إظهار /إخفاء الشريط"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
-msgstr "إيقاف تشغيل الواجهة"
+msgid "Shutdown interface"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -358,11 +358,11 @@ msgstr ""
 msgid "Restore"
 msgstr "استعادة"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
 msgstr "إلغاء"
 
-#: ../../lastore/lastore.go:233
+#: ../../lastore/lastore.go:240
 msgid "Retry"
 msgstr "إعادة المحاولة"
 
@@ -931,21 +931,21 @@ msgid "Battery low, please plug in"
 msgstr "البطارية منخفضة، رجاءً اشبك السلك الكهربائي"
 
 #: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
-msgstr "المصادقة مطلوبة لضبط وقت النظام."
+msgid "Authentication is required to set the system time"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr "المصادقة مطلوبة للتحكم بما إذا كان سيتم تمكين تزامن وقت الشبكة."
+"shall be enabled"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
-msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق."
+"UTC time"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
-msgstr "المصادقة مطلوبة لضبط المنطقة الزمنية للنظام."
+msgid "Authentication is required to set the system timezone"
+msgstr ""
