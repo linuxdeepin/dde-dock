@@ -116,8 +116,9 @@ void PreviewContainer::checkMouseLeave()
         emit requestActivateWindow(m_floatingPreview->trackedWid());
     } else {
         emit requestCancelPreviewWindow();
-        emit requestHidePopup();
     }
+
+    emit requestHidePopup();
 }
 
 void PreviewContainer::prepareHide()
@@ -204,7 +205,7 @@ void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
     e->ignore();
 
     m_needActivate = true;
-    m_mouseLeaveTimer->start(10);
+    m_mouseLeaveTimer->start();
 }
 
 void PreviewContainer::onSnapshotClicked(const WId wid)
