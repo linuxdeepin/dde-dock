@@ -6,9 +6,11 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pam"
@@ -25,10 +27,12 @@ func isPamServiceExist(name string) bool {
 
 type Authority struct {
 	service       *dbusutil.Service
+	sigLoop       *dbusutil.SignalLoop
 	count         uint64
 	mu            sync.Mutex
 	txs           map[uint64]Transaction
 	fprintManager *fprint.Manager
+	dbusDaemon    *ofdbus.DBus
 
 	methods *struct {
 		Start       func() `in:"authType,user,agentObj" out:"transactionObj"`
@@ -37,11 +41,17 @@ type Authority struct {
 }
 
 func newAuthority(service *dbusutil.Service) *Authority {
+	sysBus := service.Conn()
 	auth := &Authority{
 		service:       service,
 		txs:           make(map[uint64]Transaction),
-		fprintManager: fprint.NewManager(service.Conn()),
+		fprintManager: fprint.NewManager(sysBus),
+		dbusDaemon:    ofdbus.NewDBus(sysBus),
+		sigLoop:       dbusutil.NewSignalLoop(sysBus, 10),
 	}
+
+	auth.sigLoop.Start()
+	auth.listenDBusSignals()
 	return auth
 }
 
@@ -51,6 +61,32 @@ func (*Authority) GetInterfaceName() string {
 
 var authTypeMap = map[string]string{
 	"keyboard": "deepin-auth-keyboard",
+}
+
+func (a *Authority) listenDBusSignals() {
+	a.dbusDaemon.InitSignalExt(a.sigLoop, true)
+	_, err := a.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
+		if strings.HasPrefix(name, ":") && newOwner == "" {
+			var lostTxs []Transaction
+			a.mu.Lock()
+			for _, tx := range a.txs {
+				if tx.matchSender(name) {
+					log.Println("lost tx", name, tx.getId())
+					lostTxs = append(lostTxs, tx)
+				}
+			}
+			a.mu.Unlock()
+
+			go func() {
+				for _, tx := range lostTxs {
+					_ = tx.End(dbus.Sender(name))
+				}
+			}()
+		}
+	})
+	if err != nil {
+		log.Println("WARN:", err)
+	}
 }
 
 func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.ObjectPath) (dbus.ObjectPath, *dbus.Error) {
@@ -79,6 +115,7 @@ func (a *Authority) StartFPrint(sender dbus.Sender, user string, agent dbus.Obje
 	a.mu.Unlock()
 
 	tx := &FPrintTransaction{
+		Sender: string(sender),
 		baseTransaction: baseTransaction{
 			id:     id,
 			parent: a,
@@ -111,7 +148,7 @@ func (a *Authority) StartPAM(sender dbus.Sender, authType, user string, agent db
 		return "/", fmt.Errorf("pam service %q not exist", pamService)
 	}
 
-	tx, err := a.startPAMTx(pamService, user)
+	tx, err := a.startPAMTx(pamService, user, string(sender))
 	if err != nil {
 		return "/", err
 	}
@@ -125,13 +162,14 @@ func (a *Authority) StartPAM(sender dbus.Sender, authType, user string, agent db
 	return path, nil
 }
 
-func (a *Authority) startPAMTx(service, user string) (*PAMTransaction, error) {
+func (a *Authority) startPAMTx(service, user, sender string) (*PAMTransaction, error) {
 	a.mu.Lock()
 	id := a.count
 	a.count++
 	a.mu.Unlock()
 
 	tx := &PAMTransaction{
+		Sender: sender,
 		baseTransaction: baseTransaction{
 			id:     id,
 			parent: a,

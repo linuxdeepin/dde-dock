@@ -18,6 +18,7 @@ type FPrintTransaction struct {
 	baseTransaction
 	PropsMu        sync.RWMutex
 	Authenticating bool
+	Sender         string
 	methods        *struct {
 		SetUser func() `in:"user"`
 	}

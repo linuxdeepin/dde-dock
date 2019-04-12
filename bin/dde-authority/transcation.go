@@ -22,6 +22,8 @@ func getTxObjPath(id uint64) dbus.ObjectPath {
 type Transaction interface {
 	getUserCookie() (string, string)
 	clearCookie()
+	matchSender(name string) bool
+	getId() uint64
 
 	GetInterfaceName() string
 	Authenticate(sender dbus.Sender) *dbus.Error
@@ -45,11 +47,19 @@ func (*baseTransaction) GetInterfaceName() string {
 	return dbusTxInterface
 }
 
+func (tx *baseTransaction) getId() uint64 {
+	return tx.id
+}
+
 func (tx *baseTransaction) checkSender(sender dbus.Sender) *dbus.Error {
 	if tx.agent.Destination() != string(sender) {
 		return dbusutil.ToError(errors.New("sender not match"))
 	}
 	return nil
+}
+
+func (tx *baseTransaction) matchSender(name string) bool {
+	return tx.agent.Destination() == name
 }
 
 func (tx *baseTransaction) requestEchoOn(msg string) (ret string, err error) {
