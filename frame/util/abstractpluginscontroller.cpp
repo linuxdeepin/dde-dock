@@ -51,12 +51,12 @@ void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter,
 
     // save to local cache
     QJsonObject localObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
-    localObject.insert(key, value.toJsonValue());
+    localObject.insert(key, QJsonValue::fromVariant(value)); //Note: QVariant::toJsonValue() not work in Qt 5.7
     m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
 
     // save to daemon
     QJsonObject remoteObject, remoteObjectInter;
-    remoteObjectInter.insert(key, value.toJsonValue());
+    remoteObjectInter.insert(key, QJsonValue::fromVariant(value)); //Note: QVariant::toJsonValue() not work in Qt 5.7
     remoteObject.insert(itemInter->pluginName(), remoteObjectInter);
     m_dockDaemonInter->MergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
