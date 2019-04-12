@@ -93,7 +93,6 @@ private slots:
     void refershIcon() Q_DECL_OVERRIDE;
     void activeChanged();
     void showPreview();
-    void cancelAndHidePreview();
     void playSwingEffect();
     void stopSwingEffect();
     void checkAttentionEffect();

@@ -80,7 +80,8 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowLi
     }
 
     if (m_snapshots.isEmpty())
-        emit requestCancelAndHidePreview();
+        emit requestCancelPreviewWindow();
+        emit requestHidePopup();
 
     adjustSize();
 }
@@ -108,14 +109,14 @@ void PreviewContainer::checkMouseLeave()
     if (hover)
         return;
 
-    emit requestCancelAndHidePreview();
-
     m_floatingPreview->setVisible(false);
 
-    if (m_needActivate)
-    {
+    if (m_needActivate) {
         m_needActivate = false;
         emit requestActivateWindow(m_floatingPreview->trackedWid());
+    } else {
+        emit requestCancelPreviewWindow();
+        emit requestHidePopup();
     }
 }
 
@@ -159,8 +160,7 @@ void PreviewContainer::appendSnapWidget(const WId wid)
 {
     AppSnapshot *snap = new AppSnapshot(wid);
 
-    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestCancelAndHidePreview, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows);
 
@@ -185,7 +185,6 @@ void PreviewContainer::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
-    m_floatingPreview->setVisible(false);
     m_mouseLeaveTimer->start();
 }
 
@@ -206,6 +205,15 @@ void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
 
     m_needActivate = true;
     m_mouseLeaveTimer->start(10);
+}
+
+void PreviewContainer::onSnapshotClicked(const WId wid)
+{
+    Q_UNUSED(wid);
+
+    m_needActivate = true;
+    // the leaveEvent of this widget will be called after this signal
+    Q_EMIT requestHidePopup();
 }
 
 void PreviewContainer::previewEntered(const WId wid)
