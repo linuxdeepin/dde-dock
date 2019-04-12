@@ -582,19 +582,15 @@ void AppItem::showPreview()
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, this, &AppItem::cancelAndHidePreview);
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, &AppItem::requestCancelPreview);
+    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::hidePopup);
     connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, [=]() { m_appPreviewTips = nullptr; });
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelAndHidePreview, [=]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, [=]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, [=]() { m_appPreviewTips = nullptr; });
 
     showPopupWindow(m_appPreviewTips, true);
-}
-
-void AppItem::cancelAndHidePreview()
-{
-    hidePopup();
-    emit requestCancelPreview();
 }
 
 void AppItem::playSwingEffect()

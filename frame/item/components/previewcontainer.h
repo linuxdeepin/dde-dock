@@ -47,7 +47,8 @@ signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCheckWindows() const;
-    void requestCancelAndHidePreview() const;
+    void requestCancelPreviewWindow() const;
+    void requestHidePopup() const;
 
 public:
     void setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose);
@@ -68,6 +69,7 @@ private:
     void dragLeaveEvent(QDragLeaveEvent *e);
 
 private slots:
+    void onSnapshotClicked(const WId wid);
     void previewEntered(const WId wid);
     void moveFloatingPreview(const QPoint &p);
 
