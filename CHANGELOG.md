@@ -1,3 +1,15 @@
+<a name="4.9.7"></a>
+## 4.9.7 (2019-04-15)
+
+
+#### Bug Fixes
+
+*   can not hover preview after drag ([64aa65a5](https://github.com/linuxdeepin/dde-dock/commit/64aa65a5f0db7d2ac85d6c285bc057f2c6d5f898))
+*   preview window can not be raised after clicked preview snapshot ([f4d6ba10](https://github.com/linuxdeepin/dde-dock/commit/f4d6ba107656cf0ce917483bfa72406f70f5f688))
+*   plugin settings value can not transform to Json value in qt 5.7 ([9293c45d](https://github.com/linuxdeepin/dde-dock/commit/9293c45df595431aee5d622f3ca983ae422dcfd1))
+
+
+
 <a name="4.9.6"></a>
 ## 4.9.6 (2019-04-10)
 
