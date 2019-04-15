@@ -166,7 +166,7 @@ func (m *Manager) AuthenticateUser(sender dbus.Sender, username string) *dbus.Er
 		return nil
 	}
 
-	m.authUserTable[id] = make(chan string)
+	m.authUserTable[id] = make(chan string, 1)
 	m.authLocker.Unlock()
 	go m.doAuthenticate(username, "", pid)
 	return nil
@@ -185,15 +185,16 @@ func (m *Manager) UnlockCheck(sender dbus.Sender, username, password string) *db
 
 	m.authLocker.Lock()
 	v, ok := m.authUserTable[id]
-	m.authLocker.Unlock()
 	if ok && v != nil {
 		log.Println("In authenticating:", id)
 		// in authenticate
 		if password != "" {
 			v <- password
 		}
+		m.authLocker.Unlock()
 		return nil
 	}
+	m.authLocker.Unlock()
 
 	go m.doAuthenticate(username, password, pid)
 	return nil
@@ -247,9 +248,8 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 
 				m.authLocker.Lock()
 				delete(m.authUserTable, id)
-				m.authLocker.Unlock()
 				close(v)
-				v = nil
+				m.authLocker.Unlock()
 				return tmp, nil
 			}
 		case pam.ErrorMsg:
@@ -279,10 +279,7 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 	m.authLocker.Lock()
 	v, ok := m.authUserTable[id]
 	if ok {
-		if v != nil {
-			close(v)
-			v = nil
-		}
+		close(v)
 		delete(m.authUserTable, id)
 	}
 	m.authLocker.Unlock()
