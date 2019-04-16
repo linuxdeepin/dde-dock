@@ -35,6 +35,7 @@ import (
 	"pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -103,9 +104,38 @@ func main() {
 	// NOTE: system/power module requires glib loop
 	go glib.StartLoop()
 
+	fixDeepinInstallConfig()
 	service.Wait()
 }
 
 func (*Daemon) GetInterfaceName() string {
 	return dbusInterface
+}
+
+func fixDeepinInstallConfig() {
+	const (
+		filename = "/etc/deepin-installer.conf"
+		section  = "General"
+		key      = "DI_PASSWORD"
+	)
+
+	kf := keyfile.NewKeyFile()
+	err := kf.LoadFromFile(filename)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			logger.Warning("failed to load:", err)
+		}
+		return
+	}
+
+	val, _ := kf.GetValue(section, key)
+	if val == "" {
+		return
+	}
+
+	kf.DeleteKey(section, key)
+	err = kf.SaveToFile(filename)
+	if err != nil {
+		logger.Warning("failed to save:", err)
+	}
 }
