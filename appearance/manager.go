@@ -564,7 +564,10 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 	}
 	logger.Debug("prepare result:", file)
 	uri := dutils.EncodeURI(file, dutils.SCHEME_FILE)
-	m.wm.ChangeCurrentWorkspaceBackground(dbus.FlagNoAutoStart, uri)
+	err = m.wm.ChangeCurrentWorkspaceBackground(0, uri)
+	if err != nil {
+		return "", err
+	}
 
 	_, err = m.imageBlur.Get(0, file)
 	if err != nil {
@@ -697,7 +700,7 @@ func (m *Manager) autoChangeBg(t time.Time) {
 
 	_, err := m.doSetBackground(file)
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning("failed to set background:", err)
 	}
 
 	err = m.saveWSConfig(t)
