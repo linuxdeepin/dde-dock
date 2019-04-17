@@ -159,24 +159,31 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     const QString &pluginApi = meta.value("api").toString();
+    bool pluginIsValid = true;
     if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi))
     {
-        QString notifyMessage(tr("The plugin %1 is not compatible with the system."));
-        Dtk::Core::DUtil::DNotifySender(notifyMessage.arg(QFileInfo(pluginFile).fileName())).appIcon("dialog-warning").call();
-
         qWarning() << objectName()
                    << "plugin api version not matched! expect versions:" << CompatiblePluginApiList
                    << ", got version:" << pluginApi
                    << ", the plugin file is:" << pluginFile;
-        return;
+
+        pluginIsValid = false;
     }
 
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
     if (!interface)
     {
         qWarning() << objectName() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
+
         pluginLoader->unload();
         pluginLoader->deleteLater();
+
+        pluginIsValid = false;
+    }
+
+    if (!pluginIsValid) {
+        QString notifyMessage(tr("The plugin %1 is not compatible with the system."));
+        Dtk::Core::DUtil::DNotifySender(notifyMessage.arg(QFileInfo(pluginFile).fileName())).appIcon("dialog-warning").call();
         return;
     }
 
