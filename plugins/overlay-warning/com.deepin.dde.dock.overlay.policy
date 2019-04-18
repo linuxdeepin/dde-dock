@@ -14,6 +14,7 @@
     </defaults>
     <message xml:lang="zh_CN">本次启动处于 overlay 保护模式下，您的所有操作将不会被保存，是否要关闭此模式并重启？</message>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/sbin/overlayroot-disable</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/sbin/overlayroot-disable</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 
