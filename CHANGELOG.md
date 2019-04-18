@@ -1,3 +1,9 @@
+[3.26.0] 2019-04-18
+*   fix(appearance): do not change background after logging in
+*   fix: deepin-installer.conf
+*   fix(lockservice): panic: send on closed channel
+*   fix(authority): user in group nopasswdlogin auth failed
+
 [3.25.2] 2019-04-10
 *   chore: auto pull translation files from transifex
 *   chore: update depends for wm
