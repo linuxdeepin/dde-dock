@@ -1,3 +1,14 @@
+<a name="4.9.8"></a>
+### 4.9.8 (2019-04-19)
+
+
+#### Bug Fixes
+
+*   translation of polkit message of overlayroot-disable in stable system ([6c205f37](https://github.com/linuxdeepin/dde-dock/commit/6c205f375050e5825b51185da45b420c70688479))
+*   no notify be sent when plugin's qt version is incompatible ([c34ca9b2](https://github.com/linuxdeepin/dde-dock/commit/c34ca9b2272dc320de3589e1aa26b701e60e4c7a))
+
+
+
 <a name="4.9.7"></a>
 ## 4.9.7 (2019-04-15)
 
