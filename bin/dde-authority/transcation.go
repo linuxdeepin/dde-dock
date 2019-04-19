@@ -136,3 +136,12 @@ func (tx *baseTransaction) getUser() string {
 	tx.mu.Unlock()
 	return user
 }
+
+func (tx *baseTransaction) getUserLocale() string {
+	locale, err := tx.parent.getUserLocale(tx.getUser())
+	if err != nil {
+		log.Println("Warning: failed to get user locale:", err)
+		return "en_US.UTF-8"
+	}
+	return locale
+}

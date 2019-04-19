@@ -7,12 +7,23 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
+	"github.com/gosexy/gettext"
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
+
+var (
+	msgVerificationFailed   = Tr("Fingerprint verification failed")
+	msgVerificationTimedOut = Tr("Fingerprint verification timed out")
+)
+
+func Tr(str string) string {
+	return str
+}
 
 type FPrintTransaction struct {
 	baseTransaction
@@ -29,7 +40,10 @@ type FPrintTransaction struct {
 func (tx *FPrintTransaction) setPropAuthenticating(value bool) {
 	if tx.Authenticating != value {
 		tx.Authenticating = value
-		tx.parent.service.EmitPropertyChanged(tx, "Authenticating", value)
+		err := tx.parent.service.EmitPropertyChanged(tx, "Authenticating", value)
+		if err != nil {
+			log.Println("Warning:", err)
+		}
 	}
 }
 
@@ -142,31 +156,43 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 		isSwipe = true
 	}
 
-	deviceObj.ConnectVerifyFingerSelected(func(finger string) {
+	locale := tx.getUserLocale()
+	_, err = deviceObj.ConnectVerifyFingerSelected(func(finger string) {
 		var msg string
 		if isSwipe {
 			msg = "Swipe your finger across the fingerprint reader"
 		} else {
 			msg = "Place your finger on the fingerprint reader"
 		}
+		msg = getFprintMsg(locale, msg)
 		err := tx.displayTextInfo(msg)
 		if err != nil {
 			log.Println(err)
 		}
 	})
+	if err != nil {
+		log.Println("Warning:", err)
+	}
 
 	verifyResultCh := make(chan verifyResult)
 
-	deviceObj.ConnectVerifyStatus(func(result string, done bool) {
+	_, err = deviceObj.ConnectVerifyStatus(func(result string, done bool) {
 		log.Println("VerifyStatus", result, done)
 
 		msg := verifyResultStrToMsg(result, isSwipe)
+		msg = getFprintMsg(locale, msg)
 		if msg != "" {
-			tx.displayErrorMsg(msg)
+			err := tx.displayErrorMsg(msg)
+			if err != nil {
+				log.Println("Warning:", err)
+			}
 		}
 
 		verifyResultCh <- verifyResult{result, done}
 	})
+	if err != nil {
+		log.Println("Warning:", err)
+	}
 
 	var (
 		verifyOk  bool
@@ -175,7 +201,7 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	)
 
 	for maxTries > 0 {
-		verifyOk, continue0 = tx.doVerify(deviceObj, verifyResultCh)
+		verifyOk, continue0 = tx.doVerify(deviceObj, verifyResultCh, locale)
 		log.Printf("doVerify verifyOk: %v, continue: %v\n", verifyOk, continue0)
 		if !continue0 {
 			break
@@ -200,7 +226,8 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	return errors.New("verify failed")
 }
 
-func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh chan verifyResult) (ok, continue0 bool) {
+func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh chan verifyResult,
+	locale string) (ok, continue0 bool) {
 
 	log.Println("VerifyStart")
 	err := deviceObj.VerifyStart(0, "any")
@@ -215,7 +242,11 @@ loop:
 		select {
 		case <-time.After(10 * time.Second):
 			log.Println("timed out")
-			tx.displayErrorMsg("Verification timed out")
+			msg := getFprintMsg(locale, msgVerificationTimedOut)
+			err := tx.displayErrorMsg(msg)
+			if err != nil {
+				log.Println("Warning:", err)
+			}
 			break loop
 
 		case <-tx.quit:
@@ -255,7 +286,7 @@ loop:
 func verifyResultStrToMsg(result string, isSwipe bool) string {
 	switch result {
 	case "verify-no-match":
-		return "Failed to match fingerprint"
+		return msgVerificationFailed
 	case "verify-retry-scan":
 		if isSwipe {
 			return "Swipe your finger again"
@@ -271,6 +302,22 @@ func verifyResultStrToMsg(result string, isSwipe bool) string {
 	default:
 		return ""
 	}
+}
+
+func getFprintMsg(locale, msgId string) string {
+	gettext.SetLocale(gettext.LC_ALL, locale)
+	domain := "fprintd"
+	switch msgId {
+	case "":
+		return ""
+	case msgVerificationFailed, msgVerificationTimedOut:
+		domain = "dde-daemon"
+	}
+	text := gettext.DGettext(domain, msgId)
+	if utf8.ValidString(text) {
+		return text
+	}
+	return msgId
 }
 
 func (tx *FPrintTransaction) SetUser(sender dbus.Sender, user string) *dbus.Error {

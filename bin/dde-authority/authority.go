@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"pkg.deepin.io/lib/dbus1"
@@ -33,6 +34,7 @@ type Authority struct {
 	txs           map[uint64]Transaction
 	fprintManager *fprint.Manager
 	dbusDaemon    *ofdbus.DBus
+	accounts      *accounts.Accounts
 
 	methods *struct {
 		Start       func() `in:"authType,user,agentObj" out:"transactionObj"`
@@ -47,6 +49,7 @@ func newAuthority(service *dbusutil.Service) *Authority {
 		txs:           make(map[uint64]Transaction),
 		fprintManager: fprint.NewManager(sysBus),
 		dbusDaemon:    ofdbus.NewDBus(sysBus),
+		accounts:      accounts.NewAccounts(sysBus),
 		sigLoop:       dbusutil.NewSignalLoop(sysBus, 10),
 	}
 
@@ -225,4 +228,20 @@ func (a *Authority) deleteTx(id uint64) {
 		log.Println("warning:", err)
 	}
 	delete(a.txs, id)
+}
+
+func (a *Authority) getUserLocale(username string) (string, error) {
+	user, err := a.accounts.FindUserByName(0, username)
+	if err != nil {
+		return "", err
+	}
+	userPath := dbus.ObjectPath(user)
+	sysBus := a.service.Conn()
+	userObj, err := accounts.NewUser(sysBus, userPath)
+	if err != nil {
+		return "", err
+	}
+
+	locale, err := userObj.Locale().Get(0)
+	return locale, err
 }
