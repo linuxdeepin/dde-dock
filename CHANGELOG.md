@@ -1,3 +1,8 @@
+[3.27.0] 2019-04-19
+*   chore: auto pull translation files from transifex
+*   change(api): dde-authority add method HasCookie
+*   feat(dde-authority): fprint transcation give message based on user locale
+
 [3.26.0] 2019-04-18
 *   fix(appearance): do not change background after logging in
 *   fix: deepin-installer.conf
