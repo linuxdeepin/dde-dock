@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 16:38+0800\n"
-"PO-Revision-Date: 2019-04-09 01:14+0000\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"POT-Creation-Date: 2019-04-19 15:46+0800\n"
+"PO-Revision-Date: 2019-04-19 08:21+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,6 +71,14 @@ msgstr "Маштабування дисплею"
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
 msgstr "Налаштування масштабування зображення"
+
+#: ../../bin/dde-authority/fprint_transaction.go:20
+msgid "Fingerprint verification failed"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification timed out"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -181,7 +189,7 @@ msgstr "Термінал"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Deepin Screen Recorder"
+msgstr "Записувач Екрану Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -197,7 +205,7 @@ msgstr "Інтерфейс завершення роботи"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Terminal Quake Window"
+msgstr "Вікно Терміналу Quake"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -221,7 +229,7 @@ msgstr "Файловий менеджер"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Відключити тачпад"
+msgstr "Вимкнути тачпад"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -245,19 +253,19 @@ msgstr "Переключити компонування"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "Переключитися на ліву робочу область"
+msgstr "Перемикання на ліву робочій простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr "Переключитись на правий робочий простір"
+msgstr "Перемикання на правий робочий простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr "Переключитись на верхнє робоче місце"
+msgstr "Перемикання на верхнє робочий простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr "Перейти в нижчій робочій простір"
+msgstr "Перемикання на нижчій робочій простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
@@ -265,7 +273,7 @@ msgstr "Замінити схожі вікна"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr "Переключатися між подібними вікнами у зворотному порядку"
+msgstr "Перемикання між подібними вікнами у зворотному порядку"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
@@ -273,11 +281,11 @@ msgstr "Перехід між вікнами"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr "Переключення між вікнами у зворотному порядку"
+msgstr "Перемикання між вікнами у зворотному порядку"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Показати робочий стіл"
+msgstr "Показати стільницю"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
@@ -305,23 +313,23 @@ msgstr "Змінити розмір вікна"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "Переміститись на лівий робочий простір"
+msgstr "Перемістити на лівий робочий простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "Перемістити до правого робочого простору"
+msgstr "Перемістити на правий робочій простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr "Перейти до верхнього робочого місця"
+msgstr "Перемістити на верхній робочій простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr "Перейти на нижнє робоче місце"
+msgstr "Перемістити на нижчій робочій простір"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr "Відображати вікна всіх робочих областей"
+msgstr "Відображати вікна всіх робочих просторів"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
@@ -329,7 +337,7 @@ msgstr "Показати вікна поточного робочого прос
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Показати робоче місце"
+msgstr "Показати робочій простір"
 
 #: ../../langselector/locale.go:61
 msgid "Authentication is required to switch language"
@@ -527,11 +535,11 @@ msgstr "Стан пристрою змінено, причина невідом�
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr "Пристрій зараз управляється"
+msgstr "Пристрій зараз під керуванням"
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr "Управління цим пристроєм більше не здійснюється."
+msgstr "Керування цим пристроєм більше не здійснюється."
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
@@ -678,7 +686,7 @@ msgstr "Активний зв‘язок пристрою було видале�
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr "Користувач або клієнт надіслав запит про відключення."
+msgstr "Користувач або клієнт надіслав запит про відімкнення."
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
@@ -758,7 +766,7 @@ msgstr "Модем вже готовий та доступний."
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr "Неправильний SIM PIN"
+msgstr "Невірний SIM PIN"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
@@ -844,7 +852,7 @@ msgstr "Спробуйте підключити %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot share enabled"
-msgstr "Точка доступу включена"
+msgstr "Точка доступу увімкнена"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -872,7 +880,7 @@ msgstr "Не вдалося з'єднатися із %q. Будь ласка, п
 
 #: ../../network/state_handler.go:340
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Помилка підключення, неможливо підключити %q, неправильний пароль"
+msgstr "Помилка підключення, неможливо підключити %q, невірний пароль"
 
 #: ../../network/utils_dbus_nm.go:227
 msgid "Unknown"
@@ -902,7 +910,7 @@ msgstr "Апаратний перемикач WLAN Card вимкнений, бу
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
-msgstr "Системний проксі-сервер успішно настроєно."
+msgstr "Системний проксі-сервер успішно налаштовано."
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
@@ -914,7 +922,7 @@ msgstr "Акумулятор критично розряджено"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr "Невдовзі система перейде до стану сну, будь ласка, увімкніть комп'ютер до мережі живлення"
+msgstr "Невдовзі система перейде до стану сну, будь ласка, приєднайте комп'ютер до мережі живлення"
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
@@ -923,11 +931,11 @@ msgstr "Низький заряд батареї"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr "Невдовзі система перейде до стану сну, будь ласка, увімкніть комп'ютер до мережі живлення"
+msgstr "Невдовзі система перейде до стану сну, будь ласка, приєднайте комп'ютер до мережі живлення"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr "Низький рівень заряду акумулятора, будь ласка, увімкніть комп'ютер до мережі живлення"
+msgstr "Низький рівень заряду акумулятора, будь ласка, приєднайте комп'ютер до мережі живлення"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
@@ -937,7 +945,7 @@ msgstr "Аутентифікація потрібна для встановле�
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Аутентифікація необхідна для того, щоб контролювати, чи має бути включена синхронізація часу мережі."
+msgstr "Аутентифікація необхідна для того, щоб контролювати, чи має бути увімкнено синхронізацію часу мережі."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""

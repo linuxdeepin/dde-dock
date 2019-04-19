@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 16:38+0800\n"
-"PO-Revision-Date: 2019-04-09 01:14+0000\n"
-"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"POT-Creation-Date: 2019-04-19 15:46+0800\n"
+"PO-Revision-Date: 2019-04-19 08:21+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,7 +36,7 @@ msgstr "Das Passwort muss englische Buchstaben (Groß-/Kleinschreibung wird unte
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Benutzername darf nicht leer sein"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -44,15 +44,15 @@ msgstr "Benutzername muss a~z, 0~9, - oder _ enthalten"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "Das erste Zeichen muss in Kleinbuchstaben geschrieben sein"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "Der Benutzername ist vorhanden"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Der Benutzername ist vom System verwendet worden"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -73,6 +73,14 @@ msgstr "Anzeigeskalierung"
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
 msgstr "Skalierung der Anzeige einstellen"
+
+#: ../../bin/dde-authority/fprint_transaction.go:20
+msgid "Fingerprint verification failed"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification timed out"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -195,7 +203,7 @@ msgstr "Dock anzeigen/ausblenden"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Herunterfahrenoberfläche"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -335,7 +343,7 @@ msgstr "Arbeitsfläche anzeigen"
 
 #: ../../langselector/locale.go:61
 msgid "Authentication is required to switch language"
-msgstr "Authentifizierung ist erforderlich, um die Sprache zu wechseln"
+msgstr "Für den Sprachwechsel ist eine Authentifizierung erforderlich"
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
@@ -556,7 +564,7 @@ msgstr "Passwörter waren erforderlich, wurden aber nicht bereitgestellt"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Die 802.1X-Verbindung hat sich vom Zugangspunkt oder dem Authentifizierungsserver getrennt."
+msgstr "Die 802.1X-Verbindung hat sich vom Zugangspunkt oder dem Authentifizierungsserver getrennt"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -568,7 +576,7 @@ msgstr "Die 802.1X Verbindung wurde beendet oder schlug unerwartet fehl."
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr "Die 802.1X Verbindung hat zu viel Zeit für die Authentifizierung benötigt."
+msgstr "Die 802.1X Verbindung hat zu viel Zeit für die Authentifizierung benötigt"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
@@ -933,20 +941,20 @@ msgstr "Akkuladung niedrig, bitte anschließen"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Zum Festlegen der System-Uhrzeit ist eine Authentifizierung notwendig"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Für die Einstellung, ob die Synchronisation der Netzwerkzeit aktiviert werden soll, ist eine Authentifizierung erforderlich"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Zum Einrichten der Echtzeituhr auf die lokale oder UTC-Uhrzeit ist eine Authentifizierung notwendig."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Zum Festlegen der System-Zeitzone ist eine Authentifizierung notwendig"

@@ -11,7 +11,7 @@
 # Deepin en Español, 2017-2018
 # Deepin en Español, 2018-2019
 # Diego Cornejo <diegof.cornejo@gmail.com>, 2016
-# Diego Sanguinetti, 2017-2018
+# Diego Sanguinetti, 2017-2019
 # jhalo <jhalo@protonmail.com>, 2017
 # jhalo <jhalo@protonmail.com>, 2017
 # Luis Lazaro <luis_laz_zgz@hotmail.com>, 2016
@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 16:38+0800\n"
-"PO-Revision-Date: 2019-04-09 01:14+0000\n"
-"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"POT-Creation-Date: 2019-04-19 15:46+0800\n"
+"PO-Revision-Date: 2019-04-19 08:21+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,7 +44,7 @@ msgstr "La contraseña debe contener letras (mayúsculas y minúsculas), número
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "El nombre de usuario no puede estar vacío"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -52,15 +52,15 @@ msgstr "El nombre de usuario debe tener a~z, 0~9, - o _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "El primer carácter debe estar en minúscula"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "El nombre de usuario ya existe"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "El nombre de usuario ha sido usado por el sistema"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -81,6 +81,14 @@ msgstr "Escalado de pantalla"
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
 msgstr "Configurar escalado de pantalla"
+
+#: ../../bin/dde-authority/fprint_transaction.go:20
+msgid "Fingerprint verification failed"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification timed out"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -203,7 +211,7 @@ msgstr "Mostrar/Ocultar la barra de herramientas"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Interfaz de apagado"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -941,20 +949,20 @@ msgstr "Batería baja, por favor, conéctela"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Se requiere autenticación para configurar la hora del sistema"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Se requiere autenticación para controlar la sincronización de la hora por red si está activada"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Se requiere autenticación para controlar si el RTC almacena la hora local o UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Se requiere autenticación para configurar la zona horaria del sistema."

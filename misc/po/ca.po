@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 16:38+0800\n"
-"PO-Revision-Date: 2019-04-09 01:14+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>\n"
+"POT-Creation-Date: 2019-04-19 15:46+0800\n"
+"PO-Revision-Date: 2019-04-19 08:21+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,7 @@ msgstr "La contrasenya ha de contenir lletres angleses (majúscules o minúscule
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "El nom d'usuari no es pot deixar en blanc."
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -39,15 +39,15 @@ msgstr "El nom d'usuari ha de contenir lletres de la a a la z, números del 0 al
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "El primer caràcter ha de ser en minúscules."
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "El nom d'usuari ja existeix."
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "El nom d'usuari ja l'ha usat el sistema."
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -68,6 +68,14 @@ msgstr "Escalat de la pantalla"
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
 msgstr "Establiment de l'escalat de la pantalla"
+
+#: ../../bin/dde-authority/fprint_transaction.go:20
+msgid "Fingerprint verification failed"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification timed out"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -190,7 +198,7 @@ msgstr "Mostra / amaga l'acoblador"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Atura la interfície."
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -911,7 +919,7 @@ msgstr "Bateria molt baixa"
 
 #: ../../session/power/manager_events.go:134
 msgid "Computer will suspend very soon, please plug in now"
-msgstr "L'ordinador se suspendrà molt aviat, endolleu-lo ara"
+msgstr "L'ordinador se suspendrà molt aviat, endolleu-lo ara."
 
 #: ../../session/power/manager_events.go:157
 #: ../../session/power/manager_events.go:164
@@ -920,7 +928,7 @@ msgstr "Bateria baixa"
 
 #: ../../session/power/manager_events.go:158
 msgid "Computer will suspend soon, please plug in"
-msgstr "L'ordinador se suspendrà aviat, endolleu-lo ara"
+msgstr "L'ordinador se suspendrà aviat, endolleu-lo ara."
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
@@ -928,20 +936,20 @@ msgstr "Bateria baixa, endolleu-lo"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Cal autenticació per establir l'hora del sistema."
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Cal autenticació per controlar si s'ha d'habilitar la sincronització amb l'hora de la xarxa."
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Cal autenticació per controlar si l'RTC (rellotge de temps real) desa l'hora local o l'hora UTC."
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Cal autenticació per establir la zona horària del sistema."

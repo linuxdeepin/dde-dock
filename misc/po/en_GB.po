@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 16:38+0800\n"
-"PO-Revision-Date: 2019-04-08 09:01+0000\n"
+"POT-Creation-Date: 2019-04-19 15:46+0800\n"
+"PO-Revision-Date: 2019-04-19 08:21+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: English (United Kingdom) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
@@ -66,6 +66,14 @@ msgstr ""
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:20
+msgid "Fingerprint verification failed"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification timed out"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29

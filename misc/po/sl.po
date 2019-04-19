@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 16:38+0800\n"
-"PO-Revision-Date: 2019-04-09 01:14+0000\n"
-"Last-Translator: Gorzy Gorup <gorupgorazd@gmail.com>\n"
+"POT-Creation-Date: 2019-04-19 15:46+0800\n"
+"PO-Revision-Date: 2019-04-19 08:21+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,6 +69,14 @@ msgstr "Spreminjanje velikosti prikaza"
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
 msgstr "Nastavljanje spreminjanja velikosti"
+
+#: ../../bin/dde-authority/fprint_transaction.go:20
+msgid "Fingerprint verification failed"
+msgstr ""
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification timed out"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
