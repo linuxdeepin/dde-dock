@@ -39,6 +39,7 @@ type Authority struct {
 	methods *struct {
 		Start       func() `in:"authType,user,agentObj" out:"transactionObj"`
 		CheckCookie func() `in:"user,cookie" out:"result"`
+		HasCookie   func() `in:"user" out:"result"`
 	}
 }
 
@@ -206,6 +207,24 @@ func (a *Authority) CheckCookie(user, cookie string) (bool, *dbus.Error) {
 		user0, cookie0 := tx.getUserCookie()
 		if cookie == cookie0 && user == user0 {
 			tx.clearCookie()
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (a *Authority) HasCookie(user string) (bool, *dbus.Error) {
+	a.service.DelayAutoQuit()
+	if user == "" {
+		return false, nil
+	}
+
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	for _, tx := range a.txs {
+		user0, cookie := tx.getUserCookie()
+		if cookie != "" && user == user0 {
 			return true, nil
 		}
 	}
