@@ -1,6 +1,8 @@
 #!/usr/bin/make -f
 
 export GOPATH := /usr/share/gocode
+DEB_HOST_MULTIARCH := $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+export PAM_MODULE_DIR = lib/$(DEB_HOST_MULTIARCH)/security
 
 SYSTYPE=Desktop
 SYSTYPE=$(shell cat /etc/deepin-version | grep Type= | awk -F'=' '{print $$2}')

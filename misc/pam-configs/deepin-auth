@@ -4,4 +4,4 @@ Priority: 500
 Conflicts:
 Auth-Type: Primary
 Auth:
-	[success=end default=ignore]	pam_exec.so quiet seteuid expose_authtok /usr/lib/deepin-daemon/dde-authority-pam
+	[success=end default=ignore]	pam_deepin_auth.so
