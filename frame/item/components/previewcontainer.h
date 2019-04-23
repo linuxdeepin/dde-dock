@@ -72,6 +72,7 @@ private slots:
     void onSnapshotClicked(const WId wid);
     void previewEntered(const WId wid);
     void moveFloatingPreview(const QPoint &p);
+    void previewFloating();
 
 private:
     bool m_needActivate;
@@ -82,6 +83,8 @@ private:
 
     QTimer *m_mouseLeaveTimer;
     DWindowManagerHelper *m_wmHelper;
+    QTimer *m_waitForShowPreviewTimer;
+    WId m_currentWId;
 };
 
 #endif // PREVIEWCONTAINER_H

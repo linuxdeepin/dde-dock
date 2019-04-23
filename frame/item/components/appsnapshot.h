@@ -58,6 +58,7 @@ public:
 
 signals:
     void entered(const WId wid) const;
+    void leaved(const WId wid) const;
     void clicked(const WId wid) const;
     void requestCheckWindow() const;
 

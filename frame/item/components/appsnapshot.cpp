@@ -66,9 +66,6 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     m_closeBtn2D->setVisible(false);
     m_title->setObjectName("AppSnapshotTitle");
 
-    m_waitLeaveTimer->setInterval(200);
-    m_waitLeaveTimer->setSingleShot(true);
-
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_title);
     centralLayout->addWidget(m_closeBtn2D);
@@ -83,9 +80,6 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     connect(m_closeBtn2D, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
-    connect(m_waitLeaveTimer, &QTimer::timeout, this, [=] {
-        emit entered(wid);
-    });
     QTimer::singleShot(1, this, &AppSnapshot::compositeChanged);
 }
 
@@ -208,7 +202,7 @@ void AppSnapshot::enterEvent(QEvent *e)
         m_closeBtn2D->setVisible(true);
     }
     else {
-        m_waitLeaveTimer->start();
+        emit entered(wid());
     }
 
     update();
@@ -219,7 +213,8 @@ void AppSnapshot::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_closeBtn2D->setVisible(false);
-    m_waitLeaveTimer->stop();
+
+    emit leaved(wid());
 
     update();
 }

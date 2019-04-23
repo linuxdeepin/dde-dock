@@ -47,12 +47,17 @@ PreviewContainer::PreviewContainer(QWidget *parent)
 
     m_floatingPreview->setVisible(false);
 
+    m_waitForShowPreviewTimer = new QTimer(this);
+    m_waitForShowPreviewTimer->setSingleShot(true);
+    m_waitForShowPreviewTimer->setInterval(200);
+
     setAcceptDrops(true);
     setLayout(m_windowListLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_mouseLeaveTimer, &QTimer::timeout, this, &PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
     connect(m_floatingPreview, &FloatingPreview::requestMove, this, &PreviewContainer::moveFloatingPreview);
+    connect(m_waitForShowPreviewTimer, &QTimer::timeout, this, &PreviewContainer::previewFloating);
 }
 
 void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose)
@@ -164,6 +169,7 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows);
+    connect(snap, &AppSnapshot::leaved, m_waitForShowPreviewTimer, &QTimer::stop);
 
     m_windowListLayout->addWidget(snap);
 
@@ -187,6 +193,7 @@ void PreviewContainer::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_mouseLeaveTimer->start();
+    m_waitForShowPreviewTimer->stop();
 }
 
 void PreviewContainer::dragEnterEvent(QDragEnterEvent *e)
@@ -233,13 +240,10 @@ void PreviewContainer::previewEntered(const WId wid)
         preSnap->setContentsMargins(0, 0, 0, 0);
     }
 
-    QTimer::singleShot(0, [=] {
-        m_floatingPreview->trackWindow(snap);
-        m_floatingPreview->setVisible(true);
-        m_floatingPreview->raise();
-    });
+    m_currentWId = wid;
 
-    emit requestPreviewWindow(wid);
+    m_floatingPreview->trackWindow(snap);
+    m_waitForShowPreviewTimer->start();
 }
 
 void PreviewContainer::moveFloatingPreview(const QPoint &p)
@@ -263,4 +267,12 @@ void PreviewContainer::moveFloatingPreview(const QPoint &p)
         else
             m_floatingPreview->move(p);
     }
+}
+
+void PreviewContainer::previewFloating()
+{
+    m_floatingPreview->setVisible(true);
+    m_floatingPreview->raise();
+
+    emit requestPreviewWindow(m_currentWId);
 }
