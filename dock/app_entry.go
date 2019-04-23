@@ -154,16 +154,6 @@ func (entry *AppEntry) getExec(oneLine bool) string {
 	return ""
 }
 
-func (entry *AppEntry) getDisplayName() string {
-	if entry.appInfo != nil {
-		return entry.appInfo.GetDisplayName()
-	}
-	if entry.current != nil {
-		return entry.current.getDisplayName()
-	}
-	return ""
-}
-
 func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
 	entry.current = winInfo
 	if winInfo == nil {
@@ -275,7 +265,7 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
 
 func (entry *AppEntry) getName() (name string) {
 	if entry.appInfo != nil {
-		name = entry.appInfo.GetDisplayName()
+		name = entry.appInfo.name
 		if !utf8.ValidString(name) {
 			name = ""
 		}

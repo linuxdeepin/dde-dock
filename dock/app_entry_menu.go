@@ -95,7 +95,7 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 	var itemName string
 	if entry.hasWindow() {
-		itemName = entry.getDisplayName()
+		itemName = entry.getName()
 	} else {
 		itemName = Tr("_Open")
 	}

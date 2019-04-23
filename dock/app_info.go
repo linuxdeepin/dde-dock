@@ -33,6 +33,7 @@ type AppInfo struct {
 	*desktopappinfo.DesktopAppInfo
 	identifyMethod string
 	innerId        string
+	name           string
 }
 
 func newAppInfo(dai *desktopappinfo.DesktopAppInfo) *AppInfo {
@@ -40,6 +41,15 @@ func newAppInfo(dai *desktopappinfo.DesktopAppInfo) *AppInfo {
 		return nil
 	}
 	ai := &AppInfo{DesktopAppInfo: dai}
+	xDeepinVendor, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-Vendor")
+	if xDeepinVendor == "deepin" {
+		ai.name = dai.GetGenericName()
+		if ai.name == "" {
+			ai.name = dai.GetName()
+		}
+	} else {
+		ai.name = dai.GetName()
+	}
 	ai.genInnerId()
 	return ai
 }

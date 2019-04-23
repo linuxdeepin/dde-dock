@@ -66,8 +66,7 @@ func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
 
 	var name string
 	if xDeepinVendor == "deepin" {
-		name, _ = appInfo.GetLocaleString(desktopappinfo.MainSection,
-			desktopappinfo.KeyGenericName, "")
+		name = appInfo.GetGenericName()
 		if name == "" {
 			name = appInfo.GetName()
 		}
