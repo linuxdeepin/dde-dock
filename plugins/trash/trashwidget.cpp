@@ -170,7 +170,7 @@ void TrashWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center() / qApp->devicePixelRatio(), m_icon);
+    painter.drawPixmap(rect().center() - m_icon.rect().center() / devicePixelRatioF(), m_icon);
 }
 
 void TrashWidget::resizeEvent(QResizeEvent *e)
@@ -192,8 +192,8 @@ void TrashWidget::updateIcon()
 
     const int size = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     QIcon icon = QIcon::fromTheme(iconString);
-    m_icon = icon.pixmap(size * qApp->devicePixelRatio(), size * qApp->devicePixelRatio());
-    m_icon.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_icon = icon.pixmap(size * devicePixelRatioF(), size * devicePixelRatioF());
+    m_icon.setDevicePixelRatio(devicePixelRatioF());
     update();
 }
 

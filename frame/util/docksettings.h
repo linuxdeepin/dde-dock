@@ -80,6 +80,7 @@ public:
 
     const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
+    qreal dockRatio() const;
 
     void showDockSettingsMenu();
 

@@ -53,7 +53,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 {
     setFixedHeight(WIDTH);
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     QPixmap iconPix = QIcon::fromTheme("notification-network-wireless-full").pixmap(QSize(48, 48) * ratio);
     iconPix.setDevicePixelRatio(ratio);
 

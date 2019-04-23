@@ -56,12 +56,12 @@ void OnboardItem::paintEvent(QPaintEvent *e)
     pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - pixmap.rect().center() / qApp->devicePixelRatio(), pixmap);
+    painter.drawPixmap(rect().center() - pixmap.rect().center() / devicePixelRatioF(), pixmap);
 }
 
 const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) const
 {
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap;
     pixmap = QIcon::fromTheme(fileName).pixmap(size * ratio);

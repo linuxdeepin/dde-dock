@@ -21,6 +21,7 @@
 
 #include "mainwindow.h"
 #include "panel/mainpanel.h"
+#include "util/utils.h"
 
 #include <QDebug>
 #include <QEvent>
@@ -42,36 +43,22 @@ using org::kde::StatusNotifierWatcher;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
-    QScreen *s = qApp->primaryScreen();
-    for (auto *screen : qApp->screens())
-    {
-        const QRect &sg = screen->geometry();
-        if (sg.contains(scaledPos))
-        {
-            s = screen;
-            break;
-        }
-    }
+    QScreen const * screen = Utils::screenAtByScaled(scaledPos);
 
-    const QRect &g = s->geometry();
-
-    return g.topLeft() + (scaledPos - g.topLeft()) * s->devicePixelRatio();
+    return screen ? screen->geometry().topLeft() +
+                        (scaledPos - screen->geometry().topLeft()) *
+                            screen->devicePixelRatio()
+                  : scaledPos;
 }
 
 const QPoint scaledPos(const QPoint &rawXPos)
 {
-    QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens())
-    {
-        const QRect &sg = screen->geometry();
-        if (sg.contains(rawXPos))
-        {
-            g = sg;
-            break;
-        }
-    }
+    QScreen const * screen = Utils::screenAt(rawXPos);
 
-    return g.topLeft() + (rawXPos - g.topLeft()) / qApp->devicePixelRatio();
+    return screen
+               ? screen->geometry().topLeft() +
+                     (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
+               : rawXPos;
 }
 
 MainWindow::MainWindow(QWidget *parent)

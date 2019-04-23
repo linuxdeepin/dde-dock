@@ -52,7 +52,7 @@ AccessPointWidget::AccessPointWidget()
     m_securityPixmap = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16));
     m_securityIconSize = m_securityPixmap.size();
     m_securityLabel->setPixmap(m_securityPixmap);
-    m_securityLabel->setFixedSize(m_securityIconSize / qApp->devicePixelRatio());
+    m_securityLabel->setFixedSize(m_securityIconSize / devicePixelRatioF());
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_securityLabel);

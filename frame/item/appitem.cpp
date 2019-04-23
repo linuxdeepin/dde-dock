@@ -511,7 +511,7 @@ bool AppItem::hasAttention() const
 
 QPoint AppItem::appIconPosition() const
 {
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const QRectF itemRect = rect();
     const QRectF iconRect = m_appIcon.rect();
     const qreal iconX = itemRect.center().x() - iconRect.center().x() / ratio;
@@ -547,9 +547,9 @@ void AppItem::refershIcon()
     const int iconSize = qMin(width(), height());
 
     if (DockDisplayMode == Efficient)
-        m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7);
+        m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7, devicePixelRatioF());
     else
-        m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
+        m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8, devicePixelRatioF());
 
     if (m_appIcon.isNull()) {
         if (m_retryTimes < 5) {
@@ -602,7 +602,7 @@ void AppItem::playSwingEffect()
     stopSwingEffect();
 
     QPair<QGraphicsView *, QGraphicsItemAnimation *> pair =  SwingEffect(
-            this, m_appIcon, rect(), qApp->devicePixelRatio());
+            this, m_appIcon, rect(), devicePixelRatioF());
 
     m_swingEffectView = pair.first;
     m_itemAnimation = pair.second;

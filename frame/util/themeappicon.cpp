@@ -38,9 +38,8 @@ ThemeAppIcon::~ThemeAppIcon()
 
 }
 
-const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
+const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, const qreal ratio)
 {
-    const auto ratio = qApp->devicePixelRatio();
     QPixmap pixmap;
     QString key;
 

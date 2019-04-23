@@ -73,7 +73,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     const QDateTime current = QDateTime::currentDateTime();
@@ -188,7 +188,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 
 const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)
 {
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap(size * ratio);
     QSvgRenderer renderer(fileName);

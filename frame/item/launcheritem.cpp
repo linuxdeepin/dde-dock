@@ -48,11 +48,11 @@ void LauncherItem::refershIcon()
     const int iconSize = qMin(width(), height());
     if (DockDisplayMode == Efficient)
     {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7);
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9);
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7, devicePixelRatioF());
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9, devicePixelRatioF());
     } else {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6, devicePixelRatioF());
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8, devicePixelRatioF());
     }
 
     update();
@@ -69,7 +69,7 @@ void LauncherItem::paintEvent(QPaintEvent *e)
 
     const QPixmap pixmap = DockDisplayMode == Fashion ? m_largeIcon : m_smallIcon;
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const int iconX = rect().center().x() - pixmap.rect().center().x() / ratio;
     const int iconY = rect().center().y() - pixmap.rect().center().y() / ratio;
 

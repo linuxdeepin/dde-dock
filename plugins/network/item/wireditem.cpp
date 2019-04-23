@@ -72,7 +72,7 @@ void WiredItem::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_icon.rect());
     const int x = rf.center().x() - rfp.center().x() / ratio;
@@ -104,7 +104,7 @@ void WiredItem::reloadIcon()
 
 //    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const int iconSize = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
 
     QString iconName = "network-";

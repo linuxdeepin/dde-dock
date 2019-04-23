@@ -474,7 +474,7 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
             break;
     }
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const int iconSizeScaled = IconSize * ratio;
     do {
         // load icon from sni dbus
@@ -521,7 +521,7 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
         // so, it should be the last fallback
         if (!iconName.isEmpty()) {
             // ThemeAppIcon::getIcon 会处理高分屏缩放问题
-            pixmap = ThemeAppIcon::getIcon(iconName, IconSize);
+            pixmap = ThemeAppIcon::getIcon(iconName, IconSize, devicePixelRatioF());
             if (!pixmap.isNull()) {
                 break;
             }

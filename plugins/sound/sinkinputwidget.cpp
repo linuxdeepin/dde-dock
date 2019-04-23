@@ -28,9 +28,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-const QPixmap getIconFromTheme(const QString &name, const QSize &size)
+const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qreal ratio)
 {
-    const auto ratio = qApp->devicePixelRatio();
     QPixmap ret = QIcon::fromTheme(name, QIcon::fromTheme("application-x-desktop")).pixmap(size * ratio);
     ret.setDevicePixelRatio(ratio);
 
@@ -47,7 +46,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 {
     const QString iconName = m_inputInter->icon();
     m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
-    m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24)));
+    m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24), devicePixelRatioF()));
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(1000);
@@ -89,7 +88,7 @@ void SinkInputWidget::setMuteIcon()
     if (m_inputInter->mute()) {
         const auto ratio = devicePixelRatioF();
         QPixmap muteIcon = DHiDPIHelper::loadNxPixmap("://audio-volume-muted-symbolic.svg");
-        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
+        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24), devicePixelRatioF()));
 
         QPixmap temp(appIconSource.size());
         temp.fill(Qt::transparent);
@@ -107,7 +106,7 @@ void SinkInputWidget::setMuteIcon()
         appIconSource.setDevicePixelRatio(ratio);
         m_volumeIcon->setPixmap(appIconSource);
     } else {
-        m_volumeIcon->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
+        m_volumeIcon->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(24, 24), devicePixelRatioF()));
     }
 }
 

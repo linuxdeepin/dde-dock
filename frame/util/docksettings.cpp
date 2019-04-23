@@ -22,6 +22,7 @@
 #include "docksettings.h"
 #include "panel/mainpanel.h"
 #include "item/appitem.h"
+#include "util/utils.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -68,7 +69,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_hideState = Dock::HideState(m_dockInter->hideState());
     m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize * qApp->devicePixelRatio());
+    AppItem::setIconBaseSize(m_iconSize * dockRatio());
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
@@ -364,7 +365,7 @@ void DockSettings::iconSizeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize * qApp->devicePixelRatio());
+    AppItem::setIconBaseSize(m_iconSize * dockRatio());
 
     calculateWindowConfig();
 
@@ -432,7 +433,7 @@ void DockSettings::primaryScreenChanged()
 void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
-    const qreal ratio = qApp->devicePixelRatio();
+    const qreal ratio = dockRatio();
     const QPoint p = rawXPosition(r.topLeft());
     const uint w = r.width() * ratio;
     const uint h = r.height() * ratio;
@@ -540,7 +541,7 @@ void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
 
 void DockSettings::calculateWindowConfig()
 {
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = dockRatio();
     const int defaultHeight = std::round(AppItem::itemBaseHeight() / ratio);
     const int defaultWidth = std::round(AppItem::itemBaseWidth() / ratio);
 
@@ -622,4 +623,11 @@ void DockSettings::gtkIconThemeChanged()
 {
     qDebug() << Q_FUNC_INFO;
     m_itemController->refershItemsIcon();
+}
+
+qreal DockSettings::dockRatio() const
+{
+    QScreen const *screen = Utils::screenAtByScaled(m_frontendRect.center());
+
+    return screen ? screen->devicePixelRatio() : qApp->devicePixelRatio();
 }

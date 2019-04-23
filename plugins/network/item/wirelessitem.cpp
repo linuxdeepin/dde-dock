@@ -98,7 +98,7 @@ void WirelessItem::paintEvent(QPaintEvent *e)
 //    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     QPixmap pixmap = iconPix(displayMode, iconSize * ratio);
     pixmap.setDevicePixelRatio(ratio);
