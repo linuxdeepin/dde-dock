@@ -109,6 +109,8 @@ func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.
 	if err != nil {
 		return "/", dbusutil.ToError(err)
 	}
+	log.Printf("start sender: %q, authType: %q, user %q, agent path: %q, tx path: %q\n",
+		sender, authType, user, agent, path)
 	return path, nil
 }
 

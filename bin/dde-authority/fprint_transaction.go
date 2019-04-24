@@ -250,6 +250,7 @@ loop:
 			break loop
 
 		case <-tx.quit:
+			log.Println("receive quit")
 			break loop
 
 		case result := <-verifyResultCh:
@@ -266,6 +267,7 @@ loop:
 	deviceObj.GoVerifyStop(0, stopCallCh)
 	select {
 	case call := <-stopCallCh:
+		log.Println("VerifyStop done")
 		if call.Err != nil {
 			log.Println(err)
 		}
@@ -341,6 +343,7 @@ func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 	if err := tx.checkSender(sender); err != nil {
 		return err
 	}
+	log.Println("fprint tx end", tx.id)
 	tx.clearCookie()
 	tx.PropsMu.Lock()
 	if tx.Authenticating {
