@@ -210,8 +210,8 @@ func (a *Audio) init() {
 	go a.handleEvent()
 	go a.handleStateChanged()
 
-	a.fixActivePortNotAvailable()
 	a.applyConfig()
+	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
 }
 
