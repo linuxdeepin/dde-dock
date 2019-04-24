@@ -1,3 +1,9 @@
+[3.27.1] 2019-04-24
+*   fix(audio): use unavailable sink port
+*   chore(authority): add more log print
+*   feat(dock): process X-Deepin-Vendor field
+*   feat: add pam module deepin_auth
+
 [3.27.0] 2019-04-19
 *   chore: auto pull translation files from transifex
 *   change(api): dde-authority add method HasCookie
