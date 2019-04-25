@@ -1,3 +1,13 @@
+<a name="4.9.9"></a>
+### 4.9.9 (2019-04-25)
+
+
+#### Bug Fixes
+
+*   quick click on the preview window will crash ([d5e586fc](https://github.com/linuxdeepin/dde-dock/commit/d5e586fc9884de5771fca4255498da3ebfc90847))
+
+
+
 <a name="4.9.8"></a>
 ### 4.9.8 (2019-04-19)
 
