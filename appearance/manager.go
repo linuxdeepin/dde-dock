@@ -20,6 +20,7 @@
 package appearance
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -730,29 +731,58 @@ func (m *Manager) initWallpaperSlideshow() {
 	}
 
 	if policy == wsPolicyLogin {
-		runDir, err := basedir.GetUserRuntimeDir(true)
+		err = m.changeBgAfterLogin()
 		if err != nil {
-			logger.Warning(err)
-		} else {
-			markFile := filepath.Join(runDir, "dde-daemon-wallpaper-slideshow-login")
-			_, err = os.Stat(markFile)
-			if os.IsNotExist(err) {
-				m.autoChangeBg(time.Now())
-				err = touchFile(markFile)
-				if err != nil {
-					logger.Warning(err)
-				}
-			} else if err != nil {
-				logger.Warning(err)
-			}
+			logger.Warning("failed to change background after login:", err)
 		}
-
 	} else {
 		nSec, err := strconv.ParseUint(policy, 10, 32)
 		if err == nil {
 			m.wsScheduler.updateInterval(time.Duration(nSec) * time.Second)
 		}
 	}
+}
+
+func (m *Manager) changeBgAfterLogin() error {
+	runDir, err := basedir.GetUserRuntimeDir(true)
+	if err != nil {
+		return err
+	}
+
+	currentSessionId, err := getSessionId("/proc/self/sessionid")
+	if err != nil {
+		return err
+	}
+
+	var needChangeBg bool
+	markFile := filepath.Join(runDir, "dde-daemon-wallpaper-slideshow-login")
+	sessionId, err := getSessionId(markFile)
+	if err == nil {
+		if sessionId != currentSessionId {
+			needChangeBg = true
+		}
+	} else if os.IsNotExist(err) {
+		needChangeBg = true
+	} else if err != nil {
+		return err
+	}
+
+	if needChangeBg {
+		m.autoChangeBg(time.Now())
+		err = ioutil.WriteFile(markFile, []byte(currentSessionId), 0644)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func getSessionId(filename string) (string, error) {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes.TrimSpace(content)), nil
 }
 
 func (m *Manager) loadWSConfig() {
@@ -780,8 +810,4 @@ func (m *Manager) updateWSPolicy(policy string) {
 	} else {
 		m.wsScheduler.stop()
 	}
-}
-
-func touchFile(filename string) error {
-	return ioutil.WriteFile(filename, nil, 0644)
 }
