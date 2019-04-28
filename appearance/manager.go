@@ -75,7 +75,6 @@ const (
 
 	appearanceSchema        = "com.deepin.dde.appearance"
 	xSettingsSchema         = "com.deepin.xsettings"
-	gsKeyIndividualScaling  = "individual-scaling"
 	gsKeyGtkTheme           = "gtk-theme"
 	gsKeyIconTheme          = "icon-theme"
 	gsKeyCursorTheme        = "cursor-theme"
@@ -413,9 +412,11 @@ func (m *Manager) init() error {
 	currentGtkTheme := m.GtkTheme.Get()
 	if gtkThemes.Get(currentGtkTheme) == nil {
 		m.GtkTheme.Set(defaultGtkTheme)
-		currentGtkTheme = defaultGtkTheme
+		err = m.doSetGtkTheme(defaultGtkTheme)
+		if err != nil {
+			logger.Warning("failed to set gtk theme:", err)
+		}
 	}
-	m.doSetGtkTheme(currentGtkTheme)
 
 	// set icon theme
 	iconThemes := subthemes.ListIconTheme()
@@ -424,7 +425,10 @@ func (m *Manager) init() error {
 		m.IconTheme.Set(defaultIconTheme)
 		currentIconTheme = defaultIconTheme
 	}
-	m.doSetIconTheme(currentIconTheme)
+	err = m.doSetIconTheme(currentIconTheme)
+	if err != nil {
+		logger.Warning("failed to set icon theme:", err)
+	}
 
 	// set cursor theme
 	cursorThemes := subthemes.ListCursorTheme()
@@ -433,7 +437,10 @@ func (m *Manager) init() error {
 		m.CursorTheme.Set(defaultCursorTheme)
 		currentCursorTheme = defaultCursorTheme
 	}
-	m.doSetCursorTheme(currentCursorTheme)
+	err = m.doSetCursorTheme(currentCursorTheme)
+	if err != nil {
+		logger.Warning("failed to set cursor theme:", err)
+	}
 
 	// Init theme list
 	time.AfterFunc(time.Second*10, func() {
@@ -445,7 +452,7 @@ func (m *Manager) init() error {
 
 		fonts.GetFamilyTable()
 
-		setDQtTheme(dQtFile, dQtSectionTheme,
+		err = setDQtTheme(dQtFile, dQtSectionTheme,
 			[]string{
 				dQtKeyIcon,
 				dQtKeyFont,
@@ -456,9 +463,12 @@ func (m *Manager) init() error {
 				m.StandardFont.Get(),
 				m.MonospaceFont.Get(),
 				strconv.FormatFloat(m.FontSize.Get(), 'f', 1, 64)})
-		err := saveDQtTheme(dQtFile)
 		if err != nil {
-			logger.Warning("Failed to save qt theme:", err)
+			logger.Warning("failed to set deepin qt theme:", err)
+		}
+		err = saveDQtTheme(dQtFile)
+		if err != nil {
+			logger.Warning("Failed to save deepin qt theme:", err)
 			return
 		}
 	})
@@ -664,8 +674,11 @@ func (m *Manager) getDefaultFonts() (standard string, monospace string) {
 }
 
 func (m *Manager) writeDQtTheme(key, value string) error {
-	setDQtTheme(dQtFile, dQtSectionTheme,
+	err := setDQtTheme(dQtFile, dQtSectionTheme,
 		[]string{key}, []string{value})
+	if err != nil {
+		logger.Warning("failed to set deepin qt theme:", err)
+	}
 	return saveDQtTheme(dQtFile)
 }
 
