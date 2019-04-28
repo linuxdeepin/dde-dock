@@ -161,7 +161,7 @@ void SoundApplet::onVolumeChanged()
         volumeString = "low";
 
     const QString &iconName = QString("://audio-volume-%1-symbolic.svg").arg(volumeString);
-    QPixmap pix = Utils::renderSVG(iconName, QSize(24, 24));
+    QPixmap pix = Utils::renderSVG(iconName, QSize(24, 24), devicePixelRatioF());
 
     m_volumeBtn->setPixmap(pix);
 }

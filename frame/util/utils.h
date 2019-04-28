@@ -4,15 +4,14 @@
 #include <QScreen>
 
 namespace Utils {
-    static QPixmap renderSVG(const QString &path, const QSize &size) {
+    static QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
     QImageReader reader;
     QPixmap pixmap;
     reader.setFileName(path);
     if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
-        reader.setScaledSize(size * ratio);
+        reader.setScaledSize(size * devicePixelRatio);
         pixmap = QPixmap::fromImage(reader.read());
-        pixmap.setDevicePixelRatio(ratio);
+        pixmap.setDevicePixelRatio(devicePixelRatio);
     }
     else {
         pixmap.load(path);

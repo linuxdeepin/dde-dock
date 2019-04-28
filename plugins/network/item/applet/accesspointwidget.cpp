@@ -49,7 +49,7 @@ AccessPointWidget::AccessPointWidget()
     m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect_hover.svg");
     m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_press.svg");
 
-    m_securityPixmap = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16));
+    m_securityPixmap = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16), devicePixelRatioF());
     m_securityIconSize = m_securityPixmap.size();
     m_securityLabel->setPixmap(m_securityPixmap);
     m_securityLabel->setFixedSize(m_securityIconSize / devicePixelRatioF());
@@ -154,7 +154,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     else
         type = QString::number(strength / 10 & ~0x1) + "0";
 
-    iconPix = Utils::renderSVG(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
+    iconPix = Utils::renderSVG(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s, devicePixelRatioF());
 
     m_strengthLabel->setPixmap(iconPix);
 }
