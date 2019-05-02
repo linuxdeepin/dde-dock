@@ -20,6 +20,7 @@
  */
 
 #include "powerstatuswidget.h"
+#include "powerplugin.h"
 
 #include <QPainter>
 #include <QIcon>
@@ -65,7 +66,8 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
     const uint value = qMin(100.0, qMax(0.0, data.value("Display")));
     const int percentage = std::round(value);
-    const bool plugged = !m_powerInter->onBattery();
+    const int batteryState = m_powerInter->batteryState()["Display"];
+    const bool plugged = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
 
     QString percentageStr;
     if (percentage < 10 && percentage >= 0) {

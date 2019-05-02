@@ -102,7 +102,8 @@ QWidget *PowerPlugin::itemTipsWidget(const QString &itemKey)
 
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
     const QString value = QString("%1%").arg(std::round(percentage));
-    const bool charging = !m_powerInter->onBattery();
+    const int batteryState = m_powerInter->batteryState()["Display"];
+    const bool charging = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
 
     if (!charging) {
         qint64 timeToEmpty = -1;
@@ -115,8 +116,6 @@ QWidget *PowerPlugin::itemTipsWidget(const QString &itemKey)
                 .arg(QDateTime::fromTime_t(timeToEmpty).toUTC().toString("hh:mm:ss"))
         );
     } else {
-        const int batteryState = m_powerInter->batteryState()["Display"];
-
         if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.)
             m_tipsLabel->setText(tr("Charged %1 Battery Is Charged").arg(value));
         else {
