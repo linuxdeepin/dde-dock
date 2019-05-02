@@ -29,8 +29,17 @@
 
 #include <QLabel>
 
-#define BATTERY_DISCHARED   2
-#define BATTERY_FULL        4
+// from https://upower.freedesktop.org/docs/Device.html#Device:State
+enum BatteryState 
+{
+    UNKOWN = 0,
+    CHARGING = 1,
+    DISCHARGING = 2,
+    EMPTY = 3,
+    FULLY_CHARGED = 4,
+    PENDING_CHARGE = 5,
+    PENDING_DISCHARGE = 6
+};
 
 class PowerPlugin : public QObject, PluginsItemInterface
 {
@@ -69,6 +78,8 @@ private:
     TipsWidget *m_tipsLabel;
 
     DBusPower *m_powerInter;
+    QDBusInterface *m_uPowerInter;
+    QDBusInterface *m_uBatteryDeviceInter;
 };
 
 #endif // POWERPLUGIN_H

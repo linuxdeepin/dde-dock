@@ -24,10 +24,12 @@ DBusPower::DBusPower(QObject *parent)
     qDBusRegisterMetaType<BatteryPercentageMap>();
 
     QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(QDBusMessage)));
+    QDBusConnection::systemBus().connect("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.DBus.Properties", "PropertiesChanged", this, SLOT(__propertyChanged__(QDBusMessage)));
 }
 
 DBusPower::~DBusPower()
 {
     QDBusConnection::sessionBus().disconnect(service(), path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged",  "sa{sv}as", this, SLOT(propertyChanged(QDBusMessage)));
+    QDBusConnection::systemBus().disconnect("org.freedesktop.UPower", "/org/freedesktop/UPower", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertyChanged(QDBusMessage)));
 }
 
