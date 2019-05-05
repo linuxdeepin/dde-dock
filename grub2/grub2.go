@@ -499,8 +499,7 @@ func (g *Grub2) checkAuth(sender dbus.Sender, actionId string) error {
 		return nil
 	}
 
-	pid, err := g.service.GetConnPID(string(sender))
-	isAuthorized, err := checkAuthWithPid(pid, actionId)
+	isAuthorized, err := checkAuth(string(sender), actionId)
 	if err != nil {
 		return err
 	}

@@ -25,6 +25,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -409,12 +410,12 @@ func (u *User) getAccountType() int32 {
 }
 
 func (u *User) checkAuth(sender dbus.Sender, selfPass bool, actionId string) error {
-	pid, err := u.service.GetConnPID(string(sender))
+	uid, err := u.service.GetConnUID(string(sender))
 	if err != nil {
 		return err
 	}
 
-	isSelf := u.isSelf(pid)
+	isSelf := u.isSelf(uid)
 	if selfPass && isSelf {
 		return nil
 	}
@@ -427,7 +428,7 @@ func (u *User) checkAuth(sender dbus.Sender, selfPass bool, actionId string) err
 		}
 	}
 
-	return checkAuth(actionId, pid)
+	return checkAuth(actionId, string(sender))
 }
 
 func (u *User) checkAuthAutoLogin(sender dbus.Sender, enabled bool) error {
@@ -451,9 +452,8 @@ func (u *User) checkAuthNoPasswdLogin(sender dbus.Sender, enabled bool) error {
 	return u.checkAuth(sender, false, actionId)
 }
 
-func (u *User) isSelf(pid uint32) bool {
-	uid, _ := getUidByPid(pid)
-	return u.Uid == uid
+func (u *User) isSelf(uid uint32) bool {
+	return u.Uid == strconv.FormatInt(int64(uid), 10)
 }
 
 func (u *User) clearData() {

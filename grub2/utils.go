@@ -64,15 +64,14 @@ func allowNoCheckAuth() {
 	}
 }
 
-func checkAuthWithPid(pid uint32, actionId string) (bool, error) {
+func checkAuth(sysBusName, actionId string) (bool, error) {
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return false, err
 	}
 	authority := polkit.NewAuthority(systemBus)
-	subject := polkit.MakeSubject(polkit.SubjectKindUnixProcess)
-	subject.SetDetail("pid", pid)
-	subject.SetDetail("start-time", uint64(0))
+	subject := polkit.MakeSubject(polkit.SubjectKindSystemBusName)
+	subject.SetDetail("name", sysBusName)
 	result, err := authority.CheckAuthorization(0, subject, actionId, nil,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {

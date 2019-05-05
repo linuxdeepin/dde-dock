@@ -36,7 +36,6 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/encoding/kv"
 	"pkg.deepin.io/lib/graphic"
-	"pkg.deepin.io/lib/procfs"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -137,8 +136,8 @@ func isStrvEqual(l1, l2 []string) bool {
 	return true
 }
 
-func checkAuth(actionId string, pid uint32) error {
-	success, err := checkAuthByPolkit(actionId, pid)
+func checkAuth(actionId string, sysBusName string) error {
+	success, err := checkAuthByPolkit(actionId, sysBusName)
 	if err != nil {
 		return err
 	}
@@ -150,15 +149,14 @@ func checkAuth(actionId string, pid uint32) error {
 	return nil
 }
 
-func checkAuthByPolkit(actionId string, pid uint32) (bool, error) {
+func checkAuthByPolkit(actionId string, sysBusName string) (bool, error) {
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return false, err
 	}
 	authority := polkit.NewAuthority(systemBus)
-	subject := polkit.MakeSubject(polkit.SubjectKindUnixProcess)
-	subject.SetDetail("pid", pid)
-	subject.SetDetail("start-time", uint64(0))
+	subject := polkit.MakeSubject(polkit.SubjectKindSystemBusName)
+	subject.SetDetail("name", sysBusName)
 
 	ret, err := authority.CheckAuthorization(0, subject,
 		actionId, nil,
@@ -167,23 +165,6 @@ func checkAuthByPolkit(actionId string, pid uint32) (bool, error) {
 		return false, err
 	}
 	return ret.IsAuthorized, nil
-}
-
-func getUidByPid(pid uint32) (string, error) {
-	process := procfs.Process(pid)
-	status, err := process.Status()
-	if err != nil {
-		return "", err
-	}
-
-	uids, err := status.Uids()
-	if err != nil {
-		return "", err
-	}
-
-	//effective user id
-	euid := strconv.FormatUint(uint64(uids[1]), 10)
-	return euid, nil
 }
 
 func getDefaultLocale() (locale string) {

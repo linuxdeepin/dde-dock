@@ -74,32 +74,26 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) checkAuthorization(method, msg string, sender dbus.Sender) error {
-	pid, err := m.service.GetConnPID(string(sender))
-	if err != nil {
-		return err
-	}
-
-	isAuthorized, err := doAuthorized(msg, pid)
+	isAuthorized, err := doAuthorized(msg, string(sender))
 	if err != nil {
 		logger.Warning("Has error occurred in doAuthorized:", err)
 		return err
 	}
 	if !isAuthorized {
 		logger.Warning("Failed to authorize")
-		return fmt.Errorf("[%s] Failed to authorize for %v", method, pid)
+		return fmt.Errorf("[%s] Failed to authorize for %v", method, sender)
 	}
 	return nil
 }
 
-func doAuthorized(msg string, pid uint32) (bool, error) {
+func doAuthorized(msg, sysBusName string) (bool, error) {
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
 		return false, err
 	}
 	authority := polkit.NewAuthority(systemBus)
-	var subject = polkit.MakeSubject(polkit.SubjectKindUnixProcess)
-	subject.SetDetail("pid", pid)
-	subject.SetDetail("start-time", uint64(0))
+	subject := polkit.MakeSubject(polkit.SubjectKindSystemBusName)
+	subject.SetDetail("name", sysBusName)
 	detail := map[string]string{
 		"polkit.message": msg,
 	}
