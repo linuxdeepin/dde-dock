@@ -26,6 +26,7 @@
 
 #include <QMouseEvent>
 #include <QJsonObject>
+#include <QCursor>
 
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
@@ -161,6 +162,11 @@ void DockItem::mousePressEvent(QMouseEvent *e)
 
 void DockItem::enterEvent(QEvent *e)
 {
+    // Remove the bottom area to prevent unintentional operation in auto-hide mode.
+    if (!rect().adjusted(0, 0, width(), height() - 5).contains(mapFromGlobal(QCursor::pos()))) {
+        return;
+    }
+
     m_hover = true;
     m_hoverEffect->setHighlighting(true);
     m_popupTipsDelayTimer->start();
