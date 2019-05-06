@@ -175,17 +175,7 @@ const QRect DockSettings::primaryRect() const
 
 const QSize DockSettings::panelSize() const
 {
-    switch (m_position)
-    {
-    case Top:
-    case Bottom:
-        return m_mainWindowSize - QSize(0, WINDOW_OVERFLOW);
-    case Left:
-    case Right:
-        return m_mainWindowSize - QSize(WINDOW_OVERFLOW, 0);
-    }
-
-    Q_UNREACHABLE();
+    return m_mainWindowSize;
 }
 
 const QRect DockSettings::windowRect(const Position position, const bool hide) const
@@ -210,13 +200,13 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     switch (position)
     {
     case Top:
-        p = QPoint(offsetX, -WINDOW_OVERFLOW);                                        break;
+        p = QPoint(offsetX, 0);                                        break;
     case Left:
-        p = QPoint(-WINDOW_OVERFLOW, offsetY);                                        break;
+        p = QPoint(0, offsetY);                                        break;
     case Right:
-        p = QPoint(primaryRect.width() - size.width() + WINDOW_OVERFLOW, offsetY);    break;
+        p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
     case Bottom:
-        p = QPoint(offsetX, primaryRect.height() - size.height() + WINDOW_OVERFLOW);  break;
+        p = QPoint(offsetX, primaryRect.height() - size.height());  break;
     default:Q_UNREACHABLE();
     }
 
@@ -551,14 +541,14 @@ void DockSettings::calculateWindowConfig()
         {
         case Top:
         case Bottom:
-            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER + WINDOW_OVERFLOW);
+            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
             m_mainWindowSize.setWidth(primaryRect().width());
             break;
 
         case Left:
         case Right:
             m_mainWindowSize.setHeight(primaryRect().height());
-            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER + WINDOW_OVERFLOW);
+            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             break;
 
         default:

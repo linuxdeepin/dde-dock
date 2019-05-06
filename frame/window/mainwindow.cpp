@@ -616,12 +616,6 @@ void MainWindow::expand()
     m_panelHideAni->stop();
 
     QPoint finishPos(0, 0);
-    switch (m_settings->position())
-    {
-    case Left:  finishPos.setX(WINDOW_OVERFLOW);    break;
-    case Top:   finishPos.setY(WINDOW_OVERFLOW);    break;
-    default:;
-    }
 
     resetPanelEnvironment(true, false);
 
@@ -631,9 +625,9 @@ void MainWindow::expand()
         const QSize &size = m_settings->windowSize();
         switch (m_settings->position())
         {
-        case Top:       startPos.setY(-size.height() + WINDOW_OVERFLOW);     break;
+        case Top:       startPos.setY(-size.height());     break;
         case Bottom:    startPos.setY(size.height());      break;
-        case Left:      startPos.setX(-size.width() + WINDOW_OVERFLOW);      break;
+        case Left:      startPos.setX(-size.width());      break;
         case Right:     startPos.setX(size.width());       break;
         }
 
@@ -652,9 +646,9 @@ void MainWindow::narrow(const Position prevPos)
     QPoint finishPos(0, 0);
     switch (prevPos)
     {
-    case Top:       finishPos.setY(-size.height() + WINDOW_OVERFLOW);     break;
+    case Top:       finishPos.setY(-size.height());     break;
     case Bottom:    finishPos.setY(size.height());      break;
-    case Left:      finishPos.setX(-size.width() + WINDOW_OVERFLOW);      break;
+    case Left:      finishPos.setX(-size.width());      break;
     case Right:     finishPos.setX(size.width());       break;
     }
 
@@ -688,9 +682,9 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     QPoint finishPos(0, 0);
     switch (position)
     {
-    case Top:       finishPos.setY((visible ? WINDOW_OVERFLOW : -r.height()));     break;
+    case Top:       finishPos.setY((visible ? 0 : -r.height()));     break;
     case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
-    case Left:      finishPos.setX((visible ? WINDOW_OVERFLOW : -r.width()));       break;
+    case Left:      finishPos.setX((visible ? 0 : -r.width()));       break;
     case Right:     finishPos.setX(visible ? 0 : r.width());       break;
     }
 
