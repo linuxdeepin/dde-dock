@@ -288,7 +288,7 @@ void WirelessList::updateAPList()
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 
-    updateIndicatorPos();
+    QTimer::singleShot(100, this, &WirelessList::updateIndicatorPos);
 }
 
 void WirelessList::onEnableButtonToggle(const bool enable)
