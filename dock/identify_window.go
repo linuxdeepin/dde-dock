@@ -38,6 +38,7 @@ func (m *Manager) registerIdentifyWindowFuncs() {
 	m.registerIdentifyWindowFunc("PidEnv", identifyWindowByPidEnv)
 	m.registerIdentifyWindowFunc("Cmdline-XWalk", identifyWindowByCmdlineXWalk)
 	m.registerIdentifyWindowFunc("FlatpakAppID", identifyWindowByFlatpakAppID)
+	m.registerIdentifyWindowFunc("CrxId", identifyWindowByCrxId)
 	m.registerIdentifyWindowFunc("Rule", identifyWindowByRule)
 	m.registerIdentifyWindowFunc("Bamf", identifyWindowByBamf)
 	m.registerIdentifyWindowFunc("Pid", identifyWindowByPid)
@@ -143,6 +144,71 @@ func identifyWindowByFlatpakAppID(m *Manager, winInfo *WindowInfo) (string, *App
 		if len(parts) > 1 {
 			appID := parts[1]
 			appInfo := NewAppInfo(appID)
+			if appInfo != nil {
+				// success
+				return appInfo.innerId, appInfo
+			}
+		}
+	}
+	// fail
+	return "", nil
+}
+
+var crxAppIdMap = map[string]string{
+	"crx_onfalgmmmaighfmjgegnamdjmhpjpgpi": "apps.com.aiqiyi",
+	"crx_gfhkopakpiiaeocgofdpcpjpdiglpkjl": "apps.cn.kugou.hd",
+	"crx_gaoopbnflngfkoobibfgbhobdeiipcgh": "apps.cn.kuwo.kwmusic",
+	"crx_jajaphleehpmpblokgighfjneejapnok": "apps.com.evernote",
+	"crx_ebhffdbfjilfhahiinoijchmlceailfn": "apps.com.letv",
+	"crx_almpoflgiciaanepplakjdkiaijmklld": "apps.com.tongyong.xxbox",
+	"crx_heaphplipeblmpflpdcedfllmbehonfo": "apps.com.peashooter",
+	"crx_dbngidmdhcooejaggjiochbafiaefndn": "apps.com.rovio.angrybirdsseasons",
+	"crx_chfeacahlaknlmjhiagghobhkollfhip": "apps.com.sina.weibo",
+	"crx_cpbmecbkmjjfemjiekledmejoakfkpec": "apps.com.openapp",
+	"crx_lalomppgkdieklbppclocckjpibnlpjc": "apps.com.baidutieba",
+	"crx_gejbkhjjmicgnhcdpgpggboldigfhgli": "apps.com.zhuishushenqi",
+	"crx_gglenfcpioacendmikabbkecnfpanegk": "apps.com.duokan",
+	"crx_nkmmgdfgabhefacpfdabadjfnpffhpio": "apps.com.zhihu.daily",
+	"crx_ajkogonhhcighbinfgcgnjiadodpdicb": "apps.com.netease.newsreader",
+	"crx_hgggjnaaklhemplabjhgpodlcnndhppo": "apps.com.baidu.music.pad",
+	"crx_ebmgfebnlgilhandilnbmgadajhkkmob": "apps.cn.ibuka",
+	"crx_nolebplcbgieabkblgiaacdpgehlopag": "apps.com.tianqitong",
+	"crx_maghncnmccfbmkekccpmkjjfcmdnnlip": "apps.com.youjoy.strugglelandlord",
+	"crx_heliimhfjgfabpgfecgdhackhelmocic": "apps.cn.emoney",
+	"crx_jkgmneeafmgjillhgmjbaipnakfiidpm": "apps.com.instagram",
+	"crx_cdbkhmfmikobpndfhiphdbkjklbmnakg": "apps.com.easymindmap",
+	"crx_djflcciklfljleibeinjmjdnmenkciab": "apps.com.lgj.thunderbattle",
+	"crx_ffdgbolnndgeflkapnmoefhjhkeilfff": "apps.com.qianlong",
+	"crx_fmpniepgiofckbfgahajldgoelogdoap": "apps.com.windhd",
+	"crx_dokjmallmkihbgefmladclcdcinjlnpj": "apps.com.youdao.hanyu",
+	"crx_dicimeimfmbfcklbjdpnlmjgegcfilhm": "apps.com.ibookstar",
+	"crx_cokkcjnpjfffianjbpjbcgjefningkjm": "apps.com.yidianzixun",
+	"crx_ehflkacdpmeehailmcknlnkmjalehdah": "apps.com.xplane",
+	"crx_iedokjbbjejfinokgifgecmboncmkbhb": "apps.com.wedevote",
+	"crx_eaefcagiihjpndconigdpdmcbpcamaok": "apps.com.tongwei.blockbreaker",
+	"crx_mkjjfibpccammnliaalefmlekiiikikj": "apps.com.dayima",
+	"crx_gflkpppiigdigkemnjlonilmglokliol": "apps.com.cookpad",
+	"crx_jfhpkchgedddadekfeganigbenbfaohe": "apps.com.issuu",
+	"crx_ggkmfnbkldhmkehabgcbnmlccfbnoldo": "apps.bible.cbol",
+	"crx_phlhkholfcljapmcidanddmhpcphlfng": "apps.com.kanjian.radio",
+	"crx_bjgfcighhaahojkibojkdmpdihhcehfm": "apps.de.danoeh.antennapod",
+	"crx_kldipknjommdfkifomkmcpbcnpmcnbfi": "apps.com.asoftmurmur",
+	"crx_jfhlegimcipljdcionjbipealofoncmd": "apps.com.tencentnews",
+	"crx_aikgmfkpmmclmpooohngmcdimgcocoaj": "apps.com.tonghuashun",
+	"crx_ifimglalpdeoaffjmmihoofapmpflkad": "apps.com.letv.lecloud.disk",
+	"crx_pllcekmbablpiogkinogefpdjkmgicbp": "apps.com.hwadzanebook",
+	"crx_ohcknkkbjmgdfcejpbmhjbohnepcagkc": "apps.com.douban.radio",
+}
+
+func identifyWindowByCrxId(m *Manager, winInfo *WindowInfo) (string, *AppInfo) {
+	if winInfo.wmClass != nil &&
+		strings.EqualFold(winInfo.wmClass.Class, "chromium-browser") &&
+		strings.HasPrefix(winInfo.wmClass.Instance, "crx_") {
+
+		appId, ok := crxAppIdMap[winInfo.wmClass.Instance]
+		logger.Debug("identifyWindowByCrxId", appId)
+		if ok {
+			appInfo := NewAppInfo(appId)
 			if appInfo != nil {
 				// success
 				return appInfo.innerId, appInfo
