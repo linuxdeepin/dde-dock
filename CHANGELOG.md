@@ -1,3 +1,9 @@
+[3.27.2] 2019-05-09
+*   feat(dock): window identify for deepin archon apps
+*   chore: change polkit subject kind to system bus name
+*   chore(appearance): do not set window theme during init
+*   fix(appearance): do not change background after login
+
 [3.27.1] 2019-04-24
 *   fix(audio): use unavailable sink port
 *   chore(authority): add more log print
