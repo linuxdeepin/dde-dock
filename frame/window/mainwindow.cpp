@@ -621,14 +621,17 @@ void MainWindow::expand()
 
     if (showAniState != QPropertyAnimation::Running && m_mainPanel->pos() != m_panelShowAni->currentValue())
     {
+
+        // shift finish position to prevent animation flickering at the start
+        const unsigned char shift = 2;
         QPoint startPos(0, 0);
         const QSize &size = m_settings->windowSize();
         switch (m_settings->position())
         {
-        case Top:       startPos.setY(-size.height());     break;
-        case Bottom:    startPos.setY(size.height());      break;
-        case Left:      startPos.setX(-size.width());      break;
-        case Right:     startPos.setX(size.width());       break;
+        case Top:       startPos.setY(-size.height() + shift);     break;
+        case Bottom:    startPos.setY(size.height() - shift);      break;
+        case Left:      startPos.setX(-size.width() + shift);      break;
+        case Right:     startPos.setX(size.width() - shift);       break;
         }
 
         m_panelShowAni->setStartValue(startPos);
