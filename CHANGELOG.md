@@ -1,3 +1,13 @@
+<a name="4.9.11"></a>
+### 4.9.11 (2019-05-10)
+
+
+#### Bug Fixes
+
+* **network:**  refresh loading icon not align center ([73b39e68](https://github.com/linuxdeepin/dde-dock/commit/73b39e6846fae1a81828860670b268fa87f2ba80))
+
+
+
 <a name="4.9.10"></a>
 ### 4.9.10 (2019-05-06)
 
