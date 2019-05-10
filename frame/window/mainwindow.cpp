@@ -643,13 +643,15 @@ void MainWindow::narrow(const Position prevPos)
 {
     const QSize size = m_settings->panelSize();
 
+    // shift finish position to prevent animation flickering at the end
+    const unsigned char shift = 1;
     QPoint finishPos(0, 0);
     switch (prevPos)
     {
-    case Top:       finishPos.setY(-size.height());     break;
-    case Bottom:    finishPos.setY(size.height());      break;
-    case Left:      finishPos.setX(-size.width());      break;
-    case Right:     finishPos.setX(size.width());       break;
+    case Top:       finishPos.setY(-size.height() + shift);     break;
+    case Bottom:    finishPos.setY(size.height() - shift);      break;
+    case Left:      finishPos.setX(-size.width() + shift);      break;
+    case Right:     finishPos.setX(size.width() - shift);       break;
     }
 
     m_panelShowAni->stop();
