@@ -30,7 +30,7 @@
 #include <QLabel>
 
 // from https://upower.freedesktop.org/docs/Device.html#Device:State
-enum BatteryState 
+enum BatteryState
 {
     UNKOWN = 0,
     CHARGING = 1,
@@ -70,12 +70,14 @@ private:
     void updateBatteryVisible();
     void loadPlugin();
     void refreshPluginItemsVisible();
+    void refreshTipsData();
 
 private:
     bool m_pluginLoaded;
 
     PowerStatusWidget *m_powerStatusWidget;
     TipsWidget *m_tipsLabel;
+    QTimer *m_tipsRefreshTimer;
 
     DBusPower *m_powerInter;
     QDBusInterface *m_uPowerInter;

@@ -31,6 +31,7 @@ PowerPlugin::PowerPlugin(QObject *parent)
 
       m_pluginLoaded(false),
       m_tipsLabel(new TipsWidget),
+      m_tipsRefreshTimer(new QTimer(this)),
       m_uPowerInter(new QDBusInterface("org.freedesktop.UPower",
                                        "/org/freedesktop/UPower",
                                        "org.freedesktop.UPower",
@@ -39,6 +40,9 @@ PowerPlugin::PowerPlugin(QObject *parent)
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("power");
+
+    m_tipsRefreshTimer->setInterval(10 * 1000);
+    m_tipsRefreshTimer->setSingleShot(true);
 
     if (!m_uPowerInter->isValid()) {
         qDebug() << "DBusConnection to org.freedesktop.UPower is invalid";
@@ -60,7 +64,7 @@ PowerPlugin::PowerPlugin(QObject *parent)
 
     if (batteryPath.path().isEmpty())
         return;
-    
+
     m_uBatteryDeviceInter = new QDBusInterface(
         "org.freedesktop.UPower",
         batteryPath.path(),
@@ -70,6 +74,8 @@ PowerPlugin::PowerPlugin(QObject *parent)
     if(!m_uBatteryDeviceInter->isValid()) {
         qDebug() << QString("DBusConnection to %1 is invalid").arg(batteryPath.path());
     }
+
+    connect(m_tipsRefreshTimer, &QTimer::timeout, this, &PowerPlugin::refreshTipsData);
 }
 
 const QString PowerPlugin::pluginName() const
@@ -100,35 +106,9 @@ QWidget *PowerPlugin::itemTipsWidget(const QString &itemKey)
 
     m_tipsLabel->setObjectName(itemKey);
 
-    const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
-    const QString value = QString("%1%").arg(std::round(percentage));
-    const int batteryState = m_powerInter->batteryState()["Display"];
-    const bool charging = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
+    m_tipsRefreshTimer->start();
 
-    if (!charging) {
-        qint64 timeToEmpty = -1;
-        if(m_uBatteryDeviceInter && m_uBatteryDeviceInter->property("TimeToEmpty").isValid())
-            timeToEmpty = m_uBatteryDeviceInter->property("TimeToEmpty").toInt();
-        
-        m_tipsLabel->setText(
-            tr("Remaining Capacity: %1, %2 Until Empty")
-                .arg(value)
-                .arg(QDateTime::fromTime_t(timeToEmpty).toUTC().toString("hh:mm:ss"))
-        );
-    } else {
-        if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.)
-            m_tipsLabel->setText(tr("Charged %1 Battery Is Charged").arg(value));
-        else {
-            qint64 timeToFull = -1;
-            if(m_uBatteryDeviceInter && m_uBatteryDeviceInter->property("TimeToFull").isValid())
-                timeToFull = m_uBatteryDeviceInter->property("TimeToFull").toInt();
-            m_tipsLabel->setText(
-                tr("Charging %1, %2 Until Full")
-                    .arg(value)
-                    .arg(QDateTime::fromTime_t(timeToFull).toUTC().toString("hh:mm:ss"))
-            );
-        }
-    }
+    refreshTipsData();
 
     return m_tipsLabel;
 }
@@ -243,6 +223,7 @@ void PowerPlugin::loadPlugin()
     m_powerInter = new DBusPower(this);
 
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerPlugin::updateBatteryVisible);
+    connect(m_powerInter, &DBusPower::BatteryStateChanged, this, &PowerPlugin::refreshTipsData);
 
     updateBatteryVisible();
 }
@@ -257,5 +238,66 @@ void PowerPlugin::refreshPluginItemsVisible()
             return;
         }
         updateBatteryVisible();
+    }
+}
+
+void PowerPlugin::refreshTipsData()
+{
+    if (m_tipsLabel->isVisible()) {
+        m_tipsRefreshTimer->start();
+    }
+
+    const BatteryPercentageMap data = m_powerInter->batteryPercentage();
+
+    const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
+    const QString value = QString("%1%").arg(std::round(percentage));
+    const int batteryState = m_powerInter->batteryState()["Display"];
+    const bool charging = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
+
+    if (!charging) {
+        uint timeToEmpty = 0;
+        if(m_uBatteryDeviceInter && m_uBatteryDeviceInter->property("TimeToEmpty").isValid()) {
+            timeToEmpty = m_uBatteryDeviceInter->property("TimeToEmpty").toUInt();
+        }
+        QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
+        uint hour = time.toString("hh").toUInt();
+        uint min = time.toString("mm").toUInt();
+
+        QString tips;
+
+        if (hour == 0) {
+            tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
+        }
+        else {
+            tips = tr("Capacity %1, %2 hr %3 min remaining").arg(value).arg(hour).arg(min);
+        }
+
+        m_tipsLabel->setText(tips);
+    }
+    else {
+        if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.) {
+            m_tipsLabel->setText(tr("Charged %1").arg(value));
+        }
+        else {
+            uint timeToFull = 0;
+            if(m_uBatteryDeviceInter && m_uBatteryDeviceInter->property("TimeToFull").isValid()) {
+                timeToFull = m_uBatteryDeviceInter->property("TimeToFull").toUInt();
+            }
+
+            QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
+            uint hour = time.toString("hh").toUInt();
+            uint min = time.toString("mm").toUInt();
+
+            QString tips;
+
+            if (hour == 0) {
+                tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
+            }
+            else {
+                tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
+            }
+
+            m_tipsLabel->setText(tips);
+        }
     }
 }
