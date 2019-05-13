@@ -27,7 +27,11 @@
 #include "dbus/dbuspower.h"
 #include "../widgets/tipswidget.h"
 
+#include <com_deepin_system_systempower.h>
+
 #include <QLabel>
+
+using SystemPowerInter = com::deepin::system::Power;
 
 // from https://upower.freedesktop.org/docs/Device.html#Device:State
 enum BatteryState
@@ -77,11 +81,9 @@ private:
 
     PowerStatusWidget *m_powerStatusWidget;
     TipsWidget *m_tipsLabel;
-    QTimer *m_tipsRefreshTimer;
 
+    SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;
-    QDBusInterface *m_uPowerInter;
-    QDBusInterface *m_uBatteryDeviceInter;
 };
 
 #endif // POWERPLUGIN_H

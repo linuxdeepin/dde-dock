@@ -30,52 +30,10 @@ PowerPlugin::PowerPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
-      m_tipsLabel(new TipsWidget),
-      m_tipsRefreshTimer(new QTimer(this)),
-      m_uPowerInter(new QDBusInterface("org.freedesktop.UPower",
-                                       "/org/freedesktop/UPower",
-                                       "org.freedesktop.UPower",
-                                       QDBusConnection::systemBus())),
-      m_uBatteryDeviceInter(nullptr)
+      m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("power");
-
-    m_tipsRefreshTimer->setInterval(10 * 1000);
-    m_tipsRefreshTimer->setSingleShot(true);
-
-    if (!m_uPowerInter->isValid()) {
-        qDebug() << "DBusConnection to org.freedesktop.UPower is invalid";
-        return;
-    }
-
-    QDBusReply<QList<QDBusObjectPath>> reply = m_uPowerInter->call("EnumerateDevices");
-    QList<QDBusObjectPath> paths = reply.value();
-    QDBusObjectPath batteryPath;
-
-    foreach(auto objectPath, paths) {
-        qDebug() << "EnumerateDevices: " << objectPath.path();
-
-        if (objectPath.path().contains("battery")) {
-            batteryPath = objectPath;
-            break;
-        }
-    }
-
-    if (batteryPath.path().isEmpty())
-        return;
-
-    m_uBatteryDeviceInter = new QDBusInterface(
-        "org.freedesktop.UPower",
-        batteryPath.path(),
-        "org.freedesktop.UPower.Device",
-        QDBusConnection::systemBus()
-    );
-    if(!m_uBatteryDeviceInter->isValid()) {
-        qDebug() << QString("DBusConnection to %1 is invalid").arg(batteryPath.path());
-    }
-
-    connect(m_tipsRefreshTimer, &QTimer::timeout, this, &PowerPlugin::refreshTipsData);
 }
 
 const QString PowerPlugin::pluginName() const
@@ -105,8 +63,6 @@ QWidget *PowerPlugin::itemTipsWidget(const QString &itemKey)
     }
 
     m_tipsLabel->setObjectName(itemKey);
-
-    m_tipsRefreshTimer->start();
 
     refreshTipsData();
 
@@ -222,8 +178,14 @@ void PowerPlugin::loadPlugin()
     m_powerStatusWidget = new PowerStatusWidget;
     m_powerInter = new DBusPower(this);
 
+    m_systemPowerInter = new SystemPowerInter("com.deepin.system.Power", "/com/deepin/system/Power", QDBusConnection::systemBus(), this);
+    m_systemPowerInter->setSync(true);
+
+    connect(m_systemPowerInter, &SystemPowerInter::BatteryStatusChanged, this, &PowerPlugin::refreshTipsData);
+    connect(m_systemPowerInter, &SystemPowerInter::BatteryTimeToEmptyChanged, this, &PowerPlugin::refreshTipsData);
+    connect(m_systemPowerInter, &SystemPowerInter::BatteryTimeToFullChanged, this, &PowerPlugin::refreshTipsData);
+
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerPlugin::updateBatteryVisible);
-    connect(m_powerInter, &DBusPower::BatteryStateChanged, this, &PowerPlugin::refreshTipsData);
 
     updateBatteryVisible();
 }
@@ -243,10 +205,6 @@ void PowerPlugin::refreshPluginItemsVisible()
 
 void PowerPlugin::refreshTipsData()
 {
-    if (m_tipsLabel->isVisible()) {
-        m_tipsRefreshTimer->start();
-    }
-
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
 
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
@@ -255,10 +213,7 @@ void PowerPlugin::refreshTipsData()
     const bool charging = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
 
     if (!charging) {
-        uint timeToEmpty = 0;
-        if(m_uBatteryDeviceInter && m_uBatteryDeviceInter->property("TimeToEmpty").isValid()) {
-            timeToEmpty = m_uBatteryDeviceInter->property("TimeToEmpty").toUInt();
-        }
+        qulonglong timeToEmpty = m_systemPowerInter->batteryTimeToEmpty();
         QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
@@ -279,11 +234,7 @@ void PowerPlugin::refreshTipsData()
             m_tipsLabel->setText(tr("Charged %1").arg(value));
         }
         else {
-            uint timeToFull = 0;
-            if(m_uBatteryDeviceInter && m_uBatteryDeviceInter->property("TimeToFull").isValid()) {
-                timeToFull = m_uBatteryDeviceInter->property("TimeToFull").toUInt();
-            }
-
+            qulonglong timeToFull = m_systemPowerInter->batteryTimeToFull();
             QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
             uint hour = time.toString("hh").toUInt();
             uint min = time.toString("mm").toUInt();
