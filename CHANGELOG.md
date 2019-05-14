@@ -1,3 +1,13 @@
+<a name="4.9.13"></a>
+### 4.9.13 (2019-05-14)
+
+
+#### Bug Fixes
+
+* **tray:**  Adding a keyboard layout for the first time will crash ([8523f879](https://github.com/linuxdeepin/dde-dock/commit/8523f8797c9e9f321878f17cfd89694812601588))
+
+
+
 <a name="4.9.10"></a>
 ### 4.9.10 (2019-05-06)
 
