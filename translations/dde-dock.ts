@@ -212,19 +212,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Charged %1, %2 min remaining</source>
+        <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Charged %1, %2 hr %3 min remaining</source>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Charged %1, %2 min until full</source>
+        <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Charged %1, %2 hr %3 min until full</source>
+        <source>Charging %1, %2 hr %3 min until full</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
