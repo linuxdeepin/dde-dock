@@ -233,6 +233,10 @@ void IndicatorTray::textPropertyChanged(const QDBusMessage &message)
             return;
         }
 
+        if (!d->indicatorTrayWidget) {
+            d->init();
+        }
+
         d->indicatorTrayWidget->setText(value.toByteArray());
     });
 }
@@ -245,6 +249,10 @@ void IndicatorTray::iconPropertyChanged(const QDBusMessage &message)
         if (value.toByteArray().isEmpty()) {
             Q_EMIT removed();
             return;
+        }
+
+        if (!d->indicatorTrayWidget) {
+            d->init();
         }
 
         d->indicatorTrayWidget->setPixmapData(value.toByteArray());
