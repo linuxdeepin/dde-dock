@@ -36,7 +36,7 @@ using SystemPowerInter = com::deepin::system::Power;
 // from https://upower.freedesktop.org/docs/Device.html#Device:State
 enum BatteryState
 {
-    UNKOWN = 0,
+    UNKNOWN = 0,
     CHARGING = 1,
     DISCHARGING = 2,
     EMPTY = 3,

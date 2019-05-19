@@ -102,7 +102,7 @@ void PopupControlWidget::clearTrashFloder()
 
     if (count > 0) {
         // blumia: Workaround. There is a bug with DDialog which will let DDialog always use the smallest
-        //         avaliable size of the given icon. So we create a m_dialogTrashFullIcon and leave a minimum
+        //         available size of the given icon. So we create a m_dialogTrashFullIcon and leave a minimum
         //         64*64 pixmap size icon here.
         QIcon m_dialogTrashFullIcon;
         QIcon trash_full_icon = QIcon::fromTheme("user-trash-full-opened");
