@@ -28,7 +28,7 @@ prepare:
 		ln -sf ../../../.. ${GOPATH_DIR}/src/${GOPKG_PREFIX}; \
 		fi
 
-out/bin/%:
+out/bin/%: prepare
 	env GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 out/bin/default-file-manager: bin/default-file-manager/main.c
@@ -41,7 +41,7 @@ out/pam_deepin_auth.so: misc/pam-module/deepin_auth.c
 	gcc -fPIC -shared -Wall $(shell pkg-config --libs libsystemd) -o $@ $^
 	chmod -x $@
 
-out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
+out/locale/%/LC_MESSAGES/dde-daemon.mo: misc/po/%.po
 	mkdir -p $(@D)
 	msgfmt -o $@ $<
 
