@@ -68,7 +68,9 @@ func (m *Manager) Reset() *dbus.Error {
 	// reset all gsettings
 	resetGSettings(m.gsSystem)
 	resetGSettings(m.gsMediaKey)
-	resetGSettings(m.gsGnomeWM)
+	if m.gsGnomeWM != nil {
+		resetGSettings(m.gsGnomeWM)
+	}
 
 	// disable all custom shortcuts
 	err := m.customShortcutManager.DisableAll()
