@@ -56,7 +56,6 @@ PreviewContainer::PreviewContainer(QWidget *parent)
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_mouseLeaveTimer, &QTimer::timeout, this, &PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
-    connect(m_floatingPreview, &FloatingPreview::requestMove, this, &PreviewContainer::moveFloatingPreview);
     connect(m_waitForShowPreviewTimer, &QTimer::timeout, this, &PreviewContainer::previewFloating);
 }
 
@@ -248,29 +247,6 @@ void PreviewContainer::previewEntered(const WId wid)
 
     m_floatingPreview->trackWindow(snap);
     m_waitForShowPreviewTimer->start();
-}
-
-void PreviewContainer::moveFloatingPreview(const QPoint &p)
-{
-    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
-    const QRect r = rect();
-
-    if (horizontal)
-    {
-        if (p.x() < r.left())
-            m_floatingPreview->move(MARGIN, p.y());
-        else if (p.x() + m_floatingPreview->width() > r.right())
-            m_floatingPreview->move(r.right() - m_floatingPreview->width() - MARGIN + 1, p.y());
-        else
-            m_floatingPreview->move(p);
-    } else {
-        if (p.y() < r.top())
-            m_floatingPreview->move(p.x(), MARGIN);
-        else if (p.y() + m_floatingPreview->height() > r.bottom())
-            m_floatingPreview->move(p.x(), r.bottom() - m_floatingPreview->height() - MARGIN + 1);
-        else
-            m_floatingPreview->move(p);
-    }
 }
 
 void PreviewContainer::previewFloating()

@@ -40,9 +40,6 @@ public:
     WId trackedWid() const;
     AppSnapshot *trackedWindow();
 
-signals:
-    void requestMove(const QPoint &p) const;
-
 public slots:
     void trackWindow(AppSnapshot * const snap);
 

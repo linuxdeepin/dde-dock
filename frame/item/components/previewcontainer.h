@@ -71,7 +71,6 @@ private:
 private slots:
     void onSnapshotClicked(const WId wid);
     void previewEntered(const WId wid);
-    void moveFloatingPreview(const QPoint &p);
     void previewFloating();
 
 private:

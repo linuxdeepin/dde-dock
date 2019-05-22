@@ -68,11 +68,9 @@ void FloatingPreview::trackWindow(AppSnapshot * const snap)
     m_tracked = snap;
     m_closeBtn3D->setVisible(m_tracked->closeAble());
 
-    const QRect r = rect();
-    const QRect sr = snap->geometry();
-    const QPoint offset = sr.center() - r.center();
-
-    emit requestMove(offset);
+    QTimer::singleShot(0, this, [=] {
+        setGeometry(snap->geometry());
+    });
 }
 
 void FloatingPreview::paintEvent(QPaintEvent *e)
