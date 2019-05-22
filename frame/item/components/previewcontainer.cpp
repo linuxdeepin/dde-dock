@@ -116,11 +116,13 @@ void PreviewContainer::checkMouseLeave()
 
     m_floatingPreview->setVisible(false);
 
-    if (m_needActivate) {
-        m_needActivate = false;
-        emit requestActivateWindow(m_floatingPreview->trackedWid());
-    } else {
-        emit requestCancelPreviewWindow();
+    if (m_wmHelper->hasComposite()) {
+        if (m_needActivate) {
+            m_needActivate = false;
+            emit requestActivateWindow(m_floatingPreview->trackedWid());
+        } else {
+            emit requestCancelPreviewWindow();
+        }
     }
 
     emit requestHidePopup();
@@ -217,7 +219,9 @@ void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
 
 void PreviewContainer::onSnapshotClicked(const WId wid)
 {
-    Q_UNUSED(wid);
+    if (!m_wmHelper->hasComposite()) {
+        emit requestActivateWindow(wid);
+    }
 
     m_needActivate = true;
     // the leaveEvent of this widget will be called after this signal
