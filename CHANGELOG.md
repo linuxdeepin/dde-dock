@@ -1,3 +1,6 @@
+[3.27.2.1] 2019-05-23
+*   fix(keybinding): Reset panic
+
 [3.27.2] 2019-05-09
 *   feat(dock): window identify for deepin archon apps
 *   chore: change polkit subject kind to system bus name
