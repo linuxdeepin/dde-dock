@@ -52,7 +52,8 @@ func (d *Daemon) Start() (err error) {
 		return
 	}
 
-	err = service.Export(dbusPath, d.manager, d.manager.warnLevelConfig)
+	err = service.Export(dbusPath, d.manager,
+		d.manager.warnLevelConfig, d.manager.syncConfig)
 	if err != nil {
 		return err
 	}

@@ -23,8 +23,9 @@ import (
 	"sync"
 	"syscall"
 
-	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -32,10 +33,10 @@ import (
 
 //go:generate dbusutil-gen -type Manager manager.go
 type Manager struct {
-	service        *dbusutil.Service
-	sessionSigLoop *dbusutil.SignalLoop
-	systemSigLoop  *dbusutil.SignalLoop
-	//sysDBusDaemon        *ofdbus.DBus
+	service              *dbusutil.Service
+	sessionSigLoop       *dbusutil.SignalLoop
+	systemSigLoop        *dbusutil.SignalLoop
+	syncConfig           *dsync.Config
 	helper               *Helper
 	settings             *gio.Settings
 	isSuspending         bool
@@ -105,6 +106,8 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 	m.systemSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
 	m.inhibitFd = -1
+
+	m.syncConfig = dsync.NewConfig("power", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
 
 	helper, err := newHelper(systemBus, sessionBus)
 	if err != nil {
