@@ -70,7 +70,7 @@ func (m *Module) start() error {
 	}
 	err = m.audio.syncConfig.Register()
 	if err != nil {
-		logger.Warning("Failed to register sync bus:", err)
+		logger.Warning("failed to register for deepin sync:", err)
 	}
 	initDefaultVolume(m.audio)
 	return nil

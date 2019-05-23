@@ -63,6 +63,11 @@ func (d *Daemon) Start() (err error) {
 		return err
 	}
 
+	err = d.manager.syncConfig.Register()
+	if err != nil {
+		logger.Warning("failed to register for deepin sync:", err)
+	}
+
 	go d.manager.init()
 	return
 }

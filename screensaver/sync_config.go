@@ -32,6 +32,7 @@ func (sc *syncConfig) Get() (interface{}, error) {
 	gs := gio.NewSettings(gsSchemaPower)
 	defer gs.Unref()
 	var v syncData
+	v.Version = "1.0"
 	v.BatteryDelay = int(gs.GetInt(gsKeyBatteryScreensaverDelay))
 	v.LinePowerDelay = int(gs.GetInt(gsKeyLinePowerScreensaverDelay))
 

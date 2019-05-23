@@ -6,6 +6,10 @@ import (
 	"pkg.deepin.io/lib/strv"
 )
 
+const (
+	backgroundDBusPath = dbusPath + "/Background"
+)
+
 type syncConfig struct {
 	m *Manager
 }
@@ -19,9 +23,7 @@ func (sc *syncConfig) Get() (interface{}, error) {
 	v.Cursor = sc.m.CursorTheme.Get()
 	v.FontStandard = sc.m.StandardFont.Get()
 	v.FontMonospace = sc.m.MonospaceFont.Get()
-	v.BackgroundURIs = sc.m.getBackgroundURIs()
-	v.GreeterBackground = sc.m.greeterBg
-	return v, nil
+	return &v, nil
 }
 
 func (sc *syncConfig) Set(data []byte) error {
@@ -74,9 +76,50 @@ func (sc *syncConfig) Set(data []byte) error {
 		}
 	}
 
-	bgs := m.getBackgroundURIs()
-	if !strv.Strv(bgs).Equal(v.BackgroundURIs) {
-		m.setting.SetStrv(gsKeyBackgroundURIs, v.BackgroundURIs)
+	return nil
+}
+
+// version: 1.0
+type syncData struct {
+	Version       string  `json:"version"`
+	FontSize      float64 `json:"font_size"`
+	GTK           string  `json:"gtk"`
+	Icon          string  `json:"icon"`
+	Cursor        string  `json:"cursor"`
+	FontStandard  string  `json:"font_standard"`
+	FontMonospace string  `json:"font_monospace"`
+}
+
+type backgroundSyncConfig struct {
+	m *Manager
+}
+
+func (sc *backgroundSyncConfig) Get() (interface{}, error) {
+	var v backgroundSyncData
+	v.Version = "1.0"
+	v.GreeterBackground = sc.m.greeterBg
+	v.SlideShow = sc.m.WallpaperSlideShow.Get()
+	if v.SlideShow == "" {
+		v.BackgroundURIs = sc.m.getBackgroundURIs()
+	}
+	return &v, nil
+}
+
+func (sc *backgroundSyncConfig) Set(data []byte) error {
+	var v backgroundSyncData
+	err := json.Unmarshal(data, &v)
+	if err != nil {
+		return err
+	}
+
+	m := sc.m
+	m.WallpaperSlideShow.Set(v.SlideShow)
+
+	if v.SlideShow == "" {
+		bgs := m.getBackgroundURIs()
+		if !strv.Strv(bgs).Equal(v.BackgroundURIs) {
+			m.setting.SetStrv(gsKeyBackgroundURIs, v.BackgroundURIs)
+		}
 	}
 
 	if m.greeterBg != v.GreeterBackground {
@@ -85,19 +128,13 @@ func (sc *syncConfig) Set(data []byte) error {
 			logger.Warning(err)
 		}
 	}
-
 	return nil
 }
 
 // version: 1.0
-type syncData struct {
+type backgroundSyncData struct {
 	Version           string   `json:"version"`
-	FontSize          float64  `json:"font_size"`
-	GTK               string   `json:"gtk"`
-	Icon              string   `json:"icon"`
-	Cursor            string   `json:"cursor"`
-	FontStandard      string   `json:"font_standard"`
-	FontMonospace     string   `json:"font_monospace"`
 	BackgroundURIs    []string `json:"background_uris"`
 	GreeterBackground string   `json:"greeter_background"`
+	SlideShow         string   `json:"slideShow"`
 }

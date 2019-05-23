@@ -110,6 +110,7 @@ type Manager struct {
 	sysSigLoop     *dbusutil.SignalLoop
 	xConn          *x.Conn
 	syncConfig     *dsync.Config
+	bgSyncConfig   *dsync.Config
 
 	GtkTheme      gsprop.String
 	IconTheme     gsprop.String
@@ -261,6 +262,7 @@ func (m *Manager) destroy() {
 	m.sessionSigLoop.Stop()
 	m.xSettings.RemoveHandler(proxy.RemoveAllHandlers)
 	m.syncConfig.Destroy()
+	m.bgSyncConfig.Destroy()
 
 	m.sysSigLoop.Stop()
 	m.login1Manager.RemoveHandler(proxy.RemoveAllHandlers)
@@ -476,6 +478,8 @@ func (m *Manager) init() error {
 	m.initUserObj(systemBus)
 	m.initCurrentBgs()
 	m.syncConfig = dsync.NewConfig("appearance", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
+	m.bgSyncConfig = dsync.NewConfig("background", &backgroundSyncConfig{m: m}, m.sessionSigLoop,
+		backgroundDBusPath, logger)
 	return nil
 }
 

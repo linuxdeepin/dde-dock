@@ -68,6 +68,11 @@ func (*Module) start() error {
 		return err
 	}
 
+	err = service.Export(backgroundDBusPath, _m.bgSyncConfig)
+	if err != nil {
+		return err
+	}
+
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		_m.destroy()
@@ -77,7 +82,12 @@ func (*Module) start() error {
 
 	err = _m.syncConfig.Register()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning("failed to register for deepin sync", err)
+	}
+
+	err = _m.bgSyncConfig.Register()
+	if err != nil {
+		logger.Warning("failed to register for deepin sync", err)
 	}
 
 	go _m.listenCursorChanged()

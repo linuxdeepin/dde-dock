@@ -87,6 +87,11 @@ func (m *Module) Start() error {
 		return err
 	}
 
+	err = m.syncConfig.Register()
+	if err != nil {
+		logger.Warning("failed to register for deepin sync:", err)
+	}
+
 	return nil
 }
 
