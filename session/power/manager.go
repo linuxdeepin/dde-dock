@@ -268,13 +268,16 @@ func (m *Manager) destroy() {
 	}
 
 	if m.inhibitor != nil {
-		m.inhibitor.unblock()
+		err := m.inhibitor.unblock()
+		if err != nil {
+			logger.Warning(err)
+		}
 		m.inhibitor = nil
 	}
 
 	m.systemSigLoop.Stop()
 	m.sessionSigLoop.Stop()
-	m.service.StopExport(m)
+	m.syncConfig.Destroy()
 }
 
 func (*Manager) GetInterfaceName() string {

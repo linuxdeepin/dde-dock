@@ -80,6 +80,11 @@ func (d *Daemon) Stop() error {
 	if err != nil {
 		logger.Warning(err)
 	}
+	err = service.StopExport(d.manager.syncConfig)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	d.manager.destroy()
 	d.manager = nil
 	return nil

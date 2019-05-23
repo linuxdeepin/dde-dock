@@ -20,29 +20,32 @@
 package screensaver
 
 import (
+	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 
 func init() {
-	loader.Register(NewDaemon(logger))
+	loader.Register(newModule(logger))
 }
 
-type Daemon struct {
+type Module struct {
+	sSaver     *ScreenSaver
+	syncConfig *dsync.Config
 	*loader.ModuleBase
 }
 
-func NewDaemon(logger *log.Logger) *Daemon {
-	daemon := new(Daemon)
-	daemon.ModuleBase = loader.NewModuleBase("screensaver", daemon, logger)
-	return daemon
+func newModule(logger *log.Logger) *Module {
+	m := new(Module)
+	m.ModuleBase = loader.NewModuleBase("screensaver", m, logger)
+	return m
 }
 
-func (d *Daemon) GetDependencies() []string {
+func (m *Module) GetDependencies() []string {
 	return []string{}
 }
 
-func (d *Daemon) Start() error {
+func (m *Module) Start() error {
 	service := loader.GetService()
 
 	has, err := service.NameHasOwner(dbusServiceName)
@@ -54,32 +57,41 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	if _ssaver != nil {
+	if m.sSaver != nil {
 		return nil
 	}
 
-	_ssaver, err = newScreenSaver(service)
+	m.sSaver, err = newScreenSaver(service)
 	if err != nil {
 		return err
 	}
 
-	err = service.Export(dbusPath, _ssaver)
+	err = service.Export(dbusPath, m.sSaver)
 	if err != nil {
 		return err
 	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		_ssaver.destroy()
-		_ssaver = nil
+		return err
+	}
+
+	m.syncConfig = dsync.NewConfig("screensaver", &syncConfig{}, m.sSaver.sigLoop, dScreenSaverPath, logger)
+	err = service.Export(dScreenSaverPath, m.syncConfig)
+	if err != nil {
+		return err
+	}
+
+	err = service.RequestName(dScreenSaverServiceName)
+	if err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (d *Daemon) Stop() error {
-	if _ssaver == nil {
+func (m *Module) Stop() error {
+	if m.sSaver == nil {
 		return nil
 	}
 
@@ -89,11 +101,22 @@ func (d *Daemon) Stop() error {
 		logger.Warning(err)
 	}
 
-	err = service.StopExport(_ssaver)
+	err = service.StopExport(m.sSaver)
 	if err != nil {
 		logger.Warning(err)
 	}
-	_ssaver.destroy()
-	_ssaver = nil
+	m.sSaver.destroy()
+	m.sSaver = nil
+
+	err = service.ReleaseName(dScreenSaverServiceName)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = service.StopExport(m.syncConfig)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.syncConfig.Destroy()
 	return nil
 }

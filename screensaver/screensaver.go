@@ -268,7 +268,7 @@ func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 
 func (ss *ScreenSaver) listenDBusNameOwnerChanged() {
 	ss.dbusDaemon.InitSignalExt(ss.sigLoop, true)
-	ss.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
+	_, err := ss.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
 		if strings.HasPrefix(name, ":") &&
 			name == oldOwner && newOwner == "" {
 
@@ -284,9 +284,10 @@ func (ss *ScreenSaver) listenDBusNameOwnerChanged() {
 			ss.mu.Unlock()
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
-
-var _ssaver *ScreenSaver
 
 func (ss *ScreenSaver) loop() {
 	ssExtData := ss.xConn.GetExtensionData(screensaver.Ext())
@@ -299,13 +300,17 @@ func (ss *ScreenSaver) loop() {
 		case screensaver.NotifyEventCode + ssExtData.FirstEvent:
 			event, _ := screensaver.NewNotifyEvent(ev)
 			s := ss.service
+			var err error
 			switch event.State {
 			case screensaver.StateCycle:
-				s.Emit(ss, "CycleActive")
+				err = s.Emit(ss, "CycleActive")
 			case screensaver.StateOn:
-				s.Emit(ss, "IdleOn")
+				err = s.Emit(ss, "IdleOn")
 			case screensaver.StateOff:
-				s.Emit(ss, "IdleOff")
+				err = s.Emit(ss, "IdleOff")
+			}
+			if err != nil {
+				logger.Warning(err)
 			}
 		}
 	}
