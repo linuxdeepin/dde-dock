@@ -136,5 +136,5 @@ type backgroundSyncData struct {
 	Version           string   `json:"version"`
 	BackgroundURIs    []string `json:"background_uris"`
 	GreeterBackground string   `json:"greeter_background"`
-	SlideShow         string   `json:"slideShow"`
+	SlideShow         string   `json:"slide_show"`
 }
