@@ -1,3 +1,21 @@
+<a name=""></a>
+##  4.10.0 (2019-05-23)
+
+
+#### Bug Fixes
+
+*   typos ([c94a4d69](https://github.com/linuxdeepin/dde-dock/commit/c94a4d69a5c2f36a5720ccf4c0d7e6aba4e08c11))
+* **network:**  refresh loading icon not align center ([73b39e68](https://github.com/linuxdeepin/dde-dock/commit/73b39e6846fae1a81828860670b268fa87f2ba80))
+* **overlay:**  polkit dialog not translation message ([f1441cc1](https://github.com/linuxdeepin/dde-dock/commit/f1441cc1e76a4dca27004876b080fd9282217d0b))
+* **preview:**
+  *  float preview background have wrong offset ([06c82709](https://github.com/linuxdeepin/dde-dock/commit/06c827091e7748eaad72db61ad7dd4acf6855c5e))
+  *  crash when click active item on 2d ([2b51e164](https://github.com/linuxdeepin/dde-dock/commit/2b51e164aa0e865ae13b56d4d399f5a3e3e1c6cc))
+* **tray:**
+  *  indicator click is invalid ([2840c868](https://github.com/linuxdeepin/dde-dock/commit/2840c86844c7f55a32b04da92237c537cbe14f8e))
+  *  Adding a keyboard layout for the first time will crash ([0a71b340](https://github.com/linuxdeepin/dde-dock/commit/0a71b340ac7b0e913f4871c7149cbcbc5e18f06d))
+
+
+
 <a name="4.9.11"></a>
 ### 4.9.11 (2019-05-10)
 
