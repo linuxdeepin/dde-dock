@@ -1,19 +1,19 @@
 package shortcuts
 
 import (
-	"encoding/json"
 	"errors"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"pkg.deepin.io/dde/daemon/keybinding/util"
 )
 
-type kwinShortcut struct {
+type kWinShortcut struct {
 	BaseShortcut
 	wm *wm.Wm
 }
 
-func NewKwinShortcut(id, name string, keystrokes []string, wm *wm.Wm) *kwinShortcut {
-	return &kwinShortcut{
+func newKWinShortcut(id, name string, keystrokes []string, wm *wm.Wm) *kWinShortcut {
+	return &kWinShortcut{
 		BaseShortcut: BaseShortcut{
 			Id:         id,
 			Type:       ShortcutTypeWM,
@@ -24,12 +24,20 @@ func NewKwinShortcut(id, name string, keystrokes []string, wm *wm.Wm) *kwinShort
 	}
 }
 
-func (ks *kwinShortcut) ReloadKeystrokes() bool {
-	return false
+func (ks *kWinShortcut) ReloadKeystrokes() bool {
+	oldVal := ks.GetKeystrokes()
+	keystrokes, err := ks.wm.GetAccel(0, ks.Id)
+	if err != nil {
+		logger.Warning("failed to get accel for %s: %v", ks.Id, err)
+		return false
+	}
+	newVal := ParseKeystrokes(keystrokes)
+	ks.setKeystrokes(newVal)
+	return !keystrokesEqual(oldVal, newVal)
 }
 
-func (ks *kwinShortcut) SaveKeystrokes() error {
-	data, err := json.Marshal(kwinAccel{
+func (ks *kWinShortcut) SaveKeystrokes() error {
+	accelJson, err := util.MarshalJSON(util.KWinAccel{
 		Id:         ks.Id,
 		Keystrokes: ks.getKeystrokesStrv(),
 	})
@@ -37,13 +45,13 @@ func (ks *kwinShortcut) SaveKeystrokes() error {
 		return err
 	}
 
-	ok, err := ks.wm.SetAccel(0, string(data))
+	ok, err := ks.wm.SetAccel(0, accelJson)
 	if !ok {
-		return errors.New("wm.SetAccel failed")
+		return errors.New("wm.SetAccel failed, id: " + ks.Id)
 	}
 	return err
 }
 
-func (ks *kwinShortcut) ShouldEmitSignalChanged() bool {
+func (ks *kWinShortcut) ShouldEmitSignalChanged() bool {
 	return true
 }

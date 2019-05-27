@@ -21,13 +21,16 @@ package keybinding
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"pkg.deepin.io/dde/daemon/keybinding/util"
+	"pkg.deepin.io/lib/strv"
 
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
@@ -50,13 +53,34 @@ func resetGSettings(gs *gio.Settings) {
 	}
 }
 
-func doMarshal(v interface{}) (string, error) {
-	bytes, err := json.Marshal(v)
+func resetKWin(wmObj *wm.Wm) error {
+	accels, err := util.GetAllKWinAccels(wmObj)
 	if err != nil {
-		return "", err
+		return err
 	}
-
-	return string(bytes), nil
+	for _, accel := range accels {
+		if !strv.Strv(accel.Keystrokes).Equal(accel.DefaultKeystrokes) &&
+			len(accel.DefaultKeystrokes) > 0 && accel.DefaultKeystrokes[0] != "" {
+			accelJson, err := util.MarshalJSON(&util.KWinAccel{
+				Id:         accel.Id,
+				Keystrokes: accel.DefaultKeystrokes,
+			})
+			if err != nil {
+				logger.Warning(err)
+				continue
+			}
+			ok, err := wmObj.SetAccel(0, accelJson)
+			if !ok {
+				logger.Warning("wm.SetAccel failed, id: ", accel.Id)
+				continue
+			}
+			if err != nil {
+				logger.Warning("failed to set accel:", err, accel.Id)
+				continue
+			}
+		}
+	}
+	return nil
 }
 
 func showOSD(signal string) {

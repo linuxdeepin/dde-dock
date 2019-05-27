@@ -20,11 +20,12 @@
 package shortcuts
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
 	"sync"
+
+	"pkg.deepin.io/dde/daemon/keybinding/util"
 )
 
 type BaseShortcut struct {
@@ -45,13 +46,7 @@ func (sb *BaseShortcut) String() string {
 func (sb *BaseShortcut) Marshal() (string, error) {
 	sb.mu.Lock()
 	defer sb.mu.Unlock()
-
-	bytes, err := json.Marshal(sb)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
+	return util.MarshalJSON(sb)
 }
 
 func (sb *BaseShortcut) GetId() string {

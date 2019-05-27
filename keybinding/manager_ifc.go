@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/dde/daemon/keybinding/util"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -72,6 +73,14 @@ func (m *Manager) Reset() *dbus.Error {
 		resetGSettings(m.gsGnomeWM)
 	}
 
+	// reset for KWin
+	if shouldUseDDEKwin() {
+		err := resetKWin(m.wm)
+		if err != nil {
+			logger.Warning("failed to reset for KWin:", err)
+		}
+	}
+
 	// disable all custom shortcuts
 	err := m.customShortcutManager.DisableAll()
 	if err != nil {
@@ -89,7 +98,7 @@ func (m *Manager) Reset() *dbus.Error {
 
 func (m *Manager) ListAllShortcuts() (string, *dbus.Error) {
 	list := m.shortcutManager.List()
-	ret, err := doMarshal(list)
+	ret, err := util.MarshalJSON(list)
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -98,7 +107,7 @@ func (m *Manager) ListAllShortcuts() (string, *dbus.Error) {
 
 func (m *Manager) ListShortcutsByType(type0 int32) (string, *dbus.Error) {
 	list := m.shortcutManager.ListByType(type0)
-	ret, err := doMarshal(list)
+	ret, err := util.MarshalJSON(list)
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -177,7 +186,7 @@ func (m *Manager) LookupConflictingShortcut(keystroke string) (string, *dbus.Err
 		return "", dbusutil.ToError(err)
 	}
 	if conflictKeystroke != nil {
-		detail, err := doMarshal(conflictKeystroke.Shortcut)
+		detail, err := util.MarshalJSON(conflictKeystroke.Shortcut)
 		if err != nil {
 			return "", dbusutil.ToError(err)
 		}
