@@ -98,6 +98,7 @@ type Manager struct {
 	// shortcut action handlers
 	handlers            []shortcuts.KeyEventFunc
 	lastKeyEventTime    time.Time
+	lastExecCmdTime     time.Time
 	grabScreenKeystroke *shortcuts.Keystroke
 
 	// for switch kbd layout
@@ -300,10 +301,11 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
+	const minKeyEventInterval = 200 * time.Millisecond
 	now := time.Now()
 	duration := now.Sub(m.lastKeyEventTime)
 	logger.Debug("duration:", duration)
-	if 0 < duration && duration < 200*time.Millisecond {
+	if 0 < duration && duration < minKeyEventInterval {
 		logger.Debug("handleKeyEvent ignore key event")
 		return
 	}
