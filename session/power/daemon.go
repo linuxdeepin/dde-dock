@@ -45,11 +45,12 @@ func (d *Daemon) GetDependencies() []string {
 	return []string{"screensaver", "sessionwatcher"}
 }
 
-func (d *Daemon) Start() (err error) {
+func (d *Daemon) Start() error {
 	service := loader.GetService()
+	var err error
 	d.manager, err = newManager(service)
 	if err != nil {
-		return
+		return err
 	}
 
 	err = service.Export(dbusPath, d.manager,
@@ -69,7 +70,7 @@ func (d *Daemon) Start() (err error) {
 	}
 
 	go d.manager.init()
-	return
+	return nil
 }
 
 func (d *Daemon) Stop() error {
