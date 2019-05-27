@@ -215,7 +215,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.wm = wm.NewWm(sessionBus)
 
 	if shouldUseDDEKwin() {
-		m.shortcutManager.AddKwin(m.wm)
+		m.shortcutManager.AddKWin(m.wm)
 	} else {
 		m.gsGnomeWM = gio.NewSettings(gsSchemaGnomeWM)
 		m.shortcutManager.AddWM(m.gsGnomeWM)

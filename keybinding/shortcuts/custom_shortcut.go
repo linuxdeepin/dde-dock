@@ -20,10 +20,10 @@
 package shortcuts
 
 import (
-	"encoding/json"
 	"os"
 	"path/filepath"
 
+	"pkg.deepin.io/dde/daemon/keybinding/util"
 	"pkg.deepin.io/lib/keyfile"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -43,13 +43,7 @@ type CustomShortcut struct {
 func (cs *CustomShortcut) Marshal() (string, error) {
 	cs.mu.Lock()
 	defer cs.mu.Unlock()
-
-	bytes, err := json.Marshal(cs)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
+	return util.MarshalJSON(cs)
 }
 
 func (cs *CustomShortcut) SaveKeystrokes() error {
