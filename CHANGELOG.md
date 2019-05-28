@@ -1,3 +1,13 @@
+<a name="4.10.1"></a>
+### 4.10.1 (2019-05-28)
+
+
+#### Bug Fixes
+
+* **tray:**  cannot click indicator ([e902ba4c](https://github.com/linuxdeepin/dde-dock/commit/e902ba4cc1eb7deb53a21a9f6d47dddc03cc4c1a))
+
+
+
 <a name=""></a>
 ##  4.10.0 (2019-05-23)
 
