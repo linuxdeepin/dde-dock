@@ -197,7 +197,7 @@ void OverlayWarningPlugin::showCloseOverlayDialogPre()
 void OverlayWarningPlugin::showCloseOverlayDialog()
 {
     qDebug() << "start disable overlayroot process";
-    const int result = QProcess::execute("/usr/bin/pkexec overlayroot-disable");
+    const int result = QProcess::execute("/usr/bin/pkexec /usr/sbin/overlayroot-disable");
     if (result == 0) {
         QProcess::startDetached("reboot");
     } else {
