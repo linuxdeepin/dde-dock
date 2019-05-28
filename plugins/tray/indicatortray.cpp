@@ -187,7 +187,13 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorName)
                     auto bus = isSystemBus ? QDBusConnection::systemBus() : QDBusConnection::sessionBus();
 
                     QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus);
-                    qDebug() << interface.call(methodName, button_index, x, y);
+                    QDBusReply<void> reply = interface.call(methodName, button_index, x, y);
+                    if (!reply.isValid()) {
+                        qDebug() << interface.call(methodName);
+                    }
+                    else {
+                        qDebug() << reply.error();
+                    }
                 });
                 t.detach();
             });
