@@ -1,3 +1,7 @@
+[3.27.2.2] 2019-05-29
+*   feat(keybinding): add reset for kwin shortcuts
+*   fix(keybinding): switch WM shortcut is easy to be triggered twice
+
 [3.27.2.1] 2019-05-23
 *   fix(keybinding): Reset panic
 
