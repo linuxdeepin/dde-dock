@@ -214,8 +214,6 @@ void AppSnapshot::leaveEvent(QEvent *e)
 
     m_closeBtn2D->setVisible(false);
 
-    emit leaved(wid());
-
     update();
 }
 

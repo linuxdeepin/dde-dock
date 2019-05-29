@@ -169,8 +169,7 @@ void PreviewContainer::appendSnapWidget(const WId wid)
 
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows);
-    connect(snap, &AppSnapshot::leaved, m_waitForShowPreviewTimer, &QTimer::stop);
+    connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows, Qt::QueuedConnection);
 
     m_windowListLayout->addWidget(snap);
 
@@ -187,6 +186,7 @@ void PreviewContainer::enterEvent(QEvent *e)
 
     m_needActivate = false;
     m_mouseLeaveTimer->stop();
+    m_waitForShowPreviewTimer->start();
 }
 
 void PreviewContainer::leaveEvent(QEvent *e)
@@ -246,7 +246,12 @@ void PreviewContainer::previewEntered(const WId wid)
     m_currentWId = wid;
 
     m_floatingPreview->trackWindow(snap);
-    m_waitForShowPreviewTimer->start();
+
+    if (m_waitForShowPreviewTimer->isActive()) {
+        return;
+    }
+
+    previewFloating();
 }
 
 void PreviewContainer::previewFloating()
