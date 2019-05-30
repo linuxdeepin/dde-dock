@@ -205,7 +205,7 @@ func migrateUserEnv() error {
 
 		// save the current env to ~/.dde-env
 		currentEnv := make(map[string]string)
-		for _, envKey := range []string{"LANG", "LANGUAGE", "QT_SCALE_FACTOR"} {
+		for _, envKey := range []string{"LANG", "LANGUAGE"} {
 			envValue, ok := os.LookupEnv(envKey)
 			if ok {
 				currentEnv[envKey] = envValue

@@ -76,7 +76,7 @@ func (tx *FPrintTransaction) getDevice() (*fprint.Device, error) {
 	devicePath := devicePaths[0]
 	deviceObj, err := fprint.NewDevice(tx.parent.service.Conn(), devicePath)
 	if err != nil {
-		return nil, dbusutil.ToError(err)
+		return nil, err
 	}
 
 	return deviceObj, nil
