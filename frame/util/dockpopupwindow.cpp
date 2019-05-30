@@ -48,7 +48,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
-    connect(m_regionInter, &DRegionMonitor::buttonRelease, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
@@ -79,11 +79,12 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
 
     show(pos.x(), pos.y());
 
-    const bool regionRegistered = m_regionInter->registered();
-    if (!m_model && regionRegistered) {
+    if (m_regionInter->registered()) {
         m_regionInter->unregisterRegion();
-    } else if (m_model && !regionRegistered) {
-        QTimer::singleShot(100, this, [=] { m_regionInter->registerRegion(); });
+    }
+
+    if (m_model) {
+        m_regionInter->registerRegion();
     }
 }
 
@@ -136,8 +137,12 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
 
 void DockPopupWindow::onGlobMouseRelease(const QPoint &mousePos, const int flag)
 {
-    Q_UNUSED(flag);
     Q_ASSERT(m_model);
+
+    if (!((flag == DRegionMonitor::WatchedFlags::Button_Left) ||
+          (flag == DRegionMonitor::WatchedFlags::Button_Right))) {
+        return;
+    }
 
     const QRect rect = QRect(pos(), size());
     if (rect.contains(mousePos))
