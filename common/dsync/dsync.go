@@ -39,9 +39,9 @@ func NewConfig(name string, core Interface, sessionSigLoop *dbusutil.SignalLoop,
 	}
 
 	sessionBus := sessionSigLoop.Conn()
-	dbusDaemon := ofdbus.NewDBus(sessionBus)
-	dbusDaemon.InitSignalExt(sessionSigLoop, true)
-	_, err := dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
+	c.dbusDaemon = ofdbus.NewDBus(sessionBus)
+	c.dbusDaemon.InitSignalExt(sessionSigLoop, true)
+	_, err := c.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
 		if name == "com.deepin.sync.Daemon" && newOwner != "" {
 			err := c.Register()
 			if err != nil {
