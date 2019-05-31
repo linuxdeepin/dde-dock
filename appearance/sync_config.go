@@ -35,45 +35,27 @@ func (sc *syncConfig) Set(data []byte) error {
 
 	m := sc.m
 	if m.FontSize.Get() != v.FontSize {
-		err = m.doSetFontSize(v.FontSize)
-		if err != nil {
-			logger.Warning(err)
-		}
+		m.FontSize.Set(v.FontSize)
 	}
 
 	if m.GtkTheme.Get() != v.GTK {
-		err = m.doSetGtkTheme(v.GTK)
-		if err != nil {
-			logger.Warning(err)
-		}
+		m.GtkTheme.Set(v.GTK)
 	}
 
 	if m.IconTheme.Get() != v.Icon {
-		err = m.doSetIconTheme(v.Icon)
-		if err != nil {
-			logger.Warning(err)
-		}
+		m.IconTheme.Set(v.Icon)
 	}
 
 	if m.CursorTheme.Get() != v.Cursor {
-		err = m.doSetCursorTheme(v.Cursor)
-		if err != nil {
-			logger.Warning(err)
-		}
+		m.CursorTheme.Set(v.Cursor)
 	}
 
 	if m.StandardFont.Get() != v.FontStandard {
-		err = m.doSetStandardFont(v.FontStandard)
-		if err != nil {
-			logger.Warning(err)
-		}
+		m.StandardFont.Set(v.FontStandard)
 	}
 
 	if m.MonospaceFont.Get() != v.FontMonospace {
-		err = m.doSetMonospaceFont(v.FontMonospace)
-		if err != nil {
-			logger.Warning(err)
-		}
+		m.MonospaceFont.Set(v.FontMonospace)
 	}
 
 	return nil
@@ -115,19 +97,28 @@ func (sc *backgroundSyncConfig) Set(data []byte) error {
 	m := sc.m
 	m.WallpaperSlideShow.Set(v.SlideShow)
 
-	if v.SlideShow == "" {
-		bgs := m.getBackgroundURIs()
-		if !strv.Strv(bgs).Equal(v.BackgroundURIs) {
-			m.setting.SetStrv(gsKeyBackgroundURIs, v.BackgroundURIs)
-		}
-	}
-
 	if m.greeterBg != v.GreeterBackground {
 		err = m.doSetGreeterBackground(v.GreeterBackground)
 		if err != nil {
 			logger.Warning(err)
 		}
 	}
+
+	if v.SlideShow != "" {
+		return nil
+	}
+
+	bgs := m.getBackgroundURIs()
+	if strv.Strv(bgs).Equal(v.BackgroundURIs) {
+		return nil
+	}
+	for i, uri := range v.BackgroundURIs {
+		err := m.wm.SetWorkspaceBackground(0, int32(i+1), uri)
+		if err != nil {
+			logger.Warning("Failed to set workspace background:", i+1, uri)
+		}
+	}
+
 	return nil
 }
 

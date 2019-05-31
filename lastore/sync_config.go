@@ -3,6 +3,7 @@ package lastore
 import (
 	"encoding/json"
 	"errors"
+
 	"pkg.deepin.io/lib/dbus1"
 )
 
@@ -44,11 +45,26 @@ func (sc *syncConfig) Set(data []byte) error {
 	if err != nil {
 		return err
 	}
-	sc.l.core.AutoCheckUpdates().Set(0, info.AutoCheckUpdates)
-	sc.l.core.AutoClean().Set(0, info.AutoClean)
-	sc.l.core.AutoDownloadUpdates().Set(0, info.AutoDownloadUpdates)
-	smartMirrorEnabledSet(info.SmartMirrorEnabled)
-	sc.l.SetSourceCheckEnabled(info.SourceCheckEnabled)
+	err = sc.l.core.SetAutoCheckUpdates(0, info.AutoCheckUpdates)
+	if err != nil {
+		logger.Warning("Failed to set lastore auto check updates:", err)
+	}
+	err = sc.l.core.SetAutoClean(0, info.AutoClean)
+	if err != nil {
+		logger.Warning("Failed to set lastore auto clean:", err)
+	}
+	err = sc.l.core.SetAutoDownloadUpdates(0, info.AutoDownloadUpdates)
+	if err != nil {
+		logger.Warning("Failed to set lastore auto download updates:", err)
+	}
+	err = smartMirrorEnabledSet(info.SmartMirrorEnabled)
+	if err != nil {
+		logger.Warning("Failed to set lastore smart mirror:", err)
+	}
+	err = sc.l.SetSourceCheckEnabled(info.SourceCheckEnabled)
+	if err != nil {
+		logger.Warning("Failed to set lastore source check:", err)
+	}
 	return nil
 }
 
