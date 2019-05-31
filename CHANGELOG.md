@@ -1,3 +1,7 @@
+[3.27.2.3] 2019-05-31
+*   fix(dsync): Config.Destory method panic
+*   chore: do not save QT_SCALE_FACTOR to ~/.dde_env
+
 [3.27.2.2] 2019-05-29
 *   feat(keybinding): add reset for kwin shortcuts
 *   fix(keybinding): switch WM shortcut is easy to be triggered twice
