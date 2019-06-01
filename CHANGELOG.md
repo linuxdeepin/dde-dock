@@ -1,3 +1,15 @@
+<a name="4.10.2"></a>
+### 4.10.2 (2019-06-01)
+
+
+#### Bug Fixes
+
+* **overlay:**  disable overlay failed ([95aad7e3](https://github.com/linuxdeepin/dde-dock/commit/95aad7e3875682e32cd984d75e90935ea896c026))
+* **plugins:**  scrolling on the item, popup will hide ([8faa324e](https://github.com/linuxdeepin/dde-dock/commit/8faa324e9867fa4c6fdbedd52bc7a81bff8e5346))
+* **preview:**  cannot switch preview window ([82d6b4b3](https://github.com/linuxdeepin/dde-dock/commit/82d6b4b38a4cdac374be2d0752de94067658d0ac))
+
+
+
 <a name="4.10.1"></a>
 ### 4.10.1 (2019-05-28)
 
