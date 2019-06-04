@@ -21,6 +21,7 @@ package users
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -123,19 +124,38 @@ func ModifyPasswd(words, username string) error {
 	return updatePasswd(words, username)
 }
 
-// passwd -S username
-func IsUserLocked(username string) bool {
-	output, err := exec.Command("passwd", []string{"-S", username}...).Output()
+const (
+	// Same as the abbreviation in `passwd --status`
+	PasswordStatusUsable     = "P"
+	PasswordStatusNoPassword = "NP"
+	PasswordStatusLocked     = "L"
+)
+
+func GetUserPasswordStatus(username string) (string, error) {
+	content, err := ioutil.ReadFile(userFileShadow)
 	if err != nil {
-		return true
+		return "", err
+	}
+	lines := bytes.Split(content, []byte{'\n'})
+	for _, line := range lines {
+		fields := bytes.Split(line, []byte{':'})
+		if len(fields) != itemLenShadow {
+			continue
+		}
+
+		if string(fields[0]) == username {
+			pw := fields[1]
+			if len(pw) == 0 {
+				return PasswordStatusNoPassword, nil
+			}
+			if pw[0] == '!' {
+				return PasswordStatusLocked, nil
+			}
+			return PasswordStatusUsable, nil
+		}
 	}
 
-	items := strings.Split(string(output), " ")
-	if items[1] == "L" {
-		return true
-	}
-
-	return false
+	return "", errors.New("user not found")
 }
 
 func IsAutoLoginUser(username string) bool {
