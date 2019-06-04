@@ -31,6 +31,7 @@ import (
 	libDDELauncher "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.launcher"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wmswitcher"
 	"github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
@@ -89,7 +90,7 @@ type Manager struct {
 	wm           *wm.Wm
 	appsObj      *libApps.Apps
 	startManager *sessionmanager.StartManager
-	wmSwitcher   *sessionmanager.WMSwitcher
+	wmSwitcher   *wmswitcher.WMSwitcher
 	wmName       string
 
 	signals *struct {
