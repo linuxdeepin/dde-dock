@@ -27,6 +27,7 @@ import (
 	libDDELauncher "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.launcher"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wmswitcher"
 	"github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
@@ -84,12 +85,15 @@ func (m *Manager) listenSettingsChanged() {
 
 func (m *Manager) listenWMSwitcherSignal() {
 	m.wmSwitcher.InitSignalExt(m.sessionSigLoop, true)
-	m.wmSwitcher.ConnectWMChanged(func(wmName string) {
+	_, err := m.wmSwitcher.ConnectWMChanged(func(wmName string) {
 		m.PropsMu.Lock()
 		m.wmName = wmName
 		m.PropsMu.Unlock()
 		logger.Debugf("wm changed %q", wmName)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) is3DWM() (ret bool) {
@@ -214,7 +218,7 @@ func (m *Manager) init() error {
 	m.launcher = launcher.NewLauncher(sessionBus)
 	m.ddeLauncher = libDDELauncher.NewLauncher(sessionBus)
 	m.startManager = sessionmanager.NewStartManager(sessionBus)
-	m.wmSwitcher = sessionmanager.NewWMSwitcher(sessionBus)
+	m.wmSwitcher = wmswitcher.NewWMSwitcher(sessionBus)
 	m.sessionSigLoop = dbusutil.NewSignalLoop(m.service.Conn(), 10)
 	m.sessionSigLoop.Start()
 	m.listenLauncherSignal()

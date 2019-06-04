@@ -186,14 +186,15 @@ func (m *AppEntryMenu) GetValue() (val interface{}, err *dbus.Error) {
 	is3DWM := m.manager.is3DWM()
 	m.mu.Lock()
 	if m.dirty || m.cache == "" || m.is3DWM != is3DWM {
-		newItems := make([]*MenuItem, 0, len(m.menu.Items))
+		items := make([]*MenuItem, 0, len(m.menu.Items))
 		for _, item := range m.menu.Items {
 			if is3DWM || item.hint != menuItemHintShowAllWindows {
-				newItems = append(newItems, item)
+				items = append(items, item)
 			}
 		}
-		m.menu.Items = newItems
-		m.cache = m.menu.GenerateJSON()
+		menu := NewMenu()
+		menu.Items = items
+		m.cache = menu.GenerateJSON()
 		m.dirty = false
 		m.is3DWM = is3DWM
 	}
