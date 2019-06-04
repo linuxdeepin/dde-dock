@@ -147,7 +147,7 @@ func (infos UserInfos) GetUserNames() []string {
 func (infos UserInfos) filterUserInfos() UserInfos {
 	var tmp UserInfos
 	for _, info := range infos {
-		if !info.isHumanUser(userFileShadow, userFileLoginDefs) {
+		if !info.isHumanUser(userFileLoginDefs) {
 			continue
 		}
 
@@ -157,7 +157,7 @@ func (infos UserInfos) filterUserInfos() UserInfos {
 	return tmp
 }
 
-func (info UserInfo) isHumanUser(configShadow string, configLoginDefs string) bool {
+func (info UserInfo) isHumanUser(configLoginDefs string) bool {
 	if info.Name == "root" {
 		return false
 	}
@@ -167,10 +167,6 @@ func (info UserInfo) isHumanUser(configShadow string, configLoginDefs string) bo
 	}
 
 	if !info.isHumanViaShell() {
-		return false
-	}
-
-	if !info.isHumanViaShadow(configShadow) {
 		return false
 	}
 
@@ -192,48 +188,6 @@ func (info UserInfo) isHumanViaShell() bool {
 	}
 
 	return true
-}
-
-func (info UserInfo) isHumanViaShadow(config string) bool {
-	content, err := ioutil.ReadFile(config)
-	if err != nil {
-		return false
-	}
-
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		if len(line) == 0 {
-			continue
-		}
-
-		items := strings.Split(line, ":")
-		if len(items) != itemLenShadow {
-			continue
-		}
-
-		if items[0] != info.Name {
-			continue
-		}
-
-		pw := items[1]
-		if pw == "" {
-			break
-		}
-
-		// user was locked
-		if pw[0] == '!' {
-			return true
-		}
-
-		// 加盐密码最短为13
-		if pw[0] == '*' || len(pw) < 13 {
-			break
-		}
-
-		return true
-	}
-
-	return false
 }
 
 func (info UserInfo) isHumanViaLoginDefs(config string) bool {

@@ -122,11 +122,11 @@ func (m *Manager) handleFileGroupChanged() {
 }
 
 func (m *Manager) handleFileShadowChanged() {
-	//Update the property 'Locked'
+	//Update the property 'PasswordStatus' and 'Locked'
 	m.usersMapMu.Lock()
 	defer m.usersMapMu.Unlock()
 	for _, u := range m.usersMap {
-		u.updatePropLocked()
+		u.updatePropPasswordStatus()
 	}
 }
 

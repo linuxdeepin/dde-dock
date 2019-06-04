@@ -20,9 +20,10 @@
 package users
 
 import (
+	"testing"
+
 	C "gopkg.in/check.v1"
 	dutils "pkg.deepin.io/lib/utils"
-	"testing"
 )
 
 type testWrapper struct{}
@@ -80,16 +81,16 @@ func (*testWrapper) TestUserInfoValid(c *C.C) {
 		},
 		{
 			UserInfo{Name: "test3", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
-			false,
+			true,
 		},
 		{
 			UserInfo{Name: "test4", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
-			false,
+			true,
 		},
 	}
 
 	for _, v := range infos {
-		c.Check(v.name.isHumanUser("testdata/shadow", "testdata/login.defs"), C.Equals, v.valid)
+		c.Check(v.name.isHumanUser("testdata/login.defs"), C.Equals, v.valid)
 	}
 }
 

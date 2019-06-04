@@ -93,6 +93,7 @@ type User struct {
 	GreeterBackground  string
 	XSession           string
 
+	PasswordStatus string
 	// 用户是否被禁用
 	Locked bool
 	// 是否允许此用户自动登录
@@ -139,6 +140,11 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		return nil, err
 	}
 
+	passwordStatus, err := users.GetUserPasswordStatus(userInfo.Name)
+	if err != nil {
+		return nil, err
+	}
+
 	var u = &User{
 		service:        service,
 		UserName:       userInfo.Name,
@@ -149,7 +155,8 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		Shell:          userInfo.Shell,
 		AutomaticLogin: users.IsAutoLoginUser(userInfo.Name),
 		NoPasswdLogin:  users.CanNoPasswdLogin(userInfo.Name),
-		Locked:         users.IsUserLocked(userInfo.Name),
+		Locked:         passwordStatus == users.PasswordStatusLocked,
+		PasswordStatus: passwordStatus,
 	}
 
 	u.AccountType = u.getAccountType()
@@ -374,10 +381,15 @@ func (u *User) writeUserConfig() error {
 	return u.writeUserConfigWithChanges(nil)
 }
 
-func (u *User) updatePropLocked() {
-	newVal := users.IsUserLocked(u.UserName)
+func (u *User) updatePropPasswordStatus() {
+	passwordStatus, err := users.GetUserPasswordStatus(u.UserName)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 	u.PropsMu.Lock()
-	u.setPropLocked(newVal)
+	u.setPropPasswordStatus(passwordStatus)
+	u.setPropLocked(passwordStatus == users.PasswordStatusLocked)
 	u.PropsMu.Unlock()
 }
 
@@ -461,7 +473,7 @@ func (u *User) clearData() {
 	configFile := path.Join(userConfigDir, u.UserName)
 	err := os.Remove(configFile)
 	if err != nil {
-		logger.Warningf("remove user config failed:", err)
+		logger.Warning("remove user config failed:", err)
 	}
 
 	// delete user custom icon
