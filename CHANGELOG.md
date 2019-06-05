@@ -1,3 +1,7 @@
+[3.27.2.4] 2019-06-05
+*   fix(dock): menu item 'All windows' is not displayed
+*   change(api): accounts User add PasswordStatus property
+
 [3.27.2.3] 2019-05-31
 *   fix(dsync): Config.Destory method panic
 *   chore: do not save QT_SCALE_FACTOR to ~/.dde_env
