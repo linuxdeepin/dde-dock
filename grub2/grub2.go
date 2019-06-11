@@ -150,12 +150,10 @@ type modifyTask struct {
 
 func getModifyTaskEnableTheme(enable bool, lang string, gfxmodeDetectState gfxmodeDetectState) modifyTask {
 	if enable {
-		var adjustTheme bool
 		f := func(params map[string]string) {
 			if gfxmodeDetectState == gfxmodeDetectStateNone {
 				// normal
 				params[grubTheme] = quoteString(defaultGrubTheme)
-				adjustTheme = true
 			} else {
 				// detecting or failed
 				params[grubTheme] = quoteString(fallbackGrubTheme)
@@ -164,7 +162,7 @@ func getModifyTaskEnableTheme(enable bool, lang string, gfxmodeDetectState gfxmo
 		}
 		return modifyTask{
 			paramsModifyFunc: f,
-			adjustTheme:      adjustTheme,
+			adjustTheme:      gfxmodeDetectState == gfxmodeDetectStateNone,
 			adjustThemeLang:  lang,
 		}
 	} else {
