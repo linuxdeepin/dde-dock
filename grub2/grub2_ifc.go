@@ -118,7 +118,9 @@ func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 	g.PropsMu.Lock()
 
 	if g.setPropEnableTheme(enabled) {
-		g.addModifyTask(getModifyTaskEnableTheme(enabled, lang, g.gfxmodeDetectState))
+		task := getModifyTaskEnableTheme(enabled, lang, g.gfxmodeDetectState)
+		logger.Debugf("SetEnableTheme task: %#v", task)
+		g.addModifyTask(task)
 	}
 
 	g.PropsMu.Unlock()
