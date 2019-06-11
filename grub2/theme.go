@@ -25,20 +25,18 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 )
 
-const DefaultThemeDir = "/boot/grub/themes/deepin"
-
-var (
-	themeDir    = DefaultThemeDir
-	themeBgFile = themeDir + "/background.jpg"
+const (
+	themeDir            = "/boot/grub/themes/deepin"
+	fallbackThemeDir    = "/boot/grub/themes/deepin-fallback"
+	themeBgFile         = themeDir + "/background.jpg"
+	fallbackThemeBgFile = fallbackThemeDir + "/background.jpg"
 )
 
 // Theme is a dbus object which provide properties and methods to
 // setup deepin grub2 theme.
 type Theme struct {
-	g        *Grub2
-	service  *dbusutil.Service
-	themeDir string
-	bgFile   string
+	g       *Grub2
+	service *dbusutil.Service
 
 	PropsMu sync.RWMutex
 	methods *struct {
@@ -56,8 +54,5 @@ func NewTheme(g *Grub2) *Theme {
 	theme := &Theme{}
 	theme.g = g
 	theme.service = g.service
-	theme.themeDir = themeDir
-	theme.bgFile = themeBgFile
-
 	return theme
 }

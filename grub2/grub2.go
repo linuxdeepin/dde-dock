@@ -65,6 +65,7 @@ type Grub2 struct {
 	inhibitFd          dbus.UnixFD
 	PropsMu            sync.RWMutex
 	// props:
+	ThemeFile    string
 	DefaultEntry string
 	EnableTheme  bool
 	Gfxmode      string
@@ -116,8 +117,8 @@ func (g *Grub2) applyParams(params map[string]string) {
 
 	// enable theme
 	var enableTheme bool
-	theme := getTheme(params)
-	if theme != "" {
+	g.ThemeFile = getTheme(params)
+	if g.ThemeFile != "" {
 		enableTheme = true
 	}
 	g.EnableTheme = enableTheme
@@ -284,7 +285,13 @@ func (g *Grub2) finishGfxmodeDetect(params map[string]string) {
 	currentGfxmodeStr := currentGfxmode.String()
 	g.PropsMu.Lock()
 	g.setPropGfxmode(currentGfxmodeStr)
+	if themeEnabled {
+		g.setPropThemeFile(defaultGrubTheme)
+	} else {
+		g.setPropThemeFile("")
+	}
 	g.PropsMu.Unlock()
+	g.theme.emitSignalBackgroundChanged()
 
 	task := modifyTask{
 		paramsModifyFunc: func(params map[string]string) {
@@ -319,6 +326,7 @@ func NewGrub2(service *dbusutil.Service) *Grub2 {
 
 	g.applyParams(params)
 	g.modifyManager = newModifyManager()
+	g.modifyManager.g = g
 	g.modifyManager.stateChangeCb = func(running bool) {
 		// state change callback
 		if running {
