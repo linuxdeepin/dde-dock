@@ -42,6 +42,7 @@ func init() {
 }
 
 type modifyManager struct {
+	g           *Grub2
 	ch          chan modifyTask
 	modifyTasks []modifyTask
 
@@ -132,6 +133,7 @@ func (m *modifyManager) update(adjustTheme bool, adjustThemeLang string) {
 			logger.Warning("failed to adjust theme:", err)
 		}
 		logJobEnd(logJobAdjustTheme, err)
+		m.g.theme.emitSignalBackgroundChanged()
 	}
 
 	logJobStart(logJobMkConfig)

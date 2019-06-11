@@ -118,6 +118,15 @@ func (g *Grub2) SetEnableTheme(sender dbus.Sender, enabled bool) *dbus.Error {
 	g.PropsMu.Lock()
 
 	if g.setPropEnableTheme(enabled) {
+		var themeFile string
+		if enabled {
+			if g.gfxmodeDetectState == gfxmodeDetectStateNone {
+				themeFile = defaultGrubTheme
+			} else {
+				themeFile = fallbackGrubTheme
+			}
+		}
+		g.setPropThemeFile(themeFile)
 		task := getModifyTaskEnableTheme(enabled, lang, g.gfxmodeDetectState)
 		logger.Debugf("SetEnableTheme task: %#v", task)
 		g.addModifyTask(task)
@@ -248,17 +257,17 @@ func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
 	gfxmodeDetectState := g.gfxmodeDetectState
 	g.PropsMu.RUnlock()
 
+	params, err := grub_common.LoadGrubParams()
+	if err != nil {
+		logger.Warning("failed to load grub params:", err)
+		return dbusutil.ToError(err)
+	}
+
 	if gfxmodeDetectState == gfxmodeDetectStateDetecting {
 		return dbusutil.ToError(errors.New("already in detection mode"))
 	} else if gfxmodeDetectState == gfxmodeDetectStateFailed {
 		cur, _, err := grub_common.GetBootArgDeepinGfxmode()
 		if err == nil {
-			params, err := grub_common.LoadGrubParams()
-			if err != nil {
-				logger.Warning("failed to load grub params:", err)
-				return dbusutil.ToError(err)
-			}
-
 			if params[grubGfxmode] == gfxmodesStr ||
 				(len(gfxmodes) > 0 && gfxmodes[0] == cur) {
 				g.finishGfxmodeDetect(params)
@@ -267,14 +276,21 @@ func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
 		}
 	}
 
+	themeFile := getTheme(params)
 	g.PropsMu.Lock()
-
 	g.gfxmodeDetectState = gfxmodeDetectStateDetecting
-	g.setPropEnableTheme(false)
+	if themeFile != "" {
+		g.setPropThemeFile(fallbackGrubTheme)
+		g.setPropEnableTheme(true)
+	} else {
+		g.setPropThemeFile("")
+		g.setPropEnableTheme(false)
+	}
 	g.setPropGfxmode(gfxmodesStr)
-	g.addModifyTask(getModifyTaskPrepareGfxmodeDetect(gfxmodesStr))
-
 	g.PropsMu.Unlock()
+	g.theme.emitSignalBackgroundChanged()
+
+	g.addModifyTask(getModifyTaskPrepareGfxmodeDetect(gfxmodesStr))
 
 	err = ioutil.WriteFile(grub_common.GfxmodeDetectReadyPath, nil, 0644)
 	if err != nil {

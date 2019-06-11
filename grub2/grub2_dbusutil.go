@@ -2,6 +2,19 @@
 
 package grub2
 
+func (v *Grub2) setPropThemeFile(value string) (changed bool) {
+	if v.ThemeFile != value {
+		v.ThemeFile = value
+		v.emitPropChangedThemeFile(value)
+		return true
+	}
+	return false
+}
+
+func (v *Grub2) emitPropChangedThemeFile(value string) error {
+	return v.service.EmitPropertyChanged(v, "ThemeFile", value)
+}
+
 func (v *Grub2) setPropDefaultEntry(value string) (changed bool) {
 	if v.DefaultEntry != value {
 		v.DefaultEntry = value

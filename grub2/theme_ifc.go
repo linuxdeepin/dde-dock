@@ -23,6 +23,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"strings"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -69,9 +70,31 @@ func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string)
 
 func (theme *Theme) GetBackground() (string, *dbus.Error) {
 	theme.service.DelayAutoQuit()
-	return theme.bgFile, nil
+
+	theme.g.PropsMu.RLock()
+	themeFile := theme.g.ThemeFile
+	theme.g.PropsMu.RUnlock()
+
+	if strings.Contains(themeFile, "/deepin/") {
+		_, err := os.Stat(themeBgFile)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return fallbackThemeBgFile, nil
+			}
+			return "", dbusutil.ToError(err)
+		} else {
+			return themeBgFile, nil
+		}
+	} else if strings.Contains(themeFile, "/deepin-fallback/") {
+		return fallbackThemeBgFile, nil
+	} else {
+		return "", nil
+	}
 }
 
 func (theme *Theme) emitSignalBackgroundChanged() {
-	theme.service.Emit(theme, "BackgroundChanged")
+	err := theme.service.Emit(theme, "BackgroundChanged")
+	if err != nil {
+		logger.Warning(err)
+	}
 }
