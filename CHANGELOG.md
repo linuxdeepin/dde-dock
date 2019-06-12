@@ -1,3 +1,8 @@
+[3.27.2.5] 2019-06-12
+*   fix(lockservice): user with a blank password authentication failure
+*   fix(grub2): Theme.GetBackground return invalid file
+*   fix(grub2): do not adjust theme when enable theme
+
 [3.27.2.4] 2019-06-05
 *   fix(dock): menu item 'All windows' is not displayed
 *   change(api): accounts User add PasswordStatus property
