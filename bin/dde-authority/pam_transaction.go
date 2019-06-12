@@ -88,7 +88,14 @@ func (tx *PAMTransaction) authenticate() error {
 	tx.setPropAuthenticating(true)
 	tx.PropsMu.Unlock()
 
-	err := tx.core.Authenticate(0)
+	// meet the requirement of pam_unix.so nullok_secure option,
+	// allows any user with a blank password to unlock.
+	err := tx.core.SetItemStr(pam.Tty, "tty1")
+	if err != nil {
+		log.Println("WARN: failed to set item tty:", err)
+	}
+
+	err = tx.core.Authenticate(0)
 
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()

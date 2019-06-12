@@ -188,9 +188,7 @@ func (m *Manager) UnlockCheck(sender dbus.Sender, username, password string) *db
 	if ok && v != nil {
 		log.Println("In authenticating:", id)
 		// in authenticate
-		if password != "" {
-			v <- password
-		}
+		v <- password
 		m.authLocker.Unlock()
 		return nil
 	}
@@ -236,6 +234,7 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 			v, ok := m.authUserTable[id]
 			m.authLocker.Unlock()
 			if !ok || v == nil {
+				log.Println("WARN: no password channel found for", username)
 				return "", fmt.Errorf("no passwd channel found for %s", username)
 			}
 			log.Println("Join select:", id)
@@ -273,7 +272,14 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 		return
 	}
 
-	err = handler.Authenticate(pam.DisallowNullAuthtok)
+	// meet the requirement of pam_unix.so nullok_secure option,
+	// allows any user with a blank password to unlock.
+	err = handler.SetItem(pam.Tty, "tty1")
+	if err != nil {
+		log.Println("WARN: failed to set item tty:", err)
+	}
+
+	err = handler.Authenticate(0)
 
 	id := getId(pid, username)
 	m.authLocker.Lock()
