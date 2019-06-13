@@ -1,3 +1,13 @@
+<a name="4.10.3"></a>
+### 4.10.3 (2019-06-13)
+
+
+#### Others
+
+* **power:**  use onBattery to replace batteryState to check is used battery ([2e7a4e6f](https://github.com/linuxdeepin/dde-dock/commit/2e7a4e6fa9f960964af97648e7672359f906af7c))
+
+
+
 <a name="4.10.2"></a>
 ### 4.10.2 (2019-06-01)
 
