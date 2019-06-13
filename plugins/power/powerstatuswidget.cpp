@@ -67,7 +67,7 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     const uint value = qMin(100.0, qMax(0.0, data.value("Display")));
     const int percentage = std::round(value);
     const int batteryState = m_powerInter->batteryState()["Display"];
-    const bool plugged = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
+    const bool plugged = !m_powerInter->onBattery();
 
     QString percentageStr;
     if (percentage < 10 && percentage >= 0) {

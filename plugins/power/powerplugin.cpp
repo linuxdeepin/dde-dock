@@ -210,9 +210,8 @@ void PowerPlugin::refreshTipsData()
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
     const QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
-    const bool charging = (batteryState == BatteryState::CHARGING || batteryState == BatteryState::FULLY_CHARGED);
 
-    if (!charging) {
+    if (m_powerInter->onBattery()) {
         qulonglong timeToEmpty = m_systemPowerInter->batteryTimeToEmpty();
         QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
         uint hour = time.toString("hh").toUInt();
