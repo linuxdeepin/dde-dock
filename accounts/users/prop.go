@@ -148,7 +148,7 @@ func GetUserPasswordStatus(username string) (string, error) {
 			if len(pw) == 0 {
 				return PasswordStatusNoPassword, nil
 			}
-			if pw[0] == '!' {
+			if pw[0] == '!' || pw[0] == '*' {
 				return PasswordStatusLocked, nil
 			}
 			return PasswordStatusUsable, nil
