@@ -65,7 +65,7 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.wm = wm.NewWm(service.Conn())
 	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	m.sessionSigLoop.Start()
-	m.syncConfig = dsync.NewConfig("screenedge", &syncConfig{m: m},
+	m.syncConfig = dsync.NewConfig("screen_edge", &syncConfig{m: m},
 		m.sessionSigLoop, dbusPath, logger)
 	return m
 }
