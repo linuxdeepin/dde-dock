@@ -34,7 +34,8 @@ const (
 	settingKeyAmbientLightAdjuestBrightness = "ambient-light-adjust-brightness"
 	settingKeyScreenBlackLock               = "screen-black-lock"
 	settingKeySleepLock                     = "sleep-lock"
-	settingKeyLidClosedSleep                = "lid-closed-sleep"
+	settingKeyLinePowerLidClosedSleep       = "lid-closed-sleep"
+	settingKeyBatteryLidClosedSleep         = "battery-lid-closed-sleep"
 	settingKeyPowerButtonPressedExec        = "power-button-pressed-exec"
 
 	settingKeyFullScreenWorkaroundEnabled = "fullscreen-workaround-enabled"

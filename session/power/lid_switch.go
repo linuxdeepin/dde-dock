@@ -57,15 +57,24 @@ func (h *LidSwitchHandler) Start() error {
 
 func (h *LidSwitchHandler) onLidClosed() {
 	logger.Info("Lid closed")
+	var onBattery bool
 	m := h.manager
 	m.PropsMu.Lock()
 	m.lidSwitchState = lidSwitchStateClose
+	onBattery = h.manager.OnBattery
 	m.PropsMu.Unlock()
 	m.claimOrReleaseAmbientLight()
 
-	if !m.LidClosedSleep.Get() {
-		return
+	if onBattery {
+		if !m.BatteryLidClosedSleep.Get() {
+			return
+		}
+	} else {
+		if !m.LinePowerLidClosedSleep.Get() {
+			return
+		}
 	}
+
 	outputs, err := getWorkingOutputNames(m.helper)
 	if err != nil {
 		logger.Warning("getWorkingOutputNames failed:", err)

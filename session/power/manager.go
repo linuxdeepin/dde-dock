@@ -85,8 +85,12 @@ type Manager struct {
 	// 睡眠前是否锁定
 	SleepLock gsprop.Bool `prop:"access:rw"`
 
-	// 笔记本电脑盖上盖子后是否睡眠
+	// 废弃
 	LidClosedSleep gsprop.Bool `prop:"access:rw"`
+	// 接通电源时，笔记本电脑盖上盖子是否睡眠
+	LinePowerLidClosedSleep gsprop.Bool `prop:"access:rw"`
+	// 使用电池时，笔记本电脑盖上盖子是否睡眠
+	BatteryLidClosedSleep gsprop.Bool `prop:"access:rw"`
 
 	AmbientLightAdjustBrightness gsprop.Bool `prop:"access:rw"`
 	ambientLightClaimed          bool
@@ -126,7 +130,9 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.BatterySleepDelay.Bind(m.settings, settingKeyBatterySleepDelay)
 	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)
 	m.SleepLock.Bind(m.settings, settingKeySleepLock)
-	m.LidClosedSleep.Bind(m.settings, settingKeyLidClosedSleep)
+	m.LidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedSleep)
+	m.LinePowerLidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedSleep)
+	m.BatteryLidClosedSleep.Bind(m.settings, settingKeyBatteryLidClosedSleep)
 	m.AmbientLightAdjustBrightness.Bind(m.settings,
 		settingKeyAmbientLightAdjuestBrightness)
 
@@ -294,7 +300,8 @@ func (m *Manager) Reset() *dbus.Error {
 		settingKeyBatterySleepDelay,
 		settingKeyScreenBlackLock,
 		settingKeySleepLock,
-		settingKeyLidClosedSleep,
+		settingKeyLinePowerLidClosedSleep,
+		settingKeyBatteryLidClosedSleep,
 		settingKeyPowerButtonPressedExec,
 	}
 	for _, key := range settingKeys {
