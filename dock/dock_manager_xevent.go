@@ -276,6 +276,9 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 	case atomNetWmAllowedActions:
 		winInfo.updateWmAllowedActions()
 
+	case atomMotifWmHints:
+		winInfo.updateMotifWmHints()
+
 	case x.AtomWMClass:
 		winInfo.updateWmClass()
 		m.attachOrDetachWindow(winInfo)
@@ -316,7 +319,7 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 		}
 		entry.updateWindowInfos()
 
-	case atomNetWmAllowedActions:
+	case atomNetWmAllowedActions, atomMotifWmHints:
 		entry.updateMenu()
 	}
 }

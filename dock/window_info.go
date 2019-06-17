@@ -57,6 +57,7 @@ type WindowInfo struct {
 	hasWmTransientFor bool
 	wmClass           *icccm.WMClass
 	wmName            string
+	motifWmHints      *MotifWmHints
 
 	gtkAppId     string
 	flatpakAppID string
@@ -112,6 +113,15 @@ func (winInfo *WindowInfo) updateWmClass() {
 	winInfo.wmClass, err = getWmClass(winInfo.window)
 	if err != nil {
 		logger.Debugf("failed to get wmClass for window %d: %v", winInfo.window, err)
+	}
+}
+
+func (winInfo *WindowInfo) updateMotifWmHints() {
+	var err error
+	winInfo.motifWmHints, err = getMotifWmHints(globalXConn, winInfo.window)
+	if err != nil {
+		logger.Debugf("failed to get Motif WM Hints for window %d: %v",
+			winInfo.window, err)
 	}
 }
 
@@ -326,6 +336,7 @@ func (winInfo *WindowInfo) update() {
 	win := winInfo.window
 	logger.Debugf("update window %v info", win)
 	winInfo.updateWmClass()
+	winInfo.updateMotifWmHints()
 	winInfo.updateWmState()
 	winInfo.updateWmWindowType()
 	winInfo.updateWmAllowedActions()
