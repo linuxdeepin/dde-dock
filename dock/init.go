@@ -71,6 +71,7 @@ var (
 	atomNetWmStateAbove         x.Atom
 	atomNetWmActionClose        x.Atom
 	atomNetWmAllowedActions     x.Atom
+	atomMotifWmHints            x.Atom
 )
 
 func initDir() {
@@ -110,4 +111,5 @@ func initAtom() {
 	atomNetWmStateAbove, _ = getAtom("_NET_WM_STATE_ABOVE")
 	atomNetWmActionClose, _ = getAtom("_NET_WM_ACTION_CLOSE")
 	atomNetWmAllowedActions, _ = getAtom("_NET_WM_ALLOWED_ACTIONS")
+	atomMotifWmHints, _ = getAtom("_MOTIF_WM_HINTS")
 }

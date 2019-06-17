@@ -106,20 +106,15 @@ func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 	return NewMenuItem(Tr("_Close All"), func(timestamp uint32) {
 		logger.Debug("Close All")
-		var winIds = make([]x.Window, 0, len(entry.windows))
 		entry.PropsMu.RLock()
-		for win, winInfo := range entry.windows {
-			for _, action := range winInfo.wmAllowedActions {
-				if action == atomNetWmActionClose {
-					winIds = append(winIds, win)
-					break
-				}
-			}
-		}
+		winIds := entry.getAllowedCloseWindows()
 		entry.PropsMu.RUnlock()
 
 		for _, win := range winIds {
-			closeWindow(win, x.Timestamp(timestamp))
+			err := closeWindow(win, x.Timestamp(timestamp))
+			if err != nil {
+				logger.Warningf("failed to close window %d: %v", win, err)
+			}
 		}
 	}, true)
 }

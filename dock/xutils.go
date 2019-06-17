@@ -136,6 +136,63 @@ func getFrameExtentsFromReply(reply *x.GetPropertyReply) (*windowFrameExtents, e
 	}, nil
 }
 
+func getMotifWmHints(xConn *x.Conn, win x.Window) (*MotifWmHints, error) {
+	reply, err := x.GetProperty(xConn, false, win, atomMotifWmHints,
+		atomMotifWmHints, 0, 5).Reply(xConn)
+	if err != nil {
+		return nil, err
+	}
+	return getMotifWmHintsFromReply(reply)
+}
+
+func getMotifWmHintsFromReply(reply *x.GetPropertyReply) (*MotifWmHints, error) {
+	list, err := getCardinalsFromReply(reply)
+	if err != nil {
+		return nil, err
+	}
+	if len(list) != 5 {
+		return nil, errors.New("length of list is not 5")
+	}
+	return &MotifWmHints{
+		Flags:       list[0],
+		Functions:   list[1],
+		Decorations: list[2],
+		InputMode:   int32(list[3]),
+		Status:      list[4],
+	}, nil
+}
+
+type MotifWmHints struct {
+	Flags       uint32
+	Functions   uint32
+	Decorations uint32
+	InputMode   int32
+	Status      uint32
+}
+
+const (
+	MotifHintFunctions = 1 << iota
+	MotifHintDecorations
+	MotifHintInputMode
+	MotifHintStatus
+)
+
+const (
+	MotifFunctionAll = 1 << iota
+	MotifFunctionResize
+	MotifFunctionMove
+	MotifFunctionMinimize
+	MotifFunctionMaximize
+	MotifFunctionClose
+	MotifFunctionNone = 0
+)
+
+func (h *MotifWmHints) allowedClose() bool {
+	return h.Flags&MotifHintFunctions == 0 ||
+		h.Functions&MotifFunctionAll != 0 ||
+		h.Functions&MotifFunctionClose != 0
+}
+
 func getWindowGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
 	winRect, err := getDecorGeometry(xConn, win)
 	if err != nil {

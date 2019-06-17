@@ -113,14 +113,28 @@ func (entry *AppEntry) hasWindow() bool {
 }
 
 func (entry *AppEntry) hasAllowedCloseWindow() bool {
+	winIds := entry.getAllowedCloseWindows()
+	return len(winIds) > 0
+}
+
+func (entry *AppEntry) getAllowedCloseWindows() []x.Window {
+	ret := make([]x.Window, 0, len(entry.windows))
 	for _, winInfo := range entry.windows {
+		if winInfo.motifWmHints != nil {
+			if winInfo.motifWmHints.allowedClose() {
+				ret = append(ret, winInfo.window)
+			}
+			continue
+		}
+
 		for _, action := range winInfo.wmAllowedActions {
 			if action == atomNetWmActionClose {
-				return true
+				ret = append(ret, winInfo.window)
+				break
 			}
 		}
 	}
-	return false
+	return ret
 }
 
 func (entry *AppEntry) getWindowIds() []uint32 {
