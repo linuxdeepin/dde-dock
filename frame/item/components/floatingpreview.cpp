@@ -126,7 +126,9 @@ void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
 
-    emit m_tracked->clicked(m_tracked->wid());
+    if (m_tracked) {
+        emit m_tracked->clicked(m_tracked->wid());
+    }
 }
 
 bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
@@ -139,7 +141,9 @@ bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
 
 void FloatingPreview::hideEvent(QHideEvent *event)
 {
-    m_tracked->setContentsMargins(0, 0, 0, 0);
+    if (m_tracked) {
+        m_tracked->setContentsMargins(0, 0, 0, 0);
+    }
 
     QWidget::hideEvent(event);
 }

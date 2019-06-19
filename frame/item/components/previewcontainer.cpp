@@ -186,7 +186,10 @@ void PreviewContainer::enterEvent(QEvent *e)
 
     m_needActivate = false;
     m_mouseLeaveTimer->stop();
-    m_waitForShowPreviewTimer->start();
+
+    if (m_wmHelper->hasComposite()) {
+        m_waitForShowPreviewTimer->start();
+    }
 }
 
 void PreviewContainer::leaveEvent(QEvent *e)
