@@ -32,6 +32,7 @@ func newEventCaptor() *eventCaptor {
 		timer:    timer,
 		interval: interval,
 	}
+	l.quit = make(chan struct{})
 	go l.loopCheck()
 	return l
 }
