@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
-export GOPATH := /usr/share/gocode
+export GOCACHE = /tmp/gocache
+export GOPATH = /usr/share/gocode
 DEB_HOST_MULTIARCH := $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 export PAM_MODULE_DIR = lib/$(DEB_HOST_MULTIARCH)/security
 
