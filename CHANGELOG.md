@@ -1,3 +1,13 @@
+<a name="4.10.4"></a>
+### 4.10.4 (2019-06-25)
+
+
+#### Bug Fixes
+
+* **2d:**  Clicking on the preview will crash ([4bb03fa9](https://github.com/linuxdeepin/dde-dock/commit/4bb03fa9aeec9522e6252be5ece2b6d45232bf13))
+
+
+
 <a name="4.10.3"></a>
 ### 4.10.3 (2019-06-13)
 
