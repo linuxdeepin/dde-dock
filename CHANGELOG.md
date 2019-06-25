@@ -1,3 +1,13 @@
+<a name="4.10.5"></a>
+### 4.10.5 (2019-06-25)
+
+
+#### Others
+
+*   disable show animation for sw platform ([207911ec](https://github.com/linuxdeepin/dde-dock/commit/207911ecbe791bf5b08b5b93fcdebc3915ebbad2))
+
+
+
 <a name="4.10.4"></a>
 ### 4.10.4 (2019-06-25)
 
