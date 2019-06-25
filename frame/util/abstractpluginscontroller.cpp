@@ -133,7 +133,7 @@ void AbstractPluginsController::startLoader(PluginLoader *loader)
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 
     QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(),
-                       loader, [=] { loader->start(QThread::LowestPriority); });
+                       loader, [=] { loader->start(QThread::NormalPriority); });
 }
 
 void AbstractPluginsController::displayModeChanged()

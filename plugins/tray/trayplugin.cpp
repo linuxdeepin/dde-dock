@@ -50,10 +50,10 @@ TrayPlugin::TrayPlugin(QObject *parent)
       m_refreshSNIItemsTimer(new QTimer(this)),
       m_tipsLabel(new TipsWidget)
 {
-    m_refreshXEmbedItemsTimer->setInterval(500);
+    m_refreshXEmbedItemsTimer->setInterval(0);
     m_refreshXEmbedItemsTimer->setSingleShot(true);
 
-    m_refreshSNIItemsTimer->setInterval(500);
+    m_refreshSNIItemsTimer->setInterval(0);
     m_refreshSNIItemsTimer->setSingleShot(true);
 
     m_tipsLabel->setObjectName("tray");
@@ -92,9 +92,8 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     QTimer::singleShot(0, this, &TrayPlugin::loadIndicator);
     QTimer::singleShot(0, m_systemTraysController, &SystemTraysController::startLoader);
-
-    QTimer::singleShot(3000, this, &TrayPlugin::initSNI);
-    QTimer::singleShot(4000, this, &TrayPlugin::initXEmbed);
+    QTimer::singleShot(0, this, &TrayPlugin::initSNI);
+    QTimer::singleShot(0, this, &TrayPlugin::initXEmbed);
 }
 
 bool TrayPlugin::pluginIsDisable()
