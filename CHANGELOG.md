@@ -1,3 +1,7 @@
+[3.27.2.6] 2019-06-25
+*   fix(dock): get allowed close windows not work when use kwin
+*   fix(accounts): GetUserPasswordStatus password is * not handled correctly
+
 [3.27.2.5] 2019-06-12
 *   fix(lockservice): user with a blank password authentication failure
 *   fix(grub2): Theme.GetBackground return invalid file
