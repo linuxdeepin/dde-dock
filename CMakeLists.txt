@@ -34,6 +34,7 @@ if (${EXIT_CODE} EQUAL 0)
     if (${ARCHITECTURE} STREQUAL "sw_64")
         # add compiler flags -mieee for mathmatic
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
+        add_definitions(-DDISABLE_SHOW_ANIMATION)
     endif()
 endif()
 

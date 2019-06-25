@@ -304,7 +304,14 @@ void MainWindow::initComponents()
 void MainWindow::compositeChanged()
 {
     const bool composite = m_wmHelper->hasComposite();
+
+// NOTE(justforlxz): On the sw platform, there is an unstable
+// display position error, disable animation solution
+#ifndef DISABLE_SHOW_ANIMATION
     const int duration = composite ? 300 : 0;
+#else
+    const int duration = 0;
+#endif
 
     m_sizeChangeAni->setDuration(duration);
     m_posChangeAni->setDuration(duration);
