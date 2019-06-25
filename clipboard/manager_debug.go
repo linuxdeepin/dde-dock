@@ -14,7 +14,7 @@ import (
 )
 
 func (m *Manager) saveClipboard() error {
-	owner, err := getSelectionOwner(m.xConn, atomClipboard)
+	owner, err := m.xc.GetSelectionOwner(atomClipboard)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func (m *Manager) writeContent() error {
 	m.contentMu.Lock()
 	for _, targetData := range m.content {
 		target := targetData.Target
-		targetName, _ := m.xConn.GetAtomName(target)
+		targetName, _ := m.xc.GetAtomName(target)
 		_, err = fmt.Fprintf(&buf, "%d,%s\n", target, targetName)
 		if err != nil {
 			m.contentMu.Unlock()

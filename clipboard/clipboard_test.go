@@ -9,6 +9,7 @@ import (
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"pkg.deepin.io/dde/daemon/clipboard/mocks"
 )
 
 func TestEventCaptor(t *testing.T) {
@@ -109,4 +110,43 @@ func Test_emptyDir(t *testing.T) {
 
 	err = os.Remove(dir)
 	assert.Nil(t, err, "%v", err)
+}
+
+func Test_setSelectionOwner(t *testing.T) {
+	win := x.Window(1)
+	selection := x.Atom(2)
+	ts := x.Timestamp(3)
+	xc := &mocks.XClient{}
+	xc.On("SetSelectionOwner", win, selection, ts).Return(nil).Twice()
+	xc.On("GetSelectionOwner", selection).Return(win, nil).Once()
+
+	err := setSelectionOwner(xc, win, selection, ts)
+	assert.Nil(t, err)
+
+	xc.On("GetSelectionOwner", selection).Return(x.Window(2), nil).Once()
+	err = setSelectionOwner(xc, win, selection, ts)
+	assert.NotNil(t, err)
+	xc.AssertExpectations(t)
+}
+
+func Test_getAtomListFormReply(t *testing.T) {
+	w := x.NewWriter()
+	w.Write4b(1)
+	w.Write4b(2)
+	w.Write4b(3)
+
+	reply := &x.GetPropertyReply{
+		Format:   32,
+		Value:    w.Bytes(),
+		ValueLen: 3,
+	}
+
+	atomList, err := getAtomListFormReply(reply)
+	assert.Equal(t, []x.Atom{1, 2, 3}, atomList)
+	assert.Nil(t, err)
+
+	reply.Format = 0
+	atomList, err = getAtomListFormReply(reply)
+	assert.Nil(t, atomList)
+	assert.NotNil(t, err)
 }

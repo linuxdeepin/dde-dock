@@ -45,8 +45,9 @@ func (*Module) Start() error {
 		logger.Warning(err)
 	}
 
-	m := &Manager{
-		xConn: xConn,
+	m := &Manager{}
+	m.xc = &xClient{
+		conn: xConn,
 	}
 
 	err = m.start()

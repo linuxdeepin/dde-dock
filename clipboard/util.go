@@ -20,6 +20,7 @@ func getSelectionOwner(conn *x.Conn, selection x.Atom) (x.Window, error) {
 	return reply.Owner, nil
 }
 
+// deprecated
 func changeWindowEventMask(conn *x.Conn, win x.Window, evMask uint32) error {
 	const valueMask = x.CWEventMask
 	return x.ChangeWindowAttributesChecked(conn, win, valueMask, []uint32{evMask}).Check(conn)

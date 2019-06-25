@@ -3,10 +3,10 @@ package clipboard
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"strings"
 	"sync"
 	"time"
-	"fmt"
 
 	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/xfixes"
@@ -61,7 +61,7 @@ func (td *TargetData) needINCR() bool {
 }
 
 type Manager struct {
-	xConn     *x.Conn
+	xc        XClient
 	window    x.Window
 	dataWin   x.Window
 	ec        *eventCaptor
@@ -101,7 +101,7 @@ func (m *Manager) addTargetData(targetData *TargetData) {
 }
 
 func (m *Manager) start() error {
-	owner, err := getSelectionOwner(m.xConn, atomClipboardManager)
+	owner, err := m.xc.GetSelectionOwner(atomClipboardManager)
 	if err != nil {
 		return err
 	}
@@ -109,23 +109,23 @@ func (m *Manager) start() error {
 		return fmt.Errorf("another clipboard manager is already running, owner: %d", owner)
 	}
 
-	m.window, err = createWindow(m.xConn)
+	m.window, err = m.xc.CreateWindow()
 	if err != nil {
 		return err
 	}
 	logger.Debug("m.window:", m.window)
 
-	err = xfixes.SelectSelectionInputChecked(m.xConn, m.window, atomClipboard,
+	err = m.xc.SelectSelectionInputE(m.window, atomClipboard,
 		xfixes.SelectionEventMaskSetSelectionOwner|
 			xfixes.SelectionEventMaskSelectionClientClose|
-			xfixes.SelectionEventMaskSelectionWindowDestroy).Check(m.xConn)
+			xfixes.SelectionEventMaskSelectionWindowDestroy)
 	if err != nil {
 		logger.Warning(err)
 	}
 
 	m.ec = newEventCaptor()
 	eventChan := make(chan x.GenericEvent, 50)
-	m.xConn.AddEventChan(eventChan)
+	m.xc.Conn().AddEventChan(eventChan)
 	go func() {
 		for ev := range eventChan {
 			m.handleEvent(ev)
@@ -139,17 +139,12 @@ func (m *Manager) start() error {
 	m.timestamp = ts
 
 	logger.Debug("ts:", ts)
-	x.SetSelectionOwner(m.xConn, m.window, atomClipboardManager, ts)
-
-	owner, err = getSelectionOwner(m.xConn, atomClipboardManager)
+	err = setSelectionOwner(m.xc, m.window, atomClipboardManager, ts)
 	if err != nil {
 		return err
 	}
-	if m.window != owner {
-		return errors.New("failed to get CLIPBOARD_MANAGER selection ownership")
-	}
 
-	err = announceManageSelection(m.xConn, m.window, atomClipboardManager, ts)
+	err = announceManageSelection(m.xc.Conn(), m.window, atomClipboardManager, ts)
 	if err != nil {
 		return err
 	}
@@ -158,7 +153,7 @@ func (m *Manager) start() error {
 }
 
 func (m *Manager) handleEvent(ev x.GenericEvent) {
-	xfixesExtData := m.xConn.GetExtensionData(xfixes.Ext())
+	xfixesExtData := m.xc.Conn().GetExtensionData(xfixes.Ext())
 	code := ev.GetEventCode()
 	switch code {
 	case x.SelectionRequestEventCode:
@@ -220,17 +215,22 @@ func (m *Manager) handleEvent(ev x.GenericEvent) {
 	}
 }
 
+func setSelectionOwner(xc XClient, win x.Window, selection x.Atom, ts x.Timestamp) error {
+	xc.SetSelectionOwner(win, selection, ts)
+	owner, err := xc.GetSelectionOwner(selection)
+	if err != nil {
+		return err
+	}
+	if owner != win {
+		return errors.New("failed to set selection owner")
+	}
+	return nil
+}
+
 func (m *Manager) becomeClipboardOwner(ts x.Timestamp) error {
-	err := x.SetSelectionOwnerChecked(m.xConn, m.window, atomClipboard, ts).Check(m.xConn)
+	err := setSelectionOwner(m.xc, m.window, atomClipboard, ts)
 	if err != nil {
 		return err
-	}
-	ownerReply, err := x.GetSelectionOwner(m.xConn, atomClipboard).Reply(m.xConn)
-	if err != nil {
-		return err
-	}
-	if ownerReply.Owner != m.window {
-		return errors.New("failed to become clipboard owner")
 	}
 	logger.Debug("set clipboard selection owner to me")
 	return nil
@@ -238,9 +238,9 @@ func (m *Manager) becomeClipboardOwner(ts x.Timestamp) error {
 
 func (m *Manager) getClipboardTargets(ts x.Timestamp) ([]x.Atom, error) {
 	selNotifyEvent, err := m.ec.captureSelectionNotifyEvent(func() error {
-		x.ConvertSelection(m.xConn, m.window, atomClipboard,
+		m.xc.ConvertSelection(m.window, atomClipboard,
 			atomTargets, atomTargets, ts)
-		return m.xConn.Flush()
+		return m.xc.Flush()
 	}, func(event *x.SelectionNotifyEvent) bool {
 		return event.Target == atomTargets &&
 			event.Selection == atomClipboard &&
@@ -273,7 +273,7 @@ func (m *Manager) convertClipboardManager(ev *x.SelectionRequestEvent) {
 	switch ev.Target {
 	case atomSaveTargets:
 		logger.Debug("SAVE_TARGETS")
-		err := changeWindowEventMask(m.xConn, ev.Requestor, x.EventMaskStructureNotify)
+		err := m.xc.ChangeWindowEventMask(ev.Requestor, x.EventMaskStructureNotify)
 		if err != nil {
 			logger.Warning(err)
 			m.finishSelectionRequest(ev, false)
@@ -283,8 +283,8 @@ func (m *Manager) convertClipboardManager(ev *x.SelectionRequestEvent) {
 		var targets []x.Atom
 		var replyType x.Atom
 		if ev.Property != x.None {
-			reply, err := x.GetProperty(m.xConn, true, ev.Requestor, ev.Property,
-				x.AtomAtom, 0, 0x1FFFFFFF).Reply(m.xConn)
+			reply, err := m.xc.GetProperty(true, ev.Requestor, ev.Property,
+				x.AtomAtom, 0, 0x1FFFFFFF)
 			if err != nil {
 				logger.Warning(err)
 				m.finishSelectionRequest(ev, false)
@@ -320,8 +320,8 @@ func (m *Manager) convertClipboardManager(ev *x.SelectionRequestEvent) {
 		w.Write4b(uint32(atomTargets))
 		w.Write4b(uint32(atomSaveTargets))
 		w.Write4b(uint32(atomTimestamp))
-		err := x.ChangePropertyChecked(m.xConn, x.PropModeReplace, ev.Requestor, ev.Property,
-			x.AtomAtom, 32, w.Bytes()).Check(m.xConn)
+		err := m.xc.ChangePropertyE(x.PropModeReplace, ev.Requestor,
+			ev.Property, x.AtomAtom, 32, w.Bytes())
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -330,8 +330,8 @@ func (m *Manager) convertClipboardManager(ev *x.SelectionRequestEvent) {
 	case atomTimestamp:
 		w := x.NewWriter()
 		w.Write4b(uint32(m.timestamp))
-		err := x.ChangePropertyChecked(m.xConn, x.PropModeReplace, ev.Requestor, ev.Property,
-			x.AtomInteger, 32, w.Bytes()).Check(m.xConn)
+		err := m.xc.ChangePropertyE(x.PropModeReplace, ev.Requestor,
+			ev.Property, x.AtomInteger, 32, w.Bytes())
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -344,7 +344,7 @@ func (m *Manager) convertClipboardManager(ev *x.SelectionRequestEvent) {
 
 // convert CLIPBOARD selection
 func (m *Manager) convertClipboard(ev *x.SelectionRequestEvent) {
-	targetName, _ := m.xConn.GetAtomName(ev.Target)
+	targetName, _ := m.xc.GetAtomName(ev.Target)
 	logger.Debugf("convert clipboard target %s %d", targetName, ev.Target)
 
 	if ev.Target == atomTargets {
@@ -356,8 +356,8 @@ func (m *Manager) convertClipboard(ev *x.SelectionRequestEvent) {
 		}
 		m.contentMu.Unlock()
 
-		err := x.ChangePropertyChecked(m.xConn, x.PropModeReplace, ev.Requestor, ev.Property, x.AtomAtom, 32,
-			w.Bytes()).Check(m.xConn)
+		err := m.xc.ChangePropertyE(x.PropModeReplace, ev.Requestor,
+			ev.Property, x.AtomAtom, 32, w.Bytes())
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -376,8 +376,8 @@ func (m *Manager) convertClipboard(ev *x.SelectionRequestEvent) {
 				logger.Warning(err)
 			}
 		} else {
-			err := x.ChangePropertyChecked(m.xConn, x.PropModeReplace, ev.Requestor, ev.Property,
-				targetData.Type, targetData.Format, targetData.Data).Check(m.xConn)
+			err := m.xc.ChangePropertyE(x.PropModeReplace, ev.Requestor,
+				ev.Property, targetData.Type, targetData.Format, targetData.Data)
 			if err != nil {
 				logger.Warning(err)
 			}
@@ -387,7 +387,7 @@ func (m *Manager) convertClipboard(ev *x.SelectionRequestEvent) {
 }
 
 func (m *Manager) sendTargetIncr(targetData *TargetData, ev *x.SelectionRequestEvent) error {
-	err := changeWindowEventMask(m.xConn, ev.Requestor, x.EventMaskPropertyChange)
+	err := m.xc.ChangeWindowEventMask(ev.Requestor, x.EventMaskPropertyChange)
 	if err != nil {
 		return err
 	}
@@ -395,8 +395,8 @@ func (m *Manager) sendTargetIncr(targetData *TargetData, ev *x.SelectionRequestE
 	_, err = m.ec.capturePropertyNotifyEvent(func() error {
 		w := x.NewWriter()
 		w.Write4b(uint32(len(targetData.Data)))
-		err = x.ChangePropertyChecked(m.xConn, x.PropModeReplace, ev.Requestor, ev.Property,
-			atomIncr, 32, w.Bytes()).Check(m.xConn)
+		err = m.xc.ChangePropertyE(x.PropModeReplace, ev.Requestor, ev.Property,
+			atomIncr, 32, w.Bytes())
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -423,8 +423,8 @@ func (m *Manager) sendTargetIncr(targetData *TargetData, ev *x.SelectionRequestE
 
 		_, err = m.ec.capturePropertyNotifyEvent(func() error {
 			logger.Debug("send incr data", length)
-			err := x.ChangePropertyChecked(m.xConn, x.PropModeReplace, ev.Requestor, ev.Property,
-				targetData.Type, targetData.Format, data[:length]).Check(m.xConn)
+			err = m.xc.ChangePropertyE(x.PropModeReplace, ev.Requestor, ev.Property,
+				targetData.Type, targetData.Format, data[:length])
 			if err != nil {
 				logger.Warning(err)
 			}
@@ -449,7 +449,7 @@ func (m *Manager) finishSelectionRequest(ev *x.SelectionRequestEvent, success bo
 		property = ev.Property
 	}
 
-	event := x.SelectionNotifyEvent{
+	event := &x.SelectionNotifyEvent{
 		Time:      ev.Time,
 		Requestor: ev.Requestor,
 		Selection: ev.Selection,
@@ -457,10 +457,8 @@ func (m *Manager) finishSelectionRequest(ev *x.SelectionRequestEvent, success bo
 		Property:  property,
 	}
 
-	w := x.NewWriter()
-	x.WriteSelectionNotifyEvent(w, &event)
-	err := x.SendEventChecked(m.xConn, false, ev.Requestor, x.EventMaskNoEvent,
-		w.Bytes()).Check(m.xConn)
+	err := m.xc.SendEventE(false, ev.Requestor, x.EventMaskNoEvent,
+		event)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -476,40 +474,47 @@ func (m *Manager) saveTargets(targets []x.Atom, ts x.Timestamp) {
 	m.contentMu.Unlock()
 
 	for _, target := range targets {
-		if target == atomTargets ||
-			target == atomSaveTargets ||
-			target == atomTimestamp ||
-			target == atomMultiple ||
-			target == atomDelete ||
-			target == atomInsertProperty ||
-			target == atomInsertSelection ||
-			target == x.AtomPixmap {
+		targetName, err := m.xc.GetAtomName(target)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+		if shouldIgnoreSaveTarget(target, targetName) {
+			logger.Debug("ignore target", target, targetName)
 			continue
 		}
 
-		targetName, _ := m.xConn.GetAtomName(target)
-		logger.Debugf("save target %s %d", targetName, target)
-
-		if strings.HasPrefix(targetName, "image/") {
-			switch targetName {
-			case "image/jpeg", "image/png", "image/bmp":
-			default:
-				logger.Debug("ignore this target")
-				continue
-			}
-		}
-
-		err := m.saveTarget(target, ts)
+		logger.Debug("save target", target, targetName)
+		err = m.saveTarget(target, ts)
 		if err != nil {
 			logger.Warning(err)
 		}
 	}
 }
 
+func shouldIgnoreSaveTarget(target x.Atom, targetName string) bool {
+	switch target {
+	case atomTargets, atomSaveTargets,
+		atomTimestamp, atomMultiple, atomDelete,
+		atomInsertProperty, atomInsertSelection,
+		x.AtomPixmap:
+		return true
+	}
+	if strings.HasPrefix(targetName, "image/") {
+		switch targetName {
+		case "image/jpeg", "image/png", "image/bmp":
+			return false
+		default:
+			return true
+		}
+	}
+	return false
+}
+
 func (m *Manager) saveTarget(target x.Atom, ts x.Timestamp) error {
 	selNotifyEvent, err := m.ec.captureSelectionNotifyEvent(func() error {
-		x.ConvertSelection(m.xConn, m.window, atomClipboard, target, target, ts)
-		return m.xConn.Flush()
+		m.xc.ConvertSelection(m.window, atomClipboard, target, target, ts)
+		return m.xc.Flush()
 	}, func(event *x.SelectionNotifyEvent) bool {
 		return event.Selection == atomClipboard &&
 			event.Requestor == m.window &&
@@ -533,7 +538,7 @@ func (m *Manager) saveTarget(target x.Atom, ts x.Timestamp) error {
 			return err
 		}
 	} else {
-		err = x.DeletePropertyChecked(m.xConn, m.window, selNotifyEvent.Property).Check(m.xConn)
+		err = m.xc.DeletePropertyE(m.window, selNotifyEvent.Property)
 		if err != nil {
 			return err
 		}
@@ -549,18 +554,17 @@ func (m *Manager) saveTarget(target x.Atom, ts x.Timestamp) error {
 }
 
 func (m *Manager) getProperty(win x.Window, propertyAtom x.Atom, delete bool) (*x.GetPropertyReply, error) {
-	propReply, err := x.GetProperty(m.xConn, false, win, propertyAtom,
-		x.GetPropertyTypeAny,
-		0, 0).Reply(m.xConn)
+	propReply, err := m.xc.GetProperty(false, win, propertyAtom,
+		x.GetPropertyTypeAny, 0, 0)
 	if err != nil {
 		return nil, err
 	}
 
-	propReply, err = x.GetProperty(m.xConn, delete, win, propertyAtom,
+	propReply, err = m.xc.GetProperty(delete, win, propertyAtom,
 		x.GetPropertyTypeAny,
 		0,
 		(propReply.BytesAfter+uint32(x.Pad(int(propReply.BytesAfter))))/4,
-	).Reply(m.xConn)
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -574,7 +578,7 @@ func (m *Manager) recvTargetIncr(target, prop x.Atom) error {
 	total := 0
 	for {
 		propNotifyEvent, err := m.ec.capturePropertyNotifyEvent(func() error {
-			err := x.DeletePropertyChecked(m.xConn, m.window, prop).Check(m.xConn)
+			err := m.xc.DeletePropertyE(m.window, prop)
 			if err != nil {
 				logger.Warning(err)
 			}
@@ -589,17 +593,17 @@ func (m *Manager) recvTargetIncr(target, prop x.Atom) error {
 			return err
 		}
 
-		propReply, err := x.GetProperty(m.xConn, false, propNotifyEvent.Window, propNotifyEvent.Atom,
+		propReply, err := m.xc.GetProperty(false, propNotifyEvent.Window, propNotifyEvent.Atom,
 			x.GetPropertyTypeAny,
-			0, 0).Reply(m.xConn)
+			0, 0)
 		if err != nil {
 			logger.Warning(err)
 			return err
 		}
-		propReply, err = x.GetProperty(m.xConn, false, propNotifyEvent.Window, propNotifyEvent.Atom,
+		propReply, err = m.xc.GetProperty(false, propNotifyEvent.Window, propNotifyEvent.Atom,
 			x.GetPropertyTypeAny, 0,
 			(propReply.BytesAfter+uint32(x.Pad(int(propReply.BytesAfter))))/4,
-		).Reply(m.xConn)
+		)
 		if err != nil {
 			logger.Warning(err)
 			return err
@@ -609,7 +613,7 @@ func (m *Manager) recvTargetIncr(target, prop x.Atom) error {
 			logger.Debugf("end recvTargetIncr %d, took %v, total size: %d",
 				target, time.Since(t0), total)
 
-			err = x.DeletePropertyChecked(m.xConn, propNotifyEvent.Window, propNotifyEvent.Atom).Check(m.xConn)
+			err = m.xc.DeletePropertyE(propNotifyEvent.Window, propNotifyEvent.Atom)
 			if err != nil {
 				logger.Warning(err)
 				return err
@@ -633,8 +637,8 @@ func (m *Manager) recvTargetIncr(target, prop x.Atom) error {
 
 func (m *Manager) getTimestamp() (x.Timestamp, error) {
 	propNotifyEvent, err := m.ec.capturePropertyNotifyEvent(func() error {
-		return x.ChangePropertyChecked(m.xConn, x.PropModeReplace, m.window, atomTimestampProp,
-			x.AtomInteger, 32, nil).Check(m.xConn)
+		return m.xc.ChangePropertyE(x.PropModeReplace, m.window, atomTimestampProp,
+			x.AtomInteger, 32, nil)
 	}, func(event *x.PropertyNotifyEvent) bool {
 		return event.Window == m.window &&
 			event.Atom == atomTimestampProp &&
