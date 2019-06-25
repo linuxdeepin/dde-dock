@@ -46,8 +46,6 @@ void PluginLoader::run()
             continue;
 
         emit pluginFounded(pluginsDir.absoluteFilePath(file));
-
-        msleep(500);
     }
 
     emit finished();
