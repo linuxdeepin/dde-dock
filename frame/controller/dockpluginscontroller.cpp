@@ -124,7 +124,7 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const
 
 void DockPluginsController::startLoader()
 {
-    QString pluginsDir("../plugins");
+    QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
     if (!QDir(pluginsDir).exists()) {
         pluginsDir = "/usr/lib/dde-dock/plugins";
     }
