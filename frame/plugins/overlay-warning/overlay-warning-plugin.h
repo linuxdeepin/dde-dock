@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     listenerri <listenerri@gmail.com>
+ * Author:     sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * Maintainer: listenerri <listenerri@gmail.com>
  *
@@ -19,52 +20,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ONBOARDPLUGIN_H
-#define ONBOARDPLUGIN_H
+#ifndef OVERLAY_WARNING_PLUGIN_H
+#define OVERLAY_WARNING_PLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "onboarditem.h"
+#include "../widgets/pluginwidget.h"
 #include "../widgets/tipswidget.h"
 
 #include <QLabel>
 
-class OnboardPlugin : public QObject, PluginsItemInterface
+namespace Dtk {
+    namespace Widget {
+        class DDialog;
+    }
+}
+
+class OverlayWarningPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
 
 public:
-    explicit OnboardPlugin(QObject *parent = 0);
+    explicit OverlayWarningPlugin(QObject *parent = 0);
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
 
     void pluginStateSwitched() override;
-    bool pluginIsAllowDisable() override { return true; }
+    bool pluginIsAllowDisable() override { return false; }
     bool pluginIsDisable() override;
 
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     const QString itemCommand(const QString &itemKey) override;
-    const QString itemContextMenu(const QString &itemKey) override;
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
-    void pluginSettingsChanged() override;
-
 private:
     void loadPlugin();
-    void refreshPluginItemsVisible();
+    bool isOverlayRoot();
+
+private slots:
+    void showCloseOverlayDialogPre();
+    void showCloseOverlayDialog();
 
 private:
     bool m_pluginLoaded;
 
-    OnboardItem *m_onboardItem;
-    TipsWidget *m_tipsLabel;
+    PluginWidget *m_warningWidget;
+    QTimer *m_showDisableOverlayDialogTimer;
 };
 
-#endif // ONBOARDPLUGIN_H
+#endif // OVERLAY_WARNING_PLUGIN_H

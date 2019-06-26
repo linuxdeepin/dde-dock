@@ -23,6 +23,13 @@
 #include "pluginsiteminterface.h"
 #include "item/traypluginitem.h"
 
+#include "plugins/datetime/datetimeplugin.h"
+#include "plugins/keyboard-layout/keyboardplugin.h"
+#include "plugins/overlay-warning/overlay-warning-plugin.h"
+#include "plugins/trash/trashplugin.h"
+#include "plugins/tray/trayplugin.h"
+#include "plugins/shutdown/shutdownplugin.h"
+
 #include <QDebug>
 #include <QDir>
 
@@ -124,6 +131,18 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const
 
 void DockPluginsController::startLoader()
 {
+    const QList<const QObject* > list {
+        new DatetimePlugin,
+        new KeyboardPlugin,
+        new OverlayWarningPlugin,
+        new TrashPlugin,
+        new TrayPlugin,
+    };
+
+    for (const QObject* obj : list) {
+        loadPlugin(qobject_cast<PluginsItemInterface*>(obj));
+    }
+
     QString pluginsDir("../plugins");
     if (!QDir(pluginsDir).exists()) {
         pluginsDir = "/usr/lib/dde-dock/plugins";

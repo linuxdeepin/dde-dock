@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     listenerri <listenerri@gmail.com>
+ * Author:     sbw <sbw@sbw.so>
  *
- * Maintainer: listenerri <listenerri@gmail.com>
+ * Maintainer: sbw <sbw@sbw.so>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ONBOARDPLUGIN_H
-#define ONBOARDPLUGIN_H
+#ifndef DATETIMEPLUGIN_H
+#define DATETIMEPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "onboarditem.h"
-#include "../widgets/tipswidget.h"
+#include "datetimewidget.h"
+#include "../../../widgets/tipswidget.h"
 
+#include <QTimer>
 #include <QLabel>
+#include <QSettings>
 
-class OnboardPlugin : public QObject, PluginsItemInterface
+class DatetimePlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
 
 public:
-    explicit OnboardPlugin(QObject *parent = 0);
+    explicit DatetimePlugin(QObject *parent = 0);
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -44,27 +46,30 @@ public:
     bool pluginIsAllowDisable() override { return true; }
     bool pluginIsDisable() override;
 
-    QWidget *itemWidget(const QString &itemKey) override;
-    QWidget *itemTipsWidget(const QString &itemKey) override;
-    const QString itemCommand(const QString &itemKey) override;
-    const QString itemContextMenu(const QString &itemKey) override;
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
-    void displayModeChanged(const Dock::DisplayMode displayMode) override;
-
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
+    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemTipsWidget(const QString &itemKey) override;
+
+    const QString itemCommand(const QString &itemKey) override;
+    const QString itemContextMenu(const QString &itemKey) override;
+
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
+
     void pluginSettingsChanged() override;
 
-private:
-    void loadPlugin();
+private slots:
+    void updateCurrentTimeString();
     void refreshPluginItemsVisible();
 
 private:
-    bool m_pluginLoaded;
+    QPointer<DatetimeWidget> m_centralWidget;
+    QPointer<TipsWidget> m_dateTipsLabel;
 
-    OnboardItem *m_onboardItem;
-    TipsWidget *m_tipsLabel;
+    QTimer *m_refershTimer;
+
+    QString m_currentTimeString;
 };
 
-#endif // ONBOARDPLUGIN_H
+#endif // DATETIMEPLUGIN_H

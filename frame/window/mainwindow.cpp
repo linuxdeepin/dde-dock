@@ -41,26 +41,6 @@
 
 using org::kde::StatusNotifierWatcher;
 
-const QPoint rawXPosition(const QPoint &scaledPos)
-{
-    QScreen const * screen = Utils::screenAtByScaled(scaledPos);
-
-    return screen ? screen->geometry().topLeft() +
-                        (scaledPos - screen->geometry().topLeft()) *
-                            screen->devicePixelRatio()
-                  : scaledPos;
-}
-
-const QPoint scaledPos(const QPoint &rawXPos)
-{
-    QScreen const * screen = Utils::screenAt(rawXPos);
-
-    return screen
-               ? screen->geometry().topLeft() +
-                     (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
-               : rawXPos;
-}
-
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
 
@@ -141,7 +121,7 @@ void MainWindow::launch()
     });
 
     qApp->processEvents();
-    QTimer::singleShot(0, this, &MainWindow::show);
+    QTimer::singleShot(300, this, &MainWindow::show);
 }
 
 bool MainWindow::event(QEvent *e)
@@ -333,7 +313,7 @@ void MainWindow::internalMove(const QPoint &p)
     if (!pos_adjust)
         return QWidget::move(p);
 
-    QPoint rp = rawXPosition(p);
+    QPoint rp = Utils::rawXPosition(p);
     const auto ratio = devicePixelRatioF();
 
     const QRect &r = m_settings->primaryRawRect();
@@ -539,7 +519,7 @@ void MainWindow::setStrutPartial()
     const int maxScreenHeight = m_settings->screenRawHeight();
     const int maxScreenWidth = m_settings->screenRawWidth();
     const Position side = m_settings->position();
-    const QPoint &p = rawXPosition(m_posChangeAni->endValue().toPoint());
+    const QPoint &p = Utils::rawXPosition(m_posChangeAni->endValue().toPoint());
     const QSize &s = m_settings->windowSize();
     const QRect &primaryRawRect = m_settings->primaryRawRect();
 
@@ -748,7 +728,7 @@ void MainWindow::positionCheck()
     if (m_positionUpdateTimer->isActive())
         return;
 
-    const QPoint scaledFrontPos = scaledPos(m_settings->frontendWindowRect().topLeft());
+    const QPoint scaledFrontPos = Utils::scaledPos(m_settings->frontendWindowRect().topLeft());
 
     if (QPoint(pos() - scaledFrontPos).manhattanLength() < 2)
         return;

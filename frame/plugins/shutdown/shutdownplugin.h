@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     listenerri <listenerri@gmail.com>
+ * Author:     sbw <sbw@sbw.so>
  *
- * Maintainer: listenerri <listenerri@gmail.com>
+ * Maintainer: sbw <sbw@sbw.so>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ONBOARDPLUGIN_H
-#define ONBOARDPLUGIN_H
+#ifndef SHUTDOWNPLUGIN_H
+#define SHUTDOWNPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "onboarditem.h"
-#include "../widgets/tipswidget.h"
-
 #include <QLabel>
 
-class OnboardPlugin : public QObject, PluginsItemInterface
+class PluginWidget;
+class TipsWidget;
+class ShutdownPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
 
 public:
-    explicit OnboardPlugin(QObject *parent = 0);
+    explicit ShutdownPlugin(QObject *parent = 0);
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -58,13 +57,14 @@ public:
 
 private:
     void loadPlugin();
+    bool checkSwap();
     void refreshPluginItemsVisible();
 
 private:
     bool m_pluginLoaded;
 
-    OnboardItem *m_onboardItem;
+    PluginWidget *m_shutdownWidget;
     TipsWidget *m_tipsLabel;
 };
 
-#endif // ONBOARDPLUGIN_H
+#endif // SHUTDOWNPLUGIN_H
