@@ -64,4 +64,3 @@ private:
 
     QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
 };
-

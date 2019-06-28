@@ -20,7 +20,7 @@
  */
 
 #include "powerplugin.h"
-#include "dbus/dbusaccount.h"
+#include "../frame/dbus/dbusaccount.h"
 
 #include <QIcon>
 

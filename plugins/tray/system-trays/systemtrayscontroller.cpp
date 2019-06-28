@@ -22,6 +22,10 @@
 #include "systemtrayscontroller.h"
 #include "pluginsiteminterface.h"
 
+#include "../sound/soundplugin.h"
+#include "../power/powerplugin.h"
+#include "../network/networkplugin.h"
+
 #include <QDebug>
 #include <QDir>
 
@@ -157,6 +161,16 @@ void SystemTraysController::saveValueSystemTrayItem(const QString &itemKey, cons
 
 void SystemTraysController::startLoader()
 {
+    const QList<const QObject *> list{
+        new SoundPlugin,
+        new PowerPlugin,
+        new NetworkPlugin
+    };
+
+    for (const QObject *obj : list) {
+        loadPlugin(qobject_cast<PluginsItemInterface *>(obj));
+    }
+
     QString pluginsDir("../plugins/system-trays");
     if (!QDir(pluginsDir).exists()) {
         pluginsDir = "/usr/lib/dde-dock/plugins/system-trays";

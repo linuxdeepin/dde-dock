@@ -37,8 +37,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-extern const QPoint rawXPosition(const QPoint &scaledPos);
-
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_autoHide(true)
@@ -424,7 +422,7 @@ void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
     const qreal ratio = dockRatio();
-    const QPoint p = rawXPosition(r.topLeft());
+    const QPoint p = Utils::rawXPosition(r.topLeft());
     const uint w = r.width() * ratio;
     const uint h = r.height() * ratio;
 

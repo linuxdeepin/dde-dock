@@ -11,9 +11,8 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS})
-set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+add_library(${PLUGIN_NAME} STATIC ${SRCS})
+set(LIBRARY_OUTPUT_PATH ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ../../interfaces)
 target_link_libraries(${PLUGIN_NAME} PRIVATE
@@ -21,5 +20,3 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
 )
-
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

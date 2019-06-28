@@ -23,7 +23,7 @@
 #define SYSTEMTRAYITEM_H
 
 #include "constants.h"
-#include "abstracttraywidget.h"
+#include "../abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
 #include "dbus/dbusmenumanager.h"
 #include "pluginsiteminterface.h"

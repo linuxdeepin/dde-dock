@@ -39,9 +39,19 @@ if (${EXIT_CODE} EQUAL 0)
 endif()
 
 file(GLOB INTERFACES "interfaces/*.h")
+file(GLOB QRCS
+    plugins/datetime/datetime.qrc
+    plugins/network/network.qrc
+    plugins/overlay-warning/overlay-warning.qrc
+    plugins/power/power.qrc
+    plugins/shutdown/shutdown.qrc
+    plugins/sound/sound.qrc
+    plugins/tray/tray.qrc
+)
 
-add_subdirectory("frame")
+# plugins has static lib
 add_subdirectory("plugins")
+add_subdirectory("frame")
 
 # Install settings
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)

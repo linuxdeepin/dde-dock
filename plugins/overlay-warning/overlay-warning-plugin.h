@@ -20,11 +20,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHUTDOWNPLUGIN_H
-#define SHUTDOWNPLUGIN_H
+#ifndef OVERLAY_WARNING_PLUGIN_H
+#define OVERLAY_WARNING_PLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "pluginwidget.h"
 #include "../widgets/tipswidget.h"
 
 #include <QLabel>
@@ -35,11 +34,14 @@ namespace Dtk {
     }
 }
 
+class PluginWidget;
 class OverlayWarningPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
+#ifdef QT_PLUGIN
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "overlay-warning.json")
+#endif
 
 public:
     explicit OverlayWarningPlugin(QObject *parent = 0);
@@ -75,4 +77,4 @@ private:
     QTimer *m_showDisableOverlayDialogTimer;
 };
 
-#endif // SHUTDOWNPLUGIN_H
+#endif // OVERLAY_WARNING_PLUGIN_H

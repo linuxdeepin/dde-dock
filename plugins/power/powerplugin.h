@@ -24,13 +24,13 @@
 
 #include "pluginsiteminterface.h"
 #include "powerstatuswidget.h"
-#include "dbus/dbuspower.h"
 #include "../widgets/tipswidget.h"
 
 #include <com_deepin_system_systempower.h>
 
 #include <QLabel>
 
+class DBusPower;
 using SystemPowerInter = com::deepin::system::Power;
 
 // from https://upower.freedesktop.org/docs/Device.html#Device:State
@@ -49,7 +49,9 @@ class PowerPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
+#ifdef QT_PLUGIN
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "power.json")
+#endif
 
 public:
     explicit PowerPlugin(QObject *parent = 0);

@@ -16,9 +16,8 @@ find_package(DFrameworkdbus REQUIRED)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
-add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS})
-set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+add_library(${PLUGIN_NAME} STATIC ${SRCS})
+set(LIBRARY_OUTPUT_PATH ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
@@ -32,5 +31,4 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
 )
 
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 install(FILES ./keybord_layout.json DESTINATION /etc/dde-dock/indicator)

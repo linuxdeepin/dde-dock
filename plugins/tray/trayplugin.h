@@ -41,7 +41,9 @@ class TrayPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
+#ifdef QT_PLUGIN
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "tray.json")
+#endif
 
 public:
     explicit TrayPlugin(QObject *parent = 0);

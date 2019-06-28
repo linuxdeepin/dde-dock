@@ -22,7 +22,7 @@
 #ifndef POWERSTATUSWIDGET_H
 #define POWERSTATUSWIDGET_H
 
-#include "dbus/dbuspower.h"
+#include "../frame/dbus/dbuspower.h"
 
 #include <QWidget>
 

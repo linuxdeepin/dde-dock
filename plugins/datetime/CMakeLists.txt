@@ -4,7 +4,7 @@ set(PLUGIN_NAME "datetime")
 project(${PLUGIN_NAME})
 
 # Sources files
-file(GLOB SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp")
+file(GLOB SRCS "*.h" "*.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -12,9 +12,8 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} datetime.qrc)
-set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+add_library(${PLUGIN_NAME} STATIC ${SRCS} datetime.qrc)
+set(LIBRARY_OUTPUT_PATH ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS} ../../interfaces)
 target_link_libraries(${PLUGIN_NAME} PRIVATE
   ${Qt5DBus_LIBRARIES}
@@ -22,5 +21,3 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
   ${Qt5Widgets_LIBRARIES}
   ${Qt5Svg_LIBRARIES}
 )
-
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

@@ -2,9 +2,8 @@
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
- *             listenerri <listenerri@gmail.com>
  *
- * Maintainer: listenerri <listenerri@gmail.com>
+ * Maintainer: sbw <sbw@sbw.so>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +32,11 @@ PluginWidget::PluginWidget(QWidget *parent)
 {
 }
 
+void PluginWidget::setIcon(const QString& icon) {
+    m_icon = icon;
+    update();
+}
+
 QSize PluginWidget::sizeHint() const
 {
     return QSize(26, 26);
@@ -43,12 +47,12 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     QPixmap pixmap;
-    QString iconName = ":/icons/resources/icons/overlay-warning.svg";
+    QString iconName = m_icon;
     int iconSize;
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
     if (displayMode == Dock::Efficient) {
-//        iconName = iconName + "-symbolic";
+        iconName = iconName + "-symbolic";
         iconSize = 16;
     } else {
         iconSize = std::min(width(), height()) * 0.8;

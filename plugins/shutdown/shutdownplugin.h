@@ -23,16 +23,18 @@
 #define SHUTDOWNPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "pluginwidget.h"
 #include "../widgets/tipswidget.h"
 
 #include <QLabel>
 
+class PluginWidget;
 class ShutdownPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
+#ifdef QT_PLUGIN
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "shutdown.json")
+#endif
 
 public:
     explicit ShutdownPlugin(QObject *parent = 0);

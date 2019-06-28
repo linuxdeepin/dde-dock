@@ -32,6 +32,7 @@ class PluginWidget : public QWidget
 
 public:
     explicit PluginWidget(QWidget *parent = 0);
+    void setIcon(const QString& icon);
 
 protected:
     QSize sizeHint() const;
@@ -42,6 +43,7 @@ private:
 
 private:
     Dock::DisplayMode m_displayMode;
+    QString m_icon;
 };
 
 #endif // PLUGINWIDGET_H

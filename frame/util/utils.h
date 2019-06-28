@@ -41,4 +41,20 @@ namespace Utils {
 
         return nullptr;
     }
+
+    static const QPoint rawXPosition(const QPoint &scaledPos) {
+        QScreen const *screen = Utils::screenAtByScaled(scaledPos);
+        return screen ? screen->geometry().topLeft() +
+                            (scaledPos - screen->geometry().topLeft()) *
+                                screen->devicePixelRatio()
+                      : scaledPos;
+    }
+
+    static const QPoint scaledPos(const QPoint &rawXPos) {
+        QScreen const *screen = Utils::screenAt(rawXPos);
+        return screen
+                   ? screen->geometry().topLeft() +
+                         (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
+                   : rawXPos;
+    }
 }

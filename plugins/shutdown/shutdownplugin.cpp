@@ -20,7 +20,8 @@
  */
 
 #include "shutdownplugin.h"
-#include "dbus/dbusaccount.h"
+#include "../frame/dbus/dbusaccount.h"
+#include "../widgets/pluginwidget.h"
 
 #include <QIcon>
 #include <QSettings>
@@ -229,6 +230,7 @@ void ShutdownPlugin::loadPlugin()
     m_pluginLoaded = true;
 
     m_shutdownWidget = new PluginWidget;
+    m_shutdownWidget->setIcon("system-shutdown");
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());

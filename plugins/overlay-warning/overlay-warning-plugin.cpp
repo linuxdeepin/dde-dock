@@ -21,6 +21,7 @@
  */
 
 #include "overlay-warning-plugin.h"
+#include "../widgets/pluginwidget.h"
 
 #include <QIcon>
 #include <QStorageInfo>
@@ -147,6 +148,7 @@ void OverlayWarningPlugin::loadPlugin()
     m_pluginLoaded = true;
 
     m_warningWidget = new PluginWidget;
+    m_warningWidget->setIcon(":/icons/resources/icons/overlay-warning.svg");
 
     if (!isOverlayRoot()) {
         return;

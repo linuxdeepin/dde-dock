@@ -125,10 +125,16 @@ PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem
     return nullptr;
 }
 
+void AbstractPluginsController::loadPlugin(PluginsItemInterface* interface) {
+    m_pluginsMap.insert(interface, QMap<QString, QObject *>());
+    initPlugin(interface);
+}
+
 void AbstractPluginsController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &PluginLoader::pluginFounded, this, &AbstractPluginsController::loadPlugin, Qt::QueuedConnection);
+    connect(loader, &PluginLoader::pluginFounded,
+            this, static_cast<void (AbstractPluginsController::*)(const QString &)>(&AbstractPluginsController::loadPlugin), Qt::QueuedConnection);
 
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 

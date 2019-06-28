@@ -4,14 +4,7 @@ set(PLUGIN_NAME "tray")
 project(${PLUGIN_NAME})
 
 # Sources files
-file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
-    "../../frame/util/themeappicon.h" "../../frame/util/themeappicon.cpp"
-    "../../frame/util/dockpopupwindow.h" "../../frame/util/dockpopupwindow.cpp"
-    "../../frame/util/abstractpluginscontroller.h" "../../frame/util/abstractpluginscontroller.cpp"
-    "../../frame/util/pluginloader.h" "../../frame/util/pluginloader.cpp"
-    "../../frame/dbus/sni/*.h" "../../frame/dbus/sni/*.cpp"
-    "../../frame/dbus/dbusmenu.h" "../../frame/dbus/dbusmenu.cpp"
-    "../../frame/dbus/dbusmenumanager.h" "../../frame/dbus/dbusmenumanager.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -25,9 +18,8 @@ pkg_check_modules(DDE-Network-Utils REQUIRED dde-network-utils)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
-add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} tray.qrc)
-set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+add_library(${PLUGIN_NAME} STATIC ${SRCS} tray.qrc)
+set(LIBRARY_OUTPUT_PATH ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
                                                  ${XCB_LIBS_INCLUDE_DIRS}
@@ -46,6 +38,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DDE-Network-Utils_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
+    sound
+    network
+    power
 )
-
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

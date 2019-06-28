@@ -20,6 +20,7 @@
  */
 
 #include "xembedtraywidget.h"
+#include "util/utils.h"
 
 #include <QWindow>
 #include <QPainter>
@@ -52,22 +53,6 @@ static const qreal iconSize = 16;
 // the first suffix is 1, second is 2, etc.
 // NOTE: the first suffix will be omit when construct the key of tray widget.
 static QMap<QString, QMap<quint32, int>> AppWinidSuffixMap;
-
-const QPoint rawXPosition(const QPoint &scaledPos)
-{
-    QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens())
-    {
-        const QRect &sg = screen->geometry();
-        if (sg.contains(scaledPos))
-        {
-            g = sg;
-            break;
-        }
-    }
-
-    return g.topLeft() + (scaledPos - g.topLeft()) * qApp->devicePixelRatio();
-}
 
 void sni_cleanup_xcb_image(void *data)
 {
@@ -161,7 +146,7 @@ void XEmbedTrayWidget::configContainerPosition()
 {
     auto c = QX11Info::connection();
 
-    const QPoint p(rawXPosition(QCursor::pos()));
+    const QPoint p(Utils::rawXPosition(QCursor::pos()));
 
     const uint32_t containerVals[4] = {uint32_t(p.x()), uint32_t(p.y()), 1, 1};
     xcb_configure_window(c, m_containerWid,
@@ -283,7 +268,7 @@ void XEmbedTrayWidget::sendHoverEvent()
     }
 
     // fake enter event
-    const QPoint p(rawXPosition(QCursor::pos()));
+    const QPoint p(Utils::rawXPosition(QCursor::pos()));
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
@@ -322,7 +307,7 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 
     m_sendHoverEvent->stop();
 
-    const QPoint p(rawXPosition(QPoint(x, y)));
+    const QPoint p(Utils::rawXPosition(QPoint(x, y)));
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
