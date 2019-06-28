@@ -141,7 +141,7 @@ void MainWindow::launch()
     });
 
     qApp->processEvents();
-    QTimer::singleShot(0, this, &MainWindow::show);
+    QTimer::singleShot(300, this, &MainWindow::show);
 }
 
 bool MainWindow::event(QEvent *e)

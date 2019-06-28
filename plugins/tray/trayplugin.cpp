@@ -41,24 +41,8 @@
 using org::kde::StatusNotifierWatcher;
 
 TrayPlugin::TrayPlugin(QObject *parent)
-    : QObject(parent),
-      m_trayInter(new DBusTrayManager(this)),
-      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
-      m_fashionItem (new FashionTrayItem(this)),
-      m_systemTraysController(new SystemTraysController(this)),
-      m_refreshXEmbedItemsTimer(new QTimer(this)),
-      m_refreshSNIItemsTimer(new QTimer(this)),
-      m_tipsLabel(new TipsWidget)
+    : QObject(parent)
 {
-    m_refreshXEmbedItemsTimer->setInterval(0);
-    m_refreshXEmbedItemsTimer->setSingleShot(true);
-
-    m_refreshSNIItemsTimer->setInterval(0);
-    m_refreshSNIItemsTimer->setSingleShot(true);
-
-    m_tipsLabel->setObjectName("tray");
-    m_tipsLabel->setText(tr("System Tray"));
-    m_tipsLabel->setVisible(false);
 }
 
 const QString TrayPlugin::pluginName() const
@@ -83,8 +67,26 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
         return;
     }
 
+    m_trayInter = new DBusTrayManager(this);
+    m_sniWatcher = new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this);
+    m_fashionItem = new FashionTrayItem(this);
+    m_systemTraysController = new SystemTraysController(this);
+    m_refreshXEmbedItemsTimer = new QTimer(this);
+    m_refreshSNIItemsTimer = new QTimer(this);
+    m_tipsLabel = new TipsWidget;
+
+    m_refreshXEmbedItemsTimer->setInterval(0);
+    m_refreshXEmbedItemsTimer->setSingleShot(true);
+
+    m_refreshSNIItemsTimer->setInterval(0);
+    m_refreshSNIItemsTimer->setSingleShot(true);
+
+    m_tipsLabel->setObjectName("tray");
+    m_tipsLabel->setText(tr("System Tray"));
+    m_tipsLabel->setVisible(false);
+
     connect(m_systemTraysController, &SystemTraysController::pluginItemAdded, this, &TrayPlugin::addTrayWidget);
-    connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this, [=](const QString &itemKey) {trayRemoved(itemKey);});
+    connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this, [=](const QString &itemKey) { trayRemoved(itemKey); });
 
     m_trayInter->Manage();
 
