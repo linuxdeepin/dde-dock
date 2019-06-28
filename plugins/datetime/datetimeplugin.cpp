@@ -29,22 +29,8 @@
 #define TIME_FORMAT_KEY "24HourFormat"
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
-    : QObject(parent),
-
-      m_dateTipsLabel(new TipsWidget),
-
-      m_refershTimer(new QTimer(this))
+    : QObject(parent)
 {
-    m_dateTipsLabel->setObjectName("datetime");
-
-    m_refershTimer->setInterval(1000);
-    m_refershTimer->start();
-
-    m_centralWidget = new DatetimeWidget;
-
-    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
-
-    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
 
 const QString DatetimePlugin::pluginName() const
@@ -60,7 +46,6 @@ const QString DatetimePlugin::pluginDisplayName() const
 void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_centralWidget->set24HourFormat(m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool());
 
     // transfer config
     QSettings settings("deepin", "dde-dock-datetime");
@@ -71,8 +56,34 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
         QFile::remove(settings.fileName());
     }
 
-    if (!pluginIsDisable())
-        m_proxyInter->itemAdded(this, pluginName());
+    if (pluginIsDisable()) {
+        return;
+    }
+
+    m_dateTipsLabel = new TipsWidget;
+    m_refershTimer = new QTimer(this);
+    m_dateTipsLabel->setObjectName("datetime");
+
+    m_refershTimer->setInterval(1000);
+    m_refershTimer->start();
+
+    m_centralWidget = new DatetimeWidget;
+    m_dateTipsLabel = new TipsWidget;
+    m_refershTimer = new QTimer(this);
+    m_dateTipsLabel->setObjectName("datetime");
+
+    m_refershTimer->setInterval(1000);
+    m_refershTimer->start();
+
+    m_centralWidget = new DatetimeWidget;
+
+    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
+
+    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
+    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
+
+    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
+    m_proxyInter->itemAdded(this, pluginName());
 }
 
 void DatetimePlugin::pluginStateSwitched()
