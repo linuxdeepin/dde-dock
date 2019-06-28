@@ -133,7 +133,7 @@ void AbstractPluginsController::startLoader(PluginLoader *loader)
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 
     QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(),
-                       loader, [=] { loader->start(QThread::NormalPriority); });
+                       loader, [=] { loader->start(QThread::LowestPriority); });
 }
 
 void AbstractPluginsController::displayModeChanged()
@@ -205,7 +205,12 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         return;
     }
 
-    initPlugin(interface);
+    // NOTE(justforlxz): 插件的所有初始化工作都在init函数中进行，
+    // loadPlugin函数是按队列执行的，initPlugin函数会有可能导致
+    // 函数执行被阻塞。
+    QTimer::singleShot(1, this, [=] {
+        initPlugin(interface);
+    });
 }
 
 void AbstractPluginsController::initPlugin(PluginsItemInterface *interface) {
