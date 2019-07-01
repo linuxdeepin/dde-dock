@@ -20,8 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHUTDOWNPLUGIN_H
-#define SHUTDOWNPLUGIN_H
+#ifndef OVERLAY_WARNING_PLUGIN_H
+#define OVERLAY_WARNING_PLUGIN_H
 
 #include "pluginsiteminterface.h"
 #include "pluginwidget.h"
@@ -75,4 +75,4 @@ private:
     QTimer *m_showDisableOverlayDialogTimer;
 };
 
-#endif // SHUTDOWNPLUGIN_H
+#endif // OVERLAY_WARNING_PLUGIN_H
