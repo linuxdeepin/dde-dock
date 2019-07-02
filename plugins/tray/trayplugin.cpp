@@ -100,6 +100,13 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
 bool TrayPlugin::pluginIsDisable()
 {
+    // NOTE(justforlxz): local config
+    QSettings enableSetting("deepin", "dde-dock");
+    enableSetting.beginGroup("tray");
+    if (!enableSetting.value("enable", true).toBool()) {
+        return true;
+    }
+
     return !m_proxyInter->getValue(this, PLUGIN_ENABLED_KEY, true).toBool();
 }
 
