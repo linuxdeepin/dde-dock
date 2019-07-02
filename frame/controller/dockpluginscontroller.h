@@ -58,6 +58,10 @@ signals:
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
     void fashionTraySizeChanged(const QSize &traySize) const;
+
+private:
+    void loadLocalPlugins();
+    void loadSystemPlugins();
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

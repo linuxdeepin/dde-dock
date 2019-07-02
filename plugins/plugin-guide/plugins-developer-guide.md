@@ -335,6 +335,12 @@ sudo make install
 install -m 755 -p ./home_monitor/libhome_monitor.so /usr/lib/dde-dock/plugins/libhome_monitor.so
 ```
 
+或者将so文件放在~/.local/lib/dde-dock/plugins/目录下，dock会加载用户本地的插件。
+
+``` sh
+install -m 755 -p ./home_monitor/libhome_monitor.so ~/.local/lib/dde-dock/plugins/libhome_monitor.so
+```
+
 ### 测试加载
 
 执行 `pkill dde-dock; dde-dock` 来重新运行 dde-dock，在终端输出中如果出现以下的输出，说明插件的加载已经正常：
