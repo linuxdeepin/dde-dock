@@ -124,6 +124,23 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const
 
 void DockPluginsController::startLoader()
 {
+    loadLocalPlugins();
+    loadSystemPlugins();
+}
+
+void DockPluginsController::loadLocalPlugins() {
+    QString pluginsDir(QString("%1/.local/lib/dde-dock/plugins/").arg(QDir::homePath()));
+
+    if (!QDir(pluginsDir).exists()) {
+        return;
+    }
+
+    qDebug() << "using dock local plugins dir:" << pluginsDir;
+
+    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
+}
+
+void DockPluginsController::loadSystemPlugins() {
     QString pluginsDir("../plugins");
     if (!QDir(pluginsDir).exists()) {
         pluginsDir = "/usr/lib/dde-dock/plugins";
