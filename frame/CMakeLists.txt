@@ -14,10 +14,28 @@ find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5X11Extras REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
+find_package(DtkCMake REQUIRED)
 
 pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
+
+if (OS_DEEPIN_PROFESSIONAL)
+    if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+    endif()
+endif()
+
+if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")
+    target_compile_definitions(${BIN_NAME} DISABLE_SHOW_ANIMATION)
+endif()
+
+if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "mips64")
+    target_compile_definitions(${BIN_NAME} DISABLE_SHOW_ANIMATION)
+endif()
+
+if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
+    target_compile_definitions(${BIN_NAME} DISABLE_SHOW_ANIMATION)
+endif()
 
 # driver-manager
 add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} item/item.qrc frame.qrc)
