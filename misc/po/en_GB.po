@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Craig Anderson <cranderson0110@gmail.com>, 2018
+# f3d4ed060071855b68f094335ce6e14c, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"

@@ -9,14 +9,15 @@
 # Kaya Zeren <kayazeren@gmail.com>, 2018-2019
 # Murat Servan Kahraman, 2016
 # Ömer GÖK <omergok@outlook.com>, 2016
+# Serdar Sağlam <teknomobil@msn.com>, 2019
 # yakup <mutouk@yandex.ru>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-07-01 13:14+0000\n"
+"Last-Translator: Serdar Sağlam <teknomobil@msn.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +41,7 @@ msgstr "Kullanıcı adı boş olamaz"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
-msgstr "Kullanıcı adında yalnız a-z, 0-9, - ya da _ karakterleri bulunabilir_"
+msgstr "Kullanıcı adı bunları içerebilir a~z, 0~9, - _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
@@ -68,7 +69,7 @@ msgstr "Lütfen değişiklikleri görüntülemek için yeniden oturum açın"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
-msgstr "Görüntü Ölçeklendirme"
+msgstr "Görüntü ölçeklendirme"
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
@@ -76,39 +77,39 @@ msgstr "Görüntü ölçeklendirmesi ayarlanıyor"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Parmak izi doğrulanamadı"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Parmak izi doğrulaması zaman aşımına uğradı"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr "Seri Bağlantı Noktası"
+msgstr "Seri port"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr "Çevirmeli Bağlantı"
+msgstr "Çevirmeli bağlantı"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr "Eller Serbest Aygıtı"
+msgstr "Eller-Serbest aygıtı"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr "Eller Serbest Ses Ağ Geçidi"
+msgstr "Eller-Serbest ses ağ geçidi"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr "Kulaklık Seti Ses Ağ Geçidi"
+msgstr "Kulaklık Seti ses ağ geçidi"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr "Nesne İletme"
+msgstr "Nesne iletme"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr "Dosya Aktarımı"
+msgstr "Dosya aktarımı"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
@@ -116,19 +117,19 @@ msgstr "Eşitleme"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr "Telefon Defteri Erişimi"
+msgstr "Telefon defteri erişimi"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr "Telefon Defteri Erişimi İstemcisi"
+msgstr "Telefon defteri erişimi istemcisi"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr "İleti Erişimi"
+msgstr "İleti erişimi"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr "İleti Bildirimi"
+msgstr "İleti bildirimi"
 
 #: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
 msgid "Connected"
@@ -175,7 +176,7 @@ msgstr "_Ayır"
 
 #: ../../dock/app_entry_menu.go:149
 msgid "_All windows"
-msgstr "_Tüm Pencereler"
+msgstr "_Tüm pencereler"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -183,63 +184,63 @@ msgstr "Disk alanı yetersiz, lütfen zamanında temizleyin!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Başlatıcıyı Açma"
+msgstr "Başlatıcı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr "Uçbirimi Açma"
+msgstr "Uçbirim"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr "Deepin Ekran Kaydediciyi Açma"
+msgstr "Deepin Ekran Kaydedici"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Ekranı Kilitleme"
+msgstr "Ekranı kilitle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Görev Çubuğunu Görüntüleme/Gizleme"
+msgstr "Görev Çubuğunu görüntüle/gizle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr "Arayüzü Kapatma"
+msgstr "Arayüzü kapat"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Quake Uçbirim Penceresini Açma"
+msgstr "Quake Uçbirim Penceresi"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Ekran Görüntüsünü Yakalama"
+msgstr "Ekran görüntüsü"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr "Tam Ekran Görüntüsünü Yakalama"
+msgstr "Tam ekran görüntüsü"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr "Pencere Ekran Görüntüsünü Yakalama"
+msgstr "Pencere ekran görüntüsü"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Gecikmeli Ekran Görüntüsünü Yakalama"
+msgstr "Gecikmeli ekran görüntüsü"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr "Dosya Yöneticisini Açma"
+msgstr "Dosya yöneticisi"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Dokunmatik Yüzeyi Devre Dışı Bırakma"
+msgstr "Dokunmatik Yüzeyi Devre Dışı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr "Pencere Değiştirme Etkileri"
+msgstr "Pencere etkilerini değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr "Hızlı Ekran Kapatma"
+msgstr "Hızlı Ekran Kapalı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
@@ -251,39 +252,39 @@ msgstr "Deepin Renk Seçici"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
-msgstr "Görünümü Değiştirme"
+msgstr "Görünümü Değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:70
 msgid "Switch to left workspace"
-msgstr "Sol Çalışma Alanına Geçme"
+msgstr "Sol Çalışma Alanına Geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:71
 msgid "Switch to right workspace"
-msgstr "Sağ Çalışma Alanına Geçme"
+msgstr "Sağ Çalışma Alanına Geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:72
 msgid "Switch to upper workspace"
-msgstr "Üst Çalışma Alanına Geçme"
+msgstr "Üst Çalışma Alanına Geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to lower workspace"
-msgstr "Alt Çalışma Alanına Geçme"
+msgstr "Alt Çalışma Alanına Geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch similar windows"
-msgstr "Benzer Pencerelerde İleri Gitme"
+msgstr "Benzer Pencerelerde İleri Git"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch similar windows in reverse"
-msgstr "Benzer Pencerelerde Geri Gitme"
+msgstr "Benzer Pencerelerde Geri Git"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch windows"
-msgstr "Pencerelerde İleri Gitme"
+msgstr "Pencerelerde İleri Git"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch windows in reverse"
-msgstr "Pencerelerde Geri Gitme"
+msgstr "Pencerelerde Geri Git"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
@@ -291,55 +292,55 @@ msgstr "Masaüstünü Görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
-msgstr "Pencereyi Büyütme"
+msgstr "Pencereyi Büyüt"
 
 #: ../../keybinding/shortcuts/id_name_map.go:99
 msgid "Restore window"
-msgstr "Pencereyi Önceki Boyutuna Döndürme"
+msgstr "Pencereyi Önceki Boyutuna Döndür"
 
 #: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Minimize window"
-msgstr "Pencereyi Küçültme"
+msgstr "Pencereyi Küçült"
 
 #: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Close window"
-msgstr "Pencereyi Kapatma"
+msgstr "Pencereyi Kapat"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Move window"
-msgstr "Pencereyi Taşıma"
+msgstr "Pencereyi Taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Resize window"
-msgstr "Pencerenin Boyutunu Değiştirme"
+msgstr "Pencerenin Boyutunu Değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:119
 msgid "Move to left workspace"
-msgstr "Sol Çalışma Alanına Taşıma"
+msgstr "Sol Çalışma Alanına Taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:120
 msgid "Move to right workspace"
-msgstr "Sağ Çalışma Alanına Taşıma"
+msgstr "Sağ Çalışma Alanına Taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:121
 msgid "Move to upper workspace"
-msgstr "Üst Çalışma Alanına Taşıma"
+msgstr "Üst Çalışma Alanına Taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to lower workspace"
-msgstr "Alt Çalışma Alanına Taşıma"
+msgstr "Alt Çalışma Alanına Taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:144
 msgid "Display windows of all workspaces"
-msgstr "Tüm Çalışma Alanlarındaki Pencereleri Görüntüleme"
+msgstr "Tüm Çalışma Alanlarındaki Pencereleri Görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:145
 msgid "Display windows of current workspace"
-msgstr "Geçerli Çalışma Alanındaki Pencereleri Görüntüleme"
+msgstr "Geçerli Çalışma Alanındaki Pencereleri Görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:146
 msgid "Display workspace"
-msgstr "Çalışma Alanını Görüntüleme"
+msgstr "Çalışma Alanını Görüntüle"
 
 #: ../../langselector/locale.go:61
 msgid "Authentication is required to switch language"
@@ -347,7 +348,7 @@ msgstr "Dili değiştirmek için kimlik doğrulaması gerekli"
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr "Sistem dili değiştirilemedi, lütfen daha sonra yeniden deneyin"
+msgstr "Sistem dili değiştirilemedi, lütfen daha sonra yeniden dene"
 
 #: ../../langselector/locale.go:378
 msgid ""
@@ -692,7 +693,7 @@ msgstr "Bir kullanıcı ya da istemci bağlantıyı kesmek istedi"
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr "Cihazın taşıyıcısı/bağlantısı değişti"
+msgstr "Aygıtın taşıyıcısı/bağlantısı değişti"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"

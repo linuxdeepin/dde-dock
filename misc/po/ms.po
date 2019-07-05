@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# abuyop <abuyop@gmail.com>, 2016-2018
+# abuyop <abuyop@gmail.com>, 2016-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-04-22 07:32+0000\n"
+"Last-Translator: abuyop <abuyop@gmail.com>\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,7 @@ msgstr "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nom
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Nama pengguna tidak boleh kosong"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -38,15 +38,15 @@ msgstr "Nama pengguna mesti mengandungi a~z, 0~9, - atau _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "Aksara pertama mesti berhuruf kecil"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "Nama pengguna sudah wujud"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Nama pengguna telah digunakan oleh sistem"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -58,7 +58,7 @@ msgstr "Berjaya ditetapkan"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Sila daftar masuk kembali untuk melihat perubahan yang berlaku"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
@@ -70,11 +70,11 @@ msgstr "Menetapkan penskalaan paparan"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Pengecaman cap jari gagal"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Pengecaman cap jari telah tamat masa"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -197,7 +197,7 @@ msgstr "Tunjuk/Sembunyi labuh"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Antaramuka Matikan Komputer"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -341,21 +341,21 @@ msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu sebentar..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Mengubah bahasa sistem, tunggu sebentar..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Bahasa sistem telah diubah, sila daftar keluar kemudian daftar masuk"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -527,7 +527,7 @@ msgstr "Keadaan peranti berubah"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Keadaan peranti berubah, sebab tidak diketahui"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -658,7 +658,7 @@ msgstr "Pendaftaran rangkaian telah tamat masa"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Pendaftaran ke rangkaian GSM yang dipinta telah gagal."
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -726,7 +726,7 @@ msgstr "Peranti InfiniBand tidak menyokong mod bersambung"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "Satu dependensi sambungan mengalami kegagalan"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -791,20 +791,20 @@ msgstr "Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SI
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Gagal mengaktifkan sambungan VPN, sebab tidak diketahui"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Gagal mengaktifkan sambungan VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan pengguna"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan peranti"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -828,7 +828,7 @@ msgstr "Perkhidmatan VPN gagal dimulakan"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Kata laluan sambungan VPN tidak disediakan"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
@@ -935,20 +935,20 @@ msgstr "Kuasa bateri lemah, sila palamkan kuasa"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk menetap waktu sistem"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk menetap zon waktu sistem"

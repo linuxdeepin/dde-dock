@@ -19,7 +19,7 @@
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>
 			<source>Prepare grub2 display resolution detection</source>
-			<translation type="unfinished"/>
+			<translation>Подготвяне засичането за grub2 на разделителната способност на дисплея</translation>
 		</message>
 	</context>
 </TS>

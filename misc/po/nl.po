@@ -3,6 +3,8 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Bernard Flach <bernard@deepin.nl>, 2019
+# Cindy0514, 2019
 # dragnadh, 2016-2018
 # Hans van Schooten <hans@schootenvan.nl>, 2017
 # Lars Acou <lars.acou@gmail.com>, 2017
@@ -12,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-06-10 09:22+0000\n"
+"Last-Translator: Bernard Flach <bernard@deepin.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +35,7 @@ msgstr "Het wachtwoord moet letters (hoofdlettergevoelig), cijfers en speciale t
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Gebruikersnaam mag niet leeg zijn"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -41,15 +43,15 @@ msgstr "Gebruikersnaam moet bestaan uit a~z, 0~9, - of _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "Het eerste teken mag geen hoofdletter zijn"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "De gebruikersnaam bestaat al"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "De gebruikersnaam wordt gebruikt door het systeem"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -73,11 +75,11 @@ msgstr "Beeldgrootte instellen"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Vingerafdruk verificatie mislukt"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Vingerafdrukauthenticatie is verlopen"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -200,7 +202,7 @@ msgstr "Dock weergeven/verbergen"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Interface voor het afsluiten"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -934,24 +936,24 @@ msgstr "Computer gaat weldra in pauzestand, sluit de oplader aan"
 
 #: ../../session/power/manager_events.go:165
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Batterij is bijna leeg, sluit aan op netstroom"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Authenticatie vereist om gebruikersgegevens te kunnen veranderen"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Authenticatie is vereist om te bepalen of netwerktijdsynchronisatie moet worden ingeschakeld"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Authenticatie is vereist om te bepalen of de RTC de lokale tijd of UTC-tijd opslaat"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Authenticatie is vereist om de systeemtijdzone in te stellen"

@@ -8,14 +8,15 @@
 # hamdy abd elfatah <hamdy.elzankly@gmail.com>, 2018
 # Khodr Abdallah <khodr000@gmail.com>, 2016
 # MUHAAB SHAAM <muhaab.org@gmail.com>, 2016-2018
+# أشرف بصرى <ashrafmn2008@gmail.com>, 2019
 # Abdellah Chadidi <chadidi97@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-05-20 22:21+0000\n"
+"Last-Translator: أشرف بصرى <ashrafmn2008@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,7 +36,7 @@ msgstr "يجب أن تحتوي كلمة المرور على الحروف الإ�
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "اسم المستخدم لا يمكن أن يكون فارغاً"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -43,15 +44,15 @@ msgstr "يجب أن يتكون اسم استخدم من المحارف التا�
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "الحرف الأول يجب أن يكون صغيراً"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "اسم المستخدم موجود"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "اسم المستخدم مستخدم من قبل النظام"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -75,11 +76,11 @@ msgstr "إعدادات تحجيم العرض"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "فشل التحقق من البصمة"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "نفذ وقت التحقق من البصمة"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -202,7 +203,7 @@ msgstr "إظهار /إخفاء الشريط"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "واجهة ايقاف التشغيل"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -346,21 +347,21 @@ msgstr "المصادقة مطلوبة لتبديل اللغة"
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة لاحقاً."
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr " يجري تعديل لغة النظام بتثبيت حزم اللغة الناقصة، الرجاء الانتظار ..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "جارى تغيير لغة النظام، يرجى الانتظار ..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "تم تغيير لغة النظام، يرجى تسجيل الخروج ثم تسجيل الدخول"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -532,7 +533,7 @@ msgstr "تم تغيير حالة الجهاز"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "تغيرت حالة الجهاز ،بسبب غير معروف"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -663,7 +664,7 @@ msgstr "انتهت مدة تسجيل الشبكة"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "تعذر التسجيل على شبكة GSM  المطلوبة ."
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -796,20 +797,20 @@ msgstr "الرجاء التأكد  من الطريقة الصحيحة المحد
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "فشل تفعيل اتصال VPN  بسبب غير معروف"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "فشل تفعيل اتصال الشبكة الافتراضية VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "تغيرت حالة اتصال VPN بسبب انقطاع الاتصال بواسطة المستخدمين"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "تغيرت حالة اتصال VPN بسبب انقطاع الاتصال من الأجهزة"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -833,7 +834,7 @@ msgstr "تعذر الاتصال بخدمة VPN للبدء"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "كلمة المروراتصال الـ VPN  لم تقدم بعد"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
@@ -940,20 +941,20 @@ msgstr "البطارية منخفضة، رجاءً اشبك السلك الكه�
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "المصادقة مطلوبة لضبط وقت النظام"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "المصادقة مطلوبة للتحكم بما إذا كان سيتم تمكين تزامن وقت الشبكة"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "المصادقة مطلوبة لضبط المنطقة الزمنية للنظام"

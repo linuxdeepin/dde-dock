@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-07-04 19:59+0000\n"
+"Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,11 +72,11 @@ msgstr "Подешавање салираног приказа"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Неуспешна верификација отиска прста"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Време за верификацију отиска прста је истекло"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -92,11 +92,11 @@ msgstr "Безручни уређај"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr "Безручни гласовни везни чвор"
+msgstr "Безручни гласовни пролаз"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr "Гласовни везни чвор за слушалице"
+msgstr "Гласовни пролаз за слушалице"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
@@ -159,7 +159,7 @@ msgstr "_Затвори све"
 
 #: ../../dock/app_entry_menu.go:128
 msgid "_Force Quit"
-msgstr "_Приморај излаз"
+msgstr "_Принудно изађи"
 
 #: ../../dock/app_entry_menu.go:135
 msgid "_Dock"
@@ -175,7 +175,7 @@ msgstr "_Сви прозори"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Недовољно места на диску, молимо чистите редовно!"
+msgstr "Недовољно простора на диску, молимо чистите редовно!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -390,7 +390,7 @@ msgstr "%q уклањање неуспешно."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Прикључите пуњач да бисте успешно ажурирали и избегли самостално искључивање."
+msgstr "Прикључите пуњач да избегнете самостално искључивање."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -400,7 +400,7 @@ msgstr "Кеш пакета уклоњен"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Системски извор је промењен, молимо вратите се на званични извор за нормално коришћење."
+msgstr "Извор система је промењен, молимо вратите се на званични извор за нормално коришћење."
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
@@ -489,11 +489,11 @@ msgstr "Мобилна веза"
 
 #: ../../network/nm_custom_type.go:237
 msgid "Mobile GSM Connection"
-msgstr "Мобилна GSM Веза"
+msgstr "Мобилна ГСМ Веза"
 
 #: ../../network/nm_custom_type.go:239
 msgid "Mobile CDMA Connection"
-msgstr "Мобилна CDMA Веза"
+msgstr "Мобилна ЦДМА Веза"
 
 #: ../../network/nm_custom_type.go:241
 msgid "VPN Connection"
@@ -509,7 +509,7 @@ msgstr "ВПН OpenConnect"
 
 #: ../../network/nm_custom_type.go:247
 msgid "VPN OpenVPN"
-msgstr "ВПН отворенВПН"
+msgstr "ВПН ОтворенВПН"
 
 #: ../../network/nm_custom_type.go:249
 msgid "VPN PPTP"
@@ -517,11 +517,11 @@ msgstr "ВПН ППТП"
 
 #: ../../network/nm_custom_type.go:251
 msgid "VPN StrongSwan"
-msgstr "ВПН StrongSwan"
+msgstr "ВПН СнажниЛабуд"
 
 #: ../../network/nm_custom_type.go:253
 msgid "VPN VPNC"
-msgstr "ВПН VPNC"
+msgstr "ВПН ВПНЦ"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
@@ -546,7 +546,7 @@ msgstr "Уређај није припремљен за конфигурациј
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP configuration could not be reserved (no available address, timeout, etc)"
+msgstr "ИП конфигурација није могла бити резервисана (нема доступне адресе, време је истекло, итд.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -560,19 +560,19 @@ msgstr "Лозинке су биле потребне, али нису прил�
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "The 802.1X supplicant disconnected from the access point or authentication server"
+msgstr "802.1X предлагач је прекинуо везу са приступном тачком или са сервером за аутентификацију"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr "Configuration of the 802.1X supplicant failed"
+msgstr "Конфигурација 802.1X предлагача је неуспешна"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr "The 802.1X supplicant quitted or failed unexpectedly"
+msgstr "802.1X предлагач се зауставио или је неочекивано отказао"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr "The 802.1X supplicant took too long time to authenticate"
+msgstr "802.1X предлагачу је требало превише времена за аутентификацију"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
@@ -580,23 +580,23 @@ msgstr "ППП услуга се није покренула у оквиру д�
 
 #: ../../network/state_handler.go:52
 msgid "The PPP service disconnected unexpectedly"
-msgstr "The PPP service disconnected unexpectedly"
+msgstr "ППП услуга је неочекивано прекинула везу"
 
 #: ../../network/state_handler.go:53
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr "The PPP service quitted or failed unexpectedly"
+msgstr "ППП услуга се зауставила или је неочекивано отказала"
 
 #: ../../network/state_handler.go:54
 msgid "The DHCP service failed to start within the allowed time"
-msgstr "The DHCP service failed to start within the allowed time"
+msgstr "ДХЦП услуга се није покренула у дозвољеном времену"
 
 #: ../../network/state_handler.go:55
 msgid "The DHCP service reported an unexpected error"
-msgstr "The DHCP service reported an unexpected error"
+msgstr "ДХЦП услуга је пријавила неочекивану грешку"
 
 #: ../../network/state_handler.go:56
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr "The DHCP service quitted or failed unexpectedly"
+msgstr "ДХЦП услуга се зауставила или је неочекивано отказала"
 
 #: ../../network/state_handler.go:57
 msgid "The shared connection service failed to start"
@@ -604,7 +604,7 @@ msgstr "Услуга дељене везе се није покренула"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "The shared connection service quitted or failed unexpectedly"
+msgstr "Дељена веза се зауставила или је неочекивано отказала"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
@@ -612,11 +612,11 @@ msgstr "Услуга АутоИП се није покренула"
 
 #: ../../network/state_handler.go:60
 msgid "The AutoIP service reported an unexpected error"
-msgstr "The AutoIP service reported an unexpected error"
+msgstr "АутоИП услуга је пријавила неочекивану грешку"
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr "The AutoIP service quitted or failed unexpectedly"
+msgstr "АутоИП услуга се зауставила или је неочекивано отказала"
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
@@ -624,31 +624,31 @@ msgstr "Позивање је неуспешно због заузетих ли�
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
-msgstr "Dialing failed due to no dial tone"
+msgstr "Позивање није упело јер нема тона позивања"
 
 #: ../../network/state_handler.go:64
 msgid "Dialing failed due to the carrier"
-msgstr "Dialing failed due to the carrier"
+msgstr "Позивање није успело због пружаоца услуге"
 
 #: ../../network/state_handler.go:65
 msgid "Dialing timed out"
-msgstr "Dialing timed out"
+msgstr "Врме за позивање је истекло"
 
 #: ../../network/state_handler.go:66
 msgid "Dialing failed"
-msgstr "Dialing failed"
+msgstr "Неуспешно позивање"
 
 #: ../../network/state_handler.go:67
 msgid "Modem initialization failed"
-msgstr "Modem initialization failed"
+msgstr "Неуспела иницијација модема"
 
 #: ../../network/state_handler.go:68
 msgid "Failed to select the specified GSM APN"
-msgstr "Failed to select the specified GSM APN"
+msgstr "Неуспело бирање наведене ГСМ АПН"
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
-msgstr "No networks searched"
+msgstr "Мреже нису претражене"
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
@@ -668,7 +668,7 @@ msgstr "Провера ПИН-а није успела"
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr "Necessary firmware for the device may be missed"
+msgstr "Неопходни фирмвер за уређај можда недостаје"
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
@@ -680,11 +680,11 @@ msgstr "Управник Мреже је заспао"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr "The device's active connection was removed or disappeared"
+msgstr "Активна веза уређаја је уклоњена или је нестала"
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr "A user or client requested to disconnect"
+msgstr "Корисник или клијент је затражио прекид везе"
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
@@ -696,7 +696,7 @@ msgstr "The device's existing connection was assumed"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr "The 802.1x supplicant is now available"
+msgstr "802.1x предлагач је сада доступан"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
@@ -704,27 +704,27 @@ msgstr "Модем није пронађен"
 
 #: ../../network/state_handler.go:83
 msgid "The Bluetooth connection timed out or failed"
-msgstr "The Bluetooth connection timed out or failed"
+msgstr "Блутут веза је истекла или је отказала"
 
 #: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr "GSM Modem's SIM Card was not inserted"
+msgstr "СИМ картица за ГСМ модем није убачена"
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr "GSM Modem's SIM PIN required"
+msgstr "СИМ ПИН за ГСМ модем је неопходан"
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr "GSM Modem's SIM PUK required"
+msgstr "СИМ ПУК за ГСМ модем је неопходан"
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
-msgstr "SIM card error in GSM Modem"
+msgstr "Грешка СИМ картице у ГСМ модему"
 
 #: ../../network/state_handler.go:88
 msgid "InfiniBand device does not support connected mode"
-msgstr "InfiniBand device does not support connected mode"
+msgstr "InfiniBand уређај не подржава повезани режим"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
@@ -732,51 +732,51 @@ msgstr "Зависност везе је отказала"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr "RFC 2684 Ethernet bridging error to ADSL"
+msgstr "RFC 2684 Ентернет грешка повезивања на ADSL"
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr "ModemManager did not run or quitted unexpectedly"
+msgstr "УправникМодема се није покренуо или се неочекивано зауставио"
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "The 802.11 Wi-Fi network could not be found"
+msgstr "802.11 Wi-Fi мрежа није пронађена"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr "A secondary connection of the base connection failed"
+msgstr "Секундарна веза или основна веза су отказале"
 
 #: ../../network/state_handler.go:96
 msgid "DCB or FCoE setup failed"
-msgstr "DCB or FCoE setup failed"
+msgstr "DCB или FCoE поставка није успела"
 
 #: ../../network/state_handler.go:97
 msgid "Network teaming control failed"
-msgstr "Network teaming control failed"
+msgstr "Контрола мрежног повезивања није успела"
 
 #: ../../network/state_handler.go:98
 msgid "Modem failed to run or not available"
-msgstr "Modem failed to run or not available"
+msgstr "Модем није успео да се покрене или је недоступан"
 
 #: ../../network/state_handler.go:99
 msgid "Modem now ready and available"
-msgstr "Modem now ready and available"
+msgstr "Модем је сада спреман и доступан"
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr "SIM PIN is incorrect"
+msgstr "СИМ ПИН је нетачан"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
-msgstr "New connection activation is enqueuing"
+msgstr "Активирање нове везе у процесу"
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
-msgstr "Parent device changed"
+msgstr "Уређај родитељ је промењен"
 
 #: ../../network/state_handler.go:103
 msgid "Management status of parent device changed"
-msgstr "Management status of parent device changed"
+msgstr "Управљачки статус уређаја родитеља је промењен"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
@@ -784,7 +784,7 @@ msgstr "Мрежни кабл је ископчан"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Please make sure SIM card has been inserted with mobile network signal"
+msgstr "Уверите се да је СИМ картица убачена и да има активан мобилни сигнал"
 
 #: ../../network/state_handler.go:108
 msgid ""
@@ -810,11 +810,11 @@ msgstr "Стање ВПН везе је промењено због прекид
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr "VPN service stopped"
+msgstr "ВПН услуга је заустављена"
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr "The IP config of VPN connection was invalid"
+msgstr "ИП поставка ВПН-а је неважећа"
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
@@ -822,7 +822,7 @@ msgstr "Време за покушај повезивања на ВПН услу
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr "The VPN service start timed out"
+msgstr "Време за покретање ВПН услуге је истекло"
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
@@ -834,7 +834,7 @@ msgstr "Лозинка за ВПН везу није приложена"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr "Authentication to VPN server failed"
+msgstr "Аутентификација за ВПН сервер је неуспешна"
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
@@ -866,7 +866,7 @@ msgstr "%q нисте поевзани"
 
 #: ../../network/state_handler.go:333
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Unable to share hotspot, please check dnsmasq settings"
+msgstr "Немогуће делити врућу тачку, проверите dnsmasq поставке"
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -894,7 +894,7 @@ msgstr "Авионски режим укључен."
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr "Access Point mode is not supported by this device."
+msgstr "Режим приступне тачке није подржан на овом уређају."
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
@@ -904,7 +904,7 @@ msgstr "Мрежа"
 #: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "Хардверски прекидач ВЛАН картице је искључен, молимо укључите по потреби."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."

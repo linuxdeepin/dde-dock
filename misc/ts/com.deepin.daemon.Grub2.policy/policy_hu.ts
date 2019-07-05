@@ -14,12 +14,12 @@
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
 			<source>Authentication is required to prepare grub2 display resolution detection</source>
-			<translation>Hitelesítés szükséges a grub2 képernyőfelbontás érzékelés előkészítéséhez</translation>
+			<translation>Hitelesítés szükséges a grub2 képernyőfelbontás érzékeléshez</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>
 			<source>Prepare grub2 display resolution detection</source>
-			<translation>grub2 képernyőfelbontás érzékelés előkészítése</translation>
+			<translation>Grub2 képernyőfelbontás érzékelés.</translation>
 		</message>
 	</context>
 </TS>

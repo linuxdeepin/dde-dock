@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Cindy0514, 2019
 # Jozef Gaal <preklady@mayday.sk>, 2016
 # Marek Bujko <marek.bujko@gmail.com>, 2016-2018
 msgid ""
@@ -10,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-04-22 10:11+0000\n"
+"Last-Translator: Marek Bujko <marek.bujko@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +32,7 @@ msgstr "Heslo musí obsahovať písmená anglickej abecedy (veľké a malé pís
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Užívateľské meno nemôže byť prázdne"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -39,15 +40,15 @@ msgstr "Užívateľské meno musí obsahovať a~z, 0~9, - alebo _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "Prvý znak musí byť malé písmeno"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "Užívateľské meno už existuje"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Meno používateľa už je používané v systéme"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -198,7 +199,7 @@ msgstr "Zobraziť/Skryť dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Rozhranie vypnutia"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -342,21 +343,21 @@ msgstr "Na prepínanie jazyka je potrebná autentifikácia"
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Jazyk systému sa nezmenil, skúste to prosím neskôr"
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Systémový jazyk sa zmení inštaláciou potrebných jazykových balíkov, prosím čakajte..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Dochádza k zmene systémového jazyka, prosím čakajte..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Systémový jazyk bol zmenený, po odhlásení sa znovu prihláste"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -528,7 +529,7 @@ msgstr "Stav zariadenia sa zmenil"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Stav zariadenia zmenený, neznámy dôvod"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -659,7 +660,7 @@ msgstr "Registrácia siete vypršala"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Registrácia do požadovanej GSM siete zlyhala"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -792,20 +793,20 @@ msgstr "Uistite sa, že ste vybrali správny plán bez toho, aby ste mali na SIM
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Aktivácia pripojenia VPN zlyhala, neznámy dôvod"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Aktivácia pripojenia VPN zlyhala"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "Pripojenie VPN sa zmenilo v dôsledku odpojenia od používateľov"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "Pripojenie VPN sa zmenilo v dôsledku odpojenia od zariadení"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -829,7 +830,7 @@ msgstr "Službu VPN sa nepodarilo spustiť"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Nevyžadovalo sa potrebné heslo pre pripojenie VPN"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
@@ -936,20 +937,20 @@ msgstr "Vybitá batéria, prosím pripojte kábel napájania"
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Na nastavenie systémového času je potrebné overenie"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Je potrebné overiť, či je zapnutá synchronizácia času v sieti"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Autentifikácia je potrebná na kontrolu, či RTC ukladá miestny čas alebo čas UTC"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Na nastavenie časového pásma systému je potrebné overenie"

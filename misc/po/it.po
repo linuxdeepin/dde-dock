@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-04-19 14:09+0000\n"
+"Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
 "Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,11 +71,11 @@ msgstr "Imposta scala di visualizzazione"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Verifica impronta fallita"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Verifica impronta in time out"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"

@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Siam Sami <justfortest16162215@gmail.com>, 2017
-# Md. Emruz Hossain <hossainemruz@gmail.com>, 2018
+# Md. Emruz Hossain <hossainemruz@gmail.com>, 2018-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"PO-Revision-Date: 2019-07-01 18:09+0000\n"
+"Last-Translator: Md. Emruz Hossain <hossainemruz@gmail.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,23 +31,23 @@ msgstr "পাসওয়ার্ডটিতে ইংরেজি অক্�
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "ব্যবহারকারীর নাম খালি হতে পারবেনা"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
-msgstr ""
+msgstr "ব্যবহারকারীর নাম অবশ্যই a~z, 0~9, - অথবা _ অক্ষরগুলো ব্যবহার করে লিখতে হবে"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "প্রথম অক্ষর অবশ্যই ছোট হাতের হবে"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "ব্যবহারকারীর নাম আগে থেকেই বিদ্যমান।"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "ব্যবহারকারীর নাম সিস্টেম দ্বারা ব্যবহৃত হয়েছে।"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -59,7 +59,7 @@ msgstr "সফলভাবে সেট করা হয়েছে"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "পরিবর্তনগুলো দেখতে পুনরায় লগইন করুন"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
@@ -71,11 +71,11 @@ msgstr "প্রদর্শন স্কেলিং সেট"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "আঙুলের ছাপ সনাক্ত করতে বার্থ হয়েছে"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "আঙুলের ছাপ সনাক্ত করার সময় শেষ হয়ে গেছে"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -198,7 +198,7 @@ msgstr "ডক দেখান / লুকান"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "বন্ধ করার ইন্টারফেস"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -342,21 +342,21 @@ msgstr "ভাষা পরিবর্তন করতে প্রমাণী
 
 #: ../../langselector/locale.go:354
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "সিস্টেম ভাষা পরিবর্তন করতে ব্যর্থ হয়েছে, দয়া করে পরে চেষ্টা করুন"
 
 #: ../../langselector/locale.go:378
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "সিস্টেমের ভাষা পরিবর্তন করা হচ্ছে এবং প্রয়োজনীয় ভাষার প্যাকেজ ইন্সটল করা হচ্ছে।  দয়া করে অপেক্ষা করুন..."
 
 #: ../../langselector/locale.go:381
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "সিস্টেমের ভাষা পরিবর্তন করা হচ্ছে, দয়া করে অপেক্ষা করুন..."
 
 #: ../../langselector/locale.go:429
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "সিস্টেমের ভাষা পরিবর্তন করা হয়েছে। দয়াকরে লগআউট করে এরপর লগইন করুন।"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -528,7 +528,7 @@ msgstr "ডিভাইসের অবস্থা পরিবর্তিত 
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "ডিভাইসের অবস্থা পরিবর্তীত হয়েছে, কারণ অজানা"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -659,7 +659,7 @@ msgstr "নেটওয়ার্ক নিবন্ধনের সময় শ
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "অনুরোধকৃত জিএসএম নেটওয়ার্কে নিবন্ধন করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -727,7 +727,7 @@ msgstr "InfiniBand এর ডিভাইস সমূহ সংযুক্ত 
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "একটি নির্ভরশীল সংযোগ বার্থ হয়েছে"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -792,20 +792,20 @@ msgstr "অনুগ্রহ করে নিশ্চিত করুন য�
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "ভিপিএন সংযোগ সক্রিয় করতে ব্যর্থ হয়েছে, কারণ অজানা"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "ভিপিএন সংযোগ সক্রিয় করতে ব্যর্থ হয়েছে"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "ব্যবহারকারী সংযোগ বিচ্ছিন্ন করার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "ডিভাইস সমূহ হতে সংযোগ বিচ্ছিন্ন হওয়ার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত হয়েছে"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -829,7 +829,7 @@ msgstr "ভিপিএন পরিষেবা শুরু করতে ব�
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "ভিপিএন সংযোগের জন্য পাসওয়ার্ড সরবরাহ করা হয়নি"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
@@ -936,20 +936,20 @@ msgstr "ব্যাটারি কম, অনুগ্রহ করে চা�
 
 #: ../../timedate/manager_ifc.go:56
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "সিস্টেমের সময় সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"
 
 #: ../../timedate/manager_ifc.go:69
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "নেটওয়ার্ক সাথে সময় সিনক্রোনাইজেশন চালু করা হবে কিনা সেটা নিয়ন্ত্রণ করতে প্রমাণীকরণের প্রয়োজন।"
 
 #: ../../timedate/manager_ifc.go:89
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "RTC স্থানীয় সময় না UTC সময় সংরক্ষণ করবে সেটা নিয়ন্ত্রণ করার জন্য প্রমাণীকরণের প্রয়োজন।"
 
 #: ../../timedate/manager_ifc.go:108
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "সিস্টেমের টাইমজোন সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"
