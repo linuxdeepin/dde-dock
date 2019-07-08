@@ -17,7 +17,7 @@
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Lisää näppäimistöasettelu</translation>
+        <translation>Lisää näppäimistön asettelu</translation>
     </message>
 </context>
 <context>
@@ -51,7 +51,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Verkkoasetukset</translation>
+        <translation>Verkon asetukset</translation>
     </message>
 </context>
 <context>
@@ -70,7 +70,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Tätä toimintoa ei voida kumota</translation>
+        <translation>Tätä toimintoa ei voi kumota</translation>
     </message>
 </context>
 <context>
@@ -151,7 +151,7 @@
     </message>
     <message>
         <source>Mode</source>
-        <translation>Tila</translation>
+        <translation>Asettelu</translation>
     </message>
     <message>
         <source>Location</source>
@@ -163,7 +163,7 @@
     </message>
     <message>
         <source>Status</source>
-        <translation>Asema</translation>
+        <translation>Näkyvyys</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -288,7 +288,7 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Ääniasetukset</translation>
+        <translation>Äänen asetukset</translation>
     </message>
     <message>
         <source>Current Volume %1</source>

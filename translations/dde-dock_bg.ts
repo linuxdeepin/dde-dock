@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Приставката %1 не е съвместима със системата.</translation>
     </message>
 </context>
 <context>
@@ -58,7 +58,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Наистина ли искате да изчистите %1 елемента?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -211,19 +211,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Капацитет %1, остават %2 минути</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Капацитет %1, остават %2 ч. % 3 мин. </translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане на %1, %2 мин. до пълно зареждане</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане на %1, %2 ч. %3 мин. до пълно зареждане</translation>
     </message>
 </context>
 <context>

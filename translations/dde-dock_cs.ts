@@ -211,19 +211,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Stav %1, %2 min zbývá</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Stav %1, %2 h %3 min zbývá</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjení %1, %2 min do úplného nabití</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjení %1, %2 h %3 min do úplného nabití</translation>
     </message>
 </context>
 <context>

@@ -219,11 +219,11 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Зарядка %1, %2 мин. до полной разрядки</translation>
+        <translation>Зарядка %1, %2 мин. до полной зарядки</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Зарядка %1, %2 час. %3 мин. до полной разрядки</translation>
+        <translation>Зарядка %1, %2 час. %3 мин. до полной зарядки</translation>
     </message>
 </context>
 <context>

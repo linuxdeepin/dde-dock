@@ -211,19 +211,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Capacité : %1, %2 minutes restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Capacité : %1, %2 heures et %3 minutes restantes</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>En charge (%1), %2 minutes avant la charge complète</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>En charge (%1), %2 heures et %3 minutes avant la charge complète</translation>
     </message>
 </context>
 <context>
@@ -343,7 +343,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire: %1</translation>
+        <translation>Connexion filaire : %1</translation>
     </message>
 </context>
 <context>
@@ -354,7 +354,7 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Connexion sans fil: %1</translation>
+        <translation>Connexion sans fil : %1</translation>
     </message>
 </context>
 <context>

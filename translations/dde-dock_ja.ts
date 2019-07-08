@@ -139,11 +139,11 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>表示を保つ</translation>
+        <translation>表示したままにする</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>非表示を保つ</translation>
+        <translation>隠したままにする</translation>
     </message>
     <message>
         <source>Smart Hide</source>
@@ -310,11 +310,11 @@
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>ゴミ箱 - %1 ファイル</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>ゴミ箱 - %1 ファイル</translation>
     </message>
 </context>
 <context>
