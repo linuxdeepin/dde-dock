@@ -332,7 +332,7 @@
     <name>TrayPlugin</name>
     <message>
         <source>System Tray</source>
-        <translation>Bandeja do Sistema</translation>
+        <translation>Área de notificação do sistema</translation>
     </message>
 </context>
 <context>

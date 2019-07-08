@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>%1 প্লাগিনটি সিস্টেমের জন্যে উপযুক্ত নয়</translation>
     </message>
 </context>
 <context>
@@ -58,7 +58,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি কি নিশ্চিত যে আপনি %1 আইটেমগুলো মোছে ফেলতে চান?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -211,19 +211,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>ধারণ ক্ষমতা %1, %2 min বাকি আছে</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>ধারণ ক্ষমতা %1, %2 hr %3 min বাকি আছে</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 min বাকি আছে</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 hr %3 min বাকি আছে</translation>
     </message>
 </context>
 <context>

@@ -10,21 +10,21 @@
     <name>ContainerItem</name>
     <message>
         <source>Click to display hidden icon</source>
-        <translation>Gizli simgeyi görüntülemek için tıklayın</translation>
+        <translation>Gizli simgeyi görüntülemek için tıkla</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Tuş takımı düzeni ekle</translation>
+        <translation>Klavye düzeni ekle</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Tarih saat</translation>
+        <translation>Tarih Saat</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
@@ -77,11 +77,11 @@
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation>Aygıt bilinmiyor</translation>
+        <translation>Bilinmeyen aygıt</translation>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Birim bilinmiyor</translation>
+        <translation>Bilinmeyen birim</translation>
     </message>
 </context>
 <context>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>Tümünün bağlantısını kes</translation>
+        <translation>Tüm bağı kaldır</translation>
     </message>
 </context>
 <context>
@@ -139,15 +139,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Görüntülensin</translation>
+        <translation>Sürekli Göster</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Gizlensin</translation>
+        <translation>Sürekli Gizle</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Akıllı Gizlensin</translation>
+        <translation>Akıllı Gizle</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -167,7 +167,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Uygulama Ekleri</translation>
+        <translation>Eklentiler</translation>
     </message>
 </context>
 <context>
@@ -188,7 +188,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Tümleşik</translation>
+        <translation>Ekran Klavyesi</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Güç Ayarları</translation>
+        <translation>Güç ayarları</translation>
     </message>
     <message>
         <source>Charged %1</source>
@@ -238,11 +238,11 @@
     </message>
     <message>
         <source>Restart</source>
-        <translation>Yeniden Başlat</translation>
+        <translation>Yeniden başlat</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uyut</translation>
+        <translation>Askıya al</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -254,7 +254,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Oturumu Kapat</translation>
+        <translation>Oturumu kapat</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -306,7 +306,7 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>Çöpe At</translation>
+        <translation>Çöp Kutusu</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
@@ -343,14 +343,14 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Kablolu Bağlantı: %1</translation>
+        <translation>Kablolu bağlantı: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>Herhangi Bir Ağ Yok</translation>
+        <translation>Ağ Yok</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
