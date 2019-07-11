@@ -26,7 +26,7 @@ import (
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -262,7 +262,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			} else {
 				notify(icon, "", fmt.Sprintf(Tr("%q connected"), msg))
 			}
-		case nm.NM_DEVICE_STATE_FAILED, nm.NM_DEVICE_STATE_DISCONNECTED,
+		case nm.NM_DEVICE_STATE_FAILED, nm.NM_DEVICE_STATE_DISCONNECTED, nm.NM_DEVICE_STATE_NEED_AUTH,
 			nm.NM_DEVICE_STATE_UNMANAGED, nm.NM_DEVICE_STATE_UNAVAILABLE:
 			logger.Infof("device disconnected, type %s, %d => %d, reason[%d] %s", getCustomDeviceType(dsi.devType), oldState, newState, reason, deviceErrorTable[reason])
 
@@ -338,6 +338,10 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 					}
 				case nm.NM_DEVICE_STATE_REASON_NO_SECRETS:
 					msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
+				case nm.NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT:
+					if oldState == nm.NM_DEVICE_STATE_CONFIG && newState == nm.NM_DEVICE_STATE_NEED_AUTH {
+						msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
+					}
 				default:
 					if dsi.aconnId != "" {
 						msg = fmt.Sprintf(Tr("%q disconnected"), dsi.aconnId)
