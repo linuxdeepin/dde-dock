@@ -26,8 +26,8 @@ char *new_str(const char *src_str) {
         char *dest_str = NULL;
         if (src_str != NULL) {
                 int n = strlen(src_str);
-                dest_str = malloc(n+1);
-                strncpy(dest_str, src_str, n);
+                dest_str = (char*)malloc(n+1);
+                memcpy(dest_str, src_str, n);
                 dest_str[n] = '\0';
         }
         return dest_str;

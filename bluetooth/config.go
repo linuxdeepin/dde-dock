@@ -30,6 +30,8 @@ type config struct {
 
 	Adapters map[string]*adapterConfig // use adapter hardware address as key
 	Devices  map[string]*deviceConfig  // use adapter address/device address as key
+
+	Discoverable bool `json:"discoverable"`
 }
 
 type adapterConfig struct {
@@ -46,6 +48,7 @@ func newConfig() (c *config) {
 	logger.Info("load bluetooth config file:", c.core.GetConfigFile())
 	c.Adapters = make(map[string]*adapterConfig)
 	c.Devices = make(map[string]*deviceConfig)
+	c.Discoverable = true
 	c.load()
 	return
 }

@@ -26,9 +26,9 @@ import (
 	"time"
 
 	apidevice "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.device"
-	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
@@ -479,8 +479,7 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	}
 
 	if cfgPowered {
-		// set discoverable to false
-		err = a.core.Discoverable().Set(0, false)
+		err = a.core.Discoverable().Set(0, b.config.Discoverable)
 		if err != nil {
 			logger.Warning(err)
 		}
