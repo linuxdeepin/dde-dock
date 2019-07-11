@@ -3,7 +3,7 @@ package bluetooth
 import (
 	"fmt"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -134,6 +134,10 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 	b.config.setAdapterConfigPowered(a.address, powered)
 
 	if powered {
+		err := a.core.Discoverable().Set(0, b.config.Discoverable)
+		if err != nil {
+			logger.Warning("failed to set discoverable for %s: %v", a, err)
+		}
 		err = a.core.StartDiscovery(0)
 		if err != nil {
 			logger.Warningf("failed to start discovery for %s: %v", a, err)
