@@ -41,10 +41,11 @@ import (
 
 type Daemon struct {
 	methods *struct {
-		ScalePlymouth         func() `in:"scale"`
-		SetLongPressDuration  func() `in:"duration"`
-		NetworkGetConnections func() `out:"data"`
-		NetworkSetConnections func() `in:"data"`
+		ScalePlymouth                  func() `in:"scale"`
+		SetLongPressDuration           func() `in:"duration"`
+		NetworkGetConnections          func() `out:"data"`
+		NetworkSetConnections          func() `in:"data"`
+		BluetoothGetDeviceTechnologies func() `in:"adapter,device" out:"technologies"`
 	}
 }
 

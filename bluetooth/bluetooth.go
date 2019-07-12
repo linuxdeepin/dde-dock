@@ -28,6 +28,7 @@ import (
 	apidevice "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.device"
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -41,6 +42,12 @@ const (
 	dbusServiceName = "com.deepin.daemon.Bluetooth"
 	dbusPath        = "/com/deepin/daemon/Bluetooth"
 	dbusInterface   = dbusServiceName
+
+	daemonSysService = "com.deepin.daemon.Daemon"
+	daemonSysPath    = "/com/deepin/daemon/Daemon"
+	daemonSysIFC     = daemonSysService
+
+	methodSysBlueGetDeviceTech = daemonSysIFC + ".BluetoothGetDeviceTechnologies"
 )
 
 const (
@@ -212,6 +219,8 @@ func (b *Bluetooth) init() {
 
 	b.config.clearSpareConfig(b)
 	b.config.save()
+	go b.tryConnectPairedDevices()
+	b.wakeupWorkaround()
 }
 
 func (b *Bluetooth) unblockBluetoothDevice() {
@@ -479,6 +488,7 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	}
 
 	if cfgPowered {
+		a.core.DiscoverableTimeout().Set(0, 0)
 		err = a.core.Discoverable().Set(0, b.config.Discoverable)
 		if err != nil {
 			logger.Warning(err)
@@ -574,4 +584,92 @@ func (b *Bluetooth) updateState() {
 	b.PropsMu.Lock()
 	b.setPropState(uint32(newState))
 	b.PropsMu.Unlock()
+}
+
+func (b *Bluetooth) tryConnectPairedDevices() {
+	var devList = b.getPairedDeviceList()
+	for _, dev := range devList {
+		logger.Info("[DEBUG] Auto connect device:", dev.Path)
+		obj, err := b.getDevice(dev.Path)
+		if err != nil {
+			logger.Warning("failed to get device for auto connect:", dev.String(), err)
+			continue
+		}
+
+		// if device using LE mode, will suspend, try connect should be failed, filter it.
+		if b.isLEDevice(dev) {
+			continue
+		}
+		logger.Debug("Will auto connect device:", obj.String(), obj.adapter.address, obj.Address)
+		obj.doConnect(false)
+	}
+}
+
+func (b *Bluetooth) getPairedDeviceList() []*device {
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+
+	var devList []*device
+	for _, aobj := range b.adapters {
+		logger.Info("[DEBUG] Auto connect adapter:", aobj.Path)
+		list := b.devices[aobj.Path]
+		if len(list) == 0 {
+			continue
+		}
+		for _, dev := range list {
+			if dev.Paired && !dev.connected {
+				devList = append(devList, dev)
+			}
+		}
+	}
+	return devList
+}
+
+func (b *Bluetooth) getTechnologies(dev *device) ([]string, error) {
+	var technologies []string
+	err := b.systemSigLoop.Conn().Object(daemonSysService,
+		daemonSysPath).Call(methodSysBlueGetDeviceTech, 0,
+		dev.adapter.address, dev.Address).Store(&technologies)
+	if err != nil {
+		return nil, err
+	}
+	return technologies, nil
+}
+
+func (b *Bluetooth) isLEDevice(dev *device) bool {
+	technologies, err := b.getTechnologies(dev)
+	if err != nil {
+		logger.Warningf("failed to get device(%s -- %s) technologies: %v",
+			dev.adapter.address, dev.Address, err)
+		return false
+	}
+	for _, tech := range technologies {
+		if tech == "LE" {
+			return true
+		}
+	}
+	return false
+}
+
+func (b *Bluetooth) wakeupWorkaround() {
+	// try connect devices after suspend wakeup
+	var loginManager = login1.NewManager(b.systemSigLoop.Conn())
+	loginManager.InitSignalExt(b.systemSigLoop, true)
+	loginManager.ConnectPrepareForSleep(func(isSleep bool) {
+		if isSleep {
+			logger.Debug("prepare to sleep")
+			return
+		}
+		logger.Debug("Wakeup from sleep, will set adapter and try connect device")
+		time.Sleep(time.Second * 3)
+		for _, aobj := range b.adapters {
+			if !aobj.Powered {
+				continue
+			}
+			aobj.core.Discoverable().Set(0, b.config.Discoverable)
+		}
+		b.tryConnectPairedDevices()
+	})
 }
