@@ -142,6 +142,7 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		if err != nil {
 			logger.Warningf("failed to start discovery for %s: %v", a, err)
 		}
+		go b.tryConnectPairedDevices()
 	}
 
 	return nil

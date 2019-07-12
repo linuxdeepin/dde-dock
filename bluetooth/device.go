@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
-	"pkg.deepin.io/lib/dbus1"
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
@@ -424,91 +424,140 @@ func (d *device) getAddress() string {
 	return d.adapter.address + "/" + d.Address
 }
 
-func (d *device) Connect() {
-	logger.Debug(d, "call Connect()")
+func (d *device) doConnect(hasNotify bool) error {
 	connectPhase := d.getConnectPhase()
 	disconnectPhase := d.getDisconnectPhase()
 	if connectPhase != connectPhaseNone {
 		logger.Warningf("%s connect is in progress", d)
-		return
+		return nil
 	} else if disconnectPhase != disconnectPhaseNone {
 		logger.Debugf("%s disconnect is in progress", d)
-		return
+		return nil
 	}
 
 	d.setConnectPhase(connectPhaseStart)
 	defer d.setConnectPhase(connectPhaseNone)
 
+	err := d.cancelBlock()
+	if err != nil {
+		if hasNotify {
+			// TODO(jouyouyun): notify device blocked
+		}
+		return err
+	}
+
+	err = d.doPair()
+	if err != nil {
+		if hasNotify {
+			notifyConnectFailedPairing(d.Alias)
+		}
+		return err
+	}
+
+	d.audioA2DPWorkaround()
+
+	err = d.doRealConnect()
+	if err != nil {
+		if hasNotify {
+			notifyConnectFailedHostDown(d.Alias)
+		}
+		return err
+	}
+
+	if hasNotify {
+		notifyConnected(d.Alias)
+	}
+	return nil
+}
+
+func (d *device) doRealConnect() error {
+	d.setConnectPhase(connectPhaseConnectProfilesStart)
+	err := d.core.Connect(0)
+	d.setConnectPhase(connectPhaseConnectProfilesEnd)
+	if err != nil {
+		// connect failed
+		logger.Warningf("%s connect failed: %v", d, err)
+		globalBluetooth.config.setDeviceConfigConnected(d.getAddress(), false)
+		return err
+	}
+
+	// connect succeeded
+	logger.Infof("%s connect succeeded", d)
+	globalBluetooth.config.setDeviceConfigConnected(d.getAddress(), true)
+
+	// auto trust device when connecting success
+	d.doTrust()
+
+	return nil
+}
+
+func (d *device) doTrust() error {
+	trusted, _ := d.core.Trusted().Get(0)
+	if trusted {
+		return nil
+	}
+	err := d.core.Trusted().Set(0, true)
+	if err != nil {
+		logger.Warning(err)
+	}
+	return err
+}
+
+func (d *device) cancelBlock() error {
 	blocked, err := d.core.Blocked().Get(0)
 	if err != nil {
 		logger.Warning(err)
-		return
+		return err
 	}
-	if blocked {
-		err := d.core.Blocked().Set(0, false)
-		if err != nil {
-			logger.Warning(err)
-			return
-		}
+	if !blocked {
+		return nil
 	}
+	err = d.core.Blocked().Set(0, false)
+	if err != nil {
+		logger.Warning(err)
+	}
+	return err
+}
 
+func (d *device) doPair() error {
 	paired, err := d.core.Paired().Get(0)
 	if err != nil {
 		logger.Warning(err)
-		return
+		return err
 	}
-	if !paired {
-		d.setConnectPhase(connectPhasePairStart)
-		err := d.core.Pair(0)
-		d.setConnectPhase(connectPhasePairEnd)
-
-		if err != nil {
-			logger.Warningf("%s pair failed: %v", d, err)
-			notifyConnectFailedPairing(d.Alias)
-			d.pairingFailedTime = time.Now()
-			d.setConnectPhase(connectPhaseNone)
-			return
-		} else {
-			logger.Warningf("%s pair succeeded", d)
-		}
-	} else {
+	if paired {
 		logger.Debugf("%s already paired", d)
+		return nil
 	}
 
+	d.setConnectPhase(connectPhasePairStart)
+	err = d.core.Pair(0)
+	d.setConnectPhase(connectPhasePairEnd)
+	if err != nil {
+		logger.Warningf("%s pair failed: %v", d, err)
+		d.pairingFailedTime = time.Now()
+		d.setConnectPhase(connectPhaseNone)
+		return err
+	}
+
+	logger.Warningf("%s pair succeeded", d)
+	return nil
+}
+
+func (d *device) audioA2DPWorkaround() {
 	// TODO: remove work code if bluez a2dp is ok
 	// bluez do not support muti a2dp devices
 	// disconnect a2dp device before connect
-
 	for _, uuid := range d.UUIDs {
 		if uuid == A2DP_SINK_UUID {
 			globalBluetooth.disconnectA2DPDeviceExcept(d)
 		}
 	}
+}
 
-	d.setConnectPhase(connectPhaseConnectProfilesStart)
-	err = d.core.Connect(0)
-	d.setConnectPhase(connectPhaseConnectProfilesEnd)
-	if err == nil {
-		// connect succeeded
-		logger.Infof("%s connect succeeded", d)
-		globalBluetooth.config.setDeviceConfigConnected(d.getAddress(), true)
-
-		// auto trust device when connecting success
-		trusted, _ := d.core.Trusted().Get(0)
-		if !trusted {
-			err := d.core.Trusted().Set(0, true)
-			if err != nil {
-				logger.Warning(err)
-			}
-		}
-		notifyConnected(d.Alias)
-
-	} else {
-		// connect failed
-		logger.Warningf("%s connect failed: %v", d, err)
-		globalBluetooth.config.setDeviceConfigConnected(d.getAddress(), false)
-		notifyConnectFailedHostDown(d.Alias)
-	}
+func (d *device) Connect() {
+	logger.Debug(d, "call Connect()")
+	d.doConnect(true)
 }
 
 func (d *device) Disconnect() {
