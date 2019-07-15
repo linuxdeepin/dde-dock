@@ -26,6 +26,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${Qt5DBus_LIBRARIES}
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
