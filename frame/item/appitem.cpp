@@ -475,6 +475,7 @@ void AppItem::startDrag()
     // handle drag finished here
     connect(m_drag->appDragWidget(), &AppDragWidget::destroyed, this, [=] {
         m_dragging = false;
+        m_drag.clear();
         setVisible(true);
         update();
     });
