@@ -25,8 +25,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
-	"pkg.deepin.io/lib/dbus1"
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -154,7 +154,10 @@ func (a *agent) DisplayPasskey(dpath dbus.ObjectPath, passkey uint32,
 	entered uint16) *dbus.Error {
 
 	logger.Info("DisplayPasskey()", passkey, entered)
-	a.b.service.Emit(a.b, "DisplayPasskey", dpath, passkey, entered)
+	err := a.b.service.Emit(a.b, "DisplayPasskey", dpath, passkey, uint32(entered))
+	if err != nil {
+		logger.Warning("Failed to emit signal 'DisplayPasskey':", err, dpath, passkey, entered)
+	}
 	return nil
 }
 
