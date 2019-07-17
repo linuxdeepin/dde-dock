@@ -28,7 +28,7 @@ import (
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -184,6 +184,13 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			defer m.devicesLock.Unlock()
 			dev.ActiveAp = value
 			m.updatePropDevices()
+
+			// Re-active connection if wireless 'ActiveAccessPoint' not equal active connection 'SpecificObject'
+			// such as wifi roaming
+			err := m.wirelessReActiveConnection(nmDev)
+			if err != nil {
+				logger.Warning("Failed to re-active connection:", err)
+			}
 		})
 		if err != nil {
 			logger.Warning(err)
@@ -526,4 +533,39 @@ func (m *Manager) RequestWirelessScan() *dbus.Error {
 		}
 	}
 	return nil
+}
+
+func (m *Manager) wirelessReActiveConnection(nmDev *nmdbus.Device) error {
+	wireless := nmDev.Wireless()
+	apPath, err := wireless.ActiveAccessPoint().Get(0)
+	if err != nil {
+		return err
+	}
+	connPath, err := nmDev.ActiveConnection().Get(0)
+	if err != nil {
+		return err
+	}
+
+	connObj, err := nmNewActiveConnection(connPath)
+	if err != nil {
+		return err
+	}
+
+	spePath, err := connObj.SpecificObject().Get(0)
+	if err != nil {
+		return err
+	}
+
+	if string(apPath) == string(spePath) {
+		logger.Debug("Will re-active connection not changed:", connPath, spePath, nmDev.Path_())
+		return nil
+	}
+
+	settingsPath, err := connObj.Connection().Get(0)
+	if err != nil {
+		return err
+	}
+	logger.Debug("Will re-active connection:", settingsPath, connPath, spePath, nmDev.Path_())
+	_, err = nmActivateConnection(settingsPath, nmDev.Path_())
+	return err
 }
