@@ -353,7 +353,7 @@ func (psp *powerSavePlan) stopScreensaver() {
 func (psp *powerSavePlan) makeSystemSleep() {
 	psp.stopScreensaver()
 	logger.Info("sleep")
-	psp.manager.setDPMSModeOn()
+	//psp.manager.setDPMSModeOn()
 	psp.resetBrightness()
 	psp.manager.doSuspend()
 }
@@ -390,7 +390,8 @@ func (psp *powerSavePlan) screenBlack() {
 		psp.stopScreensaver()
 		logger.Info("Screen full black")
 		if manager.ScreenBlackLock.Get() {
-			manager.lockWaitShow(2 * time.Second)
+			//manager.lockWaitShow(2 * time.Second)
+			manager.doLock()
 		}
 
 		if adjustBrightnessEnabled {
@@ -501,11 +502,12 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if !psp.idleOn {
+	if !psp.idleOn || psp.manager.getPrepareSuspend() {
+		logger.Info("HandleIdleOff : IGNORE =========")
+		psp.idleOn = false
 		return
 	}
 	psp.idleOn = false
-
 	logger.Info("HandleIdleOff")
 	psp.interruptTasks()
 	psp.manager.setDPMSModeOn()

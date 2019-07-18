@@ -26,6 +26,19 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 )
 
+func (m *Manager) setPrepareSuspend(v bool) {
+	m.prepareSuspendLocker.Lock()
+	m.prepareSuspend = v
+	m.prepareSuspendLocker.Unlock()
+}
+
+func (m *Manager) getPrepareSuspend() bool {
+	m.prepareSuspendLocker.Lock()
+	v := m.prepareSuspend
+	m.prepareSuspendLocker.Unlock()
+	return v
+}
+
 // 处理有线电源插入拔出事件
 func (m *Manager) initOnBatteryChangedHandler() {
 	power := m.helper.Power
@@ -49,15 +62,22 @@ func (m *Manager) initOnBatteryChangedHandler() {
 }
 
 func (m *Manager) handleBeforeSuspend() {
+	m.setPrepareSuspend(true)
 	logger.Debug("before sleep")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		m.setDPMSModeOn()
-		m.lockWaitShow(4 * time.Second)
+		//m.setDPMSModeOn()
+		//m.lockWaitShow(4 * time.Second)
+		m.doLock()
 	}
 }
 
 func (m *Manager) handleWakeup() {
+	m.setPrepareSuspend(false)
 	logger.Debug("wakeup")
+	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+		m.doLock()
+	}
+	m.setDPMSModeOn()
 	m.helper.Power.RefreshBatteries(0)
 	playSound(soundutils.EventWakeup)
 }

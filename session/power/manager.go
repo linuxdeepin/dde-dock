@@ -97,6 +97,10 @@ type Manager struct {
 	lightLevelUnit               string
 	lidSwitchState               uint
 	sessionActive                bool
+
+	// if prepare suspend, ignore idle off
+	prepareSuspend       bool
+	prepareSuspendLocker sync.Mutex
 }
 
 func newManager(service *dbusutil.Service) (*Manager, error) {
