@@ -25,7 +25,7 @@ import (
 	"strings"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -201,7 +201,9 @@ func (s *Sink) update(sinkInfo *pulse.Sink) {
 	s.props = sinkInfo.PropList
 	s.PropsMu.Unlock()
 
-	if activePortChanged {
+	// TODO(jouyouyun): Sometimes the default sink not in the same card, so the activePortChanged inaccurate.
+	// The right way is saved the last default sink active port, then judge whether equal.
+	if s.audio.headphoneUnplugAutoPause && activePortChanged {
 		logger.Debugf("sink #%d active port changed, old %v, new %v",
 			s.index, oldActivePort, newActivePort)
 		// old port but has new available state

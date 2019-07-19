@@ -25,16 +25,17 @@ import (
 
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pulse"
 )
 
 const (
-	gsSchemaAudio     = "com.deepin.dde.audio"
-	gsKeyFirstRun     = "first-run"
-	gsKeyInputVolume  = "input-volume"
-	gsKeyOutputVolume = "output-volume"
+	gsSchemaAudio                 = "com.deepin.dde.audio"
+	gsKeyFirstRun                 = "first-run"
+	gsKeyInputVolume              = "input-volume"
+	gsKeyOutputVolume             = "output-volume"
+	gsKeyHeadphoneUnplugAutoPause = "headphone-unplug-auto-pause"
 
 	gsSchemaSoundEffect = "com.deepin.dde.sound-effect"
 	gsKeyEnabled        = "enabled"
@@ -75,6 +76,8 @@ type Audio struct {
 	// dbusutil-gen: ignore
 	// 最大音量
 	MaxUIVolume float64 // readonly
+
+	headphoneUnplugAutoPause bool
 
 	inited    bool
 	ctx       *pulse.Context
@@ -118,6 +121,11 @@ func newAudio(ctx *pulse.Context, service *dbusutil.Service) *Audio {
 		quit:        make(chan struct{}),
 		MaxUIVolume: pulse.VolumeUIMax,
 	}
+
+	gsAudio := gio.NewSettings(gsSchemaAudio)
+	a.headphoneUnplugAutoPause = gsAudio.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
+	gsAudio.Unref()
+
 	a.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	a.syncConfig = dsync.NewConfig("audio", &syncConfig{a: a},
 		a.sessionSigLoop, dbusPath, logger)
