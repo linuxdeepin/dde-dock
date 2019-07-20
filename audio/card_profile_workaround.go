@@ -22,6 +22,10 @@ package audio
 import (
 	"sort"
 
+	"fmt"
+
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 	"pkg.deepin.io/lib/strv"
 )
@@ -83,9 +87,42 @@ func selectNewCardProfile(c *pulse.Card) {
 	// if card is bluetooth device, switch to profile a2dp_sink
 	// only 'a2dp_sink' in bluetooth profiles because of blacklist
 	if len(profiles) > 0 {
+		if isBluetoothCard(c) {
+			// Some bluetooth device services not resolved after connected, then denied to set profile to a2dp_sink.
+			// If connect device again, the services resolved work right. The devices such as: SONY MDR-1ABT
+			if c.ActiveProfile.Name == "off" {
+				err := tryConnectBluetooth(c)
+				if err != nil {
+					logger.Warning("Failed to connect bluetooth card:", c.Name, err)
+				}
+			}
+		}
 		logger.Debug("re-select card profile:", profiles[0], c.ActiveProfile.Name)
 		if c.ActiveProfile.Name != profiles[0].Name {
 			c.SetProfile(profiles[0].Name)
 		}
 	}
+}
+
+func isBluetoothCard(c *pulse.Card) bool {
+	_, ok := c.PropList["bluez.path"]
+	return ok
+}
+
+func tryConnectBluetooth(c *pulse.Card) error {
+	bluePath, ok := c.PropList["bluez.path"]
+	if !ok {
+		return fmt.Errorf("Not bluetooth card: %s", bluePath)
+	}
+
+	logger.Debug("Will try connect bluetooth again:", bluePath)
+	conn, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+	dev, err := bluez.NewDevice(conn, dbus.ObjectPath(bluePath))
+	if err != nil {
+		return err
+	}
+	return dev.Connect(0)
 }
