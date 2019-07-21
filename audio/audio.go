@@ -23,6 +23,10 @@ import (
 	"fmt"
 	"sync"
 
+	"time"
+
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
@@ -35,6 +39,7 @@ const (
 	gsKeyFirstRun                 = "first-run"
 	gsKeyInputVolume              = "input-volume"
 	gsKeyOutputVolume             = "output-volume"
+	gsKeyHeadphoneOutputVolume    = "headphone-output-volume"
 	gsKeyHeadphoneUnplugAutoPause = "headphone-unplug-auto-pause"
 
 	gsSchemaSoundEffect = "com.deepin.dde.sound-effect"
@@ -46,8 +51,9 @@ const (
 )
 
 var (
-	defaultInputVolume  = 0.1
-	defaultOutputVolume = 0.5
+	defaultInputVolume           = 0.1
+	defaultOutputVolume          = 0.5
+	defaultHeadphoneOutputVolume = 0.17
 )
 
 //go:generate dbusutil-gen -type Audio,Sink,SinkInput,Source,Meter -import pkg.deepin.io/lib/dbus1 audio.go sink.go sinkinput.go source.go meter.go
@@ -134,6 +140,7 @@ func newAudio(ctx *pulse.Context, service *dbusutil.Service) *Audio {
 }
 
 func (a *Audio) init() {
+	defaulted := a.initDefaultVolume()
 	a.mu.Lock()
 	// init a.sinks
 	a.sinks = make(map[uint32]*Sink)
@@ -218,7 +225,15 @@ func (a *Audio) init() {
 	go a.handleEvent()
 	go a.handleStateChanged()
 
-	a.applyConfig()
+	if !defaulted {
+		a.applyConfig()
+	} else {
+		logger.Info("Will remove old audio config")
+		err := removeConfig()
+		if err != nil {
+			logger.Warning("Failed to remove audio config:", err)
+		}
+	}
 	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
 }
@@ -268,21 +283,24 @@ func (a *Audio) destroy() {
 	a.destroyCtxRelated()
 }
 
-func initDefaultVolume(audio *Audio) {
+func (a *Audio) initDefaultVolume() bool {
 	gsAudio := gio.NewSettings(gsSchemaAudio)
 	defer gsAudio.Unref()
 	if !gsAudio.GetBoolean(gsKeyFirstRun) {
-		return
+		return false
 	}
 	inVolumePer := float64(gsAudio.GetInt(gsKeyInputVolume)) / 100.0
 	outVolumePer := float64(gsAudio.GetInt(gsKeyOutputVolume)) / 100.0
+	headphoneOutVolumePer := float64(gsAudio.GetInt(gsKeyHeadphoneOutputVolume)) / 100.0
 	defaultInputVolume = pulse.VolumeUIMax * inVolumePer
 	defaultOutputVolume = pulse.VolumeUIMax * outVolumePer
+	defaultHeadphoneOutputVolume = pulse.VolumeUIMax * headphoneOutVolumePer
 
-	audio.resetSinksVolume()
-	audio.resetSourceVolume()
+	a.resetSinksVolume()
+	a.resetSourceVolume()
 
 	gsAudio.SetBoolean(gsKeyFirstRun, false)
+	return true
 }
 
 func (a *Audio) findSinkByCardIndexPortName(cardId uint32, portName string) *pulse.Sink {
@@ -445,9 +463,27 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
 func (a *Audio) resetSinksVolume() {
 	for _, s := range a.ctx.GetSinkList() {
 		a.ctx.SetSinkMuteByIndex(s.Index, false)
-		cv := s.Volume.SetAvg(defaultOutputVolume).SetBalance(s.ChannelMap,
-			0).SetFade(s.ChannelMap, 0)
-		a.ctx.SetSinkVolumeByIndex(s.Index, cv)
+		curPort := s.ActivePort.Name
+		portList := s.Ports
+		sidx := s.Index
+		for _, port := range portList {
+			a.ctx.SetSinkPortByIndex(sidx, port.Name)
+			// wait port active
+			time.Sleep(time.Millisecond * 100)
+			s, _ = a.ctx.GetSink(sidx)
+			pname := strings.ToLower(port.Name)
+			var cv pulse.CVolume
+			if strings.Contains(pname, "headphone") || strings.Contains(pname, "headset") {
+				cv = s.Volume.SetAvg(defaultHeadphoneOutputVolume).SetBalance(s.ChannelMap,
+					0).SetFade(s.ChannelMap, 0)
+			} else {
+				cv = s.Volume.SetAvg(defaultOutputVolume).SetBalance(s.ChannelMap,
+					0).SetFade(s.ChannelMap, 0)
+			}
+			a.ctx.SetSinkVolumeByIndex(sidx, cv)
+			time.Sleep(time.Millisecond * 100)
+		}
+		a.ctx.SetSinkPortByIndex(sidx, curPort)
 	}
 }
 

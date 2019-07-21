@@ -22,9 +22,9 @@ package audio
 import (
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
+	soundthemeplayer "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
 	"pkg.deepin.io/lib/asound"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 )
 
@@ -182,6 +182,7 @@ func (a *Audio) doSaveConfig() {
 		break
 	}
 
+	readConfig()
 	err := saveConfig(&info)
 	if err != nil {
 		logger.Warning("Save config file failed:", info.string(), err)

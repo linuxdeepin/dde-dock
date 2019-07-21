@@ -72,7 +72,6 @@ func (m *Module) start() error {
 	if err != nil {
 		logger.Warning("failed to register for deepin sync:", err)
 	}
-	initDefaultVolume(m.audio)
 	return nil
 }
 

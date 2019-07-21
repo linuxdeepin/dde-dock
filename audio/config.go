@@ -101,6 +101,12 @@ func saveConfig(info *config) error {
 	return nil
 }
 
+func removeConfig() error {
+	fileLocker.Lock()
+	defer fileLocker.Unlock()
+	return configHandler.RemoveConfigFile()
+}
+
 func mapStrStrEqual(a, b map[string]string) bool {
 	if len(a) != len(b) {
 		return false
