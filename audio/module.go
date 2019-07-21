@@ -72,7 +72,6 @@ func (m *Module) start() error {
 	if err != nil {
 		logger.Warning("Failed to register sync bus:", err)
 	}
-	initDefaultVolume(m.audio)
 	return nil
 }
 
