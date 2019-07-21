@@ -68,6 +68,9 @@ func (m *Manager) handleBeforeSuspend() {
 		//m.setDPMSModeOn()
 		//m.lockWaitShow(4 * time.Second)
 		m.doLock()
+		// TODO(jouyouyun): wait lock showing
+		// We will call dde-lock dbus method to detect whether lock showing
+		time.Sleep(time.Millisecond * 200)
 	}
 }
 
@@ -75,8 +78,11 @@ func (m *Manager) handleWakeup() {
 	m.setPrepareSuspend(false)
 	logger.Debug("wakeup")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+		// TODO(jouyouyun): detect lock whether showing
 		m.doLock()
 	}
+	// solved huawei honor showing confusion(flower screen)
+	time.Sleep(time.Millisecond * 100)
 	m.setDPMSModeOn()
 	m.helper.Power.RefreshBatteries(0)
 	playSound(soundutils.EventWakeup)

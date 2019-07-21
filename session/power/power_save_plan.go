@@ -451,7 +451,10 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if psp.idleOn {
+	// Somethimes will emit idle on event when sleep, why?
+	if psp.idleOn || psp.manager.getPrepareSuspend() {
+		logger.Info("HandleIdleOn : IGNORE =========")
+		psp.idleOn = true
 		return
 	}
 
