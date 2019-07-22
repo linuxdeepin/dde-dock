@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
-	"github.com/linuxdeepin/go-x11-client"
+	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/record"
 	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
@@ -257,55 +257,76 @@ func (sm *ShortcutManager) storeConflictingKeystroke(ks *Keystroke) {
 }
 
 func (sm *ShortcutManager) grabKeystroke(shortcut Shortcut, ks *Keystroke, dummy bool) {
-	key, err := ks.ToKey(sm.keySymbols)
+	keyList, err := ks.ToKeyList(sm.keySymbols)
 	if err != nil {
 		logger.Debugf("grabKeystroke failed, shortcut: %v, ks: %v, err: %v", shortcut.GetId(), ks, err)
 		return
 	}
 	//logger.Debugf("grabKeystroke shortcut: %s, ks: %s, key: %s, dummy: %v", shortcut.GetId(), ks, key, dummy)
 
-	sm.keyKeystrokeMapMu.Lock()
-	conflictKeystroke, ok := sm.keyKeystrokeMap[key]
-	sm.keyKeystrokeMapMu.Unlock()
+	var conflictCount int
+	var idx = -1
+	for i, key := range keyList {
+		sm.keyKeystrokeMapMu.Lock()
+		conflictKeystroke, ok := sm.keyKeystrokeMap[key]
+		sm.keyKeystrokeMapMu.Unlock()
 
-	if ok {
-		// conflict
-		if conflictKeystroke.Shortcut != nil {
-			logger.Debugf("key %v is grabed by %v", key, conflictKeystroke.Shortcut.GetId())
-			if !sm.EliminateConflictDone {
-				sm.storeConflictingKeystroke(ks)
+		if ok {
+			// conflict
+			if conflictKeystroke.Shortcut != nil {
+				conflictCount++
+				logger.Debugf("key %v is grabed by %v", key, conflictKeystroke.Shortcut.GetId())
+			} else {
+				logger.Warningf("key %v is grabed, conflictKeystroke.Shortcut is nil", key)
 			}
-		} else {
-			logger.Warningf("key %v is grabed, conflictKeystroke.Shortcut is nil", key)
+			continue
 		}
-		return
+
+		// no conflict
+		if !dummy {
+			err = key.Grab(sm.conn)
+			if err != nil {
+				logger.Debug(err)
+				// Rollback
+				idx = i
+				break
+			}
+		}
+		sm.keyKeystrokeMapMu.Lock()
+		sm.keyKeystrokeMap[key] = ks
+		sm.keyKeystrokeMapMu.Unlock()
 	}
 
-	// no conflict
-	if !dummy {
-		err = key.Grab(sm.conn)
-		if err != nil {
-			logger.Debug(err)
-			return
+	// Rollback
+	if idx != -1 {
+		for i := 0; i <= idx; i++ {
+			keyList[i].Ungrab(sm.conn)
 		}
 	}
-	sm.keyKeystrokeMapMu.Lock()
-	sm.keyKeystrokeMap[key] = ks
-	sm.keyKeystrokeMapMu.Unlock()
+
+	// Delete completely conflicting key
+	if conflictCount == len(keyList) && !sm.EliminateConflictDone {
+		sm.storeConflictingKeystroke(ks)
+	}
 }
 
 func (sm *ShortcutManager) ungrabKeystroke(ks *Keystroke, dummy bool) {
-	key, err := ks.ToKey(sm.keySymbols)
+	keyList, err := ks.ToKeyList(sm.keySymbols)
 	if err != nil {
 		logger.Debug(err)
 		return
 	}
+	if len(keyList) == 0 {
+		return
+	}
 
 	sm.keyKeystrokeMapMu.Lock()
-	delete(sm.keyKeystrokeMap, key)
-	sm.keyKeystrokeMapMu.Unlock()
-	if !dummy {
-		key.Ungrab(sm.conn)
+	defer sm.keyKeystrokeMapMu.Unlock()
+	for _, key := range keyList {
+		delete(sm.keyKeystrokeMap, key)
+		if !dummy {
+			key.Ungrab(sm.conn)
+		}
 	}
 }
 
@@ -635,18 +656,31 @@ func (sm *ShortcutManager) GetByIdType(id string, type0 int32) Shortcut {
 // ret0: Conflicting keystroke
 // ret1: error
 func (sm *ShortcutManager) FindConflictingKeystroke(ks *Keystroke) (*Keystroke, error) {
-	key, err := ks.ToKey(sm.keySymbols)
+	keyList, err := ks.ToKeyList(sm.keySymbols)
 	if err != nil {
 		return nil, err
 	}
+	if len(keyList) == 0 {
+		return nil, nil
+	}
 
 	logger.Debug("ShortcutManager.FindConflictingKeystroke", ks.DebugString())
-	logger.Debug("key:", key)
+	logger.Debug("key list:", keyList)
 
 	sm.keyKeystrokeMapMu.Lock()
-	ks1, ok := sm.keyKeystrokeMap[key]
-	sm.keyKeystrokeMapMu.Unlock()
-	if ok {
+	defer sm.keyKeystrokeMapMu.Unlock()
+	var count = 0
+	var ks1 *Keystroke
+	for _, key := range keyList {
+		tmp, ok := sm.keyKeystrokeMap[key]
+		if !ok {
+			continue
+		}
+		count++
+		ks1 = tmp
+	}
+
+	if count == len(keyList) {
 		return ks1, nil
 	}
 	return nil, nil

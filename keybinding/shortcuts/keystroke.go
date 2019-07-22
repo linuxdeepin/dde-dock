@@ -129,6 +129,24 @@ func (ks *Keystroke) ToKey(keySymbols *keysyms.KeySymbols) (Key, error) {
 	}, nil
 }
 
+func (ks *Keystroke) ToKeyList(keySymbols *keysyms.KeySymbols) ([]Key, error) {
+	codes, err := keySymbols.StringToKeycodes(ks.Keystr)
+	if err != nil {
+		return nil, err
+	}
+	var keyList []Key
+	for _, code := range codes {
+		if code == 0 {
+			continue
+		}
+		keyList = append(keyList, Key{
+			Mods: ks.Mods,
+			Code: Keycode(code),
+		})
+	}
+	return keyList, nil
+}
+
 func splitKeystroke(str string) ([]string, error) {
 	if str == "" {
 		return nil, nil
