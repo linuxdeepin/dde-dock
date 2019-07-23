@@ -24,6 +24,7 @@ import (
 	"encoding/gob"
 	"io/ioutil"
 	"os"
+
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -42,7 +43,7 @@ func writeDatasToFile(datas interface{}, filename string) {
 
 	fp, err := os.Create(filename)
 	if err != nil {
-		logger.Warning("Open '%s' failed:", err)
+		logger.Warningf("failed to open %q: %v", filename, err)
 		return
 	}
 	defer fp.Close()
@@ -59,7 +60,7 @@ func readDatasFromFile(datas interface{}, filename string) bool {
 
 	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
-		logger.Warning("ReadFile '%s' failed:", err)
+		logger.Warningf("failed to read file %q: %v", filename, err)
 		return false
 	}
 

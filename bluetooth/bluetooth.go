@@ -332,7 +332,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 	b.adaptersLock.Unlock()
 
 	if d.adapter == nil {
-		logger.Warning("failed to add device %s, not found adapter", dpath)
+		logger.Warningf("failed to add device %s, not found adapter", dpath)
 		return
 	}
 

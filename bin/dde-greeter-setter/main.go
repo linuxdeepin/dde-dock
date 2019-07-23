@@ -41,13 +41,13 @@ func main() {
 
 	err = service.Export(dbusPath, m)
 	if err != nil {
-		logger.Errorf("failed to export:", err)
+		logger.Error("failed to export:", err)
 		return
 	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		logger.Errorf("failed to request name:", err)
+		logger.Error("failed to request name:", err)
 		return
 	}
 	service.SetAutoQuitHandler(time.Second*30, nil)

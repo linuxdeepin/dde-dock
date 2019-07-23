@@ -380,7 +380,7 @@ func (grub *Grub2) readEntries() (err error) {
 		return
 	}
 	if len(grub.entries) == 0 {
-		logger.Warning("there is no menu entry in %s", grubScriptFile)
+		logger.Warningf("there is no menu entry in %s", grubScriptFile)
 	}
 	return
 }

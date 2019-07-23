@@ -33,7 +33,7 @@ func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) *dbus.Error {
 
 	err = a.core.RemoveDevice(0, dpath)
 	if err != nil {
-		logger.Warning("failed to remove device %q from adapter %q: %v",
+		logger.Warningf("failed to remove device %q from adapter %q: %v",
 			dpath, apath, err)
 		return dbusutil.ToError(err)
 	}
@@ -136,7 +136,7 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 	if powered {
 		err := a.core.Discoverable().Set(0, b.config.Discoverable)
 		if err != nil {
-			logger.Warning("failed to set discoverable for %s: %v", a, err)
+			logger.Warningf("failed to set discoverable for %s: %v", a, err)
 		}
 		err = a.core.StartDiscovery(0)
 		if err != nil {
