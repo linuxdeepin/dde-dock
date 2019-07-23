@@ -73,7 +73,7 @@ func removeScratchFiles(desktopFile string) {
 			logger.Debugf("remove scratch file %q", file)
 			err := os.Remove(file)
 			if err != nil {
-				logger.Warning("remove scratch file %q failed:", file, err)
+				logger.Warningf("failed to remove scratch file %q: %v", file, err)
 			}
 		}
 	}

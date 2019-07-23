@@ -429,7 +429,7 @@ func (m *Manager) loadPkgCategoryMap() error {
 	for pkg, v := range jsonData {
 		cid, ok := parseCategoryString(v.Category)
 		if !ok {
-			logger.Warning("loadPkgCategoryMap: parse category %q failed", v.Category)
+			logger.Warningf("loadPkgCategoryMap: failed to parse category %s", v.Category)
 		}
 		infos[pkg] = cid
 	}

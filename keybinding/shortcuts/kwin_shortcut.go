@@ -28,7 +28,7 @@ func (ks *kWinShortcut) ReloadKeystrokes() bool {
 	oldVal := ks.GetKeystrokes()
 	keystrokes, err := ks.wm.GetAccel(0, ks.Id)
 	if err != nil {
-		logger.Warning("failed to get accel for %s: %v", ks.Id, err)
+		logger.Warningf("failed to get accel for %s: %v", ks.Id, err)
 		return false
 	}
 	newVal := ParseKeystrokes(keystrokes)

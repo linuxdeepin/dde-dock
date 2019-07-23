@@ -53,7 +53,7 @@ func (l *Lastore) createSourceModifiedActions() []NotifyAction {
 				logger.Info("restore source")
 				err := l.core.RestoreSystemSource(0)
 				if err != nil {
-					logger.Warningf("failed to restore source:", err)
+					logger.Warning("failed to restore source:", err)
 					return
 				}
 

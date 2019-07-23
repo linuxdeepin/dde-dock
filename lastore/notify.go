@@ -65,7 +65,7 @@ func (l *Lastore) sendNotify(icon string, msg string, actions []NotifyAction) {
 					return
 				}
 			}
-			logger.Warning("not found action id %q in %v", actionId, actions)
+			logger.Warningf("not found action id %q in %v", actionId, actions)
 		})
 	if err != nil {
 		logger.Warning(err)
