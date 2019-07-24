@@ -309,7 +309,7 @@ handle_gesture_events(struct libinput_event *ev, int type)
         break;
     case LIBINPUT_EVENT_GESTURE_TAP_END:
         if (libinput_event_gesture_get_cancelled(gesture)) {
-			break;
+            break;
         }
         raw->fingers = libinput_event_gesture_get_finger_count(gesture);
         g_debug("[Tap] fingers: %d", raw->fingers);
