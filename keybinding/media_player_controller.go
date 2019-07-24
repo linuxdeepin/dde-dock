@@ -24,10 +24,10 @@ import (
 	"strings"
 
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
@@ -54,13 +54,14 @@ func NewMediaPlayerController(systemSigLoop *dbusutil.SignalLoop,
 	c.loginManager = login1.NewManager(systemSigLoop.Conn())
 	c.loginManager.InitSignalExt(systemSigLoop, true)
 
+	// move to power module
 	// pause all player before system sleep
-	c.loginManager.ConnectPrepareForSleep(func(start bool) {
-		if !start {
-			return
-		}
-		c.pauseAllPlayer()
-	})
+	// c.loginManager.ConnectPrepareForSleep(func(start bool) {
+	// 	if !start {
+	// 		return
+	// 	}
+	// 	c.pauseAllPlayer()
+	// })
 	return c
 }
 
