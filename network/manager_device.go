@@ -186,7 +186,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			m.updatePropDevices()
 
 			// Re-active connection if wireless 'ActiveAccessPoint' not equal active connection 'SpecificObject'
-			// such as wifi roaming
+			// such as wifi roaming, but the active connection state is activated
 			err := m.wirelessReActiveConnection(nmDev)
 			if err != nil {
 				logger.Warning("Failed to re-active connection:", err)
@@ -541,9 +541,17 @@ func (m *Manager) wirelessReActiveConnection(nmDev *nmdbus.Device) error {
 	if err != nil {
 		return err
 	}
+	if apPath == "/" {
+		logger.Debug("Invalid active access point path:", nmDev.Path_())
+		return nil
+	}
 	connPath, err := nmDev.ActiveConnection().Get(0)
 	if err != nil {
 		return err
+	}
+	if connPath == "/" {
+		logger.Debug("Invalid active connection path:", nmDev.Path_())
+		return nil
 	}
 
 	connObj, err := nmNewActiveConnection(connPath)
@@ -551,13 +559,33 @@ func (m *Manager) wirelessReActiveConnection(nmDev *nmdbus.Device) error {
 		return err
 	}
 
+	// check network connectivity state
+	state, err := connObj.State().Get(0)
+	if err != nil {
+		return err
+	}
+	if state != nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		logger.Debug("[Inactive] re-active connection not activated:", connPath, nmDev.Path_(), state)
+		return nil
+	}
+
 	spePath, err := connObj.SpecificObject().Get(0)
 	if err != nil {
 		return err
 	}
+	if spePath == "/" {
+		logger.Debug("Invalid specific access point path:", connObj.Path_(), nmDev.Path_())
+		return nil
+	}
 
 	if string(apPath) == string(spePath) {
-		logger.Debug("Will re-active connection not changed:", connPath, spePath, nmDev.Path_())
+		logger.Debug("[NONE] re-active connection not changed:", connPath, spePath, nmDev.Path_())
+		return nil
+	}
+
+	ip4Path, _ := connObj.Ip4Config().Get(0)
+	if m.checkGatewayConnectivity(ip4Path) {
+		logger.Debug("Network is connectivity, don't re-active")
 		return nil
 	}
 
@@ -565,7 +593,26 @@ func (m *Manager) wirelessReActiveConnection(nmDev *nmdbus.Device) error {
 	if err != nil {
 		return err
 	}
-	logger.Debug("Will re-active connection:", settingsPath, connPath, spePath, nmDev.Path_())
+	logger.Debug("[DO] re-active connection:", settingsPath, connPath, spePath, nmDev.Path_())
 	_, err = nmActivateConnection(settingsPath, nmDev.Path_())
 	return err
+}
+
+func (m *Manager) checkGatewayConnectivity(ipPath dbus.ObjectPath) bool {
+	if ipPath == "/" {
+		return false
+	}
+
+	addr, mask, gateways, domains := nmGetIp4ConfigInfo(ipPath)
+	logger.Debugf("The active connection ip4 info: address(%s), mask(%s), gateways(%v), domains(%v)",
+		addr, mask, gateways, domains)
+	// check whether the gateway is connected by ping
+	for _, gw := range gateways {
+		err := m.sysNetwork.Ping(0, gw)
+		if err != nil {
+			logger.Warning("Failed to ping gateway:", gw, err)
+			return false
+		}
+	}
+	return true
 }
