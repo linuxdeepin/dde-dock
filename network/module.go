@@ -38,6 +38,21 @@ func init() {
 	proxychains.SetLogger(logger)
 }
 
+func HandlePrepareForSleep(sleep bool) {
+	if manager == nil {
+		logger.Warning("Module 'network' has not start")
+		return
+	}
+	if sleep {
+		// suspend
+		disableNotify()
+		return
+	}
+	// wakeup
+	enableNotify()
+	_ = manager.RequestWirelessScan()
+}
+
 type Module struct {
 	*loader.ModuleBase
 }

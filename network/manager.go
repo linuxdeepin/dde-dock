@@ -25,11 +25,11 @@ import (
 
 	sysNetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
+	secrets "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/dde/daemon/session/common"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/strv"
@@ -216,23 +216,22 @@ func (m *Manager) init() {
 	})
 	m.updatePropConnectivity()
 
-	// TODO: notifications issue when resume from suspend
-
+	// move to power module
 	// connect computer suspend signal
-	_, err = loginManager.ConnectPrepareForSleep(func(active bool) {
-		if active {
-			// suspend
-			disableNotify()
-		} else {
-			// restore
-			enableNotify()
+	// _, err = loginManager.ConnectPrepareForSleep(func(active bool) {
+	// 	if active {
+	// 		// suspend
+	// 		disableNotify()
+	// 	} else {
+	// 		// restore
+	// 		enableNotify()
 
-			_ = m.RequestWirelessScan()
-		}
-	})
-	if err != nil {
-		logger.Warning(err)
-	}
+	// 		_ = m.RequestWirelessScan()
+	// 	}
+	// })
+	// if err != nil {
+	// 	logger.Warning(err)
+	// }
 
 	m.sessionSigLoop = dbusutil.NewSignalLoop(m.service.Conn(), 10)
 	m.sessionSigLoop.Start()

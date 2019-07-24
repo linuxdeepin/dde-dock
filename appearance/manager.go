@@ -32,11 +32,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-	"github.com/linuxdeepin/go-x11-client"
+	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
@@ -46,7 +46,7 @@ import (
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -724,17 +724,18 @@ func (m *Manager) autoChangeBg(t time.Time) {
 }
 
 func (m *Manager) initWallpaperSlideshow() {
-	_, err := m.login1Manager.ConnectPrepareForSleep(func(before bool) {
-		if !before {
-			// after sleep
-			if m.WallpaperSlideShow.Get() == wsPolicyWakeup {
-				m.autoChangeBg(time.Now())
-			}
-		}
-	})
-	if err != nil {
-		logger.Warning(err)
-	}
+	// move to power module
+	// _, err := m.login1Manager.ConnectPrepareForSleep(func(before bool) {
+	// 	if !before {
+	// 		// after sleep
+	// 		if m.WallpaperSlideShow.Get() == wsPolicyWakeup {
+	// 			m.autoChangeBg(time.Now())
+	// 		}
+	// 	}
+	// })
+	// if err != nil {
+	// 	logger.Warning(err)
+	// }
 	m.wsScheduler.fn = m.autoChangeBg
 
 	policy := m.WallpaperSlideShow.Get()
@@ -744,7 +745,7 @@ func (m *Manager) initWallpaperSlideshow() {
 	}
 
 	if policy == wsPolicyLogin {
-		err = m.changeBgAfterLogin()
+		err := m.changeBgAfterLogin()
 		if err != nil {
 			logger.Warning("failed to change background after login:", err)
 		}

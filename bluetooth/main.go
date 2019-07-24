@@ -20,6 +20,8 @@
 package bluetooth
 
 import (
+	"time"
+
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
@@ -41,6 +43,26 @@ func (*daemon) GetDependencies() []string {
 
 var globalBluetooth *Bluetooth
 var globalAgent *agent
+
+func HandlePrepareForSleep(sleep bool) {
+	if globalBluetooth == nil {
+		logger.Warning("Module 'bluetooth' has not start")
+		return
+	}
+	if sleep {
+		logger.Debug("prepare to sleep")
+		return
+	}
+	logger.Debug("Wakeup from sleep, will set adapter and try connect device")
+	time.Sleep(time.Second * 3)
+	for _, aobj := range globalBluetooth.adapters {
+		if !aobj.Powered {
+			continue
+		}
+		_ = aobj.core.Discoverable().Set(0, globalBluetooth.config.Discoverable)
+	}
+	globalBluetooth.tryConnectPairedDevices()
+}
 
 func (*daemon) Start() error {
 	if globalBluetooth != nil {

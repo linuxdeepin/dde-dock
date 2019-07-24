@@ -23,11 +23,12 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/linuxdeepin/go-x11-client"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/api/soundutils"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/pulse"
 )
 
 func (m *Manager) findWindow(wmClassInstance, wmClassClass string) x.Window {
@@ -230,5 +231,29 @@ func stopScreensaver() {
 	err = obj.Call(deepinScreensaverDBusInterface+".Stop", 0).Err
 	if err != nil {
 		logger.Warning(err)
+	}
+}
+
+// TODO(jouyouyun): move to common library
+func suspendPulseSinks(suspend int) {
+	var ctx = pulse.GetContext()
+	if ctx == nil {
+		logger.Error("Failed to connect pulseaudio server")
+		return
+	}
+	for _, sink := range ctx.GetSinkList() {
+		ctx.SuspendSinkById(sink.Index, suspend)
+	}
+}
+
+// TODO(jouyouyun): move to common library
+func suspendPulseSources(suspend int) {
+	var ctx = pulse.GetContext()
+	if ctx == nil {
+		logger.Error("Failed to connect pulseaudio server")
+		return
+	}
+	for _, source := range ctx.GetSourceList() {
+		ctx.SuspendSourceById(source.Index, suspend)
 	}
 }

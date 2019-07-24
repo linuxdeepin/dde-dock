@@ -22,7 +22,10 @@ package power
 import (
 	"syscall"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	"pkg.deepin.io/dde/daemon/appearance"
+	"pkg.deepin.io/dde/daemon/bluetooth"
+	"pkg.deepin.io/dde/daemon/network"
 )
 
 type sleepInhibitor struct {
@@ -43,14 +46,25 @@ func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 		logger.Info("login1 PrepareForSleep", before)
 		// signal `PrepareForSleep` true -> false
 		if before {
+			// TODO(jouyouyun): implement 'PrepareForSleep' register
+			appearance.HandlePrepareForSleep(true)
+			network.HandlePrepareForSleep(true)
+			bluetooth.HandlePrepareForSleep(true)
 			if inhibitor.OnBeforeSuspend != nil {
 				inhibitor.OnBeforeSuspend()
 			}
+			suspendPulseSinks(1)
+			suspendPulseSources(1)
 			inhibitor.unblock()
 		} else {
+			suspendPulseSources(0)
+			suspendPulseSinks(0)
 			if inhibitor.OnWakeup != nil {
 				inhibitor.OnWakeup()
 			}
+			network.HandlePrepareForSleep(false)
+			bluetooth.HandlePrepareForSleep(false)
+			appearance.HandlePrepareForSleep(false)
 			inhibitor.block()
 		}
 	})

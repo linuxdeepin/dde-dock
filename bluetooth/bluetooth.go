@@ -220,7 +220,8 @@ func (b *Bluetooth) init() {
 	b.config.clearSpareConfig(b)
 	b.config.save()
 	go b.tryConnectPairedDevices()
-	b.wakeupWorkaround()
+	// move to power module
+	// b.wakeupWorkaround()
 }
 
 func (b *Bluetooth) unblockBluetoothDevice() {

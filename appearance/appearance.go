@@ -48,6 +48,19 @@ func NewModule(logger *log.Logger) *Module {
 	return d
 }
 
+func HandlePrepareForSleep(sleep bool) {
+	if _m == nil {
+		return
+	}
+	if sleep {
+		return
+	}
+	if _m.WallpaperSlideShow.Get() != wsPolicyWakeup {
+		return
+	}
+	_m.autoChangeBg(time.Now())
+}
+
 func (*Module) GetDependencies() []string {
 	return []string{}
 }
