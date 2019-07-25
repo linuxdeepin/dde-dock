@@ -25,16 +25,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	backlight "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
+	inputdevices "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
+	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -173,8 +173,8 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	var m = Manager{
 		service:               service,
 		enableListenGSettings: true,
-		conn:       conn,
-		keySymbols: keysyms.NewKeySymbols(conn),
+		conn:                  conn,
+		keySymbols:            keysyms.NewKeySymbols(conn),
 	}
 
 	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
@@ -297,6 +297,11 @@ func (m *Manager) destroy() {
 	if m.systemSigLoop != nil {
 		m.systemSigLoop.Stop()
 		m.systemSigLoop = nil
+	}
+
+	if m.conn != nil {
+		m.conn.Close()
+		m.conn = nil
 	}
 }
 

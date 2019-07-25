@@ -25,10 +25,10 @@ import (
 	"sync"
 
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"github.com/linuxdeepin/go-x11-client"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"github.com/linuxdeepin/go-x11-client/ext/screensaver"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/log"
@@ -218,6 +218,9 @@ func (*ScreenSaver) GetInterfaceName() string {
 func (ss *ScreenSaver) destroy() {
 	ss.sigLoop.Stop()
 	ss.dbusDaemon.RemoveHandler(proxy.RemoveAllHandlers)
+	if ss.xConn != nil {
+		ss.xConn.Close()
+	}
 }
 
 func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
