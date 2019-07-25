@@ -24,7 +24,7 @@ import (
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
@@ -104,5 +104,8 @@ func (d *Daemon) Start() error {
 }
 
 func (d *Daemon) Stop() error {
+	if XConn != nil {
+		XConn.Close()
+	}
 	return nil
 }

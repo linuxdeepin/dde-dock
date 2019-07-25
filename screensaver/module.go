@@ -123,5 +123,8 @@ func (m *Module) Stop() error {
 		logger.Warning(err)
 	}
 	m.syncConfig.Destroy()
+	if m.sSaver.xConn != nil {
+		m.sSaver.xConn.Close()
+	}
 	return nil
 }
