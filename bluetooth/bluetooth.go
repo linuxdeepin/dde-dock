@@ -598,11 +598,14 @@ func (b *Bluetooth) tryConnectPairedDevices() {
 		}
 
 		// if device using LE mode, will suspend, try connect should be failed, filter it.
-		if b.isLEDevice(dev) {
+		if !b.isBREDRDevice(dev) {
 			continue
 		}
 		logger.Debug("Will auto connect device:", obj.String(), obj.adapter.address, obj.Address)
-		obj.doConnect(false)
+		err = obj.doConnect(false)
+		if err != nil {
+			logger.Debug("failed to connect:", obj.String(), err)
+		}
 	}
 }
 
@@ -639,7 +642,7 @@ func (b *Bluetooth) getTechnologies(dev *device) ([]string, error) {
 	return technologies, nil
 }
 
-func (b *Bluetooth) isLEDevice(dev *device) bool {
+func (b *Bluetooth) isBREDRDevice(dev *device) bool {
 	technologies, err := b.getTechnologies(dev)
 	if err != nil {
 		logger.Warningf("failed to get device(%s -- %s) technologies: %v",
@@ -647,7 +650,7 @@ func (b *Bluetooth) isLEDevice(dev *device) bool {
 		return false
 	}
 	for _, tech := range technologies {
-		if tech == "LE" {
+		if tech == "BR/EDR" {
 			return true
 		}
 	}
