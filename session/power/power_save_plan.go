@@ -21,7 +21,6 @@ package power
 
 import (
 	"errors"
-	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -82,6 +81,7 @@ func (psp *powerSavePlan) initSettingsChangedHandler() {
 		switch key {
 		case settingKeyLinePowerScreensaverDelay,
 			settingKeyLinePowerScreenBlackDelay,
+			settingKeyLinePowerLockDelay,
 			settingKeyLinePowerSleepDelay:
 			if !m.OnBattery {
 				logger.Debug("Change OnLinePower plan")
@@ -90,6 +90,7 @@ func (psp *powerSavePlan) initSettingsChangedHandler() {
 
 		case settingKeyBatteryScreensaverDelay,
 			settingKeyBatteryScreenBlackDelay,
+			settingKeyBatteryLockDelay,
 			settingKeyBatterySleepDelay:
 			if m.OnBattery {
 				logger.Debug("Change OnBattery plan")
@@ -105,14 +106,16 @@ func (psp *powerSavePlan) initSettingsChangedHandler() {
 func (psp *powerSavePlan) OnBattery() {
 	logger.Debug("Use OnBattery plan")
 	m := psp.manager
-	psp.Update(m.BatteryScreensaverDelay.Get(), m.BatteryScreenBlackDelay.Get(),
+	psp.Update(m.BatteryScreensaverDelay.Get(), m.BatteryLockDelay.Get(),
+		m.BatteryScreenBlackDelay.Get(),
 		m.BatterySleepDelay.Get())
 }
 
 func (psp *powerSavePlan) OnLinePower() {
 	logger.Debug("Use OnLinePower plan")
 	m := psp.manager
-	psp.Update(m.LinePowerScreensaverDelay.Get(), m.LinePowerScreenBlackDelay.Get(),
+	psp.Update(m.LinePowerScreensaverDelay.Get(), m.LinePowerLockDelay.Get(),
+		m.LinePowerScreenBlackDelay.Get(),
 		m.LinePowerSleepDelay.Get())
 }
 
@@ -210,53 +213,73 @@ func (psp *powerSavePlan) addTask(t *delayedTask) {
 }
 
 type metaTask struct {
-	step   byte
-	delay  int32
-	name   string
-	ignore bool
-	fn     func()
+	delay     int32
+	realDelay time.Duration
+	name      string
+	fn        func()
 }
 
 type metaTasks []metaTask
 
-func (v metaTasks) Len() int {
-	return len(v)
+func (mts metaTasks) min() int32 {
+	if len(mts) == 0 {
+		return 0
+	}
+
+	min := mts[0].delay
+	for _, t := range mts[1:] {
+		if t.delay < min {
+			min = t.delay
+		}
+	}
+	return min
 }
 
-func (v metaTasks) Less(i, j int) bool {
-	if v[i].delay == v[j].delay {
-		return v[i].step > v[j].step
-	} else {
-		return v[i].delay < v[j].delay
+func (mts metaTasks) setRealDelay(min int32) {
+	if min == 0 {
+		return
+	}
+	for idx := range mts {
+		t := &mts[idx]
+		nSecs := t.delay - min
+		if nSecs == 0 {
+			t.realDelay = 1 * time.Millisecond
+		} else {
+			t.realDelay = time.Second * time.Duration(nSecs)
+		}
 	}
 }
 
-func (v metaTasks) Swap(i, j int) {
-	v[i], v[j] = v[j], v[i]
-}
-
-func (psp *powerSavePlan) Update(screenSaverStartDelay, screenBlackDelay, sleepDelay int32) {
+func (psp *powerSavePlan) Update(screenSaverStartDelay, lockDelay,
+	screenBlackDelay, sleepDelay int32) {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
 	psp.interruptTasks()
-	logger.Debugf("update(screenSaverStartDelay=%vs, screenBlackDelay=%vs, sleepDelay=%vs)",
-		screenSaverStartDelay, screenBlackDelay, sleepDelay)
+	logger.Debugf("update(screenSaverStartDelay=%vs, lockDelay=%vs,"+
+		" screenBlackDelay=%vs, sleepDelay=%vs)",
+		screenSaverStartDelay, lockDelay, screenBlackDelay, sleepDelay)
 
-	tasks := make(metaTasks, 0, 3)
+	tasks := make(metaTasks, 0, 4)
 	if screenSaverStartDelay > 0 {
 		tasks = append(tasks, metaTask{
 			name:  "screenSaverStart",
-			step:  0,
 			delay: screenSaverStartDelay,
 			fn:    psp.startScreensaver,
+		})
+	}
+
+	if lockDelay > 0 {
+		tasks = append(tasks, metaTask{
+			name:  "lock",
+			delay: lockDelay,
+			fn:    psp.lock,
 		})
 	}
 
 	if screenBlackDelay > 0 {
 		tasks = append(tasks, metaTask{
 			name:  "screenBlack",
-			step:  1,
 			delay: screenBlackDelay,
 			fn:    psp.screenBlack,
 		})
@@ -265,44 +288,19 @@ func (psp *powerSavePlan) Update(screenSaverStartDelay, screenBlackDelay, sleepD
 	if sleepDelay > 0 {
 		tasks = append(tasks, metaTask{
 			name:  "sleep",
-			step:  2,
 			delay: sleepDelay,
 			fn:    psp.makeSystemSleep,
 		})
 	}
 
-	sort.Sort(tasks)
+	min := tasks.min()
+	tasks.setRealDelay(min)
+	err := psp.setScreenSaverTimeout(min)
+	if err != nil {
+		logger.Warning("failed to set screen saver timeout:", err)
+	}
+
 	psp.metaTasks = tasks
-
-	if len(tasks) == 0 {
-		psp.setScreenSaverTimeout(0)
-		return
-	}
-	screenSaverTimeout := tasks[0].delay
-	psp.setScreenSaverTimeout(screenSaverTimeout)
-
-	for i := 0; i < len(tasks); i++ {
-		a := tasks[i]
-
-		for j := i + 1; j < len(tasks); j++ {
-			b := tasks[j]
-			if b.ignore {
-				continue
-			}
-
-			if a.step > b.step {
-				tasks[j].ignore = true
-			}
-		}
-	}
-
-	for _, t := range tasks {
-		if t.ignore {
-			logger.Debugf("task %s will not run", t.name)
-		} else {
-			logger.Debugf("task %s: %ds", t.name, t.delay)
-		}
-	}
 }
 
 func (psp *powerSavePlan) setScreenSaverTimeout(seconds int32) error {
@@ -356,6 +354,10 @@ func (psp *powerSavePlan) makeSystemSleep() {
 	//psp.manager.setDPMSModeOn()
 	psp.resetBrightness()
 	psp.manager.doSuspend()
+}
+
+func (psp *powerSavePlan) lock() {
+	psp.manager.doLock()
 }
 
 // 降低显示器亮度，最终关闭显示器
@@ -479,20 +481,10 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	psp.idleOn = true
 
 	logger.Info("HandleIdleOn")
-	for _, t := range psp.metaTasks {
-		if t.ignore {
-			continue
-		}
 
-		var delay time.Duration
-		delaySeconds := t.delay - psp.screenSaverTimeout
-		if delaySeconds == 0 {
-			delay = time.Millisecond
-		} else {
-			delay = time.Duration(delaySeconds) * time.Second
-		}
-		logger.Debugf("do %s after %v", t.name, delay)
-		task := newDelayedTask(t.name, delay, t.fn)
+	for _, t := range psp.metaTasks {
+		logger.Debugf("do %s after %v", t.name, t.realDelay)
+		task := newDelayedTask(t.name, t.realDelay, t.fn)
 		psp.addTaskNoLock(task)
 	}
 }

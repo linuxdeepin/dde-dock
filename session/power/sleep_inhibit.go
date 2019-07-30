@@ -39,21 +39,30 @@ func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 		fd:           -1,
 	}
 
-	login1Manager.ConnectPrepareForSleep(func(before bool) {
+	_, err := login1Manager.ConnectPrepareForSleep(func(before bool) {
 		logger.Info("login1 PrepareForSleep", before)
 		// signal `PrepareForSleep` true -> false
 		if before {
 			if inhibitor.OnBeforeSuspend != nil {
 				inhibitor.OnBeforeSuspend()
 			}
-			inhibitor.unblock()
+			err := inhibitor.unblock()
+			if err != nil {
+				logger.Warning(err)
+			}
 		} else {
 			if inhibitor.OnWakeup != nil {
 				inhibitor.OnWakeup()
 			}
-			inhibitor.block()
+			err := inhibitor.block()
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 	return inhibitor
 }
 
@@ -65,7 +74,6 @@ func (inhibitor *sleepInhibitor) block() error {
 	fd, err := inhibitor.loginManager.Inhibit(0,
 		"sleep", dbusServiceName, "run screen lock", "delay")
 	if err != nil {
-		logger.Warning("inhibitor block failed:", err)
 		return err
 	}
 	inhibitor.fd = int(fd)

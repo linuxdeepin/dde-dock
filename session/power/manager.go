@@ -92,6 +92,11 @@ type Manager struct {
 	// 使用电池时，笔记本电脑盖上盖子是否睡眠
 	BatteryLidClosedSleep gsprop.Bool `prop:"access:rw"`
 
+	// 接通电源时，不做任何操作，到自动锁屏的时间
+	LinePowerLockDelay gsprop.Int `prop:"access:rw"`
+	// 使用电池时，不做任何操作，到自动锁屏的时间
+	BatteryLockDelay gsprop.Int `prop:"access:rw"`
+
 	AmbientLightAdjustBrightness gsprop.Bool `prop:"access:rw"`
 	ambientLightClaimed          bool
 	lightLevelUnit               string
@@ -129,9 +134,11 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.LinePowerScreensaverDelay.Bind(m.settings, settingKeyLinePowerScreensaverDelay)
 	m.LinePowerScreenBlackDelay.Bind(m.settings, settingKeyLinePowerScreenBlackDelay)
 	m.LinePowerSleepDelay.Bind(m.settings, settingKeyLinePowerSleepDelay)
+	m.LinePowerLockDelay.Bind(m.settings, settingKeyLinePowerLockDelay)
 	m.BatteryScreensaverDelay.Bind(m.settings, settingKeyBatteryScreensaverDelay)
 	m.BatteryScreenBlackDelay.Bind(m.settings, settingKeyBatteryScreenBlackDelay)
 	m.BatterySleepDelay.Bind(m.settings, settingKeyBatterySleepDelay)
+	m.BatteryLockDelay.Bind(m.settings, settingKeyBatteryLockDelay)
 	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)
 	m.SleepLock.Bind(m.settings, settingKeySleepLock)
 	m.LidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedSleep)
@@ -184,23 +191,32 @@ func (m *Manager) init() {
 	m.inhibitor = newSleepInhibitor(m.helper.LoginManager)
 	m.inhibitor.OnBeforeSuspend = m.handleBeforeSuspend
 	m.inhibitor.OnWakeup = m.handleWakeup
-	m.inhibitor.block()
+	err := m.inhibitor.block()
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	m.handleBatteryDisplayUpdate()
 	power := m.helper.Power
-	power.ConnectBatteryDisplayUpdate(func(timestamp int64) {
+	_, err = power.ConnectBatteryDisplayUpdate(func(timestamp int64) {
 		logger.Debug("BatteryDisplayUpdate", timestamp)
 		m.handleBatteryDisplayUpdate()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.helper.SensorProxy.LightLevel().ConnectChanged(func(hasValue bool, value float64) {
+	err = m.helper.SensorProxy.LightLevel().ConnectChanged(func(hasValue bool, value float64) {
 		if !hasValue {
 			return
 		}
 		m.handleLightLevelChanged(value)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.helper.SysDBusDaemon.ConnectNameOwnerChanged(
+	_, err = m.helper.SysDBusDaemon.ConnectNameOwnerChanged(
 		func(name string, oldOwner string, newOwner string) {
 			serviceName := m.helper.SensorProxy.ServiceName_()
 			if name == serviceName && newOwner != "" {
@@ -220,8 +236,11 @@ func (m *Manager) init() {
 				m.claimOrReleaseAmbientLight()
 			}
 		})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.helper.SessionWatcher.IsActive().ConnectChanged(func(hasValue bool, value bool) {
+	err = m.helper.SessionWatcher.IsActive().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -233,6 +252,9 @@ func (m *Manager) init() {
 		logger.Debug("session active changed to:", value)
 		m.claimOrReleaseAmbientLight()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	m.warnLevelConfig.setChangeCallback(m.handleBatteryDisplayUpdate)
 
@@ -300,12 +322,16 @@ func (m *Manager) Reset() *dbus.Error {
 	var settingKeys = []string{
 		settingKeyLinePowerScreenBlackDelay,
 		settingKeyLinePowerSleepDelay,
+		settingKeyLinePowerLockDelay,
+		settingKeyLinePowerLidClosedSleep,
+
 		settingKeyBatteryScreenBlackDelay,
 		settingKeyBatterySleepDelay,
+		settingKeyBatteryLockDelay,
+		settingKeyBatteryLidClosedSleep,
+
 		settingKeyScreenBlackLock,
 		settingKeySleepLock,
-		settingKeyLinePowerLidClosedSleep,
-		settingKeyBatteryLidClosedSleep,
 		settingKeyPowerButtonPressedExec,
 	}
 	for _, key := range settingKeys {

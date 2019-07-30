@@ -90,3 +90,34 @@ func Test_getWarnLevel(t *testing.T) {
 		So(getWarnLevel(config, onBattery, 0, 12000), ShouldEqual, WarnLevelNone)
 	})
 }
+
+func TestMetaTasksMin(t *testing.T) {
+	Convey("metaTasks.min", t, func() {
+		tasks := metaTasks{
+			metaTask{
+				name:  "n1",
+				delay: 10,
+			},
+			metaTask{
+				name:  "n2",
+				delay: 30,
+			},
+			metaTask{
+				name:  "n3",
+				delay: 20,
+			},
+		}
+		So(tasks.min(), ShouldEqual, 10)
+
+		tasks = metaTasks{}
+		So(tasks.min(), ShouldEqual, 0)
+
+		tasks = metaTasks{
+			metaTask{
+				name:  "n1",
+				delay: 10,
+			},
+		}
+		So(tasks.min(), ShouldEqual, 10)
+	})
+}
