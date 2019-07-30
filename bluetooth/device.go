@@ -75,10 +75,11 @@ type device struct {
 	RSSI    int16
 	Address string
 
-	connected     bool
-	connectedTime time.Time
-	connecting    bool
-	agentWorking  bool
+	connected         bool
+	connectedTime     time.Time
+	retryConnectCount int
+	connecting        bool
+	agentWorking      bool
 
 	connectPhase      connectPhase
 	disconnectPhase   disconnectPhase
@@ -244,9 +245,15 @@ func (d *device) connectProperties() {
 			// when disconnected quickly after connecting, automatically try to connect
 			sinceConnected := time.Since(d.connectedTime)
 			logger.Debug("sinceConnected:", sinceConnected)
+			logger.Debug("retryConnectCount:", d.retryConnectCount)
 
 			if sinceConnected < 300*time.Millisecond {
-				go d.Connect()
+				if d.retryConnectCount == 0 {
+					go d.Connect()
+				}
+				d.retryConnectCount++
+			} else if sinceConnected > 2*time.Second {
+				d.retryConnectCount = 0
 			}
 
 			select {
