@@ -166,7 +166,7 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 	logger.Debug("[SetLocked] locked:", locked)
 
-	err := u.checkAuth(sender, false, "")
+	err := u.checkAuth(sender, false, polkitActionUserAdministration)
 	if err != nil {
 		logger.Debug("[SetLocked] access denied:", err)
 		return dbusutil.ToError(err)
@@ -192,6 +192,36 @@ func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 			u.AutomaticLogin = false
 			u.emitPropChangedAutomaticLogin(false)
 		}
+	}
+	return nil
+}
+
+func (u *User) AddGroup(sender dbus.Sender, group string) *dbus.Error {
+	logger.Debugf("add group %s for %s", group, u.UserName)
+	err := u.checkAuth(sender, false, polkitActionUserAdministration)
+	if err != nil {
+		logger.Debug("[AddGroup] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	err = users.AddGroupForUser(group, u.UserName)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func (u *User) DeleteGroup(sender dbus.Sender, group string) *dbus.Error {
+	logger.Debugf("delete group %s for %s", group, u.UserName)
+	err := u.checkAuth(sender, false, polkitActionUserAdministration)
+	if err != nil {
+		logger.Debug("[DeleteGroup] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	err = users.DeleteGroupForUser(group, u.UserName)
+	if err != nil {
+		return dbusutil.ToError(err)
 	}
 	return nil
 }

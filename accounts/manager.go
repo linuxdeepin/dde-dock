@@ -83,6 +83,7 @@ type Manager struct {
 		IsPasswordValid    func() `in:"password" out:"ok,errReason,errCode"`
 		AllowGuestAccount  func() `in:"allow"`
 		CreateGuestAccount func() `out:"user"`
+		GetGroups          func() `out:"groups"`
 	}
 }
 

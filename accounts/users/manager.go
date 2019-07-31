@@ -21,6 +21,7 @@ package users
 
 import (
 	"bufio"
+	"errors"
 	"os"
 	"regexp"
 )
@@ -79,6 +80,20 @@ func AddToGroups(username string) error {
 		}
 	}
 	return nil
+}
+
+func AddGroupForUser(group, user string) error {
+	if group == user {
+		return nil
+	}
+	return doAction(userCmdGroup, []string{"-a", user, group})
+}
+
+func DeleteGroupForUser(group, user string) error {
+	if group == user {
+		return errors.New("not allowed to delete the same name group")
+	}
+	return doAction(userCmdGroup, []string{"-d", user, group})
 }
 
 func DeleteUser(rmFiles bool, username string) error {

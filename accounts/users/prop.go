@@ -27,6 +27,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
 	"sync"
 )
@@ -207,7 +208,7 @@ func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
 
 	groupFileLocker.Lock()
 	defer groupFileLocker.Unlock()
-	infos, err := parseGroupFile(fileGroup)
+	infos, err := getGroupInfoWithCache(fileGroup)
 	if err != nil {
 		return nil, err
 	}
@@ -286,7 +287,7 @@ func getAdmGroupAndUser(file string) ([]string, []string, error) {
 func isGroupExists(group string) bool {
 	groupFileLocker.Lock()
 	defer groupFileLocker.Unlock()
-	infos, err := parseGroupFile(userFileGroup)
+	infos, err := getGroupInfoWithCache(userFileGroup)
 	if err != nil {
 		return false
 	}
@@ -297,7 +298,7 @@ func isGroupExists(group string) bool {
 func isUserInGroup(user, group string) bool {
 	groupFileLocker.Lock()
 	defer groupFileLocker.Unlock()
-	infos, err := parseGroupFile(userFileGroup)
+	infos, err := getGroupInfoWithCache(userFileGroup)
 	if err != nil {
 		return false
 	}
@@ -308,7 +309,49 @@ func isUserInGroup(user, group string) bool {
 	return isStrInArray(user, v)
 }
 
-func parseGroupFile(file string) (map[string][]string, error) {
+func GetUserGroups(user string) ([]string, error) {
+	groupFileLocker.Lock()
+	defer groupFileLocker.Unlock()
+	infos, err := getGroupInfoWithCache(userFileGroup)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []string
+	for groupName, users := range infos {
+		if groupName == user {
+			result = append(result, groupName)
+			continue
+		}
+		for _, u := range users {
+			if u == user {
+				result = append(result, groupName)
+				break
+			}
+		}
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
+func GetAllGroups() ([]string, error) {
+	groupFileLocker.Lock()
+	defer groupFileLocker.Unlock()
+	infos, err := getGroupInfoWithCache(userFileGroup)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]string, len(infos))
+	idx := 0
+	for groupName := range infos {
+		result[idx] = groupName
+		idx++
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
+func getGroupInfoWithCache(file string) (map[string][]string, error) {
 	info, err := os.Stat(file)
 	if err != nil {
 		return nil, err
@@ -318,26 +361,41 @@ func parseGroupFile(file string) (map[string][]string, error) {
 		return groupFileInfo, nil
 	}
 
-	groupFileTimestamp = info.ModTime().UnixNano()
-	groupFileInfo = make(map[string][]string)
-	content, err := ioutil.ReadFile(file)
+	out, err := exec.Command("getent", "group").Output()
 	if err != nil {
 		return nil, err
 	}
 
-	lines := strings.Split(string(content), "\n")
+	groupFileTimestamp = info.ModTime().UnixNano()
+	groupFileInfo = parseGroup(out)
+	return groupFileInfo, nil
+}
+
+func parseGroup(data []byte) map[string][]string {
+	result := make(map[string][]string)
+	lines := bytes.Split(data, []byte{'\n'})
 	for _, line := range lines {
 		if len(line) == 0 {
 			continue
 		}
 
-		items := strings.Split(line, ":")
+		items := bytes.Split(line, []byte{':'})
 		if len(items) != itemLenGroup {
 			continue
 		}
 
-		groupFileInfo[items[0]] = strings.Split(items[3], ",")
+		groupName := string(items[0])
+		users0 := bytes.Split(items[3], []byte{','})
+		// convert users0 to users
+		var users []string
+		if len(users0) > 0 {
+			users = make([]string, len(users0))
+			for idx := range users {
+				users[idx] = string(users0[idx])
+			}
+		}
+		result[groupName] = users
 	}
 
-	return groupFileInfo, nil
+	return result
 }

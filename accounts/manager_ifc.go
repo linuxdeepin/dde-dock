@@ -251,3 +251,8 @@ func (m *Manager) CreateGuestAccount(sender dbus.Sender) (string, *dbus.Error) {
 
 	return userDBusPathPrefix + info.Uid, nil
 }
+
+func (m *Manager) GetGroups() ([]string, *dbus.Error) {
+	groups, err := users.GetAllGroups()
+	return groups, dbusutil.ToError(err)
+}

@@ -90,8 +90,10 @@ type User struct {
 	customIcon string
 	// dbusutil-gen: equal=nil
 	DesktopBackgrounds []string
-	GreeterBackground  string
-	XSession           string
+	// dbusutil-gen: equal=isStrvEqual
+	Groups            []string
+	GreeterBackground string
+	XSession          string
 
 	PasswordStatus string
 	// 用户是否被禁用
@@ -131,6 +133,8 @@ type User struct {
 		SetHistoryLayout      func() `in:"layouts"`
 		IsIconDeletable       func() `in:"icon"`
 		GetLargeIcon          func() `out:"icon"`
+		AddGroup              func() `in:"group"`
+		DeleteGroup           func() `in:"group"`
 	}
 }
 
@@ -161,6 +165,7 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 
 	u.AccountType = u.getAccountType()
 	u.IconList = u.getAllIcons()
+	u.Groups = u.getGroups()
 
 	updateConfigPath(userInfo.Name)
 
@@ -279,6 +284,15 @@ func (u *User) getAllIcons() []string {
 		icons = append(icons, u.customIcon)
 	}
 	return icons
+}
+
+func (u *User) getGroups() []string {
+	groups, err := users.GetUserGroups(u.UserName)
+	if err != nil {
+		logger.Warning("failed to get user groups:", err)
+		return nil
+	}
+	return groups
 }
 
 // ret0: new user icon uri
@@ -404,6 +418,13 @@ func (u *User) updatePropCanNoPasswdLogin() {
 	newVal := users.CanNoPasswdLogin(u.UserName)
 	u.PropsMu.Lock()
 	u.setPropNoPasswdLogin(newVal)
+	u.PropsMu.Unlock()
+}
+
+func (u *User) updatePropGroups() {
+	newVal := u.getGroups()
+	u.PropsMu.Lock()
+	u.setPropGroups(newVal)
 	u.PropsMu.Unlock()
 }
 

@@ -141,6 +141,19 @@ func (v *User) emitPropChangedDesktopBackgrounds(value []string) error {
 	return v.service.EmitPropertyChanged(v, "DesktopBackgrounds", value)
 }
 
+func (v *User) setPropGroups(value []string) (changed bool) {
+	if !isStrvEqual(v.Groups, value) {
+		v.Groups = value
+		v.emitPropChangedGroups(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedGroups(value []string) error {
+	return v.service.EmitPropertyChanged(v, "Groups", value)
+}
+
 func (v *User) setPropGreeterBackground(value string) (changed bool) {
 	if v.GreeterBackground != value {
 		v.GreeterBackground = value

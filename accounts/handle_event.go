@@ -118,6 +118,7 @@ func (m *Manager) handleFileGroupChanged() {
 	for _, u := range m.usersMap {
 		u.updatePropAccountType()
 		u.updatePropCanNoPasswdLogin()
+		u.updatePropGroups()
 	}
 }
 
