@@ -361,13 +361,13 @@ func getGroupInfoWithCache(file string) (map[string][]string, error) {
 		return groupFileInfo, nil
 	}
 
-	out, err := exec.Command("getent", "group").Output()
+	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
 
 	groupFileTimestamp = info.ModTime().UnixNano()
-	groupFileInfo = parseGroup(out)
+	groupFileInfo = parseGroup(content)
 	return groupFileInfo, nil
 }
 
