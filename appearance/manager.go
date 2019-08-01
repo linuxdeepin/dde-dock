@@ -32,11 +32,12 @@ import (
 	"sync"
 	"time"
 
-	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
-	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
-	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
-	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	geoclue "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.geoclue2"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
@@ -51,6 +52,7 @@ import (
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/fsnotify"
+	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
@@ -83,6 +85,7 @@ const (
 	gsKeyFontSize           = "font-size"
 	gsKeyBackgroundURIs     = "background-uris"
 	gsKeyOpacity            = "opacity"
+	gsKeyThemeAuto          = "theme-auto"
 	gsKeyWallpaperSlideshow = "wallpaper-slideshow"
 
 	wsPolicyLogin  = "login"
@@ -119,6 +122,7 @@ type Manager struct {
 	StandardFont  gsprop.String
 	MonospaceFont gsprop.String
 	Opacity       gsprop.Double `prop:"access:rw"`
+	ThemeAuto     gsprop.Bool   `prop:"access:rw"`
 
 	FontSize           gsprop.Double `prop:"access:rw"`
 	WallpaperSlideShow gsprop.String `prop:"access:rw"`
@@ -126,10 +130,17 @@ type Manager struct {
 	wsLoop      *WSLoop
 	wsScheduler *WSScheduler
 
-	userObj       *accounts.User
-	imageBlur     *accounts.ImageBlur
-	xSettings     *sessionmanager.XSettings
-	login1Manager *login1.Manager
+	userObj             *accounts.User
+	imageBlur           *accounts.ImageBlur
+	xSettings           *sessionmanager.XSettings
+	login1Manager       *login1.Manager
+	geoclueClient       *geoclue.Client
+	themeAutoTimer      *time.Timer
+	latitude            float64
+	longitude           float64
+	locationValid       bool
+	detectSysClockTimer *time.Timer
+	ts                  int64
 
 	setting        *gio.Settings
 	xSettingsGs    *gio.Settings
@@ -189,6 +200,7 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.Background.Bind(m.wrapBgSetting, gsKeyBackground)
 	m.FontSize.Bind(m.setting, gsKeyFontSize)
 	m.Opacity.Bind(m.setting, gsKeyOpacity)
+	m.ThemeAuto.Bind(m.setting, gsKeyThemeAuto)
 	m.WallpaperSlideShow.Bind(m.setting, gsKeyWallpaperSlideshow)
 
 	m.wsLoop = newWSLoop()
@@ -419,6 +431,7 @@ func (m *Manager) init() error {
 			logger.Warning("failed to set gtk theme:", err)
 		}
 	}
+	m.updateThemeAuto(m.ThemeAuto.Get())
 
 	// set icon theme
 	iconThemes := subthemes.ListIconTheme()
@@ -827,5 +840,202 @@ func (m *Manager) updateWSPolicy(policy string) {
 		m.wsScheduler.updateInterval(time.Duration(nSec) * time.Second)
 	} else {
 		m.wsScheduler.stop()
+	}
+}
+
+func (m *Manager) enableDetectSysClock(enabled bool) {
+	logger.Debug("enableDetectSysClock:", enabled)
+	nSec := 600 // 10 min
+	if logger.GetLogLevel() == log.LevelDebug {
+		// debug mode: 10 s
+		nSec = 10
+	}
+	interval := time.Duration(nSec) * time.Second
+	if enabled {
+		m.ts = time.Now().Unix()
+		if m.detectSysClockTimer == nil {
+			m.detectSysClockTimer = time.AfterFunc(interval, func() {
+				nowTs := time.Now().Unix()
+				d := nowTs - m.ts - int64(nSec)
+				if !(-2 < d && d < 2) {
+					m.handleSysClockChanged()
+				}
+
+				m.ts = time.Now().Unix()
+				m.detectSysClockTimer.Reset(interval)
+			})
+		} else {
+			m.detectSysClockTimer.Reset(interval)
+		}
+	} else {
+		// disable
+		if m.detectSysClockTimer != nil {
+			m.detectSysClockTimer.Stop()
+		}
+	}
+}
+
+func (m *Manager) handleSysClockChanged() {
+	logger.Debug("system clock changed")
+	if m.locationValid {
+		m.autoSetTheme(m.latitude, m.longitude)
+		m.resetThemeAutoTimer()
+	}
+}
+
+func (m *Manager) updateThemeAuto(enabled bool) {
+	m.enableDetectSysClock(enabled)
+	logger.Debug("updateThemeAuto:", enabled)
+	if enabled {
+		var err error
+		if m.themeAutoTimer == nil {
+			m.themeAutoTimer = time.AfterFunc(0, func() {
+				if m.locationValid {
+					m.autoSetTheme(m.latitude, m.longitude)
+
+					time.AfterFunc(5*time.Second, func() {
+						m.resetThemeAutoTimer()
+					})
+				}
+			})
+		} else {
+			m.themeAutoTimer.Reset(0)
+		}
+
+		if m.geoclueClient == nil {
+			m.geoclueClient, err = getGeoclueClient()
+			if err != nil {
+				logger.Warning("failed to get geoclue client:", err)
+				return
+			}
+
+			m.geoclueClient.InitSignalExt(m.sysSigLoop, true)
+			_, err = m.geoclueClient.ConnectLocationUpdated(
+				func(old dbus.ObjectPath, newLoc dbus.ObjectPath) {
+					sysBus, err := dbus.SystemBus()
+					if err != nil {
+						logger.Warning(err)
+						return
+					}
+					loc, err := geoclue.NewLocation(sysBus, newLoc)
+					if err != nil {
+						logger.Warning(err)
+						return
+					}
+
+					latitude, err := loc.Latitude().Get(0)
+					if err != nil {
+						logger.Warning("failed to get latitude:", err)
+						return
+					}
+
+					longitude, err := loc.Longitude().Get(0)
+					if err != nil {
+						logger.Warning("failed to get longitude:", err)
+						return
+					}
+					m.updateLocation(latitude, longitude)
+				})
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
+
+		locPath, err := m.geoclueClient.Location().Get(0)
+		if err == nil {
+			if locPath != "/" {
+				latitude, longitude, err := getLocation(locPath)
+				if err == nil {
+					m.updateLocation(latitude, longitude)
+				} else {
+					logger.Warning("failed to get location:", err)
+				}
+			} else {
+				logger.Debug("wait location updated signal")
+			}
+		} else {
+			logger.Warning("failed to get geoclue client location path:", err)
+		}
+
+		err = m.geoclueClient.Start(0)
+		if err != nil {
+			logger.Warning("failed to start geoclue client:", err)
+			return
+		}
+
+	} else {
+		// disable geoclue client
+		if m.geoclueClient != nil {
+			err := m.geoclueClient.Stop(0)
+			if err != nil {
+				logger.Warning("failed to stop geoclue client:", err)
+			}
+
+			m.geoclueClient.RemoveAllHandlers()
+			m.geoclueClient = nil
+		}
+		m.latitude = 0
+		m.longitude = 0
+		m.locationValid = false
+		if m.themeAutoTimer != nil {
+			m.themeAutoTimer.Stop()
+		}
+	}
+}
+
+func (m *Manager) updateLocation(latitude, longitude float64) {
+	m.latitude = latitude
+	m.longitude = longitude
+	m.locationValid = true
+	logger.Debugf("update location, latitude: %v, longitude: %v",
+		latitude, longitude)
+	m.autoSetTheme(latitude, longitude)
+	m.resetThemeAutoTimer()
+}
+
+func (m *Manager) resetThemeAutoTimer() {
+	if m.themeAutoTimer == nil {
+		logger.Debug("themeAutoTimer is nil")
+		return
+	}
+	if !m.locationValid {
+		logger.Debug("location is invalid")
+		return
+	}
+
+	now := time.Now()
+	changeTime, err := getThemeAutoChangeTime(now, m.latitude, m.longitude)
+	if err != nil {
+		logger.Warning("failed to get theme auto change time:", err)
+		return
+	}
+
+	interval := changeTime.Sub(now)
+	logger.Debug("change theme after:", interval)
+	m.themeAutoTimer.Reset(interval)
+}
+
+func (m *Manager) autoSetTheme(latitude, longitude float64) {
+	now := time.Now()
+	enabled := m.ThemeAuto.Get()
+	if !enabled {
+		return
+	}
+	sunriseT, sunsetT, err := getSunriseSunset(now, latitude, longitude)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	logger.Debugf("now: %v, sunrise: %v, sunset: %v",
+		now, sunriseT, sunsetT)
+	themeName := getThemeAutoName(isDaytime(now, sunriseT, sunsetT))
+	logger.Debug("auto theme name:", themeName)
+
+	currentTheme := m.GtkTheme.Get()
+	if currentTheme != themeName {
+		err = m.doSetGtkTheme(themeName)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 }

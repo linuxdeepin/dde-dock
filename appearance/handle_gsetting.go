@@ -74,6 +74,10 @@ func (m *Manager) listenGSettingChanged() {
 			policy := m.setting.GetString(key)
 			m.updateWSPolicy(policy)
 
+		case gsKeyThemeAuto:
+			themeAuto := m.setting.GetBoolean(key)
+			m.updateThemeAuto(themeAuto)
+
 		default:
 			return
 		}
@@ -81,7 +85,9 @@ func (m *Manager) listenGSettingChanged() {
 			logger.Warningf("Set %v failed: %v", key, err)
 			return
 		}
-		m.emitSignalChanged(ty, value)
+		if ty != "" {
+			m.emitSignalChanged(ty, value)
+		}
 	})
 
 	m.listenBgGSettings()
