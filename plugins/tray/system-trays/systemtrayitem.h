@@ -30,6 +30,7 @@
 
 #include <QGestureEvent>
 
+class QGSettings;
 class SystemTrayItem : public AbstractTrayWidget
 {
     Q_OBJECT
@@ -61,12 +62,16 @@ public:
     void showPopupApplet(QWidget * const applet);
     void hidePopup();
 
+signals:
+    void itemVisibleChanged(bool visible);
+
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent* event) override;
 
 protected:
     const QPoint popupMarkPoint() const;
@@ -86,6 +91,8 @@ protected Q_SLOTS:
 
 private:
     void updatePopupPosition();
+    void onGSettingsChanged(const QString &key);
+    bool checkGSettingsControl() const;
 
 private:
     bool m_popupShown;
@@ -103,6 +110,7 @@ private:
 
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
+    QGSettings* m_gsettings;
 };
 
 #endif // SYSTEMTRAYITEM_H

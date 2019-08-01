@@ -30,6 +30,7 @@
 #include <QMouseEvent>
 #include <QDrag>
 #include <QMimeData>
+#include <QGSettings>
 
 #define PLUGIN_ITEM_DRAG_THRESHOLD      20
 
@@ -57,6 +58,10 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     setLayout(hLayout);
     setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
+
+    m_gsettings = new QGSettings(QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8());
+    m_gsettings->setParent(this);
+    connect(m_gsettings, &QGSettings::changed, this, &PluginsItem::onGSettingsChanged);
 }
 
 PluginsItem::~PluginsItem()
@@ -147,6 +152,16 @@ void PluginsItem::refershIcon()
     m_pluginInter->refreshIcon(m_itemKey);
 }
 
+void PluginsItem::onGSettingsChanged(const QString& key) {
+    if (key != "enable") {
+        return;
+    }
+
+    if (m_gsettings->keys().contains("enable")) {
+        setVisible(m_gsettings->get("enable").toBool());
+    }
+}
+
 QWidget *PluginsItem::centralWidget() const
 {
     return m_centralWidget;
@@ -154,6 +169,10 @@ QWidget *PluginsItem::centralWidget() const
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_hover = false;
     update();
 
@@ -169,6 +188,10 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     if (e->buttons() != Qt::LeftButton)
         return DockItem::mouseMoveEvent(e);
 
@@ -181,6 +204,10 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 
 void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     DockItem::mouseReleaseEvent(e);
 
     if (e->button() != Qt::LeftButton)
@@ -200,6 +227,10 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 
 void PluginsItem::enterEvent(QEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_hover = true;
     update();
 
@@ -220,9 +251,23 @@ void PluginsItem::leaveEvent(QEvent *event)
     DockItem::leaveEvent(event);
 }
 
+void PluginsItem::showEvent(QShowEvent* event) {
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
+
+    return DockItem::showEvent(event);
+}
+
 bool PluginsItem::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_centralWidget) {
+        if (event->type() == QEvent::MouseButtonPress ||
+                event->type() == QEvent::MouseButtonRelease) {
+            if (checkGSettingsControl()) {
+                return true;
+            }
+        }
         if (event->type() == QEvent::MouseButtonRelease) {
             m_hover = false;
             update();
@@ -252,6 +297,10 @@ const QString PluginsItem::contextMenu() const
 
 QWidget *PluginsItem::popupTips()
 {
+    if (checkGSettingsControl()) {
+        return nullptr;
+    }
+
     return m_pluginInter->itemTipsWidget(m_itemKey);
 }
 
@@ -300,4 +349,10 @@ void PluginsItem::mouseClicked()
     QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey);
     if (w)
         showPopupApplet(w);
+}
+
+bool PluginsItem::checkGSettingsControl() const
+{
+    return m_gsettings->keys().contains("control")
+            && m_gsettings->get("control").toBool();
 }

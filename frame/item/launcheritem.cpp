@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <DDBusSender>
 #include <QApplication>
+#include <QGSettings>
 
 DCORE_USE_NAMESPACE
 
@@ -35,12 +36,15 @@ LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent)
     , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_tips(new TipsWidget(this))
+    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.launcher"))
 {
     m_launcherInter->setSync(true, false);
 
     setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
+
+    connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
 }
 
 void LauncherItem::refershIcon()
@@ -56,6 +60,14 @@ void LauncherItem::refershIcon()
     }
 
     update();
+}
+
+void LauncherItem::showEvent(QShowEvent* event) {
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
+
+    return DockItem::showEvent(event);
 }
 
 void LauncherItem::paintEvent(QPaintEvent *e)
@@ -85,6 +97,10 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     hidePopup();
 
     return QWidget::mousePressEvent(e);
@@ -92,6 +108,10 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
 
 void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     if (e->button() != Qt::LeftButton)
         return;
 
@@ -102,6 +122,26 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 
 QWidget *LauncherItem::popupTips()
 {
+    if (checkGSettingsControl()) {
+        return nullptr;
+    }
+
     m_tips->setText(tr("Launcher"));
     return m_tips;
+}
+
+void LauncherItem::onGSettingsChanged(const QString& key) {
+    if (key != "enable") {
+        return;
+    }
+
+    if (m_gsettings->keys().contains("enable")) {
+        setVisible(m_gsettings->get("enable").toBool());
+    }
+}
+
+bool LauncherItem::checkGSettingsControl() const
+{
+    return m_gsettings->keys().contains("control")
+            && m_gsettings->get("control").toBool();
 }

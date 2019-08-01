@@ -22,6 +22,7 @@
 #include "traypluginitem.h"
 
 #include <QEvent>
+#include <QGSettings>
 
 TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : PluginsItem(pluginInter, itemKey, parent)
@@ -46,6 +47,17 @@ bool TrayPluginItem::eventFilter(QObject *watched, QEvent *e)
     // 时尚模式下
     // 监听插件Widget的"FashionTraySize"属性
     // 当接收到这个属性变化的事件后，重新计算和设置dock的大小
+
+    if (watched == centralWidget()) {
+        if (e->type() == QEvent::MouseButtonPress ||
+                e->type() == QEvent::MouseButtonRelease) {
+            QGSettings settings("com.deepin.dde.dock.module.systemtray");
+            if (settings.keys().contains("control")
+                    && settings.get("control").toBool()) {
+                return true;
+            }
+        }
+    }
 
     if (watched == centralWidget() && e->type() == QEvent::DynamicPropertyChange) {
         const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName();

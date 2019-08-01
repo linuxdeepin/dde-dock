@@ -96,6 +96,8 @@ private slots:
     void playSwingEffect();
     void stopSwingEffect();
     void checkAttentionEffect();
+    void onGSettingsChanged(const QString& key);
+    bool checkGSettingsControl() const;
 
 private:
     TipsWidget *m_appNameTips;

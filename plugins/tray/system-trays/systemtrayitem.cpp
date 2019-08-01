@@ -26,6 +26,7 @@
 #include <QDebug>
 
 #include <xcb/xproto.h>
+#include <QGSettings>
 
 Dock::Position SystemTrayItem::DockPosition = Dock::Position::Top;
 QPointer<DockPopupWindow> SystemTrayItem::PopupWindow = nullptr;
@@ -78,6 +79,10 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
 
     grabGesture(Qt::TapAndHoldGesture);
+
+    m_gsettings = new QGSettings(QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8());
+    m_gsettings->setParent(this);
+    connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
 }
 
 SystemTrayItem::~SystemTrayItem()
@@ -175,6 +180,10 @@ bool SystemTrayItem::event(QEvent *event)
 
 void SystemTrayItem::enterEvent(QEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_popupTipsDelayTimer->start();
     update();
 
@@ -196,6 +205,10 @@ void SystemTrayItem::leaveEvent(QEvent *event)
 
 void SystemTrayItem::mousePressEvent(QMouseEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_popupTipsDelayTimer->stop();
     hideNonModel();
 
@@ -210,6 +223,10 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
 
 void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     if (event->button() != Qt::LeftButton) {
         return;
     }
@@ -228,6 +245,14 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
     }
 
     AbstractTrayWidget::mouseReleaseEvent(event);
+}
+
+void SystemTrayItem::showEvent(QShowEvent* event) {
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
+
+    return AbstractTrayWidget::showEvent(event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const
@@ -446,4 +471,21 @@ void SystemTrayItem::updatePopupPosition()
 
     const QPoint p = popupMarkPoint();
     PopupWindow->show(p, PopupWindow->model());
+}
+
+void SystemTrayItem::onGSettingsChanged(const QString &key) {
+    if (key != "enable") {
+        return;
+    }
+
+    if (m_gsettings->keys().contains("enable")) {
+        const bool visible = m_gsettings->get("enable").toBool();
+        setVisible(visible);
+        emit itemVisibleChanged(visible);
+    }
+}
+
+bool SystemTrayItem::checkGSettingsControl() const
+{
+    return m_gsettings->get("control").toBool();
 }

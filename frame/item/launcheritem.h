@@ -27,8 +27,10 @@
 
 #include <com_deepin_dde_launcher.h>
 
+
 using LauncherInter = com::deepin::dde::Launcher;
 
+class QGSettings;
 class LauncherItem : public DockItem
 {
     Q_OBJECT
@@ -40,6 +42,9 @@ public:
 
     void refershIcon();
 
+protected:
+    void showEvent(QShowEvent* event) override;
+
 private:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
@@ -48,11 +53,16 @@ private:
 
     QWidget *popupTips();
 
+    void onGSettingsChanged(const QString& key);
+
+    bool checkGSettingsControl() const;
+
 private:
     QPixmap m_smallIcon;
     QPixmap m_largeIcon;
     LauncherInter *m_launcherInter;
     TipsWidget *m_tips;
+    QGSettings* m_gsettings;
 };
 
 #endif // LAUNCHERITEM_H
