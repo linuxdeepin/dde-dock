@@ -25,10 +25,13 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"os"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -87,6 +90,7 @@ const (
 	gsKeyOpacity            = "opacity"
 	gsKeyThemeAuto          = "theme-auto"
 	gsKeyWallpaperSlideshow = "wallpaper-slideshow"
+	gsKeyQtActiveColor      = "qt-active-color"
 
 	wsPolicyLogin  = "login"
 	wsPolicyWakeup = "wakeup"
@@ -181,6 +185,8 @@ type Manager struct {
 		Thumbnail             func() `in:"type,name" out:"file"`
 		SetScreenScaleFactors func() `in:"scaleFactors"`
 		GetScreenScaleFactors func() `out:"scaleFactors"`
+		GetQtActiveColor      func() `out:"hexColor"`
+		SetQtActiveColor      func() `in:"hexColor"`
 	}
 }
 
@@ -1038,4 +1044,95 @@ func (m *Manager) autoSetTheme(latitude, longitude float64) {
 			logger.Warning(err)
 		}
 	}
+}
+
+func (m *Manager) getQtActiveColor() (string, error) {
+	str := m.xSettingsGs.GetString(gsKeyQtActiveColor)
+	return xsColorToHexColor(str)
+}
+
+func xsColorToHexColor(str string) (string, error) {
+	fields := strings.Split(str, ",")
+	if len(fields) != 4 {
+		return "", errors.New("length of fields is not 4")
+	}
+
+	var array [4]uint16
+	for idx, field := range fields {
+		v, err := strconv.ParseUint(field, 10, 16)
+		if err != nil {
+			return "", err
+		}
+		array[idx] = uint16(v)
+	}
+
+	var byteArr [4]byte
+	for idx, value := range array {
+		byteArr[idx] = byte((float64(value) / float64(math.MaxUint16)) * float64(math.MaxUint8))
+	}
+	return byteArrayToHexColor(byteArr), nil
+}
+
+func byteArrayToHexColor(p [4]byte) string {
+	// p : [R G B A]
+	if p[3] == 255 {
+		return fmt.Sprintf("#%02X%02X%02X", p[0], p[1], p[2])
+	}
+	return fmt.Sprintf("#%02X%02X%02X%02X", p[0], p[1], p[2], p[3])
+}
+
+var hexColorReg = regexp.MustCompile(`^#([0-9A-F]{6}|[0-9A-F]{8})$`)
+
+func parseHexColor(hexColor string) (array [4]byte, err error) {
+	hexColor = strings.ToUpper(hexColor)
+	match := hexColorReg.FindStringSubmatch(hexColor)
+	if match == nil {
+		err = errors.New("invalid hex color format")
+		return
+	}
+	hexNums := string(match[1])
+	count := 4
+	if len(hexNums) == 6 {
+		count = 3
+		array[3] = 255
+	}
+
+	for i := 0; i < count; i++ {
+		array[i], err = parseHexNum(hexNums[i*2 : i*2+2])
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+func parseHexNum(str string) (byte, error) {
+	v, err := strconv.ParseUint(str, 16, 8)
+	return byte(v), err
+}
+
+func (m *Manager) setQtActiveColor(hexColor string) error {
+	xsColor, err := hexColorToXsColor(hexColor)
+	if err != nil {
+		return err
+	}
+
+	ok := m.xSettingsGs.SetString(gsKeyQtActiveColor, xsColor)
+	if !ok {
+		return errors.New("failed to save")
+	}
+	return nil
+}
+
+func hexColorToXsColor(hexColor string) (string, error) {
+	byteArr, err := parseHexColor(hexColor)
+	if err != nil {
+		return "", err
+	}
+	var array [4]uint16
+	for idx, value := range byteArr {
+		array[idx] = uint16((float64(value) / float64(math.MaxUint8)) * float64(math.MaxUint16))
+	}
+	return fmt.Sprintf("%d,%d,%d,%d", array[0], array[1],
+		array[2], array[3]), nil
 }
