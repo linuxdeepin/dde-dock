@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -22,11 +22,11 @@
 #include "soundapplet.h"
 #include "sinkinputwidget.h"
 #include "componments/horizontalseparator.h"
+#include "../widgets/tipswidget.h"
+#include "util/utils.h"
 
 #include <QLabel>
 #include <QIcon>
-
-#include <DSvgRenderer>
 
 #define WIDTH       200
 #define MAX_HEIGHT  200
@@ -47,14 +47,11 @@ SoundApplet::SoundApplet(QWidget *parent)
 {
 //    QIcon::setThemeName("deepin");
 
-    m_gsetting = new QGSettings("com.deepin.dde.audio", "", this);
-
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeSlider->setAccessibleName("volume-slider");
 
-    QLabel *deviceLabel = new QLabel;
+    TipsWidget *deviceLabel = new TipsWidget;
     deviceLabel->setText(tr("Device"));
-    deviceLabel->setStyleSheet("color:white;");
 
     QHBoxLayout *deviceLineLayout = new QHBoxLayout;
     deviceLineLayout->addWidget(deviceLabel);
@@ -71,9 +68,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
 
-    QLabel *appLabel = new QLabel;
+    TipsWidget *appLabel = new TipsWidget;
     appLabel->setText(tr("Application"));
-    appLabel->setStyleSheet("color:white;");
 
     QHBoxLayout *appLineHLayout = new QHBoxLayout;
     appLineHLayout->addWidget(appLabel);
@@ -92,7 +88,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);
-    m_volumeSlider->setMaximum(1000);
+    m_volumeSlider->setMaximum(1500);
 
     m_centralLayout = new QVBoxLayout;
     m_centralLayout->addLayout(deviceLineLayout);
@@ -118,7 +114,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(this, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
 
-    QTimer::singleShot(1, this, &SoundApplet::delayLoad);
+    QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
 }
 
 int SoundApplet::volumeValue() const
@@ -146,40 +143,32 @@ void SoundApplet::defaultSinkChanged()
 
 void SoundApplet::onVolumeChanged()
 {
-    const float volmue = m_defSinkInter->volume();
+    const float volume = m_defSinkInter->volume();
     const bool mute = m_defSinkInter->mute();
 
-    //Keep the same units. slider is 1000.0f, maxVolue need multiplication 10.
-    float m_maxVolume = std::min(1000, m_gsetting->get("output-volume-max").toInt() * 10);
-
-    m_volumeSlider->setValue(std::min(1000.0f, volmue * 1000.0f / (m_maxVolume / 1000.0f)));
+    m_volumeSlider->setValue(std::min(1500.0f, volume * 1000.0f));
 
     emit volumeChanged(m_volumeSlider->value());
 
     QString volumeString;
     if (mute)
         volumeString = "muted";
-    else if (volmue >= double(2)/3)
+    else if (volume >= double(2)/3)
         volumeString = "high";
-    else if (volmue >= double(1)/3)
+    else if (volume >= double(1)/3)
         volumeString = "medium";
     else
         volumeString = "low";
 
-    const QString &iconName = QString(":/icons/image/audio-volume-%1-symbolic.svg").arg(volumeString);
-    const auto ratio = devicePixelRatioF();
-    QPixmap pix = DSvgRenderer::render(iconName, QSize(24, 24) * ratio);
-    pix.setDevicePixelRatio(ratio);
+    const QString &iconName = QString("://audio-volume-%1-symbolic.svg").arg(volumeString);
+    QPixmap pix = Utils::renderSVG(iconName, QSize(24, 24), devicePixelRatioF());
 
     m_volumeBtn->setPixmap(pix);
 }
 
 void SoundApplet::volumeSliderValueChanged()
 {
-    //Keep the same units. slider is 1000.0f, maxVolue need multiplication 10.
-    float m_maxVolume = std::min(1000, m_gsetting->get("output-volume-max").toInt() * 10);
-
-    m_defSinkInter->SetVolume(m_volumeSlider->value() / 1000.0f * (m_maxVolume / 1000.0f), false);
+    m_defSinkInter->SetVolumeQueued(m_volumeSlider->value() / 1000.0f, false);
 }
 
 void SoundApplet::sinkInputsChanged()
@@ -208,28 +197,11 @@ void SoundApplet::sinkInputsChanged()
 
 void SoundApplet::toggleMute()
 {
-    m_defSinkInter->SetMute(!m_defSinkInter->mute());
-}
-
-void SoundApplet::delayLoad()
-{
-    static int retry_times = 0;
-    ++retry_times;
-
-    const bool valid = m_audioInter->isValid();
-    qDebug() << "load sound dbus, valid = " << valid << ", retry = " << retry_times;
-
-    if (valid || retry_times > 10)
-    {
-        QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
-        QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
-    } else {
-        QTimer::singleShot(1000, this, &SoundApplet::delayLoad);
-    }
+    m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
 }
 
 void SoundApplet::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
-    m_defSinkInter->SetMute(false);
+    m_defSinkInter->SetMuteQueued(false);
 }

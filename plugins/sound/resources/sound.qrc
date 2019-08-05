@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/image"/>
+    <qresource prefix="/icons"/>
+    <qresource prefix="/">
+        <file>audio-volume-000-muted.svg</file>
+        <file>audio-volume-000.svg</file>
+        <file>audio-volume-010-muted.svg</file>
+        <file>audio-volume-010.svg</file>
+        <file>audio-volume-020-muted.svg</file>
+        <file>audio-volume-020.svg</file>
+        <file>audio-volume-030-muted.svg</file>
+        <file>audio-volume-030.svg</file>
+        <file>audio-volume-040-muted.svg</file>
+        <file>audio-volume-040.svg</file>
+        <file>audio-volume-050-muted.svg</file>
+        <file>audio-volume-050.svg</file>
+        <file>audio-volume-060-muted.svg</file>
+        <file>audio-volume-060.svg</file>
+        <file>audio-volume-070-muted.svg</file>
+        <file>audio-volume-070.svg</file>
+        <file>audio-volume-080-muted.svg</file>
+        <file>audio-volume-080.svg</file>
+        <file>audio-volume-090-muted.svg</file>
+        <file>audio-volume-090.svg</file>
+        <file>audio-volume-100-muted.svg</file>
+        <file>audio-volume-100.svg</file>
+        <file>audio-volume-high-symbolic.svg</file>
+        <file>audio-volume-low-symbolic.svg</file>
+        <file>audio-volume-medium-symbolic.svg</file>
+        <file>audio-volume-muted-symbolic.svg</file>
+        <file>slider_bg.png</file>
+        <file>slider_handle.svg</file>
+    </qresource>
+</RCC>

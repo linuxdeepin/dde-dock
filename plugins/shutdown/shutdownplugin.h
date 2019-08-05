@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,13 +24,9 @@
 
 #include "pluginsiteminterface.h"
 #include "pluginwidget.h"
-#include "powerstatuswidget.h"
-#include "dbus/dbuspower.h"
+#include "../widgets/tipswidget.h"
 
 #include <QLabel>
-
-#define BATTERY_DISCHARED   2
-#define BATTERY_FULL        4
 
 class ShutdownPlugin : public QObject, PluginsItemInterface
 {
@@ -56,18 +52,21 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
-private:
-    void updateBatteryVisible();
-    void requestContextMenu(const QString &itemKey);
-    void delayLoader();
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
+
+    void pluginSettingsChanged() override;
 
 private:
-    QSettings m_settings;
+    void loadPlugin();
+    bool checkSwap();
+    void refreshPluginItemsVisible();
+
+private:
+    bool m_pluginLoaded;
+
     PluginWidget *m_shutdownWidget;
-    PowerStatusWidget *m_powerStatusWidget;
-    QLabel *m_tipsLabel;
-
-    DBusPower *m_powerInter;
+    TipsWidget *m_tipsLabel;
 };
 
 #endif // SHUTDOWNPLUGIN_H

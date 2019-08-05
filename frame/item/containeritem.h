@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,6 +24,7 @@
 
 #include "dockitem.h"
 #include "components/containerwidget.h"
+#include "../widgets/tipswidget.h"
 
 #include <QPixmap>
 
@@ -54,7 +55,7 @@ protected:
 
 private:
     bool m_dropping;
-    QLabel *m_popupTips;
+    TipsWidget *m_popupTips;
     ContainerWidget *m_containerWidget;
     QPixmap m_icon;
 };

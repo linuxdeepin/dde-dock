@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,9 +24,11 @@
 
 #include "pluginsiteminterface.h"
 #include "datetimewidget.h"
+#include "../../widgets/tipswidget.h"
 
 #include <QTimer>
 #include <QLabel>
+#include <QSettings>
 
 class DatetimePlugin : public QObject, PluginsItemInterface
 {
@@ -45,7 +47,8 @@ public:
     bool pluginIsAllowDisable() override { return true; }
     bool pluginIsDisable() override;
 
-    int itemSortKey(const QString &itemKey) override;
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
 
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
@@ -55,12 +58,15 @@ public:
 
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 
+    void pluginSettingsChanged() override;
+
 private slots:
     void updateCurrentTimeString();
+    void refreshPluginItemsVisible();
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
-    QPointer<QLabel> m_dateTipsLabel;
+    QPointer<TipsWidget> m_dateTipsLabel;
 
     QTimer *m_refershTimer;
 

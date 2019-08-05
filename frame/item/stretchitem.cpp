@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -27,6 +27,7 @@ StretchItem::StretchItem(QWidget *parent)
     : DockItem(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setMinimumSize(0, 0);
 }
 
 void StretchItem::mousePressEvent(QMouseEvent *e)

@@ -1,9 +1,14 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,14 +32,16 @@
 #include <QDir>
 
 #include <ddialog.h>
+#include <DTrashManager>
+#include <DDesktopServices>
 
-#include <com_deepin_daemon_soundeffect.h>
+#include <QCoreApplication>
 
 DWIDGET_USE_NAMESPACE
 
 const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
+const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
 
-using SoundEffectInter = com::deepin::daemon::SoundEffect;
 
 PopupControlWidget::PopupControlWidget(QWidget *parent)
     : QWidget(parent),
@@ -73,54 +80,56 @@ const QString PopupControlWidget::trashDir()
 
 void PopupControlWidget::openTrashFloder()
 {
-    QProcess *proc = new QProcess;
-
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
-
-    proc->startDetached("gvfs-open trash:///");
+    QProcess::startDetached("gio", QStringList() << "open" << "trash:///");
 }
 
 void PopupControlWidget::clearTrashFloder()
 {
+    QString ClearTrashMutliple = qApp->translate("DialogManager", "Are you sure you want to empty %1 items?");
+
     // show confrim dialog
-    bool accept = false;
-    const int itemCount = trashItemCount();
-    const QStringList btns = {tr("Cancel"), tr("Empty")};
+    DDialog d;
+    QStringList buttonTexts;
+    buttonTexts << qApp->translate("DialogManager", "Cancel") << qApp->translate("DialogManager", "Delete");
 
-    DDialog *dialog = new DDialog(nullptr);
-    dialog->addButtons(btns);
-    dialog->setIconPixmap(QIcon::fromTheme("user-trash-full").pixmap(48, 48));
-    dialog->setMessage(tr("This action cannot be restored"));
-    if (itemCount == 1)
-        dialog->setTitle(tr("Are you sure to empty 1 item ?"));
-    else
-        dialog->setTitle(tr("Are you sure to empty %1 items ?").arg(itemCount));
+    if (!d.parentWidget()) {
+        d.setWindowFlags(d.windowFlags() | Qt::WindowStaysOnTopHint);
+    }
 
-    connect(dialog, &DDialog::buttonClicked, [&] (const int index) {
-        accept = index;
-    });
-    dialog->exec();
-    dialog->deleteLater();
+    QDir dir(TrashDir + "/files");//QDir::homePath() + "/.local/share/Trash/files");
+    uint count = dir.entryList(ItemsShouldCount).count();
+    int execCode = -1;
 
-    if (!accept)
+    if (count > 0) {
+        // blumia: Workaround. There is a bug with DDialog which will let DDialog always use the smallest
+        //         available size of the given icon. So we create a m_dialogTrashFullIcon and leave a minimum
+        //         64*64 pixmap size icon here.
+        QIcon m_dialogTrashFullIcon;
+        QIcon trash_full_icon = QIcon::fromTheme("user-trash-full-opened");
+        m_dialogTrashFullIcon.addPixmap(trash_full_icon.pixmap(64));
+        m_dialogTrashFullIcon.addPixmap(trash_full_icon.pixmap(128));
+
+        d.setTitle(ClearTrashMutliple.arg(count));
+        d.setMessage(qApp->translate("DialogManager", "This action cannot be restored"));
+        d.setIcon(m_dialogTrashFullIcon, QSize(64, 64));
+        d.addButton(buttonTexts[0], true, DDialog::ButtonNormal);
+        d.addButton(buttonTexts[1], false, DDialog::ButtonWarning);
+        d.setDefaultButton(1);
+        d.getButton(1)->setFocus();
+        d.moveToCenter();
+        execCode = d.exec();
+    }
+
+    if (execCode != QDialog::Accepted) {
         return;
+    }
 
-    QProcess::startDetached("gvfs-trash", QStringList() << "-f" << "--empty");
-
-    // play sound effects
-    SoundEffectInter sei("com.deepin.daemon.SoundEffect", "/com/deepin/daemon/SoundEffect", QDBusConnection::sessionBus());
-    sei.PlaySystemSound("trash-empty");
-
-//    for (auto item : QDir(TrashDir).entryInfoList())
-//    {
-//        if (item.fileName() == "." || item.fileName() == "..")
-//            continue;
-
-//        if (item.isFile())
-//            QFile(item.fileName()).remove();
-//        else if (item.isDir())
-//            QDir(item.absoluteFilePath()).removeRecursively();
-//    }
+    if (DTrashManager::instance()->cleanTrash()) {
+        DDesktopServices::playSystemSoundEffect(DDesktopServices::SSE_EmptyTrash);
+    } else {
+        qWarning() << "Clear trash failed";
+    }
+//    DFMGlobal::instance()->clearTrash();
 }
 
 int PopupControlWidget::trashItemCount() const
@@ -135,20 +144,23 @@ void PopupControlWidget::trashStatusChanged()
 
     // add monitor paths
     m_fsWatcher->addPath(TrashDir);
-    if (files)
+    if (files) {
         m_fsWatcher->addPath(TrashDir + "/files");
+    }
 //    if (info)
 //        m_fsWatcher->addPath(TrashDir + "/info");
 
     // check empty
-    if (!files)
+    if (!files) {
         m_trashItemsCount = 0;
-    else
-        m_trashItemsCount = QDir(TrashDir + "/files").entryList().count() - 2;
+    } else {
+        m_trashItemsCount = QDir(TrashDir + "/files").entryList(ItemsShouldCount).count();
+    }
 
     const bool empty = m_trashItemsCount == 0;
-    if (m_empty == empty)
+    if (m_empty == empty) {
         return;
+    }
 
 //    m_clearBtn->setVisible(!empty);
     m_empty = empty;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,8 +24,11 @@
 
 #include "constants.h"
 #include "util/dockpopupwindow.h"
+#include "components/hoverhighlighteffect.h"
 
 #include <QFrame>
+#include <QPointer>
+#include <QGestureEvent>
 
 #include <memory>
 
@@ -44,6 +47,7 @@ public:
         Plugins,
         Container,
         Placeholder,
+        TrayPlugin,
     };
 
 public:
@@ -58,15 +62,18 @@ public:
 public slots:
     virtual void refershIcon() {}
 
+    void showPopupApplet(QWidget * const applet);
+    void hidePopup();
+
 signals:
     void dragStarted() const;
-    void itemDropped(QObject *destination) const;
+    void itemDropped(QObject *destination, const QPoint &dropPoint) const;
     void requestWindowAutoHide(const bool autoHide) const;
-    void requestRefershWindowVisible() const;
+    void requestRefreshWindowVisible() const;
 
 protected:
+    bool event(QEvent *event);
     void paintEvent(QPaintEvent *e);
-    void moveEvent(QMoveEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
@@ -75,18 +82,20 @@ protected:
     const QPoint popupMarkPoint() const;
     const QPoint topleftPoint() const;
 
-    void hidePopup();
     void hideNonModel();
     void popupWindowAccept();
-    void showPopupApplet(QWidget * const applet);
     virtual void showPopupWindow(QWidget * const content, const bool model = false);
     virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();
 
+    bool checkAndResetTapHoldGestureState();
+    virtual void gestureEvent(QGestureEvent *event);
+
 protected slots:
     void showContextMenu();
+    void onContextMenuAccepted();
 
 private:
     void updatePopupPosition();
@@ -94,6 +103,10 @@ private:
 protected:
     bool m_hover;
     bool m_popupShown;
+    bool m_tapAndHold;
+
+    QPointer<QWidget> m_lastPopupWidget;
+    QPointer<HoverHighlightEffect> m_hoverEffect;
 
     QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;

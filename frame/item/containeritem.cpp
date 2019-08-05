@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -26,12 +26,13 @@
 ContainerItem::ContainerItem(QWidget *parent)
     : DockItem(parent),
       m_dropping(false),
-      m_popupTips(new QLabel),
+      m_popupTips(new TipsWidget(this)),
       m_containerWidget(new ContainerWidget(this))
 {
     m_containerWidget->setVisible(false);
     m_popupTips->setText(tr("Click to display hidden icon"));
     m_popupTips->setVisible(false);
+    m_popupTips->setObjectName("ContainerItem");
 
     setAcceptDrops(true);
 }
@@ -40,8 +41,8 @@ void ContainerItem::setDropping(const bool dropping)
 {
     if (dropping)
         showPopupApplet(m_containerWidget);
-    else
-        hidePopup();
+//    else
+//        hidePopup();
 
     m_dropping = dropping;
     update();

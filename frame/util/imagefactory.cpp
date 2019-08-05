@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -44,13 +44,14 @@ QPixmap ImageFactory::lighterEffect(const QPixmap pixmap, const int delta)
         for (int j(0); j != width; ++j)
         {
             QRgb &rgba = *(QRgb*)scanLine;
-            if (qAlpha(rgba) == 0xff && (qRed(rgba) || qGreen(rgba) || qBlue(rgba))) {
-                const QColor hsv = QColor::fromRgba(rgba).toHsv();
-                // check brightness first, color with max brightness processed with lighter will
-                // become white like color which will ruin the whole image in general cases.
-                if (hsv.value() < 255) {
-                    rgba = QColor::fromRgba(rgba).lighter(delta).rgba();
-                }
+            if (qAlpha(rgba) == 0xff) {
+                rgba = QColor::fromRgba(rgba).light(delta).rgba();
+//                const QColor hsv = QColor::fromRgba(rgba).toHsv();
+//                // check brightness first, color with max brightness processed with lighter will
+//                // become white like color which will ruin the whole image in general cases.
+//                if (hsv.value() < 255) {
+//                    rgba = QColor::fromRgba(rgba).lighter(delta).rgba();
+//                }
             }
             scanLine += bytesPerPixel;
         }

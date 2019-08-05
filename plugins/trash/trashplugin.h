@@ -1,9 +1,14 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +31,7 @@
 #include "trashwidget.h"
 
 #include <QLabel>
+#include <QSettings>
 
 class TrashPlugin : public QObject, PluginsItemInterface
 {
@@ -36,22 +42,23 @@ class TrashPlugin : public QObject, PluginsItemInterface
 public:
     explicit TrashPlugin(QObject *parent = 0);
 
-    const QString pluginName() const;
-    void init(PluginProxyInterface *proxyInter);
+    const QString pluginName() const Q_DECL_OVERRIDE;
+    const QString pluginDisplayName() const override;
+    void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
 
-    QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
-    QWidget *itemPopupApplet(const QString &itemKey);
-    const QString itemCommand(const QString &itemKey);
-    const QString itemContextMenu(const QString &itemKey);
-    void refershIcon(const QString &itemKey);
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
-
-    int itemSortKey(const QString &itemKey);
-    void displayModeChanged(const Dock::DisplayMode displayMode);
-
-private:
-    void showContextMenu();
+    QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
+    QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
+    QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
+    const QString itemCommand(const QString &itemKey) Q_DECL_OVERRIDE;
+    const QString itemContextMenu(const QString &itemKey) Q_DECL_OVERRIDE;
+    void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
+    bool pluginIsAllowDisable() override { return true; }
+    bool pluginIsDisable() override;
+    void pluginStateSwitched() override;
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
+    void displayModeChanged(const Dock::DisplayMode displayMode) Q_DECL_OVERRIDE;
 
 private:
     TrashWidget *m_trashWidget;

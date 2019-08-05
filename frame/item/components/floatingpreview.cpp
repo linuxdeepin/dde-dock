@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -29,23 +29,23 @@
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent),
 
-      m_closeBtn(new DImageButton)
+      m_closeBtn3D(new DImageButton)
 {
-    m_closeBtn->setFixedSize(24, 24);
-    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.svg");
-    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.svg");
-    m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
+    m_closeBtn3D->setFixedSize(24, 24);
+    m_closeBtn3D->setNormalPic(":/icons/resources/close_round_normal.svg");
+    m_closeBtn3D->setHoverPic(":/icons/resources/close_round_hover.svg");
+    m_closeBtn3D->setPressPic(":/icons/resources/close_round_press.svg");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(m_closeBtn);
-    centralLayout->setAlignment(m_closeBtn, Qt::AlignRight | Qt::AlignTop);
+    centralLayout->addWidget(m_closeBtn3D);
+    centralLayout->setAlignment(m_closeBtn3D, Qt::AlignRight | Qt::AlignTop);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
     setLayout(centralLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
-    connect(m_closeBtn, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
+    connect(m_closeBtn3D, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
 }
 
 WId FloatingPreview::trackedWid() const
@@ -55,18 +55,22 @@ WId FloatingPreview::trackedWid() const
     return m_tracked->wid();
 }
 
+AppSnapshot *FloatingPreview::trackedWindow()
+{
+    return m_tracked;
+}
+
 void FloatingPreview::trackWindow(AppSnapshot * const snap)
 {
     if (!m_tracked.isNull())
         m_tracked->removeEventFilter(this);
     snap->installEventFilter(this);
     m_tracked = snap;
+    m_closeBtn3D->setVisible(m_tracked->closeAble());
 
-    const QRect r = rect();
-    const QRect sr = snap->geometry();
-    const QPoint offset = sr.center() - r.center();
-
-    emit requestMove(offset);
+    QTimer::singleShot(0, this, [=] {
+        setGeometry(snap->geometry());
+    });
 }
 
 void FloatingPreview::paintEvent(QPaintEvent *e)
@@ -77,21 +81,19 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
         return;
 
     const QImage &snapshot = m_tracked->snapshot();
+    const QRectF &snapshot_geometry = m_tracked->snapshotGeometry();
+
     if (snapshot.isNull())
         return;
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
+    const QRectF r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
     const auto ratio = devicePixelRatioF();
 
-    QImage im = snapshot.scaled(r.size() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    im.setDevicePixelRatio(ratio);
-
-    const QRect ir = im.rect();
-    const int offset_x = r.x() + r.width() / 2 - ir.width() / ratio / 2;
-    const int offset_y = r.y() + r.height() / 2 - ir.height() / ratio / 2;
+    const qreal offset_x = width() / 2.0 - snapshot_geometry.width() / ratio / 2;
+    const qreal offset_y = height() / 2.0 - snapshot_geometry.height() / ratio / 2;
     const int radius = 4;
 
     // draw background
@@ -99,14 +101,13 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     painter.setBrush(QColor(255, 255, 255, 255 * 0.3));
     painter.drawRoundedRect(r, radius, radius);
 
-    // draw preview image
-    painter.drawImage(offset_x, offset_y, im);
+    painter.drawImage(QPointF(offset_x, offset_y), snapshot, m_tracked->snapshotGeometry());
 
     // bottom black background
-    QRect bgr = r;
+    QRectF bgr = r;
     bgr.setTop(bgr.bottom() - 25);
 
-    QRect bgre = bgr;
+    QRectF bgre = bgr;
     bgre.setTop(bgr.top() - radius);
 
     painter.save();
@@ -125,7 +126,9 @@ void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
 
-    emit m_tracked->clicked(m_tracked->wid());
+    if (m_tracked) {
+        emit m_tracked->clicked(m_tracked->wid());
+    }
 }
 
 bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
@@ -134,6 +137,15 @@ bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
         hide();
 
     return QWidget::eventFilter(watched, event);
+}
+
+void FloatingPreview::hideEvent(QHideEvent *event)
+{
+    if (m_tracked) {
+        m_tracked->setContentsMargins(0, 0, 0, 0);
+    }
+
+    QWidget::hideEvent(event);
 }
 
 void FloatingPreview::onCloseBtnClicked()

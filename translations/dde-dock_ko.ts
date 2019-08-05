@@ -1,31 +1,40 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
 <context>
+    <name>AbstractPluginsController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation>%1 플러그인이 시스템과 호환되지 않습니다.</translation>
+    </message>
+</context>
+<context>
     <name>ContainerItem</name>
     <message>
-        <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>숨겨진 아이콘을 표시하려면 클릭</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAdaptors</name>
+    <message>
+        <source>Add keyboard layout</source>
+        <translation>키보드 레이아웃 추가</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>날짜시간</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 시간</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 시간</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
         <source>Time Settings</source>
         <translation>시간 설정</translation>
     </message>
@@ -33,136 +42,130 @@
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>네트워크 사용</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>네트워크 사용안함</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>네트워크 설정</translation>
+    </message>
+</context>
+<context>
+    <name>DialogManager</name>
+    <message>
+        <source>Are you sure you want to empty %1 items?</source>
+        <translation>%1 항목을 비우시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>삭제</translation>
+    </message>
+    <message>
+        <source>This action cannot be restored</source>
+        <translation>이 동작은 되돌릴 수 없습니다</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>알 수 없는 장치</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>알 수 없는 볼륨</translation>
     </message>
 </context>
 <context>
     <name>DiskMountPlugin</name>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
         <translation>디스크</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>모두 마운트 해제</translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>유행 모드</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>효율적인 모드</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="45"/>
         <source>Top</source>
         <translation>맨 위</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
         <translation>하단</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Left</source>
         <translation>왼쪽</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Right</source>
         <translation>오른쪽</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>대형</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
-        <translation type="unfinished"/>
+        <translation>중형</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Small</source>
-        <translation type="unfinished"/>
+        <translation>소형</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>계속 표시</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>숨김 유지</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>스마트 숨김</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="88"/>
         <source>Mode</source>
         <translation>모드</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Location</source>
         <translation>위치</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="103"/>
         <source>Size</source>
         <translation>크기</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="110"/>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>상태</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
         <translation>플러그인</translation>
     </message>
@@ -170,7 +173,6 @@
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
         <translation>런쳐</translation>
     </message>
@@ -178,238 +180,192 @@
 <context>
     <name>NetworkPlugin</name>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="46"/>
         <source>Network</source>
         <translation>네트워크</translation>
     </message>
 </context>
 <context>
-    <name>PopupControlWidget</name>
+    <name>OnboardPlugin</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Cancel</source>
-        <translation>취소</translation>
+        <source>Onboard</source>
+        <translation>온보드</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Empty</source>
-        <translation>비었음</translation>
+        <source>Settings</source>
+        <translation>설정 </translation>
+    </message>
+</context>
+<context>
+    <name>PowerPlugin</name>
+    <message>
+        <source>Power</source>
+        <translation>전원</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
-        <source>This action cannot be restored</source>
-        <translation>이 동작은 되돌릴 수 없습니다</translation>
+        <source>Power settings</source>
+        <translation>전원 설정</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
-        <source>Are you sure to empty 1 item ?</source>
+        <source>Charged %1</source>
+        <translation>%1 충전됨</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
-        <source>Are you sure to empty %1 items ?</source>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1, %2 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1, %2 hr %3 min until full</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
-        <source>Shut down</source>
-        <translation>종료</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
-        <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
-        <source>Charging %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
-        <source>Restart</source>
-        <translation>재시작</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
-        <source>Lock</source>
-        <translation>잠그기</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
-        <source>Log out</source>
-        <translation>로그아웃</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
-        <source>Suspend</source>
-        <translation>일시 정지</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
         <source>Power</source>
         <translation>전원</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
-        <source>Switch account</source>
-        <translation type="unfinished"/>
+        <source>Shut down</source>
+        <translation>종료</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
+        <source>Restart</source>
+        <translation>재시작</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>일시 정지</translation>
+    </message>
+    <message>
+        <source>Hibernate</source>
+        <translation>최대 절전 모드</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>잠그기</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>로그아웃</translation>
+    </message>
+    <message>
+        <source>Switch account</source>
+        <translation>계정 전환</translation>
+    </message>
+    <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>전원 설정</translation>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
         <translation>장치</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>응용 프로그램</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>음소거 해제</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>음소거</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>오디오 설정</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
         <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>현재 볼륨 %1</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
         <translation>소리</translation>
     </message>
 </context>
 <context>
-    <name>SystemTrayPlugin</name>
-    <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
-        <source>System Tray</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
-        <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <source>Trash</source>
+        <translation>휴지통</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
+        <source>Trash - %1 file</source>
+        <translation>휴지통 - %1 파일</translation>
+    </message>
+    <message>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>휴지통 - %1 파일</translation>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
         <translation>비었음</translation>
     </message>
 </context>
 <context>
+    <name>TrayPlugin</name>
+    <message>
+        <source>System Tray</source>
+        <translation>시스템 트레이</translation>
+    </message>
+</context>
+<context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
-        <source>Unknow</source>
-        <translation type="unfinished"/>
+        <source>Unknown</source>
+        <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
-        <source>No Network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>유선 연결: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>네트워크 없음</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>무선 연결: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
-        <source>Auto-connect</source>
-        <translation>자동 연결</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
-        <source>Connect</source>
-        <translation>연결</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
-        <source>Cancel</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>
         <source>Wireless Network</source>
         <translation>무선 네트워크</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
-        <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation type="unfinished"/>
+        <translation>무선 네트워크 %1</translation>
     </message>
 </context>
 </TS>

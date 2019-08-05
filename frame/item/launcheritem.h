@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -23,6 +23,11 @@
 #define LAUNCHERITEM_H
 
 #include "dockitem.h"
+#include "../widgets/tipswidget.h"
+
+#include <com_deepin_dde_launcher.h>
+
+using LauncherInter = com::deepin::dde::Launcher;
 
 class LauncherItem : public DockItem
 {
@@ -39,14 +44,15 @@ private:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
     QWidget *popupTips();
 
 private:
     QPixmap m_smallIcon;
     QPixmap m_largeIcon;
-
-    QLabel *m_tips;
+    LauncherInter *m_launcherInter;
+    TipsWidget *m_tips;
 };
 
 #endif // LAUNCHERITEM_H

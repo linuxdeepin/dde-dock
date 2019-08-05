@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,12 +21,14 @@
 
 #include "mainwindow.h"
 #include "panel/mainpanel.h"
+#include "util/utils.h"
 
 #include <QDebug>
 #include <QEvent>
 #include <QResizeEvent>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QX11Info>
 #include <qpa/qplatformwindow.h>
 
 #include <DPlatformWindowHandle>
@@ -34,36 +36,29 @@
 #include <X11/X.h>
 #include <X11/Xutil.h>
 
+#define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
+#define SNI_WATCHER_PATH "/StatusNotifierWatcher"
+
+using org::kde::StatusNotifierWatcher;
+
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
-    QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens())
-    {
-        const QRect &sg = screen->geometry();
-        if (sg.contains(scaledPos))
-        {
-            g = sg;
-            break;
-        }
-    }
+    QScreen const * screen = Utils::screenAtByScaled(scaledPos);
 
-    return g.topLeft() + (scaledPos - g.topLeft()) * qApp->devicePixelRatio();
+    return screen ? screen->geometry().topLeft() +
+                        (scaledPos - screen->geometry().topLeft()) *
+                            screen->devicePixelRatio()
+                  : scaledPos;
 }
 
 const QPoint scaledPos(const QPoint &rawXPos)
 {
-    QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens())
-    {
-        const QRect &sg = screen->geometry();
-        if (sg.contains(rawXPos))
-        {
-            g = sg;
-            break;
-        }
-    }
+    QScreen const * screen = Utils::screenAt(rawXPos);
 
-    return g.topLeft() + (rawXPos - g.topLeft()) / qApp->devicePixelRatio();
+    return screen
+               ? screen->geometry().topLeft() +
+                     (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
+               : rawXPos;
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -79,20 +74,24 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
+      m_leaveDelayTimer(new QTimer(this)),
       m_shadowMaskOptimizeTimer(new QTimer(this)),
 
       m_sizeChangeAni(new QVariantAnimation(this)),
       m_posChangeAni(new QVariantAnimation(this)),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
-      m_xcbMisc(XcbMisc::instance())
-
+      m_xcbMisc(XcbMisc::instance()),
+      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
+      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
 {
     setAccessibleName("dock-mainwindow");
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
+    setMouseTracking(true);
     setAcceptDrops(true);
 
+    DPlatformWindowHandle::enableDXcbForWindow(this, true);
     m_platformWindowHandle.setEnableBlurWindow(false);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
@@ -100,25 +99,19 @@ MainWindow::MainWindow(QWidget *parent)
     m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
     m_platformWindowHandle.setShadowRadius(0);
 
-    m_settings = new DockSettings(this);
+    m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
 
+    initSNIHost();
     initComponents();
     initConnections();
 
-    m_mainPanel->setFixedSize(m_settings->windowSize());
+    m_mainPanel->setFixedSize(m_settings->panelSize());
 }
 
 MainWindow::~MainWindow()
 {
     delete m_xcbMisc;
-}
-
-QRect MainWindow::panelGeometry()
-{
-    QRect rect = m_mainPanel->geometry();
-    rect.moveTopLeft(m_mainPanel->mapToGlobal(QPoint(0,0)));
-    return rect;
 }
 
 void MainWindow::launch()
@@ -148,7 +141,7 @@ void MainWindow::launch()
     });
 
     qApp->processEvents();
-    QTimer::singleShot(1, this, &MainWindow::show);
+    QTimer::singleShot(300, this, &MainWindow::show);
 }
 
 bool MainWindow::event(QEvent *e)
@@ -165,11 +158,32 @@ bool MainWindow::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void MainWindow::resizeEvent(QResizeEvent *e)
+void MainWindow::showEvent(QShowEvent *e)
 {
-    QWidget::resizeEvent(e);
+    QWidget::showEvent(e);
 
-    m_shadowMaskOptimizeTimer->start();
+    m_platformWindowHandle.setEnableBlurWindow(false);
+    m_platformWindowHandle.setShadowOffset(QPoint());
+    m_platformWindowHandle.setShadowRadius(0);
+
+    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
+            windowHandle(), [this] (QScreen *new_screen) {
+        QScreen *old_screen = windowHandle()->screen();
+        windowHandle()->setScreen(new_screen);
+        // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
+        // 比如：窗口大小为 100 x 100, 显示在缩放比为 1.0 的屏幕上，此时窗口的真实大小 = 100x100
+        // 随后窗口被移动到了缩放比为 2.0 的屏幕上，应该将真实大小改为 200x200。另外，只能使用
+        // QPlatformWindow直接设置大小来绕过QWidget和QWindow对新旧geometry的比较。
+        const qreal scale = devicePixelRatioF();
+        const QPoint screenPos = new_screen->geometry().topLeft();
+        const QPoint posInScreen = this->pos() - old_screen->geometry().topLeft();
+        const QPoint pos = screenPos + posInScreen * scale;
+        const QSize size = this->size() * scale;
+
+        windowHandle()->handle()->setGeometry(QRect(pos, size));
+    }, Qt::UniqueConnection);
+
+    windowHandle()->setScreen(qGuiApp->primaryScreen());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
@@ -195,7 +209,8 @@ void MainWindow::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    if (m_settings->hideState() != Show)
+    m_leaveDelayTimer->stop();
+    if (m_settings->hideState() != Show && m_panelShowAni->state() != QPropertyAnimation::Running)
         m_expandDelayTimer->start();
 }
 
@@ -204,29 +219,27 @@ void MainWindow::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_expandDelayTimer->stop();
-    updatePanelVisible();
+    m_leaveDelayTimer->start();
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     QWidget::dragEnterEvent(e);
 
-    if (m_settings->hideState() != Show)
+    if (m_settings->hideState() != Show) {
         m_expandDelayTimer->start();
+    }
 }
 
 void MainWindow::setFixedSize(const QSize &size)
 {
     const QPropertyAnimation::State state = m_sizeChangeAni->state();
 
-//    qDebug() << state;
     if (state == QPropertyAnimation::Stopped && this->size() == size)
         return;
 
     if (state == QPropertyAnimation::Running)
         return m_sizeChangeAni->setEndValue(size);
-
-    qDebug() << Q_FUNC_INFO << size;
 
     m_sizeChangeAni->setStartValue(this->size());
     m_sizeChangeAni->setEndValue(size);
@@ -242,12 +255,27 @@ void MainWindow::internalAnimationMove(int x, int y)
     if (state == QPropertyAnimation::Stopped && p == tp)
         return;
 
-    if (state == QPropertyAnimation::Running && m_posChangeAni->endValue() != tp)
+    if (state == QPropertyAnimation::Running && p != tp)
         return m_posChangeAni->setEndValue(QPoint(x, y));
 
     m_posChangeAni->setStartValue(pos());
     m_posChangeAni->setEndValue(tp);
     m_posChangeAni->start();
+}
+
+void MainWindow::initSNIHost()
+{
+    // registor dock as SNI Host on dbus
+    QDBusConnection dbusConn = QDBusConnection::sessionBus();
+    m_sniHostService = QString("org.kde.StatusNotifierHost-") + QString::number(qApp->applicationPid());
+    dbusConn.registerService(m_sniHostService);
+    dbusConn.registerObject("/StatusNotifierHost", this);
+
+    if (m_sniWatcher->isValid()) {
+        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
+    } else {
+        qDebug() << SNI_WATCHER_SERVICE << "SNI watcher daemon is not exist for now!";
+    }
 }
 
 void MainWindow::initComponents()
@@ -258,6 +286,9 @@ void MainWindow::initComponents()
 
     m_expandDelayTimer->setSingleShot(true);
     m_expandDelayTimer->setInterval(m_settings->expandTimeout());
+
+    m_leaveDelayTimer->setSingleShot(true);
+    m_leaveDelayTimer->setInterval(m_settings->narrowTimeout());
 
     m_shadowMaskOptimizeTimer->setSingleShot(true);
     m_shadowMaskOptimizeTimer->setInterval(100);
@@ -272,22 +303,32 @@ void MainWindow::initComponents()
 
 void MainWindow::compositeChanged()
 {
-//    qDebug() << Q_FUNC_INFO;
+    const bool composite = m_wmHelper->hasComposite();
 
-    const int duration = m_wmHelper->hasComposite() ? 300 : 0;
+// NOTE(justforlxz): On the sw platform, there is an unstable
+// display position error, disable animation solution
+#ifndef DISABLE_SHOW_ANIMATION
+    const int duration = composite ? 300 : 0;
+#else
+    const int duration = 0;
+#endif
 
     m_sizeChangeAni->setDuration(duration);
     m_posChangeAni->setDuration(duration);
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
 
+    m_mainPanel->setComposite(composite);
+
+    m_shadowMaskOptimizeTimer->start();
     m_positionUpdateTimer->start();
 }
 
 void MainWindow::internalMove(const QPoint &p)
 {
+    const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
     const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
-                             m_settings->hideState() == HideState::Hide &&
+                             isHide &&
                              m_posChangeAni->state() == QVariantAnimation::Stopped;
     if (!pos_adjust)
         return QWidget::move(p);
@@ -306,8 +347,9 @@ void MainWindow::internalMove(const QPoint &p)
 
     int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
-        m_settings->hideState() == HideState::Hide &&
-        m_panelHideAni->state() == QVariantAnimation::Stopped)
+        isHide &&
+        m_panelHideAni->state() == QVariantAnimation::Stopped &&
+        m_panelShowAni->state() == QVariantAnimation::Stopped)
     {
         switch (m_settings->position())
         {
@@ -321,18 +363,21 @@ void MainWindow::internalMove(const QPoint &p)
         }
     }
 
+    // using platform window to set real window position
     windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
 }
 
 void MainWindow::initConnections()
 {
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
+    connect(m_settings, &DockSettings::autoHideChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
+    connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
-    connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
+    connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_mainPanel, &MainPanel::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
@@ -340,6 +385,7 @@ void MainWindow::initConnections()
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
+    connect(m_leaveDelayTimer, &QTimer::timeout, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
@@ -348,16 +394,15 @@ void MainWindow::initConnections()
     connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
-//    // to fix qt animation bug, sometimes window size not change
-    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
-        const QSize size = m_sizeChangeAni->currentValue().toSize();
-
-        QWidget::setFixedSize(size);
-        m_mainPanel->setFixedSize(size);
+    // to fix qt animation bug, sometimes window size not change
+    connect(m_sizeChangeAni, &QVariantAnimation::valueChanged, [=](const QVariant &value) {
+        QWidget::setFixedSize(value.toSize());
     });
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+
+    connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -400,7 +445,7 @@ void MainWindow::positionChanged(const Position prevPos)
 
     // reset position & layout and slide out
     QTimer::singleShot(200, this, [&] {
-        resetPanelEnvironment(false);
+        resetPanelEnvironment(false, true);
         updateGeometry();
         expand();
     });
@@ -419,7 +464,6 @@ void MainWindow::positionChanged(const Position prevPos)
 
 void MainWindow::updatePosition()
 {
-//    qDebug() << Q_FUNC_INFO;
     // all update operation need pass by timer
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
@@ -427,8 +471,10 @@ void MainWindow::updatePosition()
     updateGeometry();
 
     // make sure strut partial is set after the size/position animation;
-    const int inter = qMax(m_sizeChangeAni->duration(), m_posChangeAni->duration());
-    QTimer::singleShot(inter + 100, this, &MainWindow::setStrutPartial);
+    const int duration = qMax(m_sizeChangeAni->duration(), m_posChangeAni->duration());
+
+    QTimer::singleShot(duration, this, &MainWindow::setStrutPartial);
+    QTimer::singleShot(duration, this, &MainWindow::updatePanelVisible);
 }
 
 void MainWindow::updateGeometry()
@@ -436,20 +482,19 @@ void MainWindow::updateGeometry()
     const Position position = m_settings->position();
     QSize size = m_settings->windowSize();
 
-//    qDebug() << Q_FUNC_INFO << position << size;
-
-    m_mainPanel->setFixedSize(size);
-    m_mainPanel->updateDockPosition(position);
+    // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
+    m_mainPanel->updateDockPosition(position);
+    // this->setFixedSize has been overridden for size animation
+    m_mainPanel->setFixedSize(m_settings->panelSize());
 
     bool animation = true;
+    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
 
-    if (m_settings->hideState() == Hide)
-    {
+    if (isHide) {
         m_sizeChangeAni->stop();
         m_posChangeAni->stop();
-        switch (position)
-        {
+        switch (position) {
         case Top:
         case Bottom:    size.setHeight(2);      break;
         case Left:
@@ -458,14 +503,12 @@ void MainWindow::updateGeometry()
         animation = false;
         m_sizeChangeAni->setEndValue(size);
         QWidget::setFixedSize(size);
-    }
-    else
-    {
+    } else {
+        // this->setFixedSize has been overridden for size animation
         setFixedSize(size);
     }
 
-    const QRect windowRect = m_settings->windowRect(position, m_settings->hideState() == Hide);
-    qDebug() << Q_FUNC_INFO << windowRect;
+    const QRect windowRect = m_settings->windowRect(position, isHide);
 
     if (animation)
         internalAnimationMove(windowRect.x(), windowRect.y());
@@ -473,6 +516,7 @@ void MainWindow::updateGeometry()
         internalMove(windowRect.topLeft());
 
     m_mainPanel->update();
+    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::clearStrutPartial()
@@ -482,7 +526,6 @@ void MainWindow::clearStrutPartial()
 
 void MainWindow::setStrutPartial()
 {
-//    qDebug() << Q_FUNC_INFO;
     // first, clear old strut partial
     clearStrutPartial();
 
@@ -574,21 +617,16 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-//    qDebug() << "expand";
-    const QPoint finishPos(0, 0);
+    qApp->processEvents();
 
-    const int epsilon = std::round(devicePixelRatioF()) - 1;
-    const QSize s = size();
-    const QSize ps = m_mainPanel->size();
-
-    if (m_mainPanel->pos() == finishPos && m_panelHideAni->state() == QPropertyAnimation::Stopped &&
-        std::abs(ps.width() - s.width()) <= epsilon && std::abs(ps.height() - s.height()) <= epsilon)
-        return;
+    const auto showAniState = m_panelShowAni->state();
     m_panelHideAni->stop();
 
-    resetPanelEnvironment(true);
+    QPoint finishPos(0, 0);
 
-    if (m_panelShowAni->state() != QPropertyAnimation::Running)
+    resetPanelEnvironment(true, false);
+
+    if (showAniState != QPropertyAnimation::Running && m_mainPanel->pos() != m_panelShowAni->currentValue())
     {
         QPoint startPos(0, 0);
         const QSize &size = m_settings->windowSize();
@@ -601,17 +639,16 @@ void MainWindow::expand()
         }
 
         m_panelShowAni->setStartValue(startPos);
+        m_panelShowAni->setEndValue(finishPos);
+        m_panelShowAni->start();
+        m_shadowMaskOptimizeTimer->start();
+        m_platformWindowHandle.setShadowRadius(0);
     }
-
-    m_panelShowAni->setEndValue(finishPos);
-    m_panelShowAni->start();
 }
 
 void MainWindow::narrow(const Position prevPos)
 {
-//    qDebug() << "narrow" << prevPos;
-//    const QSize size = m_settings->windowSize();
-    const QSize size = m_mainPanel->size();
+    const QSize size = m_settings->panelSize();
 
     QPoint finishPos(0, 0);
     switch (prevPos)
@@ -626,12 +663,10 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->setStartValue(m_mainPanel->pos());
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
-
-    // clear shadow
-    m_shadowMaskOptimizeTimer->start();
+    m_platformWindowHandle.setShadowRadius(0);
 }
 
-void MainWindow::resetPanelEnvironment(const bool visible)
+void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosition)
 {
     if (!m_launched)
         return;
@@ -644,25 +679,24 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     const QRect r(m_settings->windowRect(position));
 
     m_sizeChangeAni->setEndValue(r.size());
-    m_mainPanel->setFixedSize(r.size());
+    m_mainPanel->setFixedSize(m_settings->panelSize());
     QWidget::setFixedSize(r.size());
     m_posChangeAni->setEndValue(r.topLeft());
     QWidget::move(r.topLeft());
 
+    if (!resetPosition)
+        return;
     QPoint finishPos(0, 0);
-    if (!visible)
+    switch (position)
     {
-        switch (position)
-        {
-        case Top:       finishPos.setY(-r.height());     break;
-        case Bottom:    finishPos.setY(r.height());      break;
-        case Left:      finishPos.setX(-r.width());      break;
-        case Right:     finishPos.setX(r.width());       break;
-        }
+    case Top:       finishPos.setY((visible ? 0 : -r.height()));     break;
+    case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
+    case Left:      finishPos.setX((visible ? 0 : -r.width()));       break;
+    case Right:     finishPos.setX(visible ? 0 : r.width());       break;
     }
 
     m_mainPanel->move(finishPos);
-    qDebug() << Q_FUNC_INFO << m_mainPanel->isVisible() << m_mainPanel->pos() << finishPos;
+    m_mainPanel->updateDockPosition(position);
 }
 
 void MainWindow::updatePanelVisible()
@@ -698,19 +732,13 @@ void MainWindow::adjustShadowMask()
     if (!m_launched)
         return;
 
-    qApp->processEvents();
     if (m_shadowMaskOptimizeTimer->isActive())
         return;
 
-    if (m_mainPanel->pos() != QPoint(0, 0) ||
-        m_panelHideAni->state() == QPropertyAnimation::Running ||
-        m_panelShowAni->state() == QPauseAnimation::Running ||
-        !m_wmHelper->hasComposite())
-    {
-        m_platformWindowHandle.setShadowRadius(0);
-    } else {
-        m_platformWindowHandle.setShadowRadius(60);
-    }
+    const bool composite = m_wmHelper->hasComposite();
+    const bool isFasion = m_settings->displayMode() == Fashion;
+
+    m_platformWindowHandle.setWindowRadius(composite && isFasion ? 5 : 0);
 }
 
 void MainWindow::positionCheck()
@@ -728,5 +756,16 @@ void MainWindow::positionCheck()
     qWarning() << "Dock position may error!!!!!";
     qDebug() << pos() << m_settings->frontendWindowRect() << m_settings->windowRect(m_settings->position(), false);
 
-    internalMove();
+    // this may cause some position error and animation caton
+    //internalMove();
+}
+
+void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
+{
+    Q_UNUSED(oldOwner);
+
+    if (name == SNI_WATCHER_SERVICE && !newOwner.isEmpty()) {
+        qDebug() << SNI_WATCHER_SERVICE << "SNI watcher daemon started, register dock to watcher as SNI Host";
+        m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
+    }
 }

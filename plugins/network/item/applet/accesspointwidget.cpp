@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,28 +21,27 @@
 
 #include "accesspointwidget.h"
 #include "horizontalseperator.h"
+#include "util/utils.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
+#include <dimagebutton.h>
 
-#include <DSvgRenderer>
+using namespace dde::network;
 
 DWIDGET_USE_NAMESPACE
 
-AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
+AccessPointWidget::AccessPointWidget()
     : QFrame(nullptr),
 
       m_activeState(NetworkDevice::Unknow),
-      m_ap(ap),
-      m_ssidBtn(new QPushButton(this)),
-      m_indicator(new DPictureSequenceView(this)),
+      m_ssidBtn(new SsidButton(this)),
       m_disconnectBtn(new DImageButton(this)),
-      m_securityIcon(new QLabel),
-      m_strengthIcon(new QLabel)
+      m_securityLabel(new QLabel),
+      m_strengthLabel(new QLabel)
 {
-    const auto ratio = devicePixelRatioF();
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_ssidBtn->setText(ap.ssid());
+
     m_ssidBtn->setObjectName("Ssid");
 
     m_disconnectBtn->setVisible(false);
@@ -50,30 +49,17 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect_hover.svg");
     m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_press.svg");
 
-    m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
-    m_indicator->setFixedSize(QSize(14, 14) * ratio);
-    m_indicator->setVisible(false);
-
-    if (ap.secured())
-    {
-        QPixmap iconPix = DSvgRenderer::render(":/wireless/resources/wireless/security.svg", QSize(16, 16) * ratio);
-        iconPix.setDevicePixelRatio(ratio);
-        m_securityIcon->setPixmap(iconPix);
-    }
-    else
-    {
-        QPixmap pixmap(QSize(16, 16));
-        pixmap.fill(Qt::transparent);
-        m_securityIcon->setPixmap(pixmap);
-    }
+    m_securityPixmap = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16), devicePixelRatioF());
+    m_securityIconSize = m_securityPixmap.size();
+    m_securityLabel->setPixmap(m_securityPixmap);
+    m_securityLabel->setFixedSize(m_securityIconSize / devicePixelRatioF());
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
-    infoLayout->addWidget(m_securityIcon);
+    infoLayout->addWidget(m_securityLabel);
     infoLayout->addSpacing(5);
-    infoLayout->addWidget(m_strengthIcon);
+    infoLayout->addWidget(m_strengthLabel);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_ssidBtn);
-    infoLayout->addWidget(m_indicator);
     infoLayout->addWidget(m_disconnectBtn);
     infoLayout->addSpacing(20);
     infoLayout->setSpacing(0);
@@ -84,7 +70,6 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     centralLayout->setSpacing(0);
     centralLayout->setMargin(0);
 
-    setStrengthIcon(ap.strength());
     setLayout(centralLayout);
     setStyleSheet("AccessPointWidget #Ssid {"
                   "color:white;"
@@ -98,16 +83,33 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
                   "border-top:1px solid rgba(255, 255, 255, .05);"
                   "}"
                   "AccessPointWidget:hover {"
-                  "border:none;"
-                  "margin:0;"
                   "background-color:rgba(255, 255, 255, .1);"
                   "}"
                   "AccessPointWidget[active=true] #Ssid {"
 //                  "color:#2ca7f8;"
                   "}");
 
-    connect(m_ssidBtn, &QPushButton::clicked, this, &AccessPointWidget::ssidClicked);
+    connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::clicked);
+    connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::ssidClicked);
     connect(m_disconnectBtn, &DImageButton::clicked, this, &AccessPointWidget::disconnectBtnClicked);
+}
+
+void AccessPointWidget::updateAP(const AccessPoint &ap)
+{
+    m_ap = ap;
+
+    m_ssidBtn->setText(ap.ssid());
+
+    setStrengthIcon(ap.strength());
+
+    if (!ap.secured()) {
+        m_securityLabel->clear();
+    } else if(!m_securityLabel->pixmap()) {
+        m_securityLabel->setPixmap(m_securityPixmap);
+    }
+
+    // reset state
+    setActiveState(NetworkDevice::Unknow);
 }
 
 bool AccessPointWidget::active() const
@@ -115,7 +117,7 @@ bool AccessPointWidget::active() const
     return m_activeState == NetworkDevice::Activated;
 }
 
-void AccessPointWidget::setActiveState(const NetworkDevice::NetworkState state)
+void AccessPointWidget::setActiveState(const NetworkDevice::DeviceStatus state)
 {
     if (m_activeState == state)
         return;
@@ -125,14 +127,6 @@ void AccessPointWidget::setActiveState(const NetworkDevice::NetworkState state)
 
     const bool isActive = active();
     m_disconnectBtn->setVisible(isActive);
-
-    if (!isActive && state > NetworkDevice::Disconnected)
-    {
-        m_indicator->play();
-        m_indicator->setVisible(true);
-    } else {
-        m_indicator->setVisible(false);
-    }
 }
 
 void AccessPointWidget::enterEvent(QEvent *e)
@@ -150,8 +144,7 @@ void AccessPointWidget::leaveEvent(QEvent *e)
 void AccessPointWidget::setStrengthIcon(const int strength)
 {
     QPixmap iconPix;
-    const auto ratio = devicePixelRatioF();
-    const QSize s = QSize(16, 16) * ratio;
+    const QSize s = QSize(16, 16);
 
     QString type;
     if (strength == 100)
@@ -161,10 +154,9 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     else
         type = QString::number(strength / 10 & ~0x1) + "0";
 
-    iconPix = DSvgRenderer::render(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s);
-    iconPix.setDevicePixelRatio(ratio);
+    iconPix = Utils::renderSVG(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s, devicePixelRatioF());
 
-    m_strengthIcon->setPixmap(iconPix);
+    m_strengthLabel->setPixmap(iconPix);
 }
 
 void AccessPointWidget::ssidClicked()
@@ -173,7 +165,7 @@ void AccessPointWidget::ssidClicked()
         return;
 
     setActiveState(NetworkDevice::Prepare);
-    emit requestActiveAP(QDBusObjectPath(m_ap.path()), m_ap.ssid());
+    emit requestActiveAP(m_ap.path(), m_ap.ssid());
 }
 
 void AccessPointWidget::disconnectBtnClicked()

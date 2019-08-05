@@ -1,9 +1,10 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,103 +25,91 @@
 
 #include <QBoxLayout>
 #include <QDragEnterEvent>
+#include <QApplication>
+#include <QScreen>
+#include <QGraphicsView>
 
-DockItem *MainPanel::DragingItem = nullptr;
-PlaceholderItem *MainPanel::RequestDockItem = nullptr;
+#include <window/mainwindow.h>
+
+#include <item/traypluginitem.h>
+
+static QPointer<DockItem> DraggingItem = nullptr;
+static PlaceholderItem *RequestDockItem = nullptr;
 
 const char *RequestDockKey = "RequestDock";
+const char *RequestDockKeyFallback = "text/plain";
+
+const char *DesktopMimeType = "application/x-desktop";
 
 MainPanel::MainPanel(QWidget *parent)
-    : QFrame(parent),
+    : DBlurEffectWidget(parent),
       m_position(Dock::Top),
       m_displayMode(Dock::Fashion),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
-
       m_itemAdjustTimer(new QTimer(this)),
-      m_itemController(DockItemController::instance(this)),
-
-      m_updateEffectTimer(new QTimer(this)),
-      m_effectWidget(new DBlurEffectWidget(this)),
-      m_wmHelper(DWindowManagerHelper::instance())
+      m_checkMouseLeaveTimer(new QTimer(this)),
+      m_appDragWidget(nullptr),
+      m_sizeChangeAni(new QVariantAnimation(this)),
+      m_showDesktopItem(new ShowDesktopItem(this)),
+      m_itemController(DockItemController::instance(this))
 {
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_effectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
-    m_effectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
-    m_effectWidget->setDisabled(true);
+    setBlurRectXRadius(0);
+    setBlurRectYRadius(0);
+    setBlendMode(BehindWindowBlend);
 
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
     setObjectName("MainPanel");
-    setStyleSheet("QWidget #MainPanel {"
-//                  "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
-//                  "background-color:rgba(10, 10, 10, .6);"
-                  "}"
-                  "QWidget #MainPanel[displayMode='1'] {"
-                  "border:none;"
-                  "}"
-                  // Top
-                  "QWidget #MainPanel[displayMode='0'][position='0'] {"
-//                  "border-bottom-left-radius:5px;"
-//                  "border-bottom-right-radius:5px;"
-                  "}"
-                  // Right
-                  "QWidget #MainPanel[displayMode='0'][position='1'] {"
-//                  "border-top-left-radius:5px;"
-//                  "border-bottom-left-radius:5px;"
-                  "}"
-                  // Bottom
-                  "QWidget #MainPanel[displayMode='0'][position='2'] {"
-//                  "border-top-left-radius:6px;"
-//                  "border-top-right-radius:6px;"
-                  "}"
-                  // Left
-                  "QWidget #MainPanel[displayMode='0'][position='3'] {"
-//                  "border-top-right-radius:5px;"
-//                  "border-bottom-right-radius:5px;"
-                  "}"
-                  "QWidget #MainPanel[position='0'] {"
-                  "padding:0 " xstr(PANEL_PADDING) "px;"
-                  "border-top:none;"
-                  "}"
-                  "QWidget #MainPanel[position='1'] {"
-                  "padding:" xstr(PANEL_PADDING) "px 0;"
-                  "border-right:none;"
-                  "}"
-                  "QWidget #MainPanel[position='2'] {"
-                  "padding:0 " xstr(PANEL_PADDING) "px;"
-                  "border-bottom:none;"
-                  "}"
-                  "QWidget #MainPanel[position='3'] {"
-                  "padding:" xstr(PANEL_PADDING) "px 0;"
-                  "border-left:none;"
-                  "}");
+    setMouseTracking(true);
 
+    QFile qssFile(":/qss/frame.qss");
+
+    qssFile.open(QFile::ReadOnly);
+    if(qssFile.isOpen()) {
+        setStyleSheet(qssFile.readAll());
+        qssFile.close();
+    }
+
+    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
-    connect(m_updateEffectTimer, &QTimer::timeout, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, m_updateEffectTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_checkMouseLeaveTimer, &QTimer::timeout, this, &MainPanel::checkMouseReallyLeave, Qt::QueuedConnection);
+    connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainPanel::setMaskAlpha);
+
+    m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
+    connect(m_sizeChangeAni, &QPropertyAnimation::finished, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    // to fix qt animation bug, sometimes widget size not change
+    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [=](const QVariant &value) {
+        QWidget::setFixedSize(value.toSize());
+    });
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
 
-    m_updateEffectTimer->setSingleShot(true);
-    m_updateEffectTimer->setInterval(1000 / 25);
+    m_checkMouseLeaveTimer->setSingleShot(true);
+    m_checkMouseLeaveTimer->setInterval(300);
 
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         manageItem(item);
         m_itemLayout->addWidget(item);
     }
 
+    m_showDesktopItem->setFixedSize(10, height());
+    m_itemLayout->addSpacing(1);
+    m_itemLayout->addWidget(m_showDesktopItem);
+
     setLayout(m_itemLayout);
 }
+
+MainPanel::~MainPanel() { }
 
 ///
 /// \brief MainPanel::updateDockPosition change panel layout with spec position.
@@ -133,13 +122,16 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     switch (m_position)
     {
     case Position::Top:
-    case Position::Bottom:          m_itemLayout->setDirection(QBoxLayout::LeftToRight);    break;
+    case Position::Bottom:
+        m_itemLayout->setDirection(QBoxLayout::LeftToRight);
+        m_showDesktopItem->setFixedSize(10, height());
+        break;
     case Position::Left:
-    case Position::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
+    case Position::Right:
+        m_itemLayout->setDirection(QBoxLayout::TopToBottom);
+        m_showDesktopItem->setFixedSize(width(), 10);
+        break;
     }
-
-    m_itemAdjustTimer->start();
-    m_updateEffectTimer->start();
 }
 
 ///
@@ -150,7 +142,9 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
     m_displayMode = displayMode;
 
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    m_showDesktopItem->setVisible(displayMode == Dock::Efficient);
+
+    const auto &itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         // we need to hide container item at fashion mode.
@@ -165,8 +159,6 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 
     // reload qss
     setStyleSheet(styleSheet());
-
-    m_updateEffectTimer->start();
 }
 
 ///
@@ -187,59 +179,83 @@ int MainPanel::position() const
     return int(m_position);
 }
 
-void MainPanel::moveEvent(QMoveEvent* e)
+void MainPanel::setEffectEnabled(const bool enabled)
 {
-    QFrame::moveEvent(e);
+    if (enabled)
+        setMaskColor(DarkColor);
+    else
+        setMaskColor(QColor(55, 63, 71));
 
-    m_updateEffectTimer->start();
+    setMaskAlpha(DockSettings::Instance().Opacity());
 
-    emit geometryChanged();
+    m_itemAdjustTimer->start();
 }
 
-void MainPanel::paintEvent(QPaintEvent *e)
+bool MainPanel::eventFilter(QObject *watched, QEvent *event)
 {
-    QWidget::paintEvent(e);
+    if (watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
+        QDropEvent *e = static_cast<QDropEvent *>(event);
+        bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
+        if (isContains) {
+            if (event->type() == QEvent::DragMove) {
+                handleDragMove(static_cast<QDragMoveEvent *>(event), true);
+            } else if (event->type() == QEvent::Drop) {
+                m_appDragWidget->hide();
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-//    QPainter p(this);
-//    p.setRenderHint(QPainter::Antialiasing);
+void MainPanel::setFixedSize(const QSize &size)
+{
+    m_destSize = size;
+    // in order to make the panel resizing animation work better, resize the icon first here
+    adjustItemSize();
 
-//    if (m_displayMode == Dock::Fashion && m_wmHelper->hasComposite()) {
-//        QPen pen;
-//        pen.setWidth(1);
-//        pen.setColor(QColor(162, 162, 162, 255 * 0.2));
+    const QPropertyAnimation::State state = m_sizeChangeAni->state();
 
-//        const QRect r = rect();
-//        // border radius
-//        const int br = 8;
+    if (state == QPropertyAnimation::Stopped && this->size() == size)
+        return;
 
-//        // draw border
-//        QRect borderRect = r;
-//        switch (m_position)
-//        {
-//        case Top:       borderRect.setTop(-br);                  break;
-//        case Bottom:    borderRect.setBottom(r.bottom() + br);   break;
-//        case Left:      borderRect.setLeft(-br);                 break;
-//        case Right:     borderRect.setRight(r.right() + br);     break;
-//        }
+    if (state == QPropertyAnimation::Running)
+        return m_sizeChangeAni->setEndValue(size);
 
-//        p.setPen(pen);
-//        p.setBrush(Qt::transparent);
-//        p.drawRoundedRect(borderRect, br, br);
-//    }
+    m_sizeChangeAni->setStartValue(this->size());
+    m_sizeChangeAni->setEndValue(size);
+    m_sizeChangeAni->start();
+}
+
+void MainPanel::setComposite(const bool hasComposite)
+{
+    setEffectEnabled(hasComposite);
+
+    m_sizeChangeAni->setDuration(hasComposite ? 300 : 0);
+}
+
+void MainPanel::moveEvent(QMoveEvent* e)
+{
+    DBlurEffectWidget::moveEvent(e);
+
+    QTimer::singleShot(500, this, &MainPanel::geometryChanged);
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)
 {
-    QWidget::resizeEvent(e);
+    DBlurEffectWidget::resizeEvent(e);
 
-    m_itemAdjustTimer->start();
-    m_updateEffectTimer->start();
-
-    emit geometryChanged();
+    QTimer::singleShot(500, this, &MainPanel::geometryChanged);
 }
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 {
+    // 不知道为什么有可能会收不到dragLeaveEvent，因此使用timer来检测鼠标是否已经离开dock
+    m_checkMouseLeaveTimer->start();
+
+    // call dragEnterEvent of MainWindow to show dock when dock is hidden
+    static_cast<MainWindow *>(window())->dragEnterEvent(e);
+
     DockItem *item = itemAt(e->pos());
     if (item && item->itemType() == DockItem::Container)
         return;
@@ -248,60 +264,33 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
     if (dragSourceItem)
     {
         e->accept();
-        if (DragingItem)
-            DragingItem->show();
+        if (DraggingItem)
+            DraggingItem->show();
         return;
     } else {
-        DragingItem = nullptr;
+        DraggingItem = nullptr;
     }
 
-    if (!e->mimeData()->formats().contains(RequestDockKey))
+    m_draggingMimeKey = e->mimeData()->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
+
+    // dragging item is NOT a desktop file
+    if (QMimeDatabase().mimeTypeForFile(e->mimeData()->data(m_draggingMimeKey)).name() != DesktopMimeType) {
+        m_draggingMimeKey.clear();
         return;
-    if (m_itemController->appIsOnDock(e->mimeData()->data(RequestDockKey)))
+    }
+
+    // dragging item has been docked
+    if (m_itemController->appIsOnDock(e->mimeData()->data(m_draggingMimeKey))) {
+        m_draggingMimeKey.clear();
         return;
+    }
 
     e->accept();
 }
 
 void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
-    e->accept();
-
-    DockItem *dst = itemAt(e->pos());
-    if (!dst)
-        return;
-
-    // internal drag swap
-    if (e->source())
-    {
-        if (dst == DragingItem)
-            return;
-        if (!DragingItem)
-            return;
-        if (m_itemController->itemIsInContainer(DragingItem))
-            return;
-
-        m_itemController->itemMove(DragingItem, dst);
-    } else {
-        DragingItem = nullptr;
-
-        if (!RequestDockItem)
-        {
-            DockItem *insertPositionItem = itemAt(e->pos());
-            if (!insertPositionItem)
-                return;
-            const auto type = insertPositionItem->itemType();
-            if (type != DockItem::App && type != DockItem::Stretch)
-                return;
-            RequestDockItem = new PlaceholderItem;
-            m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
-        } else {
-            if (dst == RequestDockItem)
-                return;
-
-            m_itemController->itemMove(RequestDockItem, dst);
-        }
-    }
+    handleDragMove(e, false);
 }
 
 void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
@@ -313,7 +302,10 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         const QRect r(static_cast<QWidget *>(parent())->pos(), size());
         const QPoint p(QCursor::pos());
 
-        if (r.contains(p))
+        // remove margins to fix a touch screen bug:
+        // the mouse point position will stay on this rect's margins after
+        // drag move to the edge of screen
+        if (r.marginsRemoved(QMargins(1,1,1,1)).contains(p))
             return;
 
         m_itemController->placeholderItemRemoved(RequestDockItem);
@@ -321,19 +313,21 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         RequestDockItem = nullptr;
     }
 
-    if (DragingItem && DragingItem->itemType() != DockItem::Plugins)
-        DragingItem->hide();
+//    if (DraggingItem) {
+//        DockItem::ItemType type = DraggingItem->itemType();
+//        if (type != DockItem::Plugins && type != DockItem::TrayPlugin) {
+//            DraggingItem->hide();
+//        }
+//    }
 }
 
 void MainPanel::dropEvent(QDropEvent *e)
 {
-    Q_UNUSED(e)
-
-    DragingItem = nullptr;
+    DraggingItem = nullptr;
 
     if (RequestDockItem)
     {
-        m_itemController->placeholderItemDocked(e->mimeData()->data(RequestDockKey), RequestDockItem);
+        m_itemController->placeholderItemDocked(e->mimeData()->data(m_draggingMimeKey), RequestDockItem);
         m_itemController->placeholderItemRemoved(RequestDockItem);
         RequestDockItem->deleteLater();
         RequestDockItem = nullptr;
@@ -348,7 +342,7 @@ void MainPanel::manageItem(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted, Qt::UniqueConnection);
     connect(item, &DockItem::itemDropped, this, &MainPanel::itemDropped, Qt::UniqueConnection);
-    connect(item, &DockItem::requestRefershWindowVisible, this, &MainPanel::requestRefershWindowVisible, Qt::UniqueConnection);
+    connect(item, &DockItem::requestRefreshWindowVisible, this, &MainPanel::requestRefershWindowVisible, Qt::UniqueConnection);
     connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide, Qt::UniqueConnection);
 }
 
@@ -359,7 +353,7 @@ void MainPanel::manageItem(DockItem *item)
 ///
 DockItem *MainPanel::itemAt(const QPoint &point)
 {
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
 
     for (auto item : itemList)
     {
@@ -377,59 +371,6 @@ DockItem *MainPanel::itemAt(const QPoint &point)
     return nullptr;
 }
 
-void MainPanel::updateBlurEffect() const
-{
-    Q_ASSERT(sender() == m_updateEffectTimer);
-
-    qApp->processEvents();
-
-    if (m_displayMode == Efficient || !m_wmHelper->hasComposite()) {
-        m_effectWidget->setBlurRectXRadius(0);
-        m_effectWidget->setBlurRectYRadius(0);
-        m_effectWidget->move(pos());
-        m_effectWidget->resize(size());
-    } else {
-        const int expandSize = 10;
-        int width = this->width();
-        int height = this->height();
-        const int x = pos().x();
-        const int y = pos().y();
-
-        m_effectWidget->setBlurRectXRadius(5);
-        m_effectWidget->setBlurRectYRadius(5);
-
-        switch (m_position)
-        {
-        case Top: {
-            height += expandSize;
-            m_effectWidget->move(x, y - expandSize);
-            m_effectWidget->resize(width, height);
-            break;
-        }
-        case Bottom:
-            height += expandSize;
-            m_effectWidget->move(x, y);
-            m_effectWidget->resize(width, height);
-            break;
-        case Left: {
-            width += expandSize;
-            m_effectWidget->move(x - expandSize, y);
-            m_effectWidget->resize(width, height);
-            break;
-        }
-        case Right: {
-            width += expandSize;
-            m_effectWidget->move(x, y);
-            m_effectWidget->resize(width, height);
-            break;
-        }
-
-        default:
-            Q_ASSERT(false);
-        }
-    }
-}
-
 ///
 /// \brief MainPanel::adjustItemSize adjust all dock item size to fit panel size,
 /// for optimize cpu usage, DO NOT call this func immediately, you should use m_itemAdjustTimer
@@ -437,7 +378,8 @@ void MainPanel::updateBlurEffect() const
 ///
 void MainPanel::adjustItemSize()
 {
-    Q_ASSERT(sender() == m_itemAdjustTimer);
+    // ensure all item is update, whatever layout is changed
+    QTimer::singleShot(1, this, static_cast<void (MainPanel::*)()>(&MainPanel::update));
 
     const auto ratio = devicePixelRatioF();
 
@@ -446,14 +388,14 @@ void MainPanel::adjustItemSize()
     {
     case Top:
     case Bottom:
-        itemSize.setHeight(height() - PANEL_BORDER);
+        itemSize.setHeight(m_destSize.height() - PANEL_BORDER);
         itemSize.setWidth(std::round(qreal(AppItem::itemBaseWidth()) / ratio));
         break;
 
     case Left:
     case Right:
         itemSize.setHeight(std::round(qreal(AppItem::itemBaseHeight()) / ratio));
-        itemSize.setWidth(width() - PANEL_BORDER);
+        itemSize.setWidth(m_destSize.width() - PANEL_BORDER);
         break;
 
     default:
@@ -466,7 +408,13 @@ void MainPanel::adjustItemSize()
     int totalAppItemCount = 0;
     int totalWidth = 0;
     int totalHeight = 0;
-    const QList<DockItem *> itemList = m_itemController->itemList();
+    const auto &itemList = m_itemController->itemList();
+
+    // FTray: FashionTray
+    const QSize &FSTrayTotalSize = DockSettings::Instance().fashionTraySize(); // the total size of FSTray
+    TrayPluginItem *FSTrayItem = nullptr; // the FSTray item object
+    QSize FSTraySuggestIconSize = itemSize; // the suggested size of FStray icons
+
     for (auto item : itemList)
     {
         const auto itemType = item->itemType();
@@ -489,12 +437,28 @@ void MainPanel::adjustItemSize()
             totalHeight += itemSize.height();
             break;
         case DockItem::Plugins:
-            if (m_displayMode == Fashion)
-            {
-                item->setFixedSize(itemSize);
-                ++totalAppItemCount;
-                totalWidth += itemSize.width();
-                totalHeight += itemSize.height();
+        case DockItem::TrayPlugin:
+            if (m_displayMode == Fashion) {
+                // 特殊处理时尚模式下的托盘插件
+                if (item->itemType() == DockItem::TrayPlugin) {
+                    FSTrayItem = static_cast<TrayPluginItem *>(item.data());
+                    if (m_position == Dock::Top || m_position == Dock::Bottom) {
+//                        item->setFixedWidth(FSTrayTotalSize.width());
+//                        item->setFixedHeight(itemSize.height());
+                        totalWidth += FSTrayTotalSize.width();
+                        totalHeight += itemSize.height();
+                    } else {
+//                        item->setFixedWidth(itemSize.width());
+//                        item->setFixedHeight(FSTrayTotalSize.height());
+                        totalWidth += itemSize.width();
+                        totalHeight += FSTrayTotalSize.height();
+                    }
+                } else {
+                    item->setFixedSize(itemSize);
+                    totalWidth += itemSize.width();
+                    totalHeight += itemSize.height();
+                    ++totalAppItemCount;
+                }
             }
             else
             {
@@ -527,8 +491,8 @@ void MainPanel::adjustItemSize()
         }
     }
 
-    const int w = width() - PANEL_BORDER * 2 - PANEL_PADDING * 2;
-    const int h = height() - PANEL_BORDER * 2 - PANEL_PADDING * 2;
+    const int w = m_destSize.width() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
+    const int h = m_destSize.height() - PANEL_BORDER * 2 - PANEL_PADDING * 2 - PANEL_MARGIN * 2;
 
     // test if panel can display all items completely
     bool containsCompletely = false;
@@ -536,37 +500,45 @@ void MainPanel::adjustItemSize()
     {
     case Dock::Top:
     case Dock::Bottom:
-        containsCompletely = totalWidth <= w;     break;
+        containsCompletely = totalWidth <= w;   break;
 
     case Dock::Left:
     case Dock::Right:
-        containsCompletely = totalHeight <= h;   break;
+        containsCompletely = totalHeight <= h;  break;
 
     default:
         Q_ASSERT(false);
     }
 
     // abort adjust.
-    if (containsCompletely)
+    if (containsCompletely) {
+        if (FSTrayItem) {
+            FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
+        }
         return;
+    }
 
     // now, we need to decrease item size to fit panel size
     int overflow;
     int base;
     if (m_position == Dock::Top || m_position == Dock::Bottom)
     {
-//        qDebug() << "width: " << totalWidth << width();
         overflow = totalWidth;
         base = w;
     }
     else
     {
-//        qDebug() << "height: " << totalHeight << height();
         overflow = totalHeight;
         base = h;
     }
 
-    const int decrease = double(overflow - base) / totalAppItemCount;
+    // FIXME:
+    // 时尚模式下使用整形否则会出现图标大小计算不正确的问题
+    // 高校模式下使用浮点数否则会出现图标背景色连到一起的问题
+    const double decrease = m_displayMode == Dock::Fashion ?
+                int(overflow - base) / totalAppItemCount :
+                double(overflow - base) / totalAppItemCount;
+
     int extraDecrease = overflow - base - decrease * totalAppItemCount;
 
     for (auto item : itemList)
@@ -581,9 +553,24 @@ void MainPanel::adjustItemSize()
             if (m_itemController->itemIsInContainer(item))
                 continue;
         }
+        if (itemType == DockItem::TrayPlugin) {
+            if (m_displayMode == Dock::Fashion) {
+                switch (m_position) {
+                case Dock::Top:
+                case Dock::Bottom:
+                    FSTraySuggestIconSize.setWidth(itemSize.width() - decrease);
+                    break;
 
-        switch (m_position)
-        {
+                case Dock::Left:
+                case Dock::Right:
+                    FSTraySuggestIconSize.setHeight(itemSize.height() - decrease);
+                    break;
+                }
+            }
+            continue;
+        }
+
+        switch (m_position) {
         case Dock::Top:
         case Dock::Bottom:
             item->setFixedWidth(item->width() - decrease - bool(extraDecrease));
@@ -599,10 +586,13 @@ void MainPanel::adjustItemSize()
             --extraDecrease;
     }
 
+    // 如果dock的大小已经是最大的则不再调整时尚模式托盘图标的大小,以避免递归调整dock与托盘的大小
+    if (!DockSettings::Instance().isMaxSize() && FSTrayItem) {
+        FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
+    }
+
     // ensure all extra space assigned
     Q_ASSERT(extraDecrease == 0);
-
-    update();
 }
 
 ///
@@ -651,17 +641,27 @@ void MainPanel::itemMoved(DockItem *item, const int index)
 }
 
 ///
-/// \brief MainPanel::itemDragStarted handle managed item draging
+/// \brief MainPanel::itemDragStarted handle managed item dragging
 ///
 void MainPanel::itemDragStarted()
 {
-    DragingItem = qobject_cast<DockItem *>(sender());
+    DraggingItem = qobject_cast<DockItem *>(sender());
 
-    if (DragingItem->itemType() == DockItem::Plugins)
+    DockItem::ItemType draggingTyep = DraggingItem->itemType();
+    if (draggingTyep == DockItem::App)
     {
-        if (static_cast<PluginsItem *>(DragingItem)->allowContainer())
+        AppItem *appItem = qobject_cast<AppItem *>(DraggingItem);
+        m_appDragWidget = appItem->appDragWidget();
+        appItem->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
+        static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
+    }
+
+    if (draggingTyep == DockItem::Plugins || draggingTyep == DockItem::TrayPlugin)
+    {
+        PluginsItem *pluginItem = qobject_cast<PluginsItem *>(DraggingItem);
+        if (pluginItem && pluginItem->allowContainer())
         {
-            qobject_cast<PluginsItem *>(DragingItem)->hidePopup();
+            pluginItem->hidePopup();
             m_itemController->setDropping(true);
         }
     }
@@ -670,35 +670,94 @@ void MainPanel::itemDragStarted()
     rect.setTopLeft(mapToGlobal(pos()));
     rect.setSize(size());
 
-    DragingItem->setVisible(rect.contains(QCursor::pos()));
+    DraggingItem->setVisible(rect.contains(QCursor::pos()));
 }
 
 ///
 /// \brief MainPanel::itemDropped handle managed item dropped.
 /// \param destnation
 ///
-void MainPanel::itemDropped(QObject *destnation)
+void MainPanel::itemDropped(QObject *destnation, const QPoint &dropPoint)
 {
     m_itemController->setDropping(false);
+
+    DockItem *src = qobject_cast<DockItem *>(sender());
 
     if (m_displayMode == Dock::Fashion)
         return;
 
-    DockItem *src = qobject_cast<DockItem *>(sender());
-//    DockItem *dst = qobject_cast<DockItem *>(destnation);
-
     if (!src)
         return;
 
+    // 忽略拖拽到了容器item上, 也就是拖拽时出现的箭头
+    if (qobject_cast<ContainerItem *>(destnation))
+        return;
+
     const bool itemIsInContainer = m_itemController->itemIsInContainer(src);
+    const bool dropInDock = rect().contains(mapFromGlobal(dropPoint));
 
     // drag from container
-    if (itemIsInContainer && src->itemType() == DockItem::Plugins && destnation == this)
+    if (itemIsInContainer
+            && (src->itemType() == DockItem::Plugins || src->itemType() == DockItem::TrayPlugin)
+            && dropInDock)
         m_itemController->itemDragOutFromContainer(src);
 
     // drop to container
-    if (!itemIsInContainer && src->parent() == this && destnation != this)
+    if (!itemIsInContainer && src->parent() == this && !dropInDock)
         m_itemController->itemDroppedIntoContainer(src);
 
     m_itemAdjustTimer->start();
+}
+
+void MainPanel::handleDragMove(QDragMoveEvent *e, bool isFilter)
+{
+    e->accept();
+
+    DockItem *dst = itemAt(isFilter ? mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())) : e->pos());
+
+    if (!dst)
+        return;
+
+    // internal drag swap
+    if (e->source())
+    {
+        if (dst == DraggingItem)
+            return;
+        if (!DraggingItem)
+            return;
+        if (m_itemController->itemIsInContainer(DraggingItem))
+            return;
+
+        m_itemController->itemMove(DraggingItem, dst);
+    } else {
+        DraggingItem = nullptr;
+
+        if (!RequestDockItem)
+        {
+            DockItem *insertPositionItem = itemAt(e->pos());
+            if (!insertPositionItem)
+                return;
+            const auto type = insertPositionItem->itemType();
+            if (type != DockItem::App && type != DockItem::Stretch)
+                return;
+            RequestDockItem = new PlaceholderItem;
+            m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
+        } else {
+            if (dst == RequestDockItem)
+                return;
+
+            m_itemController->itemMove(RequestDockItem, dst);
+        }
+    }
+}
+
+void MainPanel::checkMouseReallyLeave()
+{
+    if (window()->geometry().contains(QCursor::pos())) {
+        return m_checkMouseLeaveTimer->start();
+    }
+
+    m_checkMouseLeaveTimer->stop();
+
+    dragLeaveEvent(new QDragLeaveEvent);
 }

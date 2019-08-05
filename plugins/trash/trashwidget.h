@@ -1,9 +1,14 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *               2016 ~ 2018 dragondjf
  *
  * Author:     sbw <sbw@sbw.so>
+ *             dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             zccrs<zhangjide@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +43,7 @@ public:
 
     QWidget *popupApplet();
 
-    QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
     const QString contextMenu() const;
     int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
@@ -48,11 +53,11 @@ signals:
     void requestContextMenu() const;
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void removeApp(const QString &appKey);

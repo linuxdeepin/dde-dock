@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -30,7 +30,6 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
-#include <QGSettings>
 #include <dimagebutton.h>
 
 class SoundApplet : public QScrollArea
@@ -53,7 +52,6 @@ private slots:
     void volumeSliderValueChanged();
     void sinkInputsChanged();
     void toggleMute();
-    void delayLoad();
     void onPlaySoundEffect();
 
 private:
@@ -65,7 +63,6 @@ private:
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;
-    QGSettings *m_gsetting;
 };
 
 #endif // SOUNDAPPLET_H

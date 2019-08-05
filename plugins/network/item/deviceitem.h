@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -22,40 +22,40 @@
 #ifndef DEVICEITEM_H
 #define DEVICEITEM_H
 
-#include "networkmanager.h"
-
 #include <QWidget>
+#include <QPointer>
+
+#include <NetworkDevice>
 
 class DeviceItem : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DeviceItem(const QString &path);
+    explicit DeviceItem(dde::network::NetworkDevice *device);
 
-    const QString path() const { return m_devicePath; }
+    const QString &path() const { return m_path; }
 
-    virtual NetworkDevice::NetworkType type() const = 0;
-    virtual NetworkDevice::NetworkState state() const = 0;
+    inline const QPointer<dde::network::NetworkDevice> device() { return m_device; }
+
     virtual void refreshIcon() = 0;
     virtual const QString itemCommand() const;
     virtual const QString itemContextMenu();
     virtual QWidget *itemApplet();
-    virtual QWidget *itemPopup();
+    virtual QWidget *itemTips();
     virtual void invokeMenuItem(const QString &menuId);
 
 signals:
-    void requestContextMenu() const;
+    void requestSetDeviceEnable(const QString &path, const bool enable) const;
 
 protected:
-    bool enabled() const;
-    void setEnabled(const bool enable);
     QSize sizeHint() const;
 
 protected:
-    const QString m_devicePath;
+    QPointer<dde::network::NetworkDevice> m_device;
 
-    NetworkManager *m_networkManager;
+private:
+    QString m_path;
 };
 
 #endif // DEVICEITEM_H

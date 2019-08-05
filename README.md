@@ -2,6 +2,8 @@
 
 DDE Dock is the dock of Deepin Desktop Environment.
 
+A tutorial for build dde-dock plugin: [plugins-developer-guide](plugins/plugin-guide/plugins-developer-guide.md)
+
 ## Getting help
 
 Any usage issues can ask for help via

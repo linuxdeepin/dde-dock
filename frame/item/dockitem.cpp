@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -22,9 +22,11 @@
 #include "dockitem.h"
 #include "dbus/dbusmenu.h"
 #include "dbus/dbusmenumanager.h"
+#include "components/hoverhighlighteffect.h"
 
 #include <QMouseEvent>
 #include <QJsonObject>
+#include <QCursor>
 
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
@@ -34,6 +36,9 @@ DockItem::DockItem(QWidget *parent)
     : QWidget(parent),
       m_hover(false),
       m_popupShown(false),
+      m_tapAndHold(false),
+
+      m_hoverEffect(new HoverHighlightEffect(this)),
 
       m_popupTipsDelayTimer(new QTimer(this)),
       m_popupAdjustDelayTimer(new QTimer(this)),
@@ -55,11 +60,15 @@ DockItem::DockItem(QWidget *parent)
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
 
-    m_popupAdjustDelayTimer->setInterval(100);
+    m_popupAdjustDelayTimer->setInterval(10);
     m_popupAdjustDelayTimer->setSingleShot(true);
 
+    setGraphicsEffect(m_hoverEffect);
+
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
-    connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition);
+    connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
+
+    grabGesture(Qt::TapAndHoldGesture);
 }
 
 DockItem::~DockItem()
@@ -78,12 +87,50 @@ void DockItem::setDockDisplayMode(const DisplayMode mode)
     DockDisplayMode = mode;
 }
 
+void DockItem::gestureEvent(QGestureEvent *event)
+{
+    if (!event)
+        return;
+
+    QGesture *gesture = event->gesture(Qt::TapAndHoldGesture);
+
+    if (!gesture)
+        return;
+
+    qDebug() << "got TapAndHoldGesture";
+
+    m_tapAndHold = true;
+}
+
+bool DockItem::event(QEvent *event)
+{
+    if (m_popupShown)
+    {
+        switch (event->type())
+        {
+        case QEvent::Paint:
+            if (!m_popupAdjustDelayTimer->isActive())
+                m_popupAdjustDelayTimer->start();
+            break;
+        default:;
+        }
+    }
+
+    if (event->type() == QEvent::Gesture)
+        gestureEvent(static_cast<QGestureEvent*>(event));
+
+    return QWidget::event(event);
+}
+
 void DockItem::updatePopupPosition()
 {
     Q_ASSERT(sender() == m_popupAdjustDelayTimer);
 
-    if (!m_popupShown || !PopupWindow->isVisible())
+    if (!m_popupShown || !PopupWindow->model())
         return;
+
+    if (PopupWindow->getContent() != m_lastPopupWidget.data())
+        return popupWindowAccept();
 
     const QPoint p = popupMarkPoint();
     PopupWindow->show(p, PopupWindow->model());
@@ -94,25 +141,34 @@ void DockItem::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 }
 
-void DockItem::moveEvent(QMoveEvent *e)
-{
-    QWidget::moveEvent(e);
-
-    m_popupAdjustDelayTimer->start();
-}
-
 void DockItem::mousePressEvent(QMouseEvent *e)
 {
     m_popupTipsDelayTimer->stop();
     hideNonModel();
 
-    if (e->button() == Qt::RightButton)
-        return showContextMenu();
+    if (e->button() == Qt::RightButton) {
+        if (itemType() == ItemType::Container) {
+            // ignore this event to MainPanel/MainWindow to show context menu of MainWindow
+            return e->ignore();
+        }
+        if (perfectIconRect().contains(e->pos())) {
+            return showContextMenu();
+        }
+    }
+
+    // same as e->ignore above
+    QWidget::mousePressEvent(e);
 }
 
 void DockItem::enterEvent(QEvent *e)
 {
+    // Remove the bottom area to prevent unintentional operation in auto-hide mode.
+    if (!rect().adjusted(0, 0, width(), height() - 5).contains(mapFromGlobal(QCursor::pos()))) {
+        return;
+    }
+
     m_hover = true;
+    m_hoverEffect->setHighlighting(true);
     m_popupTipsDelayTimer->start();
 
     update();
@@ -125,6 +181,7 @@ void DockItem::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_hover = false;
+    m_hoverEffect->setHighlighting(false);
     m_popupTipsDelayTimer->stop();
 
     // auto hide if popup is not model window
@@ -182,11 +239,8 @@ void DockItem::showContextMenu()
     DBusMenu *menuInter = new DBusMenu(path.path(), this);
 
     connect(menuInter, &DBusMenu::ItemInvoked, this, &DockItem::invokedMenuItem);
-    connect(menuInter, &DBusMenu::MenuUnregistered, this, [=] {
-        emit requestRefershWindowVisible();
-        emit requestWindowAutoHide(true);
-        menuInter->deleteLater();
-    });
+    connect(menuInter, &DBusMenu::ItemInvoked, menuInter, &DBusMenu::deleteLater);
+    connect(menuInter, &DBusMenu::MenuUnregistered, this, &DockItem::onContextMenuAccepted, Qt::QueuedConnection);
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
 
@@ -194,10 +248,16 @@ void DockItem::showContextMenu()
     emit requestWindowAutoHide(false);
 }
 
+void DockItem::onContextMenuAccepted()
+{
+    emit requestRefreshWindowVisible();
+    emit requestWindowAutoHide(true);
+}
+
 void DockItem::showHoverTips()
 {
-    // another model popup window is alread exists
-    if (PopupWindow->isVisible() && PopupWindow->model())
+    // another model popup window already exists
+    if (PopupWindow->model())
         return;
 
     // if not in geometry area
@@ -215,6 +275,7 @@ void DockItem::showHoverTips()
 void DockItem::showPopupWindow(QWidget * const content, const bool model)
 {
     m_popupShown = true;
+    m_lastPopupWidget = content;
 
     if (model)
         emit requestWindowAutoHide(false);
@@ -255,8 +316,8 @@ void DockItem::popupWindowAccept()
 
 void DockItem::showPopupApplet(QWidget * const applet)
 {
-    // another model popup window is alread exists
-    if (PopupWindow->isVisible() && PopupWindow->model())
+    // another model popup window already exists
+    if (PopupWindow->model())
         return;
 
     showPopupWindow(applet, true);
@@ -276,6 +337,18 @@ const QString DockItem::contextMenu() const
 QWidget *DockItem::popupTips()
 {
     return nullptr;
+}
+
+/*!
+ * \brief DockItem::checkAndResetTapHoldGestureState checks if a QTapAndHoldGesture
+ * happens during the mouse press and release event pair.
+ * \return true if yes, otherwise false.
+ */
+bool DockItem::checkAndResetTapHoldGestureState()
+{
+    bool ret = m_tapAndHold;
+    m_tapAndHold = false;
+    return ret;
 }
 
 const QPoint DockItem::popupMarkPoint() const
@@ -310,6 +383,7 @@ const QPoint DockItem::topleftPoint() const
 void DockItem::hidePopup()
 {
     m_popupTipsDelayTimer->stop();
+    m_popupAdjustDelayTimer->stop();
     m_popupShown = false;
     PopupWindow->hide();
 

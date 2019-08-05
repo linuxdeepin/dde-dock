@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -25,28 +25,45 @@
 #include "constants.h"
 
 #include "deviceitem.h"
-#include "applet/wirelessapplet.h"
+#include "applet/wirelesslist.h"
 
 #include <QHash>
+#include <QLabel>
 
+#include <WirelessDevice>
+
+class TipsWidget;
 class WirelessItem : public DeviceItem
 {
     Q_OBJECT
 
 public:
-    explicit WirelessItem(const QString &path);
+    explicit WirelessItem(dde::network::WirelessDevice *device);
     ~WirelessItem();
 
-    NetworkDevice::NetworkType type() const;
-    NetworkDevice::NetworkState state() const;
     QWidget *itemApplet();
-    QWidget *itemPopup();
+    QWidget *itemTips();
+
+public Q_SLOTS:
+    // set the device name displayed
+    // in the top-left corner of the applet
+    void setDeviceInfo(const int index);
+
+Q_SIGNALS:
+    void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
+    void requestDeactiveAP(const QString &devPath) const;
+    void requestSetAppletVisible(const bool visible) const;
+    void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
+    void cancelSecret(const QString &connectionPath, const QString &settingName);
+    void queryActiveConnInfo();
+    void requestWirelessScan();
+    void createApConfig(const QString &devPath, const QString &apPath);
+    void queryConnectionSession( const QString &devPath, const QString &uuid );
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
 
 private:
     const QPixmap iconPix(const Dock::DisplayMode displayMode, const int size);
@@ -57,13 +74,17 @@ private slots:
     void init();
     void adjustHeight();
     void refreshIcon();
+    void refreshTips();
+    void deviceStateChanged();
+    void onRefreshTimeout();
 
 private:
     QHash<QString, QPixmap> m_icons;
+    bool m_reloadIcon;
 
-    QTimer *m_refershTimer;
+    QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
-    QLabel *m_wirelessPopup;
+    TipsWidget *m_wirelessTips;
     WirelessList *m_APList;
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -28,34 +28,33 @@
 #include <QLabel>
 #include <QTimer>
 
+#include <WiredDevice>
+
+class TipsWidget;
 class WiredItem : public DeviceItem
 {
     Q_OBJECT
 
 public:
-    explicit WiredItem(const QString &path);
+    explicit WiredItem(dde::network::WiredDevice *device);
 
-    NetworkDevice::NetworkType type() const override;
-    NetworkDevice::NetworkState state() const override;
-    QWidget *itemPopup() override;
+    QWidget *itemTips() override;
     const QString itemCommand() const override;
 
 protected:
     void paintEvent(QPaintEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
-    void mousePressEvent(QMouseEvent *e) override;
 
 private slots:
     void refreshIcon() override;
     void reloadIcon();
-    void activeConnectionChanged();
-    void deviceStateChanged(const NetworkDevice &device);
+    void deviceStateChanged();
+    void refreshTips();
 
 private:
-    bool m_connected;
     QPixmap m_icon;
 
-    QLabel *m_itemTips;
+    TipsWidget *m_itemTips;
     QTimer *m_delayTimer;
 };
 

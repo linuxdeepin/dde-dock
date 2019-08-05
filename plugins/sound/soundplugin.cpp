@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -20,15 +20,14 @@
  */
 
 #include "soundplugin.h"
+#include <QDebug>
 
 #define STATE_KEY  "enable"
 
 SoundPlugin::SoundPlugin(QObject *parent)
     : QObject(parent),
-      m_settings("deepin", "dde-dock-sound"),
       m_soundItem(nullptr)
 {
-
 }
 
 const QString SoundPlugin::pluginName() const
@@ -46,58 +45,96 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
 
     m_soundItem = new SoundItem;
-    connect(m_soundItem, &SoundItem::requestContextMenu, [this] { m_proxyInter->requestContextMenu(this, QString()); });
 
-    if (m_settings.value(STATE_KEY, true).toBool())
-        m_proxyInter->itemAdded(this, QString());
+    if (!pluginIsDisable())
+        m_proxyInter->itemAdded(this, SOUND_KEY);
 }
 
 void SoundPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(STATE_KEY, !m_settings.value(STATE_KEY, true).toBool());
+    m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
 
-    if (m_settings.value(STATE_KEY).toBool())
-        m_proxyInter->itemAdded(this, QString());
-    else
-        m_proxyInter->itemRemoved(this, QString());
+    refreshPluginItemsVisible();
 }
 
 bool SoundPlugin::pluginIsDisable()
 {
-    return !m_settings.value(STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, STATE_KEY, true).toBool();
 }
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem;
+    }
 
-    return m_soundItem;
+    return nullptr;
 }
 
 QWidget *SoundPlugin::itemTipsWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem->tipsWidget();
+    }
 
-    return m_soundItem->tipsWidget();
+    return nullptr;
 }
 
 QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem->popupApplet();
+    }
 
-    return m_soundItem->popupApplet();
+    return nullptr;
 }
 
 const QString SoundPlugin::itemContextMenu(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        return m_soundItem->contextMenu();
+    }
 
-    return m_soundItem->contextMenu();
+    return QString();
 }
 
 void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SOUND_KEY) {
+        m_soundItem->invokeMenuItem(menuId, checked);
+    }
+}
 
-    m_soundItem->invokeMenuItem(menuId, checked);
+int SoundPlugin::itemSortKey(const QString &itemKey)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+
+    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 1 : 1).toInt();
+}
+
+void SoundPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+
+    m_proxyInter->saveValue(this, key, order);
+}
+
+void SoundPlugin::refreshIcon(const QString &itemKey)
+{
+    if (itemKey == SOUND_KEY) {
+        m_soundItem->refreshIcon();
+    }
+}
+
+void SoundPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
+void SoundPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable())
+        m_proxyInter->itemRemoved(this, SOUND_KEY);
+    else
+        m_proxyInter->itemAdded(this, SOUND_KEY);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -22,6 +22,7 @@
 #include "docksettings.h"
 #include "panel/mainpanel.h"
 #include "item/appitem.h"
+#include "util/utils.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -39,28 +40,27 @@ DWIDGET_USE_NAMESPACE
 extern const QPoint rawXPosition(const QPoint &scaledPos);
 
 DockSettings::DockSettings(QWidget *parent)
-    : QObject(parent),
-
-      m_autoHide(true),
-
-      m_fashionModeAct(tr("Fashion Mode"), this),
-      m_efficientModeAct(tr("Efficient Mode"), this),
-      m_topPosAct(tr("Top"), this),
-      m_bottomPosAct(tr("Bottom"), this),
-      m_leftPosAct(tr("Left"), this),
-      m_rightPosAct(tr("Right"), this),
-      m_largeSizeAct(tr("Large"), this),
-      m_mediumSizeAct(tr("Medium"), this),
-      m_smallSizeAct(tr("Small"), this),
-      m_keepShownAct(tr("Keep Shown"), this),
-      m_keepHiddenAct(tr("Keep Hidden"), this),
-      m_smartHideAct(tr("Smart Hide"), this),
-
-      m_displayInter(new DBusDisplay(this)),
-      m_dockInter(new DBusDock(this)),
-      m_itemController(DockItemController::instance(this))
+    : QObject(parent)
+    , m_autoHide(true)
+    , m_isMaxSize(false)
+    , m_opacity(0.4)
+    , m_fashionTraySize(QSize(0, 0))
+    , m_fashionModeAct(tr("Fashion Mode"), this)
+    , m_efficientModeAct(tr("Efficient Mode"), this)
+    , m_topPosAct(tr("Top"), this)
+    , m_bottomPosAct(tr("Bottom"), this)
+    , m_leftPosAct(tr("Left"), this)
+    , m_rightPosAct(tr("Right"), this)
+    , m_largeSizeAct(tr("Large"), this)
+    , m_mediumSizeAct(tr("Medium"), this)
+    , m_smallSizeAct(tr("Small"), this)
+    , m_keepShownAct(tr("Keep Shown"), this)
+    , m_keepHiddenAct(tr("Keep Hidden"), this)
+    , m_smartHideAct(tr("Smart Hide"), this)
+    , m_displayInter(new DBusDisplay(this))
+    , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_itemController(DockItemController::instance(this))
 {
-    m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
@@ -69,7 +69,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_hideState = Dock::HideState(m_dockInter->hideState());
     m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize * qApp->devicePixelRatio());
+    AppItem::setIconBaseSize(m_iconSize * dockRatio());
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
@@ -130,13 +130,15 @@ DockSettings::DockSettings(QWidget *parent)
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
-    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
+    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::onDisplayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
+    connect(m_dockInter, &DBusDock::OpacityChanged, this, &DockSettings::onOpacityChanged);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
+    connect(m_itemController, &DockItemController::fashionTraySizeChanged, this, &DockSettings::onFashionTraySizeChanged, Qt::QueuedConnection);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
@@ -150,59 +152,28 @@ DockSettings::DockSettings(QWidget *parent)
     calculateWindowConfig();
     updateForbidPostions();
     resetFrontendGeometry();
+
+    QTimer::singleShot(0, this, [=] {onOpacityChanged(m_dockInter->opacity());});
 }
 
-DisplayMode DockSettings::displayMode() const
+DockSettings &DockSettings::Instance()
 {
-    return m_displayMode;
-}
-
-HideMode DockSettings::hideMode() const
-{
-    return m_hideMode;
-}
-
-Position DockSettings::position() const
-{
-    return m_position;
-}
-
-int DockSettings::screenHeight() const
-{
-    return m_displayInter->screenHeight();
-}
-
-int DockSettings::screenWidth() const
-{
-    return m_displayInter->screenWidth();
-}
-
-int DockSettings::expandTimeout() const
-{
-    return m_dockInter->showTimeout();
-}
-
-int DockSettings::narrowTimeout() const
-{
-    return 0;
-}
-
-bool DockSettings::autoHide() const
-{
-    return m_autoHide;
-}
-
-HideState DockSettings::hideState() const
-{
-    return m_hideState;
+    static DockSettings settings;
+    return settings;
 }
 
 const QRect DockSettings::primaryRect() const
 {
-    return m_primaryRect;
+    QRect rect = m_primaryRawRect;
+    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+
+    rect.setWidth(std::round(qreal(rect.width()) / scale));
+    rect.setHeight(std::round(qreal(rect.height()) / scale));
+
+    return rect;
 }
 
-const QSize DockSettings::windowSize() const
+const QSize DockSettings::panelSize() const
 {
     return m_mainWindowSize;
 }
@@ -221,7 +192,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
         }
     }
 
-    const QRect primaryRect = m_primaryRect;
+    const QRect primaryRect = this->primaryRect();
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
 
@@ -229,9 +200,9 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     switch (position)
     {
     case Top:
-        p = QPoint(offsetX, 0);                                     break;
+        p = QPoint(offsetX, 0);                                        break;
     case Left:
-        p = QPoint(0, offsetY);                                     break;
+        p = QPoint(0, offsetY);                                        break;
     case Right:
         p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
     case Bottom:
@@ -246,7 +217,8 @@ void DockSettings::showDockSettingsMenu()
 {
     m_autoHide = false;
 
-    qDeleteAll(m_hideSubMenu->actions());
+    // create actions
+    QList<QAction *> actions;
     for (auto *p : m_itemController->pluginList())
     {
         if (!p->pluginIsAllowDisable())
@@ -256,13 +228,28 @@ void DockSettings::showDockSettingsMenu()
         const QString &name = p->pluginName();
         const QString &display = p->pluginDisplayName();
 
+        // do not show trash in context menu under Efficient mode
+        if (m_displayMode == Efficient && name == "trash") {
+            continue;
+        }
+
         QAction *act = new QAction(display, this);
         act->setCheckable(true);
         act->setChecked(enable);
         act->setData(name);
 
-        m_hideSubMenu->addAction(act);
+        actions << act;
     }
+
+    // sort by name
+    std::sort(actions.begin(), actions.end(), [] (QAction *a, QAction *b) -> bool {
+        return a->data().toString() > b->data().toString();
+    });
+
+    // add actions
+    qDeleteAll(m_hideSubMenu->actions());
+    for (auto act : actions)
+        m_hideSubMenu->addAction(act);
 
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
@@ -280,7 +267,6 @@ void DockSettings::showDockSettingsMenu()
     m_keepShownAct.setChecked(m_hideMode == KeepShowing);
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
-
 
     m_settingsMenu.exec(QCursor::pos());
 
@@ -346,36 +332,37 @@ void DockSettings::menuActionClicked(QAction *action)
 
 void DockSettings::onPositionChanged()
 {
-//    qDebug() << Q_FUNC_INFO;
     const Position prevPos = m_position;
     const Position nextPos = Dock::Position(m_dockInter->position());
 
     if (prevPos == nextPos)
         return;
 
-    m_position = nextPos;
-    DockItem::setDockPosition(m_position);
-    qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
-
-    calculateWindowConfig();
-
     emit positionChanged(prevPos);
 
-    m_itemController->refershItemsIcon();
+    QTimer::singleShot(200, this, [this, nextPos] {
+        m_position = nextPos;
+        DockItem::setDockPosition(nextPos);
+        qApp->setProperty(PROP_POSITION, QVariant::fromValue(nextPos));
+
+        calculateWindowConfig();
+
+        m_itemController->refershItemsIcon();
+    });
 }
 
 void DockSettings::iconSizeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize * qApp->devicePixelRatio());
+    AppItem::setIconBaseSize(m_iconSize * dockRatio());
 
     calculateWindowConfig();
 
     emit dataChanged();
 }
 
-void DockSettings::displayModeChanged()
+void DockSettings::onDisplayModeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
@@ -384,7 +371,9 @@ void DockSettings::displayModeChanged()
 
     calculateWindowConfig();
 
-    emit dataChanged();
+    emit displayModeChanegd();
+
+    QTimer::singleShot(1, m_itemController, &DockItemController::sortPluginItems);
 }
 
 void DockSettings::hideModeChanged()
@@ -421,7 +410,6 @@ void DockSettings::dockItemCountChanged()
 void DockSettings::primaryScreenChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
-    m_primaryRect = m_displayInter->primaryRect();
     m_primaryRawRect = m_displayInter->primaryRawRect();
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
@@ -435,7 +423,7 @@ void DockSettings::primaryScreenChanged()
 void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
-    const qreal ratio = qApp->devicePixelRatio();
+    const qreal ratio = dockRatio();
     const QPoint p = rawXPosition(r.topLeft());
     const uint w = r.width() * ratio;
     const uint h = r.height() * ratio;
@@ -494,12 +482,16 @@ void DockSettings::updateForbidPostions()
     QList<QRect> rawScreenRects;
     for (auto *s : screens)
     {
+        qInfo() << s->name() << s->geometry();
+
         if (s == qApp->primaryScreen())
             continue;
 
         const QRect &g = s->geometry();
         rawScreenRects << QRect(g.topLeft(), g.size() * s->devicePixelRatio());
     }
+
+    qInfo() << rawScreenRects << m_screenRawWidth << m_screenRawHeight;
 
     if (!test(Top, rawScreenRects))
         forbids << Top;
@@ -513,10 +505,33 @@ void DockSettings::updateForbidPostions()
     m_forbidPositions = std::move(forbids);
 }
 
+void DockSettings::onOpacityChanged(const double value)
+{
+    if (m_opacity == value) return;
+
+    m_opacity = value;
+
+    emit opacityChanged(value * 255);
+}
+
+void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
+{
+    if (m_displayMode == Dock::Efficient)
+        return;
+
+    if (m_fashionTraySize == traySize)
+        return;
+
+    m_fashionTraySize = traySize;
+
+    calculateWindowConfig();
+
+    emit windowGeometryChanged();
+}
+
 void DockSettings::calculateWindowConfig()
 {
-//    qDebug() << Q_FUNC_INFO;
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = dockRatio();
     const int defaultHeight = std::round(AppItem::itemBaseHeight() / ratio);
     const int defaultWidth = std::round(AppItem::itemBaseWidth() / ratio);
 
@@ -527,12 +542,12 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
-            m_mainWindowSize.setWidth(m_primaryRect.width());
+            m_mainWindowSize.setWidth(primaryRect().width());
             break;
 
         case Left:
         case Right:
-            m_mainWindowSize.setHeight(m_primaryRect.height());
+            m_mainWindowSize.setHeight(primaryRect().height());
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             break;
 
@@ -543,7 +558,7 @@ void DockSettings::calculateWindowConfig()
     else if (m_displayMode == Dock::Fashion)
     {
         int visibleItemCount = 0;
-        const QList<DockItem *> itemList = m_itemController->itemList();
+        const auto &itemList = m_itemController->itemList();
         for (auto item : itemList)
         {
             switch (item->itemType())
@@ -558,27 +573,35 @@ void DockSettings::calculateWindowConfig()
             }
         }
 
-        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2;
-        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2;
-        const int calcWidth = qMin(m_primaryRect.width() - FASHION_MODE_PADDING * 2, perfectWidth);
-        const int calcHeight = qMin(m_primaryRect.height() - FASHION_MODE_PADDING * 2, perfectHeight);
+        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionTraySize.width();
+        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionTraySize.height();
+        const QRect &primaryRect = this->primaryRect();
+        const int maxWidth = primaryRect.width() - FASHION_MODE_PADDING * 2;
+        const int maxHeight = primaryRect.height() - FASHION_MODE_PADDING * 2;
+        const int calcWidth = qMin(maxWidth, perfectWidth);
+        const int calcHeight = qMin(maxHeight, perfectHeight);
         switch (m_position)
         {
         case Top:
-        case Bottom:
+        case Bottom: {
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
             m_mainWindowSize.setWidth(calcWidth);
+            m_isMaxSize = (calcWidth == maxWidth);
             break;
-
+        }
         case Left:
-        case Right:
+        case Right: {
             m_mainWindowSize.setHeight(calcHeight);
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
+            m_isMaxSize = (calcHeight == maxHeight);
             break;
-
+        }
         default:
             Q_ASSERT(false);
         }
+
+        // used by FashionTrayItem of TrayPlugin
+        qApp->setProperty("DockIsMaxiedSize", m_isMaxSize);
     } else {
         Q_ASSERT(false);
     }
@@ -590,4 +613,11 @@ void DockSettings::gtkIconThemeChanged()
 {
     qDebug() << Q_FUNC_INFO;
     m_itemController->refershItemsIcon();
+}
+
+qreal DockSettings::dockRatio() const
+{
+    QScreen const *screen = Utils::screenAtByScaled(m_frontendRect.center());
+
+    return screen ? screen->devicePixelRatio() : qApp->devicePixelRatio();
 }

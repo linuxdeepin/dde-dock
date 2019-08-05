@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -25,6 +25,8 @@
 #include <QFile>
 #include <QDebug>
 #include <QApplication>
+#include <QPixmapCache>
+#include <QCryptographicHash>
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
@@ -36,15 +38,29 @@ ThemeAppIcon::~ThemeAppIcon()
 
 }
 
-const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
+const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, const qreal ratio)
 {
-    const auto ratio = qApp->devicePixelRatio();
-    const int s = int(size * ratio) & ~1;
-
     QPixmap pixmap;
+    QString key;
+
+    // 把size改为小于size的最大偶数 :)
+    const int s = int(size * ratio) & ~1;
 
     do {
 
+        // load pixmap from our Cache
+        if (iconName.startsWith("data:image/")) {
+            key = QCryptographicHash::hash(iconName.toUtf8(), QCryptographicHash::Md5).toHex();
+
+            // FIXME(hualet): The cache can reduce memory usage,
+            // that is ~2M on HiDPI enabled machine with 9 icons loaded,
+            // but I don't know why since QIcon has its own cache and all of the
+            // icons loaded are loaded by QIcon::fromTheme, really strange here.
+            if (QPixmapCache::find(key, &pixmap))
+                break;
+        }
+
+        // load pixmap from Byte-Data
         if (iconName.startsWith("data:image/"))
         {
             const QStringList strs = iconName.split("base64,");
@@ -55,6 +71,7 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
                 break;
         }
 
+        // load pixmap from File
         if (QFile::exists(iconName))
         {
             pixmap = QPixmap(iconName);
@@ -62,11 +79,14 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
                 break;
         }
 
+        // load pixmap from Icon-Theme
         const QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
-        pixmap = icon.pixmap(QSize(s, s));
+        const int fakeSize = std::max(48, s); // cannot use 16x16, cause 16x16 is label icon
+        pixmap = icon.pixmap(QSize(fakeSize, fakeSize));
         if (!pixmap.isNull())
             break;
 
+        // fallback to a Default pixmap
         pixmap = QPixmap(":/icons/resources/application-x-desktop.svg");
         if (!pixmap.isNull())
             break;
@@ -75,9 +95,14 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 
     } while (false);
 
-    pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (!key.isEmpty()) {
+        QPixmapCache::insert(key, pixmap);
+    }
+
+    if (pixmap.size().width() != s) {
+        pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
 }
-

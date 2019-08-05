@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -30,8 +30,7 @@
 #include <dswitchbutton.h>
 
 DWIDGET_USE_NAMESPACE
-
-class RefreshButton;
+class TipsWidget;
 class DeviceControlWidget : public QWidget
 {
     Q_OBJECT
@@ -44,18 +43,19 @@ public:
 //    void setSeperatorVisible(const bool visible);
 
 signals:
-    void deviceEnableChanged(const bool enable) const;
+    void enableButtonToggled(const bool enable) const;
     void requestRefresh() const;
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void refreshNetwork();
 
 private:
-    QLabel *m_deviceName;
+    TipsWidget *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
-    RefreshButton *m_refreshBtn;
-    QWidget *m_refreshView;
     DLoadingIndicator *m_loadingIndicator;
 };
 

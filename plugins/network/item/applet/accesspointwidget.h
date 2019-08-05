@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -23,7 +23,6 @@
 #define ACCESSPOINTWIDGET_H
 
 #include "accesspoint.h"
-#include "networkdevice.h"
 
 #include <QWidget>
 #include <QLabel>
@@ -31,7 +30,25 @@
 #include <QDBusObjectPath>
 
 #include <dimagebutton.h>
-#include <dpicturesequenceview.h>
+#include <NetworkDevice>
+
+class SsidButton : public QLabel
+{
+    Q_OBJECT
+public:
+    SsidButton(QWidget *parent = nullptr) : QLabel(parent){}
+    virtual ~SsidButton() {}
+
+signals:
+    void clicked();
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *event) override {
+        QLabel::mouseReleaseEvent(event);
+
+        Q_EMIT clicked();
+    }
+};
 
 class AccessPointWidget : public QFrame
 {
@@ -39,14 +56,18 @@ class AccessPointWidget : public QFrame
     Q_PROPERTY(bool active READ active DESIGNABLE true)
 
 public:
-    explicit AccessPointWidget(const AccessPoint &ap);
+    explicit AccessPointWidget();
+
+    const AccessPoint ap() const { return m_ap; }
+    void updateAP(const AccessPoint &ap);
 
     bool active() const;
-    void setActiveState(const NetworkDevice::NetworkState state);
+    void setActiveState(const dde::network::NetworkDevice::DeviceStatus state);
 
 signals:
-    void requestActiveAP(const QDBusObjectPath &apPath, const QString &ssid) const;
+    void requestActiveAP(const QString &apPath, const QString &ssid) const;
     void requestDeactiveAP(const AccessPoint &ap) const;
+    void clicked() const;
 
 private:
     void enterEvent(QEvent *e);
@@ -58,14 +79,16 @@ private slots:
     void disconnectBtnClicked();
 
 private:
-    NetworkDevice::NetworkState m_activeState;
+    dde::network::NetworkDevice::DeviceStatus m_activeState;
 
     AccessPoint m_ap;
-    QPushButton *m_ssidBtn;
-    Dtk::Widget::DPictureSequenceView *m_indicator;
+    SsidButton *m_ssidBtn;
     Dtk::Widget::DImageButton *m_disconnectBtn;
-    QLabel *m_securityIcon;
-    QLabel *m_strengthIcon;
+    QLabel *m_securityLabel;
+    QLabel *m_strengthLabel;
+
+    QPixmap m_securityPixmap;
+    QSize m_securityIconSize;
 };
 
 #endif // ACCESSPOINTWIDGET_H

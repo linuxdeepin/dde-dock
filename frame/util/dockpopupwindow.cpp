@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -33,8 +33,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
       m_acceptDelayTimer(new QTimer(this)),
 
-      m_regionInter(new DRegionMonitor(this)),
-      m_displayInter(new DBusDisplay(this))
+      m_regionInter(new DRegionMonitor(this))
 {
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
@@ -49,7 +48,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
-    connect(m_regionInter, &DRegionMonitor::buttonRelease, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
@@ -58,7 +57,7 @@ DockPopupWindow::~DockPopupWindow()
 
 bool DockPopupWindow::model() const
 {
-    return m_model;
+    return isVisible() && m_model;
 }
 
 void DockPopupWindow::setContent(QWidget *content)
@@ -80,11 +79,13 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
 
     show(pos.x(), pos.y());
 
-    const bool regionRegistered = m_regionInter->registered();
-    if (!m_model && regionRegistered)
+    if (m_regionInter->registered()) {
         m_regionInter->unregisterRegion();
-    else if (m_model && !regionRegistered)
+    }
+
+    if (m_model) {
         m_regionInter->registerRegion();
+    }
 }
 
 void DockPopupWindow::show(const int x, const int y)
@@ -122,15 +123,26 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
         return false;
 
     // FIXME: ensure position move after global mouse release event
-    QTimer::singleShot(100, this, [this] { if (isVisible()) show(m_lastPoint, m_model); });
+    if (isVisible())
+    {
+        QTimer::singleShot(10, this, [=] {
+            // NOTE(sbw): double check is necessary, in this time, the popup maybe already hided.
+            if (isVisible())
+                show(m_lastPoint, m_model);
+        });
+    }
 
     return false;
 }
 
 void DockPopupWindow::onGlobMouseRelease(const QPoint &mousePos, const int flag)
 {
-    Q_UNUSED(flag);
     Q_ASSERT(m_model);
+
+    if (!((flag == DRegionMonitor::WatchedFlags::Button_Left) ||
+          (flag == DRegionMonitor::WatchedFlags::Button_Right))) {
+        return;
+    }
 
     const QRect rect = QRect(pos(), size());
     if (rect.contains(mousePos))

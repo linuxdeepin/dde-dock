@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,27 +24,31 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "dbus/dbusdock.h"
 #include "item/dockitem.h"
 #include "item/stretchitem.h"
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
 #include "item/containeritem.h"
 
+#include <com_deepin_dde_daemon_dock.h>
+
 #include <QObject>
+
+using DBusDock = com::deepin::dde::daemon::Dock;
 
 class DockItemController : public QObject
 {
     Q_OBJECT
 
 public:
-    static DockItemController *instance(QObject *parent);
+    static DockItemController *instance(QObject *parent = nullptr);
 
-    const QList<DockItem *> itemList() const;
+    const QList<QPointer<DockItem> > itemList() const;
     const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
     bool itemIsInContainer(DockItem * const item) const;
     void setDropping(const bool dropping);
+    void startLoadPlugins() const;
 
 signals:
     void itemInserted(const int index, DockItem *item) const;
@@ -52,9 +56,11 @@ signals:
     void itemMoved(DockItem *item, const int index) const;
     void itemManaged(DockItem *item) const;
     void itemUpdated(DockItem *item) const;
+    void fashionTraySizeChanged(const QSize &traySize) const;
 
 public slots:
     void refershItemsIcon();
+    void sortPluginItems();
     void updatePluginsItemOrderKey();
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
     void itemDroppedIntoContainer(DockItem * const item);
@@ -62,9 +68,10 @@ public slots:
     void placeholderItemAdded(PlaceholderItem *item, DockItem *position);
     void placeholderItemDocked(const QString &appDesktop, DockItem *position);
     void placeholderItemRemoved(PlaceholderItem *item);
+    void refreshFSTItemSpliterVisible();
 
 private:
-    explicit DockItemController(QObject *parent = 0);
+    explicit DockItemController(QObject *parent = nullptr);
     void appItemAdded(const QDBusObjectPath &path, const int index);
     void appItemRemoved(const QString &appId);
     void appItemRemoved(AppItem *appItem);
@@ -73,16 +80,15 @@ private:
     void reloadAppItems();
 
 private:
-    QList<DockItem *> m_itemList;
-
     QTimer *m_updatePluginsOrderTimer;
-
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
     StretchItem *m_placeholderItem;
     ContainerItem *m_containerItem;
 
     static DockItemController *INSTANCE;
+
+    QList<QPointer<DockItem>> m_itemList;
 };
 
 #endif // DOCKITEMCONTROLLER_H

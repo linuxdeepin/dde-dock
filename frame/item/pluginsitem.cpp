@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -40,7 +40,8 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
       m_pluginInter(pluginInter),
       m_centralWidget(m_pluginInter->itemWidget(itemKey)),
       m_itemKey(itemKey),
-      m_draging(false)
+      m_dragging(false),
+      m_hover(false)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -100,29 +101,70 @@ void PluginsItem::setInContainer(const bool container)
     m_pluginInter->setItemIsInContainer(m_itemKey, container);
 }
 
+QString PluginsItem::pluginName() const
+{
+    return m_pluginInter->pluginName();
+}
+
 QSize PluginsItem::sizeHint() const
 {
     return m_centralWidget->sizeHint();
 }
 
+void PluginsItem::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+
+    DisplayMode displayMode = m_pluginInter->displayMode();
+
+    if (displayMode == Dock::DisplayMode::Fashion) {
+        return;
+    }
+    if (!m_hover || m_dragging) {
+        return;
+    }
+
+    // draw hover background
+    QRect destRect;
+    destRect.setSize(m_centralWidget->sizeHint());
+    destRect.moveCenter(rect().center());
+
+    QPainterPath path;
+    path.addRoundedRect(destRect, 6, 6);
+
+    QColor color;
+    color = QColor::fromRgb(255, 255, 255);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setOpacity(0.1);
+
+    painter.fillPath(path, color);
+}
+
 void PluginsItem::refershIcon()
 {
-    m_pluginInter->refershIcon(m_itemKey);
+    m_pluginInter->refreshIcon(m_itemKey);
+}
+
+QWidget *PluginsItem::centralWidget() const
+{
+    return m_centralWidget;
 }
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
+    m_hover = false;
+    update();
+
     if (!isInContainer() && PopupWindow->isVisible())
         hideNonModel();
 
     if (e->button() == Qt::LeftButton)
         MousePressPoint = e->pos();
 
-    const QPoint dis = e->pos() - rect().center();
-    if (dis.manhattanLength() > std::min(width(), height()) / 2 * 0.8)
-        QWidget::mousePressEvent(e);
-    else
-        DockItem::mousePressEvent(e);
+    // context menu will handle in DockItem
+    DockItem::mousePressEvent(e);
 }
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)
@@ -144,6 +186,11 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    if (checkAndResetTapHoldGestureState()&& e->source() == Qt::MouseEventSynthesizedByQt) {
+        qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
+        return;
+    }
+
     e->accept();
 
     const QPoint distance = e->pos() - MousePressPoint;
@@ -151,13 +198,38 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
         mouseClicked();
 }
 
-bool PluginsItem::eventFilter(QObject *o, QEvent *e)
+void PluginsItem::enterEvent(QEvent *event)
 {
-    if (m_draging)
-        if (o == m_centralWidget && e->type() == QEvent::Paint)
-            return true;
+    m_hover = true;
+    update();
 
-    return DockItem::eventFilter(o, e);
+    DockItem::enterEvent(event);
+}
+
+void PluginsItem::leaveEvent(QEvent *event)
+{
+    // Note:
+    // here we should check the mouse position to ensure the mouse is really leaved
+    // because this leaveEvent will also be called if setX11PassMouseEvent(false) is invoked
+    // in XWindowTrayWidget::sendHoverEvent()
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+        m_hover = false;
+        update();
+    }
+
+    DockItem::leaveEvent(event);
+}
+
+bool PluginsItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_centralWidget) {
+        if (event->type() == QEvent::MouseButtonRelease) {
+            m_hover = false;
+            update();
+        }
+    }
+
+    return false;
 }
 
 void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
@@ -187,7 +259,8 @@ void PluginsItem::startDrag()
 {
     const QPixmap pixmap = grab();
 
-    m_draging = true;
+    m_dragging = true;
+    m_centralWidget->setVisible(false);
     update();
 
     QMimeData *mime = new QMimeData;
@@ -201,9 +274,11 @@ void PluginsItem::startDrag()
     emit dragStarted();
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
     Q_UNUSED(result);
-    emit itemDropped(drag->target());
+    emit itemDropped(drag->target(), QCursor::pos());
 
-    m_draging = false;
+    m_dragging = false;
+    m_hover = false;
+    m_centralWidget->setVisible(true);
     setVisible(true);
     update();
 }

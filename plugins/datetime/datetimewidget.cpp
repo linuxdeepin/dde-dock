@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -31,35 +31,25 @@
 #define PLUGIN_STATE_KEY    "enable"
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
-    : QWidget(parent),
-
-    m_settings("deepin", "dde-dock-datetime"),
-
-    m_24HourFormat(m_settings.value("24HourFormat", true).toBool())
+    : QWidget(parent)
 {
 
 }
 
-bool DatetimeWidget::enabled()
+void DatetimeWidget::set24HourFormat(const bool value)
 {
-    return m_settings.value(PLUGIN_STATE_KEY, true).toBool();
-}
+    if (m_24HourFormat == value) {
+        return;
+    }
 
-void DatetimeWidget::setEnabled(const bool b)
-{
-    m_settings.setValue(PLUGIN_STATE_KEY, b);
-}
-
-void DatetimeWidget::toggleHourFormat()
-{
-    m_24HourFormat = !m_24HourFormat;
-
-    m_settings.setValue("24HourFormat", m_24HourFormat);
+    m_24HourFormat = value;
 
     m_cachedTime.clear();
     update();
 
-    emit requestUpdateGeometry();
+    if (isVisible()) {
+        emit requestUpdateGeometry();
+    }
 }
 
 QSize DatetimeWidget::sizeHint() const
@@ -83,7 +73,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     const QDateTime current = QDateTime::currentDateTime();
@@ -109,7 +99,10 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
         return;
     }
 
-    const QString currentTimeString = current.toString(m_24HourFormat ? "hhmm" : "hhmma");
+    // use language Chinese to fix can not find image resources which will be drawn
+    const QString currentTimeString = QLocale(QLocale::Chinese, QLocale::system().country())
+            .toString(current, m_24HourFormat ? "hhmm" : "hhmma");
+
     // check cache valid
     if (m_cachedTime != currentTimeString)
     {
@@ -167,7 +160,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
             const int tips_height = tips_width / 2;
 
             QPixmap tips;
-            if (current.time().hour() > 12)
+            if (current.time().hour() > 11)
                 tips = loadSvg(":/icons/resources/icons/tips-pm.svg", QSize(tips_width, tips_height));
             else
                 tips = loadSvg(":/icons/resources/icons/tips-am.svg", QSize(tips_width, tips_height));
@@ -193,24 +186,9 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rect().center() - m_cachedIcon.rect().center() / ratio, m_cachedIcon);
 }
 
-void DatetimeWidget::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() != Qt::RightButton)
-        return QWidget::mousePressEvent(e);
-
-    const QPoint p(e->pos() - rect().center());
-    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
-    {
-        emit requestContextMenu();
-        return;
-    }
-
-    QWidget::mousePressEvent(e);
-}
-
 const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)
 {
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap(size * ratio);
     QSvgRenderer renderer(fileName);

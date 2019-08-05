@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,12 +24,12 @@
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QApplication>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
-const QPixmap getIconFromTheme(const QString &name, const QSize &size)
+const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qreal ratio)
 {
-    const auto ratio = qApp->devicePixelRatio();
     QPixmap ret = QIcon::fromTheme(name, QIcon::fromTheme("application-x-desktop")).pixmap(size * ratio);
     ret.setDevicePixelRatio(ratio);
 
@@ -46,9 +46,10 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 {
     const QString iconName = m_inputInter->icon();
     m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
-    m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24)));
+    m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24), devicePixelRatioF()));
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
-    m_volumeSlider->setValue(m_inputInter->volume() * 1000);
+    m_volumeSlider->setMinimum(0);
+    m_volumeSlider->setMaximum(1000);
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_volumeIcon);
@@ -61,30 +62,33 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
     connect(m_volumeIcon, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
+    connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [=] { m_volumeSlider->setValue(m_inputInter->volume() * 1000); });
 
     setLayout(centralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(30);
 
     setMuteIcon();
+
+    emit m_inputInter->VolumeChanged();
 }
 
 void SinkInputWidget::setVolume(const int value)
 {
-    m_inputInter->SetVolume(double(value) / 1000.0, false);
+    m_inputInter->SetVolumeQueued(double(value) / 1000.0, false);
 }
 
 void SinkInputWidget::setMute()
 {
-    m_inputInter->SetMute(!m_inputInter->mute());
+    m_inputInter->SetMuteQueued(!m_inputInter->mute());
 }
 
 void SinkInputWidget::setMuteIcon()
 {
     if (m_inputInter->mute()) {
         const auto ratio = devicePixelRatioF();
-        QPixmap muteIcon(QString(":/icons/image/audio-volume-muted-symbolic.svg"));
-        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
+        QPixmap muteIcon = DHiDPIHelper::loadNxPixmap("://audio-volume-muted-symbolic.svg");
+        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24), devicePixelRatioF()));
 
         QPixmap temp(appIconSource.size());
         temp.fill(Qt::transparent);
@@ -102,12 +106,12 @@ void SinkInputWidget::setMuteIcon()
         appIconSource.setDevicePixelRatio(ratio);
         m_volumeIcon->setPixmap(appIconSource);
     } else {
-        m_volumeIcon->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
+        m_volumeIcon->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(24, 24), devicePixelRatioF()));
     }
 }
 
 void SinkInputWidget::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
-    m_inputInter->SetMute(false);
+    m_inputInter->SetMuteQueued(false);
 }

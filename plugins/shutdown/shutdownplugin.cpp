@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -30,22 +30,10 @@
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
-      m_settings("deepin", "dde-dock-power"),
-      m_shutdownWidget(new PluginWidget),
-      m_powerStatusWidget(new PowerStatusWidget),
-      m_tipsLabel(new QLabel),
-
-      m_powerInter(new DBusPower(this))
+      m_pluginLoaded(false),
+      m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
-    m_tipsLabel->setObjectName("power");
-    m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setStyleSheet("color:white;"
-                               "padding: 0px 3px;");
-
-    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
-    connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
-    connect(m_powerStatusWidget, &PowerStatusWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
 }
 
 const QString ShutdownPlugin::pluginName() const
@@ -60,39 +48,18 @@ const QString ShutdownPlugin::pluginDisplayName() const
 
 QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 {
-    if (itemKey == SHUTDOWN_KEY)
-        return m_shutdownWidget;
-    if (itemKey == POWER_KEY)
-        return m_powerStatusWidget;
+    Q_UNUSED(itemKey);
 
-    return nullptr;
+    return m_shutdownWidget;
 }
 
 QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 {
-    const BatteryPercentageMap data = m_powerInter->batteryPercentage();
-    m_tipsLabel->setObjectName(itemKey);
+    Q_UNUSED(itemKey);
 
-    if (data.isEmpty() || (itemKey == SHUTDOWN_KEY && displayMode() == Dock::Efficient))
-    {
-        m_tipsLabel->setText(tr("Shut down"));
-        return m_tipsLabel;
-    }
-
-    const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
-    const QString value = QString("%1%").arg(std::round(percentage));
-    const bool charging = !m_powerInter->onBattery();
-    if (!charging)
-        m_tipsLabel->setText(tr("Remaining Capacity %1").arg(value));
-    else
-    {
-        const int batteryState = m_powerInter->batteryState()["Display"];
-
-        if (batteryState == BATTERY_FULL || percentage == 100.)
-            m_tipsLabel->setText(tr("Charged %1").arg(value));
-        else
-            m_tipsLabel->setText(tr("Charging %1").arg(value));
-    }
+    // reset text every time to avoid size of LabelWidget not change after
+    // font size be changed in ControlCenter
+    m_tipsLabel->setText(tr("Power"));
 
     return m_tipsLabel;
 }
@@ -101,37 +68,34 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (!pluginIsDisable())
-        delayLoader();
+    // transfer config
+    QSettings settings("deepin", "dde-dock-shutdown");
+    if (QFile::exists(settings.fileName())) {
+        QFile::remove(settings.fileName());
+    }
+
+    if (!pluginIsDisable()) {
+        loadPlugin();
+    }
 }
 
 void ShutdownPlugin::pluginStateSwitched()
 {
-    m_settings.setValue(PLUGIN_STATE_KEY, !m_settings.value(PLUGIN_STATE_KEY, true).toBool());
+    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
 
-    if (pluginIsDisable())
-    {
-        m_proxyInter->itemRemoved(this, SHUTDOWN_KEY);
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    } else {
-        m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
-        updateBatteryVisible();
-    }
+    refreshPluginItemsVisible();
 }
 
 bool ShutdownPlugin::pluginIsDisable()
 {
-    return !m_settings.value(PLUGIN_STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
 }
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 {
-    if (itemKey == SHUTDOWN_KEY)
-        return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
-    if (itemKey == POWER_KEY)
-        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+    Q_UNUSED(itemKey);
 
-    return QString();
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
 }
 
 const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
@@ -139,58 +103,62 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     QList<QVariant> items;
     items.reserve(6);
 
-    const Dock::DisplayMode mode = displayMode();
+    QMap<QString, QVariant> shutdown;
+    shutdown["itemId"] = "Shutdown";
+    shutdown["itemText"] = tr("Shut down");
+    shutdown["isActive"] = true;
+    items.push_back(shutdown);
 
-    if (mode == Dock::Fashion || itemKey == SHUTDOWN_KEY)
+    QMap<QString, QVariant> reboot;
+    reboot["itemId"] = "Restart";
+    reboot["itemText"] = tr("Restart");
+    reboot["isActive"] = true;
+    items.push_back(reboot);
+
+#ifndef DISABLE_POWER_OPTIONS
+    QMap<QString, QVariant> suspend;
+    suspend["itemId"] = "Suspend";
+    suspend["itemText"] = tr("Suspend");
+    suspend["isActive"] = true;
+    items.push_back(suspend);
+
+    if (checkSwap()) {
+        QMap<QString, QVariant> hibernate;
+        hibernate["itemId"] = "Hibernate";
+        hibernate["itemText"] = tr("Hibernate");
+        hibernate["isActive"] = true;
+        items.push_back(hibernate);
+    }
+#endif
+
+    QMap<QString, QVariant> lock;
+    lock["itemId"] = "Lock";
+    lock["itemText"] = tr("Lock");
+    lock["isActive"] = true;
+    items.push_back(lock);
+
+    QMap<QString, QVariant> logout;
+    logout["itemId"] = "Logout";
+    logout["itemText"] = tr("Log out");
+    logout["isActive"] = true;
+    items.push_back(logout);
+
+    if (DBusAccount().userList().count() > 1)
     {
-        QMap<QString, QVariant> shutdown;
-        shutdown["itemId"] = "Shutdown";
-        shutdown["itemText"] = tr("Shut down");
-        shutdown["isActive"] = true;
-        items.push_back(shutdown);
-
-        QMap<QString, QVariant> reboot;
-        reboot["itemId"] = "Restart";
-        reboot["itemText"] = tr("Restart");
-        reboot["isActive"] = true;
-        items.push_back(reboot);
-
-        QMap<QString, QVariant> suspend;
-        suspend["itemId"] = "Suspend";
-        suspend["itemText"] = tr("Suspend");
-        suspend["isActive"] = true;
-        items.push_back(suspend);
-
-        QMap<QString, QVariant> lock;
-        lock["itemId"] = "Lock";
-        lock["itemText"] = tr("Lock");
-        lock["isActive"] = true;
-        items.push_back(lock);
-
-        QMap<QString, QVariant> logout;
-        logout["itemId"] = "Logout";
-        logout["itemText"] = tr("Log out");
-        logout["isActive"] = true;
-        items.push_back(logout);
-
-        if (DBusAccount().userList().count() > 1)
-        {
-            QMap<QString, QVariant> switchUser;
-            switchUser["itemId"] = "SwitchUser";
-            switchUser["itemText"] = tr("Switch account");
-            switchUser["isActive"] = true;
-            items.push_back(switchUser);
-        }
+        QMap<QString, QVariant> switchUser;
+        switchUser["itemId"] = "SwitchUser";
+        switchUser["itemText"] = tr("Switch account");
+        switchUser["isActive"] = true;
+        items.push_back(switchUser);
     }
 
-    if (mode == Dock::Fashion || itemKey == POWER_KEY)
-    {
-        QMap<QString, QVariant> power;
-        power["itemId"] = "power";
-        power["itemText"] = tr("Power settings");
-        power["isActive"] = true;
-        items.push_back(power);
-    }
+#ifndef DISABLE_POWER_OPTIONS
+    QMap<QString, QVariant> power;
+    power["itemId"] = "power";
+    power["itemText"] = tr("Power settings");
+    power["isActive"] = true;
+    items.push_back(power);
+#endif
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;
@@ -223,42 +191,73 @@ void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
     Q_UNUSED(displayMode);
 
-    m_shutdownWidget->update();
-
-    updateBatteryVisible();
+    if (!pluginIsDisable()) {
+        m_shutdownWidget->update();
+    }
 }
 
-void ShutdownPlugin::updateBatteryVisible()
+int ShutdownPlugin::itemSortKey(const QString &itemKey)
 {
-    const bool exist = !m_powerInter->batteryPercentage().isEmpty();
+    Dock::DisplayMode mode = displayMode();
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
 
-    if (!exist || displayMode() == Dock::Fashion)
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    else if (exist && !pluginIsDisable())
-        m_proxyInter->itemAdded(this, POWER_KEY);
-}
-
-void ShutdownPlugin::requestContextMenu(const QString &itemKey)
-{
-    m_proxyInter->requestContextMenu(this, itemKey);
-}
-
-void ShutdownPlugin::delayLoader()
-{
-    static int retryTimes = 0;
-
-    ++retryTimes;
-
-    if (m_powerInter->isValid() || retryTimes > 10)
-    {
-        qDebug() << "load power item, dbus valid:" << m_powerInter->isValid();
-
-        m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
-        displayModeChanged(displayMode());
+    if (mode == Dock::DisplayMode::Fashion) {
+        return m_proxyInter->getValue(this, key, 2).toInt();
     } else {
-        qDebug() << "load power failed, wait and retry" << retryTimes;
+        return m_proxyInter->getValue(this, key, 5).toInt();
+    }
+}
 
-        // wait and retry
-        QTimer::singleShot(1000, this, &ShutdownPlugin::delayLoader);
+void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    m_proxyInter->saveValue(this, key, order);
+}
+
+void ShutdownPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
+void ShutdownPlugin::loadPlugin()
+{
+    if (m_pluginLoaded) {
+        qDebug() << "shutdown plugin has been loaded! return";
+        return;
+    }
+
+    m_pluginLoaded = true;
+
+    m_shutdownWidget = new PluginWidget;
+
+    m_proxyInter->itemAdded(this, pluginName());
+    displayModeChanged(displayMode());
+}
+
+bool ShutdownPlugin::checkSwap()
+{
+    QFile file("/proc/swaps");
+    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+        const QString &body = file.readAll();
+        file.close();
+        QRegularExpression re("\\spartition\\s");
+        QRegularExpressionMatch match = re.match(body);
+        return match.hasMatch();
+    }
+
+    return false;
+}
+
+void ShutdownPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable())
+    {
+        m_proxyInter->itemRemoved(this, pluginName());
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        m_proxyInter->itemAdded(this, pluginName());
     }
 }

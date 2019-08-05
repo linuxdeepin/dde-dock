@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -38,17 +38,16 @@ public:
     explicit FloatingPreview(QWidget *parent = 0);
 
     WId trackedWid() const;
-
-signals:
-    void requestMove(const QPoint &p) const;
+    AppSnapshot *trackedWindow();
 
 public slots:
     void trackWindow(AppSnapshot * const snap);
 
 private:
-    void paintEvent(QPaintEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    bool eventFilter(QObject *watched, QEvent *event);
+    void paintEvent(QPaintEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private slots:
     void onCloseBtnClicked();
@@ -56,7 +55,7 @@ private slots:
 private:
     QPointer<AppSnapshot> m_tracked;
 
-    DImageButton *m_closeBtn;
+    DImageButton *m_closeBtn3D;
 };
 
 #endif // FLOATINGPREVIEW_H

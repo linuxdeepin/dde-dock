@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,43 +21,50 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "dockitemcontroller.h"
-#include "dockpluginloader.h"
+#include "item/traypluginitem.h"
 
 #include <QDebug>
 #include <QDir>
 
-#define API_VERSION "1.0"
-
-DockPluginsController::DockPluginsController(DockItemController *itemControllerInter)
-    : QObject(itemControllerInter),
-      m_itemControllerInter(itemControllerInter)
+DockPluginsController::DockPluginsController(QObject *parent)
+    : AbstractPluginsController(parent)
 {
-    qApp->installEventFilter(this);
-
-    QTimer::singleShot(2000, this, &DockPluginsController::startLoader);
+    setObjectName("DockPlugin");
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+
     // check if same item added
-    if (m_pluginList.contains(itemInter))
-        if (m_pluginList[itemInter].contains(itemKey))
+    if (mPluginsMap.contains(itemInter))
+        if (mPluginsMap[itemInter].contains(itemKey))
             return;
 
-    PluginsItem *item = new PluginsItem(itemInter, itemKey);
+    PluginsItem *item = nullptr;
+    if (itemInter->pluginName() == "tray") {
+        item = new TrayPluginItem(itemInter, itemKey);
+        if (item->graphicsEffect()) {
+            item->graphicsEffect()->setEnabled(false);
+        }
+        connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::fashionTraySizeChanged,
+                this, &DockPluginsController::fashionTraySizeChanged, Qt::UniqueConnection);
+    } else {
+        item = new PluginsItem(itemInter, itemKey);
+    }
+
     item->setVisible(false);
 
-    m_pluginList[itemInter][itemKey] = item;
+    mPluginsMap[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);
 }
 
 void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-
-    Q_ASSERT(item);
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
     item->update();
 
@@ -66,8 +73,7 @@ void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, c
 
 void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
         return;
 
@@ -75,111 +81,71 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
 
     emit pluginItemRemoved(item);
 
-    m_pluginList[itemInter].remove(itemKey);
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+    mPluginsMap[itemInter].remove(itemKey);
 
-    QTimer::singleShot(1, this, [=] { delete item; });
+    // do not delete the itemWidget object(specified in the plugin interface)
+    item->centralWidget()->setParent(nullptr);
+
+    // just delete our wrapper object(PluginsItem)
+    item->deleteLater();
 }
 
-//void DockPluginsController::requestRefershWindowVisible()
-//{
-//    for (auto list : m_pluginList.values())
-//    {
-//        for (auto item : list.values())
-//        {
-//            Q_ASSERT(item);
-//            emit item->requestRefershWindowVisible();
-//            return;
-//        }
-//    }
-//}
-
-void DockPluginsController::requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-    Q_ASSERT(item);
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
-    item->showContextMenu();
+    Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
-//void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
-//{
-//    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
 
-//    Q_ASSERT(item);
-//    item->showPopupApplet();
-//}
+    Q_EMIT item->requestRefreshWindowVisible();
+}
+
+void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+{
+    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    if (!item)
+        return;
+
+    if (visible) {
+        item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
+    } else {
+        item->hidePopup();
+    }
+}
 
 void DockPluginsController::startLoader()
 {
-    DockPluginLoader *loader = new DockPluginLoader(this);
-
-    connect(loader, &DockPluginLoader::finished, loader, &DockPluginLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &DockPluginLoader::pluginFounded, this, &DockPluginsController::loadPlugin, Qt::QueuedConnection);
-
-    QTimer::singleShot(1, loader, [=] { loader->start(QThread::LowestPriority); });
+    loadLocalPlugins();
+    loadSystemPlugins();
 }
 
-void DockPluginsController::displayModeChanged()
-{
-    const DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    for (auto inter : m_pluginList.keys())
-        inter->displayModeChanged(displayMode);
-}
+void DockPluginsController::loadLocalPlugins() {
+    QString pluginsDir(QString("%1/.local/lib/dde-dock/plugins/").arg(QDir::homePath()));
 
-void DockPluginsController::positionChanged()
-{
-    const Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    for (auto inter : m_pluginList.keys())
-        inter->positionChanged(position);
-}
-
-void DockPluginsController::loadPlugin(const QString &pluginFile)
-{
-    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
-    const auto meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (!meta.contains("api") || meta["api"].toString() != API_VERSION)
-    {
-        qWarning() << "plugin api version not matched!" << pluginFile;
+    if (!QDir(pluginsDir).exists()) {
         return;
     }
 
-    PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
-    if (!interface)
-    {
-        qWarning() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
-        pluginLoader->unload();
-        pluginLoader->deleteLater();
-        return;
+    qDebug() << "using dock local plugins dir:" << pluginsDir;
+
+    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
+}
+
+void DockPluginsController::loadSystemPlugins() {
+    QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
+    if (!QDir(pluginsDir).exists()) {
+        pluginsDir = "/usr/lib/dde-dock/plugins";
     }
+    qDebug() << "using dock plugins dir:" << pluginsDir;
 
-    m_pluginList.insert(interface, QMap<QString, PluginsItem *>());
-    qDebug() << "init plugin: " << interface->pluginName();
-    interface->init(this);
-    qDebug() << "init plugin finished: " << interface->pluginName();
-}
-
-bool DockPluginsController::eventFilter(QObject *o, QEvent *e)
-{
-    if (o != qApp)
-        return false;
-    if (e->type() != QEvent::DynamicPropertyChange)
-        return false;
-
-    QDynamicPropertyChangeEvent * const dpce = static_cast<QDynamicPropertyChangeEvent *>(e);
-    const QString propertyName = dpce->propertyName();
-
-    if (propertyName == PROP_POSITION)
-        positionChanged();
-    else if (propertyName == PROP_DISPLAY_MODE)
-        displayModeChanged();
-
-    return false;
-}
-
-PluginsItem *DockPluginsController::pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const
-{
-    if (!m_pluginList.contains(itemInter))
-        return nullptr;
-
-    return m_pluginList[itemInter][itemKey];
+    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }

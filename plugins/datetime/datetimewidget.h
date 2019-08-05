@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -23,7 +23,6 @@
 #define DATETIMEWIDGET_H
 
 #include <QWidget>
-#include <QSettings>
 
 class DatetimeWidget : public QWidget
 {
@@ -33,28 +32,23 @@ public:
     explicit DatetimeWidget(QWidget *parent = 0);
 
     bool is24HourFormat() const { return m_24HourFormat; }
-    bool enabled();
-    void setEnabled(const bool b);
 
 signals:
     void requestUpdateGeometry() const;
-    void requestContextMenu() const;
 
 public slots:
-    void toggleHourFormat();
+    void set24HourFormat(const bool value);
 
 private:
     QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
 
     const QPixmap loadSvg(const QString &fileName, const QSize size);
 
 private:
     QPixmap m_cachedIcon;
     QString m_cachedTime;
-    QSettings m_settings;
     bool m_24HourFormat;
 };
 

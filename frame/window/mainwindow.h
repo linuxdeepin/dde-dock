@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+﻿/*
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -25,6 +25,7 @@
 #include "xcb/xcb_misc.h"
 #include "dbus/dbusdisplay.h"
 #include "dbus/dbusdockadaptors.h"
+#include "dbus/sni/statusnotifierwatcher_interface.h"
 #include "util/docksettings.h"
 
 #include <QWidget>
@@ -43,7 +44,8 @@ class MainWindow : public QWidget
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    QRect panelGeometry();
+
+    friend class MainPanel;
 
 public slots:
     void launch();
@@ -51,7 +53,7 @@ public slots:
 private:
     using QWidget::show;
     bool event(QEvent *e);
-    void resizeEvent(QResizeEvent *e);
+    void showEvent(QShowEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void enterEvent(QEvent *e);
@@ -60,6 +62,7 @@ private:
 
     void setFixedSize(const QSize &size);
     void internalAnimationMove(int x, int y);
+    void initSNIHost();
     void initComponents();
     void initConnections();
 
@@ -82,11 +85,13 @@ private slots:
 
     void expand();
     void narrow(const Position prevPos);
-    void resetPanelEnvironment(const bool visible);
+    void resetPanelEnvironment(const bool visible, const bool resetPosition = true);
     void updatePanelVisible();
 
     void adjustShadowMask();
     void positionCheck();
+
+    void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
 
 private:
     bool m_launched;
@@ -98,6 +103,7 @@ private:
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
+    QTimer *m_leaveDelayTimer;
     QTimer *m_shadowMaskOptimizeTimer;
     QVariantAnimation *m_sizeChangeAni;
     QVariantAnimation *m_posChangeAni;
@@ -106,6 +112,10 @@ private:
 
     XcbMisc *m_xcbMisc;
     DockSettings *m_settings;
+
+    QDBusConnectionInterface *m_dbusDaemonInterface;
+    org::kde::StatusNotifierWatcher *m_sniWatcher;
+    QString m_sniHostService;
 };
 
 #endif // MAINWINDOW_H

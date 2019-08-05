@@ -23,7 +23,7 @@
 
 typedef QMap<QString, double> BrightnessMap;
 
-Q_DECLARE_METATYPE(BrightnessMap)
+//Q_DECLARE_METATYPE(BrightnessMap)
 
 struct DisplayRect{
     qint16 x;
@@ -107,30 +107,16 @@ public:
     inline QString primary() const
     { return qvariant_cast< QString >(property("Primary")); }
 
-    Q_PROPERTY(DisplayRect PrimaryRect READ primaryRect NOTIFY PrimaryRectChanged)
+    Q_PROPERTY(DisplayRect PrimaryRect READ primaryRawRect NOTIFY PrimaryRectChanged)
     inline DisplayRect primaryRawRect() const {
         return qvariant_cast< DisplayRect >(property("PrimaryRect"));
     }
-    inline DisplayRect primaryRect() const
-    {
-        const qreal scale = qApp->devicePixelRatio();
 
-        DisplayRect dr = primaryRawRect();
-        dr.width = std::round(qreal(dr.width) / scale);
-        dr.height = std::round(qreal(dr.height) / scale);
-
-        return dr;
-    }
-
-    Q_PROPERTY(ushort ScreenHeight READ screenHeight NOTIFY ScreenHeightChanged)
-    inline ushort screenHeight() const
-    { return screenRawHeight() / qApp->devicePixelRatio(); }
+    Q_PROPERTY(ushort ScreenHeight READ screenRawHeight NOTIFY ScreenHeightChanged)
     inline ushort screenRawHeight() const
     { return qreal(qvariant_cast< ushort >(property("ScreenHeight"))); }
 
-    Q_PROPERTY(ushort ScreenWidth READ screenWidth NOTIFY ScreenWidthChanged)
-    inline ushort screenWidth() const
-    { return screenRawWidth() / qApp->devicePixelRatio(); }
+    Q_PROPERTY(ushort ScreenWidth READ screenRawWidth NOTIFY ScreenWidthChanged)
     inline ushort screenRawWidth() const
     { return qreal(qvariant_cast< ushort >(property("ScreenWidth"))); }
 

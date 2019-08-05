@@ -2,34 +2,55 @@ Source: dde-dock
 Section: x11
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
-Build-Depends: debhelper (>= 8.0.0), pkg-config,
+Build-Depends: debhelper (>= 8.0.0),
+ pkg-config,
  qt5-qmake,
- libxcb-image0-dev, libxcb-composite0-dev,
- libxcb-ewmh-dev, libqt5x11extras5-dev,
- libxcb-damage0-dev, libqt5svg5-dev,
- libxcb-icccm4-dev, libxtst-dev,
- libdtkwidget-dev, libdtkcore-dev | libdtkutil-dev,
- qttools5-dev-tools, libxcb-icccm4-dev,
+ libxcb-image0-dev,
+ libxcb-composite0-dev,
+ libxcb-ewmh-dev,
+ libqt5x11extras5-dev,
+ libxcb-damage0-dev,
+ libqt5svg5-dev,
+ libxcb-icccm4-dev,
+ libxtst-dev,
+ libdtkwidget-dev,
+ libdtkcore-dev,
+ libdtkcore-bin,
+ qttools5-dev-tools,
+ libxcb-icccm4-dev,
  qtbase5-private-dev,
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
- clang [mipsel mips64el]
+ cmake,
+ libdde-network-utils-dev (>= 0.1.4),
+ libdde-network-utils-dev (<< 0.1.5),
+ libdbusmenu-qt5-dev,
+ clang [mips64el]
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
 Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, deepin-menu
-Recommends: dde-disk-mount-plugin, 
+Recommends: dde-disk-mount-plugin, dde-dock-onboard-plugin
+Conflicts:
+ dde-workspace (<< 2.90.5),
+ dde-dock-applets,
  dde-trash-plugin
-Conflicts: dde-workspace (<< 2.90.5),
- dde-dock-applets
-Replaces: dde-dock-applets
+Replaces:
+ dde-dock-applets,
+ dde-trash-plugin
 Description: deepin desktop-environment - dock module
- Deepin desktop environment 2015 - dock module.
+ Deepin desktop environment - dock module.
 
 Package: dde-dock-dev
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: deepin desktop-environment - dock module development files
- Deepin desktop environment 2015 - dock module development files.
+ Deepin desktop environment - dock module development files.
+
+Package: dde-dock-onboard-plugin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
+Description: deepin desktop-environment - dock plugin
+ Deepin desktop environment - dock plugin for onboard

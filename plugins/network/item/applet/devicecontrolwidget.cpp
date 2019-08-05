@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,46 +21,43 @@
 
 #include "devicecontrolwidget.h"
 #include "horizontalseperator.h"
-#include "refreshbutton.h"
+#include "../widgets/tipswidget.h"
 
 #include <DHiDPIHelper>
 #include <QTimer>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QEvent>
 
 DWIDGET_USE_NAMESPACE
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_deviceName = new QLabel;
+    m_deviceName = new TipsWidget;
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_deviceName->setStyleSheet("color:white;");
 
     m_switchBtn = new DSwitchButton;
 
-    m_refreshBtn = new RefreshButton;
-
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_normal.svg");
 
-    m_refreshView = new QWidget;
-    m_refreshView->setFixedSize(pixmap.size() / devicePixelRatioF());
-    m_refreshView->hide();
-
-    m_loadingIndicator = new DLoadingIndicator(m_refreshView);
+    m_loadingIndicator = new DLoadingIndicator;
     m_loadingIndicator->setImageSource(pixmap);
     m_loadingIndicator->setLoading(false);
+    m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);
     m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
+    m_loadingIndicator->installEventFilter(this);
+    m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
-    infoLayout->addWidget(m_refreshBtn);
-    infoLayout->addWidget(m_refreshView);
+    infoLayout->addStretch();
+    infoLayout->addWidget(m_loadingIndicator);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(15, 0, 5, 0);
+    infoLayout->setContentsMargins(20, 0, 5, 0);
 
 //    m_seperator = new HorizontalSeperator;
 //    m_seperator->setFixedHeight(1);
@@ -77,8 +74,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     setLayout(centralLayout);
     setFixedHeight(30);
 
-    connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::deviceEnableChanged);
-    connect(m_refreshBtn, &RefreshButton::clicked, this, &DeviceControlWidget::refreshNetwork);
+    connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::enableButtonToggled);
 }
 
 void DeviceControlWidget::setDeviceName(const QString &name)
@@ -90,22 +86,30 @@ void DeviceControlWidget::setDeviceEnabled(const bool enable)
 {
     m_switchBtn->blockSignals(true);
     m_switchBtn->setChecked(enable);
+    m_loadingIndicator->setVisible(enable);
     m_switchBtn->blockSignals(false);
+}
 
-    m_refreshBtn->setVisible(enable);
+bool DeviceControlWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_loadingIndicator) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            if (!m_loadingIndicator->loading()) {
+                refreshNetwork();
+            }
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void DeviceControlWidget::refreshNetwork()
 {
     emit requestRefresh();
 
-    m_refreshBtn->hide();
     m_loadingIndicator->setLoading(true);
-    m_refreshView->show();
 
     QTimer::singleShot(1000, this, [=] {
-        m_refreshBtn->show();
-        m_refreshView->hide();
         m_loadingIndicator->setLoading(false);
     });
 }

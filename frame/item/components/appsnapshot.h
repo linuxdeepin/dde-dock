@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -25,15 +25,21 @@
 #include <QWidget>
 #include <QDebug>
 #include <QTimer>
-#include <QLabel>
+#include "../widgets/tipswidget.h"
 
 #include <dimagebutton.h>
 #include <DWindowManagerHelper>
+
+#include <com_deepin_dde_daemon_dock_entry.h>
 
 DWIDGET_USE_NAMESPACE
 
 #define SNAP_WIDTH       200
 #define SNAP_HEIGHT      130
+
+struct SHMInfo;
+struct _XImage;
+typedef _XImage XImage;
 
 class AppSnapshot : public QWidget
 {
@@ -42,9 +48,13 @@ class AppSnapshot : public QWidget
 public:
     explicit AppSnapshot(const WId wid, QWidget *parent = 0);
 
-    WId wid() const { return m_wid; }
-    const QImage snapshot() const { return m_snapshot; }
-    const QString title() const { return m_title->text(); }
+    inline WId wid() const { return m_wid; }
+    inline bool attentioned() const { return m_windowInfo.attention; }
+    inline bool closeAble() const { return m_closeAble; }
+    inline void setCloseAble(const bool value) { m_closeAble = value; }
+    inline const QImage snapshot() const { return m_snapshot; }
+    inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
+    inline const QString title() const { return m_windowInfo.title; }
 
 signals:
     void entered(const WId wid) const;
@@ -55,22 +65,31 @@ public slots:
     void fetchSnapshot();
     void closeWindow() const;
     void compositeChanged() const;
-    void setWindowTitle(const QString &title);
+    void setWindowInfo(const WindowInfo &info);
 
 private:
     void dragEnterEvent(QDragEnterEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    SHMInfo *getImageDSHM();
+    XImage * getImageXlib();
+    QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);
 
 private:
     const WId m_wid;
+    WindowInfo m_windowInfo;
+
+    bool m_closeAble;
 
     QImage m_snapshot;
-    QLabel *m_title;
-    DImageButton *m_closeBtn;
+    QRectF m_snapshotSrcRect;
 
+    TipsWidget *m_title;
+    QTimer *m_waitLeaveTimer;
+    DImageButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
 };
 

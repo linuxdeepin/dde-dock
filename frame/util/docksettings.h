@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -23,10 +23,11 @@
 #define DOCKSETTINGS_H
 
 #include "constants.h"
-#include "dbus/dbusdock.h"
 #include "dbus/dbusmenumanager.h"
 #include "dbus/dbusdisplay.h"
 #include "controller/dockitemcontroller.h"
+
+#include <com_deepin_dde_daemon_dock.h>
 
 #include <QAction>
 #include <QMenu>
@@ -39,6 +40,7 @@
 DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
+using DBusDock = com::deepin::dde::daemon::Dock;
 
 class WhiteMenu : public QMenu
 {
@@ -57,25 +59,28 @@ class DockSettings : public QObject
     Q_OBJECT
 
 public:
-    explicit DockSettings(QWidget *parent = 0);
+    static DockSettings& Instance();
 
-    DisplayMode displayMode() const;
-    HideMode hideMode() const;
-    HideState hideState() const;
-    Position position() const;
-    int screenHeight() const;
-    int screenWidth() const;
-    int screenRawHeight() const { return m_screenRawHeight; }
-    int screenRawWidth() const { return m_screenRawWidth; }
-    int expandTimeout() const;
-    int narrowTimeout() const;
-
-    bool autoHide() const;
+    inline DisplayMode displayMode() const { return m_displayMode; }
+    inline HideMode hideMode() const { return m_hideMode; }
+    inline HideState hideState() const { return m_hideState; }
+    inline Position position() const { return m_position; }
+    inline int screenRawHeight() const { return m_screenRawHeight; }
+    inline int screenRawWidth() const { return m_screenRawWidth; }
+    inline int expandTimeout() const { return m_dockInter->showTimeout(); }
+    inline int narrowTimeout() const { return 100; }
+    inline bool autoHide() const { return m_autoHide; }
+    inline bool isMaxSize() const { return m_isMaxSize; }
     const QRect primaryRect() const;
-    const QRect primaryRawRect() const { return m_primaryRawRect; }
-    const QRect frontendWindowRect() const { return m_frontendRect; }
-    const QSize windowSize() const;
+    inline const QRect primaryRawRect() const { return m_primaryRawRect; }
+    inline const QRect frontendWindowRect() const { return m_frontendRect; }
+    inline const QSize windowSize() const { return m_mainWindowSize; }
+    inline const quint8 Opacity() const { return m_opacity * 255; }
+    inline const QSize fashionTraySize() const { return m_fashionTraySize; }
+
+    const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
+    qreal dockRatio() const;
 
     void showDockSettingsMenu();
 
@@ -83,9 +88,11 @@ signals:
     void dataChanged() const;
     void positionChanged(const Position prevPosition) const;
     void autoHideChanged(const bool autoHide) const;
+    void displayModeChanegd() const;
     void windowVisibleChanged() const;
     void windowHideModeChanged() const;
     void windowGeometryChanged() const;
+    void opacityChanged(const quint8 value) const;
 
 public slots:
     void updateGeometry();
@@ -95,15 +102,21 @@ private slots:
     void menuActionClicked(QAction *action);
     void onPositionChanged();
     void iconSizeChanged();
-    void displayModeChanged();
+    void onDisplayModeChanged();
     void hideModeChanged();
     void hideStateChanged();
     void dockItemCountChanged();
     void primaryScreenChanged();
     void resetFrontendGeometry();
     void updateForbidPostions();
+    void onOpacityChanged(const double value);
+    void onFashionTraySizeChanged(const QSize &traySize);
 
 private:
+    DockSettings(QWidget *parent = 0);
+    DockSettings(DockSettings const &) = delete;
+    DockSettings operator =(DockSettings const &) = delete;
+
     bool test(const Position pos, const QList<QRect> &otherScreens) const;
     void calculateWindowConfig();
     void gtkIconThemeChanged();
@@ -111,17 +124,19 @@ private:
 private:
     int m_iconSize;
     bool m_autoHide;
+    bool m_isMaxSize;
     int m_screenRawHeight;
     int m_screenRawWidth;
+    double m_opacity;
     QSet<Position> m_forbidPositions;
     Position m_position;
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
-    QRect m_primaryRect;
     QRect m_primaryRawRect;
     QRect m_frontendRect;
     QSize m_mainWindowSize;
+    QSize m_fashionTraySize;
 
     WhiteMenu m_settingsMenu;
     WhiteMenu *m_hideSubMenu;

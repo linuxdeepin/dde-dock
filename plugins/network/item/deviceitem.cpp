@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,13 +21,17 @@
 
 #include "deviceitem.h"
 
-DeviceItem::DeviceItem(const QString &path)
+#include <DDBusSender>
+#include <QJsonDocument>
+
+using namespace dde::network;
+
+DeviceItem::DeviceItem(dde::network::NetworkDevice *device)
     : QWidget(nullptr),
-      m_devicePath(path),
 
-      m_networkManager(NetworkManager::instance(this))
+      m_device(device),
+      m_path(device->path())
 {
-
 }
 
 QSize DeviceItem::sizeHint() const
@@ -42,12 +46,16 @@ const QString DeviceItem::itemCommand() const
 
 const QString DeviceItem::itemContextMenu()
 {
+    if (m_device.isNull()) {
+        return QString();
+    }
+
     QList<QVariant> items;
     items.reserve(2);
 
     QMap<QString, QVariant> enable;
     enable["itemId"] = "enable";
-    if (!enabled())
+    if (!m_device->enabled())
         enable["itemText"] = tr("Enable network");
     else
         enable["itemText"] = tr("Disable network");
@@ -68,27 +76,29 @@ const QString DeviceItem::itemContextMenu()
     return QJsonDocument::fromVariant(menu).toJson();
 }
 
-QWidget *DeviceItem::itemPopup()
+QWidget *DeviceItem::itemTips()
 {
     return nullptr;
 }
 
 void DeviceItem::invokeMenuItem(const QString &menuId)
 {
+    if (m_device.isNull()) {
+        return;
+    }
+
     if (menuId == "settings")
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
+        //QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
+        DDBusSender()
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method("ShowModule")
+                .arg(QString("network"))
+                .call();
+
     else if (menuId == "enable")
-        setEnabled(!enabled());
-}
-
-bool DeviceItem::enabled() const
-{
-    return m_networkManager->deviceEnabled(m_devicePath);
-}
-
-void DeviceItem::setEnabled(const bool enable)
-{
-    m_networkManager->setDeviceEnabled(m_devicePath, enable);
+        Q_EMIT requestSetDeviceEnable(m_path, !m_device->enabled());
 }
 
 QWidget *DeviceItem::itemApplet()

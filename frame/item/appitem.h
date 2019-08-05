@@ -1,9 +1,10 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             listenerri <listenerri@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +25,17 @@
 
 #include "dockitem.h"
 #include "components/previewcontainer.h"
-#include "dbus/dbusdockentry.h"
+#include "components/appdrag.h"
 #include "dbus/dbusclientmanager.h"
+#include "../widgets/tipswidget.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QGraphicsItemAnimation>
+
+#include <com_deepin_dde_daemon_dock_entry.h>
+
+using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 
 class AppItem : public DockItem
 {
@@ -39,57 +46,74 @@ public:
     ~AppItem();
 
     const QString appId() const;
+    const bool isValid() const;
     void updateWindowIconGeometries();
     static void setIconBaseSize(const int size);
     static int iconBaseSize();
     static int itemBaseHeight();
     static int itemBaseWidth();
+    void undock();
+    QWidget *appDragWidget();
+    void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
-    inline ItemType itemType() const { return App; }
+    inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
 
 signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
+    void dragReady(QWidget *dragWidget);
 
 private:
-    void moveEvent(QMoveEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dragMoveEvent(QDragMoveEvent *e);
-    void dropEvent(QDropEvent *e);
-    void leaveEvent(QEvent *e);
+    void moveEvent(QMoveEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+    void leaveEvent(QEvent *e) override;
+    void showEvent(QShowEvent *e) override;
 
-    void showHoverTips();
-    void invokedMenuItem(const QString &itemId, const bool checked);
-    const QString contextMenu() const;
-    QWidget *popupTips();
+    void showHoverTips() Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &itemId, const bool checked) Q_DECL_OVERRIDE;
+    const QString contextMenu() const Q_DECL_OVERRIDE;
+    QWidget *popupTips() Q_DECL_OVERRIDE;
 
     void startDrag();
+    bool hasAttention() const;
+
+    QPoint appIconPosition() const;
 
 private slots:
-    void updateTitle();
-    void refershIcon();
+    void updateWindowInfos(const WindowInfoMap &info);
+    void refershIcon() Q_DECL_OVERRIDE;
     void activeChanged();
     void showPreview();
-    void cancelAndHidePreview();
+    void playSwingEffect();
+    void stopSwingEffect();
+    void checkAttentionEffect();
 
 private:
-    QLabel *m_appNameTips;
+    TipsWidget *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
-    DBusDockEntry *m_itemEntry;
+    DockEntryInter *m_itemEntryInter;
 
-    QGraphicsView *m_itemView;
-    QGraphicsScene *m_itemScene;
+    QGraphicsView *m_swingEffectView;
+    QGraphicsItemAnimation *m_itemAnimation;
 
-    bool m_draging;
+    DWindowManagerHelper *m_wmHelper;
+
+    QPointer<AppDrag> m_drag;
+
+    bool m_dragging;
     bool m_active;
-    WindowDict m_titles;
+    int m_retryTimes;
+
+    WindowInfoMap m_windowInfos;
     QString m_id;
     QPixmap m_appIcon;
     QPixmap m_horizontalIndicator;
@@ -98,6 +122,7 @@ private:
     QPixmap m_activeVerticalIndicator;
 
     QTimer *m_updateIconGeometryTimer;
+    QTimer *m_retryObtainIconTimer;
 
     QFutureWatcher<QPixmap> *m_smallWatcher;
     QFutureWatcher<QPixmap> *m_largeWatcher;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,8 +21,6 @@
 
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
-
-#include "dbus/dbusdisplay.h"
 
 #include <darrowrectangle.h>
 #include <dregionmonitor.h>
@@ -49,6 +47,11 @@ public slots:
 
 signals:
     void accept() const;
+    // 在把专业版的仓库降级到debian的stable时, dock出现了一个奇怪的问题:
+    // 在plugins/tray/system-trays/systemtrayitem.cpp中的showPopupWindow函数中
+    // 无法连接到上面这个信号: "accept", qt给出一个运行时警告提示找不到信号
+    // 目前的解决方案就是在下面增加了这个信号
+    void unusedSignal();
 
 protected:
     void showEvent(QShowEvent *e);
@@ -67,7 +70,6 @@ private:
     QTimer *m_acceptDelayTimer;
 
     DRegionMonitor *m_regionInter;
-    DBusDisplay *m_displayInter;
     DWindowManagerHelper *m_wmHelper;
 };
 

@@ -1,176 +1,178 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ro" version="2.1">
 <context>
+    <name>AbstractPluginsController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>ContainerItem</name>
     <message>
-        <location filename="../frame/item/containeritem.cpp" line="33"/>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Apăsați pentru a afișa pictogramele ascunse</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAdaptors</name>
+    <message>
+        <source>Add keyboard layout</source>
+        <translation>Adăugare aspect  tastatură</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="61"/>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Data și ora</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="125"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>Oră în format 12 ore</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>Oră în format 24 de ore</translation>
     </message>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="133"/>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configurări pentru timp</translation>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>Activați rețeaua</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
         <source>Disable network</source>
+        <translation>Dezactivați conexiunea la rețea</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Configurări de rețea</translation>
+    </message>
+</context>
+<context>
+    <name>DialogManager</name>
+    <message>
+        <source>Are you sure you want to empty %1 items?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
-        <source>Network settings</source>
-        <translation type="unfinished"/>
+        <source>Cancel</source>
+        <translation>Anulare</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Ștergere</translation>
+    </message>
+    <message>
+        <source>This action cannot be restored</source>
+        <translation>Această acţiune nu a putut fi restaurată</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Dispozitiv necunoscut</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Volum necunoscut</translation>
     </message>
 </context>
 <context>
     <name>DiskMountPlugin</name>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
         <translation>Disc</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>Deshide</translation>
+        <translation>Deschide</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>Demontați-le pe toate</translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="43"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mod aspectuos</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="44"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mod eficient</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="45"/>
         <source>Top</source>
         <translation>Sus</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="46"/>
         <source>Bottom</source>
         <translation>Jos</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="47"/>
         <source>Left</source>
         <translation>Stânga</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="48"/>
         <source>Right</source>
         <translation>Dreapta</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="49"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>Mare</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="50"/>
         <source>Medium</source>
-        <translation type="unfinished"/>
+        <translation>Mediu</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="51"/>
         <source>Small</source>
-        <translation type="unfinished"/>
+        <translation>Mic</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="52"/>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>Păstrați docul afișat</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="53"/>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Păstrați docul ascuns</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="54"/>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>Ascundere inteligentă</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="88"/>
         <source>Mode</source>
         <translation>Mod</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="96"/>
         <source>Location</source>
         <translation>Locație</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="103"/>
         <source>Size</source>
         <translation>Dimensiune</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="110"/>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>Stare</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="114"/>
         <source>Plugins</source>
-        <translation>Plugin-uri</translation>
+        <translation>Extensii</translation>
     </message>
 </context>
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
         <translation>Lansator</translation>
     </message>
@@ -178,238 +180,192 @@
 <context>
     <name>NetworkPlugin</name>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="46"/>
         <source>Network</source>
         <translation>Reţea</translation>
     </message>
 </context>
 <context>
-    <name>PopupControlWidget</name>
+    <name>OnboardPlugin</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Cancel</source>
-        <translation>Anulează</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Empty</source>
-        <translation>Gol</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
-        <source>This action cannot be restored</source>
-        <translation>Această acţiune nu a putut fi restaurată</translation>
-    </message>
-    <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
-        <source>Are you sure to empty 1 item ?</source>
+        <source>Onboard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
-        <source>Are you sure to empty %1 items ?</source>
+        <source>Settings</source>
+        <translation>Setări</translation>
+    </message>
+</context>
+<context>
+    <name>PowerPlugin</name>
+    <message>
+        <source>Power</source>
+        <translation>Energie</translation>
+    </message>
+    <message>
+        <source>Power settings</source>
+        <translation>Setări pentru administrare de energie</translation>
+    </message>
+    <message>
+        <source>Charged %1</source>
+        <translation>Încărcat %1</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1, %2 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1, %2 hr %3 min until full</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
-        <source>Shut down</source>
-        <translation>Închidere</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
-        <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
-        <source>Charging %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
-        <source>Restart</source>
-        <translation>Repornire</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
-        <source>Lock</source>
-        <translation>Blocare</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
-        <source>Log out</source>
-        <translation>Ieșire</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
-        <source>Suspend</source>
-        <translation>Suspendare</translation>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
         <source>Power</source>
         <translation>Energie</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
-        <source>Switch account</source>
-        <translation type="unfinished"/>
+        <source>Shut down</source>
+        <translation>Închidere</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
+        <source>Restart</source>
+        <translation>Repornire</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Suspendare</translation>
+    </message>
+    <message>
+        <source>Hibernate</source>
+        <translation>Hibernare</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Blocare</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>Ieșire</translation>
+    </message>
+    <message>
+        <source>Switch account</source>
+        <translation>Schimbă conturile</translation>
+    </message>
+    <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări pentru administrare de energie</translation>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
         <source>Device</source>
         <translation>Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>Aplicație</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>Activați sunetul</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
         <source>Mute</source>
         <translation>Mut</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări audio</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="214"/>
         <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Volumul actual %1</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
         <source>Sound</source>
         <translation>Sunet</translation>
     </message>
 </context>
 <context>
-    <name>SystemTrayPlugin</name>
-    <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="45"/>
-        <source>System Tray</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
-        <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <source>Trash</source>
+        <translation>Gunoi</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
+        <source>Trash - %1 file</source>
+        <translation>Coș de reciclare - %1 fișier</translation>
+    </message>
+    <message>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Coș de reciclare - %1 fișiere</translation>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
-        <translation>Deshide</translation>
+        <translation>Deschide</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
         <translation>Gol</translation>
     </message>
 </context>
 <context>
+    <name>TrayPlugin</name>
+    <message>
+        <source>System Tray</source>
+        <translation>Platou de sistem</translation>
+    </message>
+</context>
+<context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
-        <source>Unknow</source>
-        <translation type="unfinished"/>
+        <source>Unknown</source>
+        <translation>Necunoscut</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
-        <source>No Network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Conexiune prin cablu: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>Fără conexiune</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
         <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Conexiune fără fir: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
-        <source>Auto-connect</source>
-        <translation>Auto conectare</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="63"/>
-        <source>Connect</source>
-        <translation>Conectare</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="64"/>
-        <source>Cancel</source>
-        <translation>Anulează</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="170"/>
         <source>Wireless Network</source>
         <translation>Rețea fără fir</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="172"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="411"/>
-        <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Rețea fără fir %1</translation>
     </message>
 </context>
 </TS>

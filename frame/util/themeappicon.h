@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -31,7 +31,7 @@ public:
     explicit ThemeAppIcon(QObject *parent = 0);
     ~ThemeAppIcon();
 
-    static const QPixmap getIcon(const QString iconName, const int size);
+    static const QPixmap getIcon(const QString iconName, const int size, const qreal ratio);
 };
 
 #endif // THEMEAPPICON_H

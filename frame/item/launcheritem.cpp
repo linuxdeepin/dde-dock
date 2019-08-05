@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -26,18 +26,21 @@
 #include <QPainter>
 #include <QProcess>
 #include <QMouseEvent>
+#include <DDBusSender>
+#include <QApplication>
+
+DCORE_USE_NAMESPACE
 
 LauncherItem::LauncherItem(QWidget *parent)
-    : DockItem(parent),
-
-      m_tips(new QLabel(this))
+    : DockItem(parent)
+    , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
+    , m_tips(new TipsWidget(this))
 {
+    m_launcherInter->setSync(true, false);
+
     setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
-    m_tips->setText(tr("Launcher"));
-    m_tips->setStyleSheet("color:white;"
-                          "padding:0px 3px;");
 }
 
 void LauncherItem::refershIcon()
@@ -45,11 +48,11 @@ void LauncherItem::refershIcon()
     const int iconSize = qMin(width(), height());
     if (DockDisplayMode == Efficient)
     {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7);
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9);
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7, devicePixelRatioF());
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9, devicePixelRatioF());
     } else {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6, devicePixelRatioF());
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8, devicePixelRatioF());
     }
 
     update();
@@ -66,15 +69,11 @@ void LauncherItem::paintEvent(QPaintEvent *e)
 
     const QPixmap pixmap = DockDisplayMode == Fashion ? m_largeIcon : m_smallIcon;
 
-    const auto ratio = qApp->devicePixelRatio();
+    const auto ratio = devicePixelRatioF();
     const int iconX = rect().center().x() - pixmap.rect().center().x() / ratio;
     const int iconY = rect().center().y() - pixmap.rect().center().y() / ratio;
 
-    // draw ligher/normal icon
-    if (!m_hover)
-        painter.drawPixmap(iconX, iconY, pixmap);
-    else
-        painter.drawPixmap(iconX, iconY, ImageFactory::lighterEffect(pixmap));
+    painter.drawPixmap(iconX, iconY, pixmap);
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)
@@ -88,25 +87,21 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
     hidePopup();
 
-    if (e->button() == Qt::RightButton/* && !perfectIconRect().contains(e->pos())*/)
-        return QWidget::mousePressEvent(e);
+    return QWidget::mousePressEvent(e);
+}
 
+void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
+{
     if (e->button() != Qt::LeftButton)
         return;
 
-    QProcess *proc = new QProcess;
-
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
-
-    QStringList args = QStringList() << "--print-reply"
-                                     << "--dest=com.deepin.dde.Launcher"
-                                     << "/com/deepin/dde/Launcher"
-                                     << "com.deepin.dde.Launcher.Toggle";
-
-    proc->start("dbus-send", args);
+    if (!m_launcherInter->IsVisible()) {
+        m_launcherInter->Show();
+    }
 }
 
 QWidget *LauncherItem::popupTips()
 {
+    m_tips->setText(tr("Launcher"));
     return m_tips;
 }

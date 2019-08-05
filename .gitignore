@@ -14,8 +14,11 @@
 
 build*/
 *.pro.user*
+CMakeLists.txt.user*
 *.DS_Store
 *.qm
+.directory
 
 # binary file
 dde-dock
+.vscode

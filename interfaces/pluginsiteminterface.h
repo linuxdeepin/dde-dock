@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -184,15 +184,13 @@ public:
     virtual void positionChanged(const Dock::Position position) {Q_UNUSED(position);}
 
     ///
-    /// \brief refershIcon
-    /// refersh item icon, its triggered when system icon theme changed.
+    /// \brief refreshIcon
+    /// refresh item icon, its triggered when system icon theme changed.
     /// \param itemKey
     /// item key
     ///
-    virtual void refershIcon(const QString &itemKey) { Q_UNUSED(itemKey); }
+    virtual void refreshIcon(const QString &itemKey) { Q_UNUSED(itemKey); }
 
-
-protected:
     ///
     /// \brief displayMode
     /// get current dock display mode
@@ -212,6 +210,12 @@ protected:
     {
         return qApp->property(PROP_POSITION).value<Dock::Position>();
     }
+
+    ///
+    /// \brief settingsChanged
+    /// override this function to receive plugin settings changed signal(DeepinSync)
+    ///
+    virtual void pluginSettingsChanged() {}
 
 protected:
     ///

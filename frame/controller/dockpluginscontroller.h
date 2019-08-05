@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,46 +24,44 @@
 
 #include "item/pluginsitem.h"
 #include "pluginproxyinterface.h"
+#include "util/abstractpluginscontroller.h"
+
+#include <com_deepin_dde_daemon_dock.h>
 
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
+#include <QDBusConnectionInterface>
 
-class DockItemController;
 class PluginsItemInterface;
-class DockPluginsController : public QObject, PluginProxyInterface
+class DockPluginsController : public AbstractPluginsController
 {
     Q_OBJECT
 
     friend class DockItemController;
 
 public:
-    explicit DockPluginsController(DockItemController *itemControllerInter = 0);
+    explicit DockPluginsController(QObject *parent = 0);
 
     // implements PluginProxyInterface
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey);
+    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) Q_DECL_OVERRIDE;
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) Q_DECL_OVERRIDE;
+    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) Q_DECL_OVERRIDE;
+
+    void startLoader();
 
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
-
-private slots:
-    void startLoader();
-    void displayModeChanged();
-    void positionChanged();
-    void loadPlugin(const QString &pluginFile);
+    void fashionTraySizeChanged(const QSize &traySize) const;
 
 private:
-    bool eventFilter(QObject *o, QEvent *e);
-    PluginsItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
-
-private:
-    QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
-    DockItemController *m_itemControllerInter;
+    void loadLocalPlugins();
+    void loadSystemPlugins();
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

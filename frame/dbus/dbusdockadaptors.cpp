@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -21,10 +21,11 @@
 
 #include "dbusdockadaptors.h"
 #include <QScreen>
+#include <QDebug>
 
 DBusDockAdaptors::DBusDockAdaptors(MainWindow* parent): QDBusAbstractAdaptor(parent)
 {
-    connect(parent, &MainWindow::panelGeometryChanged, this, [this] {
+    connect(parent, &MainWindow::panelGeometryChanged, this, [=] {
         emit DBusDockAdaptors::geometryChanged(geometry());
     });
 }
@@ -41,6 +42,6 @@ MainWindow *DBusDockAdaptors::parent() const
 
 QRect DBusDockAdaptors::geometry() const
 {
-    return parent()->panelGeometry();
+    return parent()->geometry();
 }
 

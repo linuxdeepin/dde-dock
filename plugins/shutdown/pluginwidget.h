@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -23,12 +23,8 @@
 #define PLUGINWIDGET_H
 
 #include "constants.h"
-#include "dbus/dbuspower.h"
 
 #include <QWidget>
-#include <QTimer>
-
-#define SHUTDOWN_KEY    "shutdown"
 
 class PluginWidget : public QWidget
 {
@@ -37,27 +33,15 @@ class PluginWidget : public QWidget
 public:
     explicit PluginWidget(QWidget *parent = 0);
 
-signals:
-    void requestContextMenu(const QString &itemKey) const;
-
 protected:
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
 
 private:
     const QPixmap loadSvg(const QString &fileName, const QSize &size) const;
 
 private:
-    void refershIconPixmap();
-
-private:
-    bool m_hover;
     Dock::DisplayMode m_displayMode;
-
-    DBusPower *m_powerInter;
 };
 
 #endif // PLUGINWIDGET_H

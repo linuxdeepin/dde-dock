@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -26,10 +26,11 @@
 #include <QBoxLayout>
 #include <QTimer>
 
-#include "dbus/dbusdockentry.h"
 #include "constants.h"
 #include "appsnapshot.h"
 #include "floatingpreview.h"
+
+#include <com_deepin_dde_daemon_dock_entry.h>
 
 #include <DWindowManagerHelper>
 
@@ -46,10 +47,11 @@ signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCheckWindows() const;
-    void requestCancelAndHidePreview() const;
+    void requestCancelPreviewWindow() const;
+    void requestHidePopup() const;
 
 public:
-    void setWindowInfos(const WindowDict &infos);
+    void setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose);
     void updateSnapshots();
 
 public slots:
@@ -67,8 +69,9 @@ private:
     void dragLeaveEvent(QDragLeaveEvent *e);
 
 private slots:
+    void onSnapshotClicked(const WId wid);
     void previewEntered(const WId wid);
-    void moveFloatingPreview(const QPoint &p);
+    void previewFloating();
 
 private:
     bool m_needActivate;
@@ -79,6 +82,8 @@ private:
 
     QTimer *m_mouseLeaveTimer;
     DWindowManagerHelper *m_wmHelper;
+    QTimer *m_waitForShowPreviewTimer;
+    WId m_currentWId;
 };
 
 #endif // PREVIEWCONTAINER_H

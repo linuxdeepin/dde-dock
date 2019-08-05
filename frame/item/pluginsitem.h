@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -41,20 +41,27 @@ public:
     bool isInContainer() const;
     void setInContainer(const bool container);
 
+    QString pluginName() const;
+
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
 
     inline ItemType itemType() const override {return Plugins;}
     QSize sizeHint() const override;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    QWidget *centralWidget() const;
 
 public slots:
     void refershIcon() override;
 
-private:
+protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
-    bool eventFilter(QObject *o, QEvent *e) override;
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
     void showPopupWindow(QWidget * const content, const bool model = false) override;
@@ -68,8 +75,10 @@ private:
 private:
     PluginsItemInterface * const m_pluginInter;
     QWidget *m_centralWidget;
+
     const QString m_itemKey;
-    bool m_draging;
+    bool m_dragging;
+    bool m_hover;
 
     static QPoint MousePressPoint;
 };

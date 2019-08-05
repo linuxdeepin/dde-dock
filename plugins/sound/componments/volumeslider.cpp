@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -30,8 +30,6 @@ VolumeSlider::VolumeSlider(QWidget *parent)
       m_pressed(false),
       m_timer(new QTimer(this))
 {
-    setMinimum(0);
-    setMaximum(1000);
     setTickInterval(50);
     setPageStep(50);
     setTickPosition(QSlider::NoTicks);
@@ -42,10 +40,10 @@ VolumeSlider::VolumeSlider(QWidget *parent)
                   "border:none;"
                   "height:2px;"
 //                  "border-width:0 0px 0 0px;"
-//                  "background:url(:/image/image/slider_bg.png) 0 2 0 2 stretch;"
+//                  "background:url(://slider_bg.png) 0 2 0 2 stretch;"
                   "}"
                   "QSlider::handle{"
-                  "background:url(:/image/image/slider_handle.svg) no-repeat;"
+                  "background:url(://slider_handle.svg) no-repeat;"
                   "width:22px;"
                   "height:22px;"
                   "margin:-9px -14px -11px -14px;"
@@ -79,25 +77,27 @@ void VolumeSlider::mousePressEvent(QMouseEvent *e)
         if (!rect().contains(e->pos()))
             return;
         m_pressed = true;
-        QSlider::setValue(1000.0 * e->x() / rect().width());
+        QSlider::setValue(maximum() * e->x() / rect().width());
     }
 }
 
 void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
 {
     const int value = minimum() + (double((maximum()) - minimum()) * e->x() / rect().width());
+    const int normalized = std::max(std::min(maximum(), value), 0);
 
-    QSlider::setValue(std::max(std::min(1000, value), 0));
-    emit valueChanged(std::max(std::min(1000, value), 0));
+    QSlider::setValue(normalized);
+
+    emit valueChanged(normalized);
 }
 
 void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton)
+    {
         m_pressed = false;
         emit requestPlaySoundEffect();
     }
-    //        QTimer::singleShot(100, [this] {m_pressed = false;});
 }
 
 void VolumeSlider::wheelEvent(QWheelEvent *e)

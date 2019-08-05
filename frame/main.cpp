@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,6 +24,8 @@
 
 #include <DApplication>
 #include <DLog>
+#include <DDBusSender>
+
 #include <QDir>
 
 #include <unistd.h>
@@ -43,12 +45,17 @@ void RegisterDdeSession()
     QByteArray cookie = qgetenv(envName.toUtf8().data());
     qunsetenv(envName.toUtf8().data());
 
-    if (!cookie.isEmpty()) {
-        QDBusInterface iface("com.deepin.SessionManager",
-                             "/com/deepin/SessionManager",
-                             "com.deepin.SessionManager",
-                             QDBusConnection::sessionBus());
-        iface.asyncCall("Register", QString(cookie));
+    if (!cookie.isEmpty())
+    {
+        QDBusPendingReply<bool> r = DDBusSender()
+                .interface("com.deepin.SessionManager")
+                .path("/com/deepin/SessionManager")
+                .service("com.deepin.SessionManager")
+                .method("Register")
+                .arg(QString(cookie))
+                .call();
+
+        qDebug() << Q_FUNC_INFO << r.value();
     }
 }
 
@@ -56,23 +63,39 @@ int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
-    if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
-        qDebug() << "set single instance failed!";
-        return -1;
-    }
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
+    app.setTheme("dark");
     app.loadTranslator();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
 
+    // load dde-network-utils translator
+    QTranslator translator;
+    translator.load("/usr/share/dde-network-utils/translations/dde-network-utils_" + QLocale::system().name());
+    app.installTranslator(&translator);
+
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
+    QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
+    QCommandLineParser parser;
+    parser.setApplicationDescription("DDE Dock");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(disablePlugOption);
+    parser.process(app);
+
+    if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
+        qDebug() << "set single instance failed!";
+        return -1;
+    }
+
     qDebug() << "\n\ndde-dock startup";
+    RegisterDdeSession();
 
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());
@@ -83,9 +106,11 @@ int main(int argc, char *argv[])
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
 
-    RegisterDdeSession();
+    QTimer::singleShot(1, &mw, &MainWindow::launch);
 
-    QTimer::singleShot(500, &mw, &MainWindow::launch);
+    if (!parser.isSet(disablePlugOption)) {
+        DockItemController::instance()->startLoadPlugins();
+    }
 
     return app.exec();
 }

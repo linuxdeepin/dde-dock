@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2017 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -25,8 +25,6 @@
 #include "pluginsiteminterface.h"
 #include "sounditem.h"
 
-#include <QSettings>
-
 class SoundPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -36,22 +34,26 @@ class SoundPlugin : public QObject, PluginsItemInterface
 public:
     explicit SoundPlugin(QObject *parent = 0);
 
-    const QString pluginName() const;
-    const QString pluginDisplayName() const;
-    void init(PluginProxyInterface *proxyInter);
-    void pluginStateSwitched();
-    bool pluginIsAllowDisable() { return true; }
-    bool pluginIsDisable();
-
-    QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
-    QWidget *itemPopupApplet(const QString &itemKey);
-
-    const QString itemContextMenu(const QString &itemKey);
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
+    const QString pluginName() const Q_DECL_OVERRIDE;
+    const QString pluginDisplayName() const Q_DECL_OVERRIDE;
+    void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
+    void pluginStateSwitched() Q_DECL_OVERRIDE;
+    bool pluginIsAllowDisable() Q_DECL_OVERRIDE { return true; }
+    bool pluginIsDisable() Q_DECL_OVERRIDE;
+    QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
+    QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
+    QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
+    const QString itemContextMenu(const QString &itemKey) Q_DECL_OVERRIDE;
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
+    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
+    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
+    void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
+    void pluginSettingsChanged() override;
 
 private:
-    QSettings m_settings;
+    void refreshPluginItemsVisible();
+
+private:
     SoundItem *m_soundItem;
 };
 
