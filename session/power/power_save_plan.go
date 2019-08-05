@@ -26,7 +26,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-x11-client"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/procfs"
@@ -390,8 +390,7 @@ func (psp *powerSavePlan) screenBlack() {
 		psp.stopScreensaver()
 		logger.Info("Screen full black")
 		if manager.ScreenBlackLock.Get() {
-			//manager.lockWaitShow(2 * time.Second)
-			manager.doLock()
+			manager.lockWaitShow(2 * time.Second)
 		}
 
 		if adjustBrightnessEnabled {

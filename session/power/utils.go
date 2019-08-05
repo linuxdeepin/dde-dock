@@ -51,9 +51,7 @@ func (m *Manager) findWindow(wmClassInstance, wmClassClass string) x.Window {
 	return 0
 }
 
-func (m *Manager) waitWindowViewable(wmClassInstance, wmClassClass string, timeout time.Duration) {
-	c := m.helper.xConn
-	logger.Debug("waitWindowViewable", wmClassInstance, wmClassClass)
+func (m *Manager) waitLockShowing(timeout time.Duration) {
 	ticker := time.NewTicker(time.Millisecond * 300)
 	timer := time.NewTimer(timeout)
 	for {
@@ -64,25 +62,20 @@ func (m *Manager) waitWindowViewable(wmClassInstance, wmClassClass string, timeo
 				return
 			}
 
-			logger.Debug("waitWindowViewable tick")
-			win := m.findWindow(wmClassInstance, wmClassClass)
-			if win == 0 {
-				continue
-			}
-
-			winAttr, err := x.GetWindowAttributes(c, win).Reply(c)
+			logger.Debug("waitLockShowing tick")
+			locked, err := m.helper.SessionManager.Locked().Get(0)
 			if err != nil {
 				logger.Warning(err)
 				continue
 			}
-			if winAttr.MapState == x.MapStateViewable {
-				logger.Debug("waitWindowViewable found")
+			if locked {
+				logger.Debug("waitLockShowing found")
 				ticker.Stop()
 				return
 			}
 
 		case <-timer.C:
-			logger.Debug("waitWindowViewable failed timeout!")
+			logger.Debug("waitLockShowing failed timeout!")
 			ticker.Stop()
 			return
 		}
@@ -92,7 +85,7 @@ func (m *Manager) waitWindowViewable(wmClassInstance, wmClassClass string, timeo
 func (m *Manager) lockWaitShow(timeout time.Duration) {
 	const ddeLock = "dde-lock"
 	m.doLock()
-	m.waitWindowViewable(ddeLock, ddeLock, timeout)
+	m.waitLockShowing(timeout)
 }
 
 func (m *Manager) setDPMSModeOn() {
