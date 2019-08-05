@@ -65,9 +65,7 @@ func (m *Manager) handleBeforeSuspend() {
 	m.setPrepareSuspend(true)
 	logger.Debug("before sleep")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		//m.setDPMSModeOn()
-		//m.lockWaitShow(4 * time.Second)
-		m.doLock()
+		m.lockWaitShow(4 * time.Second)
 	}
 }
 
