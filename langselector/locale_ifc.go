@@ -20,6 +20,7 @@
 package langselector
 
 import (
+	"errors"
 	"fmt"
 
 	"pkg.deepin.io/dde/api/language_support"
@@ -58,6 +59,7 @@ func (lang *LangSelector) SetLocale(locale string) *dbus.Error {
 	if lang.LocaleState == LocaleStateChanging || lang.CurrentLocale == locale {
 		return nil
 	}
+	_ = lang.addLocale(locale)
 	logger.Debugf("setLocale %q", locale)
 	go lang.setLocale(locale)
 	return nil
@@ -94,6 +96,8 @@ func (lang *LangSelector) Reset() *dbus.Error {
 }
 
 func (lang *LangSelector) GetLanguageSupportPackages(locale string) ([]string, *dbus.Error) {
+	lang.service.DelayAutoQuit()
+
 	ls, err := language_support.NewLanguageSupport()
 	if err != nil {
 		return nil, dbusutil.ToError(err)
@@ -102,4 +106,29 @@ func (lang *LangSelector) GetLanguageSupportPackages(locale string) ([]string, *
 	pkgs := ls.ByLocale(locale, false)
 	ls.Destroy()
 	return pkgs, nil
+}
+
+func (lang *LangSelector) AddLocale(locale string) *dbus.Error {
+	lang.service.DelayAutoQuit()
+
+	if !lang.isSupportedLocale(locale) {
+		return dbusutil.ToError(fmt.Errorf("invalid locale: %v", locale))
+	}
+
+	err := lang.addLocale(locale)
+	return dbusutil.ToError(err)
+}
+
+func (lang *LangSelector) DeleteLocale(locale string) *dbus.Error {
+	lang.service.DelayAutoQuit()
+
+	lang.PropsMu.RLock()
+	if locale == lang.CurrentLocale {
+		lang.PropsMu.RUnlock()
+		return dbusutil.ToError(errors.New("the locale is being used"))
+	}
+	lang.PropsMu.RUnlock()
+
+	err := lang.deleteLocale(locale)
+	return dbusutil.ToError(err)
 }

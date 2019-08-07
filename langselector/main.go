@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -54,6 +55,11 @@ func Run() {
 		logger.Fatal("failed to request name:", err)
 	}
 
+	lang.connectSettingsChanged()
+	err = gsettings.StartMonitor()
+	if err != nil {
+		logger.Warning("failed to start monitor settings:", err)
+	}
 	service.SetAutoQuitHandler(time.Minute*5, func() bool {
 		lang.PropsMu.RLock()
 		canQuit := lang.LocaleState != LocaleStateChanging

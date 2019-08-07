@@ -31,8 +31,6 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/dde/api/userenv"
-
 	// dbus services:
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.localehelper"
 	libnetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.network"
@@ -41,10 +39,14 @@ import (
 
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/api/language_support"
+	"pkg.deepin.io/dde/api/userenv"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/gsettings"
+	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
 
@@ -70,6 +72,9 @@ const (
 	//
 	// Locale 更改状态：正在修改中
 	LocaleStateChanging = 1
+
+	gsSchemaLocale = "com.deepin.dde.locale"
+	gsKeyLocales   = "locales"
 )
 
 var (
@@ -99,12 +104,17 @@ type LangSelector struct {
 	CurrentLocale string
 	// Store locale changed state
 	LocaleState int32
+	// dbusutil-gen: equal=nil
+	Locales  []string
+	settings *gio.Settings
 
 	methods *struct {
 		SetLocale                  func() `in:"locale"`
 		GetLocaleList              func() `out:"locales"`
 		GetLocaleDescription       func() `in:"locale" out:"description"`
 		GetLanguageSupportPackages func() `in:"locale" out:"packages"`
+		AddLocale                  func() `in:"locale"`
+		DeleteLocale               func() `in:"locale"`
 	}
 
 	signals *struct {
@@ -157,7 +167,32 @@ func newLangSelector(service *dbusutil.Service) (*LangSelector, error) {
 		locale = defaultLocale
 	}
 	lang.CurrentLocale = locale
+
+	lang.settings = gio.NewSettings(gsSchemaLocale)
+	locales := lang.settings.GetStrv(gsKeyLocales)
+	if !strv.Strv(locales).Contains(locale) {
+		locales = append(locales, locale)
+	}
+	lang.Locales = locales
+
 	return &lang, nil
+}
+
+func (l *LangSelector) connectSettingsChanged() {
+	gsettings.ConnectChanged(gsSchemaLocale, gsKeyLocales, func(key string) {
+		locales := l.settings.GetStrv(gsKeyLocales)
+		l.updateLocales(locales)
+	})
+}
+
+func (l *LangSelector) updateLocales(locales []string) {
+	l.PropsMu.Lock()
+	defer l.PropsMu.Unlock()
+
+	if !strv.Strv(locales).Contains(l.CurrentLocale) {
+		locales = append(locales, l.CurrentLocale)
+	}
+	l.setPropLocales(locales)
 }
 
 func getLocaleInfos() (LocaleInfos, error) {
@@ -575,6 +610,25 @@ func (lang *LangSelector) installPackages(pkgs []string) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+func (lang *LangSelector) addLocale(locale string) error {
+	locales := lang.settings.GetStrv(gsKeyLocales)
+	if !strv.Strv(locales).Contains(locale) {
+		locales = append(locales, locale)
+	}
+
+	lang.settings.SetStrv(gsKeyLocales, locales)
+	return nil
+}
+
+func (lang *LangSelector) deleteLocale(locale string) error {
+	locales := lang.settings.GetStrv(gsKeyLocales)
+	locales, isDeleted := strv.Strv(locales).Delete(locale)
+	if isDeleted {
+		lang.settings.SetStrv(gsKeyLocales, locales)
 	}
 	return nil
 }
