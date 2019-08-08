@@ -22,37 +22,31 @@ package inputdevices
 import (
 	"encoding/xml"
 	"io/ioutil"
-	. "pkg.deepin.io/lib/gettext"
+
+	"pkg.deepin.io/dde/daemon/inputdevices/iso639"
+	"pkg.deepin.io/lib/gettext"
+	lib_locale "pkg.deepin.io/lib/locale"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
 	kbdLayoutsXml = "/usr/share/X11/xkb/rules/base.xml"
+	kbdTextDomain = "xkeyboard-config"
 )
 
 type XKBConfigRegister struct {
-	LayoutList XLayoutList `xml:"layoutList"`
-}
-
-type XLayoutList struct {
-	Layout []XLayout `xml:"layout"`
+	Layouts []XLayout `xml:"layoutList>layout"`
 }
 
 type XLayout struct {
-	ConfigItem  XConfigItem  `xml:"configItem"`
-	VariantList XVariantList `xml:"variantList"`
+	ConfigItem XConfigItem   `xml:"configItem"`
+	Variants   []XConfigItem `xml:"variantList>variant>configItem"`
 }
 
 type XConfigItem struct {
-	Name        string `xml:"name"`
-	Description string `xml:"description"`
-}
-
-type XVariantList struct {
-	Variant []XVariant `xml:"variant"`
-}
-
-type XVariant struct {
-	ConfigItem XConfigItem `xml:"configItem"`
+	Name        string   `xml:"name"`
+	Description string   `xml:"description"`
+	Languages   []string `xml:"languageList>iso639Id"`
 }
 
 func parseXML(filename string) (XKBConfigRegister, error) {
@@ -70,25 +64,79 @@ func parseXML(filename string) (XKBConfigRegister, error) {
 	return v, nil
 }
 
-func getLayoutListByFile(filename string) (map[string]string, error) {
+type layoutMap map[string]layoutDetail
+
+type layoutDetail struct {
+	Languages   []string
+	Description string
+}
+
+func getLayoutsFromFile(filename string) (layoutMap, error) {
 	xmlData, err := parseXML(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	layouts := make(map[string]string)
-	for _, layout := range xmlData.LayoutList.Layout {
-		firstName := layout.ConfigItem.Name
+	result := make(layoutMap)
+	for _, layout := range xmlData.Layouts {
+		layoutName := layout.ConfigItem.Name
 		desc := layout.ConfigItem.Description
-		layouts[firstName+layoutDelim] = DGettext("xkeyboard-config", desc)
+		result[layoutName+layoutDelim] = layoutDetail{
+			Languages:   layout.ConfigItem.Languages,
+			Description: gettext.DGettext(kbdTextDomain, desc),
+		}
 
-		variants := layout.VariantList.Variant
+		variants := layout.Variants
 		for _, v := range variants {
-			lastName := v.ConfigItem.Name
-			descTmp := v.ConfigItem.Description
-			layouts[firstName+layoutDelim+lastName] = Tr(descTmp)
+			languages := v.Languages
+			if len(v.Languages) == 0 {
+				languages = layout.ConfigItem.Languages
+			}
+			result[layoutName+layoutDelim+v.Name] = layoutDetail{
+				Languages:   languages,
+				Description: gettext.DGettext(kbdTextDomain, v.Description),
+			}
 		}
 	}
 
-	return layouts, nil
+	return result, nil
+}
+
+func (layoutMap layoutMap) filterByLocales(locales []string) map[string]string {
+	var localeLanguages []string
+	for _, locale := range locales {
+		components := lib_locale.ExplodeLocale(locale)
+		lang := components.Language
+		if lang != "" &&
+			!strv.Strv(localeLanguages).Contains(lang) {
+			localeLanguages = append(localeLanguages, lang)
+		}
+	}
+
+	languages := make([]string, len(localeLanguages), 3*len(localeLanguages))
+	copy(languages, localeLanguages)
+	for _, t := range localeLanguages {
+		a3Codes := iso639.ConvertA2ToA3(t)
+		languages = append(languages, a3Codes...)
+	}
+	logger.Debug("languages:", languages)
+
+	result := make(map[string]string)
+	for layout, layoutDetail := range layoutMap {
+		if layoutDetail.matchAnyLang(languages) {
+			result[layout] = layoutDetail.Description
+		}
+	}
+	return result
+}
+
+func (v *layoutDetail) matchAnyLang(languages []string) bool {
+	for _, l := range languages {
+		for _, ll := range v.Languages {
+			if ll == l {
+				return true
+			}
+		}
+	}
+	return false
 }

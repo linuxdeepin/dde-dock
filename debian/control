@@ -71,6 +71,7 @@ Depends: ${shlibs:Depends},
  deepin-installer-timezones,
  dde-api (>> 3.17.1+),
  libpam-runtime (>= 1.1.3-2~),
+ xkb-data,
  hwinfo
 Breaks: dde-daemon(<< 2.92.2), dde-workspace, lastore-daemon(<< 0.9.64)
 Replaces: lastore-daemon(<< 0.9.64)

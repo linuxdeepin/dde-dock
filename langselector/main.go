@@ -22,9 +22,11 @@ package langselector
 import (
 	"time"
 
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -67,4 +69,15 @@ func Run() {
 		return canQuit
 	})
 	service.Wait()
+}
+
+func GetLocales() []string {
+	currentLocale := getCurrentUserLocale()
+	settings := gio.NewSettings(gsSchemaLocale)
+	locales := settings.GetStrv(gsKeyLocales)
+	if !strv.Strv(locales).Contains(currentLocale) {
+		locales = append(locales, currentLocale)
+	}
+	settings.Unref()
+	return locales
 }

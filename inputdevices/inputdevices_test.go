@@ -35,7 +35,7 @@ func TestSystemLayout(t *testing.T) {
 
 func TestParseXKBFile(t *testing.T) {
 	Convey("Parse xkb rule file", t, func() {
-		handler, err := getLayoutListByFile("testdata/base.xml")
+		handler, err := getLayoutsFromFile("testdata/base.xml")
 		So(err, ShouldBeNil)
 		So(handler, ShouldNotBeNil)
 	})

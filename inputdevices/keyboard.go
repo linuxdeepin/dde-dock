@@ -30,10 +30,10 @@ import (
 	"strings"
 	"sync"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"pkg.deepin.io/dde/api/dxinput"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -79,9 +79,9 @@ type Keyboard struct {
 
 	UserOptionList gsprop.Strv
 
-	setting       *gio.Settings
-	user          *accounts.User
-	layoutDescMap map[string]string
+	setting   *gio.Settings
+	user      *accounts.User
+	layoutMap layoutMap
 
 	devNumber int
 
@@ -111,7 +111,7 @@ func newKeyboard(service *dbusutil.Service) *Keyboard {
 
 	var err error
 
-	kbd.layoutDescMap, err = getLayoutListByFile(kbdLayoutsXml)
+	kbd.layoutMap, err = getLayoutsFromFile(kbdLayoutsXml)
 	if err != nil {
 		logger.Error("failed to get layouts description:", err)
 		return nil
@@ -312,7 +312,7 @@ func (kbd *Keyboard) checkLayout(layout string) error {
 		return dbusutil.ToError(errInvalidLayout)
 	}
 
-	_, ok := kbd.layoutDescMap[layout]
+	_, ok := kbd.layoutMap[layout]
 	if !ok {
 		return dbusutil.ToError(errInvalidLayout)
 	}

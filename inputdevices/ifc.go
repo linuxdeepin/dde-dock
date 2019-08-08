@@ -20,6 +20,7 @@
 package inputdevices
 
 import (
+	"pkg.deepin.io/dde/daemon/langselector"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -66,7 +67,8 @@ func (kbd *Keyboard) Reset() *dbus.Error {
 }
 
 func (kbd *Keyboard) LayoutList() (map[string]string, *dbus.Error) {
-	return kbd.layoutDescMap, nil
+	locales := langselector.GetLocales()
+	return kbd.layoutMap.filterByLocales(locales), nil
 }
 
 func (kbd *Keyboard) GetLayoutDesc(layout string) (string, *dbus.Error) {
@@ -74,12 +76,12 @@ func (kbd *Keyboard) GetLayoutDesc(layout string) (string, *dbus.Error) {
 		return "", nil
 	}
 
-	desc, ok := kbd.layoutDescMap[layout]
+	value, ok := kbd.layoutMap[layout]
 	if !ok {
 		return "", nil
 	}
 
-	return desc, nil
+	return value.Description, nil
 }
 
 func (kbd *Keyboard) AddUserLayout(layout string) *dbus.Error {
