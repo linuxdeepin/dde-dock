@@ -608,11 +608,24 @@ func (m *Manager) checkGatewayConnectivity(ipPath dbus.ObjectPath) bool {
 		addr, mask, gateways, domains)
 	// check whether the gateway is connected by ping
 	for _, gw := range gateways {
-		err := m.sysNetwork.Ping(0, gw)
-		if err != nil {
-			logger.Warning("Failed to ping gateway:", gw, err)
+		if len(gw) == 0 {
+			continue
+		}
+		if !m.doPing(gw, 3) {
 			return false
 		}
 	}
 	return true
+}
+
+func (m *Manager) doPing(addr string, retries int) bool {
+	for i := 0; i < retries; i++ {
+		err := m.sysNetwork.Ping(0, addr)
+		if err == nil {
+			return true
+		}
+		logger.Warning("Failed to ping gateway:", i, addr, err)
+		time.Sleep(time.Millisecond * 500)
+	}
+	return false
 }
