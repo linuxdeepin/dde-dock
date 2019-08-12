@@ -84,6 +84,7 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
     m_proxyInter->itemAdded(this, pluginName());
+    m_centralWidget->set24HourFormat(m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool());
 }
 
 void DatetimePlugin::pluginStateSwitched()
