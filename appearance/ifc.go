@@ -28,6 +28,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/strv"
 )
 
 // Reset reset all themes and fonts settings to default values
@@ -65,7 +66,13 @@ func (m *Manager) List(ty string) (string, *dbus.Error) {
 func (m *Manager) list(ty string) (string, error) {
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
-		return m.doShow(subthemes.ListGtkTheme())
+		gtkThemes := subthemes.ListGtkTheme()
+		gtkThemes = append(gtkThemes, &subthemes.Theme{
+			Id:        autoGtkTheme,
+			Path:      "",
+			Deletable: false,
+		})
+		return m.doShow(gtkThemes)
 	case TypeIconTheme:
 		return m.doShow(subthemes.ListIconTheme())
 	case TypeCursorTheme:
@@ -95,7 +102,15 @@ func (m *Manager) Show(ty string, names []string) (string, *dbus.Error) {
 func (m *Manager) show(ty string, names []string) (string, error) {
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
-		return m.doShow(subthemes.ListGtkTheme().ListGet(names))
+		gtkThemes := subthemes.ListGtkTheme().ListGet(names)
+		if strv.Strv(names).Contains(autoGtkTheme) {
+			gtkThemes = append(gtkThemes, &subthemes.Theme{
+				Id:        autoGtkTheme,
+				Path:      "",
+				Deletable: false,
+			})
+		}
+		return m.doShow(gtkThemes)
 	case TypeIconTheme:
 		return m.doShow(subthemes.ListIconTheme().ListGet(names))
 	case TypeCursorTheme:
@@ -122,6 +137,7 @@ func (m *Manager) set(ty, value string) error {
 		if m.GtkTheme.Get() == value {
 			return nil
 		}
+
 		err = m.doSetGtkTheme(value)
 		if err == nil {
 			m.GtkTheme.Set(value)
@@ -221,6 +237,7 @@ func (m *Manager) thumbnail(ty, name string) (string, error) {
 	logger.Debugf("Get thumbnail for '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
+		// TODO
 		return subthemes.GetGtkThumbnail(name)
 	case TypeIconTheme:
 		return subthemes.GetIconThumbnail(name)

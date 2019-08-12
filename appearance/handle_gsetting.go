@@ -42,6 +42,8 @@ func (m *Manager) listenGSettingChanged() {
 			ty = TypeGtkTheme
 			value = m.setting.GetString(key)
 			err = m.doSetGtkTheme(value)
+			m.updateThemeAuto(value == autoGtkTheme)
+
 		case gsKeyIconTheme:
 			ty = TypeIconTheme
 			value = m.setting.GetString(key)
@@ -73,10 +75,6 @@ func (m *Manager) listenGSettingChanged() {
 		case gsKeyWallpaperSlideshow:
 			policy := m.setting.GetString(key)
 			m.updateWSPolicy(policy)
-
-		case gsKeyThemeAuto:
-			themeAuto := m.setting.GetBoolean(key)
-			m.updateThemeAuto(themeAuto)
 
 		default:
 			return

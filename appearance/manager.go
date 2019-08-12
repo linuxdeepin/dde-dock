@@ -88,7 +88,6 @@ const (
 	gsKeyFontSize           = "font-size"
 	gsKeyBackgroundURIs     = "background-uris"
 	gsKeyOpacity            = "opacity"
-	gsKeyThemeAuto          = "theme-auto"
 	gsKeyWallpaperSlideshow = "wallpaper-slideshow"
 	gsKeyQtActiveColor      = "qt-active-color"
 
@@ -97,6 +96,7 @@ const (
 
 	defaultIconTheme      = "deepin"
 	defaultGtkTheme       = "deepin"
+	autoGtkTheme          = "deepin-auto"
 	defaultCursorTheme    = "deepin"
 	defaultStandardFont   = "Noto Sans"
 	defaultMonospaceFont  = "Noto Mono"
@@ -119,15 +119,13 @@ type Manager struct {
 	syncConfig     *dsync.Config
 	bgSyncConfig   *dsync.Config
 
-	GtkTheme      gsprop.String
-	IconTheme     gsprop.String
-	CursorTheme   gsprop.String
-	Background    gsprop.String
-	StandardFont  gsprop.String
-	MonospaceFont gsprop.String
-	Opacity       gsprop.Double `prop:"access:rw"`
-	ThemeAuto     gsprop.Bool   `prop:"access:rw"`
-
+	GtkTheme           gsprop.String
+	IconTheme          gsprop.String
+	CursorTheme        gsprop.String
+	Background         gsprop.String
+	StandardFont       gsprop.String
+	MonospaceFont      gsprop.String
+	Opacity            gsprop.Double `prop:"access:rw"`
 	FontSize           gsprop.Double `prop:"access:rw"`
 	WallpaperSlideShow gsprop.String `prop:"access:rw"`
 
@@ -206,7 +204,6 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.Background.Bind(m.wrapBgSetting, gsKeyBackground)
 	m.FontSize.Bind(m.setting, gsKeyFontSize)
 	m.Opacity.Bind(m.setting, gsKeyOpacity)
-	m.ThemeAuto.Bind(m.setting, gsKeyThemeAuto)
 	m.WallpaperSlideShow.Bind(m.setting, gsKeyWallpaperSlideshow)
 
 	m.wsLoop = newWSLoop()
@@ -430,14 +427,18 @@ func (m *Manager) init() error {
 	// set gtk theme
 	gtkThemes := subthemes.ListGtkTheme()
 	currentGtkTheme := m.GtkTheme.Get()
-	if gtkThemes.Get(currentGtkTheme) == nil {
-		m.GtkTheme.Set(defaultGtkTheme)
-		err = m.doSetGtkTheme(defaultGtkTheme)
-		if err != nil {
-			logger.Warning("failed to set gtk theme:", err)
+
+	if currentGtkTheme == autoGtkTheme {
+		m.updateThemeAuto(true)
+	} else {
+		if gtkThemes.Get(currentGtkTheme) == nil {
+			m.GtkTheme.Set(defaultGtkTheme)
+			err = m.doSetGtkTheme(defaultGtkTheme)
+			if err != nil {
+				logger.Warning("failed to set gtk theme:", err)
+			}
 		}
 	}
-	m.updateThemeAuto(m.ThemeAuto.Get())
 
 	// set icon theme
 	iconThemes := subthemes.ListIconTheme()
@@ -543,6 +544,9 @@ func (m *Manager) correctFontName() {
 }
 
 func (m *Manager) doSetGtkTheme(value string) error {
+	if value == autoGtkTheme {
+		return nil
+	}
 	if !subthemes.IsGtkTheme(value) {
 		return fmt.Errorf("invalid gtk theme '%v'", value)
 	}
@@ -1023,10 +1027,10 @@ func (m *Manager) resetThemeAutoTimer() {
 
 func (m *Manager) autoSetTheme(latitude, longitude float64) {
 	now := time.Now()
-	enabled := m.ThemeAuto.Get()
-	if !enabled {
+	if m.GtkTheme.Get() != autoGtkTheme {
 		return
 	}
+
 	sunriseT, sunsetT, err := getSunriseSunset(now, latitude, longitude)
 	if err != nil {
 		logger.Warning(err)
