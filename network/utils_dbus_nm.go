@@ -25,8 +25,10 @@ import (
 
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 
+	"math"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -238,7 +240,15 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speedStr string) {
 	case nm.NM_DEVICE_TYPE_WIFI:
 		devWireless := dev.Wireless()
 		bitRate, _ := devWireless.Bitrate().Get(0)
-		speed = bitRate / 1024
+		/**
+		 * NMSettingWireless:rate:
+		 *
+		 * If non-zero, directs the device to only use the specified bitrate for
+		 * communication with the access point.  Units are in Kb/s, ie 5500 = 5.5
+		 * Mbit/s.  This property is highly driver dependent and not all devices
+		 * support setting a static bitrate.
+		**/
+		speed = uint32(math.Trunc((float64(bitRate)/1000.0 + 0.5) * 10 / 10))
 	case nm.NM_DEVICE_TYPE_MODEM:
 		// TODO: getting device speed for modem device
 	default: // ignore speed for other device types
