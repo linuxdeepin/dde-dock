@@ -22,8 +22,7 @@ Build-Depends: debhelper (>= 8.0.0),
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
  cmake,
- libdde-network-utils-dev (>= 5.0.1),
- libdde-network-utils-dev (<< 5.0.2),
+ libdde-network-utils-dev,
  libdbusmenu-qt5-dev,
  clang [mips64el]
 Standards-Version: 3.9.8
