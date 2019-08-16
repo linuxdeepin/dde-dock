@@ -36,6 +36,7 @@
 #include <DWindowManagerHelper>
 
 class MainPanel;
+class MainPanelControl;
 class DBusDockAdaptors;
 class MainWindow : public QWidget
 {
@@ -46,6 +47,7 @@ public:
     ~MainWindow();
 
     friend class MainPanel;
+    friend class MainPanelControl;
 
 public slots:
     void launch();
@@ -96,7 +98,7 @@ private slots:
 private:
     bool m_launched;
     bool m_updatePanelVisible;
-    MainPanel *m_mainPanel;
+    MainPanelControl *m_mainPanel;
 
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;

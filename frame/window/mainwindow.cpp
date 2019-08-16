@@ -20,7 +20,7 @@
  */
 
 #include "mainwindow.h"
-#include "panel/mainpanel.h"
+#include "panel/mainpanelcontrol.h"
 #include "util/utils.h"
 
 #include <QDebug>
@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_launched(false),
       m_updatePanelVisible(false),
 
-      m_mainPanel(new MainPanel(this)),
+      m_mainPanel(new MainPanelControl(this)),
 
       m_platformWindowHandle(this),
       m_wmHelper(DWindowManagerHelper::instance()),
@@ -318,7 +318,7 @@ void MainWindow::compositeChanged()
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
 
-    m_mainPanel->setComposite(composite);
+//    m_mainPanel->setComposite(composite);
 
     m_shadowMaskOptimizeTimer->start();
     m_positionUpdateTimer->start();
@@ -379,9 +379,9 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
-    connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
-    connect(m_mainPanel, &MainPanel::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
-    connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
+//    connect(m_mainPanel, &MainPanelControl::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
+//    connect(m_mainPanel, &MainPanelControl::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
+//    connect(m_mainPanel, &MainPanelControl::geometryChanged, this, &MainWindow::panelGeometryChanged);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
@@ -483,8 +483,8 @@ void MainWindow::updateGeometry()
     QSize size = m_settings->windowSize();
 
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
-    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
-    m_mainPanel->updateDockPosition(position);
+//    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
+//    m_mainPanel->updateDockPosition(position);
     // this->setFixedSize has been overridden for size animation
     m_mainPanel->setFixedSize(m_settings->panelSize());
 
@@ -696,7 +696,7 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     }
 
     m_mainPanel->move(finishPos);
-    m_mainPanel->updateDockPosition(position);
+//    m_mainPanel->updateDockPosition(position);
 }
 
 void MainWindow::updatePanelVisible()
