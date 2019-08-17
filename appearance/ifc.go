@@ -272,13 +272,3 @@ func (m *Manager) GetScreenScaleFactors() (map[string]float64, *dbus.Error) {
 	v, err := m.getScreenScaleFactors()
 	return v, dbusutil.ToError(err)
 }
-
-func (m *Manager) GetQtActiveColor() (string, *dbus.Error) {
-	hexColor, err := m.getQtActiveColor()
-	return hexColor, dbusutil.ToError(err)
-}
-
-func (m *Manager) SetQtActiveColor(hexColor string) *dbus.Error {
-	err := m.setQtActiveColor(hexColor)
-	return dbusutil.ToError(err)
-}

@@ -27,6 +27,21 @@ import (
 )
 
 func (m *Manager) listenGSettingChanged() {
+	gsettings.ConnectChanged(xSettingsSchema, gsKeyQtActiveColor, func(key string) {
+		value, err := m.getQtActiveColor()
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		if m.QtActiveColor != value {
+			m.QtActiveColor = value
+			err = m.service.EmitPropertyChanged(m, propQtActiveColor, value)
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
+	})
+
 	gsettings.ConnectChanged(appearanceSchema, "*", func(key string) {
 		if m.setting == nil {
 			return

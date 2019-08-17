@@ -91,6 +91,8 @@ const (
 	gsKeyWallpaperSlideshow = "wallpaper-slideshow"
 	gsKeyQtActiveColor      = "qt-active-color"
 
+	propQtActiveColor = "QtActiveColor"
+
 	wsPolicyLogin  = "login"
 	wsPolicyWakeup = "wakeup"
 
@@ -128,6 +130,7 @@ type Manager struct {
 	Opacity            gsprop.Double `prop:"access:rw"`
 	FontSize           gsprop.Double `prop:"access:rw"`
 	WallpaperSlideShow gsprop.String `prop:"access:rw"`
+	QtActiveColor      string        `prop:"access:rw"`
 
 	wsLoop      *WSLoop
 	wsScheduler *WSScheduler
@@ -183,8 +186,6 @@ type Manager struct {
 		Thumbnail             func() `in:"type,name" out:"file"`
 		SetScreenScaleFactors func() `in:"scaleFactors"`
 		GetScreenScaleFactors func() `out:"scaleFactors"`
-		GetQtActiveColor      func() `out:"hexColor"`
-		SetQtActiveColor      func() `in:"hexColor"`
 	}
 }
 
@@ -205,13 +206,17 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.FontSize.Bind(m.setting, gsKeyFontSize)
 	m.Opacity.Bind(m.setting, gsKeyOpacity)
 	m.WallpaperSlideShow.Bind(m.setting, gsKeyWallpaperSlideshow)
+	var err error
+	m.QtActiveColor, err = m.getQtActiveColor()
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	m.wsLoop = newWSLoop()
 	m.wsScheduler = newWSScheduler()
 
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
-	var err error
 	m.watcher, err = fsnotify.NewWatcher()
 	if err != nil {
 		logger.Warning("New file watcher failed:", err)

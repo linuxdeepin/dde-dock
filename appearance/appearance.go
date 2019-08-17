@@ -21,10 +21,13 @@
 package appearance
 
 import (
+	"errors"
 	"time"
 
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -82,6 +85,19 @@ func (*Module) start() error {
 	}
 
 	err = service.Export(backgroundDBusPath, _m.bgSyncConfig)
+	if err != nil {
+		return err
+	}
+
+	so := service.GetServerObject(_m)
+	err = so.SetWriteCallback(_m, propQtActiveColor, func(write *dbusutil.PropertyWrite) *dbus.Error {
+		value, ok := write.Value.(string)
+		if !ok {
+			return dbusutil.ToError(errors.New("type is not string"))
+		}
+		err = _m.setQtActiveColor(value)
+		return dbusutil.ToError(err)
+	})
 	if err != nil {
 		return err
 	}
