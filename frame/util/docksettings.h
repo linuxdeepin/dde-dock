@@ -25,7 +25,7 @@
 #include "constants.h"
 #include "dbus/dbusmenumanager.h"
 #include "dbus/dbusdisplay.h"
-#include "controller/dockitemcontroller.h"
+#include "controller/dockitemmanager.h"
 
 #include <com_deepin_dde_daemon_dock.h>
 
@@ -46,7 +46,8 @@ class WhiteMenu : public QMenu
 {
     Q_OBJECT
 public:
-    WhiteMenu(QWidget * parent = nullptr) : QMenu(parent) {
+    WhiteMenu(QWidget *parent = nullptr) : QMenu(parent)
+    {
         QStyle *style = QStyleFactory::create("dlight");
         if (style) setStyle(style);
     }
@@ -59,7 +60,7 @@ class DockSettings : public QObject
     Q_OBJECT
 
 public:
-    static DockSettings& Instance();
+    static DockSettings &Instance();
 
     inline DisplayMode displayMode() const { return m_displayMode; }
     inline HideMode hideMode() const { return m_hideMode; }
@@ -155,7 +156,7 @@ private:
 
     DBusDisplay *m_displayInter;
     DBusDock *m_dockInter;
-    DockItemController *m_itemController;
+    DockItemManager *m_itemManager;
 };
 
 #endif // DOCKSETTINGS_H

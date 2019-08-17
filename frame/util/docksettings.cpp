@@ -59,7 +59,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_smartHideAct(tr("Smart Hide"), this)
     , m_displayInter(new DBusDisplay(this))
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
-    , m_itemController(DockItemController::instance(this))
+    , m_itemManager(DockItemManager::instance(this))
 {
     m_primaryRawRect = m_displayInter->primaryRawRect();
     m_screenRawHeight = m_displayInter->screenRawHeight();
@@ -136,15 +136,15 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
     connect(m_dockInter, &DBusDock::OpacityChanged, this, &DockSettings::onOpacityChanged);
 
-    connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
-    connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
-    connect(m_itemController, &DockItemController::fashionTraySizeChanged, this, &DockSettings::onFashionTraySizeChanged, Qt::QueuedConnection);
+    connect(m_itemManager, &DockItemManager::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
+    connect(m_itemManager, &DockItemManager::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
+    connect(m_itemManager, &DockItemManager::fashionTraySizeChanged, this, &DockSettings::onFashionTraySizeChanged, Qt::QueuedConnection);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
 
-    DApplication *app = qobject_cast<DApplication*>(qApp);
+    DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
         connect(app, &DApplication::iconThemeChanged, this, &DockSettings::gtkIconThemeChanged);
     }
@@ -153,7 +153,7 @@ DockSettings::DockSettings(QWidget *parent)
     updateForbidPostions();
     resetFrontendGeometry();
 
-    QTimer::singleShot(0, this, [=] {onOpacityChanged(m_dockInter->opacity());});
+    QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
 }
 
 DockSettings &DockSettings::Instance()
@@ -181,10 +181,8 @@ const QSize DockSettings::panelSize() const
 const QRect DockSettings::windowRect(const Position position, const bool hide) const
 {
     QSize size = m_mainWindowSize;
-    if (hide)
-    {
-        switch (position)
-        {
+    if (hide) {
+        switch (position) {
         case Top:
         case Bottom:    size.setHeight(2);      break;
         case Left:
@@ -197,8 +195,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     const int offsetY = (primaryRect.height() - size.height()) / 2;
 
     QPoint p(0, 0);
-    switch (position)
-    {
+    switch (position) {
     case Top:
         p = QPoint(offsetX, 0);                                        break;
     case Left:
@@ -207,7 +204,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
         p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
     case Bottom:
         p = QPoint(offsetX, primaryRect.height() - size.height());  break;
-    default:Q_UNREACHABLE();
+    default: Q_UNREACHABLE();
     }
 
     return QRect(primaryRect.topLeft() + p, size);
@@ -219,8 +216,7 @@ void DockSettings::showDockSettingsMenu()
 
     // create actions
     QList<QAction *> actions;
-    for (auto *p : m_itemController->pluginList())
-    {
+    for (auto *p : m_itemManager->pluginList()) {
         if (!p->pluginIsAllowDisable())
             continue;
 
@@ -242,7 +238,7 @@ void DockSettings::showDockSettingsMenu()
     }
 
     // sort by name
-    std::sort(actions.begin(), actions.end(), [] (QAction *a, QAction *b) -> bool {
+    std::sort(actions.begin(), actions.end(), [](QAction * a, QAction * b) -> bool {
         return a->data().toString() > b->data().toString();
     });
 
@@ -323,8 +319,7 @@ void DockSettings::menuActionClicked(QAction *action)
     const QString &data = action->data().toString();
     if (data.isEmpty())
         return;
-    for (auto *p : m_itemController->pluginList())
-    {
+    for (auto *p : m_itemManager->pluginList()) {
         if (p->pluginName() == data)
             return p->pluginStateSwitched();
     }
@@ -347,7 +342,7 @@ void DockSettings::onPositionChanged()
 
         calculateWindowConfig();
 
-        m_itemController->refershItemsIcon();
+        m_itemManager->refershItemsIcon();
     });
 }
 
@@ -373,7 +368,7 @@ void DockSettings::onDisplayModeChanged()
 
     emit displayModeChanegd();
 
-    QTimer::singleShot(1, m_itemController, &DockItemController::sortPluginItems);
+    QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }
 
 void DockSettings::hideModeChanged()
@@ -435,8 +430,7 @@ void DockSettings::resetFrontendGeometry()
 bool DockSettings::test(const Position pos, const QList<QRect> &otherScreens) const
 {
     QRect maxStrut(0, 0, m_screenRawWidth, m_screenRawHeight);
-    switch (pos)
-    {
+    switch (pos) {
     case Top:
         maxStrut.setBottom(m_primaryRawRect.top() - 1);
         maxStrut.setLeft(m_primaryRawRect.left());
@@ -480,8 +474,7 @@ void DockSettings::updateForbidPostions()
 
     QSet<Position> forbids;
     QList<QRect> rawScreenRects;
-    for (auto *s : screens)
-    {
+    for (auto *s : screens) {
         qInfo() << s->name() << s->geometry();
 
         if (s == qApp->primaryScreen())
@@ -535,10 +528,8 @@ void DockSettings::calculateWindowConfig()
     const int defaultHeight = std::round(AppItem::itemBaseHeight() / ratio);
     const int defaultWidth = std::round(AppItem::itemBaseWidth() / ratio);
 
-    if (m_displayMode == Dock::Efficient)
-    {
-        switch (m_position)
-        {
+    if (m_displayMode == Dock::Efficient) {
+        switch (m_position) {
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
@@ -554,15 +545,11 @@ void DockSettings::calculateWindowConfig()
         default:
             Q_ASSERT(false);
         }
-    }
-    else if (m_displayMode == Dock::Fashion)
-    {
+    } else if (m_displayMode == Dock::Fashion) {
         int visibleItemCount = 0;
-        const auto &itemList = m_itemController->itemList();
-        for (auto item : itemList)
-        {
-            switch (item->itemType())
-            {
+        const auto &itemList = m_itemManager->itemList();
+        for (auto item : itemList) {
+            switch (item->itemType()) {
             case DockItem::Launcher:
             case DockItem::App:
             case DockItem::Plugins:
@@ -580,8 +567,7 @@ void DockSettings::calculateWindowConfig()
         const int maxHeight = primaryRect.height() - FASHION_MODE_PADDING * 2;
         const int calcWidth = qMin(maxWidth, perfectWidth);
         const int calcHeight = qMin(maxHeight, perfectHeight);
-        switch (m_position)
-        {
+        switch (m_position) {
         case Top:
         case Bottom: {
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
@@ -612,7 +598,7 @@ void DockSettings::calculateWindowConfig()
 void DockSettings::gtkIconThemeChanged()
 {
     qDebug() << Q_FUNC_INFO;
-    m_itemController->refershItemsIcon();
+    m_itemManager->refershItemsIcon();
 }
 
 qreal DockSettings::dockRatio() const

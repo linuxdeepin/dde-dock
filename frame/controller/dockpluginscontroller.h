@@ -39,6 +39,7 @@ class DockPluginsController : public AbstractPluginsController
     Q_OBJECT
 
     friend class DockItemController;
+    friend class DockItemManager;
 
 public:
     explicit DockPluginsController(QObject *parent = 0);
