@@ -25,6 +25,7 @@
 #include <QWidget>
 #include <QBoxLayout>
 
+class DockItem;
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
@@ -36,6 +37,10 @@ public:
     void addAppAreaItem(QWidget *wdg);
     void addTrayAreaItem(QWidget *wdg);
     void addPluginAreaItem(QWidget *wdg);
+    void removeFixedAreaItem(QWidget *wdg);
+    void removeAppAreaItem(QWidget *wdg);
+    void removeTrayAreaItem(QWidget *wdg);
+    void removePluginAreaItem(QWidget *wdg);
     void setPositonValue(const Qt::Edge val);
 
 private:
@@ -44,6 +49,10 @@ private:
     void init();
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
+
+private slots:
+    void itemInserted(const int index, DockItem *item);
+    void itemRemoved(DockItem *item);
 
 private:
     QBoxLayout *m_mainPanelLayout;

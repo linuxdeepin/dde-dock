@@ -20,6 +20,7 @@
  */
 
 #include "mainpanelcontrol.h"
+#include "../item/dockitem.h"
 
 #include <DAnchors>
 
@@ -56,7 +57,6 @@ void MainPanelControl::init()
     m_fixedAreaLayout->setMargin(0);
     m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_pluginLayout->setMargin(0);
-    m_pluginLayout->setSpacing(0);
     m_pluginLayout->setContentsMargins(0, 0, 0, 0);
     m_trayAreaLayout->setMargin(0);
     m_trayAreaLayout->setContentsMargins(0, 0, 0, 0);
@@ -70,6 +70,10 @@ void MainPanelControl::init()
     m_mainPanelLayout->addWidget(m_pluginAreaWidget);
     m_pluginAreaWidget->setLayout(m_pluginLayout);
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
+    m_fixedAreaLayout->setSpacing(0);
+    m_appAreaSonLayout->setSpacing(0);
+    m_trayAreaLayout->setSpacing(0);
+    m_pluginLayout->setSpacing(0);
 
     DAnchors<QWidget> anchors(m_appAreaSonWidget);
     anchors.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
@@ -130,6 +134,26 @@ void MainPanelControl::addPluginAreaItem(QWidget *wdg)
     m_pluginLayout->addWidget(wdg, 0, Qt::AlignCenter);
 }
 
+void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
+{
+    m_fixedAreaLayout->removeWidget(wdg);
+}
+
+void MainPanelControl::removeAppAreaItem(QWidget *wdg)
+{
+    m_appAreaSonLayout->removeWidget(wdg);
+}
+
+void MainPanelControl::removeTrayAreaItem(QWidget *wdg)
+{
+    m_trayAreaLayout->removeWidget(wdg);
+}
+
+void MainPanelControl::removePluginAreaItem(QWidget *wdg)
+{
+    m_pluginLayout->removeWidget(wdg);
+}
+
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
     updateAppAreaSonWidgetSize();
@@ -154,3 +178,48 @@ void MainPanelControl::setPositonValue(const Qt::Edge val)
 {
     m_position = val;
 }
+
+void MainPanelControl::itemInserted(const int index, DockItem *item)
+{
+    switch (item->itemType()) {
+    case DockItem::Launcher:
+        addFixedAreaItem(item);
+        break;
+    case DockItem::App:
+        addAppAreaItem(item);
+        break;
+    case DockItem::TrayPlugin:
+        addTrayAreaItem(item);
+        break;
+    case DockItem::Plugins:
+        addPluginAreaItem(item);
+        break;
+    default:
+        break;
+    }
+
+    updateAppAreaSonWidgetSize();
+}
+
+void MainPanelControl::itemRemoved(DockItem *item)
+{
+    switch (item->itemType()) {
+    case DockItem::Launcher:
+        removeFixedAreaItem(item);
+        break;
+    case DockItem::App:
+        removeAppAreaItem(item);
+        break;
+    case DockItem::TrayPlugin:
+        removeTrayAreaItem(item);
+        break;
+    case DockItem::Plugins:
+        removePluginAreaItem(item);
+        break;
+    default:
+        break;
+    }
+
+    updateAppAreaSonWidgetSize();
+}
+
