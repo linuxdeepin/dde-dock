@@ -110,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainPanel->setFixedSize(m_settings->panelSize());
 
     for (auto item : DockItemManager::instance()->itemList())
-        m_mainPanel->itemInserted(-1, item);
+        m_mainPanel->insertItem(-1, item);
 }
 
 MainWindow::~MainWindow()
@@ -403,8 +403,8 @@ void MainWindow::initConnections()
 
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
 
-    connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::itemInserted, Qt::DirectConnection);
-    connect(DockItemManager::instance(), &DockItemManager::itemRemoved, m_mainPanel, &MainPanelControl::itemRemoved, Qt::DirectConnection);
+    connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::insertItem, Qt::DirectConnection);
+    connect(DockItemManager::instance(), &DockItemManager::itemRemoved, m_mainPanel, &MainPanelControl::removeItem, Qt::DirectConnection);
 }
 
 const QPoint MainWindow::x11GetWindowPos()

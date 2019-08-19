@@ -114,24 +114,24 @@ void MainPanelControl::updateMainPanelLayout()
     QTimer::singleShot(0, this, &MainPanelControl::updateAppAreaSonWidgetSize);
 }
 
-void MainPanelControl::addFixedAreaItem(QWidget *wdg)
+void MainPanelControl::addFixedAreaItem(const int index, QWidget *wdg)
 {
-    m_fixedAreaLayout->addWidget(wdg, 0, Qt::AlignCenter);
+    m_fixedAreaLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
-void MainPanelControl::addAppAreaItem(QWidget *wdg)
+void MainPanelControl::addAppAreaItem(const int index, QWidget *wdg)
 {
-    m_appAreaSonLayout->addWidget(wdg, 0, Qt::AlignCenter);
+    m_appAreaSonLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
-void MainPanelControl::addTrayAreaItem(QWidget *wdg)
+void MainPanelControl::addTrayAreaItem(const int index, QWidget *wdg)
 {
-    m_trayAreaLayout->addWidget(wdg, 0, Qt::AlignCenter);
+    m_trayAreaLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
-void MainPanelControl::addPluginAreaItem(QWidget *wdg)
+void MainPanelControl::addPluginAreaItem(const int index, QWidget *wdg)
 {
-    m_pluginLayout->addWidget(wdg, 0, Qt::AlignCenter);
+    m_pluginLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
@@ -179,20 +179,20 @@ void MainPanelControl::setPositonValue(const Qt::Edge val)
     m_position = val;
 }
 
-void MainPanelControl::itemInserted(const int index, DockItem *item)
+void MainPanelControl::insertItem(const int index, DockItem *item)
 {
     switch (item->itemType()) {
     case DockItem::Launcher:
-        addFixedAreaItem(item);
+        addFixedAreaItem(index, item);
         break;
     case DockItem::App:
-        addAppAreaItem(item);
+        addAppAreaItem(index, item);
         break;
     case DockItem::TrayPlugin:
-        addTrayAreaItem(item);
+        addTrayAreaItem(index, item);
         break;
     case DockItem::Plugins:
-        addPluginAreaItem(item);
+        addPluginAreaItem(index, item);
         break;
     default:
         break;
@@ -201,7 +201,7 @@ void MainPanelControl::itemInserted(const int index, DockItem *item)
     updateAppAreaSonWidgetSize();
 }
 
-void MainPanelControl::itemRemoved(DockItem *item)
+void MainPanelControl::removeItem(DockItem *item)
 {
     switch (item->itemType()) {
     case DockItem::Launcher:
@@ -221,5 +221,13 @@ void MainPanelControl::itemRemoved(DockItem *item)
     }
 
     updateAppAreaSonWidgetSize();
+}
+
+ void MainPanelControl::movedItem(const int index, DockItem *item)
+{
+    // remove old item
+    removeItem(item);
+    // insert new position
+    insertItem(index, item);
 }
 

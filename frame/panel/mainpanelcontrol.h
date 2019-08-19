@@ -33,10 +33,10 @@ public:
     MainPanelControl(QWidget *parent = 0);
     ~MainPanelControl();
 
-    void addFixedAreaItem(QWidget *wdg);
-    void addAppAreaItem(QWidget *wdg);
-    void addTrayAreaItem(QWidget *wdg);
-    void addPluginAreaItem(QWidget *wdg);
+    void addFixedAreaItem(const int index, QWidget *wdg);
+    void addAppAreaItem(const int index, QWidget *wdg);
+    void addTrayAreaItem(const int index, QWidget *wdg);
+    void addPluginAreaItem(const int index, QWidget *wdg);
     void removeFixedAreaItem(QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
     void removeTrayAreaItem(QWidget *wdg);
@@ -51,8 +51,9 @@ private:
     void updateMainPanelLayout();
 
 public slots:
-    void itemInserted(const int index, DockItem *item);
-    void itemRemoved(DockItem *item);
+    void insertItem(const int index, DockItem *item);
+    void removeItem(DockItem *item);
+    void movedItem(const int index, DockItem *item);
 
 private:
     QBoxLayout *m_mainPanelLayout;
