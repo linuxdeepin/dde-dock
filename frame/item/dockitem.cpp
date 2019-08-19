@@ -45,8 +45,7 @@ DockItem::DockItem(QWidget *parent)
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
-    if (PopupWindow.isNull())
-    {
+    if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(20);
         arrowRectangle->setRadius(6);
@@ -69,6 +68,13 @@ DockItem::DockItem(QWidget *parent)
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
 
     grabGesture(Qt::TapAndHoldGesture);
+
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+QSize DockItem::sizeHint() const
+{
+    return QSize(50, 50);
 }
 
 DockItem::~DockItem()
@@ -104,10 +110,8 @@ void DockItem::gestureEvent(QGestureEvent *event)
 
 bool DockItem::event(QEvent *event)
 {
-    if (m_popupShown)
-    {
-        switch (event->type())
-        {
+    if (m_popupShown) {
+        switch (event->type()) {
         case QEvent::Paint:
             if (!m_popupAdjustDelayTimer->isActive())
                 m_popupAdjustDelayTimer->start();
@@ -117,7 +121,7 @@ bool DockItem::event(QEvent *event)
     }
 
     if (event->type() == QEvent::Gesture)
-        gestureEvent(static_cast<QGestureEvent*>(event));
+        gestureEvent(static_cast<QGestureEvent *>(event));
 
     return QWidget::event(event);
 }
@@ -213,8 +217,7 @@ void DockItem::showContextMenu()
     QDBusPendingReply<QDBusObjectPath> result = m_menuManagerInter->RegisterMenu();
 
     result.waitForFinished();
-    if (result.isError())
-    {
+    if (result.isError()) {
         qWarning() << result.error();
         return;
     }
@@ -227,8 +230,7 @@ void DockItem::showContextMenu()
     menuObject.insert("isDockMenu", QJsonValue(true));
     menuObject.insert("menuJsonContent", QJsonValue(menuJson));
 
-    switch (DockPosition)
-    {
+    switch (DockPosition) {
     case Top:       menuObject.insert("direction", "top");      break;
     case Bottom:    menuObject.insert("direction", "bottom");   break;
     case Left:      menuObject.insert("direction", "left");     break;
@@ -265,14 +267,14 @@ void DockItem::showHoverTips()
     if (!r.contains(QCursor::pos()))
         return;
 
-    QWidget * const content = popupTips();
+    QWidget *const content = popupTips();
     if (!content)
         return;
 
     showPopupWindow(content);
 }
 
-void DockItem::showPopupWindow(QWidget * const content, const bool model)
+void DockItem::showPopupWindow(QWidget *const content, const bool model)
 {
     m_popupShown = true;
     m_lastPopupWidget = content;
@@ -285,10 +287,9 @@ void DockItem::showPopupWindow(QWidget * const content, const bool model)
     if (lastContent)
         lastContent->setVisible(false);
 
-    switch (DockPosition)
-    {
+    switch (DockPosition) {
     case Top:   popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
-    case Bottom:popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
+    case Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
     case Left:  popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
     case Right: popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
     }
@@ -314,7 +315,7 @@ void DockItem::popupWindowAccept()
     hidePopup();
 }
 
-void DockItem::showPopupApplet(QWidget * const applet)
+void DockItem::showPopupApplet(QWidget *const applet)
 {
     // another model popup window already exists
     if (PopupWindow->model())
@@ -357,8 +358,7 @@ const QPoint DockItem::popupMarkPoint() const
 
     const QRect r = rect();
     const int offset = 2;
-    switch (DockPosition)
-    {
+    switch (DockPosition) {
     case Top:       p += QPoint(r.width() / 2, r.height() + offset);      break;
     case Bottom:    p += QPoint(r.width() / 2, 0 - offset);               break;
     case Left:      p += QPoint(r.width() + offset, r.height() / 2);      break;

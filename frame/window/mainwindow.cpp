@@ -21,6 +21,7 @@
 
 #include "mainwindow.h"
 #include "panel/mainpanelcontrol.h"
+#include "controller/dockitemmanager.h"
 #include "util/utils.h"
 
 #include <QDebug>
@@ -43,22 +44,22 @@ using org::kde::StatusNotifierWatcher;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
-    QScreen const * screen = Utils::screenAtByScaled(scaledPos);
+    QScreen const *screen = Utils::screenAtByScaled(scaledPos);
 
     return screen ? screen->geometry().topLeft() +
-                        (scaledPos - screen->geometry().topLeft()) *
-                            screen->devicePixelRatio()
-                  : scaledPos;
+           (scaledPos - screen->geometry().topLeft()) *
+           screen->devicePixelRatio()
+           : scaledPos;
 }
 
 const QPoint scaledPos(const QPoint &rawXPos)
 {
-    QScreen const * screen = Utils::screenAt(rawXPos);
+    QScreen const *screen = Utils::screenAt(rawXPos);
 
     return screen
-               ? screen->geometry().topLeft() +
-                     (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
-               : rawXPos;
+           ? screen->geometry().topLeft() +
+           (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
+           : rawXPos;
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -107,6 +108,9 @@ MainWindow::MainWindow(QWidget *parent)
     initConnections();
 
     m_mainPanel->setFixedSize(m_settings->panelSize());
+
+    for (auto item : DockItemManager::instance()->itemList())
+        m_mainPanel->itemInserted(-1, item);
 }
 
 MainWindow::~MainWindow()
@@ -146,8 +150,7 @@ void MainWindow::launch()
 
 bool MainWindow::event(QEvent *e)
 {
-    switch (e->type())
-    {
+    switch (e->type()) {
     case QEvent::Move:
         if (!e->spontaneous())
             QTimer::singleShot(1, this, &MainWindow::positionCheck);
@@ -167,7 +170,7 @@ void MainWindow::showEvent(QShowEvent *e)
     m_platformWindowHandle.setShadowRadius(0);
 
     connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
-            windowHandle(), [this] (QScreen *new_screen) {
+    windowHandle(), [this](QScreen * new_screen) {
         QScreen *old_screen = windowHandle()->screen();
         windowHandle()->setScreen(new_screen);
         // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
@@ -196,8 +199,7 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key())
-    {
+    switch (e->key()) {
 #ifdef QT_DEBUG
     case Qt::Key_Escape:        qApp->quit();       break;
 #endif
@@ -328,8 +330,8 @@ void MainWindow::internalMove(const QPoint &p)
 {
     const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
     const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
-                             isHide &&
-                             m_posChangeAni->state() == QVariantAnimation::Stopped;
+                            isHide &&
+                            m_posChangeAni->state() == QVariantAnimation::Stopped;
     if (!pos_adjust)
         return QWidget::move(p);
 
@@ -337,8 +339,7 @@ void MainWindow::internalMove(const QPoint &p)
     const auto ratio = devicePixelRatioF();
 
     const QRect &r = m_settings->primaryRawRect();
-    switch (m_settings->position())
-    {
+    switch (m_settings->position()) {
     case Left:      rp.setX(r.x());             break;
     case Top:       rp.setY(r.y());             break;
     case Right:     rp.setX(r.right() - 1);     break;
@@ -347,12 +348,10 @@ void MainWindow::internalMove(const QPoint &p)
 
     int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
-        isHide &&
-        m_panelHideAni->state() == QVariantAnimation::Stopped &&
-        m_panelShowAni->state() == QVariantAnimation::Stopped)
-    {
-        switch (m_settings->position())
-        {
+            isHide &&
+            m_panelHideAni->state() == QVariantAnimation::Stopped &&
+            m_panelShowAni->state() == QVariantAnimation::Stopped) {
+        switch (m_settings->position()) {
         case Top:
         case Bottom:
             hx = 2;
@@ -395,7 +394,7 @@ void MainWindow::initConnections()
     connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
 
     // to fix qt animation bug, sometimes window size not change
-    connect(m_sizeChangeAni, &QVariantAnimation::valueChanged, [=](const QVariant &value) {
+    connect(m_sizeChangeAni, &QVariantAnimation::valueChanged, [ = ](const QVariant & value) {
         QWidget::setFixedSize(value.toSize());
     });
 
@@ -403,6 +402,9 @@ void MainWindow::initConnections()
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
+
+    connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::itemInserted, Qt::DirectConnection);
+    connect(DockItemManager::instance(), &DockItemManager::itemRemoved, m_mainPanel, &MainPanelControl::itemRemoved, Qt::DirectConnection);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -549,8 +551,7 @@ void MainWindow::setStrutPartial()
     uint strutEnd = 0;
 
     QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
-    switch (side)
-    {
+    switch (side) {
     case Position::Top:
         orientation = XcbMisc::OrientationTop;
         strut = p.y() + s.height() * ratio;
@@ -596,8 +597,7 @@ void MainWindow::setStrutPartial()
     // pass if strut area is intersect with other screen
     int count = 0;
     const QRect pr = m_settings->primaryRect();
-    for (auto *screen : qApp->screens())
-    {
+    for (auto *screen : qApp->screens()) {
         const QRect sr = screen->geometry();
         if (sr == pr)
             continue;
@@ -605,8 +605,7 @@ void MainWindow::setStrutPartial()
         if (sr.intersects(strutArea))
             ++count;
     }
-    if (count > 0)
-    {
+    if (count > 0) {
         qWarning() << "strutArea is intersects with another screen.";
         qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
         return;
@@ -626,12 +625,10 @@ void MainWindow::expand()
 
     resetPanelEnvironment(true, false);
 
-    if (showAniState != QPropertyAnimation::Running && m_mainPanel->pos() != m_panelShowAni->currentValue())
-    {
+    if (showAniState != QPropertyAnimation::Running && m_mainPanel->pos() != m_panelShowAni->currentValue()) {
         QPoint startPos(0, 0);
         const QSize &size = m_settings->windowSize();
-        switch (m_settings->position())
-        {
+        switch (m_settings->position()) {
         case Top:       startPos.setY(-size.height());     break;
         case Bottom:    startPos.setY(size.height());      break;
         case Left:      startPos.setX(-size.width());      break;
@@ -651,8 +648,7 @@ void MainWindow::narrow(const Position prevPos)
     const QSize size = m_settings->panelSize();
 
     QPoint finishPos(0, 0);
-    switch (prevPos)
-    {
+    switch (prevPos) {
     case Top:       finishPos.setY(-size.height());     break;
     case Bottom:    finishPos.setY(size.height());      break;
     case Left:      finishPos.setX(-size.width());      break;
@@ -687,8 +683,7 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     if (!resetPosition)
         return;
     QPoint finishPos(0, 0);
-    switch (position)
-    {
+    switch (position) {
     case Top:       finishPos.setY((visible ? 0 : -r.height()));     break;
     case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
     case Left:      finishPos.setX((visible ? 0 : -r.width()));       break;
@@ -708,8 +703,7 @@ void MainWindow::updatePanelVisible()
 
     const Dock::HideState state = m_settings->hideState();
 
-    do
-    {
+    do {
         if (state != Hide)
             break;
 

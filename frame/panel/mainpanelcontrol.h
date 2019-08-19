@@ -50,7 +50,7 @@ private:
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
 
-private slots:
+public slots:
     void itemInserted(const int index, DockItem *item);
     void itemRemoved(DockItem *item);
 

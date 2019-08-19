@@ -59,10 +59,12 @@ public:
 
     inline virtual ItemType itemType() const {Q_UNREACHABLE(); return App;}
 
+    QSize sizeHint() const override;
+
 public slots:
     virtual void refershIcon() {}
 
-    void showPopupApplet(QWidget * const applet);
+    void showPopupApplet(QWidget *const applet);
     void hidePopup();
 
 signals:
@@ -84,7 +86,7 @@ protected:
 
     void hideNonModel();
     void popupWindowAccept();
-    virtual void showPopupWindow(QWidget * const content, const bool model = false);
+    virtual void showPopupWindow(QWidget *const content, const bool model = false);
     virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;

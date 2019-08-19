@@ -45,15 +45,14 @@ void RegisterDdeSession()
     QByteArray cookie = qgetenv(envName.toUtf8().data());
     qunsetenv(envName.toUtf8().data());
 
-    if (!cookie.isEmpty())
-    {
+    if (!cookie.isEmpty()) {
         QDBusPendingReply<bool> r = DDBusSender()
-                .interface("com.deepin.SessionManager")
-                .path("/com/deepin/SessionManager")
-                .service("com.deepin.SessionManager")
-                .method("Register")
-                .arg(QString(cookie))
-                .call();
+                                    .interface("com.deepin.SessionManager")
+                                    .path("/com/deepin/SessionManager")
+                                    .service("com.deepin.SessionManager")
+                                    .method("Register")
+                                    .arg(QString(cookie))
+                                    .call();
 
         qDebug() << Q_FUNC_INFO << r.value();
     }
@@ -109,7 +108,7 @@ int main(int argc, char *argv[])
     QTimer::singleShot(1, &mw, &MainWindow::launch);
 
     if (!parser.isSet(disablePlugOption)) {
-        DockItemController::instance()->startLoadPlugins();
+        DockItemManager::instance()->startLoadPlugins();
     }
 
     return app.exec();
