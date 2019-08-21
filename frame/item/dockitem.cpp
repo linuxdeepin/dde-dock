@@ -68,11 +68,12 @@ DockItem::DockItem(QWidget *parent)
     grabGesture(Qt::TapAndHoldGesture);
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setMaximumSize(50,50);
 }
 
 QSize DockItem::sizeHint() const
 {
-    return QSize(50, 50);
+    return maximumSize();
 }
 
 DockItem::~DockItem()

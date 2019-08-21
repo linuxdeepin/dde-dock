@@ -165,8 +165,18 @@ void MainPanelControl::resizeEvent(QResizeEvent *event)
 
 void MainPanelControl::updateAppAreaSonWidgetSize()
 {
+    for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
+        QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
+        if (w) {
+            if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
+                w->setMaximumSize(height(), height());
+            } else {
+                w->setMaximumSize(width(), width());
+            }
+        }
+    }
+
     if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
-        m_appAreaSonWidget->setMaximumHeight(QWIDGETSIZE_MAX);
         m_appAreaSonWidget->setMaximumWidth(qMin((m_appAreaWidget->geometry().right() - width() / 2) * 2, m_appAreaWidget->width()));
     } else {
         m_appAreaSonWidget->setMaximumWidth(QWIDGETSIZE_MAX);
