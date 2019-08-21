@@ -43,6 +43,9 @@ public:
     void removePluginAreaItem(QWidget *wdg);
     void setPositonValue(const Qt::Edge val);
 
+signals:
+    void itemMoved(DockItem *sourceItem, DockItem *targetItem);
+
 private:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -50,10 +53,17 @@ private:
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
 
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+    void startDrag(DockItem *);
+    DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
+    void moveItem(DockItem *sourceItem, DockItem *targetItem);
+
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
-    void movedItem(const int index, DockItem *item);
 
 private:
     QBoxLayout *m_mainPanelLayout;

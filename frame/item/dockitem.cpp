@@ -37,12 +37,10 @@ DockItem::DockItem(QWidget *parent)
       m_hover(false),
       m_popupShown(false),
       m_tapAndHold(false),
-
+      m_draging(false),
       m_hoverEffect(new HoverHighlightEffect(this)),
-
       m_popupTipsDelayTimer(new QTimer(this)),
       m_popupAdjustDelayTimer(new QTimer(this)),
-
       m_menuManagerInter(new DBusMenuManager(this))
 {
     if (PopupWindow.isNull()) {
@@ -389,6 +387,11 @@ void DockItem::hidePopup()
 
     emit PopupWindow->accept();
     emit requestWindowAutoHide(true);
+}
+
+void DockItem::setDraging(bool bDrag)
+{
+    m_draging = bDrag;
 }
 
 void DockItem::hideNonModel()

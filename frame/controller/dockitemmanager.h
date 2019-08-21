@@ -53,8 +53,6 @@ public:
 signals:
     void itemInserted(const int index, DockItem *item) const;
     void itemRemoved(DockItem *item) const;
-    void itemMoved(DockItem *item, const int index) const;
-    void itemManaged(DockItem *item) const;
     void itemUpdated(DockItem *item) const;
     void fashionTraySizeChanged(const QSize &traySize) const;
 
@@ -62,7 +60,7 @@ public slots:
     void refershItemsIcon();
     void sortPluginItems();
     void updatePluginsItemOrderKey();
-    void itemMove(DockItem *const moveItem, DockItem *const replaceItem);
+    void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemDroppedIntoContainer(DockItem *const item);
     void itemDragOutFromContainer(DockItem *const item);
     void refreshFSTItemSpliterVisible();

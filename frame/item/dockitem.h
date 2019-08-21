@@ -66,6 +66,7 @@ public slots:
 
     void showPopupApplet(QWidget *const applet);
     void hidePopup();
+    virtual void setDraging(bool bDrag);
 
 signals:
     void dragStarted() const;
@@ -106,6 +107,7 @@ protected:
     bool m_hover;
     bool m_popupShown;
     bool m_tapAndHold;
+    bool m_draging;
 
     QPointer<QWidget> m_lastPopupWidget;
     QPointer<HoverHighlightEffect> m_hoverEffect;

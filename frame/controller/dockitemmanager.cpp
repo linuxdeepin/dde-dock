@@ -134,18 +134,18 @@ void DockItemManager::updatePluginsItemOrderKey()
 
     int index = 0;
     for (auto item : m_itemList) {
-        if (item.isNull() || item->itemType() != DockItem::TrayPlugin)
+        if (item.isNull() || item->itemType() != DockItem::Plugins)
             continue;
         static_cast<PluginsItem *>(item.data())->setItemSortKey(++index);
     }
 }
 
-void DockItemManager::itemMove(DockItem *const moveItem, DockItem *const replaceItem)
+void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targetItem)
 {
-    Q_ASSERT(moveItem != replaceItem);
+    Q_ASSERT(sourceItem != targetItem);
 
-    const DockItem::ItemType moveType = moveItem->itemType();
-    const DockItem::ItemType replaceType = replaceItem->itemType();
+    const DockItem::ItemType moveType = sourceItem->itemType();
+    const DockItem::ItemType replaceType = targetItem->itemType();
 
     // app move
     if (moveType == DockItem::App || moveType == DockItem::Placeholder)
@@ -157,15 +157,14 @@ void DockItemManager::itemMove(DockItem *const moveItem, DockItem *const replace
         if (replaceType != DockItem::Plugins && replaceType != DockItem::TrayPlugin)
             return;
 
-    const int moveIndex = m_itemList.indexOf(moveItem);
+    const int moveIndex = m_itemList.indexOf(sourceItem);
     const int replaceIndex = replaceType == DockItem::Stretch ?
                              // disable insert after placeholder item
-                             m_itemList.indexOf(replaceItem) - 1 :
-                             m_itemList.indexOf(replaceItem);
+                             m_itemList.indexOf(targetItem) - 1 :
+                             m_itemList.indexOf(targetItem);
 
     m_itemList.removeAt(moveIndex);
-    m_itemList.insert(replaceIndex, moveItem);
-    emit itemMoved(moveItem, replaceIndex);
+    m_itemList.insert(replaceIndex, sourceItem);
 
     // update plugins sort key if order changed
     if (moveType == DockItem::Plugins || replaceType == DockItem::Plugins
@@ -284,7 +283,6 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
 {
     // check item is in container
     if (item->allowContainer() && item->isInContainer()) {
-        emit itemManaged(item);
         return itemDroppedIntoContainer(item);
     }
 
@@ -292,7 +290,7 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
     int firstPluginPosition = -1;
     for (int i(0); i != m_itemList.size(); ++i) {
         DockItem::ItemType type = m_itemList[i]->itemType();
-        if (type != DockItem::Plugins && type != DockItem::TrayPlugin)
+        if (type != DockItem::Plugins)
             continue;
 
         firstPluginPosition = i;
@@ -324,7 +322,7 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
     }
 
     m_itemList.insert(insertIndex, item);
-    emit itemInserted(insertIndex, item);
+    emit itemInserted(insertIndex - firstPluginPosition, item);
 
     refreshFSTItemSpliterVisible();
 }
@@ -353,12 +351,12 @@ void DockItemManager::reloadAppItems()
         appItemAdded(path, -1);
 }
 
+// 不同的模式下，插件顺序不一样
 void DockItemManager::sortPluginItems()
 {
     int firstPluginIndex = -1;
     for (int i(0); i != m_itemList.size(); ++i) {
-        DockItem::ItemType type = m_itemList[i]->itemType();
-        if (type == DockItem::Plugins || type == DockItem::TrayPlugin) {
+        if (m_itemList[i]->itemType() == DockItem::Plugins) {
             firstPluginIndex = i;
             break;
         }
@@ -383,6 +381,8 @@ void DockItemManager::sortPluginItems()
     });
 
     // reset order
-    for (int i(firstPluginIndex); i != m_itemList.size(); ++i)
-        emit itemMoved(m_itemList[i], i);
+    for (int i(firstPluginIndex); i != m_itemList.size(); ++i) {
+        emit itemRemoved(m_itemList[i]);
+        emit itemInserted(-1, m_itemList[i]);
+    }
 }

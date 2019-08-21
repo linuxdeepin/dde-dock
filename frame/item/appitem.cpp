@@ -46,17 +46,20 @@
 int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
 
-static QGSettings* GSettingsByApp() {
+static QGSettings *GSettingsByApp()
+{
     static QGSettings settings("com.deepin.dde.dock.module.app");
     return &settings;
 }
 
-static QGSettings* GSettingsByActiveApp() {
+static QGSettings *GSettingsByActiveApp()
+{
     static QGSettings settings("com.deepin.dde.dock.module.activeapp");
     return &settings;
 }
 
-static QGSettings* GSettingsByDockApp() {
+static QGSettings *GSettingsByDockApp()
+{
     static QGSettings settings("com.deepin.dde.dock.module.dockapp");
     return &settings;
 }
@@ -95,7 +98,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     centralLayout->setSpacing(0);
 
     setAccessibleName(m_itemEntryInter->name());
-    setAcceptDrops(true);
+
+    // 拖拽已放到MainPanelControl处理
+    //setAcceptDrops(true);
+
     setLayout(centralLayout);
 
     m_id = m_itemEntryInter->id();
@@ -150,7 +156,7 @@ const bool AppItem::isValid() const
 void AppItem::updateWindowIconGeometries()
 {
     const QRect r(mapToGlobal(QPoint(0, 0)),
-                  mapToGlobal(QPoint(width(),height())));
+                  mapToGlobal(QPoint(width(), height())));
     auto *xcb_misc = XcbMisc::instance();
 
     for (auto it(m_windowInfos.cbegin()); it != m_windowInfos.cend(); ++it)
@@ -218,6 +224,8 @@ int AppItem::itemBaseHeight()
 void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
+    if (m_draging)
+        return;
 
     if (m_dragging || (m_swingEffectView != nullptr && DockDisplayMode != Fashion))
         return;
@@ -233,18 +241,15 @@ void AppItem::paintEvent(QPaintEvent *e)
     // draw background
     QRectF backgroundRect = itemRect;
 
-    if (DockDisplayMode == Efficient)
-    {
+    if (DockDisplayMode == Efficient) {
         backgroundRect = itemRect.marginsRemoved(QMargins(1, 1, 1, 1));
 
-        if (m_active)
-        {
+        if (m_active) {
             painter.fillRect(backgroundRect, QColor(44, 167, 248, 255 * 0.3));
 
             const int activeLineWidth = itemRect.height() > 50 ? 4 : 2;
             QRectF activeRect = backgroundRect;
-            switch (DockPosition)
-            {
+            switch (DockPosition) {
             case Top:       activeRect.setBottom(activeRect.top() + activeLineWidth);   break;
             case Bottom:    activeRect.setTop(activeRect.bottom() - activeLineWidth);   break;
             case Left:      activeRect.setRight(activeRect.left() + activeLineWidth);   break;
@@ -252,24 +257,18 @@ void AppItem::paintEvent(QPaintEvent *e)
             }
 
             painter.fillRect(activeRect, QColor(44, 167, 248, 255));
-        }
-        else if (!m_windowInfos.isEmpty())
-        {
+        } else if (!m_windowInfos.isEmpty()) {
             if (hasAttention())
                 painter.fillRect(backgroundRect, QColor(241, 138, 46, 255 * .8));
             else
                 painter.fillRect(backgroundRect, QColor(255, 255, 255, 255 * 0.2));
         }
-    }
-    else
-    {
-        if (!m_windowInfos.isEmpty())
-        {
+    } else {
+        if (!m_windowInfos.isEmpty()) {
             QPoint p;
             QPixmap pixmap;
             QPixmap activePixmap;
-            switch (DockPosition)
-            {
+            switch (DockPosition) {
             case Top:
                 pixmap = m_horizontalIndicator;
                 activePixmap = m_activeHorizontalIndicator;
@@ -333,7 +332,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         }
 
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
-            << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
+                 << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
@@ -461,7 +460,7 @@ void AppItem::showEvent(QShowEvent *e)
 {
     DockItem::showEvent(e);
 
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -501,8 +500,7 @@ QWidget *AppItem::popupTips()
     if (m_dragging)
         return nullptr;
 
-    if (!m_windowInfos.isEmpty())
-    {
+    if (!m_windowInfos.isEmpty()) {
         const quint32 currentWindow = m_itemEntryInter->currentWindow();
         Q_ASSERT(m_windowInfos.contains(currentWindow));
         m_appNameTips->setText(m_windowInfos[currentWindow].title);
@@ -515,6 +513,9 @@ QWidget *AppItem::popupTips()
 
 void AppItem::startDrag()
 {
+    if (!acceptDrops())
+        return;
+
     if (checkGSettingsControl()) {
         return;
     }
@@ -528,7 +529,7 @@ void AppItem::startDrag()
     m_drag->setMimeData(new QMimeData);
 
     // handle drag finished here
-    connect(m_drag->appDragWidget(), &AppDragWidget::destroyed, this, [=] {
+    connect(m_drag->appDragWidget(), &AppDragWidget::destroyed, this, [ = ] {
         m_dragging = false;
         m_drag.clear();
         setVisible(true);
@@ -583,8 +584,7 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
     m_updateIconGeometryTimer->start();
 
     // process attention effect
-    if (hasAttention())
-    {
+    if (hasAttention()) {
         if (DockDisplayMode == DisplayMode::Fashion)
             playSwingEffect();
     } else {
@@ -642,9 +642,9 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::hidePopup);
     connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, [=]() { m_appPreviewTips = nullptr; });
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, [=]() { m_appPreviewTips = nullptr; });
-    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, [=]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, [ = ]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, [ = ]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, [ = ]() { m_appPreviewTips = nullptr; });
 
     showPopupWindow(m_appPreviewTips, true);
 }
@@ -658,13 +658,13 @@ void AppItem::playSwingEffect()
     stopSwingEffect();
 
     QPair<QGraphicsView *, QGraphicsItemAnimation *> pair =  SwingEffect(
-            this, m_appIcon, rect(), devicePixelRatioF());
+                                                                 this, m_appIcon, rect(), devicePixelRatioF());
 
     m_swingEffectView = pair.first;
     m_itemAnimation = pair.second;
 
     QTimeLine *tl = m_itemAnimation->timeLine();
-    connect(tl, &QTimeLine::stateChanged, [=](QTimeLine::State newState) {
+    connect(tl, &QTimeLine::stateChanged, [ = ](QTimeLine::State newState) {
         if (newState == QTimeLine::NotRunning) {
             m_swingEffectView->hide();
             layout()->removeWidget(m_swingEffectView);
@@ -692,20 +692,21 @@ void AppItem::stopSwingEffect()
 
 void AppItem::checkAttentionEffect()
 {
-    QTimer::singleShot(1000, this, [=] {
+    QTimer::singleShot(1000, this, [ = ] {
         if (DockDisplayMode == DisplayMode::Fashion && hasAttention())
             playSwingEffect();
     });
 }
 
-void AppItem::onGSettingsChanged(const QString& key) {
+void AppItem::onGSettingsChanged(const QString &key)
+{
     if (key != "enable") {
         return;
     }
 
     QGSettings *setting = m_itemEntryInter->isDocked()
-                              ? GSettingsByDockApp()
-                              : GSettingsByActiveApp();
+                          ? GSettingsByDockApp()
+                          : GSettingsByActiveApp();
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByApp()->keys().contains("enable") && GSettingsByApp()->get("enable").toBool();
@@ -716,9 +717,9 @@ void AppItem::onGSettingsChanged(const QString& key) {
 bool AppItem::checkGSettingsControl() const
 {
     QGSettings *setting = m_itemEntryInter->isDocked()
-            ? GSettingsByDockApp()
-            : GSettingsByActiveApp();
+                          ? GSettingsByDockApp()
+                          : GSettingsByActiveApp();
 
     return (setting->keys().contains("control") && setting->get("control").toBool()) ||
-            (GSettingsByApp()->keys().contains("control") && GSettingsByApp()->get("control").toBool());
+           (GSettingsByApp()->keys().contains("control") && GSettingsByApp()->get("control").toBool());
 }

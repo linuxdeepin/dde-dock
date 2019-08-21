@@ -24,6 +24,7 @@
 
 #include <DAnchors>
 
+#include <QDrag>
 #include <QTimer>
 
 DWIDGET_USE_NAMESPACE
@@ -44,6 +45,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
 {
     init();
     updateMainPanelLayout();
+    setAcceptDrops(true);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -181,6 +183,8 @@ void MainPanelControl::setPositonValue(const Qt::Edge val)
 
 void MainPanelControl::insertItem(const int index, DockItem *item)
 {
+    item->installEventFilter(this);
+
     switch (item->itemType()) {
     case DockItem::Launcher:
         addFixedAreaItem(index, item);
@@ -223,11 +227,128 @@ void MainPanelControl::removeItem(DockItem *item)
     updateAppAreaSonWidgetSize();
 }
 
- void MainPanelControl::movedItem(const int index, DockItem *item)
+void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 {
+    // get target index
+    int idx = -1;
+    if (targetItem->itemType() == DockItem::App)
+        idx = m_appAreaSonLayout->indexOf(targetItem);
+    else if (targetItem->itemType() == DockItem::Plugins)
+        idx = m_pluginLayout->indexOf(targetItem);
+    else
+        return;
+
     // remove old item
-    removeItem(item);
+    removeItem(sourceItem);
+
     // insert new position
-    insertItem(index, item);
+    insertItem(idx, sourceItem);
 }
 
+void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
+{
+    e->accept();
+}
+
+void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
+{
+    DockItem *sourceItem = qobject_cast<DockItem *>(e->source());
+    if (!sourceItem) {
+        e->ignore();
+        return;
+    }
+
+    DockItem *targetItem = dropTargetItem(sourceItem, e->pos());
+    if (!targetItem) {
+        e->ignore();
+        return;
+    }
+
+    e->accept();
+
+    if (targetItem == sourceItem)
+        return;
+
+    moveItem(sourceItem, targetItem);
+    emit itemMoved(sourceItem, targetItem);
+}
+
+bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() != QEvent::MouseMove)
+        return false;
+
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+    if (!mouseEvent || mouseEvent->buttons() != Qt::LeftButton)
+        return false;
+
+    DockItem *item = qobject_cast<DockItem *>(watched);
+    if (!item)
+        return false;
+
+    if (item->itemType() != DockItem::App && item->itemType() != DockItem::Plugins)
+        return false;
+
+    startDrag(item);
+
+    return true;
+}
+
+void MainPanelControl::startDrag(DockItem *item)
+{
+    const QPixmap pixmap = item->grab();
+
+    item->setDraging(true);
+    item->update();
+
+    QDrag *drag = new QDrag(item);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
+    drag->setMimeData(new QMimeData);
+    drag->exec(Qt::MoveAction);
+
+    item->setDraging(false);
+    item->update();
+}
+
+DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
+{
+    QWidget *parentWidget = nullptr;
+
+    switch (sourceItem->itemType()) {
+    case DockItem::App:
+        parentWidget = m_appAreaSonWidget;
+        break;
+    case DockItem::Plugins:
+        parentWidget = m_pluginAreaWidget;
+        break;
+    default:
+        break;
+    }
+
+    if (!parentWidget)
+        return nullptr;
+
+    point = parentWidget->mapFromParent(point);
+    QLayout *parentLayout = parentWidget->layout();
+
+    DockItem *targetItem = nullptr;
+
+    for (int i = 0 ; i < parentLayout->count(); ++i) {
+        QLayoutItem *layoutItem = parentLayout->itemAt(i);
+        DockItem *dockItem = qobject_cast<DockItem *>(layoutItem->widget());
+        if (!dockItem)
+            continue;
+
+        QRect rect;
+        rect.setTopLeft(dockItem->pos());
+        rect.setSize(dockItem->size());
+
+        if (rect.contains(point)) {
+            targetItem = dockItem;
+            break;
+        }
+    }
+
+    return targetItem;
+}

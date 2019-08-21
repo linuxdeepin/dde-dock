@@ -36,7 +36,7 @@
 
 QPoint PluginsItem::MousePressPoint = QPoint();
 
-PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent)
+PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent),
       m_pluginInter(pluginInter),
       m_centralWidget(m_pluginInter->itemWidget(itemKey)),
@@ -120,6 +120,9 @@ void PluginsItem::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
+    if (m_draging)
+        return;
+
     DisplayMode displayMode = m_pluginInter->displayMode();
 
     if (displayMode == Dock::DisplayMode::Fashion) {
@@ -152,7 +155,8 @@ void PluginsItem::refershIcon()
     m_pluginInter->refreshIcon(m_itemKey);
 }
 
-void PluginsItem::onGSettingsChanged(const QString& key) {
+void PluginsItem::onGSettingsChanged(const QString &key)
+{
     if (key != "enable") {
         return;
     }
@@ -213,7 +217,7 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    if (checkAndResetTapHoldGestureState()&& e->source() == Qt::MouseEventSynthesizedByQt) {
+    if (checkAndResetTapHoldGestureState() && e->source() == Qt::MouseEventSynthesizedByQt) {
         qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
         return;
     }
@@ -251,8 +255,9 @@ void PluginsItem::leaveEvent(QEvent *event)
     DockItem::leaveEvent(event);
 }
 
-void PluginsItem::showEvent(QShowEvent* event) {
-    QTimer::singleShot(0, this, [=] {
+void PluginsItem::showEvent(QShowEvent *event)
+{
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -282,7 +287,7 @@ void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
 }
 
-void PluginsItem::showPopupWindow(QWidget * const content, const bool model)
+void PluginsItem::showPopupWindow(QWidget *const content, const bool model)
 {
     if (isInContainer())
         return;
@@ -306,6 +311,9 @@ QWidget *PluginsItem::popupTips()
 
 void PluginsItem::startDrag()
 {
+    // 拖拽已放到MainPanelControl处理
+    return;
+
     const QPixmap pixmap = grab();
 
     m_dragging = true;
@@ -335,8 +343,7 @@ void PluginsItem::startDrag()
 void PluginsItem::mouseClicked()
 {
     const QString command = m_pluginInter->itemCommand(m_itemKey);
-    if (!command.isEmpty())
-    {
+    if (!command.isEmpty()) {
         QProcess *proc = new QProcess(this);
 
         connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
@@ -354,5 +361,12 @@ void PluginsItem::mouseClicked()
 bool PluginsItem::checkGSettingsControl() const
 {
     return m_gsettings->keys().contains("control")
-            && m_gsettings->get("control").toBool();
+           && m_gsettings->get("control").toBool();
+}
+
+void PluginsItem::setDraging(bool bDrag)
+{
+    DockItem::setDraging(bDrag);
+
+    m_centralWidget->setVisible(!bDrag);
 }
