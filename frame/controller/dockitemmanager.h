@@ -55,6 +55,8 @@ signals:
     void itemRemoved(DockItem *item) const;
     void itemUpdated(DockItem *item) const;
     void fashionTraySizeChanged(const QSize &traySize) const;
+    void requestWindowAutoHide(const bool autoHide) const;
+    void requestRefershWindowVisible() const;
 
 public slots:
     void refershItemsIcon();
@@ -73,6 +75,7 @@ private:
     void pluginItemInserted(PluginsItem *item);
     void pluginItemRemoved(PluginsItem *item);
     void reloadAppItems();
+    void manageItem(DockItem *item);
 
 private:
     QTimer *m_updatePluginsOrderTimer;

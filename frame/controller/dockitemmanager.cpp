@@ -49,6 +49,7 @@ DockItemManager::DockItemManager(QObject *parent)
     // 应用区域
     for (auto entry : m_appInter->entries()) {
         AppItem *it = new AppItem(entry);
+        manageItem(it);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
@@ -247,6 +248,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     }
 
     AppItem *item = new AppItem(path);
+    manageItem(item);
 
     connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
     connect(item, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
@@ -281,6 +283,8 @@ void DockItemManager::appItemRemoved(AppItem *appItem)
 
 void DockItemManager::pluginItemInserted(PluginsItem *item)
 {
+    manageItem(item);
+
     // check item is in container
     if (item->allowContainer() && item->isInContainer()) {
         return itemDroppedIntoContainer(item);
@@ -385,4 +389,10 @@ void DockItemManager::sortPluginItems()
         emit itemRemoved(m_itemList[i]);
         emit itemInserted(-1, m_itemList[i]);
     }
+}
+
+void DockItemManager::manageItem(DockItem *item)
+{
+    connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);
+    connect(item, &DockItem::requestWindowAutoHide, this, &DockItemManager::requestWindowAutoHide, Qt::UniqueConnection);
 }
