@@ -28,10 +28,11 @@
 #include <QMouseEvent>
 
 ShowDesktopItem::ShowDesktopItem(QWidget *parent)
-    : QLabel(parent),
-      m_isHovered(false),
-      m_isPressed(false)
+    : DockItem(parent)
+    , m_isHovered(false)
+    , m_isPressed(false)
 {
+    setAccessibleName("ShowDesktop");
 }
 
 ShowDesktopItem::~ShowDesktopItem()
@@ -43,7 +44,7 @@ void ShowDesktopItem::enterEvent(QEvent *event)
     m_isHovered = true;
     update();
 
-    QLabel::enterEvent(event);
+    DockItem::enterEvent(event);
 }
 
 void ShowDesktopItem::leaveEvent(QEvent *event)
@@ -51,13 +52,13 @@ void ShowDesktopItem::leaveEvent(QEvent *event)
     m_isHovered = false;
     update();
 
-    QLabel::leaveEvent(event);
+    DockItem::leaveEvent(event);
 }
 
 void ShowDesktopItem::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() != Qt::LeftButton) {
-        return QLabel::mousePressEvent(event);
+        return DockItem::mousePressEvent(event);
     }
 
     m_isPressed = true;
@@ -69,7 +70,7 @@ void ShowDesktopItem::mousePressEvent(QMouseEvent *event)
 void ShowDesktopItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() != Qt::LeftButton) {
-        return QLabel::mouseReleaseEvent(event);
+        return DockItem::mouseReleaseEvent(event);
     }
 
     m_isPressed = false;
@@ -91,7 +92,7 @@ void ShowDesktopItem::paintEvent(QPaintEvent *event)
 
     if (m_isPressed) {
         painter.fillRect(destRect, "#2ca7f8");
-    } else if(m_isHovered){
+    } else if (m_isHovered) {
         painter.fillRect(destRect, QColor(255, 255, 255, 51));
     } else {
         painter.fillRect(destRect, QColor(255, 255, 255, 26));

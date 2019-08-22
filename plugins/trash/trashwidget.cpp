@@ -72,8 +72,7 @@ const QString TrashWidget::contextMenu() const
     open["isActive"] = true;
     items.push_back(open);
 
-    if (!m_popupApplet->empty())
-    {
+    if (!m_popupApplet->empty()) {
         QMap<QString, QVariant> empty;
         empty["itemId"] = "empty";
         empty["itemText"] = tr("Empty");
@@ -182,7 +181,8 @@ void TrashWidget::resizeEvent(QResizeEvent *e)
 
 void TrashWidget::updateIcon()
 {
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+//    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    Dock::DisplayMode displayMode = displayMode = Dock::Fashion;
 
     QString iconString = "user-trash";
     if (!m_popupApplet->empty())

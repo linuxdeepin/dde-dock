@@ -22,15 +22,19 @@
 #ifndef SHOWDESKTOPITEM_H
 #define SHOWDESKTOPITEM_H
 
-#include <QLabel>
+#include "dockitem.h"
 
-class ShowDesktopItem : public QLabel
+class ShowDesktopItem : public DockItem
 {
     Q_OBJECT
 
 public:
-    explicit ShowDesktopItem(QWidget *parent = 0);
-    virtual ~ShowDesktopItem();
+    explicit ShowDesktopItem(QWidget *parent = nullptr);
+    virtual ~ShowDesktopItem() override;
+    inline ItemType itemType() const override
+    {
+        return Launcher;
+    }
 
 protected:
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
