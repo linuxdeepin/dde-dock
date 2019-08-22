@@ -63,7 +63,7 @@ const QPoint scaledPos(const QPoint &rawXPos)
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QWidget(parent),
+    : DBlurEffectWidget(parent),
 
       m_launched(false),
       m_updatePanelVisible(false),
@@ -320,7 +320,7 @@ void MainWindow::compositeChanged()
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
 
-//    m_mainPanel->setComposite(composite);
+    setComposite(composite);
 
     m_shadowMaskOptimizeTimer->start();
     m_positionUpdateTimer->start();
@@ -377,6 +377,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainWindow::setMaskAlpha);
 
 //    connect(m_mainPanel, &MainPanelControl::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
 //    connect(m_mainPanel, &MainPanelControl::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
@@ -736,7 +737,7 @@ void MainWindow::adjustShadowMask()
     const bool composite = m_wmHelper->hasComposite();
     const bool isFasion = m_settings->displayMode() == Fashion;
 
-    m_platformWindowHandle.setWindowRadius(composite && isFasion ? 5 : 0);
+    m_platformWindowHandle.setWindowRadius(composite && isFasion ? 10 : 0);
 }
 
 void MainWindow::positionCheck()
@@ -766,4 +767,21 @@ void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldO
         qDebug() << SNI_WATCHER_SERVICE << "SNI watcher daemon started, register dock to watcher as SNI Host";
         m_sniWatcher->RegisterStatusNotifierHost(m_sniHostService);
     }
+}
+
+void MainWindow::setEffectEnabled(const bool enabled)
+{
+    if (enabled)
+        setMaskColor(DarkColor);
+    else
+        setMaskColor(QColor(55, 63, 71));
+
+    setMaskAlpha(DockSettings::Instance().Opacity());
+}
+
+void MainWindow::setComposite(const bool hasComposite)
+{
+    setEffectEnabled(hasComposite);
+
+    m_sizeChangeAni->setDuration(hasComposite ? 300 : 0);
 }

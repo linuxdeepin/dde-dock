@@ -196,14 +196,24 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
 
     QPoint p(0, 0);
     switch (position) {
-    case Top:
-        p = QPoint(offsetX, 0);                                        break;
+    case Top: {
+        if (m_displayMode == Dock::Efficient)
+            p = QPoint(offsetX, 0);
+        else
+            p = QPoint(offsetX, 10);
+    }
+        break;
     case Left:
         p = QPoint(0, offsetY);                                        break;
     case Right:
         p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
-    case Bottom:
-        p = QPoint(offsetX, primaryRect.height() - size.height());  break;
+    case Bottom: {
+        if (m_displayMode == Dock::Efficient)
+            p = QPoint(offsetX, primaryRect.height() - size.height());
+        else
+            p = QPoint(offsetX, primaryRect.height() - size.height() - 10);
+    }
+        break;
     default: Q_UNREACHABLE();
     }
 
@@ -571,7 +581,7 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom: {
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
-            m_mainWindowSize.setWidth(calcWidth);
+            m_mainWindowSize.setWidth(primaryRect.width() - 20);
             m_isMaxSize = (calcWidth == maxWidth);
             break;
         }

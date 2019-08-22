@@ -34,17 +34,22 @@
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
+#include <DBlurEffectWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class MainPanel;
 class MainPanelControl;
 class DBusDockAdaptors;
-class MainWindow : public QWidget
+class MainWindow : public DBlurEffectWidget
 {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void setEffectEnabled(const bool enabled);
+    void setComposite(const bool hasComposite);
 
     friend class MainPanel;
     friend class MainPanelControl;
