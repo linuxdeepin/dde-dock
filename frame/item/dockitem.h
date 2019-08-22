@@ -29,12 +29,12 @@
 #include <QFrame>
 #include <QPointer>
 #include <QGestureEvent>
+#include <QMenu>
 
 #include <memory>
 
 using namespace Dock;
 
-class DBusMenuManager;
 class DockItem : public QWidget
 {
     Q_OBJECT
@@ -102,20 +102,20 @@ protected slots:
 
 private:
     void updatePopupPosition();
+    void menuActionClicked(QAction *action);
 
 protected:
     bool m_hover;
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_draging;
+    QMenu m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
     QPointer<HoverHighlightEffect> m_hoverEffect;
 
     QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;
-
-    DBusMenuManager *m_menuManagerInter;
 
     static Position DockPosition;
     static DisplayMode DockDisplayMode;

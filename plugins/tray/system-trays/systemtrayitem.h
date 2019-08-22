@@ -25,10 +25,10 @@
 #include "constants.h"
 #include "abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
-#include "dbus/dbusmenumanager.h"
 #include "pluginsiteminterface.h"
 
 #include <QGestureEvent>
+#include <QMenu>
 
 class QGSettings;
 class SystemTrayItem : public AbstractTrayWidget
@@ -93,13 +93,14 @@ private:
     void updatePopupPosition();
     void onGSettingsChanged(const QString &key);
     bool checkGSettingsControl() const;
+    void menuActionClicked(QAction *action);
 
 private:
     bool m_popupShown;
     bool m_tapAndHold;
+    QMenu m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;
-    DBusMenuManager *m_menuManagerInter;
     QWidget *m_centralWidget;
 
     QTimer *m_popupTipsDelayTimer;
