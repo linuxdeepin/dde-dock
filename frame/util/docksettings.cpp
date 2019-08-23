@@ -173,6 +173,14 @@ const QRect DockSettings::primaryRect() const
     return rect;
 }
 
+const int DockSettings::dockMargin(const Position position) const
+{
+    if (position == Dock::Efficient)
+        return 0;
+
+    return 10;
+}
+
 const QSize DockSettings::panelSize() const
 {
     return m_mainWindowSize;
@@ -193,26 +201,20 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     const QRect primaryRect = this->primaryRect();
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
-
+    const int margin = this->dockMargin(position);
     QPoint p(0, 0);
     switch (position) {
-    case Top: {
-        if (m_displayMode == Dock::Efficient)
-            p = QPoint(offsetX, 0);
-        else
-            p = QPoint(offsetX, 10);
-    }
+    case Top:
+        p = QPoint(offsetX, margin);
         break;
     case Left:
-        p = QPoint(0, offsetY);                                        break;
+        p = QPoint(margin, offsetY);
+        break;
     case Right:
-        p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
-    case Bottom: {
-        if (m_displayMode == Dock::Efficient)
-            p = QPoint(offsetX, primaryRect.height() - size.height());
-        else
-            p = QPoint(offsetX, primaryRect.height() - size.height() - 10);
-    }
+        p = QPoint(primaryRect.width() - size.width() - margin, offsetY);
+        break;
+    case Bottom:
+        p = QPoint(offsetX, primaryRect.height() - size.height() - margin);
         break;
     default: Q_UNREACHABLE();
     }
