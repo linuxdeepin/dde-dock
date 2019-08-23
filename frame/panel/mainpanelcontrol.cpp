@@ -169,6 +169,17 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
         if (w) {
             if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
+                w->setFixedSize(height(), height());
+            } else {
+                w->setMaximumSize(width(), width());
+            }
+        }
+    }
+
+    for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
+        QWidget *w = m_fixedAreaLayout->itemAt(i)->widget();
+        if (w) {
+            if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
                 w->setMaximumSize(height(), height());
             } else {
                 w->setMaximumSize(width(), width());
