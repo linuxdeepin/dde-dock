@@ -41,9 +41,12 @@ func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) *dbus.Er
 		logger.Debugf("Load location '%s' failed: %v", m.Timezone, err)
 		return dbusutil.ToError(err)
 	}
-	ns := time.Date(int(year), time.Month(month), int(day),
-		int(hour), int(min), int(sec), int(nsec), loc).UnixNano()
-	return m.SetTime(ns/1000, false)
+	t := time.Date(int(year), time.Month(month), int(day),
+		int(hour), int(min), int(sec), int(nsec), loc)
+
+	// microseconds since 1 Jan 1970 UTC
+	us := (t.Unix() * 1000000) + int64(t.Nanosecond()/1000)
+	return m.SetTime(us, false)
 }
 
 // Set the system clock to the specified.
