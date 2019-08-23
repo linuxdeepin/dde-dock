@@ -173,9 +173,9 @@ const QRect DockSettings::primaryRect() const
     return rect;
 }
 
-const int DockSettings::dockMargin(const Position position) const
+const int DockSettings::dockMargin() const
 {
-    if (position == Dock::Efficient)
+    if (m_displayMode == Dock::Efficient)
         return 0;
 
     return 10;
@@ -201,7 +201,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     const QRect primaryRect = this->primaryRect();
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
-    const int margin = this->dockMargin(position);
+    const int margin = this->dockMargin();
     QPoint p(0, 0);
     switch (position) {
     case Top:

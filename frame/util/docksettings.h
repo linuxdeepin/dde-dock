@@ -78,7 +78,7 @@ public:
     inline const QSize windowSize() const { return m_mainWindowSize; }
     inline const quint8 Opacity() const { return m_opacity * 255; }
     inline const QSize fashionTraySize() const { return m_fashionTraySize; }
-    const int dockMargin(const Position position) const;
+    const int dockMargin() const;
 
     const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false) const;
@@ -130,6 +130,7 @@ private:
     int m_screenRawHeight;
     int m_screenRawWidth;
     double m_opacity;
+    int m_dockMargin;
     QSet<Position> m_forbidPositions;
     Position m_position;
     HideMode m_hideMode;

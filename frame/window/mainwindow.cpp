@@ -615,7 +615,7 @@ void MainWindow::setStrutPartial()
         return;
     }
 
-    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin(m_settings->position()), strutStart, strutEnd);
+    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin(), strutStart, strutEnd);
 }
 
 void MainWindow::expand()
@@ -730,7 +730,7 @@ void MainWindow::updatePanelVisible()
             break;
 
         QRectF r(pos(), size());
-        const int margin = m_settings->dockMargin(m_settings->position());
+        const int margin = m_settings->dockMargin();
         switch (m_settings->position()) {
         case Dock::Top:
             r.setY(r.y() - margin);
