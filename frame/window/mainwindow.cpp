@@ -40,6 +40,10 @@
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
 
+#define MAINWINDOW_MAX_SIZE       (100)
+#define MAINWINDOW_MIN_SIZE       (40)
+#define MAINWINDOW_DRAG_AREA_SIZE (2)
+
 using org::kde::StatusNotifierWatcher;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
@@ -84,7 +88,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_panelHideAni(new QPropertyAnimation(this, "pos")),
       m_xcbMisc(XcbMisc::instance()),
       m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
-      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
+      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
+      m_dragStatus(false)
 {
     setAccessibleName("dock-mainwindow");
     setAttribute(Qt::WA_TranslucentBackground);
@@ -101,12 +106,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
-
+    m_size = m_settings->m_mainWindowSize;
     initSNIHost();
     initComponents();
     initConnections();
 
-    m_mainPanel->setFixedSize(m_settings->panelSize());
+    resizeMainPanelWindow();
 
     for (auto item : DockItemManager::instance()->itemList())
         m_mainPanel->insertItem(-1, item);
@@ -194,6 +199,10 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::RightButton)
         m_settings->showDockSettingsMenu();
+    if ((e->button() == Qt::LeftButton) && (!getNoneResizeRegion().contains(e->pos()))) {
+        m_resizePoint = e->globalPos();
+        m_dragStatus = true;
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -218,9 +227,9 @@ void MainWindow::enterEvent(QEvent *e)
 void MainWindow::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-
     m_expandDelayTimer->stop();
     m_leaveDelayTimer->start();
+    setCursor(Qt::ArrowCursor);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -492,7 +501,7 @@ void MainWindow::updateGeometry()
 //    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 //    m_mainPanel->updateDockPosition(position);
     // this->setFixedSize has been overridden for size animation
-    m_mainPanel->setFixedSize(m_settings->panelSize());
+    resizeMainPanelWindow();
 
     bool animation = true;
     bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
@@ -691,7 +700,7 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     const QRect r(m_settings->windowRect(position));
 
     m_sizeChangeAni->setEndValue(r.size());
-    m_mainPanel->setFixedSize(m_settings->panelSize());
+    resizeMainPanelWindow();
     QWidget::setFixedSize(r.size());
     m_posChangeAni->setEndValue(r.topLeft());
 
@@ -703,9 +712,9 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     QPoint finishPos(0, 0);
     switch (position) {
     case Top:       finishPos.setY((visible ? 0 : -r.height()));     break;
-    case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
+    case Bottom:    finishPos.setY(visible ? MAINWINDOW_DRAG_AREA_SIZE * 2 : r.height());      break;
     case Left:      finishPos.setX((visible ? 0 : -r.width()));       break;
-    case Right:     finishPos.setX(visible ? 0 : r.width());       break;
+    case Right:     finishPos.setX(visible ? MAINWINDOW_DRAG_AREA_SIZE * 2 : r.width());       break;
     }
 
     m_mainPanel->move(finishPos);
@@ -813,4 +822,92 @@ void MainWindow::setComposite(const bool hasComposite)
     setEffectEnabled(hasComposite);
 
     m_sizeChangeAni->setDuration(hasComposite ? 300 : 0);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    QPoint mousePoint = event->pos();
+    QRect r = getNoneResizeRegion();
+    if (!r.contains(mousePoint) || (m_dragStatus == true)) {
+        if ((Dock::Top == m_settings->position()) || (Dock::Bottom == m_settings->position())) {
+            setCursor(Qt::SizeVerCursor);
+        } else {
+            setCursor(Qt::SizeHorCursor);
+        }
+    } else {
+        setCursor(Qt::ArrowCursor);
+    }
+
+    if (m_dragStatus) {
+        //int xdiff = QCursor::pos().x() - m_resizePoint.x();
+        int ydiff = QCursor::pos().y() - m_resizePoint.y();
+
+        if (Dock::Top == m_settings->position()) {
+            m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE,m_size.height() + ydiff, MAINWINDOW_MAX_SIZE));
+            m_settings->m_mainWindowSize.setWidth(width());
+        } else if (Dock::Bottom == m_settings->position()) {
+            m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE,m_size.height() - ydiff, MAINWINDOW_MAX_SIZE));
+            m_settings->m_mainWindowSize.setWidth(width());
+        } else if (Dock::Left == m_settings->position()) {
+        } else {
+        }
+
+        resizeMainWindow();
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_dragStatus = false;
+    m_size = m_settings->m_mainWindowSize;
+    setStrutPartial();
+    setCursor(Qt::ArrowCursor);
+}
+
+QRect MainWindow::getNoneResizeRegion()
+{
+    QRect r;
+    switch (m_settings->position()) {
+    case Dock::Top:
+        r.setRect(0, 0, width(), height() - MAINWINDOW_DRAG_AREA_SIZE);
+        break;
+    case Dock::Bottom:
+        r.setRect(0, MAINWINDOW_DRAG_AREA_SIZE, width(), height() - MAINWINDOW_DRAG_AREA_SIZE);
+        break;
+    case Dock::Left:
+        r.setRect(0, 0, width() - MAINWINDOW_DRAG_AREA_SIZE, height());
+        break;
+    case Dock::Right:
+        r.setRect(MAINWINDOW_DRAG_AREA_SIZE, 0, width() - MAINWINDOW_DRAG_AREA_SIZE, height());
+        break;
+    default: break;
+    }
+
+    return r;
+}
+
+void MainWindow::resizeMainWindow()
+{
+    const Position position = m_settings->position();
+    QSize size = m_settings->windowSize();
+    const QRect windowRect = m_settings->windowRect(position, false);
+
+    resizeMainPanelWindow();
+    internalMove(windowRect.topLeft());
+    QWidget::setFixedSize(size);
+}
+
+void MainWindow::resizeMainPanelWindow()
+{
+    switch (m_settings->position()) {
+    case Dock::Top:
+    case Dock::Bottom:
+        m_mainPanel->setFixedSize(m_settings->panelSize() - QSize(0, MAINWINDOW_DRAG_AREA_SIZE * 2));
+        break;
+    case Dock::Left:
+    case Dock::Right:
+        m_mainPanel->setFixedSize(m_settings->panelSize() - QSize(MAINWINDOW_DRAG_AREA_SIZE * 2, 0));
+        break;
+    default: break;
+    }
 }

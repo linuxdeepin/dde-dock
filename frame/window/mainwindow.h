@@ -66,16 +66,21 @@ private:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
     void setFixedSize(const QSize &size);
     void internalAnimationMove(int x, int y);
     void initSNIHost();
     void initComponents();
     void initConnections();
+    void resizeMainWindow();
+    void resizeMainPanelWindow();
 
     const QPoint x11GetWindowPos();
     void x11MoveWindow(const int x, const int y);
     void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
+    QRect getNoneResizeRegion();
 
 signals:
     void panelGeometryChanged();
@@ -123,6 +128,9 @@ private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     org::kde::StatusNotifierWatcher *m_sniWatcher;
     QString m_sniHostService;
+    bool m_dragStatus;
+    QPoint m_resizePoint;
+    QSize m_size;
 };
 
 #endif // MAINWINDOW_H

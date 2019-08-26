@@ -85,6 +85,7 @@ public:
     qreal dockRatio() const;
 
     void showDockSettingsMenu();
+    QSize m_mainWindowSize;
 
 signals:
     void dataChanged() const;
@@ -138,7 +139,6 @@ private:
     DisplayMode m_displayMode;
     QRect m_primaryRawRect;
     QRect m_frontendRect;
-    QSize m_mainWindowSize;
     QSize m_fashionTraySize;
 
     WhiteMenu m_settingsMenu;
