@@ -29,6 +29,7 @@
 
 #include <DApplication>
 #include <QScreen>
+#include <QGSettings>
 
 #define ICON_SIZE_LARGE         48
 #define ICON_SIZE_MEDIUM        36
@@ -215,6 +216,11 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
 
 void DockSettings::showDockSettingsMenu()
 {
+    QGSettings gsettings("com.deepin.dde.dock.module.menu");
+    if (gsettings.keys().contains("enable") && !gsettings.get("enable").toBool()) {
+        return;
+    }
+
     m_autoHide = false;
 
     // create actions

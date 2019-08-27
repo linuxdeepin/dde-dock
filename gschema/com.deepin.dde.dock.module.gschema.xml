@@ -208,4 +208,13 @@
       </description>
     </key>
   </schema>
+  <schema path="/com/deepin/dde/dock/module/menu/" id="com.deepin.dde.dock.module.menu" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+  </schema>
 </schemalist>
