@@ -29,31 +29,33 @@
 #include <QIcon>
 
 #define WIDTH       200
-#define MAX_HEIGHT  200
+#define MAX_HEIGHT  300
 #define ICON_SIZE   24
 
 DWIDGET_USE_NAMESPACE
 
 SoundApplet::SoundApplet(QWidget *parent)
-    : QScrollArea(parent),
-
-      m_centralWidget(new QWidget),
-      m_applicationTitle(new QWidget),
-      m_volumeBtn(new DImageButton),
-      m_volumeSlider(new VolumeSlider),
-
-      m_audioInter(new DBusAudio(this)),
-      m_defSinkInter(nullptr)
+    : QScrollArea(parent)
+    , m_centralWidget(new QWidget)
+    , m_applicationTitle(new QWidget)
+    , m_volumeBtn(new DImageButton)
+    , m_volumeIconMax(new QLabel)
+    , m_volumeSlider(new VolumeSlider)
+    , m_audioInter(new DBusAudio(this))
+    , m_defSinkInter(nullptr)
 {
 //    QIcon::setThemeName("deepin");
 
     m_volumeBtn->setAccessibleName("volume-button");
+    m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
+    m_volumeIconMax->setPixmap(Utils::renderSVG("://audio-volume-high-symbolic.svg", QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
+
     m_volumeSlider->setAccessibleName("volume-slider");
 
     TipsWidget *deviceLabel = new TipsWidget;
     deviceLabel->setText(tr("Device"));
 
-    QHBoxLayout *deviceLineLayout = new QHBoxLayout;
+    QVBoxLayout *deviceLineLayout = new QVBoxLayout;
     deviceLineLayout->addWidget(deviceLabel);
 //    deviceLineLayout->addSpacing(12);
     deviceLineLayout->addWidget(new HorizontalSeparator);
@@ -65,15 +67,17 @@ SoundApplet::SoundApplet(QWidget *parent)
     volumeCtrlLayout->addWidget(m_volumeBtn);
     volumeCtrlLayout->addSpacing(10);
     volumeCtrlLayout->addWidget(m_volumeSlider);
+    volumeCtrlLayout->addSpacing(10);
+    volumeCtrlLayout->addWidget(m_volumeIconMax);
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
 
     TipsWidget *appLabel = new TipsWidget;
     appLabel->setText(tr("Application"));
 
-    QHBoxLayout *appLineHLayout = new QHBoxLayout;
-    appLineHLayout->addWidget(appLabel);
+    QVBoxLayout *appLineHLayout = new QVBoxLayout;
     appLineHLayout->addWidget(new HorizontalSeparator);
+    appLineHLayout->addWidget(appLabel);
     appLineHLayout->setMargin(0);
     appLineHLayout->setSpacing(10);
 
@@ -112,7 +116,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SoundApplet::onPlaySoundEffect);
     connect(m_audioInter, &DBusAudio::SinkInputsChanged, this, &SoundApplet::sinkInputsChanged);
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
-    connect(this, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
+    connect(this, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
 
     QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
     QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
@@ -151,17 +155,19 @@ void SoundApplet::onVolumeChanged()
     emit volumeChanged(m_volumeSlider->value());
 
     QString volumeString;
-    if (mute)
+
+    if (mute) {
         volumeString = "muted";
-    else if (volume >= double(2)/3)
+    } else if (volume >= double(2) / 3) {
         volumeString = "high";
-    else if (volume >= double(1)/3)
+    } else if (volume >= double(1) / 3) {
         volumeString = "medium";
-    else
+    } else {
         volumeString = "low";
+    }
 
     const QString &iconName = QString("://audio-volume-%1-symbolic.svg").arg(volumeString);
-    QPixmap pix = Utils::renderSVG(iconName, QSize(24, 24), devicePixelRatioF());
+    QPixmap pix = Utils::renderSVG(iconName, QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF());
 
     m_volumeBtn->setPixmap(pix);
 }
@@ -175,16 +181,16 @@ void SoundApplet::sinkInputsChanged()
 {
     m_centralWidget->setVisible(false);
     QVBoxLayout *appLayout = m_centralLayout;
-    while (QLayoutItem *item = appLayout->takeAt(4))
-    {
+    while (QLayoutItem *item = appLayout->takeAt(4)) {
         delete item->widget();
         delete item;
     }
 
     m_applicationTitle->setVisible(false);
-    for (auto input : m_audioInter->sinkInputs())
-    {
+    for (auto input : m_audioInter->sinkInputs()) {
         m_applicationTitle->setVisible(true);
+        appLayout->addWidget(new HorizontalSeparator);
+
         SinkInputWidget *si = new SinkInputWidget(input.path());
         appLayout->addWidget(si);
     }

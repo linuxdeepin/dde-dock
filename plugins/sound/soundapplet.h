@@ -58,6 +58,7 @@ private:
     QWidget *m_centralWidget;
     QWidget *m_applicationTitle;
     Dtk::Widget::DImageButton *m_volumeBtn;
+    QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
     QVBoxLayout *m_centralLayout;
 

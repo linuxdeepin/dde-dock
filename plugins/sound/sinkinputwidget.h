@@ -44,9 +44,14 @@ private slots:
     void onPlaySoundEffect();
 
 private:
+    void changeVolumIcon(const float volume);
+
+private:
     DBusSinkInput *m_inputInter;
 
-    Dtk::Widget::DImageButton *m_volumeIcon;
+    Dtk::Widget::DImageButton *m_appBtn;
+    Dtk::Widget::DImageButton *m_volumeBtnMin;
+    QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
 };
 
