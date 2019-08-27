@@ -21,6 +21,7 @@ package appearance
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -233,11 +234,20 @@ func (m *Manager) Thumbnail(ty, name string) (string, *dbus.Error) {
 	return file, nil
 }
 
+var gtkThumbnailMap = map[string]string{
+	"deepin":      "light",
+	"deepin-dark": "dark",
+	"deepin-auto": "auto",
+}
+
 func (m *Manager) thumbnail(ty, name string) (string, error) {
 	logger.Debugf("Get thumbnail for '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
-		// TODO
+		fName, ok := gtkThumbnailMap[name]
+		if ok {
+			return filepath.Join("/usr/share/dde-daemon/appearance", fName+".svg"), nil
+		}
 		return subthemes.GetGtkThumbnail(name)
 	case TypeIconTheme:
 		return subthemes.GetIconThumbnail(name)
