@@ -132,6 +132,9 @@ void PluginsItem::paintEvent(QPaintEvent *event)
         return;
     }
 
+    if (itemType() == TrayPlugin)
+        return;
+
     // draw hover background
     QRect destRect;
     destRect.setSize(m_centralWidget->sizeHint());
