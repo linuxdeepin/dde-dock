@@ -29,6 +29,7 @@
 
 #include <DApplication>
 #include <QScreen>
+#include <QGSettings>
 
 #define FASHION_MODE_PADDING    30
 #define MAINWINDOW_MARGIN       10
@@ -238,9 +239,10 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
 
 void DockSettings::showDockSettingsMenu()
 {
-    QTimer::singleShot(0, this, [=] {
-        onGSettingsChanged("enable");
-    });
+    QGSettings gsettings("com.deepin.dde.dock.module.menu");
+    if (gsettings.keys().contains("enable") && !gsettings.get("enable").toBool()) {
+        return;
+    }
 
     m_autoHide = false;
 
