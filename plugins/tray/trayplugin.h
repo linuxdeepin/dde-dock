@@ -71,6 +71,7 @@ private:
     void loadIndicator();
     bool isSystemTrayItem(const QString &itemKey);
     QString itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget);
+    Dock::DisplayMode displayMode();
 
 private slots:
     void initXEmbed();

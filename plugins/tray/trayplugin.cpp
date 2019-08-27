@@ -117,7 +117,7 @@ void TrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
         return;
     }
 
-    switchToMode(mode);
+    switchToMode(displayMode());
 }
 
 void TrayPlugin::positionChanged(const Dock::Position position)
@@ -310,6 +310,11 @@ QString TrayPlugin::itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget)
     }
 
     return itemKey;
+}
+
+Dock::DisplayMode TrayPlugin::displayMode()
+{
+    return Dock::DisplayMode::Fashion;
 }
 
 void TrayPlugin::initXEmbed()
