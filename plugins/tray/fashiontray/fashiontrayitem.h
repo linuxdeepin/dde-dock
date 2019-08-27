@@ -80,7 +80,6 @@ private Q_SLOTS:
     void requestResize();
     void refreshHoldContainerPosition();
     void onRequireDraggingWrapper();
-    void onContainerDraggingStateChanged(FashionTrayWidgetWrapper *wrapper, const bool dragging);
 
 private:
     QBoxLayout *m_mainBoxLayout;

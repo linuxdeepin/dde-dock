@@ -61,8 +61,8 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
 
     m_mainBoxLayout->addWidget(m_leftSpliter);
     m_mainBoxLayout->addWidget(m_normalContainer);
-    m_mainBoxLayout->addWidget(m_holdContainer);
     m_mainBoxLayout->addWidget(m_controlWidget);
+    m_mainBoxLayout->addWidget(m_holdContainer);
     m_mainBoxLayout->addWidget(m_attentionContainer);
     m_mainBoxLayout->addWidget(m_rightSpliter);
 
@@ -81,8 +81,6 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     connect(m_attentionContainer, &AttentionContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
     connect(m_normalContainer, &NormalContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
     connect(m_holdContainer, &HoldContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
-    connect(m_normalContainer, &NormalContainer::draggingStateChanged, this, &FashionTrayItem::onContainerDraggingStateChanged);
-    connect(m_holdContainer, &HoldContainer::draggingStateChanged, this, &FashionTrayItem::onContainerDraggingStateChanged);
 
     // do not call init immediately the TrayPlugin has not be constructed for now
     QTimer::singleShot(0, this, &FashionTrayItem::init);
@@ -177,7 +175,7 @@ void FashionTrayItem::onExpandChanged(const bool expand)
 {
     m_trayPlugin->saveValue(FASHION_MODE_ITEM_KEY, ExpandedKey, expand);
 
-    refreshHoldContainerPosition();
+//    refreshHoldContainerPosition();
 
     if (expand) {
         m_normalContainer->setExpand(expand);
@@ -448,11 +446,4 @@ void FashionTrayItem::onRequireDraggingWrapper()
     }
 
     container->addDraggingWrapper(draggingWrapper);
-}
-
-void FashionTrayItem::onContainerDraggingStateChanged(FashionTrayWidgetWrapper *wrapper, const bool dragging)
-{
-    Q_UNUSED(wrapper);
-
-    m_holdContainer->setDragging(dragging);
 }
