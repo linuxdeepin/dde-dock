@@ -19,6 +19,7 @@ find_package(DtkCMake REQUIRED)
 pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
+pkg_check_modules(DtkGUI REQUIRED dtkgui)
 
 # driver-manager
 add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} item/item.qrc frame.qrc)
@@ -28,6 +29,7 @@ target_include_directories(${BIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                               ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
                                               ${PROJECT_BINARY_DIR}
                                               ${QGSettings_INCLUDE_DIRS}
+                                              ${DtkGUI_INCLUDE_DIRS}
                                               ../interfaces)
 target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}
@@ -38,6 +40,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${Qt5X11Extras_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
+    ${DtkGUI_LIBRARIES}
 )
 
 if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")
