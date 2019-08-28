@@ -549,6 +549,33 @@ func (u *User) SetHistoryLayout(sender dbus.Sender, list []string) *dbus.Error {
 	return nil
 }
 
+func (u *User) SetUse24HourFormat(sender dbus.Sender, value bool) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetUse24HourFormat] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.Use24HourFormat {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyUse24HourFormat, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.Use24HourFormat = value
+	err = u.emitPropChangedUse24HourFormat(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
 func (u *User) IsIconDeletable(iconURI string) bool {
 	u.PropsMu.RLock()
 	defer u.PropsMu.RUnlock()

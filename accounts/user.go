@@ -63,6 +63,9 @@ const (
 	confKeyDesktopBackgrounds = "DesktopBackgrounds"
 	confKeyGreeterBackground  = "GreeterBackground"
 	confKeyHistoryLayout      = "HistoryLayout"
+	confKeyUse24HourFormat    = "Use24HourFormat"
+
+	defaultUse24HourFormat = true
 )
 
 func getDefaultUserBackground() string {
@@ -76,18 +79,19 @@ func getDefaultUserBackground() string {
 }
 
 type User struct {
-	service    *dbusutil.Service
-	PropsMu    sync.RWMutex
-	UserName   string
-	FullName   string
-	Uid        string
-	Gid        string
-	HomeDir    string
-	Shell      string
-	Locale     string
-	Layout     string
-	IconFile   string
-	customIcon string
+	service         *dbusutil.Service
+	PropsMu         sync.RWMutex
+	UserName        string
+	FullName        string
+	Uid             string
+	Gid             string
+	HomeDir         string
+	Shell           string
+	Locale          string
+	Layout          string
+	IconFile        string
+	Use24HourFormat bool
+	customIcon      string
 	// dbusutil-gen: equal=nil
 	DesktopBackgrounds []string
 	// dbusutil-gen: equal=isStrvEqual
@@ -135,6 +139,7 @@ type User struct {
 		GetLargeIcon          func() `out:"icon"`
 		AddGroup              func() `in:"group"`
 		DeleteGroup           func() `in:"group"`
+		SetUse24HourFormat    func() `in:"value"`
 	}
 }
 
@@ -181,7 +186,11 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		defaultUserBackground := getDefaultUserBackground()
 		u.DesktopBackgrounds = []string{defaultUserBackground}
 		u.GreeterBackground = defaultUserBackground
-		u.writeUserConfig()
+		u.Use24HourFormat = defaultUse24HourFormat
+		err = u.writeUserConfig()
+		if err != nil {
+			logger.Warning(err)
+		}
 		return u, nil
 	}
 	defer kf.Free()
@@ -248,6 +257,11 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	}
 
 	_, u.HistoryLayout, _ = kf.GetStringList(confGroupUser, confKeyHistoryLayout)
+
+	u.Use24HourFormat, err = kf.GetBoolean(confGroupUser, confKeyUse24HourFormat)
+	if err != nil {
+		u.Use24HourFormat = defaultUse24HourFormat
+	}
 
 	if isSave {
 		err := u.writeUserConfig()

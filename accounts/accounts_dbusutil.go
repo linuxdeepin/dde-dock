@@ -132,6 +132,19 @@ func (v *User) emitPropChangedIconFile(value string) error {
 	return v.service.EmitPropertyChanged(v, "IconFile", value)
 }
 
+func (v *User) setPropUse24HourFormat(value bool) (changed bool) {
+	if v.Use24HourFormat != value {
+		v.Use24HourFormat = value
+		v.emitPropChangedUse24HourFormat(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedUse24HourFormat(value bool) error {
+	return v.service.EmitPropertyChanged(v, "Use24HourFormat", value)
+}
+
 func (v *User) setPropDesktopBackgrounds(value []string) {
 	v.DesktopBackgrounds = value
 	v.emitPropChangedDesktopBackgrounds(value)

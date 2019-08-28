@@ -19,6 +19,8 @@
 
 package timedate
 
+import "pkg.deepin.io/lib/gsettings"
+
 func (m *Manager) listenPropChanged() {
 	m.td.InitSignalExt(m.systemSigLoop, true)
 	m.td.CanNTP().ConnectChanged(func(hasValue bool, value bool) {
@@ -64,5 +66,15 @@ func (m *Manager) listenPropChanged() {
 		m.PropsMu.Unlock()
 
 		m.AddUserTimezone(m.Timezone)
+	})
+}
+
+func (m *Manager) handleGSettingsChanged() {
+	gsettings.ConnectChanged(timeDateSchema, settingsKey24Hour, func(key string) {
+		value := m.settings.GetBoolean(settingsKey24Hour)
+		err := m.userObj.SetUse24HourFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
 	})
 }

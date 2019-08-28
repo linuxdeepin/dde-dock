@@ -20,11 +20,15 @@
 package timedate
 
 import (
+	"os/user"
 	"sync"
 
-	"pkg.deepin.io/gir/gio-2.0"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.timedated"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/dde/daemon/session/common"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -69,6 +73,7 @@ type Manager struct {
 	settings *gio.Settings
 	td       *timedate1.Timedate
 	setter   *timedated.Timedated
+	userObj  *accounts.User
 
 	methods *struct {
 		SetDate            func() `in:"year,month,day,hour,min,sec,nsec"`
@@ -85,7 +90,7 @@ type Manager struct {
 
 // Create Manager, if create freedesktop timedate1 failed return error
 func NewManager(service *dbusutil.Service) (*Manager, error) {
-	systemConn, err := dbus.SystemBus()
+	sysBus, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +99,9 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 		service: service,
 	}
 
-	m.systemSigLoop = dbusutil.NewSignalLoop(systemConn, 10)
-	m.td = timedate1.NewTimedate(systemConn)
-	m.setter = timedated.NewTimedated(systemConn)
+	m.systemSigLoop = dbusutil.NewSignalLoop(sysBus, 10)
+	m.td = timedate1.NewTimedate(sysBus)
+	m.setter = timedated.NewTimedated(sysBus)
 
 	m.settings = gio.NewSettings(timeDateSchema)
 	m.Use24HourFormat.Bind(m.settings, settingsKey24Hour)
@@ -141,6 +146,9 @@ func (m *Manager) init() {
 	}
 	m.AddUserTimezone(m.Timezone)
 
+	sysBus := m.systemSigLoop.Conn()
+	m.initUserObj(sysBus)
+	m.handleGSettingsChanged()
 	m.systemSigLoop.Start()
 }
 
@@ -152,4 +160,30 @@ func (m *Manager) destroy() {
 
 func (*Manager) GetInterfaceName() string {
 	return dbusInterface
+}
+
+func (m *Manager) initUserObj(systemConn *dbus.Conn) {
+	cur, err := user.Current()
+	if err != nil {
+		logger.Warning("failed to get current user:", err)
+		return
+	}
+
+	err = common.ActivateSysDaemonService("com.deepin.daemon.Accounts")
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	m.userObj, err = ddbus.NewUserByUid(systemConn, cur.Uid)
+	if err != nil {
+		logger.Warning("failed to new user object:", err)
+		return
+	}
+
+	// sync use 24 hour format
+	use24hourFormat := m.settings.GetBoolean(settingsKey24Hour)
+	err = m.userObj.SetUse24HourFormat(0, use24hourFormat)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
