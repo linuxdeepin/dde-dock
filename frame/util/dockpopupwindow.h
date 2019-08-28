@@ -27,6 +27,7 @@
 #include <DWindowManagerHelper>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class DockPopupWindow : public Dtk::Widget::DArrowRectangle
 {
