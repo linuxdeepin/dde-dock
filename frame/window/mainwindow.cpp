@@ -72,8 +72,6 @@ MainWindow::MainWindow(QWidget *parent)
       m_launched(false),
       m_updatePanelVisible(false),
 
-      m_mainPanel(new MainPanelControl(this)),
-
       m_platformWindowHandle(this),
       m_wmHelper(DWindowManagerHelper::instance()),
 
@@ -107,6 +105,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
     m_size = m_settings->m_mainWindowSize;
+    m_mainPanel = new MainPanelControl(this);
+    m_mainPanel->updateDisplayMode(m_settings->displayMode());
     initSNIHost();
     initComponents();
     initConnections();
@@ -386,7 +386,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainWindow::setMaskAlpha);
-
+    connect(m_settings, &DockSettings::displayModeChanegd, this, &MainWindow::updateDisplayMode, Qt::QueuedConnection);
 //    connect(m_mainPanel, &MainPanelControl::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
 //    connect(m_mainPanel, &MainPanelControl::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
 //    connect(m_mainPanel, &MainPanelControl::geometryChanged, this, &MainWindow::panelGeometryChanged);
@@ -662,6 +662,9 @@ void MainWindow::expand()
             break;
         }
 
+        if (finishPos == pos())
+            return;
+
         m_panelShowAni->setStartValue(startPos);
         m_panelShowAni->setEndValue(finishPos);
         m_panelShowAni->start();
@@ -790,9 +793,6 @@ void MainWindow::positionCheck()
     if (QPoint(pos() - scaledFrontPos).manhattanLength() < 2)
         return;
 
-    qWarning() << "Dock position may error!!!!!";
-    qDebug() << pos() << m_settings->frontendWindowRect() << m_settings->windowRect(m_settings->position(), false);
-
     // this may cause some position error and animation caton
     //internalMove();
 }
@@ -843,10 +843,10 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
         int ydiff = QCursor::pos().y() - m_resizePoint.y();
 
         if (Dock::Top == m_settings->position()) {
-            m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE,m_size.height() + ydiff, MAINWINDOW_MAX_SIZE));
+            m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE, m_size.height() + ydiff, MAINWINDOW_MAX_SIZE));
             m_settings->m_mainWindowSize.setWidth(width());
         } else if (Dock::Bottom == m_settings->position()) {
-            m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE,m_size.height() - ydiff, MAINWINDOW_MAX_SIZE));
+            m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE, m_size.height() - ydiff, MAINWINDOW_MAX_SIZE));
             m_settings->m_mainWindowSize.setWidth(width());
         } else if (Dock::Left == m_settings->position()) {
         } else {
@@ -910,4 +910,9 @@ void MainWindow::resizeMainPanelWindow()
         break;
     default: break;
     }
+}
+
+void MainWindow::updateDisplayMode()
+{
+    m_mainPanel->updateDisplayMode(m_settings->displayMode());
 }

@@ -21,6 +21,7 @@
 
 #include "mainpanelcontrol.h"
 #include "../item/dockitem.h"
+#include "util/docksettings.h"
 
 #include <DAnchors>
 
@@ -76,10 +77,17 @@ void MainPanelControl::init()
     m_appAreaSonLayout->setSpacing(0);
     m_trayAreaLayout->setSpacing(0);
     m_pluginLayout->setSpacing(0);
+}
 
+void MainPanelControl::updateDisplayMode(DisplayMode m_displayMode)
+{
+    DAnchorsBase::clearAnchors(m_appAreaSonWidget);
     DAnchors<QWidget> anchors(m_appAreaSonWidget);
-    anchors.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
-    anchors.setAnchor(Qt::AnchorVerticalCenter, this, Qt::AnchorVerticalCenter);
+    if (m_displayMode == Dock::DisplayMode::Fashion) {
+        anchors.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    } else {
+        anchors.setAnchor(Qt::AnchorLeft, m_appAreaWidget, Qt::AnchorLeft);
+    }
 }
 
 void MainPanelControl::updateMainPanelLayout()
@@ -169,7 +177,7 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
         if (w) {
             if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
-                w->setFixedSize(height(), height());
+                w->setMaximumSize(height(), height());
             } else {
                 w->setMaximumSize(width(), width());
             }
@@ -190,7 +198,6 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
         m_appAreaSonWidget->setMaximumWidth(qMin((m_appAreaWidget->geometry().right() - width() / 2) * 2, m_appAreaWidget->width()));
     } else {
-        m_appAreaSonWidget->setMaximumWidth(QWIDGETSIZE_MAX);
         m_appAreaSonWidget->setMaximumHeight(qMin((m_appAreaWidget->geometry().bottom() - height() / 2) * 2, m_appAreaWidget->height()));
     }
 

@@ -22,8 +22,12 @@
 #ifndef MAINPANELCONTROL_H
 #define MAINPANELCONTROL_H
 
+#include "constants.h"
+
 #include <QWidget>
 #include <QBoxLayout>
+
+using namespace Dock;
 
 class DockItem;
 class MainPanelControl : public QWidget
@@ -42,6 +46,7 @@ public:
     void removeTrayAreaItem(QWidget *wdg);
     void removePluginAreaItem(QWidget *wdg);
     void setPositonValue(const Qt::Edge val);
+    void updateDisplayMode(DisplayMode m_displayMode);
 
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);

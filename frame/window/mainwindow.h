@@ -94,6 +94,7 @@ private slots:
     void compositeChanged();
     void internalMove() { internalMove(m_posChangeAni->currentValue().toPoint()); }
     void internalMove(const QPoint &p);
+    void updateDisplayMode();
 
     void expand();
     void narrow(const Position prevPos);
