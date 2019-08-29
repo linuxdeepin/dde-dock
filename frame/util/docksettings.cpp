@@ -236,10 +236,10 @@ void DockSettings::showDockSettingsMenu()
         const QString &name = p->pluginName();
         const QString &display = p->pluginDisplayName();
 
-        // do not show trash in context menu under Efficient mode
-        if (m_displayMode == Efficient && name == "trash") {
-            continue;
-        }
+//        // do not show trash in context menu under Efficient mode
+//        if (m_displayMode == Efficient && name == "trash") {
+//            continue;
+//        }
 
         QAction *act = new QAction(display, this);
         act->setCheckable(true);
