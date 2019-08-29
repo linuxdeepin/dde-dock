@@ -63,6 +63,7 @@ public slots:
     void sortPluginItems();
     void updatePluginsItemOrderKey();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
+    void itemAdded(const QString &appDesktop, int idx);
     void itemDroppedIntoContainer(DockItem *const item);
     void itemDragOutFromContainer(DockItem *const item);
     void refreshFSTItemSpliterVisible();

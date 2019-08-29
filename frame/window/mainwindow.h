@@ -27,6 +27,7 @@
 #include "dbus/dbusdockadaptors.h"
 #include "dbus/sni/statusnotifierwatcher_interface.h"
 #include "util/docksettings.h"
+#include "panel/mainpanelcontrol.h"
 
 #include <QWidget>
 #include <QTimer>
@@ -41,7 +42,7 @@ DWIDGET_USE_NAMESPACE
 class MainPanel;
 class MainPanelControl;
 class DBusDockAdaptors;
-class MainWindow : public DBlurEffectWidget
+class MainWindow : public DBlurEffectWidget, public MainPanelDelegate
 {
     Q_OBJECT
 
@@ -81,6 +82,7 @@ private:
     void x11MoveWindow(const int x, const int y);
     void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
     QRect getNoneResizeRegion();
+    bool appIsOnDock(const QString &appDesktop);
 
 signals:
     void panelGeometryChanged();

@@ -179,6 +179,11 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
     refreshFSTItemSpliterVisible();
 }
 
+void DockItemManager::itemAdded(const QString &appDesktop, int idx)
+{
+    m_appInter->RequestDock(appDesktop, idx);
+}
+
 void DockItemManager::itemDroppedIntoContainer(DockItem *const item)
 {
     Q_ASSERT(item->itemType() == DockItem::Plugins || item->itemType() == DockItem::TrayPlugin);
@@ -235,8 +240,7 @@ void DockItemManager::refreshFSTItemSpliterVisible()
 
 void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
 {
-    // the first index is launcher item
-    int insertIndex = 1;
+    int insertIndex = 0;
 
     // -1 for append to app list end
     if (index != -1) {

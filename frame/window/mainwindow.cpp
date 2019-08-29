@@ -113,6 +113,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     resizeMainPanelWindow();
 
+    m_mainPanel->setDelegate(this);
     for (auto item : DockItemManager::instance()->itemList())
         m_mainPanel->insertItem(-1, item);
 }
@@ -417,6 +418,7 @@ void MainWindow::initConnections()
     connect(DockItemManager::instance(), &DockItemManager::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(DockItemManager::instance(), &DockItemManager::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
+    connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
 
 }
 
@@ -499,7 +501,15 @@ void MainWindow::updateGeometry()
 
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
 //    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
-//    m_mainPanel->updateDockPosition(position);
+
+    Qt::Edge panelPos;
+    switch (position) {
+    case Dock::Top: panelPos = Qt::TopEdge; break;
+    case Dock::Bottom: panelPos = Qt::BottomEdge; break;
+    case Dock::Left: panelPos = Qt::LeftEdge; break;
+    case Dock::Right: panelPos = Qt::RightEdge; break;
+    }
+    m_mainPanel->setPositonValue(panelPos);
     // this->setFixedSize has been overridden for size animation
     resizeMainPanelWindow();
 
@@ -884,6 +894,11 @@ QRect MainWindow::getNoneResizeRegion()
     }
 
     return r;
+}
+
+bool MainWindow::appIsOnDock(const QString &appDesktop)
+{
+    return DockItemManager::instance()->appIsOnDock(appDesktop);
 }
 
 void MainWindow::resizeMainWindow()

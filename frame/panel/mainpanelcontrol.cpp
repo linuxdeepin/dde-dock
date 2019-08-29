@@ -22,6 +22,9 @@
 #include "mainpanelcontrol.h"
 #include "../item/dockitem.h"
 #include "util/docksettings.h"
+#include "../item/placeholderitem.h"
+#include "../item/components/appdrag.h"
+#include "../item/appitem.h"
 
 #include <DAnchors>
 
@@ -43,6 +46,8 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_appAreaSonWidget(new QWidget(this))
     , m_appAreaSonLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_position(Qt::TopEdge)
+    , m_placeholderItem(nullptr)
+    , m_appDragWidget(nullptr)
 {
     init();
     updateMainPanelLayout();
@@ -218,6 +223,7 @@ void MainPanelControl::insertItem(const int index, DockItem *item)
         addFixedAreaItem(index, item);
         break;
     case DockItem::App:
+    case DockItem::Placeholder:
         addAppAreaItem(index, item);
         break;
     case DockItem::TrayPlugin:
@@ -230,6 +236,7 @@ void MainPanelControl::insertItem(const int index, DockItem *item)
         break;
     }
 
+    updateMainPanelLayout();
     updateAppAreaSonWidgetSize();
 }
 
@@ -240,6 +247,7 @@ void MainPanelControl::removeItem(DockItem *item)
         removeFixedAreaItem(item);
         break;
     case DockItem::App:
+    case DockItem::Placeholder:
         removeAppAreaItem(item);
         break;
     case DockItem::TrayPlugin:
@@ -253,6 +261,16 @@ void MainPanelControl::removeItem(DockItem *item)
     }
 
     updateAppAreaSonWidgetSize();
+}
+
+MainPanelDelegate *MainPanelControl::delegate() const
+{
+    return m_delegate;
+}
+
+void MainPanelControl::setDelegate(MainPanelDelegate *delegate)
+{
+    m_delegate = delegate;
 }
 
 void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
@@ -275,18 +293,118 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 {
+    DockItem *sourceItem = qobject_cast<DockItem *>(e->source());
+    if (sourceItem) {
+        e->accept();
+        return;
+    }
+
+    // 拖app到dock上
+    const char *RequestDockKey = "RequestDock";
+    const char *RequestDockKeyFallback = "text/plain";
+    const char *DesktopMimeType = "application/x-desktop";
+
+    m_draggingMimeKey = e->mimeData()->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
+
+    // dragging item is NOT a desktop file
+    if (QMimeDatabase().mimeTypeForFile(e->mimeData()->data(m_draggingMimeKey)).name() != DesktopMimeType) {
+        m_draggingMimeKey.clear();
+        qDebug() << "dragging item is NOT a desktop file";
+        return;
+    }
+
+    if (m_delegate && m_delegate->appIsOnDock(e->mimeData()->data(m_draggingMimeKey)))
+        return;
+
     e->accept();
 }
 
-void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
+void MainPanelControl::dragLeaveEvent(QDragLeaveEvent *e)
 {
+    if (m_placeholderItem) {
+        const QRect r(static_cast<QWidget *>(parent())->pos(), size());
+        const QPoint p(QCursor::pos());
+
+        // remove margins to fix a touch screen bug:
+        // the mouse point position will stay on this rect's margins after
+        // drag move to the edge of screen
+        if (r.marginsRemoved(QMargins(1, 10, 1, 1)).contains(p))
+            return;
+
+        removeAppAreaItem(m_placeholderItem);
+        m_placeholderItem->deleteLater();
+        updateMainPanelLayout();
+    }
+}
+
+void MainPanelControl::dropEvent(QDropEvent *e)
+{
+    if (m_placeholderItem) {
+
+        emit itemAdded(e->mimeData()->data(m_draggingMimeKey), m_appAreaSonLayout->indexOf(m_placeholderItem));
+
+        removeAppAreaItem(m_placeholderItem);
+        m_placeholderItem->deleteLater();
+    }
+}
+
+void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
+{
+    if (!e->source()) {
+        // 应用程序拖到dock上
+        e->accept();
+
+        DockItem *insertPositionItem = dropTargetItem(nullptr, e->pos());
+
+        if (m_placeholderItem.isNull()) {
+
+            m_placeholderItem = new PlaceholderItem;
+
+            if (m_position == Qt::TopEdge || m_position == Qt::BottomEdge) {
+                if (m_appAreaSonWidget->mapFromParent(e->pos()).x() > m_appAreaSonWidget->rect().right()) {
+                    // 插入到最右侧
+                    insertPositionItem = nullptr;
+                }
+            } else {
+                if (m_appAreaSonWidget->mapFromParent(e->pos()).y() > m_appAreaSonWidget->rect().bottom()) {
+                    // 插入到最下测
+                    insertPositionItem = nullptr;
+                }
+            }
+
+            insertItem(m_appAreaSonLayout->indexOf(insertPositionItem), m_placeholderItem);
+
+        } else if (insertPositionItem && m_placeholderItem != insertPositionItem) {
+            moveItem(m_placeholderItem, insertPositionItem);
+        }
+
+        return;
+    }
+
     DockItem *sourceItem = qobject_cast<DockItem *>(e->source());
+
     if (!sourceItem) {
         e->ignore();
         return;
     }
 
-    DockItem *targetItem = dropTargetItem(sourceItem, e->pos());
+    DockItem *targetItem = nullptr;
+
+    if (isFilter) {
+        // appItem调整顺序或者移除驻留
+        targetItem = dropTargetItem(sourceItem, mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
+
+        if (targetItem) {
+            m_appDragWidget->setOriginPos((m_appAreaSonWidget->mapToGlobal(targetItem->pos())));
+        } else {
+            targetItem = sourceItem;
+        }
+
+    } else {
+        // other dockItem调整顺序
+        targetItem = dropTargetItem(sourceItem, e->pos());
+    }
+
     if (!targetItem) {
         e->ignore();
         return;
@@ -301,8 +419,27 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
     emit itemMoved(sourceItem, targetItem);
 }
 
+void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
+{
+    handleDragMove(e, false);
+}
+
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
+    if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
+        QDropEvent *e = static_cast<QDropEvent *>(event);
+        bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
+        if (isContains) {
+            if (event->type() == QEvent::DragMove) {
+                handleDragMove(static_cast<QDragMoveEvent *>(event), true);
+            } else if (event->type() == QEvent::Drop) {
+                m_appDragWidget->hide();
+                return true;
+            }
+        }
+        return false;
+    }
+
     if (event->type() != QEvent::MouseMove)
         return false;
 
@@ -329,29 +466,59 @@ void MainPanelControl::startDrag(DockItem *item)
     item->setDraging(true);
     item->update();
 
-    QDrag *drag = new QDrag(item);
-    drag->setPixmap(pixmap);
+    QDrag *drag = nullptr;
+    if (item->itemType() == DockItem::App) {
+        AppDrag *appDrag = new AppDrag(item);
+        appDrag->setPixmap(pixmap);
+        m_appDragWidget = appDrag->appDragWidget();
+
+        connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
+            m_appDragWidget = nullptr;
+        });
+
+        m_appDragWidget->show();
+
+        Dock::Position position;
+        switch (m_position) {
+        case Qt::TopEdge: position = Dock::Top; break;
+        case Qt::BottomEdge: position = Dock::Bottom; break;
+        case Qt::LeftEdge: position = Dock::Left; break;
+        case Qt::RightEdge: position = Dock::Right; break;
+        }
+
+        appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
+        appDrag->appDragWidget()->setDockInfo(position, QRect(mapToGlobal(pos()), size()));
+        static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
+
+        drag = appDrag;
+    } else {
+        drag = new QDrag(item);
+        drag->setPixmap(pixmap);
+    }
     drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 
+    m_appDragWidget = nullptr;
     item->setDraging(false);
     item->update();
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
 {
-    QWidget *parentWidget = nullptr;
+    QWidget *parentWidget = m_appAreaSonWidget;
 
-    switch (sourceItem->itemType()) {
-    case DockItem::App:
-        parentWidget = m_appAreaSonWidget;
-        break;
-    case DockItem::Plugins:
-        parentWidget = m_pluginAreaWidget;
-        break;
-    default:
-        break;
+    if (sourceItem) {
+        switch (sourceItem->itemType()) {
+        case DockItem::App:
+            parentWidget = m_appAreaSonWidget;
+            break;
+        case DockItem::Plugins:
+            parentWidget = m_pluginAreaWidget;
+            break;
+        default:
+            break;
+        }
     }
 
     if (!parentWidget)
@@ -378,5 +545,31 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
         }
     }
 
+    if (!targetItem && parentWidget == m_appAreaSonWidget) {
+        // appitem调整顺序是，判断是否拖放在两边空白区域
+
+        if (!m_appAreaSonLayout->count())
+            return targetItem;
+
+        DockItem *first = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(0)->widget());
+        DockItem *last = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(m_appAreaSonLayout->count() - 1)->widget());
+
+        if (m_position == Qt::TopEdge || m_position == Qt::BottomEdge) {
+
+            if (point.x() < 0) {
+                targetItem = first;
+            } else {
+                targetItem = last;
+            }
+        } else {
+
+            if (point.y() < 0) {
+                targetItem = first;
+            } else {
+                targetItem = last;
+            }
+        }
+
+    }
     return targetItem;
 }

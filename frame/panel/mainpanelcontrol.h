@@ -29,7 +29,15 @@
 
 using namespace Dock;
 
+class MainPanelDelegate
+{
+public:
+    virtual bool appIsOnDock(const QString &appDesktop) = 0;
+};
+
 class DockItem;
+class PlaceholderItem;
+class AppDragWidget;
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
@@ -48,8 +56,12 @@ public:
     void setPositonValue(const Qt::Edge val);
     void updateDisplayMode(DisplayMode m_displayMode);
 
+    MainPanelDelegate *delegate() const;
+    void setDelegate(MainPanelDelegate *delegate);
+
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
+    void itemAdded(const QString &appDesktop, int idx);
 
 private:
     void resizeEvent(QResizeEvent *event) override;
@@ -60,11 +72,14 @@ private:
 
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e);
+    void dropEvent(QDropEvent *) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
     void startDrag(DockItem *);
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
+    void handleDragMove(QDragMoveEvent *e, bool isFilter);
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -82,6 +97,10 @@ private:
     QWidget *m_appAreaSonWidget;
     QBoxLayout *m_appAreaSonLayout;
     Qt::Edge m_position;
+    QPointer<PlaceholderItem> m_placeholderItem;
+    MainPanelDelegate *m_delegate;
+    QString m_draggingMimeKey;
+    AppDragWidget *m_appDragWidget;
 };
 
 #endif // MAINPANELCONTROL_H
