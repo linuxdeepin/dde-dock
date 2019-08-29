@@ -59,9 +59,19 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    m_gsettings = new QGSettings(QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8());
-    m_gsettings->setParent(this);
-    connect(m_gsettings, &QGSettings::changed, this, &PluginsItem::onGSettingsChanged);
+    const QByteArray &schema{
+        QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
+    };
+
+    if (QGSettings::isSchemaInstalled(schema)) {
+        m_gsettings = new QGSettings(schema);
+        m_gsettings->setParent(this);
+        connect(m_gsettings, &QGSettings::changed, this,
+                &PluginsItem::onGSettingsChanged);
+    }
+    else {
+        m_gsettings = nullptr;
+    }
 }
 
 PluginsItem::~PluginsItem()
@@ -153,7 +163,7 @@ void PluginsItem::refershIcon()
 }
 
 void PluginsItem::onGSettingsChanged(const QString& key) {
-    if (key != "enable") {
+    if (key != "enable" || !m_gsettings) {
         return;
     }
 
@@ -353,6 +363,7 @@ void PluginsItem::mouseClicked()
 
 bool PluginsItem::checkGSettingsControl() const
 {
-    return m_gsettings->keys().contains("control")
-            && m_gsettings->get("control").toBool();
+    return m_gsettings ? m_gsettings->keys().contains("control") &&
+                             m_gsettings->get("control").toBool()
+                       : false;
 }
