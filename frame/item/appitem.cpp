@@ -99,8 +99,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     setAccessibleName(m_itemEntryInter->name());
 
-    // 拖拽已放到MainPanelControl处理
-    //setAcceptDrops(true);
+    setAcceptDrops(true);
 
     setLayout(centralLayout);
 
@@ -513,6 +512,9 @@ QWidget *AppItem::popupTips()
 
 void AppItem::startDrag()
 {
+    // 拖拽实现放到mainpanelcontrol
+
+    /*
     if (!acceptDrops())
         return;
 
@@ -556,6 +558,7 @@ void AppItem::startDrag()
             m_itemEntryInter->RequestUndock();
         }
     }
+    */
 }
 
 bool AppItem::hasAttention() const
