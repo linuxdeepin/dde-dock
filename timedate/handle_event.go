@@ -23,7 +23,7 @@ import "pkg.deepin.io/lib/gsettings"
 
 func (m *Manager) listenPropChanged() {
 	m.td.InitSignalExt(m.systemSigLoop, true)
-	m.td.CanNTP().ConnectChanged(func(hasValue bool, value bool) {
+	err := m.td.CanNTP().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -33,8 +33,11 @@ func (m *Manager) listenPropChanged() {
 		m.setPropCanNTP(value)
 		m.PropsMu.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.td.NTP().ConnectChanged(func(hasValue bool, value bool) {
+	err = m.td.NTP().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -44,8 +47,11 @@ func (m *Manager) listenPropChanged() {
 		m.setPropNTP(value)
 		m.PropsMu.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.td.LocalRTC().ConnectChanged(func(hasValue bool, value bool) {
+	err = m.td.LocalRTC().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -55,8 +61,11 @@ func (m *Manager) listenPropChanged() {
 		m.setPropLocalRTC(value)
 		m.PropsMu.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	m.td.Timezone().ConnectChanged(func(hasValue bool, value string) {
+	err = m.td.Timezone().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -67,6 +76,23 @@ func (m *Manager) listenPropChanged() {
 
 		m.AddUserTimezone(m.Timezone)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	m.setter.InitSignalExt(m.systemSigLoop, true)
+	err = m.setter.NTPServer().ConnectChanged(func(hasValue bool, value string) {
+		if !hasValue {
+			return
+		}
+
+		m.PropsMu.Lock()
+		m.setPropNTPServer(value)
+		m.PropsMu.Unlock()
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) handleGSettingsChanged() {

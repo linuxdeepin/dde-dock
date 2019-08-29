@@ -21,23 +21,31 @@ package timedated
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"sync"
 
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
-
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/keyfile"
 )
 
+//go:generate dbusutil-gen -type Manager manager.go
+
 type Manager struct {
-	core    *timedate1.Timedate
-	service *dbusutil.Service
+	core      *timedate1.Timedate
+	service   *dbusutil.Service
+	PropsMu   sync.RWMutex
+	NTPServer string
 
 	methods *struct {
-		SetTime     func() `in:"usec,relative,message"`
-		SetTimezone func() `in:"timezone,message"`
-		SetLocalRTC func() `in:"enabled,fixSystem,message"`
-		SetNTP      func() `in:"enabled,message"`
+		SetTime      func() `in:"usec,relative,message"`
+		SetTimezone  func() `in:"timezone,message"`
+		SetLocalRTC  func() `in:"enabled,fixSystem,message"`
+		SetNTP       func() `in:"enabled,message"`
+		SetNTPServer func() `in:"server,message"`
 	}
 }
 
@@ -47,6 +55,8 @@ const (
 	dbusInterface   = dbusServiceName
 
 	timedate1ActionId = "org.freedesktop.timedate1.set-time"
+
+	timeSyncCfgFile = "/etc/systemd/timesyncd.conf.d/deepin.conf"
 )
 
 func NewManager(service *dbusutil.Service) (*Manager, error) {
@@ -56,9 +66,15 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	}
 	core := timedate1.NewTimedate(systemBus)
 
+	server, err := getNTPServer()
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	return &Manager{
-		core:    core,
-		service: service,
+		core:      core,
+		service:   service,
+		NTPServer: server,
 	}, nil
 }
 
@@ -103,4 +119,45 @@ func doAuthorized(msg, sysBusName string) (bool, error) {
 		return false, err
 	}
 	return ret.IsAuthorized, nil
+}
+
+func setNTPServer(server string) error {
+	kf := keyfile.NewKeyFile()
+	err := kf.LoadFromFile(timeSyncCfgFile)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+
+	kf.SetString("Time", "NTP", server)
+
+	dir := filepath.Dir(timeSyncCfgFile)
+	err = os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
+
+	err = kf.SaveToFile(timeSyncCfgFile)
+	return err
+}
+
+func getNTPServer() (string, error) {
+	kf := keyfile.NewKeyFile()
+	err := kf.LoadFromFile(timeSyncCfgFile)
+	if err != nil && !os.IsNotExist(err) {
+		return "", err
+	}
+
+	server, _ := kf.GetString("Time", "NTP")
+	return server, nil
+}
+
+func restartSystemdService(service, mode string) error {
+	sysBus, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+	systemdObj := sysBus.Object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
+	var jobPath dbus.ObjectPath
+	err = systemdObj.Call("org.freedesktop.systemd1.Manager.RestartUnit", 0, service, mode).Store(&jobPath)
+	return err
 }

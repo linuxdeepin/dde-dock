@@ -68,7 +68,6 @@ func (d *Daemon) Start() error {
 
 	go func() {
 		d.manager.init()
-		d.manager.listenPropChanged()
 	}()
 	return nil
 }

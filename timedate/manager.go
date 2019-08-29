@@ -60,7 +60,8 @@ type Manager struct {
 	LocalRTC bool
 
 	// Current timezone
-	Timezone string
+	Timezone  string
+	NTPServer string
 
 	// dbusutil-gen: ignore-below
 	// Use 24 hour format to display time
@@ -76,15 +77,17 @@ type Manager struct {
 	userObj  *accounts.User
 
 	methods *struct {
-		SetDate            func() `in:"year,month,day,hour,min,sec,nsec"`
-		SetTime            func() `in:"usec,relative"`
-		SetNTP             func() `in:"useNTP"`
-		SetLocalRTC        func() `in:"localeRTC,fixSystem"`
-		SetTimezone        func() `in:"zone"`
-		AddUserTimezone    func() `in:"zone"`
-		DeleteUserTimezone func() `in:"zone"`
-		GetZoneInfo        func() `in:"zone" out:"zone_info"`
-		GetZoneList        func() `out:"zone_list"`
+		SetDate             func() `in:"year,month,day,hour,min,sec,nsec"`
+		SetTime             func() `in:"usec,relative"`
+		SetNTP              func() `in:"useNTP"`
+		SetNTPServer        func() `in:"server"`
+		GetSampleNTPServers func() `out:"servers"`
+		SetLocalRTC         func() `in:"localeRTC,fixSystem"`
+		SetTimezone         func() `in:"zone"`
+		AddUserTimezone     func() `in:"zone"`
+		DeleteUserTimezone  func() `in:"zone"`
+		GetZoneInfo         func() `in:"zone" out:"zone_info"`
+		GetZoneList         func() `out:"zone_list"`
 	}
 }
 
@@ -146,10 +149,23 @@ func (m *Manager) init() {
 	}
 	m.AddUserTimezone(m.Timezone)
 
+	err = common.ActivateSysDaemonService(m.setter.ServiceName_())
+	if err != nil {
+		logger.Warning(err)
+	} else {
+		ntpServer, err := m.setter.NTPServer().Get(0)
+		if err != nil {
+			logger.Warning(err)
+		} else {
+			m.NTPServer = ntpServer
+		}
+	}
+
 	sysBus := m.systemSigLoop.Conn()
 	m.initUserObj(sysBus)
 	m.handleGSettingsChanged()
 	m.systemSigLoop.Start()
+	m.listenPropChanged()
 }
 
 func (m *Manager) destroy() {

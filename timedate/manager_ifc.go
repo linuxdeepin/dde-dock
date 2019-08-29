@@ -77,6 +77,36 @@ func (m *Manager) SetNTP(useNTP bool) *dbus.Error {
 	return dbusutil.ToError(err)
 }
 
+func (m *Manager) SetNTPServer(server string) *dbus.Error {
+	err := m.setter.SetNTPServer(0, server,
+		Tr("Authentication is required to change NTP server"))
+	if err != nil {
+		logger.Warning("SetNTPServer failed:", err)
+	}
+
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) GetSampleNTPServers() ([]string, *dbus.Error) {
+	var servers = []string{
+		"0.debian.pool.ntp.org",
+		"1.debian.pool.ntp.org",
+		"2.debian.pool.ntp.org",
+		"3.debian.pool.ntp.org",
+
+		"0.arch.pool.ntp.org",
+		"1.arch.pool.ntp.org",
+		"2.arch.pool.ntp.org",
+		"3.arch.pool.ntp.org",
+
+		"0.fedora.pool.ntp.org",
+		"1.fedora.pool.ntp.org",
+		"2.fedora.pool.ntp.org",
+		"3.fedora.pool.ntp.org",
+	}
+	return servers, nil
+}
+
 // To control whether the RTC is the local time or UTC.
 // Standards are divided into: localtime and UTC.
 // UTC standard will automatically adjust the daylight saving time.
