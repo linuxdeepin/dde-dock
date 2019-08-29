@@ -80,9 +80,19 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
 
     grabGesture(Qt::TapAndHoldGesture);
 
-    m_gsettings = new QGSettings(QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8());
-    m_gsettings->setParent(this);
-    connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
+    const QByteArray &schema{
+        QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
+    };
+
+    if (QGSettings::isSchemaInstalled(schema)) {
+        m_gsettings = new QGSettings(schema);
+        m_gsettings->setParent(this);
+        connect(m_gsettings, &QGSettings::changed, this,
+                &SystemTrayItem::onGSettingsChanged);
+    }
+    else {
+        m_gsettings = nullptr;
+    }
 }
 
 SystemTrayItem::~SystemTrayItem()
@@ -474,7 +484,7 @@ void SystemTrayItem::updatePopupPosition()
 }
 
 void SystemTrayItem::onGSettingsChanged(const QString &key) {
-    if (key != "enable") {
+    if (key != "enable" || !m_gsettings) {
         return;
     }
 
@@ -487,5 +497,5 @@ void SystemTrayItem::onGSettingsChanged(const QString &key) {
 
 bool SystemTrayItem::checkGSettingsControl() const
 {
-    return m_gsettings->get("control").toBool();
+    return m_gsettings ? m_gsettings->get("control").toBool() : false;
 }
