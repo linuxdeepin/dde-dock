@@ -63,12 +63,14 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     const QByteArray &schema{
         QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
     };
+
     if (QGSettings::isSchemaInstalled(schema)) {
         m_gsettings = new QGSettings(schema);
         m_gsettings->setParent(this);
         connect(m_gsettings, &QGSettings::changed, this,
                 &PluginsItem::onGSettingsChanged);
-    } else {
+    }
+    else {
         m_gsettings = nullptr;
     }
 }
@@ -118,8 +120,7 @@ void PluginsItem::refershIcon()
     m_pluginInter->refreshIcon(m_itemKey);
 }
 
-void PluginsItem::onGSettingsChanged(const QString &key)
-{
+void PluginsItem::onGSettingsChanged(const QString& key) {
     if (key != "enable" || !m_gsettings) {
         return;
     }
@@ -319,19 +320,6 @@ void PluginsItem::mouseClicked()
 bool PluginsItem::checkGSettingsControl() const
 {
     return m_gsettings ? m_gsettings->keys().contains("control") &&
-           m_gsettings->get("control").toBool()
-           : false;
-}
-
-void PluginsItem::resizeEvent(QResizeEvent *event)
-{
-    setMaximumSize(m_centralWidget->maximumSize());
-    return DockItem::resizeEvent(event);
-}
-
-void PluginsItem::setDraging(bool bDrag)
-{
-    DockItem::setDraging(bDrag);
-
-    m_centralWidget->setVisible(!bDrag);
+                             m_gsettings->get("control").toBool()
+                       : false;
 }
