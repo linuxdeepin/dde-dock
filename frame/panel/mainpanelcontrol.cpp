@@ -45,7 +45,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_appAreaSonWidget(new QWidget(this))
     , m_appAreaSonLayout(new QBoxLayout(QBoxLayout::LeftToRight))
-    , m_position(Qt::TopEdge)
+    , m_position(Position::Top)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_dislayMode(Efficient)
@@ -56,6 +56,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     setAcceptDrops(true);
 
     connect(this, SIGNAL(displayModeChanged()), this, SLOT(onDisplayModeChanged()));
+    connect(this, SIGNAL(positionChanged()), this, SLOT(onPositionChanged()));
 }
 
 MainPanelControl::~MainPanelControl()
@@ -99,8 +100,8 @@ void MainPanelControl::setDisplayMode(const DisplayMode mode)
 void MainPanelControl::updateMainPanelLayout()
 {
     switch (m_position) {
-    case Qt::TopEdge:
-    case Qt::BottomEdge:
+    case Position::Top:
+    case Position::Bottom:
         m_fixedAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         m_appAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_pluginAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -111,8 +112,8 @@ void MainPanelControl::updateMainPanelLayout()
         m_trayAreaLayout->setDirection(QBoxLayout::LeftToRight);
         m_appAreaSonLayout->setDirection(QBoxLayout::LeftToRight);
         break;
-    case Qt::RightEdge:
-    case Qt::LeftEdge:
+    case Position::Right:
+    case Position::Left:
         m_fixedAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_appAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_pluginAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -182,7 +183,7 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
         QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
         if (w) {
-            if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
+            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
                 w->setMaximumSize(height(), height());
             } else {
                 w->setMaximumSize(width(), width());
@@ -193,7 +194,7 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
         QWidget *w = m_fixedAreaLayout->itemAt(i)->widget();
         if (w) {
-            if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
+            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
                 w->setMaximumSize(height(), height());
             } else {
                 w->setMaximumSize(width(), width());
@@ -201,7 +202,7 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         }
     }
 
-    if ((m_position == Qt::TopEdge) || (m_position == Qt::BottomEdge)) {
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         m_appAreaSonWidget->setMaximumWidth(qMin((m_appAreaWidget->geometry().right() - width() / 2) * 2, m_appAreaWidget->width()));
     } else {
         m_appAreaSonWidget->setMaximumHeight(qMin((m_appAreaWidget->geometry().bottom() - height() / 2) * 2, m_appAreaWidget->height()));
@@ -210,9 +211,12 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     m_appAreaSonWidget->adjustSize();
 }
 
-void MainPanelControl::setPositonValue(const Qt::Edge val)
+void MainPanelControl::setPositonValue(const Position position)
 {
-    m_position = val;
+    if (m_position == position)
+        return;
+    m_position = position;
+    emit positionChanged();
 }
 
 void MainPanelControl::insertItem(const int index, DockItem *item)
@@ -481,10 +485,10 @@ void MainPanelControl::startDrag(DockItem *item)
 
         Dock::Position position;
         switch (m_position) {
-        case Qt::TopEdge: position = Dock::Top; break;
-        case Qt::BottomEdge: position = Dock::Bottom; break;
-        case Qt::LeftEdge: position = Dock::Left; break;
-        case Qt::RightEdge: position = Dock::Right; break;
+        case Position::Top: position = Dock::Top; break;
+        case Position::Bottom: position = Dock::Bottom; break;
+        case Position::Left: position = Dock::Left; break;
+        case Position::Right: position = Dock::Right; break;
         }
 
         appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
@@ -590,4 +594,13 @@ void MainPanelControl::updateDisplayMode()
 void MainPanelControl::onDisplayModeChanged()
 {
     updateDisplayMode();
+}
+void MainPanelControl::updatePosition()
+{
+    onPositionChanged();
+}
+
+void MainPanelControl::onPositionChanged()
+{
+    updateMainPanelLayout();
 }

@@ -53,7 +53,7 @@ public:
     void removeAppAreaItem(QWidget *wdg);
     void removeTrayAreaItem(QWidget *wdg);
     void removePluginAreaItem(QWidget *wdg);
-    void setPositonValue(const Qt::Edge val);
+    void setPositonValue(const Position position);
     void setDisplayMode(const  DisplayMode m_displayMode);
 
     MainPanelDelegate *delegate() const;
@@ -63,6 +63,7 @@ signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
     void displayModeChanged();
+    void positionChanged();
 
 private:
     void resizeEvent(QResizeEvent *event) override;
@@ -71,6 +72,7 @@ private:
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
     void updateDisplayMode();
+    void updatePosition();
 
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
@@ -87,6 +89,7 @@ public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
     void onDisplayModeChanged();
+    void onPositionChanged();
 
 private:
     QBoxLayout *m_mainPanelLayout;
@@ -99,7 +102,7 @@ private:
     QBoxLayout *m_pluginLayout;
     QWidget *m_appAreaSonWidget;
     QBoxLayout *m_appAreaSonLayout;
-    Qt::Edge m_position;
+    Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
     MainPanelDelegate *m_delegate;
     QString m_draggingMimeKey;
