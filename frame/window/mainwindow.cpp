@@ -540,6 +540,8 @@ void MainWindow::updateGeometry()
     else
         internalMove(windowRect.topLeft());
 
+    m_size = m_settings->m_mainWindowSize;
+
     m_mainPanel->update();
     m_shadowMaskOptimizeTimer->start();
 }
@@ -849,7 +851,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
     }
 
     if (m_dragStatus) {
-        //int xdiff = QCursor::pos().x() - m_resizePoint.x();
+        int xdiff = QCursor::pos().x() - m_resizePoint.x();
         int ydiff = QCursor::pos().y() - m_resizePoint.y();
 
         if (Dock::Top == m_settings->position()) {
@@ -859,7 +861,11 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
             m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE, m_size.height() - ydiff, MAINWINDOW_MAX_SIZE));
             m_settings->m_mainWindowSize.setWidth(width());
         } else if (Dock::Left == m_settings->position()) {
+            m_settings->m_mainWindowSize.setHeight(height());
+            m_settings->m_mainWindowSize.setWidth(qBound(MAINWINDOW_MIN_SIZE, m_size.width() + xdiff, MAINWINDOW_MAX_SIZE));
         } else {
+            m_settings->m_mainWindowSize.setHeight(height());
+            m_settings->m_mainWindowSize.setWidth(qBound(MAINWINDOW_MIN_SIZE, m_size.width() - xdiff, MAINWINDOW_MAX_SIZE));
         }
 
         resizeMainWindow();

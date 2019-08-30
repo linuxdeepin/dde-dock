@@ -589,7 +589,7 @@ void DockSettings::calculateWindowConfig()
         }
         case Left:
         case Right: {
-            m_mainWindowSize.setHeight(calcHeight);
+            m_mainWindowSize.setHeight(primaryRect.height() - 20);
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             m_isMaxSize = (calcHeight == maxHeight);
             break;
