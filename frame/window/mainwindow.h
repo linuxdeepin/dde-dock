@@ -109,6 +109,12 @@ private slots:
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
 
 private:
+    enum IsClickInDragAreaStatus {
+        NoClick = 0,
+        ClickNotInDragArea,
+        ClickInDragArea
+    };
+
     bool m_launched;
     bool m_updatePanelVisible;
     MainPanelControl *m_mainPanel;
@@ -131,7 +137,7 @@ private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     org::kde::StatusNotifierWatcher *m_sniWatcher;
     QString m_sniHostService;
-    bool m_dragStatus;
+    IsClickInDragAreaStatus m_dragStatus;
     QPoint m_resizePoint;
     QSize m_size;
 };

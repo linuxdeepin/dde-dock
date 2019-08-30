@@ -45,16 +45,16 @@ public:
     MainPanelControl(QWidget *parent = 0);
     ~MainPanelControl();
 
-    void addFixedAreaItem(const int index, QWidget *wdg);
-    void addAppAreaItem(const int index, QWidget *wdg);
-    void addTrayAreaItem(const int index, QWidget *wdg);
-    void addPluginAreaItem(const int index, QWidget *wdg);
+    void addFixedAreaItem(int index, QWidget *wdg);
+    void addAppAreaItem(int index, QWidget *wdg);
+    void addTrayAreaItem(int index, QWidget *wdg);
+    void addPluginAreaItem(int index, QWidget *wdg);
     void removeFixedAreaItem(QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
     void removeTrayAreaItem(QWidget *wdg);
     void removePluginAreaItem(QWidget *wdg);
-    void setPositonValue(const Position position);
-    void setDisplayMode(const  DisplayMode m_displayMode);
+    void setPositonValue(Position position);
+    void setDisplayMode(DisplayMode m_displayMode);
 
     MainPanelDelegate *delegate() const;
     void setDelegate(MainPanelDelegate *delegate);
@@ -72,7 +72,6 @@ private:
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
     void updateDisplayMode();
-    void updatePosition();
 
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;

@@ -42,7 +42,7 @@
 
 #define MAINWINDOW_MAX_SIZE       (100)
 #define MAINWINDOW_MIN_SIZE       (40)
-#define MAINWINDOW_DRAG_AREA_SIZE (2)
+#define MAINWINDOW_DRAG_AREA_SIZE (5)
 
 using org::kde::StatusNotifierWatcher;
 
@@ -89,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_xcbMisc(XcbMisc::instance()),
       m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
-      m_dragStatus(false)
+      m_dragStatus(NoClick)
 {
     setAccessibleName("dock-mainwindow");
     setAttribute(Qt::WA_TranslucentBackground);
@@ -198,12 +198,15 @@ void MainWindow::showEvent(QShowEvent *e)
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
-
-    if (e->button() == Qt::RightButton)
+    if (e->button() == Qt::RightButton) {
         m_settings->showDockSettingsMenu();
+        return;
+    }
     if ((e->button() == Qt::LeftButton) && (!getNoneResizeRegion().contains(e->pos()))) {
         m_resizePoint = e->globalPos();
-        m_dragStatus = true;
+        m_dragStatus = ClickInDragArea;
+    } else {
+        m_dragStatus = ClickNotInDragArea;
     }
 }
 
@@ -231,6 +234,7 @@ void MainWindow::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
     m_expandDelayTimer->stop();
     m_leaveDelayTimer->start();
+    m_dragStatus = NoClick;
     setCursor(Qt::ArrowCursor);
 }
 
@@ -728,9 +732,9 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     QPoint finishPos(0, 0);
     switch (position) {
     case Top:       finishPos.setY((visible ? 0 : -r.height()));     break;
-    case Bottom:    finishPos.setY(visible ? MAINWINDOW_DRAG_AREA_SIZE * 2 : r.height());      break;
+    case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
     case Left:      finishPos.setX((visible ? 0 : -r.width()));       break;
-    case Right:     finishPos.setX(visible ? MAINWINDOW_DRAG_AREA_SIZE * 2 : r.width());       break;
+    case Right:     finishPos.setX(visible ? 0 : r.width());       break;
     }
 
     m_mainPanel->move(finishPos);
@@ -841,7 +845,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint mousePoint = event->pos();
     QRect r = getNoneResizeRegion();
-    if (!r.contains(mousePoint) || (m_dragStatus == true)) {
+    if ((!r.contains(mousePoint) && (NoClick == m_dragStatus)) || (ClickInDragArea == m_dragStatus)) {
         if ((Dock::Top == m_settings->position()) || (Dock::Bottom == m_settings->position())) {
             setCursor(Qt::SizeVerCursor);
         } else {
@@ -851,7 +855,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
         setCursor(Qt::ArrowCursor);
     }
 
-    if (m_dragStatus) {
+    if (ClickInDragArea == m_dragStatus) {
         int xdiff = QCursor::pos().x() - m_resizePoint.x();
         int ydiff = QCursor::pos().y() - m_resizePoint.y();
 
@@ -875,7 +879,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_dragStatus = false;
+    m_dragStatus = NoClick;
     m_size = m_settings->m_mainWindowSize;
     setStrutPartial();
     setCursor(Qt::ArrowCursor);
@@ -924,11 +928,11 @@ void MainWindow::resizeMainPanelWindow()
     switch (m_settings->position()) {
     case Dock::Top:
     case Dock::Bottom:
-        m_mainPanel->setFixedSize(m_settings->panelSize() - QSize(0, MAINWINDOW_DRAG_AREA_SIZE * 2));
+        m_mainPanel->setFixedSize(m_settings->panelSize());
         break;
     case Dock::Left:
     case Dock::Right:
-        m_mainPanel->setFixedSize(m_settings->panelSize() - QSize(MAINWINDOW_DRAG_AREA_SIZE * 2, 0));
+        m_mainPanel->setFixedSize(m_settings->panelSize());
         break;
     default: break;
     }

@@ -54,6 +54,12 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     updateMainPanelLayout();
     updateDisplayMode();
     setAcceptDrops(true);
+    setMouseTracking(true);
+    m_fixedAreaWidget->setMouseTracking(true);
+    m_appAreaWidget->setMouseTracking(true);
+    m_appAreaSonWidget->setMouseTracking(true);
+    m_trayAreaWidget->setMouseTracking(true);
+    m_pluginAreaWidget->setMouseTracking(true);
 
     connect(this, SIGNAL(displayModeChanged()), this, SLOT(onDisplayModeChanged()));
     connect(this, SIGNAL(positionChanged()), this, SLOT(onPositionChanged()));
@@ -89,7 +95,7 @@ void MainPanelControl::init()
     m_pluginLayout->setSpacing(0);
 }
 
-void MainPanelControl::setDisplayMode(const DisplayMode mode)
+void MainPanelControl::setDisplayMode(DisplayMode mode)
 {
     if (mode == m_dislayMode)
         return;
@@ -131,22 +137,22 @@ void MainPanelControl::updateMainPanelLayout()
     QTimer::singleShot(0, this, &MainPanelControl::updateAppAreaSonWidgetSize);
 }
 
-void MainPanelControl::addFixedAreaItem(const int index, QWidget *wdg)
+void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
     m_fixedAreaLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
-void MainPanelControl::addAppAreaItem(const int index, QWidget *wdg)
+void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
     m_appAreaSonLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
-void MainPanelControl::addTrayAreaItem(const int index, QWidget *wdg)
+void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
     m_trayAreaLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
 
-void MainPanelControl::addPluginAreaItem(const int index, QWidget *wdg)
+void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
     m_pluginLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
 }
@@ -211,7 +217,7 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     m_appAreaSonWidget->adjustSize();
 }
 
-void MainPanelControl::setPositonValue(const Position position)
+void MainPanelControl::setPositonValue(Position position)
 {
     if (m_position == position)
         return;
@@ -219,7 +225,7 @@ void MainPanelControl::setPositonValue(const Position position)
     emit positionChanged();
 }
 
-void MainPanelControl::insertItem(const int index, DockItem *item)
+void MainPanelControl::insertItem(int index, DockItem *item)
 {
     item->installEventFilter(this);
 
@@ -595,12 +601,9 @@ void MainPanelControl::onDisplayModeChanged()
 {
     updateDisplayMode();
 }
-void MainPanelControl::updatePosition()
-{
-    onPositionChanged();
-}
 
 void MainPanelControl::onPositionChanged()
 {
     updateMainPanelLayout();
 }
+
