@@ -72,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_launched(false),
       m_updatePanelVisible(false),
 
+      m_mainPanel(new MainPanelControl(this)),
+
       m_platformWindowHandle(this),
       m_wmHelper(DWindowManagerHelper::instance()),
 
@@ -105,8 +107,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
     m_size = m_settings->m_mainWindowSize;
-    m_mainPanel = new MainPanelControl(this);
-    m_mainPanel->updateDisplayMode(m_settings->displayMode());
+    m_mainPanel->setDisplayMode(m_settings->displayMode());
     initSNIHost();
     initComponents();
     initConnections();
@@ -935,5 +936,5 @@ void MainWindow::resizeMainPanelWindow()
 
 void MainWindow::updateDisplayMode()
 {
-    m_mainPanel->updateDisplayMode(m_settings->displayMode());
+    m_mainPanel->setDisplayMode(m_settings->displayMode());
 }

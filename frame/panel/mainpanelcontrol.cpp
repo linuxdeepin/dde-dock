@@ -48,10 +48,14 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_position(Qt::TopEdge)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
+    , m_dislayMode(Efficient)
 {
     init();
     updateMainPanelLayout();
+    updateDisplayMode();
     setAcceptDrops(true);
+
+    connect(this, SIGNAL(displayModeChanged()), this, SLOT(onDisplayModeChanged()));
 }
 
 MainPanelControl::~MainPanelControl()
@@ -84,15 +88,12 @@ void MainPanelControl::init()
     m_pluginLayout->setSpacing(0);
 }
 
-void MainPanelControl::updateDisplayMode(DisplayMode m_displayMode)
+void MainPanelControl::setDisplayMode(const DisplayMode mode)
 {
-    DAnchorsBase::clearAnchors(m_appAreaSonWidget);
-    DAnchors<QWidget> anchors(m_appAreaSonWidget);
-    if (m_displayMode == Dock::DisplayMode::Fashion) {
-        anchors.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
-    } else {
-        anchors.setAnchor(Qt::AnchorLeft, m_appAreaWidget, Qt::AnchorLeft);
-    }
+    if (mode == m_dislayMode)
+        return;
+    m_dislayMode = mode;
+    emit displayModeChanged();
 }
 
 void MainPanelControl::updateMainPanelLayout()
@@ -572,4 +573,21 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
 
     }
     return targetItem;
+}
+
+
+void MainPanelControl::updateDisplayMode()
+{
+    DAnchorsBase::clearAnchors(m_appAreaSonWidget);
+    DAnchors<QWidget> anchors(m_appAreaSonWidget);
+    if (m_dislayMode == Dock::DisplayMode::Fashion) {
+        anchors.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    } else {
+        anchors.setAnchor(Qt::AnchorLeft, m_appAreaWidget, Qt::AnchorLeft);
+    }
+}
+
+void MainPanelControl::onDisplayModeChanged()
+{
+    updateDisplayMode();
 }

@@ -34,6 +34,7 @@
 #define ICON_SIZE_MEDIUM        36
 #define ICON_SIZE_SMALL         30
 #define FASHION_MODE_PADDING    30
+#define MAINWINDOW_MARGIN       10
 
 DWIDGET_USE_NAMESPACE
 
@@ -583,13 +584,13 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom: {
             m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
-            m_mainWindowSize.setWidth(primaryRect.width() - 20);
+            m_mainWindowSize.setWidth(primaryRect.width() - MAINWINDOW_MARGIN * 2);
             m_isMaxSize = (calcWidth == maxWidth);
             break;
         }
         case Left:
         case Right: {
-            m_mainWindowSize.setHeight(primaryRect.height() - 20);
+            m_mainWindowSize.setHeight(primaryRect.height() - MAINWINDOW_MARGIN * 2);
             m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             m_isMaxSize = (calcHeight == maxHeight);
             break;
