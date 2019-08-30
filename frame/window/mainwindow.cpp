@@ -679,9 +679,6 @@ void MainWindow::expand()
             break;
         }
 
-        if (finishPos == pos())
-            return;
-
         m_panelShowAni->setStartValue(startPos);
         m_panelShowAni->setEndValue(finishPos);
         m_panelShowAni->start();
@@ -921,6 +918,7 @@ void MainWindow::resizeMainWindow()
     resizeMainPanelWindow();
     internalMove(windowRect.topLeft());
     QWidget::setFixedSize(size);
+    m_panelShowAni->setEndValue(pos());
 }
 
 void MainWindow::resizeMainPanelWindow()
