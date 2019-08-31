@@ -104,7 +104,6 @@ public slots:
 private slots:
     void menuActionClicked(QAction *action);
     void onPositionChanged();
-    void iconSizeChanged();
     void onDisplayModeChanged();
     void hideModeChanged();
     void hideStateChanged();
@@ -149,9 +148,6 @@ private:
     QAction m_bottomPosAct;
     QAction m_leftPosAct;
     QAction m_rightPosAct;
-    QAction m_largeSizeAct;
-    QAction m_mediumSizeAct;
-    QAction m_smallSizeAct;
     QAction m_keepShownAct;
     QAction m_keepHiddenAct;
     QAction m_smartHideAct;

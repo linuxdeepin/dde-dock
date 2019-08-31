@@ -30,9 +30,6 @@
 #include <DApplication>
 #include <QScreen>
 
-#define ICON_SIZE_LARGE         48
-#define ICON_SIZE_MEDIUM        36
-#define ICON_SIZE_SMALL         30
 #define FASHION_MODE_PADDING    30
 #define MAINWINDOW_MARGIN       10
 
@@ -52,9 +49,6 @@ DockSettings::DockSettings(QWidget *parent)
     , m_bottomPosAct(tr("Bottom"), this)
     , m_leftPosAct(tr("Left"), this)
     , m_rightPosAct(tr("Right"), this)
-    , m_largeSizeAct(tr("Large"), this)
-    , m_mediumSizeAct(tr("Medium"), this)
-    , m_smallSizeAct(tr("Small"), this)
     , m_keepShownAct(tr("Keep Shown"), this)
     , m_keepHiddenAct(tr("Keep Hidden"), this)
     , m_smartHideAct(tr("Smart Hide"), this)
@@ -82,9 +76,6 @@ DockSettings::DockSettings(QWidget *parent)
     m_bottomPosAct.setCheckable(true);
     m_leftPosAct.setCheckable(true);
     m_rightPosAct.setCheckable(true);
-    m_largeSizeAct.setCheckable(true);
-    m_mediumSizeAct.setCheckable(true);
-    m_smallSizeAct.setCheckable(true);
     m_keepShownAct.setCheckable(true);
     m_keepHiddenAct.setCheckable(true);
     m_smartHideAct.setCheckable(true);
@@ -103,13 +94,6 @@ DockSettings::DockSettings(QWidget *parent)
     QAction *locationSubMenuAct = new QAction(tr("Location"), this);
     locationSubMenuAct->setMenu(locationSubMenu);
 
-    WhiteMenu *sizeSubMenu = new WhiteMenu(&m_settingsMenu);
-    sizeSubMenu->addAction(&m_largeSizeAct);
-    sizeSubMenu->addAction(&m_mediumSizeAct);
-    sizeSubMenu->addAction(&m_smallSizeAct);
-    QAction *sizeSubMenuAct = new QAction(tr("Size"), this);
-    sizeSubMenuAct->setMenu(sizeSubMenu);
-
     WhiteMenu *statusSubMenu = new WhiteMenu(&m_settingsMenu);
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
@@ -123,14 +107,12 @@ DockSettings::DockSettings(QWidget *parent)
 
     m_settingsMenu.addAction(modeSubMenuAct);
     m_settingsMenu.addAction(locationSubMenuAct);
-    m_settingsMenu.addAction(sizeSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
     m_settingsMenu.addAction(hideSubMenuAct);
     m_settingsMenu.setTitle("Settings Menu");
 
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
-    connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::onDisplayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
@@ -270,9 +252,6 @@ void DockSettings::showDockSettingsMenu()
     m_leftPosAct.setEnabled(!m_forbidPositions.contains(Left));
     m_rightPosAct.setChecked(m_position == Right);
     m_rightPosAct.setEnabled(!m_forbidPositions.contains(Right));
-    m_largeSizeAct.setChecked(m_iconSize == ICON_SIZE_LARGE);
-    m_mediumSizeAct.setChecked(m_iconSize == ICON_SIZE_MEDIUM);
-    m_smallSizeAct.setChecked(m_iconSize == ICON_SIZE_SMALL);
     m_keepShownAct.setChecked(m_hideMode == KeepShowing);
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
@@ -313,14 +292,6 @@ void DockSettings::menuActionClicked(QAction *action)
         return m_dockInter->setPosition(Left);
     if (action == &m_rightPosAct)
         return m_dockInter->setPosition(Right);
-
-    if (action == &m_largeSizeAct)
-        return m_dockInter->setIconSize(ICON_SIZE_LARGE);
-    if (action == &m_mediumSizeAct)
-        return m_dockInter->setIconSize(ICON_SIZE_MEDIUM);
-    if (action == &m_smallSizeAct)
-        return m_dockInter->setIconSize(ICON_SIZE_SMALL);
-
     if (action == &m_keepShownAct)
         return m_dockInter->setHideMode(KeepShowing);
     if (action == &m_keepHiddenAct)
@@ -357,17 +328,6 @@ void DockSettings::onPositionChanged()
 
         m_itemManager->refershItemsIcon();
     });
-}
-
-void DockSettings::iconSizeChanged()
-{
-//    qDebug() << Q_FUNC_INFO;
-    m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize * dockRatio());
-
-    calculateWindowConfig();
-
-    emit dataChanged();
 }
 
 void DockSettings::onDisplayModeChanged()
