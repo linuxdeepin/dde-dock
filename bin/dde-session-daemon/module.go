@@ -23,8 +23,8 @@ import (
 	"fmt"
 	"sync"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/gsettings"
 
 	_ "pkg.deepin.io/dde/daemon/dock"
@@ -57,6 +57,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/bluetooth"
 	_ "pkg.deepin.io/dde/daemon/screenedge"
 
+	_ "pkg.deepin.io/dde/daemon/calendar"
 	_ "pkg.deepin.io/dde/daemon/fprintd"
 	_ "pkg.deepin.io/dde/daemon/mime"
 
