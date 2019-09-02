@@ -26,8 +26,6 @@
 #include "../item/components/appdrag.h"
 #include "../item/appitem.h"
 
-#include <DAnchors>
-
 #include <QDrag>
 #include <QTimer>
 
@@ -52,7 +50,6 @@ MainPanelControl::MainPanelControl(QWidget *parent)
 {
     init();
     updateMainPanelLayout();
-    updateDisplayMode();
     setAcceptDrops(true);
     setMouseTracking(true);
     m_fixedAreaWidget->setMouseTracking(true);
@@ -139,22 +136,22 @@ void MainPanelControl::updateMainPanelLayout()
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
-    m_fixedAreaLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
+    m_fixedAreaLayout->insertWidget(index, wdg);
 }
 
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
-    m_appAreaSonLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
+    m_appAreaSonLayout->insertWidget(index, wdg);
 }
 
 void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
-    m_trayAreaLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
+    m_trayAreaLayout->insertWidget(index, wdg);
 }
 
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
-    m_pluginLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
+    m_pluginLayout->insertWidget(index, wdg);
 }
 
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
@@ -208,13 +205,21 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         }
     }
 
+    m_fixedAreaWidget->adjustSize();
+    m_appAreaWidget->adjustSize();
+    m_trayAreaWidget->adjustSize();
+
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        m_appAreaSonWidget->setMaximumWidth(qMin((m_appAreaWidget->geometry().right() - width() / 2) * 2, m_appAreaWidget->width()));
+        m_appAreaSonWidget->setMaximumHeight(this->height());
+        m_appAreaSonWidget->setMaximumWidth(m_appAreaWidget->geometry().right() - m_fixedAreaWidget->geometry().right());
     } else {
-        m_appAreaSonWidget->setMaximumHeight(qMin((m_appAreaWidget->geometry().bottom() - height() / 2) * 2, m_appAreaWidget->height()));
+        m_appAreaSonWidget->setMaximumWidth(this->width());
+        m_appAreaSonWidget->setMaximumHeight(m_appAreaWidget->geometry().bottom() - m_fixedAreaWidget->geometry().bottom());
     }
 
     m_appAreaSonWidget->adjustSize();
+
+    QTimer::singleShot(10, this, &MainPanelControl::updateDisplayMode);
 }
 
 void MainPanelControl::setPositonValue(Position position)
@@ -248,7 +253,6 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     }
 
     updateMainPanelLayout();
-    updateAppAreaSonWidgetSize();
 }
 
 void MainPanelControl::removeItem(DockItem *item)
@@ -588,13 +592,40 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
 
 void MainPanelControl::updateDisplayMode()
 {
-    DAnchorsBase::clearAnchors(m_appAreaSonWidget);
-    DAnchors<QWidget> anchors(m_appAreaSonWidget);
-    if (m_dislayMode == Dock::DisplayMode::Fashion) {
-        anchors.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    QRect rect(QPoint(0, 0), m_appAreaSonWidget->size());
+    if (DisplayMode::Efficient == m_dislayMode) {
+        switch (m_position) {
+        case Top:
+        case Bottom :
+            rect.moveLeft(m_fixedAreaWidget->geometry().right());
+            break;
+        case Right:
+        case Left:
+            rect.moveTop(m_fixedAreaWidget->geometry().bottom());
+            break;
+        }
     } else {
-        anchors.setAnchor(Qt::AnchorLeft, m_appAreaWidget, Qt::AnchorLeft);
+        switch (m_position) {
+        case Top:
+        case Bottom :
+            rect.moveCenter(this->rect().center());
+            if (rect.right() > m_trayAreaWidget->geometry().left()) {
+                rect.moveRight(m_trayAreaWidget->geometry().left());
+            }
+
+            break;
+        case Right:
+        case Left:
+            rect.moveCenter(this->rect().center());
+            if (rect.bottom() > m_trayAreaWidget->geometry().top()) {
+                rect.moveBottom(m_trayAreaWidget->geometry().top());
+            }
+
+            break;
+        }
     }
+
+    m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
 void MainPanelControl::onDisplayModeChanged()
@@ -606,4 +637,3 @@ void MainPanelControl::onPositionChanged()
 {
     updateMainPanelLayout();
 }
-
