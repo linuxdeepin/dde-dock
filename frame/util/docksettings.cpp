@@ -43,7 +43,6 @@ extern const QPoint rawXPosition(const QPoint &scaledPos);
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_autoHide(true)
-    , m_isMaxSize(false)
     , m_opacity(0.4)
     , m_fashionTraySize(QSize(0, 0))
     , m_fashionModeAct(tr("Fashion Mode"), this)
@@ -542,22 +541,17 @@ void DockSettings::calculateWindowConfig()
         case Bottom: {
             m_mainWindowSize.setHeight(m_dockWindowSize);
             m_mainWindowSize.setWidth(this->primaryRect().width() - MAINWINDOW_MARGIN * 2);
-            // m_isMaxSize = (calcWidth == maxWidth);
             break;
         }
         case Left:
         case Right: {
             m_mainWindowSize.setHeight(this->primaryRect().height() - MAINWINDOW_MARGIN * 2);
             m_mainWindowSize.setWidth(m_dockWindowSize);
-            //m_isMaxSize = (calcHeight == maxHeight);
             break;
         }
         default:
             Q_ASSERT(false);
         }
-
-        // used by FashionTrayItem of TrayPlugin
-        qApp->setProperty("DockIsMaxiedSize", m_isMaxSize);
     } else {
         Q_ASSERT(false);
     }

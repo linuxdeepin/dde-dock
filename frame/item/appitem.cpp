@@ -43,7 +43,6 @@
 
 #define APP_DRAG_THRESHOLD      20
 
-int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
 
 static QGSettings *GSettingsByApp()
@@ -162,24 +161,6 @@ void AppItem::updateWindowIconGeometries()
         xcb_misc->set_window_icon_geometry(it.key(), r);
 }
 
-void AppItem::setIconBaseSize(const int size)
-{
-    IconBaseSize = size;
-}
-
-int AppItem::iconBaseSize()
-{
-    return IconBaseSize;
-}
-
-int AppItem::itemBaseWidth()
-{
-    if (DockDisplayMode == Dock::Fashion)
-        return itemBaseHeight() * 1.1;
-    else
-        return itemBaseHeight() * 1.4;
-}
-
 void AppItem::undock()
 {
     m_itemEntryInter->RequestUndock();
@@ -210,14 +191,6 @@ void AppItem::moveEvent(QMoveEvent *e)
     }
 
     m_updateIconGeometryTimer->start();
-}
-
-int AppItem::itemBaseHeight()
-{
-    if (DockDisplayMode == Efficient)
-        return IconBaseSize * 1.2;
-    else
-        return IconBaseSize * 1.5;
 }
 
 void AppItem::paintEvent(QPaintEvent *e)

@@ -389,12 +389,12 @@ void MainPanel::adjustItemSize()
     case Top:
     case Bottom:
         itemSize.setHeight(m_destSize.height() - PANEL_BORDER);
-        itemSize.setWidth(std::round(qreal(AppItem::itemBaseWidth()) / ratio));
+        //itemSize.setWidth(std::round(qreal(AppItem::itemBaseWidth()) / ratio));
         break;
 
     case Left:
     case Right:
-        itemSize.setHeight(std::round(qreal(AppItem::itemBaseHeight()) / ratio));
+        //itemSize.setHeight(std::round(qreal(AppItem::itemBaseHeight()) / ratio));
         itemSize.setWidth(m_destSize.width() - PANEL_BORDER);
         break;
 
@@ -587,9 +587,9 @@ void MainPanel::adjustItemSize()
     }
 
     // 如果dock的大小已经是最大的则不再调整时尚模式托盘图标的大小,以避免递归调整dock与托盘的大小
-    if (!DockSettings::Instance().isMaxSize() && FSTrayItem) {
-        FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
-    }
+//    if (!DockSettings::Instance().isMaxSize() && FSTrayItem) {
+//        FSTrayItem->setSuggestIconSize(FSTraySuggestIconSize);
+//    }
 
     // ensure all extra space assigned
     Q_ASSERT(extraDecrease == 0);
