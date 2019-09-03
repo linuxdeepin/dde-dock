@@ -33,6 +33,9 @@
 #define FASHION_MODE_PADDING    30
 #define MAINWINDOW_MARGIN       10
 
+#define FASHION_DEFAULT_HEIGHT 72
+#define EffICIENT_DEFAULT_HEIGHT 40
+
 DWIDGET_USE_NAMESPACE
 
 extern const QPoint rawXPosition(const QPoint &scaledPos);
@@ -63,7 +66,8 @@ DockSettings::DockSettings(QWidget *parent)
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_hideState = Dock::HideState(m_dockInter->hideState());
-    m_iconSize = m_dockInter->iconSize();
+    // default height
+    m_iconSize = (m_displayMode == Dock::Fashion) ? FASHION_DEFAULT_HEIGHT : EffICIENT_DEFAULT_HEIGHT;
     AppItem::setIconBaseSize(m_iconSize * dockRatio());
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
