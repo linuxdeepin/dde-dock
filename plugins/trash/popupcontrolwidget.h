@@ -30,8 +30,6 @@
 #include <QWidget>
 #include <QFileSystemWatcher>
 
-#include <dlinkbutton.h>
-
 class PopupControlWidget : public QWidget
 {
     Q_OBJECT

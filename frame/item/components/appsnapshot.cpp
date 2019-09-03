@@ -239,8 +239,8 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     // draw image
     const QImage &im = m_snapshot;
 
-    const qreal offset_x = width() / 2.0 - m_snapshotSrcRect.width() / ratio / 2 - m_snapshotSrcRect.left();
-    const qreal offset_y = height() / 2.0 - m_snapshotSrcRect.height() / ratio / 2 - m_snapshotSrcRect.top();
+    const qreal offset_x = width() / 2.0 - m_snapshotSrcRect.width() / ratio / 2 - m_snapshotSrcRect.left() / ratio;
+    const qreal offset_y = height() / 2.0 - m_snapshotSrcRect.height() / ratio / 2 - m_snapshotSrcRect.top() / ratio;
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
@@ -249,8 +249,9 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     brush.setTextureImage(im);
     painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
-    painter.translate(QPoint(offset_x, offset_y));
-    painter.drawRoundedRect(m_snapshotSrcRect, radius, radius);
+    painter.scale(1 / ratio, 1 / ratio);
+    painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
+    painter.drawRoundedRect(m_snapshotSrcRect, radius * ratio, radius * ratio);
 }
 
 void AppSnapshot::resizeEvent(QResizeEvent *e)

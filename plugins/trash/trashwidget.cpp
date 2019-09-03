@@ -34,8 +34,6 @@
 #include <QJsonDocument>
 #include <QApplication>
 
-DWIDGET_USE_NAMESPACE
-
 TrashWidget::TrashWidget(QWidget *parent)
     : QWidget(parent),
 

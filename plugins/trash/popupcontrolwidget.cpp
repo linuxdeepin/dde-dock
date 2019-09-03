@@ -115,7 +115,6 @@ void PopupControlWidget::clearTrashFloder()
         d.addButton(buttonTexts[0], true, DDialog::ButtonNormal);
         d.addButton(buttonTexts[1], false, DDialog::ButtonWarning);
         d.setDefaultButton(1);
-        d.getButton(1)->setFocus();
         d.moveToCenter();
         execCode = d.exec();
     }

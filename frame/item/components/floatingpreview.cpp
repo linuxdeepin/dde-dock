@@ -119,8 +119,8 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     const QRectF r = rect().marginsRemoved(QMargins(BORDER_MARGIN, BORDER_MARGIN, BORDER_MARGIN, BORDER_MARGIN));
     const auto ratio = devicePixelRatioF();
 
-    const qreal offset_x = width() / 2.0 - snapshot_geometry.width() / ratio / 2 - snapshot_geometry.left();
-    const qreal offset_y = height() / 2.0 - snapshot_geometry.height() / ratio / 2 - snapshot_geometry.top();
+    const qreal offset_x = width() / 2.0 - snapshot_geometry.width() / ratio / 2 - snapshot_geometry.left() / ratio;
+    const qreal offset_y = height() / 2.0 - snapshot_geometry.height() / ratio / 2 - snapshot_geometry.top() / ratio;
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
@@ -130,9 +130,11 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     brush.setTextureImage(snapshot);
     painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
-    painter.translate(QPoint(offset_x, offset_y));
-    painter.drawRoundedRect(snapshot_geometry, radius, radius);
-    painter.translate(QPoint(-offset_x, -offset_y));
+    painter.scale(1 / ratio, 1 / ratio);
+    painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
+    painter.drawRoundedRect(snapshot_geometry, radius * ratio, radius * ratio);
+    painter.translate(QPoint(-offset_x * ratio, -offset_y * ratio));
+    painter.scale(ratio, ratio);
 
     // 选中外框
     QPen pen;
