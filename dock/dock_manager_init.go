@@ -191,7 +191,7 @@ func (m *Manager) init() error {
 	m.IconSize.Bind(m.settings, settingKeyIconSize)
 	m.ShowTimeout.Bind(m.settings, settingKeyShowTimeout)
 	m.HideTimeout.Bind(m.settings, settingKeyHideTimeout)
-	m.Height.Bind(m.settings, settingKeyHeight)
+	m.WindowSize.Bind(m.settings, settingKeyWindowSize)
 	m.DockedApps.Bind(m.settings, settingKeyDockedApps)
 	m.appearanceSettings = gio.NewSettings(appearanceSchema)
 	m.Opacity.Bind(m.appearanceSettings, settingKeyOpacity)
