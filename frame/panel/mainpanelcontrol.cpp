@@ -73,9 +73,9 @@ void MainPanelControl::init()
     m_fixedAreaLayout->setMargin(0);
     m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_pluginLayout->setMargin(0);
-    m_pluginLayout->setContentsMargins(0, 0, 0, 0);
+    m_pluginLayout->setContentsMargins(10, 10, 10, 10);
     m_trayAreaLayout->setMargin(0);
-    m_trayAreaLayout->setContentsMargins(0, 0, 0, 0);
+    m_trayAreaLayout->setContentsMargins(10, 10, 10, 10);
     m_appAreaSonLayout->setMargin(0);
     m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
