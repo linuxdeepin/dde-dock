@@ -30,6 +30,7 @@
 #include <QLabel>
 #include <QSettings>
 
+class QDBusInterface;
 class DatetimePlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -63,6 +64,7 @@ public:
 private slots:
     void updateCurrentTimeString();
     void refreshPluginItemsVisible();
+    void propertiesChanged();
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
@@ -71,6 +73,8 @@ private:
     QTimer *m_refershTimer;
 
     QString m_currentTimeString;
+
+    QDBusInterface *m_interface;
 };
 
 #endif // DATETIMEPLUGIN_H
