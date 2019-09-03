@@ -31,7 +31,7 @@
 #include <QGuiApplication>
 #include <QX11Info>
 #include <qpa/qplatformwindow.h>
-
+#include <DStyle>
 #include <DPlatformWindowHandle>
 
 #include <X11/X.h>
@@ -792,7 +792,10 @@ void MainWindow::adjustShadowMask()
     const bool composite = m_wmHelper->hasComposite();
     const bool isFasion = m_settings->displayMode() == Fashion;
 
-    m_platformWindowHandle.setWindowRadius(composite && isFasion ? 10 : 0);
+    DStyleHelper dstyle(style());
+    const int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
+
+    m_platformWindowHandle.setWindowRadius(composite && isFasion ? radius : 0);
 }
 
 void MainWindow::positionCheck()
