@@ -75,7 +75,7 @@ private:
 
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
-    void dragLeaveEvent(QDragLeaveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 

@@ -506,15 +506,7 @@ void MainWindow::updateGeometry()
 
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
 //    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
-
-    Position panelPos;
-    switch (position) {
-    case Dock::Top: panelPos = Position::Top; break;
-    case Dock::Bottom: panelPos = Position::Bottom; break;
-    case Dock::Left: panelPos = Position::Left; break;
-    case Dock::Right: panelPos = Position::Right; break;
-    }
-    m_mainPanel->setPositonValue(panelPos);
+    m_mainPanel->setPositonValue(position);
     // this->setFixedSize has been overridden for size animation
     resizeMainPanelWindow();
 

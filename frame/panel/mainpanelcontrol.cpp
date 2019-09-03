@@ -127,8 +127,6 @@ void MainPanelControl::updateMainPanelLayout()
         m_trayAreaLayout->setDirection(QBoxLayout::TopToBottom);
         m_appAreaSonLayout->setDirection(QBoxLayout::TopToBottom);
         break;
-    default:
-        break;
     }
 
     QTimer::singleShot(0, this, &MainPanelControl::updateAppAreaSonWidgetSize);
@@ -222,7 +220,7 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     QTimer::singleShot(10, this, &MainPanelControl::updateDisplayMode);
 }
 
-void MainPanelControl::setPositonValue(Position position)
+void MainPanelControl::setPositonValue(Dock::Position position)
 {
     if (m_position == position)
         return;
@@ -336,6 +334,7 @@ void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 
 void MainPanelControl::dragLeaveEvent(QDragLeaveEvent *e)
 {
+    Q_UNUSED(e);
     if (m_placeholderItem) {
         const QRect r(static_cast<QWidget *>(parent())->pos(), size());
         const QPoint p(QCursor::pos());
@@ -375,7 +374,7 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
 
             m_placeholderItem = new PlaceholderItem;
 
-            if (m_position == Qt::TopEdge || m_position == Qt::BottomEdge) {
+            if (m_position == Dock::Top || m_position == Dock::Bottom) {
                 if (m_appAreaSonWidget->mapFromParent(e->pos()).x() > m_appAreaSonWidget->rect().right()) {
                     // 插入到最右侧
                     insertPositionItem = nullptr;
@@ -493,16 +492,8 @@ void MainPanelControl::startDrag(DockItem *item)
 
         m_appDragWidget->show();
 
-        Dock::Position position;
-        switch (m_position) {
-        case Position::Top: position = Dock::Top; break;
-        case Position::Bottom: position = Dock::Bottom; break;
-        case Position::Left: position = Dock::Left; break;
-        case Position::Right: position = Dock::Right; break;
-        }
-
         appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
-        appDrag->appDragWidget()->setDockInfo(position, QRect(mapToGlobal(pos()), size()));
+        appDrag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
         static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
 
         drag = appDrag;
@@ -569,7 +560,7 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
         DockItem *first = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(0)->widget());
         DockItem *last = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(m_appAreaSonLayout->count() - 1)->widget());
 
-        if (m_position == Qt::TopEdge || m_position == Qt::BottomEdge) {
+        if (m_position == Dock::Top || m_position == Dock::Bottom) {
 
             if (point.x() < 0) {
                 targetItem = first;
