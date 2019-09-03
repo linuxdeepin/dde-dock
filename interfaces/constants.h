@@ -30,6 +30,12 @@ namespace Dock {
 #define DOCK_PLUGIN_API_VERSION    "1.2.1"
 
 #define PROP_DISPLAY_MODE   "DisplayMode"
+
+#define PLUGIN_BACKGROUND_MAX_SIZE 40
+#define PLUGIN_BACKGROUND_MIN_SIZE 20
+
+#define PLUGIN_ICON_MAX_SIZE 20
+#define PLUGIN_ICON_MIN_SIZE 17
 ///
 /// \brief The DisplayMode enum
 /// spec dock display mode

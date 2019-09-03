@@ -34,14 +34,21 @@ public:
     explicit PluginWidget(QWidget *parent = 0);
 
 protected:
-    QSize sizeHint() const;
-    void paintEvent(QPaintEvent *e);
+    QSize sizeHint() const override;
+    void paintEvent(QPaintEvent *e) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     const QPixmap loadSvg(const QString &fileName, const QSize &size) const;
 
 private:
     Dock::DisplayMode m_displayMode;
+    bool m_hover;
+    bool m_pressed;
 };
 
 #endif // PLUGINWIDGET_H

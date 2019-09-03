@@ -27,14 +27,23 @@
 #include <QApplication>
 #include <QIcon>
 
+#include <DStyle>
+
+DWIDGET_USE_NAMESPACE;
+
 PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent)
+    , m_hover(false)
+    , m_pressed(false)
 {
+    setMouseTracking(true);
+    setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
+    setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 QSize PluginWidget::sizeHint() const
 {
-    return QSize(26, 26);
+    return QSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
 }
 
 void PluginWidget::paintEvent(QPaintEvent *e)
@@ -44,18 +53,39 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     QPixmap pixmap;
     QString iconName = "system-shutdown";
     int iconSize;
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-
-    if (displayMode == Dock::Efficient) {
-        iconName = iconName + "-symbolic";
-        iconSize = 16;
-    } else {
-        iconSize = std::min(width(), height()) * 0.8;
-    }
-
-    pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
 
     QPainter painter(this);
+
+    QColor color = QColor::fromRgb(40, 40, 40);;
+
+    if (m_hover) {
+        color = QColor::fromRgb(60, 60, 60);
+    }
+
+    if (m_pressed) {
+        color = QColor::fromRgb(20, 20, 20);
+    }
+
+    if (rect().height() > PLUGIN_BACKGROUND_MIN_SIZE) {
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setOpacity(0.5);
+
+        DStyleHelper dstyle(style());
+        const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
+
+        QPainterPath path;
+        path.addRoundedRect(rect(), radius, radius);
+        painter.fillPath(path, color);
+
+        iconSize = PLUGIN_ICON_MAX_SIZE;
+    } else {
+        iconSize = PLUGIN_ICON_MIN_SIZE;
+        iconName = iconName + "-symbolic";
+    }
+
+    painter.setOpacity(1);
+
+    pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
     painter.drawPixmap(rect().center() - pixmap.rect().center() / devicePixelRatioF(), pixmap);
 }
 
@@ -68,4 +98,53 @@ const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) 
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
+}
+
+void PluginWidget::mousePressEvent(QMouseEvent *event)
+{
+    m_pressed = true;
+    update();
+
+    QWidget::mousePressEvent(event);
+}
+
+void PluginWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_pressed = false;
+    m_hover = false;
+    update();
+
+    QWidget::mouseReleaseEvent(event);
+}
+
+void PluginWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    m_hover = true;
+    QWidget::mouseMoveEvent(event);
+}
+
+void PluginWidget::leaveEvent(QEvent *event)
+{
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+        m_hover = false;
+        m_pressed = false;
+        update();
+    }
+
+    QWidget::leaveEvent(event);
+}
+
+void PluginWidget::resizeEvent(QResizeEvent *event)
+{
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMinimumWidth(height());
+        setMinimumHeight(PLUGIN_ICON_MIN_SIZE);
+    } else {
+        setMinimumWidth(PLUGIN_ICON_MIN_SIZE);
+        setMinimumHeight(width());
+    }
+
+    QWidget::resizeEvent(event);
 }
