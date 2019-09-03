@@ -816,7 +816,7 @@ void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldO
 void MainWindow::setEffectEnabled(const bool enabled)
 {
     if (enabled)
-        setMaskColor(DarkColor);
+        setMaskColor(LightColor);
     else
         setMaskColor(QColor(55, 63, 71));
 
