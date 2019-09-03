@@ -43,6 +43,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
       m_itemKey(itemKey),
       m_dragging(false),
       m_hover(false)
+    , m_gsettings(nullptr)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -118,6 +119,15 @@ void PluginsItem::setInContainer(const bool container)
 QString PluginsItem::pluginName() const
 {
     return m_pluginInter->pluginName();
+}
+
+DockItem::ItemType PluginsItem::itemType() const
+{
+    if (m_pluginInter->type() == PluginsItemInterface::normal) {
+        return Plugins;
+    } else {
+        return Launcher;
+    }
 }
 
 QSize PluginsItem::sizeHint() const
@@ -373,8 +383,8 @@ void PluginsItem::mouseClicked()
 bool PluginsItem::checkGSettingsControl() const
 {
     return m_gsettings ? m_gsettings->keys().contains("control") &&
-                             m_gsettings->get("control").toBool()
-                       : false;
+           m_gsettings->get("control").toBool()
+           : false;
 }
 
 void PluginsItem::setDraging(bool bDrag)

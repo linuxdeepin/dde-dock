@@ -35,6 +35,11 @@
 class PluginsItemInterface
 {
 public:
+    enum PluginType {
+        Normal,
+        Fixed
+    };
+
     ///
     /// \brief ~PluginsItemInterface
     /// DON'T try to delete m_proxyInter.
@@ -48,6 +53,8 @@ public:
     ///
     virtual const QString pluginName() const = 0;
     virtual const QString pluginDisplayName() const { return QString(); }
+
+    virtual PluginType type() { return normal; }
     ///
     /// \brief init
     /// init your plugins, you need to save proxyInter to m_proxyInter

@@ -35,7 +35,7 @@ namespace Dock {
 #define PLUGIN_BACKGROUND_MIN_SIZE 20
 
 #define PLUGIN_ICON_MAX_SIZE 20
-#define PLUGIN_ICON_MIN_SIZE 17
+#define PLUGIN_ICON_MIN_SIZE 16
 ///
 /// \brief The DisplayMode enum
 /// spec dock display mode
