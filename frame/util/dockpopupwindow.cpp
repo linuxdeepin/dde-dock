@@ -42,7 +42,6 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
     compositeChanged();
 
-    setBackgroundColor(DBlurEffectWidget::DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_InputMethodEnabled, false);
 
