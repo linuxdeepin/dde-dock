@@ -68,6 +68,9 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
         connect(m_gsettings, &QGSettings::changed, this,
                 &PluginsItem::onGSettingsChanged);
     }
+    else {
+        m_gsettings = nullptr;
+    }
 }
 
 PluginsItem::~PluginsItem()
