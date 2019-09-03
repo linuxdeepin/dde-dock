@@ -145,7 +145,7 @@ void TrashPlugin::pluginStateSwitched()
         return;
     }
 
-    if (m_trashWidget && displayMode() == Dock::Fashion) {
+    if (m_trashWidget) {
         m_proxyInter->itemAdded(this, pluginName());
     }
 }
