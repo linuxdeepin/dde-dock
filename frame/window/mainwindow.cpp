@@ -234,8 +234,6 @@ void MainWindow::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
     m_expandDelayTimer->stop();
     m_leaveDelayTimer->start();
-    m_dragStatus = NoClick;
-    setCursor(Qt::ArrowCursor);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -424,7 +422,6 @@ void MainWindow::initConnections()
     connect(DockItemManager::instance(), &DockItemManager::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
     connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
-
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -872,9 +869,17 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     m_dragStatus = NoClick;
+    if (m_size == m_settings->m_mainWindowSize)
+        return;
+
     m_size = m_settings->m_mainWindowSize;
+    if (Dock::Top == m_settings->position() || Dock::Bottom == m_settings->position()) {
+        m_settings->m_dockInter ->setWindowSize(m_settings->m_mainWindowSize.height());
+    } else {
+        m_settings->m_dockInter->setWindowSize(m_settings->m_mainWindowSize.width());
+    }
+
     setStrutPartial();
-    setCursor(Qt::ArrowCursor);
 }
 
 QRect MainWindow::getNoneResizeRegion()

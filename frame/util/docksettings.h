@@ -86,6 +86,7 @@ public:
 
     void showDockSettingsMenu();
     QSize m_mainWindowSize;
+    DBusDock *m_dockInter;
 
 signals:
     void dataChanged() const;
@@ -124,7 +125,7 @@ private:
     void gtkIconThemeChanged();
 
 private:
-    int m_iconSize;
+    int m_dockWindowSize;
     bool m_autoHide;
     bool m_isMaxSize;
     int m_screenRawHeight;
@@ -153,7 +154,6 @@ private:
     QAction m_smartHideAct;
 
     DBusDisplay *m_displayInter;
-    DBusDock *m_dockInter;
     DockItemManager *m_itemManager;
 };
 

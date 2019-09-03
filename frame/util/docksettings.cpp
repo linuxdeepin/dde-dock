@@ -66,9 +66,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_hideState = Dock::HideState(m_dockInter->hideState());
-    // default height
-    m_iconSize = (m_displayMode == Dock::Fashion) ? FASHION_DEFAULT_HEIGHT : EffICIENT_DEFAULT_HEIGHT;
-    AppItem::setIconBaseSize(m_iconSize * dockRatio());
+    m_dockWindowSize = m_dockInter->windowSize();
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
@@ -501,22 +499,24 @@ void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
 
 void DockSettings::calculateWindowConfig()
 {
-    const auto ratio = dockRatio();
-    const int defaultHeight = std::round(AppItem::itemBaseHeight() / ratio);
-    const int defaultWidth = std::round(AppItem::itemBaseWidth() / ratio);
-
+    if (m_dockWindowSize == 0) {
+        if (m_displayMode == Dock::Efficient)
+            m_dockWindowSize = EffICIENT_DEFAULT_HEIGHT;
+        else
+            m_dockWindowSize = FASHION_DEFAULT_HEIGHT;
+    }
     if (m_displayMode == Dock::Efficient) {
         switch (m_position) {
         case Top:
         case Bottom:
-            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
+            m_mainWindowSize.setHeight(m_dockWindowSize);
             m_mainWindowSize.setWidth(primaryRect().width());
             break;
 
         case Left:
         case Right:
             m_mainWindowSize.setHeight(primaryRect().height());
-            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
+            m_mainWindowSize.setWidth(m_dockWindowSize);
             break;
 
         default:
@@ -537,26 +537,19 @@ void DockSettings::calculateWindowConfig()
             }
         }
 
-        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionTraySize.width();
-        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2 + PANEL_MARGIN * 2 + m_fashionTraySize.height();
-        const QRect &primaryRect = this->primaryRect();
-        const int maxWidth = primaryRect.width() - FASHION_MODE_PADDING * 2;
-        const int maxHeight = primaryRect.height() - FASHION_MODE_PADDING * 2;
-        const int calcWidth = qMin(maxWidth, perfectWidth);
-        const int calcHeight = qMin(maxHeight, perfectHeight);
         switch (m_position) {
         case Top:
         case Bottom: {
-            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
-            m_mainWindowSize.setWidth(primaryRect.width() - MAINWINDOW_MARGIN * 2);
-            m_isMaxSize = (calcWidth == maxWidth);
+            m_mainWindowSize.setHeight(m_dockWindowSize);
+            m_mainWindowSize.setWidth(this->primaryRect().width() - MAINWINDOW_MARGIN * 2);
+            // m_isMaxSize = (calcWidth == maxWidth);
             break;
         }
         case Left:
         case Right: {
-            m_mainWindowSize.setHeight(primaryRect.height() - MAINWINDOW_MARGIN * 2);
-            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
-            m_isMaxSize = (calcHeight == maxHeight);
+            m_mainWindowSize.setHeight(this->primaryRect().height() - MAINWINDOW_MARGIN * 2);
+            m_mainWindowSize.setWidth(m_dockWindowSize);
+            //m_isMaxSize = (calcHeight == maxHeight);
             break;
         }
         default:
@@ -584,3 +577,4 @@ qreal DockSettings::dockRatio() const
 
     return screen ? screen->devicePixelRatio() : qApp->devicePixelRatio();
 }
+
