@@ -27,14 +27,25 @@
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QMouseEvent>
+#include <DFontSizeManager>
 
 #define PLUGIN_STATE_KEY    "enable"
 #define SHOW_DATE_MIN_HEIGHT 45
+#define TIME_FONT DFontSizeManager::instance()->t5()
+#define DATE_FONT DFontSizeManager::instance()->t10()
+
+DWIDGET_USE_NAMESPACE
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
 {
+    QFontMetrics fm_time(TIME_FONT);
+    int timeHeight =  fm_time.boundingRect("88:88").height();
 
+    QFontMetrics fm_date(DATE_FONT);
+    int dateHeight =  fm_date.boundingRect("8888/88/88").height();
+
+    m_timeOffset = (timeHeight - dateHeight) / 2;
 }
 
 void DatetimeWidget::set24HourFormat(const bool value)
@@ -54,20 +65,12 @@ void DatetimeWidget::set24HourFormat(const bool value)
 
 QSize DatetimeWidget::sizeHint() const
 {
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-
     QFontMetrics fm(qApp->font());
 
-    QString timeString;
     if (m_24HourFormat)
-        timeString = "88:88";
+        return fm.boundingRect("8888/88/88").size() + QSize(20, 10);
     else
-        timeString = "88:88 A.A.";
-
-    if (displayMode == Dock::Fashion && rect().height() > SHOW_DATE_MIN_HEIGHT)
-        timeString += "\n8888-88-88";
-
-    return fm.size(Qt::TextExpandTabs, timeString) + QSize(20, 20);
+        return fm.boundingRect("88:88 A.A.").size() + QSize(20, 20);
 }
 
 void DatetimeWidget::resizeEvent(QResizeEvent *e)
@@ -93,11 +96,23 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     else
         format = "hh:mm AP";
 
-    if (displayMode == Dock::Fashion && rect().height() > SHOW_DATE_MIN_HEIGHT)
-        format += "\nyyyy-MM-dd";
-
     painter.setPen(Qt::white);
-    painter.drawText(rect(), Qt::AlignCenter, current.toString(format));
+
+    if (displayMode == Dock::Fashion && rect().height() > SHOW_DATE_MIN_HEIGHT) {
+        QRect timeRect = rect();
+        timeRect.setBottom(rect().center().y() + m_timeOffset);
+        painter.setFont(TIME_FONT);
+        painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, current.toString(format));
+
+        QRect dateRect = rect();
+        dateRect.setTop(timeRect.bottom());
+        format = "yyyy/MM/dd";
+        painter.setFont(DATE_FONT);
+        painter.drawText(dateRect, Qt::AlignTop | Qt::AlignHCenter, current.toString(format));
+
+    } else {
+        painter.drawText(rect(), Qt::AlignCenter, current.toString(format));
+    }
 }
 
 const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)

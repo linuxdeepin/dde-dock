@@ -48,6 +48,7 @@ private:
 
 private:
     bool m_24HourFormat;
+    int m_timeOffset;
 };
 
 #endif // DATETIMEWIDGET_H
