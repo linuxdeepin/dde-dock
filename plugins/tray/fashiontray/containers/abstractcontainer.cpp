@@ -8,15 +8,13 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
       m_currentDraggingWrapper(nullptr),
       m_expand(true),
       m_dockPosition(Dock::Position::Bottom),
-      m_wrapperSize(QSize(TrayWidgetWidthMin, TrayWidgetHeightMin))
+      m_wrapperSize(QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE))
 {
     setAcceptDrops(true);
 
     m_wrapperLayout->setMargin(0);
-    m_wrapperLayout->setContentsMargins(0, 0, 0, 0);
+    m_wrapperLayout->setContentsMargins(10, 0, 10, 0);
     m_wrapperLayout->setSpacing(TraySpace);
-
-    m_wrapperLayout->setAlignment(Qt::AlignCenter);
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_wrapperLayout);
@@ -33,7 +31,6 @@ void AbstractContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
     m_wrapperList.insert(index, wrapper);
 
     wrapper->setAttention(false);
-    wrapper->setFixedSize(m_wrapperSize);
 
     connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &AbstractContainer::onWrapperAttentionhChanged, static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
     connect(wrapper, &FashionTrayWidgetWrapper::dragStart, this, &AbstractContainer::onWrapperDragStart, Qt::UniqueConnection);
@@ -94,8 +91,10 @@ void AbstractContainer::setDockPosition(const Dock::Position pos)
     m_dockPosition = pos;
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
+        m_wrapperLayout->setContentsMargins(10, 0, 10, 0);
         m_wrapperLayout->setDirection(QBoxLayout::Direction::LeftToRight);
-    } else{
+    } else {
+        m_wrapperLayout->setContentsMargins(0, 10, 0, 10);
         m_wrapperLayout->setDirection(QBoxLayout::Direction::TopToBottom);
     }
 
@@ -109,34 +108,34 @@ void AbstractContainer::setExpand(const bool expand)
     refreshVisible();
 }
 
-QSize AbstractContainer::totalSize() const
-{
-    QSize size;
+//QSize AbstractContainer::sizeHint() const
+//{
+//    return totalSize();
+//}
 
-    const int wrapperWidth = m_wrapperSize.width();
-    const int wrapperHeight = m_wrapperSize.height();
+//QSize AbstractContainer::totalSize() const
+//{
+//    QSize size;
 
-    if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
-        size.setWidth(
-                    m_wrapperList.size() * wrapperWidth // 所有托盘图标
-                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-                    );
-        size.setHeight(height());
-    } else {
-        size.setWidth(width());
-        size.setHeight(
-                    m_wrapperList.size() * wrapperHeight // 所有托盘图标
-                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-                    );
-    }
+//    const int wrapperWidth = m_wrapperSize.width();
+//    const int wrapperHeight = m_wrapperSize.height();
 
-    return size;
-}
+//    if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
+//        size.setWidth(
+//                    m_wrapperList.size() * wrapperWidth // 所有托盘图标
+//                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
+//                    );
+//        size.setHeight(height());
+//    } else {
+//        size.setWidth(width());
+//        size.setHeight(
+//                    m_wrapperList.size() * wrapperHeight // 所有托盘图标
+//                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
+//                    );
+//    }
 
-QSize AbstractContainer::sizeHint() const
-{
-    return totalSize();
-}
+//    return size;
+//}
 
 void AbstractContainer::clearWrapper()
 {
@@ -155,15 +154,6 @@ void AbstractContainer::saveCurrentOrderToConfig()
 {
     for (int i = 0; i < m_wrapperList.size(); ++i) {
         m_trayPlugin->setSortKey(m_wrapperList.at(i)->itemKey(), i + 1);
-    }
-}
-
-void AbstractContainer::setWrapperSize(QSize size)
-{
-    m_wrapperSize = size;
-
-    for (auto w : m_wrapperList) {
-        w->setFixedSize(size);
     }
 }
 
@@ -297,6 +287,14 @@ void AbstractContainer::dragEnterEvent(QDragEnterEvent *event)
     }
 
     QWidget::dragEnterEvent(event);
+}
+
+void AbstractContainer::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+
+    QPainter p(this);
+//    p.fillRect(rect(), Qt::red);
 }
 
 void AbstractContainer::onWrapperAttentionhChanged(const bool attention)

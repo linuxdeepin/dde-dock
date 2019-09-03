@@ -18,8 +18,6 @@ HoldContainer::HoldContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
     m_mainBoxLayout->addLayout(newLayout);
 
-    m_mainBoxLayout->setAlignment(newLayout, Qt::AlignCenter);
-
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_mainBoxLayout);
 }
@@ -57,17 +55,17 @@ void HoldContainer::setDockPosition(const Dock::Position pos)
     AbstractContainer::setDockPosition(pos);
 }
 
-QSize HoldContainer::totalSize() const
-{
-    QSize size = AbstractContainer::totalSize();
+//QSize HoldContainer::totalSize() const
+//{
+//    QSize size = AbstractContainer::totalSize();
 
-    if (expand()) {
-        if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom) {
-            size.setHeight(height());
-        } else {
-            size.setWidth(width());
-        }
-    }
+//    if (expand()) {
+//        if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom) {
+//            size.setHeight(height());
+//        } else {
+//            size.setWidth(width());
+//        }
+//    }
 
-    return size;
-}
+//    return size;
+//}

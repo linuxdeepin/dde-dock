@@ -28,8 +28,8 @@
 
 #define ExpandedKey "fashion-tray-expanded"
 
-int FashionTrayItem::TrayWidgetWidth = TrayWidgetWidthMin;
-int FashionTrayItem::TrayWidgetHeight = TrayWidgetHeightMin;
+int FashionTrayItem::TrayWidgetWidth = PLUGIN_BACKGROUND_MAX_SIZE;
+int FashionTrayItem::TrayWidgetHeight = PLUGIN_BACKGROUND_MAX_SIZE;
 
 FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
@@ -49,15 +49,13 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
     m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
 
-    m_controlWidget->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
-
     m_normalContainer->setVisible(false);
     m_attentionContainer->setVisible(false);
     m_holdContainer->setVisible(false);
 
     m_mainBoxLayout->setMargin(0);
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
-    m_mainBoxLayout->setSpacing(TraySpace);
+    m_mainBoxLayout->setSpacing(0);
 
     m_mainBoxLayout->addWidget(m_leftSpliter);
     m_mainBoxLayout->addWidget(m_normalContainer);
@@ -202,33 +200,6 @@ void FashionTrayItem::onExpandChanged(const bool expand)
     requestResize();
 }
 
-// used by QMetaObject::invokeMethod in TrayPluginItem / MainPanel class
-void FashionTrayItem::setSuggestIconSize(QSize size)
-{
-    size = size * 0.6;
-
-    int length = qMin(size.width(), size.height());
-    // 设置最小值
-//    length = qMax(length, TrayWidgetWidthMin);
-
-    if (length == TrayWidgetWidth || length == TrayWidgetHeight) {
-        return;
-    }
-
-    TrayWidgetWidth = length;
-    TrayWidgetHeight = length;
-
-    QSize newSize(length, length);
-
-    m_controlWidget->setFixedSize(newSize);
-
-    m_normalContainer->setWrapperSize(newSize);
-    m_attentionContainer->setWrapperSize(newSize);
-    m_holdContainer->setWrapperSize(newSize);
-
-    requestResize();
-}
-
 void FashionTrayItem::setRightSplitVisible(const bool visible)
 {
     if (visible) {
@@ -285,10 +256,10 @@ void FashionTrayItem::dragEnterEvent(QDragEnterEvent *event)
     QWidget::dragEnterEvent(event);
 }
 
-QSize FashionTrayItem::sizeHint() const
-{
-    return wantedTotalSize();
-}
+//QSize FashionTrayItem::sizeHint() const
+//{
+//    return wantedTotalSize();
+//}
 
 void FashionTrayItem::init()
 {
@@ -307,8 +278,7 @@ QSize FashionTrayItem::wantedTotalSize() const
         if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
             size.setWidth(
                         SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
-                        + TrayWidgetWidth // 控制按钮
+                        + m_controlWidget->sizeHint().width() // 控制按钮
                         + m_normalContainer->sizeHint().width() // 普通区域
                         + m_holdContainer->sizeHint().width() // 保留区域
                         + m_attentionContainer->sizeHint().width() // 活动区域
@@ -318,8 +288,7 @@ QSize FashionTrayItem::wantedTotalSize() const
             size.setWidth(width());
             size.setHeight(
                         SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
-                        + TrayWidgetWidth // 控制按钮
+                        + m_controlWidget->sizeHint().height()// 控制按钮
                         + m_normalContainer->sizeHint().height() // 普通区域
                         + m_holdContainer->sizeHint().height() // 保留区域
                         + m_attentionContainer->sizeHint().height() // 活动区域
@@ -329,7 +298,6 @@ QSize FashionTrayItem::wantedTotalSize() const
         if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
             size.setWidth(
                         SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
                         + TrayWidgetWidth // 控制按钮
                         + m_holdContainer->sizeHint().width() // 保留区域
                         + m_attentionContainer->sizeHint().width() // 活动区域
@@ -339,7 +307,6 @@ QSize FashionTrayItem::wantedTotalSize() const
             size.setWidth(width());
             size.setHeight(
                         SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
                         + TrayWidgetWidth // 控制按钮
                         + m_holdContainer->sizeHint().height() // 保留区域
                         + m_attentionContainer->sizeHint().height() // 活动区域

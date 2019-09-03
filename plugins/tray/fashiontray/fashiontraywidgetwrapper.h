@@ -40,6 +40,7 @@ public:
 
     bool attention() const;
     void setAttention(bool attention);
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
     void attentionChanged(const bool attention);
@@ -55,6 +56,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void handleMouseMove(QMouseEvent *event);

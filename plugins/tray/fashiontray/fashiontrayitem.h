@@ -58,7 +58,6 @@ public:
 
 public slots:
     void onExpandChanged(const bool expand);
-    void setSuggestIconSize(QSize size);
     void setRightSplitVisible(const bool visible);
     void onPluginSettingsChanged();
 
@@ -67,7 +66,7 @@ protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+//    QSize sizeHit() const Q_DECL_OVERRIDE;
 
 private:
     void init();

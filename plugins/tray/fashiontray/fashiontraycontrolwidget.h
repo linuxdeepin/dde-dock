@@ -37,6 +37,7 @@ public:
 
     bool expanded() const;
     void setExpanded(const bool &expanded);
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
     void expandChanged(const bool expanded);
@@ -47,6 +48,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void refreshArrowPixmap();
