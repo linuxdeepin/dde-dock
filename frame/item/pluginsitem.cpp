@@ -68,8 +68,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
         m_gsettings->setParent(this);
         connect(m_gsettings, &QGSettings::changed, this,
                 &PluginsItem::onGSettingsChanged);
-    }
-    else {
+    } else {
         m_gsettings = nullptr;
     }
 }
@@ -123,7 +122,7 @@ QString PluginsItem::pluginName() const
 
 DockItem::ItemType PluginsItem::itemType() const
 {
-    if (m_pluginInter->type() == PluginsItemInterface::normal) {
+    if (m_pluginInter->type() == PluginsItemInterface::Normal) {
         return Plugins;
     } else {
         return Launcher;

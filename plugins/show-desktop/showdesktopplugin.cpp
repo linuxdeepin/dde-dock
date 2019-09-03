@@ -158,7 +158,7 @@ void ShowDesktopPlugin::pluginSettingsChanged()
 
 PluginsItemInterface::PluginType ShowDesktopPlugin::type()
 {
-    return PluginType::fixed;
+    return PluginType::Fixed;
 }
 
 void ShowDesktopPlugin::updateBatteryVisible()

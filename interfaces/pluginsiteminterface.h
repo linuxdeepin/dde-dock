@@ -54,7 +54,7 @@ public:
     virtual const QString pluginName() const = 0;
     virtual const QString pluginDisplayName() const { return QString(); }
 
-    virtual PluginType type() { return normal; }
+    virtual PluginType type() { return Normal; }
     ///
     /// \brief init
     /// init your plugins, you need to save proxyInter to m_proxyInter
