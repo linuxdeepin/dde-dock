@@ -72,6 +72,7 @@ protected:
     void showPopupWindow(QWidget *const content, const bool model = false) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void startDrag();

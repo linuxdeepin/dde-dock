@@ -125,7 +125,7 @@ DockItem::ItemType PluginsItem::itemType() const
     if (m_pluginInter->type() == PluginsItemInterface::Normal) {
         return Plugins;
     } else {
-        return Launcher;
+        return FixedPlugin;
     }
 }
 
@@ -384,6 +384,13 @@ bool PluginsItem::checkGSettingsControl() const
     return m_gsettings ? m_gsettings->keys().contains("control") &&
            m_gsettings->get("control").toBool()
            : false;
+}
+
+void PluginsItem::resizeEvent(QResizeEvent *event)
+{
+    setMinimumSize(m_centralWidget->minimumSize());
+    setMaximumSize(m_centralWidget->maximumSize());
+    return DockItem::resizeEvent(event);
 }
 
 void PluginsItem::setDraging(bool bDrag)
