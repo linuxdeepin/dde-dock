@@ -40,11 +40,8 @@ DockItemManager::DockItemManager(QObject *parent)
     , m_pluginsInter(new DockPluginsController(this))
     , m_containerItem(new ContainerItem)
 {
-    //固定区域：启动器、显示桌面、多任务视图
+    //固定区域：启动器
     m_itemList.append(new LauncherItem);
-    // TODO
-    // m_itemList.append(new ShowDesktopItem);
-    // m_itemList.append(new MutableTaskItem)
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
@@ -139,6 +136,14 @@ void DockItemManager::updatePluginsItemOrderKey()
             continue;
         static_cast<PluginsItem *>(item.data())->setItemSortKey(++index);
     }
+
+    // 固定区域插件排序
+    index = 0;
+    for (auto item : m_itemList) {
+        if (item.isNull() || item->itemType() != DockItem::FixedPlugin)
+            continue;
+        static_cast<PluginsItem *>(item.data())->setItemSortKey(++index);
+    }
 }
 
 void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targetItem)
@@ -169,7 +174,8 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
 
     // update plugins sort key if order changed
     if (moveType == DockItem::Plugins || replaceType == DockItem::Plugins
-            || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin)
+            || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin
+            || moveType == DockItem::FixedPlugin || replaceType == DockItem::FixedPlugin)
         m_updatePluginsOrderTimer->start();
 
     // for app move, index 0 is launcher item, need to pass it.
@@ -327,6 +333,10 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
             insertIndex = i - 1;
             break;
         }
+    }
+
+    if (item->itemType() == DockItem::FixedPlugin) {
+        insertIndex ++;
     }
 
     m_itemList.insert(insertIndex, item);

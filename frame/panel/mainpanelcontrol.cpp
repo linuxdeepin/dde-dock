@@ -240,6 +240,7 @@ void MainPanelControl::insertItem(int index, DockItem *item)
 
     switch (item->itemType()) {
     case DockItem::Launcher:
+    case DockItem::FixedPlugin:
         addFixedAreaItem(index, item);
         break;
     case DockItem::App:
@@ -261,6 +262,7 @@ void MainPanelControl::removeItem(DockItem *item)
 {
     switch (item->itemType()) {
     case DockItem::Launcher:
+    case DockItem::FixedPlugin:
         removeFixedAreaItem(item);
         break;
     case DockItem::App:
@@ -296,6 +298,8 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
         idx = m_appAreaSonLayout->indexOf(targetItem);
     else if (targetItem->itemType() == DockItem::Plugins)
         idx = m_pluginLayout->indexOf(targetItem);
+    else if (targetItem->itemType() == DockItem::FixedPlugin)
+        idx = m_fixedAreaLayout->indexOf(targetItem);
     else
         return;
 
@@ -476,7 +480,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (!item)
         return false;
 
-    if (item->itemType() != DockItem::App && item->itemType() != DockItem::Plugins)
+    if (item->itemType() != DockItem::App && item->itemType() != DockItem::Plugins && item->itemType() != DockItem::FixedPlugin)
         return false;
 
     startDrag(item);
@@ -532,6 +536,9 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
             break;
         case DockItem::Plugins:
             parentWidget = m_pluginAreaWidget;
+            break;
+        case DockItem::FixedPlugin:
+            parentWidget = m_fixedAreaWidget;
             break;
         default:
             break;
