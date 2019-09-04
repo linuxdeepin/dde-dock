@@ -67,14 +67,15 @@ private slots:
     void propertiesChanged();
 
 private:
+    void loadPlugin();
+
+private:
     QPointer<DatetimeWidget> m_centralWidget;
     QPointer<TipsWidget> m_dateTipsLabel;
-
     QTimer *m_refershTimer;
-
     QString m_currentTimeString;
-
     QDBusInterface *m_interface;
+    bool m_pluginLoaded;
 };
 
 #endif // DATETIMEPLUGIN_H

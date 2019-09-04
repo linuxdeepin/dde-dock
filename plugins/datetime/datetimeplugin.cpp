@@ -30,6 +30,7 @@
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
+    , m_pluginLoaded(false)
 {
     m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate");
 
@@ -64,6 +65,15 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
         return;
     }
 
+    loadPlugin();
+}
+
+void DatetimePlugin::loadPlugin()
+{
+    if (m_pluginLoaded)
+        return;
+
+    m_pluginLoaded = true;
     m_dateTipsLabel = new TipsWidget;
     m_refershTimer = new QTimer(this);
     m_dateTipsLabel->setObjectName("datetime");
@@ -87,6 +97,7 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
     connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
 
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
+
     m_proxyInter->itemAdded(this, pluginName());
 }
 
@@ -225,10 +236,16 @@ void DatetimePlugin::updateCurrentTimeString()
 
 void DatetimePlugin::refreshPluginItemsVisible()
 {
-    if (!pluginIsDisable())
+    if (!pluginIsDisable()) {
+
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
         m_proxyInter->itemAdded(this, pluginName());
-    else
+    } else {
         m_proxyInter->itemRemoved(this, pluginName());
+    }
 }
 
 void DatetimePlugin::propertiesChanged()
