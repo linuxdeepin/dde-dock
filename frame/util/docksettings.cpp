@@ -338,9 +338,8 @@ void DockSettings::onDisplayModeChanged()
     DockItem::setDockDisplayMode(m_displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
 
-    calculateWindowConfig();
-
     emit displayModeChanegd();
+    calculateWindowConfig();
 
     QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }
@@ -371,8 +370,6 @@ void DockSettings::dockItemCountChanged()
     if (m_displayMode == Dock::Efficient)
         return;
 
-    calculateWindowConfig();
-
     emit windowGeometryChanged();
 }
 
@@ -383,10 +380,9 @@ void DockSettings::primaryScreenChanged()
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
 
-    calculateWindowConfig();
     updateForbidPostions();
-
     emit dataChanged();
+    calculateWindowConfig();
 }
 
 void DockSettings::resetFrontendGeometry()
@@ -491,8 +487,6 @@ void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
 
     m_fashionTraySize = traySize;
 
-    calculateWindowConfig();
-
     emit windowGeometryChanged();
 }
 
@@ -522,20 +516,6 @@ void DockSettings::calculateWindowConfig()
             Q_ASSERT(false);
         }
     } else if (m_displayMode == Dock::Fashion) {
-        int visibleItemCount = 0;
-        const auto &itemList = m_itemManager->itemList();
-        for (auto item : itemList) {
-            switch (item->itemType()) {
-            case DockItem::Launcher:
-            case DockItem::App:
-            case DockItem::Plugins:
-            case DockItem::Placeholder:
-                ++visibleItemCount;
-                break;
-            default:;
-            }
-        }
-
         switch (m_position) {
         case Top:
         case Bottom: {
