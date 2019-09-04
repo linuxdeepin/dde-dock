@@ -72,6 +72,7 @@ private:
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
     void updateDisplayMode();
+    void moveAppSonWidget();
 
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;

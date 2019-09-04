@@ -60,6 +60,8 @@ MainPanelControl::MainPanelControl(QWidget *parent)
 
     connect(this, SIGNAL(displayModeChanged()), this, SLOT(onDisplayModeChanged()));
     connect(this, SIGNAL(positionChanged()), this, SLOT(onPositionChanged()));
+
+    m_appAreaWidget->installEventFilter(this);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -128,18 +130,28 @@ void MainPanelControl::updateMainPanelLayout()
         m_appAreaSonLayout->setDirection(QBoxLayout::TopToBottom);
         break;
     }
-
-    QTimer::singleShot(0, this, &MainPanelControl::updateAppAreaSonWidgetSize);
 }
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
     m_fixedAreaLayout->insertWidget(index, wdg);
+
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        wdg->setMaximumSize(height(), height());
+    } else {
+        wdg->setMaximumSize(width(), width());
+    }
 }
 
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
     m_appAreaSonLayout->insertWidget(index, wdg);
+
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        wdg->setMaximumSize(height(), height());
+    } else {
+        wdg->setMaximumSize(width(), width());
+    }
 }
 
 void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
@@ -174,13 +186,6 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
-    updateAppAreaSonWidgetSize();
-
-    return QWidget::resizeEvent(event);
-}
-
-void MainPanelControl::updateAppAreaSonWidgetSize()
-{
     for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
         QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
         if (w) {
@@ -203,21 +208,22 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         }
     }
 
-    m_fixedAreaWidget->adjustSize();
-    m_appAreaWidget->adjustSize();
-    m_trayAreaWidget->adjustSize();
+    return QWidget::resizeEvent(event);
+}
 
+void MainPanelControl::updateAppAreaSonWidgetSize()
+{
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         m_appAreaSonWidget->setMaximumHeight(this->height());
-        m_appAreaSonWidget->setMaximumWidth(m_appAreaWidget->geometry().right() - m_fixedAreaWidget->geometry().right());
+        m_appAreaSonWidget->setMaximumWidth(m_appAreaWidget->width());
     } else {
         m_appAreaSonWidget->setMaximumWidth(this->width());
-        m_appAreaSonWidget->setMaximumHeight(m_appAreaWidget->geometry().bottom() - m_fixedAreaWidget->geometry().bottom());
+        m_appAreaSonWidget->setMaximumHeight(m_appAreaWidget->height());
     }
 
     m_appAreaSonWidget->adjustSize();
 
-    QTimer::singleShot(10, this, &MainPanelControl::updateDisplayMode);
+    moveAppSonWidget();
 }
 
 void MainPanelControl::setPositonValue(Dock::Position position)
@@ -249,8 +255,6 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     default:
         break;
     }
-
-    updateMainPanelLayout();
 }
 
 void MainPanelControl::removeItem(DockItem *item)
@@ -272,8 +276,6 @@ void MainPanelControl::removeItem(DockItem *item)
     default:
         break;
     }
-
-    updateAppAreaSonWidgetSize();
 }
 
 MainPanelDelegate *MainPanelControl::delegate() const
@@ -440,6 +442,14 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == m_appAreaWidget) {
+        if (event->type() == QEvent::Resize)
+            updateAppAreaSonWidgetSize();
+
+        if (event->type() == QEvent::Move)
+            moveAppSonWidget();
+    }
+
     if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
         QDropEvent *e = static_cast<QDropEvent *>(event);
         bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
@@ -451,6 +461,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
                 return true;
             }
         }
+
         return false;
     }
 
@@ -470,7 +481,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 
     startDrag(item);
 
-    return true;
+    return QWidget::eventFilter(watched, event);
 }
 
 void MainPanelControl::startDrag(DockItem *item)
@@ -577,22 +588,28 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
         }
 
     }
+
     return targetItem;
 }
 
 
 void MainPanelControl::updateDisplayMode()
 {
+    moveAppSonWidget();
+}
+
+void MainPanelControl::moveAppSonWidget()
+{
     QRect rect(QPoint(0, 0), m_appAreaSonWidget->size());
     if (DisplayMode::Efficient == m_dislayMode) {
         switch (m_position) {
         case Top:
         case Bottom :
-            rect.moveLeft(m_fixedAreaWidget->geometry().right());
+            rect.moveTo(m_appAreaWidget->pos());
             break;
         case Right:
         case Left:
-            rect.moveTop(m_fixedAreaWidget->geometry().bottom());
+            rect.moveTo(m_appAreaWidget->pos());
             break;
         }
     } else {
@@ -600,16 +617,16 @@ void MainPanelControl::updateDisplayMode()
         case Top:
         case Bottom :
             rect.moveCenter(this->rect().center());
-            if (rect.right() > m_trayAreaWidget->geometry().left()) {
-                rect.moveRight(m_trayAreaWidget->geometry().left());
+            if (rect.right() > m_appAreaWidget->geometry().right()) {
+                rect.moveRight(m_appAreaWidget->geometry().right());
             }
 
             break;
         case Right:
         case Left:
             rect.moveCenter(this->rect().center());
-            if (rect.bottom() > m_trayAreaWidget->geometry().top()) {
-                rect.moveBottom(m_trayAreaWidget->geometry().top());
+            if (rect.bottom() > m_appAreaWidget->geometry().bottom()) {
+                rect.moveBottom(m_appAreaWidget->geometry().bottom());
             }
 
             break;
