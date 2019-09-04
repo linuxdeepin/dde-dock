@@ -45,6 +45,7 @@ public:
         App,
         Stretch,
         Plugins,
+        FixedPlugin,
         Container,
         Placeholder,
         TrayPlugin,
