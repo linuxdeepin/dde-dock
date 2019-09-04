@@ -68,9 +68,9 @@ QSize DatetimeWidget::sizeHint() const
     QFontMetrics fm(qApp->font());
 
     if (m_24HourFormat)
-        return fm.boundingRect("8888/88/88").size() + QSize(20, 10);
+        return fm.boundingRect("8888/88/88").size() + QSize(30, 10);
     else
-        return fm.boundingRect("88:88 A.A.").size() + QSize(20, 20);
+        return fm.boundingRect("88:88 A.A.").size() + QSize(30, 20);
 }
 
 void DatetimeWidget::resizeEvent(QResizeEvent *e)
@@ -98,7 +98,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 
     painter.setPen(Qt::white);
 
-    if (displayMode == Dock::Fashion && rect().height() > SHOW_DATE_MIN_HEIGHT) {
+    if (rect().height() > SHOW_DATE_MIN_HEIGHT) {
         QRect timeRect = rect();
         timeRect.setBottom(rect().center().y() + m_timeOffset);
         painter.setFont(TIME_FONT);
