@@ -47,7 +47,14 @@ void ShowDesktopWidget::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     const auto ratio = devicePixelRatioF();
-    QPixmap icon = QIcon::fromTheme("deepin-toggle-desktop").pixmap(size() * ratio);
+    QPixmap icon;
+
+    if (Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) {
+        icon = QIcon::fromTheme("deepin-toggle-desktop").pixmap(size() * 0.8 * ratio);
+    } else {
+        icon = QIcon::fromTheme("deepin-toggle-desktop").pixmap(size() * 0.7 * ratio);
+    }
+
     icon.setDevicePixelRatio(ratio);
 
     QPainter painter(this);

@@ -126,7 +126,7 @@ void ShowDesktopPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     if (menuId == "show-desktop") {
         QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
     } else if (menuId == "remove") {
-        m_proxyInter->itemRemoved(this, POWER_KEY);
+        pluginStateSwitched();
     }
 }
 
@@ -141,7 +141,7 @@ int ShowDesktopPlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
 
-    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 3 : 3).toInt();
+    return m_proxyInter->getValue(this, key, 1).toInt();
 }
 
 void ShowDesktopPlugin::setSortKey(const QString &itemKey, const int order)
@@ -163,7 +163,10 @@ PluginsItemInterface::PluginType ShowDesktopPlugin::type()
 
 void ShowDesktopPlugin::updateBatteryVisible()
 {
-
+    if (pluginIsDisable())
+        m_proxyInter->itemRemoved(this, POWER_KEY);
+    else
+        m_proxyInter->itemAdded(this, POWER_KEY);
 }
 
 void ShowDesktopPlugin::loadPlugin()
