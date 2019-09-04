@@ -62,8 +62,7 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     connect(m_absTrayWidget, &AbstractTrayWidget::needAttention, this, &FashionTrayWidgetWrapper::onTrayWidgetNeedAttention);
     connect(m_absTrayWidget, &AbstractTrayWidget::clicked, this, &FashionTrayWidgetWrapper::onTrayWidgetClicked);
 
-    setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
-    setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
+    setFixedSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 AbstractTrayWidget *FashionTrayWidgetWrapper::absTrayWidget() const
@@ -168,7 +167,7 @@ void FashionTrayWidgetWrapper::leaveEvent(QEvent *event)
 
 QSize FashionTrayWidgetWrapper::sizeHint() const
 {
-    return QSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
+    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 void FashionTrayWidgetWrapper::resizeEvent(QResizeEvent *event)
@@ -176,11 +175,11 @@ void FashionTrayWidgetWrapper::resizeEvent(QResizeEvent *event)
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     // 保持横纵比
     if (position == Dock::Bottom || position == Dock::Top) {
-        setMinimumWidth(height());
         setMinimumHeight(PLUGIN_BACKGROUND_MIN_SIZE);
+        setFixedWidth(height());
     } else {
         setMinimumWidth(PLUGIN_BACKGROUND_MIN_SIZE);
-        setMinimumHeight(width());
+        setFixedHeight(width());
     }
 
     QWidget::resizeEvent(event);
