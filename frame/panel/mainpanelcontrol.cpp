@@ -91,7 +91,7 @@ void MainPanelControl::init()
     m_fixedAreaLayout->setSpacing(0);
     m_appAreaSonLayout->setSpacing(0);
     m_trayAreaLayout->setSpacing(0);
-    m_pluginLayout->setSpacing(0);
+    m_pluginLayout->setSpacing(10);
 }
 
 void MainPanelControl::setDisplayMode(DisplayMode mode)

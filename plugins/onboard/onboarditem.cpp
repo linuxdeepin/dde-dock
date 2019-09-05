@@ -27,14 +27,23 @@
 #include <QApplication>
 #include <QIcon>
 
+#include <DStyle>
+
+DWIDGET_USE_NAMESPACE;
+
 OnboardItem::OnboardItem(QWidget *parent)
     : QWidget(parent)
+    , m_hover(false)
+    , m_pressed(false)
 {
+    setMouseTracking(true);
+    setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
+    setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 QSize OnboardItem::sizeHint() const
 {
-    return QSize(26, 26);
+    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 void OnboardItem::paintEvent(QPaintEvent *e)
@@ -43,19 +52,41 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
     QPixmap pixmap;
     QString iconName = "deepin-virtualkeyboard";
-    int iconSize;
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
     if (displayMode == Dock::Efficient) {
         iconName = iconName + "-symbolic";
-        iconSize = 16;
+    }
+
+    QPainter painter(this);
+    if (std::min(width(), height()) > PLUGIN_BACKGROUND_MIN_SIZE) {
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setOpacity(0.5);
+
+        DStyleHelper dstyle(style());
+        const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
+
+        QPainterPath path;
+        path.addRoundedRect(rect(), radius, radius);
+
+        QColor color = QColor::fromRgb(40, 40, 40);;
+
+        if (m_hover) {
+            color = QColor::fromRgb(60, 60, 60);
+        }
+
+        if (m_pressed) {
+            color = QColor::fromRgb(20, 20, 20);
+        }
+
+        painter.fillPath(path, color);
     } else {
-        iconSize = std::min(width(), height()) * 0.8;
+        iconName.append(PLUGIN_MIN_ICON_NAME);
     }
 
     pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
 
-    QPainter painter(this);
     painter.drawPixmap(rect().center() - pixmap.rect().center() / devicePixelRatioF(), pixmap);
 }
 
@@ -68,4 +99,54 @@ const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) c
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
+}
+
+void OnboardItem::mousePressEvent(QMouseEvent *event)
+{
+    m_pressed = true;
+    update();
+
+    QWidget::mousePressEvent(event);
+}
+
+void OnboardItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_pressed = false;
+    m_hover = false;
+    update();
+
+    QWidget::mouseReleaseEvent(event);
+}
+
+void OnboardItem::mouseMoveEvent(QMouseEvent *event)
+{
+    m_hover = true;
+
+    QWidget::mouseMoveEvent(event);
+}
+
+void OnboardItem::leaveEvent(QEvent *event)
+{
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+        m_hover = false;
+        m_pressed = false;
+        update();
+    }
+
+    QWidget::leaveEvent(event);
+}
+
+void OnboardItem::resizeEvent(QResizeEvent *event)
+{
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(PLUGIN_BACKGROUND_MAX_SIZE);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(PLUGIN_BACKGROUND_MAX_SIZE);
+    }
+
+    QWidget::resizeEvent(event);
 }
