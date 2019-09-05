@@ -20,8 +20,7 @@ func getTimeRange(start, end time.Time) TimeRange {
 func (r TimeRange) contains(r1 TimeRange) bool {
 	// r.start <= r1.start
 	// and r1.end <= r.end
-	return (r.start.Before(r1.start) || r.start.Equal(r1.start)) &&
-		(r1.end.Before(r.end) || r1.end.Equal(r.end))
+	return !r.start.After(r1.start) && !r1.end.After(r.end)
 }
 
 func (r TimeRange) overlap(r1 TimeRange) bool {
@@ -30,6 +29,6 @@ func (r TimeRange) overlap(r1 TimeRange) bool {
 		r, r1 = r1, r
 	}
 
-	return (r1.start.Before(r.end) || r1.start.Equal(r.end)) &&
-		(r.start.Before(r1.end) || r.start.Equal(r1.end))
+	// r1.start <= r.end
+	return !r1.start.After(r.end)
 }

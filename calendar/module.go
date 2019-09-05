@@ -22,7 +22,7 @@ func init() {
 }
 
 type Module struct {
-	m *Manager
+	scheduler *Scheduler
 	*loader.ModuleBase
 }
 
@@ -31,7 +31,7 @@ func (m *Module) GetDependencies() []string {
 }
 
 func (m *Module) Start() error {
-	if m.m != nil {
+	if m.scheduler != nil {
 		return nil
 	}
 	go func() {
@@ -46,23 +46,23 @@ func (m *Module) Start() error {
 }
 
 func (m *Module) Stop() error {
-	if m.m == nil {
+	if m.scheduler == nil {
 		return nil
 	}
 
 	service := loader.GetService()
-	err := service.RequestName(dbusServiceName)
+	err := service.ReleaseName(dbusServiceName)
 	if err != nil {
 		return err
 	}
 
-	err = service.StopExport(m.m)
+	err = service.StopExport(m.scheduler)
 	if err != nil {
 		return err
 	}
 
-	close(m.m.quitChan)
-	m.m = nil
+	close(m.scheduler.quitChan)
+	m.scheduler = nil
 	return nil
 }
 
@@ -99,9 +99,9 @@ func (m *Module) start() error {
 	}
 
 	service := loader.GetService()
-	m.m = newManager(db, service)
+	m.scheduler = newScheduler(db, service)
 
-	err = service.Export(dbusPath, m.m)
+	err = service.Export(dbusPath, m.scheduler)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func (m *Module) start() error {
 		return err
 	}
 
-	m.m.startRemindLoop()
+	m.scheduler.startRemindLoop()
 	return nil
 }
 

@@ -11,8 +11,8 @@ const (
 	dbusInterface   = "com.deepin.daemon.Calendar.Scheduler"
 )
 
-func (m *Manager) GetJob(id int64) (string, *dbus.Error) {
-	job, err := m.getJob(uint(id))
+func (s *Scheduler) GetJob(id int64) (string, *dbus.Error) {
+	job, err := s.getJob(uint(id))
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -20,15 +20,15 @@ func (m *Manager) GetJob(id int64) (string, *dbus.Error) {
 	return result, dbusutil.ToError(err)
 }
 
-func (m *Manager) DeleteJob(id int64) *dbus.Error {
-	err := m.deleteJob(uint(id))
+func (s *Scheduler) DeleteJob(id int64) *dbus.Error {
+	err := s.deleteJob(uint(id))
 	if err == nil {
-		m.notifyJobsChange()
+		s.notifyJobsChange()
 	}
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) UpdateJob(jobStr string) *dbus.Error {
+func (s *Scheduler) UpdateJob(jobStr string) *dbus.Error {
 	var jj JobJSON
 	err := fromJson(jobStr, &jj)
 	if err != nil {
@@ -39,14 +39,14 @@ func (m *Manager) UpdateJob(jobStr string) *dbus.Error {
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	err = m.updateJob(job)
+	err = s.updateJob(job)
 	if err == nil {
-		m.notifyJobsChange()
+		s.notifyJobsChange()
 	}
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) CreateJob(jobStr string) (int64, *dbus.Error) {
+func (s *Scheduler) CreateJob(jobStr string) (int64, *dbus.Error) {
 	var jj JobJSON
 	err := fromJson(jobStr, &jj)
 	if err != nil {
@@ -57,16 +57,16 @@ func (m *Manager) CreateJob(jobStr string) (int64, *dbus.Error) {
 	if err != nil {
 		return 0, dbusutil.ToError(err)
 	}
-	err = m.createJob(job)
+	err = s.createJob(job)
 	if err != nil {
 		return 0, dbusutil.ToError(err)
 	}
-	m.notifyJobsChange()
+	s.notifyJobsChange()
 	return int64(job.ID), nil
 }
 
-func (m *Manager) GetTypes() (string, *dbus.Error) {
-	types, err := m.getTypes()
+func (s *Scheduler) GetTypes() (string, *dbus.Error) {
+	types, err := s.getTypes()
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -74,8 +74,8 @@ func (m *Manager) GetTypes() (string, *dbus.Error) {
 	return result, dbusutil.ToError(err)
 }
 
-func (m *Manager) GetType(id int64) (string, *dbus.Error) {
-	t, err := m.getType(uint(id))
+func (s *Scheduler) GetType(id int64) (string, *dbus.Error) {
+	t, err := s.getType(uint(id))
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -83,12 +83,12 @@ func (m *Manager) GetType(id int64) (string, *dbus.Error) {
 	return result, dbusutil.ToError(err)
 }
 
-func (m *Manager) DeleteType(id int64) *dbus.Error {
-	err := m.deleteType(uint(id))
+func (s *Scheduler) DeleteType(id int64) *dbus.Error {
+	err := s.deleteType(uint(id))
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) CreateType(typeStr string) (int64, *dbus.Error) {
+func (s *Scheduler) CreateType(typeStr string) (int64, *dbus.Error) {
 	var jobType JobTypeJSON
 	err := fromJson(typeStr, &jobType)
 	if err != nil {
@@ -96,14 +96,14 @@ func (m *Manager) CreateType(typeStr string) (int64, *dbus.Error) {
 	}
 
 	jt := jobType.toJobType()
-	err = m.createType(jt)
+	err = s.createType(jt)
 	if err != nil {
 		return 0, dbusutil.ToError(err)
 	}
 	return int64(jt.ID), nil
 }
 
-func (m *Manager) UpdateType(typeStr string) *dbus.Error {
+func (s *Scheduler) UpdateType(typeStr string) *dbus.Error {
 	var jobType JobTypeJSON
 	err := fromJson(typeStr, &jobType)
 	if err != nil {
@@ -111,6 +111,6 @@ func (m *Manager) UpdateType(typeStr string) *dbus.Error {
 	}
 
 	jt := jobType.toJobType()
-	err = m.updateType(jt)
+	err = s.updateType(jt)
 	return dbusutil.ToError(err)
 }

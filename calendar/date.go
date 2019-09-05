@@ -11,16 +11,6 @@ type Date struct {
 	Day   int
 }
 
-func (d Date) isWorkday() bool {
-	w := d.weekday()
-	return time.Monday <= w && w <= time.Friday
-}
-
-func (d Date) weekday() time.Weekday {
-	t := newTimeYMDHM(d.Year, d.Month, d.Day, 0, 0)
-	return t.Weekday()
-}
-
 const maxNanoSecs = 999999999
 
 func (d Date) toTimeRange() TimeRange {
@@ -33,12 +23,6 @@ func (d Date) toTimeRange() TimeRange {
 func timeToDate(t time.Time) (d Date) {
 	d.Year, d.Month, d.Day = t.Year(), t.Month(), t.Day()
 	return
-}
-
-func sameDate(t1, t2 time.Time) bool {
-	d1 := timeToDate(t1)
-	d2 := timeToDate(t2)
-	return d1 == d2
 }
 
 func (d Date) String() string {

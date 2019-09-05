@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"strconv"
 	"time"
-
-	"pkg.deepin.io/lib/calendar/util"
 )
 
 func parseInt(str string) (int, error) {
@@ -54,34 +52,6 @@ func iterDays(start, end time.Time, f func(t time.Time) error) error {
 		t = t.AddDate(0, 0, 1)
 	}
 	return nil
-}
-
-func getYearTimeRange(year int) TimeRange {
-	start := newTimeYMDHM(year, 1, 1, 0, 0)
-	end := newTimeYMDHM(year, 12, 31, 0, 0)
-	return TimeRange{start, end}
-}
-
-const (
-	modeDay   = 0
-	modeWeek  = 1
-	modeMonth = 2
-	modeYear  = 3
-)
-
-func getMondayDate(t time.Time) time.Time {
-	nDays := int(t.Weekday()) - 1
-	if t.Weekday() == time.Sunday {
-		nDays = 6
-	}
-	return t.AddDate(0, 0, -nDays)
-}
-
-func getMonthTimeRange(year int, month int) TimeRange {
-	start := newTimeYMDHM(year, time.Month(month), 1, 0, 0)
-	days := util.GetSolarMonthDays(year, month)
-	end := start.AddDate(0, 0, days-1)
-	return TimeRange{start, end}
 }
 
 func fromJson(jStr string, v interface{}) error {

@@ -3,14 +3,13 @@ package calendar
 import (
 	"time"
 
-	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
-
 	"github.com/jinzhu/gorm"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
-type Manager struct {
+type Scheduler struct {
 	db            *gorm.DB
 	notifications *notifications.Notifications
 	timerGroup    timerGroup
@@ -33,9 +32,9 @@ type Manager struct {
 	}
 }
 
-func newManager(db *gorm.DB, service *dbusutil.Service) *Manager {
+func newScheduler(db *gorm.DB, service *dbusutil.Service) *Scheduler {
 	sessionBus := service.Conn()
-	m := &Manager{
+	m := &Scheduler{
 		db:            db,
 		changeChan:    make(chan struct{}),
 		quitChan:      make(chan struct{}),
@@ -44,14 +43,14 @@ func newManager(db *gorm.DB, service *dbusutil.Service) *Manager {
 	return m
 }
 
-func (m *Manager) GetInterfaceName() string {
+func (s *Scheduler) GetInterfaceName() string {
 	return dbusInterface
 }
 
-func (m *Manager) GetJobs(startYear, startMonth, startDay, endYear, endMonth, endDay int32) (string, *dbus.Error) {
+func (s *Scheduler) GetJobs(startYear, startMonth, startDay, endYear, endMonth, endDay int32) (string, *dbus.Error) {
 	start := newTimeYMDHM(int(startYear), time.Month(startMonth), int(startDay), 0, 0)
 	end := newTimeYMDHM(int(endYear), time.Month(endMonth), int(endDay), 0, 0)
-	jobs, err := m.getJobs(start, end)
+	jobs, err := s.getJobs(start, end)
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -64,9 +63,9 @@ type DateJobsWrap struct {
 	Jobs []*JobJSON
 }
 
-func (m *Manager) getJobs(start, end time.Time) ([]DateJobsWrap, error) {
+func (s *Scheduler) getJobs(start, end time.Time) ([]DateJobsWrap, error) {
 	var allJobs []*Job
-	err := m.db.Find(&allJobs).Error
+	err := s.db.Find(&allJobs).Error
 	if err != nil {
 		return nil, err
 	}
@@ -102,32 +101,32 @@ func (m *Manager) getJobs(start, end time.Time) ([]DateJobsWrap, error) {
 	return result, nil
 }
 
-func (m *Manager) getJob(id uint) (*JobJSON, error) {
+func (s *Scheduler) getJob(id uint) (*JobJSON, error) {
 	var job Job
-	err := m.db.First(&job, id).Error
+	err := s.db.First(&job, id).Error
 	if err != nil {
 		return nil, err
 	}
 	return job.toJobJSON()
 }
 
-func (m *Manager) deleteJob(id uint) error {
+func (s *Scheduler) deleteJob(id uint) error {
 	var job Job
-	err := m.db.Select("id").First(&job, id).Error
+	err := s.db.Select("id").First(&job, id).Error
 	if err != nil {
 		return err
 	}
 
-	return m.db.Unscoped().Delete(&job).Error
+	return s.db.Unscoped().Delete(&job).Error
 }
 
-func (m *Manager) updateJob(job *Job) error {
+func (s *Scheduler) updateJob(job *Job) error {
 	err := job.validate()
 	if err != nil {
 		return err
 	}
 	var job0 Job
-	err = m.db.Find(&job0, job.ID).Error
+	err = s.db.Find(&job0, job.ID).Error
 	if err != nil {
 		return err
 	}
@@ -163,25 +162,25 @@ func (m *Manager) updateJob(job *Job) error {
 	}
 
 	if len(diffMap) > 0 {
-		err = m.db.Model(job).Updates(diffMap).Error
+		err = s.db.Model(job).Updates(diffMap).Error
 	}
 	return err
 }
 
-func (m *Manager) createJob(job *Job) error {
+func (s *Scheduler) createJob(job *Job) error {
 	err := job.validate()
 	if err != nil {
 		return err
 	}
 	job.ID = 0
 
-	err = m.db.Create(job).Error
+	err = s.db.Create(job).Error
 	return err
 }
 
-func (m *Manager) getTypes() ([]*JobTypeJSON, error) {
+func (s *Scheduler) getTypes() ([]*JobTypeJSON, error) {
 	var types []JobType
-	err := m.db.Find(&types).Error
+	err := s.db.Find(&types).Error
 	if err != nil {
 		return nil, err
 	}
@@ -193,41 +192,41 @@ func (m *Manager) getTypes() ([]*JobTypeJSON, error) {
 	return result, nil
 }
 
-func (m *Manager) getType(id uint) (*JobTypeJSON, error) {
+func (s *Scheduler) getType(id uint) (*JobTypeJSON, error) {
 	var jobType JobType
-	err := m.db.First(&jobType, id).Error
+	err := s.db.First(&jobType, id).Error
 	if err != nil {
 		return nil, err
 	}
 	return jobType.toJobTypeJSON(), nil
 }
 
-func (m *Manager) deleteType(id uint) error {
+func (s *Scheduler) deleteType(id uint) error {
 	var jobType JobType
-	err := m.db.Select("id").First(&jobType, id).Error
+	err := s.db.Select("id").First(&jobType, id).Error
 	if err != nil {
 		return err
 	}
 
-	return m.db.Delete(&jobType).Error
+	return s.db.Delete(&jobType).Error
 }
 
-func (m *Manager) createType(jobType *JobType) error {
+func (s *Scheduler) createType(jobType *JobType) error {
 	err := jobType.validate()
 	if err != nil {
 		return err
 	}
 	jobType.ID = 0
-	return m.db.Create(jobType).Error
+	return s.db.Create(jobType).Error
 }
 
-func (m *Manager) updateType(jobType *JobType) error {
+func (s *Scheduler) updateType(jobType *JobType) error {
 	err := jobType.validate()
 	if err != nil {
 		return err
 	}
 	var jobType0 JobType
-	err = m.db.Find(&jobType0, jobType.ID).Error
+	err = s.db.Find(&jobType0, jobType.ID).Error
 	if err != nil {
 		return err
 	}
@@ -242,7 +241,7 @@ func (m *Manager) updateType(jobType *JobType) error {
 	}
 
 	if len(diffMap) > 0 {
-		err = m.db.Model(jobType).Updates(diffMap).Error
+		err = s.db.Model(jobType).Updates(diffMap).Error
 	}
 	return err
 }
@@ -251,7 +250,7 @@ type timerGroup struct {
 	timers []*time.Timer
 }
 
-func (tg *timerGroup) addJob(job *Job, m *Manager) {
+func (tg *timerGroup) addJob(job *Job, m *Scheduler) {
 	now := time.Now()
 	duration := job.remindTime.Sub(now)
 	logger.Debugf("notify job %d %q after %v", job.ID, job.Title, duration)
@@ -267,11 +266,11 @@ func (tg *timerGroup) reset() {
 	tg.timers = nil
 }
 
-func (m *Manager) remindJob(job *Job) {
+func (s *Scheduler) remindJob(job *Job) {
 	layout := "2006-01-02 15:04"
 	body := job.Start.Format(layout) + " ~ " + job.End.Format(layout)
 	logger.Debug("remind:", job.Title, body)
-	id, err := m.notifications.Notify(0, "dde-daemon", 0,
+	id, err := s.notifications.Notify(0, "dde-daemon", 0,
 		"", job.Title,
 		body, nil, nil, 0)
 	if err != nil {
@@ -280,33 +279,33 @@ func (m *Manager) remindJob(job *Job) {
 	logger.Debug("id:", id)
 }
 
-func (m *Manager) DebugRemindJob(id int64) *dbus.Error {
+func (s *Scheduler) DebugRemindJob(id int64) *dbus.Error {
 	var job Job
-	err := m.db.First(&job, id).Error
+	err := s.db.First(&job, id).Error
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
 
-	m.remindJob(&job)
+	s.remindJob(&job)
 	return nil
 }
 
-func (m *Manager) notifyJobsChange() {
-	m.changeChan <- struct{}{}
+func (s *Scheduler) notifyJobsChange() {
+	s.changeChan <- struct{}{}
 }
 
-func (m *Manager) startRemindLoop() {
+func (s *Scheduler) startRemindLoop() {
 	const interval = 10 * time.Minute
 	ticker := time.NewTicker(interval)
 
 	setTimerGroup := func(tr TimeRange) {
-		m.timerGroup.reset()
-		jobs, err := m.getRemindJobs(tr)
+		s.timerGroup.reset()
+		jobs, err := s.getRemindJobs(tr)
 		if err != nil {
 			logger.Warning(err)
 		}
 		for _, job := range jobs {
-			m.timerGroup.addJob(job, m)
+			s.timerGroup.addJob(job, s)
 		}
 	}
 
@@ -320,7 +319,7 @@ func (m *Manager) startRemindLoop() {
 				}
 				setTimerGroup(tr)
 
-			case <-m.changeChan:
+			case <-s.changeChan:
 				now := time.Now()
 				tr := TimeRange{
 					start: now,
@@ -328,16 +327,16 @@ func (m *Manager) startRemindLoop() {
 				}
 				setTimerGroup(tr)
 
-			case <-m.quitChan:
+			case <-s.quitChan:
 				return
 			}
 		}
 	}()
 }
 
-func (m *Manager) getRemindJobs(tr TimeRange) ([]*Job, error) {
+func (s *Scheduler) getRemindJobs(tr TimeRange) ([]*Job, error) {
 	var allJobs []*Job
-	err := m.db.Find(&allJobs, "remind IS NOT NULL AND remind != '' ").Error
+	err := s.db.Find(&allJobs, "remind IS NOT NULL AND remind != '' ").Error
 	if err != nil {
 		return nil, err
 	}
