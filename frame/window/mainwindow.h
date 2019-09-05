@@ -39,6 +39,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class DragWidget;
 class MainPanel;
 class MainPanelControl;
 class DBusDockAdaptors;
@@ -67,8 +68,6 @@ private:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
 
     void setFixedSize(const QSize &size);
     void internalAnimationMove(int x, int y);
@@ -81,7 +80,6 @@ private:
     const QPoint x11GetWindowPos();
     void x11MoveWindow(const int x, const int y);
     void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
-    QRect getNoneResizeRegion();
     bool appIsOnDock(const QString &appDesktop);
 
 signals:
@@ -107,14 +105,10 @@ private slots:
     void positionCheck();
 
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
+    void onMainWindowSizeChanged(QPoint offset);
+    void onDragFinished();
 
-private:
-    enum IsClickInDragAreaStatus {
-        NoClick = 0,
-        ClickNotInDragArea,
-        ClickInDragArea
-    };
-
+    private:
     bool m_launched;
     bool m_updatePanelVisible;
     MainPanelControl *m_mainPanel;
@@ -137,9 +131,8 @@ private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     org::kde::StatusNotifierWatcher *m_sniWatcher;
     QString m_sniHostService;
-    IsClickInDragAreaStatus m_dragStatus;
-    QPoint m_resizePoint;
     QSize m_size;
+    DragWidget *m_dragWidget;
 };
 
 #endif // MAINWINDOW_H

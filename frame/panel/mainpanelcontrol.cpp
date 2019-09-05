@@ -52,11 +52,6 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     updateMainPanelLayout();
     setAcceptDrops(true);
     setMouseTracking(true);
-    m_fixedAreaWidget->setMouseTracking(true);
-    m_appAreaWidget->setMouseTracking(true);
-    m_appAreaSonWidget->setMouseTracking(true);
-    m_trayAreaWidget->setMouseTracking(true);
-    m_pluginAreaWidget->setMouseTracking(true);
 
     connect(this, SIGNAL(displayModeChanged()), this, SLOT(onDisplayModeChanged()));
     connect(this, SIGNAL(positionChanged()), this, SLOT(onPositionChanged()));
