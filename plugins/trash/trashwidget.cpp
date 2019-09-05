@@ -180,7 +180,7 @@ void TrashWidget::resizeEvent(QResizeEvent *e)
 void TrashWidget::updateIcon()
 {
 //    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    Dock::DisplayMode displayMode = displayMode = Dock::Fashion;
+    Dock::DisplayMode displayMode = Dock::Fashion;
 
     QString iconString = "user-trash";
     if (!m_popupApplet->empty())

@@ -99,7 +99,7 @@ void WirelessItem::paintEvent(QPaintEvent *e)
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     const auto ratio = devicePixelRatioF();
-    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
+    const int iconSize = PLUGIN_ICON_MAX_SIZE;
     QPixmap pixmap = iconPix(displayMode, iconSize * ratio);
     pixmap.setDevicePixelRatio(ratio);
 
@@ -198,6 +198,9 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
     if (m_device->obtainIpFailed()) {
         key = "network-wireless-warning-symbolic";
     }
+
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE)
+        key.append(PLUGIN_MIN_ICON_NAME);
 
     return cachedPix(key, size);
 }

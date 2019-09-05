@@ -52,7 +52,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
     QPixmap pixmap;
     QString iconName = "system-shutdown";
-    int iconSize;
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
 
     QPainter painter(this);
 
@@ -76,11 +76,9 @@ void PluginWidget::paintEvent(QPaintEvent *e)
         QPainterPath path;
         path.addRoundedRect(rect(), radius, radius);
         painter.fillPath(path, color);
-
-        iconSize = PLUGIN_ICON_MAX_SIZE;
     } else {
-        iconSize = PLUGIN_ICON_MIN_SIZE;
-        iconName = iconName + "-symbolic";
+        // 最小尺寸时，不画背景，采用深色图标
+        iconName.append(PLUGIN_MIN_ICON_NAME);
     }
 
     painter.setOpacity(1);

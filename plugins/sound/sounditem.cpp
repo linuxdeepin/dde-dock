@@ -179,7 +179,10 @@ void SoundItem::refreshIcon()
     }
 
     const auto ratio = devicePixelRatioF();
-    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE)
+        iconString.append(PLUGIN_MIN_ICON_NAME);
+
     const QIcon icon = QIcon::fromTheme(iconString);
     m_iconPixmap = icon.pixmap(iconSize * ratio, iconSize * ratio);
     m_iconPixmap.setDevicePixelRatio(ratio);

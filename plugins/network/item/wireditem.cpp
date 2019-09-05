@@ -73,7 +73,7 @@ void WiredItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     const auto ratio = devicePixelRatioF();
-    const QRectF &rf = QRectF(rect());
+    const QRectF &rf = QRectF(pos(), QSize(std::min(width(), height()), std::min(width(), height())));
     const QRectF &rfp = QRectF(m_icon.rect());
     const int x = rf.center().x() - rfp.center().x() / ratio;
     const int y = rf.center().y() - rfp.center().y() / ratio;
@@ -105,7 +105,8 @@ void WiredItem::reloadIcon()
 //    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
     const auto ratio = devicePixelRatioF();
-    const int iconSize = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
+//    const int iconSize = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
+    const int iconSize = PLUGIN_ICON_MAX_SIZE;
 
     QString iconName = "network-";
     NetworkDevice::DeviceStatus devState = m_device->status();
@@ -164,6 +165,10 @@ void WiredItem::reloadIcon()
 
     if (displayMode == Dock::Efficient)
         iconName.append("-symbolic");
+
+    // 最小尺寸时采用深色图标
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE)
+        iconName.append(PLUGIN_MIN_ICON_NAME);
 
     m_icon = QIcon::fromTheme(iconName).pixmap(iconSize * ratio, iconSize * ratio);
     m_icon.setDevicePixelRatio(ratio);
