@@ -492,6 +492,7 @@ void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
 
 void DockSettings::calculateWindowConfig()
 {
+    m_dockWindowSize = m_dockInter->windowSize();
     if (m_dockWindowSize == 0) {
         if (m_displayMode == Dock::Efficient)
             m_dockWindowSize = EffICIENT_DEFAULT_HEIGHT;
