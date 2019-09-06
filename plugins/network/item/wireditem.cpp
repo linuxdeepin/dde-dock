@@ -73,7 +73,7 @@ void WiredItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     const auto ratio = devicePixelRatioF();
-    const QRectF &rf = QRectF(pos(), QSize(std::min(width(), height()), std::min(width(), height())));
+    const QRectF &rf = rect();
     const QRectF &rfp = QRectF(m_icon.rect());
     const int x = rf.center().x() - rfp.center().x() / ratio;
     const int y = rf.center().y() - rfp.center().y() / ratio;
@@ -82,6 +82,16 @@ void WiredItem::paintEvent(QPaintEvent *e)
 
 void WiredItem::resizeEvent(QResizeEvent *e)
 {
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
+
     DeviceItem::resizeEvent(e);
 
     m_delayTimer->start();
@@ -133,7 +143,7 @@ void WiredItem::reloadIcon()
             const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
             const int num = (index % 5) + 1;
             m_icon = QIcon(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num))
-                    .pixmap(iconSize * ratio, iconSize * ratio);
+                     .pixmap(iconSize * ratio, iconSize * ratio);
             m_icon.setDevicePixelRatio(ratio);
             update();
             return;

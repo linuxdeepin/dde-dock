@@ -90,6 +90,7 @@ public slots:
     void removeItem(DockItem *item);
     void onDisplayModeChanged();
     void onPositionChanged();
+    void itemUpdated(DockItem *item);
 
 private:
     QBoxLayout *m_mainPanelLayout;

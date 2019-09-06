@@ -49,9 +49,9 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     m_wirelessTips->setText(tr("No Network"));
 
     connect(m_refreshTimer, &QTimer::timeout, this, &WirelessItem::onRefreshTimeout);
-    connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     QTimer::singleShot(0, this, &WirelessItem::refreshTips);
@@ -104,8 +104,7 @@ void WirelessItem::paintEvent(QPaintEvent *e)
     pixmap.setDevicePixelRatio(ratio);
 
     QPainter painter(this);
-    if (displayMode == Dock::Fashion)
-    {
+    if (displayMode == Dock::Fashion) {
         QPixmap pixmap = backgroundPix(iconSize * ratio);
         pixmap.setDevicePixelRatio(ratio);
         painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
@@ -121,6 +120,16 @@ void WirelessItem::paintEvent(QPaintEvent *e)
 void WirelessItem::resizeEvent(QResizeEvent *e)
 {
     DeviceItem::resizeEvent(e);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 
     m_icons.clear();
 }
@@ -188,8 +197,8 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
     }
 
     QString key = QString("wireless-%1%2")
-                                .arg(type)
-                                .arg(displayMode == Dock::Fashion ? "" : "-symbolic");
+                  .arg(type)
+                  .arg(displayMode == Dock::Fashion ? "" : "-symbolic");
 
     if (state == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) {
         key = "network-wireless-offline-symbolic";
@@ -238,7 +247,7 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
     connect(m_APList, &WirelessList::requestSetAppletVisible, this, &WirelessItem::requestSetAppletVisible);
 
-    QTimer::singleShot(0, this, [=]() {
+    QTimer::singleShot(0, this, [ = ]() {
         m_refreshTimer->start();
     });
 }

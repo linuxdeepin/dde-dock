@@ -38,7 +38,6 @@ OnboardItem::OnboardItem(QWidget *parent)
 {
     setMouseTracking(true);
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
-    setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 QSize OnboardItem::sizeHint() const
@@ -61,14 +60,6 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     if (std::min(width(), height()) > PLUGIN_BACKGROUND_MIN_SIZE) {
-        painter.setRenderHint(QPainter::Antialiasing, true);
-        painter.setOpacity(0.5);
-
-        DStyleHelper dstyle(style());
-        const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
-
-        QPainterPath path;
-        path.addRoundedRect(rect(), radius, radius);
 
         QColor color = QColor::fromRgb(40, 40, 40);;
 
@@ -80,6 +71,19 @@ void OnboardItem::paintEvent(QPaintEvent *e)
             color = QColor::fromRgb(20, 20, 20);
         }
 
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setOpacity(0.5);
+
+        DStyleHelper dstyle(style());
+        const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
+
+        QPainterPath path;
+
+        int minSize = std::min(width(), height());
+        QRect rc(0, 0, minSize, minSize);
+        rc.moveTo(rect().center() - rc.center());
+
+        path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
     } else {
         iconName.append(PLUGIN_MIN_ICON_NAME);
@@ -142,10 +146,10 @@ void OnboardItem::resizeEvent(QResizeEvent *event)
     // 保持横纵比
     if (position == Dock::Bottom || position == Dock::Top) {
         setMaximumWidth(height());
-        setMaximumHeight(PLUGIN_BACKGROUND_MAX_SIZE);
+        setMaximumHeight(QWIDGETSIZE_MAX);
     } else {
         setMaximumHeight(width());
-        setMaximumWidth(PLUGIN_BACKGROUND_MAX_SIZE);
+        setMaximumWidth(QWIDGETSIZE_MAX);
     }
 
     QWidget::resizeEvent(event);

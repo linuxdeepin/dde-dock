@@ -46,6 +46,8 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     int dateHeight =  fm_date.boundingRect("8888/88/88").height();
 
     m_timeOffset = (timeHeight - dateHeight) / 2;
+
+    setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 }
 
 void DatetimeWidget::set24HourFormat(const bool value)
@@ -65,16 +67,35 @@ void DatetimeWidget::set24HourFormat(const bool value)
 
 QSize DatetimeWidget::sizeHint() const
 {
-    QFontMetrics fm(qApp->font());
-
-    if (m_24HourFormat)
-        return fm.boundingRect("8888/88/88").size() + QSize(30, 10);
-    else
-        return fm.boundingRect("88:88 A.A.").size() + QSize(30, 20);
+    // 最大尺寸
+    QFontMetrics fm(TIME_FONT);
+    return fm.boundingRect("88:88 A.A.").size() + QSize(20, 20);
 }
 
 void DatetimeWidget::resizeEvent(QResizeEvent *e)
 {
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+
+    QFontMetrics fm(TIME_FONT);
+    QString format;
+    if (m_24HourFormat)
+        format = "hh:mm";
+    else
+        format = "hh:mm AP";
+
+    QSize timeSize = fm.boundingRect(QDateTime::currentDateTime().toString(format)).size();
+    QSize dateSize = QFontMetrics(DATE_FONT).boundingRect("0000/00/00").size();
+    if (timeSize.width() < dateSize.width())
+        timeSize.setWidth(dateSize.width());
+
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(timeSize.width());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumWidth(QWIDGETSIZE_MAX);
+        setMaximumHeight(timeSize.height() * 2);
+    }
+
     QWidget::resizeEvent(e);
 }
 
@@ -82,9 +103,6 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const auto ratio = devicePixelRatioF();
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     const QDateTime current = QDateTime::currentDateTime();
 
     QPainter painter(this);

@@ -37,13 +37,12 @@ PluginWidget::PluginWidget(QWidget *parent)
     , m_pressed(false)
 {
     setMouseTracking(true);
-    setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
-    setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
+    setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 }
 
 QSize PluginWidget::sizeHint() const
 {
-    return QSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
+    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
 }
 
 void PluginWidget::paintEvent(QPaintEvent *e)
@@ -56,17 +55,18 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
-    QColor color = QColor::fromRgb(40, 40, 40);;
-
-    if (m_hover) {
-        color = QColor::fromRgb(60, 60, 60);
-    }
-
-    if (m_pressed) {
-        color = QColor::fromRgb(20, 20, 20);
-    }
-
     if (rect().height() > PLUGIN_BACKGROUND_MIN_SIZE) {
+
+        QColor color = QColor::fromRgb(40, 40, 40);;
+
+        if (m_hover) {
+            color = QColor::fromRgb(60, 60, 60);
+        }
+
+        if (m_pressed) {
+            color = QColor::fromRgb(20, 20, 20);
+        }
+
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setOpacity(0.5);
 
@@ -74,7 +74,12 @@ void PluginWidget::paintEvent(QPaintEvent *e)
         const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
         QPainterPath path;
-        path.addRoundedRect(rect(), radius, radius);
+
+        int minSize = std::min(width(), height());
+        QRect rc(0, 0, minSize, minSize);
+        rc.moveTo(rect().center() - rc.center());
+
+        path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
     } else {
         // 最小尺寸时，不画背景，采用深色图标
@@ -137,11 +142,11 @@ void PluginWidget::resizeEvent(QResizeEvent *event)
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     // 保持横纵比
     if (position == Dock::Bottom || position == Dock::Top) {
-        setMinimumWidth(height());
-        setMinimumHeight(PLUGIN_ICON_MIN_SIZE);
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
     } else {
-        setMinimumWidth(PLUGIN_ICON_MIN_SIZE);
-        setMinimumHeight(width());
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
     }
 
     QWidget::resizeEvent(event);

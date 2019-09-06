@@ -65,27 +65,38 @@ MainPanelControl::~MainPanelControl()
 
 void MainPanelControl::init()
 {
-    m_mainPanelLayout->setMargin(0);
-    m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
-    m_fixedAreaLayout->setMargin(0);
-    m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
-    m_pluginLayout->setMargin(0);
-    m_pluginLayout->setContentsMargins(10, 10, 10, 10);
-    m_trayAreaLayout->setMargin(0);
-    m_trayAreaLayout->setContentsMargins(10, 10, 10, 10);
-    m_appAreaSonLayout->setMargin(0);
-    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
+    // 主窗口
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
-    m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
     m_mainPanelLayout->addWidget(m_appAreaWidget);
     m_mainPanelLayout->addWidget(m_trayAreaWidget);
-    m_trayAreaWidget->setLayout(m_trayAreaLayout);
     m_mainPanelLayout->addWidget(m_pluginAreaWidget);
-    m_pluginAreaWidget->setLayout(m_pluginLayout);
-    m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
+
+    m_mainPanelLayout->setMargin(0);
+    m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainPanelLayout->setSpacing(0);
+
+    // 固定区域
+    m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
+    m_fixedAreaLayout->setMargin(0);
+    m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_fixedAreaLayout->setSpacing(0);
+
+    // 应用程序
+    m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
+    m_appAreaSonLayout->setMargin(0);
+    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_appAreaSonLayout->setSpacing(0);
+
+    // 托盘
+    m_trayAreaWidget->setLayout(m_trayAreaLayout);
+    m_trayAreaLayout->setMargin(0);
+    m_trayAreaLayout->setContentsMargins(10, 10, 10, 10);
     m_trayAreaLayout->setSpacing(0);
+
+    // 插件
+    m_pluginAreaWidget->setLayout(m_pluginLayout);
+    m_pluginLayout->setMargin(0);
+    m_pluginLayout->setContentsMargins(0, 10, 10, 10);
     m_pluginLayout->setSpacing(10);
 }
 
@@ -111,6 +122,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_pluginLayout->setDirection(QBoxLayout::LeftToRight);
         m_trayAreaLayout->setDirection(QBoxLayout::LeftToRight);
         m_appAreaSonLayout->setDirection(QBoxLayout::LeftToRight);
+        m_pluginLayout->setContentsMargins(0, 10, 10, 10);
         break;
     case Position::Right:
     case Position::Left:
@@ -123,6 +135,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_pluginLayout->setDirection(QBoxLayout::TopToBottom);
         m_trayAreaLayout->setDirection(QBoxLayout::TopToBottom);
         m_appAreaSonLayout->setDirection(QBoxLayout::TopToBottom);
+        m_pluginLayout->setContentsMargins(10, 0, 10, 10);
         break;
     }
 }
@@ -157,6 +170,8 @@ void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
     m_pluginLayout->insertWidget(index, wdg);
+    QTimer::singleShot(50, this, [ = ] {m_pluginAreaWidget->adjustSize();});
+
 }
 
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
@@ -646,4 +661,9 @@ void MainPanelControl::onDisplayModeChanged()
 void MainPanelControl::onPositionChanged()
 {
     updateMainPanelLayout();
+}
+
+void MainPanelControl::itemUpdated(DockItem *item)
+{
+    item->parentWidget()->adjustSize();
 }

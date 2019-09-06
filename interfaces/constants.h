@@ -41,6 +41,9 @@ namespace Dock {
 
 // 插件最小尺寸，图标采用深色
 #define PLUGIN_MIN_ICON_NAME "-dark"
+
+// dock最大尺寸
+#define DOCK_MAX_SIZE 100
 ///
 /// \brief The DisplayMode enum
 /// spec dock display mode

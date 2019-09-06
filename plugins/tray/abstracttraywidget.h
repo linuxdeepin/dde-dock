@@ -58,6 +58,7 @@ protected:
 
     void handleMouseRelease();
     const QRect perfectIconRect() const;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     QTimer *m_handleMouseReleaseTimer;

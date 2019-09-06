@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "constants.h"
 #include "abstracttraywidget.h"
 
 #include <xcb/xproto.h>
@@ -26,8 +27,8 @@
 #include <QDebug>
 
 AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, f),
-    m_handleMouseReleaseTimer(new QTimer(this))
+    : QWidget(parent, f)
+    , m_handleMouseReleaseTimer(new QTimer(this))
 {
     m_handleMouseReleaseTimer->setSingleShot(true);
     m_handleMouseReleaseTimer->setInterval(100);
@@ -70,8 +71,8 @@ void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
 }
 
 
-void AbstractTrayWidget::handleMouseRelease() {
-
+void AbstractTrayWidget::handleMouseRelease()
+{
     Q_ASSERT(sender() == m_handleMouseReleaseTimer);
 
     // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
@@ -115,4 +116,19 @@ const QRect AbstractTrayWidget::perfectIconRect() const
     iconRect.moveTopLeft(itemRect.center() - iconRect.center());
 
     return iconRect;
+}
+
+void AbstractTrayWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 }

@@ -47,6 +47,8 @@ TrashWidget::TrashWidget(QWidget *parent)
 
     updateIcon();
     setAcceptDrops(true);
+
+    setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
 }
 
 QWidget *TrashWidget::popupApplet()
@@ -56,7 +58,7 @@ QWidget *TrashWidget::popupApplet()
 
 QSize TrashWidget::sizeHint() const
 {
-    return QSize(26, 26);
+    return QSize(DOCK_MAX_SIZE, DOCK_MAX_SIZE);
 }
 
 const QString TrashWidget::contextMenu() const
@@ -172,6 +174,16 @@ void TrashWidget::paintEvent(QPaintEvent *e)
 
 void TrashWidget::resizeEvent(QResizeEvent *e)
 {
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
+
     QWidget::resizeEvent(e);
 
     updateIcon();
@@ -188,7 +200,7 @@ void TrashWidget::updateIcon()
     if (displayMode == Dock::Efficient)
         iconString.append("-symbolic");
 
-    const int size = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
+    const int size = std::min(width(), height()) ;
     QIcon icon = QIcon::fromTheme(iconString);
     m_icon = icon.pixmap(size * devicePixelRatioF(), size * devicePixelRatioF());
     m_icon.setDevicePixelRatio(devicePixelRatioF());
