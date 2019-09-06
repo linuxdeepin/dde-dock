@@ -47,7 +47,7 @@ public:
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
 
-    inline ItemType itemType() const override;
+    ItemType itemType() const override;
     QSize sizeHint() const override;
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 

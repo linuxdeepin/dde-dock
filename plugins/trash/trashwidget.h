@@ -48,6 +48,7 @@ public:
     int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
     void updateIcon();
+    void updateIconAndRefresh();
 
 signals:
     void requestContextMenu() const;

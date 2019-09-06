@@ -33,9 +33,9 @@
 DWIDGET_USE_NAMESPACE
 
 TrashPlugin::TrashPlugin(QObject *parent)
-    : QObject(parent),
-      m_trashWidget(new TrashWidget),
-      m_tipsLabel(new QLabel)
+    : QObject(parent)
+    , m_trashWidget(nullptr)
+    , m_tipsLabel(new QLabel)
 {
     m_tipsLabel->setObjectName("trash");
     m_tipsLabel->setStyleSheet("color:white;"
@@ -70,6 +70,10 @@ void TrashPlugin::init(PluginProxyInterface *proxyInter)
     qApp->setApplicationName(applicationName);
 
     m_proxyInter = proxyInter;
+
+    if (!m_trashWidget)
+        m_trashWidget = new TrashWidget;
+
 //    DFMGlobal::instance()->installTranslator();
     displayModeChanged(displayMode());
 }

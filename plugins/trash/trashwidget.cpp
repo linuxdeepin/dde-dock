@@ -35,17 +35,13 @@
 #include <QApplication>
 
 TrashWidget::TrashWidget(QWidget *parent)
-    : QWidget(parent),
-
-      m_popupApplet(new PopupControlWidget(this))
+    : QWidget(parent)
+    , m_popupApplet(new PopupControlWidget(this))
 {
-//    QIcon::setThemeName("deepin");
-
     m_popupApplet->setVisible(false);
 
-    connect(m_popupApplet, &PopupControlWidget::emptyChanged, this, &TrashWidget::updateIcon);
+    connect(m_popupApplet, &PopupControlWidget::emptyChanged, this, &TrashWidget::updateIconAndRefresh);
 
-    updateIcon();
     setAcceptDrops(true);
 
     setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
@@ -169,6 +165,9 @@ void TrashWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
+
+    updateIcon();
+
     painter.drawPixmap(rect().center() - m_icon.rect().center() / devicePixelRatioF(), m_icon);
 }
 
@@ -185,8 +184,6 @@ void TrashWidget::resizeEvent(QResizeEvent *e)
     }
 
     QWidget::resizeEvent(e);
-
-    updateIcon();
 }
 
 void TrashWidget::updateIcon()
@@ -202,8 +199,16 @@ void TrashWidget::updateIcon()
 
     const int size = std::min(width(), height()) ;
     QIcon icon = QIcon::fromTheme(iconString);
-    m_icon = icon.pixmap(size * devicePixelRatioF(), size * devicePixelRatioF());
-    m_icon.setDevicePixelRatio(devicePixelRatioF());
+
+    const auto ratio = devicePixelRatioF();
+
+    m_icon = icon.pixmap(size * ratio, size * ratio);
+    m_icon.setDevicePixelRatio(ratio);
+}
+
+void TrashWidget::updateIconAndRefresh()
+{
+    updateIcon();
     update();
 }
 
