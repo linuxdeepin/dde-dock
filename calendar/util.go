@@ -2,13 +2,8 @@ package calendar
 
 import (
 	"encoding/json"
-	"strconv"
 	"time"
 )
-
-func parseInt(str string) (int, error) {
-	return strconv.Atoi(str)
-}
 
 func newTimeYMDHM(y int, m time.Month, d int, h int, min int) time.Time {
 	return time.Date(y, m, d, h, min, 0, 0, time.Local)
@@ -30,28 +25,8 @@ type Clock struct {
 	Second int
 }
 
-func parseDate(str string) (time.Time, error) {
-	t, err := time.ParseInLocation("2006-01-02", str, time.Local)
-	return t, err
-}
-
 func formatTime(t time.Time) string {
 	return t.Format("2006-01-02 15:04")
-}
-
-func iterDays(start, end time.Time, f func(t time.Time) error) error {
-	t := start
-	for {
-		err := f(t)
-		if err != nil {
-			return err
-		}
-		if t.Equal(end) {
-			break
-		}
-		t = t.AddDate(0, 0, 1)
-	}
-	return nil
 }
 
 func fromJson(jStr string, v interface{}) error {

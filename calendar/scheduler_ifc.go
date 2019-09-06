@@ -1,6 +1,9 @@
 package calendar
 
 import (
+	"time"
+
+	libdate "github.com/rickb777/date"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -10,6 +13,17 @@ const (
 	dbusPath        = "/com/deepin/daemon/Calendar/Scheduler"
 	dbusInterface   = "com.deepin.daemon.Calendar.Scheduler"
 )
+
+func (s *Scheduler) GetJobs(startYear, startMonth, startDay, endYear, endMonth, endDay int32) (string, *dbus.Error) {
+	startDate := libdate.New(int(startYear), time.Month(startMonth), int(startDay))
+	endDate := libdate.New(int(endYear), time.Month(endMonth), int(endDay))
+	jobs, err := s.getJobs(startDate, endDate)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	result, err := toJson(jobs)
+	return result, dbusutil.ToError(err)
+}
 
 func (s *Scheduler) GetJob(id int64) (string, *dbus.Error) {
 	job, err := s.getJob(uint(id))

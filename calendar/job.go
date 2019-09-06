@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/stephens2424/rrule"
-
 	"github.com/jinzhu/gorm"
+	libdate "github.com/rickb777/date"
+	"github.com/stephens2424/rrule"
 )
 
 type Job struct {
@@ -97,7 +97,21 @@ func (j *JobJSON) toJob() (*Job, error) {
 }
 
 func (j *Job) validate() error {
-	// TODO
+	// j.End < j.Start
+	if j.End.Before(j.Start) {
+		return errors.New("job end time before start time")
+	}
+
+	_, err := rrule.ParseRRule(j.RRule)
+	if err != nil {
+		return fmt.Errorf("invalid RRule: %v", err)
+	}
+
+	_, err = parseRemind(j.Start, j.Remind)
+	if err != nil {
+		return fmt.Errorf("invalid Remind: %v", err)
+	}
+
 	return nil
 }
 
@@ -118,31 +132,129 @@ func timeSliceContains(timeSlice []time.Time, t time.Time) bool {
 	return false
 }
 
-func getDateJobs(allJobs []*Job, date Date) ([]*Job, error) {
+type jobTime struct {
+	start   time.Time
+	recurID int
+}
 
-	var result []*Job
-	dateRange := date.toTimeRange()
-	for _, job := range allJobs {
-		r := TimeRange{job.Start, job.End}
+func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool) (wraps []dateJobsWrap) {
+	days := endDate.Sub(startDate)
+	wraps = make([]dateJobsWrap, days+1)
+	date := startDate
+	for idx := range wraps {
+		wraps[idx].date = date
+		date = date.Add(1)
+	}
 
-		ignore, err := job.getIgnore()
+	for _, job := range jobs {
+		interval := job.End.Sub(job.Start)
+		jobTimes, err := job.between(startDate, endDate)
 		if err != nil {
-			return nil, err
-		}
-		if !timeSliceContains(ignore, job.Start) {
-			if r.overlap(dateRange) {
-				result = append(result, job)
+			if logger != nil {
+				logger.Warning(err)
 			}
+			continue
 		}
-
-		rJobs := job.getRecurrenceJobs(dateRange)
-		for _, rJob := range rJobs {
-			if timeSliceContains(ignore, rJob.Start) {
-				continue
+		for _, jobTime := range jobTimes {
+			var j *Job
+			if jobTime.recurID == 0 {
+				j = job
+			} else {
+				j = job.clone(jobTime.start, jobTime.start.Add(interval), jobTime.recurID)
 			}
-			result = append(result, rJob)
+			d := libdate.NewAt(jobTime.start)
+			idx := d.Sub(startDate)
+			wraps[idx].jobs = append(wraps[idx].jobs, j)
 		}
 	}
+
+	if !extend {
+		return
+	}
+	for idx, wrap := range wraps {
+		for _, job := range wrap.jobs {
+			jStartDate := libdate.NewAt(job.Start)
+			jEndDate := libdate.NewAt(job.End)
+
+			days := int(jEndDate.Sub(jStartDate))
+
+			for i := 0; i < days; i++ {
+				tIdx := idx + i + 1
+				if tIdx == len(wraps) {
+					break
+				}
+				w := &wraps[tIdx]
+				w.extendJobs = append(w.extendJobs, job)
+			}
+		}
+	}
+
+	return
+}
+
+const recurrenceLimit = 3650
+
+func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
+	jStartDate := libdate.NewAt(j.Start)
+	if endDate.Before(jStartDate) {
+		// endDate < jStartDate
+		return nil, nil
+	}
+
+	ignore, err := j.getIgnore()
+	if err != nil {
+		return nil, err
+	}
+	// 此次满足条件 jStartDate <= endDate
+	if j.RRule == "" {
+		if !startDate.After(jStartDate) {
+			// startDate <= jStartDate <= endDate
+			if timeSliceContains(ignore, j.Start) {
+				// ignore this job
+				return nil, nil
+			}
+			return []jobTime{
+				{start: j.Start},
+			}, nil
+		}
+
+		return nil, nil
+	}
+
+	rule, err := rrule.ParseRRule(j.RRule)
+	if err != nil {
+		return nil, err
+	}
+	rule.Dtstart = j.Start
+	iter := rule.Iterator()
+
+	count := 0
+	var result []jobTime
+
+	for {
+		if count == recurrenceLimit {
+			break
+		}
+		t := iter.Next()
+		if t == nil {
+			break
+		}
+		start := *t
+		d := libdate.NewAt(start)
+		if endDate.Before(d) {
+			// endDate < d
+			break
+		}
+
+		if !startDate.After(d) &&
+			!timeSliceContains(ignore, start) {
+			// startDate <= d <= endDate and not ignored
+			result = append(result, jobTime{start: start, recurID: count})
+		}
+
+		count++
+	}
+
 	return result, nil
 }
 
@@ -181,7 +293,7 @@ func parseRemind(startTime time.Time, remind string) (t time.Time, err error) {
 		return
 	}
 	var nMinutes int
-	nMinutes, err = parseInt(remind)
+	nMinutes, err = strconv.Atoi(remind)
 	if err != nil {
 		return
 	}
@@ -194,48 +306,13 @@ func parseRemind(startTime time.Time, remind string) (t time.Time, err error) {
 	return
 }
 
-func (j *Job) getRecurrenceJobs(dateRange TimeRange) []*Job {
-	if j.RRule == "" {
-		return nil
+func (j *Job) getRemindTime() (time.Time, error) {
+	start := j.Start
+	if j.AllDay {
+		start = setClock(j.Start, Clock{})
 	}
 
-	if dateRange.start.Before(j.Start) {
-		return nil
-	}
-
-	rule, err := rrule.ParseRRule(j.RRule)
-	if err != nil {
-		logger.Warningf("failed to parse rrule %q: %v", j.RRule, err)
-		return nil
-	}
-	rule.Dtstart = j.Start
-	iter := rule.Iterator()
-	iter.Next()
-
-	count := 0
-	var result []*Job
-	for {
-		count++
-		t := iter.Next()
-		if t == nil {
-			break
-		}
-		start := *t
-		if dateRange.end.Before(start) {
-			break
-		}
-		interval := start.Sub(j.Start)
-		end := j.End.Add(interval)
-
-		r := TimeRange{start, end}
-		if r.overlap(dateRange) {
-			result = append(result, j.clone(start, end, count))
-		}
-		if count == 2000 {
-			break
-		}
-	}
-	return result
+	return parseRemind(start, j.Remind)
 }
 
 func (j *Job) clone(start, end time.Time, recurID int) *Job {

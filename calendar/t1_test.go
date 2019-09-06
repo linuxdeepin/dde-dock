@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	libdate "github.com/rickb777/date"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -125,4 +126,20 @@ func TestTimeRangeOverlap(t *testing.T) {
 		newTimeYMDHMS(2019, 1, 2, 23, 59, 59))
 	assert.False(t, r.overlap(r1))
 	assert.False(t, r1.overlap(r))
+}
+
+func TestBetween(t *testing.T) {
+	job := &Job{
+		Start: newTimeYMDHM(2019, 9, 1, 9, 0),
+		End:   newTimeYMDHM(2019, 9, 1, 10, 0),
+		RRule: "FREQ=DAILY",
+	}
+	startDate := libdate.New(2019, 9, 1)
+	endDate := libdate.New(2019, 9, 30)
+	timeCounts, err := job.between(startDate, endDate)
+	assert.Nil(t, err)
+	//t.Log(timeCounts)
+	for _, timeCount := range timeCounts {
+		t.Logf("%s %d\n", timeCount.start, timeCount.recurID)
+	}
 }

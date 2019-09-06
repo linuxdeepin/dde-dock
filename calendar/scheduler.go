@@ -1,10 +1,12 @@
 package calendar
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
+	libdate "github.com/rickb777/date"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -47,23 +49,40 @@ func (s *Scheduler) GetInterfaceName() string {
 	return dbusInterface
 }
 
-func (s *Scheduler) GetJobs(startYear, startMonth, startDay, endYear, endMonth, endDay int32) (string, *dbus.Error) {
-	start := newTimeYMDHM(int(startYear), time.Month(startMonth), int(startDay), 0, 0)
-	end := newTimeYMDHM(int(endYear), time.Month(endMonth), int(endDay), 0, 0)
-	jobs, err := s.getJobs(start, end)
-	if err != nil {
-		return "", dbusutil.ToError(err)
-	}
-	result, err := toJson(jobs)
-	return result, dbusutil.ToError(err)
+type dateJobsWrap struct {
+	date       libdate.Date
+	jobs       []*Job
+	extendJobs []*Job
 }
 
-type DateJobsWrap struct {
+type dateJobsWrapJSON struct {
 	Date string
 	Jobs []*JobJSON
 }
 
-func (s *Scheduler) getJobs(start, end time.Time) ([]DateJobsWrap, error) {
+func (w *dateJobsWrap) MarshalJSON() ([]byte, error) {
+	var wj dateJobsWrapJSON
+	wj.Date = w.date.String()
+	wj.Jobs = make([]*JobJSON, len(w.jobs)+len(w.extendJobs))
+	var err error
+	for idx, j := range w.jobs {
+		wj.Jobs[idx], err = j.toJobJSON()
+		if err != nil {
+			return nil, err
+		}
+	}
+	baseIdx := len(w.jobs)
+	for idx, j := range w.extendJobs {
+		wj.Jobs[idx+baseIdx], err = j.toJobJSON()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return json.Marshal(wj)
+}
+
+func (s *Scheduler) getJobs(startDate, endDate libdate.Date) ([]dateJobsWrap, error) {
 	var allJobs []*Job
 	err := s.db.Find(&allJobs).Error
 	if err != nil {
@@ -71,32 +90,7 @@ func (s *Scheduler) getJobs(start, end time.Time) ([]DateJobsWrap, error) {
 	}
 
 	t0 := time.Now()
-	var result []DateJobsWrap
-	err = iterDays(start, end, func(t time.Time) error {
-		date := timeToDate(t)
-		jobs, err := getDateJobs(allJobs, date)
-		if err != nil {
-			return err
-		}
-
-		jobs1 := make([]*JobJSON, len(jobs))
-		for i, j := range jobs {
-			jj, err := j.toJobJSON()
-			if err != nil {
-				return err
-			}
-			jobs1[i] = jj
-		}
-
-		result = append(result, DateJobsWrap{
-			Date: timeToDate(t).String(),
-			Jobs: jobs1,
-		})
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
+	result := getJobsBetween(startDate, endDate, allJobs, true)
 	logger.Debug("cost time:", time.Since(t0))
 	return result, nil
 }
@@ -260,6 +254,9 @@ func (tg *timerGroup) addJob(job *Job, m *Scheduler) {
 }
 
 func (tg *timerGroup) reset() {
+	if tg.timers == nil {
+		return
+	}
 	for _, timer := range tg.timers {
 		timer.Stop()
 	}
@@ -271,7 +268,7 @@ func (s *Scheduler) remindJob(job *Job) {
 	body := job.Start.Format(layout) + " ~ " + job.End.Format(layout)
 	logger.Debug("remind:", job.Title, body)
 	id, err := s.notifications.Notify(0, "dde-daemon", 0,
-		"", job.Title,
+		"dde-calendar", job.Title,
 		body, nil, nil, 0)
 	if err != nil {
 		logger.Warning(err)
@@ -298,34 +295,32 @@ func (s *Scheduler) startRemindLoop() {
 	const interval = 10 * time.Minute
 	ticker := time.NewTicker(interval)
 
-	setTimerGroup := func(tr TimeRange) {
+	setTimerGroup := func(now time.Time) {
 		s.timerGroup.reset()
+		tr := TimeRange{
+			start: now,
+			end:   now.Add(interval),
+		}
 		jobs, err := s.getRemindJobs(tr)
 		if err != nil {
 			logger.Warning(err)
+			return
 		}
 		for _, job := range jobs {
 			s.timerGroup.addJob(job, s)
 		}
 	}
 
+	setTimerGroup(time.Now())
 	go func() {
 		for {
 			select {
 			case now := <-ticker.C:
-				tr := TimeRange{
-					start: now,
-					end:   now.Add(interval),
-				}
-				setTimerGroup(tr)
+				setTimerGroup(now)
 
 			case <-s.changeChan:
 				now := time.Now()
-				tr := TimeRange{
-					start: now,
-					end:   now.Add(interval),
-				}
-				setTimerGroup(tr)
+				setTimerGroup(now)
 
 			case <-s.quitChan:
 				return
@@ -340,35 +335,26 @@ func (s *Scheduler) getRemindJobs(tr TimeRange) ([]*Job, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	start := setClock(tr.start, Clock{})
-	end := start.AddDate(0, 0, 8)
+	startDate := libdate.NewAt(tr.start)
+	endDate := startDate.Add(8)
 
 	var result []*Job
-	err = iterDays(start, end, func(t time.Time) error {
 
-		date := timeToDate(t)
-		jobs, err := getDateJobs(allJobs, date)
-		if err != nil {
-			return err
-		}
-
-		for _, job := range jobs {
-			remindT, err := parseRemind(job.Start, job.Remind)
+	wraps := getJobsBetween(startDate, endDate, allJobs, false)
+	for _, wrap := range wraps {
+		for _, job := range wrap.jobs {
+			remindT, err := job.getRemindTime()
 			if err != nil {
 				continue
 			}
-			job.remindTime = remindT
-			if (tr.start.Before(remindT) || tr.start.Equal(remindT)) &&
-				(remindT.Before(tr.end) || remindT.Equal(tr.end)) {
+			if !tr.start.After(remindT) &&
+				!remindT.After(tr.end) {
 				// tr.start <= remindT <= tr.end
+				job.remindTime = remindT
 				result = append(result, job)
 			}
 		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
 	}
+
 	return result, nil
 }
