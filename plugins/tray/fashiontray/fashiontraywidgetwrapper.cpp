@@ -62,7 +62,7 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     connect(m_absTrayWidget, &AbstractTrayWidget::needAttention, this, &FashionTrayWidgetWrapper::onTrayWidgetNeedAttention);
     connect(m_absTrayWidget, &AbstractTrayWidget::clicked, this, &FashionTrayWidgetWrapper::onTrayWidgetClicked);
 
-    setFixedSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
+    setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 }
 
 AbstractTrayWidget *FashionTrayWidgetWrapper::absTrayWidget() const
@@ -100,7 +100,12 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
         const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
         QPainterPath path;
-        path.addRoundedRect(rect(), radius, radius);
+
+        int minSize = std::min(width(), height());
+        QRect rc(0, 0, minSize, minSize);
+        rc.moveTo(rect().center() - rc.center());
+
+        path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
     }
 }
@@ -175,11 +180,11 @@ void FashionTrayWidgetWrapper::resizeEvent(QResizeEvent *event)
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     // 保持横纵比
     if (position == Dock::Bottom || position == Dock::Top) {
-        setMinimumHeight(PLUGIN_BACKGROUND_MIN_SIZE);
-        setFixedWidth(height());
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
     } else {
-        setMinimumWidth(PLUGIN_BACKGROUND_MIN_SIZE);
-        setFixedHeight(width());
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
     }
 
     QWidget::resizeEvent(event);

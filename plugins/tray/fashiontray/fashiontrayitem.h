@@ -96,6 +96,9 @@ private:
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;
+
+    QWidget *m_leftSpace;
+    QWidget *m_rightSpace;
 };
 
 #endif // FASHIONTRAYITEM_H

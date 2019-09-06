@@ -18,7 +18,7 @@ HoldContainer::HoldContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
     m_mainBoxLayout->addLayout(newLayout);
 
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_mainBoxLayout);
 }
 
@@ -41,6 +41,8 @@ void HoldContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
 
 void HoldContainer::refreshVisible()
 {
+    AbstractContainer::refreshVisible();
+
     setVisible(expand() || !isEmpty());
 }
 

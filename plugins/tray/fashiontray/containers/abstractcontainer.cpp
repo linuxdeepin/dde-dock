@@ -13,11 +13,29 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
     setAcceptDrops(true);
 
     m_wrapperLayout->setMargin(0);
-    m_wrapperLayout->setContentsMargins(10, 0, 10, 0);
+    m_wrapperLayout->setContentsMargins(0, 0, 0, 0);
     m_wrapperLayout->setSpacing(TraySpace);
 
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_wrapperLayout);
+
+    setMinimumWidth(TraySpace);
+    setMinimumHeight(TraySpace);
+}
+
+void AbstractContainer::refreshVisible()
+{
+    qDebug() << this << size() << minimumSize() << maximumSize();
+    if (!m_wrapperList.isEmpty()) {
+        //非空保留两边边距
+        if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
+            m_wrapperLayout->setContentsMargins(TraySpace, 0, TraySpace, 0);
+        } else {
+            m_wrapperLayout->setContentsMargins(0, TraySpace, 0, TraySpace);
+        }
+    } else {
+        // 空，保留最小size，可以拖入
+        m_wrapperLayout->setContentsMargins(0, 0, 0, 0);
+    }
 }
 
 void AbstractContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
@@ -91,10 +109,8 @@ void AbstractContainer::setDockPosition(const Dock::Position pos)
     m_dockPosition = pos;
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
-        m_wrapperLayout->setContentsMargins(10, 0, 10, 0);
         m_wrapperLayout->setDirection(QBoxLayout::Direction::LeftToRight);
     } else {
-        m_wrapperLayout->setContentsMargins(0, 10, 0, 10);
         m_wrapperLayout->setDirection(QBoxLayout::Direction::TopToBottom);
     }
 

@@ -14,7 +14,7 @@ public:
     explicit AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent = nullptr);
 
     virtual bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) = 0;
-    virtual void refreshVisible() = 0;
+    virtual void refreshVisible();
 
     virtual void addWrapper(FashionTrayWidgetWrapper *wrapper);
     virtual bool removeWrapper(FashionTrayWidgetWrapper *wrapper);

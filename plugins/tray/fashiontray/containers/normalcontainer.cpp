@@ -25,10 +25,12 @@ void NormalContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
 
 void NormalContainer::refreshVisible()
 {
+    AbstractContainer::refreshVisible();
+
     if (isEmpty()) {
         // set the minimum size to 1 to avoid can not drag back wrappers when
         // all wrappers has been drag out
-        setMinimumSize(1, 1);
+        setMinimumSize(TraySpace, TraySpace);
     } else {
         // set the minimum size back to 0 in order to make the fold animation works correctly
         setMinimumSize(0, 0);
