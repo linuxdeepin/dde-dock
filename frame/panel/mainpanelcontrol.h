@@ -55,7 +55,6 @@ public:
     void removePluginAreaItem(QWidget *wdg);
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode m_displayMode);
-    void positionChanged();
 
     MainPanelDelegate *delegate() const;
     void setDelegate(MainPanelDelegate *delegate);

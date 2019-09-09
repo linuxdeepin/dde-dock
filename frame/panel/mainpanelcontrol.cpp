@@ -240,8 +240,9 @@ void MainPanelControl::setPositonValue(Dock::Position position)
 {
     if (m_position == position)
         return;
+
     m_position = position;
-    emit positionChanged();
+    updateMainPanelLayout();
 }
 
 void MainPanelControl::insertItem(int index, DockItem *item)
@@ -668,11 +669,6 @@ void MainPanelControl::moveAppSonWidget()
     }
 
     m_appAreaSonWidget->move(rect.x(), rect.y());
-}
-
-void MainPanelControl::positionChanged()
-{
-    updateMainPanelLayout();
 }
 
 void MainPanelControl::itemUpdated(DockItem *item)
