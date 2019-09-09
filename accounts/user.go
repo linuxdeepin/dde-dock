@@ -32,7 +32,7 @@ import (
 	"pkg.deepin.io/gir/glib-2.0"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/strv"
@@ -110,6 +110,7 @@ type User struct {
 
 	AccountType int32
 	LoginTime   uint64
+	CreatedTime uint64
 
 	// dbusutil-gen: equal=nil
 	IconList []string
@@ -171,6 +172,12 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	u.AccountType = u.getAccountType()
 	u.IconList = u.getAllIcons()
 	u.Groups = u.getGroups()
+
+	// NOTICE(jouyouyun): Got created time,  not accurate, can only be used as a reference
+	u.CreatedTime, err = u.getCreatedTime()
+	if err != nil {
+		logger.Warning("Failed to get created time:", err)
+	}
 
 	updateConfigPath(userInfo.Name)
 
