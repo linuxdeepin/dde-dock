@@ -55,6 +55,7 @@ public:
     void removePluginAreaItem(QWidget *wdg);
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode m_displayMode);
+    void positionChanged();
 
     MainPanelDelegate *delegate() const;
     void setDelegate(MainPanelDelegate *delegate);
@@ -62,8 +63,6 @@ public:
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
-    void displayModeChanged();
-    void positionChanged();
 
 private:
     void resizeEvent(QResizeEvent *event) override;
@@ -88,8 +87,6 @@ private:
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
-    void onDisplayModeChanged();
-    void onPositionChanged();
     void itemUpdated(DockItem *item);
 
 private:

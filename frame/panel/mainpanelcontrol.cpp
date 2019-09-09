@@ -55,9 +55,6 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     setAcceptDrops(true);
     setMouseTracking(true);
 
-    connect(this, SIGNAL(displayModeChanged()), this, SLOT(onDisplayModeChanged()));
-    connect(this, SIGNAL(positionChanged()), this, SLOT(onPositionChanged()));
-
     m_appAreaWidget->installEventFilter(this);
     m_appAreaSonWidget->installEventFilter(this);
 }
@@ -108,7 +105,7 @@ void MainPanelControl::setDisplayMode(DisplayMode mode)
     if (mode == m_dislayMode)
         return;
     m_dislayMode = mode;
-    emit displayModeChanged();
+    updateDisplayMode();
 }
 
 void MainPanelControl::updateMainPanelLayout()
@@ -372,7 +369,6 @@ void MainPanelControl::dragLeaveEvent(QDragLeaveEvent *e)
 
         removeAppAreaItem(m_placeholderItem);
         m_placeholderItem->deleteLater();
-        updateMainPanelLayout();
     }
 }
 
@@ -674,12 +670,7 @@ void MainPanelControl::moveAppSonWidget()
     m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
-void MainPanelControl::onDisplayModeChanged()
-{
-    updateDisplayMode();
-}
-
-void MainPanelControl::onPositionChanged()
+void MainPanelControl::positionChanged()
 {
     updateMainPanelLayout();
 }
