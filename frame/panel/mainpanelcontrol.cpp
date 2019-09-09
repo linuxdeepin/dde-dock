@@ -469,6 +469,10 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::LayoutRequest) {
             m_appAreaSonWidget->adjustSize();
         }
+
+        if (event->type() == QEvent::Resize) {
+            moveAppSonWidget();
+        }
     }
 
     if (watched == m_appAreaWidget) {
