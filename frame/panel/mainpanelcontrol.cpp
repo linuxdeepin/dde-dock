@@ -28,6 +28,8 @@
 
 #include <QDrag>
 #include <QTimer>
+#include <QStandardPaths>
+#include <QString>
 
 DWIDGET_USE_NAMESPACE
 
@@ -342,6 +344,12 @@ void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
         qDebug() << "dragging item is NOT a desktop file";
         return;
     }
+
+    //如果当前从桌面拖拽的的app是trash，则不能放入app任务栏中
+    QString str = "file://";
+    str.append(QStandardPaths::locate(QStandardPaths::DesktopLocation, "dde-trash.desktop"));
+    if (str == e->mimeData()->data(m_draggingMimeKey))
+        return;
 
     if (m_delegate && m_delegate->appIsOnDock(e->mimeData()->data(m_draggingMimeKey)))
         return;
