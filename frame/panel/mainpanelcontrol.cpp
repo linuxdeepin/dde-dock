@@ -57,6 +57,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     connect(this, SIGNAL(positionChanged()), this, SLOT(onPositionChanged()));
 
     m_appAreaWidget->installEventFilter(this);
+    m_appAreaSonWidget->installEventFilter(this);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -456,6 +457,12 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == m_appAreaSonWidget) {
+        if (event->type() == QEvent::LayoutRequest) {
+            m_appAreaSonWidget->adjustSize();
+        }
+    }
+
     if (watched == m_appAreaWidget) {
         if (event->type() == QEvent::Resize)
             updateAppAreaSonWidgetSize();
