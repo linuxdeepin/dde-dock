@@ -148,8 +148,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
     m_platformWindowHandle.setBorderWidth(0);
-    m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
-    m_platformWindowHandle.setShadowRadius(0);
 
     m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
@@ -226,10 +224,6 @@ bool MainWindow::event(QEvent *e)
 void MainWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
-
-//    m_platformWindowHandle.setEnableBlurWindow(false);
-    m_platformWindowHandle.setShadowOffset(QPoint());
-    m_platformWindowHandle.setShadowRadius(0);
 
     connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
     windowHandle(), [this](QScreen * new_screen) {
@@ -555,7 +549,7 @@ void MainWindow::updateGeometry()
     QSize size = m_settings->windowSize();
 
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
-//    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
+    m_mainPanel->setDisplayMode(m_settings->displayMode());
     m_mainPanel->setPositonValue(position);
     // this->setFixedSize has been overridden for size animation
     resizeMainPanelWindow();
@@ -731,7 +725,6 @@ void MainWindow::expand()
         m_panelShowAni->setEndValue(finishPos);
         m_panelShowAni->start();
         m_shadowMaskOptimizeTimer->start();
-        m_platformWindowHandle.setShadowRadius(0);
     }
 }
 
@@ -749,7 +742,6 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->setStartValue(pos());
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
-    m_platformWindowHandle.setShadowRadius(0);
 }
 
 void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosition)
