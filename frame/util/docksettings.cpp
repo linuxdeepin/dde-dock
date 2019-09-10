@@ -44,7 +44,6 @@ DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_autoHide(true)
     , m_opacity(0.4)
-    , m_fashionTraySize(QSize(0, 0))
     , m_fashionModeAct(tr("Fashion Mode"), this)
     , m_efficientModeAct(tr("Efficient Mode"), this)
     , m_topPosAct(tr("Top"), this)
@@ -367,9 +366,6 @@ void DockSettings::hideStateChanged()
 
 void DockSettings::dockItemCountChanged()
 {
-    if (m_displayMode == Dock::Efficient)
-        return;
-
     emit windowGeometryChanged();
 }
 
@@ -479,14 +475,6 @@ void DockSettings::onOpacityChanged(const double value)
 
 void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
 {
-    if (m_displayMode == Dock::Efficient)
-        return;
-
-    if (m_fashionTraySize == traySize)
-        return;
-
-    m_fashionTraySize = traySize;
-
     emit windowGeometryChanged();
 }
 

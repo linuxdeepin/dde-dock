@@ -76,7 +76,6 @@ public:
     inline const QRect frontendWindowRect() const { return m_frontendRect; }
     inline const QSize windowSize() const { return m_mainWindowSize; }
     inline const quint8 Opacity() const { return m_opacity * 255; }
-    inline const QSize fashionTraySize() const { return m_fashionTraySize; }
     const int dockMargin() const;
 
     const QSize panelSize() const;
@@ -137,7 +136,6 @@ private:
     DisplayMode m_displayMode;
     QRect m_primaryRawRect;
     QRect m_frontendRect;
-    QSize m_fashionTraySize;
 
     WhiteMenu m_settingsMenu;
     WhiteMenu *m_hideSubMenu;

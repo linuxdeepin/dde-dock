@@ -411,7 +411,7 @@ void MainPanel::adjustItemSize()
     const auto &itemList = m_itemController->itemList();
 
     // FTray: FashionTray
-    const QSize &FSTrayTotalSize = DockSettings::Instance().fashionTraySize(); // the total size of FSTray
+   // const QSize &FSTrayTotalSize = DockSettings::Instance().fashionTraySize(); // the total size of FSTray
     TrayPluginItem *FSTrayItem = nullptr; // the FSTray item object
     QSize FSTraySuggestIconSize = itemSize; // the suggested size of FStray icons
 
@@ -445,13 +445,13 @@ void MainPanel::adjustItemSize()
                     if (m_position == Dock::Top || m_position == Dock::Bottom) {
 //                        item->setFixedWidth(FSTrayTotalSize.width());
 //                        item->setFixedHeight(itemSize.height());
-                        totalWidth += FSTrayTotalSize.width();
+                        //totalWidth += FSTrayTotalSize.width();
                         totalHeight += itemSize.height();
                     } else {
 //                        item->setFixedWidth(itemSize.width());
 //                        item->setFixedHeight(FSTrayTotalSize.height());
                         totalWidth += itemSize.width();
-                        totalHeight += FSTrayTotalSize.height();
+                       // totalHeight += FSTrayTotalSize.height();
                     }
                 } else {
                     item->setFixedSize(itemSize);
