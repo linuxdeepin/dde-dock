@@ -20,7 +20,6 @@
  */
 
 #include "docksettings.h"
-#include "panel/mainpanel.h"
 #include "item/appitem.h"
 #include "util/utils.h"
 
