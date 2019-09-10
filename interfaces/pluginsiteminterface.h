@@ -54,7 +54,6 @@ public:
     virtual const QString pluginName() const = 0;
     virtual const QString pluginDisplayName() const { return QString(); }
 
-    virtual PluginType type() { return Normal; }
     ///
     /// \brief init
     /// init your plugins, you need to save proxyInter to m_proxyInter
@@ -223,6 +222,12 @@ public:
     /// override this function to receive plugin settings changed signal(DeepinSync)
     ///
     virtual void pluginSettingsChanged() {}
+
+    ///
+    /// \brief type
+    /// default plugin add dock right,fixed plugin add to dock fixed area
+    ///
+    virtual PluginType type() { return Normal; }
 
 protected:
     ///
