@@ -97,14 +97,14 @@ func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 	if entry.hasWindow() {
 		itemName = entry.getName()
 	} else {
-		itemName = Tr("&Open")
+		itemName = Tr("Open")
 	}
 	logger.Debugf("getMenuItemLaunch, itemName: %q", itemName)
 	return NewMenuItem(itemName, entry.launchApp, true)
 }
 
 func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
-	return NewMenuItem(Tr("&Close All"), func(timestamp uint32) {
+	return NewMenuItem(Tr("Close All"), func(timestamp uint32) {
 		logger.Debug("Close All")
 		entry.PropsMu.RLock()
 		winIds := entry.getAllowedCloseWindows()
@@ -120,28 +120,28 @@ func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 }
 
 func (entry *AppEntry) getMenuItemForceQuit() *MenuItem {
-	return NewMenuItem(Tr("&Force Quit"), func(timestamp uint32) {
+	return NewMenuItem(Tr("Force Quit"), func(timestamp uint32) {
 		logger.Debug("Force Quit")
 		entry.ForceQuit()
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemDock() *MenuItem {
-	return NewMenuItem(Tr("&Dock"), func(uint32) {
+	return NewMenuItem(Tr("Dock"), func(uint32) {
 		logger.Debug("menu action dock entry")
 		entry.RequestDock()
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemUndock() *MenuItem {
-	return NewMenuItem(Tr("&Undock"), func(uint32) {
+	return NewMenuItem(Tr("Undock"), func(uint32) {
 		logger.Debug("menu action undock entry")
 		entry.RequestUndock()
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemAllWindows() *MenuItem {
-	menuItem := NewMenuItem(Tr("&All windows"), func(uint32) {
+	menuItem := NewMenuItem(Tr("All windows"), func(uint32) {
 		logger.Debug("menu action all windows")
 		entry.PresentWindows()
 	}, true)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-09 10:32+0800\n"
+"POT-Creation-Date: 2019-09-10 16:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,27 +159,27 @@ msgid "Other"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:100
-msgid "&Open"
+msgid "Open"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:107
-msgid "&Close All"
+msgid "Close All"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:123
-msgid "&Force Quit"
+msgid "Force Quit"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:130
-msgid "&Dock"
+msgid "Dock"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:137
-msgid "&Undock"
+msgid "Undock"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:144
-msgid "&All windows"
+msgid "All windows"
 msgstr ""
 
 #: ../../housekeeping/init.go:90
