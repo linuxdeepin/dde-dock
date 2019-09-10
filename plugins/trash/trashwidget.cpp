@@ -54,7 +54,10 @@ QWidget *TrashWidget::popupApplet()
 
 QSize TrashWidget::sizeHint() const
 {
-    return QSize(DOCK_MAX_SIZE, DOCK_MAX_SIZE);
+    int w = std::min(width(), DOCK_MAX_SIZE);
+    int h = std::min(height(), DOCK_MAX_SIZE);
+    int size = std::max(w, h);
+    return QSize(size, size);
 }
 
 const QString TrashWidget::contextMenu() const

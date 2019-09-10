@@ -24,7 +24,6 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
 void AbstractContainer::refreshVisible()
 {
-    qDebug() << this << size() << minimumSize() << maximumSize();
     if (!m_wrapperList.isEmpty()) {
         //非空保留两边边距
         if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {

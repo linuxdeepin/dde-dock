@@ -65,17 +65,9 @@ void DatetimeWidget::set24HourFormat(const bool value)
     }
 }
 
-QSize DatetimeWidget::sizeHint() const
-{
-    // 最大尺寸
-    QFontMetrics fm(TIME_FONT);
-    return fm.boundingRect("88:88 A.A.").size() + QSize(20, 20);
-}
-
-void DatetimeWidget::resizeEvent(QResizeEvent *e)
+QSize DatetimeWidget::curTimeSize() const
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-
     QFontMetrics fm(TIME_FONT);
     QString format;
     if (m_24HourFormat)
@@ -89,12 +81,20 @@ void DatetimeWidget::resizeEvent(QResizeEvent *e)
         timeSize.setWidth(dateSize.width());
 
     if (position == Dock::Bottom || position == Dock::Top) {
-        setMaximumWidth(timeSize.width());
-        setMaximumHeight(QWIDGETSIZE_MAX);
+        return QSize(timeSize.width(), DOCK_MAX_SIZE);
     } else {
-        setMaximumWidth(QWIDGETSIZE_MAX);
-        setMaximumHeight(timeSize.height() * 2);
+        return QSize(DOCK_MAX_SIZE, timeSize.height() * 2);
     }
+}
+
+QSize DatetimeWidget::sizeHint() const
+{
+    return curTimeSize();
+}
+
+void DatetimeWidget::resizeEvent(QResizeEvent *e)
+{
+    setMaximumSize(curTimeSize());
 
     QWidget::resizeEvent(e);
 }
@@ -131,22 +131,4 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     } else {
         painter.drawText(rect(), Qt::AlignCenter, current.toString(format));
     }
-}
-
-const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)
-{
-    const auto ratio = devicePixelRatioF();
-
-    QPixmap pixmap(size * ratio);
-    QSvgRenderer renderer(fileName);
-    pixmap.fill(Qt::transparent);
-
-    QPainter painter;
-    painter.begin(&pixmap);
-    renderer.render(&painter);
-    painter.end();
-
-    pixmap.setDevicePixelRatio(ratio);
-
-    return pixmap;
 }
