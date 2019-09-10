@@ -99,6 +99,8 @@ void DatetimePlugin::loadPlugin()
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 
     m_proxyInter->itemAdded(this, pluginName());
+
+    pluginSettingsChanged();
 }
 
 void DatetimePlugin::pluginStateSwitched()
