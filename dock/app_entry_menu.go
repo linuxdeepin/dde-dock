@@ -141,7 +141,7 @@ func (entry *AppEntry) getMenuItemUndock() *MenuItem {
 }
 
 func (entry *AppEntry) getMenuItemAllWindows() *MenuItem {
-	menuItem := NewMenuItem(Tr("All windows"), func(uint32) {
+	menuItem := NewMenuItem(Tr("All Windows"), func(uint32) {
 		logger.Debug("menu action all windows")
 		entry.PresentWindows()
 	}, true)

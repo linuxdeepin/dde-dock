@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-10 16:53+0800\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgid "Undock"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:144
-msgid "All windows"
+msgid "All Windows"
 msgstr ""
 
 #: ../../housekeeping/init.go:90
