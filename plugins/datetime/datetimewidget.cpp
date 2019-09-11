@@ -98,7 +98,7 @@ QSize DatetimeWidget::curTimeSize() const
             return QSize(DOCK_MAX_SIZE, std::max(timeHeight, PLUGIN_BACKGROUND_MIN_SIZE));
 
         } else {
-            return QSize(DOCK_MAX_SIZE, timeSize.height() + dateSize.height());
+            return QSize(DOCK_MAX_SIZE, std::max(timeSize.height() + dateSize.height(), SHOW_DATE_MIN_HEIGHT));
         }
     }
 }
@@ -110,7 +110,7 @@ QSize DatetimeWidget::sizeHint() const
 
 void DatetimeWidget::resizeEvent(QResizeEvent *e)
 {
-    setMaximumSize(curTimeSize());
+    setMaximumSize(curTimeSize() + QSize(1, 1));
 
     QWidget::resizeEvent(e);
 }
@@ -133,7 +133,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     painter.setPen(Qt::white);
     painter.setFont(m_timeFont);
 
-    if (rect().height() > SHOW_DATE_MIN_HEIGHT) {
+    if (rect().height() >= SHOW_DATE_MIN_HEIGHT) {
         QRect timeRect = rect();
         timeRect.setBottom(rect().center().y() + m_timeOffset);
         painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, current.toString(format));
