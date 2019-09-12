@@ -31,7 +31,7 @@
 
 #define PLUGIN_STATE_KEY    "enable"
 #define SHOW_DATE_MIN_HEIGHT 45
-#define TIME_FONT DFontSizeManager::instance()->t5()
+#define TIME_FONT DFontSizeManager::instance()->t4()
 #define DATE_FONT DFontSizeManager::instance()->t10()
 
 DWIDGET_USE_NAMESPACE
@@ -68,7 +68,9 @@ void DatetimeWidget::set24HourFormat(const bool value)
 QSize DatetimeWidget::curTimeSize() const
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    QFontMetrics fm(TIME_FONT);
+
+    m_timeFont = TIME_FONT;
+    QFontMetrics fm(m_timeFont);
     QString format;
     if (m_24HourFormat)
         format = "hh:mm";
@@ -83,7 +85,21 @@ QSize DatetimeWidget::curTimeSize() const
     if (position == Dock::Bottom || position == Dock::Top) {
         return QSize(timeSize.width(), DOCK_MAX_SIZE);
     } else {
-        return QSize(DOCK_MAX_SIZE, timeSize.height() * 2);
+        // 宽度不够显示日期则隐藏日期，宽度不够显示时间，则缩小时间字体适应dock
+        if (width() < dateSize.width()) {
+            QString timeString = QDateTime::currentDateTime().toString(format);
+
+            while (QFontMetrics(m_timeFont).boundingRect(timeString).size().width() > width()) {
+                m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
+            }
+
+            int timeHeight = QFontMetrics(m_timeFont).boundingRect(timeString).size().height();
+
+            return QSize(DOCK_MAX_SIZE, std::max(timeHeight, PLUGIN_BACKGROUND_MIN_SIZE));
+
+        } else {
+            return QSize(DOCK_MAX_SIZE, timeSize.height() + dateSize.height());
+        }
     }
 }
 
@@ -115,11 +131,11 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
         format = "hh:mm AP";
 
     painter.setPen(Qt::white);
+    painter.setFont(m_timeFont);
 
     if (rect().height() > SHOW_DATE_MIN_HEIGHT) {
         QRect timeRect = rect();
         timeRect.setBottom(rect().center().y() + m_timeOffset);
-        painter.setFont(TIME_FONT);
         painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, current.toString(format));
 
         QRect dateRect = rect();
