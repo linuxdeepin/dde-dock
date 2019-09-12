@@ -182,21 +182,7 @@ void FashionTrayItem::onExpandChanged(const bool expand)
 
 //    refreshHoldContainerPosition();
 
-    if (expand) {
-        m_normalContainer->setExpand(expand);
-    } else {
-        // hide all tray immediately if Dock is in maxed size
-        // the property "DockIsMaxiedSize" of qApp is set by DockSettings class
-        if (qApp->property("DockIsMaxiedSize").toBool()) {
-            m_normalContainer->setExpand(expand);
-        } else {
-            // hide all tray widget delay for fold animation
-            QTimer::singleShot(350, this, [ = ] {
-
-                m_normalContainer->setExpand(expand);
-            });
-        }
-    }
+    m_normalContainer->setExpand(expand);
 
     m_attentionContainer->setExpand(expand);
     m_holdContainer->setExpand(expand);
@@ -377,9 +363,8 @@ void FashionTrayItem::normalWrapperToAttentionWrapper(FashionTrayWidgetWrapper *
 
 void FashionTrayItem::requestResize()
 {
-    // reset property "FashionTraySize" to notify dock resize
-    // DockPluginsController will watch this property
-    setProperty("FashionTraySize", sizeHint());
+    // 此属性用来通知dock实现动画，目前已经失效，动画效果在托盘实现
+//    setProperty("FashionTraySize", sizeHint());
 
     m_leftSpace->setVisible(!m_controlWidget->expanded());
 

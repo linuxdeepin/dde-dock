@@ -22,7 +22,7 @@ public:
     virtual FashionTrayWidgetWrapper *takeWrapper(FashionTrayWidgetWrapper *wrapper);
     virtual void setDockPosition(const Dock::Position pos);
     virtual void setExpand(const bool expand);
-//    virtual QSize totalSize() const;
+    virtual QSize totalSize() const;
 //    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     void clearWrapper();

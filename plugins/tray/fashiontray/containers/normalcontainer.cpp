@@ -3,7 +3,47 @@
 
 NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : AbstractContainer(trayPlugin, parent)
+    , m_sizeAnimation(new QVariantAnimation(this))
 {
+    m_sizeAnimation->setDuration(200);
+    m_sizeAnimation->setEasingCurve(QEasingCurve::InOutCubic);
+
+    connect(m_sizeAnimation, &QVariantAnimation::finished, [ = ]() {
+        setVisible(expand());
+    });
+
+    connect(m_sizeAnimation, &QVariantAnimation::valueChanged, [ = ](const QVariant & value) {
+
+        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom) {
+            this->setMaximumWidth(value.toSize().width());
+            this->setMaximumHeight(DOCK_MAX_SIZE);
+        } else {
+            this->setMaximumWidth(DOCK_MAX_SIZE);
+            this->setMaximumHeight(value.toSize().height());
+        }
+    });
+
+    connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, [ = ]() {
+        m_sizeAnimation->setDuration(DWindowManagerHelper::instance()->hasComposite() ? 200 : 0);
+    });
+}
+
+QSize NormalContainer::sizeHint() const
+{
+    return totalSize();
+}
+
+void NormalContainer::resizeEvent(QResizeEvent *event)
+{
+    if (QPropertyAnimation::Stopped == m_sizeAnimation->state()) {
+        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom)
+            setMaximumWidth(totalSize().width());
+        else {
+            setMaximumHeight(totalSize().height());
+        }
+    }
+
+    AbstractContainer::resizeEvent(event);
 }
 
 bool NormalContainer::acceptWrapper(FashionTrayWidgetWrapper *wrapper)
@@ -36,7 +76,27 @@ void NormalContainer::refreshVisible()
         setMinimumSize(0, 0);
     }
 
-    setVisible(expand());
+    QSize endSize = expand() ? totalSize() : QSize(0, 0);
+
+    const QPropertyAnimation::State state = m_sizeAnimation->state();
+
+    if (state == QPropertyAnimation::Stopped && size() == endSize)
+        return;
+
+    if (state == QPropertyAnimation::Running)
+        return m_sizeAnimation->setEndValue(endSize);
+
+    m_sizeAnimation->setStartValue(size());
+    m_sizeAnimation->setEndValue(endSize);
+
+    if (isVisible() == expand())
+        return;
+
+    if (expand()) {
+        setVisible(true);
+    }
+
+    m_sizeAnimation->start();
 }
 
 void NormalContainer::setExpand(const bool expand)

@@ -15,14 +15,19 @@ public:
     void addWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
     void refreshVisible() Q_DECL_OVERRIDE;
     void setExpand(const bool expand) Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 protected:
     int whereToInsert(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     int whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const;
     int whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
     int whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
+
+private:
+    mutable QVariantAnimation *m_sizeAnimation;
 };
 
 #endif // NORMALCONTAINER_H

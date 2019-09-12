@@ -128,29 +128,29 @@ void AbstractContainer::setExpand(const bool expand)
 //    return totalSize();
 //}
 
-//QSize AbstractContainer::totalSize() const
-//{
-//    QSize size;
+QSize AbstractContainer::totalSize() const
+{
+    QSize size;
 
-//    const int wrapperWidth = m_wrapperSize.width();
-//    const int wrapperHeight = m_wrapperSize.height();
+    if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
 
-//    if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
-//        size.setWidth(
-//                    m_wrapperList.size() * wrapperWidth // 所有托盘图标
-//                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-//                    );
-//        size.setHeight(height());
-//    } else {
-//        size.setWidth(width());
-//        size.setHeight(
-//                    m_wrapperList.size() * wrapperHeight // 所有托盘图标
-//                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-//                    );
-//    }
+        size.setWidth(
+            m_wrapperList.size() * std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE) // 所有托盘图标
+            + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
+            + TraySpace
+        );
+        size.setHeight(height());
+    } else {
+        size.setWidth(width());
+        size.setHeight(
+            m_wrapperList.size() * std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE) // 所有托盘图标
+            + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
+            + TraySpace
+        );
+    }
 
-//    return size;
-//}
+    return size;
+}
 
 void AbstractContainer::clearWrapper()
 {
