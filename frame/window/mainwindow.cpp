@@ -147,7 +147,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_platformWindowHandle.setEnableBlurWindow(true);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
-    m_platformWindowHandle.setBorderWidth(0);
+    m_platformWindowHandle.setShadowOffset(QPoint(0, 5));
+    m_platformWindowHandle.setShadowColor(QColor(0, 0, 0, 0.3 * 255));
 
     m_settings = &DockSettings::Instance();
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
