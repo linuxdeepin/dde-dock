@@ -614,7 +614,7 @@ void MainWindow::setStrutPartial()
         return;
     }
 
-    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin(), strutStart, strutEnd);
+    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
 }
 
 void MainWindow::expand()
