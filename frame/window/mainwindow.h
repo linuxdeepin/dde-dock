@@ -69,8 +69,6 @@ private:
     void leaveEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
 
-    void setFixedSize(const QSize &size);
-    void internalAnimationMove(int x, int y);
     void initSNIHost();
     void initComponents();
     void initConnections();
@@ -92,7 +90,6 @@ private slots:
     void clearStrutPartial();
     void setStrutPartial();
     void compositeChanged();
-    void internalMove() { internalMove(m_posChangeAni->currentValue().toPoint()); }
     void internalMove(const QPoint &p);
     void updateDisplayMode();
 
@@ -108,7 +105,7 @@ private slots:
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
 
-    private:
+private:
     bool m_launched;
     bool m_updatePanelVisible;
     MainPanelControl *m_mainPanel;
@@ -120,8 +117,6 @@ private slots:
     QTimer *m_expandDelayTimer;
     QTimer *m_leaveDelayTimer;
     QTimer *m_shadowMaskOptimizeTimer;
-    QVariantAnimation *m_sizeChangeAni;
-    QVariantAnimation *m_posChangeAni;
     QPropertyAnimation *m_panelShowAni;
     QPropertyAnimation *m_panelHideAni;
 

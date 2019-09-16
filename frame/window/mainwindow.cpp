@@ -129,8 +129,6 @@ MainWindow::MainWindow(QWidget *parent)
       m_leaveDelayTimer(new QTimer(this)),
       m_shadowMaskOptimizeTimer(new QTimer(this)),
 
-      m_sizeChangeAni(new QVariantAnimation(this)),
-      m_posChangeAni(new QVariantAnimation(this)),
       m_panelShowAni(new QPropertyAnimation(this, "pos")),
       m_panelHideAni(new QPropertyAnimation(this, "pos")),
       m_xcbMisc(XcbMisc::instance()),
@@ -182,7 +180,6 @@ MainWindow::~MainWindow()
 void MainWindow::launch()
 {
     m_updatePanelVisible = false;
-    m_mainPanel->setVisible(false);
     resetPanelEnvironment(false);
     setVisible(false);
 
@@ -190,7 +187,6 @@ void MainWindow::launch()
         m_launched = true;
         m_mainPanel->setVisible(true);
         resetPanelEnvironment(false);
-        updateGeometry();
         expand();
     });
 
@@ -277,6 +273,9 @@ void MainWindow::enterEvent(QEvent *e)
 void MainWindow::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
+    if (m_panelHideAni->state() == QPropertyAnimation::Running)
+        return;
+
     m_expandDelayTimer->stop();
     m_leaveDelayTimer->start();
 }
@@ -288,38 +287,6 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
     if (m_settings->hideState() != Show) {
         m_expandDelayTimer->start();
     }
-}
-
-void MainWindow::setFixedSize(const QSize &size)
-{
-    const QPropertyAnimation::State state = m_sizeChangeAni->state();
-
-    if (state == QPropertyAnimation::Stopped && this->size() == size)
-        return;
-
-    if (state == QPropertyAnimation::Running)
-        return m_sizeChangeAni->setEndValue(size);
-
-    m_sizeChangeAni->setStartValue(this->size());
-    m_sizeChangeAni->setEndValue(size);
-    m_sizeChangeAni->start();
-}
-
-void MainWindow::internalAnimationMove(int x, int y)
-{
-    const QPropertyAnimation::State state = m_posChangeAni->state();
-    const QPoint p = m_posChangeAni->endValue().toPoint();
-    const QPoint tp = QPoint(x, y);
-
-    if (state == QPropertyAnimation::Stopped && p == tp)
-        return;
-
-    if (state == QPropertyAnimation::Running && p != tp)
-        return m_posChangeAni->setEndValue(QPoint(x, y));
-
-    m_posChangeAni->setStartValue(pos());
-    m_posChangeAni->setEndValue(tp);
-    m_posChangeAni->start();
 }
 
 void MainWindow::initSNIHost()
@@ -352,8 +319,6 @@ void MainWindow::initComponents()
     m_shadowMaskOptimizeTimer->setSingleShot(true);
     m_shadowMaskOptimizeTimer->setInterval(100);
 
-    m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
-    m_posChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
     m_panelShowAni->setEasingCurve(QEasingCurve::InOutCubic);
     m_panelHideAni->setEasingCurve(QEasingCurve::InOutCubic);
 
@@ -363,6 +328,7 @@ void MainWindow::initComponents()
 void MainWindow::compositeChanged()
 {
     const bool composite = m_wmHelper->hasComposite();
+    setComposite(composite);
 
 // NOTE(justforlxz): On the sw platform, there is an unstable
 // display position error, disable animation solution
@@ -372,15 +338,10 @@ void MainWindow::compositeChanged()
     const int duration = 0;
 #endif
 
-    m_sizeChangeAni->setDuration(duration);
-    m_posChangeAni->setDuration(duration);
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
 
-    setComposite(composite);
-
     m_shadowMaskOptimizeTimer->start();
-    m_positionUpdateTimer->start();
 }
 
 void MainWindow::internalMove(const QPoint &p)
@@ -388,9 +349,11 @@ void MainWindow::internalMove(const QPoint &p)
     const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
     const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
                             isHide &&
-                            m_posChangeAni->state() == QVariantAnimation::Stopped;
-    if (!pos_adjust)
+                            m_panelShowAni->state() == QVariantAnimation::Stopped;
+    if (!pos_adjust) {
         return QWidget::move(p);
+    }
+
 
     QPoint rp = rawXPosition(p);
     const auto ratio = devicePixelRatioF();
@@ -402,7 +365,6 @@ void MainWindow::internalMove(const QPoint &p)
     case Right:     rp.setX(r.right() - 1);     break;
     case Bottom:    rp.setY(r.bottom() - 1);    break;
     }
-
     int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
             isHide &&
@@ -436,25 +398,14 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainWindow::setMaskAlpha);
     connect(m_settings, &DockSettings::displayModeChanegd, this, &MainWindow::updateDisplayMode, Qt::QueuedConnection);
-//    connect(m_mainPanel, &MainPanelControl::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
-//    connect(m_mainPanel, &MainPanelControl::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
-//    connect(m_mainPanel, &MainPanelControl::geometryChanged, this, &MainWindow::panelGeometryChanged);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
     connect(m_leaveDelayTimer, &QTimer::timeout, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
-    connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
     connect(m_panelHideAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_panelShowAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    //connect(m_posChangeAni, &QVariantAnimation::valueChanged, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove));
-    connect(m_posChangeAni, &QVariantAnimation::finished, this, static_cast<void (MainWindow::*)()>(&MainWindow::internalMove), Qt::QueuedConnection);
-
-    // to fix qt animation bug, sometimes window size not change
-    connect(m_sizeChangeAni, &QVariantAnimation::valueChanged, [ = ](const QVariant & value) {
-        QWidget::setFixedSize(value.toSize());
-    });
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
@@ -510,13 +461,6 @@ void MainWindow::positionChanged(const Position prevPos)
     clearStrutPartial();
     narrow(prevPos);
 
-    // reset position & layout and slide out
-    QTimer::singleShot(200, this, [&] {
-        resetPanelEnvironment(false, true);
-        updateGeometry();
-//        expand();
-    });
-
     // set strut
     QTimer::singleShot(400, this, [&] {
         setStrutPartial();
@@ -525,6 +469,14 @@ void MainWindow::positionChanged(const Position prevPos)
     // reset to right environment when animation finished
     QTimer::singleShot(600, this, [&] {
         m_updatePanelVisible = true;
+        m_mainPanel->setPositonValue(m_settings->position());
+
+        if ((Top == m_settings->position()) || (Bottom == m_settings->position())){
+            m_dragWidget->setCursor(Qt::SizeVerCursor);
+        } else{
+            m_dragWidget->setCursor(Qt::SizeHorCursor);
+        }
+
         updatePanelVisible();
     });
 }
@@ -534,14 +486,8 @@ void MainWindow::updatePosition()
     // all update operation need pass by timer
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
-    clearStrutPartial();
+    //clearStrutPartial();
     updateGeometry();
-
-    // make sure strut partial is set after the size/position animation;
-    const int duration = qMax(m_sizeChangeAni->duration(), m_posChangeAni->duration());
-
-    QTimer::singleShot(duration, this, &MainWindow::setStrutPartial);
-    QTimer::singleShot(duration, this, &MainWindow::updatePanelVisible);
 }
 
 void MainWindow::updateGeometry()
@@ -552,15 +498,12 @@ void MainWindow::updateGeometry()
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     m_mainPanel->setPositonValue(position);
-    // this->setFixedSize has been overridden for size animation
     resizeMainPanelWindow();
 
     bool animation = true;
     bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
 
     if (isHide) {
-        m_sizeChangeAni->stop();
-        m_posChangeAni->stop();
         switch (position) {
         case Top:
         case Bottom:    size.setHeight(2);      break;
@@ -568,30 +511,16 @@ void MainWindow::updateGeometry()
         case Right:     size.setWidth(2);       break;
         }
         animation = false;
-        m_sizeChangeAni->setEndValue(size);
         QWidget::setFixedSize(size);
-    } else {
-        // this->setFixedSize has been overridden for size animation
-        setFixedSize(size);
     }
-
     const QRect windowRect = m_settings->windowRect(position, isHide);
 
-    if (animation)
-        internalAnimationMove(windowRect.x(), windowRect.y());
-    else
-        internalMove(windowRect.topLeft());
+    internalMove(windowRect.topLeft());
 
     m_size = m_settings->m_mainWindowSize;
 
     m_mainPanel->update();
-    m_shadowMaskOptimizeTimer->start();
 
-    if ((Top == m_settings->position()) || (Bottom == m_settings->position())) {
-        m_dragWidget->setCursor(Qt::SizeVerCursor);
-    } else {
-        m_dragWidget->setCursor(Qt::SizeHorCursor);
-    }
 }
 
 void MainWindow::clearStrutPartial()
@@ -605,7 +534,7 @@ void MainWindow::setStrutPartial()
     clearStrutPartial();
 
     // reset env
-    resetPanelEnvironment(true);
+    //resetPanelEnvironment(true);
 
     if (m_settings->hideMode() != Dock::KeepShowing)
         return;
@@ -614,7 +543,7 @@ void MainWindow::setStrutPartial()
     const int maxScreenHeight = m_settings->screenRawHeight();
     const int maxScreenWidth = m_settings->screenRawWidth();
     const Position side = m_settings->position();
-    const QPoint &p = rawXPosition(m_posChangeAni->endValue().toPoint());
+    const QPoint &p = rawXPosition(m_settings->windowRect(m_settings->position()).topLeft());
     const QSize &s = m_settings->windowSize();
     const QRect &primaryRawRect = m_settings->primaryRawRect();
 
@@ -691,32 +620,42 @@ void MainWindow::expand()
 {
     qApp->processEvents();
 
+    if (m_panelHideAni->state() == QPropertyAnimation::Running)
+        return;
+
     const auto showAniState = m_panelShowAni->state();
-    m_panelHideAni->stop();
+    //m_panelHideAni->stop();
 
     QPoint finishPos = pos();
     QPoint startPos = pos();
 
     resetPanelEnvironment(true, false);
-
     if (showAniState != QPropertyAnimation::Running && pos() != m_panelShowAni->currentValue()) {
         const Position position = m_settings->position();
         const QRectF windowRect = m_settings->windowRect(position, true);
-
+        int margin = m_settings->dockMargin();
         switch (m_settings->position()) {
         case Top:
+            startPos.setX(0 + margin);
+            finishPos.setX(0 + margin);
             startPos.setY(-size().height());
             finishPos.setY(windowRect.top());
             break;
         case Bottom:
+            startPos.setX(0 + margin);
+            finishPos.setX(0 + margin);
             startPos.setY(windowRect.bottom());
             finishPos.setY(windowRect.bottom() - size().height());
             break;
         case Left:
+            startPos.setY(0 + margin);
+            finishPos.setY(0 + margin);
             startPos.setX(-size().width());
             finishPos.setX(windowRect.left());
             break;
         case Right:
+            startPos.setY(0 + margin);
+            finishPos.setY(0 + margin);
             startPos.setX(windowRect.right());
             finishPos.setX(windowRect.right() - size().width());
             break;
@@ -732,15 +671,53 @@ void MainWindow::expand()
 void MainWindow::narrow(const Position prevPos)
 {
     QPoint finishPos = pos();
-    switch (prevPos) {
-    case Top:       finishPos.setY(pos().y() - size().height());     break;
-    case Bottom:    finishPos.setY(pos().y() + size().height());      break;
-    case Left:      finishPos.setX(pos().x() - size().width());      break;
-    case Right:     finishPos.setX(pos().x() + size().width());       break;
+    QPoint startPos = pos();
+    const Position position = m_settings->position();
+    const QRectF windowRect = m_settings->windowRect(position, true);
+    int margin = m_settings->dockMargin();
+
+    const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
+    const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
+                            isHide;
+    if (!pos_adjust) {
+        switch (prevPos) {
+        case Top:
+            finishPos.setY(-size().height() - margin);
+            break;
+        case Bottom:
+            finishPos.setY(windowRect.bottom() + margin);
+            break;
+        case Left:
+            finishPos.setX(-size().width() - margin);
+            break;
+        case Right:
+            finishPos.setX(windowRect.right() - margin);
+            break;
+        }
+    } else {
+        switch (prevPos) {
+        case Top:
+//            startPos.setY(0);
+            finishPos.setY(-size().height() + 2);
+            break;
+        case Bottom:
+            startPos.setY(windowRect.bottom() - size().height());
+            finishPos.setY(windowRect.bottom() + margin - 2);
+
+            break;
+        case Left:
+            startPos.setX(0);
+            finishPos.setX(-size().width() + 2);
+            break;
+        case Right:
+            startPos.setX(windowRect.right() - size().width());
+            finishPos.setX(windowRect.right() + margin - 2);
+            break;
+        }
     }
 
     m_panelShowAni->stop();
-    m_panelHideAni->setStartValue(pos());
+    m_panelHideAni->setStartValue(startPos);
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
 }
@@ -751,38 +728,20 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
         return;
 
     // reset environment
-    m_sizeChangeAni->stop();
-    m_posChangeAni->stop();
-
     const Position position = m_settings->position();
     const QRect r(m_settings->windowRect(position));
-
-    m_sizeChangeAni->setEndValue(r.size());
     resizeMainPanelWindow();
     QWidget::setFixedSize(r.size());
-    m_posChangeAni->setEndValue(r.topLeft());
 
     if (!resetPosition)
         return;
-
-    QWidget::move(r.topLeft());
-
-    QPoint finishPos(0, 0);
-    switch (position) {
-    case Top:       finishPos.setY((visible ? 0 : -r.height()));     break;
-    case Bottom:    finishPos.setY(visible ? 0 : r.height());      break;
-    case Left:      finishPos.setX((visible ? 0 : -r.width()));       break;
-    case Right:     finishPos.setX(visible ? 0 : r.width());       break;
-    }
-
-    m_mainPanel->move(finishPos);
-    m_mainPanel->setPositonValue(position);
 }
 
 void MainWindow::updatePanelVisible()
 {
     if (!m_updatePanelVisible)
         return;
+
     if (m_settings->hideMode() == KeepShowing) {
         return expand();
     }
@@ -810,9 +769,18 @@ void MainWindow::updatePanelVisible()
             break;
         case Dock::Right:
             r.setWidth(r.width() + margin);
+            break;
         }
         if (r.contains(QCursor::pos())) {
             break;
+        }
+
+        const QRect windowRect = m_settings->windowRect(m_settings->position(), true);
+        if (Dock::Top == m_settings->position() || Dock::Bottom == m_settings->position()) {
+
+            move(windowRect.topLeft());
+        } else {
+            move(windowRect.topRight());
         }
 
         return narrow(m_settings->position());
@@ -841,8 +809,6 @@ void MainWindow::adjustShadowMask()
 
 void MainWindow::positionCheck()
 {
-    if (m_posChangeAni->state() == QPropertyAnimation::Running)
-        return;
     if (m_positionUpdateTimer->isActive())
         return;
 
@@ -878,8 +844,6 @@ void MainWindow::setEffectEnabled(const bool enabled)
 void MainWindow::setComposite(const bool hasComposite)
 {
     setEffectEnabled(hasComposite);
-
-    m_sizeChangeAni->setDuration(hasComposite ? 300 : 0);
 }
 
 bool MainWindow::appIsOnDock(const QString &appDesktop)
@@ -924,6 +888,7 @@ void MainWindow::resizeMainPanelWindow()
 void MainWindow::updateDisplayMode()
 {
     m_mainPanel->setDisplayMode(m_settings->displayMode());
+    setStrutPartial();
 }
 
 void MainWindow::onMainWindowSizeChanged(QPoint offset)
