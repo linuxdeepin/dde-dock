@@ -467,9 +467,10 @@ void MainWindow::positionChanged(const Position prevPos)
     });
 
     // reset to right environment when animation finished
-    QTimer::singleShot(600, this, [&] {
+    QTimer::singleShot(500, this, [&] {
         m_updatePanelVisible = true;
         m_mainPanel->setPositonValue(m_settings->position());
+        resetPanelEnvironment(true);
 
         if ((Top == m_settings->position()) || (Bottom == m_settings->position())){
             m_dragWidget->setCursor(Qt::SizeVerCursor);
@@ -776,12 +777,7 @@ void MainWindow::updatePanelVisible()
         }
 
         const QRect windowRect = m_settings->windowRect(m_settings->position(), true);
-        if (Dock::Top == m_settings->position() || Dock::Bottom == m_settings->position()) {
-
-            move(windowRect.topLeft());
-        } else {
-            move(windowRect.topRight());
-        }
+        move(windowRect.topLeft());
 
         return narrow(m_settings->position());
 
