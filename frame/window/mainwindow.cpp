@@ -733,6 +733,7 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
     const QRect r(m_settings->windowRect(position));
     resizeMainPanelWindow();
     QWidget::setFixedSize(r.size());
+    m_size = m_settings->m_mainWindowSize;
 
     if (!resetPosition)
         return;
