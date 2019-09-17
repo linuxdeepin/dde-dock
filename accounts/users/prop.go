@@ -254,11 +254,11 @@ func getAdmGroupAndUser(file string) ([]string, []string, error) {
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		line = strings.TrimSpace(line)
 		if len(line) == 0 {
 			continue
 		}
 
-		line = strings.TrimSpace(line)
 		if line[0] == '#' || !strings.Contains(line, `ALL=(ALL`) {
 			continue
 		}
