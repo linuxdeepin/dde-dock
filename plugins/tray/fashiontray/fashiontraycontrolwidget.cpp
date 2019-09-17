@@ -26,6 +26,7 @@
 #include <DHiDPIHelper>
 
 #include <DStyle>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -76,24 +77,29 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setOpacity(0.5);
 
     QColor color;
-    if (m_expanded) {
-        color = QColor::fromRgb(40, 40, 40);
-        if (m_hover) {
-            color = QColor::fromRgb(60, 60, 60);
-        }
-        if (m_pressed) {
-            color = QColor::fromRgb(20, 20, 20);
-        }
-    } else {
-        color = QColor::fromRgb(255, 255, 255);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        color = Qt::black;
+        painter.setOpacity(0.5);
+
         if (m_hover) {
             painter.setOpacity(0.6);
         }
+
         if (m_pressed) {
             painter.setOpacity(0.3);
+        }
+    } else {
+        color = Qt::white;
+        painter.setOpacity(0.1);
+
+        if (m_hover) {
+            painter.setOpacity(0.2);
+        }
+
+        if (m_pressed) {
+            painter.setOpacity(0.05);
         }
     }
 

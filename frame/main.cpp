@@ -27,6 +27,7 @@
 #include <DDBusSender>
 
 #include <QDir>
+#include <DGuiApplicationHelper>
 
 #include <unistd.h>
 #include "dbus/dbusdockadaptors.h"
@@ -60,6 +61,7 @@ void RegisterDdeSession()
 
 int main(int argc, char *argv[])
 {
+    DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
 
@@ -67,7 +69,6 @@ int main(int argc, char *argv[])
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
-    app.setTheme("dark");
     app.loadTranslator();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);

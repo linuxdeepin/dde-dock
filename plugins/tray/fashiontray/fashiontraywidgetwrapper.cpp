@@ -28,6 +28,7 @@
 #include <QMimeData>
 
 #include <DStyle>
+#include <DGuiApplicationHelper>
 
 #include "constants.h"
 
@@ -86,14 +87,30 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
     if (rect().height() > PLUGIN_BACKGROUND_MIN_SIZE) {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing, true);
-        painter.setOpacity(0.5);
 
-        QColor color = QColor::fromRgb(40, 40, 40);;
-        if (m_hover) {
-            color = QColor::fromRgb(60, 60, 60);
-        }
-        if (m_pressed) {
-            color = QColor::fromRgb(20, 20, 20);
+        QColor color;
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            color = Qt::black;
+            painter.setOpacity(0.5);
+
+            if (m_hover) {
+                painter.setOpacity(0.6);
+            }
+
+            if (m_pressed) {
+                painter.setOpacity(0.3);
+            }
+        } else {
+            color = Qt::white;
+            painter.setOpacity(0.1);
+
+            if (m_hover) {
+                painter.setOpacity(0.2);
+            }
+
+            if (m_pressed) {
+                painter.setOpacity(0.05);
+            }
         }
 
         DStyleHelper dstyle(style());

@@ -28,6 +28,7 @@
 #include <QIcon>
 
 #include <DStyle>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE;
 
@@ -61,18 +62,32 @@ void OnboardItem::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     if (std::min(width(), height()) > PLUGIN_BACKGROUND_MIN_SIZE) {
 
-        QColor color = QColor::fromRgb(40, 40, 40);;
+        QColor color;
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            color = Qt::black;
+            painter.setOpacity(0.5);
 
-        if (m_hover) {
-            color = QColor::fromRgb(60, 60, 60);
-        }
+            if (m_hover) {
+                painter.setOpacity(0.6);
+            }
 
-        if (m_pressed) {
-            color = QColor::fromRgb(20, 20, 20);
+            if (m_pressed) {
+                painter.setOpacity(0.3);
+            }
+        } else {
+            color = Qt::white;
+            painter.setOpacity(0.1);
+
+            if (m_hover) {
+                painter.setOpacity(0.2);
+            }
+
+            if (m_pressed) {
+                painter.setOpacity(0.05);
+            }
         }
 
         painter.setRenderHint(QPainter::Antialiasing, true);
-        painter.setOpacity(0.5);
 
         DStyleHelper dstyle(style());
         const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
@@ -91,6 +106,7 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
     pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
 
+    painter.setOpacity(1);
     painter.drawPixmap(rect().center() - pixmap.rect().center() / devicePixelRatioF(), pixmap);
 }
 

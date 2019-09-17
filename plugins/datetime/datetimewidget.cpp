@@ -130,7 +130,6 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     else
         format = "hh:mm AP";
 
-    painter.setPen(Qt::white);
     painter.setFont(m_timeFont);
 
     if (rect().height() >= SHOW_DATE_MIN_HEIGHT) {

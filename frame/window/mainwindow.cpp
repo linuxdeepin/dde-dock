@@ -830,10 +830,7 @@ void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldO
 
 void MainWindow::setEffectEnabled(const bool enabled)
 {
-    if (enabled)
-        setMaskColor(LightColor);
-    else
-        setMaskColor(QColor(55, 63, 71));
+    setMaskColor(AutoColor);
 
     setMaskAlpha(DockSettings::Instance().Opacity());
 }
