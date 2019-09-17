@@ -5,12 +5,7 @@ NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : AbstractContainer(trayPlugin, parent)
     , m_sizeAnimation(new QVariantAnimation(this))
 {
-    m_sizeAnimation->setDuration(200);
     m_sizeAnimation->setEasingCurve(QEasingCurve::InOutCubic);
-
-    connect(m_sizeAnimation, &QVariantAnimation::finished, [ = ]() {
-        setVisible(expand());
-    });
 
     connect(m_sizeAnimation, &QVariantAnimation::valueChanged, [ = ](const QVariant & value) {
 
@@ -23,9 +18,24 @@ NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
         }
     });
 
-    connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, [ = ]() {
-        m_sizeAnimation->setDuration(DWindowManagerHelper::instance()->hasComposite() ? 200 : 0);
+    connect(m_sizeAnimation, &QVariantAnimation::finished, [ = ]() {
+        for (auto w : wrapperList()) {
+            w->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        }
+
+        this->setVisible(expand());
     });
+
+    connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &NormalContainer::compositeChanged, Qt::QueuedConnection);
+
+    QTimer::singleShot(1, this, &NormalContainer::compositeChanged);
+}
+
+void NormalContainer::compositeChanged()
+{
+    const int duration = DWindowManagerHelper::instance()->hasComposite() ? 300 : 0;
+
+    m_sizeAnimation->setDuration(duration);
 }
 
 QSize NormalContainer::sizeHint() const
@@ -104,6 +114,15 @@ void NormalContainer::setExpand(const bool expand)
     for (auto w : wrapperList()) {
         // reset all tray item attention state
         w->setAttention(false);
+
+        int itemSize;
+
+        if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom)
+            itemSize = std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
+        else
+            itemSize = std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
+
+        w->setFixedSize(itemSize, itemSize);
     }
 
     AbstractContainer::setExpand(expand);

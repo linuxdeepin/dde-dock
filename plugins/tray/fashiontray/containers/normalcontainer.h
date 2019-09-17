@@ -25,6 +25,7 @@ private:
     int whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const;
     int whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
     int whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
+    void compositeChanged();
 
 private:
     mutable QVariantAnimation *m_sizeAnimation;

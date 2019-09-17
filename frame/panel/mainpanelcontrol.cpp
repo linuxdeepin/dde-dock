@@ -31,6 +31,10 @@
 #include <QStandardPaths>
 #include <QString>
 
+#include <DGuiApplicationHelper>
+
+#define SPLITER_SIZE 2
+
 DWIDGET_USE_NAMESPACE
 
 MainPanelControl::MainPanelControl(QWidget *parent)
@@ -49,6 +53,9 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_dislayMode(Efficient)
+    , m_fixedSpliter(new QLabel(this))
+    , m_appSpliter(new QLabel(this))
+    , m_traySpliter(new QLabel(this))
 {
     init();
     updateMainPanelLayout();
@@ -67,13 +74,19 @@ void MainPanelControl::init()
 {
     // 主窗口
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
+    m_mainPanelLayout->addWidget(m_fixedSpliter);
     m_mainPanelLayout->addWidget(m_appAreaWidget);
+    m_mainPanelLayout->addWidget(m_appSpliter);
     m_mainPanelLayout->addWidget(m_trayAreaWidget);
+    m_mainPanelLayout->addWidget(m_traySpliter);
     m_mainPanelLayout->addWidget(m_pluginAreaWidget);
 
     m_mainPanelLayout->setMargin(0);
     m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
     m_mainPanelLayout->setSpacing(0);
+    m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
 
     // 固定区域
     m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
@@ -90,13 +103,13 @@ void MainPanelControl::init()
     // 托盘
     m_trayAreaWidget->setLayout(m_trayAreaLayout);
     m_trayAreaLayout->setMargin(0);
-    m_trayAreaLayout->setContentsMargins(10, 10, 10, 10);
+    m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
     m_trayAreaLayout->setSpacing(0);
 
     // 插件
     m_pluginAreaWidget->setLayout(m_pluginLayout);
     m_pluginLayout->setMargin(0);
-    m_pluginLayout->setContentsMargins(0, 10, 10, 10);
+    m_pluginLayout->setContentsMargins(10, 10, 10, 10);
     m_pluginLayout->setSpacing(10);
 }
 
@@ -122,7 +135,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_pluginLayout->setDirection(QBoxLayout::LeftToRight);
         m_trayAreaLayout->setDirection(QBoxLayout::LeftToRight);
         m_appAreaSonLayout->setDirection(QBoxLayout::LeftToRight);
-        m_pluginLayout->setContentsMargins(0, 10, 10, 10);
+        m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
         break;
     case Position::Right:
     case Position::Left:
@@ -135,7 +148,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_pluginLayout->setDirection(QBoxLayout::TopToBottom);
         m_trayAreaLayout->setDirection(QBoxLayout::TopToBottom);
         m_appAreaSonLayout->setDirection(QBoxLayout::TopToBottom);
-        m_pluginLayout->setContentsMargins(10, 0, 10, 10);
+        m_trayAreaLayout->setContentsMargins(10, 0, 10, 0);
         break;
     }
 }
@@ -216,6 +229,16 @@ void MainPanelControl::resizeEvent(QResizeEvent *event)
                 w->setMaximumSize(width(), width());
             }
         }
+    }
+
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        m_fixedSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
+        m_appSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
+        m_traySpliter->setFixedSize(SPLITER_SIZE, height() * 0.5);
+    } else {
+        m_fixedSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
+        m_appSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
+        m_traySpliter->setFixedSize(width() * 0.5, SPLITER_SIZE);
     }
 
     return QWidget::resizeEvent(event);
@@ -674,4 +697,21 @@ void MainPanelControl::moveAppSonWidget()
 void MainPanelControl::itemUpdated(DockItem *item)
 {
     item->parentWidget()->adjustSize();
+}
+
+void MainPanelControl::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    QColor color;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        color = Qt::black;
+        painter.setOpacity(0.5);
+    } else {
+        color = Qt::white;
+        painter.setOpacity(0.1);
+    }
+
+    painter.fillRect(m_fixedSpliter->geometry(), color);
+    painter.fillRect(m_appSpliter->geometry(), color);
+    painter.fillRect(m_traySpliter->geometry(), color);
 }

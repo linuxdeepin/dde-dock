@@ -28,6 +28,7 @@
 #include <QSvgRenderer>
 #include <QMouseEvent>
 #include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 
 #define PLUGIN_STATE_KEY    "enable"
 #define SHOW_DATE_MIN_HEIGHT 45

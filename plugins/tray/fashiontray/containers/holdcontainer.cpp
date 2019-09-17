@@ -43,7 +43,7 @@ void HoldContainer::refreshVisible()
 {
     AbstractContainer::refreshVisible();
 
-    setVisible(expand() || !isEmpty());
+    setVisible(true);
 }
 
 void HoldContainer::setDockPosition(const Dock::Position pos)

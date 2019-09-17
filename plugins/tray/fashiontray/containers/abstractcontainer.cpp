@@ -135,17 +135,17 @@ QSize AbstractContainer::totalSize() const
     if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
 
         size.setWidth(
-            m_wrapperList.size() * std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE) // 所有托盘图标
-            + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-            + TraySpace
+            (expand() ? (m_wrapperList.size() * std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE)                                       // 所有托盘图标
+                         + m_wrapperList.size() * TraySpace) : 0 // 所有托盘图标之间 + 一个尾部的 space
+            )           + TraySpace
         );
         size.setHeight(height());
     } else {
         size.setWidth(width());
         size.setHeight(
-            m_wrapperList.size() * std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE) // 所有托盘图标
-            + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-            + TraySpace
+            (expand() ? (m_wrapperList.size() * std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE) // 所有托盘图标
+                         + m_wrapperList.size() * TraySpace) : 0 // 所有托盘图标之间 + 一个尾部的 space
+            ) + TraySpace
         );
     }
 

@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QBoxLayout>
+#include <QLabel>
 
 using namespace Dock;
 
@@ -82,6 +83,7 @@ private:
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
+    void paintEvent(QPaintEvent *event) override;
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -105,6 +107,9 @@ private:
     QString m_draggingMimeKey;
     AppDragWidget *m_appDragWidget;
     DisplayMode m_dislayMode;
+    QLabel *m_fixedSpliter;
+    QLabel *m_appSpliter;
+    QLabel *m_traySpliter;
 };
 
 #endif // MAINPANELCONTROL_H

@@ -82,8 +82,6 @@ private Q_SLOTS:
 
 private:
     QBoxLayout *m_mainBoxLayout;
-    QLabel *m_leftSpliter;
-    QLabel *m_rightSpliter;
     QTimer *m_attentionDelayTimer;
 
     TrayPlugin *m_trayPlugin;
@@ -96,9 +94,7 @@ private:
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;
-
-    QWidget *m_leftSpace;
-    QWidget *m_rightSpace;
+QWidget *m_leftSpace;
 };
 
 #endif // FASHIONTRAYITEM_H
