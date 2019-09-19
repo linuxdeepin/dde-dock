@@ -823,6 +823,8 @@ void MainWindow::setEffectEnabled(const bool enabled)
     setMaskColor(AutoColor);
 
     setMaskAlpha(DockSettings::Instance().Opacity());
+
+    m_platformWindowHandle.setBorderWidth(enabled ? 1 : 0);
 }
 
 void MainWindow::setComposite(const bool hasComposite)
