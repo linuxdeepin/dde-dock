@@ -110,6 +110,8 @@ install: build translate install-dde-data install-icons install-pam-module
 	mkdir -pv ${DESTDIR}/etc/acpi/actions
 	cp -f misc/etc/acpi/actions/* ${DESTDIR}/etc/acpi/actions/
 
+	mkdir -pv ${DESTDIR}/etc/pulse/daemon.conf.d
+	cp -f misc/etc/pulse/daemon.conf.d/*.conf ${DESTDIR}/etc/pulse/daemon.conf.d/
 
 install-pam-module:
 	mkdir -pv ${DESTDIR}/${PAM_MODULE_DIR}
