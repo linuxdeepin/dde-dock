@@ -501,24 +501,14 @@ void MainWindow::updateGeometry()
     m_mainPanel->setPositonValue(position);
     resizeMainPanelWindow();
 
-    bool animation = true;
-    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
-
-    if (isHide) {
-        switch (position) {
-        case Top:
-        case Bottom:    size.setHeight(2);      break;
-        case Left:
-        case Right:     size.setWidth(2);       break;
-        }
-        animation = false;
-        QWidget::setFixedSize(size);
-    }
-    const QRect windowRect = m_settings->windowRect(position, isHide);
+    const QRect windowRect = m_settings->windowRect(position, true);
 
     internalMove(windowRect.topLeft());
 
     m_size = m_settings->m_mainWindowSize;
+
+    QWidget::setFixedSize(size);
+    setStrutPartial();
 
     m_mainPanel->update();
 

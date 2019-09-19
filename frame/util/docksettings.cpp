@@ -171,14 +171,6 @@ const QSize DockSettings::panelSize() const
 const QRect DockSettings::windowRect(const Position position, const bool hide) const
 {
     QSize size = m_mainWindowSize;
-    if (hide) {
-        switch (position) {
-        case Top:
-        case Bottom:    size.setHeight(2);      break;
-        case Left:
-        case Right:     size.setWidth(2);       break;
-        }
-    }
 
     const QRect primaryRect = this->primaryRect();
     const int offsetX = (primaryRect.width() - size.width()) / 2;
