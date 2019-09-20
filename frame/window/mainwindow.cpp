@@ -895,6 +895,7 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
     }
 
     resizeMainWindow();
+    m_settings->updateFrontendGeometry();
 }
 
 void MainWindow::onDragFinished()
@@ -910,7 +911,6 @@ void MainWindow::onDragFinished()
     }
 
     setStrutPartial();
-    m_settings->updateFrontendGeometry();
 }
 
 #include "mainwindow.moc"
