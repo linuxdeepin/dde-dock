@@ -384,6 +384,11 @@ void DockSettings::resetFrontendGeometry()
     m_dockInter->SetFrontendWindowRect(p.x(), p.y(), w, h);
 }
 
+void DockSettings::updateFrontendGeometry()
+{
+    resetFrontendGeometry();
+}
+
 bool DockSettings::test(const Position pos, const QList<QRect> &otherScreens) const
 {
     QRect maxStrut(0, 0, m_screenRawWidth, m_screenRawHeight);

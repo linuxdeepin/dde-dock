@@ -365,6 +365,7 @@ void MainWindow::internalMove(const QPoint &p)
     case Right:     rp.setX(r.right() - 1);     break;
     case Bottom:    rp.setY(r.bottom() - 1);    break;
     }
+
     int hx = height() * ratio, wx = width() * ratio;
     if (m_settings->hideMode() != HideMode::KeepShowing &&
             isHide &&
@@ -909,6 +910,7 @@ void MainWindow::onDragFinished()
     }
 
     setStrutPartial();
+    m_settings->updateFrontendGeometry();
 }
 
 #include "mainwindow.moc"

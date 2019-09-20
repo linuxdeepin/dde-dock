@@ -83,6 +83,8 @@ public:
     qreal dockRatio() const;
 
     void showDockSettingsMenu();
+    void updateFrontendGeometry();
+    
     QSize m_mainWindowSize;
     DBusDock *m_dockInter;
 
