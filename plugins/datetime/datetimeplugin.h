@@ -68,6 +68,7 @@ private slots:
 
 private:
     void loadPlugin();
+    QDBusInterface *timedateInterface();
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;

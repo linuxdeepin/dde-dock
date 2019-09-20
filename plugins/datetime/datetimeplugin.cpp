@@ -24,6 +24,9 @@
 #include <DDBusSender>
 #include <QLabel>
 #include <QDebug>
+#include <QDBusConnectionInterface>
+
+#include <unistd.h>
 
 #define PLUGIN_STATE_KEY "enable"
 #define TIME_FORMAT_KEY "Use24HourFormat"
@@ -31,9 +34,8 @@
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_interface(nullptr)
 {
-    m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate");
-
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
     sessionBus.connect("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
 }
@@ -198,15 +200,18 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         .arg(QString("datetime"))
         .call();
     } else {
-        const bool value = m_interface->property(TIME_FORMAT_KEY).toBool();
-        m_interface->setProperty(TIME_FORMAT_KEY, !value);
+        const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
+        timedateInterface()->setProperty(TIME_FORMAT_KEY, !value);
         m_centralWidget->set24HourFormat(!value);
     }
 }
 
 void DatetimePlugin::pluginSettingsChanged()
 {
-    const bool value = m_interface->property(TIME_FORMAT_KEY).toBool();
+    if (!m_pluginLoaded)
+        return;
+
+    const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
 
     m_proxyInter->saveValue(this, TIME_FORMAT_KEY, value);
     m_centralWidget->set24HourFormat(value);
@@ -249,4 +254,20 @@ void DatetimePlugin::refreshPluginItemsVisible()
 void DatetimePlugin::propertiesChanged()
 {
     pluginSettingsChanged();
+}
+
+QDBusInterface* DatetimePlugin::timedateInterface()
+{
+    if (!m_interface) {
+        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.daemon.Timedate")) {
+            m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate");
+        } else {
+            const QString path = QString("/com/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
+            QDBusInterface * systemInterface = new QDBusInterface("com.deepin.daemon.Accounts", path, "com.deepin.daemon.Accounts.User",
+                                      QDBusConnection::systemBus(), this);
+            return systemInterface;
+        }
+    }
+
+    return m_interface;
 }
