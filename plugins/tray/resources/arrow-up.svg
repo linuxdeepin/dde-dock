@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <linearGradient id="arrow-up-a" x1="0%" x2="100%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#DBFDFF"/>
+      <stop offset="100%" stop-color="#70FBFB"/>
+    </linearGradient>
+  </defs>
+  <polygon fill="url(#arrow-up-a)" fill-rule="evenodd" points="6.437 10.73 5.73 11.437 .341 6.048 5.73 .659 6.437 1.366 1.755 6.048" transform="matrix(0 1 1 0 4 6)"/>
+</svg>

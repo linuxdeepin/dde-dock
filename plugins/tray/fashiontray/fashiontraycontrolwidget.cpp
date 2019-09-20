@@ -48,6 +48,10 @@ FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWid
 
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
+
+    connect(DGuiApplicationHelper::instance(),&DGuiApplicationHelper::themeTypeChanged,[=]{
+        this->refreshArrowPixmap();
+    });
 }
 
 void FashionTrayControlWidget::setDockPostion(Dock::Position pos)
@@ -200,14 +204,18 @@ void FashionTrayControlWidget::refreshArrowPixmap()
     switch (m_dockPosition) {
     case Dock::Top:
     case Dock::Bottom:
-        iconPath = m_expanded ? ":/icons/resources/arrow_left_light.svg" : ":/icons/resources/arrow_right_dark.svg";
+        iconPath = m_expanded ? ":/icons/resources/arrow-left" : ":/icons/resources/arrow-right";
         break;
     case Dock::Left:
     case Dock::Right:
-        iconPath = m_expanded ? ":/icons/resources/arrow_up_light.svg" : ":/icons/resources/arrow_down_dark.svg";
+        iconPath = m_expanded ? ":/icons/resources/arrow-up" : ":/icons/resources/arrow-down";
         break;
     default:
         break;
+    }
+
+    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        iconPath.append("-dark");
     }
 
     m_arrowPix = DHiDPIHelper::loadNxPixmap(iconPath);
