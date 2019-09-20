@@ -23,6 +23,7 @@ import (
 	"sync"
 
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
+	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -130,4 +131,22 @@ func (m *Manager) addDevices(pathList []dbus.ObjectPath) {
 func (m *Manager) destroy() {
 	destroyDevices(m.devList)
 	m.systemSigLoop.Stop()
+}
+
+func checkAuth(actionId string, busName string) (bool, error) {
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		return false, err
+	}
+	authority := polkit.NewAuthority(systemBus)
+	subject := polkit.MakeSubject(polkit.SubjectKindSystemBusName)
+	subject.SetDetail("name", busName)
+
+	ret, err := authority.CheckAuthorization(0, subject,
+		actionId, nil,
+		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
+	if err != nil {
+		return false, err
+	}
+	return ret.IsAuthorized, nil
 }

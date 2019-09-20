@@ -25,7 +25,7 @@ import (
 )
 
 var (
-	logger = log.NewLogger("System/Fprintd")
+	logger = log.NewLogger("daemon/fprintd")
 )
 
 type Daemon struct {

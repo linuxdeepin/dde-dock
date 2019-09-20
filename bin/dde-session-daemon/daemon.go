@@ -142,7 +142,6 @@ func (s *SessionDaemon) initModules() {
 		"timedate",
 		"bluetooth",
 		"screenedge",
-		"fprintd",
 		"mime",
 		"calendar",
 		"miracast", // need network

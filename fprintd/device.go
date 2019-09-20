@@ -20,12 +20,18 @@
 package fprintd
 
 import (
+	"errors"
 	"path"
 
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
+)
+
+const (
+	actionIdEnroll = "com.deepin.daemon.fprintd.enroll"
+	actionIdDelete = "com.deepin.daemon.fprintd.delete-enrolled-fingers"
 )
 
 type Device struct {
@@ -92,12 +98,21 @@ func (dev *Device) Release() *dbus.Error {
 	return dbusutil.ToError(err)
 }
 
-func (dev *Device) EnrollStart(finger string) *dbus.Error {
-	err := dev.core.EnrollStart(0, finger)
+func (dev *Device) EnrollStart(sender dbus.Sender, finger string) *dbus.Error {
+	ok, err := checkAuth(actionIdEnroll, string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	if !ok {
+		err = errors.New("authentication failed")
+		return dbusutil.ToError(err)
+	}
+
+	err = dev.core.EnrollStart(0, finger)
 	return dbusutil.ToError(err)
 }
 
-func (dev *Device) EnrollStop() *dbus.Error {
+func (dev *Device) EnrollStop(sender dbus.Sender) *dbus.Error {
 	err := dev.core.EnrollStop(0)
 	return dbusutil.ToError(err)
 }
@@ -112,8 +127,17 @@ func (dev *Device) VerifyStop() *dbus.Error {
 	return dbusutil.ToError(err)
 }
 
-func (dev *Device) DeleteEnrolledFingers(username string) *dbus.Error {
-	err := dev.core.DeleteEnrolledFingers(0, username)
+func (dev *Device) DeleteEnrolledFingers(sender dbus.Sender, username string) *dbus.Error {
+	ok, err := checkAuth(actionIdDelete, string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	if !ok {
+		err = errors.New("authentication failed")
+		return dbusutil.ToError(err)
+	}
+
+	err = dev.core.DeleteEnrolledFingers(0, username)
 	return dbusutil.ToError(err)
 }
 
