@@ -553,6 +553,14 @@ void AppItem::startDrag()
     if (!m_wmHelper->hasComposite()) {
         if (!m_drag->target()) {
             m_itemEntryInter->RequestUndock();
+            // NOTICE(jouyouyun): Maybe no animation in 2D, so the 'appDragWidget'
+            // no 'destroyed' signal be emited.
+            // So here called the destroyed action manually, this is only temporary solution.
+            // And it's necessary to modify 'appDragWidget' to solve the bug.
+            m_dragging = false;
+            m_drag.clear();
+            setVisible(true);
+            update();
         }
     }
 }
