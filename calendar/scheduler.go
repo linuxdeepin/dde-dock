@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"encoding/json"
+	"sync"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -12,12 +13,16 @@ import (
 )
 
 type Scheduler struct {
-	db            *gorm.DB
-	notifications *notifications.Notifications
-	timerGroup    timerGroup
-	changeChan    chan struct{}
-	quitChan      chan struct{}
-	methods       *struct {
+	signalLoop     *dbusutil.SignalLoop
+	db             *gorm.DB
+	notifications  *notifications.Notifications
+	notifyJobMap   map[uint32]*JobJSON // key is notification id
+	notifyJobMapMu sync.Mutex
+	timerGroup     timerGroup
+	changeChan     chan struct{}
+	quitChan       chan struct{}
+
+	methods *struct {
 		GetJobs   func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
 		GetJob    func() `in:"id" out:"job"`
 		DeleteJob func() `in:"id"`
@@ -36,17 +41,82 @@ type Scheduler struct {
 
 func newScheduler(db *gorm.DB, service *dbusutil.Service) *Scheduler {
 	sessionBus := service.Conn()
-	m := &Scheduler{
+	s := &Scheduler{
 		db:            db,
 		changeChan:    make(chan struct{}),
 		quitChan:      make(chan struct{}),
 		notifications: notifications.NewNotifications(sessionBus),
+		notifyJobMap:  make(map[uint32]*JobJSON),
 	}
-	return m
+	s.signalLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	s.signalLoop.Start()
+	s.listenDBusSignals()
+	return s
+}
+
+func (s *Scheduler) destroy() {
+	s.notifications.RemoveAllHandlers()
+	s.signalLoop.Stop()
+	close(s.quitChan)
 }
 
 func (s *Scheduler) GetInterfaceName() string {
 	return dbusInterface
+}
+
+const (
+	notifyCloseReasonDismissedByUser = 2
+)
+
+func (s *Scheduler) listenDBusSignals() {
+	s.notifications.InitSignalExt(s.signalLoop, true)
+	_, err := s.notifications.ConnectNotificationClosed(func(id uint32, reason uint32) {
+		logger.Debug("signal notification closed", id, reason)
+		defer func() {
+			s.notifyJobMapMu.Lock()
+			delete(s.notifyJobMap, id)
+			s.notifyJobMapMu.Unlock()
+		}()
+
+		if reason != notifyCloseReasonDismissedByUser {
+			return
+		}
+		s.notifyJobMapMu.Lock()
+		job := s.notifyJobMap[id]
+		s.notifyJobMapMu.Unlock()
+
+		if job == nil {
+			return
+		}
+
+		err := callUIOpenSchedule(job)
+		if err != nil {
+			logger.Warning("failed to show job:", err)
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+const (
+	uiDBusPath      = "/com/deepin/Calendar"
+	uiDBusInterface = "com.deepin.Calendar"
+	uiDBusService   = uiDBusInterface
+)
+
+func callUIOpenSchedule(job *JobJSON) error {
+	bus, err := dbus.SessionBus()
+	if err != nil {
+		return err
+	}
+	jobStr, err := toJson(job)
+	if err != nil {
+		return err
+	}
+	obj := bus.Object(uiDBusService, uiDBusPath)
+	err = obj.Call(uiDBusInterface+".OpenSchedule", 0, jobStr).Err
+	return err
 }
 
 type dateJobsWrap struct {
@@ -266,14 +336,23 @@ func (tg *timerGroup) reset() {
 func (s *Scheduler) remindJob(job *Job) {
 	layout := "2006-01-02 15:04"
 	body := job.Start.Format(layout) + " ~ " + job.End.Format(layout)
-	logger.Debug("remind:", job.Title, body)
+	logger.Debugf("remind now: %v, title: %v, body: %v", time.Now(), job.Title, body)
 	id, err := s.notifications.Notify(0, "dde-daemon", 0,
 		"dde-calendar", job.Title,
 		body, nil, nil, 0)
 	if err != nil {
 		logger.Warning(err)
+		return
 	}
 	logger.Debug("id:", id)
+	jj, err := job.toJobJSON()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	s.notifyJobMapMu.Lock()
+	s.notifyJobMap[id] = jj
+	s.notifyJobMapMu.Unlock()
 }
 
 func (s *Scheduler) DebugRemindJob(id int64) *dbus.Error {

@@ -50,6 +50,8 @@ func (m *Module) Stop() error {
 		return nil
 	}
 
+	m.scheduler.destroy()
+
 	service := loader.GetService()
 	err := service.ReleaseName(dbusServiceName)
 	if err != nil {
@@ -61,7 +63,6 @@ func (m *Module) Stop() error {
 		return err
 	}
 
-	close(m.scheduler.quitChan)
 	m.scheduler = nil
 	return nil
 }
