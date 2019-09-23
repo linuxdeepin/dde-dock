@@ -156,33 +156,37 @@ func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool) (
 			continue
 		}
 		for _, jobTime := range jobTimes {
+
 			var j *Job
 			if jobTime.recurID == 0 {
 				j = job
 			} else {
 				j = job.clone(jobTime.start, jobTime.start.Add(interval), jobTime.recurID)
 			}
-			d := libdate.NewAt(jobTime.start)
-			idx := d.Sub(startDate)
-			wraps[idx].jobs = append(wraps[idx].jobs, j)
-		}
-	}
+			jStartDate := libdate.NewAt(jobTime.start)
+			idx := int(jStartDate.Sub(startDate))
 
-	if !extend {
-		return
-	}
-	for idx, wrap := range wraps {
-		for _, job := range wrap.jobs {
-			jStartDate := libdate.NewAt(job.Start)
-			jEndDate := libdate.NewAt(job.End)
+			if 0 <= idx && idx < len(wraps) {
+				wraps[idx].jobs = append(wraps[idx].jobs, j)
+			}
 
+			if !extend {
+				continue
+			}
+			// NOTE: extend 指把跨越多天的 job 给扩展开，比如开始日期为 2019-09-01 结束日期为 2019-09-02 的
+			// job, 将会扩展出一个job 放入 2019-09-02 那天的 extendJobs 字段中。
+
+			jEndDate := libdate.NewAt(j.End)
 			days := int(jEndDate.Sub(jStartDate))
-
 			for i := 0; i < days; i++ {
 				tIdx := idx + i + 1
 				if tIdx == len(wraps) {
 					break
 				}
+				if tIdx < 0 {
+					continue
+				}
+
 				w := &wraps[tIdx]
 				w.extendJobs = append(w.extendJobs, job)
 			}
@@ -196,6 +200,8 @@ const recurrenceLimit = 3650
 
 func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
 	jStartDate := libdate.NewAt(j.Start)
+	jEndDate := libdate.NewAt(j.End)
+	nDays := jEndDate.Sub(jStartDate)
 	if endDate.Before(jStartDate) {
 		// endDate < jStartDate
 		return nil, nil
@@ -205,10 +211,9 @@ func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
 	if err != nil {
 		return nil, err
 	}
-	// 此次满足条件 jStartDate <= endDate
+	// 此处满足条件 jStartDate <= endDate
 	if j.RRule == "" {
-		if !startDate.After(jStartDate) {
-			// startDate <= jStartDate <= endDate
+		if (dateRange{startDate, endDate}).overlap(dateRange{jStartDate, jEndDate}) {
 			if timeSliceContains(ignore, j.Start) {
 				// ignore this job
 				return nil, nil
@@ -240,15 +245,19 @@ func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
 			break
 		}
 		start := *t
-		d := libdate.NewAt(start)
-		if endDate.Before(d) {
-			// endDate < d
+		jStartDate := libdate.NewAt(start)
+		if endDate.Before(jStartDate) {
+			// endDate < jStartDate
+			// jStartDate 会随着循环迭代而增加，所以应该 break。
 			break
 		}
+		jEndDate := jStartDate.Add(nDays)
 
-		if !startDate.After(d) &&
-			!timeSliceContains(ignore, start) {
-			// startDate <= d <= endDate and not ignored
+		if (dateRange{startDate, endDate}).overlap(dateRange{jStartDate, jEndDate}) {
+			if timeSliceContains(ignore, j.Start) {
+				// ignore this job
+				continue
+			}
 			result = append(result, jobTime{start: start, recurID: count})
 		}
 

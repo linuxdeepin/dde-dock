@@ -129,17 +129,73 @@ func TestTimeRangeOverlap(t *testing.T) {
 }
 
 func TestBetween(t *testing.T) {
+	// 单日任务，无重复
 	job := &Job{
+		Start: newTimeYMDHM(2019, 9, 1, 9, 0),
+		End:   newTimeYMDHM(2019, 9, 1, 10, 0),
+	}
+	startDate := libdate.New(2019, 9, 1)
+	endDate := libdate.New(2019, 9, 10)
+	jobTimes, err := job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 1)
+	assert.Equal(t, jobTime{start: newTimeYMDHM(2019, 9, 1, 9, 0)}, jobTimes[0])
+
+	startDate = libdate.New(2019, 8, 1)
+	endDate = libdate.New(2019, 8, 31)
+	jobTimes, err = job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 0)
+
+	startDate = libdate.New(2019, 9, 2)
+	endDate = libdate.New(2019, 9, 31)
+	jobTimes, err = job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 0)
+
+	// 单日任务，重复：每天
+	job = &Job{
 		Start: newTimeYMDHM(2019, 9, 1, 9, 0),
 		End:   newTimeYMDHM(2019, 9, 1, 10, 0),
 		RRule: "FREQ=DAILY",
 	}
-	startDate := libdate.New(2019, 9, 1)
-	endDate := libdate.New(2019, 9, 30)
-	timeCounts, err := job.between(startDate, endDate)
+	startDate = libdate.New(2019, 9, 1)
+	endDate = libdate.New(2019, 9, 10)
+	jobTimes, err = job.between(startDate, endDate)
 	assert.Nil(t, err)
-	//t.Log(timeCounts)
-	for _, timeCount := range timeCounts {
-		t.Logf("%s %d\n", timeCount.start, timeCount.recurID)
+	assert.Equal(t, len(jobTimes), 10)
+	assert.Equal(t, jobTimes[0], jobTime{start: newTimeYMDHM(2019, 9, 1, 9, 0)})
+	assert.Equal(t, jobTimes[1], jobTime{start: newTimeYMDHM(2019, 9, 2, 9, 0), recurID: 1})
+	assert.Equal(t, jobTimes[9], jobTime{start: newTimeYMDHM(2019, 9, 10, 9, 0), recurID: 9})
+
+	// 多日任务，10日， 无重复
+	job = &Job{
+		Start: newTimeYMDHM(2019, 9, 1, 9, 0),
+		End:   newTimeYMDHM(2019, 9, 10, 9, 0),
 	}
+	startDate = libdate.New(2019, 9, 1)
+	endDate = libdate.New(2019, 9, 12)
+	jobTimes, err = job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 1)
+	assert.Equal(t, jobTimes[0], jobTime{start: newTimeYMDHM(2019, 9, 1, 9, 0)})
+
+	startDate = libdate.New(2019, 9, 5)
+	endDate = libdate.New(2019, 9, 12)
+	jobTimes, err = job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 1)
+	assert.Equal(t, jobTimes[0], jobTime{start: newTimeYMDHM(2019, 9, 1, 9, 0)})
+
+	startDate = libdate.New(2019, 8, 1)
+	endDate = libdate.New(2019, 8, 31)
+	jobTimes, err = job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 0)
+
+	startDate = libdate.New(2019, 9, 11)
+	endDate = libdate.New(2019, 9, 30)
+	jobTimes, err = job.between(startDate, endDate)
+	assert.Nil(t, err)
+	assert.Len(t, jobTimes, 0)
 }
