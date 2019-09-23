@@ -63,6 +63,7 @@ func (*Manager) GetInterfaceName() string {
 
 // Reset reset all shortcut
 func (m *Manager) Reset() *dbus.Error {
+	customShortcuts := m.customShortcutManager.List()
 	m.shortcutManager.UngrabAll()
 
 	m.enableListenGSettingsChanged(false)
@@ -81,15 +82,46 @@ func (m *Manager) Reset() *dbus.Error {
 		}
 	}
 
-	// disable all custom shortcuts
-	err := m.customShortcutManager.DisableAll()
-	if err != nil {
-		logger.Warning(err)
-	}
-
 	changes := m.shortcutManager.ReloadAllShortcutsKeystrokes()
 	m.enableListenGSettingsChanged(true)
 	m.shortcutManager.GrabAll()
+
+	for _, cs := range customShortcuts {
+		keystrokes := cs.GetKeystrokes()
+		var newKeystrokes []*shortcuts.Keystroke
+		modifyFlag := false
+		for _, keystroke := range keystrokes {
+			conflictKeystroke, err := m.shortcutManager.FindConflictingKeystroke(keystroke)
+			if err != nil {
+				logger.Warning(err)
+				modifyFlag = true
+				continue
+			}
+			if conflictKeystroke != nil {
+				logger.Debugf("keystroke %v has conflict", keystroke)
+				modifyFlag = true
+			} else {
+				newKeystrokes = append(newKeystrokes, keystroke)
+			}
+		}
+
+		cs0 := m.shortcutManager.GetByUid(cs.GetUid())
+		if cs0 == nil {
+			logger.Warning("cs0 is nil")
+			continue
+		}
+
+		m.shortcutManager.ModifyShortcutKeystrokes(cs0, newKeystrokes)
+		if modifyFlag {
+			err := cs0.SaveKeystrokes()
+			if err != nil {
+				logger.Warning(err)
+			}
+			// 将修改的自定义快捷键补充到 changes 列表中
+			changes = append(changes, cs0)
+		}
+	}
+
 	for _, shortcut := range changes {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	}

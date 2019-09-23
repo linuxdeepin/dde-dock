@@ -664,6 +664,11 @@ func (sm *ShortcutManager) GetByIdType(id string, type0 int32) Shortcut {
 	return shortcut
 }
 
+func (sm *ShortcutManager) GetByUid(uid string) Shortcut {
+	shortcut := sm.idShortcutMap[uid]
+	return shortcut
+}
+
 // ret0: Conflicting keystroke
 // ret1: error
 func (sm *ShortcutManager) FindConflictingKeystroke(ks *Keystroke) (*Keystroke, error) {

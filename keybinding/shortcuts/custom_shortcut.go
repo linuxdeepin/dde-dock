@@ -53,14 +53,10 @@ func (cs *CustomShortcut) SaveKeystrokes() error {
 	return csm.Save()
 }
 
-// after Reset, keystrokes of custom shortcut should be empty
+// 经过 Reset 重置后， 自定义快捷键的 keystrokes 被设置为空，始终返回 false
+// 是为了另外计算改变的自定义快捷键项目。
 func (cs *CustomShortcut) ReloadKeystrokes() bool {
-	keystrokes := cs.GetKeystrokes()
 	cs.setKeystrokes(nil)
-
-	if len(keystrokes) > 0 {
-		return true
-	}
 	return false
 }
 
@@ -170,14 +166,5 @@ func (csm *CustomShortcutManager) Delete(id string) error {
 	}
 
 	csm.kfile.DeleteSection(id)
-	return csm.Save()
-}
-
-func (csm *CustomShortcutManager) DisableAll() error {
-	kfile := csm.kfile
-	sections := kfile.GetSections()
-	for _, section := range sections {
-		kfile.SetValue(section, kfKeyKeystrokes, "")
-	}
 	return csm.Save()
 }
