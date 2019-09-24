@@ -188,7 +188,7 @@ func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool) (
 				}
 
 				w := &wraps[tIdx]
-				w.extendJobs = append(w.extendJobs, job)
+				w.extendJobs = append(w.extendJobs, j)
 			}
 		}
 	}
