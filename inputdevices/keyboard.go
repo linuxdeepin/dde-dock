@@ -26,11 +26,15 @@ import (
 	"os"
 	"os/user"
 	"path"
+	"pkg.deepin.io/lib/gsettings"
 	"regexp"
 	"strings"
 	"sync"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	"github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/api/dxinput"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/gir/gio-2.0"
@@ -50,6 +54,12 @@ const (
 	kbdKeyLayoutOptions  = "layout-options"
 	kbdKeyCursorBlink    = "cursor-blink-time"
 	kbdKeyCapslockToggle = "capslock-toggle"
+	kbdKeyLayoutApp      = "layout-app"
+	kbdKeyAppLayoutMap   = "app-layout-map"
+	kbdKeyLayoutScope    = "layout-scope"
+
+	layoutScopeGlobal = 0
+	layoutScopeApp    = 1
 
 	layoutDelim      = ";"
 	kbdDefaultLayout = "us" + layoutDelim
@@ -61,10 +71,15 @@ const (
 )
 
 type Keyboard struct {
-	service       *dbusutil.Service
-	sysSigLoop    *dbusutil.SignalLoop
-	PropsMu       sync.RWMutex
-	CurrentLayout string `prop:"access:rw"`
+	xConn          *x.Conn
+	activeWindow   x.Window
+	activeWinClass string
+	service        *dbusutil.Service
+	sysSigLoop     *dbusutil.SignalLoop
+	PropsMu        sync.RWMutex
+	CurrentLayout  string      `prop:"access:rw"`
+	LayoutScope    gsprop.Enum `prop:"access:rw"`
+	appLayoutCfg   appLayoutConfig
 	// dbusutil-gen: equal=nil
 	UserLayoutList []string
 
@@ -108,8 +123,22 @@ func newKeyboard(service *dbusutil.Service) *Keyboard {
 	kbd.CursorBlink.Bind(kbd.setting, kbdKeyCursorBlink)
 	kbd.CapslockToggle.Bind(kbd.setting, kbdKeyCapslockToggle)
 	kbd.UserOptionList.Bind(kbd.setting, kbdKeyLayoutOptions)
+	kbd.LayoutScope.Bind(kbd.setting, kbdKeyLayoutScope)
 
 	var err error
+	err = kbd.loadAppLayoutConfig()
+	if err != nil {
+		logger.Warning("failed to load app layout config:", err)
+	}
+	if kbd.appLayoutCfg.Map == nil {
+		kbd.appLayoutCfg.Map = make(map[string]int)
+	}
+
+	kbd.xConn, err = x.NewConn()
+	if err != nil {
+		logger.Error("failed to get X conn:", err)
+		return nil
+	}
 
 	kbd.layoutMap, err = getLayoutsFromFile(kbdLayoutsXml)
 	if err != nil {
@@ -149,6 +178,10 @@ func newKeyboard(service *dbusutil.Service) *Keyboard {
 	}
 
 	kbd.devNumber = getKeyboardNumber()
+
+	kbd.listenSettingsChanged()
+	kbd.listenRootWindowXEvent()
+	kbd.startXEventLoop()
 	return kbd
 }
 
@@ -186,18 +219,18 @@ func (kbd *Keyboard) initUser() {
 		return
 	}
 	kbd.user.InitSignalExt(kbd.sysSigLoop, true)
-	kbd.user.Layout().ConnectChanged(func(hasValue bool, value string) {
+	err = kbd.user.Layout().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
 
-		kbd.PropsMu.Lock()
-		kbd.setPropCurrentLayout(fixLayout(value))
-		kbd.PropsMu.Unlock()
-
-		kbd.applyLayout()
+		layout := fixLayout(value)
+		kbd.setLayout(layout)
 	})
-	kbd.user.HistoryLayout().ConnectChanged(func(hasValue bool, value []string) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = kbd.user.HistoryLayout().ConnectChanged(func(hasValue bool, value []string) {
 		if !hasValue {
 			return
 		}
@@ -206,6 +239,9 @@ func (kbd *Keyboard) initUser() {
 		kbd.setPropUserLayoutList(fixLayoutList(value))
 		kbd.PropsMu.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (kbd *Keyboard) destroy() {
@@ -319,6 +355,15 @@ func (kbd *Keyboard) checkLayout(layout string) error {
 	return nil
 }
 
+func (kbd *Keyboard) setLayout(layout string) {
+	logger.Debug("set layout to", layout)
+	kbd.PropsMu.Lock()
+	kbd.setPropCurrentLayout(layout)
+	kbd.PropsMu.Unlock()
+
+	kbd.applyLayout()
+}
+
 func (kbd *Keyboard) setCurrentLayout(write *dbusutil.PropertyWrite) *dbus.Error {
 	layout := write.Value.(string)
 	logger.Debugf("setCurrentLayout %q", layout)
@@ -331,10 +376,32 @@ func (kbd *Keyboard) setCurrentLayout(write *dbusutil.PropertyWrite) *dbus.Error
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-
-	kbd.setLayoutForAccountsUser(layout)
 	kbd.addUserLayout(layout)
+
+	if kbd.LayoutScope.Get() == layoutScopeGlobal {
+		kbd.setLayoutForAccountsUser(layout)
+	} else {
+		kbd.setLayoutScopeApp(layout)
+	}
 	return nil
+}
+
+func (kbd *Keyboard) setLayoutScopeApp(layout string) {
+	if kbd.activeWinClass == "" {
+		return
+	}
+
+	if kbd.appLayoutCfg.set(kbd.activeWinClass, layout) {
+		kbd.saveAppLayoutConfig()
+	}
+
+	kbd.setLayout(layout)
+}
+
+func (kbd *Keyboard) saveAppLayoutConfig() {
+	jsonStr := kbd.appLayoutCfg.toJson()
+	logger.Debug("save app layout config", jsonStr)
+	kbd.setting.SetString(kbdKeyAppLayoutMap, jsonStr)
 }
 
 func (kbd *Keyboard) addUserLayout(layout string) {
@@ -361,6 +428,9 @@ func (kbd *Keyboard) delUserLayout(layout string) {
 		return
 	}
 	kbd.setLayoutListForAccountsUser(newLayoutList)
+	if kbd.appLayoutCfg.deleteLayout(layout) {
+		kbd.saveAppLayoutConfig()
+	}
 }
 
 func (kbd *Keyboard) addUserOption(option string) {
@@ -524,4 +594,99 @@ func applyXmodmapConfig() error {
 		return nil
 	}
 	return doAction("xmodmap " + config)
+}
+
+func (kbd *Keyboard) listenSettingsChanged() {
+	gsettings.ConnectChanged(kbdSchema, "layout-scope", func(key string) {
+		scope := kbd.LayoutScope.Get()
+		logger.Debug("layout scope changed to", scope)
+		switch scope {
+		case layoutScopeGlobal:
+			if kbd.user == nil {
+				logger.Warning("kbd.user is nil")
+				return
+			}
+
+			layout, err := kbd.user.Layout().Get(0)
+			if err != nil {
+				logger.Warning("failed to get user layout:", err)
+				return
+			}
+
+			kbd.setLayout(layout)
+
+		case layoutScopeApp:
+			layout, ok := kbd.appLayoutCfg.get(kbd.activeWinClass)
+			if ok {
+				kbd.setLayout(layout)
+			}
+		}
+	})
+}
+
+func (kbd *Keyboard) listenRootWindowXEvent() {
+	rootWin := kbd.xConn.GetDefaultScreen().Root
+	const eventMask = x.EventMaskPropertyChange
+	err := x.ChangeWindowAttributesChecked(kbd.xConn, rootWin, x.CWEventMask,
+		[]uint32{eventMask}).Check(kbd.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+	kbd.handleActiveWindowChanged()
+}
+
+func (kbd *Keyboard) handleActiveWindowChanged() {
+	activeWindow, err := ewmh.GetActiveWindow(kbd.xConn).Reply(kbd.xConn)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if activeWindow == kbd.activeWindow || activeWindow == 0 {
+		return
+	}
+	kbd.activeWindow = activeWindow
+	logger.Debug("active window changed to", activeWindow)
+	wmClass, err := icccm.GetWMClass(kbd.xConn, activeWindow).Reply(kbd.xConn)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	class := strings.ToLower(wmClass.Class)
+	if class == kbd.activeWinClass || class == "" {
+		return
+	}
+	kbd.activeWinClass = class
+	logger.Debug("wm class changed to", class)
+
+	if kbd.LayoutScope.Get() != layoutScopeApp {
+		return
+	}
+
+	layout, ok := kbd.appLayoutCfg.get(class)
+	if ok {
+		kbd.setLayout(layout)
+	}
+	// 否则不改变布局
+}
+
+func (kbd *Keyboard) startXEventLoop() {
+	eventChan := make(chan x.GenericEvent, 10)
+	kbd.xConn.AddEventChan(eventChan)
+
+	go func() {
+		for ev := range eventChan {
+			switch ev.GetEventCode() {
+			case x.PropertyNotifyEventCode:
+				event, _ := x.NewPropertyNotifyEvent(ev)
+				kbd.handlePropertyNotifyEvent(event)
+			}
+		}
+	}()
+}
+
+func (kbd *Keyboard) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
+	rootWin := kbd.xConn.GetDefaultScreen().Root
+	if ev.Window == rootWin {
+		kbd.handleActiveWindowChanged()
+	}
 }

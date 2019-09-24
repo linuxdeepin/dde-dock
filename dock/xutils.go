@@ -63,7 +63,6 @@ func getAtom(name string) (x.Atom, error) {
 
 func maximizeWindow(win x.Window) error {
 	return ewmh.RequestChangeWMState(globalXConn, win, ewmh.WMStateAdd, atomNetWmStateMaximizedVert, atomNetWmStateMaximizedHorz, 2).Check(globalXConn)
-	return nil
 }
 
 func minimizeWindow(win x.Window) error {
