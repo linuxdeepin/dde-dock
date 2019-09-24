@@ -53,6 +53,7 @@ public:
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
     inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
+    QPixmap appIcon(){ return m_appIcon; }
 
 signals:
     void requestActivateWindow(const WId wid) const;
