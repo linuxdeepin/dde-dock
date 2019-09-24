@@ -78,6 +78,7 @@ private:
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
 
     void startDrag(DockItem *);
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
@@ -110,6 +111,7 @@ private:
     QLabel *m_fixedSpliter;
     QLabel *m_appSpliter;
     QLabel *m_traySpliter;
+    QPoint m_mousePressPos;
 };
 
 #endif // MAINPANELCONTROL_H

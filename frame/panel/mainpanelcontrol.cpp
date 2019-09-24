@@ -30,6 +30,7 @@
 #include <QTimer>
 #include <QStandardPaths>
 #include <QString>
+#include <QApplication>
 
 #include <DGuiApplicationHelper>
 #include <DWindowManagerHelper>
@@ -535,9 +536,22 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (item->itemType() != DockItem::App && item->itemType() != DockItem::Plugins && item->itemType() != DockItem::FixedPlugin)
         return false;
 
+    const QPoint pos = mouseEvent->globalPos();
+    const QPoint distance = pos - m_mousePressPos;
+    if (distance.manhattanLength() < QApplication::startDragDistance())
+        return false;
+
     startDrag(item);
 
     return QWidget::eventFilter(watched, event);
+}
+
+void MainPanelControl::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+        m_mousePressPos = e->globalPos();
+
+    QWidget::mousePressEvent(e);
 }
 
 void MainPanelControl::startDrag(DockItem *item)
@@ -660,7 +674,6 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
                 targetItem = last;
             }
         }
-
     }
 
     return targetItem;
