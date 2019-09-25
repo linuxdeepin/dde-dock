@@ -90,7 +90,7 @@ public:
 
 signals:
     void dataChanged() const;
-    void positionChanged(const Position prevPosition) const;
+    void positionChanged(const Position prevPosition, const Position nextPosition) const;
     void autoHideChanged(const bool autoHide) const;
     void displayModeChanegd() const;
     void windowVisibleChanged() const;

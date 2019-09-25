@@ -84,7 +84,7 @@ signals:
     void panelGeometryChanged();
 
 private slots:
-    void positionChanged(const Position prevPos);
+    void positionChanged(const Position prevPos, const Position nextPos);
     void updatePosition();
     void updateGeometry();
     void clearStrutPartial();
@@ -117,8 +117,8 @@ private:
     QTimer *m_expandDelayTimer;
     QTimer *m_leaveDelayTimer;
     QTimer *m_shadowMaskOptimizeTimer;
-    QPropertyAnimation *m_panelShowAni;
-    QPropertyAnimation *m_panelHideAni;
+    QVariantAnimation *m_panelShowAni;
+    QVariantAnimation *m_panelHideAni;
 
     XcbMisc *m_xcbMisc;
     DockSettings *m_settings;
@@ -128,6 +128,8 @@ private:
     QString m_sniHostService;
     QSize m_size;
     DragWidget *m_dragWidget;
+    Position m_curDockPos;
+    Position m_newDockPos;
 };
 
 #endif // MAINWINDOW_H
