@@ -132,6 +132,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
         format = "hh:mm AP";
 
     painter.setFont(m_timeFont);
+    painter.setPen(QPen(palette().brightText(), 1));
 
     if (rect().height() >= SHOW_DATE_MIN_HEIGHT) {
         QRect timeRect = rect();
