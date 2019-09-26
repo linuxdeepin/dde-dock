@@ -22,9 +22,6 @@ void TipsWidget::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
 
-    QPen pen(Qt::white);
-    painter.setPen(pen);
-
     QTextOption option;
     option.setAlignment(Qt::AlignCenter);
     painter.drawText(rect(), m_text, option);
