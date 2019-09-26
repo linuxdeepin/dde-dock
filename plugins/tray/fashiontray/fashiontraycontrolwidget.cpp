@@ -48,10 +48,6 @@ FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWid
 
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
-
-    connect(DGuiApplicationHelper::instance(),&DGuiApplicationHelper::themeTypeChanged,[=]{
-        this->refreshArrowPixmap();
-    });
 }
 
 void FashionTrayControlWidget::setDockPostion(Dock::Position pos)
@@ -120,6 +116,7 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
     painter.setOpacity(1);
 
     // draw arrow pixmap
+    refreshArrowPixmap();
     QRectF rf = QRectF(rect());
     QRectF rfp = QRectF(m_arrowPix.rect());
     QPointF p = rf.center() - rfp.center() / m_arrowPix.devicePixelRatioF();
@@ -204,21 +201,21 @@ void FashionTrayControlWidget::refreshArrowPixmap()
     switch (m_dockPosition) {
     case Dock::Top:
     case Dock::Bottom:
-        iconPath = m_expanded ? ":/icons/resources/arrow-left" : ":/icons/resources/arrow-right";
+        iconPath = m_expanded ? "arrow-right" : "arrow-left";
         break;
     case Dock::Left:
     case Dock::Right:
-        iconPath = m_expanded ? ":/icons/resources/arrow-up" : ":/icons/resources/arrow-down";
+        iconPath = m_expanded ?  "arrow-down" : "arrow-up";
         break;
     default:
         break;
     }
 
-    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
         iconPath.append("-dark");
     }
 
-    m_arrowPix = DHiDPIHelper::loadNxPixmap(iconPath);
-
-    update();
+    const auto ratio = devicePixelRatioF();
+    m_arrowPix = QIcon::fromTheme(iconPath).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
+    m_arrowPix.setDevicePixelRatio(ratio);
 }
