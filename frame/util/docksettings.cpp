@@ -125,6 +125,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -378,6 +379,9 @@ void DockSettings::primaryScreenChanged()
     updateForbidPostions();
     emit dataChanged();
     calculateWindowConfig();
+
+    // 主屏切换时，如果缩放比例不一样，需要刷新item的图标(bug:3176)
+    m_itemManager->refershItemsIcon();
 }
 
 void DockSettings::resetFrontendGeometry()
