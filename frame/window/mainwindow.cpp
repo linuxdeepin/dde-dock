@@ -91,6 +91,16 @@ private:
         releaseMouse();
         emit dragFinished();
     }
+
+    void enterEvent(QEvent *) override
+    {
+        QApplication::setOverrideCursor(cursor());
+    }
+
+    void leaveEvent(QEvent *) override
+    {
+        QApplication::restoreOverrideCursor();
+    }
 };
 
 const QPoint rawXPosition(const QPoint &scaledPos)
