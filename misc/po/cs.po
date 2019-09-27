@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-05-13 09:07+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-20 12:29+0000\n"
 "Last-Translator: fri\n"
 "Language-Team: Czech (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -149,29 +149,41 @@ msgstr "Nelze se připojit k: %q, párování selhalo"
 msgid "Bluetooth connection failed"
 msgstr "Připojení rozhraní Bluetooth se nezdařilo."
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Práce"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Život"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Jiné"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Otevřít"
+msgid "Open"
+msgstr "Otevřít"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Zavřít vše"
+msgid "Close All"
+msgstr "Zavřít vše"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Vynutit ukončení"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Vynutit ukončení"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Panel"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dock"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Uvolnit z panelu"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Zrušit ukotvení"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Všechna okna"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Všechna okna"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -337,25 +349,25 @@ msgstr "Zobrazit okna z nynějšího pracovního prostředí"
 msgid "Display workspace"
 msgstr "Zobrazit pracovní prostředí"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Pro přepnutí jazyka je požadováno ověření pravosti"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Nepodařilo se změnit jazyk systému, zkuste to znovu později"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Mění se jazyk systému a instalují se požadované jazykové balíky, prosím, čekejte..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Mění se jazyk systému, prosím, čekejte..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Systémový jazyk byl změněn, prosím, odhlaste se, a potom se přihlašte  znovu"
 
@@ -860,7 +872,7 @@ msgstr " %q připojeno"
 msgid "Hotspot share turned off"
 msgstr "Sdílení činného bodu vypnuto"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr " %q odpojeno"
 
@@ -876,11 +888,11 @@ msgstr "Nelze připojit %q. Zdržujte se, prosím, blížeji u bezdrátového sm
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Nelze připojit %q. Zkontrolujte, prosím, směrovač nebo síťový kabel (internet)."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Připojení selhalo. Nelze připojit %q. Špatné heslo"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Neznámý"
 
@@ -914,43 +926,47 @@ msgstr "System proxy úspěšně nastaveno."
 msgid "System proxy has been cancelled."
 msgstr "System proxy bylo zrušeno."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Baterie velmi vybitá"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Počítač velice brzy přejde do úsporného režimu, prosím, ihned připojte kabel napájení"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Vybitá baterie"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Počítač brzy přejde do úsporného režimu, prosím, připojte kabel napájení"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Nízký stav baterie. Připojte, prosím, počítač k síti. Připojte kabel napájení"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Pro nastavení systémového času je požadováno ověření pravosti"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Pro řízení toho, zda se má povolit seřízení se síťovým časem, je požadováno ověření pravosti"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Pro změnu serveru NTP je vyžadováno ověření pravosti"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Pro řízení toho, zda RTC ukládá místní nebo světový čas (UTC), je požadováno ověření pravosti"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Pro nastavení časového pásma systému je požadováno ověření pravosti"

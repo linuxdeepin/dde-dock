@@ -24,52 +24,52 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation type="unfinished"/>
+			<translation>Autentisering krävs för att aktivera automatisk inloggning</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
 			<source>Enable Auto Login</source>
-			<translation type="unfinished"/>
+			<translation>Aktivera automatisk inloggning</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation type="unfinished"/>
+			<translation>Autentisering krävs för att inaktivera automatisk inloggning</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation type="unfinished"/>
+			<translation>Inaktivera automatisk inloggning</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation type="unfinished"/>
+			<translation>Autentisering krävs för att aktivera inloggning utan lösenord</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>Aktivera inloggning utan lösenord</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation type="unfinished"/>
+			<translation>Autentisering krävs för att inaktivera inloggning utan lösenord</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>Inaktivera inloggning utan lösenord</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Autentisering krävs för att ändra tangentbordslayout</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Ändra tangentbordslayout</translation>
 		</message>
 	</context>
 </TS>

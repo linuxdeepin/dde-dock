@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-26 12:48+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-17 18:19+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -148,29 +148,41 @@ msgstr "Ha fallat connectar amb %q. Ha fallat l'aparellament."
 msgid "Bluetooth connection failed"
 msgstr "Ha fallat la connexió de Bluetooth."
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Feina"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Vida"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Altres"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Obre"
+msgid "Open"
+msgstr "Obre"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "Tan_ca-ho tot"
+msgid "Close All"
+msgstr "Tanca-ho tot"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Força'n la sortida"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Força'n la sortida"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "Aco_bla"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Acoblador"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "Desacob_la"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Treu de l'acoblador"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Totes les finestres"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Totes les finestres"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -336,25 +348,25 @@ msgstr "Mostra les finestres de l'espai de treball actual"
 msgid "Display workspace"
 msgstr "Mostra l'espai de treball"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Cal autenticació per canviar la llengua."
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més tard."
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Es canvia la llengua del sistema i s'instal·len els paquets de llengua necessaris. Espereu, si us plau..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Es canvia la llengua del sistema. Espereu, si us plau..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "S'ha canviat la llengua del sistema. Si us plau, sortiu de la sessió i torneu-hi a entrar."
 
@@ -460,7 +472,7 @@ msgstr "EAP protegit"
 
 #: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
-msgstr "Connexió per cable"
+msgstr "Connexió amb fil"
 
 #: ../../network/nm_custom_type.go:223
 msgid "Connection"
@@ -667,7 +679,7 @@ msgstr "Ha fallat la comprovació del PIN."
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr "El microprogramari necessari per al dispositiu pot mancar."
+msgstr "Pot mancar el microprogramari necessari per al dispositiu."
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
@@ -859,7 +871,7 @@ msgstr "%q connectada"
 msgid "Hotspot share turned off"
 msgstr "Compartició de punt d'accés aturada"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q desconnectada"
 
@@ -875,11 +887,11 @@ msgstr "No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de l'encam
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "No es pot connectar a %q, comproveu el vostre encaminador o el cable de xarxa."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Ha fallat la connexió. No es pot connectar amb %q. Contrasenya incorrecta."
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Desconegut"
 
@@ -913,43 +925,47 @@ msgstr "L'intermediari del sistema s'ha configurat correctament."
 msgid "System proxy has been cancelled."
 msgstr "L'intermediari del sistema s'ha cancel·lat."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Bateria molt baixa"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "L'ordinador se suspendrà molt aviat, endolleu-lo ara."
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Bateria baixa"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "L'ordinador se suspendrà aviat, endolleu-lo ara."
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Bateria baixa, endolleu-lo"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Cal autenticació per establir l'hora del sistema."
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Cal autenticació per controlar si s'ha d'habilitar la sincronització amb l'hora de la xarxa."
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Cal autenticació per canviar el servidor NTP."
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Cal autenticació per controlar si l'RTC (rellotge de temps real) desa l'hora local o l'hora UTC."
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Cal autenticació per establir la zona horària del sistema."

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-07-01 03:57+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-17 01:32+0000\n"
 "Last-Translator: Ryo Nakano\n"
 "Language-Team: Japanese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "パスワードは英字(大文字と小文字を区別)、数字、特�
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "ユーザー名は空欄にできません"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -41,7 +41,7 @@ msgstr "ユーザー名は a〜z、0〜9、-、_ で構成されなくてはい�
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "最初の文字は小文字にしなければなりません"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
@@ -150,29 +150,41 @@ msgstr "%q とのペアリング接続に失敗しました"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth の接続に失敗しました"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "その他"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "開く(_O)"
+msgid "Open"
+msgstr "開く"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "すべて閉じる (_C)"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "強制終了 (_F)"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "Dock へ追加 (_D)"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "ドック"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "Dock から削除 (_U)"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "すべてのウィンドウ (_A)"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "すべてのウィンドウ"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -338,25 +350,25 @@ msgstr "現ワークスペースのウィンドウを表示"
 msgid "Display workspace"
 msgstr "ワークスペースを表示"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "言語を変更するには権限が必要です"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr ""
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr ""
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr ""
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr ""
 
@@ -861,7 +873,7 @@ msgstr "%qに接続されました"
 msgid "Hotspot share turned off"
 msgstr ""
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q から切断されました"
 
@@ -877,11 +889,11 @@ msgstr "%q への接続に失敗しました、ワイヤレスルーターの付
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "不明"
 
@@ -915,43 +927,47 @@ msgstr "システムプロキシが無事設定されました。"
 msgid "System proxy has been cancelled."
 msgstr "システムプロキシはキャンセルされました"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "バッテリー残量がごくわずかです"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "コンピュータはすぐにサスペンドされます、今すぐ電源に接続してください"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "バッテリが少なくなっています"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "コンピュータは間もなくサスペンドされます、電源に接続してください"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "バッテリが少なくなっています、電源に接続してください"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr ""

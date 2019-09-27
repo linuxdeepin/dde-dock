@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-20 08:12+0000\n"
-"Last-Translator: Moo\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
+"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -149,29 +149,41 @@ msgstr "Nepavyko prijungti %q, poravimas nepavyko"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth ryšys nepavyko"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Kita"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "At_verti"
+msgid "Open"
+msgstr "Atverti"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Užverti visus"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "Pri_verstinai išjungti"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Laikyti doke"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dokas"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Nelaikyti prisegtą"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Visi langai"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Visi langai"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -337,25 +349,25 @@ msgstr "Rodyti esamos darbo srities langus"
 msgid "Display workspace"
 msgstr "Rodyti darbo sritį"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Norint perjungti kalbą, reikalingas tapatybės nustatymas"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Nepavyko pakeisti sistemos kalbos, vėliau bandykite dar kartą"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Keičiama sistemos kalba ir įdiegiami reikalingi kalbos paketai, palaukite..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Keičiama sistemos kalba, palaukite..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Sistemos kalba pakeista, atsijunkite ir vėl prisijunkite"
 
@@ -860,7 +872,7 @@ msgstr "%q prijungtas"
 msgid "Hotspot share turned off"
 msgstr "Prieigos taško bendrinimas išjungtas"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q atjungtas"
 
@@ -876,11 +888,11 @@ msgstr "Nepavyko prijungti %q, laikykite arčiau belaidžio maršrutizatoriaus"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Nepavyko prijungti %q, patikrinkite savo maršrutizatorių ar tinklo laidą."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Ryšys patyrė nesėkmę, nepavyko prisijungti prie %q, neteisingas slaptažodis"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Nežinoma"
 
@@ -914,43 +926,47 @@ msgstr "Sistemos įgaliotasis serveris yra sėkmingai nustatytas."
 msgid "System proxy has been cancelled."
 msgstr "Sistemos įgaliotasis serveris buvo atšauktas."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Kritiškai žema baterijos įkrova"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Kompiuteris netrukus bus pristabdytas, prijunkite maitinimą dabar"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Baterija baigia išsikrauti"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Kompiuteris greitu metu bus pristabdytas, prijunkite maitinimą"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Baterija baigia išsikrauti, prijunkite maitinimą"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Norint nustatyti sistemos laiką, reikalingas tapatybės nustatymas"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Norint valdyti ar tinklo laiko sinchronizavimas turėtų būti įjungtas, reikalingas tapatybės nustatymas"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Norint valdyti ar RTC bus laikomas vietinis ar suderintasis pasaulinis laikas (UTC), reikalingas tapatybės nustatymas"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas"

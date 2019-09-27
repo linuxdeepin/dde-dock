@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-07-01 18:09+0000\n"
-"Last-Translator: Md. Emruz Hossain <hossainemruz@gmail.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -148,29 +148,41 @@ msgstr "%q এ সংযুক্ত হতে পারেনি, যুক্�
 msgid "Bluetooth connection failed"
 msgstr "ব্লুটুথ সংযোগ ব্যর্থ হয়েছে"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "অন্যান্য"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_খোলা"
+msgid "Open"
+msgstr "খুলুন"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_সব বন্ধ করা"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_জোর করেই বন্ধ করুন"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_ডক"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "ডক"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_ডকমুক্ত করুন"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_সকল উইন্ডো"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr ""
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -336,25 +348,25 @@ msgstr "বর্তমান কর্মক্ষেত্রের উইন�
 msgid "Display workspace"
 msgstr "কর্মক্ষেত্র প্রদর্শন"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "ভাষা পরিবর্তন করতে প্রমাণীকরণের প্রয়োজন"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "সিস্টেম ভাষা পরিবর্তন করতে ব্যর্থ হয়েছে, দয়া করে পরে চেষ্টা করুন"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "সিস্টেমের ভাষা পরিবর্তন করা হচ্ছে এবং প্রয়োজনীয় ভাষার প্যাকেজ ইন্সটল করা হচ্ছে।  দয়া করে অপেক্ষা করুন..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "সিস্টেমের ভাষা পরিবর্তন করা হচ্ছে, দয়া করে অপেক্ষা করুন..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "সিস্টেমের ভাষা পরিবর্তন করা হয়েছে। দয়াকরে লগআউট করে এরপর লগইন করুন।"
 
@@ -859,7 +871,7 @@ msgstr "%q সংযুক্ত হয়েছে"
 msgid "Hotspot share turned off"
 msgstr "হটস্পট শেয়ার করা বন্ধ হয়েছে"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "% q সংযোগ বিচ্ছিন্ন হয়েছে"
 
@@ -875,11 +887,11 @@ msgstr "%q এর সাথে সংযুক্ত করতে অক্ষ�
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে রাউটার বা নেটওয়ার্কের তার চেক করুন"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "সংযোগ ব্যর্থ হয়েছে, %q এর সাথে সংযুক্ত করতে অক্ষম, ভুল পাসওয়ার্ড"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "অজানা"
 
@@ -913,43 +925,47 @@ msgstr "সিস্টেমের প্রক্সি সফলভাবে 
 msgid "System proxy has been cancelled."
 msgstr "সিস্টেমের প্রক্সি বাতিল করা হয়েছে।"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "ব্যাটারি অত্যন্ত কম"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "কম্পিউটার খুব শীঘ্রই সাময়িক ভাবে বন্ধ হয়ে যাবে, অনুগ্রহ করে এখনই চার্জার সংযুক্ত করুন"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "ব্যাটারি কম"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "কম্পিউটার শীঘ্রই সাময়িক ভাবে বন্ধ হয়ে যাবে, অনুগ্রহ করে এখনই চার্জার সংযুক্ত করুন"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "ব্যাটারি কম, অনুগ্রহ করে চার্জার সংযুক্ত করুন"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "সিস্টেমের সময় সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "নেটওয়ার্ক সাথে সময় সিনক্রোনাইজেশন চালু করা হবে কিনা সেটা নিয়ন্ত্রণ করতে প্রমাণীকরণের প্রয়োজন।"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "RTC স্থানীয় সময় না UTC সময় সংরক্ষণ করবে সেটা নিয়ন্ত্রণ করার জন্য প্রমাণীকরণের প্রয়োজন।"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "সিস্টেমের টাইমজোন সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"

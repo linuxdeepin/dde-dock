@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
+"Last-Translator: e2f_in_c3 <e2f_in_c3@outlook.com>\n"
 "Language-Team: Hindi (India) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hi_IN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -148,29 +148,41 @@ msgstr "%q से कनेक्ट होने में विफल रह�
 msgid "Bluetooth connection failed"
 msgstr "ब्लूटुथ कनेक्शन विफल हुआ   "
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "अन्य"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_खोलें"
+msgid "Open"
+msgstr "खोलें"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_सभी को बंद करें"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Force Quit"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_डॉक "
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_असंक्षिप्त"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_All windows"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "सभी विंडोज "
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -336,25 +348,25 @@ msgstr "मौजूदा वर्कस्पेस के विंडो �
 msgid "Display workspace"
 msgstr "वर्कस्पेस दिखाएं"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "भाषा बदलने हेतु प्रमाणीकरण आवश्यक है"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr ""
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr ""
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr ""
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr ""
 
@@ -859,7 +871,7 @@ msgstr "%q कनेक्टेड है "
 msgid "Hotspot share turned off"
 msgstr "होटस्पॉट शेरिंग बंद किया है"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q दिस-कनेक्टेड है"
 
@@ -875,11 +887,11 @@ msgstr "%q  कनेक्ट नही हो रहा, वाइयर ल�
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "%q  कनेक्ट नही हो रहा,  अपने रूटर अथवा नेट केबल को चेक कीजिए"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr " कनेक्षन विफल , %q कनेक्ट नही हो रहा, ग़लत पासवर्ड"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "अज्ञात"
 
@@ -913,43 +925,47 @@ msgstr "सिस्टम प्रॉक्सी सफलतापूर्�
 msgid "System proxy has been cancelled."
 msgstr "सिस्टम प्रॉक्सी को रद्द कर दिया गया है। "
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "बैटरी काफी कम "
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "कम्यूटर जल्द ही सस्पेंड मोड में होगा, कृपया अब प्लग इन करें"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "बैटरी कम"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "कम्यूटर जल्द ही सस्पेंड मोड में होगा, कृपया अब प्लग इन करें"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "बैटरी कम है, कृपया चार्ज करें"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr ""

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-05-30 06:14+0000\n"
-"Last-Translator: Galin Iskrenov <loot270@abv.bg>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
+"Last-Translator: Kiril Kirilov <cybercop_montana@abv.bg>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -149,29 +149,41 @@ msgstr "Неуспешно свързване на %q, сдвояването н
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth връзката пропадна"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Други"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
+msgid "Open"
 msgstr "Отваряне"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Close All"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Принудително Приключване"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Dock"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Док"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "Разкачване"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Всички прозорци"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Всички прозорци"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -337,25 +349,25 @@ msgstr "Покажи прозорците в текущия плот"
 msgid "Display workspace"
 msgstr "Покажи работното място"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Необходима е идентификация за промяна на езика"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Промяната на системния език не бе успешна. Моля, опитайте по-късно"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Промяна на езика на системата и инсталиране на необходимите езикови пакети, моля, изчакайте..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Промяна на езика на системата, моля, изчакайте ..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Езикът на системата се промени, моля излезте и влезте"
 
@@ -860,7 +872,7 @@ msgstr "%q свързан"
 msgid "Hotspot share turned off"
 msgstr "Споделения хотспот е изключен"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q прекъснат"
 
@@ -876,11 +888,11 @@ msgstr "Неуспешно свързване с %q, приближете се �
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Невъзможна връзка с %q, моля проверете рутера или мрежовия кабел."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Неуспешна връзка, не се свързваме с %q, грешна парола"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -914,43 +926,47 @@ msgstr "Системното прокси е зададено успешно."
 msgid "System proxy has been cancelled."
 msgstr "Системното прокси беше отказано."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Критично ниво на батерията"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Компютърът ще премине в режим на сън, моля включете захранването сега"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Изтощена батерия"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Компютърът ще премине в режим на сън, моля включете захранването"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Слаба батерия, включете захранването"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Изисква се удостоверяване, за да настроите системното време"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Идентификацията е необходима, за да се контролира дали синхронизацията на мрежовото време трябва да бъде активирана"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Изисква се удостоверяване, за да се контролира дали RTC съхранява местното или UTC време"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Идентификацията е необходима, за да настроите системния часови пояс"

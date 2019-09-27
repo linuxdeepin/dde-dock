@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 14:09+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 10:13+0000\n"
 "Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
 "Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -148,29 +148,41 @@ msgstr "Collegamento a %q fallito, accoppiamento fallito"
 msgid "Bluetooth connection failed"
 msgstr "Connessione Bluetooth fallita"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Lavoro"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Personale"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Altro"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Apri"
+msgid "Open"
+msgstr "Apri"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Chiudi Tutti"
+msgid "Close All"
+msgstr "Chiudi tutto"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Forza Chiusura"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Forza chiusura"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Dock"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dock"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Sblocca"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Sgancia"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Tutte le finestre"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Tutte le finestre"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -336,25 +348,25 @@ msgstr "Visualizza le finestre dell'attuale spazio di lavoro"
 msgid "Display workspace"
 msgstr "Visualizza lo spazio di lavoro"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Il cambio lingua richiede l'autenticazione"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Cambio lingua di sistema fallito, riprova"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Cambio lingua di sistema ed installazione dei relativi pacchetti, attendi..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Cambio lingua di Sistema, attendi..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Lingua di sistema modificata, esegui un nuovo login"
 
@@ -859,7 +871,7 @@ msgstr "%q connesso"
 msgid "Hotspot share turned off"
 msgstr "Condivisione hotspot spenta"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q disconnesso"
 
@@ -875,11 +887,11 @@ msgstr "Impossibile collegarsi a %q, avvicinati al router wireless"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Impossibile connettersi a %q, controlla il tuo router o il cavo di rete."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Connessione fallita, impossibile connettersi a %q, password errata"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Sconosciuto"
 
@@ -913,43 +925,47 @@ msgstr "Il proxy di sistema è stato impostato con successo."
 msgid "System proxy has been cancelled."
 msgstr "Il proxy di sistema è stato eliminato."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Batteria molto scarica"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Il PC entrerà in modalità sospensione a breve, si consiglia di collegarlo all'alimentazione"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Batteria scarica"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Il PC entrerà in modalità sospensione, si consiglia di collegare l'alimentazione"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Livello batteria basso, collega il PC all'alimentazione"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Autenticazione richiesta per impostare l'orario di sistema."
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Autenticazione richiesta per verificare se la sincronizzazione dell'orario mediante Rete può esser abilitata."
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Autenticazione necessaria per cambiare il server NTP"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Autenticazione richiesta per verificare se lo store RTC utilizza l'orario Locale o UTC."
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Autenticazione richiesta per impostare l'orario di Sistema."

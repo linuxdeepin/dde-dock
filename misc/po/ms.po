@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-22 07:32+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
 "Last-Translator: abuyop <abuyop@gmail.com>\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
@@ -147,29 +147,41 @@ msgstr "Gagal menyambung dengan %q, perpasangan gagal"
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Lain-lain"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Buka"
+msgid "Open"
+msgstr "Buka"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Tutup Semua"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Paksa Keluar"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Labuh"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Nyahlabuh"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "Semu_a tetingkap"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Semua Tetingkap"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -335,25 +347,25 @@ msgstr "Papar tetingkap pada ruang kerja semasa"
 msgid "Display workspace"
 msgstr "Papar ruang kerja"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu sebentar..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Mengubah bahasa sistem, tunggu sebentar..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Bahasa sistem telah diubah, sila daftar keluar kemudian daftar masuk"
 
@@ -858,7 +870,7 @@ msgstr "%q bersambung"
 msgid "Hotspot share turned off"
 msgstr "Perkongsian kawasan khas dimatikan"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q terputus"
 
@@ -874,11 +886,11 @@ msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan pengh
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
@@ -912,43 +924,47 @@ msgstr "Proksi sistem berjaya ditetapkan."
 msgid "System proxy has been cancelled."
 msgstr "Proksi sistem dibatalkan."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Kuasa Bateri Sangat Rendah"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Komputer akan ditangguhkan tidak lama lagi, sila palamkan kabel kuasa sekarang"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Kuasa Bateri Rendah"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Komputer akan ditangguhkan tidak lama lagi, sila palamkan kabel kuasa sekarang"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Kuasa bateri lemah, sila palamkan kuasa"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Pengesahihan diperlukan untuk menetap waktu sistem"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Pengesahihan diperlukan untuk menetap zon waktu sistem"

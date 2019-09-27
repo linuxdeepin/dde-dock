@@ -4,14 +4,15 @@
 # 
 # Translators:
 # 31c8ff7daf246c6bd598eefe84c1433c, 2016-2017
+# Cindy0514, 2019
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2016,2018
 # scootergrisen, 2017-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-06-10 20:29+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-12 13:47+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +49,7 @@ msgstr "Brugernavnet findes"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Brugernavnet er blevet brugt af systemet"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -72,11 +73,11 @@ msgstr "Sætter skærmskalering"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Verifikation af fingeraftryk mislykkedes"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Verifikation med fingeraftryk fik timeout"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -149,29 +150,41 @@ msgstr "Kunne ikke tilslutte %q, parring mislykkedes"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Arbejde"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Leve"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Andre"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Åbn"
+msgid "Open"
+msgstr "Åbn"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Luk alle"
+msgid "Close All"
+msgstr "Luk alle"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Gennemtving afslut"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Gennemtving afslut"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Dok"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dok"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Fjern fra dok"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Fjern fra dok"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Alle vinduer"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Alle vinduer"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -199,7 +212,7 @@ msgstr "Vis/skjul dokken"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Luk ned-grænseflade"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -337,25 +350,25 @@ msgstr "Vis vinduer på nuværende arbejdsområde"
 msgid "Display workspace"
 msgstr "Vis arbejdsområde"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Der kræves autentifikation for at skifte sprog"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Skifter systemsproget og installerer de påkrævede sprogpakker, vent venligst..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Skifter systemsprog, vent venligst..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Systemsproget blev ændret. Log venligst ud og ind igen"
 
@@ -860,7 +873,7 @@ msgstr "%q tilsluttet"
 msgid "Hotspot share turned off"
 msgstr "Hotspotdeling slået fra"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q afbrudt"
 
@@ -876,11 +889,11 @@ msgstr "Kan ikke oprette forbindelse til %q, vær venligst tættere på den trå
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kan ikke forbinde %q, check din router eller netværkskabel."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Ukendt"
 
@@ -914,43 +927,47 @@ msgstr "Systemproxy er indstillet."
 msgid "System proxy has been cancelled."
 msgstr "Systemproxy er annulleret."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Batteriet er kritisk lavt"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Computeren går meget snart i hvile, tilslut venligst strømforsyningen nu"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Batteriet er lavt"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Computeren går snart i hvile, tilslut venligst strømforsyningen"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Batteriet er lavt. Tilslut venligst strømforsyningen"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Autentifikation kræves for at sætte systemets tid"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Der kræves autentifikation for at ændre NTP-server"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Der kræves autentifikation for at styre om RTC'en lagre den lokale tid eller UTC-tiden"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Autentifikation kræves for at sætte systemets tidszone"

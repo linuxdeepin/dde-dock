@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Galvanize87 <ajg.silva@hotmail.com>, 2019
 # Dickprince, 2017
 # Cindy0514, 2019
 # Gabriel Vicente <gabrielvicent98@gmail.com>, 2017
@@ -15,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-28 15:52+0000\n"
-"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-21 18:16+0000\n"
+"Last-Translator: Galvanize87 <ajg.silva@hotmail.com>\n"
 "Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -154,29 +155,41 @@ msgstr "Falha ao ligar %q, emparelhamento falhou"
 msgid "Bluetooth connection failed"
 msgstr "Falha na ligação por Bluetooth"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Trabalho"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Vida"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Outro"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Abrir"
+msgid "Open"
+msgstr "Abrir"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Fechar Todos"
+msgid "Close All"
+msgstr "Fechar tudo"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Forçar Desistir"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Forçar o terminar"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Dock"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dock"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Remover do Dock"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Remover da dock"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Todas as janelas"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Todas as Janelas"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -232,7 +245,7 @@ msgstr "Abrir Gestor de ficheiros"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Desativar Painel Táctil"
+msgstr "Desativar TouchPad"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -342,25 +355,25 @@ msgstr "Mostrar janelas da atual área de trabalho"
 msgid "Display workspace"
 msgstr "Mostrar área de trabalho virtual"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "É necessário estar autenticado para alterar o idioma"
+msgstr "A autenticação é necessária para alterar o idioma"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Falha ao mudar o idioma do sistema, por favor tente novamente mais tarde"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "A mudar o idioma do sistema e a instalar os pacotes de idioma necessários, por favor aguarde..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "A mudar o idioma do sistema, por favor aguarde..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "Idioma do sistema alterado, por favor saia e depois entre"
 
@@ -478,11 +491,11 @@ msgstr "Ligação Sem-fios"
 
 #: ../../network/nm_custom_type.go:229
 msgid "Wireless Ad-Hoc"
-msgstr "Sem-fios Ad-Hoc"
+msgstr "Wireless Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:231
 msgid "Wireless Ap-Hotspot"
-msgstr "Ap-Hotspot Sem-fios"
+msgstr "Wireless Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:233
 msgid "PPPoE Connection"
@@ -559,7 +572,7 @@ msgstr "A configuração do IP já não é válida"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr "As palavras-passe eram obrigatórias mas não foram fornecidas"
+msgstr "As palavras-passe eram necessárias mas não foram fornecidas"
 
 #: ../../network/state_handler.go:47
 msgid ""
@@ -717,11 +730,11 @@ msgstr "O cartão SIM do modem GSM não foi inserido"
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr "É requerido o SIM PIN do Modem GSM"
+msgstr "É necessário o SIM PIN do Modem GSM"
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr "É requerido o SIM PUK do Modem GSM"
+msgstr "É necessário o SIM PUK do Modem GSM"
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
@@ -865,7 +878,7 @@ msgstr "%q ligado"
 msgid "Hotspot share turned off"
 msgstr "Partilha de hotspot desligada"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q desligado"
 
@@ -875,17 +888,17 @@ msgstr "Incapaz de partilhar hotspot, por favor verifique definições dnsmasq"
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Incapaz de ligar %q, por favor mantenha-se perto do router sem-fios"
+msgstr "Incapaz de ligar %q, por favor mantenha-se perto do router sem fios"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Incapaz de ligar %q, por favor verifique o seu router ou cabo de rede"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Ligação falhou, incapaz de ligar %q, palavra-passe errada"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Desconhecido"
 
@@ -895,7 +908,7 @@ msgstr "Está agora desligado."
 
 #: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
-msgstr "Modo de Avião ativado."
+msgstr "Modo de avião ativado."
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
@@ -919,43 +932,47 @@ msgstr "Proxy do sistema está definido com sucesso."
 msgid "System proxy has been cancelled."
 msgstr "Proxy de sistema foi cancelado."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Bateria Criticamente Baixa"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "O computador irá entrar em suspensão muito brevemente, por favor ligue-o à corrente agora"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Bateria Baixa"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "O computador irá entrar em suspensão brevemente, por favor ligue-o à corrente agora"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
-msgstr "Bateria baixa, por favor ligue à corrente"
+msgstr "Bateria fraca, por favor ligue à corrente"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr "Autenticação é requerida para definir a hora do sistema"
+msgstr "A autenticação é necessária para definir a hora do sistema"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Autenticação é requerida para controlar se a sincronização da hora através da rede deverá estar ativada"
+msgstr "A autenticação é necessária para controlar se a sincronização da hora através da rede deverá estar ativada"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "É necessária autenticação para alterar o servidor NTP"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Autenticação é requerida para controlar se o RTC guarda UTC ou a hora local"
+msgstr "A autenticação é necessária para controlar se o RTC guarda UTC ou a hora local"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr "Autenticação é requerida para definir a zona de fuso horário"
+msgstr "A autenticação é necessária para definir a zona de fuso horário"

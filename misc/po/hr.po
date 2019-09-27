@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Ivica  Kolić <ikoli@yahoo.com>, 2016,2018
+# Ivica  Kolić <ikoli@yahoo.com>, 2016,2018-2019
 # dpnlin, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-19 16:15+0000\n"
+"Last-Translator: Ivica  Kolić <ikoli@yahoo.com>\n"
 "Language-Team: Croatian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,7 @@ msgstr "Lozinka mora sadržavati engleska slova (velika i mala slova nisu ekviva
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Korisničko ime ne može biti prazno"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -39,15 +39,15 @@ msgstr "Korisničko ime mora sadržavati a~z, 0~9, - ili _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "Prvi znak mora biti malo slovo"
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "Korisničko ime postoji"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Korisničko ime koristi sustav"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -59,7 +59,7 @@ msgstr "Uspješno postavljeno"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Molim prijavite se ponovno da vidite promjene"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
@@ -148,29 +148,41 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr "Povezivanje bluetoothom nije uspjelo"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Ostalo"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Otvori"
+msgid "Open"
+msgstr "Otvori"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Zatvori sve"
+msgid "Close All"
+msgstr "Zatvori sve"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
 msgstr "_Prisili izlaz"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Pričvrsti"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Ukloni"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Svi prozori"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Svi prozori"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -186,7 +198,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin snimač zaslona"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -336,27 +348,27 @@ msgstr "Prikaži prozore trenutačnog radnog prostora"
 msgid "Display workspace"
 msgstr "Prikaži radni prostor"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Potrebna je ovjera za promjenu jezika"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Neuspjela promjena jezika sustava, molim pokušajte ponovno kasnije"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Mijenjam jezik sustava i instaliram potrebne jezične pakete, molim pričekajte..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Mijenjam jezik sustava, molim pričekajte..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Jezik sustava je promijenjen, molim vas odjavite se i zatim se ponovno prijavite"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -407,7 +419,7 @@ msgstr "%q uspješno uklonjen"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Neuspjelo deinstaliranje %q"
 
 #: ../../network/manager_active_conn.go:318
 msgid "A (5 GHz)"
@@ -524,23 +536,23 @@ msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr ""
+msgstr "Stanje uređaja promijenjeno"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Stanje uređaja promijenjeno, nepoznat razlog"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr ""
+msgstr "Uređajem se sada upravlja"
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Uređajem se više ne upravlja"
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Uređaj nije spreman za podešavanje"
 
 #: ../../network/state_handler.go:44
 msgid ""
@@ -549,29 +561,29 @@ msgstr ""
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "IP podešavanje više nije valjano"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Potrebna je lozinka ali nije omogućena"
 
 #: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "The 802.1X suplikant je odspojen s pristupne točke ili poslužitelja autentifikacije."
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Neuspjelo podešavanje 802.1X suplikanta."
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "802.1X suplikant je isključen ili se neočekivano srušio."
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "802.1X suplikant predugo trajanje autentifikacije"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
@@ -859,7 +871,7 @@ msgstr ""
 msgid "Hotspot share turned off"
 msgstr ""
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr ""
 
@@ -875,11 +887,11 @@ msgstr ""
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Nepoznato"
 
@@ -913,43 +925,47 @@ msgstr "Proxy sustava je uspješno postavljen."
 msgid "System proxy has been cancelled."
 msgstr "Proxy sustava je otkazan."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Baterija je nisko"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr ""

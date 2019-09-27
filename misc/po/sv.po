@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# John Franzen <tndb82@gmail.com>, 2019
 # Jonatan Nyberg, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:21+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-25 16:15+0000\n"
+"Last-Translator: John Franzen <tndb82@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr "Lösenordet måste innehålla engelska bokstäver (skiftlägeskänsliga)
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Användarnamnet får inte vara tomt"
 
 #: ../../accounts/checkers/username.go:62
 msgid "Username must comprise a~z, 0~9, - or _"
@@ -38,15 +39,15 @@ msgstr "Användarnamnet måste bestå av a~z, 0~9, - eller _"
 
 #: ../../accounts/checkers/username.go:64
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "Första bokstaven måste vara en liten bokstav."
 
 #: ../../accounts/checkers/username.go:66
 msgid "The username exists"
-msgstr ""
+msgstr "Användarnamnet existerar."
 
 #: ../../accounts/checkers/username.go:68
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Användarnamnet har redan använts av systemet."
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username's length exceeds the limit"
@@ -54,27 +55,27 @@ msgstr "Användarnamnet är för långt."
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
-msgstr ""
+msgstr "Ändringar genomförda"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Var god logga ut och in igen för att slutföra ändringarna"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
-msgstr ""
+msgstr "Skärmskalning"
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Inställningar skärmskalning"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Fingeravtrycks verifiering misslyckades"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Fingeravtrycks verifiering tog för lång tid"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -141,39 +142,51 @@ msgstr "Se till att %q är påslagen och inom räckhåll"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "Gick ej att ansluta %q, parning misslyckades"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-anslutningen misslyckades."
 
-#: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Öppna"
-
-#: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Stäng Alla"
-
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
+#: ../../calendar/module.go:125
+msgid "Work"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Dock"
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Avdocka"
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Övrigt"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Alla fönster"
+#: ../../dock/app_entry_menu.go:100
+msgid "Open"
+msgstr "Öppna"
+
+#: ../../dock/app_entry_menu.go:107
+msgid "Close All"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dockan"
+
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Alla Fönster"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Otillräckligt diskutrymme, var god rensa upp i tid!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -185,7 +198,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin skärminspelare"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -197,7 +210,7 @@ msgstr "Visa/Dölj dockan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "Avstängningsfönster"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -225,7 +238,7 @@ msgstr "Filhanterare"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Inaktivera Touchpad"
+msgstr "Inaktivera pekplatta"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -233,11 +246,11 @@ msgstr "Byt fönstereffekter"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "Snabb skärmavstängning"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr ""
+msgstr "Deepin Systemövervakare"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -335,27 +348,27 @@ msgstr "Visa den aktuella arbetsytans fönster"
 msgid "Display workspace"
 msgstr "Visa arbetsyta"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Autentisering krävs för att byta språk"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Misslyckades med att byta systemspråk, var god försök igen senare"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Ändrar systemspråk och installerar de nödvändiga språkpaketen, var god vänta..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Ändrar systemspråk, var god vänta..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Systemspråk är ändrat, var god logga ut och in igen"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -402,11 +415,11 @@ msgstr "Din systemkälla har modifierats, vänligen återställ till den officie
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q borttagning lyckades"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Kunde ej installera %q"
 
 #: ../../network/manager_active_conn.go:318
 msgid "A (5 GHz)"
@@ -515,7 +528,7 @@ msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:251
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:253
 msgid "VPN VPNC"
@@ -523,206 +536,206 @@ msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr ""
+msgstr "Enhetstillstånd ändrades."
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Enhetstillstånd ändrades, okänd anledning."
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr ""
+msgstr "Enheten hanteras nu."
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Enheten hanteras inte längre."
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Enheten är inte redo för konfigurering."
 
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "IP-konfiguration kan inte reserveras (ingen tillgänglig adress, timeout, etc)."
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "IP-konfigurationen är inte längre giltig."
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Lösenord krävdes men gavs inte."
 
 #: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "802.1X supplikanten bortkopplad från åtkomstpunkten eller autentiseringsservern."
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Konfiguration av 802.1X supplikant misslyckades."
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "802.1X supplikant avslutade eller misslyckades oväntat."
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "802.1X supplikant tog för lång tid för att autentisera."
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "Tjänsten PPP kunde ej startas inom den tillåtna tiden."
 
 #: ../../network/state_handler.go:52
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "PPP tjänsten kopplades oväntat bort."
 
 #: ../../network/state_handler.go:53
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Tjänsten PPP avslutades eller misslyckades oväntat ."
 
 #: ../../network/state_handler.go:54
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "DHCP-tjänsten kunde inte startas inom den tillåtna tiden."
 
 #: ../../network/state_handler.go:55
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "DHCP-tjänsten rapporterade ett oväntat fel."
 
 #: ../../network/state_handler.go:56
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "DHCP-tjänsten avslutades eller misslyckades oväntat."
 
 #: ../../network/state_handler.go:57
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Den delade anslutningstjänsten misslyckades att starta."
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Den delade anslutningstjänsten avslutades eller misslyckades oväntat."
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "AutoIP-tjänsten misslyckades med att starta."
 
 #: ../../network/state_handler.go:60
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "AutoIP-tjänsten rapporterade ett oväntat fel."
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "AutoIP-tjänsten avslutades eller misslyckades oväntat."
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "Uppringning misslyckades på grund av upptagna linjer."
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "Uppringning misslyckades på grund av att kopplingston saknas."
 
 #: ../../network/state_handler.go:64
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "Uppringning misslyckades på grund av operatören"
 
 #: ../../network/state_handler.go:65
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Uppringningens tidsgräns överskreds."
 
 #: ../../network/state_handler.go:66
 msgid "Dialing failed"
-msgstr ""
+msgstr "Uppringning misslyckades."
 
 #: ../../network/state_handler.go:67
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Modeminitiering misslyckades."
 
 #: ../../network/state_handler.go:68
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "Det gick inte att välja den angivna GSM APN."
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
-msgstr ""
+msgstr "Inga nätverk sökta."
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Nätverksregistrering nekades."
 
 #: ../../network/state_handler.go:71
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Nätverksregisteringens tidsgräns överskreds."
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Registrering på det begärda GSM-nätet misslyckades."
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
-msgstr ""
+msgstr "PIN kontroll misslyckades."
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "Nödvändig firmware för enheten kanske saknas."
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
-msgstr ""
+msgstr "Enheten togs bort."
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "NetworkManager pausades."
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "Enhetens aktiva anslutning togs bort eller har försvunnit."
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "En användare eller klient begärde frånkoppling."
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "Enhetens operatör/länk ändrades."
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "Enhetens befintliga anslutning antogs."
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "802.1x supplikanten är nu tillgänglig."
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
-msgstr ""
+msgstr "Modemet kunde ej hittas."
 
 #: ../../network/state_handler.go:83
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "Bluetoothanslutningens tidsgräns överskreds eller misslyckades."
 
 #: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "GSM Modemets SIM-kort var inte isatt."
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "GSM Modemets SIM PIN krävs."
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "GSM Modemets SIM PUK krävs."
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "Simkorts fel i GSM Modemet"
 
 #: ../../network/state_handler.go:88
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "InfiniBand-enheten stöder inte anslutet läge."
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
@@ -734,19 +747,19 @@ msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "ModemManager kördes inte eller avlutades oväntat."
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "802.11 Wi-Fi nätverket hittades inte."
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "En sekundär anslutning av basanslutningen misslyckades."
 
 #: ../../network/state_handler.go:96
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "DCB eller FCoE inställning misslyckades."
 
 #: ../../network/state_handler.go:97
 msgid "Network teaming control failed"
@@ -754,19 +767,19 @@ msgstr ""
 
 #: ../../network/state_handler.go:98
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "Modem kunde inte köras eller är ej tillgängligt."
 
 #: ../../network/state_handler.go:99
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Modemet är nu redo och tillgängligt"
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "SIM-kortets PIN-kod stämmer ej."
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "Aktiveringen av den nya anslutningen läggs till i kön."
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
@@ -778,24 +791,24 @@ msgstr ""
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "Nätverkskabel är urkopplad."
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Se till att SIM-kortet som satts in har fungerande täckning."
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "Kontrollera att du har valt en korrekt plan utan förfallna betalningar på SIM-kortet."
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Misslyckades aktivera VPN anslutning, okänd anledning"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Misslyckades aktivera VPN anslutning"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
@@ -808,77 +821,77 @@ msgstr ""
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr ""
+msgstr "VPN-tjänsten stoppades."
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "IP-konfigurationen för VPN-anslutningen var ogiltig."
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Anslutningsförsöket till VPN-tjänsten tog för lång tid."
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "Tidsgränsen för VPN tjänsten överskreds"
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "VPN tjänsten kunde ej starta"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Nödvändigt lösenord för VPN-anslutningen angavs inte."
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Autentisering till VPN-servern misslyckades."
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "Anslutningen togs bort från inställningarna."
 
 #: ../../network/state_handler.go:251
 msgid "Try enabling hotspot"
-msgstr ""
+msgstr "Försök aktivera hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Try connecting %q"
-msgstr ""
+msgstr "Försök anslut %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot share enabled"
-msgstr ""
+msgstr "Hotspot delning aktiverad"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
-msgstr ""
+msgstr "%q ansluten"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot share turned off"
-msgstr ""
+msgstr "Hotspot delning inaktiverad"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q ifrånkopplad"
 
 #: ../../network/state_handler.go:333
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "Kunde ej dela hotspot, var god kontrollera dnsmasq inställningarna"
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "Kunde ej ansluta till %q, försök komma närmre till den trådlösa routern"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "Kunde ej ansluta till %q, var god kontrollera din router eller nätverkskabel"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Anslutning misslyckades, kunde ej ansluta till %q, fel lösenord"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -912,43 +925,47 @@ msgstr "System proxy ställdes framgångsrikt in."
 msgid "System proxy has been cancelled."
 msgstr "System proxy har blivit avbruten."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "Batteriet kritiskt lågt"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "Datorn kommer snart gå i viloläge, var god koppla in strömmen nu"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Batteri Låg"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "Datorn kommer snart gå i viloläge, var god koppla in strömmen "
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Lågt batteri, vänligen anslut"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Autentisering krävs för att ställa in system klockan"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
+msgstr "Autentisering krävs för att ändra inställningarna för tidssynkronisering"
+
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
 msgstr ""
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "Autentisering krävs för att bestämma om RTC sparar lokal eller UTC tid"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Autentisering krävs för att ställa in tidszon"

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Cindy0514, 2019
 # 이정희 <daemul72@gmail.com>, 2019
 # ElnathK <drjekyll1@gmail.com>, 2018
 # Sangmin Lee <sangminlee7648@gmail.com>, 2016
@@ -10,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-05-14 20:18+0000\n"
-"Last-Translator: 이정희 <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
+"Last-Translator: Sangmin Lee <sangminlee7648@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -149,29 +150,41 @@ msgstr "%q을(를) 연결하지 못했습니다. 페어링을 구성하지 못�
 msgid "Bluetooth connection failed"
 msgstr "블루투스 연결 실패"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr ""
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr ""
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "기타"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "열기(_O)"
+msgid "Open"
+msgstr "열기"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_모두 닫기"
+msgid "Close All"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "강제 종료(_F)"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Dock"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_언도킹"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr ""
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "모든 창(_A)"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "모든 창"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -337,25 +350,25 @@ msgstr "현재 작업대의 창 표시하기"
 msgid "Display workspace"
 msgstr "작업 공간 보이기 "
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "언어를 전화하려면 인증이 필요합니다."
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "시스템 언어를 변경하지 못했습니다. 나중에 시도하십시오"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "시스템 언어를 변경하고 필요한 언어 패키지를 설치합니다. 잠시 기다려 주십시오..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "시스템 언어를 변경하는 중입니다. 잠시 기다려 주십시오..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "시스템 언어가 변경되었습니다. 로그아웃한 후 로그인하십시오"
 
@@ -568,11 +581,11 @@ msgstr "802.1X 요청자 설정에 실패했습니다"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "802.1X 서플리컨트가 중지되거나 예기치 않게 실패했습니다"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "802.1X Supplicant가 인증 절차를 완료하는 데 너무 오랜 시간이 소모되었습니다"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
@@ -696,7 +709,7 @@ msgstr "장치의 기존 연결이 전제됩니다"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr " 802.1x Supplicant를 이용하실 수 있습니다"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
@@ -789,7 +802,7 @@ msgstr "SIM 카드에 모바일 네트워크 신호가 삽입되었는지 확인
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "SIM 카드 채납 없이 알맞은 요금제가 선택되었는지 확인하세요"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -860,7 +873,7 @@ msgstr "%q 연결됨"
 msgid "Hotspot share turned off"
 msgstr "핫스팟 공유 꺼짐"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q 연결 끊김"
 
@@ -876,11 +889,11 @@ msgstr "%q을(를) 연결할 수 없습니다. 무선 라우터에 가까이 있
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "%q을(를) 연결할 수 없습니다. 라우터 또는 인터넷 케이블을 확인하세요."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "연결 실패, %q을(를) 연결할 수 없습니다. 암호가 잘못되었습니다"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -914,43 +927,47 @@ msgstr "시스템 프록시가 성공적으로 설정되었습니다. "
 msgid "System proxy has been cancelled."
 msgstr "시스템 프록시가 취소되었습니다."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "배터리 매우 부족"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "컴퓨터가 곧 정지됩니다. 바로 전원을 연결하세요"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "배터리 낮음 "
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "컴퓨터가 곧 정지됩니다. 전원을 연결하세요"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "배터리 부족,. 전원을 연결하세요"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "시스템 시간을 설정하려면 인증이 필요합니다"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "네트워크 시간 동기화를 활성화할지 여부를 제어하려면 인증이 필요합니다"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr ""
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "RTC가 로컬 또는 UTC 시간을 저장하는지 제어하려면 인증이 필요합니다"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "시스템 시간대를 설정하려면 인증이 필요합니다"

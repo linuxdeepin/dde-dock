@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-19 08:54+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 06:17+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -149,29 +149,41 @@ msgstr "Не удалось подключить %q, сопряжение не �
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-подключение не удалось"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Работа"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Семья"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Другое"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Открыть"
+msgid "Open"
+msgstr "Открыть"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Закрыть все"
+msgid "Close All"
+msgstr "Закрыть Всё"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Принудительный Выход"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Принудительный Выход"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Закрепить в доке"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Док"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Убрать из дока"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Открепить"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Все окна"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Все Окна"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -337,25 +349,25 @@ msgstr "Показать окна текущего рабочего стола"
 msgid "Display workspace"
 msgstr "Отобразить рабочий стол"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Для изменения языка системы требуется аутентификация"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Не удалось изменить язык системы, попробуйте позже."
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Изменяется язык системы и устанавливаются недостающие языковые пакеты, пожалуйста подождите…"
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Изменяется язык системы, пожалуйста подождите..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr " Язык системы был изменен, пожалуйста выйдите из системы и войдите вновь…"
 
@@ -860,7 +872,7 @@ msgstr "%q соединено"
 msgid "Hotspot share turned off"
 msgstr "Общедоступная точка доступа отключена"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q отсоединено"
 
@@ -876,11 +888,11 @@ msgstr "Не удалось соединить %q, пожалуйста держ
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Не удалось соединить %q, пожалуйста проверьте ваш беспроводной маршрутизатор или сетевой кабель."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Не удалось подключиться, не удалось соединить %q, неправильный пароль"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Неизвестный"
 
@@ -914,43 +926,47 @@ msgstr "Системный прокси установлен успешно."
 msgid "System proxy has been cancelled."
 msgstr "Системный прокси был отменен."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Критически низкий заряд батареи"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Компьютер сейчас будет приостановлен, пожалуйста, подключите питание прямо сейчас"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Батарея разряжена"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Компьютер скоро приостановит работу, пожалуйста, подключите питание"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Низкий заряд батареи, пожалуйста подключите питание"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Для установки системного времени требуется аутентификация."
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "Для управления включением синхронизации времени по сети требуется аутентификация."
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Для смены NTP-сервера требуется аутентификация"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Аутентификация требуется для контроля того, сохраняет ли RTC местное время или время UTC."
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Для установки часового пояса системы требуется аутентификация"

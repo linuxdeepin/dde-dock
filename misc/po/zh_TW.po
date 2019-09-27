@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-04-28 07:26+0000\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-20 11:31+0000\n"
 "Last-Translator: byStarTW (pan93412) <pan93412@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -156,29 +156,41 @@ msgstr "無法連線到 %q，配對失敗"
 msgid "Bluetooth connection failed"
 msgstr "藍牙連線失敗"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "工作"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "生活"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "其它"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "開啟(_O)"
+msgid "Open"
+msgstr "開放"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "關閉全部(_C)"
+msgid "Close All"
+msgstr "全部關閉"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "強制退出(_F)"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "強制離開"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "建立 Dock 捷徑(_D)"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Dock"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "移除 Dock 捷徑(_U)"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "解除駐停"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "所有視窗(_A)"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "所有視窗"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -344,25 +356,25 @@ msgstr "僅顯示目前工作區視窗"
 msgid "Display workspace"
 msgstr "顯示工作區"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "切換語言需要驗證"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "無法變更系統語言，請稍候再試"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "正在變更系統語言並安裝所需語言包，請稍候…"
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "正在變更系統語言，請稍候…"
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
 msgstr "已變更系統語言，請重新登入以套用變更"
 
@@ -867,7 +879,7 @@ msgstr "已連線到 %q 網路"
 msgid "Hotspot share turned off"
 msgstr "已關閉熱點分享功能"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "已斷開到 %q 的連線"
 
@@ -883,11 +895,11 @@ msgstr "無法連線到 %q 網路，請離無線網路路由器更近點"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "無法連線到 %q 網路，請檢查路由器或網路線"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "連線失敗：無法連線到 %q 網路，原因：密碼錯誤"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "未知"
 
@@ -921,43 +933,47 @@ msgstr "系統代理伺服器設定成功。"
 msgid "System proxy has been cancelled."
 msgstr "系統代理伺服器已被取消。"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "電量過低"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "電腦將在不久後休眠，請立即接上電源"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "電量偏低"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "電腦將在不久後休眠，請接上電源"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "電量剩餘不多，請接上電源"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "設定系統時間需要身份核對"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
 msgstr "開啟或關閉網路時間同步需要身份驗證"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "變更 NTP 伺服器需要身份驗證"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "控制 RTC 儲存本機還是 UTC 時間需要身份驗證"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "設定系統時區需要身份驗證"

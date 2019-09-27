@@ -4,15 +4,15 @@
 # 
 # Translators:
 # kolera <koleramilan@gmail.com>, 2017
-# Један Пријатељ <3acejax@gmail.com>, 2018-2019
-# Један Пријатељ <3acejax@gmail.com>, 2018-2019
+# Марко Пејовић <3acejax@gmail.com>, 2018-2019
+# Марко Пејовић <3acejax@gmail.com>, 2018-2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 15:46+0800\n"
-"PO-Revision-Date: 2019-07-04 19:59+0000\n"
-"Last-Translator: Један Пријатељ <3acejax@gmail.com>\n"
+"POT-Creation-Date: 2019-09-11 10:09+0800\n"
+"PO-Revision-Date: 2019-09-11 02:13+0000\n"
+"Last-Translator: Slobodan Simić <slsimic@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +28,7 @@ msgstr "Молимо унесите лозинку од најмање 8 кар�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Лозинка мора садржати слова алфабета (осетљива на величину слова), бројеве или специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Лозинка може садржати само слова алфабета (осетљива на величину), бројеве или специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:60
 msgid "Username cannot be empty"
@@ -139,7 +139,7 @@ msgstr "Нисте поевзани"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
-msgstr "Проверите да ли је %q укључен и да је у опсегу"
+msgstr "Проверите да ли је %q укључен и да је у домету"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
@@ -149,29 +149,41 @@ msgstr "Неуспешно повезивање са %q, упаривање не
 msgid "Bluetooth connection failed"
 msgstr "Блутут повезивање неуспешно"
 
+#: ../../calendar/module.go:125
+msgid "Work"
+msgstr "Посао"
+
+#: ../../calendar/module.go:126
+msgid "Life"
+msgstr "Живот"
+
+#: ../../calendar/module.go:127
+msgid "Other"
+msgstr "Остало"
+
 #: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr "_Покрени"
+msgid "Open"
+msgstr "Покрени"
 
 #: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr "_Затвори све"
+msgid "Close All"
+msgstr "Затвори све"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr "_Принудно изађи"
+#: ../../dock/app_entry_menu.go:123
+msgid "Force Quit"
+msgstr "Принудно изађи"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr "_Закачи"
+#: ../../dock/app_entry_menu.go:130
+msgid "Dock"
+msgstr "Док"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr "_Откачи"
+#: ../../dock/app_entry_menu.go:137
+msgid "Undock"
+msgstr "Откачи"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr "_Сви прозори"
+#: ../../dock/app_entry_menu.go:144
+msgid "All Windows"
+msgstr "Сви прозори"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -337,27 +349,27 @@ msgstr "Приказ прозора тренутне радне површине
 msgid "Display workspace"
 msgstr "Приказ активности"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
 msgstr "Аутентификација је неопходна за промену језика"
 
-#: ../../langselector/locale.go:354
+#: ../../langselector/locale.go:389
 msgid "Failed to change system language, please try later"
 msgstr "Неуспешна промена језика система, молимо покушајте касније"
 
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:413
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Промена језика система и инсталирање потребних језичких пакета, молимо сачекајте..."
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:416
 msgid "Changing system language, please wait..."
 msgstr "Промена језика система, молимо сачекајте..."
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:464
 msgid "System language changed, please log out and then log in"
-msgstr "Језик система је промењен, одјавите се и пријавите се поново"
+msgstr "Језик система је промењен, одјавите се, па се пријавите"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -860,7 +872,7 @@ msgstr "%q повезани сте"
 msgid "Hotspot share turned off"
 msgstr "Дељење вруће тачке искључено"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
 msgstr "%q нисте поевзани"
 
@@ -876,11 +888,11 @@ msgstr "Неуспешно повезивање на %q, будите ближе
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Неуспешно повезивање на %q, проверите ваш рутер или мрежни кабл."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Неуспешно повезивање на %q, погрешна лозинка"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
 msgstr "Непознато"
 
@@ -914,43 +926,47 @@ msgstr "Системски посредник успешно подешен."
 msgid "System proxy has been cancelled."
 msgstr "Системски посредник је отказан."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
 msgstr "Батерија критично испражњена"
 
-#: ../../session/power/manager_events.go:134
+#: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "Рачунар ће обуставити рад ускоро, укључите пуњач одмах"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:175
+#: ../../session/power/manager_events.go:182
 msgid "Battery Low"
 msgstr "Батерија при крају"
 
-#: ../../session/power/manager_events.go:158
+#: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
 msgstr "Рачунар ће обуставити рад ускоро, укључите пуњач"
 
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
 msgstr "Батерија при крају, прикључите пуњач"
 
-#: ../../timedate/manager_ifc.go:56
+#: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Аутентификација је неопходна за подешавање времена система"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Аутентификација је неопходна да контролишете да ли ће мрежна синхронизација времена бити омогућена"
+msgstr "Аутентификација је неопходна да контролишете опцију мрежне синхронизације времена"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Аутентификација је неопходна за промену НТП сервера"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr "Аутентификација је неопходна да контролишете да ли RTC памти локално или UTC време"
 
-#: ../../timedate/manager_ifc.go:108
+#: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
 msgstr "Аутентификација је неопходна за поставку временске зоне"
