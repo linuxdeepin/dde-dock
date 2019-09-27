@@ -74,7 +74,11 @@ type Audio struct {
 	service *dbusutil.Service
 	PropsMu sync.RWMutex
 	// dbusutil-gen: equal=objectPathSliceEqual
-	SinkInputs    []dbus.ObjectPath
+	SinkInputs []dbus.ObjectPath
+	// dbusutil-gen: equal=objectPathSliceEqual
+	Sinks []dbus.ObjectPath
+	// dbusutil-gen: equal=objectPathSliceEqual
+	Sources       []dbus.ObjectPath
 	DefaultSink   dbus.ObjectPath
 	DefaultSource dbus.ObjectPath
 	Cards         string
@@ -182,6 +186,8 @@ func (a *Audio) init() {
 		}
 	}
 	a.mu.Unlock()
+	a.updatePropSinks()
+	a.updatePropSources()
 	a.updatePropSinkInputs()
 
 	serverInfo, err := a.ctx.GetServer()

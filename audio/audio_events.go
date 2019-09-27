@@ -150,6 +150,7 @@ func (a *Audio) addSink(sinkInfo *pulse.Sink) {
 		logger.Warning(err)
 		return
 	}
+	a.updatePropSinks()
 
 	if sink.Name == a.defaultSinkName {
 		a.defaultSink = sink
@@ -189,6 +190,7 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		}
 		delete(a.sinks, idx)
 		a.mu.Unlock()
+		a.updatePropSinks()
 
 		err := a.service.StopExport(sink)
 		if err != nil {
@@ -240,25 +242,47 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 	}
 }
 
+func (a *Audio) updateObjPathsProp(type0 string, ids []int, setFn func(value []dbus.ObjectPath) bool) {
+	sort.Ints(ids)
+	paths := make([]dbus.ObjectPath, len(ids))
+	for idx, id := range ids {
+		paths[idx] = dbus.ObjectPath(dbusPath + "/" + type0 + strconv.Itoa(id))
+	}
+	a.PropsMu.Lock()
+	setFn(paths)
+	a.PropsMu.Unlock()
+}
+
+func (a *Audio) updatePropSinks() {
+	var ids []int
+	a.mu.Lock()
+	for _, sink := range a.sinks {
+		ids = append(ids, int(sink.index))
+	}
+	a.mu.Unlock()
+	a.updateObjPathsProp("Sink", ids, a.setPropSinks)
+}
+
+func (a *Audio) updatePropSources() {
+	var ids []int
+	a.mu.Lock()
+	for _, source := range a.sources {
+		ids = append(ids, int(source.index))
+	}
+	a.mu.Unlock()
+	a.updateObjPathsProp("Source", ids, a.setPropSources)
+}
+
 func (a *Audio) updatePropSinkInputs() {
-	var sinkInputIdList []int
+	var ids []int
 	a.mu.Lock()
 	for _, sinkInput := range a.sinkInputs {
 		if sinkInput.visible {
-			sinkInputIdList = append(sinkInputIdList, int(sinkInput.index))
+			ids = append(ids, int(sinkInput.index))
 		}
 	}
 	a.mu.Unlock()
-	sort.Ints(sinkInputIdList)
-
-	sinkInputPaths := make([]dbus.ObjectPath, len(sinkInputIdList))
-	for idx, id := range sinkInputIdList {
-		sinkInputPaths[idx] = dbus.ObjectPath(dbusPath + "/SinkInput" + strconv.Itoa(id))
-	}
-
-	a.PropsMu.Lock()
-	a.setPropSinkInputs(sinkInputPaths)
-	a.PropsMu.Unlock()
+	a.updateObjPathsProp("SinkInput", ids, a.setPropSinkInputs)
 }
 
 func (a *Audio) addSinkInput(sinkInputInfo *pulse.SinkInput) {
@@ -341,6 +365,8 @@ func (a *Audio) addSource(sourceInfo *pulse.Source) {
 		return
 	}
 
+	a.updatePropSources()
+
 	if a.defaultSourceName == source.Name {
 		a.defaultSource = source
 		a.PropsMu.Lock()
@@ -378,6 +404,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		delete(a.sources, idx)
 		a.mu.Unlock()
+		a.updatePropSources()
 
 		err := a.service.StopExport(source)
 		if err != nil {

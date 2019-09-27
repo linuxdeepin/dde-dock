@@ -6,58 +6,6 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 )
 
-func (v *Audio) setPropSinkInputs(value []dbus.ObjectPath) (changed bool) {
-	if !objectPathSliceEqual(v.SinkInputs, value) {
-		v.SinkInputs = value
-		v.emitPropChangedSinkInputs(value)
-		return true
-	}
-	return false
-}
-
-func (v *Audio) emitPropChangedSinkInputs(value []dbus.ObjectPath) error {
-	return v.service.EmitPropertyChanged(v, "SinkInputs", value)
-}
-
-func (v *Audio) setPropDefaultSink(value dbus.ObjectPath) (changed bool) {
-	if v.DefaultSink != value {
-		v.DefaultSink = value
-		v.emitPropChangedDefaultSink(value)
-		return true
-	}
-	return false
-}
-
-func (v *Audio) emitPropChangedDefaultSink(value dbus.ObjectPath) error {
-	return v.service.EmitPropertyChanged(v, "DefaultSink", value)
-}
-
-func (v *Audio) setPropDefaultSource(value dbus.ObjectPath) (changed bool) {
-	if v.DefaultSource != value {
-		v.DefaultSource = value
-		v.emitPropChangedDefaultSource(value)
-		return true
-	}
-	return false
-}
-
-func (v *Audio) emitPropChangedDefaultSource(value dbus.ObjectPath) error {
-	return v.service.EmitPropertyChanged(v, "DefaultSource", value)
-}
-
-func (v *Audio) setPropCards(value string) (changed bool) {
-	if v.Cards != value {
-		v.Cards = value
-		v.emitPropChangedCards(value)
-		return true
-	}
-	return false
-}
-
-func (v *Audio) emitPropChangedCards(value string) error {
-	return v.service.EmitPropertyChanged(v, "Cards", value)
-}
-
 func (v *Sink) setPropName(value string) (changed bool) {
 	if v.Name != value {
 		v.Name = value
@@ -498,4 +446,82 @@ func (v *Meter) setPropVolume(value float64) (changed bool) {
 
 func (v *Meter) emitPropChangedVolume(value float64) error {
 	return v.service.EmitPropertyChanged(v, "Volume", value)
+}
+
+func (v *Audio) setPropSinkInputs(value []dbus.ObjectPath) (changed bool) {
+	if !objectPathSliceEqual(v.SinkInputs, value) {
+		v.SinkInputs = value
+		v.emitPropChangedSinkInputs(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedSinkInputs(value []dbus.ObjectPath) error {
+	return v.service.EmitPropertyChanged(v, "SinkInputs", value)
+}
+
+func (v *Audio) setPropSinks(value []dbus.ObjectPath) (changed bool) {
+	if !objectPathSliceEqual(v.Sinks, value) {
+		v.Sinks = value
+		v.emitPropChangedSinks(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedSinks(value []dbus.ObjectPath) error {
+	return v.service.EmitPropertyChanged(v, "Sinks", value)
+}
+
+func (v *Audio) setPropSources(value []dbus.ObjectPath) (changed bool) {
+	if !objectPathSliceEqual(v.Sources, value) {
+		v.Sources = value
+		v.emitPropChangedSources(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedSources(value []dbus.ObjectPath) error {
+	return v.service.EmitPropertyChanged(v, "Sources", value)
+}
+
+func (v *Audio) setPropDefaultSink(value dbus.ObjectPath) (changed bool) {
+	if v.DefaultSink != value {
+		v.DefaultSink = value
+		v.emitPropChangedDefaultSink(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedDefaultSink(value dbus.ObjectPath) error {
+	return v.service.EmitPropertyChanged(v, "DefaultSink", value)
+}
+
+func (v *Audio) setPropDefaultSource(value dbus.ObjectPath) (changed bool) {
+	if v.DefaultSource != value {
+		v.DefaultSource = value
+		v.emitPropChangedDefaultSource(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedDefaultSource(value dbus.ObjectPath) error {
+	return v.service.EmitPropertyChanged(v, "DefaultSource", value)
+}
+
+func (v *Audio) setPropCards(value string) (changed bool) {
+	if v.Cards != value {
+		v.Cards = value
+		v.emitPropChangedCards(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedCards(value string) error {
+	return v.service.EmitPropertyChanged(v, "Cards", value)
 }
