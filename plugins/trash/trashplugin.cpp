@@ -35,11 +35,9 @@ DWIDGET_USE_NAMESPACE
 TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent)
     , m_trashWidget(nullptr)
-    , m_tipsLabel(new QLabel)
+    , m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setObjectName("trash");
-    m_tipsLabel->setStyleSheet("color:white;"
-                               "padding: 0 3px;");
 }
 
 const QString TrashPlugin::pluginName() const

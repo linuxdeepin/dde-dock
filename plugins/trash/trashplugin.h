@@ -29,6 +29,7 @@
 
 #include "pluginsiteminterface.h"
 #include "trashwidget.h"
+#include "../../widgets/tipswidget.h"
 
 #include <QLabel>
 #include <QSettings>
@@ -62,7 +63,7 @@ public:
 
 private:
     TrashWidget *m_trashWidget;
-    QLabel *m_tipsLabel;
+    QPointer<TipsWidget> m_tipsLabel;
 };
 
 #endif // TRASHPLUGIN_H
