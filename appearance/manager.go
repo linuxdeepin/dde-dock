@@ -860,7 +860,7 @@ func (m *Manager) updateWSPolicy(policy string) {
 
 func (m *Manager) enableDetectSysClock(enabled bool) {
 	logger.Debug("enableDetectSysClock:", enabled)
-	nSec := 600 // 10 min
+	nSec := 60 // 1 min
 	if logger.GetLogLevel() == log.LevelDebug {
 		// debug mode: 10 s
 		nSec = 10
