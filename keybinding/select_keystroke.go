@@ -27,7 +27,11 @@ import (
 )
 
 func (m *Manager) selectKeystroke() error {
-	err := grabKbdAndMouse(m.conn)
+	conn, err := x.NewConn()
+	if err != nil {
+		return err
+	}
+	err = grabKbdAndMouse(conn)
 	if err != nil {
 		logger.Warning("failed to grab keyboard and mouse:", err)
 		return err
@@ -38,7 +42,7 @@ func (m *Manager) selectKeystroke() error {
 	defer m.shortcutManager.EnableRecord(true)
 
 	eventChan := make(chan x.GenericEvent, 500)
-	m.conn.AddEventChan(eventChan)
+	conn.AddEventChan(eventChan)
 
 loop:
 	for event := range eventChan {
@@ -82,6 +86,7 @@ loop:
 	}
 
 	ungrabKbdAndMouse(m.conn)
+	conn.Close()
 	logger.Debug("end selectKeystroke")
 	return nil
 }
