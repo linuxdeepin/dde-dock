@@ -85,7 +85,7 @@ loop:
 		}
 	}
 
-	ungrabKbdAndMouse(m.conn)
+	ungrabKbdAndMouse(conn)
 	conn.Close()
 	logger.Debug("end selectKeystroke")
 	return nil
