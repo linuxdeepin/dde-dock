@@ -67,7 +67,14 @@ func (m *Manager) List(ty string) (string, *dbus.Error) {
 func (m *Manager) list(ty string) (string, error) {
 	switch strings.ToLower(ty) {
 	case TypeGtkTheme:
-		gtkThemes := subthemes.ListGtkTheme()
+		themes := subthemes.ListGtkTheme()
+		var gtkThemes subthemes.Themes
+		for _, theme := range themes {
+			if !strings.HasPrefix(theme.Id, "deepin") {
+				continue
+			}
+			gtkThemes = append(gtkThemes, theme)
+		}
 		gtkThemes = append(gtkThemes, &subthemes.Theme{
 			Id:        autoGtkTheme,
 			Path:      "",
