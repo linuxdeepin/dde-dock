@@ -82,9 +82,9 @@ func isCommentFieldValid(name string) bool {
 	return true
 }
 
-func ModifyFullName(newname, username string) error {
-	if !isCommentFieldValid(newname) {
-		return errors.New("invalid nickname")
+func ModifyFullName(fullName, username string) error {
+	if !isCommentFieldValid(fullName) {
+		return errors.New("invalid full name")
 	}
 
 	user, err := GetUserInfoByName(username)
@@ -92,7 +92,13 @@ func ModifyFullName(newname, username string) error {
 		return err
 	}
 	comment := user.Comment()
-	comment.SetFullName(newname)
+	comment.SetFullName(fullName)
+	user.comment = comment.String()
+	err = user.checkLength()
+	if err != nil {
+		return err
+	}
+
 	return modifyComment(comment.String(), username)
 }
 
@@ -106,12 +112,32 @@ func ModifyHome(dir, username string) error {
 		return errInvalidParam
 	}
 
+	user, err := GetUserInfoByName(username)
+	if err != nil {
+		return err
+	}
+	user.Home = dir
+	err = user.checkLength()
+	if err != nil {
+		return err
+	}
+
 	return doAction(userCmdModify, []string{"-m", "-d", dir, username})
 }
 
 func ModifyShell(shell, username string) error {
 	if len(shell) == 0 {
 		return errInvalidParam
+	}
+
+	user, err := GetUserInfoByName(username)
+	if err != nil {
+		return err
+	}
+	user.Shell = shell
+	err = user.checkLength()
+	if err != nil {
+		return err
 	}
 
 	return doAction(userCmdModify, []string{"-s", shell, username})

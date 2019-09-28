@@ -23,6 +23,7 @@ import (
 	"bufio"
 	"errors"
 	"os"
+	"path/filepath"
 	"regexp"
 )
 
@@ -42,6 +43,19 @@ func CreateUser(username, fullname, shell string) error {
 
 	if len(shell) == 0 {
 		shell, _ = getDefaultShell(defaultConfigShell)
+	}
+
+	mockUserInfo := UserInfo{
+		Name:    username,
+		Uid:     "10000",
+		Gid:     "10000",
+		comment: fullname,
+		Home:    filepath.Join("/home/", username),
+		Shell:   shell,
+	}
+	err := mockUserInfo.checkLength()
+	if err != nil {
+		return err
 	}
 
 	var args = []string{"-m"}

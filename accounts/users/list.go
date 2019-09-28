@@ -21,6 +21,7 @@ package users
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -55,6 +56,19 @@ type UserInfo struct {
 	comment string
 	Home    string
 	Shell   string
+}
+
+func (u *UserInfo) calLength() int {
+	// 8 是 6 个分号加一个 'x' (第二字段) 加末尾的 '\0'
+	return 8 + len(u.Name) + len(u.Uid) + len(u.Gid) +
+		len(u.comment) + len(u.Home) + len(u.Shell)
+}
+
+func (u *UserInfo) checkLength() error {
+	if u.calLength() > 1024 {
+		return errors.New("user info string length exceeds limit")
+	}
+	return nil
 }
 
 func (u *UserInfo) Comment() *CommentInfo {
