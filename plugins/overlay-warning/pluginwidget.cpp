@@ -57,7 +57,9 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - pixmap.rect().center() / devicePixelRatioF(), pixmap);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(pixmap.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / devicePixelRatioF(), pixmap);
 }
 
 const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) const

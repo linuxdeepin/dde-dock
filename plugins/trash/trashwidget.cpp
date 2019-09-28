@@ -171,7 +171,9 @@ void TrashWidget::paintEvent(QPaintEvent *e)
 
     updateIcon();
 
-    painter.drawPixmap(rect().center() - m_icon.rect().center() / devicePixelRatioF(), m_icon);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_icon.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / devicePixelRatioF(), m_icon);
 }
 
 void TrashWidget::resizeEvent(QResizeEvent *e)

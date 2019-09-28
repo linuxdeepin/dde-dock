@@ -104,7 +104,9 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     painter.setOpacity(1);
 
     pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
-    painter.drawPixmap(rect().center() - pixmap.rect().center() / devicePixelRatioF(), pixmap);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(pixmap.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / pixmap.devicePixelRatioF(), pixmap);
 }
 
 const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) const
