@@ -220,7 +220,7 @@ void DatetimePlugin::updateCurrentTimeString()
     else
         m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss A"));
 
-    const QString currentString = currentDateTime.toString("mm");
+    const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
 
     if (currentString == m_currentTimeString)
         return;
