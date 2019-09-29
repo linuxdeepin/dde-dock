@@ -59,6 +59,7 @@ func resetKWin(wmObj *wm.Wm) error {
 		return err
 	}
 	for _, accel := range accels {
+		//logger.Debug("resetKwin each accel:", accel.Id, accel.Keystrokes, accel.DefaultKeystrokes)
 		if !strv.Strv(accel.Keystrokes).Equal(accel.DefaultKeystrokes) &&
 			len(accel.DefaultKeystrokes) > 0 && accel.DefaultKeystrokes[0] != "" {
 			accelJson, err := util.MarshalJSON(&util.KWinAccel{
@@ -69,7 +70,9 @@ func resetKWin(wmObj *wm.Wm) error {
 				logger.Warning(err)
 				continue
 			}
+			logger.Debug("resetKwin SetAccel", accelJson)
 			ok, err := wmObj.SetAccel(0, accelJson)
+			// 目前 wm 的实现，调用 SetAccel 如果遇到冲突情况，会导致目标快捷键被清空。
 			if !ok {
 				logger.Warning("wm.SetAccel failed, id: ", accel.Id)
 				continue
