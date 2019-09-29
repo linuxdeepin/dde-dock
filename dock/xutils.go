@@ -193,43 +193,65 @@ func (h *MotifWmHints) allowedClose() bool {
 }
 
 func getWindowGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
-	winRect, err := getDecorGeometry(xConn, win)
+	rect, err := getGeometry(xConn, win)
 	if err != nil {
 		return nil, err
 	}
-	frameExtents, _ := getWindowFrameExtents(xConn, win)
-	if frameExtents != nil {
-		X := winRect.X + int32(frameExtents.Left)
-		y := winRect.Y + int32(frameExtents.Top)
-		w := winRect.Width - uint32(frameExtents.Left+frameExtents.Right)
-		h := winRect.Height - uint32(frameExtents.Top+frameExtents.Bottom)
-		return &Rect{X, y, w, h}, nil
-	}
-	return winRect, nil
-}
 
-func getWindowParent(xConn *x.Conn, win x.Window) (x.Window, error) {
-	reply, err := x.QueryTree(xConn, win).Reply(xConn)
+	root := xConn.GetDefaultScreen().Root
+	coord, err := x.TranslateCoordinates(xConn, win, root, 0, 0).Reply(xConn)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	return reply.Parent, nil
-}
+	rect.X = int32(coord.DstX)
+	rect.Y = int32(coord.DstY)
 
-func getDecorGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
-	rootWin := xConn.GetDefaultScreen().Root
-	parent := win
-	for {
-		tempParent, err := getWindowParent(xConn, parent)
-		if err != nil || tempParent == rootWin {
-			break
+	dWin, err := getDecorativeWindow(xConn, win)
+	if err != nil {
+		return nil, err
+	}
+
+	dRect, err := getGeometry(xConn, dWin)
+	if err != nil {
+		return nil, err
+	}
+
+	if rect.X == dRect.X && rect.Y == dRect.Y {
+		// 无标题栏的窗口，比如 deepin-editor, dconf-editor
+		frameExtents, _ := getWindowFrameExtents(xConn, win)
+		if frameExtents != nil {
+			X := rect.X + int32(frameExtents.Left)
+			y := rect.Y + int32(frameExtents.Top)
+			w := rect.Width - uint32(frameExtents.Left+frameExtents.Right)
+			h := rect.Height - uint32(frameExtents.Top+frameExtents.Bottom)
+			return &Rect{X, y, w, h}, nil
 		}
-		parent = tempParent
+		return rect, nil
 	}
-	return getRawGeometry(xConn, parent)
+	// else 普通的有标题栏的窗口，比如 xev, 返回装饰窗口的位置和大小。
+	return dRect, nil
 }
 
-func getRawGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
+func getDecorativeWindow(conn *x.Conn, win x.Window) (x.Window, error) {
+	count := 0
+	for {
+		count++
+		reply, err := x.QueryTree(conn, win).Reply(conn)
+		if err != nil {
+			return 0, err
+		}
+
+		if reply.Root == reply.Parent {
+			return win, nil
+		}
+		if count > 10 {
+			return 0, errors.New("getDecorateWindow: exceeded the loop iteration limit")
+		}
+		win = reply.Parent
+	}
+}
+
+func getGeometry(xConn *x.Conn, win x.Window) (*Rect, error) {
 	geo, err := x.GetGeometry(xConn, x.Drawable(win)).Reply(xConn)
 	if err != nil {
 		return nil, err
