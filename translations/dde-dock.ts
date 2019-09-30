@@ -128,18 +128,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -160,10 +148,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,6 +160,17 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -208,10 +203,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"></translation>
     </message>
@@ -220,11 +211,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
