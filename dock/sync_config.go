@@ -11,8 +11,8 @@ type syncConfig struct {
 
 func (sc *syncConfig) Get() (interface{}, error) {
 	var v syncData
-	v.Version = "1.0"
-	v.IconSize = sc.m.IconSize.Get()
+	v.Version = syncConfigVersion
+	v.WindowSize = sc.m.WindowSize.Get()
 	v.DisplayMode = sc.m.DisplayMode.GetString()
 	v.HideMode = sc.m.HideMode.GetString()
 	v.Position = sc.m.Position.GetString()
@@ -74,7 +74,9 @@ func (sc *syncConfig) Set(data []byte) error {
 		return err
 	}
 	m := sc.m
-	m.IconSize.Set(v.IconSize)
+	if v.WindowSize > 0 {
+		m.WindowSize.Set(v.WindowSize)
+	}
 	m.DisplayMode.SetString(v.DisplayMode)
 	m.HideMode.SetString(v.HideMode)
 	m.Position.SetString(v.Position)
@@ -111,10 +113,13 @@ func diffStrSlice(a, b []string) (added, removed []string) {
 	return
 }
 
-// version: 1.0
+const (
+	syncConfigVersion = "1.1"
+)
+
 type syncData struct {
-	Version     string         `json:"version"` // such as "1.0.0"
-	IconSize    uint32         `json:"icon_size"`
+	Version     string         `json:"version"`
+	WindowSize  uint32         `json:"window_size"`
 	DisplayMode string         `json:"display_mode"`
 	HideMode    string         `json:"hide_mode"`
 	Position    string         `json:"position"`
