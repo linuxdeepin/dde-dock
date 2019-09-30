@@ -170,8 +170,23 @@ void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
         return;
     }
 
-//    if (displayMode == Dock::Fashion)
     m_proxyInter->itemAdded(this, pluginName());
-//    else
-//        m_proxyInter->itemRemoved(this, pluginName());
 }
+
+void TrashPlugin::pluginSettingsChanged()
+{
+    refreshPluginItemsVisible();
+}
+
+void TrashPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable()) {
+        m_proxyInter->itemRemoved(this, pluginName());
+        return;
+    }
+
+    if (m_trashWidget) {
+        m_proxyInter->itemAdded(this, pluginName());
+    }
+}
+
