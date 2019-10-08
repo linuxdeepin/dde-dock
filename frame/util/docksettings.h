@@ -114,6 +114,7 @@ private slots:
     void updateForbidPostions();
     void onOpacityChanged(const double value);
     void onFashionTraySizeChanged(const QSize &traySize);
+    void onWindowSizeChanged();
 
 private:
     DockSettings(QWidget *parent = 0);

@@ -117,6 +117,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
     connect(m_dockInter, &DBusDock::OpacityChanged, this, &DockSettings::onOpacityChanged);
+    connect(m_dockInter, &DBusDock::WindowSizeChanged, this, &DockSettings::onWindowSizeChanged);
 
     connect(m_itemManager, &DockItemManager::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemManager, &DockItemManager::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -547,5 +548,11 @@ qreal DockSettings::dockRatio() const
     QScreen const *screen = Utils::screenAtByScaled(m_frontendRect.center());
 
     return screen ? screen->devicePixelRatio() : qApp->devicePixelRatio();
+}
+
+void DockSettings::onWindowSizeChanged()
+{
+    calculateWindowConfig();
+    emit windowGeometryChanged();
 }
 
