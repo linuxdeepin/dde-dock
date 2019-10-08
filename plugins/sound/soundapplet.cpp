@@ -24,15 +24,18 @@
 #include "componments/horizontalseparator.h"
 #include "../widgets/tipswidget.h"
 #include "util/utils.h"
+#include <DGuiApplicationHelper>
 
 #include <QLabel>
 #include <QIcon>
+#include <DApplication>
 
 #define WIDTH       200
 #define MAX_HEIGHT  300
 #define ICON_SIZE   24
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
@@ -48,7 +51,6 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
-    m_volumeIconMax->setPixmap(Utils::renderSVG("://audio-volume-high-symbolic.svg", QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
     m_volumeSlider->setAccessibleName("volume-slider");
 
@@ -106,10 +108,11 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     setFixedWidth(WIDTH);
     setWidget(m_centralWidget);
-    setFrameStyle(QFrame::NoFrame);
+    setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setStyleSheet("background-color:transparent;");
+    m_centralWidget->setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
 
     connect(m_volumeBtn, &DImageButton::clicked, this, &SoundApplet::toggleMute);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
@@ -117,9 +120,13 @@ SoundApplet::SoundApplet(QWidget *parent)
     connect(m_audioInter, &DBusAudio::SinkInputsChanged, this, &SoundApplet::sinkInputsChanged);
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(this, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundApplet::refreshIcon);
+    connect(qApp, &DApplication::iconThemeChanged, this, &SoundApplet::refreshIcon);
 
     QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
     QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
+
+    refreshIcon();
 }
 
 int SoundApplet::volumeValue() const
@@ -148,28 +155,12 @@ void SoundApplet::defaultSinkChanged()
 void SoundApplet::onVolumeChanged()
 {
     const float volume = m_defSinkInter->volume();
-    const bool mute = m_defSinkInter->mute();
 
     m_volumeSlider->setValue(std::min(1500.0f, volume * 1000.0f));
 
     emit volumeChanged(m_volumeSlider->value());
 
-    QString volumeString;
-
-    if (mute) {
-        volumeString = "muted";
-    } else if (volume >= double(2) / 3) {
-        volumeString = "high";
-    } else if (volume >= double(1) / 3) {
-        volumeString = "medium";
-    } else {
-        volumeString = "low";
-    }
-
-    const QString &iconName = QString("://audio-volume-%1-symbolic.svg").arg(volumeString);
-    QPixmap pix = Utils::renderSVG(iconName, QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF());
-
-    m_volumeBtn->setPixmap(pix);
+    refreshIcon();
 }
 
 void SoundApplet::volumeSliderValueChanged()
@@ -210,4 +201,37 @@ void SoundApplet::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
     m_defSinkInter->SetMuteQueued(false);
+}
+
+void SoundApplet::refreshIcon()
+{
+    if (!m_defSinkInter)
+        return;
+
+    const float volume = m_defSinkInter->volume();
+    const bool mute = m_defSinkInter->mute();
+
+    QString volumeString;
+
+    if (mute) {
+        volumeString = "muted";
+    } else if (volume >= double(2) / 3) {
+        volumeString = "high";
+    } else if (volume >= double(1) / 3) {
+        volumeString = "medium";
+    } else {
+        volumeString = "low";
+    }
+
+    QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
+    QString iconRight = QString("audio-volume-high-symbolic");
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        iconLeft.append("-dark");
+        iconRight.append("-dark");
+    }
+
+    const auto ratio = devicePixelRatioF();
+    m_volumeIconMax->setPixmap(QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
+    m_volumeBtn->setPixmap(QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
 }

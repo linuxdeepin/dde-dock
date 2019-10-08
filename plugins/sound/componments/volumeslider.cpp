@@ -33,28 +33,6 @@ VolumeSlider::VolumeSlider(QWidget *parent)
     setTickInterval(50);
     setPageStep(50);
     setTickPosition(QSlider::NoTicks);
-    setFixedHeight(22);
-    setStyleSheet("QSlider::groove {"
-                  "margin-left:11px;"
-                  "margin-right:11px;"
-                  "border:none;"
-                  "height:2px;"
-//                  "border-width:0 0px 0 0px;"
-//                  "background:url(://slider_bg.png) 0 2 0 2 stretch;"
-                  "}"
-                  "QSlider::handle{"
-                  "background:url(://slider_handle.svg) no-repeat;"
-                  "width:22px;"
-                  "height:22px;"
-                  "margin:-9px -14px -11px -14px;"
-                  "}"
-                  "QSlider::add-page {"
-                  "background-color:rgba(255, 255, 255, .1);"
-                  "}"
-                  "QSlider::sub-page {"
-                  "background-color:rgba(255, 255, 255, .8);"
-                  "}");
-
     m_timer->setInterval(100);
 
     connect(m_timer, &QTimer::timeout, this, &VolumeSlider::onTimeout);

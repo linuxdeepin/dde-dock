@@ -44,7 +44,7 @@ private slots:
     void onPlaySoundEffect();
 
 private:
-    void changeVolumIcon(const float volume);
+    void refreshIcon();
 
 private:
     DBusSinkInput *m_inputInter;

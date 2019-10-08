@@ -26,10 +26,13 @@
 #include <QIcon>
 #include <QApplication>
 #include <DHiDPIHelper>
+#include <DGuiApplicationHelper>
+#include <DApplication>
 
 #define ICON_SIZE   24
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qreal ratio)
 {
@@ -59,7 +62,6 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_volumeBtnMin->setPixmap(DHiDPIHelper::loadNxPixmap("://audio-volume-low-symbolic.svg"));
 
     m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
-    m_volumeIconMax->setPixmap(DHiDPIHelper::loadNxPixmap("://audio-volume-high-symbolic.svg"));
 
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
     m_volumeSlider->setMinimum(0);
@@ -99,14 +101,17 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
     connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [ = ] {
         m_volumeSlider->setValue(m_inputInter->volume() * 1000);
-        changeVolumIcon(m_inputInter->volume());
+        refreshIcon();
     });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SinkInputWidget::refreshIcon);
+    connect(qApp, &DApplication::iconThemeChanged, this, &SinkInputWidget::refreshIcon);
 
     setLayout(centralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(60);
 
     setMuteIcon();
+    refreshIcon();
 
     emit m_inputInter->VolumeChanged();
 }
@@ -115,7 +120,7 @@ void SinkInputWidget::setVolume(const int value)
 {
     m_inputInter->SetVolumeQueued(double(value) / 1000.0, false);
 
-    changeVolumIcon(double(value) / 1000.0);
+    refreshIcon();
 }
 
 void SinkInputWidget::setMute()
@@ -127,7 +132,11 @@ void SinkInputWidget::setMuteIcon()
 {
     if (m_inputInter->mute()) {
         const auto ratio = devicePixelRatioF();
-        QPixmap muteIcon = DHiDPIHelper::loadNxPixmap("://audio-volume-muted-symbolic.svg");
+        QString iconString = "audio-volume-muted-symbolic";
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            iconString.append("-dark");
+        }
+        QPixmap muteIcon = QIcon::fromTheme(iconString).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
         QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
         QPixmap temp(appIconSource.size());
@@ -145,11 +154,11 @@ void SinkInputWidget::setMuteIcon()
 
         appIconSource.setDevicePixelRatio(ratio);
         m_appBtn->setPixmap(appIconSource);
-        m_volumeBtnMin->setPixmap(DHiDPIHelper::loadNxPixmap("://audio-volume-muted-symbolic.svg"));
     } else {
-        m_volumeBtnMin->setPixmap(DHiDPIHelper::loadNxPixmap("://audio-volume-low-symbolic.svg"));
         m_appBtn->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
     }
+
+    refreshIcon();
 }
 
 void SinkInputWidget::onPlaySoundEffect()
@@ -158,11 +167,17 @@ void SinkInputWidget::onPlaySoundEffect()
     m_inputInter->SetMuteQueued(false);
 }
 
-void SinkInputWidget::changeVolumIcon(const float volume)
+void SinkInputWidget::refreshIcon()
 {
+    if (!m_inputInter)
+        return;
+
+    const float volume = m_inputInter->volume();
+    const bool mute = m_inputInter->mute();
+
     QString volumeString;
 
-    if (m_inputInter->mute()) {
+    if (mute) {
         volumeString = "muted";
     } else if (volume >= double(2) / 3) {
         volumeString = "high";
@@ -172,8 +187,15 @@ void SinkInputWidget::changeVolumIcon(const float volume)
         volumeString = "low";
     }
 
-    const QString &iconName = QString("://audio-volume-%1-symbolic.svg").arg(volumeString);
-    QPixmap pix = DHiDPIHelper::loadNxPixmap(iconName);
+    QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
+    QString iconRight = QString("audio-volume-high-symbolic");
 
-    m_volumeBtnMin->setPixmap(pix);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        iconLeft.append("-dark");
+        iconRight.append("-dark");
+    }
+
+    const auto ratio = devicePixelRatioF();
+    m_volumeIconMax->setPixmap(QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
+    m_volumeBtnMin->setPixmap(QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
 }

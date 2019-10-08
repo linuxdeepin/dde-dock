@@ -55,6 +55,9 @@ private slots:
     void onPlaySoundEffect();
 
 private:
+    void refreshIcon();
+
+private:
     QWidget *m_centralWidget;
     QWidget *m_applicationTitle;
     Dtk::Widget::DImageButton *m_volumeBtn;
