@@ -216,6 +216,6 @@ void FashionTrayControlWidget::refreshArrowPixmap()
     }
 
     const auto ratio = devicePixelRatioF();
-    m_arrowPix = QIcon::fromTheme(iconPath).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
+    m_arrowPix = QIcon::fromTheme(iconPath,QIcon(QString(":/icons/resources/%1").arg(iconPath))).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
     m_arrowPix.setDevicePixelRatio(ratio);
 }
