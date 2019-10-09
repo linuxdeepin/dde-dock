@@ -196,9 +196,7 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
         type = "disabled";
     }
 
-    QString key = QString("wireless-%1%2")
-                  .arg(type)
-                  .arg(displayMode == Dock::Fashion ? "" : "-symbolic");
+    QString key = QString("wireless-%1-symbolic").arg(type);
 
     if (state == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) {
         key = "network-wireless-offline-symbolic";

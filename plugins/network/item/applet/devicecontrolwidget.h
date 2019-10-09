@@ -48,6 +48,7 @@ signals:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void refreshIcon();
 
 private slots:
     void refreshNetwork();

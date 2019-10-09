@@ -26,10 +26,13 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <dimagebutton.h>
+#include <DGuiApplicationHelper>
+#include <DApplication>
 
 using namespace dde::network;
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 AccessPointWidget::AccessPointWidget()
     : QFrame(nullptr),
@@ -45,9 +48,6 @@ AccessPointWidget::AccessPointWidget()
     m_ssidBtn->setObjectName("Ssid");
 
     m_disconnectBtn->setVisible(false);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/select.svg");
-    m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect_hover.svg");
-    m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_press.svg");
 
     m_securityPixmap = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16), devicePixelRatioF());
     m_securityIconSize = m_securityPixmap.size();
@@ -71,27 +71,19 @@ AccessPointWidget::AccessPointWidget()
     centralLayout->setMargin(0);
 
     setLayout(centralLayout);
-    setStyleSheet("AccessPointWidget #Ssid {"
-                  "color:white;"
-                  "background-color:transparent;"
-                  "border:none;"
-                  "text-align:left;"
-                  "}"
-                  "AccessPointWidget {"
-                  "border-radius:4px;"
-                  "margin:0 2px;"
-                  "border-top:1px solid rgba(255, 255, 255, .05);"
-                  "}"
-                  "AccessPointWidget:hover {"
-                  "background-color:rgba(255, 255, 255, .1);"
-                  "}"
-                  "AccessPointWidget[active=true] #Ssid {"
-//                  "color:#2ca7f8;"
-                  "}");
 
     connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::clicked);
     connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::ssidClicked);
     connect(m_disconnectBtn, &DImageButton::clicked, this, &AccessPointWidget::disconnectBtnClicked);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        setStrengthIcon(m_ap.strength());
+    });
+    connect(qApp, &DApplication::iconThemeChanged, this, [ = ] {
+        setStrengthIcon(m_ap.strength());
+    });
+
+    setStrengthIcon(m_ap.strength());
+
 }
 
 void AccessPointWidget::updateAP(const AccessPoint &ap)
@@ -132,13 +124,15 @@ void AccessPointWidget::setActiveState(const NetworkDevice::DeviceStatus state)
 void AccessPointWidget::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/disconnect.svg");
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
+    m_disconnectBtn->setNormalPic(isLight ? ":/wireless/resources/wireless/disconnect_dark.svg" : ":/wireless/resources/wireless/disconnect.svg");
 }
 
 void AccessPointWidget::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/select.svg");
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
+    m_disconnectBtn->setNormalPic(isLight ? ":/wireless/resources/wireless/select_dark.svg" : ":/wireless/resources/wireless/select.svg");
 }
 
 void AccessPointWidget::setStrengthIcon(const int strength)
@@ -154,9 +148,25 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     else
         type = QString::number(strength / 10 & ~0x1) + "0";
 
-    iconPix = Utils::renderSVG(QString(":/wireless/resources/wireless/wireless-%1-symbolic.svg").arg(type), s, devicePixelRatioF());
+    QString iconString = QString("wireless-%1-symbolic").arg(type);
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
+
+    if (isLight) {
+        iconString.append("-dark");
+    }
+
+    const auto ratio = devicePixelRatioF();
+    iconPix = QIcon::fromTheme(iconString, QIcon(QString(":/wireless/resources/wireless/%1").arg(iconString))).pixmap(s * ratio);
 
     m_strengthLabel->setPixmap(iconPix);
+
+
+    m_securityPixmap = QIcon::fromTheme(isLight ? ":/wireless/resources/wireless/security_dark.svg" : ":/wireless/resources/wireless/security.svg").pixmap(s * devicePixelRatioF());
+    m_securityLabel->setPixmap(m_securityPixmap);
+
+    m_disconnectBtn->setNormalPic(isLight ? ":/wireless/resources/wireless/select_dark.svg" : ":/wireless/resources/wireless/select.svg");
+    m_disconnectBtn->setHoverPic(isLight ? ":/wireless/resources/wireless/disconnect_dark.svg" : ":/wireless/resources/wireless/disconnect.svg");
+    m_disconnectBtn->setPressPic(isLight ? ":/wireless/resources/wireless/disconnect_dark.svg" : ":/wireless/resources/wireless/disconnect.svg");
 }
 
 void AccessPointWidget::ssidClicked()

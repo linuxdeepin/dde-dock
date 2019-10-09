@@ -28,8 +28,10 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QEvent>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
@@ -39,16 +41,16 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     m_switchBtn = new DSwitchButton;
 
-    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_normal.svg");
+    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 
     m_loadingIndicator = new DLoadingIndicator;
-    m_loadingIndicator->setImageSource(pixmap);
     m_loadingIndicator->setLoading(false);
     m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);
     m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
     m_loadingIndicator->installEventFilter(this);
     m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
+    refreshIcon();
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
@@ -75,6 +77,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     setFixedHeight(30);
 
     connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::enableButtonToggled);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &DeviceControlWidget::refreshIcon);
 }
 
 void DeviceControlWidget::setDeviceName(const QString &name)
@@ -112,6 +115,17 @@ void DeviceControlWidget::refreshNetwork()
     QTimer::singleShot(1000, this, [=] {
         m_loadingIndicator->setLoading(false);
     });
+}
+
+void DeviceControlWidget::refreshIcon()
+{
+    QPixmap pixmap;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_dark.svg");
+    else
+        pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
+
+    m_loadingIndicator->setImageSource(pixmap);
 }
 
 //void DeviceControlWidget::setSeperatorVisible(const bool visible)

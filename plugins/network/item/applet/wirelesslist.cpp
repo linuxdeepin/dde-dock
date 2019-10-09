@@ -54,8 +54,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     setFixedHeight(WIDTH);
 
     const auto ratio = devicePixelRatioF();
-    QPixmap iconPix = QIcon::fromTheme("notification-network-wireless-full").pixmap(QSize(48, 48) * ratio);
-    iconPix.setDevicePixelRatio(ratio);
 
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
@@ -68,11 +66,12 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     m_centralLayout->setMargin(0);
 
     setWidget(m_centralWidget);
-    setFrameStyle(QFrame::NoFrame);
+    setFrameShape(QFrame::NoFrame);
     setFixedWidth(300);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setStyleSheet("background-color:transparent;");
+    m_centralWidget->setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
 
     m_indicator = new DPictureSequenceView(this);
     m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
