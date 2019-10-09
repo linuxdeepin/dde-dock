@@ -90,8 +90,10 @@ void NormalContainer::refreshVisible()
 
     const QPropertyAnimation::State state = m_sizeAnimation->state();
 
-    if (state == QPropertyAnimation::Stopped && size() == endSize)
+    if (state == QPropertyAnimation::Stopped && size() == endSize) {
+        setVisible(expand());
         return;
+    }
 
     if (state == QPropertyAnimation::Running)
         return m_sizeAnimation->setEndValue(endSize);
