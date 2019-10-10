@@ -46,16 +46,16 @@ func (*Daemon) ScalePlymouth(scale uint32) *dbus.Error {
 	// TODO: inhibit poweroff
 	switch scale {
 	case 1:
-		var name = "deepin-logo"
-		if isSSD() {
-			name = "deepin-ssd-logo"
-		}
+		var name = "uos-ssd-logo"
+		//if isSSD() {
+		//	name = "deepin-ssd-logo"
+		//}
 		out, err = exec.Command("plymouth-set-default-theme", name).CombinedOutput()
 	case 2:
-		var name = "deepin-hidpi-logo"
-		if isSSD() {
-			name = "deepin-hidpi-ssd-logo"
-		}
+		var name = "uos-hidpi-ssd-logo"
+		//if isSSD() {
+		//	name = "deepin-hidpi-ssd-logo"
+		//}
 		out, err = exec.Command("plymouth-set-default-theme", name).CombinedOutput()
 	default:
 		return dbusutil.ToError(fmt.Errorf("invalid scale value: %d", scale))
