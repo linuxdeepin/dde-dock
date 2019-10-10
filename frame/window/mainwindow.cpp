@@ -432,6 +432,8 @@ void MainWindow::initComponents()
     m_panelHideAni->setEasingCurve(QEasingCurve::InOutCubic);
 
     QTimer::singleShot(1, this, &MainWindow::compositeChanged);
+
+    themeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 }
 
 void MainWindow::compositeChanged()
@@ -532,6 +534,7 @@ void MainWindow::initConnections()
     connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -977,6 +980,17 @@ void MainWindow::onDragFinished()
     }
 
     setStrutPartial();
+}
+
+void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    if (m_wmHelper->hasComposite()) {
+
+        if (themeType == DGuiApplicationHelper::DarkType)
+            m_platformWindowHandle.setBorderColor(QColor(0, 0, 0, 255 * 0.3));
+        else
+            m_platformWindowHandle.setBorderColor(QColor(QColor::Invalid));
+    }
 }
 
 #include "mainwindow.moc"

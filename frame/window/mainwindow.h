@@ -36,6 +36,7 @@
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
 #include <DBlurEffectWidget>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -104,6 +105,7 @@ private slots:
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
+    void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     bool m_launched;
