@@ -126,18 +126,6 @@
         <translation>Rechts</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Groß</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Mittel</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Klein</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Angezeigt lassen</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>Ort</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Größe</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Status</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Starter</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Abdocken</translation>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Energieeinstellungen</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>%1 aufgeladen</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Kapazität %1, %2 Min. verbleibend</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>Kapazität %1, %2 Std. %3 Min. verbleibend</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>%1 aufgeladen</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Lade %1, %2 Min. bis geladen</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Lade %1, %2 Std. %3 Min. bis geladen</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Desktop anzeigen</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Abdocken</translation>
     </message>
 </context>
 <context>

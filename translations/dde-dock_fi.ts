@@ -126,18 +126,6 @@
         <translation>Oikea</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Suuri</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Keskikokoinen</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pieni</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Pidä näkyvänä</translation>
     </message>
@@ -158,12 +146,8 @@
         <translation>Sijainti</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Koko</translation>
-    </message>
-    <message>
         <source>Status</source>
-        <translation>Näkyvyys</translation>
+        <translation>Tila</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Käynnistin</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Näkymät</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Irrota</translation>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Virta-asetukset</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Ladattu: %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Akku %1, %2 min jäljellä</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>Akku %1, %2 t %3 min jäljellä</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Ladattu: %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Lataa %1, %2 min täyteen</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Lataa %1, %2 t %3 min täyteen</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Näytä työpöytä</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Irrota</translation>
     </message>
 </context>
 <context>

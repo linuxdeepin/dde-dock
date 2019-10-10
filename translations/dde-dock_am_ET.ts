@@ -126,18 +126,6 @@
         <translation>የ ቀኝ</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>ትልቅ</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>መካከለኛ</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>ትንሽ</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>እንደ ታየ ማቆያ</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>አካባቢ</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>መጠን</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>ሁኔታው</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>ማስጀመሪያ</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>ሐይል ማሰናጃ</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>ሞልቷል %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
@@ -218,11 +209,26 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>ሞልቷል %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>ዴስክቶፕ ማሳያ</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>

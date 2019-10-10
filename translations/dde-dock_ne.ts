@@ -126,18 +126,6 @@
         <translation>दाँया</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>लार्ज </translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>मेडियम</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>सानो</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>देखाउनुहोस्</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>स्थान</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>आकार</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>स्थिति</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>लन्चर</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>पावर सेटिङहरू</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>चार्ज % 1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
@@ -218,11 +209,26 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>चार्ज % 1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>डेस्कटप देखाउनुहोस्</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>

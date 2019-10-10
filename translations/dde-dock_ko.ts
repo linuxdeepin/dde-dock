@@ -126,18 +126,6 @@
         <translation>오른쪽</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>대형</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>중형</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>소형</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>계속 표시</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>위치</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>크기</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>상태</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>런쳐</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>멀티태스킹 보기</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>도크 해제</translation>
     </message>
 </context>
 <context>
@@ -206,24 +201,35 @@
         <translation>전원 설정</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>용량 %1, %2분 남음</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>용량 %1, %2시간 %3분 남음</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>%1 충전됨</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 충전중, 완전 충전까지 %2분 남음</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 충전중, 완전 충전까지 %2시간 %3분 남음</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>바탕 화면 표시</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>도크 해제</translation>
     </message>
 </context>
 <context>

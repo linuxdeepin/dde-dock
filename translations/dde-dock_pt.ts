@@ -17,7 +17,7 @@
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar esquema de teclado</translation>
+        <translation>Adicionar disposição de teclado</translation>
     </message>
 </context>
 <context>
@@ -126,18 +126,6 @@
         <translation>Direita</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Médio</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pequeno</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Manter Visível</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>Localização</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Tamanho</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Lançador</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vista Multitarefa</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Definições de energia</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Carregado %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacidade %1, %2 min restantes</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>Capacidade %1, %2 hr %3 min restantes</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Carregado %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>A carregar %1, %2 min até estar cheio</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>A carregar %1, %2 hr %3 min até estar cheio</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Mostrar Ambiente de Trabalho</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>

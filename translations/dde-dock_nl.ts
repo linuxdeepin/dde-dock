@@ -126,18 +126,6 @@
         <translation>Rechts</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Groot</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Gemiddeld</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Klein</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Blijf weergeven</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>Locatie</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Grootte</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Status</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Starter</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Energie-instellingen</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>%1 Opgeladen</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capaciteit %1, %2 min resterend</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>Capaciteit %1, %2 hr %3 min resterend</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>%1 Opgeladen</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Opladen %1, %2 min tot vol</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Opladen %1, %2 hr %3 min tot vol</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Toon Bureaublad</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

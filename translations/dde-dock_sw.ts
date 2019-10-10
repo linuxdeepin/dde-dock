@@ -126,18 +126,6 @@
         <translation>Kulia</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Kubwa</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Wastani</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Ndogo</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Tunza ionekane</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>Pahali</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Ukubwa</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Hadhi</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Kizindua</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Sifa za kiwashio</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
@@ -218,11 +209,26 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Onesha eneo ya kazi</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>

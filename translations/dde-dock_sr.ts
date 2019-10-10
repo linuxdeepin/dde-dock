@@ -126,18 +126,6 @@
         <translation>Десно</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Велико</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Средње</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Мало</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Остави приказано</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>Позиција</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Величина</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Стање</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Покретач Програма</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Приказ Активности</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Откачи</translation>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Поставке напајања</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Напуњено %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Капацитет %1, %2 мин преостало</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>Капацитет %1, %2 ч %3 мин преостало</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Напуњено %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Пуни се %1, %2 мин преостало</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Пуни се %1, %2 ч %3 мин преостало</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Прикажи радну површину</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Откачи</translation>
     </message>
 </context>
 <context>

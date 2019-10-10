@@ -126,18 +126,6 @@
         <translation>右側</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>大</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>中</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>小</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>永遠顯示</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>位置</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>圖示</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>狀態</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>啟動器</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>解除駐停</translation>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>電源設定</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>%1 充電完成</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>電量 %1，剩餘 %2 分鐘</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>電量 %1，剩餘 %2 小時 %3 分鐘</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>%1 充電完成</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>正在充電 %1，距離完成尚餘 %2 分鐘</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>正在充電 %1，距離完成尚餘 %2 小時 %3 分鐘</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>顯示桌面</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>解除駐停</translation>
     </message>
 </context>
 <context>
