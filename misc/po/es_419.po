@@ -4,8 +4,8 @@
 # 
 # Translators:
 # Alejandro Hamann <linkstat@gmail.com>, 2016
-# Alvaro Samudio <alvarosamudio1@gmail.com>, 2017
-# Alvaro Samudio <alvarosamudio1@gmail.com>, 2017
+# Alvaro Samudio <alvarosamudio@protonmail.com>, 2017
+# Alvaro Samudio <alvarosamudio@protonmail.com>, 2017
 # Benjamin Perez Carrillo <benperezc@gmail.com>, 2016-2017
 # Zaraza, 2017
 # Zaraza, 2017

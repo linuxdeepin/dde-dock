@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Grzegorz Ciężarkiewicz <pegaz19803@gmail.com>, 2018
-# Kacper Paczos <kacper-paczos@linux.pl>, 2019
+# Pyroxar <kacper-paczos@linux.pl>, 2019
 # Marcin Kozioł <koziol.martin@gmail.com>, 2019
 # Piotr Strębski <strebski@gmail.com>, 2017-2018
 # Piotr Strębski <strebski@gmail.com>, 2016-2017

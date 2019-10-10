@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-11 10:09+0800\n"
-"PO-Revision-Date: 2019-09-11 02:23+0000\n"
+"PO-Revision-Date: 2019-10-10 05:14+0000\n"
 "Last-Translator: Cindy0514\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -179,7 +179,7 @@ msgstr "强制退出"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
-msgstr "任务栏"
+msgstr "驻留"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"

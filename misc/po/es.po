@@ -4,8 +4,8 @@
 # 
 # Translators:
 # Alejandro Hamann <linkstat@gmail.com>, 2016
-# Alvaro Samudio <alvarosamudio1@gmail.com>, 2017
-# Alvaro Samudio <alvarosamudio1@gmail.com>, 2017-2018
+# Alvaro Samudio <alvarosamudio@protonmail.com>, 2017
+# Alvaro Samudio <alvarosamudio@protonmail.com>, 2017-2018
 # Zaraza, 2017
 # Deepin en Español, 2017-2018
 # Zaraza, 2017-2018
