@@ -126,18 +126,6 @@
         <translation>Derecha</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Mediano</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pequeño</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Mantener visible</translation>
     </message>
@@ -158,10 +146,6 @@
         <translation>Ubicación</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Tamaño</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Lanzador</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vista Multitarea</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Desacoplar</translation>
     </message>
 </context>
 <context>
@@ -206,10 +201,6 @@
         <translation>Ajustes de energía</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Cargado %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacidad %1, %2 min restante</translation>
     </message>
@@ -218,12 +209,27 @@
         <translation>Capacidad %1, %2 h %3 min restante</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Cargado %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Cargando % 1, %2 min para completarse</translation>
+        <translation>Cargando %1, %2 min para completarse</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Cargando %1, %2 h %3 min para completarse</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Mostrar Escritorio</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Desacoplar</translation>
     </message>
 </context>
 <context>

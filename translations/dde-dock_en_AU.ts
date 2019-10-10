@@ -3,62 +3,62 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Plugin %1 is not compatible with the system.</translation>
     </message>
 </context>
 <context>
     <name>ContainerItem</name>
     <message>
         <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>Click to display hidden icon</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Add keyboard layout</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>Datetime</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 Hour Time</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 Hour Time</translation>
     </message>
     <message>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>Time Settings</translation>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>Enable network</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>Disable network</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>Network settings</translation>
     </message>
 </context>
 <context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Are you sure you want to empty %1 items?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -70,18 +70,18 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation type="unfinished"/>
+        <translation>This action cannot be restored</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Unknown device</translation>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Unknown volume</translation>
     </message>
 </context>
 <context>
@@ -96,26 +96,26 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>Unmount all</translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>Fashion Mode</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>Efficient Mode</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Top</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Bottom</translation>
     </message>
     <message>
         <source>Left</source>
@@ -126,28 +126,16 @@
         <translation>Right</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>Keep Shown</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Keep Hidden</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>Smart Hide</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -155,19 +143,15 @@
     </message>
     <message>
         <source>Location</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Size</translation>
+        <translation>Location</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>Status</translation>
     </message>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Plugins</translation>
     </message>
 </context>
 <context>
@@ -175,6 +159,17 @@
     <message>
         <source>Launcher</source>
         <translation>Launcher</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Multitasking View</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Undock</translation>
     </message>
 </context>
 <context>
@@ -188,7 +183,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Onboard</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -203,27 +198,38 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>Power settings</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Capacity %1, %2 min remaining</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Capacity %1, %2 hr %3 min remaining</translation>
+    </message>
+    <message>
+        <source>Charged %1</source>
+        <translation>Charged %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Charging %1, %2 min until full</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Charging %1, %2 hr %3 min until full</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Show Desktop</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Undock</translation>
     </message>
 </context>
 <context>
@@ -262,7 +268,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>Power settings</translation>
     </message>
 </context>
 <context>
@@ -273,7 +279,7 @@
     </message>
     <message>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>Application</translation>
     </message>
 </context>
 <context>
@@ -365,7 +371,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Wired Network %1</translation>
     </message>
 </context>
 </TS>
