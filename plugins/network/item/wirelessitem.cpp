@@ -23,6 +23,7 @@
 #include "networkplugin.h"
 #include "../util/imageutil.h"
 #include "../widgets/tipswidget.h"
+#include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -30,6 +31,7 @@
 #include <QIcon>
 
 using namespace dde::network;
+DGUI_USE_NAMESPACE
 
 WirelessItem::WirelessItem(WirelessDevice *device)
     : DeviceItem(device),
@@ -54,6 +56,9 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        update();
+    });
 
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     QTimer::singleShot(0, this, &WirelessItem::refreshTips);
@@ -208,7 +213,7 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
         key = "network-wireless-warning-symbolic";
     }
 
-    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE)
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         key.append(PLUGIN_MIN_ICON_NAME);
 
     return cachedPix(key, size);

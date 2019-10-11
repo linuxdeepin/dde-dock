@@ -25,6 +25,7 @@
 #include "networkplugin.h"
 #include "../util/imageutil.h"
 #include "../widgets/tipswidget.h"
+#include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -32,6 +33,7 @@
 #include <QApplication>
 
 using namespace dde::network;
+DGUI_USE_NAMESPACE
 
 WiredItem::WiredItem(WiredDevice *device)
     : DeviceItem(device),
@@ -52,6 +54,9 @@ WiredItem::WiredItem(WiredDevice *device)
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::connectionsChanged, this, &WiredItem::deviceStateChanged);
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged, this, &WiredItem::deviceStateChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshIcon();
+    });
 
     QTimer::singleShot(0, this, &WiredItem::refreshTips);
     QTimer::singleShot(0, this, &WiredItem::refreshIcon);
@@ -179,7 +184,7 @@ void WiredItem::reloadIcon()
         iconName.append("-symbolic");
 
     // 最小尺寸时采用深色图标
-    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE)
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconName.append(PLUGIN_MIN_ICON_NAME);
 
     m_icon = QIcon::fromTheme(iconName).pixmap(iconSize * ratio, iconSize * ratio);

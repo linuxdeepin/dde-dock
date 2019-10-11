@@ -29,12 +29,14 @@
 #include <DApplication>
 #include <DDBusSender>
 #include "../widgets/tipswidget.h"
+#include <DGuiApplicationHelper>
 
 // menu actions
 #define MUTE     "mute"
 #define SETTINGS "settings"
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
@@ -50,6 +52,10 @@ SoundItem::SoundItem(QWidget *parent)
 
     connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
     connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refreshTips, Qt::QueuedConnection);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshIcon();
+    });
 }
 
 QWidget *SoundItem::tipsWidget()
@@ -180,7 +186,7 @@ void SoundItem::refreshIcon()
 
     const auto ratio = devicePixelRatioF();
     int iconSize = PLUGIN_ICON_MAX_SIZE;
-    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE)
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
 
     const QIcon icon = QIcon::fromTheme(iconString);

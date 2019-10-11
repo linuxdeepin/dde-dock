@@ -39,6 +39,10 @@ OnboardItem::OnboardItem(QWidget *parent)
 {
     setMouseTracking(true);
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        update();
+    });
 }
 
 QSize OnboardItem::sizeHint() const
@@ -53,11 +57,6 @@ void OnboardItem::paintEvent(QPaintEvent *e)
     QPixmap pixmap;
     QString iconName = "deepin-virtualkeyboard";
     int iconSize = PLUGIN_ICON_MAX_SIZE;
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-
-    if (displayMode == Dock::Efficient) {
-        iconName = iconName + "-symbolic";
-    }
 
     QPainter painter(this);
     if (std::min(width(), height()) > PLUGIN_BACKGROUND_MIN_SIZE) {
@@ -100,7 +99,7 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
         path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
-    } else {
+    } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
         iconName.append(PLUGIN_MIN_ICON_NAME);
     }
 

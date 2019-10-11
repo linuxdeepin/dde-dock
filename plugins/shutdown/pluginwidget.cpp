@@ -39,6 +39,10 @@ PluginWidget::PluginWidget(QWidget *parent)
 {
     setMouseTracking(true);
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        update();
+    });
 }
 
 QSize PluginWidget::sizeHint() const
@@ -96,7 +100,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
         path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
-    } else {
+    } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
         // 最小尺寸时，不画背景，采用深色图标
         iconName.append(PLUGIN_MIN_ICON_NAME);
     }

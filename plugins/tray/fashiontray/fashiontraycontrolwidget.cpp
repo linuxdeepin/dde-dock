@@ -48,6 +48,10 @@ FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWid
 
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     setMaximumSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        update();
+    });
 }
 
 void FashionTrayControlWidget::setDockPostion(Dock::Position pos)
@@ -211,11 +215,11 @@ void FashionTrayControlWidget::refreshArrowPixmap()
         break;
     }
 
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
         iconPath.append("-dark");
     }
 
     const auto ratio = devicePixelRatioF();
-    m_arrowPix = QIcon::fromTheme(iconPath,QIcon(QString(":/icons/resources/%1").arg(iconPath))).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
+    m_arrowPix = QIcon::fromTheme(iconPath, QIcon(QString(":/icons/resources/%1").arg(iconPath))).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
     m_arrowPix.setDevicePixelRatio(ratio);
 }
