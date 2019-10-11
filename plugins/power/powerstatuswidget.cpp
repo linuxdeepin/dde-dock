@@ -21,10 +21,13 @@
 
 #include "powerstatuswidget.h"
 #include "powerplugin.h"
+#include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+
+DGUI_USE_NAMESPACE
 
 PowerStatusWidget::PowerStatusWidget(QWidget *parent)
     : QWidget(parent),
@@ -36,6 +39,9 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
     connect(m_powerInter, &DBusPower::BatteryStateChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
     connect(m_powerInter, &DBusPower::OnBatteryChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshIcon();
+    });
 }
 
 void PowerStatusWidget::refreshIcon()
@@ -86,9 +92,13 @@ QPixmap PowerStatusWidget::getBatteryIcon()
         percentageStr = "000";
     }
 
-    const QString iconStr = QString("battery-%1-%2")
+    QString iconStr = QString("battery-%1-%2")
                                 .arg(percentageStr)
                                 .arg(plugged ? "plugged-symbolic" : "symbolic");
+
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconStr.append(PLUGIN_MIN_ICON_NAME);
+
     const auto ratio = devicePixelRatioF();
     QPixmap pix = QIcon::fromTheme(iconStr).pixmap(QSize(20, 20) * ratio);
     pix.setDevicePixelRatio(ratio);
