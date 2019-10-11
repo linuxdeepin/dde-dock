@@ -246,7 +246,8 @@ void DockItemManager::refreshFSTItemSpliterVisible()
 
 void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
 {
-    int insertIndex = 0;
+    // 第一个是启动器
+    int insertIndex = 1;
 
     // -1 for append to app list end
     if (index != -1) {
