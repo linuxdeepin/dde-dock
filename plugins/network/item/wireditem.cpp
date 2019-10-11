@@ -39,6 +39,8 @@ WiredItem::WiredItem(WiredDevice *device)
       m_itemTips(new TipsWidget(this)),
       m_delayTimer(new QTimer(this))
 {
+    m_pageName = "wired";
+
     m_delayTimer->setSingleShot(true);
     m_delayTimer->setInterval(200);
 

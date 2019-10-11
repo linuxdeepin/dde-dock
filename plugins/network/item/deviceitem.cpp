@@ -93,8 +93,9 @@ void DeviceItem::invokeMenuItem(const QString &menuId)
                 .service("com.deepin.dde.ControlCenter")
                 .interface("com.deepin.dde.ControlCenter")
                 .path("/com/deepin/dde/ControlCenter")
-                .method("ShowModule")
+                .method("ShowPage")
                 .arg(QString("network"))
+                .arg(m_pageName)
                 .call();
 
     else if (menuId == "enable")

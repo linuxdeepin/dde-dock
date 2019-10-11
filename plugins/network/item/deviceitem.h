@@ -53,6 +53,7 @@ protected:
 
 protected:
     QPointer<dde::network::NetworkDevice> m_device;
+    QString m_pageName;
 
 private:
     QString m_path;
