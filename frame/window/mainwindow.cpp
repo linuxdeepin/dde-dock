@@ -185,6 +185,10 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     connect(m_panelShowAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
+
+        if (m_panelShowAni->state() != QPropertyAnimation::Running)
+            return;
+
         // dock的宽度或高度值
         int val = value.toInt();
         // 当前dock尺寸
@@ -222,6 +226,10 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(m_panelHideAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
+
+        if (m_panelHideAni->state() != QPropertyAnimation::Running)
+            return;
+
         // dock的宽度或高度
         int val = value.toInt();
         // dock隐藏后的rect
