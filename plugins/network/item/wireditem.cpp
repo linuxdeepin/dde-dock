@@ -41,8 +41,6 @@ WiredItem::WiredItem(WiredDevice *device)
       m_itemTips(new TipsWidget(this)),
       m_delayTimer(new QTimer(this))
 {
-    m_pageName = "wired";
-
     m_delayTimer->setSingleShot(true);
     m_delayTimer->setInterval(200);
 
@@ -71,7 +69,7 @@ QWidget *WiredItem::itemTips()
 
 const QString WiredItem::itemCommand() const
 {
-    return "dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"";
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowPage \"string:network\" \"string:%1\"").arg(path());
 }
 
 void WiredItem::paintEvent(QPaintEvent *e)

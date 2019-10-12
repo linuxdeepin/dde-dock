@@ -42,8 +42,6 @@ WirelessItem::WirelessItem(WirelessDevice *device)
       m_wirelessTips(new TipsWidget),
       m_APList(nullptr)
 {
-    m_pageName = "wireless";
-
     m_refreshTimer->setSingleShot(true);
     m_refreshTimer->setInterval(100);
 
