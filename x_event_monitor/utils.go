@@ -20,9 +20,14 @@
 package x_event_monitor
 
 const (
+	MotionFlag = int32(1)
 	ButtonFlag = int32(1 << 1)
 	KeyFlag    = int32(1 << 2)
 )
+
+func hasMotionFlag(flag int32) bool {
+	return flag&MotionFlag != 0
+}
 
 func hasKeyFlag(flag int32) bool {
 	return flag&KeyFlag != 0

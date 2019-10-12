@@ -41,9 +41,11 @@ var errAreasRegistered = errors.New("the areas has been registered")
 var errAreasNotRegistered = errors.New("the areas has not been registered yet")
 
 type coordinateInfo struct {
-	areas      []coordinateRange
-	buttonFlag bool
-	keyFlag    bool
+	areas        []coordinateRange
+	moveIntoFlag bool
+	motionFlag   bool
+	buttonFlag   bool
+	keyFlag      bool
 }
 
 type coordinateRange struct {
@@ -59,6 +61,11 @@ type Manager struct {
 	service    *dbusutil.Service
 	signals    *struct {
 		CancelAllArea struct{}
+
+		CursorInto, CursorOut, CursorMove struct {
+			x, y int32
+			id   string
+		}
 
 		ButtonPress, ButtonRelease struct {
 			button, x, y int32
@@ -116,7 +123,8 @@ func (m *Manager) selectXInputEvents() {
 		{
 			DeviceId: input.DeviceAllMaster,
 			Mask: []uint32{
-				input.XIEventMaskRawButtonPress |
+				input.XIEventMaskRawMotion |
+					input.XIEventMaskRawButtonPress |
 					input.XIEventMaskRawButtonRelease |
 					input.XIEventMaskRawKeyPress |
 					input.XIEventMaskRawKeyRelease |
@@ -172,6 +180,24 @@ func (m *Manager) handleXEvent() {
 			geEvent, _ := x.NewGeGenericEvent(ev)
 			if geEvent.Extension == inputExtData.MajorOpcode {
 				switch geEvent.EventType {
+				case input.RawMotionEventCode:
+					qpReply, err := m.queryPointer()
+					if err != nil {
+						logger.Warning(err)
+					} else {
+						/**
+						mouse left press: mask = 256
+						mouse right press: mask = 512
+						mouse middle press: mask = 1024
+						 **/
+
+						var press bool
+						if qpReply.Mask >= 256 {
+							press = true
+						}
+						m.handleCursorEvent(int32(qpReply.RootX), int32(qpReply.RootY), press)
+					}
+
 				case input.RawKeyPressEventCode:
 					e, _ := input.NewRawKeyPressEvent(geEvent.Data)
 					qpReply, err := m.queryPointer()
@@ -230,6 +256,57 @@ func (m *Manager) handleXEvent() {
 					}
 				}
 			}
+		}
+	}
+}
+
+func (m *Manager) handleCursorEvent(x, y int32, press bool) {
+	press = !press
+	inList, outList := m.getIdList(x, y)
+	for _, id := range inList {
+		areaInfo, ok := m.idAreaInfoMap[id]
+		if !ok {
+			continue
+		}
+
+		if !areaInfo.moveIntoFlag {
+			if press {
+				err := m.service.Emit(m, "CursorInto", x, y, id)
+				if err != nil {
+					logger.Warning(err)
+				}
+				areaInfo.moveIntoFlag = true
+			}
+		}
+
+		if areaInfo.motionFlag {
+			err := m.service.Emit(m, "CursorMove", x, y, id)
+			if err != nil {
+				logger.Warning(err)
+			}
+		}
+	}
+
+	for _, id := range outList {
+		areaInfo, ok := m.idAreaInfoMap[id]
+		if !ok {
+			continue
+		}
+
+		if areaInfo.moveIntoFlag {
+			err := m.service.Emit(m, "CursorOut", x, y, id)
+			if err != nil {
+				logger.Warning(err)
+			}
+			areaInfo.moveIntoFlag = false
+		}
+	}
+
+	_, ok := m.idReferCountMap[fullscreenId]
+	if ok {
+		err := m.service.Emit(m, "CursorMove", x, y, fullscreenId)
+		if err != nil {
+			logger.Warning(err)
 		}
 	}
 }
@@ -366,6 +443,7 @@ func (m *Manager) RegisterAreas(sender dbus.Sender, areas []coordinateRange, fla
 
 	info := &coordinateInfo{}
 	info.areas = areas
+	info.motionFlag = hasMotionFlag(flag)
 	info.buttonFlag = hasButtonFlag(flag)
 	info.keyFlag = hasKeyFlag(flag)
 
