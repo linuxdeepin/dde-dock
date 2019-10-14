@@ -172,6 +172,7 @@ func newLangSelector(service *dbusutil.Service) (*LangSelector, error) {
 	locales := lang.settings.GetStrv(gsKeyLocales)
 	if !strv.Strv(locales).Contains(locale) {
 		locales = append(locales, locale)
+		lang.settings.SetStrv(gsKeyLocales, locales)
 	}
 	lang.Locales = locales
 
