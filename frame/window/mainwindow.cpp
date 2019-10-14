@@ -222,7 +222,6 @@ MainWindow::MainWindow(QWidget *parent)
 
         m_mainPanel->setFixedSize(windowRect.width(), windowRect.height());
 
-        qDebug() << "show,pos:" << windowRect.topLeft() << "size:" << val;
     });
 
     connect(m_panelHideAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
@@ -261,7 +260,6 @@ MainWindow::MainWindow(QWidget *parent)
             QWidget::setFixedWidth(val);
         }
 
-        qDebug() << "hide,pos:" << windowRect.topLeft() << "size:" << val;
     });
 
     connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
@@ -708,8 +706,6 @@ void MainWindow::setStrutPartial()
     default:
         Q_ASSERT(false);
     }
-
-    qDebug() << "screen info: " << p << strutArea;
 
     // pass if strut area is intersect with other screen
     int count = 0;

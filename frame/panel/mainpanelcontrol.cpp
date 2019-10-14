@@ -182,7 +182,7 @@ void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
     m_trayAreaLayout->insertWidget(index, wdg);
 
     //解决开机或切换用户时托盘区域大小没有调整，导致托盘图标重叠问题
-    m_trayAreaWidget->adjustSize();
+    QTimer::singleShot(50, this, [ = ] {m_trayAreaWidget->adjustSize();});
 }
 
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
