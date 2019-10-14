@@ -50,6 +50,8 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
     m_loadingIndicator->installEventFilter(this);
     m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
+    m_loadingIndicator->viewport()->setAutoFillBackground(false);
+    m_loadingIndicator->setFrameShape(QFrame::NoFrame);
     refreshIcon();
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
@@ -76,7 +78,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     setLayout(centralLayout);
     setFixedHeight(30);
 
-    connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::enableButtonToggled);
+    connect(m_switchBtn, &DSwitchButton::clicked, this, &DeviceControlWidget::enableButtonToggled);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &DeviceControlWidget::refreshIcon);
 }
 
