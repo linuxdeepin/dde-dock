@@ -37,7 +37,7 @@ func (s *Scheduler) GetJob(id int64) (string, *dbus.Error) {
 func (s *Scheduler) DeleteJob(id int64) *dbus.Error {
 	err := s.deleteJob(uint(id))
 	if err == nil {
-		s.notifyJobsChange()
+		s.notifyJobsChange(uint(id))
 	}
 	return dbusutil.ToError(err)
 }
@@ -55,7 +55,7 @@ func (s *Scheduler) UpdateJob(jobStr string) *dbus.Error {
 	}
 	err = s.updateJob(job)
 	if err == nil {
-		s.notifyJobsChange()
+		s.notifyJobsChange(job.ID)
 	}
 	return dbusutil.ToError(err)
 }
@@ -75,7 +75,7 @@ func (s *Scheduler) CreateJob(jobStr string) (int64, *dbus.Error) {
 	if err != nil {
 		return 0, dbusutil.ToError(err)
 	}
-	s.notifyJobsChange()
+	s.notifyJobsChange(job.ID)
 	return int64(job.ID), nil
 }
 

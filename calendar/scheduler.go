@@ -10,17 +10,22 @@ import (
 	libdate "github.com/rickb777/date"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/log"
 )
 
 type Scheduler struct {
-	signalLoop     *dbusutil.SignalLoop
-	db             *gorm.DB
-	notifications  *notifications.Notifications
-	notifyJobMap   map[uint32]*JobJSON // key is notification id
-	notifyJobMapMu sync.Mutex
-	timerGroup     timerGroup
-	changeChan     chan struct{}
-	quitChan       chan struct{}
+	signalLoop          *dbusutil.SignalLoop
+	db                  *gorm.DB
+	notifications       *notifications.Notifications
+	notifyJobMap        map[uint32]*JobJSON // key is notification id
+	notifyJobMapMu      sync.Mutex
+	timerGroup          timerGroup
+	remindLaterTimers   map[uint]*time.Timer // key is job id
+	remindLaterTimersMu sync.Mutex
+
+	changeChan chan uint
+	quitChan   chan struct{}
 
 	methods *struct {
 		GetJobs   func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
@@ -42,11 +47,12 @@ type Scheduler struct {
 func newScheduler(db *gorm.DB, service *dbusutil.Service) *Scheduler {
 	sessionBus := service.Conn()
 	s := &Scheduler{
-		db:            db,
-		changeChan:    make(chan struct{}),
-		quitChan:      make(chan struct{}),
-		notifications: notifications.NewNotifications(sessionBus),
-		notifyJobMap:  make(map[uint32]*JobJSON),
+		db:                db,
+		changeChan:        make(chan uint),
+		quitChan:          make(chan struct{}),
+		notifications:     notifications.NewNotifications(sessionBus),
+		notifyJobMap:      make(map[uint32]*JobJSON),
+		remindLaterTimers: make(map[uint]*time.Timer),
 	}
 	s.signalLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 	s.signalLoop.Start()
@@ -73,9 +79,11 @@ func (s *Scheduler) listenDBusSignals() {
 	_, err := s.notifications.ConnectNotificationClosed(func(id uint32, reason uint32) {
 		logger.Debug("signal notification closed", id, reason)
 		defer func() {
-			s.notifyJobMapMu.Lock()
-			delete(s.notifyJobMap, id)
-			s.notifyJobMapMu.Unlock()
+			time.AfterFunc(100*time.Millisecond, func() {
+				s.notifyJobMapMu.Lock()
+				delete(s.notifyJobMap, id)
+				s.notifyJobMapMu.Unlock()
+			})
 		}()
 
 		if reason != notifyCloseReasonDismissedByUser {
@@ -97,6 +105,23 @@ func (s *Scheduler) listenDBusSignals() {
 	if err != nil {
 		logger.Warning(err)
 	}
+
+	_, err = s.notifications.ConnectActionInvoked(func(id uint32, actionKey string) {
+		logger.Debug("signal action invoked", id, actionKey)
+		switch actionKey {
+		case notifyActKeyRemindLater:
+			s.notifyJobMapMu.Lock()
+			job := s.notifyJobMap[id]
+			s.notifyJobMapMu.Unlock()
+
+			if job == nil {
+				return
+			}
+
+			logger.Debug("remind later", job.ID)
+			s.remindJobLater(job)
+		}
+	})
 }
 
 const (
@@ -319,7 +344,12 @@ func (tg *timerGroup) addJob(job *Job, m *Scheduler) {
 	duration := job.remindTime.Sub(now)
 	logger.Debugf("notify job %d %q after %v", job.ID, job.Title, duration)
 	tg.timers = append(tg.timers, time.AfterFunc(duration, func() {
-		m.remindJob(job)
+		jj, err := job.toJobJSON()
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		m.remindJob(jj)
 	}))
 }
 
@@ -333,26 +363,50 @@ func (tg *timerGroup) reset() {
 	tg.timers = nil
 }
 
-func (s *Scheduler) remindJob(job *Job) {
+const (
+	notifyActKeyNoLongerRemind = "no-longer-remind"
+	notifyActKeyRemindLater    = "remind-later"
+)
+
+func (s *Scheduler) remindJob(job *JobJSON) {
 	layout := "2006-01-02 15:04"
 	body := job.Start.Format(layout) + " ~ " + job.End.Format(layout)
 	logger.Debugf("remind now: %v, title: %v, body: %v", time.Now(), job.Title, body)
+
+	actions := []string{
+		notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+		notifyActKeyRemindLater, gettext.Tr("Remind later"),
+	}
 	id, err := s.notifications.Notify(0, "dde-daemon", 0,
 		"dde-calendar", job.Title,
-		body, nil, nil, 0)
+		body, actions, nil, 0)
 	if err != nil {
 		logger.Warning(err)
 		return
 	}
-	logger.Debug("id:", id)
-	jj, err := job.toJobJSON()
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
+	logger.Debug("notify id:", id)
+
 	s.notifyJobMapMu.Lock()
-	s.notifyJobMap[id] = jj
+	s.notifyJobMap[id] = job
 	s.notifyJobMapMu.Unlock()
+}
+
+func (s *Scheduler) remindJobLater(job *JobJSON) {
+	duration := 10 * time.Minute
+	if logger.GetLogLevel() == log.LevelDebug {
+		duration = 10 * time.Second
+	}
+
+	timer := time.AfterFunc(duration, func() {
+		s.remindLaterTimersMu.Lock()
+		delete(s.remindLaterTimers, job.ID)
+		s.remindLaterTimersMu.Unlock()
+
+		s.remindJob(job)
+	})
+	s.remindLaterTimersMu.Lock()
+	s.remindLaterTimers[job.ID] = timer
+	s.remindLaterTimersMu.Unlock()
 }
 
 func (s *Scheduler) DebugRemindJob(id int64) *dbus.Error {
@@ -362,12 +416,16 @@ func (s *Scheduler) DebugRemindJob(id int64) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
-	s.remindJob(&job)
+	jj, err := job.toJobJSON()
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	s.remindJob(jj)
 	return nil
 }
 
-func (s *Scheduler) notifyJobsChange() {
-	s.changeChan <- struct{}{}
+func (s *Scheduler) notifyJobsChange(id uint) {
+	s.changeChan <- id
 }
 
 func (s *Scheduler) startRemindLoop() {
@@ -397,9 +455,18 @@ func (s *Scheduler) startRemindLoop() {
 			case now := <-ticker.C:
 				setTimerGroup(now)
 
-			case <-s.changeChan:
+			case id := <-s.changeChan:
 				now := time.Now()
 				setTimerGroup(now)
+
+				s.remindLaterTimersMu.Lock()
+				timer := s.remindLaterTimers[id]
+				if timer != nil {
+					logger.Debug("cancel remind later", id)
+					timer.Stop()
+					delete(s.remindLaterTimers, id)
+				}
+				s.remindLaterTimersMu.Unlock()
 
 			case <-s.quitChan:
 				return
