@@ -82,6 +82,23 @@ func TestParseRemind(t *testing.T) {
 	}
 }
 
+func TestGetRemindAdvanceDays(t *testing.T) {
+	n, err := getRemindAdvanceDays("0;09:00")
+	assert.Nil(t, err)
+	assert.Equal(t, 0, n)
+	n, err = getRemindAdvanceDays("1;09:00")
+	assert.Nil(t, err)
+	assert.Equal(t, 1, n)
+
+	n, err = getRemindAdvanceDays("0")
+	assert.Nil(t, err)
+	assert.Equal(t, 0, n)
+
+	n, err = getRemindAdvanceDays("2880")
+	assert.Nil(t, err)
+	assert.Equal(t, 2, n)
+}
+
 func TestTimeRangeContains(t *testing.T) {
 	r := getTimeRange(newTimeYMDHM(2019, 1, 1, 0, 0),
 		newTimeYMDHM(2019, 1, 1, 2, 0))

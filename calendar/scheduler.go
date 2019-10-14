@@ -17,6 +17,7 @@ import (
 type Scheduler struct {
 	signalLoop          *dbusutil.SignalLoop
 	db                  *gorm.DB
+	service             *dbusutil.Service
 	notifications       *notifications.Notifications
 	notifyJobMap        map[uint32]*JobJSON // key is notification id
 	notifyJobMapMu      sync.Mutex
@@ -24,7 +25,7 @@ type Scheduler struct {
 	remindLaterTimers   map[uint]*time.Timer // key is job id
 	remindLaterTimersMu sync.Mutex
 
-	changeChan chan uint
+	changeChan chan []uint
 	quitChan   chan struct{}
 
 	methods *struct {
@@ -42,13 +43,20 @@ type Scheduler struct {
 
 		DebugRemindJob func() `in:"id"`
 	}
+
+	signals *struct {
+		JobsUpdated struct {
+			Ids []int64
+		}
+	}
 }
 
 func newScheduler(db *gorm.DB, service *dbusutil.Service) *Scheduler {
 	sessionBus := service.Conn()
 	s := &Scheduler{
 		db:                db,
-		changeChan:        make(chan uint),
+		service:           service,
+		changeChan:        make(chan []uint),
 		quitChan:          make(chan struct{}),
 		notifications:     notifications.NewNotifications(sessionBus),
 		notifyJobMap:      make(map[uint32]*JobJSON),
@@ -106,22 +114,47 @@ func (s *Scheduler) listenDBusSignals() {
 		logger.Warning(err)
 	}
 
-	_, err = s.notifications.ConnectActionInvoked(func(id uint32, actionKey string) {
-		logger.Debug("signal action invoked", id, actionKey)
+	_, err = s.notifications.ConnectActionInvoked(func(notifyId uint32, actionKey string) {
+		logger.Debug("signal action invoked", notifyId, actionKey)
+		s.notifyJobMapMu.Lock()
+		job := s.notifyJobMap[notifyId]
+		s.notifyJobMapMu.Unlock()
+
+		if job == nil {
+			return
+		}
+
 		switch actionKey {
 		case notifyActKeyRemindLater:
-			s.notifyJobMapMu.Lock()
-			job := s.notifyJobMap[id]
-			s.notifyJobMapMu.Unlock()
-
-			if job == nil {
-				return
-			}
 
 			logger.Debug("remind later", job.ID)
+			job.remindLaterCount++
 			s.remindJobLater(job)
+
+		case notifyActKey1DayAdvanceRemind:
+			err = s.setJob1DayAdvanceRemind(job)
+			if err != nil {
+				logger.Warning(err)
+			}
+
+		case notifyActKeyNextDayRemind:
+			err = s.setJobNextDayRemind(job)
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	})
+}
+
+func (s *Scheduler) emitJobsUpdated(ids ...uint) {
+	ids0 := make([]int64, len(ids))
+	for idx, value := range ids {
+		ids0[idx] = int64(value)
+	}
+	err := s.service.Emit(s, "JobsUpdated", ids0)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 const (
@@ -364,19 +397,52 @@ func (tg *timerGroup) reset() {
 }
 
 const (
-	notifyActKeyNoLongerRemind = "no-longer-remind"
-	notifyActKeyRemindLater    = "remind-later"
+	notifyActKeyNoLongerRemind    = "no-longer-remind"
+	notifyActKeyRemindLater       = "remind-later"
+	notifyActKey1DayAdvanceRemind = "1-day-advance-remind"
+	notifyActKeyNextDayRemind     = "next-day-remind"
 )
 
 func (s *Scheduler) remindJob(job *JobJSON) {
+	if job.Remind == "" {
+		logger.Warning("job.Remind is empty")
+		return
+	}
 	layout := "2006-01-02 15:04"
 	body := job.Start.Format(layout) + " ~ " + job.End.Format(layout)
-	logger.Debugf("remind now: %v, title: %v, body: %v", time.Now(), job.Title, body)
+	now := time.Now()
 
-	actions := []string{
-		notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
-		notifyActKeyRemindLater, gettext.Tr("Remind later"),
+	nDays, err := getRemindAdvanceDays(job.Remind)
+	if err != nil {
+		logger.Warning(err)
+		return
 	}
+
+	var actions []string
+	duration, durationMax := getRemindLaterDuration(job.remindLaterCount + 1)
+	if nDays >= 2 && job.remindLaterCount == 1 {
+		actions = []string{
+			notifyActKey1DayAdvanceRemind, gettext.Tr("1 day in advance to remind"),
+			notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+		}
+	} else if nDays == 1 && durationMax {
+		actions = []string{
+			notifyActKeyNextDayRemind, gettext.Tr("Next day to remind"),
+			notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+		}
+	} else {
+		nextRemindTime := now.Add(duration)
+		logger.Debug("nextRemindTime:", nextRemindTime)
+		if nextRemindTime.Before(job.Start) {
+			actions = []string{
+				notifyActKeyRemindLater, gettext.Tr("Remind later"),
+				notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+			}
+		}
+	}
+
+	logger.Debugf("remind now: %v, title: %v, body: %v, actions: %#v",
+		now, job.Title, body, actions)
 	id, err := s.notifications.Notify(0, "dde-daemon", 0,
 		"dde-calendar", job.Title,
 		body, actions, nil, 0)
@@ -391,12 +457,127 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 	s.notifyJobMapMu.Unlock()
 }
 
-func (s *Scheduler) remindJobLater(job *JobJSON) {
-	duration := 10 * time.Minute
-	if logger.GetLogLevel() == log.LevelDebug {
-		duration = 10 * time.Second
+func (s *Scheduler) setJobRemind(jj *JobJSON, remind string) error {
+	var job Job
+	err := s.db.Find(&job, jj.ID).Error
+	if err != nil {
+		return err
 	}
 
+	if job.RRule != "" {
+		newJob := Job{
+			Type:        jj.Type,
+			Title:       jj.Title,
+			Description: jj.Description,
+			AllDay:      jj.AllDay,
+			Start:       jj.Start,
+			End:         jj.End,
+			Remind:      remind,
+		}
+		err = s.withTx(func(tx *gorm.DB) error {
+			ignore, err := job.getIgnore()
+			if err != nil {
+				return err
+			}
+
+			if !timeSliceContains(ignore, jj.Start) {
+				ignore = append(ignore, jj.Start)
+				err = job.setIgnore(ignore)
+				if err != nil {
+					return err
+				}
+
+				err = tx.Model(&job).Update("Ignore", job.Ignore).Error
+				if err != nil {
+					return err
+				}
+
+			} else {
+				logger.Warning("job.ignore already contains jj.Start")
+			}
+
+			err = tx.Create(&newJob).Error
+			return err
+		})
+		if err != nil {
+			return err
+		}
+		s.notifyJobsChange(job.ID, newJob.ID)
+		s.emitJobsUpdated(job.ID, newJob.ID)
+
+	} else {
+		err = s.db.Model(&job).Update("Remind", remind).Error
+		if err != nil {
+			return err
+		}
+		s.notifyJobsChange(job.ID)
+		s.emitJobsUpdated(job.ID)
+	}
+
+	return nil
+}
+
+func (s *Scheduler) withTx(fn func(db *gorm.DB) error) (err error) {
+	tx := s.db.Begin()
+	defer func() {
+		if p := recover(); p != nil {
+			// a panic occurred, rollback and re-panic
+			tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			// something went wrong, rollback
+			tx.Rollback()
+		} else {
+			// all good, commit
+			err = tx.Commit().Error
+		}
+	}()
+
+	err = fn(tx)
+	return err
+}
+
+func (s *Scheduler) setJob1DayAdvanceRemind(jj *JobJSON) error {
+	// 非全天，提醒改成24小时前
+	// 全天，提醒改成一天前的09:00。
+	remind := "1440"
+	if jj.AllDay {
+		remind = "1;09:00"
+	}
+	return s.setJobRemind(jj, remind)
+}
+
+func (s *Scheduler) setJobNextDayRemind(jj *JobJSON) error {
+	// 非全天，提醒改成1小时前；
+	// 全天，提醒改成当天09:00。
+	remind := "60"
+	if jj.AllDay {
+		remind = "0;09:00"
+	}
+	return s.setJobRemind(jj, remind)
+}
+
+func getRemindLaterDuration(count int) (time.Duration, bool) {
+	max := false
+	duration := time.Duration(10+((count-1)*5)) * time.Minute
+	if duration >= time.Hour {
+		max = true
+		duration = time.Hour
+	}
+
+	if logger.GetLogLevel() == log.LevelDebug {
+		duration = duration / 60
+		if count >= 3 {
+			max = true
+		}
+	}
+
+	return duration, max
+}
+
+func (s *Scheduler) remindJobLater(job *JobJSON) {
+	duration, _ := getRemindLaterDuration(job.remindLaterCount)
+	logger.Debug("remindJobLater duration:", duration)
 	timer := time.AfterFunc(duration, func() {
 		s.remindLaterTimersMu.Lock()
 		delete(s.remindLaterTimers, job.ID)
@@ -424,8 +605,8 @@ func (s *Scheduler) DebugRemindJob(id int64) *dbus.Error {
 	return nil
 }
 
-func (s *Scheduler) notifyJobsChange(id uint) {
-	s.changeChan <- id
+func (s *Scheduler) notifyJobsChange(ids ...uint) {
+	s.changeChan <- ids
 }
 
 func (s *Scheduler) startRemindLoop() {
@@ -455,16 +636,18 @@ func (s *Scheduler) startRemindLoop() {
 			case now := <-ticker.C:
 				setTimerGroup(now)
 
-			case id := <-s.changeChan:
+			case ids := <-s.changeChan:
 				now := time.Now()
 				setTimerGroup(now)
 
 				s.remindLaterTimersMu.Lock()
-				timer := s.remindLaterTimers[id]
-				if timer != nil {
-					logger.Debug("cancel remind later", id)
-					timer.Stop()
-					delete(s.remindLaterTimers, id)
+				for _, id := range ids {
+					timer := s.remindLaterTimers[id]
+					if timer != nil {
+						logger.Debug("cancel remind later", id)
+						timer.Stop()
+						delete(s.remindLaterTimers, id)
+					}
 				}
 				s.remindLaterTimersMu.Unlock()
 

@@ -7,6 +7,7 @@ Bus 类型：session bus
 接口名称：com.deepin.daemon.Calendar.Scheduler
 
 
+# 方法
 
 ## 获取指定范围内的日程
 GetJobs(startYear int32, startMonth int32, startDay int32,
@@ -97,3 +98,9 @@ DeleteType(id int64) -> ()
 UpdateType(typeInfo string) -> ()
 
 参数 typeInfo 为 job type 的 JSON 表示。
+
+# 信号
+
+JobsUpdated(ids []int64)
+
+只在后端自己修改了 job 数据后发送，前端收到信号后，不用使用 ids 参数，刷新界面所需数据。

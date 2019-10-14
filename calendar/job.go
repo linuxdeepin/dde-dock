@@ -45,6 +45,8 @@ type JobJSON struct {
 	Remind      string
 	RecurID     int
 	Ignore      []time.Time
+
+	remindLaterCount int
 }
 
 func (j *Job) toJobJSON() (*JobJSON, error) {
@@ -121,6 +123,15 @@ func (j *Job) getIgnore() (result []time.Time, err error) {
 	}
 	err = fromJson(j.Ignore, &result)
 	return
+}
+
+func (j *Job) setIgnore(ignore []time.Time) error {
+	v, err := toJson(ignore)
+	if err != nil {
+		return err
+	}
+	j.Ignore = v
+	return nil
 }
 
 func timeSliceContains(timeSlice []time.Time, t time.Time) bool {
@@ -254,17 +265,38 @@ func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
 		jEndDate := jStartDate.Add(nDays)
 
 		if (dateRange{startDate, endDate}).overlap(dateRange{jStartDate, jEndDate}) {
-			if timeSliceContains(ignore, j.Start) {
+			if timeSliceContains(ignore, start) {
 				// ignore this job
-				continue
+			} else {
+				result = append(result, jobTime{start: start, recurID: count})
 			}
-			result = append(result, jobTime{start: start, recurID: count})
 		}
 
 		count++
 	}
 
 	return result, nil
+}
+
+// 返回提醒设置提前几天
+func getRemindAdvanceDays(remind string) (int, error) {
+	var err error
+	if remindReg1.MatchString(remind) {
+		var nDays, hour, min int
+		_, err = fmt.Sscanf(remind, "%d;%d:%d", &nDays, &hour, &min)
+		if err != nil {
+			return 0, err
+		}
+
+		return nDays, nil
+	}
+	var nMinutes int
+	nMinutes, err = strconv.Atoi(remind)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(float64(nMinutes) / float64(24*60)), nil
 }
 
 var remindReg1 = regexp.MustCompile(`\d;\d\d:\d\d`)
