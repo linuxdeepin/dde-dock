@@ -125,20 +125,20 @@ func (s *Scheduler) listenDBusSignals() {
 		}
 
 		switch actionKey {
-		case notifyActKeyRemindLater:
+		case notifyActKeyLater:
 
 			logger.Debug("remind later", job.ID)
 			job.remindLaterCount++
 			s.remindJobLater(job)
 
-		case notifyActKey1DayAdvanceRemind:
-			err = s.setJob1DayAdvanceRemind(job)
+		case notifyActKeyOneDayBefore:
+			err = s.setJobRemindOneDayBefore(job)
 			if err != nil {
 				logger.Warning(err)
 			}
 
-		case notifyActKeyNextDayRemind:
-			err = s.setJobNextDayRemind(job)
+		case notifyActKeyTomorrow:
+			err = s.setJobRemindTomorrow(job)
 			if err != nil {
 				logger.Warning(err)
 			}
@@ -397,10 +397,13 @@ func (tg *timerGroup) reset() {
 }
 
 const (
-	notifyActKeyNoLongerRemind    = "no-longer-remind"
-	notifyActKeyRemindLater       = "remind-later"
-	notifyActKey1DayAdvanceRemind = "1-day-advance-remind"
-	notifyActKeyNextDayRemind     = "next-day-remind"
+	notifyActKeyClose        = "close"
+	notifyActKeyLater        = "later"
+	notifyActKeyOneDayBefore = "one-day-before"
+	notifyActKeyTomorrow     = "tomorrow"
+
+	layoutYMDHM = "2006-01-02 15:04"
+	layoutHM    = "15:04"
 )
 
 func (s *Scheduler) remindJob(job *JobJSON) {
@@ -408,8 +411,7 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 		logger.Warning("job.Remind is empty")
 		return
 	}
-	layout := "2006-01-02 15:04"
-	body := job.Start.Format(layout) + " ~ " + job.End.Format(layout)
+
 	now := time.Now()
 
 	nDays, err := getRemindAdvanceDays(job.Remind)
@@ -422,29 +424,35 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 	duration, durationMax := getRemindLaterDuration(job.remindLaterCount + 1)
 	if nDays >= 2 && job.remindLaterCount == 1 {
 		actions = []string{
-			notifyActKey1DayAdvanceRemind, gettext.Tr("1 day in advance to remind"),
-			notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+			notifyActKeyOneDayBefore, gettext.Tr("One day before"),
+			notifyActKeyClose, gettext.Tr("Close"),
 		}
 	} else if nDays == 1 && durationMax {
 		actions = []string{
-			notifyActKeyNextDayRemind, gettext.Tr("Next day to remind"),
-			notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+			notifyActKeyTomorrow, gettext.Tr("Tomorrow"),
+			notifyActKeyClose, gettext.Tr("Close"),
 		}
 	} else {
 		nextRemindTime := now.Add(duration)
 		logger.Debug("nextRemindTime:", nextRemindTime)
 		if nextRemindTime.Before(job.Start) {
 			actions = []string{
-				notifyActKeyRemindLater, gettext.Tr("Remind later"),
-				notifyActKeyNoLongerRemind, gettext.Tr("No longer remind"),
+				notifyActKeyLater, gettext.Tr("Later"),
+				notifyActKeyClose, gettext.Tr("Close"),
+			}
+		} else {
+			actions = []string{
+				notifyActKeyClose, gettext.Tr("Close"),
 			}
 		}
 	}
 
+	title := gettext.Tr("Schedule Reminder")
+	body := job.getRemindBody(now)
 	logger.Debugf("remind now: %v, title: %v, body: %v, actions: %#v",
-		now, job.Title, body, actions)
+		now, title, body, actions)
 	id, err := s.notifications.Notify(0, "dde-daemon", 0,
-		"dde-calendar", job.Title,
+		"dde-calendar", title,
 		body, actions, nil, 0)
 	if err != nil {
 		logger.Warning(err)
@@ -537,7 +545,7 @@ func (s *Scheduler) withTx(fn func(db *gorm.DB) error) (err error) {
 	return err
 }
 
-func (s *Scheduler) setJob1DayAdvanceRemind(jj *JobJSON) error {
+func (s *Scheduler) setJobRemindOneDayBefore(jj *JobJSON) error {
 	// 非全天，提醒改成24小时前
 	// 全天，提醒改成一天前的09:00。
 	remind := "1440"
@@ -547,7 +555,7 @@ func (s *Scheduler) setJob1DayAdvanceRemind(jj *JobJSON) error {
 	return s.setJobRemind(jj, remind)
 }
 
-func (s *Scheduler) setJobNextDayRemind(jj *JobJSON) error {
+func (s *Scheduler) setJobRemindTomorrow(jj *JobJSON) error {
 	// 非全天，提醒改成1小时前；
 	// 全天，提醒改成当天09:00。
 	remind := "60"

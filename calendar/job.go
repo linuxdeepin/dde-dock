@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
 	libdate "github.com/rickb777/date"
 	"github.com/stephens2424/rrule"
+	"pkg.deepin.io/lib/gettext"
 )
 
 type Job struct {
@@ -386,4 +388,38 @@ func (j *Job) String() string {
 	buf.WriteString("rrule: " + j.RRule + "\n")
 
 	return buf.String()
+}
+
+func getBodyTimePart(today libdate.Date, t time.Time, start bool) string {
+	title := func(v string) string {
+		return v
+	}
+	if start {
+		title = strings.Title
+	}
+
+	msgStr := t.Format(layoutYMDHM)
+	date := libdate.NewAt(t)
+	diff := date.Sub(today)
+	if diff == 0 {
+		msgStr = title(gettext.Tr("today")) + " " + t.Format(layoutHM)
+	} else if diff == 1 {
+		msgStr = title(gettext.Tr("tomorrow")) + " " + t.Format(layoutHM)
+	}
+	return msgStr
+}
+
+func (job *JobJSON) getRemindBody(now time.Time) string {
+	today := libdate.NewAt(now)
+	msgStart := getBodyTimePart(today, job.Start, true)
+	msgEnd := getBodyTimePart(today, job.End, false)
+
+	startDate := libdate.NewAt(job.Start)
+	endDate := libdate.NewAt(job.End)
+	if startDate.Equal(endDate) {
+		msgEnd = job.End.Format(layoutHM)
+	}
+	to := gettext.Tr("%s to %s")
+	body := fmt.Sprintf(to, msgStart, msgEnd) + "  " + job.Title
+	return body
 }

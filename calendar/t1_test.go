@@ -216,3 +216,58 @@ func TestBetween(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Len(t, jobTimes, 0)
 }
+
+func TestGetBodyTimePart(t *testing.T) {
+	today := libdate.New(2019, 10, 15)
+	t1 := newTimeYMDHM(2019, 10, 15, 9, 0)
+	assert.Equal(t, "Today 09:00", getBodyTimePart(today, t1, true))
+	assert.Equal(t, "today 09:00", getBodyTimePart(today, t1, false))
+
+	t1 = newTimeYMDHM(2019, 10, 16, 9, 0)
+	assert.Equal(t, "Tomorrow 09:00", getBodyTimePart(today, t1, true))
+	assert.Equal(t, "tomorrow 09:00", getBodyTimePart(today, t1, false))
+
+	t1 = newTimeYMDHM(2019, 10, 17, 9, 0)
+	assert.Equal(t, "2019-10-17 09:00", getBodyTimePart(today, t1, true))
+	assert.Equal(t, "2019-10-17 09:00", getBodyTimePart(today, t1, false))
+}
+
+func TestGetRemindJobBody(t *testing.T) {
+	now := newTimeYMDHM(2019, 10, 15, 18, 59)
+
+	tests := []struct {
+		start  time.Time
+		end    time.Time
+		result string
+	}{
+		{start: newTimeYMDHM(2019, 10, 15, 9, 10),
+			end:    newTimeYMDHM(2019, 10, 15, 10, 20),
+			result: "Today 09:10 to 10:20  Job Title",
+		},
+		{
+			start:  newTimeYMDHM(2019, 10, 15, 9, 10),
+			end:    newTimeYMDHM(2019, 10, 16, 10, 20),
+			result: "Today 09:10 to tomorrow 10:20  Job Title",
+		},
+		{
+			start:  newTimeYMDHM(2019, 10, 17, 9, 10),
+			end:    newTimeYMDHM(2019, 10, 17, 10, 20),
+			result: "2019-10-17 09:10 to 10:20  Job Title",
+		},
+		{
+			start:  newTimeYMDHM(2019, 10, 17, 9, 10),
+			end:    newTimeYMDHM(2019, 10, 18, 10, 20),
+			result: "2019-10-17 09:10 to 2019-10-18 10:20  Job Title",
+		},
+	}
+
+	for idx, testData := range tests {
+		job := &JobJSON{
+			Start: testData.start,
+			End:   testData.end,
+			Title: "Job Title",
+		}
+		assert.Equal(t, testData.result, job.getRemindBody(now),
+			"idx %d", idx)
+	}
+}
