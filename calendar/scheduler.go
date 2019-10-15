@@ -125,19 +125,19 @@ func (s *Scheduler) listenDBusSignals() {
 		}
 
 		switch actionKey {
-		case notifyActKeyLater:
+		case notifyActKeyRemindLater:
 
 			logger.Debug("remind later", job.ID)
 			job.remindLaterCount++
 			s.remindJobLater(job)
 
-		case notifyActKeyOneDayBefore:
+		case notifyActKeyRemind1DayBefore:
 			err = s.setJobRemindOneDayBefore(job)
 			if err != nil {
 				logger.Warning(err)
 			}
 
-		case notifyActKeyTomorrow:
+		case notifyActKeyRemindTomorrow:
 			err = s.setJobRemindTomorrow(job)
 			if err != nil {
 				logger.Warning(err)
@@ -397,10 +397,10 @@ func (tg *timerGroup) reset() {
 }
 
 const (
-	notifyActKeyClose        = "close"
-	notifyActKeyLater        = "later"
-	notifyActKeyOneDayBefore = "one-day-before"
-	notifyActKeyTomorrow     = "tomorrow"
+	notifyActKeyClose            = "close"
+	notifyActKeyRemindLater      = "later"
+	notifyActKeyRemind1DayBefore = "one-day-before"
+	notifyActKeyRemindTomorrow   = "tomorrow"
 
 	layoutYMDHM = "2006-01-02 15:04"
 	layoutHM    = "15:04"
@@ -424,12 +424,12 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 	duration, durationMax := getRemindLaterDuration(job.remindLaterCount + 1)
 	if nDays >= 2 && job.remindLaterCount == 1 {
 		actions = []string{
-			notifyActKeyOneDayBefore, gettext.Tr("One day before"),
+			notifyActKeyRemind1DayBefore, gettext.Tr("One day before start"),
 			notifyActKeyClose, gettext.Tr("Close"),
 		}
 	} else if nDays == 1 && durationMax {
 		actions = []string{
-			notifyActKeyTomorrow, gettext.Tr("Tomorrow"),
+			notifyActKeyRemindTomorrow, gettext.Tr("Remind me tomorrow"),
 			notifyActKeyClose, gettext.Tr("Close"),
 		}
 	} else {
@@ -437,7 +437,7 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 		logger.Debug("nextRemindTime:", nextRemindTime)
 		if nextRemindTime.Before(job.Start) {
 			actions = []string{
-				notifyActKeyLater, gettext.Tr("Later"),
+				notifyActKeyRemindLater, gettext.Tr("Remind me later"),
 				notifyActKeyClose, gettext.Tr("Close"),
 			}
 		} else {
