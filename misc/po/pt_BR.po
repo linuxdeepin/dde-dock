@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 10:09+0800\n"
-"PO-Revision-Date: 2019-09-30 02:11+0000\n"
+"POT-Creation-Date: 2019-10-15 20:00+0800\n"
+"PO-Revision-Date: 2019-10-16 03:19+0000\n"
 "Last-Translator: Alex Wender\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr "O tamanho do nome de usuário excedeu o limite"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
-msgstr "Definido com sucesso"
+msgstr "Ajustado com sucesso"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
@@ -83,7 +83,7 @@ msgstr "Por favor, logue-se novamente para ver as alterações"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
-msgstr "Escala de exibição"
+msgstr "Escala de Exibição"
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
@@ -168,17 +168,51 @@ msgstr "Falha ao conectar a %q, o emparelhamento falhou"
 msgid "Bluetooth connection failed"
 msgstr "Falha na conexão bluetooth"
 
-#: ../../calendar/module.go:125
+#: ../../calendar/job.go:405
+msgid "today"
+msgstr "hoje"
+
+#: ../../calendar/job.go:407
+msgid "tomorrow"
+msgstr "amanhã"
+
+#: ../../calendar/job.go:422
+#, c-format
+msgid "%s to %s"
+msgstr "%s às %s"
+
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Trabalho"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Vida"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Outro"
+
+#: ../../calendar/scheduler.go:427
+msgid "One day before start"
+msgstr "Um dia antes do início"
+
+#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
+#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+msgid "Close"
+msgstr "Fechar"
+
+#: ../../calendar/scheduler.go:432
+msgid "Remind me tomorrow"
+msgstr "Lembre-me amanhã"
+
+#: ../../calendar/scheduler.go:440
+msgid "Remind me later"
+msgstr "Lembre-me mais tarde"
+
+#: ../../calendar/scheduler.go:450
+msgid "Schedule Reminder"
+msgstr "Agendar lembrete"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -206,7 +240,7 @@ msgstr "Todas as Janelas"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Espaço em disco insuficiente, por favor, limpe quando possível!"
+msgstr "Espaço insuficiente no disco. Favor liberar espaço!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -270,7 +304,7 @@ msgstr "Desligar Rapidamente a Tela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "Deepin System Monitor"
-msgstr "Deepin System Monitor"
+msgstr "Deepin Monitor do Sistema"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -370,23 +404,23 @@ msgstr "Exibir espaço de trabalho"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "A autenticação é necessária para mudar o idioma"
+msgstr "É necessária autenticação para alternar o idioma"
 
-#: ../../langselector/locale.go:389
+#: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
 msgstr "Não foi possível alterar o idioma do sistema, tente mais tarde"
 
-#: ../../langselector/locale.go:413
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Alterando o idioma do sistema e instalando os pacotes necessários, aguarde..."
 
-#: ../../langselector/locale.go:416
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Mudando o idioma do sistema, aguarde..."
 
-#: ../../langselector/locale.go:464
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "O idioma do sistema foi alterado, saia e faça login novamente"
 
@@ -435,11 +469,11 @@ msgstr "A fonte do sistema foi modificada, restaure a fonte oficial para o seu u
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr "%q removido com sucesso."
+msgstr "%q removido com sucesso"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr "Falha ao desinstalar %q."
+msgstr "Falha ao remover %q"
 
 #: ../../network/manager_active_conn.go:318
 msgid "A (5 GHz)"
@@ -556,7 +590,7 @@ msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr "Estado do dispositivo alterado."
+msgstr "O estado do dispositivo foi alterado"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
@@ -564,11 +598,11 @@ msgstr "Estado do dispositivo alterado, motivo desconhecido"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr "O dispositivo agora é gerenciado."
+msgstr "O dispositivo agora é gerenciado"
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr "O dispositivo não é mais gerenciado."
+msgstr "O dispositivo não é gerenciado"
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
@@ -577,37 +611,37 @@ msgstr "O dispositivo não está pronto para configuração"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "A configuração do IP não pôde ser reservada (sem endereços disponíveis, tempo esgotado, etc)."
+msgstr "A configuração IP não pôde ser reservada (sem endereço disponível, tempo limite, etc.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
-msgstr "A configuração de IP não é mais válida."
+msgstr "A configuração de IP não é válida"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr "Senhas foram requisitadas, mas não foram fornecidas."
+msgstr "As senhas foram necessárias, mas não fornecidas"
 
 #: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "O requisitante 802.1X se desconectou do ponto de acesso ou do servidor de autenticação."
+msgstr "O requisitante 802.1X se desconectou do ponto de acesso ou servidor de autenticação"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr "A configuração do requisitante 802.1X falhou."
+msgstr "A configuração do requisitante 802.1X falhou"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr "O requisitante 802.1X foi encerrado ou falhou inesperadamente."
+msgstr "O requisitante 802.1X saiu ou falhou inesperadamente"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr "O requisitante 802.1X demorou demais para se autenticar."
+msgstr "O requisitante 802.1X levou muito tempo para autenticar"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
-msgstr "O serviço PPP falhou em iniciar no tempo permitido."
+msgstr "O serviço PPP falhou em iniciar dentro do tempo permitido"
 
 #: ../../network/state_handler.go:52
 msgid "The PPP service disconnected unexpectedly"
@@ -619,59 +653,59 @@ msgstr "O serviço PPP foi encerrado ou falhou inesperadamente"
 
 #: ../../network/state_handler.go:54
 msgid "The DHCP service failed to start within the allowed time"
-msgstr "O serviço de DHCP falhou em iniciar no tempo permitido."
+msgstr "O serviço de DHCP falhou em iniciar dentro do tempo permitido"
 
 #: ../../network/state_handler.go:55
 msgid "The DHCP service reported an unexpected error"
-msgstr "O serviço de DHCP reportou um erro inesperado."
+msgstr "O serviço DHCP relatou um erro inesperado"
 
 #: ../../network/state_handler.go:56
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr "O serviço DHCP foi encerrado ou falhou inesperadamente."
+msgstr "O serviço DHCP foi encerrado ou falhou inesperadamente"
 
 #: ../../network/state_handler.go:57
 msgid "The shared connection service failed to start"
-msgstr "O serviço de conexão compartilhada falhou ao iniciar."
+msgstr "O serviço de conexão compartilhada falhou ao iniciar"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "O serviço de conexão compartilhada foi encerrado ou falhou inesperadamente."
+msgstr "O serviço de conexão compartilhada foi encerrado ou falhou inesperadamente"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
-msgstr "O serviço de AutoIP falhou em iniciar."
+msgstr "O serviço de AutoIP falhou ao iniciar"
 
 #: ../../network/state_handler.go:60
 msgid "The AutoIP service reported an unexpected error"
-msgstr "O serviço de AutoIP reportou um erro inesperado."
+msgstr "O serviço AutoIP relatou um erro inesperado"
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr "O serviço AutoIP foi encerrado ou falhou inesperadamente."
+msgstr "O serviço AutoIP foi encerrado ou falhou inesperadamente"
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
-msgstr "Discagem falhou devido a linhas ocupadas"
+msgstr "Falha na discagem devido a linhas ocupadas"
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
-msgstr "A discagem falhou pois não houve tom de discagem"
+msgstr "A discagem falhou devido a nenhum tom de discagem"
 
 #: ../../network/state_handler.go:64
 msgid "Dialing failed due to the carrier"
-msgstr "A falha na discagem foi causada pela operadora"
+msgstr "Falha na discagem devido à operadora"
 
 #: ../../network/state_handler.go:65
 msgid "Dialing timed out"
-msgstr "Tempo de discagem esgotado"
+msgstr "A discagem expirou"
 
 #: ../../network/state_handler.go:66
 msgid "Dialing failed"
-msgstr "Falha na discagem."
+msgstr "Falha na discagem"
 
 #: ../../network/state_handler.go:67
 msgid "Modem initialization failed"
-msgstr "Inicialização do modem falhou."
+msgstr "Falha na inicialização do modem"
 
 #: ../../network/state_handler.go:68
 msgid "Failed to select the specified GSM APN"
@@ -679,15 +713,15 @@ msgstr "Falha ao selecionar a APN GSM especificada"
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
-msgstr "Nenhuma rede pesquisada."
+msgstr "Nenhuma rede pesquisada"
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
-msgstr "Registro na rede negado"
+msgstr "O registro da rede foi negado"
 
 #: ../../network/state_handler.go:71
 msgid "Network registration timed out"
-msgstr "Tempo esgotado para registro na rede."
+msgstr "O tempo limite para o registro na rede expirou"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
@@ -695,11 +729,11 @@ msgstr "Falha ao registrar na rede GSM solicitada"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
-msgstr "Falha na autenticação do PIN"
+msgstr "Falha na verificação do PIN"
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr "Firmware necessário para o dispositivo pode estar faltando."
+msgstr "O firmware necessário para o dispositivo pode estar ausente"
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
@@ -707,19 +741,19 @@ msgstr "O dispositivo foi removido"
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
-msgstr "O gerenciador de rede hibernou"
+msgstr "O Gerenciador de Rede está inativo"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr "A conexão ativa do dispositivo foi removida ou desapareceu."
+msgstr "A conexão ativa do dispositivo foi removida ou desapareceu"
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr "O cliente ou usuário solicitou desconectar-se."
+msgstr "Um usuário ou cliente solicitou desconectar-se"
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr "A operadora/link do dispositivo mudou."
+msgstr "A operadora/link do dispositivo mudou"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
@@ -727,35 +761,35 @@ msgstr "A conexão existente do dispositivo foi assumida"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr "O requisitante 802.1x está disponível agora."
+msgstr "O requisitante 802.1x já está disponível"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
-msgstr "O modem não foi encontrado."
+msgstr "Não foi possível encontrar o modem"
 
 #: ../../network/state_handler.go:83
 msgid "The Bluetooth connection timed out or failed"
-msgstr "A conexão bluetooth expirou ou falhou."
+msgstr "A conexão Bluetooth expirou ou falhou"
 
 #: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr "Cartão SIM do Modem GSM não foi inserido."
+msgstr "O Cartão SIM do Modem GSM não foi inserido"
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr "É necessário o PIN do SIM do modem GSM."
+msgstr "É necessário o PIN do SIM do Modem GSM"
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr "É necessário o PUK do SIM do modem GSM."
+msgstr "É necessário o PUK do SIM do Modem GSM"
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
-msgstr "Erro no cartão SIM no modem GSM"
+msgstr "Erro no cartão SIM no Modem GSM"
 
 #: ../../network/state_handler.go:88
 msgid "InfiniBand device does not support connected mode"
-msgstr "Dispositivo InifiniBand não suporta modo conectado."
+msgstr "O dispositivo InifiniBand não suporta o modo conectado"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
@@ -763,39 +797,39 @@ msgstr "Uma dependência da conexão falhou"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr "Erro de ponte de rede RFC 2684 para ADSL"
+msgstr "Erro de ponte de Ethernet RFC 2684 para ADSL"
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr "Gerenciador de modem não estava sendo executado ou foi fechado inesperadamente."
+msgstr "O Gerenciador do Modem não foi executado ou encerrado inesperadamente"
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "A conexão Wi-fi 802.11 não pode ser encontrada."
+msgstr "Não foi possível encontrar a rede Wi-Fi 802.11"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr "Uma conexão secundária da conexão de base falhou."
+msgstr "Uma conexão secundária da conexão base falhou"
 
 #: ../../network/state_handler.go:96
 msgid "DCB or FCoE setup failed"
-msgstr "Falha na configuração do DCB ou FCoE."
+msgstr "Falha na instalação do DCB ou FCoE"
 
 #: ../../network/state_handler.go:97
 msgid "Network teaming control failed"
-msgstr "Falha no controle de agrupamento de rede."
+msgstr "O controle de agrupamento da rede falhou"
 
 #: ../../network/state_handler.go:98
 msgid "Modem failed to run or not available"
-msgstr "Modem falhou ao executar ou não está disponível"
+msgstr "O modem falhou ao executar ou não está disponível"
 
 #: ../../network/state_handler.go:99
 msgid "Modem now ready and available"
-msgstr "Modem está pronto e disponível."
+msgstr "O modem está pronto e disponível"
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr "PIN do SIM está incorreto."
+msgstr "O PIN do SIM está incorreto"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
@@ -803,24 +837,24 @@ msgstr "A ativação da nova conexão está sendo solicitada"
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
-msgstr "O dispositivo pai mudou"
+msgstr "O dispositivo pai alterou"
 
 #: ../../network/state_handler.go:103
 msgid "Management status of parent device changed"
-msgstr "O status de gerenciamento do dispositivo pai foi alterado"
+msgstr "O estado de gerenciamento do dispositivo pai foi alterado"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr "Cabo de rede está desconectado."
+msgstr "O cabo de rede está desconectado"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Por favor, assegure-se que o cartão SIM inserido possua sinal de rede móvel."
+msgstr "Verifique se o cartão SIM inserido possuí sinal de rede móvel"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Certifique-se de que um plano correto foi selecionado sem atraso no cartão SIM"
+msgstr "Verifique o plano selecionado sem ter débitos atrasados no cartão SIM"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -841,23 +875,23 @@ msgstr "O estado da conexão VPN foi alterado por ter sido desconectada dos disp
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr "Serviço VPN parado"
+msgstr "Serviço de VPN parado"
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr "A configuração do IP do VPN era inválida."
+msgstr "A configuração de IP da conexão VPN é inválida"
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
-msgstr "A tentativa de conexão ao serviço VPN expirou"
+msgstr "A tentativa de conexão com o serviço VPN expirou"
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr "A inicialização do serviço VPN expirou."
+msgstr "A inicialização do serviço VPN expirou"
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
-msgstr "Serviço VPN falhou ao iniciar"
+msgstr "O serviço VPN falhou ao iniciar"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
@@ -865,7 +899,7 @@ msgstr "A senha da conexão VPN não foi fornecida"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr "Autenticação com servidor VPN falhou"
+msgstr "Falha na autenticação no servidor VPN"
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
@@ -873,7 +907,7 @@ msgstr "A conexão foi excluída das configurações"
 
 #: ../../network/state_handler.go:251
 msgid "Try enabling hotspot"
-msgstr "Tente habilitar o hotspot"
+msgstr "Tente ativar o Hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Try connecting %q"
@@ -881,7 +915,7 @@ msgstr "Tente conectar %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot share enabled"
-msgstr "Hotspot compartilhado habilitado"
+msgstr "Compartilhamento de Hotspot ativado"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -889,7 +923,7 @@ msgstr "%q conectada"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot share turned off"
-msgstr "O compartilhamento do hotspot está desativado"
+msgstr "Compartilhamento de Hotspot desativado"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -897,15 +931,15 @@ msgstr "%q desconectado"
 
 #: ../../network/state_handler.go:333
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Não é possível compartilhar o hotspot, verifique as configurações do dnsmasq"
+msgstr "Não foi possível compartilhar o Hotspot; verifique as configurações do dnsmasq"
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Não é possível conectar %q, fique mais perto do roteador wireless"
+msgstr "Não é possível conectar-se a %q; verifique a intensidade do sinal Wi-Fi"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Não é possível conectar %q, verifique o roteador ou o cabo de rede."
+msgstr "Não é possível conectar %q; verifique o roteador ou cabo de rede."
 
 #: ../../network/state_handler.go:340 ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"

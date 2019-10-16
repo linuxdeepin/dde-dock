@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 10:09+0800\n"
-"PO-Revision-Date: 2019-09-12 13:47+0000\n"
-"Last-Translator: scootergrisen\n"
+"POT-Creation-Date: 2019-10-15 20:00+0800\n"
+"PO-Revision-Date: 2019-10-16 01:57+0000\n"
+"Last-Translator: 31c8ff7daf246c6bd598eefe84c1433c\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -150,17 +150,51 @@ msgstr "Kunne ikke tilslutte %q, parring mislykkedes"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../calendar/module.go:125
+#: ../../calendar/job.go:405
+msgid "today"
+msgstr ""
+
+#: ../../calendar/job.go:407
+msgid "tomorrow"
+msgstr ""
+
+#: ../../calendar/job.go:422
+#, c-format
+msgid "%s to %s"
+msgstr ""
+
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Arbejde"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Leve"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Andre"
+
+#: ../../calendar/scheduler.go:427
+msgid "One day before start"
+msgstr ""
+
+#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
+#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+msgid "Close"
+msgstr "Luk"
+
+#: ../../calendar/scheduler.go:432
+msgid "Remind me tomorrow"
+msgstr ""
+
+#: ../../calendar/scheduler.go:440
+msgid "Remind me later"
+msgstr ""
+
+#: ../../calendar/scheduler.go:450
+msgid "Schedule Reminder"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -354,21 +388,21 @@ msgstr "Vis arbejdsområde"
 msgid "Authentication is required to switch language"
 msgstr "Der kræves autentifikation for at skifte sprog"
 
-#: ../../langselector/locale.go:389
+#: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
 msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
 
-#: ../../langselector/locale.go:413
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Skifter systemsproget og installerer de påkrævede sprogpakker, vent venligst..."
 
-#: ../../langselector/locale.go:416
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Skifter systemsprog, vent venligst..."
 
-#: ../../langselector/locale.go:464
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Systemsproget blev ændret. Log venligst ud og ind igen"
 

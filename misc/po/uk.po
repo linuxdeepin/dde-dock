@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 10:09+0800\n"
-"PO-Revision-Date: 2019-09-11 02:13+0000\n"
-"Last-Translator: Yuriy Moskalchuk <termosyura@ukr.net>\n"
+"POT-Creation-Date: 2019-10-15 20:00+0800\n"
+"PO-Revision-Date: 2019-10-16 01:57+0000\n"
+"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -151,17 +151,51 @@ msgstr "Помилка підключення до %q, пара не створ�
 msgid "Bluetooth connection failed"
 msgstr "Збій підключення з Bluetooth"
 
-#: ../../calendar/module.go:125
+#: ../../calendar/job.go:405
+msgid "today"
+msgstr ""
+
+#: ../../calendar/job.go:407
+msgid "tomorrow"
+msgstr ""
+
+#: ../../calendar/job.go:422
+#, c-format
+msgid "%s to %s"
+msgstr ""
+
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Робота"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Життя"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Інше"
+
+#: ../../calendar/scheduler.go:427
+msgid "One day before start"
+msgstr ""
+
+#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
+#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+msgid "Close"
+msgstr "Закрити"
+
+#: ../../calendar/scheduler.go:432
+msgid "Remind me tomorrow"
+msgstr ""
+
+#: ../../calendar/scheduler.go:440
+msgid "Remind me later"
+msgstr ""
+
+#: ../../calendar/scheduler.go:450
+msgid "Schedule Reminder"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -355,21 +389,21 @@ msgstr "Показати робочій простір"
 msgid "Authentication is required to switch language"
 msgstr "Аутентифікація потрібна для перемикання мови"
 
-#: ../../langselector/locale.go:389
+#: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
 msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
 
-#: ../../langselector/locale.go:413
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Змінюється мова системи та встановлюються необхідні мовні пакети, зачекайте..."
 
-#: ../../langselector/locale.go:416
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Зміна мови системи, зачекайте..."
 
-#: ../../langselector/locale.go:464
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Змінено мову системи, вийдіть із системи та увійдіть"
 

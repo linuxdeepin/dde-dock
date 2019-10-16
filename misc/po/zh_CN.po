@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 10:09+0800\n"
-"PO-Revision-Date: 2019-10-10 05:14+0000\n"
+"POT-Creation-Date: 2019-10-15 20:00+0800\n"
+"PO-Revision-Date: 2019-10-16 02:10+0000\n"
 "Last-Translator: Cindy0514\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -153,17 +153,51 @@ msgstr "无法连接%q，配对失败"
 msgid "Bluetooth connection failed"
 msgstr "蓝牙连接失败"
 
-#: ../../calendar/module.go:125
+#: ../../calendar/job.go:405
+msgid "today"
+msgstr "今天"
+
+#: ../../calendar/job.go:407
+msgid "tomorrow"
+msgstr "明天"
+
+#: ../../calendar/job.go:422
+#, c-format
+msgid "%s to %s"
+msgstr "%s至%s"
+
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "工作"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "生活"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "其他"
+
+#: ../../calendar/scheduler.go:427
+msgid "One day before start"
+msgstr "提前1天提醒"
+
+#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
+#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+msgid "Close"
+msgstr "关闭"
+
+#: ../../calendar/scheduler.go:432
+msgid "Remind me tomorrow"
+msgstr "明天提醒"
+
+#: ../../calendar/scheduler.go:440
+msgid "Remind me later"
+msgstr "稍后提醒"
+
+#: ../../calendar/scheduler.go:450
+msgid "Schedule Reminder"
+msgstr "日程提醒"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -357,21 +391,21 @@ msgstr "显示工作区 "
 msgid "Authentication is required to switch language"
 msgstr "切换语言需要认证"
 
-#: ../../langselector/locale.go:389
+#: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
 msgstr "系统语言切换失败，请稍后重试"
 
-#: ../../langselector/locale.go:413
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "正在切换系统语言并安装缺失的语言包，请稍候…"
 
-#: ../../langselector/locale.go:416
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "正在切换系统语言，请稍候…"
 
-#: ../../langselector/locale.go:464
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "语言切换成功，请注销后重新登录"
 

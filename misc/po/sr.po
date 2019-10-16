@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 10:09+0800\n"
-"PO-Revision-Date: 2019-09-11 02:13+0000\n"
-"Last-Translator: Slobodan Simić <slsimic@gmail.com>\n"
+"POT-Creation-Date: 2019-10-15 20:00+0800\n"
+"PO-Revision-Date: 2019-10-16 05:30+0000\n"
+"Last-Translator: Марко Пејовић <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -149,17 +149,51 @@ msgstr "Неуспешно повезивање са %q, упаривање не
 msgid "Bluetooth connection failed"
 msgstr "Блутут повезивање неуспешно"
 
-#: ../../calendar/module.go:125
+#: ../../calendar/job.go:405
+msgid "today"
+msgstr "данас"
+
+#: ../../calendar/job.go:407
+msgid "tomorrow"
+msgstr "сутра"
+
+#: ../../calendar/job.go:422
+#, c-format
+msgid "%s to %s"
+msgstr "%s до %s"
+
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Посао"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Живот"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Остало"
+
+#: ../../calendar/scheduler.go:427
+msgid "One day before start"
+msgstr ""
+
+#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
+#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+msgid "Close"
+msgstr "Затвори"
+
+#: ../../calendar/scheduler.go:432
+msgid "Remind me tomorrow"
+msgstr ""
+
+#: ../../calendar/scheduler.go:440
+msgid "Remind me later"
+msgstr ""
+
+#: ../../calendar/scheduler.go:450
+msgid "Schedule Reminder"
+msgstr ""
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -353,21 +387,21 @@ msgstr "Приказ активности"
 msgid "Authentication is required to switch language"
 msgstr "Аутентификација је неопходна за промену језика"
 
-#: ../../langselector/locale.go:389
+#: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
 msgstr "Неуспешна промена језика система, молимо покушајте касније"
 
-#: ../../langselector/locale.go:413
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Промена језика система и инсталирање потребних језичких пакета, молимо сачекајте..."
 
-#: ../../langselector/locale.go:416
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Промена језика система, молимо сачекајте..."
 
-#: ../../langselector/locale.go:464
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Језик система је промењен, одјавите се, па се пријавите"
 
@@ -752,7 +786,7 @@ msgstr "УправникМодема се није покренуо или се 
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "802.11 Wi-Fi мрежа није пронађена"
+msgstr "802.11 Вај-Фај мрежа није пронађена"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
