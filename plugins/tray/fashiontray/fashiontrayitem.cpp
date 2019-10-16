@@ -194,11 +194,6 @@ void FashionTrayItem::onPluginSettingsChanged()
 void FashionTrayItem::showEvent(QShowEvent *event)
 {
     requestResize();
-    //抓托盘重叠问题log，以后删除打印
-    qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ controlWidget rect:"<<m_controlWidget->rect();
-    qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ normalContainer rect:"<<m_normalContainer->rect();
-    qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ controlWidget geometry:"<<m_controlWidget->geometry();
-    qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ normalContainer geometry:"<<m_normalContainer->geometry();
 
     QWidget::showEvent(event);
 }

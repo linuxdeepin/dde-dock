@@ -8,14 +8,7 @@ NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
     m_sizeAnimation->setEasingCurve(QEasingCurve::InOutCubic);
 
     connect(m_sizeAnimation, &QVariantAnimation::valueChanged, [ = ](const QVariant & value) {
-
-        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom) {
-            this->setMaximumWidth(value.toSize().width());
-            this->setMaximumHeight(DOCK_MAX_SIZE);
-        } else {
-            this->setMaximumWidth(DOCK_MAX_SIZE);
-            this->setMaximumHeight(value.toSize().height());
-        }
+        adjustMaxSize(value.toSize());
     });
 
     connect(m_sizeAnimation, &QVariantAnimation::finished, [ = ]() {
@@ -101,14 +94,28 @@ void NormalContainer::refreshVisible()
     m_sizeAnimation->setStartValue(size());
     m_sizeAnimation->setEndValue(endSize);
 
-    if (isVisible() == expand())
+    if (isVisible() == expand()) {
+        // 非x86平台，第一次启动setEndValue时，不进QVariantAnimation::valueChanged
+        adjustMaxSize(endSize);
         return;
+    }
 
     if (expand()) {
         setVisible(true);
     }
 
     m_sizeAnimation->start();
+}
+
+void NormalContainer::adjustMaxSize(const QSize size)
+{
+    if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom) {
+        this->setMaximumWidth(size.width());
+        this->setMaximumHeight(DOCK_MAX_SIZE);
+    } else {
+        this->setMaximumWidth(DOCK_MAX_SIZE);
+        this->setMaximumHeight(size.height());
+    }
 }
 
 void NormalContainer::setExpand(const bool expand)

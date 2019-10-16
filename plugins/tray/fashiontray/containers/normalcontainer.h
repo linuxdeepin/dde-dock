@@ -26,6 +26,7 @@ private:
     int whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
     int whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *wrapper) const;
     void compositeChanged();
+    void adjustMaxSize(const QSize size);
 
 private:
     mutable QVariantAnimation *m_sizeAnimation;
