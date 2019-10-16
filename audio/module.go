@@ -57,6 +57,7 @@ func (m *Module) start() error {
 		logger.Error("failed to connect pulseaudio server")
 		return nil
 	}
+	ctx.LoadModule("module-switch-on-connect", "")
 
 	m.audio = newAudio(ctx, service)
 	m.audio.init()
