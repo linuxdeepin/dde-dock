@@ -35,27 +35,45 @@ func (sc *syncConfig) Set(data []byte) error {
 
 	m := sc.m
 	if m.FontSize.Get() != v.FontSize {
-		m.FontSize.Set(v.FontSize)
+		err = m.doSetFontSize(v.FontSize)
+		if err != nil {
+			logger.Warning("failed to set font size:", err)
+		}
 	}
 
 	if m.GtkTheme.Get() != v.GTK {
-		m.GtkTheme.Set(v.GTK)
+		err = m.doSetGtkTheme(v.GTK)
+		if err != nil {
+			logger.Warning("failed to set gtk theme:", err)
+		}
 	}
 
 	if m.IconTheme.Get() != v.Icon {
-		m.IconTheme.Set(v.Icon)
+		err = m.doSetIconTheme(v.Icon)
+		if err != nil {
+			logger.Warning("failed to set icon theme:", err)
+		}
 	}
 
 	if m.CursorTheme.Get() != v.Cursor {
-		m.CursorTheme.Set(v.Cursor)
+		err = m.doSetCursorTheme(v.Cursor)
+		if err != nil {
+			logger.Warning("failed to set cursor theme:", err)
+		}
 	}
 
 	if m.StandardFont.Get() != v.FontStandard {
-		m.StandardFont.Set(v.FontStandard)
+		err = m.doSetStandardFont(v.FontStandard)
+		if err != nil {
+			logger.Warning("failed to set standard font:", err)
+		}
 	}
 
 	if m.MonospaceFont.Get() != v.FontMonospace {
-		m.MonospaceFont.Set(v.FontMonospace)
+		err = m.doSetMonospaceFont(v.FontMonospace)
+		if err != nil {
+			logger.Warning("failed to set monospace font:", err)
+		}
 	}
 
 	return nil
