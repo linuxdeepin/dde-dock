@@ -116,6 +116,9 @@ install: build translate install-dde-data install-icons install-pam-module
 	mkdir -pv ${DESTDIR}/etc/pulse/daemon.conf.d
 	cp -f misc/etc/pulse/daemon.conf.d/*.conf ${DESTDIR}/etc/pulse/daemon.conf.d/
 
+	mkdir -pv ${DESTDIR}/lib/udev/rules.d
+	cp -f misc/udev-rules/*.rules ${DESTDIR}/lib/udev/rules.d/
+
 install-pam-module:
 	mkdir -pv ${DESTDIR}/${PAM_MODULE_DIR}
 	cp -f out/pam_deepin_auth.so ${DESTDIR}/${PAM_MODULE_DIR}

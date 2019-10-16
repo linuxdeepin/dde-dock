@@ -1,0 +1,1 @@
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_interface", ACTION=="add|remove", ENV{LIBFPRINT_DRIVER}!="" RUN+="/usr/bin/dbus-send --system --dest=com.deepin.daemon.Fprintd --print-reply /com/deepin/daemon/Fprintd com.deepin.daemon.Fprintd.TriggerUDevEvent"

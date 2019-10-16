@@ -50,7 +50,7 @@ Architecture: any
 Depends: ${shlibs:Depends},
  ${misc:Depends},
  ${dist:Depends},
- upower,
+ dbus,
  network-manager,
  iso-codes,
  gvfs-bin,

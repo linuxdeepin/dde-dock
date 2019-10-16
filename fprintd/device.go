@@ -68,24 +68,49 @@ func newDevice(objPath dbus.ObjectPath, service *dbusutil.Service,
 	var dev Device
 	dev.service = service
 	dev.core, _ = fprint.NewDevice(systemSigLoop.Conn(), objPath)
-
-	dev.core.InitSignalExt(systemSigLoop, true)
-	dev.core.ConnectEnrollStatus(func(status string, ok bool) {
-		dev.service.Emit(&dev, "EnrollStatus", status, ok)
-	})
-	dev.core.ConnectVerifyStatus(func(status string, ok bool) {
-		dev.service.Emit(&dev, "VerifyStatus", status, ok)
-	})
-	dev.core.ConnectVerifyFingerSelected(func(finger string) {
-		dev.service.Emit(&dev, "VerifyFingerSelected", finger)
-	})
-
+	dev.listenDBusSignals(systemSigLoop)
 	return &dev
+}
+
+func (dev *Device) listenDBusSignals(sigLoop *dbusutil.SignalLoop) {
+	dev.core.InitSignalExt(sigLoop, true)
+	_, err := dev.core.ConnectEnrollStatus(func(status string, ok bool) {
+		err := dev.service.Emit(dev, "EnrollStatus", status, ok)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = dev.core.ConnectVerifyStatus(func(status string, ok bool) {
+		err := dev.service.Emit(dev, "VerifyStatus", status, ok)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = dev.core.ConnectVerifyFingerSelected(func(finger string) {
+		err := dev.service.Emit(dev, "VerifyFingerSelected", finger)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (dev *Device) destroy() {
 	dev.core.RemoveHandler(proxy.RemoveAllHandlers)
-	dev.service.StopExport(dev)
+	err := dev.service.StopExport(dev)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (dev *Device) Claim(username string) *dbus.Error {
@@ -165,15 +190,10 @@ func destroyDevices(list Devices) {
 
 func (devList Devices) Add(objPath dbus.ObjectPath, service *dbusutil.Service,
 	systemSigLoop *dbusutil.SignalLoop) Devices {
-	dev := devList.Get(objPath)
-	if dev != nil {
-		return devList
-	}
-
 	var v = newDevice(objPath, service, systemSigLoop)
 	err := service.Export(v.getPath(), v)
 	if err != nil {
-		logger.Warning("Failed to export:", objPath)
+		logger.Warning("failed to export:", objPath)
 		return devList
 	}
 

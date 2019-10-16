@@ -20,9 +20,12 @@
 package fprintd
 
 import (
+	"errors"
 	"sync"
+	"time"
 
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
+	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -34,18 +37,25 @@ const (
 	dbusInterface       = dbusServiceName
 	dbusDeviceInterface = dbusServiceName + ".Device"
 
-	fprintDBusServiceName  = "net.reactivated.Fprint"
-	fprintDBusPath         = "/net/reactivated/Fprint/"
-	fprintManagerInterface = "net.reactivated.Fprint.Manager"
-	fprintDeviceInterface  = "net.reactivated.Fprint.Device"
+	systemdDBusServiceName = "org.freedesktop.systemd1"
+	systemdDBusPath        = "/org/freedesktop/systemd1"
+	systemdDBusInterface   = systemdDBusServiceName + ".Manager"
 )
+
+//go:generate dbusutil-gen -type Manager -import pkg.deepin.io/lib/dbus1 manager.go
 
 type Manager struct {
 	service       *dbusutil.Service
-	systemSigLoop *dbusutil.SignalLoop
-	core          *fprint.Manager
-	devList       Devices
-	devLocker     sync.Mutex
+	sysSigLoop    *dbusutil.SignalLoop
+	fprintManager *fprint.Manager
+	dbusDaemon    *ofdbus.DBus
+	devices       Devices
+	devicesMu     sync.Mutex
+	fprintCh      chan struct{}
+
+	PropsMu sync.RWMutex
+	// dbusutil-gen: equal=nil
+	Devices []dbus.ObjectPath
 
 	methods *struct {
 		GetDefaultDevice func() `out:"device"`
@@ -61,13 +71,14 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 
 	return &Manager{
 		service:       service,
-		core:          fprint.NewManager(systemConn),
-		systemSigLoop: dbusutil.NewSignalLoop(systemConn, 10),
+		fprintManager: fprint.NewManager(systemConn),
+		dbusDaemon:    ofdbus.NewDBus(systemConn),
+		sysSigLoop:    dbusutil.NewSignalLoop(systemConn, 10),
 	}, nil
 }
 
 func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
-	objPath, err := m.core.GetDefaultDevice(0)
+	objPath, err := m.fprintManager.GetDefaultDevice(0)
 	if err != nil {
 		logger.Warning("Failed to get default device:", err)
 		return "/", dbusutil.ToError(err)
@@ -77,16 +88,78 @@ func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
 }
 
 func (m *Manager) GetDevices() ([]dbus.ObjectPath, *dbus.Error) {
-	devicePaths, err := m.core.GetDevices(0)
+	err := m.refreshDevices()
 	if err != nil {
 		return nil, dbusutil.ToError(err)
 	}
-	var ret []dbus.ObjectPath
-	for _, devPath := range devicePaths {
-		m.addDevice(devPath)
-		ret = append(ret, convertFPrintPath(devPath))
+	m.PropsMu.Lock()
+	paths := m.Devices
+	m.PropsMu.Unlock()
+	return paths, nil
+}
+
+func (m *Manager) refreshDevices() error {
+	devicePaths, err := m.fprintManager.GetDevices(0)
+	if err != nil {
+		return err
 	}
-	return ret, nil
+
+	var needDelete []dbus.ObjectPath
+	var needAdd []dbus.ObjectPath
+
+	m.devicesMu.Lock()
+
+	// 在 m.devList 但不在 devicePaths 中的记录在 needDelete
+	for _, d := range m.devices {
+		found := false
+		for _, devPath := range devicePaths {
+			if d.core.Path_() == devPath {
+				found = true
+				break
+			}
+		}
+		if !found {
+			needDelete = append(needDelete, d.core.Path_())
+		}
+	}
+
+	// 在 devicePaths 但不在 m.devList 中的记录在 needAdd
+	for _, devPath := range devicePaths {
+		found := false
+		for _, d := range m.devices {
+			if d.core.Path_() == devPath {
+				found = true
+				break
+			}
+		}
+		if !found {
+			needAdd = append(needAdd, devPath)
+		}
+	}
+
+	for _, devPath := range needDelete {
+		m.devices = m.devices.Delete(devPath)
+	}
+	for _, devPath := range needAdd {
+		m.devices = m.devices.Add(devPath, m.service, m.sysSigLoop)
+	}
+	m.devicesMu.Unlock()
+
+	m.updatePropDevices()
+	return nil
+}
+
+func (m *Manager) updatePropDevices() {
+	m.devicesMu.Lock()
+	paths := make([]dbus.ObjectPath, len(m.devices))
+	for idx, d := range m.devices {
+		paths[idx] = d.getPath()
+	}
+	m.devicesMu.Unlock()
+
+	m.PropsMu.Lock()
+	m.setPropDevices(paths)
+	m.PropsMu.Unlock()
 }
 
 func (*Manager) GetInterfaceName() string {
@@ -94,43 +167,52 @@ func (*Manager) GetInterfaceName() string {
 }
 
 func (m *Manager) init() {
-	m.systemSigLoop.Start()
-	list, err := m.core.GetDevices(0)
+	m.sysSigLoop.Start()
+	m.fprintCh = make(chan struct{}, 1)
+	m.listenDBusSignals()
+
+	paths, err := m.fprintManager.GetDevices(0)
 	if err != nil {
 		logger.Warning("Failed to get fprint devices:", err)
 		return
 	}
+	for _, devPath := range paths {
+		m.addDevice(devPath)
+	}
+	m.updatePropDevices()
+}
 
-	if len(list) == 0 {
-		logger.Info("Not found fprint device")
-		return
+func (m *Manager) listenDBusSignals() {
+	m.dbusDaemon.InitSignalExt(m.sysSigLoop, true)
+	_, err := m.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
+		fprintDBusServiceName := m.fprintManager.ServiceName_()
+		if name == fprintDBusServiceName && newOwner != "" {
+			select {
+			case m.fprintCh <- struct{}{}:
+			default:
+			}
+		}
+	})
+	if err != nil {
+		logger.Warning(err)
 	}
-	list0 := make([]dbus.ObjectPath, len(list))
-	for idx, devPath := range list {
-		list0[idx] = devPath
-	}
-	m.addDevices(list0)
 }
 
 func (m *Manager) addDevice(objPath dbus.ObjectPath) {
-	logger.Debug("Will add device:", objPath)
-	m.devLocker.Lock()
-	m.devList = m.devList.Add(objPath, m.service, m.systemSigLoop)
-	m.devLocker.Unlock()
-}
+	logger.Debug("add device:", objPath)
+	m.devicesMu.Lock()
+	defer m.devicesMu.Unlock()
 
-func (m *Manager) addDevices(pathList []dbus.ObjectPath) {
-	logger.Debug("Will add device list:", pathList)
-	m.devLocker.Lock()
-	for _, v := range pathList {
-		m.devList = m.devList.Add(v, m.service, m.systemSigLoop)
+	d := m.devices.Get(objPath)
+	if d != nil {
+		return
 	}
-	m.devLocker.Unlock()
+	m.devices = m.devices.Add(objPath, m.service, m.sysSigLoop)
 }
 
 func (m *Manager) destroy() {
-	destroyDevices(m.devList)
-	m.systemSigLoop.Stop()
+	destroyDevices(m.devices)
+	m.sysSigLoop.Stop()
 }
 
 func checkAuth(actionId string, busName string) (bool, error) {
@@ -149,4 +231,51 @@ func checkAuth(actionId string, busName string) (bool, error) {
 		return false, err
 	}
 	return ret.IsAuthorized, nil
+}
+
+func (m *Manager) TriggerUDevEvent(sender dbus.Sender) *dbus.Error {
+	uid, err := m.service.GetConnUID(string(sender))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	if uid != 0 {
+		err = errors.New("not root user")
+		return dbusutil.ToError(err)
+	}
+
+	logger.Debug("udev event")
+
+	select {
+	case <-m.fprintCh:
+	default:
+	}
+
+	err = restartSystemdService("fprintd.service", "replace")
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	select {
+	case <-m.fprintCh:
+		logger.Debug("fprintd started")
+	case <-time.After(5 * time.Second):
+		logger.Warning("wait fprintd restart timed out!")
+	}
+
+	err = m.refreshDevices()
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func restartSystemdService(name, mode string) error {
+	sysBus, err := dbus.SystemBus()
+	if err != nil {
+		return err
+	}
+	obj := sysBus.Object(systemdDBusServiceName, systemdDBusPath)
+	var jobPath dbus.ObjectPath
+	err = obj.Call(systemdDBusInterface+".RestartUnit", dbus.FlagNoAutoStart, name, mode).Store(&jobPath)
+	return err
 }
