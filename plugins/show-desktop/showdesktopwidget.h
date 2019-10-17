@@ -24,8 +24,6 @@
 
 #include <QWidget>
 
-#define POWER_KEY "show-desktop"
-
 class ShowDesktopWidget : public QWidget
 {
     Q_OBJECT

@@ -161,7 +161,7 @@ PluginsItemInterface::PluginType MultitaskingPlugin::type()
     return PluginType::Fixed;
 }
 
-void MultitaskingPlugin::updateBatteryVisible()
+void MultitaskingPlugin::updateVisible()
 {
     if (pluginIsDisable())
         m_proxyInter->itemRemoved(this, PLUGIN_KEY);
@@ -181,7 +181,7 @@ void MultitaskingPlugin::loadPlugin()
 
     m_proxyInter->itemAdded(this, pluginName());
 
-    updateBatteryVisible();
+    updateVisible();
 }
 
 void MultitaskingPlugin::refreshPluginItemsVisible()
@@ -193,6 +193,6 @@ void MultitaskingPlugin::refreshPluginItemsVisible()
             loadPlugin();
             return;
         }
-        updateBatteryVisible();
+        updateVisible();
     }
 }

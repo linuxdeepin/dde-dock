@@ -83,7 +83,7 @@ bool ShowDesktopPlugin::pluginIsDisable()
 
 const QString ShowDesktopPlugin::itemCommand(const QString &itemKey)
 {
-    if (itemKey == POWER_KEY)
+    if (itemKey == pluginName())
         QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
 
     return QString();
@@ -91,7 +91,7 @@ const QString ShowDesktopPlugin::itemCommand(const QString &itemKey)
 
 const QString ShowDesktopPlugin::itemContextMenu(const QString &itemKey)
 {
-    if (itemKey != POWER_KEY) {
+    if (itemKey != pluginName()) {
         return QString();
     }
 
@@ -132,7 +132,7 @@ void ShowDesktopPlugin::invokedMenuItem(const QString &itemKey, const QString &m
 
 void ShowDesktopPlugin::refreshIcon(const QString &itemKey)
 {
-    if (itemKey == POWER_KEY) {
+    if (itemKey == pluginName()) {
         m_showDesktopWidget->refreshIcon();
     }
 }
@@ -161,12 +161,12 @@ PluginsItemInterface::PluginType ShowDesktopPlugin::type()
     return PluginType::Fixed;
 }
 
-void ShowDesktopPlugin::updateBatteryVisible()
+void ShowDesktopPlugin::updateVisible()
 {
     if (pluginIsDisable())
-        m_proxyInter->itemRemoved(this, POWER_KEY);
+        m_proxyInter->itemRemoved(this, pluginName());
     else
-        m_proxyInter->itemAdded(this, POWER_KEY);
+        m_proxyInter->itemAdded(this, pluginName());
 }
 
 void ShowDesktopPlugin::loadPlugin()
@@ -181,18 +181,18 @@ void ShowDesktopPlugin::loadPlugin()
 
     m_proxyInter->itemAdded(this, pluginName());
 
-    updateBatteryVisible();
+    updateVisible();
 }
 
 void ShowDesktopPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, POWER_KEY);
+        m_proxyInter->itemRemoved(this, pluginName());
     } else {
         if (!m_pluginLoaded) {
             loadPlugin();
             return;
         }
-        updateBatteryVisible();
+        updateVisible();
     }
 }

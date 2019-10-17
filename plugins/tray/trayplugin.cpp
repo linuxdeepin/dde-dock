@@ -152,31 +152,6 @@ QWidget *TrayPlugin::itemPopupApplet(const QString &itemKey)
     return nullptr;
 }
 
-bool TrayPlugin::itemAllowContainer(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey);
-
-    if (trayWidget && trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
-        return false;
-    }
-
-    return true;
-}
-
-bool TrayPlugin::itemIsInContainer(const QString &itemKey)
-{
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
-    if (trayWidget == nullptr) {
-        return false;
-    }
-
-    const QString &key = "container_" + trayWidget->itemKeyForConfig();
-
-    return m_proxyInter->getValue(this, key, false).toBool();
-}
-
 int TrayPlugin::itemSortKey(const QString &itemKey)
 {
     // 如果是系统托盘图标则调用内部插件的相应接口
@@ -214,18 +189,6 @@ void TrayPlugin::setSortKey(const QString &itemKey, const int order)
 
     const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(displayMode());
     m_proxyInter->saveValue(this, key, order);
-}
-
-void TrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
-{
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
-    if (trayWidget == nullptr) {
-        return;
-    }
-
-    const QString &key = "container_" + trayWidget->itemKeyForConfig();
-
-    m_proxyInter->saveValue(this, key, container);
 }
 
 void TrayPlugin::refreshIcon(const QString &itemKey)

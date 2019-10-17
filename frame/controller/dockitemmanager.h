@@ -25,10 +25,8 @@
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
 #include "item/dockitem.h"
-#include "item/stretchitem.h"
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
-#include "item/containeritem.h"
 
 #include <com_deepin_dde_daemon_dock.h>
 
@@ -46,8 +44,6 @@ public:
     const QList<QPointer<DockItem> > itemList() const;
     const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
-    bool itemIsInContainer(DockItem *const item) const;
-    void setDropping(const bool dropping);
     void startLoadPlugins() const;
 
 signals:
@@ -64,8 +60,6 @@ public slots:
     void updatePluginsItemOrderKey();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);
-    void itemDroppedIntoContainer(DockItem *const item);
-    void itemDragOutFromContainer(DockItem *const item);
     void refreshFSTItemSpliterVisible();
 
 private:
@@ -82,8 +76,6 @@ private:
     QTimer *m_updatePluginsOrderTimer;
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
-    StretchItem *m_placeholderItem;
-    ContainerItem *m_containerItem;
 
     static DockItemManager *INSTANCE;
 

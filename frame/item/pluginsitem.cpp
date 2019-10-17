@@ -37,12 +37,11 @@
 QPoint PluginsItem::MousePressPoint = QPoint();
 
 PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
-    : DockItem(parent),
-      m_pluginInter(pluginInter),
-      m_centralWidget(m_pluginInter->itemWidget(itemKey)),
-      m_itemKey(itemKey),
-      m_dragging(false),
-      m_hover(false)
+    : DockItem(parent)
+    , m_pluginInter(pluginInter)
+    , m_centralWidget(m_pluginInter->itemWidget(itemKey))
+    , m_itemKey(itemKey)
+    , m_dragging(false)
     , m_gsettings(nullptr)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
@@ -92,27 +91,6 @@ void PluginsItem::detachPluginWidget()
     QWidget *widget = m_pluginInter->itemWidget(m_itemKey);
     if (widget)
         widget->setParent(nullptr);
-}
-
-bool PluginsItem::allowContainer() const
-{
-    if (DockDisplayMode == Dock::Fashion)
-        return false;
-
-    return m_pluginInter->itemAllowContainer(m_itemKey);
-}
-
-bool PluginsItem::isInContainer() const
-{
-    if (DockDisplayMode == Dock::Fashion)
-        return false;
-
-    return m_pluginInter->itemIsInContainer(m_itemKey);
-}
-
-void PluginsItem::setInContainer(const bool container)
-{
-    m_pluginInter->setItemIsInContainer(m_itemKey, container);
 }
 
 QString PluginsItem::pluginName() const
@@ -201,7 +179,7 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
     m_hover = false;
     update();
 
-    if (!isInContainer() && PopupWindow->isVisible())
+    if (PopupWindow->isVisible())
         hideNonModel();
 
     if (e->button() == Qt::LeftButton)
@@ -310,9 +288,6 @@ void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
 
 void PluginsItem::showPopupWindow(QWidget *const content, const bool model)
 {
-    if (isInContainer())
-        return;
-
     DockItem::showPopupWindow(content, model);
 }
 

@@ -150,10 +150,6 @@ void DockItem::mousePressEvent(QMouseEvent *e)
     hideNonModel();
 
     if (e->button() == Qt::RightButton) {
-        if (itemType() == ItemType::Container) {
-            // ignore this event to MainPanel/MainWindow to show context menu of MainWindow
-            return e->ignore();
-        }
         if (perfectIconRect().contains(e->pos())) {
             return showContextMenu();
         }

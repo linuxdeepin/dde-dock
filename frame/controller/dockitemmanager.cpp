@@ -21,12 +21,10 @@
 
 #include "dockitemmanager.h"
 #include "item/appitem.h"
-#include "item/stretchitem.h"
 #include "item/launcheritem.h"
 #include "item/pluginsitem.h"
 #include "item/traypluginitem.h"
 #include "util/docksettings.h"
-#include "item/showdesktopitem.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -38,7 +36,6 @@ DockItemManager::DockItemManager(QObject *parent)
     , m_updatePluginsOrderTimer(new QTimer(this))
     , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_pluginsInter(new DockPluginsController(this))
-    , m_containerItem(new ContainerItem)
 {
     //固定区域：启动器
     m_itemList.append(new LauncherItem);
@@ -101,16 +98,6 @@ bool DockItemManager::appIsOnDock(const QString &appDesktop) const
     return m_appInter->IsOnDock(appDesktop);
 }
 
-bool DockItemManager::itemIsInContainer(DockItem *const item) const
-{
-    return m_containerItem->contains(item);
-}
-
-void DockItemManager::setDropping(const bool dropping)
-{
-    m_containerItem->setDropping(dropping);
-}
-
 void DockItemManager::startLoadPlugins() const
 {
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
@@ -155,7 +142,7 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
 
     // app move
     if (moveType == DockItem::App || moveType == DockItem::Placeholder)
-        if (replaceType != DockItem::App && replaceType != DockItem::Stretch)
+        if (replaceType != DockItem::App)
             return;
 
     // plugins move
@@ -164,10 +151,7 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
             return;
 
     const int moveIndex = m_itemList.indexOf(sourceItem);
-    const int replaceIndex = replaceType == DockItem::Stretch ?
-                             // disable insert after placeholder item
-                             m_itemList.indexOf(targetItem) - 1 :
-                             m_itemList.indexOf(targetItem);
+    const int replaceIndex = m_itemList.indexOf(targetItem);
 
     m_itemList.removeAt(moveIndex);
     m_itemList.insert(replaceIndex, sourceItem);
@@ -188,44 +172,6 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
 void DockItemManager::itemAdded(const QString &appDesktop, int idx)
 {
     m_appInter->RequestDock(appDesktop, idx);
-}
-
-void DockItemManager::itemDroppedIntoContainer(DockItem *const item)
-{
-    Q_ASSERT(item->itemType() == DockItem::Plugins || item->itemType() == DockItem::TrayPlugin);
-
-    PluginsItem *pi = static_cast<PluginsItem *>(item);
-
-    if (!pi->allowContainer())
-        return;
-    if (m_containerItem->contains(item))
-        return;
-
-    // remove from main panel
-    emit itemRemoved(item);
-    m_itemList.removeOne(item);
-
-    // add to container
-    pi->setInContainer(true);
-    m_containerItem->addItem(item);
-}
-
-void DockItemManager::itemDragOutFromContainer(DockItem *const item)
-{
-//    qDebug() << "drag out from container" << item;
-
-    // remove from container
-    m_containerItem->removeItem(item);
-
-    // insert to panel
-    switch (item->itemType()) {
-    case DockItem::Plugins:
-    case DockItem::TrayPlugin:
-        static_cast<PluginsItem *>(item)->setInContainer(false);
-        pluginItemInserted(static_cast<PluginsItem *>(item));
-        break;
-    default:                  Q_UNREACHABLE();
-    }
 }
 
 // refresh right spliter visible of fashion tray plugin item
@@ -296,11 +242,6 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
 {
     manageItem(item);
 
-    // check item is in container
-    if (item->allowContainer() && item->isInContainer()) {
-        return itemDroppedIntoContainer(item);
-    }
-
     // find first plugins item position
     int firstPluginPosition = -1;
     for (int i(0); i != m_itemList.size(); ++i) {
@@ -350,10 +291,7 @@ void DockItemManager::pluginItemRemoved(PluginsItem *item)
 {
     item->hidePopup();
 
-    if (m_containerItem->contains(item))
-        m_containerItem->removeItem(item);
-    else
-        emit itemRemoved(item);
+    emit itemRemoved(item);
 
     m_itemList.removeOne(item);
 }

@@ -55,7 +55,7 @@ public:
     PluginType type() override;
 
 private:
-    void updateBatteryVisible();
+    void updateVisible();
     void loadPlugin();
     void refreshPluginItemsVisible();
 

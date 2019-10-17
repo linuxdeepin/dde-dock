@@ -31,15 +31,13 @@ class PluginsItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = 0);
-    ~PluginsItem();
+    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    ~PluginsItem() override;
 
     int itemSortKey() const;
     void setItemSortKey(const int order) const;
     void detachPluginWidget();
 
-    bool allowContainer() const;
-    bool isInContainer() const;
     void setInContainer(const bool container);
 
     QString pluginName() const;
@@ -53,7 +51,7 @@ public:
 
     QWidget *centralWidget() const;
 
-    virtual void setDraging(bool bDrag);
+    virtual void setDraging(bool bDrag) override;
 
 public slots:
     void refershIcon() override;
@@ -85,7 +83,6 @@ private:
 
     const QString m_itemKey;
     bool m_dragging;
-    bool m_hover;
 
     static QPoint MousePressPoint;
     QGSettings *m_gsettings;

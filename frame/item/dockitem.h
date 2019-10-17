@@ -43,10 +43,8 @@ public:
     enum ItemType {
         Launcher,
         App,
-        Stretch,
         Plugins,
         FixedPlugin,
-        Container,
         Placeholder,
         TrayPlugin,
     };
