@@ -232,6 +232,11 @@ void SoundApplet::refreshIcon()
     }
 
     const auto ratio = devicePixelRatioF();
-    m_volumeIconMax->setPixmap(QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
-    m_volumeBtn->setPixmap(QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
+    QPixmap ret = QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+    ret.setDevicePixelRatio(ratio);
+    m_volumeIconMax->setPixmap(ret);
+
+    ret = QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+    ret.setDevicePixelRatio(ratio);
+    m_volumeBtn->setPixmap(ret);
 }

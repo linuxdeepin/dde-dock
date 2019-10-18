@@ -162,6 +162,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
 
 
     m_securityPixmap = QIcon::fromTheme(isLight ? ":/wireless/resources/wireless/security_dark.svg" : ":/wireless/resources/wireless/security.svg").pixmap(s * devicePixelRatioF());
+    m_securityPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_securityLabel->setPixmap(m_securityPixmap);
 
     m_disconnectBtn->setNormalPic(isLight ? ":/wireless/resources/wireless/select_dark.svg" : ":/wireless/resources/wireless/select.svg");

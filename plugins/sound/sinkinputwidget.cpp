@@ -137,6 +137,7 @@ void SinkInputWidget::setMuteIcon()
             iconString.append("-dark");
         }
         QPixmap muteIcon = QIcon::fromTheme(iconString).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+        muteIcon.setDevicePixelRatio(ratio);
         QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
         QPixmap temp(appIconSource.size());
@@ -196,6 +197,12 @@ void SinkInputWidget::refreshIcon()
     }
 
     const auto ratio = devicePixelRatioF();
-    m_volumeIconMax->setPixmap(QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
-    m_volumeBtnMin->setPixmap(QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio));
+    QPixmap ret = QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+    ret.setDevicePixelRatio(ratio);
+    m_volumeIconMax->setPixmap(ret);
+
+    ret = QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+    ret.setDevicePixelRatio(ratio);
+    m_volumeBtnMin->setPixmap(ret);
+
 }
