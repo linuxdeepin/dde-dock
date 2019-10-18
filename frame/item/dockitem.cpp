@@ -231,7 +231,7 @@ void DockItem::showContextMenu()
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.exec(QCursor::pos());
+    m_contextMenu.popup(QCursor::pos());
 
     onContextMenuAccepted();
 }
