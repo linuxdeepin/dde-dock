@@ -422,12 +422,12 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 
 	var actions []string
 	duration, durationMax := getRemindLaterDuration(job.remindLaterCount + 1)
-	if nDays >= 2 && job.remindLaterCount == 1 {
+	if nDays >= 3 && job.remindLaterCount == 1 {
 		actions = []string{
 			notifyActKeyRemind1DayBefore, gettext.Tr("One day before start"),
 			notifyActKeyClose, gettext.Tr("Close"),
 		}
-	} else if nDays == 1 && durationMax {
+	} else if (nDays == 1 || nDays == 2) && durationMax {
 		actions = []string{
 			notifyActKeyRemindTomorrow, gettext.Tr("Remind me tomorrow"),
 			notifyActKeyClose, gettext.Tr("Close"),
