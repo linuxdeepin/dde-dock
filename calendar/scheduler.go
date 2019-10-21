@@ -402,8 +402,7 @@ const (
 	notifyActKeyRemind1DayBefore = "one-day-before"
 	notifyActKeyRemindTomorrow   = "tomorrow"
 
-	layoutYMDHM = "2006-01-02 15:04"
-	layoutHM    = "15:04"
+	layoutHM = "15:04"
 )
 
 func (s *Scheduler) remindJob(job *JobJSON) {

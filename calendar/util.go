@@ -1,8 +1,10 @@
 package calendar
 
 import (
-	"encoding/json"
 	"time"
+
+	"encoding/json"
+	"pkg.deepin.io/lib/libc"
 )
 
 func newTimeYMDHM(y int, m time.Month, d int, h int, min int) time.Time {
@@ -39,4 +41,10 @@ func toJson(v interface{}) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+func cFormatTime(format string, t time.Time) string {
+	tm := libc.NewTm(t)
+	v := libc.Strftime(format, tm)
+	return v
 }

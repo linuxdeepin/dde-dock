@@ -390,7 +390,7 @@ func (j *Job) String() string {
 	return buf.String()
 }
 
-func getBodyTimePart(today libdate.Date, t time.Time, start bool) string {
+func getBodyTimePart(today libdate.Date, allDay bool, t time.Time, start bool) (msgStr string) {
 	title := func(v string) string {
 		return v
 	}
@@ -398,28 +398,48 @@ func getBodyTimePart(today libdate.Date, t time.Time, start bool) string {
 		title = strings.Title
 	}
 
-	msgStr := t.Format(layoutYMDHM)
 	date := libdate.NewAt(t)
 	diff := date.Sub(today)
-	if diff == 0 {
-		msgStr = title(gettext.Tr("today")) + " " + t.Format(layoutHM)
-	} else if diff == 1 {
-		msgStr = title(gettext.Tr("tomorrow")) + " " + t.Format(layoutHM)
+	if allDay {
+		msgStr = cFormatTime("%x", t)
+		if diff == 0 {
+			msgStr = title(gettext.Tr("today"))
+		} else if diff == 1 {
+			msgStr = title(gettext.Tr("tomorrow"))
+		}
+	} else {
+		msgStr = cFormatTime("%x %H:%M", t)
+		if diff == 0 {
+			msgStr = title(gettext.Tr("today")) + " " + t.Format(layoutHM)
+		} else if diff == 1 {
+			msgStr = title(gettext.Tr("tomorrow")) + " " + t.Format(layoutHM)
+		}
 	}
 	return msgStr
 }
 
-func (job *JobJSON) getRemindBody(now time.Time) string {
+func (job *JobJSON) getRemindBody(now time.Time) (body string) {
 	today := libdate.NewAt(now)
-	msgStart := getBodyTimePart(today, job.Start, true)
-	msgEnd := getBodyTimePart(today, job.End, false)
+	msgStart := getBodyTimePart(today, job.AllDay, job.Start, true)
+	msgEnd := getBodyTimePart(today, job.AllDay, job.End, false)
 
 	startDate := libdate.NewAt(job.Start)
 	endDate := libdate.NewAt(job.End)
-	if startDate.Equal(endDate) {
-		msgEnd = job.End.Format(layoutHM)
-	}
 	to := gettext.Tr("%s to %s")
-	body := fmt.Sprintf(to, msgStart, msgEnd) + "  " + job.Title
+	var prefix string
+	if job.AllDay {
+		if startDate.Equal(endDate) {
+			prefix = msgStart
+		} else {
+			prefix = fmt.Sprintf(to, msgStart, msgEnd)
+		}
+	} else {
+		if startDate.Equal(endDate) {
+			msgEnd = job.End.Format(layoutHM)
+		}
+		prefix = fmt.Sprintf(to, msgStart, msgEnd)
+	}
+
+	body = prefix + "  " + job.Title
 	return body
 }
