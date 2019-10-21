@@ -23,6 +23,7 @@
 #define MultitaskingWidget_H
 
 #include <QWidget>
+#include <QIcon>
 
 #define PLUGIN_KEY "multitasking"
 
@@ -41,6 +42,7 @@ signals:
 protected:
     void paintEvent(QPaintEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
+    QIcon m_icon;
 };
 
 #endif // MULTITASKINGWIDGET_H

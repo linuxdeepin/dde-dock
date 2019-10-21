@@ -30,6 +30,7 @@ MultitaskingWidget::MultitaskingWidget(QWidget *parent)
     : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_icon = QIcon::fromTheme(":/icons/deepin-multitasking-view.svg");
 }
 
 void MultitaskingWidget::refreshIcon()
@@ -50,9 +51,9 @@ void MultitaskingWidget::paintEvent(QPaintEvent *e)
     QPixmap icon;
 
     if (Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) {
-        icon = QIcon::fromTheme("deepin-multitasking-view").pixmap(size() * 0.8 * ratio);
+        icon = QIcon::fromTheme("deepin-multitasking-view", m_icon).pixmap(size() * 0.8 * ratio);
     } else {
-        icon = QIcon::fromTheme("deepin-multitasking-view").pixmap(size() * 0.7 * ratio);
+        icon = QIcon::fromTheme("deepin-multitasking-view", m_icon).pixmap(size() * 0.7 * ratio);
     }
 
     icon.setDevicePixelRatio(ratio);
