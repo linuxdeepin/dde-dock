@@ -154,38 +154,6 @@ void MainPanelControl::updateMainPanelLayout()
         break;
     }
 
-
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        m_fixedSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
-        m_appSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
-        m_traySpliter->setFixedSize(SPLITER_SIZE, height() * 0.5);
-    } else {
-        m_fixedSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
-        m_appSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
-        m_traySpliter->setFixedSize(width() * 0.5, SPLITER_SIZE);
-    }
-
-    for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
-        QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
-        if (w) {
-            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                w->setMaximumSize(height(), height());
-            } else {
-                w->setMaximumSize(width(), width());
-            }
-        }
-    }
-
-    for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
-        QWidget *w = m_fixedAreaLayout->itemAt(i)->widget();
-        if (w) {
-            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                w->setMaximumSize(height(), height());
-            } else {
-                w->setMaximumSize(width(), width());
-            }
-        }
-    }
 }
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
@@ -513,6 +481,38 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_appAreaSonWidget) {
         if (event->type() == QEvent::LayoutRequest) {
             m_appAreaSonWidget->adjustSize();
+
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+                m_fixedSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
+                m_appSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
+                m_traySpliter->setFixedSize(SPLITER_SIZE, height() * 0.5);
+            } else {
+                m_fixedSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
+                m_appSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
+                m_traySpliter->setFixedSize(width() * 0.5, SPLITER_SIZE);
+            }
+
+            for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
+                QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
+                if (w) {
+                    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+                        w->setMaximumSize(height(), height());
+                    } else {
+                        w->setMaximumSize(width(), width());
+                    }
+                }
+            }
+
+            for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
+                QWidget *w = m_fixedAreaLayout->itemAt(i)->widget();
+                if (w) {
+                    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+                        w->setMaximumSize(height(), height());
+                    } else {
+                        w->setMaximumSize(width(), width());
+                    }
+                }
+            }
         } else {
             moveAppSonWidget();
         }
