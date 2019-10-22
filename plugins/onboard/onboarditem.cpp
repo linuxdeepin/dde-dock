@@ -43,6 +43,7 @@ OnboardItem::OnboardItem(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
+    m_icon = QIcon::fromTheme(":/icons/icon/deepin-virtualkeyboard.svg");
 }
 
 QSize OnboardItem::sizeHint() const
@@ -116,7 +117,7 @@ const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) c
     const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap;
-    pixmap = QIcon::fromTheme(fileName).pixmap(size * ratio);
+    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(size * ratio);
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;

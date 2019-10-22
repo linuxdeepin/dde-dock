@@ -45,6 +45,8 @@ TrashWidget::TrashWidget(QWidget *parent)
     setAcceptDrops(true);
 
     setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
+
+    m_defaulticon = QIcon::fromTheme(":/icons/user-trash.svg");
 }
 
 QWidget *TrashWidget::popupApplet()
@@ -167,10 +169,9 @@ void TrashWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
-    QPainter painter(this);
-
     updateIcon();
 
+    QPainter painter(this);
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_icon.rect());
     painter.drawPixmap(rf.center() - rfp.center() / devicePixelRatioF(), m_icon);
@@ -203,7 +204,7 @@ void TrashWidget::updateIcon()
         iconString.append("-symbolic");
 
     const int size = std::min(width(), height()) ;
-    QIcon icon = QIcon::fromTheme(iconString);
+    QIcon icon = QIcon::fromTheme(iconString, m_defaulticon);
 
     const auto ratio = devicePixelRatioF();
 

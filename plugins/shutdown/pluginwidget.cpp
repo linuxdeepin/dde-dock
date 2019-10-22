@@ -43,6 +43,7 @@ PluginWidget::PluginWidget(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
+    m_icon = QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg");
 }
 
 QSize PluginWidget::sizeHint() const
@@ -108,6 +109,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     painter.setOpacity(1);
 
     pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
+
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());
     painter.drawPixmap(rf.center() - rfp.center() / pixmap.devicePixelRatioF(), pixmap);
@@ -118,7 +120,7 @@ const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) 
     const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap;
-    pixmap = QIcon::fromTheme(fileName).pixmap(size * ratio);
+    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(size * ratio);
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;

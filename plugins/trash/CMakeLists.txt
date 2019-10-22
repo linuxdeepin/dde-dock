@@ -12,7 +12,7 @@ find_package(Qt5Svg REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS})
+add_library(${PLUGIN_NAME} SHARED ${SRCS} resource.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ../../interfaces)

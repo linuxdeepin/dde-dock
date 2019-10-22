@@ -33,6 +33,7 @@
 #include <QPixmap>
 #include <QMenu>
 #include <QAction>
+#include <QIcon>
 
 class TrashWidget : public QWidget
 {
@@ -68,6 +69,7 @@ private:
     PopupControlWidget *m_popupApplet;
 
     QPixmap m_icon;
+    QIcon m_defaulticon;
 };
 
 #endif // TRASHWIDGET_H

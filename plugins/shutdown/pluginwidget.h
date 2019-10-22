@@ -25,6 +25,7 @@
 #include "constants.h"
 
 #include <QWidget>
+#include <QIcon>
 
 class PluginWidget : public QWidget
 {
@@ -49,6 +50,7 @@ private:
     Dock::DisplayMode m_displayMode;
     bool m_hover;
     bool m_pressed;
+    QIcon m_icon;
 };
 
 #endif // PLUGINWIDGET_H
