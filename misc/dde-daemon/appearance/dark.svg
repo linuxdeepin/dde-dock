@@ -5,24 +5,23 @@
       <stop offset="0%" stop-color="#477DB3"/>
       <stop offset="100%" stop-color="#00237D"/>
     </linearGradient>
-    <rect id="dark-e" width="76" height="34" x="0" y="0" rx="8"/>
-    <filter id="dark-d" width="117.1%" height="138.2%" x="-8.6%" y="-16.2%" filterUnits="objectBoundingBox">
+    <linearGradient id="dark-d" x1="100%" x2="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#102E5B"/>
+      <stop offset="49.798%" stop-color="#821954"/>
+      <stop offset="100%" stop-color="#010A35"/>
+    </linearGradient>
+    <rect id="dark-f" width="76" height="34" x="0" y="0" rx="8"/>
+    <filter id="dark-e" width="117.1%" height="138.2%" x="-8.6%" y="-16.2%" filterUnits="objectBoundingBox">
       <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
       <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2"/>
       <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0"/>
     </filter>
-    <linearGradient id="dark-h" x1="50%" x2="50%" y1="0%" y2="100%">
+    <linearGradient id="dark-g" x1="50%" x2="50%" y1="0%" y2="100%">
       <stop offset="0%" stop-color="#232323" stop-opacity=".5"/>
       <stop offset="100%" stop-color="#1C1C1C" stop-opacity=".5"/>
     </linearGradient>
-    <path id="dark-g" d="M8,0 L68,0 C72.418278,-8.11624501e-16 76,3.581722 76,8 L76,17 L76,17 L0,17 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
-    <filter id="dark-f" width="127.6%" height="223.5%" x="-13.8%" y="-44.1%" filterUnits="objectBoundingBox">
-      <feOffset dy="3" in="SourceAlpha" result="shadowOffsetOuter1"/>
-      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3"/>
-      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
-      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0"/>
-    </filter>
-    <filter id="dark-i" width="117.1%" height="176.5%" x="-8.6%" y="-20.6%" filterUnits="objectBoundingBox">
+    <path id="dark-h" d="M8,0 L68,0 C72.418278,-8.11624501e-16 76,3.581722 76,8 L76,17 L76,17 L0,17 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
+    <filter id="dark-i" width="101.3%" height="105.9%" x="-.7%" y="-2.9%" filterUnits="objectBoundingBox">
       <feOffset dy="-1" in="SourceAlpha" result="shadowOffsetInner1"/>
       <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1"/>
       <feColorMatrix in="shadowInnerInner1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0"/>
@@ -37,7 +36,7 @@
     <path fill="#DC8FBB" d="M25,-0.165662651 C34.7263158,20.7981928 39.5894737,35.2981928 39.5894737,43.3343373 C39.5894737,51.3704819 42.0210526,58.0090361 46.8842105,63.25 L74.5,58.5331325 C71.2329118,50.7592088 68.975017,44.8194498 67.7263158,40.7138554 C60.6115519,17.3212827 55.9444175,1.77042172 52.0947368,-0.165662651 C47.2315789,-2.61144578 38.2,-2.61144578 25,-0.165662651 Z" mask="url(#dark-c)"/>
     <path fill="#A54B7B" d="M17,-0.1937751 C26.7263158,20.4487952 31.5894737,34.726573 31.5894737,42.6395582 C31.5894737,50.5525435 34.0210526,57.0893574 38.8842105,62.25 L66.5,57.6054217 C63.2329118,49.9506385 60.975017,44.1019103 59.7263158,40.0592369 C52.6115519,17.0251711 47.9444175,1.71263747 44.0947368,-0.1937751 C39.2315789,-2.60207497 30.2,-2.60207497 17,-0.1937751 Z" mask="url(#dark-c)"/>
     <g transform="translate(3 44)">
-      <rect width="95" height="9" fill="#000" fill-opacity=".6" rx="2.5"/>
+      <rect width="95" height="9" fill="url(#dark-d)" rx="2.5"/>
       <circle cx="4.5" cy="4.5" r="2.5" fill="#2876E8"/>
       <rect width="5" height="5" x="10" y="2" fill="#11B46F" rx="1.25"/>
       <rect width="5" height="5" x="43" y="2" fill="#11B46F" rx="1.25"/>
@@ -49,11 +48,10 @@
       <rect width="5" height="5" x="88" y="2" fill="#FFF" fill-opacity=".352" rx="1.25"/>
     </g>
     <g transform="translate(12 5)">
-      <use fill="#000" filter="url(#dark-d)" xlink:href="#dark-e"/>
-      <use fill="#343434" xlink:href="#dark-e"/>
-      <use fill="#000" filter="url(#dark-f)" xlink:href="#dark-g"/>
-      <use fill="url(#dark-h)" xlink:href="#dark-g"/>
-      <use fill="#000" filter="url(#dark-i)" xlink:href="#dark-g"/>
+      <use fill="#000" filter="url(#dark-e)" xlink:href="#dark-f"/>
+      <use fill="#343434" xlink:href="#dark-f"/>
+      <use fill="url(#dark-g)" xlink:href="#dark-h"/>
+      <use fill="#000" filter="url(#dark-i)" xlink:href="#dark-h"/>
       <g fill="#B0B5BF" fill-rule="nonzero" transform="translate(19 6)">
         <polygon points="6.556 1 7 1 7 0 6.556 0 .444 0 0 0 0 1 .444 1" transform="translate(0 2)"/>
         <polygon points="1.061 5.303 .707 5.657 0 4.95 .354 4.596 2.121 2.828 .354 1.061 0 .707 .707 0 1.061 .354 2.828 2.121 4.596 .354 4.95 0 5.657 .707 5.303 1.061 3.536 2.828 5.303 4.596 5.657 4.95 4.95 5.657 4.596 5.303 2.828 3.536" transform="translate(43)"/>

@@ -11,35 +11,32 @@
       <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2"/>
       <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0"/>
     </filter>
-    <linearGradient id="auto-h" x1="50%" x2="50%" y1="0%" y2="100%">
+    <linearGradient id="auto-f" x1="50%" x2="50%" y1="0%" y2="100%">
       <stop offset="0%" stop-color="#232323" stop-opacity=".5"/>
       <stop offset="100%" stop-color="#1C1C1C" stop-opacity=".5"/>
     </linearGradient>
     <path id="auto-g" d="M8,0 L68,0 C72.418278,-8.11624501e-16 76,3.581722 76,8 L76,17 L76,17 L0,17 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
-    <filter id="auto-f" width="127.6%" height="223.5%" x="-13.8%" y="-44.1%" filterUnits="objectBoundingBox">
-      <feOffset dy="3" in="SourceAlpha" result="shadowOffsetOuter1"/>
-      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3"/>
-      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
-      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0"/>
-    </filter>
-    <filter id="auto-i" width="117.1%" height="176.5%" x="-8.6%" y="-20.6%" filterUnits="objectBoundingBox">
+    <filter id="auto-h" width="101.3%" height="105.9%" x="-.7%" y="-2.9%" filterUnits="objectBoundingBox">
       <feOffset dy="-1" in="SourceAlpha" result="shadowOffsetInner1"/>
       <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1"/>
       <feColorMatrix in="shadowInnerInner1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0"/>
     </filter>
-    <path id="auto-j" d="M8,0 L38,0 L38,0 L38,34 L8,34 C3.581722,34 5.41083001e-16,30.418278 0,26 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
-    <path id="auto-m" d="M8,0 L68,0 C72.418278,-8.11624501e-16 76,3.581722 76,8 L76,17 L76,17 L0,17 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
-    <filter id="auto-l" width="144.7%" height="300%" x="-22.4%" y="-76.5%" filterUnits="objectBoundingBox">
+    <path id="auto-i" d="M8,0 L38,0 L38,0 L38,34 L8,34 C3.581722,34 5.41083001e-16,30.418278 0,26 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
+    <path id="auto-l" d="M8,0 L68,0 C72.418278,-8.11624501e-16 76,3.581722 76,8 L76,17 L76,17 L0,17 L0,8 C-5.41083001e-16,3.581722 3.581722,8.11624501e-16 8,0 Z"/>
+    <filter id="auto-k" width="144.7%" height="300%" x="-22.4%" y="-76.5%" filterUnits="objectBoundingBox">
       <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1"/>
       <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="5"/>
       <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
       <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.03 0"/>
     </filter>
-    <filter id="auto-n" width="127.6%" height="223.5%" x="-13.8%" y="-38.2%" filterUnits="objectBoundingBox">
-      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetInner1"/>
-      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1"/>
-      <feColorMatrix in="shadowInnerInner1" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.6 0"/>
-    </filter>
+    <linearGradient id="auto-m" x1="100%" x2="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#102E5B"/>
+      <stop offset="100%" stop-color="#821954"/>
+    </linearGradient>
+    <linearGradient id="auto-n" x1="0%" x2="100%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#A09AD3"/>
+      <stop offset="100%" stop-color="#988DD9"/>
+    </linearGradient>
   </defs>
   <g fill="none" fill-rule="evenodd">
     <mask id="auto-c" fill="#fff">
@@ -52,9 +49,8 @@
     <g transform="translate(12 5)">
       <use fill="#000" filter="url(#auto-d)" xlink:href="#auto-e"/>
       <use fill="#343434" xlink:href="#auto-e"/>
-      <use fill="#000" filter="url(#auto-f)" xlink:href="#auto-g"/>
-      <use fill="url(#auto-h)" xlink:href="#auto-g"/>
-      <use fill="#000" filter="url(#auto-i)" xlink:href="#auto-g"/>
+      <use fill="url(#auto-f)" xlink:href="#auto-g"/>
+      <use fill="#000" filter="url(#auto-h)" xlink:href="#auto-g"/>
       <g fill="#B0B5BF" fill-rule="nonzero" transform="translate(19 6)">
         <polygon points="6.556 1 7 1 7 0 6.556 0 .444 0 0 0 0 1 .444 1" transform="translate(0 2)"/>
         <polygon points="1.061 5.303 .707 5.657 0 4.95 .354 4.596 2.121 2.828 .354 1.061 0 .707 .707 0 1.061 .354 2.828 2.121 4.596 .354 4.95 0 5.657 .707 5.303 1.061 3.536 2.828 5.303 4.596 5.657 4.95 4.95 5.657 4.596 5.303 2.828 3.536" transform="translate(43)"/>
@@ -62,16 +58,15 @@
       </g>
     </g>
     <g transform="translate(12 5)">
-      <mask id="auto-k" fill="#fff">
-        <use xlink:href="#auto-j"/>
+      <mask id="auto-j" fill="#fff">
+        <use xlink:href="#auto-i"/>
       </mask>
-      <use fill="#F4F4F4" xlink:href="#auto-j"/>
-      <g mask="url(#auto-k)">
-        <use fill="#000" filter="url(#auto-l)" xlink:href="#auto-m"/>
-        <use fill="#FFF" fill-opacity=".8" xlink:href="#auto-m"/>
-        <use fill="#000" filter="url(#auto-n)" xlink:href="#auto-m"/>
+      <use fill="#F4F4F4" xlink:href="#auto-i"/>
+      <g mask="url(#auto-j)">
+        <use fill="#000" filter="url(#auto-k)" xlink:href="#auto-l"/>
+        <use fill="#FFF" fill-opacity=".8" xlink:href="#auto-l"/>
       </g>
-      <g mask="url(#auto-k)">
+      <g mask="url(#auto-j)">
         <g transform="translate(19 6)">
           <polygon fill="#626E88" fill-rule="nonzero" points="6.556 1 7 1 7 0 6.556 0 .444 0 0 0 0 1 .444 1" transform="translate(0 2)"/>
           <polygon fill="#626E88" fill-rule="nonzero" points="1.061 5.303 .707 5.657 0 4.95 .354 4.596 2.121 2.828 .354 1.061 0 .707 .707 0 1.061 .354 2.828 2.121 4.596 .354 4.95 0 5.657 .707 5.303 1.061 3.536 2.828 5.303 4.596 5.657 4.95 4.95 5.657 4.596 5.303 2.828 3.536" transform="translate(43)"/>
@@ -80,8 +75,8 @@
       </g>
     </g>
     <g transform="translate(3 44)">
-      <path fill="#000" fill-opacity=".6" d="M47,0 L92.5,0 C93.8807119,-2.53632657e-16 95,1.11928813 95,2.5 L95,6.5 C95,7.88071187 93.8807119,9 92.5,9 L47,9 L47,9 L47,0 Z"/>
-      <path fill="#FFF" fill-opacity=".6" d="M2.5,0 L47,0 L47,0 L47,9 L2.5,9 C1.11928813,9 1.69088438e-16,7.88071187 0,6.5 L0,2.5 C-1.69088438e-16,1.11928813 1.11928813,2.53632657e-16 2.5,0 Z"/>
+      <path fill="url(#auto-m)" d="M47,0 L92.5,0 C93.8807119,-2.53632657e-16 95,1.11928813 95,2.5 L95,6.5 C95,7.88071187 93.8807119,9 92.5,9 L47,9 L47,9 L47,0 Z"/>
+      <path fill="url(#auto-n)" d="M2.5,0 L47,0 L47,0 L47,9 L2.5,9 C1.11928813,9 1.69088438e-16,7.88071187 0,6.5 L0,2.5 C-1.69088438e-16,1.11928813 1.11928813,2.53632657e-16 2.5,0 Z"/>
       <circle cx="4.5" cy="4.5" r="2.5" fill="#2876E8"/>
       <rect width="5" height="5" x="10" y="2" fill="#11B46F" rx="1.25"/>
       <rect width="5" height="5" x="43" y="2" fill="#11B46F" rx="1.25"/>
