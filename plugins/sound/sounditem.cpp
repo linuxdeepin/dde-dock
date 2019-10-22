@@ -50,12 +50,13 @@ SoundItem::SoundItem(QWidget *parent)
 
     m_applet->setVisible(false);
 
-    connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
+    connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
     connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refreshTips, Qt::QueuedConnection);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshIcon();
     });
+    m_icon = QIcon::fromTheme(":/audio-volume-muted-symbolic.svg");
 }
 
 QWidget *SoundItem::tipsWidget()
@@ -109,12 +110,12 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
         m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
     else if (menuId == SETTINGS)
         DDBusSender()
-            .service("com.deepin.dde.ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
-            .method(QString("ShowModule"))
-            .arg(QString("sound"))
-            .call();
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowModule"))
+        .arg(QString("sound"))
+        .call();
 }
 
 QSize SoundItem::sizeHint() const
@@ -158,8 +159,7 @@ void SoundItem::refreshIcon()
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     QString iconString;
-    if (displayMode == Dock::Fashion)
-    {
+    if (displayMode == Dock::Fashion) {
         QString volumeString;
         if (volmue >= 1000)
             volumeString = "100";
@@ -174,9 +174,9 @@ void SoundItem::refreshIcon()
         QString volumeString;
         if (mute)
             volumeString = "muted";
-        else if (volmue / 1000.0f >= double(2)/3)
+        else if (volmue / 1000.0f >= double(2) / 3)
             volumeString = "high";
-        else if (volmue / 1000.0f >= double(1)/3)
+        else if (volmue / 1000.0f >= double(1) / 3)
             volumeString = "medium";
         else
             volumeString = "low";
@@ -189,7 +189,7 @@ void SoundItem::refreshIcon()
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
 
-    const QIcon icon = QIcon::fromTheme(iconString);
+    const QIcon icon = QIcon::fromTheme(iconString, m_icon);
     m_iconPixmap = icon.pixmap(iconSize * ratio, iconSize * ratio);
     m_iconPixmap.setDevicePixelRatio(ratio);
 
@@ -201,7 +201,7 @@ void SoundItem::refreshTips(const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    if(!m_sinkInter)
+    if (!m_sinkInter)
         return;
 
     QString value;

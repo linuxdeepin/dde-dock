@@ -26,6 +26,7 @@
 #include "dbus/dbussink.h"
 
 #include <QWidget>
+#include <QIcon>
 
 #define SOUND_KEY "sound-item-key"
 
@@ -62,6 +63,7 @@ private:
     TipsWidget *m_tipsLabel;
     SoundApplet *m_applet;
     DBusSink *m_sinkInter;
+    QIcon m_icon;
     QPixmap m_iconPixmap;
 };
 

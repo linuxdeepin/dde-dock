@@ -29,6 +29,7 @@
 #include <QTimer>
 
 #include <WiredDevice>
+#include <QIcon>
 
 class TipsWidget;
 class WiredItem : public DeviceItem
@@ -56,6 +57,7 @@ private:
 
     TipsWidget *m_itemTips;
     QTimer *m_delayTimer;
+    QIcon m_defaultIcon;
 };
 
 #endif // WIREDITEM_H
