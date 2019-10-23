@@ -29,19 +29,38 @@
 
 #define IconSize 16
 
-const QStringList ItemCategoryList {"ApplicationStatus" , "Communications" , "SystemServices", "Hardware"};
-const QStringList ItemStatusList {"Passive" , "Active" , "NeedsAttention"};
+const QStringList ItemCategoryList {"ApplicationStatus", "Communications", "SystemServices", "Hardware"};
+const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
 const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
+QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     : AbstractTrayWidget(parent),
-        m_dbusMenuImporter(nullptr),
-        m_menu(nullptr),
-        m_updateIconTimer(new QTimer(this)),
-        m_updateOverlayIconTimer(new QTimer(this)),
-        m_updateAttentionIconTimer(new QTimer(this)),
-        m_sniServicePath(sniServicePath)
+      m_dbusMenuImporter(nullptr),
+      m_menu(nullptr),
+      m_updateIconTimer(new QTimer(this))
+    , m_updateOverlayIconTimer(new QTimer(this))
+    , m_updateAttentionIconTimer(new QTimer(this))
+    , m_sniServicePath(sniServicePath)
+    , m_popupTipsDelayTimer(new QTimer(this))
+    , m_tipsLabel(new QLabel)
 {
+    m_popupTipsDelayTimer->setInterval(500);
+    m_popupTipsDelayTimer->setSingleShot(true);
+
+    connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SNITrayWidget::showHoverTips);
+
+    if (PopupWindow.isNull()) {
+        DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
+        arrowRectangle->setShadowBlurRadius(20);
+        arrowRectangle->setRadius(6);
+        arrowRectangle->setShadowYOffset(2);
+        arrowRectangle->setShadowXOffset(0);
+        arrowRectangle->setArrowWidth(18);
+        arrowRectangle->setArrowHeight(10);
+        PopupWindow = arrowRectangle;
+    }
+
     if (m_sniServicePath.startsWith("/") || !m_sniServicePath.contains("/")) {
         qDebug() << "SNI service path invalid";
         return;
@@ -89,28 +108,28 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
 
     // the following signals can be emit automatically
     // need refresh cached properties in these slots
-    connect(m_sniInter, &StatusNotifierItem::NewIcon, [=] {
+    connect(m_sniInter, &StatusNotifierItem::NewIcon, [ = ] {
         m_sniIconName = m_sniInter->iconName();
         m_sniIconPixmap = m_sniInter->iconPixmap();
         m_sniIconThemePath = m_sniInter->iconThemePath();
 
         m_updateIconTimer->start();
     });
-    connect(m_sniInter, &StatusNotifierItem::NewOverlayIcon, [=] {
+    connect(m_sniInter, &StatusNotifierItem::NewOverlayIcon, [ = ] {
         m_sniOverlayIconName = m_sniInter->overlayIconName();
         m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
         m_sniIconThemePath = m_sniInter->iconThemePath();
 
         m_updateOverlayIconTimer->start();
     });
-    connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, [=] {
+    connect(m_sniInter, &StatusNotifierItem::NewAttentionIcon, [ = ] {
         m_sniAttentionIconName = m_sniInter->attentionIconName();
         m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
         m_sniIconThemePath = m_sniInter->iconThemePath();
 
         m_updateAttentionIconTimer->start();
     });
-    connect(m_sniInter, &StatusNotifierItem::NewStatus, [=] {
+    connect(m_sniInter, &StatusNotifierItem::NewStatus, [ = ] {
         onSNIStatusChanged(m_sniInter->status());
     });
 
@@ -132,7 +151,7 @@ QString SNITrayWidget::itemKeyForConfig()
         }
 
         key = QDBusInterface(m_dbusService, m_dbusPath, StatusNotifierItem::staticInterfaceName())
-                .property("Id").toString();
+              .property("Id").toString();
         if (!key.isEmpty()) {
             break;
         }
@@ -155,23 +174,23 @@ void SNITrayWidget::updateIcon()
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     switch (mouseButton) {
-        case XCB_BUTTON_INDEX_1:
-            // left button click invalid
-            if (LeftClickInvalidIdList.contains(m_sniId)) {
-                showContextMenu(x, y);
-            } else {
-                m_sniInter->Activate(x, y);
-            }
-            break;
-        case XCB_BUTTON_INDEX_2:
-            m_sniInter->SecondaryActivate(x, y);
-            break;
-        case XCB_BUTTON_INDEX_3:
+    case XCB_BUTTON_INDEX_1:
+        // left button click invalid
+        if (LeftClickInvalidIdList.contains(m_sniId)) {
             showContextMenu(x, y);
-            break;
-        default:
-            qDebug() << "unknown mouse button key";
-            break;
+        } else {
+            m_sniInter->Activate(x, y);
+        }
+        break;
+    case XCB_BUTTON_INDEX_2:
+        m_sniInter->SecondaryActivate(x, y);
+        break;
+    case XCB_BUTTON_INDEX_3:
+        showContextMenu(x, y);
+        break;
+    default:
+        qDebug() << "unknown mouse button key";
+        break;
     }
 }
 
@@ -328,6 +347,7 @@ void SNITrayWidget::showContextMenu(int x, int y)
         }
         m_menu->popup(QPoint(x, y));
     }
+    hidePopup();
 }
 
 void SNITrayWidget::onSNIAttentionIconNameChanged(const QString &value)
@@ -455,23 +475,23 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
     QString iconThemePath = m_sniIconThemePath;
 
     switch (iconType) {
-        case Icon:
-            iconName = m_sniIconName;
-            dbusImageList = m_sniIconPixmap;
-            break;
-        case OverlayIcon:
-            iconName = m_sniOverlayIconName;
-            dbusImageList = m_sniOverlayIconPixmap;
-            break;
-        case AttentionIcon:
-            iconName = m_sniAttentionIconName;
-            dbusImageList = m_sniAttentionIconPixmap;
-            break;
-        case AttentionMovieIcon:
-            iconName = m_sniAttentionMovieName;
-            break;
-        default:
-            break;
+    case Icon:
+        iconName = m_sniIconName;
+        dbusImageList = m_sniIconPixmap;
+        break;
+    case OverlayIcon:
+        iconName = m_sniOverlayIconName;
+        dbusImageList = m_sniOverlayIconPixmap;
+        break;
+    case AttentionIcon:
+        iconName = m_sniAttentionIconName;
+        dbusImageList = m_sniAttentionIconPixmap;
+        break;
+    case AttentionMovieIcon:
+        iconName = m_sniAttentionMovieName;
+        break;
+    default:
+        break;
     }
 
     const auto ratio = devicePixelRatioF();
@@ -484,11 +504,11 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
 
                 if (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
                     for (int i = 0; i < dbusImage.pixels.size(); i += 4) {
-                        *(qint32*)(image_data + i) = qFromBigEndian(*(qint32*)(image_data + i));
+                        *(qint32 *)(image_data + i) = qFromBigEndian(*(qint32 *)(image_data + i));
                     }
                 }
 
-                QImage image((const uchar*)dbusImage.pixels.constData(), dbusImage.width, dbusImage.height, QImage::Format_ARGB32);
+                QImage image((const uchar *)dbusImage.pixels.constData(), dbusImage.width, dbusImage.height, QImage::Format_ARGB32);
                 pixmap = QPixmap::fromImage(image.scaled(iconSizeScaled, iconSizeScaled, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 pixmap.setDevicePixelRatio(ratio);
                 if (!pixmap.isNull()) {
@@ -533,4 +553,100 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
     } while (false);
 
     return pixmap;
+}
+
+void SNITrayWidget::enterEvent(QEvent *event)
+{
+    m_popupTipsDelayTimer->start();
+
+    AbstractTrayWidget::enterEvent(event);
+}
+
+void SNITrayWidget::leaveEvent(QEvent *event)
+{
+    m_popupTipsDelayTimer->stop();
+    if (m_popupShown && !PopupWindow->model())
+        hidePopup();
+
+    update();
+
+    AbstractTrayWidget::leaveEvent(event);
+}
+
+void SNITrayWidget::showHoverTips()
+{
+    if (PopupWindow->model())
+        return;
+
+    // if not in geometry area
+    const QRect r(topleftPoint(), size());
+    if (!r.contains(QCursor::pos()))
+        return;
+
+    if (m_sniInter->title().isEmpty())
+        return;
+
+    m_tipsLabel->setText(m_sniInter->title());
+
+    showPopupWindow(m_tipsLabel);
+}
+
+void SNITrayWidget::hideNonModel()
+{
+    // auto hide if popup is not model window
+    if (m_popupShown && !PopupWindow->model())
+        hidePopup();
+}
+
+void SNITrayWidget::popupWindowAccept()
+{
+    if (!PopupWindow->isVisible())
+        return;
+
+    hidePopup();
+}
+
+void SNITrayWidget::hidePopup()
+{
+    m_popupTipsDelayTimer->stop();
+    m_popupShown = false;
+    PopupWindow->hide();
+
+    emit PopupWindow->accept();
+    emit requestWindowAutoHide(true);
+}
+// 获取在最外层的窗口(MainWindow)中的位置
+const QPoint SNITrayWidget::topleftPoint() const
+{
+    QPoint p;
+    const QWidget *w = this;
+    do {
+        p += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    } while (w);
+
+    return p;
+}
+
+void SNITrayWidget::showPopupWindow(QWidget *const content, const bool model)
+{
+    m_popupShown = true;
+
+    if (model)
+        emit requestWindowAutoHide(false);
+
+    DockPopupWindow *popup = PopupWindow.data();
+    QWidget *lastContent = popup->getContent();
+    if (lastContent)
+        lastContent->setVisible(false);
+
+    popup->setArrowDirection(DockPopupWindow::ArrowBottom);
+    popup->resize(content->sizeHint());
+    popup->setContent(content);
+
+    QPoint p = topleftPoint();
+    if (!popup->isVisible())
+        QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+    else
+        popup->show(p, model);
 }
