@@ -3,9 +3,9 @@ package appearance
 import (
 	"time"
 
-	"pkg.deepin.io/dde/daemon/vendor1/github.com/kelvins/sunrisesunset"
-	"pkg.deepin.io/lib/dbus1"
+	"github.com/kelvins/sunrisesunset"
 	geoclue "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.geoclue2"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 func getLocation(locPath dbus.ObjectPath) (latitude float64, longitude float64, err error) {
