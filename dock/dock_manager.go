@@ -279,7 +279,7 @@ func (m *Manager) CancelPreviewWindow() *dbus.Error {
 
 // for debug
 func (m *Manager) GetEntryIDs() ([]string, *dbus.Error) {
-	entries := m.Entries
+	entries := &m.Entries
 	entries.mu.RLock()
 	list := make([]string, 0, len(entries.items))
 	for _, entry := range entries.items {

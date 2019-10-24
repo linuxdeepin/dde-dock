@@ -84,21 +84,3 @@ func setWMTPadBoolKey(key string, value bool) {
 		//setting.SetString(key, tmp)
 	}
 }
-
-func setWMMouseBoolKey(key string, value bool) {
-	return
-	setting, err := dutils.CheckAndNewGSettings(wmMouseSchemaID)
-	if err != nil {
-		logger.Warning("Failed to new wm mouse settings")
-		return
-	}
-	defer setting.Unref()
-
-	switch key {
-	case wmTPadKeyNaturalScroll, wmTPadKeyLeftHanded:
-		if v := setting.GetBoolean(key); v == value {
-			return
-		}
-		setting.SetBoolean(key, value)
-	}
-}

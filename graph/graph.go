@@ -116,12 +116,12 @@ func (d *Data) AddNode(nd *Node) bool {
 }
 
 // GetNodeSize returns the size of Node of the graph Data.
-func (d Data) GetNodeSize() int {
+func (d *Data) GetNodeSize() int {
 	return len(d.NodeMap)
 }
 
 //GetNodeByID finds a Node by ID.
-func (d Data) GetNodeByID(id string) *Node {
+func (d *Data) GetNodeByID(id string) *Node {
 	for nd := range d.NodeMap {
 		if nd.ID == id {
 			return nd
@@ -247,7 +247,7 @@ func (d *Data) DeleteEdge(src, dst *Node) {
 }
 
 // String describes the graph Data.
-func (d Data) String() string {
+func (d *Data) String() string {
 	buf := new(bytes.Buffer)
 	if d.GetNodeSize() == 0 {
 		return "Graph is empty."
@@ -270,7 +270,7 @@ func (d Data) String() string {
 }
 
 // String describes Node.
-func (nd Node) String() string {
+func (nd *Node) String() string {
 	return fmt.Sprintf("[%s / %d Outgoing / %d Incoming Edges]",
 		nd.ID,
 		len(nd.WeightTo),

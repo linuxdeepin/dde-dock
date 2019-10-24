@@ -76,7 +76,6 @@ func getWarnLevel(config *warnLevelConfig, onBattery bool,
 		}
 		return WarnLevelAction
 	}
-	return WarnLevelNone
 }
 
 func (m *Manager) getWarnLevel(percentage float64, timeToEmpty uint64) WarnLevel {

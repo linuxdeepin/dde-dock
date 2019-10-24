@@ -127,12 +127,10 @@ func fcInfosToFamilyTable() FamilyHashTable {
 	}
 	defer C.free_font_info_list(list, num)
 
-	listPtr := uintptr(unsafe.Pointer(list))
-	itemLen := unsafe.Sizeof(*list)
+	itemSize := unsafe.Sizeof(*list)
 
 	for i := C.int(0); i < num; i++ {
-		cItem := (*C.FcInfo)(unsafe.Pointer(
-			listPtr + uintptr(i)*itemLen))
+		cItem := (*C.FcInfo)(unsafe.Pointer(uintptr(unsafe.Pointer(list)) + uintptr(i)*itemSize))
 
 		info := fcInfoToFamily(cItem)
 		if info == nil {

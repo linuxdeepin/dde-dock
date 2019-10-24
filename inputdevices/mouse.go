@@ -173,7 +173,6 @@ func (m *Mouse) enableLeftHanded() {
 				v.Id, v.Name, err)
 		}
 	}
-	setWMMouseBoolKey(wmTPadKeyLeftHanded, enabled)
 }
 
 func (m *Mouse) enableNaturalScroll() {
@@ -185,7 +184,6 @@ func (m *Mouse) enableNaturalScroll() {
 				v.Id, v.Name, err)
 		}
 	}
-	setWMMouseBoolKey(wmTPadKeyNaturalScroll, enabled)
 }
 
 func (m *Mouse) enableMidBtnEmu() {

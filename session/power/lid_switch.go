@@ -144,13 +144,13 @@ func (h *LidSwitchHandler) stopAskUser() error {
 // guess the working outputs after user close the lid
 func outputsAfterLidClosed(outputs []string) []string {
 	ret := make([]string, 0, len(outputs))
-	// found built ouput
+	// found builtin output
 	var found bool
 	for _, output := range outputs {
 		if !found && isBuiltinOutput(output) {
 			// skip built output
-			continue
 			found = true
+			continue
 		}
 		ret = append(ret, output)
 	}
