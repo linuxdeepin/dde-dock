@@ -57,7 +57,6 @@ private:
 
     TipsWidget *m_itemTips;
     QTimer *m_delayTimer;
-    QIcon m_defaultIcon;
 };
 
 #endif // WIREDITEM_H

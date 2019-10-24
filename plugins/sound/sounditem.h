@@ -63,7 +63,6 @@ private:
     TipsWidget *m_tipsLabel;
     SoundApplet *m_applet;
     DBusSink *m_sinkInter;
-    QIcon m_icon;
     QPixmap m_iconPixmap;
 };
 

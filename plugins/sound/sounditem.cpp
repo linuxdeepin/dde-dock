@@ -56,7 +56,6 @@ SoundItem::SoundItem(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshIcon();
     });
-    m_icon = QIcon::fromTheme(":/audio-volume-muted-symbolic.svg");
 }
 
 QWidget *SoundItem::tipsWidget()
@@ -181,7 +180,7 @@ void SoundItem::refreshIcon()
         else
             volumeString = "low";
 
-        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
+        iconString = QString("audio-volume-%1-symbolic.svg").arg(volumeString);
     }
 
     const auto ratio = devicePixelRatioF();
@@ -189,7 +188,7 @@ void SoundItem::refreshIcon()
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
 
-    const QIcon icon = QIcon::fromTheme(iconString, m_icon);
+    const QIcon icon = QIcon::fromTheme(iconString, QIcon::fromTheme(QString(":/%1").arg(iconString)));
     m_iconPixmap = icon.pixmap(iconSize * ratio, iconSize * ratio);
     m_iconPixmap.setDevicePixelRatio(ratio);
 
