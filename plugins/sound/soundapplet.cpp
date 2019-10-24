@@ -208,17 +208,12 @@ void SoundApplet::refreshIcon()
     if (!m_defSinkInter)
         return;
 
-    const float volume = m_defSinkInter->volume();
     const bool mute = m_defSinkInter->mute();
 
     QString volumeString;
 
     if (mute) {
         volumeString = "muted";
-    } else if (volume >= double(2) / 3) {
-        volumeString = "high";
-    } else if (volume >= double(1) / 3) {
-        volumeString = "medium";
     } else {
         volumeString = "low";
     }
