@@ -20,6 +20,7 @@
  */
 
 #include "fashiontraywidgetwrapper.h"
+#include "../xembedtraywidget.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -178,11 +179,14 @@ void FashionTrayWidgetWrapper::leaveEvent(QEvent *event)
     // here we should check the mouse position to ensure the mouse is really leaved
     // because this leaveEvent will also be called if setX11PassMouseEvent(false) is invoked
     // in XWindowTrayWidget::sendHoverEvent()
-    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
-        m_hover = false;
-        m_pressed = false;
-        update();
+
+    if (qobject_cast<XEmbedTrayWidget *>(m_absTrayWidget) && rect().contains(mapFromGlobal(QCursor::pos()))) {
+        return QWidget::leaveEvent(event);
     }
+
+    m_hover = false;
+    m_pressed = false;
+    update();
 
     QWidget::leaveEvent(event);
 }

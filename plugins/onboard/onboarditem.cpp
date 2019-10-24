@@ -149,11 +149,9 @@ void OnboardItem::mouseMoveEvent(QMouseEvent *event)
 
 void OnboardItem::leaveEvent(QEvent *event)
 {
-    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
-        m_hover = false;
-        m_pressed = false;
-        update();
-    }
+    m_hover = false;
+    m_pressed = false;
+    update();
 
     QWidget::leaveEvent(event);
 }

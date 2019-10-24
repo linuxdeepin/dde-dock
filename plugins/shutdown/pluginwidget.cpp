@@ -151,11 +151,9 @@ void PluginWidget::mouseMoveEvent(QMouseEvent *event)
 
 void PluginWidget::leaveEvent(QEvent *event)
 {
-    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
-        m_hover = false;
-        m_pressed = false;
-        update();
-    }
+    m_hover = false;
+    m_pressed = false;
+    update();
 
     QWidget::leaveEvent(event);
 }
