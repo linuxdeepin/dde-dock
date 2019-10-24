@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"time"
 
+	"pkg.deepin.io/dde/api/inhibit_hint"
 	"pkg.deepin.io/dde/daemon/grub_common"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -37,6 +38,9 @@ func RunAsDaemon() {
 		logger.Fatal("failed to new system service", err)
 	}
 	_g = NewGrub2(service)
+	ihObj := inhibit_hint.New("lastore-daemon")
+	ihObj.SetName("Control Center")
+	ihObj.SetIcon("dde-control-center")
 
 	err = service.Export(dbusPath, _g)
 	if err != nil {
@@ -46,6 +50,11 @@ func RunAsDaemon() {
 	err = service.Export(themeDBusPath, _g.theme)
 	if err != nil {
 		logger.Fatal("failed to export grub2 theme:", err)
+	}
+
+	err = ihObj.Export(service)
+	if err != nil {
+		logger.Warning("failed to export inhibit hint:", err)
 	}
 
 	err = service.RequestName(dbusServiceName)

@@ -22,7 +22,7 @@ func (m *Grub2) enableShutdown() {
 func (m *Grub2) preventShutdown() {
 	if m.inhibitFd == -1 {
 		fd, err := inhibit("shutdown", dbusServiceName,
-			"System is updating, please shut down or reboot later.")
+			"Updating the system, please shut down or reboot later.")
 		logger.Infof("prevent shutdown: fd:%v\n", fd)
 		if err != nil {
 			logger.Infof("prevent shutdown failed: fd:%v, err:%v\n", fd, err)
