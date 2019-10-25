@@ -22,9 +22,10 @@
 #ifndef SNITRAYWIDGET_H
 #define SNITRAYWIDGET_H
 
+#include "constants.h"
 #include "abstracttraywidget.h"
-//#include "dbus/sni/statusnotifieritem_interface.h"
 #include "util/dockpopupwindow.h"
+#include "../../widgets/tipswidget.h"
 
 #include <org_kde_statusnotifieritem.h>
 #include <dbusmenu-qt5/dbusmenuimporter.h>
@@ -67,6 +68,10 @@ public:
     void showHoverTips();
     const QPoint topleftPoint() const;
     void showPopupWindow(QWidget * const content, const bool model = false);
+    const QPoint popupMarkPoint() const;
+
+    static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
+
 Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
 
@@ -132,8 +137,9 @@ private:
     DBusImageList m_sniOverlayIconPixmap;
     QString m_sniStatus;
     QTimer *m_popupTipsDelayTimer;
+    static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
-    QLabel *m_tipsLabel;
+    TipsWidget *m_tipsLabel;
     bool m_popupShown;
 };
 

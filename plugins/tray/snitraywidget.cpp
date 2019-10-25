@@ -33,6 +33,7 @@ const QStringList ItemCategoryList {"ApplicationStatus", "Communications", "Syst
 const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
 const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
+Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
 
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     : AbstractTrayWidget(parent),
@@ -43,7 +44,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
     , m_popupTipsDelayTimer(new QTimer(this))
-    , m_tipsLabel(new QLabel)
+    , m_tipsLabel(new TipsWidget)
 {
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
@@ -78,6 +79,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
         return;
     }
 
+    m_sniInter->title();
     m_updateIconTimer->setInterval(100);
     m_updateIconTimer->setSingleShot(true);
     m_updateOverlayIconTimer->setInterval(500);
@@ -628,6 +630,31 @@ const QPoint SNITrayWidget::topleftPoint() const
     return p;
 }
 
+const QPoint SNITrayWidget::popupMarkPoint() const
+{
+    QPoint p(topleftPoint());
+
+    const QRect r = rect();
+    const QRect wr = window()->rect();
+
+    switch (DockPosition) {
+    case Dock::Position::Top:
+        p += QPoint(r.width() / 2, r.height() + (wr.height() - r.height()) / 2);
+        break;
+    case Dock::Position::Bottom:
+      p += QPoint(r.width() / 2, 0 - (wr.height() - r.height()) / 2);
+        break;
+    case Dock::Position::Left:
+        p += QPoint(r.width() + (wr.width() - r.width()) / 2, r.height() / 2);
+        break;
+    case Dock::Position::Right:
+        p += QPoint(0 - (wr.width() - r.width()) / 2, r.height() / 2);
+        break;
+    }
+
+    return p;
+}
+
 void SNITrayWidget::showPopupWindow(QWidget *const content, const bool model)
 {
     m_popupShown = true;
@@ -640,11 +667,16 @@ void SNITrayWidget::showPopupWindow(QWidget *const content, const bool model)
     if (lastContent)
         lastContent->setVisible(false);
 
-    popup->setArrowDirection(DockPopupWindow::ArrowBottom);
+    switch (DockPosition) {
+    case Dock::Position::Top:   popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
+    case Dock::Position::Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
+    case Dock::Position::Left:  popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
+    case Dock::Position::Right: popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
+    }
     popup->resize(content->sizeHint());
     popup->setContent(content);
 
-    QPoint p = topleftPoint();
+    QPoint p = popupMarkPoint();
     if (!popup->isVisible())
         QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
     else

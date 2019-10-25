@@ -150,6 +150,7 @@ void FashionTrayItem::setDockPosition(Dock::Position pos)
 {
     m_controlWidget->setDockPostion(pos);
     SystemTrayItem::setDockPostion(pos);
+    SNITrayWidget::setDockPostion(pos);
 
     m_normalContainer->setDockPosition(pos);
     m_attentionContainer->setDockPosition(pos);
