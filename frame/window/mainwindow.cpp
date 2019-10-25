@@ -94,7 +94,9 @@ private:
 
     void enterEvent(QEvent *) override
     {
-        QApplication::setOverrideCursor(cursor());
+        if (QApplication::overrideCursor() && QApplication::overrideCursor()->shape() != cursor()) {
+            QApplication::setOverrideCursor(cursor());
+        }
     }
 
     void leaveEvent(QEvent *) override
@@ -380,13 +382,12 @@ void MainWindow::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    if (cursor().shape() != Qt::ArrowCursor) {
-        QApplication::restoreOverrideCursor();
-    }
-
     m_leaveDelayTimer->stop();
     if (m_settings->hideState() != Show && m_panelShowAni->state() != QPropertyAnimation::Running)
         m_expandDelayTimer->start();
+
+    if (QApplication::overrideCursor() && QApplication::overrideCursor()->shape() != Qt::ArrowCursor)
+        QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::leaveEvent(QEvent *e)
