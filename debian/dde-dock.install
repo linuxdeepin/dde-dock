@@ -9,5 +9,6 @@ usr/lib/dde-dock/plugins/liboverlay-warning.so
 usr/lib/dde-dock/plugins/system-trays
 usr/lib/dde-dock/plugins/libmultitasking.so
 usr/lib/dde-dock/plugins/libshow-desktop.so
+usr/lib/dde-dock/plugins/libnotifications.so
 usr/share
 etc/dde-dock
