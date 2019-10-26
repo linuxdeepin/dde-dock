@@ -20,7 +20,6 @@
 package checkers
 
 import (
-	. "pkg.deepin.io/lib/gettext"
 	"regexp"
 	"strings"
 )
