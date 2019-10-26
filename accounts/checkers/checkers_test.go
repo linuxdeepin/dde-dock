@@ -43,7 +43,8 @@ func (*testWrapper) TestCheckUsername(c *C.C) {
 	var infos = []checkRet{
 		{"", ErrCodeEmpty},
 		{"a1111111111111111111111111111111", 0},
-		{"a11111111111111111111111111111111", ErrCodeLenMoreThen},
+		{"a11111111111111111111111111111111", ErrCodeLen},
+		{"a1", ErrCodeLen},
 		{"root", ErrCodeSystemUsed},
 		{"123", ErrCodeFirstNotLower},
 		{"a123*&", ErrCodeInvalidChar},
