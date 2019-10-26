@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"encoding/json"
+	"strings"
 	"sync"
 	"time"
 
@@ -31,6 +32,7 @@ type Scheduler struct {
 	methods *struct {
 		GetJobs   func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
 		GetJob    func() `in:"id" out:"job"`
+		QueryJobs func() `in:"params" out:"jobs"`
 		DeleteJob func() `in:"id"`
 		UpdateJob func() `in:"jobInfo"`
 		CreateJob func() `in:"jobInfo" out:"id"`
@@ -230,6 +232,55 @@ func (s *Scheduler) getJob(id uint) (*JobJSON, error) {
 		return nil, err
 	}
 	return job.toJobJSON()
+}
+
+func (s *Scheduler) queryJobs(key string, startTime, endTime time.Time) ([]dateJobsWrap, error) {
+	var allJobs []*Job
+	db := s.db
+
+	key = strings.TrimSpace(key)
+	if key != "" {
+		db = db.Where("instr(title, ?)", key)
+	}
+
+	err := db.Find(&allJobs).Error
+	if err != nil {
+		return nil, err
+	}
+
+	startDate := libdate.NewAt(startTime)
+	endDate := libdate.NewAt(endTime)
+
+	result := getJobsBetween(startDate, endDate, allJobs, true)
+
+	timeRange := TimeRange{
+		start: startTime,
+		end:   endTime,
+	}
+	result = filterDateJobsWrap(result, timeRange)
+	return result, nil
+}
+
+func filterDateJobsWrap(wraps []dateJobsWrap, timeRange TimeRange) []dateJobsWrap {
+	var result []dateJobsWrap
+	for _, wrap := range wraps {
+		wrap.jobs = filterJobs(wrap.jobs, timeRange)
+		wrap.extendJobs = filterJobs(wrap.extendJobs, timeRange)
+		if len(wrap.jobs)+len(wrap.extendJobs) > 0 {
+			result = append(result, wrap)
+		}
+	}
+	return result
+}
+
+func filterJobs(jobs []*Job, timeRange TimeRange) []*Job {
+	var result []*Job
+	for _, job := range jobs {
+		if job.timeRange().overlap(timeRange) {
+			result = append(result, job)
+		}
+	}
+	return result
 }
 
 func (s *Scheduler) deleteJob(id uint) error {

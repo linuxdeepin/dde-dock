@@ -14,6 +14,27 @@ const (
 	dbusInterface   = "com.deepin.daemon.Calendar.Scheduler"
 )
 
+type queryJobsParams struct {
+	Key   string
+	Start time.Time
+	End   time.Time
+}
+
+func (s *Scheduler) QueryJobs(paramsStr string) (string, *dbus.Error) {
+	var params queryJobsParams
+	err := fromJson(paramsStr, &params)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	jobs, err := s.queryJobs(params.Key, params.Start, params.End)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	result, err := toJson(jobs)
+	return result, dbusutil.ToError(err)
+}
+
 func (s *Scheduler) GetJobs(startYear, startMonth, startDay, endYear, endMonth, endDay int32) (string, *dbus.Error) {
 	startDate := libdate.New(int(startYear), time.Month(startMonth), int(startDay))
 	endDate := libdate.New(int(endYear), time.Month(endMonth), int(endDay))

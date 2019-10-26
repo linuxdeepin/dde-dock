@@ -100,6 +100,13 @@ func (j *JobJSON) toJob() (*Job, error) {
 	return job, nil
 }
 
+func (j *Job) timeRange() TimeRange {
+	return TimeRange{
+		start: j.Start,
+		end:   j.End,
+	}
+}
+
 func (j *Job) validate() error {
 	// j.End < j.Start
 	if j.End.Before(j.Start) {
