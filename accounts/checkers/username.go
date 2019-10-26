@@ -26,12 +26,15 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	. "pkg.deepin.io/lib/gettext"
 )
+
+func Tr(text string) string {
+	return text
+}
 
 const (
 	userNameMaxLength = 32
+	userNameMinLength = 3
 
 	passwdFile = "/etc/passwd"
 	groupFile  = "/etc/group"
@@ -50,7 +53,7 @@ const (
 	ErrCodeFirstNotLower
 	ErrCodeExist
 	ErrCodeSystemUsed
-	ErrCodeLenMoreThen
+	ErrCodeLen
 )
 
 func (code ErrorCode) Error() *ErrorInfo {
@@ -59,15 +62,15 @@ func (code ErrorCode) Error() *ErrorInfo {
 	case ErrCodeEmpty:
 		err = fmt.Errorf(Tr("Username cannot be empty"))
 	case ErrCodeInvalidChar:
-		err = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _"))
+		err = fmt.Errorf(Tr("Username must only contain a~z, 0~9, - or _"))
 	case ErrCodeFirstNotLower:
 		err = fmt.Errorf(Tr("The first character must be in lower case"))
 	case ErrCodeExist:
-		err = fmt.Errorf(Tr("The username exists"))
+		err = fmt.Errorf(Tr("The username already exists"))
 	case ErrCodeSystemUsed:
 		err = fmt.Errorf(Tr("The username has been used by system"))
-	case ErrCodeLenMoreThen:
-		err = fmt.Errorf(Tr("The username's length exceeds the limit"))
+	case ErrCodeLen:
+		err = fmt.Errorf(Tr("Username must be between 3 and 32 characters"))
 	default:
 		return nil
 	}
@@ -79,12 +82,13 @@ func (code ErrorCode) Error() *ErrorInfo {
 }
 
 func CheckUsernameValid(name string) *ErrorInfo {
-	if len(name) == 0 {
+	length := len(name)
+	if length == 0 {
 		return ErrCodeEmpty.Error()
 	}
 
-	if len(name) > userNameMaxLength {
-		return ErrCodeLenMoreThen.Error()
+	if length > userNameMaxLength || length < userNameMinLength {
+		return ErrCodeLen.Error()
 	}
 
 	if Username(name).isNameExist() {

@@ -29,6 +29,8 @@ import (
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/procfs"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -186,13 +188,40 @@ func (m *Manager) RandUserIcon() (string, *dbus.Error) {
 // ret1: 不合法原因
 //
 // ret2: 不合法代码
-func (m *Manager) IsUsernameValid(name string) (bool, string, int32, *dbus.Error) {
-	info := checkers.CheckUsernameValid(name)
-	if info == nil {
-		return true, "", 0, nil
+func (m *Manager) IsUsernameValid(sender dbus.Sender, name string) (valid bool,
+	msg string, code int32, busErr *dbus.Error) {
+
+	var err error
+	defer func() {
+		busErr = dbusutil.ToError(err)
+	}()
+
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return
 	}
 
-	return false, info.Error.Error(), int32(info.Code), nil
+	p := procfs.Process(pid)
+	environ, err := p.Environ()
+	if err != nil {
+		return
+	}
+
+	locale := environ.Get("LANG")
+
+	info := checkers.CheckUsernameValid(name)
+	if info == nil {
+		valid = true
+		return
+	}
+
+	msg = info.Error.Error()
+	if locale != "" {
+		gettext.SetLocale(gettext.LcAll, locale)
+		msg = gettext.Tr(msg)
+	}
+	code = int32(info.Code)
+	return
 }
 
 // 检测密码是否有效
