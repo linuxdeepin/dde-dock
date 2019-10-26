@@ -9,7 +9,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
 			<source>Change your own user data</source>
-			<translation>Modifiez vos données utilisateur</translation>
+			<translation>Modifier vos données utilisateur</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>

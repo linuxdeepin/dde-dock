@@ -13,14 +13,15 @@
 # Kristien <kristien@mailo.com>, 2019
 # lexross <mais@techie.com>, 2018-2019
 # Quentin D <heziode@protonmail.com>, 2017
+# Rox fr <roxfr@outlook.fr>, 2019
 # Sami G.-D., 2017
 # zwpwjwtz <zwpwjwtz@126.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 01:57+0000\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
 "Last-Translator: lexross <mais@techie.com>\n"
 "Language-Team: French (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -29,39 +30,39 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "Veuillez insérer un mot de passe d'au moins 8 caractères"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Le mot de passe doit contenir des lettres (sensibles à la casse), des chiffres ou des symboles spéciaux (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Le nom d'utilisateur ne peut pas être vide"
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
 msgstr "Le nom d'utilisateur doit comporter a~z, 0~9, - ou _"
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr "La première lettre doit être en minuscule"
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
-msgstr "Le nom d'utilisateur existe déjà"
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Le nom d'utilisateur a été utilisé par le système"
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "La longueur du nom d'utilisateur dépasse la limite"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr "Le nom d'utilisateur doit être entre 3-32 caractères"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -158,18 +159,18 @@ msgstr "Échec de la connexion %q, appariement échoué"
 msgid "Bluetooth connection failed"
 msgstr "Connection bluetooth échouée "
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "aujourd'hui"
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "demain"
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s à %s"
 
 #: ../../calendar/module.go:126
 msgid "Work"
@@ -183,26 +184,26 @@ msgstr "Loisir"
 msgid "Other"
 msgstr "Autre"
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "Un jour avant le début"
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Fermer"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Rappeler-le moi demain"
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Rappeler-le moi plus tard"
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Rappel d'horaire"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -230,7 +231,7 @@ msgstr "Toutes les fenêtres"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Espace disque insuffisant, nettoyez de temps en temps !"
+msgstr "Espace disque insuffisant, nettoyer de temps en temps !"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -412,7 +413,7 @@ msgstr "Changement de la langue du système en cours, veuillez patienter..."
 
 #: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
-msgstr "Langue du système changée, veuillez vous déconnecter puis vous reconnecter"
+msgstr "Langue du système changée, veuillez-vous déconnecter puis vous reconnecter"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
@@ -445,7 +446,7 @@ msgstr "%q désinstallation échouée."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Afin d'éviter l'arrêt automatique, veuillez branchez votre appareil pendant l'actualisation."
+msgstr "Afin d'éviter l'arrêt automatique, veuillez brancher votre appareil pendant l'actualisation."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -844,7 +845,7 @@ msgstr "Assurez-vous que la carte SIM a été insérée avec un signal du résea
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Veuillez vous assurer qu'un plan corect a été sélectionné sans arriérés de la carte SIM"
+msgstr "Veuillez-vous assurer qu'un plan correct a été sélectionné sans arriérés de la carte SIM"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -897,11 +898,11 @@ msgstr "La connexion a été supprimée des paramètres"
 
 #: ../../network/state_handler.go:251
 msgid "Try enabling hotspot"
-msgstr "Essayez d'activer un point d'accès"
+msgstr "Essayer d'activer un point d'accès"
 
 #: ../../network/state_handler.go:253
 msgid "Try connecting %q"
-msgstr "Essayez de connecter% q"
+msgstr "Essayer de connecter% q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot share enabled"
@@ -925,7 +926,7 @@ msgstr "Impossible de partager le point d'accès, veuillez vérifier les paramè
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Impossible de se connecter à %q, veuillez vous rapprocher du routeur sans fil."
+msgstr "Impossible de se connecter à %q, veuillez-vous rapprocher du routeur sans fil."
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."

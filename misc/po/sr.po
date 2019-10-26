@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 05:30+0000\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
 "Last-Translator: Марко Пејовић <3acejax@gmail.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -20,39 +20,39 @@ msgstr ""
 "Language: sr\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "Молимо унесите лозинку од најмање 8 карактера"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Лозинка може садржати само слова алфабета (осетљива на величину), бројеве или специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Корисничко име не може бити празно"
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
 msgstr "Корисничко име мора бити састављено од a~z, 0~9, - или _"
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr "Први карактер мора бити мало слово"
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
-msgstr "Корисничко име већ постоји"
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Корисничко име се већ користи"
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "Дужина корисничког имена прелази дозвољену границу"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr "Корисничко име мора садржати између 3-32 карактера"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -149,15 +149,15 @@ msgstr "Неуспешно повезивање са %q, упаривање не
 msgid "Bluetooth connection failed"
 msgstr "Блутут повезивање неуспешно"
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
 msgstr "данас"
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
 msgstr "сутра"
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
 msgstr "%s до %s"
@@ -174,26 +174,26 @@ msgstr "Живот"
 msgid "Other"
 msgstr "Остало"
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "Један дан пре пчетка"
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Затвори"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Подсети ме сутра"
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Подсети касније"
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Подсетник догађаја"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -587,7 +587,7 @@ msgstr "Уређајем се више не управља"
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
-msgstr "Уређај није припремљен за конфигурацију"
+msgstr "Уређај није спреман за конфигурацију"
 
 #: ../../network/state_handler.go:44
 msgid ""
@@ -738,7 +738,7 @@ msgstr "The device's carrier/link changed"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
-msgstr "The device's existing connection was assumed"
+msgstr "Претпостављена је постојећа веза уређаја"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"

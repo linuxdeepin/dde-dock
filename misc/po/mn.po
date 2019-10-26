@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 01:57+0000\n"
-"Last-Translator: Gantulga Gansukh <irawel10@gmail.com>\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Mongolian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/mn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,39 +18,39 @@ msgstr ""
 "Language: mn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "8 тэмдэгтээс баггүй нүүц үг оруулна уу"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Нууц үг Англи үсгүүд (том-жижиг), тоо эсвэл тусгай тэмдэгтүүд (~!@#$%^&*()[]{}\\|/?,.<>) агуулсан байх ёстой"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "Хэрэглэгчийн нэрний уртын хязгаар хэтэрсэн байна"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr ""
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -147,15 +147,15 @@ msgstr "%q төхөөрөмжтой холбогдсонгүй, холболт �
 msgid "Bluetooth connection failed"
 msgstr "Блютүүтийн холболт амжилгүй"
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
 msgstr ""
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
 msgstr ""
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
 msgstr ""
@@ -172,24 +172,24 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr ""
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Хаах"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr ""
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr ""
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr ""
 

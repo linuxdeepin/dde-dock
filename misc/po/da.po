@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 01:57+0000\n"
-"Last-Translator: 31c8ff7daf246c6bd598eefe84c1433c\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,39 +21,39 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "Indtast venligt en adgangskode, ikke mindre end 8 tegn"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Brugernavnet må ikke være tomt"
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
-msgstr "Brugernavn skal indeholde a~z, 0~9, - eller _"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
+msgstr "Brugernavnet må kun indeholde a~z, 0~9, - eller _"
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr "Det første tegn skal være med småt"
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
-msgstr "Brugernavnet findes"
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Brugernavnet er blevet brugt af systemet"
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "Brugernavnets længde overskrider grænsen"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr "Brugernavnet skal være mellem 3-32 tegn langt"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -150,18 +150,18 @@ msgstr "Kunne ikke tilslutte %q, parring mislykkedes"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "i dag"
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "i morgen"
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s til %s"
 
 #: ../../calendar/module.go:126
 msgid "Work"
@@ -175,26 +175,26 @@ msgstr "Leve"
 msgid "Other"
 msgstr "Andre"
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "En dag før start"
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Luk"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Påmind mig i morgen"
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Påmind mig senere"
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Planlæg påmindelse"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"

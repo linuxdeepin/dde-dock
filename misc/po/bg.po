@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 01:57+0000\n"
-"Last-Translator: Kiril Kirilov <cybercop_montana@abv.bg>\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,39 +20,39 @@ msgstr ""
 "Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "Моля, въведете парола не по-малка от 8 символа"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Паролата трябва да е от английски букви (големината е от значение), числа и специални символи (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Потребителското име не може да бъде празно"
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
-msgstr "Потребителско име трябва да съдържа a~z, 0~9, - или_"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr "Първият знак трябва да е с малки букви"
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
-msgstr "Потребителското име съществува"
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Потребителското име е използвано от системата"
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "Дължината на потребителското име е максимална"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr ""
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -149,15 +149,15 @@ msgstr "Неуспешно свързване на %q, сдвояването н
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth връзката пропадна"
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
 msgstr ""
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
 msgstr ""
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
 msgstr ""
@@ -174,24 +174,24 @@ msgstr ""
 msgid "Other"
 msgstr "Други"
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr ""
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Затваряне"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr ""
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr ""
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr ""
 

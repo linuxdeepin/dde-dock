@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 01:57+0000\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
 "Last-Translator: Moo\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -20,39 +20,39 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "Prašome įrašyti ne trumpesnį, nei 8 simbolių slaptažodį"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), skaičiai ar ypatingi simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Naudotojo vardas negali būti tuščias"
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
-msgstr "Naudotojo vardas turi būti sudarytas iš a~z, 0~9, - ar _"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
+msgstr "Naudotojo vardas privalo būti sudarytas iš a~z, 0~9, - ar _"
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr "Pirmoji raidė turi būti mažoji"
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
-msgstr "Naudotojo vardas yra"
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Naudotojo vardas naudojamas sistemos"
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "Naudotojo vardo ilgis viršija leidžiamą ribą"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr "Naudotojo vardas privalo būti nuo 3 iki 32 simbolių"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -149,51 +149,51 @@ msgstr "Nepavyko prijungti %q, poravimas nepavyko"
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth ryšys nepavyko"
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "šiandien"
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "rytoj"
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s iki %s"
 
 #: ../../calendar/module.go:126
 msgid "Work"
-msgstr ""
+msgstr "Darbas"
 
 #: ../../calendar/module.go:127
 msgid "Life"
-msgstr ""
+msgstr "Gyvenimas"
 
 #: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Kita"
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "Vieną dieną prieš įvykį"
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Užverti"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Priminti rytoj"
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Priminti vėliau"
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Planuoti priminimą"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -201,11 +201,11 @@ msgstr "Atverti"
 
 #: ../../dock/app_entry_menu.go:107
 msgid "Close All"
-msgstr ""
+msgstr "Užverti visus"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "Force Quit"
-msgstr ""
+msgstr "Priverstinai išjungti"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
@@ -213,7 +213,7 @@ msgstr "Dokas"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"
-msgstr ""
+msgstr "Atskirti nuo doko"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "All Windows"
@@ -993,7 +993,7 @@ msgstr "Norint valdyti ar tinklo laiko sinchronizavimas turėtų būti įjungtas
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "Norint pakeisti NTP serverį, reikalingas tapatybės nustatymas"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""

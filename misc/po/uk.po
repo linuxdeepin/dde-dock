@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-15 20:00+0800\n"
-"PO-Revision-Date: 2019-10-16 01:57+0000\n"
-"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>\n"
+"POT-Creation-Date: 2019-10-26 19:02+0800\n"
+"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"Last-Translator: Marck Hrin <marck741@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,39 +22,39 @@ msgstr ""
 "Language: uk\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
 msgstr "Пароль має бути не менше 8 символів"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Пароль повинен містити англійські літери (чутливі до регістру), цифри або спеціальні символи(~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:60
+#: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Поле, призначене для імені користувача, не може бути пустим"
 
-#: ../../accounts/checkers/username.go:62
-msgid "Username must comprise a~z, 0~9, - or _"
+#: ../../accounts/checkers/username.go:65
+msgid "Username must only contain a~z, 0~9, - or _"
 msgstr "Ім'я користувача повинне містити такі символи, як a~z, 0~9, - або _"
 
-#: ../../accounts/checkers/username.go:64
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
 msgstr "Перший символ має бути у нижньому регістрі."
 
-#: ../../accounts/checkers/username.go:66
-msgid "The username exists"
-msgstr "Таке ім'я користувача вже існує."
+#: ../../accounts/checkers/username.go:69
+msgid "The username already exists"
+msgstr ""
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Це ім'я користувача вже використовувалося в системі."
 
-#: ../../accounts/checkers/username.go:70
-msgid "The username's length exceeds the limit"
-msgstr "Ім’я користувача задовге"
+#: ../../accounts/checkers/username.go:73
+msgid "Username must be between 3 and 32 characters"
+msgstr "Ім'я користувача має містити 3-32 символи"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -151,18 +151,18 @@ msgstr "Помилка підключення до %q, пара не створ�
 msgid "Bluetooth connection failed"
 msgstr "Збій підключення з Bluetooth"
 
-#: ../../calendar/job.go:405
+#: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "сьогодні"
 
-#: ../../calendar/job.go:407
+#: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "завтра"
 
-#: ../../calendar/job.go:422
+#: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s до %s"
 
 #: ../../calendar/module.go:126
 msgid "Work"
@@ -176,26 +176,26 @@ msgstr "Життя"
 msgid "Other"
 msgstr "Інше"
 
-#: ../../calendar/scheduler.go:427
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "За день до початку"
 
-#: ../../calendar/scheduler.go:428 ../../calendar/scheduler.go:433
-#: ../../calendar/scheduler.go:441 ../../calendar/scheduler.go:445
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Закрити"
 
-#: ../../calendar/scheduler.go:432
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Нагадати мені завтра"
 
-#: ../../calendar/scheduler.go:440
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Нагадати мені пізніше"
 
-#: ../../calendar/scheduler.go:450
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Розклад нагадування"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
