@@ -180,7 +180,7 @@ void SoundItem::refreshIcon()
         else
             volumeString = "low";
 
-        iconString = QString("audio-volume-%1-symbolic.svg").arg(volumeString);
+        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
     }
 
     const auto ratio = devicePixelRatioF();
