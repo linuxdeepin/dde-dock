@@ -29,7 +29,6 @@ import (
 	"sync"
 	"time"
 
-	libPinyin "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
 	"pkg.deepin.io/dde/daemon/common/dsync"
@@ -76,7 +75,7 @@ type Manager struct {
 	appsObj        *libApps.Apps
 	notification   *notify.Notification
 	lastore        *libLastore.Lastore
-	pinyin         *libPinyin.Pinyin
+	pinyinEnabled  bool
 	desktopPkgMap  map[string]string
 	pkgCategoryMap map[string]CategoryID
 	nameMap        map[string]string
@@ -157,7 +156,7 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	m.appsObj = libApps.NewApps(systemBus)
 	m.lastore = libLastore.NewLastore(systemBus)
 	if isZH() {
-		m.pinyin = libPinyin.NewPinyin(service.Conn())
+		m.pinyinEnabled = true
 	}
 
 	// init fsWatcher
@@ -307,7 +306,7 @@ func (m *Manager) addItem(item *Item) {
 
 	item.CategoryID = m.queryCategoryID(item)
 	logger.Debug("addItem category", item.CategoryID)
-	item.setSearchTargets(m.pinyin)
+	item.setSearchTargets(m.pinyinEnabled)
 	logger.Debug("item search targets:", item.searchTargets)
 	m.items[item.ID] = item
 }

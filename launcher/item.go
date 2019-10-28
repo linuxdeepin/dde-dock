@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.pinyin"
+	"github.com/mozillazg/go-pinyin"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 )
 
@@ -140,7 +140,23 @@ const (
 	commentScore     = 50
 )
 
-func (item *Item) setSearchTargets(pinyin *pinyin.Pinyin) {
+var pinyinArg = pinyin.NewArgs()
+
+func init() {
+	pinyinArg.Heteronym = true
+}
+
+func toPinyin(str string) string {
+	list := pinyin.Pinyin(str, pinyinArg)
+
+	items := make([]string, len(list))
+	for idx, value := range list {
+		items[idx] = strings.Join(value, "")
+	}
+	return strings.Join(items, "")
+}
+
+func (item *Item) setSearchTargets(pinyinEnabled bool) {
 	item.addSearchTarget(idScore, item.ID)
 	item.addSearchTarget(nameScore, item.Name)
 	item.addSearchTarget(nameScore, item.enName)
@@ -150,16 +166,9 @@ func (item *Item) setSearchTargets(pinyin *pinyin.Pinyin) {
 	for _, c := range item.categories {
 		item.addSearchTarget(categoryScore, c)
 	}
-	if pinyin != nil {
-		pinyinList, err := pinyin.Query(0, item.Name)
-		if err == nil {
-			for _, v := range pinyinList {
-				item.addSearchTarget(nameScore, v)
-			}
-		} else {
-			logger.Warning(err)
-		}
-
+	if pinyinEnabled {
+		namePy := toPinyin(item.Name)
+		item.addSearchTarget(nameScore, namePy)
 		item.addSearchTarget(categoryScore, item.CategoryID.Pinyin())
 	}
 
