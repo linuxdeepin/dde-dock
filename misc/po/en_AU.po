@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Aimi Hobson <minervavine@gmail.com>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: English (Australia) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/en_AU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -885,24 +885,24 @@ msgid "The connection was deleted from settings"
 msgstr "The connection was deleted from settings"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Try enabling hotspot"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Try connecting %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Hotspot share enabled"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q connected"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Hotspot share turned off"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -920,7 +920,11 @@ msgstr "Unable to connect %q, please keep closer to the wireless router"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Unable to connect %q, please check your router or net cable."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Connection failed, unable to connect %q, wrong password"
 

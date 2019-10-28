@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
@@ -887,24 +887,24 @@ msgid "The connection was deleted from settings"
 msgstr "Pripojenie bolo odstránené z nastavení"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Opakované povolenie hotspotu"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Opakované pripájanie %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Zdieľanie hotspotu je zapnuté"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q pripojený"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Zdieľanie hotspotu je vypnuté"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -922,7 +922,11 @@ msgstr "Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôto
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Nepodarilo sa pripojiť %q, skontrolujte router alebo sieťový kábel."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Pripojenie zlyhalo, nemôžem pripojiť %q, nesprávne heslo"
 

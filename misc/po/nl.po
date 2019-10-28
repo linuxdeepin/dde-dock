@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -890,24 +890,24 @@ msgid "The connection was deleted from settings"
 msgstr "De verbinding is verwijderd van instellingen"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Probeer de hotspot in te schakelen"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Probeer %q aan te sluiten"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Hotspot delen ingeschakeld"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q verbonden"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Hotspot delen uitgeschakeld"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -925,7 +925,11 @@ msgstr "Kon %q niet verbinden, blijf dichter bij de draadloze router"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kan %q niet verbinden, controleer uw router of netwerk kabel"
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Verbinding mislukt, kan geen verbinding maken met %q, verkeerd wachtwoord"
 

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Марко Пејовић <3acejax@gmail.com>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,7 +44,7 @@ msgstr "Први карактер мора бити мало слово"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Корисничко име већ постоји"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -887,24 +887,24 @@ msgid "The connection was deleted from settings"
 msgstr "Веза је обрисана из подешавања"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Покушајте укључивање вруће тачке"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Повезивање %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Дељење вруће тачке укључено"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q повезани сте"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Дељење вруће тачке искључено"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -922,7 +922,11 @@ msgstr "Неуспешно повезивање на %q, будите ближе
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Неуспешно повезивање на %q, проверите ваш рутер или мрежни кабл."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Неуспешно повезивање на %q, погрешна лозинка"
 

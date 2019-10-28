@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Spanish (Latin America) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es_419/)\n"
 "MIME-Version: 1.0\n"
@@ -899,24 +899,24 @@ msgid "The connection was deleted from settings"
 msgstr "La conexión se ha eliminado de la configuración"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Intenta activar la conexión compartida"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Intente conectar %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Permitir conexión compartida activada"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q conectado"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Permitir conexión compartida desactivada"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -934,7 +934,11 @@ msgstr "No se puede conectar %q, por favor manténgase cerca del enrutador inal�
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Imposible conectar a %q, por favor revisa tu router o el cable de red."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Error en la conexión, no se puede conectar %q, contraseña incorrecta"
 

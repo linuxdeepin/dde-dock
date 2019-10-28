@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,7 +43,7 @@ msgstr "Il primo carattere deve essere in minuscolo."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Questo Username esiste già"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -886,24 +886,24 @@ msgid "The connection was deleted from settings"
 msgstr "La connessione è stata eliminata dalle impostazioni"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Tentativo di attivazione hotspot"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Tentativo di connessione a %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Condivisione hotspot attiva"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q connesso"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Condivisione hotspot spenta"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -921,7 +921,11 @@ msgstr "Impossibile collegarsi a %q, avvicinati al router wireless"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Impossibile connettersi a %q, controlla il tuo router o il cavo di rete."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Connessione fallita, impossibile connettersi a %q, password errata"
 

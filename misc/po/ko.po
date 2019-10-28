@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: 이정희 <daemul72@gmail.com>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -888,24 +888,24 @@ msgid "The connection was deleted from settings"
 msgstr "설정이 연결에서 삭제되었습니다"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "핫스팟 활성화 시도"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "%q 연결 시도"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "핫스팟 공유 사용"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q 연결됨"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "핫스팟 공유 꺼짐"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -923,7 +923,11 @@ msgstr "%q을(를) 연결할 수 없습니다. 무선 라우터에 가까이 있
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "%q을(를) 연결할 수 없습니다. 라우터 또는 인터넷 케이블을 확인하세요."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "연결 실패, %q을(를) 연결할 수 없습니다. 암호가 잘못되었습니다"
 

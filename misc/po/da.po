@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: scootergrisen\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +45,7 @@ msgstr "Det første tegn skal være med småt"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Brugernavnet findes allerede"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -888,24 +888,24 @@ msgid "The connection was deleted from settings"
 msgstr "Forbindelsen blev slettet fra indstillingerne"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Prøv at aktivere hotspot"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Prøv at oprette forbindelse til %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Hotspotdeling aktiveret"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q tilsluttet"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Hotspotdeling slået fra"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -923,7 +923,11 @@ msgstr "Kan ikke oprette forbindelse til %q, vær venligst tættere på den trå
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kan ikke forbinde %q, check din router eller netværkskabel."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
 

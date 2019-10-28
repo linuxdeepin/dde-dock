@@ -29,9 +29,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Paulo Schopf\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgstr "O nome de usuário não pode estar vazio"
 
 #: ../../accounts/checkers/username.go:65
 msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "Nome de usuário deve conter apenas a~z, 0~9, - ou _"
+msgstr "O nome de usuário deve conter apenas a~z, 0~9, - ou _"
 
 #: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
@@ -63,7 +63,7 @@ msgstr "O primeiro caractere deve estar em minúsculas"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "O nome de usuário já existe"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -71,7 +71,7 @@ msgstr "O nome de usuário foi usado pelo sistema"
 
 #: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
-msgstr "O nome de usuário deve ter entre 3 a 32 caracteres"
+msgstr "O nome de usuário deve ter entre 3 à 32 caracteres"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -228,7 +228,7 @@ msgstr "Forçar Saída"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
-msgstr "Doca"
+msgstr "Dock"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"
@@ -260,7 +260,7 @@ msgstr "Bloquear tela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Mostrar/Ocultar a doca"
+msgstr "Mostrar/Ocultar a dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
@@ -348,7 +348,7 @@ msgstr "Alternar entre janelas em reverso"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "Mostrar a Área de Trabalho"
+msgstr "Mostrar à Área de Trabalho"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
@@ -438,7 +438,7 @@ msgstr "Tentar novamente"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
-msgstr "%q instalado com sucesso."
+msgstr "%q foi instalado."
 
 #: ../../lastore/notify.go:85
 msgid "%q failed to install."
@@ -446,7 +446,7 @@ msgstr "Falha na instalação do %q."
 
 #: ../../lastore/notify.go:93
 msgid "%q removed successfully."
-msgstr "%q removido com sucesso."
+msgstr "%q foi desinstalado."
 
 #: ../../lastore/notify.go:95
 msgid "%q failed to remove."
@@ -455,11 +455,11 @@ msgstr "Falha ao remover %q."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Conecte-se a uma fonte de energia; para evitar o desligamento durante a atualização."
+msgstr "Para evitar o desligamento, conecte o carregador."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
-msgstr "Pacote do cache esvaziado"
+msgstr "O cache de pacotes foi esvaziado"
 
 #: ../../lastore/notify.go:112
 msgid ""
@@ -469,7 +469,7 @@ msgstr "A fonte do sistema foi modificada, restaure a fonte oficial para o seu u
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr "%q removido com sucesso"
+msgstr "%q foi desinstalado"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
@@ -845,7 +845,7 @@ msgstr "O estado de gerenciamento do dispositivo pai foi alterado"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr "O cabo de rede está desconectado"
+msgstr "Cabo de Rede está desconectado"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
@@ -906,24 +906,24 @@ msgid "The connection was deleted from settings"
 msgstr "A conexão foi excluída das configurações"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Tente ativar o Hotspot"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Tente conectar %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Compartilhamento de Hotspot ativado"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q conectada"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Compartilhamento de Hotspot desativado"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -939,9 +939,13 @@ msgstr "Não é possível conectar-se a %q; verifique a intensidade do sinal Wi-
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Não é possível conectar %q; verifique o roteador ou cabo de rede."
+msgstr "Não foi possível conectar-se a %q. Verifique as conexões e dispositivos de rede."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Falha na conexão, incapaz de conectar %q, senha incorreta"
 
@@ -981,11 +985,11 @@ msgstr "O proxy do sistema foi cancelado."
 
 #: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
-msgstr "Bateria Criticamente Baixa"
+msgstr "Bateria Criticamente Fraca"
 
 #: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
-msgstr "O computador entrará em suspensão em breve, por favor, conecte o carregador"
+msgstr "Em instantes, o computador será suspenso. Conecte o carregador!"
 
 #: ../../session/power/manager_events.go:175
 #: ../../session/power/manager_events.go:182
@@ -994,11 +998,11 @@ msgstr "Bateria Fraca"
 
 #: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
-msgstr "Computador entrará em modo de suspensão, conecte o carregador"
+msgstr "O computador entrará em suspensão. Conecte o carregador!"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
-msgstr "Bateria fraca, por favor, conecte ao carregador"
+msgstr "Bateria fraca! Conecte o carregador"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

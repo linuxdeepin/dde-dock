@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
@@ -885,24 +885,24 @@ msgid "The connection was deleted from settings"
 msgstr "Sambungan telah dipadam dari tetapan"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Cuba membenarkan kawasan khas"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Cuba bersambung dengan %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Perkongsian kawasan khas dibenarkan"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q bersambung"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Perkongsian kawasan khas dimatikan"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -920,7 +920,11 @@ msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan pengh
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 

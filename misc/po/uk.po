@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Marck Hrin <marck741@gmail.com>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -889,24 +889,24 @@ msgid "The connection was deleted from settings"
 msgstr "З'єднання було видалено з налаштувань."
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Спробуйте увімкнути точку доступу"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Спробуйте підключити %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Точка доступу увімкнена"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q підключено"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Точка доступу вимкнена"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -924,7 +924,11 @@ msgstr "Неможливо підключити %q, будь ласка, три�
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Не вдалося з'єднатися із %q. Будь ласка, перевірте, чи працює ваш маршрутизатор або мережевий кабель."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Помилка підключення, неможливо підключити %q, невірний пароль"
 

@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: byStarTW (pan93412) <pan93412@gmail.com>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -894,24 +894,24 @@ msgid "The connection was deleted from settings"
 msgstr "此連線已從設定中刪除"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "嘗試啟用熱點功能"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "嘗試連線到 %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "已啟用熱點分享功能"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "已連線到 %q 網路"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "已關閉熱點分享功能"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -929,7 +929,11 @@ msgstr "無法連線到 %q 網路，請離無線網路路由器更近點"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "無法連線到 %q 網路，請檢查路由器或網路線"
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "連線失敗：無法連線到 %q 網路，原因：密碼錯誤"
 

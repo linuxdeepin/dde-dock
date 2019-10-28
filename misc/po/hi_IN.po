@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Hindi (India) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/hi_IN/)\n"
 "MIME-Version: 1.0\n"
@@ -886,24 +886,24 @@ msgid "The connection was deleted from settings"
 msgstr "सेटिंग्स से कनेक्शन डिलीट हुआ "
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "होटस्पॉट शुरू करने की कोशिश करें"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "%q से कनेक्ट करने की कोशिश करें"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "होटस्पॉट शेरिंग शुरू हो गया है"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q कनेक्टेड है "
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "होटस्पॉट शेरिंग बंद किया है"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -921,7 +921,11 @@ msgstr "%q  कनेक्ट नही हो रहा, वाइयर ल�
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "%q  कनेक्ट नही हो रहा,  अपने रूटर अथवा नेट केबल को चेक कीजिए"
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr " कनेक्षन विफल , %q कनेक्ट नही हो रहा, ग़लत पासवर्ड"
 

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Валерий Владимирович\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,7 +44,7 @@ msgstr "Первый символ должен быть в нижнем реги
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Имя пользователя уже существует."
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -887,24 +887,24 @@ msgid "The connection was deleted from settings"
 msgstr "Соединение было удалено из настроек."
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Попытка подключить точку доступа"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Попытка поключить %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Общедоступная точка доступа включена"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q соединено"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Общедоступная точка доступа отключена"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -922,7 +922,11 @@ msgstr "Не удалось соединить %q, пожалуйста держ
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Не удалось соединить %q, пожалуйста проверьте ваш беспроводной маршрутизатор или сетевой кабель."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Не удалось подключиться, не удалось соединить %q, неправильный пароль"
 

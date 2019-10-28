@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -886,24 +886,24 @@ msgid "The connection was deleted from settings"
 msgstr "Anslutningen togs bort från inställningarna."
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Försök aktivera hotspot"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Försök anslut %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Hotspot delning aktiverad"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q ansluten"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Hotspot delning inaktiverad"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -921,7 +921,11 @@ msgstr "Kunde ej ansluta till %q, försök komma närmre till den trådlösa rou
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kunde ej ansluta till %q, var god kontrollera din router eller nätverkskabel"
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Anslutning misslyckades, kunde ej ansluta till %q, fel lösenord"
 

@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:21+0000\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 09:16+0000\n"
 "Last-Translator: Cindy0514\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -891,15 +891,15 @@ msgid "The connection was deleted from settings"
 msgstr "该连接已从设置中删除"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
+msgid "Enabling hotspot"
 msgstr "正在尝试打开热点"
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "正在尝试连接%q"
+msgid "Connecting %q"
+msgstr "正在连接%q"
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
+msgid "Hotspot enabled"
 msgstr "热点共享已开启"
 
 #: ../../network/state_handler.go:263
@@ -907,7 +907,7 @@ msgid "%q connected"
 msgstr "已连接%q"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
+msgid "Hotspot disabled"
 msgstr "热点共享已关闭"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
@@ -926,7 +926,11 @@ msgstr "未能加入%q，请尝试靠近无线路由器"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "未能加入%q，请检查路由器或网线。"
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr "连接%q需要密码"
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "连接失败，未能加入%q，密码不正确"
 

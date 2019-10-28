@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Moo\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,7 +44,7 @@ msgstr "Pirmoji raidė turi būti mažoji"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Naudotojo vardas jau yra"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -887,24 +887,24 @@ msgid "The connection was deleted from settings"
 msgstr "Ryšys buvo ištrintas iš nustatymų"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Pabandykite įjungti prieigos tašką"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Bandoma prisijungti %q"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Prieigos taško bendrinimas įjungtas"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q prijungtas"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Prieigos taško bendrinimas išjungtas"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -922,7 +922,11 @@ msgstr "Nepavyko prijungti %q, laikykite arčiau belaidžio maršrutizatoriaus"
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Nepavyko prijungti %q, patikrinkite savo maršrutizatorių ar tinklo laidą."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Ryšys patyrė nesėkmę, nepavyko prisijungti prie %q, neteisingas slaptažodis"
 

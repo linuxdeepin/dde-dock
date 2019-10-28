@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 19:02+0800\n"
-"PO-Revision-Date: 2019-10-26 11:09+0000\n"
-"Last-Translator: Marcel Pa <marcelpaluch@me.com>\n"
+"POT-Creation-Date: 2019-10-28 16:38+0800\n"
+"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,7 +48,7 @@ msgstr "Das erste Zeichen muss in Kleinbuchstaben geschrieben sein"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Der Benutzername existiert bereits"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -155,16 +155,16 @@ msgstr "Bluetooth-Verbindung fehlgeschlagen"
 
 #: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "heute"
 
 #: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "morgen"
 
 #: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s bis %s"
 
 #: ../../calendar/module.go:126
 msgid "Work"
@@ -180,7 +180,7 @@ msgstr "Andere"
 
 #: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "Einen Tag vor Beginn"
 
 #: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
 #: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
@@ -891,24 +891,24 @@ msgid "The connection was deleted from settings"
 msgstr "Die Verbindung wurde aus den Einstellungen entfernt."
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr "Es wird versucht den Hotspot zu aktivieren"
+msgid "Enabling hotspot"
+msgstr ""
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr "Es wird versucht mit %q zu verbinden"
+msgid "Connecting %q"
+msgstr ""
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr "Das Teilen der Hotspots wurde aktiviert"
+msgid "Hotspot enabled"
+msgstr ""
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q verbunden"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr "Das Teilen des Hotspots wurde deaktiviert"
+msgid "Hotspot disabled"
+msgstr ""
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -926,7 +926,11 @@ msgstr "Keine Verbindung %q, Reichweite zum WLAN Router verringern."
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kann keine Verbindung mit %q herstellen, bitte überprüfen Sie Ihren Router und das Netzwerkkabel."
 
-#: ../../network/state_handler.go:340 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:340
+msgid "Password is required to connect %q"
+msgstr ""
+
+#: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Verbindung mit %q fehlgeschlagen. Das Passwort ist ungültig"
 
