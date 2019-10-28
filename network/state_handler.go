@@ -248,9 +248,9 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				icon := generalGetNotifyDisconnectedIcon(dsi.devType, path)
 				logger.Debug("--------[Prepare] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path_())
 				if dsi.connectionType == connectionWirelessHotspot {
-					notify(icon, "", Tr("Try enabling hotspot"))
+					notify(icon, "", Tr("Enabling hotspot"))
 				} else {
-					notify(icon, "", fmt.Sprintf(Tr("Try connecting %q"), dsi.aconnId))
+					notify(icon, "", fmt.Sprintf(Tr("Connecting %q"), dsi.aconnId))
 				}
 			}
 		case nm.NM_DEVICE_STATE_ACTIVATED:
@@ -258,7 +258,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			msg := dsi.aconnId
 			logger.Debug("--------[Activated] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path_())
 			if dsi.connectionType == connectionWirelessHotspot {
-				notify(icon, "", Tr("Hotspot share enabled"))
+				notify(icon, "", Tr("Hotspot enabled"))
 			} else {
 				notify(icon, "", fmt.Sprintf(Tr("%q connected"), msg))
 			}
@@ -271,7 +271,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			if reason == nm.NM_DEVICE_STATE_REASON_REMOVED {
 				if dsi.connectionType == connectionWirelessHotspot {
 					icon := generalGetNotifyDisconnectedIcon(dsi.devType, path)
-					notify(icon, "", Tr("Hotspot share turned off"))
+					notify(icon, "", Tr("Hotspot disabled"))
 				}
 				return
 			}
@@ -322,7 +322,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				case nm.NM_DEVICE_STATE_REASON_USER_REQUESTED:
 					if newState == nm.NM_DEVICE_STATE_DISCONNECTED {
 						if dsi.connectionType == connectionWirelessHotspot {
-							notify(icon, "", Tr("Hotspot share turned off"))
+							notify(icon, "", Tr("Hotspot disabled"))
 						} else {
 							msg = fmt.Sprintf(Tr("%q disconnected"), dsi.aconnId)
 						}
@@ -337,7 +337,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 						msg = fmt.Sprintf(Tr("Unable to connect %q, please check your router or net cable."), dsi.aconnId)
 					}
 				case nm.NM_DEVICE_STATE_REASON_NO_SECRETS:
-					msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
+					msg = fmt.Sprintf(Tr("Password is required to connect %q"), dsi.aconnId)
 				case nm.NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT:
 					if oldState == nm.NM_DEVICE_STATE_CONFIG && newState == nm.NM_DEVICE_STATE_NEED_AUTH {
 						msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
