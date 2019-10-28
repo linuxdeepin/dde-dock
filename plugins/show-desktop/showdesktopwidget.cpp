@@ -29,17 +29,11 @@
 ShowDesktopWidget::ShowDesktopWidget(QWidget *parent)
     : QWidget(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void ShowDesktopWidget::refreshIcon()
 {
     update();
-}
-
-QSize ShowDesktopWidget::sizeHint() const
-{
-    return QSize(16, 16);
 }
 
 void ShowDesktopWidget::paintEvent(QPaintEvent *e)
@@ -61,19 +55,4 @@ void ShowDesktopWidget::paintEvent(QPaintEvent *e)
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(icon.rect());
     painter.drawPixmap(rf.center() - rfp.center() / ratio, icon);
-}
-
-void ShowDesktopWidget::resizeEvent(QResizeEvent *event)
-{
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    // 保持横纵比
-    if (position == Dock::Bottom || position == Dock::Top) {
-        setMinimumWidth(height());
-        setMinimumHeight(PLUGIN_ICON_MIN_SIZE);
-    } else {
-        setMinimumWidth(PLUGIN_ICON_MIN_SIZE);
-        setMinimumHeight(width());
-    }
-
-    QWidget::resizeEvent(event);
 }

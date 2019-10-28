@@ -361,7 +361,6 @@ bool PluginsItem::checkGSettingsControl() const
 
 void PluginsItem::resizeEvent(QResizeEvent *event)
 {
-    setMinimumSize(m_centralWidget->minimumSize());
     setMaximumSize(m_centralWidget->maximumSize());
     return DockItem::resizeEvent(event);
 }

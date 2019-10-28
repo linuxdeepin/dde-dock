@@ -29,18 +29,12 @@
 MultitaskingWidget::MultitaskingWidget(QWidget *parent)
     : QWidget(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_icon = QIcon::fromTheme(":/icons/deepin-multitasking-view.svg");
 }
 
 void MultitaskingWidget::refreshIcon()
 {
     update();
-}
-
-QSize MultitaskingWidget::sizeHint() const
-{
-    return QSize(16, 16);
 }
 
 void MultitaskingWidget::paintEvent(QPaintEvent *e)
@@ -62,19 +56,4 @@ void MultitaskingWidget::paintEvent(QPaintEvent *e)
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(icon.rect());
     painter.drawPixmap(rf.center() - rfp.center() / ratio, icon);
-}
-
-void MultitaskingWidget::resizeEvent(QResizeEvent *event)
-{
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    // 保持横纵比
-    if (position == Dock::Bottom || position == Dock::Top) {
-        setMinimumWidth(height());
-        setMinimumHeight(PLUGIN_ICON_MIN_SIZE);
-    } else {
-        setMinimumWidth(PLUGIN_ICON_MIN_SIZE);
-        setMinimumHeight(width());
-    }
-
-    QWidget::resizeEvent(event);
 }

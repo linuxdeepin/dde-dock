@@ -85,6 +85,8 @@ private:
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
     void paintEvent(QPaintEvent *event) override;
+    void resizeDockIcon();
+    void calcuDockIconSize(int w,int h);
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -102,6 +104,7 @@ private:
     QBoxLayout *m_pluginLayout;
     QWidget *m_appAreaSonWidget;
     QBoxLayout *m_appAreaSonLayout;
+    QBoxLayout *m_appAreaLayout;
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
     MainPanelDelegate *m_delegate;

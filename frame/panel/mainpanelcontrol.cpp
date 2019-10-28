@@ -25,6 +25,7 @@
 #include "../item/placeholderitem.h"
 #include "../item/components/appdrag.h"
 #include "../item/appitem.h"
+#include "../item/pluginsitem.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -36,6 +37,7 @@
 #include <DWindowManagerHelper>
 
 #define SPLITER_SIZE 2
+#define TRASH_MARGIN 20
 
 DWIDGET_USE_NAMESPACE
 
@@ -66,6 +68,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
 
     m_appAreaWidget->installEventFilter(this);
     m_appAreaSonWidget->installEventFilter(this);
+    m_trayAreaWidget->installEventFilter(this);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -153,41 +156,31 @@ void MainPanelControl::updateMainPanelLayout()
         m_trayAreaLayout->setContentsMargins(10, 0, 10, 0);
         break;
     }
-
 }
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
     m_fixedAreaLayout->insertWidget(index, wdg);
-
-    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        wdg->setMaximumSize(height(), height());
-    } else {
-        wdg->setMaximumSize(width(), width());
-    }
+    resizeDockIcon();
 }
 
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
     m_appAreaSonLayout->insertWidget(index, wdg);
-
-    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        wdg->setMaximumSize(height(), height());
-    } else {
-        wdg->setMaximumSize(width(), width());
-    }
+    resizeDockIcon();
 }
 
 void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
     m_trayAreaLayout->insertWidget(index, wdg);
+    resizeDockIcon();
 }
 
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
     m_pluginLayout->insertWidget(index, wdg);
+    resizeDockIcon();
     QTimer::singleShot(50, this, [ = ] {m_pluginAreaWidget->adjustSize();});
-
 }
 
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
@@ -212,28 +205,7 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
-    for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
-        QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
-        if (w) {
-            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                w->setMaximumSize(height(), height());
-            } else {
-                w->setMaximumSize(width(), width());
-            }
-        }
-    }
-
-    for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
-        QWidget *w = m_fixedAreaLayout->itemAt(i)->widget();
-        if (w) {
-            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                w->setMaximumSize(height(), height());
-            } else {
-                w->setMaximumSize(width(), width());
-            }
-        }
-    }
-
+    resizeDockIcon();
     return QWidget::resizeEvent(event);
 }
 
@@ -481,38 +453,8 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_appAreaSonWidget) {
         if (event->type() == QEvent::LayoutRequest) {
             m_appAreaSonWidget->adjustSize();
+            resizeDockIcon();
 
-            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-                m_fixedSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
-                m_appSpliter->setFixedSize(SPLITER_SIZE, height() * 0.6);
-                m_traySpliter->setFixedSize(SPLITER_SIZE, height() * 0.5);
-            } else {
-                m_fixedSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
-                m_appSpliter->setFixedSize(width() * 0.6, SPLITER_SIZE);
-                m_traySpliter->setFixedSize(width() * 0.5, SPLITER_SIZE);
-            }
-
-            for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
-                QWidget *w = m_appAreaSonLayout->itemAt(i)->widget();
-                if (w) {
-                    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                        w->setMaximumSize(height(), height());
-                    } else {
-                        w->setMaximumSize(width(), width());
-                    }
-                }
-            }
-
-            for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
-                QWidget *w = m_fixedAreaLayout->itemAt(i)->widget();
-                if (w) {
-                    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                        w->setMaximumSize(height(), height());
-                    } else {
-                        w->setMaximumSize(width(), width());
-                    }
-                }
-            }
         } else {
             moveAppSonWidget();
         }
@@ -530,6 +472,16 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             moveAppSonWidget();
     }
 
+    if (watched == m_trayAreaWidget) {
+        if (event->type() == QEvent::Resize) {
+            resizeDockIcon();
+        }
+    }
+
+    if (watched == m_trayAreaWidget) {
+        if (event->type() == QEvent::Resize) {
+        }
+    }
     if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
         QDropEvent *e = static_cast<QDropEvent *>(event);
         bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
@@ -766,4 +718,76 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
     painter.fillRect(m_fixedSpliter->geometry(), color);
     painter.fillRect(m_appSpliter->geometry(), color);
     painter.fillRect(m_traySpliter->geometry(), color);
+}
+
+void MainPanelControl::resizeDockIcon()
+{
+    //计算插件区域的垃圾箱大小
+    int trashWidth = 0;
+    int trashHeight = 0;
+    for (int i = 0; i < m_pluginLayout->count(); ++ i) {
+        PluginsItem *w = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
+        if (w->pluginName() == "trash") {
+            trashWidth = w->width();
+            trashHeight = w->height();
+            break;
+        }
+    }
+    //计算luancher 和 APP 区域大小
+    int iconWidgetwidth = 0;
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        iconWidgetwidth = this->width() - m_trayAreaWidget->width() - (m_pluginAreaWidget->width() - trashHeight);
+    } else {
+        iconWidgetwidth = this->height() - m_trayAreaWidget->height() - (m_pluginAreaWidget->height() - trashWidth);
+    }
+
+    //计算每一个icon的大小
+    float iconSize = (iconWidgetwidth) / (m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + 1) - 1;
+
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        if (iconSize >= height()) {
+            calcuDockIconSize(height(), height());
+        } else {
+            calcuDockIconSize(iconSize, height());
+        }
+    } else {
+        if (iconSize >= width()) {
+            calcuDockIconSize(width(), width());
+        } else {
+            calcuDockIconSize(width(), iconSize);
+        }
+    }
+}
+
+void MainPanelControl::calcuDockIconSize(int w, int h)
+{
+    for (int i = 0; i < m_fixedAreaLayout->count(); ++ i) {
+        m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize(w, h);
+    }
+
+    for (int i = 0; i < m_appAreaSonLayout->count(); ++ i) {
+        m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(w, h);
+    }
+
+    for (int i = 0; i < m_pluginLayout->count(); ++ i) {
+        PluginsItem *p = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
+        if (p->pluginName() == "trash") {
+            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+                p->setFixedSize(w, h - TRASH_MARGIN);
+            } else {
+                p->setFixedSize(w - TRASH_MARGIN, h);
+            }
+            break;
+        }
+    }
+
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        m_fixedSpliter->setFixedSize(SPLITER_SIZE, w * 0.6);
+        m_appSpliter->setFixedSize(SPLITER_SIZE, w * 0.6);
+        m_traySpliter->setFixedSize(SPLITER_SIZE, w * 0.5);
+    } else {
+        m_fixedSpliter->setFixedSize(h * 0.6, SPLITER_SIZE);
+        m_appSpliter->setFixedSize(h * 0.6, SPLITER_SIZE);
+        m_traySpliter->setFixedSize(h * 0.5, SPLITER_SIZE);
+    }
 }

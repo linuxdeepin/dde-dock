@@ -31,14 +31,12 @@ class ShowDesktopWidget : public QWidget
 public:
     explicit ShowDesktopWidget(QWidget *parent = 0);
     void refreshIcon();
-    QSize sizeHint() const override;
 
 signals:
     void requestContextMenu(const QString &itemKey) const;
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // SHOWDESKTOPWIDGET_H

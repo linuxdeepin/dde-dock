@@ -44,7 +44,6 @@ public:
 
     QWidget *popupApplet();
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     const QString contextMenu() const;
     int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
@@ -59,7 +58,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void removeApp(const QString &appKey);

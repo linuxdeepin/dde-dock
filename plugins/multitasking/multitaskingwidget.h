@@ -34,14 +34,12 @@ class MultitaskingWidget : public QWidget
 public:
     explicit MultitaskingWidget(QWidget *parent = 0);
     void refreshIcon();
-    QSize sizeHint() const override;
 
 signals:
     void requestContextMenu(const QString &itemKey) const;
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *event) override;
     QIcon m_icon;
 };
 
