@@ -20,6 +20,7 @@
 package shortcuts
 
 import (
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -54,6 +55,7 @@ type ShortcutManager struct {
 	dataConn *x.Conn // conn for receive record event
 
 	idShortcutMap     map[string]Shortcut
+	idShortcutMapMu   sync.Mutex
 	keyKeystrokeMap   map[Key]*Keystroke
 	keyKeystrokeMapMu sync.Mutex
 	keySymbols        *keysyms.KeySymbols
@@ -65,6 +67,7 @@ type ShortcutManager struct {
 	eventCb             KeyEventFunc
 	eventCbMu           sync.Mutex
 	layoutChanged       chan struct{}
+	pinyinEnabled       bool
 
 	ConflictingKeystrokes []*Keystroke
 	EliminateConflictDone bool
@@ -85,6 +88,7 @@ func NewShortcutManager(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb Ke
 		recordEnable:    true,
 		keyKeystrokeMap: make(map[Key]*Keystroke),
 		layoutChanged:   make(chan struct{}),
+		pinyinEnabled:   isZH(),
 	}
 
 	ss.xRecordEventHandler = NewXRecordEventHandler(keySymbols)
@@ -247,7 +251,9 @@ func (sm *ShortcutManager) Destroy() {
 }
 
 func (sm *ShortcutManager) List() (list []Shortcut) {
-	// RLock ss.idShortcutMap
+	sm.idShortcutMapMu.Lock()
+	defer sm.idShortcutMapMu.Unlock()
+
 	for _, shortcut := range sm.idShortcutMap {
 		list = append(list, shortcut)
 	}
@@ -255,12 +261,60 @@ func (sm *ShortcutManager) List() (list []Shortcut) {
 }
 
 func (sm *ShortcutManager) ListByType(type0 int32) (list []Shortcut) {
+	sm.idShortcutMapMu.Lock()
+	defer sm.idShortcutMapMu.Unlock()
+
 	for _, shortcut := range sm.idShortcutMap {
 		if type0 == shortcut.GetType() {
 			list = append(list, shortcut)
 		}
 	}
 	return
+}
+
+var regSpace = regexp.MustCompile(`\s+`)
+
+func (sm *ShortcutManager) Search(key string) (list []Shortcut) {
+	// remove all space
+	key = regSpace.ReplaceAllString(key, "")
+	key = strings.ToLower(key)
+
+	sm.idShortcutMapMu.Lock()
+	defer sm.idShortcutMapMu.Unlock()
+
+	for _, shortcut := range sm.idShortcutMap {
+		if sm.matchShortcut(shortcut, key) {
+			list = append(list, shortcut)
+		}
+	}
+	return list
+}
+
+func (sm *ShortcutManager) matchShortcut(shortcut Shortcut, key string) bool {
+	name := shortcut.GetName()
+	name = regSpace.ReplaceAllString(name, "")
+	name = strings.ToLower(name)
+
+	if strings.Contains(name, key) {
+		return true
+	}
+
+	if sm.pinyinEnabled {
+		namePy := shortcut.GetNamePinyin()
+		if len(namePy) > 0 &&
+			pinYinDistinguish(key, 0, namePy, 0, 0) {
+			return true
+		}
+	}
+
+	keystrokes := shortcut.GetKeystrokes()
+	for _, keystroke := range keystrokes {
+		if strings.Contains(keystroke.searchString(), key) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (sm *ShortcutManager) storeConflictingKeystroke(ks *Keystroke) {
@@ -434,6 +488,9 @@ func (sm *ShortcutManager) UngrabAll() {
 }
 
 func (sm *ShortcutManager) GrabAll() {
+	sm.idShortcutMapMu.Lock()
+	defer sm.idShortcutMapMu.Unlock()
+
 	// re-grab all shortcuts
 	for _, shortcut := range sm.idShortcutMap {
 		sm.grabShortcut(shortcut)
@@ -447,6 +504,9 @@ func (sm *ShortcutManager) regrabAll() {
 }
 
 func (sm *ShortcutManager) ReloadAllShortcutsKeystrokes() []Shortcut {
+	sm.idShortcutMapMu.Lock()
+	defer sm.idShortcutMapMu.Unlock()
+
 	var changes []Shortcut
 	for _, shortcut := range sm.idShortcutMap {
 		changed := shortcut.ReloadKeystrokes()
@@ -638,34 +698,49 @@ func (sm *ShortcutManager) EventLoop() {
 }
 
 func (sm *ShortcutManager) Add(shortcut Shortcut) {
-	sm.AddWithoutLock(shortcut)
+	logger.Debug("add", shortcut)
+	uid := shortcut.GetUid()
+
+	sm.idShortcutMapMu.Lock()
+	sm.idShortcutMap[uid] = shortcut
+	sm.idShortcutMapMu.Unlock()
+
+	sm.grabShortcut(shortcut)
 }
 
-// TODO private
-func (sm *ShortcutManager) AddWithoutLock(shortcut Shortcut) {
-	logger.Debug("AddWithoutLock", shortcut)
+func (sm *ShortcutManager) addWithoutLock(shortcut Shortcut) {
+	logger.Debug("add", shortcut)
 	uid := shortcut.GetUid()
-	// Lock ss.idShortcutMap
+
 	sm.idShortcutMap[uid] = shortcut
+
 	sm.grabShortcut(shortcut)
 }
 
 func (sm *ShortcutManager) Delete(shortcut Shortcut) {
 	uid := shortcut.GetUid()
-	// Lock ss.idShortcutMap
+
+	sm.idShortcutMapMu.Lock()
 	delete(sm.idShortcutMap, uid)
+	sm.idShortcutMapMu.Unlock()
+
 	sm.ungrabShortcut(shortcut)
 }
 
 func (sm *ShortcutManager) GetByIdType(id string, type0 int32) Shortcut {
 	uid := idType2Uid(id, type0)
-	// Lock ss.idShortcutMap
+
+	sm.idShortcutMapMu.Lock()
 	shortcut := sm.idShortcutMap[uid]
+	sm.idShortcutMapMu.Unlock()
+
 	return shortcut
 }
 
 func (sm *ShortcutManager) GetByUid(uid string) Shortcut {
+	sm.idShortcutMapMu.Lock()
 	shortcut := sm.idShortcutMap[uid]
+	sm.idShortcutMapMu.Unlock()
 	return shortcut
 }
 
@@ -718,7 +793,7 @@ func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
 				Cmd: getSystemActionCmd(id),
 			},
 		}
-		sm.AddWithoutLock(sysShortcut)
+		sm.addWithoutLock(sysShortcut)
 	}
 }
 
@@ -732,7 +807,7 @@ func (sm *ShortcutManager) AddWM(gsettings *gio.Settings) {
 		}
 		keystrokes := gsettings.GetStrv(id)
 		gs := NewGSettingsShortcut(gsettings, id, ShortcutTypeWM, keystrokes, name)
-		sm.AddWithoutLock(gs)
+		sm.addWithoutLock(gs)
 	}
 }
 
@@ -749,14 +824,15 @@ func (sm *ShortcutManager) AddMedia(gsettings *gio.Settings) {
 		mediaShortcut := &MediaShortcut{
 			GSettingsShortcut: gs,
 		}
-		sm.AddWithoutLock(mediaShortcut)
+		sm.addWithoutLock(mediaShortcut)
 	}
 }
 
 func (sm *ShortcutManager) AddCustom(csm *CustomShortcutManager) {
+	csm.pinyinEnabled = sm.pinyinEnabled
 	logger.Debug("AddCustom")
 	for _, shortcut := range csm.List() {
-		sm.AddWithoutLock(shortcut)
+		sm.addWithoutLock(shortcut)
 	}
 }
 
@@ -772,7 +848,7 @@ func (sm *ShortcutManager) AddSpecial() {
 	s0.Id = "switch-kbd-layout"
 	s0.Name = idNameMap[s0.Id]
 	s0.Keystrokes = []*Keystroke{ks}
-	sm.AddWithoutLock(s0)
+	sm.addWithoutLock(s0)
 }
 
 func (sm *ShortcutManager) AddKWin(wmObj *wm.Wm) {
@@ -792,6 +868,6 @@ func (sm *ShortcutManager) AddKWin(wmObj *wm.Wm) {
 		}
 
 		ks := newKWinShortcut(accel.Id, name, accel.Keystrokes, wmObj)
-		sm.AddWithoutLock(ks)
+		sm.addWithoutLock(ks)
 	}
 }

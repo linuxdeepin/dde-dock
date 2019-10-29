@@ -269,7 +269,7 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, keystroke string) *dbus.Er
 	}
 
 	// modify then save
-	customShortcut.Name = name
+	customShortcut.SetName(name)
 	customShortcut.Cmd = cmd
 	m.shortcutManager.ModifyShortcutKeystrokes(shortcut, keystrokes)
 	err := customShortcut.Save()
@@ -374,4 +374,13 @@ func (m *Manager) SetNumLockState(state int32) *dbus.Error {
 	logger.Debug("SetNumLockState", state)
 	err := setNumLockState(m.conn, m.keySymbols, NumLockState(state))
 	return dbusutil.ToError(err)
+}
+
+func (m *Manager) SearchShortcuts(key string) (string, *dbus.Error) {
+	list := m.shortcutManager.Search(key)
+	ret, err := util.MarshalJSON(list)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+	return ret, nil
 }

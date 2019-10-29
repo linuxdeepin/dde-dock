@@ -299,6 +299,32 @@ func (ks *Keystroke) String() string {
 	return strings.Join(keys, "")
 }
 
+func (ks *Keystroke) searchString() string {
+	var strs []string
+	mods := ks.Mods
+	if mods&keysyms.ModMaskShift > 0 {
+		strs = append(strs, "shift")
+	}
+	if mods&keysyms.ModMaskControl > 0 {
+		strs = append(strs, "ctrl")
+	}
+	if mods&keysyms.ModMaskAlt > 0 {
+		strs = append(strs, "alt")
+	}
+	if mods&keysyms.ModMaskSuper > 0 {
+		strs = append(strs, "super")
+	}
+
+	visibleChar, ok := keysyms.KeysymVisibleCharMap[ks.Keysym]
+	if ok {
+		strs = append(strs, strings.ToLower(string(visibleChar)))
+	} else {
+		strs = append(strs, strings.ToLower(ks.Keystr))
+	}
+
+	return strings.Join(strs, "")
+}
+
 func isGoodNoMods(str string, sym x.Keysym) bool {
 	// single key
 	if keysyms.IsFunctionKey(sym) || keysyms.IsMiscFunctionKey(sym) {

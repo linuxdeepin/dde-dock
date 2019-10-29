@@ -83,9 +83,18 @@ func (cs *CustomShortcut) GetAction() *Action {
 	return a
 }
 
+func (cs *CustomShortcut) SetName(name string) {
+	cs.Name = name
+	if cs.manager.pinyinEnabled {
+		cs.pinyinInit = false
+		cs.initPinyin()
+	}
+}
+
 type CustomShortcutManager struct {
-	file  string
-	kfile *keyfile.KeyFile
+	file          string
+	kfile         *keyfile.KeyFile
+	pinyinEnabled bool
 }
 
 func NewCustomShortcutManager(file string) *CustomShortcutManager {
