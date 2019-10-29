@@ -5,13 +5,24 @@
         <file>resources/wired/network-wired-symbolic-connecting3.svg</file>
         <file>resources/wired/network-wired-symbolic-connecting4.svg</file>
         <file>resources/wired/network-wired-symbolic-connecting5.svg</file>
-        <file>resources/wired/network-none-symbolic.svg</file>
         <file>resources/wired/network-disabled-symbolic.svg</file>
-        <file>resources/wired/network-warning-symbolic.svg</file>
         <file>resources/wired/network-error-symbolic.svg</file>
         <file>resources/wired/network-online-symbolic.svg</file>
         <file>resources/wired/network-offline-symbolic.svg</file>
         <file>resources/wired/network-wired-symbolic.svg</file>
+        <file>resources/wired/network-online-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting3-dark.svg</file>
+        <file>resources/wired/network-disabled-symbolic-dark.svg</file>
+        <file>resources/wired/network-none-symbolic.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting1-dark.svg</file>
+        <file>resources/wired/network-error-symbolic-dark.svg</file>
+        <file>resources/wired/network-warning-symbolic.svg</file>
+        <file>resources/wired/network-warning-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting5-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting2-dark.svg</file>
+        <file>resources/wired/network-none-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting4-dark.svg</file>
     </qresource>
     <qresource prefix="/wireless">
         <file>resources/wireless/wireless-background.svg</file>
