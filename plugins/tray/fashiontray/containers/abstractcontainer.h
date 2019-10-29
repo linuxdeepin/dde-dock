@@ -28,6 +28,7 @@ public:
     void clearWrapper();
     void saveCurrentOrderToConfig();
     bool isEmpty();
+    int itemCount();
     bool containsWrapper(FashionTrayWidgetWrapper *wrapper);
     bool containsWrapperByTrayWidget(AbstractTrayWidget *trayWidget);
     FashionTrayWidgetWrapper *wrapperByTrayWidget(AbstractTrayWidget *trayWidget);

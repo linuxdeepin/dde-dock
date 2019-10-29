@@ -68,7 +68,7 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemManager::pluginItemInserted, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemManager::pluginItemRemoved, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemManager::itemUpdated, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::fashionTraySizeChanged, this, &DockItemManager::fashionTraySizeChanged, Qt::QueuedConnection);
+    connect(m_pluginsInter, &DockPluginsController::trayVisableCountChanged, this, &DockItemManager::trayVisableCountChanged, Qt::QueuedConnection);
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);

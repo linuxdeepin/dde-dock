@@ -177,6 +177,14 @@ bool AbstractContainer::isEmpty()
     return m_wrapperList.isEmpty();
 }
 
+int AbstractContainer::itemCount()
+{
+    if(expand())
+        return m_wrapperList.count();
+    else
+        return 0;
+}
+
 bool AbstractContainer::containsWrapper(FashionTrayWidgetWrapper *wrapper)
 {
     for (auto w : m_wrapperList) {

@@ -121,7 +121,7 @@ DockSettings::DockSettings(QWidget *parent)
 
     connect(m_itemManager, &DockItemManager::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemManager, &DockItemManager::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
-    connect(m_itemManager, &DockItemManager::fashionTraySizeChanged, this, &DockSettings::onFashionTraySizeChanged, Qt::QueuedConnection);
+    connect(m_itemManager, &DockItemManager::trayVisableCountChanged, this, &DockSettings::trayVisableCountChanged, Qt::QueuedConnection);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
@@ -482,7 +482,7 @@ void DockSettings::onOpacityChanged(const double value)
     emit opacityChanged(value * 255);
 }
 
-void DockSettings::onFashionTraySizeChanged(const QSize &traySize)
+void DockSettings::trayVisableCountChanged(const int &count)
 {
     emit windowGeometryChanged();
 }

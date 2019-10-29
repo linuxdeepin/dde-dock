@@ -22,6 +22,7 @@
 #include "fashiontrayitem.h"
 #include "fashiontray/fashiontrayconstants.h"
 #include "system-trays/systemtrayitem.h"
+#include "containers/abstractcontainer.h"
 
 #include <QDebug>
 #include <QResizeEvent>
@@ -336,9 +337,11 @@ void FashionTrayItem::normalWrapperToAttentionWrapper(FashionTrayWidgetWrapper *
 
 void FashionTrayItem::requestResize()
 {
-    // 此属性用来通知dock实现动画，目前已经失效，动画效果在托盘实现
-//    setProperty("FashionTraySize", sizeHint());
-m_leftSpace->setVisible(!m_controlWidget->expanded());
+    // 通知dock，当前托盘有几个图标显示，用来计算图标大小
+    m_leftSpace->setVisible(!m_controlWidget->expanded());
+
+    int count = m_normalContainer->itemCount() + m_holdContainer->itemCount() + m_attentionContainer->itemCount();
+    setProperty("TrayVisableItemCount", count + 1); // +1 : m_controlWidget
 }
 
 void FashionTrayItem::refreshHoldContainerPosition()

@@ -47,8 +47,8 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
         if (item->graphicsEffect()) {
             item->graphicsEffect()->setEnabled(false);
         }
-        connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::fashionTraySizeChanged,
-                this, &DockPluginsController::fashionTraySizeChanged, Qt::UniqueConnection);
+        connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::trayVisableCountChanged,
+                this, &DockPluginsController::trayVisableCountChanged, Qt::UniqueConnection);
     } else {
         item = new PluginsItem(itemInter, itemKey);
     }

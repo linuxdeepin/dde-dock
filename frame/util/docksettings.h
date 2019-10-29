@@ -113,7 +113,7 @@ private slots:
     void resetFrontendGeometry();
     void updateForbidPostions();
     void onOpacityChanged(const double value);
-    void onFashionTraySizeChanged(const QSize &traySize);
+    void trayVisableCountChanged(const int &count);
     void onWindowSizeChanged();
 
 private:

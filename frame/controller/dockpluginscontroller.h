@@ -58,7 +58,7 @@ signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
-    void fashionTraySizeChanged(const QSize &traySize) const;
+    void trayVisableCountChanged(const int &count) const;
 
 private:
     void loadLocalPlugins();
