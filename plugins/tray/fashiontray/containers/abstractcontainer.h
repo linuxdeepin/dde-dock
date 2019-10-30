@@ -23,12 +23,12 @@ public:
     virtual void setDockPosition(const Dock::Position pos);
     virtual void setExpand(const bool expand);
     virtual QSize totalSize() const;
+    virtual int itemCount();
 //    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     void clearWrapper();
     void saveCurrentOrderToConfig();
     bool isEmpty();
-    int itemCount();
     bool containsWrapper(FashionTrayWidgetWrapper *wrapper);
     bool containsWrapperByTrayWidget(AbstractTrayWidget *trayWidget);
     FashionTrayWidgetWrapper *wrapperByTrayWidget(AbstractTrayWidget *trayWidget);

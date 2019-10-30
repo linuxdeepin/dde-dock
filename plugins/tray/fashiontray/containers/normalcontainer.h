@@ -15,6 +15,7 @@ public:
     void addWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
     void refreshVisible() Q_DECL_OVERRIDE;
     void setExpand(const bool expand) Q_DECL_OVERRIDE;
+    int itemCount() override;
     QSize sizeHint() const override;
 
 protected:
@@ -30,6 +31,7 @@ private:
 
 private:
     mutable QVariantAnimation *m_sizeAnimation;
+
 };
 
 #endif // NORMALCONTAINER_H

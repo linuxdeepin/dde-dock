@@ -118,6 +118,14 @@ void NormalContainer::adjustMaxSize(const QSize size)
     }
 }
 
+int NormalContainer::itemCount()
+{
+    if(expand())
+        return AbstractContainer::itemCount();
+    else
+        return 0;
+}
+
 void NormalContainer::setExpand(const bool expand)
 {
     for (auto w : wrapperList()) {

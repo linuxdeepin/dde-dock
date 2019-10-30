@@ -179,10 +179,7 @@ bool AbstractContainer::isEmpty()
 
 int AbstractContainer::itemCount()
 {
-    if(expand())
-        return m_wrapperList.count();
-    else
-        return 0;
+    return m_wrapperList.count();
 }
 
 bool AbstractContainer::containsWrapper(FashionTrayWidgetWrapper *wrapper)
