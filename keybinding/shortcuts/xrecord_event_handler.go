@@ -95,7 +95,7 @@ func (h *XRecordEventHandler) handleKeyEvent(pressed bool, keycode uint8, state 
 			h.historyPressedMods = 0
 			h.nonModKeyPressed = false
 			if h.allModKeysReleasedCb != nil {
-				logger.Debug("allModKeysReleased")
+				//logger.Debug("allModKeysReleased")
 				h.allModKeysReleasedCb()
 			}
 		}

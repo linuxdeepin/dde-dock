@@ -384,3 +384,14 @@ func (m *Manager) SearchShortcuts(key string) (string, *dbus.Error) {
 	}
 	return ret, nil
 }
+
+func (m *Manager) GetCapsLockState() (int32, *dbus.Error) {
+	state, err := queryCapsLockState(m.conn)
+	return int32(state), dbusutil.ToError(err)
+}
+
+func (m *Manager) SetCapsLockState(state int32) *dbus.Error {
+	logger.Debug("SetCapsLockState", state)
+	err := setCapsLockState(m.conn, m.keySymbols, CapsLockState(state))
+	return dbusutil.ToError(err)
+}

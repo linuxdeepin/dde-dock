@@ -130,6 +130,8 @@ type Manager struct {
 		LookupConflictingShortcut func() `in:"keystroke" out:"shortcut"`
 		ModifyCustomShortcut      func() `in:"id,name,cmd,keystroke"`
 		SetNumLockState           func() `in:"state"`
+		GetCapsLockState          func() `out:"state"`
+		SetCapsLockState          func() `in:"state"`
 
 		// deprecated
 		Add            func() `in:"name,action,keystroke" out:"ret0,ret1"`

@@ -76,7 +76,7 @@ func queryCapsLockState(conn *x.Conn) (CapsLockState, error) {
 
 func setNumLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols, state NumLockState) error {
 	if !(state == NumLockOff || state == NumLockOn) {
-		return errors.New("invalid numlock state")
+		return errors.New("invalid num lock state")
 	}
 
 	state0, err := queryNumLockState(conn)
@@ -90,24 +90,51 @@ func setNumLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols, state NumLock
 	return nil
 }
 
-func changeNumLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols) (err error) {
-	// get Num_Lock keycode
-	code, err := shortcuts.GetKeyFirstCode(keySymbols, "Num_Lock")
+func setCapsLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols, state CapsLockState) error {
+	if !(state == CapsLockOff || state == CapsLockOn) {
+		return errors.New("invalid caps lock state")
+	}
+
+	state0, err := queryCapsLockState(conn)
 	if err != nil {
 		return err
 	}
-	numLockKeycode := byte(code)
+
+	if state0 != state {
+		return changeCapsLockState(conn, keySymbols)
+	}
+	return nil
+}
+
+func changeNumLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols) (err error) {
+	// get Num_Lock keycode
+	numLockKeycode, err := shortcuts.GetKeyFirstCode(keySymbols, "Num_Lock")
+	if err != nil {
+		return err
+	}
 	logger.Debug("numLockKeycode is", numLockKeycode)
+	return simulatePressReleaseKey(conn, numLockKeycode)
+}
 
+func changeCapsLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols) (err error) {
+	// get Caps_Lock keycode
+	capsLockKeycode, err := shortcuts.GetKeyFirstCode(keySymbols, "Caps_Lock")
+	if err != nil {
+		return err
+	}
+	logger.Debug("capsLockKeycode is", capsLockKeycode)
+	return simulatePressReleaseKey(conn, capsLockKeycode)
+}
+
+func simulatePressReleaseKey(conn *x.Conn, code x.Keycode) error {
 	rootWin := conn.GetDefaultScreen().Root
-
 	// fake key press
-	err = test.FakeInputChecked(conn, x.KeyPressEventCode, numLockKeycode, x.TimeCurrentTime, rootWin, 0, 0, 0).Check(conn)
+	err := test.FakeInputChecked(conn, x.KeyPressEventCode, byte(code), x.TimeCurrentTime, rootWin, 0, 0, 0).Check(conn)
 	if err != nil {
 		return err
 	}
 	// fake key release
-	err = test.FakeInputChecked(conn, x.KeyReleaseEventCode, numLockKeycode, x.TimeCurrentTime, rootWin, 0, 0, 0).Check(conn)
+	err = test.FakeInputChecked(conn, x.KeyReleaseEventCode, byte(code), x.TimeCurrentTime, rootWin, 0, 0, 0).Check(conn)
 	if err != nil {
 		return err
 	}
