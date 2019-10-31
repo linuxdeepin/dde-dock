@@ -140,18 +140,20 @@ const (
 	commentScore     = 50
 )
 
-var pinyinArg = pinyin.NewArgs()
+var pinyinArgs = pinyin.NewArgs()
 
 func init() {
-	pinyinArg.Heteronym = true
+	pinyinArgs.Heteronym = true
+	pinyinArgs.Fallback = func(r rune, a pinyin.Args) []string {
+		return []string{string(r)}
+	}
 }
 
 func toPinyin(str string) string {
-	list := pinyin.Pinyin(str, pinyinArg)
-
-	items := make([]string, len(list))
-	for idx, value := range list {
-		items[idx] = strings.Join(value, "")
+	pySliceSlice := pinyin.Pinyin(str, pinyinArgs)
+	items := make([]string, len(pySliceSlice))
+	for idx, pySlice := range pySliceSlice {
+		items[idx] = strings.Join(pySlice, "")
 	}
 	return strings.Join(items, "")
 }
