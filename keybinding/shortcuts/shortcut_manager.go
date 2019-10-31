@@ -277,37 +277,37 @@ func (sm *ShortcutManager) ListByType(type0 int32) (list []Shortcut) {
 var regSpace = regexp.MustCompile(`\s+`)
 
 func (sm *ShortcutManager) Search(query string) (list []Shortcut) {
-	gQuery := pinyin_search.GeneralizeQuery(query)
+	query = pinyin_search.GeneralizeQuery(query)
 
 	sm.idShortcutMapMu.Lock()
 	defer sm.idShortcutMapMu.Unlock()
 
 	for _, shortcut := range sm.idShortcutMap {
-		if sm.matchShortcut(shortcut, query, gQuery) {
+		if sm.matchShortcut(shortcut, query) {
 			list = append(list, shortcut)
 		}
 	}
 	return list
 }
 
-func (sm *ShortcutManager) matchShortcut(shortcut Shortcut, query, gQuery string) bool {
+func (sm *ShortcutManager) matchShortcut(shortcut Shortcut, query string) bool {
 	name := shortcut.GetName()
-	name = strings.ToLower(name)
-
-	if strings.Contains(name, query) {
-		return true
-	}
 
 	if sm.pinyinEnabled {
 		nameBlocks := shortcut.GetNameBlocks()
-		if nameBlocks.Match(gQuery) {
+		if nameBlocks.Match(query) {
 			return true
 		}
 	}
 
+	name = pinyin_search.GeneralizeQuery(name)
+	if strings.Contains(name, query) {
+		return true
+	}
+
 	keystrokes := shortcut.GetKeystrokes()
 	for _, keystroke := range keystrokes {
-		if strings.Contains(keystroke.searchString(), gQuery) {
+		if strings.Contains(keystroke.searchString(), query) {
 			return true
 		}
 	}
