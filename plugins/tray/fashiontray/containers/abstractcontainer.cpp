@@ -128,22 +128,42 @@ void AbstractContainer::setExpand(const bool expand)
 //    return totalSize();
 //}
 
+void AbstractContainer::setItemSize(int itemSize)
+{
+    m_itemSize = itemSize;
+
+    for (auto w : wrapperList()) {
+        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom)
+            w->setFixedSize(m_itemSize, QWIDGETSIZE_MAX);
+        else
+            w->setFixedSize(QWIDGETSIZE_MAX, m_itemSize);
+    }
+}
+
 QSize AbstractContainer::totalSize() const
 {
     QSize size;
 
     if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
 
+        int itemSize = qBound(PLUGIN_BACKGROUND_MIN_SIZE, parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
+        if (itemSize > m_itemSize)
+            itemSize = m_itemSize;
+
         size.setWidth(
-            (expand() ? (m_wrapperList.size() * std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE)                                       // 所有托盘图标
+            (expand() ? (m_wrapperList.size() * itemSize         // 所有托盘图标
                          + m_wrapperList.size() * TraySpace) : 0 // 所有托盘图标之间 + 一个尾部的 space
             )           + TraySpace
         );
         size.setHeight(height());
     } else {
+        int itemSize = qBound(PLUGIN_BACKGROUND_MIN_SIZE, parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
+        if (itemSize > m_itemSize)
+            itemSize = m_itemSize;
+
         size.setWidth(width());
         size.setHeight(
-            (expand() ? (m_wrapperList.size() * std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE) // 所有托盘图标
+            (expand() ? (m_wrapperList.size() * itemSize // 所有托盘图标
                          + m_wrapperList.size() * TraySpace) : 0 // 所有托盘图标之间 + 一个尾部的 space
             ) + TraySpace
         );
@@ -314,7 +334,6 @@ void AbstractContainer::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     QPainter p(this);
-//    p.fillRect(rect(), Qt::red);
 }
 
 void AbstractContainer::onWrapperAttentionhChanged(const bool attention)

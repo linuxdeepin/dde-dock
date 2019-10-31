@@ -639,6 +639,7 @@ void MainWindow::updateGeometry()
     resizeMainPanelWindow();
 
     m_mainPanel->update();
+    m_mainPanel->getTrayVisableItemCount();
 }
 
 void MainWindow::clearStrutPartial()

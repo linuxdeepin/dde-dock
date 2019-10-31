@@ -113,11 +113,6 @@ const QImage XEmbedTrayWidget::trayImage()
     return m_image;
 }
 
-QSize XEmbedTrayWidget::sizeHint() const
-{
-    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
-}
-
 void XEmbedTrayWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
@@ -134,9 +129,6 @@ void XEmbedTrayWidget::paintEvent(QPaintEvent *e)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
-#ifdef QT_DEBUG
-//    painter.fillRect(rect(), Qt::red);
-#endif
 
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_image.rect());

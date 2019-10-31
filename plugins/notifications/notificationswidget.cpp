@@ -43,11 +43,6 @@ NotificationsWidget::NotificationsWidget(QWidget *parent)
     });
 }
 
-QSize NotificationsWidget::sizeHint() const
-{
-    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
-}
-
 void NotificationsWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
@@ -71,15 +66,5 @@ void NotificationsWidget::paintEvent(QPaintEvent *e)
 
 void NotificationsWidget::resizeEvent(QResizeEvent *event)
 {
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    // 保持横纵比
-    if (position == Dock::Bottom || position == Dock::Top) {
-        setMaximumWidth(height());
-        setMaximumHeight(QWIDGETSIZE_MAX);
-    } else {
-        setMaximumHeight(width());
-        setMaximumWidth(QWIDGETSIZE_MAX);
-    }
-
     QWidget::resizeEvent(event);
 }

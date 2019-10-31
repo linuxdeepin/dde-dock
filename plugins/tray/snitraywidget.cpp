@@ -434,11 +434,6 @@ void SNITrayWidget::onSNIStatusChanged(const QString &status)
     Q_EMIT statusChanged(static_cast<SNITrayWidget::ItemStatus>(ItemStatusList.indexOf(status)));
 }
 
-QSize SNITrayWidget::sizeHint() const
-{
-    return QSize(26, 26);
-}
-
 void SNITrayWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
@@ -448,9 +443,6 @@ void SNITrayWidget::paintEvent(QPaintEvent *e)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
-#ifdef QT_DEBUG
-//    painter.fillRect(rect(), Qt::red);
-#endif
 
     const QRectF &rf = QRect(rect());
     const QRectF &rfp = QRect(m_pixmap.rect());

@@ -40,7 +40,6 @@ public:
 
     bool attention() const;
     void setAttention(bool attention);
-    QSize sizeHint() const override;
 
 Q_SIGNALS:
     void attentionChanged(const bool attention);

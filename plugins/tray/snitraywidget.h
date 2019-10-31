@@ -102,7 +102,6 @@ private Q_SLOTS:
     void leaveEvent(QEvent *event) override;
 
 private:
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     QPixmap newIconPixmap(IconType iconType);
 

@@ -42,7 +42,7 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
       m_normalContainer(new NormalContainer(m_trayPlugin)),
       m_attentionContainer(new AttentionContainer(m_trayPlugin)),
       m_holdContainer(new HoldContainer(m_trayPlugin))
-      , m_leftSpace(new QWidget)
+    , m_leftSpace(new QWidget)
 {
     setAcceptDrops(true);
 
@@ -54,17 +54,14 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_mainBoxLayout->setSpacing(0);
 
-	m_leftSpace->setFixedSize(TraySpace, TraySpace);
+    m_leftSpace->setFixedSize(TraySpace, TraySpace);
 
-	m_mainBoxLayout->addWidget(m_leftSpace);
+    m_mainBoxLayout->addWidget(m_leftSpace);
     m_mainBoxLayout->addWidget(m_normalContainer);
     m_mainBoxLayout->addWidget(m_controlWidget);
     m_mainBoxLayout->addWidget(m_holdContainer);
     m_mainBoxLayout->addWidget(m_attentionContainer);
 
-    m_mainBoxLayout->setAlignment(m_controlWidget, Qt::AlignCenter);
-
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_mainBoxLayout);
 
     m_attentionDelayTimer->setInterval(3000);
@@ -149,6 +146,7 @@ void FashionTrayItem::clearTrayWidgets()
 
 void FashionTrayItem::setDockPosition(Dock::Position pos)
 {
+    m_dockpos = pos;
     m_controlWidget->setDockPostion(pos);
     SystemTrayItem::setDockPostion(pos);
     SNITrayWidget::setDockPostion(pos);
@@ -209,6 +207,7 @@ void FashionTrayItem::hideEvent(QHideEvent *event)
 
 void FashionTrayItem::resizeEvent(QResizeEvent *event)
 {
+    resizeTray();
     QWidget::resizeEvent(event);
 }
 
@@ -224,65 +223,12 @@ void FashionTrayItem::dragEnterEvent(QDragEnterEvent *event)
     QWidget::dragEnterEvent(event);
 }
 
-//QSize FashionTrayItem::sizeHint() const
-//{
-//    return wantedTotalSize();
-//}
-
 void FashionTrayItem::init()
 {
     qDebug() << "init Fashion mode tray plugin item";
     m_controlWidget->setExpanded(m_trayPlugin->getValue(FASHION_MODE_ITEM_KEY, ExpandedKey, true).toBool());
     setDockPosition(m_trayPlugin->dockPosition());
     onExpandChanged(m_controlWidget->expanded());
-}
-
-QSize FashionTrayItem::wantedTotalSize() const
-{
-    QSize size;
-    const Dock::Position dockPosition = m_trayPlugin->dockPosition();
-
-    if (m_controlWidget->expanded()) {
-        if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
-            size.setWidth(
-                SpliterSize * 2 // 两个分隔条
-                + m_controlWidget->sizeHint().width() // 控制按钮
-                + m_normalContainer->sizeHint().width() // 普通区域
-                + m_holdContainer->sizeHint().width() // 保留区域
-                + m_attentionContainer->sizeHint().width() // 活动区域
-            );
-            size.setHeight(height());
-        } else {
-            size.setWidth(width());
-            size.setHeight(
-                SpliterSize * 2 // 两个分隔条
-                + m_controlWidget->sizeHint().height()// 控制按钮
-                + m_normalContainer->sizeHint().height() // 普通区域
-                + m_holdContainer->sizeHint().height() // 保留区域
-                + m_attentionContainer->sizeHint().height() // 活动区域
-            );
-        }
-    } else {
-        if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
-            size.setWidth(
-                SpliterSize * 2 // 两个分隔条
-                + TrayWidgetWidth // 控制按钮
-                + m_holdContainer->sizeHint().width() // 保留区域
-                + m_attentionContainer->sizeHint().width() // 活动区域
-            );
-            size.setHeight(height());
-        } else {
-            size.setWidth(width());
-            size.setHeight(
-                SpliterSize * 2 // 两个分隔条
-                + TrayWidgetWidth // 控制按钮
-                + m_holdContainer->sizeHint().height() // 保留区域
-                + m_attentionContainer->sizeHint().height() // 活动区域
-            );
-        }
-    }
-
-    return size;
 }
 
 void FashionTrayItem::onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention)
@@ -342,6 +288,8 @@ void FashionTrayItem::requestResize()
 
     int count = m_normalContainer->itemCount() + m_holdContainer->itemCount() + m_attentionContainer->itemCount();
     setProperty("TrayVisableItemCount", count + 1); // +1 : m_controlWidget
+
+    resizeTray();
 }
 
 void FashionTrayItem::refreshHoldContainerPosition()
@@ -383,4 +331,43 @@ void FashionTrayItem::onRequireDraggingWrapper()
     }
 
     container->addDraggingWrapper(draggingWrapper);
+}
+
+bool FashionTrayItem::event(QEvent *event)
+{
+    if (event->type() == QEvent::DynamicPropertyChange) {
+        const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(event)->propertyName();
+        if (propertyName == "iconSize") {
+            m_iconSize = property("iconSize").toInt();
+            m_normalContainer->setItemSize(m_iconSize);
+
+            resizeTray();
+        }
+    }
+
+    return QWidget::event(event);
+}
+
+void FashionTrayItem::resizeTray()
+{
+    if (!m_iconSize)
+        return;
+
+    if (m_dockpos == Dock::Position::Top || m_dockpos == Dock::Position::Bottom) {
+        m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        m_holdContainer->setFixedHeight(QWIDGETSIZE_MAX);
+
+        m_attentionContainer->setFixedWidth((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + m_attentionContainer->itemCount() ? TraySpace : 0);
+        m_attentionContainer->setFixedHeight(QWIDGETSIZE_MAX);
+
+        m_controlWidget->setFixedSize(m_iconSize, QWIDGETSIZE_MAX);
+    } else {
+        m_holdContainer->setFixedWidth(QWIDGETSIZE_MAX);
+        m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+
+        m_attentionContainer->setFixedWidth(QWIDGETSIZE_MAX);
+        m_attentionContainer->setFixedHeight((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + m_attentionContainer->itemCount() ? TraySpace : 0);
+
+        m_controlWidget->setFixedSize(QWIDGETSIZE_MAX, m_iconSize);
+    }    
 }

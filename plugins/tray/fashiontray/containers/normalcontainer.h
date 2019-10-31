@@ -31,7 +31,6 @@ private:
 
 private:
     mutable QVariantAnimation *m_sizeAnimation;
-
 };
 
 #endif // NORMALCONTAINER_H

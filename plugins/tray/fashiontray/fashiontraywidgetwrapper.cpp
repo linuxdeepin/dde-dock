@@ -191,11 +191,6 @@ void FashionTrayWidgetWrapper::leaveEvent(QEvent *event)
     QWidget::leaveEvent(event);
 }
 
-QSize FashionTrayWidgetWrapper::sizeHint() const
-{
-    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
-}
-
 void FashionTrayWidgetWrapper::resizeEvent(QResizeEvent *event)
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();

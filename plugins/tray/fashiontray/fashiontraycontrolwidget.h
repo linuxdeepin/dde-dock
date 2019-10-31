@@ -37,7 +37,6 @@ public:
 
     bool expanded() const;
     void setExpanded(const bool &expanded);
-    QSize sizeHint() const override;
 
 Q_SIGNALS:
     void expandChanged(const bool expanded);

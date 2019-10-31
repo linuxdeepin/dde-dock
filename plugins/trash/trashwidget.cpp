@@ -45,6 +45,8 @@ TrashWidget::TrashWidget(QWidget *parent)
     setAcceptDrops(true);
 
     m_defaulticon = QIcon::fromTheme(":/icons/user-trash.svg");
+
+    setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
 }
 
 QWidget *TrashWidget::popupApplet()
@@ -178,7 +180,17 @@ void TrashWidget::updateIcon()
     if (displayMode == Dock::Efficient)
         iconString.append("-symbolic");
 
-        const int size = std::min(width(), height()) * ((Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) ? 0.8 : 0.7);
+    int size = std::min(width(), height());
+    if (size < PLUGIN_ICON_MIN_SIZE)
+        size = PLUGIN_ICON_MIN_SIZE;
+    if (size > PLUGIN_BACKGROUND_MAX_SIZE)
+    {
+        size *= ((Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) ? 0.8 : 0.7);
+        if(size < PLUGIN_BACKGROUND_MAX_SIZE)
+            size = PLUGIN_BACKGROUND_MAX_SIZE;
+    }
+
+
     QIcon icon = QIcon::fromTheme(iconString, m_defaulticon);
 
     const auto ratio = devicePixelRatioF();

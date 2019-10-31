@@ -30,6 +30,9 @@
 
 using namespace Dock;
 
+class TrayPluginItem;
+class PluginsItem;
+
 class MainPanelDelegate
 {
 public:
@@ -56,6 +59,7 @@ public:
     void removePluginAreaItem(QWidget *wdg);
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode m_displayMode);
+    void getTrayVisableItemCount();
 
     MainPanelDelegate *delegate() const;
     void setDelegate(MainPanelDelegate *delegate);
@@ -86,7 +90,7 @@ private:
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
     void paintEvent(QPaintEvent *event) override;
     void resizeDockIcon();
-    void calcuDockIconSize(int w,int h);
+    void calcuDockIconSize(const int w, const int h, PluginsItem *timePlugin = nullptr, PluginsItem *trashPlugin = nullptr);
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -115,6 +119,8 @@ private:
     QLabel *m_appSpliter;
     QLabel *m_traySpliter;
     QPoint m_mousePressPos;
+    int m_trayIconCount;
+    TrayPluginItem *m_tray = nullptr;
 };
 
 #endif // MAINPANELCONTROL_H

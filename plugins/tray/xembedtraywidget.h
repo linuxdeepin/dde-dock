@@ -46,7 +46,6 @@ public:
     static bool isXEmbedKey(const QString &itemKey);
 
 private:
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -54,7 +53,6 @@ private:
 
     void wrapWindow();
     void sendHoverEvent();
-//    void hideIcon();
     void refershIconImage();
 
     static QString getAppNameForWindow(quint32 winId);

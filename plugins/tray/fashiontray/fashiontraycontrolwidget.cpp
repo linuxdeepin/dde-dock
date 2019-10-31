@@ -113,7 +113,11 @@ void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
         DStyleHelper dstyle(style());
         const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
-        path.addRoundedRect(rect(), radius, radius);
+        int minSize = std::min(width(), height());
+        QRect rc(0, 0, minSize, minSize);
+        rc.moveTo(rect().center() - rc.center());
+
+        path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
     }
     // reset opacity
@@ -178,23 +182,8 @@ void FashionTrayControlWidget::leaveEvent(QEvent *event)
     QWidget::leaveEvent(event);
 }
 
-QSize FashionTrayControlWidget::sizeHint() const
-{
-    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
-}
-
 void FashionTrayControlWidget::resizeEvent(QResizeEvent *event)
 {
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    // 保持横纵比
-    if (position == Dock::Bottom || position == Dock::Top) {
-        setMaximumWidth(height());
-        setMaximumHeight(PLUGIN_BACKGROUND_MAX_SIZE);
-    } else {
-        setMaximumWidth(PLUGIN_BACKGROUND_MAX_SIZE);
-        setMaximumHeight(width());
-    }
-
     QWidget::resizeEvent(event);
 }
 

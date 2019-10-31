@@ -24,8 +24,9 @@ public:
     virtual void setExpand(const bool expand);
     virtual QSize totalSize() const;
     virtual int itemCount();
-//    QSize sizeHint() const Q_DECL_OVERRIDE;
 
+    int itemSize() {return m_itemSize;}
+    void setItemSize(int itemSize);
     void clearWrapper();
     void saveCurrentOrderToConfig();
     bool isEmpty();
@@ -73,6 +74,7 @@ private:
     Dock::Position m_dockPosition;
 
     QSize m_wrapperSize;
+    int m_itemSize = 40;
 };
 
 #endif // ABSTRACTCONTAINER_H

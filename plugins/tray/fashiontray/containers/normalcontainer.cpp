@@ -8,14 +8,14 @@ NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
     m_sizeAnimation->setEasingCurve(QEasingCurve::InOutCubic);
 
     connect(m_sizeAnimation, &QVariantAnimation::valueChanged, [ = ](const QVariant & value) {
+
+        if (m_sizeAnimation->state() != QVariantAnimation::Running)
+            return;
+
         adjustMaxSize(value.toSize());
     });
 
     connect(m_sizeAnimation, &QVariantAnimation::finished, [ = ]() {
-        for (auto w : wrapperList()) {
-            w->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-        }
-
         this->setVisible(expand());
     });
 
@@ -70,6 +70,13 @@ void NormalContainer::refreshVisible()
 {
     AbstractContainer::refreshVisible();
 
+    for (auto w : wrapperList()) {
+        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom)
+            w->setFixedSize(itemSize(), QWIDGETSIZE_MAX);
+        else
+            w->setFixedSize(QWIDGETSIZE_MAX, itemSize());
+    }
+
     if (isEmpty()) {
         // set the minimum size to 1 to avoid can not drag back wrappers when
         // all wrappers has been drag out
@@ -120,7 +127,7 @@ void NormalContainer::adjustMaxSize(const QSize size)
 
 int NormalContainer::itemCount()
 {
-    if(expand())
+    if (expand())
         return AbstractContainer::itemCount();
     else
         return 0;
@@ -128,18 +135,17 @@ int NormalContainer::itemCount()
 
 void NormalContainer::setExpand(const bool expand)
 {
+    int itemSize;
+
+    if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom)
+        itemSize = std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
+    else
+        itemSize = std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
+
     for (auto w : wrapperList()) {
-        // reset all tray item attention state
         w->setAttention(false);
 
-        int itemSize;
-
-        if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom)
-            itemSize = std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
-        else
-            itemSize = std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
-
-        w->setFixedSize(itemSize, itemSize);
+//        w->setFixedSize(itemSize, itemSize);
     }
 
     AbstractContainer::setExpand(expand);

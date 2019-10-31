@@ -35,7 +35,6 @@ public:
     explicit NotificationsWidget(QWidget *parent = 0);
 
 protected:
-    QSize sizeHint() const override;
     void paintEvent(QPaintEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
 };

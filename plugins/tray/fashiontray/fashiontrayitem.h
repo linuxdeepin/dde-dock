@@ -66,11 +66,11 @@ protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-//    QSize sizeHit() const Q_DECL_OVERRIDE;
+    bool event(QEvent *event) override;
 
 private:
     void init();
-    QSize wantedTotalSize() const;
+    void resizeTray();
 
 private Q_SLOTS:
     void onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention);
@@ -94,7 +94,9 @@ private:
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;
-QWidget *m_leftSpace;
+    QWidget *m_leftSpace;
+    Dock::Position m_dockpos;
+    int m_iconSize  = 40;
 };
 
 #endif // FASHIONTRAYITEM_H

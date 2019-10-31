@@ -36,30 +36,29 @@ class LauncherItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit LauncherItem(QWidget *parent = 0);
+    explicit LauncherItem(QWidget *parent = nullptr) ;
 
-    inline ItemType itemType() const {return Launcher;}
+    inline ItemType itemType() const override {return Launcher;}
 
-    void refershIcon();
+    void refershIcon() override;
 
 protected:
     void showEvent(QShowEvent* event) override;
 
 private:
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
-    QWidget *popupTips();
+    QWidget *popupTips() override;
 
     void onGSettingsChanged(const QString& key);
 
     bool checkGSettingsControl() const;
 
 private:
-    QPixmap m_smallIcon;
-    QPixmap m_largeIcon;
+    QPixmap m_icon;
     LauncherInter *m_launcherInter;
     TipsWidget *m_tips;
     QGSettings* m_gsettings;

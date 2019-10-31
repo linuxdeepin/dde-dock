@@ -68,8 +68,6 @@ bool TrayPluginItem::eventFilter(QObject *watched, QEvent *e)
         const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName();
         if (propertyName == "TrayVisableItemCount") {
             m_trayVisableItemCount = watched->property("TrayVisableItemCount").toInt();
-
-            qDebug()<<"++++++++++++++++"<<m_trayVisableItemCount;
             Q_EMIT trayVisableCountChanged(m_trayVisableItemCount);
         }
     }

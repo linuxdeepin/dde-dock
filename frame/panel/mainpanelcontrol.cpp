@@ -26,6 +26,7 @@
 #include "../item/components/appdrag.h"
 #include "../item/appitem.h"
 #include "../item/pluginsitem.h"
+#include "../item/traypluginitem.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -38,6 +39,8 @@
 
 #define SPLITER_SIZE 2
 #define TRASH_MARGIN 20
+#define PLUGIN_MAX_SIZE  40
+#define PLUGIN_MIN_SIZE  20
 
 DWIDGET_USE_NAMESPACE
 
@@ -172,6 +175,7 @@ void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 
 void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
+    m_tray = static_cast<TrayPluginItem *>(wdg);
     m_trayAreaLayout->insertWidget(index, wdg);
     resizeDockIcon();
 }
@@ -472,16 +476,6 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             moveAppSonWidget();
     }
 
-    if (watched == m_trayAreaWidget) {
-        if (event->type() == QEvent::Resize) {
-            resizeDockIcon();
-        }
-    }
-
-    if (watched == m_trayAreaWidget) {
-        if (event->type() == QEvent::Resize) {
-        }
-    }
     if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
         QDropEvent *e = static_cast<QDropEvent *>(event);
         bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
@@ -722,72 +716,162 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
 
 void MainPanelControl::resizeDockIcon()
 {
-    //计算插件区域的垃圾箱大小
-    int trashWidth = 0;
-    int trashHeight = 0;
+    if (!m_tray)
+        return;
+
+    PluginsItem *timePlugin = nullptr;
+    PluginsItem *trashPlugin = nullptr;
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         PluginsItem *w = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-        if (w->pluginName() == "trash") {
-            trashWidth = w->width();
-            trashHeight = w->height();
-            break;
+        if (w->pluginName() == "datetime") {
+            timePlugin = w;
+        } else if (w->pluginName() == "trash") {
+            trashPlugin = w;
         }
     }
-    //计算luancher 和 APP 区域大小
-    int iconWidgetwidth = 0;
-    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        iconWidgetwidth = this->width() - m_trayAreaWidget->width() - (m_pluginAreaWidget->width() - trashHeight);
-    } else {
-        iconWidgetwidth = this->height() - m_trayAreaWidget->height() - (m_pluginAreaWidget->height() - trashWidth);
-    }
 
-    //计算每一个icon的大小
-    float iconSize = (iconWidgetwidth) / (m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + 1) - 1;
+    // 总宽度
+    int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
+    // 减去托盘间隔区域
+    totalLength -= (m_tray->trayVisableItemCount() + 1) * 10;
+    // 减去插件间隔
+    totalLength -= (m_pluginLayout->count() + 1) * 10;
+    // 减去3个分割线的宽度
+    totalLength -= 3 * SPLITER_SIZE;
+
+    // 减去时间控件的宽度
+    if ((m_position == Position::Top) || (m_position == Position::Bottom))
+        totalLength -= (timePlugin ? timePlugin->centralWidget()->sizeHint().width() : 0);
+    else
+        totalLength -= (timePlugin ? timePlugin->centralWidget()->sizeHint().height() : 0);
+
+    if (totalLength < 0)
+        return;
+
+    // 插件的个数（包含托盘和插件，减去时间控件，减去垃圾桶）
+    int pluginCount = m_tray->trayVisableItemCount() + (m_pluginLayout->count() - (timePlugin ? 1 : 0) - (trashPlugin ? 1 : 0));
+
+    // icon个数
+    int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + pluginCount;
+
+    int iconSize = 0;
+
+    // 余数
+    int yu = (totalLength % iconCount);
+    // icon宽度 = (总宽度-余数)/icon个数
+    iconSize = (totalLength - yu) / iconCount;
+
+    if (iconSize < 20 || iconSize > 40) {
+
+        // 减去插件和托盘的宽度
+        if (iconSize < 20)
+            totalLength -= 20 * pluginCount;
+        else
+            totalLength -= 40 * pluginCount;
+
+        iconCount -= pluginCount;
+
+        // 余数
+        int yu = (totalLength % iconCount);
+        // icon宽度 = (总宽度-余数)/icon个数
+        iconSize = (totalLength - yu) / iconCount;
+    }
 
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         if (iconSize >= height()) {
-            calcuDockIconSize(height(), height());
+            calcuDockIconSize(height(), height(), timePlugin, trashPlugin);
         } else {
-            calcuDockIconSize(iconSize, height());
+            calcuDockIconSize(iconSize, height(), timePlugin, trashPlugin);
         }
     } else {
         if (iconSize >= width()) {
-            calcuDockIconSize(width(), width());
+            calcuDockIconSize(width(), width(), timePlugin, trashPlugin);
         } else {
-            calcuDockIconSize(width(), iconSize);
+            calcuDockIconSize(width(), iconSize, timePlugin, trashPlugin);
         }
     }
 }
 
-void MainPanelControl::calcuDockIconSize(int w, int h)
+void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *timePlugin, PluginsItem *trashPlugin)
 {
     for (int i = 0; i < m_fixedAreaLayout->count(); ++ i) {
         m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize(w, h);
     }
 
-    for (int i = 0; i < m_appAreaSonLayout->count(); ++ i) {
-        m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(w, h);
-    }
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        m_fixedSpliter->setFixedSize(SPLITER_SIZE, int(w * 0.6));
+        m_appSpliter->setFixedSize(SPLITER_SIZE, int(w * 0.6));
+        m_traySpliter->setFixedSize(SPLITER_SIZE, int(w * 0.5));
+        // 垃圾桶
+        if (trashPlugin)
+            trashPlugin->setFixedSize(std::min(w, h - 20), h - 20);
 
-    for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-        PluginsItem *p = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-        if (p->pluginName() == "trash") {
-            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                p->setFixedSize(w, h - TRASH_MARGIN);
-            } else {
-                p->setFixedSize(w - TRASH_MARGIN, h);
-            }
-            break;
+
+        for (int i = 0; i < m_appAreaSonLayout->count(); ++ i) {
+            m_appAreaSonLayout->itemAt(i)->widget()->setMaximumWidth(h);
+        }
+
+    } else {
+        m_fixedSpliter->setFixedSize(int(h * 0.6), SPLITER_SIZE);
+        m_appSpliter->setFixedSize(int(h * 0.6), SPLITER_SIZE);
+        m_traySpliter->setFixedSize(int(h * 0.5), SPLITER_SIZE);
+        // 垃圾桶
+        if (trashPlugin)
+            trashPlugin->setFixedSize(w - 20, std::min(w - 20, h));
+
+
+        for (int i = 0; i < m_appAreaSonLayout->count(); ++ i) {
+            m_appAreaSonLayout->itemAt(i)->widget()->setMaximumHeight(w);
         }
     }
 
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        m_fixedSpliter->setFixedSize(SPLITER_SIZE, w * 0.6);
-        m_appSpliter->setFixedSize(SPLITER_SIZE, w * 0.6);
-        m_traySpliter->setFixedSize(SPLITER_SIZE, w * 0.5);
+    // 插件和托盘
+
+    // 托盘上每个图标大小
+    int tray_item_size = 20;
+
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        w = qBound(20, w, 40);
+        tray_item_size = std::min(w, h - 20);
     } else {
-        m_fixedSpliter->setFixedSize(h * 0.6, SPLITER_SIZE);
-        m_appSpliter->setFixedSize(h * 0.6, SPLITER_SIZE);
-        m_traySpliter->setFixedSize(h * 0.5, SPLITER_SIZE);
+        h = qBound(20, h, 40);
+        tray_item_size = std::min(w - 20, h);
     }
+
+    if (tray_item_size < 20)
+        return;
+
+    int pluginCount = (m_pluginLayout->count() - (timePlugin ? 1 : 0) - (trashPlugin ? 1 : 0));
+
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+
+        // 插件区域宽度
+        int timeWidth = timePlugin ? timePlugin->centralWidget()->sizeHint().width() + 10 : 0;
+        int trashWidth = trashPlugin ? trashPlugin->width() + 10 : 0;
+
+        m_pluginAreaWidget->setFixedWidth((tray_item_size + 10)*pluginCount + timeWidth + trashWidth + 10);
+        m_pluginAreaWidget->setFixedHeight(h);
+
+    } else {
+        m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+
+        int timeHeight = timePlugin ? timePlugin->centralWidget()->sizeHint().height() + 10 : 0;
+        int trashHeight = trashPlugin ? trashPlugin->height() + 10 : 0;
+
+        m_pluginAreaWidget->setFixedWidth(w);
+        m_pluginAreaWidget->setFixedHeight((tray_item_size + 10)*pluginCount + timeHeight + trashHeight + 10);
+    }
+}
+
+void MainPanelControl::getTrayVisableItemCount()
+{
+    if (m_trayAreaLayout->count() > 0) {
+        TrayPluginItem *w = static_cast<TrayPluginItem *>(m_trayAreaLayout->itemAt(0)->widget());
+        m_trayIconCount = w->trayVisableItemCount();
+    } else {
+        m_trayIconCount = 0;
+    }
+
+    resizeDockIcon();
 }
