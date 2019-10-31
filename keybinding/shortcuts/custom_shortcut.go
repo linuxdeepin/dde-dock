@@ -86,8 +86,8 @@ func (cs *CustomShortcut) GetAction() *Action {
 func (cs *CustomShortcut) SetName(name string) {
 	cs.Name = name
 	if cs.manager.pinyinEnabled {
-		cs.pinyinInit = false
-		cs.initPinyin()
+		cs.nameBlocksInit = false
+		cs.initNameBlocks()
 	}
 }
 

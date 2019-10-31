@@ -25,18 +25,18 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/mozillazg/go-pinyin"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
+	"pkg.deepin.io/lib/pinyin_search"
 )
 
 type BaseShortcut struct {
-	mu         sync.Mutex
-	Id         string
-	Type       int32
-	Keystrokes []*Keystroke `json:"Accels"`
-	Name       string
-	pinyinInit bool
-	namePinyin []string
+	mu             sync.Mutex
+	Id             string
+	Type           int32
+	Keystrokes     []*Keystroke `json:"Accels"`
+	Name           string
+	nameBlocksInit bool
+	nameBlocks     pinyin_search.Blocks
 }
 
 func (sb *BaseShortcut) String() string {
@@ -105,20 +105,18 @@ func (sb *BaseShortcut) ShouldEmitSignalChanged() bool {
 	return false
 }
 
-var pinyinArgs = pinyin.NewArgs()
-
-func (sb *BaseShortcut) GetNamePinyin() []string {
-	if sb.pinyinInit {
-		return sb.namePinyin
+func (sb *BaseShortcut) GetNameBlocks() pinyin_search.Blocks {
+	if sb.nameBlocksInit {
+		return sb.nameBlocks
 	}
-	sb.initPinyin()
-	return sb.namePinyin
+	sb.initNameBlocks()
+	return sb.nameBlocks
 }
 
-func (sb *BaseShortcut) initPinyin() {
+func (sb *BaseShortcut) initNameBlocks() {
 	name := sb.GetName()
-	sb.namePinyin = pinyin.LazyPinyin(name, pinyinArgs)
-	sb.pinyinInit = true
+	sb.nameBlocks = pinyin_search.Split(name)
+	sb.nameBlocksInit = true
 }
 
 const (
@@ -135,7 +133,7 @@ type Shortcut interface {
 	GetType() int32
 
 	GetName() string
-	GetNamePinyin() []string
+	GetNameBlocks() pinyin_search.Blocks
 
 	GetKeystrokesModifiable() bool
 	GetKeystrokes() []*Keystroke

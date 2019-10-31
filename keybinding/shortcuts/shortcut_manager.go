@@ -33,7 +33,9 @@ import (
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
 	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/pinyin_search"
 )
 
 var logger *log.Logger
@@ -274,42 +276,38 @@ func (sm *ShortcutManager) ListByType(type0 int32) (list []Shortcut) {
 
 var regSpace = regexp.MustCompile(`\s+`)
 
-func (sm *ShortcutManager) Search(key string) (list []Shortcut) {
-	// remove all space
-	key = regSpace.ReplaceAllString(key, "")
-	key = strings.ToLower(key)
+func (sm *ShortcutManager) Search(query string) (list []Shortcut) {
+	gQuery := pinyin_search.GeneralizeQuery(query)
 
 	sm.idShortcutMapMu.Lock()
 	defer sm.idShortcutMapMu.Unlock()
 
 	for _, shortcut := range sm.idShortcutMap {
-		if sm.matchShortcut(shortcut, key) {
+		if sm.matchShortcut(shortcut, query, gQuery) {
 			list = append(list, shortcut)
 		}
 	}
 	return list
 }
 
-func (sm *ShortcutManager) matchShortcut(shortcut Shortcut, key string) bool {
+func (sm *ShortcutManager) matchShortcut(shortcut Shortcut, query, gQuery string) bool {
 	name := shortcut.GetName()
-	name = regSpace.ReplaceAllString(name, "")
 	name = strings.ToLower(name)
 
-	if strings.Contains(name, key) {
+	if strings.Contains(name, query) {
 		return true
 	}
 
 	if sm.pinyinEnabled {
-		namePy := shortcut.GetNamePinyin()
-		if len(namePy) > 0 &&
-			pinYinDistinguish(key, 0, namePy, 0, 0) {
+		nameBlocks := shortcut.GetNameBlocks()
+		if nameBlocks.Match(gQuery) {
 			return true
 		}
 	}
 
 	keystrokes := shortcut.GetKeystrokes()
 	for _, keystroke := range keystrokes {
-		if strings.Contains(keystroke.searchString(), key) {
+		if strings.Contains(keystroke.searchString(), gQuery) {
 			return true
 		}
 	}
@@ -870,4 +868,9 @@ func (sm *ShortcutManager) AddKWin(wmObj *wm.Wm) {
 		ks := newKWinShortcut(accel.Id, name, accel.Keystrokes, wmObj)
 		sm.addWithoutLock(ks)
 	}
+}
+
+func isZH() bool {
+	lang := gettext.QueryLang()
+	return strings.HasPrefix(lang, "zh")
 }

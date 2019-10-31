@@ -376,8 +376,8 @@ func (m *Manager) SetNumLockState(state int32) *dbus.Error {
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) SearchShortcuts(key string) (string, *dbus.Error) {
-	list := m.shortcutManager.Search(key)
+func (m *Manager) SearchShortcuts(query string) (string, *dbus.Error) {
+	list := m.shortcutManager.Search(query)
 	ret, err := util.MarshalJSON(list)
 	if err != nil {
 		return "", dbusutil.ToError(err)

@@ -126,7 +126,7 @@ type Manager struct {
 		GetShortcut               func() `in:"id,type" out:"shortcut"`
 		ListAllShortcuts          func() `out:"shortcuts"`
 		ListShortcutsByType       func() `in:"type" out:"shortcuts"`
-		SearchShortcuts           func() `in:"key" out:"shortcuts"`
+		SearchShortcuts           func() `in:"query" out:"shortcuts"`
 		LookupConflictingShortcut func() `in:"keystroke" out:"shortcut"`
 		ModifyCustomShortcut      func() `in:"id,name,cmd,keystroke"`
 		SetNumLockState           func() `in:"state"`
