@@ -35,7 +35,6 @@ public:
     explicit OnboardItem(QWidget *parent = nullptr);
 
 protected:
-    QSize sizeHint() const override;
     void paintEvent(QPaintEvent *e) override;
 
 private:

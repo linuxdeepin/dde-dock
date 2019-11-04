@@ -46,11 +46,6 @@ PluginWidget::PluginWidget(QWidget *parent)
     m_icon = QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg");
 }
 
-QSize PluginWidget::sizeHint() const
-{
-    return QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE);
-}
-
 void PluginWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
@@ -156,19 +151,4 @@ void PluginWidget::leaveEvent(QEvent *event)
     update();
 
     QWidget::leaveEvent(event);
-}
-
-void PluginWidget::resizeEvent(QResizeEvent *event)
-{
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    // 保持横纵比
-    if (position == Dock::Bottom || position == Dock::Top) {
-        setMaximumWidth(height());
-        setMaximumHeight(QWIDGETSIZE_MAX);
-    } else {
-        setMaximumHeight(width());
-        setMaximumWidth(QWIDGETSIZE_MAX);
-    }
-
-    QWidget::resizeEvent(event);
 }
