@@ -66,60 +66,6 @@ func TestUnmarshal(t *testing.T) {
 	})
 }
 
-func TestMarshal(t *testing.T) {
-	Convey("Marshal info", t, func() {
-		content, err := toJSON(&AppInfo{
-			Id:   "gvim.desktop",
-			Name: "gvim",
-			Exec: "gvim",
-		})
-		So(err, ShouldBeNil)
-		So(content, ShouldEqual,
-			"{\"Id\":\"gvim.desktop\","+
-				"\"Name\":\"gvim\","+
-				"\"DisplayName\":\"\","+
-				"\"Description\":\"\","+
-				"\"Icon\":\"\","+
-				"\"Exec\":\"gvim\"}")
-	})
-
-	Convey("Marshal info list", t, func() {
-		content, err := toJSON(AppInfos{
-			&AppInfo{
-				Id:   "gvim.desktop",
-				Name: "gvim",
-				Exec: "gvim",
-			},
-			&AppInfo{
-				Id:   "firefox.desktop",
-				Name: "Firefox",
-				Exec: "firefox",
-			},
-		})
-		So(err, ShouldBeNil)
-		So(content, ShouldEqual, "["+
-			"{\"Id\":\"gvim.desktop\","+
-			"\"Name\":\"gvim\","+
-			"\"DisplayName\":\"\","+
-			"\"Description\":\"\","+
-			"\"Icon\":\"\","+
-			"\"Exec\":\"gvim\"},"+
-			"{\"Id\":\"firefox.desktop\","+
-			"\"Name\":\"Firefox\","+
-			"\"DisplayName\":\"\","+
-			"\"Description\":\"\","+
-			"\"Icon\":\"\","+
-			"\"Exec\":\"firefox\"}"+
-			"]")
-	})
-
-	Convey("Marshal nil", t, func() {
-		content, err := toJSON(nil)
-		So(content, ShouldEqual, "null")
-		So(err, ShouldBeNil)
-	})
-}
-
 func TestIsStrInList(t *testing.T) {
 	Convey("Test str whether in list", t, func() {
 		var list = []string{"abc", "abs"}
