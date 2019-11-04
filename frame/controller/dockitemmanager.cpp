@@ -212,6 +212,12 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
     m_itemList.insert(insertIndex, item);
+
+    if (index != -1) {
+        emit itemInserted(insertIndex - 1, item);
+        return;
+    }
+
     emit itemInserted(insertIndex, item);
 }
 
