@@ -68,7 +68,7 @@ func TestUnmarshal(t *testing.T) {
 
 func TestMarshal(t *testing.T) {
 	Convey("Marshal info", t, func() {
-		content, err := marshal(&AppInfo{
+		content, err := toJSON(&AppInfo{
 			Id:   "gvim.desktop",
 			Name: "gvim",
 			Exec: "gvim",
@@ -84,7 +84,7 @@ func TestMarshal(t *testing.T) {
 	})
 
 	Convey("Marshal info list", t, func() {
-		content, err := marshal(AppInfos{
+		content, err := toJSON(AppInfos{
 			&AppInfo{
 				Id:   "gvim.desktop",
 				Name: "gvim",
@@ -114,7 +114,7 @@ func TestMarshal(t *testing.T) {
 	})
 
 	Convey("Marshal nil", t, func() {
-		content, err := marshal(nil)
+		content, err := toJSON(nil)
 		So(content, ShouldEqual, "null")
 		So(err, ShouldBeNil)
 	})

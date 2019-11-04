@@ -41,20 +41,21 @@ type AppInfo struct {
 	// Icon
 	Icon string
 	// Commandline
-	Exec string
+	Exec      string
+	CanDelete bool
 
 	fileName string
 }
 
 type AppInfos []*AppInfo
 
-func GetAppInfo(ty string) (*AppInfo, error) {
-	id, err := mime.GetDefaultApp(ty, false)
+func GetDefaultAppInfo(mimeType string) (*AppInfo, error) {
+	id, err := mime.GetDefaultApp(mimeType, false)
 	if err != nil {
 		return nil, err
 	}
 
-	info, err := newAppInfoById(id)
+	info, err := newAppInfoById2(id, mimeType)
 	if err != nil {
 		return nil, err
 	}
@@ -90,10 +91,10 @@ func SetAppInfo(ty, id string) error {
 	return mime.SetDefaultApp(ty, id)
 }
 
-func GetAppInfos(ty string) AppInfos {
+func GetAppInfos(mimeType string) AppInfos {
 	var infos AppInfos
-	for _, id := range mime.GetAppList(ty) {
-		appInfo, err := newAppInfoById(id)
+	for _, id := range mime.GetAppList(mimeType) {
+		appInfo, err := newAppInfoById2(id, mimeType)
 		if err != nil {
 			logger.Warning(err)
 			continue
@@ -103,36 +104,60 @@ func GetAppInfos(ty string) AppInfos {
 	return infos
 }
 
-func newAppInfoById(id string) (*AppInfo, error) {
-	ginfo := gio.NewDesktopAppInfo(id)
-	if ginfo == nil {
+func newAppInfoByIdAux(id string, fn func(dai *gio.DesktopAppInfo, appInfo *AppInfo)) (*AppInfo, error) {
+	dai := gio.NewDesktopAppInfo(id)
+	if dai == nil {
 		id = "kde4-" + id
-		ginfo = gio.NewDesktopAppInfo(id)
+		dai = gio.NewDesktopAppInfo(id)
 	}
-	if ginfo == nil {
+	if dai == nil {
 		return nil, fmt.Errorf("gio.NewDesktopAppInfo failed: id %v", id)
 	}
-
-	defer ginfo.Unref()
-	if !ginfo.ShouldShow() {
+	defer dai.Unref()
+	if !dai.ShouldShow() {
 		return nil, fmt.Errorf("app %q should not show", id)
 	}
-
-	var info = &AppInfo{
+	var appInfo = &AppInfo{
 		Id:          id,
-		Name:        ginfo.GetName(),
-		DisplayName: ginfo.GetGenericName(),
-		Description: ginfo.GetDescription(),
-		Exec:        ginfo.GetCommandline(),
-		fileName:    ginfo.GetFilename(),
+		Name:        dai.GetName(),
+		DisplayName: dai.GetGenericName(),
+		Description: dai.GetDescription(),
+		Exec:        dai.GetCommandline(),
+		fileName:    dai.GetFilename(),
 	}
-	iconObj := ginfo.GetIcon()
+	iconObj := dai.GetIcon()
 	if iconObj != nil {
-		info.Icon = iconObj.ToString()
+		appInfo.Icon = iconObj.ToString()
 		iconObj.Unref()
 	}
 
-	return info, nil
+	if fn != nil {
+		fn(dai, appInfo)
+	}
+
+	return appInfo, nil
+}
+
+func newAppInfoById2(id string, mimeType string) (*AppInfo, error) {
+	// 可以填写 CanDelete 字段
+	gInfo, err := newAppInfoByIdAux(id, func(dai *gio.DesktopAppInfo, appInfo *AppInfo) {
+		appInfo.CanDelete = canDeleteAssociation(dai, mimeType)
+	})
+	return gInfo, err
+}
+
+func newAppInfoById(id string) (*AppInfo, error) {
+	return newAppInfoByIdAux(id, nil)
+}
+
+func canDeleteAssociation(appInfo *gio.DesktopAppInfo, mimeType string) bool {
+	mimeTypes := appInfo.GetSupportedTypes()
+	for _, mt := range mimeTypes {
+		if mt == mimeType {
+			return false
+		}
+	}
+	return true
 }
 
 func findFilePath(file string) string {

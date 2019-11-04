@@ -20,13 +20,18 @@
 package mime
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/fsnotify"
+	"pkg.deepin.io/lib/keyfile"
+	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
@@ -49,12 +54,13 @@ type Manager struct {
 	doneResp chan struct{}
 
 	methods *struct {
-		GetDefaultApp func() `in:"mime_type" out:"default_app"`
-		SetDefaultApp func() `in:"mime_types,desktop_id"`
-		ListApps      func() `in:"mime_type" out:"apps"`
-		ListUserApps  func() `in:"mime_type" out:"user_apps"`
-		AddUserApp    func() `in:"mime_types,desktop_id"`
-		DeleteUserApp func() `in:"desktop_id"`
+		GetDefaultApp func() `in:"mimeType" out:"defaultApp"`
+		SetDefaultApp func() `in:"mimeTypes,desktopId"`
+		ListApps      func() `in:"mimeType" out:"apps"`
+		DeleteApp     func() `in:"mimeTypes,desktopId"`
+		ListUserApps  func() `in:"mimeType" out:"userApps"`
+		AddUserApp    func() `in:"mimeTypes,desktopId"`
+		DeleteUserApp func() `in:"desktopId"`
 	}
 
 	signals *struct {
@@ -207,21 +213,21 @@ func (m *Manager) Reset() {
 // ty: the special mime
 // ret0: the default app info
 // ret1: error message
-func (m *Manager) GetDefaultApp(ty string) (string, *dbus.Error) {
+func (m *Manager) GetDefaultApp(mimeType string) (string, *dbus.Error) {
 	var (
 		info *AppInfo
 		err  error
 	)
-	if ty == AppMimeTerminal {
+	if mimeType == AppMimeTerminal {
 		info, err = getDefaultTerminal()
 	} else {
-		info, err = GetAppInfo(ty)
+		info, err = GetDefaultAppInfo(mimeType)
 	}
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
 
-	defaultApp, err := marshal(info)
+	defaultApp, err := toJSON(info)
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
@@ -271,12 +277,79 @@ func (m *Manager) ListApps(ty string) (string, *dbus.Error) {
 		filteredInfos = append(filteredInfos, info)
 	}
 
-	content, err := marshal(filteredInfos)
+	content, err := toJSON(filteredInfos)
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}
 
 	return content, nil
+}
+
+func (m *Manager) DeleteApp(mimeTypes []string, desktopId string) *dbus.Error {
+	err := m.deleteApp(mimeTypes, desktopId)
+	return dbusutil.ToError(err)
+}
+
+var userMimeAppsListFile = filepath.Join(basedir.GetUserConfigDir(), "mimeapps.list")
+
+func (m *Manager) deleteApp(mimeTypes []string, desktopId string) error {
+	dai := desktopappinfo.NewDesktopAppInfo(desktopId)
+	if dai == nil {
+		return fmt.Errorf("not found desktop app info %q", desktopId)
+	}
+	desktopId = toDesktopId(dai.GetId())
+
+	mimeAppsKeyFile := keyfile.NewKeyFile()
+	err := mimeAppsKeyFile.LoadFromFile(userMimeAppsListFile)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+
+	originMimeTypes := strv.Strv(dai.GetMimeTypes())
+
+	for _, mimeType := range mimeTypes {
+		if originMimeTypes.Contains(mimeType) {
+			// ignore, should not delete
+		} else {
+			deleteMimeAssociation(mimeAppsKeyFile, mimeType, desktopId)
+		}
+	}
+
+	return saveMimeAppsList(mimeAppsKeyFile)
+}
+
+func toDesktopId(appId string) string {
+	appId = strings.ReplaceAll(appId, "/", "-")
+	return appId + ".desktop"
+}
+
+const (
+	sectionDefaultApps         = "Default Applications"
+	sectionAddedAssociations   = "Added Associations"
+	sectionRemovedAssociations = "Removed Associations"
+)
+
+func deleteMimeAssociation(mimeAppsKf *keyfile.KeyFile, mimeType string, desktopId string) {
+	for _, section := range []string{sectionDefaultApps, sectionAddedAssociations} {
+		apps, _ := mimeAppsKf.GetStringList(section, mimeType)
+		if strv.Strv(apps).Contains(desktopId) {
+			apps, _ = strv.Strv(apps).Delete(desktopId)
+			if len(apps) > 0 {
+				mimeAppsKf.SetStringList(section, mimeType, apps)
+			} else {
+				mimeAppsKf.DeleteKey(section, mimeType)
+			}
+		}
+	}
+}
+
+func saveMimeAppsList(mimeAppsKeyFile *keyfile.KeyFile) error {
+	tmpFile := userMimeAppsListFile + ".tmp"
+	err := mimeAppsKeyFile.SaveToFile(tmpFile)
+	if err != nil {
+		return err
+	}
+	return os.Rename(tmpFile, userMimeAppsListFile)
 }
 
 var userAppDir string
@@ -309,9 +382,10 @@ func (m *Manager) ListUserApps(ty string) (string, *dbus.Error) {
 			logger.Warningf("New '%s' failed: %v", app.DesktopId, err)
 			continue
 		}
+		info.CanDelete = true
 		infos = append(infos, info)
 	}
-	content, err := marshal(infos)
+	content, err := toJSON(infos)
 	if err != nil {
 		return "", dbusutil.ToError(err)
 	}

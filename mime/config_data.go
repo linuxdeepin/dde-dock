@@ -50,7 +50,7 @@ func unmarshal(file string) (*defaultAppTable, error) {
 	return &table, nil
 }
 
-func marshal(v interface{}) (string, error) {
+func toJSON(v interface{}) (string, error) {
 	content, err := json.Marshal(v)
 	if err != nil {
 		return "", err
