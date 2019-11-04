@@ -809,6 +809,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *timePlugin, 
 
         for (int i = 0; i < m_appAreaSonLayout->count(); ++ i) {
             m_appAreaSonLayout->itemAt(i)->widget()->setMaximumWidth(h);
+            m_appAreaSonLayout->itemAt(i)->widget()->setMaximumHeight(QWIDGETSIZE_MAX);
         }
 
     } else {
@@ -822,6 +823,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *timePlugin, 
 
         for (int i = 0; i < m_appAreaSonLayout->count(); ++ i) {
             m_appAreaSonLayout->itemAt(i)->widget()->setMaximumHeight(w);
+            m_appAreaSonLayout->itemAt(i)->widget()->setMaximumWidth(QWIDGETSIZE_MAX);
         }
     }
 
