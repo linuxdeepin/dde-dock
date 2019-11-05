@@ -319,7 +319,7 @@ func (m *Manager) deleteApp(mimeTypes []string, desktopId string) error {
 }
 
 func toDesktopId(appId string) string {
-	appId = strings.ReplaceAll(appId, "/", "-")
+	appId = strings.Replace(appId, "/", "-", -1)
 	return appId + ".desktop"
 }
 
