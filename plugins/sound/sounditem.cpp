@@ -29,6 +29,7 @@
 #include <DApplication>
 #include <DDBusSender>
 #include "../widgets/tipswidget.h"
+#include "../frame/util/imageutil.h"
 #include <DGuiApplicationHelper>
 
 // menu actions
@@ -154,7 +155,6 @@ void SoundItem::refreshIcon()
 
     const double volmue = m_applet->volumeValue();
     const bool mute = m_sinkInter->mute();
-//    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     QString iconString;
@@ -188,9 +188,7 @@ void SoundItem::refreshIcon()
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
 
-    const QIcon icon = QIcon::fromTheme(iconString, QIcon::fromTheme(QString(":/%1").arg(iconString)));
-    m_iconPixmap = icon.pixmap(iconSize * ratio, iconSize * ratio);
-    m_iconPixmap.setDevicePixelRatio(ratio);
+    m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
 
     update();
 }

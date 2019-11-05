@@ -24,9 +24,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <DHiDPIHelper>
-
 #include <DStyle>
 #include <DGuiApplicationHelper>
+
+#include "../frame/util/imageutil.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -200,8 +201,6 @@ void FashionTrayControlWidget::refreshArrowPixmap()
     case Dock::Right:
         iconPath = m_expanded ?  "arrow-down" : "arrow-up";
         break;
-    default:
-        break;
     }
 
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
@@ -209,6 +208,5 @@ void FashionTrayControlWidget::refreshArrowPixmap()
     }
 
     const auto ratio = devicePixelRatioF();
-    m_arrowPix = QIcon::fromTheme(iconPath, QIcon(QString(":/icons/resources/%1").arg(iconPath))).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
-    m_arrowPix.setDevicePixelRatio(ratio);
+    m_arrowPix = ImageUtil::loadSvg(iconPath, ":/icons/resources/", PLUGIN_ICON_MAX_SIZE, ratio);
 }

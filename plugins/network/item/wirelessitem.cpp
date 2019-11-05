@@ -21,7 +21,7 @@
 
 #include "wirelessitem.h"
 #include "networkplugin.h"
-#include "../util/imageutil.h"
+#include "../frame/util/imageutil.h"
 #include "../widgets/tipswidget.h"
 #include <DGuiApplicationHelper>
 
@@ -225,7 +225,7 @@ const QPixmap WirelessItem::backgroundPix(const int size)
 const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 {
     if (m_reloadIcon || !m_icons.contains(key)) {
-        m_icons.insert(key, QIcon::fromTheme(key, QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
+        m_icons.insert(key, ImageUtil::loadSvg(key, ":/wireless/resources/wireless/", size, 1));
     }
 
     return m_icons.value(key);

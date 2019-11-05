@@ -22,7 +22,7 @@
 #include "accesspointwidget.h"
 #include "horizontalseperator.h"
 #include "util/utils.h"
-
+#include "../frame/util/imageutil.h"
 #include <QHBoxLayout>
 #include <QDebug>
 #include <dimagebutton.h>
@@ -156,7 +156,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     }
 
     const auto ratio = devicePixelRatioF();
-    iconPix = QIcon::fromTheme(iconString, QIcon(QString(":/wireless/resources/wireless/%1").arg(iconString))).pixmap(s * ratio);
+    iconPix = ImageUtil::loadSvg(iconString, ":/wireless/resources/wireless/", s.width(), ratio);
 
     m_strengthLabel->setPixmap(iconPix);
 

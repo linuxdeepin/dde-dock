@@ -23,7 +23,7 @@
 #include "constants.h"
 #include "wireditem.h"
 #include "networkplugin.h"
-#include "../util/imageutil.h"
+#include "../frame/util/imageutil.h"
 #include "../widgets/tipswidget.h"
 #include <DGuiApplicationHelper>
 
@@ -149,9 +149,7 @@ void WiredItem::reloadIcon()
             const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
             const int num = (index % 5) + 1;
 
-            m_icon = QIcon::fromTheme(QString("network-wired-symbolic-connecting%1.svg").arg(num), QIcon::fromTheme(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num)))
-                     .pixmap(iconSize * ratio, iconSize * ratio);
-            m_icon.setDevicePixelRatio(ratio);
+            m_icon = ImageUtil::loadSvg(QString("network-wired-symbolic-connecting%1.svg").arg(num), ":/wired/resources/wired/", iconSize, ratio);
             update();
             return;
         }
@@ -186,8 +184,8 @@ void WiredItem::reloadIcon()
     // 最小尺寸时采用深色图标
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconName.append(PLUGIN_MIN_ICON_NAME);
-    m_icon = QIcon::fromTheme(iconName, QIcon::fromTheme(QString(":/wired/resources/wired/%1").arg(iconName))).pixmap(iconSize * ratio, iconSize * ratio);
-    m_icon.setDevicePixelRatio(ratio);
+
+    m_icon = ImageUtil::loadSvg(iconName, ":/wired/resources/wired/", iconSize, ratio);
     update();
 }
 

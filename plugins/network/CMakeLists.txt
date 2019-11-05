@@ -4,7 +4,7 @@ set(PLUGIN_NAME "network")
 project(${PLUGIN_NAME})
 
 # Sources files
-file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp" "../../frame/util/utils.h")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp" "../../frame/util/imageutil.h" "../../frame/util/imageutil.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)

@@ -19,20 +19,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "imageutil.h"
+#ifndef IMAGEUTIL_H
+#define IMAGEUTIL_H
 
-#include <QPainter>
+#include <QPixmap>
+#include <QSvgRenderer>
 
-const QPixmap ImageUtil::loadSvg(const QString &path, const int size)
+class ImageUtil
 {
-    QPixmap pixmap(size, size);
-    QSvgRenderer renderer(path);
-    pixmap.fill(Qt::transparent);
+public:
+    static const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
+};
 
-    QPainter painter;
-    painter.begin(&pixmap);
-    renderer.render(&painter);
-    painter.end();
-
-    return pixmap;
-}
+#endif // IMAGEUTIL_H

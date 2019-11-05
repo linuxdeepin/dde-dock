@@ -23,6 +23,7 @@
 #include "sinkinputwidget.h"
 #include "componments/horizontalseparator.h"
 #include "../widgets/tipswidget.h"
+#include "../frame/util/imageutil.h"
 #include "util/utils.h"
 #include <DGuiApplicationHelper>
 
@@ -227,11 +228,9 @@ void SoundApplet::refreshIcon()
     }
 
     const auto ratio = devicePixelRatioF();
-    QPixmap ret = QIcon::fromTheme(iconRight).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
-    ret.setDevicePixelRatio(ratio);
+    QPixmap ret = ImageUtil::loadSvg(iconRight, ":/", ICON_SIZE, ratio);
     m_volumeIconMax->setPixmap(ret);
 
-    ret = QIcon::fromTheme(iconLeft).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
-    ret.setDevicePixelRatio(ratio);
+    ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
     m_volumeBtn->setPixmap(ret);
 }
