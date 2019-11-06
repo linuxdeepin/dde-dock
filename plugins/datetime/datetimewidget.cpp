@@ -58,9 +58,9 @@ void DatetimeWidget::set24HourFormat(const bool value)
     }
 
     m_24HourFormat = value;
-
     update();
 
+    adjustSize();
     if (isVisible()) {
         emit requestUpdateGeometry();
     }
@@ -94,7 +94,7 @@ QSize DatetimeWidget::curTimeSize() const
     }
 
     if (position == Dock::Bottom || position == Dock::Top) {
-        return QSize(timeSize.width(), DOCK_MAX_SIZE);
+        return QSize(timeSize.width(), height());
     } else {
         if (width() < timeSize.width()) {
             if (timeString.contains("\n")) {
@@ -114,10 +114,10 @@ QSize DatetimeWidget::curTimeSize() const
                 timeHeight = QFontMetrics(m_timeFont).boundingRect(SL.at(0)).size().height() + QFontMetrics(m_timeFont).boundingRect(SL.at(1)).size().height();
             }
 
-            return QSize(DOCK_MAX_SIZE, std::max(timeHeight, PLUGIN_BACKGROUND_MIN_SIZE));
+            return QSize(width(), std::max(timeHeight, PLUGIN_BACKGROUND_MIN_SIZE));
 
         } else {
-            return QSize(DOCK_MAX_SIZE, std::max(timeSize.height(), SHOW_DATE_MIN_HEIGHT));
+            return QSize(width(), std::max(timeSize.height(), SHOW_DATE_MIN_HEIGHT));
         }
     }
 }
