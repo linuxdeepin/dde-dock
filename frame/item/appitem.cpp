@@ -40,6 +40,7 @@
 #include <QTimeLine>
 #include <QX11Info>
 #include <QGSettings>
+#include <DGuiApplicationHelper>
 
 #define APP_DRAG_THRESHOLD      20
 
@@ -82,10 +83,6 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
       m_appIcon(QPixmap()),
 
-      m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
-      m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
-      m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
-      m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png")),
       m_updateIconGeometryTimer(new QTimer(this)),
       m_retryObtainIconTimer(new QTimer(this)),
 
@@ -129,6 +126,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
     connect(GSettingsByDockApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 }
 
 AppItem::~AppItem()
@@ -240,6 +238,15 @@ void AppItem::paintEvent(QPaintEvent *e)
             QPoint p;
             QPixmap pixmap;
             QPixmap activePixmap;
+            if(DGuiApplicationHelper::DarkType == m_themeType){
+                m_horizontalIndicator = QPixmap(":/indicator/resources/indicator_dark.svg");
+                m_verticalIndicator = QPixmap(":/indicator/resources/indicator_dark_ver.svg");
+            }else {
+                m_horizontalIndicator = QPixmap(":/indicator/resources/indicator.svg");
+                m_verticalIndicator = QPixmap(":/indicator/resources/indicator_ver.svg");
+            }
+            m_activeHorizontalIndicator = QPixmap(":/indicator/resources/indicator_active.svg");
+            m_activeVerticalIndicator = QPixmap(":/indicator/resources/indicator_active_ver.svg");
             switch (DockPosition) {
             case Top:
                 pixmap = m_horizontalIndicator;
@@ -698,4 +705,10 @@ bool AppItem::checkGSettingsControl() const
 
     return (setting->keys().contains("control") && setting->get("control").toBool()) ||
            (GSettingsByApp()->keys().contains("control") && GSettingsByApp()->get("control").toBool());
+}
+
+void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    m_themeType = themeType;
+    update();
 }

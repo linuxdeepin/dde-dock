@@ -32,6 +32,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QGraphicsItemAnimation>
+#include <DGuiApplicationHelper>
 
 #include <com_deepin_dde_daemon_dock_entry.h>
 
@@ -95,6 +96,7 @@ private slots:
     void checkAttentionEffect();
     void onGSettingsChanged(const QString& key);
     bool checkGSettingsControl() const;
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     TipsWidget *m_appNameTips;
@@ -125,6 +127,7 @@ private:
 
     QFutureWatcher<QPixmap> *m_smallWatcher;
     QFutureWatcher<QPixmap> *m_largeWatcher;
+    DGuiApplicationHelper::ColorType m_themeType;
 
     static QPoint MousePressPos;
 };
