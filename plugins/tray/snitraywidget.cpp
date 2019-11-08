@@ -79,7 +79,6 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
         return;
     }
 
-    m_sniInter->title();
     m_updateIconTimer->setInterval(100);
     m_updateIconTimer->setSingleShot(true);
     m_updateOverlayIconTimer->setInterval(500);
@@ -577,12 +576,18 @@ void SNITrayWidget::showHoverTips()
     if (!r.contains(QCursor::pos()))
         return;
 
-    if (m_sniInter->title().isEmpty())
-        return;
+    QDBusInterface infc(m_dbusService, m_dbusPath);
+    QDBusMessage msg = infc.call("Get", "org.kde.StatusNotifierItem", "ToolTip");
+    if (msg.type() == QDBusMessage::ReplyMessage) {
+        QDBusArgument arg = msg.arguments().at(0).value<QDBusVariant>().variant().value<QDBusArgument>();
+        DBusToolTip tooltip = qdbus_cast<DBusToolTip>(arg);
 
-    m_tipsLabel->setText(m_sniInter->title());
+        if (tooltip.title.isEmpty())
+            return;
 
-    showPopupWindow(m_tipsLabel);
+        m_tipsLabel->setText(tooltip.title);
+        showPopupWindow(m_tipsLabel);
+    }
 }
 
 void SNITrayWidget::hideNonModel()
