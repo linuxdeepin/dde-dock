@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
+"Last-Translator: Massimo A. Carofano <real.massimo@hotmail.it>\n"
 "Language-Team: Italian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -231,8 +231,8 @@ msgid "Terminal"
 msgstr "Terminale"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Deepin Screen Recorder"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -283,8 +283,8 @@ msgid "Fast Screen Off"
 msgstr "Fast Screen Disattivato"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Deepin System Monitor"
+msgid "System Monitor"
+msgstr "System Monitor"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -887,15 +887,15 @@ msgstr "La connessione è stata eliminata dalle impostazioni"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Attiva l'hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Connessione a %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot attivato"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -903,7 +903,7 @@ msgstr "%q connesso"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot disattivato"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -923,7 +923,7 @@ msgstr "Impossibile connettersi a %q, controlla il tuo router o il cavo di rete.
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Password richiesta per connettersi a %q"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"

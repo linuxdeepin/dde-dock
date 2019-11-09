@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -251,8 +251,8 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Deepin Screen Recorder"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -303,8 +303,8 @@ msgid "Fast Screen Off"
 msgstr "Desligar Rapidamente a Tela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Deepin Monitor do Sistema"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -526,7 +526,7 @@ msgstr "EAP protegido"
 
 #: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
-msgstr "Conexão via Cabo"
+msgstr "Conexão Cabeada"
 
 #: ../../network/nm_custom_type.go:223
 msgid "Connection"
@@ -534,15 +534,15 @@ msgstr "Conexão"
 
 #: ../../network/nm_custom_type.go:227
 msgid "Wireless Connection"
-msgstr "Conexão Sem Fio"
+msgstr "Conexão Wi-Fi"
 
 #: ../../network/nm_custom_type.go:229
 msgid "Wireless Ad-Hoc"
-msgstr "Ad-Hoc Sem Fio"
+msgstr "Wi-Fi Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:231
 msgid "Wireless Ap-Hotspot"
-msgstr "Ap-Hotspot Sem Fio"
+msgstr "Wi-Fi Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:233
 msgid "PPPoE Connection"
@@ -845,7 +845,7 @@ msgstr "O estado de gerenciamento do dispositivo pai foi alterado"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr "Cabo de Rede está desconectado"
+msgstr "O Cabo de Rede está desconectado"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
@@ -907,15 +907,15 @@ msgstr "A conexão foi excluída das configurações"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Ativando o Hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Conectando %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot ativado"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -923,7 +923,7 @@ msgstr "%q conectada"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot desativado"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -943,7 +943,7 @@ msgstr "Não foi possível conectar-se a %q. Verifique as conexões e dispositiv
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "É necessária uma senha para conectar a %q"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -977,7 +977,7 @@ msgstr "A chave de hardware da placa WLAN está desligada. Alterne-a conforme ne
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
-msgstr "O proxy do sistema está definido com sucesso."
+msgstr "O proxy do sistema foi definido com sucesso."
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."

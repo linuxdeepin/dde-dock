@@ -6,6 +6,7 @@
 # Alejandro Hamann <linkstat@gmail.com>, 2016
 # Alvaro Samudio <alvarosamudio@protonmail.com>, 2017
 # Alvaro Samudio <alvarosamudio@protonmail.com>, 2017-2018
+# Alvaro Samudio <alvarosamudio@protonmail.com>, 2019
 # Zaraza, 2017
 # Deepin en Español, 2017-2018
 # Zaraza, 2017-2018
@@ -23,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +58,7 @@ msgstr "El primer carácter debe estar en minúscula"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "El nombre de usuario ya existe"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -245,8 +246,8 @@ msgid "Terminal"
 msgstr "Terminal "
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Grabador de pantalla Deepin"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -297,8 +298,8 @@ msgid "Fast Screen Off"
 msgstr "Apagado de pantalla rápido"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Monitor del sistema Deepin"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -901,15 +902,15 @@ msgstr "La conexión se ha eliminado de la configuración"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Habilitar hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Conectando %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot habilitado"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -917,7 +918,7 @@ msgstr "%q conectado"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot desactivado"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -937,7 +938,7 @@ msgstr "No se puede conectar %q, compruebe su enrutador o cable de red."
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Se requiere contraseña para conectarse %q"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"

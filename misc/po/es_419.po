@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Spanish (Latin America) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es_419/)\n"
 "MIME-Version: 1.0\n"
@@ -244,8 +244,8 @@ msgid "Terminal"
 msgstr "Terminal "
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Grabador de pantalla Deepin"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -296,8 +296,8 @@ msgid "Fast Screen Off"
 msgstr "Apagado de pantalla rápido"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Monitor del sistema Deepin"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"

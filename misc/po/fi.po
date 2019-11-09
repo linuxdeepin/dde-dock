@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Ensimmäisen merkin on oltava pieniä kirjaimia"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Käyttäjänimi on jo olemassa"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -231,8 +231,8 @@ msgid "Terminal"
 msgstr "Pääte"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Deepin näytön tallennin"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -283,8 +283,8 @@ msgid "Fast Screen Off"
 msgstr "Nopea näytön sammutus"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Deepin järjestelmänhallinta"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -887,15 +887,15 @@ msgstr "Yhteys poistettiin asetuksista"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Hotspotin käyttöönotto"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Yhdistää %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot käytössä"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -903,7 +903,7 @@ msgstr "Yhdistetty kohteeseen %q"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot suljettu"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -923,7 +923,7 @@ msgstr "Yhteys kohteeseen %q epäonnistui, tarkista reititin tai verkkokaapeli"
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Yhdistämiseen tarvitaan salasana %q"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"

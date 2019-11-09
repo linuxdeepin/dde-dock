@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "El primer caràcter ha de ser en minúscules."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "El nom d'usuari ja existeix."
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -231,8 +231,8 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Gravador de pantalla del Deepin"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -283,8 +283,8 @@ msgid "Fast Screen Off"
 msgstr "Desactiva la pantalla ràpida"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Monitor de sistema del Deepin"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -887,15 +887,15 @@ msgstr "La connexió s'ha eliminat de la configuració."
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "S'habilita el punt d'accés."
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Connectant amb %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Punt d'accés habilitat"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -903,7 +903,7 @@ msgstr "%q connectada"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Punt d'accés inhabilitat"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -923,7 +923,7 @@ msgstr "No es pot connectar a %q, comproveu el vostre encaminador o el cable de 
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Cal la contrasenya per connectar amb %q"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"

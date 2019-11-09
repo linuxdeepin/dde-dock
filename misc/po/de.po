@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -189,15 +189,15 @@ msgstr "Schließen"
 
 #: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Erinnere mich morgen"
 
 #: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Erinnere mich später"
 
 #: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Terminerinnerung"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -236,8 +236,8 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Deepin Screen Recorder"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -288,8 +288,8 @@ msgid "Fast Screen Off"
 msgstr "Bildschirm schnell ausschalten"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Deepin Systemmonitor"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -892,15 +892,15 @@ msgstr "Die Verbindung wurde aus den Einstellungen entfernt."
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Hotspot aktivieren"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "%q wird verbunden"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot aktiviert"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -908,7 +908,7 @@ msgstr "%q verbunden"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot deaktiviert"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -928,7 +928,7 @@ msgstr "Kann keine Verbindung mit %q herstellen, bitte überprüfen Sie Ihren Ro
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Für die Verbindung mit %q ist ein Kennwort erforderlich"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"

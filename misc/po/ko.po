@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
-msgstr "비밀번호를 8자 이상 입력하세요"
+msgstr "비밀번호를 8자 이상 입력하십시오"
 
 #: ../../accounts/checkers/password.go:55
 msgid ""
@@ -45,7 +45,7 @@ msgstr "첫 번째 문자는 소문자여야 합니다"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "사용자 이름이 이미 존재합니다"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
@@ -61,7 +61,7 @@ msgstr "성공적으로 설정"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr "변경 사항을 보려면 다시 로그인하세요"
+msgstr "변경 사항을 보려면 다시 로그인하십시오"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
@@ -222,7 +222,7 @@ msgstr "모든 창"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "디스크 공간이 부족합니다. 정리하세요!"
+msgstr "디스크 공간이 부족합니다. 정리하십시오!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -233,8 +233,8 @@ msgid "Terminal"
 msgstr "터미널"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Deepin 화면 레코더"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -285,8 +285,8 @@ msgid "Fast Screen Off"
 msgstr "빠른 화면 꺼짐"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr "Deepin 시스템 모니터"
+msgid "System Monitor"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -330,7 +330,7 @@ msgstr "반대로 윈도우 바꾸기"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Show desktop"
-msgstr "데스크톱 보기"
+msgstr "바탕화면 표시"
 
 #: ../../keybinding/shortcuts/id_name_map.go:98
 msgid "Maximize window"
@@ -437,7 +437,7 @@ msgstr "%q(을)를 삭제하는데 실패하였습니다."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "자동 종료를 방지하려면 정상 업데이트를 위해 전원을 연결하세요. "
+msgstr "자동 종료를 방지하려면 정상 업데이트를 위해 전원을 연결하십시오. "
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -836,7 +836,7 @@ msgstr "SIM 카드에 모바일 네트워크 신호가 삽입되었는지 확인
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "SIM 카드 채납 없이 알맞은 요금제가 선택되었는지 확인하세요"
+msgstr "SIM 카드의 채납액이 없는 적절한 요금제를 선택했는지 확인하십시오"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -889,15 +889,15 @@ msgstr "설정이 연결에서 삭제되었습니다"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "핫스팟 활성화"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "%q 연결중"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "핫스팟 사용"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -905,7 +905,7 @@ msgstr "%q 연결됨"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "핫스팟 사용안함"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
@@ -913,7 +913,7 @@ msgstr "%q 연결 끊김"
 
 #: ../../network/state_handler.go:333
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "핫스팟을 공유할 수 없습니다. dnsmasq 설정을 확인하세요"
+msgstr "핫스팟을 공유할 수 없습니다. dnsmasq 설정을 확인하십시오"
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -921,11 +921,11 @@ msgstr "%q을(를) 연결할 수 없습니다. 무선 라우터에 가까이 있
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "%q을(를) 연결할 수 없습니다. 라우터 또는 인터넷 케이블을 확인하세요."
+msgstr "%q을(를) 연결할 수 없습니다. 라우터 또는 인터넷 케이블을 확인하십시오"
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "%q을(를) 연결하려면 비밀번호가 필요합니다"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -955,7 +955,7 @@ msgstr "네트워크"
 #: ../../network/utils_notify.go:96
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "WLAN 카드의 하드웨어 스위치가 꺼져있습니다, 필요하시면 전원을 켜주세요."
+msgstr "WLAN 카드의 하드웨어 스위치가 꺼져있습니다, 필요하시면 전원을 켜주십시오."
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
@@ -971,7 +971,7 @@ msgstr "배터리 매우 부족"
 
 #: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
-msgstr "컴퓨터가 곧 정지됩니다. 바로 전원을 연결하세요"
+msgstr "컴퓨터가 곧 일시 중단됩니다. 지금 전원을 연결하십시오"
 
 #: ../../session/power/manager_events.go:175
 #: ../../session/power/manager_events.go:182
@@ -980,11 +980,11 @@ msgstr "배터리 낮음 "
 
 #: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
-msgstr "컴퓨터가 곧 정지됩니다. 전원을 연결하세요"
+msgstr "컴퓨터가 일시 중단됩니다. 전원을 연결하십시오"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
-msgstr "배터리 부족,. 전원을 연결하세요"
+msgstr "배터리 부족, 전원을 연결하십시오"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

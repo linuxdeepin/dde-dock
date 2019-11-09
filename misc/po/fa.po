@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Alik Miankoli <alikmiankoliid@gmail.com>, 2016
+# AmirHosein Lesani <xenups@outlook.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
 "MIME-Version: 1.0\n"
@@ -20,61 +21,61 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "لطفاً یک گذرواژه که کمتر از 8 نویسه نباشد را  وارد کنید"
 
 #: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "گذرواژه باید حاوی حروف انگلیسی ( حساس به حالت ) , اعداد یا نمادهای خاص باشد ( ~ ! @ # % ^ * * ( ) { } ^ * ? , . < >)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "نام کاربری نمیتواند خالی باشد."
 
 #: ../../accounts/checkers/username.go:65
 msgid "Username must only contain a~z, 0~9, - or _"
-msgstr ""
+msgstr "نام کاربر باید فقط حاوی  a~z, 0~9, - or _ باشد ."
 
 #: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "حرف اول باید با حروف کوچک نوشته شود."
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "این نام کاربری  از قبل وجود دارد"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
-msgstr ""
+msgstr "نام کاربری توسط سیستم استفاده شده است."
 
 #: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
+msgstr "نام کاربری باید بین 3 تا 32 نویسه باشد"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
-msgstr ""
+msgstr "با موفقیت تنظیم شد"
 
 #: ../../appearance/scale.go:62
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "لطفاً برای مشاهده تغییرات وارد سیستم شوید"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
-msgstr ""
+msgstr "نمایش مقیاس"
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
-msgstr ""
+msgstr "تنظیم نمایش مقیاس"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "تأیید اثر انگشت انجام نشد"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "تایید اثر انگشت منقضی شد "
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -98,7 +99,7 @@ msgstr "درگاه صدای گوشی"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
-msgstr ""
+msgstr "Object push"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
@@ -137,11 +138,11 @@ msgstr "قطع اتصال"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "اطمینان حاصل کنید که %q روشن و در دامنه است"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Failed to connect %q, pairing failed"
-msgstr ""
+msgstr "اتصال %q انجام نشد ، جفت شدن انجام نشد"
 
 #: ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -149,32 +150,32 @@ msgstr "اتصال  بلوتوث ناموفق بود"
 
 #: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "امروز"
 
 #: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "فردا"
 
 #: ../../calendar/job.go:435
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s به %s"
 
 #: ../../calendar/module.go:126
 msgid "Work"
-msgstr ""
+msgstr "کار"
 
 #: ../../calendar/module.go:127
 msgid "Life"
-msgstr ""
+msgstr "زندگی"
 
 #: ../../calendar/module.go:128
 msgid "Other"
-msgstr ""
+msgstr "سایر"
 
 #: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "یک روز قبل از شروع"
 
 #: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
 #: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
@@ -183,15 +184,15 @@ msgstr "بستن"
 
 #: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "فردا یادم بنداز"
 
 #: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "بعدا ً به من یادآوری کن"
 
 #: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "یادآور برنامه"
 
 #: ../../dock/app_entry_menu.go:100
 msgid "Open"
@@ -199,19 +200,19 @@ msgstr "باز کردن"
 
 #: ../../dock/app_entry_menu.go:107
 msgid "Close All"
-msgstr ""
+msgstr "بستن همه"
 
 #: ../../dock/app_entry_menu.go:123
 msgid "Force Quit"
-msgstr ""
+msgstr "خروج اجباری"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
-msgstr ""
+msgstr "لنگرگاه"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"
-msgstr ""
+msgstr "باز کردن"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "All Windows"
@@ -219,7 +220,7 @@ msgstr "همه پنجره ها"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "فضای دیسک کافی نیست ، لطفا به موقع تمیز کنید!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -230,7 +231,7 @@ msgid "Terminal"
 msgstr "ترمینال"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
+msgid "Screen Recorder"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
@@ -243,7 +244,7 @@ msgstr "نمایش/پنهان سازی نوار"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "رابط خاموش کردن"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -279,15 +280,15 @@ msgstr "تغییر جلوه های پنجره"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "خاموش کردن سریع صفحه"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
+msgid "System Monitor"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "دیپین پیکر"
 
 #: ../../keybinding/shortcuts/id_name_map.go:51
 msgid "Switch Layout"
@@ -387,25 +388,25 @@ msgstr "احراز هویت برای تغییر زبان لازم است"
 
 #: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "تغییر زبان سیستم انجام نشد ، لطفاً بعداً امتحان کنید"
 
 #: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "تغییر زبان سیستم و نصب بسته‌های زبان مورد نیاز ، لطفا ً صبر کنید …"
 
 #: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "در حال عوض کردن زبان سیستم ، لطفا ً صبر کنید ..."
 
 #: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "زبان سیستم تغییر کرده است ، لطفاً  خارج شوید و سپس دوباره وارد شوید"
 
 #: ../../lastore/check_source.go:51
 msgid "Restore"
-msgstr ""
+msgstr "بازگردانی "
 
 #: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
 msgid "Cancel"
@@ -417,42 +418,42 @@ msgstr "سعی مجدد"
 
 #: ../../lastore/notify.go:82
 msgid "%q installed successfully."
-msgstr ""
+msgstr "%q با موفقیت نصب شد."
 
 #: ../../lastore/notify.go:85
 msgid "%q failed to install."
-msgstr ""
+msgstr "%q نصب نشد."
 
 #: ../../lastore/notify.go:93
 msgid "%q removed successfully."
-msgstr ""
+msgstr "%q با موفقیت حذف شد."
 
 #: ../../lastore/notify.go:95
 msgid "%q failed to remove."
-msgstr ""
+msgstr "%q نتوانست حذف شود."
 
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
+msgstr "برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی معمولی ، سیستم را به برق متصل کنید "
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
-msgstr ""
+msgstr "حافظه پنهان بسته پاک شد"
 
 #: ../../lastore/notify.go:112
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
+msgstr "منبع سیستم شما تغییر یافته است ، لطفاً برای استفاده عادی خود به منبع رسمی برگردید"
 
 #: ../../launcher/manager_uninstall.go:69
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q با موفقیت حذف شد"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "%q حذف انجام نشد"
 
 #: ../../network/manager_active_conn.go:318
 msgid "A (5 GHz)"
@@ -473,11 +474,11 @@ msgstr "هیچ کدام"
 
 #: ../../network/manager_active_conn.go:340
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "WEP 40/128-bit Key"
 
 #: ../../network/manager_active_conn.go:342
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_active_conn.go:350
 msgid "TLS"
@@ -561,7 +562,7 @@ msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:251
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:253
 msgid "VPN VPNC"
@@ -569,364 +570,364 @@ msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr ""
+msgstr "وضعیت دستگاه تغییر پیدا کرد."
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "به دلیل ناشناخته وضعیت دستگاه تغییر پیدا کرد."
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr ""
+msgstr "دستگاه هم اکنون مدیریت شده."
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "دستگاه دیگر مدیریت نمی شود."
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "دستگاه برای پیکر بندی آماده نیست."
 
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "پیکربندی IP نمی تواند محفوظ باشد (بدون آدرس ، زمان بندی و غیره در دسترس نیست)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "پیکربندی IP دیگر معتبر نیست"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "پسورد مورد نیاز است اما فراهم نشده."
 
 #: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "متقاضی 802.1X از نقطه دسترسی یا سرور تأیید اعتبار جدا شده است"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "پیکربندی درخواست کننده 802.1X انجام نشد"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "متقاضی 802.1X بطور غیر منتظره ای کنار رفت یا شکست خورد"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "متقاضی 802.1X برای احراز هویت مدت زمان زیادی طول کشید"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "سرویس PPP در زمان مجاز شروع به کار نکرد"
 
 #: ../../network/state_handler.go:52
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "سرویس PPP بطور غیر منتظره ای قطع شد"
 
 #: ../../network/state_handler.go:53
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "سرویس PPP به طور غیر منتظره ای کنار گذاشته یا از کار افتاد"
 
 #: ../../network/state_handler.go:54
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "سرویس DHCP در زمان مجاز شروع به کار نکرد"
 
 #: ../../network/state_handler.go:55
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "سرویس DHCP خطایی غیر منتظره را گزارش داد"
 
 #: ../../network/state_handler.go:56
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "سرویس DHCP بطور غیر منتظره ای کنار گذاشته یا از کار افتاد"
 
 #: ../../network/state_handler.go:57
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "سرویس اتصال مشترک شروع به کار نکرد"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "سرویس اتصال مشترک به طور غیر منتظره متوقف شد یا شکست خورد"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "سرویس AutoIP شروع نشد"
 
 #: ../../network/state_handler.go:60
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "سرویس AutoIP خطایی غیر منتظره را گزارش داد"
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "سرویس AutoIP به طور غیر منتظره ای کنار گذاشته یا از کار افتاد"
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "شماره گیری به دلیل خطوط مشغول انجام نشد"
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "به دلیل نداشتن بوق  ، شماره گیری انجام نشد"
 
 #: ../../network/state_handler.go:64
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "شماره گیری به دلیل حامل انجام نشد"
 
 #: ../../network/state_handler.go:65
 msgid "Dialing timed out"
-msgstr ""
+msgstr "مدت زمان تماس گرفتن به اتمام رسید."
 
 #: ../../network/state_handler.go:66
 msgid "Dialing failed"
-msgstr ""
+msgstr "شماره گیری ناموفق بود."
 
 #: ../../network/state_handler.go:67
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "راه اندازی مودم ناموفق بود."
 
 #: ../../network/state_handler.go:68
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "انتخاب APN مشخص شده GSM انجام نشد"
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
-msgstr ""
+msgstr "شبکه ای جستجو نشد."
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
-msgstr ""
+msgstr "دسترسی به ثبت شبکه داده نشد."
 
 #: ../../network/state_handler.go:71
 msgid "Network registration timed out"
-msgstr ""
+msgstr "زمان ثبت شبکه به پایان رسید."
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "ثبت نام در شبکه GSM درخواستی انجام نشد"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
-msgstr ""
+msgstr "بررسی PIN ناموفق بود."
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "ممکن است Firmware مورد نیاز دستگاه مشکل داشته باشد."
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
-msgstr ""
+msgstr "دستگاه حذف شد."
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "مدیریت شبکه به خواب رفته است"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "اتصال فعال دستگاه حذف یا ناپدید شده."
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "یک کاربر یا کلاینت درخواست قطع اتصال داده است."
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "حامل / پیوند دستگاه تغییر کرد"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "اتصال موجود دستگاه در نظر گرفته شده."
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "متقاضی 802.1x اکنون در دسترس است"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
-msgstr ""
+msgstr "مودم پیدا نشد."
 
 #: ../../network/state_handler.go:83
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "زمان اتصال بلوتوث تمام شده و یا اتصال ناموفق بوده."
 
 #: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "سیم کارت GSM مودم درج نشده است"
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "پین سیم کارت GSM مودم مورد نیاز است"
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "PUK سیم کارت GSM مودم مورد نیاز است"
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "خطای سیم کارت در مودم GSM"
 
 #: ../../network/state_handler.go:88
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "دستگاه InfiniBand از حالت متصل پشتیبانی نمی کند"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "یک وابستگی از اتصال شکست خورد"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgstr "RFC 2684 خطای پل اتصال اترنت برای ADSL"
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "مدیریت کننده مودم اجراء نشده یا بصورت غیر منتظره بسته شده."
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "شبکه Wi-Fi 802.11 یافت نشد"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "دومین اتصال از اتصال پایه ناموفق بود."
 
 #: ../../network/state_handler.go:96
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "نصب DCB یا FCoE انجام نشد"
 
 #: ../../network/state_handler.go:97
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "کنترل همکاری شبکه ناموفق بود."
 
 #: ../../network/state_handler.go:98
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "راه اندازی مودم ناموفق بود و یا در دسترس نیست."
 
 #: ../../network/state_handler.go:99
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "مودم هم اکنون آماده و قابل دسترس است."
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "پین سیم کارت نادرست است"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "فعال سازی اتصال جدید نوبت بندی شده است."
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
-msgstr ""
+msgstr "دستگاه والد تغییر کرد."
 
 #: ../../network/state_handler.go:103
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "وضعیت مدیریت دستگاه والد تغییر کرد."
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "کابل شبکه جدا شده."
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "لطفاً مطمئن شوید که سیم کارت درج شده است و دستگاه دارای  سیگنال شبکه است"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "لطفاً اطمینان حاصل کنید که یک طرح صحیح و بدون عقب افتادگی سیم کارت انتخاب شده است"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "به دلیل نامشخص ، اتصال VPN فعال نشد"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "اتصال VPN فعال نشد"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "وضعیت اتصال VPN به دلیل قطع ارتباط توسط کاربران تغییر کرده است"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "حالت اتصال VPN به دلیل قطع ارتباط از دستگاه تغییر کرده است"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr ""
+msgstr "سرویس VPN متوقف شد."
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "پیکربندی IP اتصال VPN نامعتبر بود"
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "تلاش اتصال به سرویس VPN به پایان رسید"
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "زمان شروع سرویس VPN به پایان رسید"
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "سرویس VPN شروع نشد"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "رمز عبور اتصال VPN ارائه نشده است"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "احراز حویت اتصال VPN ناموفق بود."
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "اتصال از قسمت تنظیمات حذف شد."
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "فعال کردن هات اسپات"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "در حال اتصال %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "هات اسپات فعال شد"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
-msgstr ""
+msgstr "%q متصل شده"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:325
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "هات اسپات غیرفعال شد"
 
 #: ../../network/state_handler.go:327 ../../network/state_handler.go:347
 msgid "%q disconnected"
-msgstr ""
+msgstr "%q قطع شد"
 
 #: ../../network/state_handler.go:333
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
+msgstr "اشتراک هات اسپات امکان پذیر نیست ، لطفاً تنظیمات dnsmasq را بررسی کنید"
 
 #: ../../network/state_handler.go:335
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "اتصال %q امکان پذیر نیست ، لطفاً به روتر بی سیم نزدیک تر شوید"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "اتصال %q امکان پذیر نیست ، لطفاً روتر یا کابل اینترنت خود را بررسی کنید."
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "برای اتصال به %q  نیاز به رمز عبور دارید"
 
 #: ../../network/state_handler.go:343
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "اتصال انجام نشد ، قادر به اتصال %q ، گذرواژه اشتباه است"
 
 #: ../../network/utils_dbus_nm.go:229
 msgid "Unknown"
@@ -964,11 +965,11 @@ msgstr "تنظیم کردن  پراکسی سیستم لغو شد."
 
 #: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
-msgstr ""
+msgstr "باتری بسیار کم است"
 
 #: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+msgstr "کامپیوتر خیلی زود به حالت تعلیق در می آید ، لطفا آن را به برق متصل کنید"
 
 #: ../../session/power/manager_events.go:175
 #: ../../session/power/manager_events.go:182
@@ -977,32 +978,32 @@ msgstr "کمبود باتری"
 
 #: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"
-msgstr ""
+msgstr "کامپیوتر به زودی به حالت تعلیق در می آید ، لطفا آن را به برق متصل کنید"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "باتری شما کم است ، لطفاً دستگاه را برق وصل کنید"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "برای تعیین زمان سیستم ، احراز هویت لازم است"
 
 #: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "احراز هویت لازم است تا بتواند همگام سازی زمان شبکه را فعال کند یا نه"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "برای تغییر سرور NTP احراز هویت لازم است"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr ""
+msgstr "احراز هویت برای کنترل اینکه آیا RTC زمان محلی و یا UTC را ذخیره کند  لازم است "
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "برای تنظیم منطقه زمانی سیستم احراز هویت لازم است"

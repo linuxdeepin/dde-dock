@@ -5,12 +5,13 @@
 # Translators:
 # Nam Anh <phamnamanh25@gmail.com>, 2016
 # Phạm Đông Giang <ginise99@yahoo.com>, 2016-2017
+# Vu Thanh An <banzin123@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +32,7 @@ msgstr "Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ)
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Tên người dùng không được để trống"
 
 #: ../../accounts/checkers/username.go:65
 msgid "Username must only contain a~z, 0~9, - or _"
@@ -43,15 +44,15 @@ msgstr ""
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "Tên người dùng đã được sử dụng"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Tên người dùng đã được sử dụng bởi hệ thống"
 
 #: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
+msgstr "Tên người dùng phải từ 3 đến 32 kí tự"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -63,11 +64,11 @@ msgstr ""
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
-msgstr ""
+msgstr "Tỉ lệ màn hình"
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
-msgstr ""
+msgstr "Điều chỉnh tỉ lệ màn hình"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
@@ -150,11 +151,11 @@ msgstr "Kết nối bluetooth đã thất bại"
 
 #: ../../calendar/job.go:413 ../../calendar/job.go:420
 msgid "today"
-msgstr ""
+msgstr "Hôm nay"
 
 #: ../../calendar/job.go:415 ../../calendar/job.go:422
 msgid "tomorrow"
-msgstr ""
+msgstr "Ngày mai"
 
 #: ../../calendar/job.go:435
 #, c-format
@@ -204,7 +205,7 @@ msgstr ""
 
 #: ../../dock/app_entry_menu.go:123
 msgid "Force Quit"
-msgstr ""
+msgstr "Buộc đóng"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
@@ -231,8 +232,8 @@ msgid "Terminal"
 msgstr "Đầu cuối"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr "Trình thu lại Màn hình Deepin"
+msgid "Screen Recorder"
+msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -283,7 +284,7 @@ msgid "Fast Screen Off"
 msgstr "Tắt Màn hình Nhanh"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
+msgid "System Monitor"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
@@ -982,7 +983,7 @@ msgstr ""
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Pin yếu,vui lòng cắm sạc"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

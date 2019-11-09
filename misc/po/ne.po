@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Nepali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ne/)\n"
 "MIME-Version: 1.0\n"
@@ -29,15 +29,15 @@ msgstr "पासवर्डमा अंग्रेजी अक्षरह�
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "प्रयोगकर्ता को नाम खाली राख्न मिल्दैन"
 
 #: ../../accounts/checkers/username.go:65
 msgid "Username must only contain a~z, 0~9, - or _"
-msgstr ""
+msgstr "प्रयोगकर्ता को नाम मा a~z, 0~9, - वा  _ मात्र स्विकार्य छ"
 
 #: ../../accounts/checkers/username.go:67
 msgid "The first character must be in lower case"
-msgstr ""
+msgstr "पहिलो अक्षर सानो abc मा हुनुपर्छ"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
+msgstr "प्रयोगकर्ता को नाम ३ देखि ३२ अक्षर को हुनुपर्छ"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -132,7 +132,7 @@ msgstr "जोडिएको"
 #: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
 #: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
 msgid "Disconnected"
-msgstr ""
+msgstr "विच्छेदित "
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
@@ -210,7 +210,7 @@ msgstr ""
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"
-msgstr ""
+msgstr "हटाउने"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "All Windows"
@@ -229,7 +229,7 @@ msgid "Terminal"
 msgstr "टर्मिनल"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
+msgid "Screen Recorder"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
@@ -281,7 +281,7 @@ msgid "Fast Screen Off"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
+msgid "System Monitor"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
@@ -476,7 +476,7 @@ msgstr ""
 
 #: ../../network/manager_active_conn.go:342
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_active_conn.go:350
 msgid "TLS"

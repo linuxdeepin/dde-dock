@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 16:38+0800\n"
-"PO-Revision-Date: 2019-10-28 08:49+0000\n"
+"POT-Creation-Date: 2019-11-09 15:50+0800\n"
+"PO-Revision-Date: 2019-11-09 07:56+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Chinese (Hong Kong) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_HK/)\n"
 "MIME-Version: 1.0\n"
@@ -231,7 +231,7 @@ msgid "Terminal"
 msgstr "終端機"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
+msgid "Screen Recorder"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
@@ -283,7 +283,7 @@ msgid "Fast Screen Off"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
+msgid "System Monitor"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
