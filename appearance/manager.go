@@ -638,6 +638,12 @@ func (m *Manager) doSetStandardFont(value string) error {
 	if err != nil {
 		return err
 	}
+
+	err = m.xSettings.SetString(0, "Qt/FontName", value)
+	if err != nil {
+		return err
+	}
+
 	return m.writeDQtTheme(dQtKeyFont, value)
 }
 
@@ -650,6 +656,12 @@ func (m *Manager) doSetMonospaceFont(value string) error {
 	if err != nil {
 		return err
 	}
+
+	err = m.xSettings.SetString(0, "Qt/MonoFontName", value)
+	if err != nil {
+		return err
+	}
+
 	return m.writeDQtTheme(dQtKeyMonoFont, value)
 }
 
@@ -660,6 +672,11 @@ func (m *Manager) doSetFontSize(size float64) error {
 	}
 
 	err := fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(), size)
+	if err != nil {
+		return err
+	}
+
+	err = m.xSettings.SetInteger(0, "Qt/FontPointSize", int32(size))
 	if err != nil {
 		return err
 	}
