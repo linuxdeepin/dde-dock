@@ -42,19 +42,6 @@ DWIDGET_USE_NAMESPACE
 using namespace Dock;
 using DBusDock = com::deepin::dde::daemon::Dock;
 
-class WhiteMenu : public QMenu
-{
-    Q_OBJECT
-public:
-    WhiteMenu(QWidget *parent = nullptr) : QMenu(parent)
-    {
-        QStyle *style = QStyleFactory::create("dlight");
-        if (style) setStyle(style);
-    }
-
-    virtual ~WhiteMenu() {}
-};
-
 class DockSettings : public QObject
 {
     Q_OBJECT
@@ -140,8 +127,8 @@ private:
     QRect m_primaryRawRect;
     QRect m_frontendRect;
 
-    WhiteMenu m_settingsMenu;
-    WhiteMenu *m_hideSubMenu;
+    QMenu m_settingsMenu;
+    QMenu *m_hideSubMenu;
     QAction m_fashionModeAct;
     QAction m_efficientModeAct;
     QAction m_topPosAct;

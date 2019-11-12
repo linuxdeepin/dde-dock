@@ -79,13 +79,13 @@ DockSettings::DockSettings(QWidget *parent)
     m_keepHiddenAct.setCheckable(true);
     m_smartHideAct.setCheckable(true);
 
-    WhiteMenu *modeSubMenu = new WhiteMenu(&m_settingsMenu);
+    QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
     QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
-    WhiteMenu *locationSubMenu = new WhiteMenu(&m_settingsMenu);
+    QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
     locationSubMenu->addAction(&m_leftPosAct);
@@ -93,14 +93,14 @@ DockSettings::DockSettings(QWidget *parent)
     QAction *locationSubMenuAct = new QAction(tr("Location"), this);
     locationSubMenuAct->setMenu(locationSubMenu);
 
-    WhiteMenu *statusSubMenu = new WhiteMenu(&m_settingsMenu);
+    QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
     statusSubMenu->addAction(&m_smartHideAct);
     QAction *statusSubMenuAct = new QAction(tr("Status"), this);
     statusSubMenuAct->setMenu(statusSubMenu);
 
-    m_hideSubMenu = new WhiteMenu(&m_settingsMenu);
+    m_hideSubMenu = new QMenu(&m_settingsMenu);
     QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
     hideSubMenuAct->setMenu(m_hideSubMenu);
 
@@ -110,7 +110,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(hideSubMenuAct);
     m_settingsMenu.setTitle("Settings Menu");
 
-    connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
+    connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::onDisplayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
