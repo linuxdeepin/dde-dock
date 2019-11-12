@@ -329,7 +329,7 @@ func (a *Audio) findSourceByCardIndexPortName(cardId uint32, portName string) *p
 
 // set default sink and sink active port
 func (a *Audio) setDefaultSinkWithPort(cardId uint32, portName string) error {
-	logger.Debugf("trySetDefaultSink card #%d port %q", cardId, portName)
+	logger.Debugf("setDefaultSinkWithPort card #%d port %q", cardId, portName)
 	sink := a.findSinkByCardIndexPortName(cardId, portName)
 	if sink == nil {
 		return fmt.Errorf("cannot find valid sink for card #%d and port %q",
@@ -372,7 +372,7 @@ func (a *Audio) getDefaultSourceActivePortName() string {
 
 // set default source and source active port
 func (a *Audio) setDefaultSourceWithPort(cardId uint32, portName string) error {
-	logger.Debugf("trySetDefaultSource card #%d port %q", cardId, portName)
+	logger.Debugf("setDefault card #%d port %q", cardId, portName)
 	source := a.findSourceByCardIndexPortName(cardId, portName)
 	if source == nil {
 		return fmt.Errorf("cannot find valid source for card #%d and port %q",

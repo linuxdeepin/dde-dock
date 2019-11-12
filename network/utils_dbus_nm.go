@@ -22,6 +22,7 @@ package network
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 
@@ -309,10 +310,26 @@ func nmGeneralGetDeviceDesc(devPath dbus.ObjectPath) (desc string) {
 }
 
 func nmGeneralIsUsbDevice(devPath dbus.ObjectPath) bool {
-	sysPath, err := nmGeneralGetDeviceSysPath(devPath)
-	if err != nil {
-		return false
+	var sysPath string
+	var err error
+	for i := 0; i < 10; i++ {
+		sysPath, err = nmGeneralGetDeviceSysPath(devPath)
+		if err != nil {
+			logger.Warningf("failed to get device %v sys path: %v",
+				devPath, err)
+			return false
+		}
+		//logger.Debug("sysPath:", sysPath)
+		if strings.HasPrefix(sysPath, "/virtual/device/placeholder/") ||
+			sysPath == "" {
+			logger.Debug("sleep 500ms")
+			time.Sleep(500 * time.Millisecond)
+			continue
+		} else {
+			break
+		}
 	}
+
 	return udevIsUsbDevice(sysPath)
 }
 

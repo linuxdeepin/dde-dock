@@ -30,12 +30,18 @@ func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, activ
 	hwAddr, _ := nmGeneralGetDeviceHwAddr(devPath, true)
 	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
 	setSettingConnectionAutoconnect(data, true)
-	if active {
-		cpath, _, err = nmAddAndActivateConnection(data, devPath, false)
-	} else {
-		cpath, err = nmAddConnection(data)
+	cpath, err = nmAddConnection(data)
+	if err != nil {
+		return "/", err
 	}
-	return
+	if active {
+		_, err = nmActivateConnection(cpath, devPath)
+		if err != nil {
+			logger.Warningf("failed to activate connection cpath: %v, devPath: %v, err: %v",
+				cpath, devPath, err)
+		}
+	}
+	return cpath, nil
 }
 
 func newWiredConnectionData(id, uuid string) (data connectionData) {
