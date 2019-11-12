@@ -63,6 +63,18 @@
         {
             "Action": "sleep 0.5; xset dpms force off",
             "Key": "turn-off-screen"
+        },
+        {
+            "Key": "ai-assistant",
+            "Action": "dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.changeui"
+        },
+        {
+            "Key": "text-to-speech",
+            "Action": "dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech"
+        },
+        {
+            "Key": "speech-to-text",
+            "Action": "dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText"
         }
     ]
 }
