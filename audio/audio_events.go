@@ -304,14 +304,6 @@ func (a *Audio) addSinkInput(sinkInputInfo *pulse.SinkInput) {
 
 	logger.Debugf("sink-input #%d play with sink #%d", sinkInputInfo.Index,
 		sinkInputInfo.Sink)
-	// move sink to default sink
-	defaultSink := a.getDefaultSink()
-	if defaultSink != nil &&
-		defaultSink.index != sinkInputInfo.Sink {
-		a.ctx.MoveSinkInputsByIndex([]uint32{sinkInputInfo.Index}, defaultSink.index)
-		logger.Debugf("move sink-input #%d to sink #%d",
-			sinkInputInfo.Index, defaultSink.index)
-	}
 }
 
 func (a *Audio) handleSinkInputAdded(idx uint32) {
