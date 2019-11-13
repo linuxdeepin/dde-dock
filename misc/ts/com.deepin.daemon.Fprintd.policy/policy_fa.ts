@@ -4,17 +4,17 @@
 		<message>
 			<location filename="com.deepin.daemon.fprintd.enroll!message" line="0"/>
 			<source>Authentication is required to add fingerprint password</source>
-			<translation>برای اضافه کردن گذرواژه‌های اثر انگشت ، احراز هویت لازم است</translation>
+			<translation>برای اضافه کردن رمزعبور اثر انگشت ، احراز هویت لازم است</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.fprintd.enroll!description" line="0"/>
 			<source>Add fingerprint password</source>
-			<translation>اضافه کردن گذرواژه اثر انگشت</translation>
+			<translation>اضافه کردن رمزعبور اثر انگشت</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.fprintd.delete-enrolled-fingers!message" line="0"/>
 			<source>Authentication is required to clear fingerprint passwords</source>
-			<translation>برای پاک کردن گذرواژه‌های اثر انگشت ، احراز هویت لازم است</translation>
+			<translation>برای پاک کردن رمزهای عبور اثر انگشت ، احراز هویت لازم است</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.fprintd.delete-enrolled-fingers!description" line="0"/>

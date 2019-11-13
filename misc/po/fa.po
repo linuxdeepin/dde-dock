@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 15:50+0800\n"
-"PO-Revision-Date: 2019-11-09 07:56+0000\n"
+"POT-Creation-Date: 2019-11-12 10:32+0800\n"
+"PO-Revision-Date: 2019-11-13 03:52+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr "شبکه دایل آپ"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr "هندزفری"
+msgstr "دستگاه هندزفری"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
@@ -127,14 +127,14 @@ msgstr "مدیریت اعلان"
 
 #: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
 msgid "Connected"
-msgstr "متصل شده"
+msgstr "متصل شد"
 
 #: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
 #: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
 #: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
 #: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
 msgid "Disconnected"
-msgstr "قطع اتصال"
+msgstr "اتصال قطع شد"
 
 #: ../../bluetooth/utils_notify.go:59
 msgid "Make sure %q is turned on and in range"
@@ -208,11 +208,11 @@ msgstr "خروج اجباری"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
-msgstr "لنگرگاه"
+msgstr "داک"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"
-msgstr "باز کردن"
+msgstr "باز کردن از داک"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "All Windows"
@@ -232,7 +232,7 @@ msgstr "ترمینال"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "ضبط صفحه نمایش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -248,7 +248,7 @@ msgstr "رابط خاموش کردن"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "پنجره شفاف ترمینال"
+msgstr "پنجره Quake ترمینال"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -284,101 +284,113 @@ msgstr "خاموش کردن سریع صفحه"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "پایشگر سیستم"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
 msgstr "دیپین پیکر"
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
-msgid "Switch Layout"
-msgstr "سوئیچ صفحه کلید"
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:54
+msgid "Switch Layout"
+msgstr "تغییر صفحه کلید"
+
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to left workspace"
 msgstr "رفتن به فضای کار سمت چپ"
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:74
 msgid "Switch to right workspace"
 msgstr "رفتن به فضای کار سمت راست"
 
-#: ../../keybinding/shortcuts/id_name_map.go:72
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to upper workspace"
 msgstr "رفتن به فضای کار بالا"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to lower workspace"
 msgstr "رفتن به فضای کار پایین"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch similar windows"
 msgstr "تغییر پنجره های مشابه"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows in reverse"
 msgstr "تعویض پنجره های مشابه بصورت معکوس"
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch windows"
 msgstr "تغییر پنجره ها"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows in reverse"
 msgstr "تغییر پنجره ها بصورت معکوس"
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Show desktop"
-msgstr "نمایش میز کار"
+msgstr "نمایش دسکتاپ"
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Maximize window"
 msgstr "بزرگ کردن پنجره"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Restore window"
 msgstr "بازگردانی پنجره"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Minimize window"
 msgstr "پایین بردن پنجره"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Close window"
 msgstr "بستن پنجره"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Move window"
 msgstr "جابجایی پنجره"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Resize window"
 msgstr "تغییر سایز پنجره"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to left workspace"
 msgstr "انتقال به فضای کار سمت چپ"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:123
 msgid "Move to right workspace"
 msgstr "انتقال به فضای کار سمت راست"
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to upper workspace"
 msgstr "انتقال به فضای کار بالا"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to lower workspace"
 msgstr "انتقال به فضای کار سمت پایین"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:147
 msgid "Display windows of all workspaces"
 msgstr "نمایش پنجره های تمام فضاهای کار"
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of current workspace"
 msgstr "نمایش پنجره های فضای کار جاری"
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display workspace"
 msgstr "نمایش فضای کار"
 
@@ -435,7 +447,7 @@ msgstr "%q نتوانست حذف شود."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی معمولی ، سیستم را به برق متصل کنید "
+msgstr "برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی عادی، سیستم را به برق متصل کنید "
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -574,7 +586,7 @@ msgstr "وضعیت دستگاه تغییر پیدا کرد."
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr "به دلیل ناشناخته وضعیت دستگاه تغییر پیدا کرد."
+msgstr "به دلیل ناشناخته ، وضعیت دستگاه تغییر پیدا کرد."
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -605,7 +617,7 @@ msgstr "پسورد مورد نیاز است اما فراهم نشده."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "متقاضی 802.1X از نقطه دسترسی یا سرور تأیید اعتبار جدا شده است"
+msgstr "متقاضی 802.1X از نقطه دسترسی یا سرور تأیید اعتبار ، جدا شده است"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"

@@ -10,13 +10,14 @@
 # Maggie Liu <maggie.liufei@gmail.com>, 2017
 # Maggie Liu <maggie.liufei@gmail.com>, 2017
 # Michael Jay Tong <michaeljayt@gmail.com>, 2016-2017
+# transifex deepin <transifex@deepin.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 15:50+0800\n"
-"PO-Revision-Date: 2019-11-09 07:58+0000\n"
-"Last-Translator: Cindy0514\n"
+"POT-Creation-Date: 2019-11-12 10:32+0800\n"
+"PO-Revision-Date: 2019-11-13 04:24+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -295,95 +296,107 @@ msgstr "系统监视器"
 msgid "Deepin Picker"
 msgstr "深度取色器"
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr "桌面智能助手"
+
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr "阅读"
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr "听写"
+
+#: ../../keybinding/shortcuts/id_name_map.go:54
 msgid "Switch Layout"
 msgstr "切换键盘布局"
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to left workspace"
 msgstr "切换到左边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:74
 msgid "Switch to right workspace"
 msgstr "切换到右边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:72
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to upper workspace"
 msgstr "切换到上方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to lower workspace"
 msgstr "切换到下方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch similar windows"
 msgstr "切换同类型窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows in reverse"
 msgstr "反向切换同类型窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch windows"
 msgstr "切换窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows in reverse"
 msgstr "反向切换窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Show desktop"
 msgstr "显示桌面"
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Restore window"
 msgstr "恢复窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Close window"
 msgstr "关闭窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Move window"
 msgstr "移动窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Resize window"
 msgstr "改变窗口大小"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to left workspace"
 msgstr "移动到左边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:123
 msgid "Move to right workspace"
 msgstr "移动到右边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to upper workspace"
 msgstr "移动到上方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to lower workspace"
 msgstr "移动到下方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:147
 msgid "Display windows of all workspaces"
 msgstr "显示所有工作区的窗口  "
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of current workspace"
 msgstr "显示当前工作区的窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display workspace"
 msgstr "显示工作区 "
 

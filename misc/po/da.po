@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 15:50+0800\n"
-"PO-Revision-Date: 2019-11-09 07:56+0000\n"
+"POT-Creation-Date: 2019-11-12 10:32+0800\n"
+"PO-Revision-Date: 2019-11-13 03:52+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "Skærmoptager"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -286,101 +286,113 @@ msgstr "Hurtig skærm fra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "Systemovervågning"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
 msgstr "Deepin pipette"
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:54
 msgid "Switch Layout"
 msgstr "Skift layout"
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to left workspace"
 msgstr "Skift til venstre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:74
 msgid "Switch to right workspace"
 msgstr "Skift til højre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:72
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to upper workspace"
 msgstr "Skift til øvre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to lower workspace"
 msgstr "Skift til nedre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch similar windows"
 msgstr "Skift lignende vinduer"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows in reverse"
 msgstr "Skift lignende vinduer baglæns"
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch windows"
 msgstr "Skift vinduer"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows in reverse"
 msgstr "Skift vinduer baglæns"
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Show desktop"
 msgstr "Vis skrivebord"
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Maximize window"
 msgstr "Maksimer vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Restore window"
 msgstr "Gendan vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Minimize window"
 msgstr "Minimer vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Close window"
 msgstr "Luk vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Move window"
 msgstr "Flyt vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Resize window"
 msgstr "Juster vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to left workspace"
 msgstr "Flyt til venstre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:123
 msgid "Move to right workspace"
 msgstr "Flyt til højre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to upper workspace"
 msgstr "Flyt til øvre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to lower workspace"
 msgstr "Flyt til nedre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:147
 msgid "Display windows of all workspaces"
 msgstr "Vis vinduer fra alle arbejdsområder"
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of current workspace"
 msgstr "Vis vinduer på nuværende arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display workspace"
 msgstr "Vis arbejdsområde"
 

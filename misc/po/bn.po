@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 15:50+0800\n"
-"PO-Revision-Date: 2019-11-09 07:56+0000\n"
+"POT-Creation-Date: 2019-11-12 10:32+0800\n"
+"PO-Revision-Date: 2019-11-13 03:52+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
 "MIME-Version: 1.0\n"
@@ -290,95 +290,107 @@ msgstr ""
 msgid "Deepin Picker"
 msgstr "ডিপিন পিকার"
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:54
 msgid "Switch Layout"
 msgstr "বিন্যাস স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to left workspace"
 msgstr "বাম কর্মক্ষেত্রে স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:74
 msgid "Switch to right workspace"
 msgstr "ডান কর্মক্ষেত্রে স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:72
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to upper workspace"
 msgstr "উপরের কাজস্থানে স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to lower workspace"
 msgstr "কম কর্মক্ষেত্রে স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch similar windows"
 msgstr "একই উইন্ডোগুলি পরিবর্তন করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows in reverse"
 msgstr "বিপরীত দিকে অনুরূপ উইন্ডোগুলি পরিবর্তন করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch windows"
 msgstr "উইন্ডোগুলি স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows in reverse"
 msgstr "বিপরীতগুলি মধ্যে উইন্ডোতে স্যুইচ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Show desktop"
 msgstr "ডেস্কটপ দেখান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Maximize window"
 msgstr "উইন্ডো বাড়ান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Restore window"
 msgstr "উইন্ডো পুনরুদ্ধার করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Minimize window"
 msgstr "উইন্ডো ছোট করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Close window"
 msgstr "উইন্ডো বন্ধ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Move window"
 msgstr "উইন্ডোটি সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Resize window"
 msgstr "উইন্ডো পুনরায় আকার দিন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to left workspace"
 msgstr "বাম কর্মক্ষেত্রের দিকে সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:123
 msgid "Move to right workspace"
 msgstr "ডান কর্মক্ষেত্রের দিকে যান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to upper workspace"
 msgstr "উপরের কাজস্থানে সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to lower workspace"
 msgstr "নিচের কাজস্থানে সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:147
 msgid "Display windows of all workspaces"
 msgstr "সমস্ত কর্মক্ষেত্রের উইন্ডো প্রদর্শন করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of current workspace"
 msgstr "বর্তমান কর্মক্ষেত্রের উইন্ডো প্রদর্শন করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display workspace"
 msgstr "কর্মক্ষেত্র প্রদর্শন"
 

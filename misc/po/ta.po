@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 15:50+0800\n"
-"PO-Revision-Date: 2019-11-09 07:56+0000\n"
+"POT-Creation-Date: 2019-11-12 10:32+0800\n"
+"PO-Revision-Date: 2019-11-13 03:52+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Tamil (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ta/)\n"
 "MIME-Version: 1.0\n"
@@ -289,95 +289,107 @@ msgstr ""
 msgid "Deepin Picker"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:54
 msgid "Switch Layout"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
+#: ../../keybinding/shortcuts/id_name_map.go:73
 msgid "Switch to left workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:74
 msgid "Switch to right workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:72
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to upper workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to lower workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch similar windows"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows in reverse"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch windows"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows in reverse"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Show desktop"
 msgstr "டெஸ்க்டாப்பை காட்டு"
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Maximize window"
 msgstr "சாளரத்தை பெரிதாக்கு "
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Restore window"
 msgstr "சாளரத்தை மீட்டெடு"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Minimize window"
 msgstr "சாளரத்தை குறைத்தல்"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Close window"
 msgstr "சாளரத்தை மூடு"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Move window"
 msgstr "சாளரத்தை நகர்த்து"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Resize window"
 msgstr "சாளரத்த்து அளவை மாற்ற  "
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:122
 msgid "Move to left workspace"
 msgstr "இடப்பக்க பணியிடத்திற்கு நகர்த்து"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:123
 msgid "Move to right workspace"
 msgstr "வலப்பக்க பணியிடத்திற்கு நகர்த்து"
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to upper workspace"
 msgstr "மேல் பணியிடத்திற்கு நகர்த்து"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to lower workspace"
 msgstr " கீழான பணியிடத்திற்கு நகர்த்து"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:147
 msgid "Display windows of all workspaces"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of current workspace"
 msgstr ""
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display workspace"
 msgstr ""
 

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 15:50+0800\n"
-"PO-Revision-Date: 2019-11-09 07:56+0000\n"
+"POT-Creation-Date: 2019-11-12 10:32+0800\n"
+"PO-Revision-Date: 2019-11-13 03:52+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,7 @@ msgstr "사용자 이름이 시스템에서 사용되었습니다"
 
 #: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
-msgstr "사용자 이름은 3 ~ 32 자 사이 여야합니다"
+msgstr "사용자 이름은 3 ~ 32자 사이여야 합니다"
 
 #: ../../appearance/scale.go:61
 msgid "Set successfully"
@@ -65,11 +65,11 @@ msgstr "변경 사항을 보려면 다시 로그인하십시오"
 
 #: ../../appearance/scale.go:66
 msgid "Display scaling"
-msgstr "디스플레이 크기 조정"
+msgstr "디스플레이 크기조정"
 
 #: ../../appearance/scale.go:67
 msgid "Setting display scaling"
-msgstr "디스플레이 배율 설정"
+msgstr "디스플레이 크기조정 설정"
 
 #: ../../bin/dde-authority/fprint_transaction.go:20
 msgid "Fingerprint verification failed"
@@ -117,7 +117,7 @@ msgstr "전화번호부 접속"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr "전화번호부 "
+msgstr "전화번호부 접속 클라이언트"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
@@ -210,11 +210,11 @@ msgstr "강제 종료"
 
 #: ../../dock/app_entry_menu.go:130
 msgid "Dock"
-msgstr "도크"
+msgstr "도구집"
 
 #: ../../dock/app_entry_menu.go:137
 msgid "Undock"
-msgstr "도크 해제"
+msgstr "도구집 해제"
 
 #: ../../dock/app_entry_menu.go:144
 msgid "All Windows"
@@ -234,7 +234,7 @@ msgstr "터미널"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "화면 녹화기"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -242,7 +242,7 @@ msgstr "화면 잠그기"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "도크 보이기/숨기기"
+msgstr "도구집 보이기/숨기기"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
@@ -266,7 +266,7 @@ msgstr "윈도우 스크린샷"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "스크린 지연 "
+msgstr "스크린샷 지연 "
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -286,107 +286,119 @@ msgstr "빠른 화면 꺼짐"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "시스템 모니터"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
 msgstr "Deepin 선택 도구"
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:54
 msgid "Switch Layout"
 msgstr "레이아웃 변경하기"
 
-#: ../../keybinding/shortcuts/id_name_map.go:70
-msgid "Switch to left workspace"
-msgstr "왼쪽 작업 공간으로 전환 "
-
-#: ../../keybinding/shortcuts/id_name_map.go:71
-msgid "Switch to right workspace"
-msgstr "오른쪽 워크스페이스로 변경"
-
-#: ../../keybinding/shortcuts/id_name_map.go:72
-msgid "Switch to upper workspace"
-msgstr "상위 작업 공간으로 전환"
-
 #: ../../keybinding/shortcuts/id_name_map.go:73
-msgid "Switch to lower workspace"
-msgstr "낮은 작업대로 변경"
+msgid "Switch to left workspace"
+msgstr "왼쪽 작업공간으로 전환"
+
+#: ../../keybinding/shortcuts/id_name_map.go:74
+msgid "Switch to right workspace"
+msgstr "오른쪽 작업공간으로 전환"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
+msgid "Switch to upper workspace"
+msgstr "상부 작업공간으로 전환"
+
+#: ../../keybinding/shortcuts/id_name_map.go:76
+msgid "Switch to lower workspace"
+msgstr "하부 작업공간으로 전환"
+
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch similar windows"
 msgstr "유사한 윈도우 전환"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows in reverse"
 msgstr "비슷한 창 반대로 전환"
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch windows"
 msgstr "윈도우 간 변환"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows in reverse"
 msgstr "반대로 윈도우 바꾸기"
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Show desktop"
 msgstr "바탕화면 표시"
 
-#: ../../keybinding/shortcuts/id_name_map.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:101
 msgid "Maximize window"
 msgstr "윈도우 최대화"
 
-#: ../../keybinding/shortcuts/id_name_map.go:99
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Restore window"
 msgstr "윈도우 복원"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Minimize window"
 msgstr "창 최소화"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Close window"
 msgstr "윈도우 닫기"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Move window"
 msgstr "창 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Resize window"
 msgstr "창 크기 조절"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
-msgid "Move to left workspace"
-msgstr "왼쪽 워크스페이스로 이동"
-
-#: ../../keybinding/shortcuts/id_name_map.go:120
-msgid "Move to right workspace"
-msgstr "오른쪽 작업 공간으로 이동"
-
-#: ../../keybinding/shortcuts/id_name_map.go:121
-msgid "Move to upper workspace"
-msgstr "상위 워크스페이스로 이동"
-
 #: ../../keybinding/shortcuts/id_name_map.go:122
+msgid "Move to left workspace"
+msgstr "왼쪽 작업공간으로 이동"
+
+#: ../../keybinding/shortcuts/id_name_map.go:123
+msgid "Move to right workspace"
+msgstr "오른쪽 작업공간으로 이동"
+
+#: ../../keybinding/shortcuts/id_name_map.go:124
+msgid "Move to upper workspace"
+msgstr "상부 작업공간으로 이동"
+
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to lower workspace"
-msgstr "낮은 워크스페이스로 이동"
+msgstr "하부 작업공간으로 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:147
 msgid "Display windows of all workspaces"
-msgstr "모든 작업대 창 표시하기"
+msgstr "모든 작업공간의 창 표시"
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of current workspace"
-msgstr "현재 작업대의 창 표시하기"
+msgstr "현재 작업공간의 창 표시"
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display workspace"
-msgstr "작업 공간 보이기 "
+msgstr "작업공간 표시"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "언어를 전화하려면 인증이 필요합니다."
+msgstr "언어를 전화하려면 인증이 필요합니다"
 
 #: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
@@ -437,7 +449,7 @@ msgstr "%q(을)를 삭제하는데 실패하였습니다."
 #: ../../lastore/notify.go:102
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "자동 종료를 방지하려면 정상 업데이트를 위해 전원을 연결하십시오. "
+msgstr "자동 종료를 방지하려면, 정상적인 업데이트를 위해 연결하십시오."
 
 #: ../../lastore/notify.go:107
 msgid "Package cache wiped"
@@ -572,11 +584,11 @@ msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr "기기 상태 변경됨."
+msgstr "장치 상태가 변경됨"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr "알 수 없는 이유로, 기기 상태가 변경되었습니다."
+msgstr "알 수 없는 이유로, 장치 상태가 변경됨"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -735,7 +747,7 @@ msgstr "연결을 해제를 요청한 사용자 또는 클라이언트"
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr "기기의 이동 통신사/링크가 변경되었습니다"
+msgstr "장치의 이동 통신사/링크가 변경되었습니다"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
@@ -743,7 +755,7 @@ msgstr "장치의 기존 연결이 전제됩니다"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr " 802.1x Supplicant를 이용하실 수 있습니다"
+msgstr "802.1x Supplicant를 사용할 수 있습니다"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
@@ -921,7 +933,7 @@ msgstr "%q을(를) 연결할 수 없습니다. 무선 라우터에 가까이 있
 
 #: ../../network/state_handler.go:337
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "%q을(를) 연결할 수 없습니다. 라우터 또는 인터넷 케이블을 확인하십시오"
+msgstr "%q을(를) 연결할 수 없습니다. 라우터 또는 인터넷 케이블을 확인하십시오."
 
 #: ../../network/state_handler.go:340
 msgid "Password is required to connect %q"
@@ -941,11 +953,11 @@ msgstr "오프라인 상태입니다."
 
 #: ../../network/utils_notify.go:84
 msgid "Airplane mode enabled."
-msgstr "비행기 모드가 활성화됨"
+msgstr "비행기 모드 활성화됨."
 
 #: ../../network/utils_notify.go:92
 msgid "Access Point mode is not supported by this device."
-msgstr "본 장비를 액세스 포인트 모드를 지원하지 않습니다"
+msgstr "이 장치는 액세스 포인트 모드를 지원하지 않습니다."
 
 #: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
 #: ../../network/utils_notify.go:103
@@ -959,7 +971,7 @@ msgstr "WLAN 카드의 하드웨어 스위치가 꺼져있습니다, 필요하�
 
 #: ../../network/utils_notify.go:100
 msgid "System proxy is set successfully."
-msgstr "시스템 프록시가 성공적으로 설정되었습니다. "
+msgstr "시스템 프록시가 성공적으로 설정되었습니다."
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
@@ -967,7 +979,7 @@ msgstr "시스템 프록시가 취소되었습니다."
 
 #: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"
-msgstr "배터리 매우 부족"
+msgstr "배터리 잔량 부족"
 
 #: ../../session/power/manager_events.go:152
 msgid "Computer will suspend very soon, please plug in now"
@@ -976,7 +988,7 @@ msgstr "컴퓨터가 곧 일시 중단됩니다. 지금 전원을 연결하십�
 #: ../../session/power/manager_events.go:175
 #: ../../session/power/manager_events.go:182
 msgid "Battery Low"
-msgstr "배터리 낮음 "
+msgstr "배터리 부족"
 
 #: ../../session/power/manager_events.go:176
 msgid "Computer will suspend soon, please plug in"

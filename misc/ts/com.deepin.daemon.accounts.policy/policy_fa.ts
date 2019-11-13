@@ -44,17 +44,17 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>احراز هویت برای فعالسازی ورود بدون رمز لازم است</translation>
+			<translation>احراز هویت برای فعالسازی ورود بدون رمزعبور لازم است</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation>فعالسازی ورود بدون رمز</translation>
+			<translation>فعالسازی ورود بدون رمزعبور</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>احراز هویت برای غیرفعالسازی ورود بدون رمز لازم است</translation>
+			<translation>احراز هویت برای غیرفعالسازی ورود بدون رمزعبور لازم است</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
