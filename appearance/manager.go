@@ -676,7 +676,8 @@ func (m *Manager) doSetFontSize(size float64) error {
 		return err
 	}
 
-	err = m.xSettings.SetInteger(0, "Qt/FontPointSize", int32(size))
+	err = m.xSettings.SetString(0, "Qt/FontPointSize",
+		strconv.FormatFloat(size, 'f', -1, 64))
 	if err != nil {
 		return err
 	}
