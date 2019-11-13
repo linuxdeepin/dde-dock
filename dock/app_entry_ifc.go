@@ -21,6 +21,10 @@ package dock
 
 import (
 	"errors"
+	"os"
+	"pkg.deepin.io/lib/procfs"
+	"syscall"
+	"time"
 
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/lib/dbus1"
@@ -156,8 +160,52 @@ func (entry *AppEntry) ForceQuit() *dbus.Error {
 	winInfoSlice := entry.getWindowInfoSlice()
 	entry.PropsMu.RUnlock()
 
+	pidWinInfosMap := make(map[uint][]*WindowInfo)
 	for _, winInfo := range winInfoSlice {
-		killClient(winInfo.window)
+		if winInfo.pid != 0 && winInfo.process != nil {
+			pidWinInfosMap[winInfo.pid] = append(pidWinInfosMap[winInfo.pid], winInfo)
+		} else {
+			killClient(winInfo.window)
+		}
+	}
+
+	for pid, winInfoSlice := range pidWinInfosMap {
+		err := killProcess(pid)
+		if err != nil {
+			logger.Warning(err)
+			if os.IsPermission(err) {
+				for _, winInfo := range winInfoSlice {
+					killClient(winInfo.window)
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func killProcess(pid uint) error {
+	p := procfs.Process(pid)
+	if p.Exist() {
+		logger.Debug("kill process", pid)
+		osP, err := os.FindProcess(int(pid))
+		if err != nil {
+			return err
+		}
+		err = osP.Signal(syscall.SIGTERM)
+		if err != nil {
+			logger.Warningf("failed to send signal TERM to process %d: %v",
+				osP.Pid, err)
+			return err
+		}
+		time.AfterFunc(5*time.Second, func() {
+			if p.Exist() {
+				err := osP.Kill()
+				if err != nil {
+					logger.Warningf("failed to send signal KILL to process %d: %v",
+						osP.Pid, err)
+				}
+			}
+		})
 	}
 	return nil
 }
