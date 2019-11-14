@@ -208,40 +208,33 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     const QRectF itemRect = rect();
 
-    // draw background
-    QRectF backgroundRect = itemRect;
-
     if (DockDisplayMode == Efficient) {
-        backgroundRect = itemRect.marginsRemoved(QMargins(1, 1, 1, 1));
+        // draw background
+        qreal min = qMin(itemRect.width(), itemRect.height());
+        QRectF backgroundRect = QRectF(itemRect.x(), itemRect.y(), min, min);
+        backgroundRect = backgroundRect.marginsRemoved(QMargins(2, 2, 2, 2));
+        backgroundRect.moveCenter(itemRect.center());
+
+        QPainterPath path;
+        path.addRoundedRect(backgroundRect, 8, 8);
 
         if (m_active) {
-            painter.fillRect(backgroundRect, QColor(44, 167, 248, 255 * 0.3));
-
-            const int activeLineWidth = itemRect.height() > 50 ? 4 : 2;
-            QRectF activeRect = backgroundRect;
-            switch (DockPosition) {
-            case Top:       activeRect.setBottom(activeRect.top() + activeLineWidth);   break;
-            case Bottom:    activeRect.setTop(activeRect.bottom() - activeLineWidth);   break;
-            case Left:      activeRect.setRight(activeRect.left() + activeLineWidth);   break;
-            case Right:     activeRect.setLeft(activeRect.right() - activeLineWidth);   break;
-            }
-
-            painter.fillRect(activeRect, QColor(44, 167, 248, 255));
+            painter.fillPath(path, QColor(0, 0, 0, 255 * 0.8));
         } else if (!m_windowInfos.isEmpty()) {
             if (hasAttention())
-                painter.fillRect(backgroundRect, QColor(241, 138, 46, 255 * .8));
+                painter.fillPath(path, QColor(241, 138, 46, 255 * .8));
             else
-                painter.fillRect(backgroundRect, QColor(255, 255, 255, 255 * 0.2));
+                painter.fillPath(path, QColor(0, 0, 0, 255 * 0.3));
         }
     } else {
         if (!m_windowInfos.isEmpty()) {
             QPoint p;
             QPixmap pixmap;
             QPixmap activePixmap;
-            if(DGuiApplicationHelper::DarkType == m_themeType){
+            if (DGuiApplicationHelper::DarkType == m_themeType) {
                 m_horizontalIndicator = QPixmap(":/indicator/resources/indicator_dark.svg");
                 m_verticalIndicator = QPixmap(":/indicator/resources/indicator_dark_ver.svg");
-            }else {
+            } else {
                 m_horizontalIndicator = QPixmap(":/indicator/resources/indicator.svg");
                 m_verticalIndicator = QPixmap(":/indicator/resources/indicator_ver.svg");
             }
