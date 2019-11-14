@@ -75,6 +75,10 @@
         {
             "Key": "speech-to-text",
             "Action": "dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText"
+        },
+        {
+            "Key": "clipboard",
+            "Action": "dbus-send --print-reply --dest=com.deepin.dde.Clipboard /com/deepin/dde/Clipboard com.deepin.dde.Clipboard.Show"
         }
     ]
 }

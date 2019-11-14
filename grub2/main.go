@@ -40,7 +40,7 @@ func RunAsDaemon() {
 	_g = NewGrub2(service)
 	ihObj := inhibit_hint.New("lastore-daemon")
 	ihObj.SetName("Control Center")
-	ihObj.SetIcon("dde-control-center")
+	ihObj.SetIcon("preferences-system")
 
 	err = service.Export(dbusPath, _g)
 	if err != nil {
