@@ -495,6 +495,7 @@ void DockSettings::calculateWindowConfig()
         m_dockWindowSize = m_dockInter->windowSizeEfficient();
         if (m_dockWindowSize > WINDOW_MAX_SIZE || m_dockWindowSize < WINDOW_MIN_SIZE) {
             m_dockWindowSize = EffICIENT_DEFAULT_HEIGHT;
+            m_dockInter->setWindowSize(EffICIENT_DEFAULT_HEIGHT);
         }
 
         switch (m_position) {
@@ -517,6 +518,7 @@ void DockSettings::calculateWindowConfig()
         m_dockWindowSize = m_dockInter->windowSizeFashion();
         if (m_dockWindowSize > WINDOW_MAX_SIZE || m_dockWindowSize < WINDOW_MIN_SIZE) {
             m_dockWindowSize = FASHION_DEFAULT_HEIGHT;
+            m_dockInter->setWindowSize(FASHION_DEFAULT_HEIGHT);
         }
 
         switch (m_position) {
