@@ -12,7 +12,8 @@ type syncConfig struct {
 func (sc *syncConfig) Get() (interface{}, error) {
 	var v syncData
 	v.Version = syncConfigVersion
-	v.WindowSize = sc.m.WindowSize.Get()
+	v.WindowSizeEfficient = sc.m.WindowSizeEfficient.Get()
+	v.WindowSizeFashion = sc.m.WindowSizeFashion.Get()
 	v.DisplayMode = sc.m.DisplayMode.GetString()
 	v.HideMode = sc.m.HideMode.GetString()
 	v.Position = sc.m.Position.GetString()
@@ -74,8 +75,11 @@ func (sc *syncConfig) Set(data []byte) error {
 		return err
 	}
 	m := sc.m
-	if v.WindowSize > 0 {
-		m.WindowSize.Set(v.WindowSize)
+	if v.WindowSizeEfficient > 0 {
+		m.WindowSizeEfficient.Set(v.WindowSizeEfficient)
+	}
+	if v.WindowSizeFashion > 0 {
+		m.WindowSizeFashion.Set(v.WindowSizeFashion)
 	}
 	m.DisplayMode.SetString(v.DisplayMode)
 	m.HideMode.SetString(v.HideMode)
@@ -114,15 +118,16 @@ func diffStrSlice(a, b []string) (added, removed []string) {
 }
 
 const (
-	syncConfigVersion = "1.1"
+	syncConfigVersion = "1.2"
 )
 
 type syncData struct {
-	Version     string         `json:"version"`
-	WindowSize  uint32         `json:"window_size"`
-	DisplayMode string         `json:"display_mode"`
-	HideMode    string         `json:"hide_mode"`
-	Position    string         `json:"position"`
-	DockedApps  []string       `json:"docked_apps"`
-	Plugins     pluginSettings `json:"plugins"`
+	Version             string         `json:"version"`
+	WindowSizeEfficient uint32         `json:"window_size_efficient"`
+	WindowSizeFashion   uint32         `json:"window_size_fashion"`
+	DisplayMode         string         `json:"display_mode"`
+	HideMode            string         `json:"hide_mode"`
+	Position            string         `json:"position"`
+	DockedApps          []string       `json:"docked_apps"`
+	Plugins             pluginSettings `json:"plugins"`
 }

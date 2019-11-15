@@ -43,19 +43,20 @@ import (
 )
 
 type Manager struct {
-	PropsMu            sync.RWMutex
-	Entries            AppEntries
-	HideMode           gsprop.Enum `prop:"access:rw"`
-	DisplayMode        gsprop.Enum `prop:"access:rw"`
-	Position           gsprop.Enum `prop:"access:rw"`
-	IconSize           gsprop.Uint `prop:"access:rw"`
-	ShowTimeout        gsprop.Uint `prop:"access:rw"`
-	HideTimeout        gsprop.Uint `prop:"access:rw"`
-	WindowSize         gsprop.Uint `prop:"access:rw"`
-	DockedApps         gsprop.Strv
-	Opacity            gsprop.Double
-	HideState          HideStateType
-	FrontendWindowRect *Rect
+	PropsMu             sync.RWMutex
+	Entries             AppEntries
+	HideMode            gsprop.Enum `prop:"access:rw"`
+	DisplayMode         gsprop.Enum `prop:"access:rw"`
+	Position            gsprop.Enum `prop:"access:rw"`
+	IconSize            gsprop.Uint `prop:"access:rw"`
+	ShowTimeout         gsprop.Uint `prop:"access:rw"`
+	HideTimeout         gsprop.Uint `prop:"access:rw"`
+	WindowSizeEfficient gsprop.Uint `prop:"access:rw"`
+	WindowSizeFashion   gsprop.Uint `prop:"access:rw"`
+	DockedApps          gsprop.Strv
+	Opacity             gsprop.Double
+	HideState           HideStateType
+	FrontendWindowRect  *Rect
 
 	service            *dbusutil.Service
 	sessionSigLoop     *dbusutil.SignalLoop
@@ -142,7 +143,8 @@ const (
 	settingKeyDockedApps           = "docked-apps"
 	settingKeyShowTimeout          = "show-timeout"
 	settingKeyHideTimeout          = "hide-timeout"
-	settingKeyWindowSize           = "window-size"
+	settingKeyWindowSizeFashion    = "window-size-fashion"
+	settingKeyWindowSizeEfficient  = "window-size-efficient"
 	settingKeyWinIconPreferredApps = "win-icon-preferred-apps"
 	settingKeyOpacity              = "opacity"
 	settingKeyPluginSettings       = "plugin-settings"
