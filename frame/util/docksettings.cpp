@@ -34,6 +34,8 @@
 
 #define FASHION_DEFAULT_HEIGHT 72
 #define EffICIENT_DEFAULT_HEIGHT 40
+#define WINDOW_MAX_SIZE          100
+#define WINDOW_MIN_SIZE          40
 
 DWIDGET_USE_NAMESPACE
 
@@ -63,7 +65,6 @@ DockSettings::DockSettings(QWidget *parent)
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_hideState = Dock::HideState(m_dockInter->hideState());
-    m_dockWindowSize = m_dockInter->windowSize();
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
@@ -117,7 +118,8 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
     connect(m_dockInter, &DBusDock::OpacityChanged, this, &DockSettings::onOpacityChanged);
-    connect(m_dockInter, &DBusDock::WindowSizeChanged, this, &DockSettings::onWindowSizeChanged);
+    connect(m_dockInter, &DBusDock::WindowSizeEfficientChanged, this, &DockSettings::onWindowSizeChanged);
+    connect(m_dockInter, &DBusDock::WindowSizeFashionChanged, this, &DockSettings::onWindowSizeChanged);
 
     connect(m_itemManager, &DockItemManager::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemManager, &DockItemManager::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -489,14 +491,12 @@ void DockSettings::trayVisableCountChanged(const int &count)
 
 void DockSettings::calculateWindowConfig()
 {
-    m_dockWindowSize = m_dockInter->windowSize();
-    if (m_dockWindowSize == 0) {
-        if (m_displayMode == Dock::Efficient)
-            m_dockWindowSize = EffICIENT_DEFAULT_HEIGHT;
-        else
-            m_dockWindowSize = FASHION_DEFAULT_HEIGHT;
-    }
     if (m_displayMode == Dock::Efficient) {
+        m_dockWindowSize = m_dockInter->windowSizeEfficient();
+        if (m_dockWindowSize > WINDOW_MAX_SIZE || m_dockWindowSize < WINDOW_MIN_SIZE) {
+            m_dockWindowSize = EffICIENT_DEFAULT_HEIGHT;
+        }
+
         switch (m_position) {
         case Top:
         case Bottom:
@@ -514,6 +514,11 @@ void DockSettings::calculateWindowConfig()
             Q_ASSERT(false);
         }
     } else if (m_displayMode == Dock::Fashion) {
+        m_dockWindowSize = m_dockInter->windowSizeFashion();
+        if (m_dockWindowSize > WINDOW_MAX_SIZE || m_dockWindowSize < WINDOW_MIN_SIZE) {
+            m_dockWindowSize = FASHION_DEFAULT_HEIGHT;
+        }
+
         switch (m_position) {
         case Top:
         case Bottom: {

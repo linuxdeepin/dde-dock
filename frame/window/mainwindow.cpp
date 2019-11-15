@@ -983,11 +983,21 @@ void MainWindow::onDragFinished()
         return;
 
     m_size = m_settings->m_mainWindowSize;
-    if (Dock::Top == m_curDockPos || Dock::Bottom == m_curDockPos) {
-        m_settings->m_dockInter ->setWindowSize(m_settings->m_mainWindowSize.height());
+
+    if (m_settings->displayMode() == Fashion) {
+        if (Dock::Top == m_curDockPos || Dock::Bottom == m_curDockPos) {
+            m_settings->m_dockInter->setWindowSizeFashion(m_settings->m_mainWindowSize.height());
+        } else {
+            m_settings->m_dockInter->setWindowSizeFashion(m_settings->m_mainWindowSize.width());
+        }
     } else {
-        m_settings->m_dockInter->setWindowSize(m_settings->m_mainWindowSize.width());
+        if (Dock::Top == m_curDockPos || Dock::Bottom == m_curDockPos) {
+            m_settings->m_dockInter->setWindowSizeEfficient(m_settings->m_mainWindowSize.height());
+        } else {
+            m_settings->m_dockInter->setWindowSizeEfficient(m_settings->m_mainWindowSize.width());
+        }
     }
+
 
     setStrutPartial();
 }
