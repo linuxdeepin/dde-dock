@@ -3,5 +3,4 @@ include:
 
 variables:
     CPPCHECK_DISABLED: "true"
-    PKG_NAME: "dde-daemon"
     BUILD_CLASS: "make"
