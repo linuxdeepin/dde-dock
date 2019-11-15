@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 04:24+0000\n"
+"POT-Creation-Date: 2019-11-14 20:29+0800\n"
+"PO-Revision-Date: 2019-11-15 01:31+0000\n"
 "Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -308,95 +308,99 @@ msgstr "阅读"
 msgid "Speech to Text"
 msgstr "听写"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "剪贴板"
+
+#: ../../keybinding/shortcuts/id_name_map.go:55
 msgid "Switch Layout"
 msgstr "切换键盘布局"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:74
 msgid "Switch to left workspace"
 msgstr "切换到左边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to right workspace"
 msgstr "切换到右边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to upper workspace"
 msgstr "切换到上方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to lower workspace"
 msgstr "切换到下方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:79
 msgid "Switch similar windows"
 msgstr "切换同类型窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows in reverse"
 msgstr "反向切换同类型窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch windows"
 msgstr "切换窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows in reverse"
 msgstr "反向切换窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:93
 msgid "Show desktop"
 msgstr "显示桌面"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:102
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Restore window"
 msgstr "恢复窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Close window"
 msgstr "关闭窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Move window"
 msgstr "移动窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Resize window"
 msgstr "改变窗口大小"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:123
 msgid "Move to left workspace"
 msgstr "移动到左边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to right workspace"
 msgstr "移动到右边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to upper workspace"
 msgstr "移动到上方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to lower workspace"
 msgstr "移动到下方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:148
 msgid "Display windows of all workspaces"
 msgstr "显示所有工作区的窗口  "
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of current workspace"
 msgstr "显示当前工作区的窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display workspace"
 msgstr "显示工作区 "
 
@@ -947,7 +951,7 @@ msgstr "连接%q需要密码"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "连接失败，未能加入%q，密码不正确"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:230
 msgid "Unknown"
 msgstr "未知"
 
