@@ -24,6 +24,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"os"
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
@@ -486,6 +487,16 @@ func (psp *powerSavePlan) HandleIdleOn() {
 		task := newDelayedTask(t.name, t.realDelay, t.fn)
 		psp.addTaskNoLock(task)
 	}
+
+	_, err = os.Stat("/etc/deepin/no_suspend")
+	if err == nil {
+		if psp.manager.ScreenBlackLock.Get() {
+			//m.setDPMSModeOn()
+			//m.lockWaitShow(4 * time.Second)
+			psp.manager.doLock()
+			time.Sleep(time.Millisecond * 500)
+		}
+	}
 }
 
 // 结束 Idle
@@ -503,6 +514,16 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	psp.interruptTasks()
 	psp.manager.setDPMSModeOn()
 	psp.resetBrightness()
+
+	_, err := os.Stat("/etc/deepin/no_suspend")
+	if err == nil {
+		if psp.manager.ScreenBlackLock.Get() {
+			//m.setDPMSModeOn()
+			//m.lockWaitShow(4 * time.Second)
+			psp.manager.doLock()
+			time.Sleep(time.Millisecond * 500)
+		}
+	}
 }
 
 func (psp *powerSavePlan) isWindowFullScreenAndFocused(xid x.Window) (bool, error) {
