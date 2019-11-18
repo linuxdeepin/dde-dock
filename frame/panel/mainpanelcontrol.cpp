@@ -869,6 +869,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         if (keyboardPlugin)
             keyboardPlugin->setFixedSize(w - 20, tray_item_size);
     }
+
+    m_trayAreaWidget->adjustSize();
 }
 
 void MainPanelControl::getTrayVisableItemCount()
