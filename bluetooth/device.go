@@ -391,11 +391,11 @@ func (d *device) notifyConnectedChanged() {
 
 	if d.connected {
 		notifyConnected(d.Alias)
-	} else {
-		if time.Since(d.pairingFailedTime) < 2*time.Second {
-			return
-		}
-		notifyDisconnected(d.Alias)
+		//} else {
+		//	if time.Since(d.pairingFailedTime) < 2*time.Second {
+		//		return
+		//	}
+		//	notifyDisconnected(d.Alias)
 	}
 }
 
@@ -456,7 +456,7 @@ func (d *device) doConnect(hasNotify bool) error {
 	err = d.doPair()
 	if err != nil {
 		if hasNotify {
-			notifyConnectFailedPairing(d.Alias)
+			notifyConnectFailedHostDown(d.Alias)
 		}
 		return err
 	}

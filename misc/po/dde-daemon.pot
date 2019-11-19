@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 20:29+0800\n"
+"POT-Creation-Date: 2019-11-19 11:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,26 +123,22 @@ msgstr ""
 msgid "Message notification"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
+#: ../../bluetooth/utils_notify.go:52
+msgid "Connect %q successfully"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
+#: ../../bluetooth/utils_notify.go:56 ../../network/utils_notify.go:80
 #: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
 #: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
 #: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:60
 msgid "Make sure %q is turned on and in range"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:65
 msgid "Bluetooth connection failed"
 msgstr ""
 
@@ -973,6 +969,10 @@ msgstr ""
 
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
+msgstr ""
+
+#: ../../network/utils_notify.go:107
+msgid "Connected"
 msgstr ""
 
 #: ../../session/power/manager_events.go:151
