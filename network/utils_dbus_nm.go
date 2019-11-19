@@ -20,14 +20,14 @@
 package network
 
 import (
+	"bufio"
 	"fmt"
+	"math"
+	"os"
 	"strings"
 	"time"
 
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
-
-	"math"
-
 	"pkg.deepin.io/dde/daemon/network/nm"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -44,6 +44,10 @@ const (
 	CUSTOM_NM_DEVICE_STATE_REASON_WIRELESS_DISABLED
 	CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
 	CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
+)
+
+const (
+	devWhitelistHuaweiFile = "/lib/vendor/interface"
 )
 
 var nmPermissions map[string]string
@@ -108,8 +112,40 @@ func isConnectionStateInActivating(state uint32) bool {
 	return false
 }
 
+func isInDeviceWhitelist(filename string, ifc string) bool {
+	if len(ifc) == 0 {
+		return false
+	}
+	fr, err := os.Open(filename)
+	if err != nil {
+		return false
+	}
+	defer fr.Close()
+
+	var scanner = bufio.NewScanner(fr)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if len(line) == 0 {
+			continue
+		}
+
+		if line == ifc {
+			return true
+		}
+	}
+	return false
+
+}
+
 func isVirtualDeviceIfc(dev *nmdbus.Device) bool {
 	driver, _ := dev.Driver().Get(0)
+
+	//// workaround for huawei pangu
+	ifc, _ := dev.Interface().Get(0)
+	if isInDeviceWhitelist(devWhitelistHuaweiFile, ifc) {
+		return false
+	}
+
 	switch driver {
 	case "dummy", "veth", "vboxnet", "vmnet", "vmxnet", "vmxnet2", "vmxnet3":
 		return true
@@ -117,10 +153,9 @@ func isVirtualDeviceIfc(dev *nmdbus.Device) bool {
 		// sometimes we could not get vmnet dirver name, so check the
 		// udi sys path if is prefix with /sys/devices/virtual/net
 		devUdi, _ := dev.Udi().Get(0)
-		devInterface, _ := dev.Interface().Get(0)
 		if strings.HasPrefix(devUdi, "/sys/devices/virtual/net") ||
 			strings.HasPrefix(devUdi, "/virtual/device") ||
-			strings.HasPrefix(devInterface, "vmnet") {
+			strings.HasPrefix(ifc, "vmnet") {
 			return true
 		}
 	}
