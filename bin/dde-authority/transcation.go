@@ -2,7 +2,7 @@ package main
 
 import (
 	"errors"
-	"log"
+	"fmt"
 	"strconv"
 	"sync"
 
@@ -35,12 +35,17 @@ var _ Transaction = &PAMTransaction{}
 var _ Transaction = &FPrintTransaction{}
 
 type baseTransaction struct {
-	parent *Authority
-	id     uint64
-	agent  dbus.BusObject
-	user   string
-	cookie string
-	mu     sync.Mutex
+	authType string
+	parent   *Authority
+	id       uint64
+	agent    dbus.BusObject
+	user     string
+	cookie   string
+	mu       sync.Mutex
+}
+
+func (tx *baseTransaction) String() string {
+	return fmt.Sprintf("tx(%s,%d)", tx.authType, tx.id)
 }
 
 func (*baseTransaction) GetInterfaceName() string {
@@ -63,24 +68,24 @@ func (tx *baseTransaction) matchSender(name string) bool {
 }
 
 func (tx *baseTransaction) requestEchoOn(msg string) (ret string, err error) {
-	log.Println("RequestEchoOn:", msg)
+	logger.Debug(tx, "RequestEchoOn:", msg)
 	err = tx.agent.Call(dbusAgentInterface+".RequestEchoOn", 0, msg).Store(&ret)
 	return
 }
 
 func (tx *baseTransaction) requestEchoOff(msg string) (ret string, err error) {
-	log.Println("RequestEchoOff:", msg)
+	logger.Debug(tx, "RequestEchoOff:", msg)
 	err = tx.agent.Call(dbusAgentInterface+".RequestEchoOff", 0, msg).Store(&ret)
 	return
 }
 
 func (tx *baseTransaction) displayErrorMsg(msg string) error {
-	log.Println("DisplayErrorMsg:", msg)
+	logger.Debug(tx, "DisplayErrorMsg:", msg)
 	return tx.agent.Call(dbusAgentInterface+".DisplayErrorMsg", 0, msg).Err
 }
 
 func (tx *baseTransaction) displayTextInfo(msg string) error {
-	log.Println("DisplayTextInfo:", msg)
+	logger.Debug(tx, "DisplayTextInfo:", msg)
 	return tx.agent.Call(dbusAgentInterface+".DisplayTextInfo", 0, msg).Err
 }
 
@@ -90,7 +95,7 @@ func (tx *baseTransaction) sendResult(success bool) {
 	if success {
 		cookie, err = genCookie()
 		if err != nil {
-			log.Println("failed to gen cookie:", err)
+			logger.Warning(tx, "failed to gen cookie:", err)
 		} else {
 			tx.setCookie(cookie)
 		}
@@ -99,7 +104,7 @@ func (tx *baseTransaction) sendResult(success bool) {
 	err = tx.agent.Call(dbusAgentInterface+".RespondResult", 0,
 		cookie).Err
 	if err != nil {
-		log.Println(err)
+		logger.Warning(tx, err)
 	}
 }
 
@@ -140,7 +145,7 @@ func (tx *baseTransaction) getUser() string {
 func (tx *baseTransaction) getUserLocale() string {
 	locale, err := tx.parent.getUserLocale(tx.getUser())
 	if err != nil {
-		log.Println("Warning: failed to get user locale:", err)
+		logger.Warning(tx, "failed to get user locale:", err)
 		return "en_US.UTF-8"
 	}
 	return locale

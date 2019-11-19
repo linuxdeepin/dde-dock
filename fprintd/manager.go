@@ -21,9 +21,11 @@ package fprintd
 
 import (
 	"errors"
+	"strings"
 	"sync"
 	"time"
 
+	huawei_fprint "github.com/linuxdeepin/go-dbus-factory/com.huawei.fingerprint"
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
@@ -48,6 +50,8 @@ type Manager struct {
 	service       *dbusutil.Service
 	sysSigLoop    *dbusutil.SignalLoop
 	fprintManager *fprint.Manager
+	huaweiFprint  *huawei_fprint.Fingerprint
+	huaweiDevice  *HuaweiDevice
 	dbusDaemon    *ofdbus.DBus
 	devices       Devices
 	devicesMu     sync.Mutex
@@ -72,12 +76,17 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	return &Manager{
 		service:       service,
 		fprintManager: fprint.NewManager(systemConn),
+		huaweiFprint:  huawei_fprint.NewFingerprint(systemConn),
 		dbusDaemon:    ofdbus.NewDBus(systemConn),
 		sysSigLoop:    dbusutil.NewSignalLoop(systemConn, 10),
 	}, nil
 }
 
 func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
+	if m.huaweiDevice != nil {
+		return huaweiDevicePath, nil
+	}
+
 	objPath, err := m.fprintManager.GetDefaultDevice(0)
 	if err != nil {
 		logger.Warning("Failed to get default device:", err)
@@ -104,6 +113,10 @@ func (m *Manager) refreshDevices() error {
 		return err
 	}
 
+	if m.huaweiDevice != nil {
+		devicePaths = append(devicePaths, huaweiDevicePath)
+	}
+
 	var needDelete []dbus.ObjectPath
 	var needAdd []dbus.ObjectPath
 
@@ -113,13 +126,13 @@ func (m *Manager) refreshDevices() error {
 	for _, d := range m.devices {
 		found := false
 		for _, devPath := range devicePaths {
-			if d.core.Path_() == devPath {
+			if d.getCorePath() == devPath {
 				found = true
 				break
 			}
 		}
 		if !found {
-			needDelete = append(needDelete, d.core.Path_())
+			needDelete = append(needDelete, d.getCorePath())
 		}
 	}
 
@@ -127,7 +140,7 @@ func (m *Manager) refreshDevices() error {
 	for _, devPath := range devicePaths {
 		found := false
 		for _, d := range m.devices {
-			if d.core.Path_() == devPath {
+			if d.getCorePath() == devPath {
 				found = true
 				break
 			}
@@ -166,10 +179,22 @@ func (*Manager) GetInterfaceName() string {
 	return dbusInterface
 }
 
+func (m *Manager) hasHuaweiDevice() (has bool, err error) {
+	has, err = m.huaweiFprint.SearchDevice(0)
+	return
+}
+
 func (m *Manager) init() {
 	m.sysSigLoop.Start()
 	m.fprintCh = make(chan struct{}, 1)
 	m.listenDBusSignals()
+
+	has, err := m.hasHuaweiDevice()
+	if err != nil {
+		logger.Warning(err)
+	} else if has {
+		m.addHuaweiDevice()
+	}
 
 	paths, err := m.fprintManager.GetDevices(0)
 	if err != nil {
@@ -182,6 +207,51 @@ func (m *Manager) init() {
 	m.updatePropDevices()
 }
 
+func (m *Manager) addHuaweiDevice() {
+	logger.Debug("add huawei device")
+	d := &HuaweiDevice{
+		service:  m.service,
+		core:     m.huaweiFprint,
+		ScanType: "press",
+	}
+
+	// listen dbus signals
+	m.huaweiFprint.InitSignalExt(m.sysSigLoop, true)
+	_, err := m.huaweiFprint.ConnectEnrollStatus(func(progress int32, result int32) {
+		d.handleSignalEnrollStatus(progress, result)
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = m.huaweiFprint.ConnectIdentifyStatus(func(result int32) {
+		d.handleSignalIdentifyStatus(result)
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	// TODO: remove it
+	_, err = m.huaweiFprint.ConnectVerifyStatus(func(result int32) {
+		d.handleSignalIdentifyStatus(result)
+	})
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = m.service.Export(huaweiDevicePath, d)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	m.huaweiDevice = d
+
+	m.devicesMu.Lock()
+	m.devices = append(m.devices, d)
+	m.devicesMu.Unlock()
+}
+
 func (m *Manager) listenDBusSignals() {
 	m.dbusDaemon.InitSignalExt(m.sysSigLoop, true)
 	_, err := m.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
@@ -190,6 +260,16 @@ func (m *Manager) listenDBusSignals() {
 			select {
 			case m.fprintCh <- struct{}{}:
 			default:
+			}
+		}
+		if newOwner == "" &&
+			oldOwner != "" &&
+			name == oldOwner &&
+			strings.HasPrefix(name, ":") {
+			// uniq name lost
+
+			if m.huaweiDevice != nil {
+				m.huaweiDevice.handleNameLost(name)
 			}
 		}
 	})

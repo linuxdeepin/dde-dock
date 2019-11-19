@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"os/exec"
 	"strings"
 	"sync"
@@ -10,7 +9,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/gosexy/gettext"
-	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
+	fprint "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.fprintd"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -42,7 +41,7 @@ func (tx *FPrintTransaction) setPropAuthenticating(value bool) {
 		tx.Authenticating = value
 		err := tx.parent.service.EmitPropertyChanged(tx, "Authenticating", value)
 		if err != nil {
-			log.Println("Warning:", err)
+			logger.Warning(err)
 		}
 	}
 }
@@ -55,25 +54,21 @@ func (tx *FPrintTransaction) getUser() string {
 
 	result, err := tx.requestEchoOn("login:")
 	if err != nil {
-		log.Println(err)
+		logger.Warning(tx, "requestEchoOn return err:", err)
 		return ""
 	} else {
-		log.Println("RequestEchoOn result:", result)
+		logger.Debug(tx, "requestEchoOn(\"login:\") result:", result)
 		tx.setUser(result)
 		return result
 	}
 }
 
 func (tx *FPrintTransaction) getDevice() (*fprint.Device, error) {
-	devicePaths, err := tx.parent.fprintManager.GetDevices(0)
+	devicePath, err := tx.parent.fprintManager.GetDefaultDevice(0)
 	if err != nil {
 		return nil, err
 	}
-	if len(devicePaths) == 0 {
-		return nil, errors.New("fingerprint reader not found")
-	}
 
-	devicePath := devicePaths[0]
 	deviceObj, err := fprint.NewDevice(tx.parent.service.Conn(), devicePath)
 	if err != nil {
 		return nil, err
@@ -121,7 +116,7 @@ func (tx *FPrintTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
 
 		tx.sendResult(err == nil)
 		if err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		}
 	}()
 
@@ -133,12 +128,8 @@ type verifyResult struct {
 	done   bool
 }
 
-func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string) error {
-	sigLoop := dbusutil.NewSignalLoop(tx.parent.service.Conn(), 10)
-	sigLoop.Start()
-	deviceObj.InitSignalExt(sigLoop, true)
-
-	log.Println("claim device")
+func claimFprintDevice(deviceObj *fprint.Device, user string) error {
+	logger.Debug("claim device")
 	err := deviceObj.Claim(0, user)
 	if err != nil {
 		if strings.Contains(err.Error(), "Could not attempt device open") {
@@ -146,10 +137,40 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 		}
 		return err
 	}
+	return nil
+
+	//caps, err := deviceObj.GetCapabilities(0)
+	//if err != nil {
+	//	logger.Warning(err)
+	//}
+	//
+	//if strv.Strv(caps).Contains("ClaimForce") {
+	//	err = deviceObj.ClaimForce(0, user)
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//} else {
+	//	err = deviceObj.Claim(0, user)
+	//	if err != nil {
+	//		if strings.Contains(err.Error(), "Could not attempt device open") {
+	//			killFPrintDaemon()
+	//		}
+	//		return err
+	//	}
+	//}
+}
+
+func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string) error {
+	logger.Debugf("%v authenticate device: %v, user: %s", tx, deviceObj.Path_(), user)
+	err := claimFprintDevice(deviceObj, user)
+	if err != nil {
+		return err
+	}
 
 	scanType, err := deviceObj.ScanType().Get(0)
 	if err != nil {
-		log.Println("Warning:", err)
+		logger.Warning(err)
 	}
 	var isSwipe bool
 	if scanType == "swipe" {
@@ -157,6 +178,8 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	}
 
 	locale := tx.getUserLocale()
+
+	deviceObj.InitSignalExt(tx.parent.sigLoop, true)
 	_, err = deviceObj.ConnectVerifyFingerSelected(func(finger string) {
 		var msg string
 		if isSwipe {
@@ -167,31 +190,31 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 		msg = getFprintMsg(locale, msg)
 		err := tx.displayTextInfo(msg)
 		if err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		}
 	})
 	if err != nil {
-		log.Println("Warning:", err)
+		logger.Warning(err)
 	}
 
 	verifyResultCh := make(chan verifyResult)
 
 	_, err = deviceObj.ConnectVerifyStatus(func(result string, done bool) {
-		log.Println("VerifyStatus", result, done)
+		logger.Debug(tx, "signal VerifyStatus", result, done)
 
 		msg := verifyResultStrToMsg(result, isSwipe)
 		msg = getFprintMsg(locale, msg)
 		if msg != "" {
 			err := tx.displayErrorMsg(msg)
 			if err != nil {
-				log.Println("Warning:", err)
+				logger.Warning(err)
 			}
 		}
 
 		verifyResultCh <- verifyResult{result, done}
 	})
 	if err != nil {
-		log.Println("Warning:", err)
+		logger.Warning(err)
 	}
 
 	var (
@@ -202,7 +225,7 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 
 	for maxTries > 0 {
 		verifyOk, continue0 = tx.doVerify(deviceObj, verifyResultCh, locale)
-		log.Printf("doVerify verifyOk: %v, continue: %v\n", verifyOk, continue0)
+		logger.Debugf("%v doVerify verifyOk: %v, continue: %v", tx, verifyOk, continue0)
 		if !continue0 {
 			break
 		}
@@ -211,12 +234,11 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 
 	deviceObj.RemoveHandler(proxy.RemoveAllHandlers)
 	close(verifyResultCh)
-	sigLoop.Stop()
 
-	log.Println("release device")
+	logger.Debug(tx, "release device")
 	err = deviceObj.Release(0)
 	if err != nil {
-		log.Println(err)
+		logger.Warning(err)
 	}
 	close(tx.release)
 
@@ -229,10 +251,10 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh chan verifyResult,
 	locale string) (ok, continue0 bool) {
 
-	log.Println("VerifyStart")
+	logger.Debug(tx, "VerifyStart")
 	err := deviceObj.VerifyStart(0, "any")
 	if err != nil {
-		log.Println(err)
+		logger.Warning(err)
 		return false, false
 	}
 
@@ -241,20 +263,20 @@ loop:
 	for {
 		select {
 		case <-time.After(10 * time.Second):
-			log.Println("timed out")
+			logger.Warning(tx, "timed out")
 			msg := getFprintMsg(locale, msgVerificationTimedOut)
 			err := tx.displayErrorMsg(msg)
 			if err != nil {
-				log.Println("Warning:", err)
+				logger.Warning(err)
 			}
 			break loop
 
 		case <-tx.quit:
-			log.Println("receive quit")
+			logger.Debug(tx, "receive quit")
 			break loop
 
 		case result := <-verifyResultCh:
-			log.Println("receive result", result)
+			logger.Debug(tx, "receive result", result)
 			if result.done {
 				status = result.status
 				break loop
@@ -262,17 +284,17 @@ loop:
 		}
 	}
 
-	log.Println("VerifyStop")
+	logger.Debug(tx, "VerifyStop")
 	stopCallCh := make(chan *dbus.Call, 1)
 	deviceObj.GoVerifyStop(0, stopCallCh)
 	select {
 	case call := <-stopCallCh:
-		log.Println("VerifyStop done")
+		logger.Debug(tx, "VerifyStop done")
 		if call.Err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		}
 	case <-time.After(10 * time.Second):
-		log.Println("VerifyStop timed out")
+		logger.Warning(tx, "VerifyStop timed out")
 	}
 
 	switch status {
@@ -343,11 +365,11 @@ func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 	if err := tx.checkSender(sender); err != nil {
 		return err
 	}
-	log.Println("fprint tx end", tx.id)
+	logger.Debug(tx, "end")
 	tx.clearCookie()
 	tx.PropsMu.Lock()
 	if tx.Authenticating {
-		log.Println("force quit")
+		logger.Debug(tx, "force quit")
 		close(tx.quit)
 		<-tx.release // wait tx.release chan closed
 	}
@@ -357,9 +379,9 @@ func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 }
 
 func killFPrintDaemon() {
-	log.Println("kill fprintd")
+	logger.Debug("kill fprintd")
 	err := exec.Command("pkill", "-f", "/usr/lib/fprintd/fprintd").Run()
 	if err != nil {
-		log.Println("failed to kill fprintd:", err)
+		logger.Warning("failed to kill fprintd:", err)
 	}
 }

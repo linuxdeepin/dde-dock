@@ -2,16 +2,16 @@ package main
 
 import (
 	"flag"
-	"log"
 	"time"
 
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 var noQuitFlag bool
+var logger = log.NewLogger("dde-authority")
 
 func init() {
-	log.SetFlags(log.Lshortfile)
 	flag.BoolVar(&noQuitFlag, "no-quit", false, "do not auto quit")
 }
 
@@ -27,20 +27,20 @@ func main() {
 	flag.Parse()
 	service, err := dbusutil.NewSystemService()
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	auth := newAuthority(service)
 	err = service.Export(dbusPath, auth)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
-	log.Println("start service")
+	logger.Debug("start service")
 	if !noQuitFlag {
 		service.SetAutoQuitHandler(3*time.Minute, func() bool {
 			auth.mu.Lock()

@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
-	"log"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
@@ -30,7 +29,10 @@ type PAMTransaction struct {
 func (tx *PAMTransaction) setPropAuthenticating(value bool) {
 	if tx.Authenticating != value {
 		tx.Authenticating = value
-		tx.parent.service.EmitPropertyChanged(tx, "Authenticating", value)
+		err := tx.parent.service.EmitPropertyChanged(tx, "Authenticating", value)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 }
 
@@ -39,9 +41,9 @@ func (tx *PAMTransaction) RespondPAM(style pam.Style, msg string) (string, error
 	case pam.PromptEchoOn:
 		result, err := tx.requestEchoOn(msg)
 		if err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		} else {
-			log.Println("RequestEchoOn result:", result)
+			logger.Debug("RequestEchoOn result:", result)
 			tx.setUser(result)
 		}
 		return result, err
@@ -49,20 +51,20 @@ func (tx *PAMTransaction) RespondPAM(style pam.Style, msg string) (string, error
 	case pam.PromptEchoOff:
 		result, err := tx.requestEchoOff(msg)
 		if err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		}
 		return result, err
 
 	case pam.ErrorMsg:
 		err := tx.displayErrorMsg(msg)
 		if err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		}
 		return "", nil
 	case pam.TextInfo:
 		err := tx.displayTextInfo(msg)
 		if err != nil {
-			log.Println(err)
+			logger.Warning(err)
 		}
 		return "", nil
 	default:
@@ -84,6 +86,7 @@ func genCookie() (string, error) {
 }
 
 func (tx *PAMTransaction) authenticate() error {
+	logger.Debug(tx, "authenticate")
 	tx.PropsMu.Lock()
 	tx.setPropAuthenticating(true)
 	tx.PropsMu.Unlock()
@@ -92,7 +95,7 @@ func (tx *PAMTransaction) authenticate() error {
 	// allows any user with a blank password to unlock.
 	err := tx.core.SetItemStr(pam.Tty, "tty1")
 	if err != nil {
-		log.Println("WARN: failed to set item tty:", err)
+		logger.Warning("failed to set item tty:", err)
 	}
 
 	err = tx.core.Authenticate(0)
@@ -124,7 +127,7 @@ func (tx *PAMTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
 			err := tx.authenticate()
 			tx.sendResult(err == nil)
 			if err != nil {
-				log.Println(err)
+				logger.Warning(err)
 			}
 		}()
 	}
@@ -132,10 +135,10 @@ func (tx *PAMTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
 }
 
 func (tx *PAMTransaction) terminate() {
-	log.Println("tx terminate", tx.id)
+	logger.Debug(tx, "terminate")
 	err := tx.core.End(tx.core.LastStatus())
 	if err != nil {
-		log.Println("warning:", err)
+		logger.Warning(err)
 	}
 	tx.parent.deleteTx(tx.id)
 }
@@ -173,7 +176,7 @@ func (tx *PAMTransaction) SetUser(sender dbus.Sender, user string) *dbus.Error {
 	err := tx.core.SetItemStr(pam.User, user)
 
 	if err != nil {
-		log.Println("warning:", err)
+		logger.Warning(err)
 		return dbusutil.ToError(err)
 	}
 

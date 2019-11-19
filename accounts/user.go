@@ -64,6 +64,7 @@ const (
 	confKeyGreeterBackground  = "GreeterBackground"
 	confKeyHistoryLayout      = "HistoryLayout"
 	confKeyUse24HourFormat    = "Use24HourFormat"
+	confKeyUUID               = "UUID"
 
 	defaultUse24HourFormat = true
 )
@@ -82,6 +83,7 @@ type User struct {
 	service         *dbusutil.Service
 	PropsMu         sync.RWMutex
 	UserName        string
+	UUID            string
 	FullName        string
 	Uid             string
 	Gid             string
@@ -194,6 +196,7 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		u.DesktopBackgrounds = []string{defaultUserBackground}
 		u.GreeterBackground = defaultUserBackground
 		u.Use24HourFormat = defaultUse24HourFormat
+		u.UUID = dutils.GenUuid()
 		err = u.writeUserConfig()
 		if err != nil {
 			logger.Warning(err)
@@ -268,6 +271,13 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	u.Use24HourFormat, err = kf.GetBoolean(confGroupUser, confKeyUse24HourFormat)
 	if err != nil {
 		u.Use24HourFormat = defaultUse24HourFormat
+		isSave = true
+	}
+
+	u.UUID, err = kf.GetString(confGroupUser, confKeyUUID)
+	if err != nil || u.UUID == "" {
+		u.UUID = dutils.GenUuid()
+		isSave = true
 	}
 
 	if isSave {
@@ -385,6 +395,7 @@ func (u *User) writeUserConfigWithChanges(changes []configChange) error {
 	kf.SetStringList(confGroupUser, confKeyDesktopBackgrounds, u.DesktopBackgrounds)
 	kf.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
 	kf.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
+	kf.SetString(confGroupUser, confKeyUUID, u.UUID)
 
 	for _, change := range changes {
 		switch val := change.value.(type) {

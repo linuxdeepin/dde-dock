@@ -3,14 +3,13 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
-	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
+	fprint "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.fprintd"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -32,7 +31,7 @@ type Authority struct {
 	count         uint64
 	mu            sync.Mutex
 	txs           map[uint64]Transaction
-	fprintManager *fprint.Manager
+	fprintManager *fprint.Fprintd
 	dbusDaemon    *ofdbus.DBus
 	accounts      *accounts.Accounts
 
@@ -48,7 +47,7 @@ func newAuthority(service *dbusutil.Service) *Authority {
 	auth := &Authority{
 		service:       service,
 		txs:           make(map[uint64]Transaction),
-		fprintManager: fprint.NewManager(sysBus),
+		fprintManager: fprint.NewFprintd(sysBus),
 		dbusDaemon:    ofdbus.NewDBus(sysBus),
 		accounts:      accounts.NewAccounts(sysBus),
 		sigLoop:       dbusutil.NewSignalLoop(sysBus, 10),
@@ -75,7 +74,7 @@ func (a *Authority) listenDBusSignals() {
 			a.mu.Lock()
 			for _, tx := range a.txs {
 				if tx.matchSender(name) {
-					log.Println("lost tx", name, tx.getId())
+					logger.Debug("lost tx", name, tx.getId())
 					lostTxs = append(lostTxs, tx)
 				}
 			}
@@ -89,9 +88,14 @@ func (a *Authority) listenDBusSignals() {
 		}
 	})
 	if err != nil {
-		log.Println("WARN:", err)
+		logger.Warning(err)
 	}
 }
+
+const (
+	authTypeFprint   = "fprint"
+	authTypeKeyboard = "keyboard"
+)
 
 func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.ObjectPath) (dbus.ObjectPath, *dbus.Error) {
 	a.service.DelayAutoQuit()
@@ -101,7 +105,7 @@ func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.
 
 	var path dbus.ObjectPath
 	var err error
-	if authType == "fprint" {
+	if authType == authTypeFprint {
 		path, err = a.StartFPrint(sender, user, agent)
 	} else {
 		path, err = a.StartPAM(sender, authType, user, agent)
@@ -109,7 +113,7 @@ func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.
 	if err != nil {
 		return "/", dbusutil.ToError(err)
 	}
-	log.Printf("start sender: %q, authType: %q, user %q, agent path: %q, tx path: %q\n",
+	logger.Debugf("start sender: %q, authType: %q, user %q, agent path: %q, tx path: %q",
 		sender, authType, user, agent, path)
 	return path, nil
 }
@@ -123,9 +127,10 @@ func (a *Authority) StartFPrint(sender dbus.Sender, user string, agent dbus.Obje
 	tx := &FPrintTransaction{
 		Sender: string(sender),
 		baseTransaction: baseTransaction{
-			id:     id,
-			parent: a,
-			user:   user,
+			authType: authTypeFprint,
+			id:       id,
+			parent:   a,
+			user:     user,
 		},
 	}
 
@@ -154,7 +159,7 @@ func (a *Authority) StartPAM(sender dbus.Sender, authType, user string, agent db
 		return "/", fmt.Errorf("pam service %q not exist", pamService)
 	}
 
-	tx, err := a.startPAMTx(pamService, user, string(sender))
+	tx, err := a.startPAMTx(authType, pamService, user, string(sender))
 	if err != nil {
 		return "/", err
 	}
@@ -168,7 +173,7 @@ func (a *Authority) StartPAM(sender dbus.Sender, authType, user string, agent db
 	return path, nil
 }
 
-func (a *Authority) startPAMTx(service, user, sender string) (*PAMTransaction, error) {
+func (a *Authority) startPAMTx(authType, service, user, sender string) (*PAMTransaction, error) {
 	a.mu.Lock()
 	id := a.count
 	a.count++
@@ -177,9 +182,10 @@ func (a *Authority) startPAMTx(service, user, sender string) (*PAMTransaction, e
 	tx := &PAMTransaction{
 		Sender: sender,
 		baseTransaction: baseTransaction{
-			id:     id,
-			parent: a,
-			user:   user,
+			authType: authType,
+			id:       id,
+			parent:   a,
+			user:     user,
 		},
 	}
 
@@ -234,7 +240,7 @@ func (a *Authority) HasCookie(user string) (bool, *dbus.Error) {
 }
 
 func (a *Authority) deleteTx(id uint64) {
-	log.Println("deleteTx", id)
+	logger.Debug("deleteTx", id)
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -246,7 +252,7 @@ func (a *Authority) deleteTx(id uint64) {
 	impl := tx.(dbusutil.Implementer)
 	err := a.service.StopExport(impl)
 	if err != nil {
-		log.Println("warning:", err)
+		logger.Warning(err)
 	}
 	delete(a.txs, id)
 }

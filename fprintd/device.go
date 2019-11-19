@@ -34,40 +34,60 @@ const (
 	actionIdDelete = "com.deepin.daemon.fprintd.delete-enrolled-fingers"
 )
 
+type deviceMethods struct {
+	Claim                 func() `in:"username"`
+	ClaimForce            func() `in:"username"`
+	GetCapabilities       func() `out:"caps"`
+	EnrollStart           func() `in:"finger"`
+	VerifyStart           func() `in:"finger"`
+	DeleteEnrolledFingers func() `in:"username"`
+	DeleteEnrolledFinger  func() `in:"username,finger"`
+	ListEnrolledFingers   func() `in:"username" out:"fingers"`
+}
+
+type deviceSignals struct {
+	EnrollStatus struct {
+		status string
+		done   bool
+	}
+	VerifyStatus struct {
+		status string
+		done   bool
+	}
+	VerifyFingerSelected struct {
+		finger string
+	}
+}
+
+type IDevice interface {
+	IsDevice()
+	destroy()
+	getCorePath() dbus.ObjectPath
+	getPath() dbus.ObjectPath
+	dbusutil.Implementer
+}
+
 type Device struct {
 	service *dbusutil.Service
 	core    *fprint.Device
 
-	methods *struct {
-		Claim                 func() `in:"username"`
-		EnrollStart           func() `in:"finger"`
-		VerifyStart           func() `in:"finger"`
-		DeleteEnrolledFingers func() `in:"username"`
-		ListEnrolledFingers   func() `in:"username" out:"fingers"`
-	}
+	ScanType string
+	methods  *deviceMethods
 
 	// TODO: enroll image
-	signals *struct {
-		EnrollStatus struct {
-			status string
-			ok     bool
-		}
-		VerifyStatus struct {
-			status string
-			ok     bool
-		}
-		VerifyFingerSelected struct {
-			finger string
-		}
-	}
+	signals *deviceSignals
 }
-type Devices []*Device
+
+func (d *Device) IsDevice() {}
+
+type Devices []IDevice
 
 func newDevice(objPath dbus.ObjectPath, service *dbusutil.Service,
 	systemSigLoop *dbusutil.SignalLoop) *Device {
 	var dev Device
 	dev.service = service
 	dev.core, _ = fprint.NewDevice(systemSigLoop.Conn(), objPath)
+	dev.ScanType, _ = dev.core.ScanType().Get(0)
 	dev.listenDBusSignals(systemSigLoop)
 	return &dev
 }
@@ -166,6 +186,18 @@ func (dev *Device) DeleteEnrolledFingers(sender dbus.Sender, username string) *d
 	return dbusutil.ToError(err)
 }
 
+func (dev *Device) DeleteEnrolledFinger(sender dbus.Sender, username string, finger string) *dbus.Error {
+	return dbusutil.ToError(errors.New("can not delete fprintd single finger"))
+}
+
+func (dev *Device) GetCapabilities() ([]string, *dbus.Error) {
+	return nil, nil
+}
+
+func (dev *Device) ClaimForce(sender dbus.Sender, username string) *dbus.Error {
+	return dbusutil.ToError(errors.New("can not claim force"))
+}
+
 func (dev *Device) ListEnrolledFingers(username string) ([]string, *dbus.Error) {
 	fingers, err := dev.core.ListEnrolledFingers(0, username)
 	if err != nil {
@@ -180,6 +212,10 @@ func (*Device) GetInterfaceName() string {
 
 func (dev *Device) getPath() dbus.ObjectPath {
 	return convertFPrintPath(dev.core.Path_())
+}
+
+func (dev *Device) getCorePath() dbus.ObjectPath {
+	return dev.core.Path_()
 }
 
 func destroyDevices(list Devices) {
@@ -201,9 +237,9 @@ func (devList Devices) Add(objPath dbus.ObjectPath, service *dbusutil.Service,
 	return devList
 }
 
-func (devList Devices) Get(objPath dbus.ObjectPath) *Device {
+func (devList Devices) Get(objPath dbus.ObjectPath) IDevice {
 	for _, dev := range devList {
-		if dev.core.Path_() == objPath {
+		if dev.getCorePath() == objPath {
 			return dev
 		}
 	}
@@ -213,10 +249,10 @@ func (devList Devices) Get(objPath dbus.ObjectPath) *Device {
 func (devList Devices) Delete(objPath dbus.ObjectPath) Devices {
 	var (
 		list Devices
-		v    *Device
+		v    IDevice
 	)
 	for _, dev := range devList {
-		if dev.core.Path_() == objPath {
+		if dev.getCorePath() == objPath {
 			v = dev
 			continue
 		}
