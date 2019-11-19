@@ -43,6 +43,7 @@ extern const QPoint rawXPosition(const QPoint &scaledPos);
 
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
+    , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_autoHide(true)
     , m_opacity(0.4)
     , m_fashionModeAct(tr("Fashion Mode"), this)
@@ -55,7 +56,6 @@ DockSettings::DockSettings(QWidget *parent)
     , m_keepHiddenAct(tr("Keep Hidden"), this)
     , m_smartHideAct(tr("Smart Hide"), this)
     , m_displayInter(new DBusDisplay(this))
-    , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_itemManager(DockItemManager::instance(this))
 {
     m_primaryRawRect = m_displayInter->primaryRawRect();

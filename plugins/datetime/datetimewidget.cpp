@@ -31,7 +31,7 @@
 #include <DGuiApplicationHelper>
 
 #define PLUGIN_STATE_KEY    "enable"
-#define SHOW_DATE_MIN_HEIGHT 45
+#define SHOW_DATE_MIN_HEIGHT 40
 #define TIME_FONT DFontSizeManager::instance()->t4()
 #define DATE_FONT DFontSizeManager::instance()->t10()
 
