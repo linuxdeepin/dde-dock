@@ -67,7 +67,7 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 }
 
-AbstractTrayWidget *FashionTrayWidgetWrapper::absTrayWidget() const
+QPointer<AbstractTrayWidget> FashionTrayWidgetWrapper::absTrayWidget() const
 {
     return m_absTrayWidget;
 }
@@ -208,6 +208,9 @@ void FashionTrayWidgetWrapper::resizeEvent(QResizeEvent *event)
 
 void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
 {
+    if(m_absTrayWidget.isNull())
+        return;
+
     if (event->buttons() != Qt::MouseButton::LeftButton) {
         return QWidget::mouseMoveEvent(event);
     }

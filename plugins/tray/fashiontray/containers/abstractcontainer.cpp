@@ -66,7 +66,9 @@ bool AbstractContainer::removeWrapper(FashionTrayWidgetWrapper *wrapper)
 
     // do not delete real tray object, just delete it's wrapper object
     // the real tray object should be deleted in TrayPlugin class
-    w->absTrayWidget()->setParent(nullptr);
+    if (!w->absTrayWidget().isNull())
+        w->absTrayWidget()->setParent(nullptr);
+
     w->deleteLater();
 
     refreshVisible();
