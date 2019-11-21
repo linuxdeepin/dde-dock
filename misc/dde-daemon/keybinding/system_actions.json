@@ -78,7 +78,7 @@
         },
         {
             "Key": "clipboard",
-            "Action": "dbus-send --print-reply --dest=com.deepin.dde.Clipboard /com/deepin/dde/Clipboard com.deepin.dde.Clipboard.Show"
+            "Action": "dbus-send --print-reply --dest=com.deepin.dde.Clipboard /com/deepin/dde/Clipboard com.deepin.dde.Clipboard.Toggle"
         }
     ]
 }
