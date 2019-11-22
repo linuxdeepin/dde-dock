@@ -99,6 +99,7 @@ private:
     QMap<QString, IndicatorTray*> m_indicatorMap;
 
     TipsWidget *m_tipsLabel;
+    bool m_pluginLoaded;
 };
 
 #endif // TRAYPLUGIN_H

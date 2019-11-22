@@ -43,6 +43,7 @@ using org::kde::StatusNotifierWatcher;
 
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
+    , m_pluginLoaded(false)
 {
 }
 
@@ -67,6 +68,12 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
         qDebug() << "hide tray from config disable!!";
         return;
     }
+
+    if (m_pluginLoaded) {
+        return;
+    }
+
+    m_pluginLoaded = true;
 
     m_trayInter = new DBusTrayManager(this);
     m_sniWatcher = new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this);
