@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 20:29+0800\n"
-"PO-Revision-Date: 2019-11-15 01:31+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2019-11-19 11:27+0800\n"
+"PO-Revision-Date: 2019-11-19 07:50+0000\n"
+"Last-Translator: Cindy0514\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,26 +131,22 @@ msgstr "消息访问"
 msgid "Message notification"
 msgstr "消息通知"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "已连接"
+#: ../../bluetooth/utils_notify.go:52
+msgid "Connect %q successfully"
+msgstr "连接%q成功"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
+#: ../../bluetooth/utils_notify.go:56 ../../network/utils_notify.go:80
 #: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
 #: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
 #: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
 msgid "Disconnected"
 msgstr "断开"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:60
 msgid "Make sure %q is turned on and in range"
 msgstr "请确定%q已打开而且在通讯范围内"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "无法连接%q，配对失败"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:65
 msgid "Bluetooth connection failed"
 msgstr "蓝牙连接失败"
 
@@ -984,6 +980,10 @@ msgstr "设置系统代理成功。"
 #: ../../network/utils_notify.go:103
 msgid "System proxy has been cancelled."
 msgstr "系统代理已取消。"
+
+#: ../../network/utils_notify.go:107
+msgid "Connected"
+msgstr "已连接"
 
 #: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"

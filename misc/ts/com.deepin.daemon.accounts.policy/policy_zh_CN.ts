@@ -19,7 +19,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
 			<source>Manage user accounts</source>
-			<translation>管理用户账户</translation>
+			<translation>管理用户帐户</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
