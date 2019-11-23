@@ -35,17 +35,17 @@ type developerModeInfo struct {
 	Enabled bool `json:"enabled"`
 
 	changed bool
-	locker  sync.Mutex
 }
 
-var (
+const (
 	developerModeFile = "/var/lib/deepin/developer_mode.json"
 )
 
-func (info *developerModeInfo) Enable(v bool) {
-	info.locker.Lock()
-	defer info.locker.Unlock()
+var (
+	_developerModeLocker sync.RWMutex
+)
 
+func (info *developerModeInfo) Enable(v bool) {
 	if info.Enabled == v {
 		return
 	}
@@ -54,9 +54,6 @@ func (info *developerModeInfo) Enable(v bool) {
 }
 
 func (info *developerModeInfo) Save(filename string) error {
-	info.locker.Lock()
-	defer info.locker.Unlock()
-
 	if !info.changed {
 		return nil
 	}
@@ -65,11 +62,22 @@ func (info *developerModeInfo) Save(filename string) error {
 	if err != nil {
 		return err
 	}
+
+	_developerModeLocker.Lock()
+	defer _developerModeLocker.Unlock()
 	err = os.MkdirAll(filepath.Dir(developerModeFile), 0755)
 	if err != nil {
 		return err
 	}
 	return ioutil.WriteFile(filename, data, 0644)
+}
+
+func (*Daemon) IsDeveloperMode() (bool, *dbus.Error) {
+	info, _ := newDeveloperModeInfo(developerModeFile)
+	if info == nil {
+		info = &developerModeInfo{Enabled: false}
+	}
+	return info.Enabled, nil
 }
 
 func (*Daemon) EnableDeveloperMode() *dbus.Error {
@@ -92,6 +100,8 @@ func (*Daemon) EnableDeveloperMode() *dbus.Error {
 }
 
 func newDeveloperModeInfo(filename string) (*developerModeInfo, error) {
+	_developerModeLocker.RLock()
+	defer _developerModeLocker.RUnlock()
 	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

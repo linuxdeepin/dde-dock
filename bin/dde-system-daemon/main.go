@@ -48,6 +48,7 @@ type Daemon struct {
 		NetworkSetConnections          func() `in:"data"`
 		BluetoothGetDeviceTechnologies func() `in:"adapter,device" out:"technologies"`
 		EnableDeveloperMode            func()
+		IsDeveloperMode                func() `out:"yes"`
 	}
 }
 
