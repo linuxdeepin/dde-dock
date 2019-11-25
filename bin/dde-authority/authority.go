@@ -37,7 +37,7 @@ type Authority struct {
 
 	methods *struct {
 		Start       func() `in:"authType,user,agentObj" out:"transactionObj"`
-		CheckCookie func() `in:"user,cookie" out:"result"`
+		CheckCookie func() `in:"user,cookie" out:"result,authToken"`
 		HasCookie   func() `in:"user" out:"result"`
 	}
 }
@@ -202,10 +202,10 @@ func (a *Authority) startPAMTx(authType, service, user, sender string) (*PAMTran
 	return tx, nil
 }
 
-func (a *Authority) CheckCookie(user, cookie string) (bool, *dbus.Error) {
+func (a *Authority) CheckCookie(user, cookie string) (bool, string, *dbus.Error) {
 	a.service.DelayAutoQuit()
 	if user == "" || cookie == "" {
-		return false, nil
+		return false, "", nil
 	}
 
 	a.mu.Lock()
@@ -214,11 +214,13 @@ func (a *Authority) CheckCookie(user, cookie string) (bool, *dbus.Error) {
 	for _, tx := range a.txs {
 		user0, cookie0 := tx.getUserCookie()
 		if cookie == cookie0 && user == user0 {
-			tx.clearCookie()
-			return true, nil
+			authToken := tx.getAuthToken()
+			tx.clearSecret()
+			logger.Debug("CheckCookie success", user)
+			return true, authToken, nil
 		}
 	}
-	return false, nil
+	return false, "", nil
 }
 
 func (a *Authority) HasCookie(user string) (bool, *dbus.Error) {

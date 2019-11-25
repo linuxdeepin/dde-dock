@@ -21,9 +21,11 @@ func getTxObjPath(id uint64) dbus.ObjectPath {
 
 type Transaction interface {
 	getUserCookie() (string, string)
-	clearCookie()
+	clearSecret()
 	matchSender(name string) bool
 	getId() uint64
+	getAuthToken() string
+	setAuthToken(token string)
 
 	GetInterfaceName() string
 	Authenticate(sender dbus.Sender) *dbus.Error
@@ -35,13 +37,14 @@ var _ Transaction = &PAMTransaction{}
 var _ Transaction = &FPrintTransaction{}
 
 type baseTransaction struct {
-	authType string
-	parent   *Authority
-	id       uint64
-	agent    dbus.BusObject
-	user     string
-	cookie   string
-	mu       sync.Mutex
+	authType  string
+	parent    *Authority
+	id        uint64
+	agent     dbus.BusObject
+	user      string
+	authToken string
+	cookie    string
+	mu        sync.Mutex
 }
 
 func (tx *baseTransaction) String() string {
@@ -90,6 +93,7 @@ func (tx *baseTransaction) displayTextInfo(msg string) error {
 }
 
 func (tx *baseTransaction) sendResult(success bool) {
+	logger.Debug(tx, "sendResult", success)
 	var cookie string
 	var err error
 	if success {
@@ -120,10 +124,23 @@ func (tx *baseTransaction) setCookie(cookie string) {
 	tx.mu.Unlock()
 }
 
-func (tx *baseTransaction) clearCookie() {
+func (tx *baseTransaction) clearSecret() {
 	tx.mu.Lock()
 	tx.cookie = ""
+	tx.authToken = ""
 	tx.mu.Unlock()
+}
+
+func (tx *baseTransaction) setAuthToken(token string) {
+	tx.mu.Lock()
+	tx.authToken = token
+	tx.mu.Unlock()
+}
+
+func (tx *baseTransaction) getAuthToken() string {
+	tx.mu.Lock()
+	defer tx.mu.Unlock()
+	return tx.authToken
 }
 
 func (tx *baseTransaction) setUser(user string) {

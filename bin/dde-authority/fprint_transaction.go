@@ -116,7 +116,7 @@ func (tx *FPrintTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
 
 		tx.sendResult(err == nil)
 		if err != nil {
-			logger.Warning(err)
+			logger.Warning(tx, err)
 		}
 	}()
 
@@ -128,8 +128,8 @@ type verifyResult struct {
 	done   bool
 }
 
-func claimFprintDevice(deviceObj *fprint.Device, user string) error {
-	logger.Debug("claim device")
+func (tx *FPrintTransaction) claimFprintDevice(deviceObj *fprint.Device, user string) error {
+	logger.Debug(tx, "claim device")
 	err := deviceObj.Claim(0, user)
 	if err != nil {
 		if strings.Contains(err.Error(), "Could not attempt device open") {
@@ -163,7 +163,7 @@ func claimFprintDevice(deviceObj *fprint.Device, user string) error {
 
 func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string) error {
 	logger.Debugf("%v authenticate device: %v, user: %s", tx, deviceObj.Path_(), user)
-	err := claimFprintDevice(deviceObj, user)
+	err := tx.claimFprintDevice(deviceObj, user)
 	if err != nil {
 		return err
 	}
@@ -349,6 +349,7 @@ func (tx *FPrintTransaction) SetUser(sender dbus.Sender, user string) *dbus.Erro
 	if err := tx.checkSender(sender); err != nil {
 		return err
 	}
+	logger.Debug(tx, "SetUser", sender, user)
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()
 
@@ -366,7 +367,7 @@ func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 		return err
 	}
 	logger.Debug(tx, "end")
-	tx.clearCookie()
+	tx.clearSecret()
 	tx.PropsMu.Lock()
 	if tx.Authenticating {
 		logger.Debug(tx, "force quit")

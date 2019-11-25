@@ -53,6 +53,7 @@ func (tx *PAMTransaction) RespondPAM(style pam.Style, msg string) (string, error
 		if err != nil {
 			logger.Warning(err)
 		}
+		tx.setAuthToken(result)
 		return result, err
 
 	case pam.ErrorMsg:
@@ -149,7 +150,7 @@ func (tx *PAMTransaction) End(sender dbus.Sender) *dbus.Error {
 		return err
 	}
 
-	tx.clearCookie()
+	tx.clearSecret()
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()
 
@@ -166,6 +167,7 @@ func (tx *PAMTransaction) SetUser(sender dbus.Sender, user string) *dbus.Error {
 	if err := tx.checkSender(sender); err != nil {
 		return err
 	}
+	logger.Debug(tx, "SetUser", sender, user)
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()
 
