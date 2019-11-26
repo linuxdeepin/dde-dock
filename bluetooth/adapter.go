@@ -22,8 +22,8 @@ package bluetooth
 import (
 	"fmt"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.bluez"
-	"pkg.deepin.io/lib/dbus1"
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )

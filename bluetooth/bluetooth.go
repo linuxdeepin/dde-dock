@@ -619,7 +619,7 @@ func (b *Bluetooth) getPairedDeviceList() []*device {
 	for _, aobj := range b.adapters {
 		logger.Info("[DEBUG] Auto connect adapter:", aobj.Path)
 		list := b.devices[aobj.Path]
-		if len(list) == 0 {
+		if len(list) == 0 || b.config.getAdapterConfigPowered(aobj.address) {
 			continue
 		}
 		for _, dev := range list {
@@ -669,10 +669,15 @@ func (b *Bluetooth) wakeupWorkaround() {
 		logger.Debug("Wakeup from sleep, will set adapter and try connect device")
 		time.Sleep(time.Second * 3)
 		for _, aobj := range b.adapters {
-			if !aobj.Powered {
+			powered := b.config.getAdapterConfigPowered(aobj.address)
+			logger.Debugf("Compare adapter(%s) powered with config: ifc(%v), config(%v)", aobj.address, aobj.Powered, powered)
+			if powered != aobj.Powered {
+				_ = aobj.core.Powered().Set(0, powered)
+			}
+			if !powered {
 				continue
 			}
-			aobj.core.Discoverable().Set(0, b.config.Discoverable)
+			_ = aobj.core.Discoverable().Set(0, b.config.Discoverable)
 		}
 		b.tryConnectPairedDevices()
 	})

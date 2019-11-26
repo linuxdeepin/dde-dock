@@ -96,6 +96,11 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	if !a.Powered {
+		err = fmt.Errorf("'%s' power off", a)
+		return dbusutil.ToError(err)
+	}
+
 	discovering, err := a.core.Discovering().Get(0)
 	if err != nil {
 		return dbusutil.ToError(err)
@@ -172,6 +177,11 @@ func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath,
 		return dbusutil.ToError(err)
 	}
 
+	if !a.Powered {
+		err = fmt.Errorf("'%s' power off", a)
+		return dbusutil.ToError(err)
+	}
+
 	err = a.core.Discoverable().Set(0, discoverable)
 	if err != nil {
 		logger.Warningf("failed to set %s discoverable: %v", a, err)
@@ -187,6 +197,11 @@ func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
 
 	a, err := b.getAdapter(apath)
 	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	if !a.Powered {
+		err = fmt.Errorf("'%s' power off", a)
 		return dbusutil.ToError(err)
 	}
 
