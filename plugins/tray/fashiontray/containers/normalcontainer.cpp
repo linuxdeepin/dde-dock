@@ -26,7 +26,7 @@ NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
 void NormalContainer::compositeChanged()
 {
-    const int duration = DWindowManagerHelper::instance()->hasComposite() ? 300 : 0;
+    const int duration = DWindowManagerHelper::instance()->hasComposite() ? 300 : 1;
 
     m_sizeAnimation->setDuration(duration);
 }
