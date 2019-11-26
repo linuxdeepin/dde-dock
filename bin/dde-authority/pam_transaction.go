@@ -150,6 +150,7 @@ func (tx *PAMTransaction) End(sender dbus.Sender) *dbus.Error {
 		return err
 	}
 
+	logger.Debugf("%s End sender: %s", tx, sender)
 	tx.clearSecret()
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()

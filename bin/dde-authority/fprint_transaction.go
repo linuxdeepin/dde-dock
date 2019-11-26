@@ -366,7 +366,7 @@ func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 	if err := tx.checkSender(sender); err != nil {
 		return err
 	}
-	logger.Debug(tx, "end")
+	logger.Debugf("%s End sender: %s", tx, sender)
 	tx.clearSecret()
 	tx.PropsMu.Lock()
 	if tx.Authenticating {
