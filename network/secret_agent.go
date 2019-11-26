@@ -289,6 +289,7 @@ type getSecretsRequest struct {
 	VpnService  string   `json:"vpnService"`
 	SettingName string   `json:"settingName"`
 	Secrets     []string `json:"secrets"`
+	RequestNew  bool     `json:"requestNew"`
 }
 
 type getSecretsReply struct {
@@ -297,7 +298,7 @@ type getSecretsReply struct {
 
 func (sa *SecretAgent) askPasswords(connPath dbus.ObjectPath,
 	connectionData map[string]map[string]dbus.Variant,
-	connUUID, settingName string, settingKeys []string) (map[string]string, error) {
+	connUUID, settingName string, settingKeys []string, requestNew bool) (map[string]string, error) {
 
 	logger.Debugf("askPasswords settingName: %v, settingKeys: %v",
 		settingName, settingKeys)
@@ -314,10 +315,12 @@ func (sa *SecretAgent) askPasswords(connPath dbus.ObjectPath,
 	req.VpnService = vpnService
 	req.SettingName = settingName
 	req.Secrets = settingKeys
+	req.RequestNew = requestNew
 	reqJSON, err := json.Marshal(&req)
 	if err != nil {
 		return nil, err
 	}
+	logger.Debugf("reqJSON: %s", reqJSON)
 
 	cmd := exec.Command(nmSecretDialogBin)
 	cmd.Stdin = bytes.NewReader(reqJSON)
@@ -479,7 +482,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 
 		if allowInteraction && len(askItems) > 0 {
 			resultAsk, err := sa.askPasswords(connectionPath, connectionData, connUUID,
-				settingName, askItems)
+				settingName, askItems, requestNew)
 			if err != nil {
 				logger.Debug("waring askPasswords error:", err)
 				return nil, err
@@ -535,7 +538,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 
 		if allowInteraction && len(askItems) > 0 {
 			resultAsk, err := sa.askPasswords(connectionPath, connectionData, connUUID,
-				settingName, askItems)
+				settingName, askItems, requestNew)
 			if err != nil {
 				logger.Warning("askPasswords error:", err)
 			} else {
