@@ -267,6 +267,10 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	}
 
 	_, u.HistoryLayout, _ = kf.GetStringList(confGroupUser, confKeyHistoryLayout)
+	if !strv.Strv(u.HistoryLayout).Contains(u.Layout) {
+		u.HistoryLayout = append(u.HistoryLayout, u.Layout)
+		isSave = true
+	}
 
 	u.Use24HourFormat, err = kf.GetBoolean(confGroupUser, confKeyUse24HourFormat)
 	if err != nil {
