@@ -44,6 +44,7 @@ public:
     virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
     virtual const QImage trayImage() = 0;
     virtual inline TrayType trayTyep() const { return TrayType::ApplicationTray; } // default is ApplicationTray
+    virtual bool isValid() {return true;}
 
 Q_SIGNALS:
     void iconChanged();

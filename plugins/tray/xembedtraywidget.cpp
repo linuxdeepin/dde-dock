@@ -176,8 +176,10 @@ void XEmbedTrayWidget::wrapWindow()
 
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-    if (clientGeom.isNull())
+    if (clientGeom.isNull()) {
+        m_valid = false;
         return;
+    }
 
     //create a container window
     const auto ratio = devicePixelRatioF();

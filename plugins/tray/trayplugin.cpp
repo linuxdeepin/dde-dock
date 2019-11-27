@@ -385,7 +385,11 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
     }
 
     AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
-    addTrayWidget(itemKey, trayWidget);
+    if (trayWidget->isValid())
+        addTrayWidget(itemKey, trayWidget);
+    else {
+        qDebug() << "-- invalid tray windowid" << winId;
+    }
 }
 
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
