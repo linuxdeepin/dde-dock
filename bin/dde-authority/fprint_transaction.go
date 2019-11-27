@@ -41,7 +41,7 @@ func (tx *FPrintTransaction) setPropAuthenticating(value bool) {
 		tx.Authenticating = value
 		err := tx.parent.service.EmitPropertyChanged(tx, "Authenticating", value)
 		if err != nil {
-			logger.Warning(err)
+			logger.Warning(tx, err)
 		}
 	}
 }
@@ -180,21 +180,17 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	locale := tx.getUserLocale()
 
 	deviceObj.InitSignalExt(tx.parent.sigLoop, true)
-	_, err = deviceObj.ConnectVerifyFingerSelected(func(finger string) {
-		var msg string
-		if isSwipe {
-			msg = "Swipe your finger across the fingerprint reader"
-		} else {
-			msg = "Place your finger on the fingerprint reader"
-		}
-		msg = getFprintMsg(locale, msg)
-		err := tx.displayTextInfo(msg)
-		if err != nil {
-			logger.Warning(err)
-		}
-	})
+
+	var msg string
+	if isSwipe {
+		msg = "Swipe your finger across the fingerprint reader"
+	} else {
+		msg = "Place your finger on the fingerprint reader"
+	}
+	msg = getFprintMsg(locale, msg)
+	err = tx.displayTextInfo(msg)
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning(tx, err)
 	}
 
 	verifyResultCh := make(chan verifyResult)
@@ -207,7 +203,7 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 		if msg != "" {
 			err := tx.displayErrorMsg(msg)
 			if err != nil {
-				logger.Warning(err)
+				logger.Warning(tx, err)
 			}
 		}
 
@@ -233,12 +229,11 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	}
 
 	deviceObj.RemoveHandler(proxy.RemoveAllHandlers)
-	close(verifyResultCh)
 
 	logger.Debug(tx, "release device")
 	err = deviceObj.Release(0)
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning(tx, err)
 	}
 	close(tx.release)
 
