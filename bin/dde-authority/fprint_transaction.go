@@ -194,6 +194,8 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	}
 
 	verifyResultCh := make(chan verifyResult)
+	var verifyResultChMu sync.Mutex
+	var verifyResultChIsClosed bool
 
 	_, err = deviceObj.ConnectVerifyStatus(func(result string, done bool) {
 		logger.Debug(tx, "signal VerifyStatus", result, done)
@@ -207,7 +209,11 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 			}
 		}
 
-		verifyResultCh <- verifyResult{result, done}
+		verifyResultChMu.Lock()
+		if !verifyResultChIsClosed {
+			verifyResultCh <- verifyResult{result, done}
+		}
+		verifyResultChMu.Unlock()
 	})
 	if err != nil {
 		logger.Warning(err)
@@ -229,6 +235,10 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	}
 
 	deviceObj.RemoveHandler(proxy.RemoveAllHandlers)
+	verifyResultChMu.Lock()
+	close(verifyResultCh)
+	verifyResultChIsClosed = true
+	verifyResultChMu.Unlock()
 
 	logger.Debug(tx, "release device")
 	err = deviceObj.Release(0)
