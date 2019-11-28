@@ -135,10 +135,11 @@ func getTerminalInfos() AppInfos {
 			continue
 		}
 
+		name := getAppName(appInfo)
 		var tmp = &AppInfo{
 			Id:          appInfo.GetId() + desktopExt,
-			Name:        appInfo.GetName(),
-			DisplayName: appInfo.GetDisplayName(),
+			Name:        name,
+			DisplayName: name,
 			Description: appInfo.GetComment(),
 			Exec:        appInfo.GetCommandline(),
 			Icon:        appInfo.GetIcon(),

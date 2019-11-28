@@ -24,7 +24,7 @@ import (
 	"os"
 	"path"
 
-	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/mime"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -104,31 +104,37 @@ func GetAppInfos(mimeType string) AppInfos {
 	return infos
 }
 
-func newAppInfoByIdAux(id string, fn func(dai *gio.DesktopAppInfo, appInfo *AppInfo)) (*AppInfo, error) {
-	dai := gio.NewDesktopAppInfo(id)
-	if dai == nil {
-		id = "kde4-" + id
-		dai = gio.NewDesktopAppInfo(id)
+func getAppName(dai *desktopappinfo.DesktopAppInfo) (name string) {
+	xDeepinVendor, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-Vendor")
+	if xDeepinVendor == "deepin" {
+		name = dai.GetGenericName()
+	} else {
+		name = dai.GetName()
 	}
-	if dai == nil {
-		return nil, fmt.Errorf("gio.NewDesktopAppInfo failed: id %v", id)
+	if name == "" {
+		name = dai.GetId()
 	}
-	defer dai.Unref()
+	return
+}
+
+func newAppInfoByIdAux(id string, fn func(dai *desktopappinfo.DesktopAppInfo, appInfo *AppInfo)) (*AppInfo, error) {
+	dai := desktopappinfo.NewDesktopAppInfo(id)
+	if dai == nil {
+		return nil, fmt.Errorf("NewDesktopAppInfo failed: id %v", id)
+	}
 	if !dai.ShouldShow() {
 		return nil, fmt.Errorf("app %q should not show", id)
 	}
+
+	name := getAppName(dai)
 	var appInfo = &AppInfo{
 		Id:          id,
-		Name:        dai.GetName(),
-		DisplayName: dai.GetGenericName(),
-		Description: dai.GetDescription(),
+		Name:        name,
+		DisplayName: name,
+		Description: dai.GetComment(),
 		Exec:        dai.GetCommandline(),
-		fileName:    dai.GetFilename(),
-	}
-	iconObj := dai.GetIcon()
-	if iconObj != nil {
-		appInfo.Icon = iconObj.ToString()
-		iconObj.Unref()
+		fileName:    dai.GetFileName(),
+		Icon:        dai.GetIcon(),
 	}
 
 	if fn != nil {
@@ -140,7 +146,7 @@ func newAppInfoByIdAux(id string, fn func(dai *gio.DesktopAppInfo, appInfo *AppI
 
 func newAppInfoById2(id string, mimeType string) (*AppInfo, error) {
 	// 可以填写 CanDelete 字段
-	gInfo, err := newAppInfoByIdAux(id, func(dai *gio.DesktopAppInfo, appInfo *AppInfo) {
+	gInfo, err := newAppInfoByIdAux(id, func(dai *desktopappinfo.DesktopAppInfo, appInfo *AppInfo) {
 		appInfo.CanDelete = canDeleteAssociation(dai, mimeType)
 	})
 	return gInfo, err
@@ -150,8 +156,8 @@ func newAppInfoById(id string) (*AppInfo, error) {
 	return newAppInfoByIdAux(id, nil)
 }
 
-func canDeleteAssociation(appInfo *gio.DesktopAppInfo, mimeType string) bool {
-	mimeTypes := appInfo.GetSupportedTypes()
+func canDeleteAssociation(appInfo *desktopappinfo.DesktopAppInfo, mimeType string) bool {
+	mimeTypes := appInfo.GetMimeTypes()
 	for _, mt := range mimeTypes {
 		if mt == mimeType {
 			return false
