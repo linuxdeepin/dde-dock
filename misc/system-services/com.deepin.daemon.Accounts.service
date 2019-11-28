@@ -2,3 +2,4 @@
 Name=com.deepin.daemon.Accounts
 Exec=/usr/lib/deepin-daemon/dde-system-daemon
 User=root
+SystemdService=deepin-accounts-daemon.service
