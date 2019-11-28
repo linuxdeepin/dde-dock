@@ -14,19 +14,20 @@ import (
 )
 
 var (
-	atomClipboardManager x.Atom
-	atomClipboard        x.Atom
-	atomSaveTargets      x.Atom
-	atomTargets          x.Atom
-	atomMultiple         x.Atom
-	atomDelete           x.Atom
-	atomInsertProperty   x.Atom
-	atomInsertSelection  x.Atom
-	atomAtomPair         x.Atom
-	atomIncr             x.Atom
-	atomTimestamp        x.Atom
-	atomNull             x.Atom
-	atomTimestampProp    x.Atom
+	atomClipboardManager     x.Atom
+	atomClipboard            x.Atom
+	atomSaveTargets          x.Atom
+	atomTargets              x.Atom
+	atomMultiple             x.Atom
+	atomDelete               x.Atom
+	atomInsertProperty       x.Atom
+	atomInsertSelection      x.Atom
+	atomAtomPair             x.Atom
+	atomIncr                 x.Atom
+	atomTimestamp            x.Atom
+	atomNull                 x.Atom
+	atomTimestampProp        x.Atom
+	atomFromClipboardManager x.Atom
 
 	selectionMaxSize int
 )
@@ -45,6 +46,7 @@ func initAtoms(xConn *x.Conn) {
 	atomTimestamp, _ = xConn.GetAtom("TIMESTAMP")
 	atomTimestampProp, _ = xConn.GetAtom("_TIMESTAMP_PROP")
 	atomNull, _ = xConn.GetAtom("NULL")
+	atomFromClipboardManager, _ = xConn.GetAtom("FROM_DEEPIN_CLIPBOARD_MANAGER")
 	selectionMaxSize = 65432
 	logger.Debug("selectionMaxSize:", selectionMaxSize)
 }
@@ -313,6 +315,14 @@ func (m *Manager) convertClipboardManager(ev *x.SelectionRequestEvent) {
 		}
 
 		m.saveTargets(targets, ev.Time)
+		// add special target
+		m.addTargetData(&TargetData{
+			Target: atomFromClipboardManager,
+			Type:   x.AtomString,
+			Format: 8,
+			Data:   []byte("1"),
+		})
+
 		m.finishSelectionRequest(ev, true)
 
 	case atomTargets:
