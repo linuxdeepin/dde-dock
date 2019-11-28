@@ -231,12 +231,8 @@ var fprintdFingerprintNames = strv.Strv{
 }
 
 func (dev *HuaweiDevice) enrollStart(sender dbus.Sender, finger string) error {
-	ok, err := checkAuth(actionIdEnroll, string(sender))
+	err := checkAuth(actionIdEnroll, string(sender))
 	if err != nil {
-		return err
-	}
-	if !ok {
-		err = errors.New("authentication failed")
 		return err
 	}
 
@@ -342,12 +338,8 @@ func (dev *HuaweiDevice) VerifyStop(sender dbus.Sender) *dbus.Error {
 }
 
 func (dev *HuaweiDevice) deleteEnrolledFingers(sender dbus.Sender, username string) error {
-	ok, err := checkAuth(actionIdDelete, string(sender))
+	err := checkAuth(actionIdDelete, string(sender))
 	if err != nil {
-		return err
-	}
-	if !ok {
-		err = errors.New("authentication failed")
 		return err
 	}
 
@@ -393,12 +385,8 @@ func (dev *HuaweiDevice) DeleteEnrolledFinger(sender dbus.Sender, username, fing
 }
 
 func (dev *HuaweiDevice) deleteEnrolledFinger(sender dbus.Sender, username, finger string) error {
-	ok, err := checkAuth(actionIdDelete, string(sender))
+	err := checkAuth(actionIdDelete, string(sender))
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	if !ok {
-		err = errors.New("authentication failed")
 		return dbusutil.ToError(err)
 	}
 

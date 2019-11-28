@@ -31,6 +31,7 @@ import (
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -180,6 +181,14 @@ func (*Manager) GetInterfaceName() string {
 }
 
 func (m *Manager) hasHuaweiDevice() (has bool, err error) {
+	activatableNames, err := m.dbusDaemon.ListActivatableNames(0)
+	if err != nil {
+		return false, err
+	}
+	if !strv.Strv(activatableNames).Contains(m.huaweiFprint.ServiceName_()) {
+		return false, nil
+	}
+
 	has, err = m.huaweiFprint.SearchDevice(0)
 	return
 }
@@ -295,10 +304,12 @@ func (m *Manager) destroy() {
 	m.sysSigLoop.Stop()
 }
 
-func checkAuth(actionId string, busName string) (bool, error) {
+var errAuthFailed = errors.New("authentication failed")
+
+func checkAuth(actionId string, busName string) error {
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
-		return false, err
+		return err
 	}
 	authority := polkit.NewAuthority(systemBus)
 	subject := polkit.MakeSubject(polkit.SubjectKindSystemBusName)
@@ -308,9 +319,13 @@ func checkAuth(actionId string, busName string) (bool, error) {
 		actionId, nil,
 		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {
-		return false, err
+		return err
 	}
-	return ret.IsAuthorized, nil
+
+	if ret.IsAuthorized {
+		return nil
+	}
+	return errAuthFailed
 }
 
 func (m *Manager) TriggerUDevEvent(sender dbus.Sender) *dbus.Error {
@@ -358,4 +373,9 @@ func restartSystemdService(name, mode string) error {
 	var jobPath dbus.ObjectPath
 	err = obj.Call(systemdDBusInterface+".RestartUnit", dbus.FlagNoAutoStart, name, mode).Store(&jobPath)
 	return err
+}
+
+func (m *Manager) PreAuthEnroll(sender dbus.Sender) *dbus.Error {
+	err := checkAuth(actionIdEnroll, string(sender))
+	return dbusutil.ToError(err)
 }

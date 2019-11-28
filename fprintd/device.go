@@ -144,12 +144,8 @@ func (dev *Device) Release() *dbus.Error {
 }
 
 func (dev *Device) EnrollStart(sender dbus.Sender, finger string) *dbus.Error {
-	ok, err := checkAuth(actionIdEnroll, string(sender))
+	err := checkAuth(actionIdEnroll, string(sender))
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	if !ok {
-		err = errors.New("authentication failed")
 		return dbusutil.ToError(err)
 	}
 
@@ -173,12 +169,8 @@ func (dev *Device) VerifyStop() *dbus.Error {
 }
 
 func (dev *Device) DeleteEnrolledFingers(sender dbus.Sender, username string) *dbus.Error {
-	ok, err := checkAuth(actionIdDelete, string(sender))
+	err := checkAuth(actionIdDelete, string(sender))
 	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	if !ok {
-		err = errors.New("authentication failed")
 		return dbusutil.ToError(err)
 	}
 
