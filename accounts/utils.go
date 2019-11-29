@@ -33,6 +33,7 @@ import (
 	"time"
 
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
+	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/encoding/kv"
 	"pkg.deepin.io/lib/graphic"
@@ -134,6 +135,15 @@ func isStrvEqual(l1, l2 []string) bool {
 		}
 	}
 	return true
+}
+
+func checkAccountType(accountType int) error {
+	switch accountType {
+	case users.UserTypeStandard, users.UserTypeAdmin:
+		return nil
+	default:
+		return fmt.Errorf("invalid account type %d", accountType)
+	}
 }
 
 func checkAuth(actionId string, sysBusName string) error {

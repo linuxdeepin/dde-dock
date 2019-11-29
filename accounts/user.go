@@ -40,11 +40,6 @@ import (
 )
 
 const (
-	UserTypeStandard int32 = iota
-	UserTypeAdmin
-)
-
-const (
 	defaultUserIcon          = "file:///var/lib/AccountsService/icons/default.png"
 	defaultUserBackgroundDir = "/usr/share/wallpapers/deepin/"
 
@@ -142,6 +137,7 @@ type User struct {
 		GetLargeIcon          func() `out:"icon"`
 		AddGroup              func() `in:"group"`
 		DeleteGroup           func() `in:"group"`
+		SetGroups             func() `in:"groups"`
 		SetUse24HourFormat    func() `in:"value"`
 	}
 }
@@ -473,9 +469,9 @@ func (u *User) updatePropAutomaticLogin() {
 
 func (u *User) getAccountType() int32 {
 	if users.IsAdminUser(u.UserName) {
-		return UserTypeAdmin
+		return users.UserTypeAdmin
 	}
-	return UserTypeStandard
+	return users.UserTypeStandard
 }
 
 func (u *User) checkAuth(sender dbus.Sender, selfPass bool, actionId string) error {

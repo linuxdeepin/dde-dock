@@ -74,7 +74,7 @@ type Manager struct {
 	}
 
 	methods *struct {
-		CreateUser         func() `in:"name,fullName,type" out:"user"`
+		CreateUser         func() `in:"name,fullName,accountType" out:"user"`
 		DeleteUser         func() `in:"name,rmFiles"`
 		FindUserById       func() `in:"uid" out:"user"`
 		FindUserByName     func() `in:"name" out:"user"`
@@ -84,6 +84,7 @@ type Manager struct {
 		AllowGuestAccount  func() `in:"allow"`
 		CreateGuestAccount func() `out:"user"`
 		GetGroups          func() `out:"groups"`
+		GetPresetGroups    func() `in:"accountType" out:"groups"`
 	}
 }
 

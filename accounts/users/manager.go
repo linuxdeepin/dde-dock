@@ -25,6 +25,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 const (
@@ -34,6 +35,11 @@ const (
 	userCmdGroup  = "gpasswd"
 
 	defaultConfigShell = "/etc/adduser.conf"
+)
+
+const (
+	UserTypeStandard = iota
+	UserTypeAdmin
 )
 
 func CreateUser(username, fullname, shell string) error {
@@ -71,29 +77,47 @@ func CreateUser(username, fullname, shell string) error {
 	return doAction(userCmdAdd, args)
 }
 
-func AddToGroups(username string) error {
-	groups := []string{
-		"lp",
-		"lpadmin",
-		"netdev",
-		"network",
-		"sambashare",
-		"scanner",
-		"storage",
-		"users",
-	}
-	adminGroups, _, _ := getAdmGroupAndUser(userFileSudoers)
-	groups = append(groups, adminGroups...)
+var commonGroups = []string{
+	"lp",
+	"lpadmin",
+	"netdev",
+	"network",
+	"sambashare",
+	"scanner",
+	"storage",
+	"users",
+}
 
+func GetPresetGroups(userType int) []string {
+	var groups []string
+	switch userType {
+	case UserTypeStandard:
+		groups = commonGroups
+	case UserTypeAdmin:
+		groups = make([]string, len(commonGroups))
+		copy(groups, commonGroups)
+
+		adminGroups, _, _ := getAdmGroupAndUser(userFileSudoers)
+		groups = append(groups, adminGroups...)
+	default:
+		return nil
+	}
+
+	return filterInvalidGroup(groups)
+}
+
+func filterInvalidGroup(groups []string) []string {
+	result := make([]string, 0, len(groups))
 	for _, group := range groups {
 		if isGroupExists(group) {
-			err := doAction(userCmdGroup, []string{"-a", username, group})
-			if err != nil {
-				return err
-			}
+			result = append(result, group)
 		}
 	}
-	return nil
+	return result
+}
+
+func SetGroupsForUser(groups []string, user string) error {
+	return doAction(userCmdModify, []string{"-G", strings.Join(groups, ","), user})
 }
 
 func AddGroupForUser(group, user string) error {

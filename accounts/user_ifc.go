@@ -226,6 +226,21 @@ func (u *User) DeleteGroup(sender dbus.Sender, group string) *dbus.Error {
 	return nil
 }
 
+func (u *User) SetGroups(sender dbus.Sender, groups []string) *dbus.Error {
+	logger.Debugf("set groups %v for %s", groups, u.UserName)
+	err := u.checkAuth(sender, false, polkitActionUserAdministration)
+	if err != nil {
+		logger.Debug("[SetGroups] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	err = users.SetGroupsForUser(groups, u.UserName)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
 func (u *User) SetAutomaticLogin(sender dbus.Sender, enabled bool) *dbus.Error {
 	logger.Debug("[SetAutomaticLogin] enable:", enabled)
 

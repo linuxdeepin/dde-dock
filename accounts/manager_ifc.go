@@ -56,11 +56,16 @@ func (*Manager) GetInterfaceName() string {
 // ty: 用户类型，0 为普通用户，1 为管理员
 
 func (m *Manager) CreateUser(sender dbus.Sender,
-	name, fullName string, ty int32) (dbus.ObjectPath, *dbus.Error) {
+	name, fullName string, accountType int32) (dbus.ObjectPath, *dbus.Error) {
 
-	logger.Debug("[CreateUser] new user:", name, fullName, ty)
+	logger.Debug("[CreateUser] new user:", name, fullName, accountType)
 
-	err := m.checkAuth(sender)
+	err := checkAccountType(int(accountType))
+	if err != nil {
+		return nilObjPath, dbusutil.ToError(err)
+	}
+
+	err = m.checkAuth(sender)
 	if err != nil {
 		logger.Debug("[CreateUser] access denied:", err)
 		return nilObjPath, dbusutil.ToError(err)
@@ -83,9 +88,11 @@ func (m *Manager) CreateUser(sender dbus.Sender,
 		return nilObjPath, dbusutil.ToError(err)
 	}
 
-	err = users.AddToGroups(name)
+	groups := users.GetPresetGroups(int(accountType))
+	logger.Debug("groups:", groups)
+	err = users.SetGroupsForUser(groups, name)
 	if err != nil {
-		logger.Warningf("failed to add user %s to groups: %v", name, err)
+		logger.Warningf("failed to set groups for user %s: %v", name, err)
 	}
 
 	// create user success
@@ -284,4 +291,14 @@ func (m *Manager) CreateGuestAccount(sender dbus.Sender) (string, *dbus.Error) {
 func (m *Manager) GetGroups() ([]string, *dbus.Error) {
 	groups, err := users.GetAllGroups()
 	return groups, dbusutil.ToError(err)
+}
+
+func (m *Manager) GetPresetGroups(accountType int32) ([]string, *dbus.Error) {
+	err := checkAccountType(int(accountType))
+	if err != nil {
+		return nil, dbusutil.ToError(err)
+	}
+
+	groups := users.GetPresetGroups(int(accountType))
+	return groups, nil
 }
