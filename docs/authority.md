@@ -93,11 +93,12 @@ RequestEchoOn 从用户获取回显的文本，比如用户名
 - result 用户输入的文本
 
 ---
-DisplayErrorMsg(String msg)
+DisplayErrorMsg(String errType, String errMsg)
 
 DisplayErrorMsg 向用户展示错误信息
 
-- msg 错误信息
+- errType 错误类型，比如 verify-not-match 验证失败，verify-timed-out 验证超时。
+- errMsg 错误信息，经过国际化的文本。
 
 ---
 DisplayTextInfo(String msg)

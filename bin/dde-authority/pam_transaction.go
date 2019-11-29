@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
-	"io"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
@@ -57,7 +56,7 @@ func (tx *PAMTransaction) RespondPAM(style pam.Style, msg string) (string, error
 		return result, err
 
 	case pam.ErrorMsg:
-		err := tx.displayErrorMsg(msg)
+		err := tx.displayErrorMsg("", msg)
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -75,7 +74,8 @@ func (tx *PAMTransaction) RespondPAM(style pam.Style, msg string) (string, error
 
 func genCookie() (string, error) {
 	var buf = make([]byte, 256)
-	_, err := io.ReadFull(rand.Reader, buf)
+	_, err := rand.Read(buf)
+	// NOTE: err == nil only if we read len(buf) bytes.
 	if err != nil {
 		return "", err
 	}
@@ -118,6 +118,7 @@ func (tx *PAMTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
 		return err
 	}
 
+	logger.Debugf("%s Authenticate sender: %q", tx, sender)
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()
 

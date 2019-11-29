@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -77,50 +78,85 @@ func (tx *FPrintTransaction) getDevice() (*fprint.Device, error) {
 	return deviceObj, nil
 }
 
-func (tx *FPrintTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
-	tx.parent.service.DelayAutoQuit()
-	if err := tx.checkSender(sender); err != nil {
-		return err
-	}
-
+func (tx *FPrintTransaction) authenticate() error {
 	tx.PropsMu.Lock()
 	defer tx.PropsMu.Unlock()
 
 	if tx.Authenticating {
-		return dbusutil.ToError(errors.New("transaction busy"))
+		return errors.New("transaction busy")
 	}
 
 	user := tx.getUser()
 	if user == "" {
-		return dbusutil.ToError(errors.New("user empty"))
+		return errors.New("user empty")
 	}
 
 	deviceObj, err := tx.getDevice()
 	if err != nil {
-		return dbusutil.ToError(err)
+		return err
 	}
+
+	fingers, err := deviceObj.ListEnrolledFingers(0, user)
+	if err != nil {
+		return err
+	}
+
+	if len(fingers) == 0 {
+		return errors.New("user do not have fingerprint")
+	}
+
+	scanType, err := deviceObj.ScanType().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = tx.claimDevice(deviceObj, user)
+	if err != nil {
+		return err
+	}
+
 	go func() {
+		var err error
 		tx.PropsMu.Lock()
 		tx.setPropAuthenticating(true)
 		tx.quit = make(chan struct{})
 		tx.release = make(chan struct{})
 		tx.PropsMu.Unlock()
 
-		err := tx.authenticate(deviceObj, user)
+		verifyErr := tx.verify(deviceObj, user, scanType)
+		if verifyErr != nil {
+			logger.Warning(tx, verifyErr)
+		}
+
+		logger.Debug(tx, "release device")
+		err = deviceObj.Release(0)
+		if err != nil {
+			logger.Warning(tx, err)
+		}
+		close(tx.release)
 
 		tx.PropsMu.Lock()
 		tx.setPropAuthenticating(false)
 		tx.quit = nil
-		tx.release = nil
 		tx.PropsMu.Unlock()
 
-		tx.sendResult(err == nil)
-		if err != nil {
-			logger.Warning(tx, err)
-		}
+		tx.sendResult(verifyErr == nil)
 	}()
 
 	return nil
+}
+
+func (tx *FPrintTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
+	tx.parent.service.DelayAutoQuit()
+	if err := tx.checkSender(sender); err != nil {
+		return err
+	}
+	logger.Debugf("%s Authenticate sender: %q", tx, sender)
+	err := tx.authenticate()
+	if err != nil {
+		logger.Warningf("%s failed to authenticate: %v", tx, err)
+	}
+	return dbusutil.ToError(err)
 }
 
 type verifyResult struct {
@@ -128,7 +164,7 @@ type verifyResult struct {
 	done   bool
 }
 
-func (tx *FPrintTransaction) claimFprintDevice(deviceObj *fprint.Device, user string) error {
+func (tx *FPrintTransaction) claimDevice(deviceObj *fprint.Device, user string) error {
 	logger.Debug(tx, "claim device")
 	err := deviceObj.Claim(0, user)
 	if err != nil {
@@ -138,40 +174,10 @@ func (tx *FPrintTransaction) claimFprintDevice(deviceObj *fprint.Device, user st
 		return err
 	}
 	return nil
-
-	//caps, err := deviceObj.GetCapabilities(0)
-	//if err != nil {
-	//	logger.Warning(err)
-	//}
-	//
-	//if strv.Strv(caps).Contains("ClaimForce") {
-	//	err = deviceObj.ClaimForce(0, user)
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//} else {
-	//	err = deviceObj.Claim(0, user)
-	//	if err != nil {
-	//		if strings.Contains(err.Error(), "Could not attempt device open") {
-	//			killFPrintDaemon()
-	//		}
-	//		return err
-	//	}
-	//}
 }
 
-func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string) error {
-	logger.Debugf("%v authenticate device: %v, user: %s", tx, deviceObj.Path_(), user)
-	err := tx.claimFprintDevice(deviceObj, user)
-	if err != nil {
-		return err
-	}
-
-	scanType, err := deviceObj.ScanType().Get(0)
-	if err != nil {
-		logger.Warning(err)
-	}
+func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType string) error {
+	logger.Debugf("%v verify device: %v, user: %s", tx, deviceObj.Path_(), user)
 	var isSwipe bool
 	if scanType == "swipe" {
 		isSwipe = true
@@ -188,7 +194,7 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 		msg = "Place your finger on the fingerprint reader"
 	}
 	msg = getFprintMsg(locale, msg)
-	err = tx.displayTextInfo(msg)
+	err := tx.displayTextInfo(msg)
 	if err != nil {
 		logger.Warning(tx, err)
 	}
@@ -203,7 +209,7 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 		msg := verifyResultStrToMsg(result, isSwipe)
 		msg = getFprintMsg(locale, msg)
 		if msg != "" {
-			err := tx.displayErrorMsg(msg)
+			err := tx.displayErrorMsg(result, msg)
 			if err != nil {
 				logger.Warning(tx, err)
 			}
@@ -240,17 +246,19 @@ func (tx *FPrintTransaction) authenticate(deviceObj *fprint.Device, user string)
 	verifyResultChIsClosed = true
 	verifyResultChMu.Unlock()
 
-	logger.Debug(tx, "release device")
-	err = deviceObj.Release(0)
-	if err != nil {
-		logger.Warning(tx, err)
-	}
-	close(tx.release)
-
 	if verifyOk {
 		return nil
 	}
 	return errors.New("verify failed")
+}
+
+func shouldLimitVerifyTime(deviceObj *fprint.Device) bool {
+	path := string(deviceObj.Path_())
+	if filepath.Base(path) == "huawei" {
+		return false
+	}
+	// else fprintd device
+	return true
 }
 
 func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh chan verifyResult,
@@ -263,14 +271,19 @@ func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh c
 		return false, false
 	}
 
+	var timeCh <-chan time.Time
+	if shouldLimitVerifyTime(deviceObj) {
+		timeCh = time.After(10 * time.Second)
+	}
+
 	var status string
 loop:
 	for {
 		select {
-		case <-time.After(10 * time.Second):
+		case <-timeCh:
 			logger.Warning(tx, "timed out")
 			msg := getFprintMsg(locale, msgVerificationTimedOut)
-			err := tx.displayErrorMsg(msg)
+			err := tx.displayErrorMsg("verify-timed-out", msg)
 			if err != nil {
 				logger.Warning(err)
 			}
@@ -373,13 +386,16 @@ func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 	}
 	logger.Debugf("%s End sender: %s", tx, sender)
 	tx.clearSecret()
+
 	tx.PropsMu.Lock()
 	if tx.Authenticating {
 		logger.Debug(tx, "force quit")
 		close(tx.quit)
 		<-tx.release // wait tx.release chan closed
+		tx.release = nil
 	}
 	tx.PropsMu.Unlock()
+
 	tx.parent.deleteTx(tx.id)
 	return nil
 }

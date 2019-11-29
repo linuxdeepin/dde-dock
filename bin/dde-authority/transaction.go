@@ -82,9 +82,9 @@ func (tx *baseTransaction) requestEchoOff(msg string) (ret string, err error) {
 	return
 }
 
-func (tx *baseTransaction) displayErrorMsg(msg string) error {
-	logger.Debug(tx, "DisplayErrorMsg:", msg)
-	return tx.agent.Call(dbusAgentInterface+".DisplayErrorMsg", 0, msg).Err
+func (tx *baseTransaction) displayErrorMsg(errType, errMsg string) error {
+	logger.Debug(tx, "DisplayErrorMsg:", errType, errMsg)
+	return tx.agent.Call(dbusAgentInterface+".DisplayErrorMsg", 0, errType, errMsg).Err
 }
 
 func (tx *baseTransaction) displayTextInfo(msg string) error {

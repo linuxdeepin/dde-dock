@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	fprint "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.fprintd"
@@ -105,20 +106,23 @@ func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.
 
 	var path dbus.ObjectPath
 	var err error
+	var tx Transaction
 	if authType == authTypeFprint {
-		path, err = a.StartFPrint(sender, user, agent)
+		tx, path, err = a.StartFPrint(sender, user, agent)
 	} else {
-		path, err = a.StartPAM(sender, authType, user, agent)
+		tx, path, err = a.StartPAM(sender, authType, user, agent)
 	}
 	if err != nil {
 		return "/", dbusutil.ToError(err)
 	}
-	logger.Debugf("start sender: %q, authType: %q, user %q, agent path: %q, tx path: %q",
-		sender, authType, user, agent, path)
+	logger.Debugf("%s start sender: %q, authType: %q, user %q, agent path: %q, tx path: %q",
+		tx, sender, authType, user, agent, path)
 	return path, nil
 }
 
-func (a *Authority) StartFPrint(sender dbus.Sender, user string, agent dbus.ObjectPath) (dbus.ObjectPath, error) {
+func (a *Authority) StartFPrint(sender dbus.Sender, user string, agent dbus.ObjectPath) (Transaction,
+	dbus.ObjectPath, error) {
+
 	a.mu.Lock()
 	id := a.count
 	a.count++
@@ -138,39 +142,40 @@ func (a *Authority) StartFPrint(sender dbus.Sender, user string, agent dbus.Obje
 	path := getTxObjPath(id)
 	err := a.service.Export(path, tx)
 	if err != nil {
-		return "/", err
+		return nil, "/", err
 	}
 
 	a.mu.Lock()
 	a.txs[id] = tx
 	a.mu.Unlock()
 
-	return path, nil
+	return tx, path, nil
 }
 
-func (a *Authority) StartPAM(sender dbus.Sender, authType, user string, agent dbus.ObjectPath) (dbus.ObjectPath, error) {
+func (a *Authority) StartPAM(sender dbus.Sender, authType, user string, agent dbus.ObjectPath) (Transaction,
+	dbus.ObjectPath, error) {
 
 	var tx *PAMTransaction
 	pamService, ok := authTypeMap[authType]
 	if !ok {
-		return "/", errors.New("invalid auth type")
+		return nil, "/", errors.New("invalid auth type")
 	}
 	if !isPamServiceExist(pamService) {
-		return "/", fmt.Errorf("pam service %q not exist", pamService)
+		return nil, "/", fmt.Errorf("pam service %q not exist", pamService)
 	}
 
 	tx, err := a.startPAMTx(authType, pamService, user, string(sender))
 	if err != nil {
-		return "/", err
+		return nil, "/", err
 	}
 
 	tx.agent = a.service.Conn().Object(string(sender), agent)
 	path := getTxObjPath(tx.id)
 	err = a.service.Export(path, tx)
 	if err != nil {
-		return "/", err
+		return nil, "/", err
 	}
-	return path, nil
+	return tx, path, nil
 }
 
 func (a *Authority) startPAMTx(authType, service, user, sender string) (*PAMTransaction, error) {
@@ -251,11 +256,13 @@ func (a *Authority) deleteTx(id uint64) {
 		return
 	}
 
-	impl := tx.(dbusutil.Implementer)
-	err := a.service.StopExport(impl)
-	if err != nil {
-		logger.Warning(err)
-	}
+	time.AfterFunc(100*time.Millisecond, func() {
+		impl := tx.(dbusutil.Implementer)
+		err := a.service.StopExport(impl)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
 	delete(a.txs, id)
 }
 
