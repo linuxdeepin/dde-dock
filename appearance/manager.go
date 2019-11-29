@@ -96,10 +96,10 @@ const (
 	wsPolicyLogin  = "login"
 	wsPolicyWakeup = "wakeup"
 
-	defaultIconTheme      = "deepin"
+	defaultIconTheme      = "bloom"
 	defaultGtkTheme       = "deepin"
 	autoGtkTheme          = "deepin-auto"
-	defaultCursorTheme    = "deepin"
+	defaultCursorTheme    = "bloom"
 	defaultStandardFont   = "Noto Sans"
 	defaultMonospaceFont  = "Noto Mono"
 	defaultFontConfigFile = "/usr/share/deepin-default-settings/fontconfig.json"
