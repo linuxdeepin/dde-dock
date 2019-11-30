@@ -28,11 +28,13 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"os/user"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
 	"pkg.deepin.io/dde/api/soundutils"
@@ -73,6 +75,10 @@ func allowRun() bool {
 	}
 
 	return allowRun
+}
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
 }
 
 func main() {

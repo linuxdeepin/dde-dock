@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"math/rand"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -400,14 +401,20 @@ func (m *Manager) init() error {
 		logger.Warning(err)
 	}
 
+	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
+	m.sessionSigLoop.Start()
+
 	m.wm = wm.NewWm(sessionBus)
+	m.wm.InitSignalExt(m.sessionSigLoop, true)
+	_, err = m.wm.ConnectWorkspaceCountChanged(m.handleWmWorkspaceCountChanged)
+	if err != nil {
+		logger.Warning(err)
+	}
 	m.imageBlur = accounts.NewImageBlur(systemBus)
 
 	m.xSettings = sessionmanager.NewXSettings(sessionBus)
 	theme_thumb.Init(m.getScaleFactor())
 
-	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
-	m.sessionSigLoop.Start()
 	m.xSettings.InitSignalExt(m.sessionSigLoop, true)
 	_, err = m.xSettings.ConnectSetScaleFactorStarted(handleSetScaleFactorStarted)
 	if err != nil {
@@ -506,6 +513,25 @@ func (m *Manager) init() error {
 	m.bgSyncConfig = dsync.NewConfig("background", &backgroundSyncConfig{m: m}, m.sessionSigLoop,
 		backgroundDBusPath, logger)
 	return nil
+}
+
+func (m *Manager) handleWmWorkspaceCountChanged(count int32) {
+	logger.Debug("wm workspace count changed", count)
+	bgs := m.setting.GetStrv(gsKeyBackgroundURIs)
+	if len(bgs) < int(count) {
+		allBgs := background.ListBackground()
+
+		numAdded := int(count) - len(bgs)
+		for i := 0; i < numAdded; i++ {
+			idx := rand.Intn(len(allBgs))
+			// Id is file url
+			bgs = append(bgs, allBgs[idx].Id)
+		}
+		m.setting.SetStrv(gsKeyBackgroundURIs, bgs)
+	} else if len(bgs) > int(count) {
+		bgs = bgs[:int(count)]
+		m.setting.SetStrv(gsKeyBackgroundURIs, bgs)
+	}
 }
 
 func (m *Manager) correctFontName() {
