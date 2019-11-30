@@ -86,8 +86,11 @@ func (d *Daemon) Start() error {
 				if fs.AvailSize > fsMinLeftSpace {
 					break
 				}
-				sendNotify("dialog-warning", "",
+				err = sendNotify("dialog-warning", "",
 					Tr("Insufficient disk space, please clean up in time!"))
+				if err != nil {
+					logger.Warning(err)
+				}
 			case <-d.stopChan:
 				logger.Debug("Stop housekeeping")
 				if d.ticker != nil {
@@ -115,8 +118,8 @@ func sendNotify(icon, summary, body string) error {
 		return err
 	}
 	notifier := notifications.NewNotifications(sessionConn)
-	_, err = notifier.Notify(0, "housekeeping", 0,
+	_, err = notifier.Notify(0, "dde-control-center", 0,
 		icon, summary, body,
-		nil, nil, 0)
+		nil, nil, -1)
 	return err
 }

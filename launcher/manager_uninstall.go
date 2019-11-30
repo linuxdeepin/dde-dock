@@ -59,18 +59,20 @@ func (m *Manager) removeAutostart(id string) {
 	name := filepath.Base(id) + desktopExt
 	file := filepath.Join(basedir.GetUserConfigDir(), "autostart", name)
 	logger.Debugf("removeAutostart id: %q, file: %q", id, file)
-	os.Remove(file)
+	err := os.Remove(file)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) notifyUninstallDone(item *Item, succeed bool) {
-	const icon = "deepin-appstore"
 	var msg string
 	if succeed {
 		msg = fmt.Sprintf(Tr("%q removed successfully"), item.Name)
 	} else {
 		msg = fmt.Sprintf(Tr("Failed to uninstall %q"), item.Name)
 	}
-	m.sendNotification(msg, "", icon)
+	m.sendNotify(msg)
 }
 
 func isWineApp(appInfo *desktopappinfo.DesktopAppInfo) bool {

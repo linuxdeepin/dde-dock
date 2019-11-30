@@ -31,6 +31,7 @@ import (
 
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/gir/gio-2.0"
@@ -39,7 +40,6 @@ import (
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/gettext"
-	"pkg.deepin.io/lib/notify"
 	"pkg.deepin.io/lib/strv"
 )
 
@@ -73,7 +73,7 @@ type Manager struct {
 	itemsMutex     sync.Mutex
 
 	appsObj        *libApps.Apps
-	notification   *notify.Notification
+	notifications  *notifications.Notifications
 	lastore        *libLastore.Lastore
 	pinyinEnabled  bool
 	desktopPkgMap  map[string]string
@@ -183,9 +183,7 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	logger.Debug("appsHidden: ", m.appsHidden)
 	m.listenSettingsChanged()
 
-	// init notification
-	notify.Init(dbusServiceName)
-	m.notification = notify.NewNotification("", "", "")
+	m.notifications = notifications.NewNotifications(service.Conn())
 
 	m.appDirs = getAppDirs()
 	err = m.loadDesktopPkgMap()
@@ -221,30 +219,45 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	}
 
 	m.appsObj.InitSignalExt(m.sysSigLoop, true)
-	m.appsObj.ConnectEvent(func(filename string, _ uint32) {
+	_, err = m.appsObj.ConnectEvent(func(filename string, _ uint32) {
 		if shouldCheckDesktopFile(filename) {
 			logger.Debug("DFWatcher event", filename)
 			m.delayHandleFileEvent(filename)
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	err = m.appsObj.WatchDirs(0, getDataDirsForWatch())
 	if err != nil {
 		logger.Warning(err)
 	}
 
-	m.appsObj.ConnectServiceRestarted(func() {
+	_, err = m.appsObj.ConnectServiceRestarted(func() {
 		if m.appsObj != nil {
-			m.appsObj.WatchDirs(0, getDataDirsForWatch())
+			err = m.appsObj.WatchDirs(0, getDataDirsForWatch())
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	})
-	m.appsObj.ConnectLaunched(func(path string) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	_, err = m.appsObj.ConnectLaunched(func(path string) {
 		item := m.getItemByPath(path)
 		if item == nil {
 			return
 		}
-		m.service.Emit(m, "NewAppLaunched", item.ID)
+		err = m.service.Emit(m, "NewAppLaunched", item.ID)
+		if err != nil {
+			logger.Warning(err)
+		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	m.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	m.sessionSigLoop.Start()
@@ -440,16 +453,21 @@ func (m *Manager) loadPkgCategoryMap() error {
 	return nil
 }
 
-func (m *Manager) sendNotification(summary, body, icon string) {
-	n := m.notification
-	n.Update(summary, body, icon)
-	go func() {
-		err := n.Show()
-		logger.Infof("sendNotification summary: %q, body: %q, icon: %q", summary, body, icon)
-		if err != nil {
-			logger.Warning("sendNotification failed:", err)
-		}
-	}()
+func (m *Manager) sendNotify(summary string) {
+	const icon = "deepin-appstore"
+	_, err := m.notifications.Notify(0, getNotifyAppName(), 0, icon,
+		summary, "", nil, nil, -1)
+	if err != nil {
+		logger.Warning("failed to send notification", err)
+	}
+}
+
+func getNotifyAppName() string {
+	_, err := os.Stat("/usr/share/applications/deepin-app-store.desktop")
+	if err == nil {
+		return "deepin-app-store"
+	}
+	return "deepin-appstore"
 }
 
 func (m *Manager) emitSearchDone(result MatchResults) {
@@ -457,8 +475,11 @@ func (m *Manager) emitSearchDone(result MatchResults) {
 	if result != nil {
 		ids = result.Copy().GetTruncatedOrderedIDs()
 	}
-	m.service.Emit(m, "SearchDone", ids)
 	logger.Debug("emit SearchDone", ids)
+	err := m.service.Emit(m, "SearchDone", ids)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) getUseFeature(key, id string) (bool, *dbus.Error) {
@@ -488,7 +509,7 @@ func (m *Manager) setUseFeature(key, id string, val bool) *dbus.Error {
 		return nil
 	}
 
-	ok := m.settings.SetStrv(key, []string(apps))
+	ok := m.settings.SetStrv(key, apps)
 	if !ok {
 		return dbusutil.ToError(fmt.Errorf("gsettings set %s failed", key))
 	}

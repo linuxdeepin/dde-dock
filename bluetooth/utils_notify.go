@@ -21,9 +21,11 @@ package bluetooth
 
 import (
 	"fmt"
+	"sync"
 
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
+	dbus "pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
-	libnotify "pkg.deepin.io/lib/notify"
 )
 
 const (
@@ -32,20 +34,35 @@ const (
 	notifyIconBluetoothConnectFailed = "notification-bluetooth-error"
 )
 
-var globalNotification *libnotify.Notification
+var globalNotifications *notifications.Notifications
+var globalNotifyId uint32
+var globalNotifyMu sync.Mutex
 
-func init() {
-	globalNotification = libnotify.NewNotification("", "", "")
+func initNotifications() error {
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		return err
+	}
+	globalNotifications = notifications.NewNotifications(sessionBus)
+	return nil
 }
 
 func notify(icon, summary, body string) {
 	logger.Info("notify", icon, summary, body)
-	globalNotification.Update(summary, body, icon)
-	err := globalNotification.Show()
+
+	globalNotifyMu.Lock()
+	nid := globalNotifyId
+	globalNotifyMu.Unlock()
+
+	nid, err := globalNotifications.Notify(0, "dde-control-center", nid, icon,
+		summary, body, nil, nil, -1)
 	if err != nil {
 		logger.Warning(err)
+		return
 	}
-	return
+	globalNotifyMu.Lock()
+	globalNotifyId = nid
+	globalNotifyMu.Unlock()
 }
 
 func notifyConnected(alias string) {

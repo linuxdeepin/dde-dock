@@ -99,6 +99,10 @@ func (*daemon) Start() error {
 		return err
 	}
 
+	err = initNotifications()
+	if err != nil {
+		return err
+	}
 	// initialize bluetooth after dbus interface installed
 	go globalBluetooth.init()
 	return nil

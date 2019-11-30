@@ -20,12 +20,13 @@
 package network
 
 import (
+	"sync"
 	"time"
 
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
-	libnotify "pkg.deepin.io/lib/notify"
 )
 
 const (
@@ -57,7 +58,9 @@ const (
 
 var (
 	notifyEnabled = true
-	notification  = libnotify.NewNotification("", "", "")
+	notification  *notifications.Notifications
+	notifyId      uint32
+	notifyIdMu    sync.Mutex
 )
 
 func enableNotify() {
@@ -72,8 +75,24 @@ func disableNotify() {
 
 func notify(icon, summary, body string) {
 	logger.Debugf("notify icon: %q, summary: %q, body: %q", icon, summary, body)
-	notification.Update(summary, body, icon)
-	go notification.Show()
+	if !notifyEnabled {
+		logger.Debug("notify disabled")
+		return
+	}
+	notifyIdMu.Lock()
+	nid := notifyId
+	notifyIdMu.Unlock()
+
+	nid, err := notification.Notify(0, "dde-control-center", nid,
+		icon, summary, body, nil, nil, -1)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	notifyIdMu.Lock()
+	notifyId = nid
+	notifyIdMu.Unlock()
 }
 
 func notifyNetworkOffline() {

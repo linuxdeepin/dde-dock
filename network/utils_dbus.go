@@ -23,6 +23,7 @@ import (
 	dbusmgr "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
+	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -41,6 +42,11 @@ func (m *Manager) initDbusObjects() {
 		logger.Error(err)
 		return
 	}
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 
 	nmManager = nmdbus.NewManager(systemBus)
 	nmManager.InitSignalExt(m.sysSigLoop, true)
@@ -51,6 +57,7 @@ func (m *Manager) initDbusObjects() {
 	loginManager = login1.NewManager(systemBus)
 	loginManager.InitSignalExt(m.sysSigLoop, true)
 
+	notification = notifications.NewNotifications(sessionBus)
 }
 
 var sysSigLoop *dbusutil.SignalLoop

@@ -174,16 +174,11 @@ func doCloseDDELowPower() {
 }
 
 func (m *Manager) sendNotify(icon, summary, body string) {
-	n := m.helper.Notification
-	n.Update(summary, body, icon)
-
-	go func() {
-		err := n.Show()
-		logger.Debugf("sendNotify icon: %q, summary: %q, body: %q", icon, summary, body)
-		if err != nil {
-			logger.Warning("sendNotify failed:", err)
-		}
-	}()
+	n := m.helper.Notifications
+	_, err := n.Notify(0, "dde-control-center", 0, icon, summary, body, nil, nil, -1)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func playSound(name string) {

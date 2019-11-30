@@ -501,7 +501,7 @@ func (s *Scheduler) remindJob(job *JobJSON) {
 	body := job.getRemindBody(now)
 	logger.Debugf("remind now: %v, title: %v, body: %v, actions: %#v",
 		now, title, body, actions)
-	id, err := s.notifications.Notify(0, "dde-daemon", 0,
+	id, err := s.notifications.Notify(0, "dde-calendar", 0,
 		"dde-calendar", title,
 		body, actions, nil, 0)
 	if err != nil {

@@ -20,9 +20,9 @@
 package power
 
 import (
+	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
-	"pkg.deepin.io/lib/notify"
 
 	// system bus
 	libpower "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
@@ -40,7 +40,7 @@ import (
 )
 
 type Helper struct {
-	Notification *notify.Notification
+	Notifications *notifications.Notifications
 
 	Power         *libpower.Power // sig
 	LoginManager  *login1.Manager // sig
@@ -64,20 +64,19 @@ func newHelper(systemBus, sessionBus *dbus.Conn) (*Helper, error) {
 	return h, nil
 }
 
-func (h *Helper) init(systemConn, sessionConn *dbus.Conn) error {
+func (h *Helper) init(sysBus, sessionBus *dbus.Conn) error {
 	var err error
 
-	notify.Init(dbusServiceName)
-	h.Notification = notify.NewNotification("", "", "")
+	h.Notifications = notifications.NewNotifications(sessionBus)
 
-	h.Power = libpower.NewPower(systemConn)
-	h.LoginManager = login1.NewManager(systemConn)
-	h.SensorProxy = sensorproxy.NewSensorProxy(systemConn)
-	h.SysDBusDaemon = ofdbus.NewDBus(systemConn)
-	h.SessionManager = sessionmanager.NewSessionManager(sessionConn)
-	h.ScreenSaver = screensaver.NewScreenSaver(sessionConn)
-	h.Display = display.NewDisplay(sessionConn)
-	h.SessionWatcher = sessionwatcher.NewSessionWatcher(sessionConn)
+	h.Power = libpower.NewPower(sysBus)
+	h.LoginManager = login1.NewManager(sysBus)
+	h.SensorProxy = sensorproxy.NewSensorProxy(sysBus)
+	h.SysDBusDaemon = ofdbus.NewDBus(sysBus)
+	h.SessionManager = sessionmanager.NewSessionManager(sessionBus)
+	h.ScreenSaver = screensaver.NewScreenSaver(sessionBus)
+	h.Display = display.NewDisplay(sessionBus)
+	h.SessionWatcher = sessionwatcher.NewSessionWatcher(sessionBus)
 
 	// init X conn
 	h.xConn, err = x.NewConn()
@@ -107,12 +106,6 @@ func (h *Helper) Destroy() {
 
 	h.ScreenSaver.RemoveHandler(proxy.RemoveAllHandlers)
 	h.SessionWatcher.RemoveHandler(proxy.RemoveAllHandlers)
-
-	if h.Notification != nil {
-		h.Notification.Destroy()
-		h.Notification = nil
-		notify.Destroy()
-	}
 
 	if h.xConn != nil {
 		h.xConn.Close()
