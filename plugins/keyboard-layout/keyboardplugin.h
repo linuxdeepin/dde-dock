@@ -41,7 +41,7 @@ public:
     QWidget *itemTipsWidget(const QString &itemKey) override;
 
 private:
-    DBusAdaptors *m_dbusAdaptors;
+    DBusAdaptors *m_dbusAdaptors = nullptr;
 };
 
 #endif
