@@ -58,6 +58,8 @@ DockSettings::DockSettings(QWidget *parent)
     , m_displayInter(new DBusDisplay(this))
     , m_itemManager(DockItemManager::instance(this))
 {
+    checkService();
+
     m_primaryRawRect = m_displayInter->primaryRawRect();
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
@@ -563,3 +565,27 @@ void DockSettings::onWindowSizeChanged()
     emit windowGeometryChanged();
 }
 
+void DockSettings::checkService()
+{
+    // com.deepin.dde.daemon.Dock服务比dock晚启动，导致dock启动后的状态错误
+
+    QString serverName = "com.deepin.dde.daemon.Dock";
+    QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
+
+    if (!ifc->isServiceRegistered(serverName)) {
+        connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
+            if (name == serverName && !newOwner.isEmpty()) {
+
+                m_dockInter = new DBusDock(serverName, "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+                onPositionChanged();
+                onDisplayModeChanged();
+                hideModeChanged();
+                hideStateChanged();
+                onOpacityChanged(m_dockInter->opacity());
+                onWindowSizeChanged();
+
+                disconnect(ifc);
+            }
+        });
+    }
+}

@@ -94,7 +94,7 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
     m_tipsLabel->setVisible(false);
 
     connect(m_systemTraysController, &SystemTraysController::pluginItemAdded, this, &TrayPlugin::addTrayWidget);
-    connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this, [=](const QString &itemKey) { trayRemoved(itemKey); });
+    connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this, [ = ](const QString & itemKey) { trayRemoved(itemKey); });
 
     m_trayInter->Manage();
 
@@ -114,6 +114,9 @@ bool TrayPlugin::pluginIsDisable()
     if (!enableSetting.value("enable", true).toBool()) {
         return true;
     }
+
+    if (!m_proxyInter)
+        return true;
 
     return !m_proxyInter->getValue(this, PLUGIN_ENABLED_KEY, true).toBool();
 }
@@ -168,7 +171,7 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
 
     const int defaultSort = displayMode() == Dock::DisplayMode::Fashion ? 0 : 0;
 
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey, nullptr);
     if (trayWidget == nullptr) {
         return defaultSort;
     }
@@ -189,7 +192,7 @@ void TrayPlugin::setSortKey(const QString &itemKey, const int order)
         return m_systemTraysController->setSystemTrayItemSortKey(itemKey, order);
     }
 
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey, nullptr);
     if (trayWidget == nullptr) {
         return;
     }
@@ -209,7 +212,7 @@ void TrayPlugin::refreshIcon(const QString &itemKey)
         return;
     }
 
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey);
+    AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey);
     if (trayWidget) {
         trayWidget->updateIcon();
     }
@@ -260,7 +263,7 @@ const QVariant TrayPlugin::getValue(const QString &itemKey, const QString &key, 
 
 bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
 {
-    AbstractTrayWidget * const trayWidget = m_trayMap.value(itemKey, nullptr);
+    AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey, nullptr);
 
     if (trayWidget && trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         return true;
@@ -290,7 +293,7 @@ Dock::DisplayMode TrayPlugin::displayMode()
 void TrayPlugin::initXEmbed()
 {
     connect(m_refreshXEmbedItemsTimer, &QTimer::timeout, this, &TrayPlugin::xembedItemsChanged);
-    connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, [=] {m_refreshXEmbedItemsTimer->start();});
+    connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, [ = ] {m_refreshXEmbedItemsTimer->start();});
     connect(m_trayInter, &DBusTrayManager::Changed, this, &TrayPlugin::xembedItemChanged);
 
     m_refreshXEmbedItemsTimer->start();
@@ -299,8 +302,8 @@ void TrayPlugin::initXEmbed()
 void TrayPlugin::initSNI()
 {
     connect(m_refreshSNIItemsTimer, &QTimer::timeout, this, &TrayPlugin::sniItemsChanged);
-    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, [=] {m_refreshSNIItemsTimer->start();});
-    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, [=] {m_refreshSNIItemsTimer->start();});
+    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, [ = ] {m_refreshSNIItemsTimer->start();});
+    connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, [ = ] {m_refreshSNIItemsTimer->start();});
 
     m_refreshSNIItemsTimer->start();
 }
@@ -428,8 +431,7 @@ void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indic
     if (!m_indicatorMap.keys().contains(indicatorName)) {
         indicatorTray = new IndicatorTray(indicatorName);
         m_indicatorMap[indicatorName] = indicatorTray;
-    }
-    else {
+    } else {
         indicatorTray = m_indicatorMap[itemKey];
     }
 
@@ -438,7 +440,7 @@ void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indic
         addTrayWidget(itemKey, indicatorTray->widget());
     }, Qt::UniqueConnection);
 
-    connect(indicatorTray, &IndicatorTray::removed, this, [=] {
+    connect(indicatorTray, &IndicatorTray::removed, this, [ = ] {
         trayRemoved(itemKey);
         indicatorTray->removeWidget();
     }, Qt::UniqueConnection);
@@ -479,6 +481,9 @@ void TrayPlugin::xembedItemChanged(quint32 winId)
 
 void TrayPlugin::switchToMode(const Dock::DisplayMode mode)
 {
+    if (!m_proxyInter)
+        return;
+
     if (mode == Dock::Fashion) {
         for (auto itemKey : m_trayMap.keys()) {
             m_proxyInter->itemRemoved(this, itemKey);

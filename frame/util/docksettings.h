@@ -111,6 +111,7 @@ private:
     bool test(const Position pos, const QList<QRect> &otherScreens) const;
     void calculateWindowConfig();
     void gtkIconThemeChanged();
+    void checkService();
 
 private:
     int m_dockWindowSize;
