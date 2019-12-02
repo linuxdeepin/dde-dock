@@ -31,6 +31,7 @@
 
 #define BORDER_MARGIN 8
 #define TITLE_MARGIN 20
+#define BTN_TITLE_MARGIN 6
 
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent)
@@ -83,7 +84,6 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
     m_tracked = snap;
 
     m_closeBtn3D->setVisible(m_tracked->closeAble());
-    m_titleBtn->setText(m_tracked->title());
 
     QFontMetrics fm(m_titleBtn->font());
     int textWidth = fm.width(m_tracked->title()) + 10;
@@ -91,7 +91,13 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
 
     if (textWidth  < titleWidth) {
         m_titleBtn->setFixedWidth(textWidth);
+        m_titleBtn->setText(m_tracked->title());
     } else {
+        QString str = m_tracked->title();
+        /*某些特殊字符只显示一半 如"Q"," W"，所以加一个空格保证字符显示完整,*/
+        str.insert(0, " ");
+        QString strTtile = m_titleBtn->fontMetrics().elidedText(str, Qt::ElideRight, titleWidth - BTN_TITLE_MARGIN);
+        m_titleBtn->setText(strTtile);
         m_titleBtn->setFixedWidth(titleWidth);
     }
 
