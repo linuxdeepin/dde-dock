@@ -806,10 +806,10 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
         return;
 
     resizeMainPanelWindow();
-    m_size = m_settings->m_mainWindowSize;
-
-    if (!resetPosition)
-        return;
+    if (m_size != m_settings->m_mainWindowSize) {
+        m_size = m_settings->m_mainWindowSize;
+        setStrutPartial();
+    }
 }
 
 void MainWindow::updatePanelVisible()
