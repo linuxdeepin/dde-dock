@@ -63,10 +63,6 @@ func newLastore(service *dbusutil.Service) (*Lastore, error) {
 		lang:      QueryLang(),
 	}
 
-	if !FileExist(disableSourceCheckFile) {
-		l.SourceCheckEnabled = true
-	}
-
 	logger.Debugf("CurrentLang: %q", l.lang)
 	systemBus, err := dbus.SystemBus()
 	if err != nil {
@@ -96,11 +92,14 @@ func newLastore(service *dbusutil.Service) (*Lastore, error) {
 func (l *Lastore) initPower(systemBus *dbus.Conn) {
 	l.power = power.NewPower(systemBus)
 	l.power.InitSignalExt(l.sysSigLoop, true)
-	l.power.HasBattery().ConnectChanged(func(hasValue bool, hasBattery bool) {
+	err := l.power.HasBattery().ConnectChanged(func(hasValue bool, hasBattery bool) {
 		if !hasBattery {
 			l.notifiedBattery = false
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (l *Lastore) initNotify(sessionBus *dbus.Conn) {
@@ -108,7 +107,7 @@ func (l *Lastore) initNotify(sessionBus *dbus.Conn) {
 	l.notifications.InitSignalExt(l.sessionSigLoop, true)
 
 	l.notifyIdHidMap = make(map[uint32]dbusutil.SignalHandlerId)
-	l.notifications.ConnectNotificationClosed(func(id uint32, reason uint32) {
+	_, err := l.notifications.ConnectNotificationClosed(func(id uint32, reason uint32) {
 		logger.Debug("notification closed id", id)
 		hid, ok := l.notifyIdHidMap[id]
 		if ok {
@@ -121,12 +120,15 @@ func (l *Lastore) initNotify(sessionBus *dbus.Conn) {
 			})
 		}
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (l *Lastore) initSysDBusDaemon(systemBus *dbus.Conn) {
 	l.sysDBusDaemon = ofdbus.NewDBus(systemBus)
 	l.sysDBusDaemon.InitSignalExt(l.sysSigLoop, true)
-	l.sysDBusDaemon.ConnectNameOwnerChanged(
+	_, err := l.sysDBusDaemon.ConnectNameOwnerChanged(
 		func(name string, oldOwner string, newOwner string) {
 			if name == l.core.ServiceName_() {
 				if newOwner == "" {
@@ -136,7 +138,9 @@ func (l *Lastore) initSysDBusDaemon(systemBus *dbus.Conn) {
 				}
 			}
 		})
-
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (l *Lastore) initCore(systemBus *dbus.Conn) {
@@ -153,12 +157,15 @@ func (l *Lastore) initCore(systemBus *dbus.Conn) {
 	}
 
 	l.core.InitSignalExt(l.sysSigLoop, false)
-	l.core.JobList().ConnectChanged(func(hasValue bool, value []dbus.ObjectPath) {
+	err = l.core.JobList().ConnectChanged(func(hasValue bool, value []dbus.ObjectPath) {
 		if !hasValue {
 			return
 		}
 		l.updateJobList(value)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	l.jobsPropsChangedHId = l.sysSigLoop.AddHandler(&dbusutil.SignalRule{
 		Name: "org.freedesktop.DBus.Properties.PropertiesChanged",

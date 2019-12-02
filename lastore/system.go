@@ -34,7 +34,12 @@ func decodeJson(fpath string, d interface{}) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer func() {
+		err := f.Close()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 
 	return json.NewDecoder(f).Decode(&d)
 }

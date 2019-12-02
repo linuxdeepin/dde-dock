@@ -26,7 +26,6 @@ import "C"
 import (
 	"os"
 	"path"
-	"path/filepath"
 	"sort"
 	"strings"
 	"unsafe"
@@ -103,11 +102,6 @@ func PackageName(pkg string, lang string) string {
 	return name
 }
 
-func FileExist(fpath string) bool {
-	_, err := os.Stat(fpath)
-	return err == nil || os.IsExist(err)
-}
-
 func strSliceSetEqual(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
@@ -120,17 +114,6 @@ func strSliceSetEqual(a, b []string) bool {
 		}
 	}
 	return true
-}
-
-func touchFile(filename string) error {
-	dir := filepath.Dir(filename)
-	os.MkdirAll(dir, 0755)
-
-	f, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	return f.Close()
 }
 
 func queryVFSAvailable(path string) (uint64, error) {

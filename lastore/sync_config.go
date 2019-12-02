@@ -17,7 +17,6 @@ type syncData struct {
 	AutoClean           bool   `json:"auto_clean"`
 	AutoDownloadUpdates bool   `json:"auto_download_updates"`
 	SmartMirrorEnabled  bool   `json:"smart_mirror_enabled"`
-	SourceCheckEnabled  bool   `json:"source_check_enabled"`
 }
 
 const (
@@ -35,7 +34,6 @@ func (sc *syncConfig) Get() (interface{}, error) {
 	info.AutoClean, _ = sc.l.core.AutoClean().Get(0)
 	info.AutoDownloadUpdates, _ = sc.l.core.AutoDownloadUpdates().Get(0)
 	info.SmartMirrorEnabled, _ = smartMirrorEnabledGet()
-	info.SourceCheckEnabled = sc.l.SourceCheckEnabled
 	return &info, nil
 }
 
@@ -60,10 +58,6 @@ func (sc *syncConfig) Set(data []byte) error {
 	err = smartMirrorEnabledSet(info.SmartMirrorEnabled)
 	if err != nil {
 		logger.Warning("Failed to set lastore smart mirror:", err)
-	}
-	err = sc.l.SetSourceCheckEnabled(info.SourceCheckEnabled)
-	if err != nil {
-		logger.Warning("Failed to set lastore source check:", err)
 	}
 	return nil
 }
@@ -90,7 +84,7 @@ func smartMirrorEnabledGet() (bool, error) {
 	}
 
 	if variant.Signature().String() != "b" {
-		return false, errors.New("Not excepted value type")
+		return false, errors.New("not excepted value type")
 	}
 	return variant.Value().(bool), nil
 }
