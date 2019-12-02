@@ -22,6 +22,7 @@ package users
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -33,6 +34,8 @@ const (
 	userCmdDelete = "userdel"
 	userCmdModify = "usermod"
 	userCmdGroup  = "gpasswd"
+
+	cmdGroupDel = "groupdel"
 
 	defaultConfigShell = "/etc/adduser.conf"
 )
@@ -135,13 +138,33 @@ func DeleteGroupForUser(group, user string) error {
 }
 
 func DeleteUser(rmFiles bool, username string) error {
+	uInfo, err := GetUserInfoByName(username)
+	if err != nil {
+		return err
+	}
+	gInfo, err := getGroupByGid(uInfo.Gid)
+	if err != nil {
+		return err
+	}
+
 	var args = []string{"-f"}
 	if rmFiles {
 		args = append(args, "-r")
 	}
 	args = append(args, username)
+	err = doAction(userCmdDelete, args)
+	if err != nil {
+		return err
+	}
 
-	return doAction(userCmdDelete, args)
+	if username != gInfo.Name {
+		err = doAction(cmdGroupDel, []string{gInfo.Name})
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "failed to delete group %s: %v\n", gInfo.Name, err)
+		}
+	}
+
+	return nil
 }
 
 func LockedUser(locked bool, username string) error {

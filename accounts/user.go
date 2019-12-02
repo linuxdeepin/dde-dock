@@ -467,6 +467,35 @@ func (u *User) updatePropAutomaticLogin() {
 	u.PropsMu.Unlock()
 }
 
+func (u *User) updatePropsPasswd(uInfo *users.UserInfo) {
+	var userNameChanged bool
+	var oldUserName string
+
+	u.PropsMu.Lock()
+	u.setPropGid(uInfo.Gid)
+
+	if u.UserName != uInfo.Name {
+		oldUserName = u.UserName
+		userNameChanged = true
+	}
+	u.setPropUserName(uInfo.Name)
+
+	u.setPropHomeDir(uInfo.Home)
+	u.setPropShell(uInfo.Shell)
+	fullName := uInfo.Comment().FullName()
+	u.setPropFullName(fullName)
+	u.PropsMu.Unlock()
+
+	if userNameChanged {
+		logger.Debugf("user name changed old: %q, new: %q", oldUserName, uInfo.Name)
+		err := os.Rename(filepath.Join(userConfigDir, oldUserName),
+			filepath.Join(userConfigDir, uInfo.Name))
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+}
+
 func (u *User) getAccountType() int32 {
 	if users.IsAdminUser(u.UserName) {
 		return users.UserTypeAdmin

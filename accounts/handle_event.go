@@ -20,6 +20,7 @@
 package accounts
 
 import (
+	"path/filepath"
 	"time"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
@@ -38,8 +39,6 @@ const (
 )
 
 const (
-	maxDuration    = time.Second * 1
-	deltaDuration  = time.Millisecond * 500
 	fileEventDelay = time.Millisecond * 500
 
 	taskNamePasswd = "passwd"
@@ -48,21 +47,13 @@ const (
 	taskNameDM     = "dm"
 )
 
-const (
-	userListNotChange = iota + 1
-	userListAdded
-	userListDeleted
-)
-
 func (m *Manager) getWatchFiles() []string {
-	var list []string
+	list := []string{"/etc"}
 	dmConfig, err := users.GetDMConfig()
 	if err == nil {
-		list = append(list, dmConfig)
+		list = append(list, filepath.Dir(dmConfig))
 	}
 
-	list = append(list, []string{userFilePasswd, userFileGroup,
-		userFileShadow, userFileSudoers}...)
 	return list
 }
 
@@ -71,45 +62,97 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 		return
 	}
 
-	logger.Debug("File changed:", ev)
 	var err error
 	switch ev.Name {
 	case userFilePasswd:
+		logger.Debug("File changed:", ev)
 		if task, _ := m.delayTaskManager.GetTask(taskNamePasswd); task != nil {
 			err = task.Start()
 		}
 	case userFileGroup, userFileSudoers:
+		logger.Debug("File changed:", ev)
 		if task, _ := m.delayTaskManager.GetTask(taskNameGroup); task != nil {
 			err = task.Start()
 		}
 	case userFileShadow:
+		logger.Debug("File changed:", ev)
 		if task, _ := m.delayTaskManager.GetTask(taskNameShadow); task != nil {
 			err = task.Start()
 		}
 	case lightdmConfig, kdmConfig, gdmConfig:
+		logger.Debug("File changed:", ev)
 		if task, _ := m.delayTaskManager.GetTask(taskNameDM); task != nil {
 			err = task.Start()
 		}
 	default:
-		logger.Debug("Unknow event, ignore")
 		return
 	}
 	if err != nil {
 		logger.Warning("Failed to start task:", err, ev)
 	}
-	m.watcher.ResetFileListWatch()
 }
 
 func (m *Manager) handleFilePasswdChanged() {
-	waitDuration := time.Second * 0
-	for waitDuration <= maxDuration {
-		if m.refreshUserList() {
-			break
-		}
-
-		waitDuration += deltaDuration
-		<-time.After(waitDuration)
+	infos, err := users.GetHumanUserInfos()
+	if err != nil {
+		logger.Warning(err)
+		return
 	}
+
+	infosMap := make(map[string]*users.UserInfo)
+	for idx := range infos {
+		info := &infos[idx]
+		infosMap[info.Uid] = info
+	}
+
+	m.usersMapMu.Lock()
+
+	// 之后需要删除的用户的uid列表
+	var uidsDelete []string
+
+	for _, u := range m.usersMap {
+		uInfo, ok := infosMap[u.Uid]
+		if ok {
+			u.updatePropsPasswd(uInfo)
+		} else {
+			uidsDelete = append(uidsDelete, u.Uid)
+		}
+		delete(infosMap, u.Uid)
+	}
+	m.usersMapMu.Unlock()
+
+	for _, uid := range uidsDelete {
+		m.deleteUser(uid)
+	}
+
+	// infosMap 中还存留的用户，就是新增加的用户。
+	for _, uInfo := range infosMap {
+		m.addUser(uInfo)
+	}
+
+	m.updatePropUserList()
+}
+
+func (m *Manager) updatePropUserList() {
+	logger.Debug("updatePropUserList")
+	var userPaths []string
+
+	m.usersMapMu.Lock()
+
+	for _, u := range m.usersMap {
+		userPath := userDBusPathPrefix + u.Uid
+		userPaths = append(userPaths, userPath)
+	}
+
+	m.usersMapMu.Unlock()
+
+	m.UserListMu.Lock()
+	m.UserList = userPaths
+	err := m.service.EmitPropertyChanged(m, "UserList", userPaths)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.UserListMu.Unlock()
 }
 
 func (m *Manager) handleFileGroupChanged() {
@@ -137,90 +180,22 @@ func (m *Manager) handleDMConfigChanged() {
 	}
 }
 
-func (m *Manager) refreshUserList() bool {
-	m.UserListMu.Lock()
-
-	var freshed bool
-	ret, status := compareUserList(m.UserList, getUserPaths())
-	switch status {
-	case userListAdded:
-		freshed = true
-		m.handleUserAdded(ret)
-	case userListDeleted:
-		freshed = true
-		m.handleUserDeleted(ret)
+func (m *Manager) addUser(uInfo *users.UserInfo) {
+	logger.Debug("addUser", uInfo.Uid)
+	userPath := userDBusPathPrefix + uInfo.Uid
+	err := m.exportUserByPath(userPath)
+	if err != nil {
+		logger.Warningf("failed to export user %s: %v", uInfo.Uid, err)
+		return
 	}
-
-	defer m.UserListMu.Unlock()
-	return freshed
 }
 
-func (m *Manager) handleUserAdded(list []string) {
-	var userList = m.UserList
-	for _, p := range list {
-		err := m.exportUserByPath(p)
-		if err != nil {
-			logger.Errorf("Install user '%s' failed: %v", p, err)
-			continue
-		}
-
-		userList = append(userList, p)
-		m.service.Emit(m, "UserAdded", p)
-		m.copyUserDatas(p)
+func (m *Manager) deleteUser(uid string) {
+	logger.Debug("deleteUser", uid)
+	userPath := userDBusPathPrefix + uid
+	m.stopExportUser(userPath)
+	err := m.service.Emit(m, "UserDeleted", userPath)
+	if err != nil {
+		logger.Warning(err)
 	}
-
-	m.UserList = userList
-	m.service.EmitPropertyChanged(m, "UserList", userList)
-}
-
-func (m *Manager) handleUserDeleted(list []string) {
-	var userList = m.UserList
-	for _, p := range list {
-		m.stopExportUser(p)
-		userList = deleteStrFromList(p, userList)
-		m.service.Emit(m, "UserDeleted", p)
-	}
-
-	m.UserList = userList
-	m.service.EmitPropertyChanged(m, "UserList", userList)
-}
-
-func compareUserList(oldList, newList []string) ([]string, int) {
-	var (
-		ret    []string
-		oldLen = len(oldList)
-		newLen = len(newList)
-	)
-
-	if oldLen < newLen {
-		for _, v := range newList {
-			if isStrInArray(v, oldList) {
-				continue
-			}
-			ret = append(ret, v)
-		}
-		return ret, userListAdded
-	} else if oldLen > newLen {
-		for _, v := range oldList {
-			if isStrInArray(v, newList) {
-				continue
-			}
-			ret = append(ret, v)
-		}
-		return ret, userListDeleted
-	}
-
-	return ret, userListNotChange
-}
-
-func deleteStrFromList(str string, list []string) []string {
-	var ret []string
-	for _, v := range list {
-		if v == str {
-			continue
-		}
-		ret = append(ret, v)
-	}
-
-	return ret
 }

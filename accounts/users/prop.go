@@ -38,7 +38,7 @@ var (
 
 var (
 	groupFileTimestamp int64 = 0
-	groupFileInfo            = make(map[string][]string)
+	groupFileInfo            = make(map[string]GroupInfo)
 	groupFileLocker    sync.Mutex
 
 	groupNameNoPasswdLogin = "nopasswdlogin"
@@ -244,7 +244,7 @@ func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
 		if !ok {
 			continue
 		}
-		users = append(users, v...)
+		users = append(users, v.Users...)
 	}
 	return users, nil
 }
@@ -332,7 +332,7 @@ func isUserInGroup(user, group string) bool {
 	if !ok {
 		return false
 	}
-	return isStrInArray(user, v)
+	return isStrInArray(user, v.Users)
 }
 
 func GetUserGroups(user string) ([]string, error) {
@@ -344,12 +344,12 @@ func GetUserGroups(user string) ([]string, error) {
 	}
 
 	var result []string
-	for groupName, users := range infos {
+	for groupName, groupInfo := range infos {
 		if groupName == user {
 			result = append(result, groupName)
 			continue
 		}
-		for _, u := range users {
+		for _, u := range groupInfo.Users {
 			if u == user {
 				result = append(result, groupName)
 				break
@@ -377,7 +377,7 @@ func GetAllGroups() ([]string, error) {
 	return result, nil
 }
 
-func getGroupInfoWithCache(file string) (map[string][]string, error) {
+func getGroupInfoWithCache(file string) (map[string]GroupInfo, error) {
 	info, err := os.Stat(file)
 	if err != nil {
 		return nil, err
@@ -397,8 +397,14 @@ func getGroupInfoWithCache(file string) (map[string][]string, error) {
 	return groupFileInfo, nil
 }
 
-func parseGroup(data []byte) map[string][]string {
-	result := make(map[string][]string)
+type GroupInfo struct {
+	Name  string
+	Gid   string
+	Users []string
+}
+
+func parseGroup(data []byte) map[string]GroupInfo {
+	result := make(map[string]GroupInfo)
 	lines := bytes.Split(data, []byte{'\n'})
 	for _, line := range lines {
 		if len(line) == 0 {
@@ -410,18 +416,29 @@ func parseGroup(data []byte) map[string][]string {
 			continue
 		}
 
-		groupName := string(items[0])
-		users0 := bytes.Split(items[3], []byte{','})
-		// convert users0 to users
-		var users []string
-		if len(users0) > 0 {
-			users = make([]string, len(users0))
-			for idx := range users {
-				users[idx] = string(users0[idx])
-			}
-		}
-		result[groupName] = users
+		var gInfo GroupInfo
+		gInfo.Name = string(items[0])
+		gInfo.Gid = string(items[2])
+		gInfo.Users = strings.Split(string(items[3]), ",")
+		result[gInfo.Name] = gInfo
 	}
 
 	return result
+}
+
+func getGroupByGid(gid string) (*GroupInfo, error) {
+	groupFileLocker.Lock()
+	defer groupFileLocker.Unlock()
+
+	gInfos, err := getGroupInfoWithCache(userFileGroup)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, gInfo := range gInfos {
+		if gInfo.Gid == gid {
+			return &gInfo, nil
+		}
+	}
+	return nil, fmt.Errorf("not found group with gid %s", gid)
 }
