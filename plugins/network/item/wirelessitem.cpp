@@ -203,7 +203,8 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
 
     QString key = QString("wireless-%1-symbolic").arg(type);
 
-    if (state == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) {
+    if ((state == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) ||
+            (m_APList->isHotposActive)) {
         key = "network-wireless-offline-symbolic";
     }
 
@@ -271,6 +272,11 @@ void WirelessItem::refreshIcon()
 void WirelessItem::refreshTips()
 {
     if (m_device.isNull()) {
+        return;
+    }
+
+    if (m_APList->isHotposActive){
+        m_wirelessTips->setText(tr("Connected but no Internet access"));
         return;
     }
 

@@ -95,6 +95,10 @@ private:
     DeviceControlWidget *m_controlPanel;
 
     AccessPointWidget *m_clickedAPW;
+
+public:
+    bool isHotposActive;
+
 };
 
 #endif // WIRELESSAPPLET_H

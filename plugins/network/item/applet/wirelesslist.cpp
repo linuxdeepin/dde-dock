@@ -77,6 +77,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
     m_indicator->setFixedSize(QSize(14, 14) * ratio);
     m_indicator->setVisible(false);
+    isHotposActive = false;
 
     connect(m_device, &WirelessDevice::apAdded, this, &WirelessList::APAdded);
     connect(m_device, &WirelessDevice::apRemoved, this, &WirelessList::APRemoved);
@@ -434,7 +435,7 @@ void WirelessList::onHotspotEnabledChanged(const bool enabled)
     // Note: the obtained hotspot info is not complete
     m_activeHotspotAP = enabled ? AccessPoint(m_device->activeHotspotInfo().value("Hotspot").toObject())
                                 : AccessPoint();
-
+    isHotposActive = enabled;
     m_updateAPTimer->start();
 }
 
