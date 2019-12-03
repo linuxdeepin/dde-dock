@@ -9,13 +9,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -362,6 +355,10 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
