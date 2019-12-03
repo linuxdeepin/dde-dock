@@ -116,11 +116,13 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.push_back(reboot);
 
 #ifndef DISABLE_POWER_OPTIONS
-    QMap<QString, QVariant> suspend;
-    suspend["itemId"] = "Suspend";
-    suspend["itemText"] = tr("Suspend");
-    suspend["isActive"] = true;
-    items.push_back(suspend);
+    if (valueByQSettings<bool>("Power", "sleep", true)) {
+        QMap<QString, QVariant> suspend;
+        suspend["itemId"] = "Suspend";
+        suspend["itemText"] = tr("Suspend");
+        suspend["isActive"] = true;
+        items.push_back(suspend);
+    }
 
     if (checkSwap()) {
         QMap<QString, QVariant> hibernate;
@@ -143,8 +145,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     logout["isActive"] = true;
     items.push_back(logout);
 
-    if (DBusAccount().userList().count() > 1)
-    {
+    if (DBusAccount().userList().count() > 1) {
         QMap<QString, QVariant> switchUser;
         switchUser["itemId"] = "SwitchUser";
         switchUser["itemText"] = tr("Switch account");
@@ -177,14 +178,14 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
     else if (menuId == "Lock")
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                                           << "--dest=com.deepin.dde.lockFront"
-                                                           << "/com/deepin/dde/lockFront"
-                                                           << QString("com.deepin.dde.lockFront.Show"));
+                                << "--dest=com.deepin.dde.lockFront"
+                                << "/com/deepin/dde/lockFront"
+                                << QString("com.deepin.dde.lockFront.Show"));
     else
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                                           << "--dest=com.deepin.dde.shutdownFront"
-                                                           << "/com/deepin/dde/shutdownFront"
-                                                           << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
+                                << "--dest=com.deepin.dde.shutdownFront"
+                                << "/com/deepin/dde/shutdownFront"
+                                << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
 }
 
 void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
@@ -234,24 +235,72 @@ void ShutdownPlugin::loadPlugin()
     displayModeChanged(displayMode());
 }
 
+std::pair<bool, qint64> ShutdownPlugin::checkIsPartitionType(const QStringList &list)
+{
+    std::pair<bool, qint64> result{ false, -1 };
+
+    if (list.length() != 5) {
+        return result;
+    }
+
+    const QString type{ list[1] };
+    const QString size{ list[2] };
+
+    result.first  = type == "partition";
+    result.second = size.toLongLong() * 1024.0f;
+
+    return result;
+}
+
+qint64 ShutdownPlugin::get_power_image_size()
+{
+    qint64 size{ 0 };
+    QFile  file("/sys/power/image_size");
+
+    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+        size = file.readAll().trimmed().toLongLong();
+        file.close();
+    }
+
+    return size;
+}
+
 bool ShutdownPlugin::checkSwap()
 {
+    if (!valueByQSettings<bool>("Power", "hibernate", false))
+        return false;
+
+    bool hasSwap = false;
     QFile file("/proc/swaps");
     if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
         const QString &body = file.readAll();
+        QTextStream    stream(body.toUtf8());
+        while (!stream.atEnd()) {
+            const std::pair<bool, qint64> result =
+                checkIsPartitionType(stream.readLine().simplified().split(
+                                         " ", QString::SplitBehavior::SkipEmptyParts));
+            qint64 image_size{ get_power_image_size() };
+
+            if (result.first) {
+                hasSwap = image_size < result.second;
+            }
+
+            if (hasSwap) {
+                break;
+            }
+        }
+
         file.close();
-        QRegularExpression re("\\spartition\\s");
-        QRegularExpressionMatch match = re.match(body);
-        return match.hasMatch();
+    } else {
+        qWarning() << "open /proc/swaps failed! please check permission!!!";
     }
 
-    return false;
+    return hasSwap;
 }
 
 void ShutdownPlugin::refreshPluginItemsVisible()
 {
-    if (pluginIsDisable())
-    {
+    if (pluginIsDisable()) {
         m_proxyInter->itemRemoved(this, pluginName());
     } else {
         if (!m_pluginLoaded) {

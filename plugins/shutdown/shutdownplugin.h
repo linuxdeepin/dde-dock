@@ -57,6 +57,47 @@ public:
 
     void pluginSettingsChanged() override;
 
+    // 休眠待机配置，保持和sessionshell一致
+    const QStringList session_ui_configs {
+        "/etc/lightdm/lightdm-deepin-greeter.conf",
+        "/etc/deepin/dde-session-ui.conf",
+        "/usr/share/dde-session-ui/dde-session-ui.conf"
+    };
+    template <typename T>
+    T findValueByQSettings(const QStringList &configFiles,
+                           const QString &group,
+                           const QString &key,
+                           const QVariant &failback)
+    {
+        for (const QString &path : configFiles) {
+            QSettings settings(path, QSettings::IniFormat);
+            if (!group.isEmpty()) {
+                settings.beginGroup(group);
+            }
+
+            const QVariant& v = settings.value(key);
+            if (v.isValid()) {
+                T t = v.value<T>();
+                return t;
+            }
+        }
+
+        return failback.value<T>();
+    }
+
+    template <typename T>
+    T valueByQSettings(const QString & group,
+                       const QString & key,
+                       const QVariant &failback) {
+        return findValueByQSettings<T>(session_ui_configs,
+                                       group,
+                                       key,
+                                       failback);
+    }
+
+    std::pair<bool, qint64> checkIsPartitionType(const QStringList &list);
+    qint64 get_power_image_size();
+
 private:
     void loadPlugin();
     bool checkSwap();
