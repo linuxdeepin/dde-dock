@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>انقر لعرض الرمز المخفي</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -169,7 +162,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>إلغاء الإرساء</translation>
     </message>
 </context>
 <context>
@@ -187,7 +180,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation>إعدادات</translation>
+        <translation>الإعدادات</translation>
     </message>
 </context>
 <context>
@@ -229,7 +222,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>إلغاء الإرساء</translation>
     </message>
 </context>
 <context>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>اتصال لاسلكي بـ : %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>متصل لكن لا يوجد اتصال بالإنترنت</translation>
     </message>
 </context>
 <context>

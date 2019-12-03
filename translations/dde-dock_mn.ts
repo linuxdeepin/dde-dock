@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Дараад нуугдсан дүрсүүдийг харах</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Утасгүй холболт: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Холбогдсон боловч интернетэд холбогдоогүй байна</translation>
     </message>
 </context>
 <context>

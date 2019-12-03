@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Klik untuk menampilkan ikon tersembunyi</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Koneksi nirkabel: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Terhubung tetapi tidak ada akses Internet</translation>
     </message>
 </context>
 <context>

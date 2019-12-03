@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Spustelėkite, norėdami rodyti paslėptą piktogramą</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -169,7 +162,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Atskirti nuo doko</translation>
     </message>
 </context>
 <context>
@@ -229,7 +222,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Atskirti nuo doko</translation>
     </message>
 </context>
 <context>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Belaidis ryšys: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Prisijungta, bet nėra prieigos prie interneto</translation>
     </message>
 </context>
 <context>

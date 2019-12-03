@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>숨겨진 아이콘을 표시하려면 클릭</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -107,11 +100,11 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>효율적인 모드</translation>
+        <translation>능률 모드</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation>맨 위</translation>
+        <translation>상단</translation>
     </message>
     <message>
         <source>Bottom</source>
@@ -127,15 +120,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>계속 표시</translation>
+        <translation>표시된 상태로 유지</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>숨김 유지</translation>
+        <translation>숨겨진 상태로 유지</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>스마트 숨김</translation>
+        <translation>스마트 숨기기</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -158,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>런쳐</translation>
+        <translation>실행도구</translation>
     </message>
 </context>
 <context>
@@ -169,7 +162,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>도크 해제</translation>
+        <translation>도구집 해제</translation>
     </message>
 </context>
 <context>
@@ -225,11 +218,11 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>바탕 화면 표시</translation>
+        <translation>바탕화면 표시</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>도크 해제</translation>
+        <translation>도구집 해제</translation>
     </message>
 </context>
 <context>
@@ -248,7 +241,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>일시 정지</translation>
+        <translation>일시 중지</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -331,7 +324,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>비었음</translation>
+        <translation>비우기</translation>
     </message>
 </context>
 <context>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>무선 연결: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>연결됨, 인터넷 없음</translation>
     </message>
 </context>
 <context>

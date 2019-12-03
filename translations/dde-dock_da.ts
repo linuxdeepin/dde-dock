@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Klik for at vise skjulte ikoner</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Trådløs forbindelse: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Tilsluttet men ingen internetadgang</translation>
     </message>
 </context>
 <context>

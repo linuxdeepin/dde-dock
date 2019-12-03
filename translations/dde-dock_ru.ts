@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Нажмите для показа скрытых значков</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>Справа</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Большой</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Средний</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Маленький</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Отображать Всегда</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Местонахождение</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Размер</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation> Выбор программ</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Многозадачный Вид</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Открепить</translation>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Параметры питания</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Заряжено %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Емкость %1, %2 мин. осталось</translation>
     </message>
@@ -218,12 +202,27 @@
         <translation>Емкость %1, %2 час. %3 мин. осталось</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Заряжено %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Зарядка %1, %2 мин. до полной зарядки</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Зарядка %1, %2 час. %3 мин. до полной зарядки</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Показать Рабочий стол</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Открепить</translation>
     </message>
 </context>
 <context>
@@ -355,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Беспроводное Подключение: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Подключено без доступа к Интернет</translation>
     </message>
 </context>
 <context>

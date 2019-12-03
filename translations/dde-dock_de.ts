@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Klicken Sie zum Anzeigen des ausgeblendeten Symbols</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -103,11 +96,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Mode-Modus</translation>
+        <translation>Design-Modus</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Effizienter Modus</translation>
+        <translation>Leistungs-Modus</translation>
     </message>
     <message>
         <source>Top</source>
@@ -165,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Multitask-Ansicht</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -248,7 +241,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation>Bereitschaftszustand</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Drahtlosverbindung: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Verbunden, aber kein Internetzugang</translation>
     </message>
 </context>
 <context>

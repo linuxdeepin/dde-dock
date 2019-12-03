@@ -3,14 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Apăsați pentru a afișa pictogramele ascunse</translation>
+        <translation>Pluginul % 1 nu este compatibil cu sistemul.</translation>
     </message>
 </context>
 <context>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Sunteți doriți să goliți %1 articole?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -165,11 +158,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Vizualizare Multitask</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Detaşaţi</translation>
     </message>
 </context>
 <context>
@@ -183,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>La bord</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -202,11 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Capacitate %1, %2 Min rămase</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Capacitate %1, %2 Ore %3 Min rămase</translation>
     </message>
     <message>
         <source>Charged %1</source>
@@ -214,11 +207,11 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Încărcare %1, %2 Min până la plin</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Încărcare %1, %2 Ore %3 Min rămase până la plin</translation>
     </message>
 </context>
 <context>
@@ -229,7 +222,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Detaşaţi</translation>
     </message>
 </context>
 <context>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Conexiune fără fir: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Conectat dar fară acces Internet</translation>
     </message>
 </context>
 <context>

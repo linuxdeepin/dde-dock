@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Näytä piilotettut kuvakeet napsauttamalla</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -43,7 +36,7 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Ota verkkoyhteys käyttöön</translation>
+        <translation>Verkkoyhteys käyttöön</translation>
     </message>
     <message>
         <source>Disable network</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Langaton yhteys: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Yhdistetty, mutta ei internet osoitetta</translation>
     </message>
 </context>
 <context>

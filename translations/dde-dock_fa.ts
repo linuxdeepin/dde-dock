@@ -3,62 +3,55 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
+        <translation>افزونه %1 با سیستم سازگار نیست.</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>اضافه کردن طرح بندی صفحه کلید</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>تاریخ زمان</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>زمان 12ساعته</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>زمان 24 ساعته</translation>
     </message>
     <message>
         <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات زمان</translation>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>فعال کردن شبکه</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>غیر فعال کردن شبکه</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات شبکه</translation>
     </message>
 </context>
 <context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>آیا مطمئن هستید که می خواهید %1 موارد را خالی کنید؟</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -77,11 +70,11 @@
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>دستگاه ناشناخته</translation>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>حجم ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -96,26 +89,26 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>خارج کردن همه</translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>حالت فشن</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>حالت کارآمد</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>بالا</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>پایین</translation>
     </message>
     <message>
         <source>Left</source>
@@ -126,28 +119,16 @@
         <translation>راست</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>نمایش داده شود</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>مخفی نگاه داشتن</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>مخفی سازی هوشمند</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -155,19 +136,15 @@
     </message>
     <message>
         <source>Location</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>حجم</translation>
+        <translation>مکان</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>وضعیت </translation>
     </message>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>پلاگین ها</translation>
     </message>
 </context>
 <context>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>اجرا کننده</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>نمای چند وظیفه ای</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>باز کردن از داک</translation>
     </message>
 </context>
 <context>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>روی صفحه</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -203,27 +191,38 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات برق</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>ظرفیت %1, %2 دقیقه باقی مانده است</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>ظرفیت %1 ،%2 ساعت  %3 دقیقه باقی مانده است</translation>
+    </message>
+    <message>
+        <source>Charged %1</source>
+        <translation>%1 شارژشد</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>درحال شارژ %1 ، %2 دقیقه تا شارژ کامل</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>درحال شارژ %1 ، %2 ساعت و  %3 دقیقه تا شارژ کامل</translation>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>نمایش دسکتاپ</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>باز کردن از داک</translation>
     </message>
 </context>
 <context>
@@ -246,7 +245,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>هایبرنت</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -258,11 +257,11 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>تعویض حساب کاربری</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات برق</translation>
     </message>
 </context>
 <context>
@@ -273,14 +272,14 @@
     </message>
     <message>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>برنامه</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>باصدا</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -288,11 +287,11 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات صدا</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>صدای فعلی %1</translation>
     </message>
 </context>
 <context>
@@ -306,15 +305,15 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>زباله</translation>
+        <translation>سطل زباله</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>سطل زباله - %1 فایل</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>سطل زباله - %1 فایل</translation>
     </message>
 </context>
 <context>
@@ -332,7 +331,7 @@
     <name>TrayPlugin</name>
     <message>
         <source>System Tray</source>
-        <translation type="unfinished"/>
+        <translation>سینی سیستم</translation>
     </message>
 </context>
 <context>
@@ -343,18 +342,22 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>اتصال سیمی %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>بدون شبکه</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>اتصال بی سیم %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>متصل است اما دسترسی به اینترنت ندارد</translation>
     </message>
 </context>
 <context>
@@ -365,7 +368,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>شبکه بی سیم %1</translation>
     </message>
 </context>
 </TS>

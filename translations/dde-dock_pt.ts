@@ -7,17 +7,10 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Clique para exibir o ícone oculto</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar disposição de teclado</translation>
+        <translation>Adicionar esquema de teclado</translation>
     </message>
 </context>
 <context>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Tem certeza de que deseja esvaziar % 1 itens?</translation>
+        <translation>Tem a certeza que deseja eliminar % 1 itens?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -165,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vista Multitarefa</translation>
+        <translation>Vista multitarefa</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -214,18 +207,18 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>A carregar %1, %2 min até estar cheio</translation>
+        <translation>A carregar %1, %2 min até ficar completa</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>A carregar %1, %2 hr %3 min até estar cheio</translation>
+        <translation>A carregar %1, %2 hr %3 min até ficar completa</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostrar Ambiente de Trabalho</translation>
+        <translation>Mostrar ambiente de trabalho</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -294,11 +287,11 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Definições de Áudio</translation>
+        <translation>Definições de áudio</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Nível de Som Atual %1</translation>
+        <translation>Volume atual %1</translation>
     </message>
 </context>
 <context>
@@ -360,18 +353,22 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Ligação Sem Fios: %1</translation>
+        <translation>Ligação sem fios: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Ligado, mas sem acesso à Internet</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Rede Sem fios</translation>
+        <translation>Rede sem fios</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>Rede Sem Fios %1</translation>
+        <translation>Rede sem fios %1</translation>
     </message>
 </context>
 </TS>

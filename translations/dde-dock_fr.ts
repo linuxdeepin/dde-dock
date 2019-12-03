@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Cliquer pour afficher les icônes cachés</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -165,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Vue Multitâche</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Connexion sans fil : %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connecté mais pas d’accès internet</translation>
     </message>
 </context>
 <context>

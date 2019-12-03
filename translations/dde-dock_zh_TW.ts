@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>點按顯示被隱藏圖示</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -361,6 +354,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>無線網路：%1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>已連線但不能存取網路</translation>
     </message>
 </context>
 <context>

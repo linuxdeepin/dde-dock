@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>വലതു്</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>വലുത്</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>ഇടത്തരം</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>ചെറുത്</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>എപ്പോഴും ദൃശ്യമാക്കുക</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>സ്ഥാനം</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>വലുപ്പം</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>അവസ്ഥ</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>ലോഞ്ചർ</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
@@ -218,11 +202,26 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -354,6 +353,10 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
         <translation type="unfinished"/>
     </message>
 </context>
