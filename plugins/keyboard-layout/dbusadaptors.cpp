@@ -18,6 +18,7 @@
  */
 
 #include "dbusadaptors.h"
+#include <DDBusSender>
 #include <QDebug>
 
 DBusAdaptors::DBusAdaptors(QObject *parent)
@@ -152,9 +153,14 @@ void DBusAdaptors::refreshMenuSelection()
 void DBusAdaptors::handleActionTriggered(QAction *action)
 {
     if (action == m_addLayoutAction) {
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter "
-                                "/com/deepin/dde/ControlCenter "
-                                "com.deepin.dde.ControlCenter.ShowModule string:keyboard");
+        DDBusSender()
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method("ShowPage")
+                .arg(QString("keyboard"))
+                .arg(QString("Keyboard Layout/Add Keyboard Layout"))
+                .call();
     }
 
     const QString layout = action->objectName();
