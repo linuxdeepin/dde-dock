@@ -411,19 +411,13 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
             << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength();
         m_updateAPTimer->start();
 
-        m_editConnectionData = {};
-        m_editConnectionData.insert("conn-type", "wireless");
-        m_editConnectionData.insert("device-path", QJsonValue(m_device->path()));
-        m_editConnectionData.insert("conn-uuid", QJsonValue(uuid));
-        m_editConnectionData.insert("ap-path", QJsonValue(apPath));
-
         DDBusSender()
                 .service("com.deepin.dde.ControlCenter")
                 .interface("com.deepin.dde.ControlCenter")
                 .path("/com/deepin/dde/ControlCenter")
                 .method("ShowPage")
                 .arg(QString("network"))
-                .arg(QString(QJsonDocument(m_editConnectionData).toJson()))
+                .arg(apPath)
                 .call();
 
         Q_EMIT requestSetAppletVisible(false);
