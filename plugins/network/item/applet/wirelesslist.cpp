@@ -417,7 +417,7 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
                 .path("/com/deepin/dde/ControlCenter")
                 .method("ShowPage")
                 .arg(QString("network"))
-                .arg(apPath)
+                .arg(QString("%1,%2").arg(m_device->path()).arg(apPath))
                 .call();
 
         Q_EMIT requestSetAppletVisible(false);
