@@ -68,7 +68,16 @@ func (kbd *Keyboard) Reset() *dbus.Error {
 
 func (kbd *Keyboard) LayoutList() (map[string]string, *dbus.Error) {
 	locales := langselector.GetLocales()
-	return kbd.layoutMap.filterByLocales(locales), nil
+	result := kbd.layoutMap.filterByLocales(locales)
+
+	kbd.PropsMu.RLock()
+	for _, layout := range kbd.UserLayoutList {
+		layoutDetail := kbd.layoutMap[layout]
+		result[layout] = layoutDetail.Description
+	}
+	kbd.PropsMu.RUnlock()
+
+	return result, nil
 }
 
 func (kbd *Keyboard) GetLayoutDesc(layout string) (string, *dbus.Error) {
