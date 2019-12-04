@@ -617,10 +617,14 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
         QRect rect;
 
         rect.setTopLeft(dockItem->pos());
-        if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-            rect.setSize(QSize(PLUGIN_MAX_SIZE, height()));
+        if (dockItem->itemType() == DockItem::Plugins) {
+            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+                rect.setSize(QSize(PLUGIN_MAX_SIZE, height()));
+            } else {
+                rect.setSize(QSize(width(), PLUGIN_MAX_SIZE));
+            }
         } else {
-            rect.setSize(QSize(width(), PLUGIN_MAX_SIZE));
+            rect.setSize(dockItem->size());
         }
         if (rect.contains(point)) {
             targetItem = dockItem;

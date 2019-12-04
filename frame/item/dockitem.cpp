@@ -269,6 +269,12 @@ void DockItem::showHoverTips()
 
 void DockItem::showPopupWindow(QWidget *const content, const bool model)
 {
+    if(itemType() == App){
+        PopupWindow->setRadius(18);
+    }else {
+        PopupWindow->setRadius(6);
+    }
+
     m_popupShown = true;
     m_lastPopupWidget = content;
 
