@@ -283,10 +283,6 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
         }
     }
 
-    if (item->itemType() == DockItem::FixedPlugin) {
-        insertIndex ++;
-    }
-
     m_itemList.insert(insertIndex, item);
     emit itemInserted(insertIndex - firstPluginPosition, item);
 

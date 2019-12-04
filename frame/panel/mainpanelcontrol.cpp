@@ -243,7 +243,12 @@ void MainPanelControl::insertItem(int index, DockItem *item)
 
     switch (item->itemType()) {
     case DockItem::Launcher:
+        addFixedAreaItem(0, item);
+        break;
     case DockItem::FixedPlugin:
+        if (index == 0) {
+            index += 1;
+        }
         addFixedAreaItem(index, item);
         break;
     case DockItem::App:
@@ -610,9 +615,13 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
             continue;
 
         QRect rect;
-        rect.setTopLeft(dockItem->pos());
-        rect.setSize(dockItem->size());
 
+        rect.setTopLeft(dockItem->pos());
+        if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+            rect.setSize(QSize(PLUGIN_MAX_SIZE, height()));
+        } else {
+            rect.setSize(QSize(width(), PLUGIN_MAX_SIZE));
+        }
         if (rect.contains(point)) {
             targetItem = dockItem;
             break;

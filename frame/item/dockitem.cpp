@@ -26,6 +26,8 @@
 #include <QJsonObject>
 #include <QCursor>
 
+#define PLUGIN_MARGEN  10
+
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
 QPointer<DockPopupWindow> DockItem::PopupWindow(nullptr);
@@ -44,7 +46,7 @@ DockItem::DockItem(QWidget *parent)
     if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(20);
-        arrowRectangle->setRadius(6);
+        arrowRectangle->setRadius(18);
         arrowRectangle->setShadowYOffset(2);
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
@@ -348,14 +350,40 @@ const QPoint DockItem::popupMarkPoint() const
     QPoint p(topleftPoint());
 
     const QRect r = rect();
-    const int offset = 2;
     switch (DockPosition) {
-    case Top:       p += QPoint(r.width() / 2, r.height() + offset);      break;
-    case Bottom:    p += QPoint(r.width() / 2, 0 - offset);               break;
-    case Left:      p += QPoint(r.width() + offset, r.height() / 2);      break;
-    case Right:     p += QPoint(0 - offset, r.height() / 2);              break;
+    case Top: {
+        if (itemType() == Plugins) {
+            p += QPoint(r.width() / 2, r.height() + PLUGIN_MARGEN);
+        } else {
+            p += QPoint(r.width() / 2, r.height());
+        }
+        break;
     }
-
+    case Bottom: {
+        if (itemType() == Plugins) {
+            p += QPoint(r.width() / 2, 0 - PLUGIN_MARGEN);
+        } else {
+            p += QPoint(r.width() / 2, 0);
+        }
+        break;
+    }
+    case Left: {
+        if (itemType() == Plugins) {
+            p += QPoint(r.width() + PLUGIN_MARGEN, r.height() / 2);
+        } else {
+            p += QPoint(r.width(), r.height() / 2);
+        }
+        break;
+    }
+    case Right: {
+        if (itemType() == Plugins) {
+            p += QPoint(0 - PLUGIN_MARGEN, r.height() / 2);
+        } else {
+            p += QPoint(0, r.height() / 2);
+        }
+        break;
+        }
+    }
     return p;
 }
 
