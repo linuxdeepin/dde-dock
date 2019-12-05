@@ -56,29 +56,17 @@ func (a *Audio) handleEvent() {
 	}
 }
 
-func (a *Audio) initCtxChan() {
-	a.ctx.AddEventChan(a.eventChan)
-	a.ctx.AddStateChan(a.stateChan)
-}
-
 func (a *Audio) handleStateChanged() {
 	for {
 		select {
 		case state := <-a.stateChan:
 			switch state {
 			case pulse.ContextStateFailed:
-				logger.Warning("Pulse context connection failed, try again")
-				ctx := pulse.GetContextForced()
-				if ctx == nil {
-					logger.Warning("failed to connect pulseaudio server")
-					break
-				}
-
+				logger.Warning("pulseaudio context state failed")
 				a.destroyCtxRelated()
-				a.mu.Lock()
-				a.ctx = ctx
-				a.mu.Unlock()
+				logger.Debug("retry init")
 				a.init()
+				return
 			}
 
 		case <-a.quit:
@@ -147,7 +135,7 @@ func (a *Audio) addSink(sinkInfo *pulse.Sink) {
 	sinkPath := sink.getPath()
 	err := a.service.Export(sinkPath, sink)
 	if err != nil {
-		logger.Warning(err)
+		logger.Warningf("failed to export sink #%d: %v", sink.index, err)
 		return
 	}
 	a.updatePropSinks()

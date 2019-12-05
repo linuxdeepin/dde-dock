@@ -20,13 +20,14 @@
 package audio
 
 import (
+	"errors"
 	"fmt"
+	"os/exec"
+	"strings"
 	"sync"
-
 	"time"
 
-	"strings"
-
+	"golang.org/x/xerrors"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
@@ -121,14 +122,10 @@ type Audio struct {
 	}
 }
 
-func newAudio(ctx *pulse.Context, service *dbusutil.Service) *Audio {
+func newAudio(service *dbusutil.Service) *Audio {
 	a := &Audio{
-		ctx:         ctx,
 		service:     service,
 		meters:      make(map[string]*Meter),
-		eventChan:   make(chan *pulse.Event, 100),
-		stateChan:   make(chan int, 10),
-		quit:        make(chan struct{}),
 		MaxUIVolume: pulse.VolumeUIMax,
 	}
 
@@ -143,9 +140,50 @@ func newAudio(ctx *pulse.Context, service *dbusutil.Service) *Audio {
 	return a
 }
 
+func startPulseaudio() error {
+	cmd := exec.Command("pulseaudio", "--start")
+	return cmd.Run()
+}
+
+func getCtx() (ctx *pulse.Context, err error) {
+	for i := 0; i < 10; i++ {
+		ctx, err = getCtxAux()
+		if err == nil {
+			return
+		}
+		logger.Debug("sleep for a while and try again")
+		time.Sleep(300 * time.Millisecond)
+	}
+	return
+}
+
+func getCtxAux() (ctx *pulse.Context, err error) {
+	err = startPulseaudio()
+	if err != nil {
+		err = xerrors.Errorf("failed to start pulseaudio: %w", err)
+		return
+	}
+
+	ctx = pulse.GetContextForced()
+	if ctx == nil {
+		err = errors.New("failed to get pulse context")
+		return
+	}
+	ctx.LoadModule("module-switch-on-connect", "")
+	return
+}
+
 func (a *Audio) init() {
+	ctx, err := getCtx()
+	if err != nil {
+		logger.Warning("failed to init context:", err)
+		return
+	}
+
 	defaulted := a.initDefaultVolume()
 	a.mu.Lock()
+	a.ctx = ctx
+
 	// init a.sinks
 	a.sinks = make(map[uint32]*Sink)
 	sinkInfoList := a.ctx.GetSinkList()
@@ -225,11 +263,17 @@ func (a *Audio) init() {
 	a.setPropCards(a.cards.string())
 	a.PropsMu.Unlock()
 
+	a.eventChan = make(chan *pulse.Event, 100)
+	a.stateChan = make(chan int, 10)
+	a.quit = make(chan struct{})
+	a.ctx.AddEventChan(a.eventChan)
+	a.ctx.AddStateChan(a.stateChan)
+
 	a.mu.Unlock()
 
-	a.initCtxChan()
 	go a.handleEvent()
 	go a.handleStateChanged()
+	logger.Debug("init done")
 
 	if !defaulted {
 		a.applyConfig()
@@ -248,27 +292,29 @@ func (a *Audio) destroyCtxRelated() {
 	a.mu.Lock()
 	a.ctx.RemoveEventChan(a.eventChan)
 	a.ctx.RemoveStateChan(a.stateChan)
+	close(a.quit)
+	a.ctx = nil
 
 	for _, sink := range a.sinks {
-		err := a.service.StopExport(sink)
+		err := a.service.StopExportByPath(sink.getPath())
 		if err != nil {
-			logger.Warning(err)
+			logger.Warningf("failed to stop export sink #%d: %v", sink.index, err)
 		}
 	}
 	a.sinks = nil
 
 	for _, source := range a.sources {
-		err := a.service.StopExport(source)
+		err := a.service.StopExportByPath(source.getPath())
 		if err != nil {
-			logger.Warning(err)
+			logger.Warningf("failed to stop export source #%d: %v", source.index, err)
 		}
 	}
 	a.sources = nil
 
 	for _, sinkInput := range a.sinkInputs {
-		err := a.service.StopExport(sinkInput)
+		err := a.service.StopExportByPath(sinkInput.getPath())
 		if err != nil {
-			logger.Warning(err)
+			logger.Warningf("failed to stop export sink input #%d: %v", sinkInput.index, err)
 		}
 	}
 	a.sinkInputs = nil

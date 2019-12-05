@@ -156,6 +156,11 @@ func (a *Audio) doSaveConfig() {
 	}
 
 	ctx := a.context()
+	if ctx == nil {
+		logger.Warning("failed to save config, ctx is nil")
+		return
+	}
+
 	for _, card := range ctx.GetCardList() {
 		info.Profiles[card.Name] = card.ActiveProfile.Name
 	}
@@ -182,8 +187,11 @@ func (a *Audio) doSaveConfig() {
 		break
 	}
 
-	readConfig()
-	err := saveConfig(&info)
+	_, err := readConfig()
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = saveConfig(&info)
 	if err != nil {
 		logger.Warning("Save config file failed:", info.string(), err)
 	}

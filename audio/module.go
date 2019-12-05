@@ -24,7 +24,6 @@ import (
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
-	"pkg.deepin.io/lib/pulse"
 )
 
 var (
@@ -52,14 +51,7 @@ func (*Module) GetDependencies() []string {
 
 func (m *Module) start() error {
 	service := loader.GetService()
-	ctx := pulse.GetContext()
-	if ctx == nil {
-		logger.Error("failed to connect pulseaudio server")
-		return nil
-	}
-	ctx.LoadModule("module-switch-on-connect", "")
-
-	m.audio = newAudio(ctx, service)
+	m.audio = newAudio(service)
 	m.audio.init()
 	err := service.Export(dbusPath, m.audio, m.audio.syncConfig)
 	if err != nil {
