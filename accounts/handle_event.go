@@ -166,11 +166,16 @@ func (m *Manager) handleFileGroupChanged() {
 }
 
 func (m *Manager) handleFileShadowChanged() {
-	//Update the property 'PasswordStatus' and 'Locked'
 	m.usersMapMu.Lock()
 	defer m.usersMapMu.Unlock()
+
 	for _, u := range m.usersMap {
+		// TODO
 		u.updatePropPasswordStatus()
+		shadowInfo, err := users.GetShadowInfo(u.UserName)
+		if err == nil {
+			u.updatePropsShadow(shadowInfo)
+		}
 	}
 }
 

@@ -28,6 +28,19 @@ func (v *User) emitPropChangedUserName(value string) error {
 	return v.service.EmitPropertyChanged(v, "UserName", value)
 }
 
+func (v *User) setPropUUID(value string) (changed bool) {
+	if v.UUID != value {
+		v.UUID = value
+		v.emitPropChangedUUID(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedUUID(value string) error {
+	return v.service.EmitPropertyChanged(v, "UUID", value)
+}
+
 func (v *User) setPropFullName(value string) (changed bool) {
 	if v.FullName != value {
 		v.FullName = value
@@ -206,6 +219,19 @@ func (v *User) emitPropChangedPasswordStatus(value string) error {
 	return v.service.EmitPropertyChanged(v, "PasswordStatus", value)
 }
 
+func (v *User) setPropMaxPasswordAge(value int32) (changed bool) {
+	if v.MaxPasswordAge != value {
+		v.MaxPasswordAge = value
+		v.emitPropChangedMaxPasswordAge(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedMaxPasswordAge(value int32) error {
+	return v.service.EmitPropertyChanged(v, "MaxPasswordAge", value)
+}
+
 func (v *User) setPropLocked(value bool) (changed bool) {
 	if v.Locked != value {
 		v.Locked = value
@@ -282,6 +308,19 @@ func (v *User) setPropLoginTime(value uint64) (changed bool) {
 
 func (v *User) emitPropChangedLoginTime(value uint64) error {
 	return v.service.EmitPropertyChanged(v, "LoginTime", value)
+}
+
+func (v *User) setPropCreatedTime(value uint64) (changed bool) {
+	if v.CreatedTime != value {
+		v.CreatedTime = value
+		v.emitPropChangedCreatedTime(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedCreatedTime(value uint64) error {
+	return v.service.EmitPropertyChanged(v, "CreatedTime", value)
 }
 
 func (v *User) setPropIconList(value []string) {

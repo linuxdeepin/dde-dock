@@ -22,6 +22,7 @@ package users
 import (
 	"fmt"
 	"os/exec"
+	"strconv"
 )
 
 func isStrInArray(str string, array []string) bool {
@@ -41,4 +42,15 @@ func doAction(cmd string, args []string) error {
 		fmt.Printf("[doAction] exec '%s' failed: %s, %v\n", cmd, string(out), err)
 	}
 	return err
+}
+
+func strToInt(str string, defaultVal int) int {
+	if str == "" {
+		return defaultVal
+	}
+	val, err := strconv.Atoi(str)
+	if err != nil {
+		val = defaultVal
+	}
+	return val
 }

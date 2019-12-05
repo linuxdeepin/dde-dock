@@ -36,6 +36,7 @@ const (
 	userCmdGroup  = "gpasswd"
 
 	cmdGroupDel = "groupdel"
+	cmdChAge    = "chage"
 
 	defaultConfigShell = "/etc/adduser.conf"
 )

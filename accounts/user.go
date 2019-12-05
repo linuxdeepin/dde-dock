@@ -97,6 +97,7 @@ type User struct {
 	XSession          string
 
 	PasswordStatus string
+	MaxPasswordAge int32
 	// 用户是否被禁用
 	Locked bool
 	// 是否允许此用户自动登录
@@ -139,6 +140,8 @@ type User struct {
 		DeleteGroup           func() `in:"group"`
 		SetGroups             func() `in:"groups"`
 		SetUse24HourFormat    func() `in:"value"`
+		SetMaxPasswordAge     func() `in:"nDays"`
+		IsPasswordExpired     func() `out:"expired"`
 	}
 }
 
@@ -148,6 +151,12 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		return nil, err
 	}
 
+	shadowInfo, err := users.GetShadowInfo(userInfo.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO get from shadowInfo
 	passwordStatus, err := users.GetUserPasswordStatus(userInfo.Name)
 	if err != nil {
 		return nil, err
@@ -165,6 +174,7 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		NoPasswdLogin:  users.CanNoPasswdLogin(userInfo.Name),
 		Locked:         passwordStatus == users.PasswordStatusLocked,
 		PasswordStatus: passwordStatus,
+		MaxPasswordAge: int32(shadowInfo.MaxDays),
 	}
 
 	u.AccountType = u.getAccountType()
@@ -494,6 +504,16 @@ func (u *User) updatePropsPasswd(uInfo *users.UserInfo) {
 			logger.Warning(err)
 		}
 	}
+}
+
+func (u *User) updatePropsShadow(shadowInfo *users.ShadowInfo) {
+	u.PropsMu.Lock()
+
+	// TODO
+	//u.setPropPasswordStatus()
+	u.setPropMaxPasswordAge(int32(shadowInfo.MaxDays))
+
+	u.PropsMu.Unlock()
 }
 
 func (u *User) getAccountType() int32 {

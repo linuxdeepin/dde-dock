@@ -22,6 +22,7 @@ package users
 import (
 	"testing"
 
+	libdate "github.com/rickb777/date"
 	C "gopkg.in/check.v1"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -301,4 +302,23 @@ func (*testWrapper) TestGetAdmGroup(c *C.C) {
 func (*testWrapper) TestDMFromService(c *C.C) {
 	dm, _ := getDMFromSystemService("testdata/autologin/display-manager.service")
 	c.Check(dm, C.Equals, "lightdm")
+}
+
+func (*testWrapper) TestIsPasswordExpired(c *C.C) {
+	shadowInfo := &ShadowInfo{
+		MaxDays:    -1,
+		LastChange: 0,
+	}
+	today := libdate.New(2019, 12, 6)
+	c.Check(isPasswordExpired(shadowInfo, today), C.Equals, false)
+
+	shadowInfo = &ShadowInfo{
+		MaxDays:    1,
+		LastChange: 0,
+	}
+	today = libdate.New(1970, 1, 2)
+	c.Check(isPasswordExpired(shadowInfo, today), C.Equals, false)
+
+	today = libdate.New(1970, 1, 3)
+	c.Check(isPasswordExpired(shadowInfo, today), C.Equals, true)
 }

@@ -163,6 +163,27 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 	return nil
 }
 
+func (u *User) SetMaxPasswordAge(sender dbus.Sender, nDays int32) *dbus.Error {
+	err := u.checkAuth(sender, false, "")
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
+	err = users.ModifyMaxPasswordAge(u.UserName, int(nDays))
+	if err != nil {
+		logger.Warning("failed to set max password age:", err)
+		return dbusutil.ToError(err)
+	}
+
+	return nil
+}
+
+func (u *User) IsPasswordExpired() (bool, *dbus.Error) {
+	v, err := users.IsPasswordExpired(u.UserName)
+	return v, dbusutil.ToError(err)
+}
+
 func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 	logger.Debug("[SetLocked] locked:", locked)
 
