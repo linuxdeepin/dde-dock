@@ -5,6 +5,7 @@ set -e
 fallbackFont=/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc
 fallbackFontDir=/lib/fonts/fallback
 jvmDir=/usr/lib/jvm
+arch=$(dpkg --print-architecture)
 
 linkJavaFallbackFont () {
     if [ -f $fallbackFont -a -d $jvmDir ];then
@@ -19,13 +20,19 @@ linkJavaFallbackFont () {
 }
 
 prepareGfxmodeDetect () {
-	if [ -f /etc/default/grub ]; then
-		. /etc/default/grub
-		if [ "$DEEPIN_GFXMODE_ADJUSTED" = 1 -o -n "$DEEPIN_GFXMODE_DETECT" ] ;then
-			return
-		fi
-		/usr/lib/deepin-daemon/grub2 -prepare-gfxmode-detect && grub-mkconfig -o /boot/grub/grub.cfg || true
-	fi
+    if echo $arch | grep -q ^mips; then
+        [ -f /etc/default/grub.d/10_deepin.cfg ] && rm /etc/default/grub.d/10_deepin.cfg
+        [ -f /etc/grub.d/35_deepin_gfxmode ] && rm /etc/grub.d/35_deepin_gfxmode
+        return 0
+    fi
+
+    if [ -f /etc/default/grub ]; then
+        . /etc/default/grub
+        if [ "$DEEPIN_GFXMODE_ADJUSTED" = 1 -o -n "$DEEPIN_GFXMODE_DETECT" ] ;then
+            return
+        fi
+        /usr/lib/deepin-daemon/grub2 -prepare-gfxmode-detect && grub-mkconfig -o /boot/grub/grub.cfg || true
+    fi
 }
 
 case "$1" in

@@ -21,14 +21,6 @@ override_dh_strip:
 	true
 override_dh_auto_test:
 	true
-override_dh_auto_configure:
-	# mate-screenshot -a grab the area screen
-	#sed -i 's|"deepin-screenshot"|"mate-screenshot -a"|g' misc/dde-daemon/keybinding/system_actions.json
-	# mate-screenshot grab the full screen
-	#sed -i 's|"deepin-screenshot -f"|"mate-screenshot"|g' misc/dde-daemon/keybinding/system_actions.json
-	#sed -i 's|deepin-screenshot|mate-screenshot|g' misc/dde-daemon/keybinding/system_actions.json
-
-	dh_auto_configure
 endif
 
 ifeq ($(DEB_BUILD_ARCH), mipsel)
@@ -40,23 +32,20 @@ override_dh_auto_configure:
 	sed -i 's|deepin-screenshot|mate-screenshot|g' misc/dde-daemon/keybinding/system_actions.json
 
 	dh_auto_configure
-endif
-
-ifeq ($(DEB_BUILD_ARCH), mips64el)
-override_dh_auto_configure:
-	# mate-screenshot -a grab the area screen
-#	sed -i 's|"deepin-screenshot"|"mate-screenshot -a"|g' misc/dde-daemon/keybinding/system_actions.json
-	# mate-screenshot grab the full screen
-#	sed -i 's|"deepin-screenshot -f"|"mate-screenshot"|g' misc/dde-daemon/keybinding/system_actions.json
-#	sed -i 's|deepin-screenshot|mate-screenshot|g' misc/dde-daemon/keybinding/system_actions.json
-
-	dh_auto_configure
 
 override_dh_auto_install:
 	dh_auto_install
+	rm debian/dde-daemon/etc/default/grub.d/10_deepin.cfg
+	rm debian/dde-daemon/etc/grub.d/35_deepin_gfxmode
+endif
+
+ifeq ($(DEB_BUILD_ARCH), mips64el)
+override_dh_auto_install:
+	dh_auto_install
+	rm debian/dde-daemon/etc/default/grub.d/10_deepin.cfg
+	rm debian/dde-daemon/etc/grub.d/35_deepin_gfxmode
 	install -d debian/dde-daemon/lib/systemd/system-sleep/
 	install misc/scripts/dde-system-daemon-power-refresh.sh debian/dde-daemon/lib/systemd/system-sleep/
-
 endif
 
 override_dh_systemd_enable:
