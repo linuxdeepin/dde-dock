@@ -97,6 +97,10 @@ func IsPasswordExpired(username string) (bool, error) {
 }
 
 func isPasswordExpired(shadowInfo *ShadowInfo, today libdate.Date) bool {
+	if shadowInfo.LastChange == 0 {
+		// must change password
+		return true
+	}
 	if shadowInfo.MaxDays == -1 {
 		// never expire
 		return false

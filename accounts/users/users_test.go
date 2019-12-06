@@ -305,20 +305,47 @@ func (*testWrapper) TestDMFromService(c *C.C) {
 }
 
 func (*testWrapper) TestIsPasswordExpired(c *C.C) {
-	shadowInfo := &ShadowInfo{
-		MaxDays:    -1,
-		LastChange: 0,
-	}
-	today := libdate.New(2019, 12, 6)
-	c.Check(isPasswordExpired(shadowInfo, today), C.Equals, false)
+	for _, testCase := range []struct {
+		shadowInfo *ShadowInfo
+		today      libdate.Date
+		result     bool
+	}{
+		{
+			shadowInfo: &ShadowInfo{
+				MaxDays:    -1,
+				LastChange: 0, // must change
+			},
+			today:  libdate.New(2019, 12, 6),
+			result: true,
+		},
 
-	shadowInfo = &ShadowInfo{
-		MaxDays:    1,
-		LastChange: 0,
-	}
-	today = libdate.New(1970, 1, 2)
-	c.Check(isPasswordExpired(shadowInfo, today), C.Equals, false)
+		{
+			shadowInfo: &ShadowInfo{
+				LastChange: 1, // 1970-01-02
+				MaxDays:    -1,
+			},
+			today:  libdate.New(2019, 12, 6),
+			result: false,
+		},
 
-	today = libdate.New(1970, 1, 3)
-	c.Check(isPasswordExpired(shadowInfo, today), C.Equals, true)
+		{
+			shadowInfo: &ShadowInfo{
+				MaxDays:    1,
+				LastChange: 1, // 1970-01-02
+			},
+			today:  libdate.New(1970, 1, 3),
+			result: false,
+		},
+
+		{
+			shadowInfo: &ShadowInfo{
+				MaxDays:    1,
+				LastChange: 1, // 1970-01-02
+			},
+			today:  libdate.New(1970, 1, 4),
+			result: true,
+		},
+	} {
+		c.Check(isPasswordExpired(testCase.shadowInfo, testCase.today), C.Equals, testCase.result)
+	}
 }
