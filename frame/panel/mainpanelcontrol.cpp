@@ -246,9 +246,6 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         addFixedAreaItem(0, item);
         break;
     case DockItem::FixedPlugin:
-        if (index == 0) {
-            index += 1;
-        }
         addFixedAreaItem(index, item);
         break;
     case DockItem::App:

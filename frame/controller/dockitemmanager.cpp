@@ -165,29 +165,11 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
     // for app move, index 0 is launcher item, need to pass it.
     if (moveType == DockItem::App && replaceType == DockItem::App)
         m_appInter->MoveEntry(moveIndex - 1, replaceIndex - 1);
-
-    refreshFSTItemSpliterVisible();
 }
 
 void DockItemManager::itemAdded(const QString &appDesktop, int idx)
 {
     m_appInter->RequestDock(appDesktop, idx);
-}
-
-// refresh right spliter visible of fashion tray plugin item
-void DockItemManager::refreshFSTItemSpliterVisible()
-{
-    if (DockSettings::Instance().displayMode() != Dock::DisplayMode::Fashion) {
-        return;
-    }
-
-    for (int i = 0; i < m_itemList.size(); ++i) {
-        if (m_itemList.at(i)->itemType() == DockItem::ItemType::TrayPlugin) {
-            static_cast<TrayPluginItem *>(m_itemList.at(i).data())
-            ->setRightSplitVisible(i != (m_itemList.size() - 1));
-            break;
-        }
-    }
 }
 
 void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
@@ -248,11 +230,13 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
 {
     manageItem(item);
 
+    DockItem::ItemType pluginType = item->itemType();
+
     // find first plugins item position
     int firstPluginPosition = -1;
     for (int i(0); i != m_itemList.size(); ++i) {
         DockItem::ItemType type = m_itemList[i]->itemType();
-        if (type != DockItem::Plugins)
+        if (type != pluginType)
             continue;
 
         firstPluginPosition = i;
@@ -284,9 +268,10 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
     }
 
     m_itemList.insert(insertIndex, item);
-    emit itemInserted(insertIndex - firstPluginPosition, item);
+    if(pluginType == DockItem::FixedPlugin)
+        insertIndex ++;
 
-    refreshFSTItemSpliterVisible();
+    emit itemInserted(insertIndex - firstPluginPosition, item);
 }
 
 void DockItemManager::pluginItemRemoved(PluginsItem *item)

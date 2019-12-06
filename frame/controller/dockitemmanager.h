@@ -60,7 +60,6 @@ public slots:
     void updatePluginsItemOrderKey();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);
-    void refreshFSTItemSpliterVisible();
 
 private:
     explicit DockItemManager(QObject *parent = nullptr);
