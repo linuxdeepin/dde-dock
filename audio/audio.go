@@ -141,23 +141,11 @@ func newAudio(service *dbusutil.Service) *Audio {
 }
 
 func startPulseaudio() error {
-	cmd := exec.Command("pulseaudio", "--start")
+	cmd := exec.Command("systemctl", "--user", "start", "pulseaudio")
 	return cmd.Run()
 }
 
 func getCtx() (ctx *pulse.Context, err error) {
-	for i := 0; i < 10; i++ {
-		ctx, err = getCtxAux()
-		if err == nil {
-			return
-		}
-		logger.Debug("sleep for a while and try again")
-		time.Sleep(300 * time.Millisecond)
-	}
-	return
-}
-
-func getCtxAux() (ctx *pulse.Context, err error) {
 	err = startPulseaudio()
 	if err != nil {
 		err = xerrors.Errorf("failed to start pulseaudio: %w", err)
