@@ -96,8 +96,9 @@ type User struct {
 	GreeterBackground string
 	XSession          string
 
-	PasswordStatus string
-	MaxPasswordAge int32
+	PasswordStatus     string
+	MaxPasswordAge     int32
+	PasswordLastChange int32
 	// 用户是否被禁用
 	Locked bool
 	// 是否允许此用户自动登录
@@ -163,18 +164,19 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 	}
 
 	var u = &User{
-		service:        service,
-		UserName:       userInfo.Name,
-		FullName:       userInfo.Comment().FullName(),
-		Uid:            userInfo.Uid,
-		Gid:            userInfo.Gid,
-		HomeDir:        userInfo.Home,
-		Shell:          userInfo.Shell,
-		AutomaticLogin: users.IsAutoLoginUser(userInfo.Name),
-		NoPasswdLogin:  users.CanNoPasswdLogin(userInfo.Name),
-		Locked:         passwordStatus == users.PasswordStatusLocked,
-		PasswordStatus: passwordStatus,
-		MaxPasswordAge: int32(shadowInfo.MaxDays),
+		service:            service,
+		UserName:           userInfo.Name,
+		FullName:           userInfo.Comment().FullName(),
+		Uid:                userInfo.Uid,
+		Gid:                userInfo.Gid,
+		HomeDir:            userInfo.Home,
+		Shell:              userInfo.Shell,
+		AutomaticLogin:     users.IsAutoLoginUser(userInfo.Name),
+		NoPasswdLogin:      users.CanNoPasswdLogin(userInfo.Name),
+		Locked:             passwordStatus == users.PasswordStatusLocked,
+		PasswordStatus:     passwordStatus,
+		MaxPasswordAge:     int32(shadowInfo.MaxDays),
+		PasswordLastChange: int32(shadowInfo.LastChange),
 	}
 
 	u.AccountType = u.getAccountType()
@@ -512,6 +514,7 @@ func (u *User) updatePropsShadow(shadowInfo *users.ShadowInfo) {
 	// TODO
 	//u.setPropPasswordStatus()
 	u.setPropMaxPasswordAge(int32(shadowInfo.MaxDays))
+	u.setPropPasswordLastChange(int32(shadowInfo.LastChange))
 
 	u.PropsMu.Unlock()
 }

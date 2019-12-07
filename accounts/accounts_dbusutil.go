@@ -232,6 +232,19 @@ func (v *User) emitPropChangedMaxPasswordAge(value int32) error {
 	return v.service.EmitPropertyChanged(v, "MaxPasswordAge", value)
 }
 
+func (v *User) setPropPasswordLastChange(value int32) (changed bool) {
+	if v.PasswordLastChange != value {
+		v.PasswordLastChange = value
+		v.emitPropChangedPasswordLastChange(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedPasswordLastChange(value int32) error {
+	return v.service.EmitPropertyChanged(v, "PasswordLastChange", value)
+}
+
 func (v *User) setPropLocked(value bool) (changed bool) {
 	if v.Locked != value {
 		v.Locked = value
