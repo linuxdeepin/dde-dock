@@ -168,9 +168,9 @@ func (a *Audio) init() {
 		return
 	}
 
-	defaulted := a.initDefaultVolume()
 	a.mu.Lock()
 	a.ctx = ctx
+	defaulted := a.initDefaultVolume()
 
 	// init a.sinks
 	a.sinks = make(map[uint32]*Sink)
