@@ -157,12 +157,6 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		return nil, err
 	}
 
-	// TODO get from shadowInfo
-	passwordStatus, err := users.GetUserPasswordStatus(userInfo.Name)
-	if err != nil {
-		return nil, err
-	}
-
 	var u = &User{
 		service:            service,
 		UserName:           userInfo.Name,
@@ -173,8 +167,8 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		Shell:              userInfo.Shell,
 		AutomaticLogin:     users.IsAutoLoginUser(userInfo.Name),
 		NoPasswdLogin:      users.CanNoPasswdLogin(userInfo.Name),
-		Locked:             passwordStatus == users.PasswordStatusLocked,
-		PasswordStatus:     passwordStatus,
+		Locked:             shadowInfo.Status == users.PasswordStatusLocked,
+		PasswordStatus:     shadowInfo.Status,
 		MaxPasswordAge:     int32(shadowInfo.MaxDays),
 		PasswordLastChange: int32(shadowInfo.LastChange),
 	}
@@ -439,18 +433,6 @@ func (u *User) writeUserConfig() error {
 	return u.writeUserConfigWithChanges(nil)
 }
 
-func (u *User) updatePropPasswordStatus() {
-	passwordStatus, err := users.GetUserPasswordStatus(u.UserName)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	u.PropsMu.Lock()
-	u.setPropPasswordStatus(passwordStatus)
-	u.setPropLocked(passwordStatus == users.PasswordStatusLocked)
-	u.PropsMu.Unlock()
-}
-
 func (u *User) updatePropAccountType() {
 	newVal := u.getAccountType()
 	u.PropsMu.Lock()
@@ -511,8 +493,8 @@ func (u *User) updatePropsPasswd(uInfo *users.UserInfo) {
 func (u *User) updatePropsShadow(shadowInfo *users.ShadowInfo) {
 	u.PropsMu.Lock()
 
-	// TODO
-	//u.setPropPasswordStatus()
+	u.setPropPasswordStatus(shadowInfo.Status)
+	u.setPropLocked(shadowInfo.Status == users.PasswordStatusLocked)
 	u.setPropMaxPasswordAge(int32(shadowInfo.MaxDays))
 	u.setPropPasswordLastChange(int32(shadowInfo.LastChange))
 

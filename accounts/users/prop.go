@@ -265,33 +265,6 @@ const (
 	PasswordStatusLocked     = "L"
 )
 
-func GetUserPasswordStatus(username string) (string, error) {
-	content, err := ioutil.ReadFile(userFileShadow)
-	if err != nil {
-		return "", err
-	}
-	lines := bytes.Split(content, []byte{'\n'})
-	for _, line := range lines {
-		fields := bytes.Split(line, []byte{':'})
-		if len(fields) != itemLenShadow {
-			continue
-		}
-
-		if string(fields[0]) == username {
-			pw := fields[1]
-			if len(pw) == 0 {
-				return PasswordStatusNoPassword, nil
-			}
-			if pw[0] == '!' || pw[0] == '*' {
-				return PasswordStatusLocked, nil
-			}
-			return PasswordStatusUsable, nil
-		}
-	}
-
-	return "", errors.New("user not found")
-}
-
 func IsAutoLoginUser(username string) bool {
 	name, _ := GetAutoLoginUser()
 	if name == username {
@@ -549,6 +522,15 @@ func parseShadow(data []byte) map[string]ShadowInfo {
 		var sInfo ShadowInfo
 		sInfo.Name = string(items[0])
 
+		pw := items[1]
+		if len(pw) == 0 {
+			sInfo.Status = PasswordStatusNoPassword
+		} else if pw[0] == '!' || pw[0] == '*' {
+			sInfo.Status = PasswordStatusLocked
+		} else {
+			sInfo.Status = PasswordStatusUsable
+		}
+
 		lastDateStr := string(items[2])
 		sInfo.LastChange = strToInt(lastDateStr, 0)
 		//minPasswordAge := string(items[3])
@@ -582,4 +564,5 @@ type ShadowInfo struct {
 	Name       string
 	LastChange int
 	MaxDays    int
+	Status     string // password status
 }

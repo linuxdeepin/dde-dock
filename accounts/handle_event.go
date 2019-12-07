@@ -170,8 +170,6 @@ func (m *Manager) handleFileShadowChanged() {
 	defer m.usersMapMu.Unlock()
 
 	for _, u := range m.usersMap {
-		// TODO
-		u.updatePropPasswordStatus()
 		shadowInfo, err := users.GetShadowInfo(u.UserName)
 		if err == nil {
 			u.updatePropsShadow(shadowInfo)
