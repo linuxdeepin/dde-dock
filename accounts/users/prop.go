@@ -92,7 +92,7 @@ func IsPasswordExpired(username string) (bool, error) {
 		return false, err
 	}
 
-	today := libdate.Today()
+	today := libdate.TodayUTC()
 	return isPasswordExpired(shadowInfo, today), nil
 }
 
