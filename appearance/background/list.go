@@ -36,7 +36,7 @@ func ListDirs() []string {
 	for _, value := range systemWallpapersDir {
 		result = append(result, value)
 	}
-	result = append(result, customWallpapersCacheDir)
+	result = append(result, CustomWallpapersConfigDir)
 	return result
 }
 
@@ -49,7 +49,7 @@ func getSysBgFiles() []string {
 }
 
 func getCustomBgFiles() []string {
-	return getBgFilesInDir(customWallpapersCacheDir)
+	return getBgFilesInDir(CustomWallpapersConfigDir)
 }
 
 func getBgFilesInDir(dir string) []string {

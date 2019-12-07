@@ -22,6 +22,7 @@ package appearance
 import (
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -46,6 +47,8 @@ func (m *Manager) handleThemeChanged() {
 	m.watchIconDirs()
 	m.watchBgDirs()
 
+	tmpFilePrefix := filepath.Join(background.CustomWallpapersConfigDir, "tmp-")
+
 	for {
 		select {
 		case <-m.endWatcher:
@@ -58,6 +61,10 @@ func (m *Manager) handleThemeChanged() {
 			if !ok {
 				logger.Error("Invalid event:", ev)
 				return
+			}
+
+			if strings.HasPrefix(ev.Name, tmpFilePrefix) {
+				continue
 			}
 
 			timestamp := time.Now().UnixNano()

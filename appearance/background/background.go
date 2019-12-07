@@ -39,7 +39,7 @@ var (
 	backgroundsCacheMu sync.Mutex
 	fsChanged          bool
 
-	customWallpapersCacheDir      string
+	CustomWallpapersConfigDir     string
 	customWallpaperDeleteCallback func(file string)
 	logger                        *log.Logger
 )
@@ -55,9 +55,12 @@ func SetCustomWallpaperDeleteCallback(fn func(file string)) {
 }
 
 func init() {
-	customWallpapersCacheDir = filepath.Join(basedir.GetUserConfigDir(),
+	CustomWallpapersConfigDir = filepath.Join(basedir.GetUserConfigDir(),
 		"deepin/dde-daemon/appearance/custom-wallpapers")
-	os.MkdirAll(customWallpapersCacheDir, 0755)
+	err := os.MkdirAll(CustomWallpapersConfigDir, 0755)
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err)
+	}
 }
 
 type Background struct {

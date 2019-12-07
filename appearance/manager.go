@@ -629,6 +629,7 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 
 	file, err := background.Prepare(value)
 	if err != nil {
+		logger.Warning("failed to prepare:", err)
 		return "", err
 	}
 	logger.Debug("prepare result:", file)

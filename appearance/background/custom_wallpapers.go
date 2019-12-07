@@ -11,7 +11,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nfnt/resize"
 	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/imgutil"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -35,38 +38,131 @@ func updateModTime(file string) {
 	}
 }
 
-func prepare(image string) (string, error) {
-	// image is not uri
-	logger.Debug("prepare", image)
-	if strings.HasPrefix(image, customWallpapersCacheDir) {
-		updateModTime(image)
-		return image, nil
+func resizeImage(filename, cacheDir string) (outFilename, ext string, isResized bool) {
+	img, err := imgutil.Load(filename)
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "failed to load image file %q: %v\n", filename, err)
+		outFilename = filename
+		return
 	}
 
-	md5sum, err := sumFileMd5(image)
+	const (
+		stdWidth  = 3840
+		stdHeight = 2400
+	)
+
+	imgWidth := img.Bounds().Dx()
+	imgHeight := img.Bounds().Dy()
+
+	if imgWidth <= stdWidth && imgHeight <= stdHeight {
+		// no need to resize
+		outFilename = filename
+		return
+	}
+
+	ext = "jpg"
+	format := graphic.FormatJpeg
+	_, err = os.Stat("/usr/share/wallpapers/deepin/desktop.bmp")
+	if err == nil {
+		ext = "bmp"
+		format = graphic.FormatBmp
+	}
+
+	fh, err := ioutil.TempFile(cacheDir, "tmp-")
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, "failed to create temp file:", err)
+		outFilename = filename
+		return
+	}
+
+	// tmp-###
+	outFilename = fh.Name()
+	err = fh.Close()
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, "failed to close temp file:", err)
+	}
+
+	if float64(imgWidth)/float64(imgHeight) > float64(stdWidth)/float64(stdHeight) {
+		// use std height
+		imgWidth = 0
+		imgHeight = stdHeight
+	} else {
+		// use std width
+		imgWidth = stdWidth
+		imgHeight = 0
+	}
+
+	img = resize.Resize(uint(imgWidth), uint(imgHeight), img, resize.Lanczos3)
+	err = graphic.SaveImage(outFilename, img, format)
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "failed to save image file %q: %v\n",
+			outFilename, err)
+		outFilename = filename
+		return
+	}
+
+	isResized = true
+	return
+}
+
+func prepare(filename string) (string, error) {
+	// image is not uri
+	logger.Debug("prepare", filename)
+	if strings.HasPrefix(filename, CustomWallpapersConfigDir) {
+		updateModTime(filename)
+		return filename, nil
+	}
+
+	filename, resizeExt, isResized := resizeImage(filename, CustomWallpapersConfigDir)
+
+	md5sum, err := sumFileMd5(filename)
 	if err != nil {
 		return "", err
 	}
-	ext := filepath.Ext(image)
-	cacheFileBaseName := md5sum + ext
-	cacheFile := filepath.Join(customWallpapersCacheDir, cacheFileBaseName)
-	_, err = os.Stat(cacheFile)
+	var ext string
+	if isResized {
+		ext = "." + resizeExt
+	} else {
+		ext = filepath.Ext(filename)
+	}
+
+	baseName := md5sum + ext
+	dstFile := filepath.Join(CustomWallpapersConfigDir, baseName)
+	_, err = os.Stat(dstFile)
 	if err != nil {
 		// copy image to cacheFile
-		os.MkdirAll(customWallpapersCacheDir, 0755)
-		err = dutils.CopyFile(image, cacheFile)
+		err = os.MkdirAll(CustomWallpapersConfigDir, 0755)
 		if err != nil {
 			return "", err
 		}
 
+		if isResized {
+			err = os.Rename(filename, dstFile)
+			if err != nil {
+				return "", err
+			}
+		} else {
+			err = dutils.CopyFile(filename, dstFile)
+			if err != nil {
+				return "", err
+			}
+		}
+
 		time.AfterFunc(time.Second, func() {
-			shrinkCache(cacheFileBaseName)
+			shrinkCache(baseName)
 		})
 	} else {
-		updateModTime(cacheFile)
+		updateModTime(dstFile)
+		if isResized {
+			// remove temp file
+			err := os.Remove(filename)
+			if err != nil && !os.IsNotExist(err) {
+				_, _ = fmt.Fprintln(os.Stderr, "failed to remove temp file:", err)
+			}
+		}
 	}
 
-	return cacheFile, nil
+	return dstFile, nil
 }
 
 func shrinkCache(cacheFileBaseName string) {
@@ -78,7 +174,7 @@ func shrinkCache(cacheFileBaseName string) {
 	notDeleteFiles = append(notDeleteFiles, cacheFileBaseName)
 	for _, uri := range workspaceBackgrounds {
 		wbFile := dutils.DecodeURI(uri)
-		if strings.HasPrefix(wbFile, customWallpapersCacheDir) {
+		if strings.HasPrefix(wbFile, CustomWallpapersConfigDir) {
 			// is custom wallpaper
 			basename := filepath.Base(wbFile)
 			if basename != cacheFileBaseName {
@@ -90,7 +186,7 @@ func shrinkCache(cacheFileBaseName string) {
 }
 
 func deleteOld(notDeleteFiles strv.Strv) {
-	fileInfos, _ := ioutil.ReadDir(customWallpapersCacheDir)
+	fileInfos, _ := ioutil.ReadDir(CustomWallpapersConfigDir)
 	count := len(fileInfos) - customWallpapersLimit
 	if count <= 0 {
 		return
@@ -107,7 +203,7 @@ func deleteOld(notDeleteFiles strv.Strv) {
 		fileBaseName := fileInfo.Name()
 		if !notDeleteFiles.Contains(fileBaseName) {
 			logger.Debug("delete", fileBaseName)
-			fullPath := filepath.Join(customWallpapersCacheDir, fileBaseName)
+			fullPath := filepath.Join(CustomWallpapersConfigDir, fileBaseName)
 			err := os.Remove(fullPath)
 			if os.IsNotExist(err) {
 				err = nil
