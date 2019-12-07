@@ -43,7 +43,7 @@ func (w *fsWatcher) loopCheck() {
 		w.mu.Lock()
 		for _, file := range w.try {
 			err := w.Watch(file)
-			logger.Debug("try watch", file)
+			//logger.Debug("try watch", file)
 			if os.IsNotExist(err) {
 				newTryFiles = append(newTryFiles, file)
 			} else if err == nil {
@@ -59,9 +59,9 @@ func (w *fsWatcher) loopCheck() {
 		w.try = newTryFiles
 
 		if len(newTryFiles) > 0 {
-			logger.Debug(newTryFiles)
+			//logger.Debug(newTryFiles)
 			w.timer.Reset(w.interval)
-			logger.Debug("reset timer")
+			//logger.Debug("reset timer")
 		} else {
 			logger.Debug("stop timer")
 		}

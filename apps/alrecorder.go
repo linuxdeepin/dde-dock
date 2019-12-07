@@ -48,9 +48,10 @@ type ALRecorder struct {
 	loginManager      *login1.Manager
 
 	methods *struct {
-		GetNew       func() `out:"newApps"`
-		MarkLaunched func() `in:"file"`
-		WatchDirs    func() `in:"dirs"`
+		GetNew         func() `out:"newApps"`
+		MarkLaunched   func() `in:"desktopFile"`
+		WatchDirs      func() `in:"dirs"`
+		UninstallHints func() `in:"desktopFiles"`
 	}
 
 	signals *struct {
@@ -143,6 +144,26 @@ func (r *ALRecorder) listenEvents() {
 		} else if ev.NotExist && ev.IsRename() {
 			// may be dir removed
 			r.handleDirRemoved(name)
+		}
+	}
+}
+
+func (r *ALRecorder) UninstallHints(desktopFiles []string) *dbus.Error {
+	for _, filename := range desktopFiles {
+		r.uninstallHint(filename)
+	}
+	return nil
+}
+
+func (r *ALRecorder) uninstallHint(file string) {
+	r.subRecordersMutex.RLock()
+	defer r.subRecordersMutex.RUnlock()
+
+	for _, sr := range r.subRecorders {
+		if strings.HasPrefix(file, sr.root) {
+			rel, _ := filepath.Rel(sr.root, file)
+			sr.uninstallHint(removeDesktopExt(rel))
+			return
 		}
 	}
 }

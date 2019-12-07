@@ -42,6 +42,7 @@ type SubRecorder struct {
 	// key: app, value: launched
 	launchedMap        map[string]bool
 	removedLaunchedMap map[string]bool
+	uninstallMap       map[string]struct{}
 
 	launchedMapMu sync.RWMutex
 
@@ -60,6 +61,7 @@ func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder
 		uids:               []int{uid}, // first uid
 		parent:             parent,
 		removedLaunchedMap: make(map[string]bool),
+		uninstallMap:       make(map[string]struct{}),
 	}
 
 	sr.statusFile, sr.statusFileOwner = getStatusFileAndOwner(uid, home, root)
@@ -270,6 +272,15 @@ func (sr *SubRecorder) resetStatus(apps []string) {
 	sr.launchedMap = launchedMap
 }
 
+func (sr *SubRecorder) uninstallHint(name string) {
+	logger.Debug("SubRecorder.uninstallHint", sr.root, name)
+	sr.launchedMapMu.Lock()
+
+	sr.uninstallMap[name] = struct{}{}
+
+	sr.launchedMapMu.Unlock()
+}
+
 func (sr *SubRecorder) handleAdded(name string) {
 	logger.Debug("SubRecorder.handleAdded", sr.root, name)
 	sr.launchedMapMu.Lock()
@@ -279,9 +290,11 @@ func (sr *SubRecorder) handleAdded(name string) {
 		if ok1 {
 			delete(sr.removedLaunchedMap, name)
 		}
+		logger.Debugf("app: %s, launched: %v", name, launched)
 		sr.launchedMap[name] = launched
 		sr.RequestSave()
 	}
+	delete(sr.uninstallMap, name)
 
 	sr.launchedMapMu.Unlock()
 }
@@ -289,15 +302,18 @@ func (sr *SubRecorder) handleAdded(name string) {
 func (sr *SubRecorder) handleRemoved(name string) {
 	logger.Debug("SubRecorder.handleRemoved", sr.root, name)
 	sr.launchedMapMu.Lock()
+	defer sr.launchedMapMu.Unlock()
 
 	launched, ok := sr.launchedMap[name]
-	if ok {
-		sr.removedLaunchedMap[name] = launched
-		delete(sr.launchedMap, name)
-		sr.RequestSave()
+	if !ok {
+		return
 	}
-
-	sr.launchedMapMu.Unlock()
+	_, uninstall := sr.uninstallMap[name]
+	if !uninstall {
+		sr.removedLaunchedMap[name] = launched
+	} // else 卸装则不留下 launched 记录
+	delete(sr.launchedMap, name)
+	sr.RequestSave()
 }
 
 func (sr *SubRecorder) handleDirRemoved(name string) {
