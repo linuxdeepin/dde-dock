@@ -86,7 +86,7 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
     m_closeBtn3D->setVisible(m_tracked->closeAble());
 
     QFontMetrics fm(m_titleBtn->font());
-    int textWidth = fm.width(m_tracked->title()) + 10;
+    int textWidth = fm.width(m_tracked->title()) + 10 + BTN_TITLE_MARGIN;
     int titleWidth = width() - (TITLE_MARGIN * 2  + BORDER_MARGIN);
 
     if (textWidth  < titleWidth) {
@@ -98,7 +98,7 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
         str.insert(0, " ");
         QString strTtile = m_titleBtn->fontMetrics().elidedText(str, Qt::ElideRight, titleWidth - BTN_TITLE_MARGIN);
         m_titleBtn->setText(strTtile);
-        m_titleBtn->setFixedWidth(titleWidth);
+        m_titleBtn->setFixedWidth(titleWidth + BTN_TITLE_MARGIN);
     }
 
     QTimer::singleShot(0, this, [ = ] {
