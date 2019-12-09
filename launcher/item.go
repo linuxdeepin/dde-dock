@@ -163,15 +163,12 @@ func (item *Item) setSearchTargets(pinyinEnabled bool) {
 	item.addSearchTarget(nameScore, item.Name)
 	item.addSearchTarget(nameScore, item.enName)
 	item.addSearchTarget(genericNameScore, item.genericName)
-	item.addSearchTarget(categoryScore, item.CategoryID.String())
-	item.addSearchTarget(commentScore, item.comment)
 	for _, c := range item.categories {
 		item.addSearchTarget(categoryScore, c)
 	}
 	if pinyinEnabled {
 		namePy := toPinyin(item.Name)
 		item.addSearchTarget(nameScore, namePy)
-		item.addSearchTarget(categoryScore, item.CategoryID.Pinyin())
 	}
 
 	// add keywords

@@ -201,6 +201,8 @@ func (st *searchTask) match(item *Item) *MatchResult {
 func (st *searchTask) matchItem(item *Item) {
 	mResult := st.match(item)
 	if mResult != nil {
+		logger.Debugf("searchTask %s match item score: %d, item: %v",
+			string(st.chars), mResult.score, mResult.item)
 		st.result = append(st.result, mResult)
 	}
 }
