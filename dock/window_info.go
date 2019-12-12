@@ -66,7 +66,7 @@ type WindowInfo struct {
 	process      *ProcessInfo
 	entry        *AppEntry
 
-	firstUpdate bool
+	updateCalled bool
 
 	entryInnerId string
 	appInfo      *AppInfo
@@ -289,9 +289,9 @@ var skipTaskBarWindowTypes = []string{
 
 func (winInfo *WindowInfo) shouldSkip() bool {
 	logger.Debugf("win %d shouldSkip?", winInfo.window)
-	if !winInfo.firstUpdate {
+	if !winInfo.updateCalled {
 		winInfo.update()
-		winInfo.firstUpdate = true
+		winInfo.updateCalled = true
 	}
 
 	logger.Debugf("hasXEmbedInfo: %v", winInfo.hasXEmbedInfo)
@@ -316,7 +316,7 @@ func (winInfo *WindowInfo) shouldSkip() bool {
 	return false
 }
 
-func (winInfo *WindowInfo) initProcessInfo() {
+func (winInfo *WindowInfo) updateProcessInfo() {
 	win := winInfo.window
 	winInfo.pid = getWmPid(win)
 	var err error
@@ -344,12 +344,12 @@ func (winInfo *WindowInfo) update() {
 		winInfo.updateHasXEmbedInfo()
 	}
 	winInfo.updateHasWmTransientFor()
-	winInfo.initProcessInfo()
+	winInfo.updateProcessInfo()
 	winInfo.wmRole = getWmWindowRole(win)
 	winInfo.gtkAppId = getWindowGtkApplicationId(win)
 	winInfo.flatpakAppID = getWindowFlatpakAppID(win)
 	winInfo.updateWmName()
-	winInfo.genInnerId()
+	winInfo.innerId = genInnerId(winInfo)
 }
 
 func filterFilePath(args []string) string {
@@ -364,7 +364,7 @@ func filterFilePath(args []string) string {
 	return strings.Join(filtered, " ")
 }
 
-func (winInfo *WindowInfo) genInnerId() {
+func genInnerId(winInfo *WindowInfo) string {
 	win := winInfo.window
 	var wmClass string
 	var wmInstance string
@@ -395,6 +395,7 @@ func (winInfo *WindowInfo) genInnerId() {
 
 	md5hash := md5.New()
 	md5hash.Write([]byte(str))
-	winInfo.innerId = windowHashPrefix + hex.EncodeToString(md5hash.Sum(nil))
-	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
+	innerId := windowHashPrefix + hex.EncodeToString(md5hash.Sum(nil))
+	logger.Debugf("genInnerId win: %v str: %s, innerId: %s", win, str, innerId)
+	return innerId
 }

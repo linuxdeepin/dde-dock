@@ -54,20 +54,22 @@ func (m *Manager) registerIdentifyWindowFunc(name string, fn _IdentifyWindowFunc
 	})
 }
 
-func (m *Manager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
-	logger.Debugf("identifyWindow: window id: %v, window innerId: %q", winInfo.window, winInfo.innerId)
+func (m *Manager) identifyWindow(winInfo *WindowInfo) (innerId string, appInfo *AppInfo) {
+	logger.Debugf("identifyWindow: window id: %v, window innerId: %q",
+		winInfo.window, winInfo.innerId)
 	if winInfo.innerId == "" {
-		logger.Debug("identifyWindow: failed winInfo no innerId")
-		return "", nil
+		logger.Debug("identifyWindow: winInfo.innerId is empty")
+		return
 	}
 
 	for idx, item := range m.identifyWindowFuns {
 		name := item.Name
 		logger.Debugf("identifyWindow: try %s:%d", name, idx)
-		innerId, appInfo := item.Fn(m, winInfo)
+		innerId, appInfo = item.Fn(m, winInfo)
 		if innerId != "" {
 			// success
-			logger.Debugf("identifyWindow by %s success, innerId: %q, appInfo: %v", name, innerId, appInfo)
+			logger.Debugf("identifyWindow by %s success, innerId: %q, appInfo: %v",
+				name, innerId, appInfo)
 			// NOTE: if name == "Pid", appInfo may be nil
 			if appInfo != nil {
 				fixedAppInfo := fixAutostartAppInfo(appInfo)
@@ -79,7 +81,7 @@ func (m *Manager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 					appInfo.identifyMethod = name
 				}
 			}
-			return innerId, appInfo
+			return
 		}
 	}
 	// fail

@@ -261,14 +261,25 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 	//	logger.Warning(err)
 	//}
 	//logger.Debugf("winInfo %d property %s changed", winInfo.window, atomName)
+	var newInnerId string
+	var needAttachOrDetach bool
 
 	switch ev.Atom {
 	case atomNetWMState:
 		winInfo.updateWmState()
-		m.attachOrDetachWindow(winInfo)
+		needAttachOrDetach = true
+
+	case atomGtkApplicationId:
+		winInfo.gtkAppId = getWindowGtkApplicationId(winInfo.window)
+		newInnerId = genInnerId(winInfo)
+
+	case atomNetWmPid:
+		winInfo.updateProcessInfo()
+		newInnerId = genInnerId(winInfo)
 
 	case atomNetWMName:
 		winInfo.updateWmName()
+		newInnerId = genInnerId(winInfo)
 
 	case atomNetWMIcon:
 		winInfo.updateIcon()
@@ -281,18 +292,32 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 
 	case x.AtomWMClass:
 		winInfo.updateWmClass()
-		m.attachOrDetachWindow(winInfo)
+		newInnerId = genInnerId(winInfo)
+		needAttachOrDetach = true
 
 	case atomXEmbedInfo:
 		winInfo.updateHasXEmbedInfo()
-		m.attachOrDetachWindow(winInfo)
+		needAttachOrDetach = true
 
 	case atomNetWMWindowType:
 		winInfo.updateWmWindowType()
-		m.attachOrDetachWindow(winInfo)
+		needAttachOrDetach = true
 
 	case x.AtomWMTransientFor:
 		winInfo.updateHasWmTransientFor()
+		needAttachOrDetach = true
+	}
+
+	if winInfo.updateCalled && newInnerId != "" && winInfo.innerId != newInnerId {
+		// winInfo.innerId changed
+		logger.Debug("window %v innerId changed to %s", winInfo.window, newInnerId)
+		m.detachWindow(winInfo)
+		winInfo.innerId = newInnerId
+		winInfo.entryInnerId = ""
+		needAttachOrDetach = true
+	}
+
+	if needAttachOrDetach {
 		m.attachOrDetachWindow(winInfo)
 	}
 
