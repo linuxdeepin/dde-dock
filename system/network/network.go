@@ -605,7 +605,6 @@ func (n *Network) enableVpn(enabled bool) {
 		avail, err := n.isNetworkAvailable()
 		if err != nil {
 			logger.Warning(err)
-			return
 		}
 
 		if avail {
