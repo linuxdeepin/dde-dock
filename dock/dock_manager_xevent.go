@@ -310,7 +310,7 @@ func (m *Manager) handlePropertyNotifyEvent(ev *x.PropertyNotifyEvent) {
 
 	if winInfo.updateCalled && newInnerId != "" && winInfo.innerId != newInnerId {
 		// winInfo.innerId changed
-		logger.Debug("window %v innerId changed to %s", winInfo.window, newInnerId)
+		logger.Debugf("window %v innerId changed to %s", winInfo.window, newInnerId)
 		m.detachWindow(winInfo)
 		winInfo.innerId = newInnerId
 		winInfo.entryInnerId = ""
