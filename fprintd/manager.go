@@ -84,6 +84,11 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 }
 
 func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
+	err := m.refreshDeviceHuawei()
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	if m.huaweiDevice != nil {
 		return huaweiDevicePath, nil
 	}
@@ -98,17 +103,14 @@ func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
 }
 
 func (m *Manager) GetDevices() ([]dbus.ObjectPath, *dbus.Error) {
-	err := m.refreshDevices()
-	if err != nil {
-		return nil, dbusutil.ToError(err)
-	}
+	m.refreshDevices()
 	m.PropsMu.Lock()
 	paths := m.Devices
 	m.PropsMu.Unlock()
 	return paths, nil
 }
 
-func (m *Manager) refreshDevices() error {
+func (m *Manager) refreshDevicesFprintd() error {
 	devicePaths, err := m.fprintManager.GetDevices(0)
 	if err != nil {
 		return err
@@ -163,6 +165,34 @@ func (m *Manager) refreshDevices() error {
 	return nil
 }
 
+func (m *Manager) refreshDeviceHuawei() error {
+	if m.huaweiDevice != nil {
+		return nil
+	}
+
+	has, err := m.hasHuaweiDevice()
+	if err != nil {
+		return err
+	}
+
+	if has {
+		m.addHuaweiDevice()
+		m.updatePropDevices()
+	}
+	return nil
+}
+
+func (m *Manager) refreshDevices() {
+	err := m.refreshDeviceHuawei()
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = m.refreshDevicesFprintd()
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
 func (m *Manager) updatePropDevices() {
 	m.devicesMu.Lock()
 	paths := make([]dbus.ObjectPath, len(m.devices))
@@ -197,13 +227,6 @@ func (m *Manager) init() {
 	m.sysSigLoop.Start()
 	m.fprintCh = make(chan struct{}, 1)
 	m.listenDBusSignals()
-
-	has, err := m.hasHuaweiDevice()
-	if err != nil {
-		logger.Warning(err)
-	} else if has {
-		m.addHuaweiDevice()
-	}
 
 	paths, err := m.fprintManager.GetDevices(0)
 	if err != nil {
@@ -357,7 +380,7 @@ func (m *Manager) TriggerUDevEvent(sender dbus.Sender) *dbus.Error {
 		logger.Warning("wait fprintd restart timed out!")
 	}
 
-	err = m.refreshDevices()
+	err = m.refreshDevicesFprintd()
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
