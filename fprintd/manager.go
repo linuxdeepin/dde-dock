@@ -399,6 +399,7 @@ func restartSystemdService(name, mode string) error {
 }
 
 func (m *Manager) PreAuthEnroll(sender dbus.Sender) *dbus.Error {
+	logger.Debug("PreAuthEnroll sender:", sender)
 	err := checkAuth(actionIdEnroll, string(sender))
 	return dbusutil.ToError(err)
 }

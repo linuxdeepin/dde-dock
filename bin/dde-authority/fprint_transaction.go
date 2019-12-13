@@ -14,6 +14,7 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
+	"pkg.deepin.io/lib/strv"
 )
 
 var (
@@ -166,13 +167,26 @@ type verifyResult struct {
 
 func (tx *FPrintTransaction) claimDevice(deviceObj *fprint.Device, user string) error {
 	logger.Debug(tx, "claim device")
-	err := deviceObj.Claim(0, user)
+
+	caps, err := deviceObj.GetCapabilities(0)
 	if err != nil {
-		if strings.Contains(err.Error(), "Could not attempt device open") {
-			killFPrintDaemon()
-		}
-		return err
+		logger.Warning(err)
 	}
+
+	if strv.Strv(caps).Contains("ClaimForce") {
+		// huawei device
+		return deviceObj.ClaimForce(0, user)
+	} else {
+		// fprintd device
+		err := deviceObj.Claim(0, user)
+		if err != nil {
+			if strings.Contains(err.Error(), "Could not attempt device open") {
+				killFPrintDaemon()
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
