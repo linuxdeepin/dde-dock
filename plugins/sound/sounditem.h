@@ -50,7 +50,6 @@ signals:
     void requestContextMenu() const;
 
 protected:
-    QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
     void paintEvent(QPaintEvent *e);

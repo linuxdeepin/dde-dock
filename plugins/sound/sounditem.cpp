@@ -118,14 +118,19 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
         .call();
 }
 
-QSize SoundItem::sizeHint() const
-{
-    return QSize(26, 26);
-}
-
 void SoundItem::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 
     refreshIcon();
 }

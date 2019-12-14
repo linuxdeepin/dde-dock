@@ -49,11 +49,6 @@ void PowerStatusWidget::refreshIcon()
     update();
 }
 
-QSize PowerStatusWidget::sizeHint() const
-{
-    return QSize(26, 26);
-}
-
 void PowerStatusWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
@@ -104,4 +99,19 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     pix.setDevicePixelRatio(ratio);
 
     return pix;
+}
+
+void PowerStatusWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 }

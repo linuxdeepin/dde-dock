@@ -41,7 +41,7 @@ signals:
     void requestContextMenu(const QString &itemKey) const;
 
 protected:
-    QSize sizeHint() const;
+    void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *e);
 
 private:
