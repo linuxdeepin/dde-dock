@@ -36,6 +36,8 @@ type Transaction interface {
 var _ Transaction = &PAMTransaction{}
 var _ Transaction = &FPrintTransaction{}
 
+var errTxEnd = errors.New("tx has ended")
+
 type baseTransaction struct {
 	authType  string
 	parent    *Authority
@@ -44,6 +46,7 @@ type baseTransaction struct {
 	user      string
 	authToken string
 	cookie    string
+	end       bool
 	mu        sync.Mutex
 }
 
@@ -59,6 +62,18 @@ func (tx *baseTransaction) getId() uint64 {
 	return tx.id
 }
 
+func (tx *baseTransaction) hasEnded() bool {
+	tx.mu.Lock()
+	defer tx.mu.Unlock()
+	return tx.end
+}
+
+func (tx *baseTransaction) markEnd() {
+	tx.mu.Lock()
+	tx.end = true
+	tx.mu.Unlock()
+}
+
 func (tx *baseTransaction) checkSender(sender dbus.Sender) *dbus.Error {
 	if tx.agent.Destination() != string(sender) {
 		return dbusutil.ToError(errors.New("sender not match"))
@@ -72,28 +87,43 @@ func (tx *baseTransaction) matchSender(name string) bool {
 
 func (tx *baseTransaction) requestEchoOn(msg string) (ret string, err error) {
 	logger.Debug(tx, "RequestEchoOn:", msg)
+	if tx.hasEnded() {
+		return "", errTxEnd
+	}
 	err = tx.agent.Call(dbusAgentInterface+".RequestEchoOn", 0, msg).Store(&ret)
 	return
 }
 
 func (tx *baseTransaction) requestEchoOff(msg string) (ret string, err error) {
 	logger.Debug(tx, "RequestEchoOff:", msg)
+	if tx.hasEnded() {
+		return "", errTxEnd
+	}
 	err = tx.agent.Call(dbusAgentInterface+".RequestEchoOff", 0, msg).Store(&ret)
 	return
 }
 
 func (tx *baseTransaction) displayErrorMsg(errType, errMsg string) error {
 	logger.Debug(tx, "DisplayErrorMsg:", errType, errMsg)
+	if tx.hasEnded() {
+		return nil
+	}
 	return tx.agent.Call(dbusAgentInterface+".DisplayErrorMsg", 0, errType, errMsg).Err
 }
 
 func (tx *baseTransaction) displayTextInfo(msg string) error {
 	logger.Debug(tx, "DisplayTextInfo:", msg)
+	if tx.hasEnded() {
+		return nil
+	}
 	return tx.agent.Call(dbusAgentInterface+".DisplayTextInfo", 0, msg).Err
 }
 
 func (tx *baseTransaction) sendResult(success bool) {
 	logger.Debug(tx, "sendResult", success)
+	if tx.hasEnded() {
+		return
+	}
 	var cookie string
 	var err error
 	if success {

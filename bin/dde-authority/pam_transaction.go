@@ -21,8 +21,7 @@ type PAMTransaction struct {
 		SetUser func() `in:"user"`
 	}
 
-	core    *pam.Transaction
-	markEnd bool
+	core *pam.Transaction
 }
 
 func (tx *PAMTransaction) setPropAuthenticating(value bool) {
@@ -102,12 +101,12 @@ func (tx *PAMTransaction) authenticate() error {
 	err = tx.core.Authenticate(0)
 
 	tx.PropsMu.Lock()
-	defer tx.PropsMu.Unlock()
-
 	tx.setPropAuthenticating(false)
-	if tx.markEnd {
+	tx.PropsMu.Unlock()
+
+	if tx.hasEnded() {
 		tx.terminate()
-		return errors.New("mark end")
+		return errTxEnd
 	}
 	return err
 }
@@ -147,18 +146,25 @@ func (tx *PAMTransaction) terminate() {
 
 func (tx *PAMTransaction) End(sender dbus.Sender) *dbus.Error {
 	tx.parent.service.DelayAutoQuit()
-	if err := tx.checkSender(sender); err != nil {
+	err := tx.checkSender(sender)
+	if err != nil {
 		return err
 	}
 
 	logger.Debugf("%s End sender: %s", tx, sender)
-	tx.clearSecret()
-	tx.PropsMu.Lock()
-	defer tx.PropsMu.Unlock()
+	if tx.hasEnded() {
+		logger.Warningf("%s End sender: %s, tx has ended", tx, sender)
+		return dbusutil.ToError(errTxEnd)
+	}
 
-	if tx.Authenticating {
-		tx.markEnd = true
-	} else {
+	tx.clearSecret()
+	tx.markEnd()
+
+	tx.PropsMu.Lock()
+	inAuth := tx.Authenticating
+	tx.PropsMu.Unlock()
+
+	if !inAuth {
 		tx.terminate()
 	}
 	return nil

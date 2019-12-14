@@ -22,6 +22,7 @@ package fprintd
 import (
 	"errors"
 	"path"
+	"strings"
 
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	"pkg.deepin.io/lib/dbus1"
@@ -60,11 +61,12 @@ type deviceSignals struct {
 }
 
 type IDevice interface {
-	IsDevice()
 	destroy()
 	getCorePath() dbus.ObjectPath
 	getPath() dbus.ObjectPath
 	dbusutil.Implementer
+
+	isFree() (bool, error)
 }
 
 type Device struct {
@@ -77,8 +79,6 @@ type Device struct {
 	// TODO: enroll image
 	signals *deviceSignals
 }
-
-func (d *Device) IsDevice() {}
 
 type Devices []IDevice
 
@@ -130,6 +130,23 @@ func (dev *Device) destroy() {
 	err := dev.service.StopExport(dev)
 	if err != nil {
 		logger.Warning(err)
+	}
+}
+
+func (dev *Device) isFree() (bool, error) {
+	err := dev.core.Claim(0, "root")
+	if err == nil {
+		err = dev.core.Release(dbus.FlagNoAutoStart)
+		if err != nil {
+			logger.Warningf("failed to release device %q: %v", dev.getCorePath(), err)
+		}
+		return true, nil
+
+	} else {
+		if strings.Contains(err.Error(), "already claimed") {
+			return false, nil
+		}
+		return false, err
 	}
 }
 

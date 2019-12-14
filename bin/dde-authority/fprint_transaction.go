@@ -120,9 +120,9 @@ func (tx *FPrintTransaction) authenticate() error {
 		var err error
 		tx.PropsMu.Lock()
 		tx.setPropAuthenticating(true)
+		tx.PropsMu.Unlock()
 		tx.quit = make(chan struct{})
 		tx.release = make(chan struct{})
-		tx.PropsMu.Unlock()
 
 		verifyErr := tx.verify(deviceObj, user, scanType)
 		if verifyErr != nil {
@@ -138,7 +138,6 @@ func (tx *FPrintTransaction) authenticate() error {
 
 		tx.PropsMu.Lock()
 		tx.setPropAuthenticating(false)
-		tx.quit = nil
 		tx.PropsMu.Unlock()
 
 		tx.sendResult(verifyErr == nil)
@@ -214,11 +213,13 @@ func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType str
 	}
 
 	verifyResultCh := make(chan verifyResult)
-	var verifyResultChMu sync.Mutex
-	var verifyResultChIsClosed bool
 
 	_, err = deviceObj.ConnectVerifyStatus(func(result string, done bool) {
 		logger.Debug(tx, "signal VerifyStatus", result, done)
+		if tx.hasEnded() {
+			close(verifyResultCh)
+			return
+		}
 
 		msg := verifyResultStrToMsg(result, isSwipe)
 		msg = getFprintMsg(locale, msg)
@@ -229,11 +230,7 @@ func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType str
 			}
 		}
 
-		verifyResultChMu.Lock()
-		if !verifyResultChIsClosed {
-			verifyResultCh <- verifyResult{result, done}
-		}
-		verifyResultChMu.Unlock()
+		verifyResultCh <- verifyResult{result, done}
 	})
 	if err != nil {
 		logger.Warning(err)
@@ -255,10 +252,6 @@ func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType str
 	}
 
 	deviceObj.RemoveHandler(proxy.RemoveAllHandlers)
-	verifyResultChMu.Lock()
-	close(verifyResultCh)
-	verifyResultChIsClosed = true
-	verifyResultChMu.Unlock()
 
 	if verifyOk {
 		return nil
@@ -307,10 +300,15 @@ loop:
 			logger.Debug(tx, "receive quit")
 			break loop
 
-		case result := <-verifyResultCh:
-			logger.Debug(tx, "receive result", result)
-			if result.done {
-				status = result.status
+		case result, ok := <-verifyResultCh:
+			if ok {
+				logger.Debug(tx, "receive result", result)
+				if result.done {
+					status = result.status
+					break loop
+				}
+			} else {
+				logger.Debug("verifyResultCh closed")
 				break loop
 			}
 		}
@@ -395,20 +393,28 @@ func (tx *FPrintTransaction) SetUser(sender dbus.Sender, user string) *dbus.Erro
 
 func (tx *FPrintTransaction) End(sender dbus.Sender) *dbus.Error {
 	tx.parent.service.DelayAutoQuit()
-	if err := tx.checkSender(sender); err != nil {
+	err := tx.checkSender(sender)
+	if err != nil {
 		return err
 	}
 	logger.Debugf("%s End sender: %s", tx, sender)
+	if tx.hasEnded() {
+		logger.Warningf("%s End sender: %s, tx has ended", tx, sender)
+		return dbusutil.ToError(errTxEnd)
+	}
+
 	tx.clearSecret()
+	tx.markEnd()
 
 	tx.PropsMu.Lock()
-	if tx.Authenticating {
+	inAuth := tx.Authenticating
+	tx.PropsMu.Unlock()
+
+	if inAuth {
 		logger.Debug(tx, "force quit")
 		close(tx.quit)
 		<-tx.release // wait tx.release chan closed
-		tx.release = nil
 	}
-	tx.PropsMu.Unlock()
 
 	tx.parent.deleteTx(tx.id)
 	return nil

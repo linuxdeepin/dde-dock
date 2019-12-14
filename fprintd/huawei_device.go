@@ -38,8 +38,6 @@ type HuaweiDevice struct {
 	signals *deviceSignals
 }
 
-func (d *HuaweiDevice) IsDevice() {}
-
 func (d *HuaweiDevice) destroy() {
 }
 
@@ -79,6 +77,12 @@ func getUserUuid(username string) (string, error) {
 	}
 
 	return uuid, nil
+}
+
+func (dev *HuaweiDevice) isFree() (bool, error) {
+	dev.mu.Lock()
+	defer dev.mu.Unlock()
+	return !dev.claimed, nil
 }
 
 func (dev *HuaweiDevice) claim(sender, username string) error {
@@ -482,16 +486,25 @@ func (dev *HuaweiDevice) handleSignalEnrollStatus(progress int32, result int32) 
 	var done bool
 	var status string
 	switch result {
+	case -2:
+		// 没进行设备初始化就进行录入操作
+		done = true
+		status = fprintdEnrollStatusFailed
+		logger.Debug("failed, no device initialization")
 	case -1:
 		// 指纹录入错误（指纹录入错误，结束指纹录入，多为函数的参数问题引发的错误）
 		done = true
 		status = fprintdEnrollStatusFailed
 		logger.Debug("failed")
 	case 1:
-		// 指纹录入完成（指纹录入以及指纹模板保存完成，结束指纹录入）
-		done = true
-		status = fprintdEnrollStatusCompleted
-		logger.Debug("completed")
+		if progress == 100 {
+			// 指纹录入完成（指纹录入以及指纹模板保存完成，结束指纹录入）
+			done = true
+			status = fprintdEnrollStatusCompleted
+			logger.Debug("completed")
+		} else {
+			logger.Warningf("ignore invalid signal EnrollStatus(%d,%d)", progress, result)
+		}
 	case 2:
 		// 指纹录入失败（指纹录入失败，结束指纹录入，多为指纹设备异常出现的错误）
 		done = true
@@ -506,6 +519,11 @@ func (dev *HuaweiDevice) handleSignalEnrollStatus(progress int32, result int32) 
 		// 当前手指指纹模板已存在，需换其他手指录入指纹
 		status = fprintdEnrollStatusRetryScan
 		logger.Debug("The current finger fingerprint template already exists. You need to change the fingerprint of other fingers.")
+
+	case 104:
+		// TODO
+		status = fprintdEnrollStatusRetryScan
+		logger.Warning("unknown enroll result", result)
 
 	case 100, 105:
 		// 指纹图像质量太差，或其他设备扫描的原因需要重新录入指纹

@@ -29,6 +29,7 @@ import (
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
+	"golang.org/x/xerrors"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
@@ -83,6 +84,18 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	}, nil
 }
 
+func (m *Manager) getDefaultDeviceInter() (IDevice, error) {
+	if m.huaweiDevice != nil {
+		return m.huaweiDevice, nil
+	}
+
+	objPath, err := m.fprintManager.GetDefaultDevice(0)
+	if err != nil {
+		return nil, err
+	}
+	return m.devices.Get(objPath), nil
+}
+
 func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
 	err := m.refreshDeviceHuawei()
 	if err != nil {
@@ -95,7 +108,7 @@ func (m *Manager) GetDefaultDevice() (dbus.ObjectPath, *dbus.Error) {
 
 	objPath, err := m.fprintManager.GetDefaultDevice(0)
 	if err != nil {
-		logger.Warning("Failed to get default device:", err)
+		logger.Debug("failed to get default device:", err)
 		return "/", dbusutil.ToError(err)
 	}
 	m.addDevice(objPath)
@@ -263,14 +276,6 @@ func (m *Manager) addHuaweiDevice() {
 		logger.Warning(err)
 	}
 
-	// TODO: remove it
-	_, err = m.huaweiFprint.ConnectVerifyStatus(func(result int32) {
-		d.handleSignalIdentifyStatus(result)
-	})
-	if err != nil {
-		logger.Warning(err)
-	}
-
 	err = m.service.Export(huaweiDevicePath, d)
 	if err != nil {
 		logger.Warning(err)
@@ -401,5 +406,34 @@ func restartSystemdService(name, mode string) error {
 func (m *Manager) PreAuthEnroll(sender dbus.Sender) *dbus.Error {
 	logger.Debug("PreAuthEnroll sender:", sender)
 	err := checkAuth(actionIdEnroll, string(sender))
-	return dbusutil.ToError(err)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	var dev IDevice
+	dev, err = m.getDefaultDeviceInter()
+	if err != nil {
+		return dbusutil.ToError(xerrors.Errorf("failed to get default device: %w", err))
+	}
+	if dev == nil {
+		logger.Warning("PreAuthEnroll dev is nil")
+		return nil
+	}
+
+	// wait device free, timeout 4s
+	for i := 0; i < 20; i++ {
+		free, err := dev.isFree()
+		if err != nil {
+			logger.Warning("dev isFree err:", err)
+			return dbusutil.ToError(err)
+		}
+		if free {
+			logger.Debug("PreAuthEnroll default device is free now")
+			return nil
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+	logger.Warning("wait for the default device to become free timed out")
+
+	return nil
 }
