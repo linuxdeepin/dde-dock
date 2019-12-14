@@ -407,6 +407,9 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
     }
 
     SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
+    if (!trayWidget->isValid())
+        return;
+
     if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
         m_passiveSNITrayMap.insert(itemKey, trayWidget);
     } else {

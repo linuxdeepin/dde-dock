@@ -27,7 +27,7 @@
 
 #include <xcb/xproto.h>
 
-#define IconSize 16
+#define IconSize 20
 
 const QStringList ItemCategoryList {"ApplicationStatus", "Communications", "SystemServices", "Hardware"};
 const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
@@ -346,7 +346,9 @@ void SNITrayWidget::showContextMenu(int x, int y)
             qDebug() << "context menu has not be ready, init menu";
             initMenu();
         }
-        m_menu->popup(QPoint(x, y));
+
+        if (m_menu)
+            m_menu->popup(QPoint(x, y));
     }
     hidePopup();
 }
