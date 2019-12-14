@@ -92,7 +92,7 @@ void DBusAdaptors::onUserLayoutListChanged(const QStringList &value)
 {
     m_userLayoutList = value;
 
-    refreshMenu();
+    initAllLayoutList();
 
     emit layoutChanged(layout());
 }
