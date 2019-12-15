@@ -58,17 +58,47 @@ func (m *Manager) initConnectionManage() {
 	m.connections = make(map[string]connectionSlice)
 	m.connectionsLock.Unlock()
 
-	for _, cpath := range nmGetConnectionList() {
-		m.addConnection(cpath)
-	}
-	nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
+	_, err := nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
 		logger.Info("add connection", cpath)
 		m.addConnection(cpath)
 	})
-	nmSettings.ConnectConnectionRemoved(func(cpath dbus.ObjectPath) {
+	if err != nil {
+		logger.Warning(err)
+	}
+	_, err = nmSettings.ConnectConnectionRemoved(func(cpath dbus.ObjectPath) {
 		logger.Info("remove connection", cpath)
 		m.removeConnection(cpath)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
+	for _, cpath := range nmGetConnectionList() {
+		m.addConnection(cpath)
+	}
+}
+
+func (m *Manager) deleteTempConnectionSettings(conn *connection, cdata connectionData) {
+	connType := getSettingConnectionType(cdata)
+	if connType != nm.NM_SETTING_WIRED_SETTING_NAME {
+		return
+	}
+	// wired connection
+	autoConnect := getSettingConnectionAutoconnect(cdata)
+	autoConnectPriority := getSettingConnectionAutoconnectPriority(cdata)
+	if autoConnect && autoConnectPriority == -999 {
+		unsaved, err := conn.nmConn.Unsaved().Get(0)
+		if err != nil {
+			logger.Warningf("failed to get connection %s prop Unsaved: %v", conn.Path, err)
+			return
+		}
+		if unsaved {
+			logger.Debug("delete unsaved connection", conn.Path)
+			err = conn.nmConn.Delete(0)
+			if err != nil {
+				logger.Warningf("failed to delete connection %s: %v", conn.Path, err)
+			}
+		}
+	}
 }
 
 func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err error) {
@@ -79,21 +109,29 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 	}
 
 	conn.nmConn = nmConn
-	conn.updateProps()
+	cdata := conn.updateProps()
+	if cdata != nil {
+		m.deleteTempConnectionSettings(conn, cdata)
+	}
 
 	// connect signals
 	nmConn.InitSignalExt(m.sysSigLoop, true)
-	nmConn.ConnectUpdated(func() {
+	_, err = nmConn.ConnectUpdated(func() {
 		m.updateConnection(cpath)
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
+	err = nil
 	return
 }
-func (conn *connection) updateProps() {
+
+func (conn *connection) updateProps() connectionData {
 	cdata, err := conn.nmConn.GetSettings(0)
 	if err != nil {
 		logger.Error(err)
-		return
+		return nil
 	}
 
 	conn.Uuid = getSettingConnectionUuid(cdata)
@@ -133,6 +171,7 @@ func (conn *connection) updateProps() {
 			conn.ClonedAddress = ""
 		}
 	}
+	return cdata
 }
 
 func (m *Manager) destroyConnection(conn *connection) {

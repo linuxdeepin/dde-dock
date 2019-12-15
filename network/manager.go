@@ -193,8 +193,8 @@ func (m *Manager) init() {
 	}
 
 	// initialize device and connection handlers
-	m.initDeviceManage()
 	m.initConnectionManage()
+	m.initDeviceManage()
 	m.initActiveConnectionManage()
 	m.initNMObjManager(systemBus)
 	m.initSysNetwork(systemBus)
