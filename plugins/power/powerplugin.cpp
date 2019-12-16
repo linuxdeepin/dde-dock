@@ -206,12 +206,11 @@ void PowerPlugin::refreshPluginItemsVisible()
 void PowerPlugin::refreshTipsData()
 {
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
-
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
     const QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
 
-    if (m_powerInter->onBattery()) {
+    if (batteryState == BatteryState::DIS_CHARGING) {
         qulonglong timeToEmpty = m_systemPowerInter->batteryTimeToEmpty();
         QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
         uint hour = time.toString("hh").toUInt();
@@ -228,26 +227,24 @@ void PowerPlugin::refreshTipsData()
 
         m_tipsLabel->setText(tips);
     }
-    else {
-        if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.) {
-            m_tipsLabel->setText(tr("Charged %1").arg(value));
+    else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.){
+        m_tipsLabel->setText(tr("Charged %1").arg(value));
+     }else if (batteryState == BatteryState::NOT_CHARGED || batteryState == BatteryState::UNKNOWN){
+        m_tipsLabel->setText(tr("Charged %1").arg(value));
+    }else {
+        qulonglong timeToFull = m_systemPowerInter->batteryTimeToFull();
+        QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
+        uint hour = time.toString("hh").toUInt();
+        uint min = time.toString("mm").toUInt();
+        QString tips;
+
+        if (hour == 0) {
+            tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
         }
         else {
-            qulonglong timeToFull = m_systemPowerInter->batteryTimeToFull();
-            QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
-            uint hour = time.toString("hh").toUInt();
-            uint min = time.toString("mm").toUInt();
-
-            QString tips;
-
-            if (hour == 0) {
-                tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
-            }
-            else {
-                tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
-            }
-
-            m_tipsLabel->setText(tips);
+            tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
         }
+
+        m_tipsLabel->setText(tips);
     }
 }
