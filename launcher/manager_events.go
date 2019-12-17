@@ -174,7 +174,10 @@ func (m *Manager) delayHandleFileEvent(name string) {
 				// retry queryPkgName for m.noPkgItemIDs
 				logger.Debugf("m.noPkgItemIDs: %v", m.noPkgItemIDs)
 				for id := range m.noPkgItemIDs {
-					pkg := m.queryPkgName(id)
+					pkg, err := m.queryPkgName(id, "")
+					if err != nil {
+						logger.Warning(err)
+					}
 					logger.Debugf("item id %q pkg %q", id, pkg)
 
 					if pkg != "" {

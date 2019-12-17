@@ -202,8 +202,17 @@ func (m *Manager) uninstall(id string) error {
 		return err
 	}
 
+	err = m.appsObj.UninstallHints(0, []string{item.Path})
+	if err != nil {
+		logger.Warning("failed to call apps UninstallHints:", err)
+	}
+
 	// uninstall system package
-	if pkg := m.queryPkgName(item.ID); pkg != "" {
+	pkg, err := m.queryPkgName(item.ID, item.Path)
+	if err != nil {
+		logger.Warning(err)
+	}
+	if pkg != "" {
 		// is pkg installed?
 		installed, err := m.lastore.PackageExists(0, pkg)
 		if err != nil {

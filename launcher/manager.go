@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -337,7 +338,10 @@ func (m *Manager) removeItem(id string) {
 }
 
 func (m *Manager) queryCategoryID(item *Item) CategoryID {
-	pkg := m.queryPkgName(item.ID)
+	pkg, err := m.queryPkgName(item.ID, item.Path)
+	if err != nil {
+		logger.Warning(err)
+	}
 	if pkg == "" {
 		m.noPkgItemIDs[item.ID] = 1
 	}
@@ -362,15 +366,36 @@ func (m *Manager) _queryCategoryID(item *Item, pkg string) CategoryID {
 	return categoryGuess
 }
 
-func (m *Manager) queryPkgName(itemID string) string {
+var regOptApps = regexp.MustCompile(`^/opt/apps/([^/]+)/entries/applications/`)
+
+func (m *Manager) queryPkgName(itemID string, itemPath string) (string, error) {
+	if itemPath != "" {
+		// check whether it is the app of the new specification
+		fileInfo, err := os.Lstat(itemPath)
+		if err != nil {
+			return "", err
+		}
+		if strings.HasPrefix(fileInfo.Mode().String(), "L") {
+			// desktop file is symbol link
+			linkDst, err := os.Readlink(itemPath)
+			if err != nil {
+				return "", err
+			}
+			match := regOptApps.FindStringSubmatch(linkDst)
+			if match != nil {
+				return match[1], nil
+			}
+		}
+	}
+
 	if strings.HasPrefix(itemID, "org.deepin.flatdeb.") {
-		return "deepin-fpapp-" + itemID
+		return "deepin-fpapp-" + itemID, nil
 	}
 	if m.desktopPkgMap == nil {
 		logger.Warning("queryPkgName failed: Manager.desktopPkgMap is nil")
-		return ""
+		return "", nil
 	}
-	return m.desktopPkgMap[itemID]
+	return m.desktopPkgMap[itemID], nil
 }
 
 func (m *Manager) loadNameMap() error {
