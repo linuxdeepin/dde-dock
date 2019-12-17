@@ -281,3 +281,27 @@ func (a *Authority) getUserLocale(username string) (string, error) {
 	locale, err := userObj.Locale().Get(0)
 	return locale, err
 }
+
+func (a *Authority) releaseFprintTransaction(ignoreTxId uint64, devPath dbus.ObjectPath) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	for txId, tx := range a.txs {
+		if txId == ignoreTxId {
+			continue
+		}
+
+		fpTx, ok := tx.(*FPrintTransaction)
+		if !ok {
+			continue
+		}
+
+		fpTx.mu.Lock()
+		if fpTx.devicePath == devPath {
+			fpTx.devicePath = ""
+			fpTx.mu.Unlock()
+			return
+		}
+		fpTx.mu.Unlock()
+	}
+}

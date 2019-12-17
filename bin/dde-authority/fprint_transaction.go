@@ -34,8 +34,9 @@ type FPrintTransaction struct {
 	methods        *struct {
 		SetUser func() `in:"user"`
 	}
-	quit    chan struct{}
-	release chan struct{}
+	quit       chan struct{}
+	release    chan struct{}
+	devicePath dbus.ObjectPath
 }
 
 func (tx *FPrintTransaction) setPropAuthenticating(value bool) {
@@ -79,11 +80,24 @@ func (tx *FPrintTransaction) getDevice() (*fprint.Device, error) {
 	return deviceObj, nil
 }
 
+func (tx *FPrintTransaction) setDevicePath(devPath dbus.ObjectPath) {
+	tx.mu.Lock()
+	tx.devicePath = devPath
+	tx.mu.Unlock()
+}
+
+func (tx *FPrintTransaction) isClaimOk() bool {
+	tx.mu.Lock()
+	defer tx.mu.Unlock()
+	return tx.devicePath != ""
+}
+
 func (tx *FPrintTransaction) authenticate() error {
 	tx.PropsMu.Lock()
-	defer tx.PropsMu.Unlock()
+	inAuth := tx.Authenticating
+	tx.PropsMu.Unlock()
 
-	if tx.Authenticating {
+	if inAuth {
 		return errors.New("transaction busy")
 	}
 
@@ -129,11 +143,17 @@ func (tx *FPrintTransaction) authenticate() error {
 			logger.Warning(tx, verifyErr)
 		}
 
-		logger.Debug(tx, "release device")
-		err = deviceObj.Release(0)
-		if err != nil {
-			logger.Warning(tx, err)
+		if tx.isClaimOk() {
+			logger.Debug(tx, "release device")
+			tx.setDevicePath("")
+			err = deviceObj.Release(0)
+			if err != nil {
+				logger.Warning(tx, err)
+			}
+		} else {
+			logger.Debug(tx, "claim lost, do not call Release")
 		}
+
 		close(tx.release)
 
 		tx.PropsMu.Lock()
@@ -164,6 +184,10 @@ type verifyResult struct {
 	done   bool
 }
 
+func (tx *FPrintTransaction) releaseOtherTx(devPath dbus.ObjectPath) {
+	tx.baseTransaction.parent.releaseFprintTransaction(tx.id, devPath)
+}
+
 func (tx *FPrintTransaction) claimDevice(deviceObj *fprint.Device, user string) error {
 	logger.Debug(tx, "claim device")
 
@@ -173,11 +197,15 @@ func (tx *FPrintTransaction) claimDevice(deviceObj *fprint.Device, user string) 
 	}
 
 	if strv.Strv(caps).Contains("ClaimForce") {
+		tx.releaseOtherTx(deviceObj.Path_())
 		// huawei device
-		return deviceObj.ClaimForce(0, user)
+		err = deviceObj.ClaimForce(0, user)
+		if err != nil {
+			return err
+		}
 	} else {
 		// fprintd device
-		err := deviceObj.Claim(0, user)
+		err = deviceObj.Claim(0, user)
 		if err != nil {
 			if strings.Contains(err.Error(), "Could not attempt device open") {
 				killFPrintDaemon()
@@ -186,10 +214,17 @@ func (tx *FPrintTransaction) claimDevice(deviceObj *fprint.Device, user string) 
 		}
 	}
 
+	tx.setDevicePath(deviceObj.Path_())
 	return nil
 }
 
+var errClaimLost = errors.New("claim lost")
+
 func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType string) error {
+	if !tx.isClaimOk() {
+		return errClaimLost
+	}
+
 	logger.Debugf("%v verify device: %v, user: %s", tx, deviceObj.Path_(), user)
 	var isSwipe bool
 	if scanType == "swipe" {
@@ -217,7 +252,6 @@ func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType str
 	_, err = deviceObj.ConnectVerifyStatus(func(result string, done bool) {
 		logger.Debug(tx, "signal VerifyStatus", result, done)
 		if tx.hasEnded() {
-			close(verifyResultCh)
 			return
 		}
 
@@ -271,6 +305,10 @@ func shouldLimitVerifyTime(deviceObj *fprint.Device) bool {
 func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh chan verifyResult,
 	locale string) (ok, continue0 bool) {
 
+	if !tx.isClaimOk() {
+		return
+	}
+
 	logger.Debug(tx, "VerifyStart")
 	err := deviceObj.VerifyStart(0, "any")
 	if err != nil {
@@ -314,24 +352,28 @@ loop:
 		}
 	}
 
-	logger.Debug(tx, "VerifyStop")
-	stopCallCh := make(chan *dbus.Call, 1)
-	deviceObj.GoVerifyStop(0, stopCallCh)
-	select {
-	case call := <-stopCallCh:
-		logger.Debug(tx, "VerifyStop done")
-		if call.Err != nil {
-			logger.Warning(err)
+	if tx.isClaimOk() {
+		logger.Debug(tx, "VerifyStop")
+		stopCallCh := make(chan *dbus.Call, 1)
+		deviceObj.GoVerifyStop(0, stopCallCh)
+		select {
+		case call := <-stopCallCh:
+			logger.Debug(tx, "VerifyStop done")
+			if call.Err != nil {
+				logger.Warning(err)
+			}
+		case <-time.After(10 * time.Second):
+			logger.Warning(tx, "VerifyStop timed out")
 		}
-	case <-time.After(10 * time.Second):
-		logger.Warning(tx, "VerifyStop timed out")
-	}
-
-	switch status {
-	case "verify-no-match":
-		continue0 = true
-	case "verify-match":
-		ok = true
+		switch status {
+		case "verify-no-match":
+			continue0 = true
+		case "verify-match":
+			ok = true
+		}
+	} else {
+		logger.Debug(tx, "claim lost, do not call VerifyStop")
+		// verify failed, no continue
 	}
 
 	return
