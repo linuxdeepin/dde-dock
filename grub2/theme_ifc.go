@@ -20,14 +20,12 @@
 package grub2
 
 import (
-	"errors"
 	"os"
 	"os/exec"
 	"strings"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/imgutil"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -50,12 +48,6 @@ func (theme *Theme) SetBackgroundSourceFile(sender dbus.Sender, filename string)
 	}
 
 	filename = utils.DecodeURI(filename)
-	if !imgutil.CanDecodeConfig(filename) {
-		err = errors.New("failed to decode config")
-		logger.Warning(err)
-		return dbusutil.ToError(err)
-	}
-
 	cmd := exec.Command(adjustThemeCmd, "-set-background", filename)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
