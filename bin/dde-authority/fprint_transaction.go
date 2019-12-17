@@ -185,7 +185,7 @@ type verifyResult struct {
 }
 
 func (tx *FPrintTransaction) releaseOtherTx(devPath dbus.ObjectPath) {
-	tx.baseTransaction.parent.releaseFprintTransaction(tx.id, devPath)
+	tx.parent.releaseFprintTransaction(tx.id, devPath)
 }
 
 func (tx *FPrintTransaction) claimDevice(deviceObj *fprint.Device, user string) error {
