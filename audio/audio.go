@@ -20,6 +20,7 @@
 package audio
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os/exec"
@@ -49,6 +50,9 @@ const (
 	dbusServiceName = "com.deepin.daemon.Audio"
 	dbusPath        = "/com/deepin/daemon/Audio"
 	dbusInterface   = dbusServiceName
+
+	cmdSystemctl  = "systemctl"
+	cmdPulseaudio = "pulseaudio"
 )
 
 var (
@@ -141,8 +145,30 @@ func newAudio(service *dbusutil.Service) *Audio {
 }
 
 func startPulseaudio() error {
-	cmd := exec.Command("systemctl", "--user", "start", "pulseaudio")
-	return cmd.Run()
+	var errBuf bytes.Buffer
+	cmd := exec.Command(cmdSystemctl, "--user", "start", "pulseaudio")
+	cmd.Stderr = &errBuf
+	err := cmd.Run()
+	if err != nil {
+		logger.Warningf("failed to start pulseaudio via systemd: err: %v, stderr: %s",
+			err, errBuf.Bytes())
+	}
+	errBuf.Reset()
+
+	err = exec.Command(cmdPulseaudio, "--check").Run()
+	if err == nil {
+		return nil
+	}
+
+	cmd = exec.Command(cmdPulseaudio, "--start")
+	cmd.Stderr = &errBuf
+	err = cmd.Run()
+	if err != nil {
+		logger.Warningf("failed to start pulseaudio via `pulseaudio --start`: err: %v, stderr: %s",
+			err, errBuf.Bytes())
+		return xerrors.Errorf("cmd `pulseaudio --start` error:", err)
+	}
+	return nil
 }
 
 func getCtx() (ctx *pulse.Context, err error) {
@@ -161,11 +187,10 @@ func getCtx() (ctx *pulse.Context, err error) {
 	return
 }
 
-func (a *Audio) init() {
+func (a *Audio) init() error {
 	ctx, err := getCtx()
 	if err != nil {
-		logger.Warning("failed to init context:", err)
-		return
+		return xerrors.Errorf("failed to get context: %w", err)
 	}
 
 	a.mu.Lock()
@@ -274,6 +299,7 @@ func (a *Audio) init() {
 	}
 	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
+	return nil
 }
 
 func (a *Audio) destroyCtxRelated() {

@@ -52,8 +52,13 @@ func (*Module) GetDependencies() []string {
 func (m *Module) start() error {
 	service := loader.GetService()
 	m.audio = newAudio(service)
-	m.audio.init()
-	err := service.Export(dbusPath, m.audio, m.audio.syncConfig)
+	err := m.audio.init()
+	if err != nil {
+		logger.Warning("failed to init audio module:", err)
+		return nil
+	}
+
+	err = service.Export(dbusPath, m.audio, m.audio.syncConfig)
 	if err != nil {
 		return err
 	}
