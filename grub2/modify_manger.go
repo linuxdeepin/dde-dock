@@ -34,10 +34,6 @@ const (
 )
 
 func init() {
-	// force use LANG=en_US.UTF-8 to make lsb-release/os-probe support
-	// Unicode characters
-	// FIXME: keep same with the current system language settings
-	os.Setenv("LANG", "en_US.UTF-8")
 	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
 }
 

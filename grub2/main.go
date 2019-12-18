@@ -22,6 +22,8 @@ package grub2
 import (
 	"errors"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"time"
 
 	"pkg.deepin.io/dde/api/inhibit_hint"
@@ -91,5 +93,17 @@ func PrepareGfxmodeDetect() error {
 	}
 
 	err = writeGrubParams(params)
-	return err
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command(adjustThemeCmd, "-fallback-only")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		logger.Warning("failed to adjust theme:", err)
+	}
+
+	return nil
 }
