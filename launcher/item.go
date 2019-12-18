@@ -78,8 +78,15 @@ func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
 		name = appInfo.GetId()
 	}
 
+	filename := appInfo.GetFileName()
+	ctime, err := getFileCTime(filename)
+	if err != nil {
+		logger.Warningf("failed to get file %q ctime: %v", filename, err)
+	}
+
 	item := &Item{
-		Path:            appInfo.GetFileName(),
+		Path:            filename,
+		TimeInstalled:   ctime,
 		Name:            name,
 		enName:          enName,
 		Icon:            appInfo.GetIcon(),

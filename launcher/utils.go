@@ -27,6 +27,7 @@ import (
 	"pkg.deepin.io/lib/xdg/basedir"
 	"pkg.deepin.io/lib/xdg/userdir"
 	"strings"
+	"syscall"
 )
 
 const (
@@ -147,4 +148,13 @@ func runeSliceDiff(key, current []rune) (popCount int, runesPush []rune) {
 
 	//logger.Debug("i:", i)
 	return
+}
+
+func getFileCTime(filename string) (int64, error) {
+	var stat syscall.Stat_t
+	err := syscall.Stat(filename, &stat)
+	if err != nil {
+		return 0, err
+	}
+	return int64(stat.Ctim.Sec), nil
 }
