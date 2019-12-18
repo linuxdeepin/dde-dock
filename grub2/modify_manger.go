@@ -30,6 +30,7 @@ import (
 
 const (
 	grubMkconfigCmd = "grub-mkconfig"
+	updateGrubCmd   = "update-grub"
 	adjustThemeCmd  = "/usr/lib/deepin-api/adjust-grub-theme"
 )
 
@@ -133,7 +134,7 @@ func (m *modifyManager) update(adjustTheme bool, adjustThemeLang string) {
 	}
 
 	logJobStart(logJobMkConfig)
-	err := runGrubMkconfig()
+	err := runUpdateGrub()
 	if err != nil {
 		logger.Warning("failed to make config:", err)
 	}
@@ -141,11 +142,20 @@ func (m *modifyManager) update(adjustTheme bool, adjustThemeLang string) {
 	m.updateEnd()
 }
 
-func runGrubMkconfig() error {
-	cmd := exec.Command(grubMkconfigCmd, "-o", grubScriptFile)
+func runUpdateGrub() error {
+	updateGrubPath, err := exec.LookPath(updateGrubCmd)
+	var cmd *exec.Cmd
+	if err == nil {
+		cmd = exec.Command(updateGrubPath)
+		logger.Debugf("$ %s", updateGrubCmd)
+	} else {
+		// fallback to grub-mkconfig
+		cmd = exec.Command(grubMkconfigCmd, "-o", grubScriptFile)
+		logger.Debugf("$ %s -o %s", grubMkconfigCmd, grubScriptFile)
+	}
+
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	logger.Debugf("$ %s -o %s", grubMkconfigCmd, grubScriptFile)
 	return cmd.Run()
 }
 

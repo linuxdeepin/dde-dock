@@ -31,7 +31,7 @@ prepareGfxmodeDetect () {
         if [ "$DEEPIN_GFXMODE_ADJUSTED" = 1 -o -n "$DEEPIN_GFXMODE_DETECT" ] ;then
             return
         fi
-        /usr/lib/deepin-daemon/grub2 -prepare-gfxmode-detect && grub-mkconfig -o /boot/grub/grub.cfg || true
+        /usr/lib/deepin-daemon/grub2 -prepare-gfxmode-detect && update-grub || true
     fi
 }
 

@@ -79,7 +79,7 @@ func getGrubParamsContent(params map[string]string) []byte {
 	for _, k := range keys {
 		buf.WriteString(k + "=" + params[k] + "\n")
 	}
-	// if you want let the grub-mkconfig exit with error code,
+	// if you want let the update-grub exit with error code,
 	// uncomment the next line.
 	//buf.WriteString("=\n")
 	return buf.Bytes()
