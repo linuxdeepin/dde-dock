@@ -12,5 +12,5 @@
 
     "Name": "ACL ELF Denied",
     "Description": "",
-    "Exec": ["sh", "-c", "msg=$(gettext -d dde-daemon '\"%s\" did not pass the system security verification, and cannot run now');msg=$(printf \"$msg\" $1);notify-send -a dde-control-center \"$msg\"", "", "%{arg0}"]
+    "Exec": ["sh", "-c", "msg=$(gettext -d dde-daemon '\"%s\" did not pass the system security verification, and cannot run now');msg=$(printf \"$msg\" $1);notify-send -i preferences-system -a dde-control-center \"$msg\"", "", "%{arg0}"]
 }
