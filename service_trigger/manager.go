@@ -5,8 +5,6 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"path/filepath"
-	"regexp"
-	"strconv"
 	"strings"
 
 	"pkg.deepin.io/lib/dbus1"
@@ -104,32 +102,22 @@ func getNameOwner(conn *dbus.Conn, name string) (string, error) {
 	return owner, err
 }
 
-var argReg = regexp.MustCompile(`^%arg(\d+)$`)
-
-func replaceArg(arg string, signal *dbus.Signal) string {
-	submatch := argReg.FindStringSubmatch(arg)
-	if submatch == nil {
-		return arg
+func newReplacer(signal *dbus.Signal) *strings.Replacer {
+	var oldNewSlice []string
+	for idx, item := range signal.Body {
+		oldStr := fmt.Sprintf("%%{arg%d}", idx)
+		newStr := fmt.Sprintf("%v", item)
+		logger.Debugf("old %q => new %q", oldStr, newStr)
+		oldNewSlice = append(oldNewSlice, oldStr, newStr)
 	}
-
-	argIdx, err := strconv.Atoi(submatch[1])
-	if err != nil {
-		logger.Warning(err)
-		return arg
-	}
-	argIdx--
-	if argIdx < 0 || argIdx >= len(signal.Body) {
-		logger.Warningf("replaceArg: arg %q index out of range", arg)
-		return ""
-	}
-	signalItem := signal.Body[argIdx]
-	return fmt.Sprintf("%v", signalItem)
+	return strings.NewReplacer(oldNewSlice...)
 }
 
 func (m *Manager) execService(service *Service, signal *dbus.Signal) {
 	var args []string
+	replacer := newReplacer(signal)
 	for _, arg := range service.Exec[1:] {
-		args = append(args, replaceArg(arg, signal))
+		args = append(args, replacer.Replace(arg))
 	}
 
 	logger.Debugf("run cmd %q %#v", service.Exec[0], args)

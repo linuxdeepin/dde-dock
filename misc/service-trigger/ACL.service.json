@@ -1,0 +1,16 @@
+{
+    "Monitor": {
+        "Type": "DBus",
+        "DBus": {
+            "BusType": "System",
+            "Sender": "com.deepin.daemon.ACL",
+            "Interface": "com.deepin.daemon.ACL.ELF",
+            "Path": "/com/deepin/daemon/ACL/ELF",
+            "Signal": "Denied"
+        }
+    },
+
+    "Name": "ACL ELF Denied",
+    "Description": "",
+    "Exec": ["notify-send", "-a", "dde-control-center", "“%{arg0}”没有通过系统安全验证，无法运行"]
+}
