@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/log"
 )
 
 type Manager struct {
@@ -114,15 +115,29 @@ func newReplacer(signal *dbus.Signal) *strings.Replacer {
 }
 
 func (m *Manager) execService(service *Service, signal *dbus.Signal) {
+	if len(service.Exec) == 0 {
+		logger.Warning("service Exec empty")
+		return
+	}
+
 	var args []string
+	execArgs := service.Exec[1:]
+	if logger.GetLogLevel() == log.LevelDebug {
+		if service.Exec[0] == "sh" {
+			// add -x option for debug shell
+			execArgs = append([]string{"-x"}, execArgs...)
+		}
+	}
+
 	replacer := newReplacer(signal)
-	for _, arg := range service.Exec[1:] {
+	for _, arg := range execArgs {
 		args = append(args, replacer.Replace(arg))
 	}
 
 	logger.Debugf("run cmd %q %#v", service.Exec[0], args)
 	cmd := exec.Command(service.Exec[0], args...)
-	err := cmd.Run()
+	out, err := cmd.CombinedOutput()
+	logger.Debugf("cmd combined output: %s", out)
 	if err != nil {
 		logger.Warning(err)
 	}

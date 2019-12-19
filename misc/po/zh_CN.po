@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-19 11:27+0800\n"
-"PO-Revision-Date: 2019-11-19 07:50+0000\n"
-"Last-Translator: Cindy0514\n"
+"POT-Creation-Date: 2019-12-19 17:00+0800\n"
+"PO-Revision-Date: 2019-12-19 09:08+0000\n"
+"Last-Translator: transifex deepin <transifex@deepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,11 +75,11 @@ msgstr "屏幕缩放"
 msgid "Setting display scaling"
 msgstr "即将设置屏幕缩放"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr "指纹验证失败"
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr "指纹验证超时"
 
@@ -131,22 +131,22 @@ msgstr "消息访问"
 msgid "Message notification"
 msgstr "消息通知"
 
-#: ../../bluetooth/utils_notify.go:52
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "连接%q成功"
 
-#: ../../bluetooth/utils_notify.go:56 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "断开"
 
-#: ../../bluetooth/utils_notify.go:60
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "请确定%q已打开而且在通讯范围内"
 
-#: ../../bluetooth/utils_notify.go:65
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "蓝牙连接失败"
 
@@ -422,54 +422,50 @@ msgstr "正在切换系统语言，请稍候…"
 msgid "System language changed, please log out and then log in"
 msgstr "语言切换成功，请注销后重新登录"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "恢复"
-
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "取消"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "重试"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "取消"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q 安装成功。"
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "%q 安装失败"
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "卸载 %q 成功。"
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "卸载 %q 失败。"
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "为防止自动关机，请连接电源以保证安全更新。"
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "已成功清理软件包缓存"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "检测到您的系统源已被修改，为了您的正常使用，建议恢复到官方源"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "成功卸载 %q "
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "%q 卸载失败"
 
@@ -522,7 +518,7 @@ msgstr "隧道TLS"
 msgid "Protected EAP"
 msgstr "受保护的EAP"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:317 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "有线连接"
 
@@ -947,43 +943,48 @@ msgstr "连接%q需要密码"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "连接失败，未能加入%q，密码不正确"
 
-#: ../../network/utils_dbus_nm.go:230
+#: ../../network/utils_dbus_nm.go:265
 msgid "Unknown"
 msgstr "未知"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "当前已离线。"
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "飞行模式已启用"
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式。"
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "网络"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "设置系统代理成功。"
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "系统代理已取消。"
 
-#: ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "已连接"
+
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "“%s”没有通过系统安全验证，无法运行"
 
 #: ../../session/power/manager_events.go:151
 msgid "Battery Critically Low"

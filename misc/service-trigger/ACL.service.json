@@ -12,5 +12,5 @@
 
     "Name": "ACL ELF Denied",
     "Description": "",
-    "Exec": ["notify-send", "-a", "dde-control-center", "“%{arg0}”没有通过系统安全验证，无法运行"]
+    "Exec": ["sh", "-c", "msg=$(gettext -d dde-daemon '\"%s\" did not pass the system security verification, and cannot run now');msg=$(printf \"$msg\" $1);notify-send -a dde-control-center \"$msg\"", "", "%{arg0}"]
 }

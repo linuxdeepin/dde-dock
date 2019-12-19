@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-19 11:27+0800\n"
+"POT-Creation-Date: 2019-12-19 17:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,11 +67,11 @@ msgstr ""
 msgid "Setting display scaling"
 msgstr ""
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr ""
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr ""
 
@@ -123,22 +123,22 @@ msgstr ""
 msgid "Message notification"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:52
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:56 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:60
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:65
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr ""
 
@@ -414,54 +414,50 @@ msgstr ""
 msgid "System language changed, please log out and then log in"
 msgstr ""
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr ""
-
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr ""
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr ""
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr ""
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr ""
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr ""
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr ""
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr ""
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr ""
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr ""
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr ""
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr ""
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr ""
 
@@ -514,7 +510,7 @@ msgstr ""
 msgid "Protected EAP"
 msgstr ""
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:317 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr ""
 
@@ -938,41 +934,47 @@ msgstr ""
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:230
+#: ../../network/utils_dbus_nm.go:265
 msgid "Unknown"
 msgstr ""
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr ""
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr ""
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr ""
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr ""
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:115
 msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr ""
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:126
 msgid "Connected"
+msgstr ""
+
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid ""
+"\"%s\" did not pass the system security verification, and cannot run now"
 msgstr ""
 
 #: ../../session/power/manager_events.go:151
