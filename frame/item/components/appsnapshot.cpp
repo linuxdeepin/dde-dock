@@ -113,8 +113,9 @@ void AppSnapshot::compositeChanged() const
 void AppSnapshot::setWindowInfo(const WindowInfo &info)
 {
     m_windowInfo = info;
-
-    m_title->setText(m_windowInfo.title);
+    QFontMetrics fm(m_title->font());
+    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, width());
+    m_title->setText(strTtile);
 }
 
 void AppSnapshot::dragEnterEvent(QDragEnterEvent *e)
