@@ -112,43 +112,6 @@ QSize PluginsItem::sizeHint() const
     return m_centralWidget->sizeHint();
 }
 
-void PluginsItem::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-
-    if (m_draging)
-        return;
-
-    DisplayMode displayMode = m_pluginInter->displayMode();
-
-    if (displayMode == Dock::DisplayMode::Fashion) {
-        return;
-    }
-    if (!m_hover || m_dragging) {
-        return;
-    }
-
-    if (itemType() == TrayPlugin)
-        return;
-
-    // draw hover background
-    QRect destRect;
-    destRect.setSize(m_centralWidget->sizeHint());
-    destRect.moveCenter(rect().center());
-
-    QPainterPath path;
-    path.addRoundedRect(destRect, 6, 6);
-
-    QColor color;
-    color = QColor::fromRgb(255, 255, 255);
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setOpacity(0.1);
-
-    painter.fillPath(path, color);
-}
-
 void PluginsItem::refershIcon()
 {
     m_pluginInter->refreshIcon(m_itemKey);

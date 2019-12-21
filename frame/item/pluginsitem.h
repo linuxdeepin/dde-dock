@@ -47,7 +47,6 @@ public:
 
     ItemType itemType() const override;
     QSize sizeHint() const override;
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     QWidget *centralWidget() const;
 
