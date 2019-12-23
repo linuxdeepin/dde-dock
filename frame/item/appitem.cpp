@@ -291,6 +291,12 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
+    int curTimestamp = QX11Info::getTimestamp();
+    if ((curTimestamp - m_lastclickTimes) < 300)
+        return;
+
+    m_lastclickTimes = curTimestamp;
+
     if (e->button() == Qt::MiddleButton) {
         m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
 
@@ -307,11 +313,6 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
                  << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
-        int curTimestamp = QX11Info::getTimestamp();
-        if ((curTimestamp - m_lastclickTimes) < 200)
-            return;
-
-        m_lastclickTimes = curTimestamp;
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
         // play launch effect
