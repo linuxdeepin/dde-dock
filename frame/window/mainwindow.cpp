@@ -129,7 +129,6 @@ MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent),
 
       m_launched(false),
-      m_updatePanelVisible(false),
 
       m_mainPanel(new MainPanelControl(this)),
 
@@ -295,31 +294,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::launch()
 {
-    m_updatePanelVisible = false;
-    resetPanelEnvironment(false);
     setVisible(false);
-
     QTimer::singleShot(400, this, [&] {
         m_launched = true;
+        qApp->processEvents();
         QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
-        m_mainPanel->setVisible(true);
-        resetPanelEnvironment(false);
-        expand();
-    });
-
-    // set strut
-    QTimer::singleShot(600, this, [&] {
-        setStrutPartial();
-    });
-
-    // reset to right environment when animation finished
-    QTimer::singleShot(800, this, [&] {
-        m_updatePanelVisible = true;
+        setVisible(true);
         updatePanelVisible();
+        expand();
+        resetPanelEnvironment(false);
     });
-
-    qApp->processEvents();
-    QTimer::singleShot(300, this, &MainWindow::show);
 }
 
 bool MainWindow::event(QEvent *e)
@@ -583,7 +567,6 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
 {
     m_newDockPos = nextPos;
     // paly hide animation and disable other animation
-    m_updatePanelVisible = false;
     clearStrutPartial();
     narrow(prevPos);
 
@@ -594,7 +577,6 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
 
     // reset to right environment when animation finished
     QTimer::singleShot(500, this, [&] {
-        m_updatePanelVisible = true;
         m_mainPanel->setPositonValue(m_curDockPos);
         resetPanelEnvironment(true);
 
@@ -814,9 +796,6 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
 
 void MainWindow::updatePanelVisible()
 {
-//    if (!m_updatePanelVisible)
-//        return;
-
     if (m_settings->hideMode() == KeepShowing) {
         return expand();
     }

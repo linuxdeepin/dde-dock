@@ -109,7 +109,6 @@ private slots:
 
 private:
     bool m_launched;
-    bool m_updatePanelVisible;
     MainPanelControl *m_mainPanel;
 
     DPlatformWindowHandle m_platformWindowHandle;
