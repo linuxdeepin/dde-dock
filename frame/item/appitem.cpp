@@ -80,6 +80,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_dragging(false),
 
       m_retryTimes(0),
+      m_lastclickTimes(0),
 
       m_appIcon(QPixmap()),
 
@@ -306,6 +307,11 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
                  << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
+        int curTimestamp = QX11Info::getTimestamp();
+        if ((curTimestamp - m_lastclickTimes) < 200)
+            return;
+
+        m_lastclickTimes = curTimestamp;
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
         // play launch effect

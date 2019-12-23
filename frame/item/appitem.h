@@ -113,6 +113,7 @@ private:
     bool m_dragging;
     bool m_active;
     int m_retryTimes;
+    unsigned long m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;
     QString m_id;
