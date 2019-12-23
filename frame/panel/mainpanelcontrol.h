@@ -103,6 +103,7 @@ private:
     QWidget *m_appAreaWidget;
     QWidget *m_trayAreaWidget;
     QWidget *m_pluginAreaWidget;
+    QWidget *m_desktopWidget;
     QBoxLayout *m_fixedAreaLayout;
     QBoxLayout *m_trayAreaLayout;
     QBoxLayout *m_pluginLayout;
@@ -121,6 +122,7 @@ private:
     QPoint m_mousePressPos;
     int m_trayIconCount;
     TrayPluginItem *m_tray = nullptr;
+    bool m_isHover;//判断鼠标是否移到desktop区域
 };
 
 #endif // MAINPANELCONTROL_H

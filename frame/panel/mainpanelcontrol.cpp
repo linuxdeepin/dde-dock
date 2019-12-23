@@ -51,6 +51,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_appAreaWidget(new QWidget(this))
     , m_trayAreaWidget(new QWidget(this))
     , m_pluginAreaWidget(new QWidget(this))
+    , m_desktopWidget(new QWidget(this))
     , m_fixedAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_trayAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight))
@@ -63,15 +64,18 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_fixedSpliter(new QLabel(this))
     , m_appSpliter(new QLabel(this))
     , m_traySpliter(new QLabel(this))
+    , m_isHover(false)
 {
     init();
     updateMainPanelLayout();
     setAcceptDrops(true);
     setMouseTracking(true);
+    m_desktopWidget->setMouseTracking(true);
 
     m_appAreaWidget->installEventFilter(this);
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
+    m_desktopWidget->installEventFilter(this);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -119,6 +123,10 @@ void MainPanelControl::init()
     m_pluginLayout->setMargin(0);
     m_pluginLayout->setContentsMargins(10, 10, 10, 10);
     m_pluginLayout->setSpacing(10);
+
+    //桌面
+    m_mainPanelLayout->addWidget(m_desktopWidget);
+
 }
 
 void MainPanelControl::setDisplayMode(DisplayMode mode)
@@ -209,6 +217,14 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
+    if (m_position == Position::Right || m_position == Position::Left)
+        m_desktopWidget->setFixedSize(width(), 6);
+    else
+       m_desktopWidget->setFixedSize(6, height());
+
+    if (DisplayMode::Fashion == m_dislayMode)
+        m_desktopWidget->setFixedSize(0, 0);
+
     resizeDockIcon();
     return QWidget::resizeEvent(event);
 }
@@ -470,6 +486,16 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
+    if (watched == m_desktopWidget){
+        if (event->type() == QEvent::Enter){
+            m_isHover = true;
+            update();
+        } else if (event->type() == QEvent::Leave){
+            m_isHover = false;
+            update();
+        }
+    }
+
     if (watched == m_appAreaWidget) {
         if (event->type() == QEvent::Resize)
             updateAppAreaSonWidgetSize();
@@ -519,8 +545,13 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 
 void MainPanelControl::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton) {
         m_mousePressPos = e->globalPos();
+
+        QRect rect(m_desktopWidget->pos(),m_desktopWidget->size());
+        if (rect.contains(e->pos()))
+            QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+    }
 
     QWidget::mousePressEvent(e);
 }
@@ -722,6 +753,20 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
     painter.fillRect(m_fixedSpliter->geometry(), color);
     painter.fillRect(m_appSpliter->geometry(), color);
     painter.fillRect(m_traySpliter->geometry(), color);
+
+    //描绘桌面区域的颜色
+    painter.setOpacity(1);
+    QPen pen;
+    QColor penColor(0, 0, 0, 25);
+    pen.setWidth(2);
+    pen.setColor(penColor);
+    painter.setPen(pen);
+    painter.drawRect(m_desktopWidget->geometry());
+    if (m_isHover){
+        painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 51));
+        return;
+    }
+     painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 25));
 }
 
 void MainPanelControl::resizeDockIcon()
@@ -759,11 +804,13 @@ void MainPanelControl::resizeDockIcon()
         if (trashPlugin) totalLength += trashPlugin->width();
         if (shutdownPlugin) totalLength += shutdownPlugin->width();
         if (keyboardPlugin) totalLength += keyboardPlugin->width();
+        totalLength -= m_desktopWidget->width();
     } else {
         totalLength -= m_pluginAreaWidget->height();
         if (trashPlugin) totalLength += trashPlugin->height();
         if (shutdownPlugin) totalLength += shutdownPlugin->height();
         if (keyboardPlugin) totalLength += keyboardPlugin->height();
+        totalLength -= m_desktopWidget->height();
     }
 
     if (totalLength < 0)
