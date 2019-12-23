@@ -21,10 +21,12 @@ package accounts
 
 import (
 	"path/filepath"
+	"sort"
 	"time"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/fsnotify"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -145,12 +147,15 @@ func (m *Manager) updatePropUserList() {
 	}
 
 	m.usersMapMu.Unlock()
+	sort.Strings(userPaths)
 
 	m.UserListMu.Lock()
-	m.UserList = userPaths
-	err := m.service.EmitPropertyChanged(m, "UserList", userPaths)
-	if err != nil {
-		logger.Warning(err)
+	if !strv.Strv(userPaths).Equal(m.UserList) {
+		m.UserList = userPaths
+		err := m.service.EmitPropertyChanged(m, "UserList", userPaths)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	m.UserListMu.Unlock()
 }
@@ -190,6 +195,10 @@ func (m *Manager) addUser(uInfo *users.UserInfo) {
 	if err != nil {
 		logger.Warningf("failed to export user %s: %v", uInfo.Uid, err)
 		return
+	}
+	err = m.service.Emit(m, "UserAdded", userPath)
+	if err != nil {
+		logger.Warning(err)
 	}
 }
 

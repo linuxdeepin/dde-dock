@@ -20,6 +20,7 @@
 package accounts
 
 import (
+	"sort"
 	"sync"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
@@ -141,6 +142,7 @@ func (m *Manager) initUsers(list []string) {
 		m.usersMap[p] = u
 		m.usersMapMu.Unlock()
 	}
+	sort.Strings(userList)
 	m.UserList = userList
 }
 
