@@ -41,6 +41,7 @@
 #define TRASH_MARGIN 20
 #define PLUGIN_MAX_SIZE  40
 #define PLUGIN_MIN_SIZE  20
+#define DESKTOP_SIZE  10
 
 DWIDGET_USE_NAMESPACE
 
@@ -218,9 +219,9 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
     if (m_position == Position::Right || m_position == Position::Left)
-        m_desktopWidget->setFixedSize(width(), 6);
+        m_desktopWidget->setFixedSize(width(), DESKTOP_SIZE);
     else
-       m_desktopWidget->setFixedSize(6, height());
+       m_desktopWidget->setFixedSize(DESKTOP_SIZE, height());
 
     if (DisplayMode::Fashion == m_dislayMode)
         m_desktopWidget->setFixedSize(0, 0);
