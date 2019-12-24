@@ -353,7 +353,12 @@ void FashionTrayItem::resizeTray()
         return;
 
     if (m_dockpos == Dock::Position::Top || m_dockpos == Dock::Position::Bottom) {
-        m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        if (m_attentionContainer->itemCount() != 0){
+            m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount());
+        } else {
+            m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        }
+
         m_holdContainer->setFixedHeight(QWIDGETSIZE_MAX);
 
         m_attentionContainer->setFixedWidth((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + (m_attentionContainer->itemCount() ? TraySpace : 0));
