@@ -257,7 +257,6 @@ void FashionTrayItem::onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrappe
             attentionWrapperToNormalWrapper();
         }
     }
-
     m_attentionDelayTimer->start();
 
     requestResize();
@@ -357,7 +356,7 @@ void FashionTrayItem::resizeTray()
         m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
         m_holdContainer->setFixedHeight(QWIDGETSIZE_MAX);
 
-        m_attentionContainer->setFixedWidth((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + m_attentionContainer->itemCount() ? TraySpace : 0);
+        m_attentionContainer->setFixedWidth((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + (m_attentionContainer->itemCount() ? TraySpace : 0));
         m_attentionContainer->setFixedHeight(QWIDGETSIZE_MAX);
 
         m_controlWidget->setFixedSize(m_iconSize, QWIDGETSIZE_MAX);
