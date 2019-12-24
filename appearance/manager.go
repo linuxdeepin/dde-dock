@@ -37,6 +37,7 @@ import (
 	"time"
 
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	imageeffect "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.imageeffect"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	geoclue "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.geoclue2"
@@ -138,6 +139,7 @@ type Manager struct {
 
 	userObj             *accounts.User
 	imageBlur           *accounts.ImageBlur
+	imageEffect         *imageeffect.ImageEffect
 	xSettings           *sessionmanager.XSettings
 	login1Manager       *login1.Manager
 	geoclueClient       *geoclue.Client
@@ -382,6 +384,12 @@ func (m *Manager) init() error {
 		if err != nil {
 			logger.Warning("imageBlur delete err:", err)
 		}
+
+		logger.Debug("imageEffect delete", file)
+		err = m.imageEffect.Delete(0, "all", file)
+		if err != nil {
+			logger.Warning("imageEffect delete err:", err)
+		}
 	})
 
 	sessionBus := m.service.Conn()
@@ -411,6 +419,7 @@ func (m *Manager) init() error {
 		logger.Warning(err)
 	}
 	m.imageBlur = accounts.NewImageBlur(systemBus)
+	m.imageEffect = imageeffect.NewImageEffect(systemBus)
 
 	m.xSettings = sessionmanager.NewXSettings(sessionBus)
 	theme_thumb.Init(m.getScaleFactor())
@@ -643,6 +652,15 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 	if err != nil {
 		logger.Warning("call imageBlur.Get err:", err)
 	}
+	go func() {
+		outputFile, err := m.imageEffect.Get(0, "", file)
+		if err != nil {
+			logger.Warning("imageEffect Get err:", err)
+		} else {
+			logger.Warning("imageEffect Get outputFile:", outputFile)
+		}
+	}()
+
 	return file, nil
 }
 
