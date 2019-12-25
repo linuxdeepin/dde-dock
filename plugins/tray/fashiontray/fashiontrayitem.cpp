@@ -339,6 +339,8 @@ bool FashionTrayItem::event(QEvent *event)
         if (propertyName == "iconSize") {
             m_iconSize = property("iconSize").toInt();
             m_normalContainer->setItemSize(m_iconSize);
+            m_holdContainer->setItemSize(m_iconSize);
+            m_attentionContainer->setItemSize(m_iconSize);
 
             resizeTray();
         }
