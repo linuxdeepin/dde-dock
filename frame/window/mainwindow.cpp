@@ -295,14 +295,15 @@ MainWindow::~MainWindow()
 void MainWindow::launch()
 {
     setVisible(false);
-    QTimer::singleShot(400, this, [&] {
-        m_launched = true;
-        qApp->processEvents();
-        QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
+    m_launched = true;
+    qApp->processEvents();
+    QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
+    updatePanelVisible();
+
+    QTimer::singleShot(200, this, [&] {
         setVisible(true);
-        updatePanelVisible();
-        expand();
         resetPanelEnvironment(false);
+        expand();
     });
 }
 
