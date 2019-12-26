@@ -26,7 +26,9 @@ NormalContainer::NormalContainer(TrayPlugin *trayPlugin, QWidget *parent)
 
 void NormalContainer::compositeChanged()
 {
-    const int duration = DWindowManagerHelper::instance()->hasComposite() ? 300 : 1;
+    int duration = DWindowManagerHelper::instance()->hasComposite() ? 300 : 1;
+    if (isEmpty())
+        duration = 0;
 
     m_sizeAnimation->setDuration(duration);
 }
@@ -86,6 +88,7 @@ void NormalContainer::refreshVisible()
         setMinimumSize(0, 0);
     }
 
+    compositeChanged();
     QSize endSize = expand() ? totalSize() : QSize(0, 0);
 
     const QPropertyAnimation::State state = m_sizeAnimation->state();

@@ -41,8 +41,8 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
       m_currentDraggingTray(nullptr),
       m_normalContainer(new NormalContainer(m_trayPlugin)),
       m_attentionContainer(new AttentionContainer(m_trayPlugin)),
-      m_holdContainer(new HoldContainer(m_trayPlugin))
-    , m_leftSpace(new QWidget)
+      m_holdContainer(new HoldContainer(m_trayPlugin)),
+      m_leftSpace(new QWidget)
 {
     setAcceptDrops(true);
 
@@ -356,27 +356,28 @@ void FashionTrayItem::resizeTray()
 
     if (m_dockpos == Dock::Position::Top || m_dockpos == Dock::Position::Bottom) {
         if (m_attentionContainer->itemCount() != 0){
-            m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount());
+            m_mainBoxLayout->setContentsMargins(0, 0, TraySpace, 0);
         } else {
-            m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+            m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
         }
-
+        m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
         m_holdContainer->setFixedHeight(QWIDGETSIZE_MAX);
 
-        m_attentionContainer->setFixedWidth((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + (m_attentionContainer->itemCount() ? TraySpace : 0));
+        m_attentionContainer->setFixedWidth(m_iconSize * m_attentionContainer->itemCount());
         m_attentionContainer->setFixedHeight(QWIDGETSIZE_MAX);
 
         m_controlWidget->setFixedSize(m_iconSize, QWIDGETSIZE_MAX);
     } else {
         m_holdContainer->setFixedWidth(QWIDGETSIZE_MAX);
         if (m_attentionContainer->itemCount() != 0){
-            m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount());
+            m_mainBoxLayout->setContentsMargins(0, 0, 0, TraySpace);
         } else {
-            m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+            m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
         }
 
+         m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
         m_attentionContainer->setFixedWidth(QWIDGETSIZE_MAX);
-        m_attentionContainer->setFixedHeight((m_iconSize + TraySpace) * m_attentionContainer->itemCount() + (m_attentionContainer->itemCount() ? TraySpace : 0));
+        m_attentionContainer->setFixedHeight(m_iconSize * m_attentionContainer->itemCount());
 
         m_controlWidget->setFixedSize(QWIDGETSIZE_MAX, m_iconSize);
     }    

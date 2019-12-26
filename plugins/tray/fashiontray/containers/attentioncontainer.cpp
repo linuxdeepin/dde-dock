@@ -22,8 +22,8 @@ bool AttentionContainer::acceptWrapper(FashionTrayWidgetWrapper *wrapper)
 
 void AttentionContainer::refreshVisible()
 {
-    AbstractContainer::refreshVisible();
-
+   // AbstractContainer::refreshVisible();
+    setContentsMargins(0, 0, 0 ,0);
     setVisible(!isEmpty());
 }
 
