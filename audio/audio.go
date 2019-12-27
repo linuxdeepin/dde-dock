@@ -358,9 +358,9 @@ func (a *Audio) initDefaultVolume() bool {
 	inVolumePer := float64(gsAudio.GetInt(gsKeyInputVolume)) / 100.0
 	outVolumePer := float64(gsAudio.GetInt(gsKeyOutputVolume)) / 100.0
 	headphoneOutVolumePer := float64(gsAudio.GetInt(gsKeyHeadphoneOutputVolume)) / 100.0
-	defaultInputVolume = pulse.VolumeUIMax * inVolumePer
-	defaultOutputVolume = pulse.VolumeUIMax * outVolumePer
-	defaultHeadphoneOutputVolume = pulse.VolumeUIMax * headphoneOutVolumePer
+	defaultInputVolume = inVolumePer
+	defaultOutputVolume = outVolumePer
+	defaultHeadphoneOutputVolume = headphoneOutVolumePer
 
 	a.resetSinksVolume()
 	a.resetSourceVolume()
