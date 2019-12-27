@@ -11,7 +11,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	libdate "github.com/rickb777/date"
-	"github.com/stephens2424/rrule"
+	"github.com/teambition/rrule-go"
 	"pkg.deepin.io/lib/gettext"
 )
 
@@ -113,7 +113,7 @@ func (j *Job) validate() error {
 		return errors.New("job end time before start time")
 	}
 
-	_, err := rrule.ParseRRule(j.RRule)
+	_, err := rrule.StrToRRule(j.RRule)
 	if err != nil {
 		return fmt.Errorf("invalid RRule: %v", err)
 	}
@@ -246,12 +246,16 @@ func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
 		return nil, nil
 	}
 
-	rule, err := rrule.ParseRRule(j.RRule)
+	rOpt, err := rrule.StrToROptionInLocation(j.RRule, time.Local)
 	if err != nil {
 		return nil, err
 	}
-	rule.Dtstart = j.Start
-	iter := rule.Iterator()
+	rOpt.Dtstart = j.Start
+	rule, err := rrule.NewRRule(*rOpt)
+	if err != nil {
+		return nil, err
+	}
+	next := rule.Iterator()
 
 	count := 0
 	var result []jobTime
@@ -260,11 +264,10 @@ func (j *Job) between(startDate, endDate libdate.Date) ([]jobTime, error) {
 		if count == recurrenceLimit {
 			break
 		}
-		t := iter.Next()
-		if t == nil {
+		start, ok := next()
+		if !ok {
 			break
 		}
-		start := *t
 		jStartDate := libdate.NewAt(start)
 		if endDate.Before(jStartDate) {
 			// endDate < jStartDate
