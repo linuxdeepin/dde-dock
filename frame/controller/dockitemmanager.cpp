@@ -260,7 +260,13 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
             Q_ASSERT(pItem);
 
             const int sortKey = pItem->itemSortKey();
-            if (sortKey != -1 && itemSortKey > sortKey)
+            if (pluginType == DockItem::FixedPlugin) {
+                if (sortKey != -1 && itemSortKey > sortKey)
+                    continue;
+                insertIndex = i - 1;
+                break;
+            }
+            if (sortKey != -1 && itemSortKey > sortKey && pItem->itemType() != DockItem::FixedPlugin)
                 continue;
             insertIndex = i - 1;
             break;
