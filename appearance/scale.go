@@ -20,9 +20,11 @@
 package appearance
 
 import (
+	"sync/atomic"
+
+	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gettext"
-	"pkg.deepin.io/lib/notify"
 )
 
 func (m *Manager) getScaleFactor() float64 {
@@ -42,29 +44,38 @@ func (m *Manager) setScaleFactor(scale float64) error {
 	return err
 }
 
-var _notifier *notify.Notification
+var notifyId uint32
 
-func sendNotify(summary, body, icon string) {
-	if _notifier == nil {
-		notify.Init("dde-daemon")
-		_notifier = notify.NewNotification(summary, body, icon)
-	} else {
-		_notifier.Update(summary, body, icon)
-	}
-	err := _notifier.Show()
+func sendNotify(summary, body, icon string) error {
+	sessionConn, err := dbus.SessionBus()
 	if err != nil {
-		logger.Warning("Failed to send notify:", summary, body)
+		return err
 	}
+	nid := atomic.LoadUint32(&notifyId)
+	notifier := notifications.NewNotifications(sessionConn)
+	nid, err = notifier.Notify(0, "dde-control-center", nid,
+		icon, summary, body,
+		nil, nil, -1)
+	if err != nil {
+		atomic.StoreUint32(&notifyId, nid)
+	}
+	return err
 }
 
 func handleSetScaleFactorDone() {
-	sendNotify(gettext.Tr("Set successfully"),
+	err := sendNotify(gettext.Tr("Set successfully"),
 		gettext.Tr("Please log back in to view the changes"), "dialog-window-scale")
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func handleSetScaleFactorStarted() {
-	sendNotify(gettext.Tr("Display scaling"),
+	err := sendNotify(gettext.Tr("Display scaling"),
 		gettext.Tr("Setting display scaling"), "dialog-window-scale")
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) setScreenScaleFactors(factors map[string]float64) error {
