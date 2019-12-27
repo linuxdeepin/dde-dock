@@ -41,6 +41,8 @@ public:
 
     bool attention() const;
     void setAttention(bool attention);
+    bool isDragging();
+    void cancelDragging();
 
 Q_SIGNALS:
     void attentionChanged(const bool attention);

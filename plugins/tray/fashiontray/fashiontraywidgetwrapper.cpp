@@ -265,3 +265,13 @@ void FashionTrayWidgetWrapper::setAttention(bool attention)
 
     Q_EMIT attentionChanged(m_attention);
 }
+
+bool FashionTrayWidgetWrapper::isDragging()
+{
+    return m_dragging;
+}
+
+void FashionTrayWidgetWrapper::cancelDragging()
+{
+    QDrag::cancel();
+}

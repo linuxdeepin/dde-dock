@@ -69,6 +69,9 @@ bool AbstractContainer::removeWrapper(FashionTrayWidgetWrapper *wrapper)
     if (!w->absTrayWidget().isNull())
         w->absTrayWidget()->setParent(nullptr);
 
+    if (w->isDragging()) {
+        w->cancelDragging();
+    }
     w->deleteLater();
 
     refreshVisible();
