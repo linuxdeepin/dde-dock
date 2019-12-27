@@ -20,9 +20,13 @@
 package audio
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"math"
 	"strings"
+	"unicode"
 
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
@@ -101,4 +105,40 @@ func floatPrecision(f float64) float64 {
 	pow10N := math.Pow10(2)
 	return math.Trunc((f+0.5/pow10N)*pow10N) / pow10N
 	// return math.Trunc((f)*pow10N) / pow10N
+}
+
+const defaultPaFile = "/etc/pulse/default.pa"
+
+func loadDefaultPaConfig(filename string) (cfg defaultPaConfig) {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	scanner := bufio.NewScanner(bytes.NewReader(content))
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		line = bytes.TrimLeftFunc(line, unicode.IsSpace)
+		if bytes.HasPrefix(line, []byte{'#'}) {
+			continue
+		}
+
+		if bytes.Contains(line, []byte("set-default-sink")) {
+			cfg.setDefaultSink = true
+		}
+		if bytes.Contains(line, []byte("set-default-source")) {
+			cfg.setDefaultSource = true
+		}
+	}
+	err = scanner.Err()
+	if err != nil {
+		logger.Warning(err)
+	}
+	return
+}
+
+type defaultPaConfig struct {
+	setDefaultSource bool
+	setDefaultSink   bool
 }

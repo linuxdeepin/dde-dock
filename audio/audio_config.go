@@ -20,6 +20,7 @@
 package audio
 
 import (
+	"os"
 	"time"
 
 	soundthemeplayer "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
@@ -31,9 +32,11 @@ import (
 func (a *Audio) applyConfig() {
 	cfg, err := readConfig()
 	if err != nil {
-		logger.Warning("Read config info failed:", err)
-		return
+		if !os.IsNotExist(err) {
+			logger.Warning("Read config info failed:", err)
+		}
 	}
+	logger.Debugf("load config: %+v", cfg)
 
 	if !a.isConfigValid(cfg) {
 		logger.Warning("Invalid config:", cfg.string())
@@ -41,6 +44,9 @@ func (a *Audio) applyConfig() {
 		return
 	}
 
+	if cfg == nil {
+		return
+	}
 	for _, card := range a.ctx.GetCardList() {
 		profileName, ok := cfg.Profiles[card.Name]
 		if !ok {
@@ -108,30 +114,40 @@ func (a *Audio) applyConfig() {
 
 func (a *Audio) trySelectBestPort() {
 	logger.Debug("trySelectBestPort")
-	cardId, sinkPort := a.cards.getPassablePort(pulse.DirectionSink)
-	if sinkPort != nil {
-		logger.Debugf("switch to sink port %s, avail: %s",
-			sinkPort.Name, portAvailToString(sinkPort.Available))
-		err := a.setPort(cardId, sinkPort.Name, sinkPort.Direction)
-		if err != nil {
-			logger.Warningf("failed to switch to sink port %s: %v",
-				sinkPort.Name, err)
+
+	if !a.defaultPaCfg.setDefaultSink {
+		cardId, sinkPort := a.cards.getPassablePort(pulse.DirectionSink)
+		if sinkPort != nil {
+			logger.Debugf("switch to sink port %s, avail: %s",
+				sinkPort.Name, portAvailToString(sinkPort.Available))
+			err := a.setPort(cardId, sinkPort.Name, sinkPort.Direction)
+			if err != nil {
+				logger.Warningf("failed to switch to sink port %s: %v",
+					sinkPort.Name, err)
+			}
 		}
+	} else {
+		logger.Debug("do not set default sink")
 	}
 
-	cardId, sourcePort := a.cards.getPassablePort(pulse.DirectionSource)
-	if sourcePort != nil {
-		logger.Debugf("switch to source port %s, avail: %s",
-			sourcePort.Name, portAvailToString(sourcePort.Available))
-		err := a.setPort(cardId, sourcePort.Name, pulse.DirectionSource)
-		if err != nil {
-			logger.Warningf("failed to switch to source port %s: %v",
-				sourcePort.Name, err)
+	if !a.defaultPaCfg.setDefaultSource {
+		cardId, sourcePort := a.cards.getPassablePort(pulse.DirectionSource)
+		if sourcePort != nil {
+			logger.Debugf("switch to source port %s, avail: %s",
+				sourcePort.Name, portAvailToString(sourcePort.Available))
+			err := a.setPort(cardId, sourcePort.Name, pulse.DirectionSource)
+			if err != nil {
+				logger.Warningf("failed to switch to source port %s: %v",
+					sourcePort.Name, err)
+			}
 		}
+	} else {
+		logger.Debug("do not set default source")
 	}
 }
 
 func (a *Audio) saveConfig() {
+	logger.Debug("saveConfig")
 	a.saverLocker.Lock()
 	if a.isSaving {
 		a.saverLocker.Unlock()
@@ -188,7 +204,7 @@ func (a *Audio) doSaveConfig() {
 	}
 
 	_, err := readConfig()
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		logger.Warning(err)
 	}
 	err = saveConfig(&info)
@@ -254,6 +270,9 @@ func toALSACardId(idx string) (cardId string, err error) {
 }
 
 func (a *Audio) isConfigValid(cfg *config) bool {
+	if cfg == nil {
+		return false
+	}
 	if len(cfg.Profiles) == 0 {
 		return false
 	}

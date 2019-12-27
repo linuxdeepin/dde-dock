@@ -21,21 +21,19 @@ package audio
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"sync"
 
-	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 var (
-	fileLocker    sync.Mutex
-	configCache   *config
-	configHandler *dutils.Config
+	fileLocker  sync.Mutex
+	configCache *config
+	configFile  = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/audio.json")
 )
-
-func init() {
-	configHandler = new(dutils.Config)
-	configHandler.SetConfigName("dde-daemon/audio")
-}
 
 type config struct {
 	Profiles   map[string]string // Profiles[cardName] = activeProfile
@@ -54,6 +52,12 @@ func (c *config) string() string {
 }
 
 func (c *config) equal(b *config) bool {
+	if c == nil && b == nil {
+		return true
+	}
+	if c == nil || b == nil {
+		return false
+	}
 	return c.Sink == b.Sink &&
 		c.Source == b.Source &&
 		c.SinkPort == b.SinkPort &&
@@ -72,12 +76,16 @@ func readConfig() (*config, error) {
 	}
 
 	var info config
-	err := configHandler.Load(&info)
-	configCache = &info
+	content, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(content, &info)
 	if err != nil {
 		return nil, err
 	}
 
+	configCache = &info
 	return configCache, nil
 }
 
@@ -92,7 +100,15 @@ func saveConfig(info *config) error {
 		logger.Debug("[saveConfigInfo] will save:", info.string())
 	}
 
-	err := configHandler.Save(info)
+	content, err := json.Marshal(info)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(filepath.Dir(configFile), 0755)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(configFile, content, 0644)
 	if err != nil {
 		return err
 	}
@@ -104,7 +120,7 @@ func saveConfig(info *config) error {
 func removeConfig() error {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
-	return configHandler.RemoveConfigFile()
+	return os.Remove(configFile)
 }
 
 func mapStrStrEqual(a, b map[string]string) bool {

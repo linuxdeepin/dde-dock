@@ -87,6 +87,7 @@ type Audio struct {
 	DefaultSink   dbus.ObjectPath
 	DefaultSource dbus.ObjectPath
 	Cards         string
+	defaultPaCfg  defaultPaConfig
 
 	// dbusutil-gen: ignore
 	// 最大音量
@@ -193,6 +194,8 @@ func (a *Audio) init() error {
 		return xerrors.Errorf("failed to get context: %w", err)
 	}
 
+	a.defaultPaCfg = loadDefaultPaConfig(defaultPaFile)
+	logger.Debugf("defaultPaConfig: %+v", a.defaultPaCfg)
 	a.mu.Lock()
 	a.ctx = ctx
 	defaulted := a.initDefaultVolume()
