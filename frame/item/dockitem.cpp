@@ -432,3 +432,8 @@ void DockItem::hideNonModel()
     if (m_popupShown && !PopupWindow->model())
         hidePopup();
 }
+
+bool DockItem::isDragging()
+{
+    return m_draging;
+}

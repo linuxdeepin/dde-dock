@@ -223,6 +223,10 @@ void DockItemManager::appItemRemoved(AppItem *appItem)
 {
     emit itemRemoved(appItem);
     m_itemList.removeOne(appItem);
+
+    if (appItem->isDragging()) {
+        QDrag::cancel();
+    }
     appItem->deleteLater();
 }
 

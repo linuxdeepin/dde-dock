@@ -67,6 +67,7 @@ public slots:
     void hidePopup();
     virtual void setDraging(bool bDrag);
 
+    bool isDragging();
 signals:
     void dragStarted() const;
     void itemDropped(QObject *destination, const QPoint &dropPoint) const;

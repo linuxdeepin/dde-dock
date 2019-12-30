@@ -25,6 +25,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QDrag>
 
 DockPluginsController::DockPluginsController(QObject *parent)
     : AbstractPluginsController(parent)
@@ -84,6 +85,10 @@ void DockPluginsController::itemRemoved(PluginsItemInterface *const itemInter, c
 
     // do not delete the itemWidget object(specified in the plugin interface)
     item->centralWidget()->setParent(nullptr);
+
+    if (item->isDragging()) {
+        QDrag::cancel();
+    }
 
     // just delete our wrapper object(PluginsItem)
     item->deleteLater();
