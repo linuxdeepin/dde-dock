@@ -113,9 +113,12 @@ func (j *Job) validate() error {
 		return errors.New("job end time before start time")
 	}
 
-	_, err := rrule.StrToRRule(j.RRule)
-	if err != nil {
-		return fmt.Errorf("invalid RRule: %v", err)
+	var err error
+	if j.RRule != "" {
+		_, err = rrule.StrToROptionInLocation(j.RRule, time.Local)
+		if err != nil {
+			return fmt.Errorf("invalid RRule: %v", err)
+		}
 	}
 
 	_, err = parseRemind(j.Start, j.Remind)
