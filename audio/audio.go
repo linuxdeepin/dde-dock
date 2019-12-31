@@ -122,6 +122,8 @@ type Audio struct {
 	syncConfig     *dsync.Config
 	sessionSigLoop *dbusutil.SignalLoop
 
+	noRestartPulseAudio bool
+
 	methods *struct {
 		SetPort func() `in:"cardId,portName,direction"`
 	}
@@ -782,4 +784,9 @@ func (a *Audio) fixActivePortNotAvailable() {
 			}
 		}
 	}
+}
+
+func (a *Audio) NoRestartPulseAudio() *dbus.Error {
+	a.noRestartPulseAudio = true
+	return nil
 }

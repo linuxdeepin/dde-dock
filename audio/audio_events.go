@@ -64,9 +64,17 @@ func (a *Audio) handleStateChanged() {
 			case pulse.ContextStateFailed:
 				logger.Warning("pulseaudio context state failed")
 				a.destroyCtxRelated()
-				logger.Debug("retry init")
-				a.init()
-				return
+
+				if !a.noRestartPulseAudio {
+					logger.Debug("retry init")
+					err := a.init()
+					if err != nil {
+						logger.Warning("failed to init:", err)
+					}
+					return
+				} else {
+					logger.Debug("do not restart pulseaudio")
+				}
 			}
 
 		case <-a.quit:
