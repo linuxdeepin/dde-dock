@@ -16,9 +16,16 @@ void TipsWidget::setText(const QString &text)
     update();
 }
 
+void TipsWidget::refreshFont()
+{
+    setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
+    update();
+}
+
 void TipsWidget::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
+    refreshFont();
 
     QPainter painter(this);
     painter.setPen(QPen(palette().brightText(), 1));

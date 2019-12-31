@@ -10,7 +10,8 @@ public:
     explicit TipsWidget(QWidget *parent = nullptr);
 
     void setText(const QString &text);
-
+    void refreshFont();
+    
 protected:
     void paintEvent(QPaintEvent *event) override;
 
