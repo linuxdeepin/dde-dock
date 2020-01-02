@@ -17,6 +17,7 @@ public:
     void setExpand(const bool expand) Q_DECL_OVERRIDE;
     int itemCount() override;
     QSize sizeHint() const override;
+    void updateSize();
 
 protected:
     int whereToInsert(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;

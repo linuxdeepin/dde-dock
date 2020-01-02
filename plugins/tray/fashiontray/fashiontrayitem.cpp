@@ -381,4 +381,6 @@ void FashionTrayItem::resizeTray()
 
         m_controlWidget->setFixedSize(QWIDGETSIZE_MAX, m_iconSize);
     }    
+
+    m_normalContainer->updateSize();
 }

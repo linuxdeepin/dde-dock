@@ -274,3 +274,13 @@ int NormalContainer::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *
 
     return insertIndex;
 }
+void NormalContainer::updateSize()
+{
+    if (QPropertyAnimation::Stopped == m_sizeAnimation->state()) {
+        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom)
+            setMaximumWidth(totalSize().width());
+        else {
+            setMaximumHeight(totalSize().height());
+        }
+    }
+}
