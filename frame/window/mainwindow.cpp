@@ -935,6 +935,7 @@ void MainWindow::updateDisplayMode()
 {
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     setStrutPartial();
+    adjustShadowMask();
 }
 
 void MainWindow::onMainWindowSizeChanged(QPoint offset)
