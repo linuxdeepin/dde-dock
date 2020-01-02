@@ -36,10 +36,7 @@ func setFileModTime(filename string, t time.Time) error {
 }
 
 func timeToTimeval(t time.Time) syscall.Timeval {
-	return syscall.Timeval{
-		Sec:  t.Unix(),
-		Usec: int64(t.Nanosecond()) / 1000,
-	}
+	return syscall.NsecToTimeval(t.UnixNano())
 }
 
 func runCmdRedirectStdOut(uid int, outputFile string, cmdline, envVars []string) error {
