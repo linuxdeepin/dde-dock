@@ -234,23 +234,24 @@ MainWindow::MainWindow(QWidget *parent)
         int val = value.toInt();
         // dock隐藏后的rect
         const QRectF windowRect = m_settings->windowRect(m_curDockPos, false);
+        const int margin = m_settings->dockMargin();
 
         switch (m_curDockPos) {
         case Dock::Top:
             m_mainPanel->move(0, val - windowRect.height());
-            QWidget::move(windowRect.left(), windowRect.top());
+            QWidget::move(windowRect.left(), windowRect.top() - margin);
             break;
         case Dock::Bottom:
             m_mainPanel->move(0, 0);
-            QWidget::move(windowRect.left(), windowRect.bottom() - val);
+            QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
             break;
         case Dock::Left:
             m_mainPanel->move(val - windowRect.width(), 0);
-            QWidget::move(windowRect.left(), windowRect.top());
+            QWidget::move(windowRect.left() - margin, windowRect.top());
             break;
         case Dock::Right:
             m_mainPanel->move(0, 0);
-            QWidget::move(windowRect.right() - val, windowRect.top());
+            QWidget::move(windowRect.right() - val + margin, windowRect.top());
             break;
         default: break;
         }
