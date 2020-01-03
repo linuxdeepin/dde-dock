@@ -273,7 +273,7 @@ func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType str
 	var (
 		verifyOk  bool
 		continue0 bool
-		maxTries  = 3
+		maxTries  = 5
 	)
 
 	for maxTries > 0 {
