@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"pkg.deepin.io/lib/utils"
@@ -29,14 +28,7 @@ func modTimeEqual(t1, t2 time.Time) bool {
 
 func setFileModTime(filename string, t time.Time) error {
 	now := time.Now()
-	return syscall.Utimes(filename, []syscall.Timeval{
-		timeToTimeval(now), // access time
-		timeToTimeval(t),   // modify time
-	})
-}
-
-func timeToTimeval(t time.Time) syscall.Timeval {
-	return syscall.NsecToTimeval(t.UnixNano())
+	return os.Chtimes(filename, now, t)
 }
 
 func runCmdRedirectStdOut(uid int, outputFile string, cmdline, envVars []string) error {

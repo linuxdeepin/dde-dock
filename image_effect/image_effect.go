@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"golang.org/x/xerrors"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/procfs"
@@ -129,6 +130,7 @@ func (ie *ImageEffect) Get(sender dbus.Sender, effect, filename string) (outputF
 
 	filenameResolved, err := filepath.EvalSymlinks(filename)
 	if err != nil {
+		err = xerrors.Errorf("failed to eval symlinks: %w", err)
 		return
 	} else {
 		filename = filenameResolved
@@ -136,16 +138,19 @@ func (ie *ImageEffect) Get(sender dbus.Sender, effect, filename string) (outputF
 
 	uid, err := ie.service.GetConnUID(string(sender))
 	if err != nil {
+		err = xerrors.Errorf("failed to get conn uid: %w", err)
 		return
 	}
 	pid, err := ie.service.GetConnPID(string(sender))
 	if err != nil {
+		err = xerrors.Errorf("failed to get conn pid: %w", err)
 		return
 	}
 
 	process := procfs.Process(pid)
 	processEnv, err := process.Environ()
 	if err != nil {
+		err = xerrors.Errorf("failed to get process %d environ: %w", pid, err)
 		return
 	}
 	var envVarNames = []string{"DISPLAY", "XDG_RUNTIME_DIR"}
@@ -156,6 +161,10 @@ func (ie *ImageEffect) Get(sender dbus.Sender, effect, filename string) (outputF
 	}
 
 	outputFile, err = ie.get(int(uid), effect, filename, envVars)
+	if err != nil {
+		err = xerrors.Errorf("failed to get output file: %w", err)
+		return
+	}
 	return
 }
 
@@ -172,6 +181,7 @@ func (ie *ImageEffect) get(uid int, effect, filename string, envVars []string) (
 
 	inputFileInfo, err := os.Stat(filename)
 	if err != nil {
+		err = xerrors.Errorf("failed to stat file: %w", err)
 		return
 	}
 
@@ -179,6 +189,7 @@ func (ie *ImageEffect) get(uid int, effect, filename string, envVars []string) (
 	outputDir := filepath.Dir(outputFile)
 	err = os.MkdirAll(outputDir, 0755)
 	if err != nil {
+		err = xerrors.Errorf("failed to make output dir: %w", err)
 		return
 	}
 
@@ -190,6 +201,7 @@ func (ie *ImageEffect) get(uid int, effect, filename string, envVars []string) (
 			return
 		}
 	} else if !os.IsNotExist(err) {
+		err = xerrors.Errorf("failed to stat outputFile: %w", err)
 		return
 	}
 
@@ -209,6 +221,7 @@ func (ie *ImageEffect) get(uid int, effect, filename string, envVars []string) (
 		// generate success
 		err = setFileModTime(outputFile, inputFileInfo.ModTime())
 		if err != nil {
+			err = xerrors.Errorf("failed to set file modify time: %w", err)
 			return
 		}
 
@@ -216,15 +229,17 @@ func (ie *ImageEffect) get(uid int, effect, filename string, envVars []string) (
 		var fileInfo os.FileInfo
 		fileInfo, err = os.Stat(outputFile)
 		if err != nil {
+			err = xerrors.Errorf("failed to stat output file: %w", err)
 			return
 		}
 		if fileInfo.Size() == 0 {
 			shouldDelete = true
-			err = errors.New("output file is empty")
+			err = errors.New("generate success but output file is empty")
 		}
 	} else {
 		// generate failed
 		shouldDelete = true
+		err = xerrors.Errorf("generate failed: %w", err)
 	}
 
 	logger.Debug("cost time:", elapsed)
