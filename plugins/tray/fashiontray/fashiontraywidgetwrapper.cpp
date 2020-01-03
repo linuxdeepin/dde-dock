@@ -51,8 +51,6 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     setStyleSheet("background: transparent;");
     setAcceptDrops(true);
 
-    m_absTrayWidget->setVisible(true);
-
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -65,6 +63,8 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     connect(m_absTrayWidget, &AbstractTrayWidget::clicked, this, &FashionTrayWidgetWrapper::onTrayWidgetClicked);
 
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
+
+    m_absTrayWidget->show();
 }
 
 QPointer<AbstractTrayWidget> FashionTrayWidgetWrapper::absTrayWidget() const
