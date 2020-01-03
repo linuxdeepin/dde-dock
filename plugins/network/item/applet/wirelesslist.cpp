@@ -209,10 +209,10 @@ void WirelessList::updateAPList()
     //if (m_networkInter->IsDeviceEnabled(m_device.dbusPath()))
     if (m_device->enabled())
     {
-        if (m_device->hotspotEnabled()) {
-            m_apList.clear();
-            m_apList.append(m_activeHotspotAP);
-        }
+//        if (m_device->hotspotEnabled()) {
+//            m_apList.clear();
+//            m_apList.append(m_activeHotspotAP);
+//        }
 
         // sort ap list by strength
         // std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
