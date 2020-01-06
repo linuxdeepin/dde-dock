@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 	"sync"
@@ -96,6 +97,7 @@ type Audio struct {
 	headphoneUnplugAutoPause bool
 
 	inited    bool
+	settings  *gio.Settings
 	ctx       *pulse.Context
 	eventChan chan *pulse.Event
 	stateChan chan int
@@ -136,9 +138,8 @@ func newAudio(service *dbusutil.Service) *Audio {
 		MaxUIVolume: pulse.VolumeUIMax,
 	}
 
-	gsAudio := gio.NewSettings(gsSchemaAudio)
-	a.headphoneUnplugAutoPause = gsAudio.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
-	gsAudio.Unref()
+	a.settings = gio.NewSettings(gsSchemaAudio)
+	a.headphoneUnplugAutoPause = a.settings.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
 
 	a.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	a.syncConfig = dsync.NewConfig("audio", &syncConfig{a: a},
@@ -191,6 +192,7 @@ func getCtx() (ctx *pulse.Context, err error) {
 }
 
 func (a *Audio) init() error {
+	a.initDefaultVolumes()
 	ctx, err := getCtx()
 	if err != nil {
 		return xerrors.Errorf("failed to get context: %w", err)
@@ -200,7 +202,6 @@ func (a *Audio) init() error {
 	logger.Debugf("defaultPaConfig: %+v", a.defaultPaCfg)
 	a.mu.Lock()
 	a.ctx = ctx
-	defaulted := a.initDefaultVolume()
 
 	// init a.sinks
 	a.sinks = make(map[uint32]*Sink)
@@ -293,15 +294,21 @@ func (a *Audio) init() error {
 	go a.handleStateChanged()
 	logger.Debug("init done")
 
-	if !defaulted {
-		a.applyConfig()
-	} else {
-		logger.Info("Will remove old audio config")
+	firstRun := a.settings.GetBoolean(gsKeyFirstRun)
+	if firstRun {
+		logger.Info("first run, Will remove old audio config")
 		err := removeConfig()
-		if err != nil {
+		if err != nil && !os.IsNotExist(err) {
 			logger.Warning("Failed to remove audio config:", err)
 		}
+		a.resetSinksVolume()
+		a.resetSourceVolume()
+		a.trySelectBestPort()
+		a.settings.SetBoolean(gsKeyFirstRun, false)
+	} else {
+		a.applyConfig()
 	}
+
 	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
 	return nil
@@ -348,30 +355,19 @@ func (a *Audio) destroyCtxRelated() {
 }
 
 func (a *Audio) destroy() {
+	a.settings.Unref()
 	a.sessionSigLoop.Stop()
 	a.syncConfig.Destroy()
-	close(a.quit)
 	a.destroyCtxRelated()
 }
 
-func (a *Audio) initDefaultVolume() bool {
-	gsAudio := gio.NewSettings(gsSchemaAudio)
-	defer gsAudio.Unref()
-	if !gsAudio.GetBoolean(gsKeyFirstRun) {
-		return false
-	}
-	inVolumePer := float64(gsAudio.GetInt(gsKeyInputVolume)) / 100.0
-	outVolumePer := float64(gsAudio.GetInt(gsKeyOutputVolume)) / 100.0
-	headphoneOutVolumePer := float64(gsAudio.GetInt(gsKeyHeadphoneOutputVolume)) / 100.0
+func (a *Audio) initDefaultVolumes() {
+	inVolumePer := float64(a.settings.GetInt(gsKeyInputVolume)) / 100.0
+	outVolumePer := float64(a.settings.GetInt(gsKeyOutputVolume)) / 100.0
+	headphoneOutVolumePer := float64(a.settings.GetInt(gsKeyHeadphoneOutputVolume)) / 100.0
 	defaultInputVolume = inVolumePer
 	defaultOutputVolume = outVolumePer
 	defaultHeadphoneOutputVolume = headphoneOutVolumePer
-
-	a.resetSinksVolume()
-	a.resetSourceVolume()
-
-	gsAudio.SetBoolean(gsKeyFirstRun, false)
-	return true
 }
 
 func (a *Audio) findSinkByCardIndexPortName(cardId uint32, portName string) *pulse.Sink {
@@ -532,6 +528,7 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
 }
 
 func (a *Audio) resetSinksVolume() {
+	logger.Debug("reset sink volume")
 	for _, s := range a.ctx.GetSinkList() {
 		a.ctx.SetSinkMuteByIndex(s.Index, false)
 		curPort := s.ActivePort.Name
@@ -559,6 +556,7 @@ func (a *Audio) resetSinksVolume() {
 }
 
 func (a *Audio) resetSourceVolume() {
+	logger.Debug("reset source volume")
 	for _, s := range a.ctx.GetSourceList() {
 		a.ctx.SetSourceMuteByIndex(s.Index, false)
 		cv := s.Volume.SetAvg(defaultInputVolume).SetBalance(s.ChannelMap,
