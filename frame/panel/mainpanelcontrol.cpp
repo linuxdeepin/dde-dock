@@ -356,8 +356,13 @@ void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 
     //如果当前从桌面拖拽的的app是trash，则不能放入app任务栏中
     QString str = "file://";
+    //启动器
+    QString str_t = "";
+
     str.append(QStandardPaths::locate(QStandardPaths::DesktopLocation, "dde-trash.desktop"));
-    if (str == e->mimeData()->data(m_draggingMimeKey))
+    str_t.append(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "dde-trash.desktop"));
+
+    if ((str == e->mimeData()->data(m_draggingMimeKey)) || (str_t == e->mimeData()->data(m_draggingMimeKey)))
         return;
 
     if (m_delegate && m_delegate->appIsOnDock(e->mimeData()->data(m_draggingMimeKey)))
