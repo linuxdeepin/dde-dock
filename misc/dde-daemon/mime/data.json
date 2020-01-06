@@ -222,6 +222,7 @@
 				        "image/x-pcx",
 				        "image/svg+xml",
 				        "image/svg+xml-compressed",
+				        "image/vnd.microsoft.icon",
 				        "image/vnd.wap.wbmp"
 			      ]
 		    },
