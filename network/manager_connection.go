@@ -77,26 +77,38 @@ func (m *Manager) initConnectionManage() {
 	}
 }
 
-func (m *Manager) deleteTempConnectionSettings(conn *connection, cdata connectionData) {
+func isTempWiredConnectionSettings(conn *nmdbus.ConnectionSettings, cdata connectionData) (bool, error) {
 	connType := getSettingConnectionType(cdata)
 	if connType != nm.NM_SETTING_WIRED_SETTING_NAME {
-		return
+		return false, nil
 	}
 	// wired connection
 	autoConnect := getSettingConnectionAutoconnect(cdata)
 	autoConnectPriority := getSettingConnectionAutoconnectPriority(cdata)
 	if autoConnect && autoConnectPriority == -999 {
-		unsaved, err := conn.nmConn.Unsaved().Get(0)
+		unsaved, err := conn.Unsaved().Get(0)
 		if err != nil {
-			logger.Warningf("failed to get connection %s prop Unsaved: %v", conn.Path, err)
-			return
+			return false, err
 		}
 		if unsaved {
-			logger.Debug("delete unsaved connection", conn.Path)
-			err = conn.nmConn.Delete(0)
-			if err != nil {
-				logger.Warningf("failed to delete connection %s: %v", conn.Path, err)
-			}
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (m *Manager) deleteTempConnectionSettings(conn *connection, cdata connectionData) {
+	isTemp, err := isTempWiredConnectionSettings(conn.nmConn, cdata)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if isTemp {
+		uuid := getSettingConnectionUuid(cdata)
+		logger.Debug("delete unsaved connection", conn.Path, uuid)
+		err = conn.nmConn.Delete(0)
+		if err != nil {
+			logger.Warningf("failed to delete connection %s: %v", conn.Path, err)
 		}
 	}
 }
@@ -297,30 +309,95 @@ func (m *Manager) ensureUniqueConnectionExists(devPath dbus.ObjectPath, active b
 // target device exists, if not, create one.
 func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
 	uuid := nmGeneralGetDeviceUniqueUuid(wiredDevPath)
+	logger.Debug("uuid:", uuid)
 
 	cpath, err = nmGetConnectionByUuid(uuid)
-	if err != nil {
-		// try get uuid from active or available connection
-		existedUuid := getWiredDeviceConnectionUuid(wiredDevPath)
-		if existedUuid != "" {
-			cpath, err = nmGetConnectionByUuid(existedUuid)
+	if err == nil {
+		exists = true
+		return
+	}
+
+	// try get uuid from active or available connection
+	existedUuid := getNonTempWiredDeviceConnectionUuid(wiredDevPath)
+	logger.Debug("existed uuid:", existedUuid)
+	if existedUuid != "" {
+		cpath, err = nmGetConnectionByUuid(existedUuid)
+		if err == nil {
+			exists = true
+			return
 		}
 	}
-	if err != nil {
-		// connection not exists, create one
-		logger.Debug("connection not exist, create one, uuid:", uuid)
-		exists = false
-		var id string
-		if nmGeneralIsUsbDevice(wiredDevPath) {
-			id = nmGeneralGetDeviceDesc(wiredDevPath)
-		} else {
-			id = Tr("Wired Connection")
-		}
-		cpath, err = newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
+
+	// connection not exists, create one
+	logger.Debug("connection not exist, create one, uuid:", uuid)
+	var id string
+	if nmGeneralIsUsbDevice(wiredDevPath) {
+		id = nmGeneralGetDeviceDesc(wiredDevPath)
 	} else {
-		exists = true
+		id = Tr("Wired Connection")
+	}
+	cpath, err = newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
+	return
+}
+
+func isTempWiredConnectionPath(connPath dbus.ObjectPath) (isTemp bool, uuid string, err error) {
+	connSettings, err := nmNewSettingsConnection(connPath)
+	if err != nil {
+		return
+	}
+	cdata, err := connSettings.GetSettings(0)
+	if err != nil {
+		return
+	}
+	isTemp, err = isTempWiredConnectionSettings(connSettings, cdata)
+	if err != nil {
+		return
+	}
+	if !isTemp {
+		uuid = getSettingConnectionUuid(cdata)
 	}
 	return
+}
+
+func getNonTempWiredDeviceConnectionUuid(wiredDevPath dbus.ObjectPath) string {
+	wired, _ := nmNewDevice(wiredDevPath)
+	if wired == nil {
+		return ""
+	}
+
+	apath, err := wired.ActiveConnection().Get(0)
+	if err == nil && isObjPathValid(apath) {
+		aConn, _ := nmNewActiveConnection(apath)
+		if aConn != nil {
+			connPath, err := aConn.Connection().Get(0)
+			if err == nil && isObjPathValid(connPath) {
+				isTemp, uuid, err := isTempWiredConnectionPath(connPath)
+				if err == nil && !isTemp {
+					return uuid
+				}
+			}
+		}
+	}
+
+	connPaths, _ := wired.AvailableConnections().Get(0)
+	for _, connPath := range connPaths {
+		if !isObjPathValid(connPath) {
+			continue
+		}
+
+		isTemp, uuid, err := isTempWiredConnectionPath(connPath)
+		if err == nil && !isTemp {
+			return uuid
+		}
+	}
+	return ""
+}
+
+func isObjPathValid(dpath dbus.ObjectPath) bool {
+	if dpath == "" || dpath == "/" {
+		return false
+	}
+	return true
 }
 
 func getWiredDeviceConnectionUuid(wiredDevPath dbus.ObjectPath) string {

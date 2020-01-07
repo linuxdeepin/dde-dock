@@ -27,8 +27,7 @@ import (
 func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {
 	logger.Infof("new wired connection, id=%s, uuid=%s, devPath=%s", id, uuid, devPath)
 	data := newWiredConnectionData(id, uuid)
-	hwAddr, _ := nmGeneralGetDeviceHwAddr(devPath, true)
-	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
+
 	setSettingConnectionAutoconnect(data, true)
 	cpath, err = nmAddConnection(data)
 	if err != nil {
