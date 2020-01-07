@@ -81,6 +81,21 @@ func (m *userAppManager) Add(mimes []string, desktopId string) bool {
 	return added
 }
 
+func (m *userAppManager) DeleteByMimes(mimes []string, desktopId string) bool {
+	m.locker.Lock()
+	defer m.locker.Unlock()
+	var deleted bool = false
+
+	for _, info := range m.appInfos {
+		if info.DesktopId == desktopId {
+			deleted = info.DeleteMimes(mimes)
+			break
+		}
+	}
+
+	return deleted
+}
+
 func (m *userAppManager) Delete(desktopId string) error {
 	m.locker.Lock()
 	defer m.locker.Unlock()
@@ -135,6 +150,25 @@ func (info *userAppInfo) AddMimes(mimes []string) bool {
 		info.SupportedMime = append(info.SupportedMime, mime)
 	}
 	return added
+}
+
+func (info *userAppInfo) DeleteMimes(mimes []string) bool {
+	var deleted bool
+	for _, mime := range mimes {
+		if !info.HasMime(mime) {
+			continue
+		}
+
+		for index, mimeSupported := range info.SupportedMime {
+			if mime == mimeSupported {
+				deleted = true
+				info.SupportedMime = append(info.SupportedMime[:index], info.SupportedMime[index+1:]...)
+				break
+			}
+		}
+	}
+
+	return deleted
 }
 
 func (info *userAppInfo) HasMime(mime string) bool {

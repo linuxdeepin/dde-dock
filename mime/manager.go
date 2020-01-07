@@ -293,6 +293,13 @@ func (m *Manager) DeleteApp(mimeTypes []string, desktopId string) *dbus.Error {
 var userMimeAppsListFile = filepath.Join(basedir.GetUserConfigDir(), "mimeapps.list")
 
 func (m *Manager) deleteApp(mimeTypes []string, desktopId string) error {
+	if m.userManager.DeleteByMimes(mimeTypes, desktopId) {
+		err := m.userManager.Write()
+		if nil != err {
+			return err
+		}
+	}
+
 	dai := desktopappinfo.NewDesktopAppInfo(desktopId)
 	if dai == nil {
 		return fmt.Errorf("not found desktop app info %q", desktopId)
