@@ -1,4 +1,5 @@
 include:
     - remote: 'https://gitlab.deepin.io/dev-tools/letmeci/raw/master/gitlab-ci/dde.yml'
 variables:
-    BUILD_CLASS: "cmake"
+    CPPCHECK: "true"
+    CODESPELL: "true"
