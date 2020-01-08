@@ -82,9 +82,8 @@ func (m *Manager) waitLockShowing(timeout time.Duration) {
 	}
 }
 
-func (m *Manager) lockWaitShow(timeout time.Duration) {
-	const ddeLock = "dde-lock"
-	m.doLock()
+func (m *Manager) lockWaitShow(timeout time.Duration, autoStartAuth bool) {
+	m.doLock(autoStartAuth)
 	m.waitLockShowing(timeout)
 }
 
@@ -106,14 +105,23 @@ func (m *Manager) setDPMSModeOff() {
 	}
 }
 
-func (m *Manager) doLock() {
+const (
+	lockFrontServiceName = "com.deepin.dde.lockFront"
+	lockFrontIfc         = lockFrontServiceName
+	lockFrontObjPath     = "/com/deepin/dde/lockFront"
+)
+
+func (m *Manager) doLock(autoStartAuth bool) {
 	logger.Info("Lock Screen")
-	sessionManager := m.helper.SessionManager
-	if sessionManager != nil {
-		err := sessionManager.RequestLock(0)
-		if err != nil {
-			logger.Error("Lock failed:", err)
-		}
+	bus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	lockFrontObj := bus.Object(lockFrontServiceName, lockFrontObjPath)
+	err = lockFrontObj.Call(lockFrontIfc+".ShowAuth", 0, autoStartAuth).Err
+	if err != nil {
+		logger.Warning("failed to call lockFront ShowAuth:", err)
 	}
 }
 

@@ -21,10 +21,10 @@ package power
 
 import (
 	"errors"
+	"os"
 	"strings"
 	"sync"
 	"time"
-	"os"
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
@@ -358,7 +358,7 @@ func (psp *powerSavePlan) makeSystemSleep() {
 }
 
 func (psp *powerSavePlan) lock() {
-	psp.manager.doLock()
+	psp.manager.doLock(true)
 }
 
 // 降低显示器亮度，最终关闭显示器
@@ -393,7 +393,7 @@ func (psp *powerSavePlan) screenBlack() {
 		psp.stopScreensaver()
 		logger.Info("Screen full black")
 		if manager.ScreenBlackLock.Get() {
-			manager.lockWaitShow(2 * time.Second)
+			manager.lockWaitShow(2*time.Second, true)
 		}
 
 		if adjustBrightnessEnabled {
@@ -493,7 +493,7 @@ func (psp *powerSavePlan) HandleIdleOn() {
 		if psp.manager.ScreenBlackLock.Get() {
 			//m.setDPMSModeOn()
 			//m.lockWaitShow(4 * time.Second)
-			psp.manager.doLock()
+			psp.manager.doLock(true)
 			time.Sleep(time.Millisecond * 500)
 		}
 	}
@@ -520,7 +520,7 @@ func (psp *powerSavePlan) HandleIdleOff() {
 		if psp.manager.ScreenBlackLock.Get() {
 			//m.setDPMSModeOn()
 			//m.lockWaitShow(4 * time.Second)
-			psp.manager.doLock()
+			psp.manager.doLock(false)
 			time.Sleep(time.Millisecond * 500)
 		}
 	}

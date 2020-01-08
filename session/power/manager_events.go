@@ -65,7 +65,7 @@ func (m *Manager) handleBeforeSuspend() {
 	m.setPrepareSuspend(true)
 	logger.Debug("before sleep")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		m.lockWaitShow(4 * time.Second)
+		m.lockWaitShow(4*time.Second, false)
 	}
 }
 
@@ -73,7 +73,7 @@ func (m *Manager) handleWakeup() {
 	m.setPrepareSuspend(false)
 	logger.Debug("wakeup")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		m.doLock()
+		m.doLock(true)
 	}
 	m.setDPMSModeOn()
 	m.helper.Power.RefreshBatteries(0)
@@ -156,7 +156,7 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 				// after 3 seconds, lock and then show dde low power
 				go func() {
 					if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-						m.lockWaitShow(2 * time.Second)
+						m.lockWaitShow(2*time.Second, false)
 					}
 					doShowDDELowPower()
 				}()
