@@ -26,15 +26,29 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 )
 
-func (m *Manager) setPrepareSuspend(v bool) {
+const (
+	suspendStateUnknown = iota + 1
+	suspendStateFinish
+	suspendStatePrepare
+	suspendStateWakeup
+)
+
+func (m *Manager) setPrepareSuspend(v int) {
 	m.prepareSuspendLocker.Lock()
 	m.prepareSuspend = v
 	m.prepareSuspendLocker.Unlock()
 }
 
-func (m *Manager) getPrepareSuspend() bool {
+func (m *Manager) shouldIgnoreIdleOn() bool {
 	m.prepareSuspendLocker.Lock()
-	v := m.prepareSuspend
+	v := (m.prepareSuspend > suspendStateFinish)
+	m.prepareSuspendLocker.Unlock()
+	return v
+}
+
+func (m *Manager) shouldIgnoreIdleOff() bool {
+	m.prepareSuspendLocker.Lock()
+	v := (m.prepareSuspend == suspendStatePrepare)
 	m.prepareSuspendLocker.Unlock()
 	return v
 }
@@ -62,7 +76,7 @@ func (m *Manager) initOnBatteryChangedHandler() {
 }
 
 func (m *Manager) handleBeforeSuspend() {
-	m.setPrepareSuspend(true)
+	m.setPrepareSuspend(suspendStatePrepare)
 	logger.Debug("before sleep")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
 		m.lockWaitShow(4*time.Second, false)
@@ -70,7 +84,7 @@ func (m *Manager) handleBeforeSuspend() {
 }
 
 func (m *Manager) handleWakeup() {
-	m.setPrepareSuspend(false)
+	m.setPrepareSuspend(suspendStateWakeup)
 	logger.Debug("wakeup")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
 		m.doLock(true)

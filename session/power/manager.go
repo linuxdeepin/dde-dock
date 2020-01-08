@@ -26,7 +26,7 @@ import (
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
@@ -104,7 +104,7 @@ type Manager struct {
 	sessionActive                bool
 
 	// if prepare suspend, ignore idle off
-	prepareSuspend       bool
+	prepareSuspend       int
 	prepareSuspendLocker sync.Mutex
 }
 
@@ -119,6 +119,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.sessionSigLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 	m.systemSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
 	m.inhibitFd = -1
+	m.prepareSuspend = suspendStateUnknown
 
 	m.syncConfig = dsync.NewConfig("power", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
 

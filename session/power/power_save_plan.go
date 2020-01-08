@@ -453,7 +453,9 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if psp.idleOn {
+	if psp.idleOn || psp.manager.shouldIgnoreIdleOn() {
+		logger.Info("HandleIdleOn : IGNORE =========")
+		psp.idleOn = true
 		return
 	}
 
@@ -504,11 +506,13 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if !psp.idleOn || psp.manager.getPrepareSuspend() {
-		logger.Info("HandleIdleOff : IGNORE =========")
+	if !psp.idleOn || psp.manager.shouldIgnoreIdleOff() {
+		psp.manager.setPrepareSuspend(suspendStateFinish)
 		psp.idleOn = false
+		logger.Info("HandleIdleOff : IGNORE =========")
 		return
 	}
+
 	psp.idleOn = false
 	logger.Info("HandleIdleOff")
 	psp.interruptTasks()
