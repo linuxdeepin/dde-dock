@@ -939,8 +939,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
                 int width = pItem->sizeHint().width();
-                if(h == 40 && pItem->sizeHint().width() == 40)
-                    width = 20;
+                if(pItem->pluginName()=="AiAssistant")
+                    width = tray_item_size;
                 if (width > -1)
                     pItem->setFixedWidth(width);
                 else {
@@ -955,8 +955,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
                 int height = pItem->sizeHint().height();
-                if(w == 40 && pItem->sizeHint().height() == 40)
-                    height = 20;
+                if(pItem->pluginName()=="AiAssistant")
+                    height = tray_item_size;
                 if (height > -1)
                     pItem->setFixedHeight(height);
                 else {
