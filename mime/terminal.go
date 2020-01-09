@@ -143,6 +143,7 @@ func getTerminalInfos() AppInfos {
 			Description: appInfo.GetComment(),
 			Exec:        appInfo.GetCommandline(),
 			Icon:        appInfo.GetIcon(),
+			fileName:    appInfo.GetFileName(),
 		}
 		list = append(list, tmp)
 	}
