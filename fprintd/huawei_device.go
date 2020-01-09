@@ -104,7 +104,11 @@ func (dev *HuaweiDevice) claim(sender, username string) error {
 	}
 
 	if status == huaweiDeviceStatusBusy {
-		return errors.New("device is busy")
+		logger.Warning("device is busy, call Close first")
+		err = dev.doClose()
+		if err != nil {
+			return err
+		}
 	}
 
 	dev.claimed = true
@@ -136,15 +140,20 @@ func (dev *HuaweiDevice) close() error {
 	}
 
 	if status == huaweiDeviceStatusBusy {
-		closeRet, err := dev.core.Close(0)
-		if err != nil {
-			return err
-		}
-
-		if closeRet == -1 {
-			return errors.New("failed to close")
-		}
+		return dev.doClose()
 	} // else status is idle, no need call close
+	return nil
+}
+
+func (dev *HuaweiDevice) doClose() error {
+	closeRet, err := dev.core.Close(0)
+	if err != nil {
+		return err
+	}
+
+	if closeRet == -1 {
+		return errors.New("failed to close")
+	}
 	return nil
 }
 
