@@ -29,8 +29,10 @@ import (
 const (
 	suspendStateUnknown = iota + 1
 	suspendStateFinish
-	suspendStatePrepare
 	suspendStateWakeup
+	suspendStateLidOpen
+	suspendStatePrepare
+	suspendStateLidClose
 )
 
 func (m *Manager) setPrepareSuspend(v int) {
@@ -48,7 +50,7 @@ func (m *Manager) shouldIgnoreIdleOn() bool {
 
 func (m *Manager) shouldIgnoreIdleOff() bool {
 	m.prepareSuspendLocker.Lock()
-	v := (m.prepareSuspend == suspendStatePrepare)
+	v := (m.prepareSuspend >= suspendStatePrepare)
 	m.prepareSuspendLocker.Unlock()
 	return v
 }

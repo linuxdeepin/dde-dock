@@ -59,6 +59,7 @@ func (h *LidSwitchHandler) onLidClosed() {
 	logger.Info("Lid closed")
 	var onBattery bool
 	m := h.manager
+	m.setPrepareSuspend(suspendStateLidClose)
 	m.PropsMu.Lock()
 	m.lidSwitchState = lidSwitchStateClose
 	onBattery = h.manager.OnBattery
@@ -95,6 +96,7 @@ func (h *LidSwitchHandler) onLidClosed() {
 func (h *LidSwitchHandler) onLidOpened() {
 	logger.Info("Lid opened")
 	m := h.manager
+	m.setPrepareSuspend(suspendStateLidOpen)
 	m.PropsMu.Lock()
 	m.lidSwitchState = lidSwitchStateOpen
 	m.PropsMu.Unlock()
