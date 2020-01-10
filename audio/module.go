@@ -24,6 +24,7 @@ import (
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 var (
@@ -79,6 +80,7 @@ func (m *Module) Start() error {
 	}
 
 	go func() {
+		waitSoundThemePlayerExit()
 		t0 := time.Now()
 		err := m.start()
 		if err != nil {
@@ -109,4 +111,22 @@ func (m *Module) Stop() error {
 
 	m.audio = nil
 	return nil
+}
+
+func waitSoundThemePlayerExit() {
+	srv, err := dbusutil.NewSystemService()
+	if err != nil {
+		logger.Warning("Failed to connect system bus:", err)
+		return
+	}
+
+	for {
+		var owner string
+		owner, err = srv.GetNameOwner("com.deepin.api.SoundThemePlayer")
+		if err != nil {
+			return
+		}
+		logger.Info("Owner:", owner)
+		time.Sleep(time.Millisecond * 800)
+	}
 }
