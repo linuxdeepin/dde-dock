@@ -578,6 +578,13 @@ void SNITrayWidget::showHoverTips()
     if (!r.contains(QCursor::pos()))
         return;
 
+    QProcess p;
+    p.start("qdbus", {m_dbusService});
+    if (!p.waitForFinished(100)) {
+        qWarning() << "sni dbus service error : " << m_dbusService;
+        return;
+    }
+
     QDBusInterface infc(m_dbusService, m_dbusPath);
     QDBusMessage msg = infc.call("Get", "org.kde.StatusNotifierItem", "ToolTip");
     if (msg.type() == QDBusMessage::ReplyMessage) {

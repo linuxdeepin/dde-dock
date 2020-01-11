@@ -406,6 +406,21 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
         return;
     }
 
+    if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
+        qDebug() << "SNI service path invalid";
+        return;
+    }
+
+    QStringList list = sniServicePath.split("/");
+    QString nsiServerName = list.takeFirst();
+
+    QProcess p;
+    p.start("qdbus", {nsiServerName});
+    if (!p.waitForFinished(100)) {
+        qWarning() << "sni dbus service error : " << nsiServerName;
+        return;
+    }
+
     SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
     if (!trayWidget->isValid())
         return;
