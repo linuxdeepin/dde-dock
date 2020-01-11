@@ -38,6 +38,8 @@ func (sc *syncConfig) Set(data []byte) error {
 		err = m.doSetFontSize(v.FontSize)
 		if err != nil {
 			logger.Warning("failed to set font size:", err)
+		} else {
+			m.FontSize.Set(v.FontSize)
 		}
 	}
 
@@ -45,6 +47,8 @@ func (sc *syncConfig) Set(data []byte) error {
 		err = m.doSetGtkTheme(v.GTK)
 		if err != nil {
 			logger.Warning("failed to set gtk theme:", err)
+		} else {
+			m.GtkTheme.Set(v.GTK)
 		}
 	}
 
@@ -52,6 +56,8 @@ func (sc *syncConfig) Set(data []byte) error {
 		err = m.doSetIconTheme(v.Icon)
 		if err != nil {
 			logger.Warning("failed to set icon theme:", err)
+		} else {
+			m.IconTheme.Set(v.Icon)
 		}
 	}
 
@@ -59,6 +65,8 @@ func (sc *syncConfig) Set(data []byte) error {
 		err = m.doSetCursorTheme(v.Cursor)
 		if err != nil {
 			logger.Warning("failed to set cursor theme:", err)
+		} else {
+			m.CursorTheme.Set(v.Cursor)
 		}
 	}
 
@@ -66,6 +74,8 @@ func (sc *syncConfig) Set(data []byte) error {
 		err = m.doSetStandardFont(v.FontStandard)
 		if err != nil {
 			logger.Warning("failed to set standard font:", err)
+		} else {
+			m.StandardFont.Set(v.FontStandard)
 		}
 	}
 
@@ -73,6 +83,8 @@ func (sc *syncConfig) Set(data []byte) error {
 		err = m.doSetMonospaceFont(v.FontMonospace)
 		if err != nil {
 			logger.Warning("failed to set monospace font:", err)
+		} else {
+			m.MonospaceFont.Set(v.FontMonospace)
 		}
 	}
 
