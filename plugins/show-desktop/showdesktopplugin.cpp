@@ -139,14 +139,14 @@ void ShowDesktopPlugin::refreshIcon(const QString &itemKey)
 
 int ShowDesktopPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     return m_proxyInter->getValue(this, key, 1).toInt();
 }
 
 void ShowDesktopPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     m_proxyInter->saveValue(this, key, order);
 }

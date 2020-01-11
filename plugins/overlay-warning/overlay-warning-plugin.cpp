@@ -121,19 +121,13 @@ void OverlayWarningPlugin::displayModeChanged(const Dock::DisplayMode displayMod
 
 int OverlayWarningPlugin::itemSortKey(const QString &itemKey)
 {
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 2).toInt();
-    } else {
-        return m_proxyInter->getValue(this, key, 5).toInt();
-    }
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+    return m_proxyInter->getValue(this, key, 3).toInt();
 }
 
 void OverlayWarningPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 

@@ -154,13 +154,13 @@ void TrashPlugin::pluginStateSwitched()
 
 int TrashPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
-    return m_proxyInter->getValue(this, key, -1).toInt();
+    const QString &key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+    return m_proxyInter->getValue(this, key, 7).toInt();
 }
 
 void TrashPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString &key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString &key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 

@@ -139,14 +139,14 @@ void MultitaskingPlugin::refreshIcon(const QString &itemKey)
 
 int MultitaskingPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     return m_proxyInter->getValue(this, key, 2).toInt();
 }
 
 void MultitaskingPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     m_proxyInter->saveValue(this, key, order);
 }

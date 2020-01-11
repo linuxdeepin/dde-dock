@@ -176,7 +176,7 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
         return defaultSort;
     }
 
-    const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(Dock::Efficient);
 
     return m_proxyInter->getValue(this, key, defaultSort).toInt();
 }
@@ -197,7 +197,7 @@ void TrayPlugin::setSortKey(const QString &itemKey, const int order)
         return;
     }
 
-    const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(trayWidget->itemKeyForConfig()).arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 

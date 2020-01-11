@@ -345,7 +345,7 @@ void DockSettings::onDisplayModeChanged()
     emit displayModeChanegd();
     calculateWindowConfig();
 
-    QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
+   //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }
 
 void DockSettings::hideModeChanged()

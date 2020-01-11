@@ -126,19 +126,13 @@ void OnboardPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 
 int OnboardPlugin::itemSortKey(const QString &itemKey)
 {
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 1).toInt();
-    } else {
-        return m_proxyInter->getValue(this, key, 4).toInt();
-    }
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+    return m_proxyInter->getValue(this, key, 3).toInt();
 }
 
 void OnboardPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 

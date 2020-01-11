@@ -139,14 +139,14 @@ void PowerPlugin::refreshIcon(const QString &itemKey)
 
 int PowerPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
-    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 3 : 3).toInt();
+    return m_proxyInter->getValue(this, key, 4).toInt();
 }
 
 void PowerPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     m_proxyInter->saveValue(this, key, order);
 }
