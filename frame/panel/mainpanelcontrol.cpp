@@ -742,6 +742,7 @@ void MainPanelControl::moveAppSonWidget()
 void MainPanelControl::itemUpdated(DockItem *item)
 {
     item->parentWidget()->adjustSize();
+    resizeDockIcon();
 }
 
 void MainPanelControl::paintEvent(QPaintEvent *event)
