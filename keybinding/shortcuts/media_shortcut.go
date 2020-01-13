@@ -93,7 +93,8 @@ var mediaIdActionMap = map[string]*Action{
 
 	// We do not need to deal with XF86Wlan key default,
 	// but can be specially by 'EnableNetworkController'
-	"wlan": &Action{Type: ActionTypeToggleWireless},
+	"wlan":  &Action{Type: ActionTypeToggleWireless},
+	"tools": &Action{Type: ActionTypeShowControlCenter},
 }
 
 func (ms *MediaShortcut) GetAction() *Action {

@@ -53,6 +53,7 @@ const (
 	gsKeySaveNumLockState     = "save-numlock-state"
 	gsKeyShortcutSwitchLayout = "shortcut-switch-layout"
 	gsKeyShowCapsLockOSD      = "capslock-toggle"
+	gsKeyUpperLayerWLAN       = "upper-layer-wlan"
 
 	gsSchemaSystem   = "com.deepin.dde.keybinding.system"
 	gsSchemaMediaKey = "com.deepin.dde.keybinding.mediakey"

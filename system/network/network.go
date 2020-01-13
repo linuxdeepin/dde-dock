@@ -110,9 +110,10 @@ type Network struct {
 	nmSettings     *networkmanager.Settings
 	sigLoop        *dbusutil.SignalLoop
 	methods        *struct {
-		IsDeviceEnabled func() `in:"pathOrIface" out:"enabled"`
-		EnableDevice    func() `in:"pathOrIface,enabled"`
-		Ping            func() `in:"host"`
+		IsDeviceEnabled       func() `in:"pathOrIface" out:"enabled"`
+		EnableDevice          func() `in:"pathOrIface,enabled"`
+		Ping                  func() `in:"host"`
+		ToggleWirelessEnabled func() `out:"enabled"`
 	}
 
 	signals *struct {
@@ -252,7 +253,19 @@ func (n *Network) connectSignal() {
 			n.handleVpnStateChanged(state)
 		}
 	})
+}
 
+func (n *Network) getWirelessDevices() (devices []*device) {
+	n.devicesMu.Lock()
+
+	for _, d := range n.devices {
+		if d.type0 == nm.NM_DEVICE_TYPE_WIFI {
+			devices = append(devices, d)
+		}
+	}
+
+	n.devicesMu.Unlock()
+	return
 }
 
 func (n *Network) handleVpnStateChanged(state uint32) {
@@ -558,6 +571,35 @@ func (n *Network) enableWireless() error {
 	}
 
 	return n.nmManager.WirelessEnabled().Set(0, true)
+}
+
+func (n *Network) ToggleWirelessEnabled() (bool, *dbus.Error) {
+	enabled, err := n.toggleWirelessEnabled()
+	return enabled, dbusutil.ToError(err)
+}
+
+func (n *Network) toggleWirelessEnabled() (bool, error) {
+	enabled, err := n.nmManager.WirelessEnabled().Get(0)
+	if err != nil {
+		return false, err
+	}
+	enabled = !enabled
+
+	err = n.nmManager.WirelessEnabled().Set(0, enabled)
+	if err != nil {
+		return false, err
+	}
+
+	device := n.getWirelessDevices()
+	for _, d := range device {
+		devPath := d.nmDevice.Path_()
+		err = n.enableDevice(string(devPath), enabled)
+		if err != nil {
+            logger.Warningf("failed to enable %v device %s: %v", enabled, devPath, err)
+		}
+	}
+
+	return enabled, nil
 }
 
 type connSettings struct {

@@ -23,7 +23,9 @@ import (
 	"fmt"
 	"time"
 
+	sys_network "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) shouldShowCapsLockOSD() bool {
@@ -132,15 +134,35 @@ func (m *Manager) initHandlers() {
 	m.handlers[ActionTypeKbdLightCtrl] = buildHandlerFromController(m.kbdLightController)
 	m.handlers[ActionTypeTouchpadCtrl] = buildHandlerFromController(m.touchPadController)
 	m.handlers[ActionTypeToggleWireless] = func(ev *KeyEvent) {
-		state, err := getRfkillWlanState()
-		if err != nil {
-			logger.Warning(err)
-			return
-		}
-		if state == 0 {
-			showOSD("WLANOff")
+		if m.gsMediaKey.GetBoolean(gsKeyUpperLayerWLAN) {
+			sysBus, err := dbus.SystemBus()
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+			sysNetwork := sys_network.NewNetwork(sysBus)
+			enabled, err := sysNetwork.ToggleWirelessEnabled(0)
+			if err != nil {
+				logger.Warning("failed to toggle wireless enabled:", err)
+				return
+			}
+			if enabled {
+				showOSD("WLANOn")
+			} else {
+				showOSD("WLANOff")
+			}
+
 		} else {
-			showOSD("WLANOn")
+			state, err := getRfkillWlanState()
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+			if state == 0 {
+				showOSD("WLANOff")
+			} else {
+				showOSD("WLANOn")
+			}
 		}
 	}
 
@@ -186,6 +208,14 @@ func (m *Manager) initHandlers() {
 
 		case SKLStateOSDShown:
 			showOSD("SwitchLayout")
+		}
+	}
+
+	m.handlers[ActionTypeShowControlCenter] = func(ev *KeyEvent) {
+		err := m.execCmd("dbus-send --session --dest=com.deepin.dde.ControlCenter  --print-reply /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.Show",
+			false)
+		if err != nil {
+			logger.Warning("failed to show control center:", err)
 		}
 	}
 
