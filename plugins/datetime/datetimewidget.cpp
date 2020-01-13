@@ -71,6 +71,7 @@ QSize DatetimeWidget::curTimeSize() const
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
 
     m_timeFont = TIME_FONT;
+    m_dateFont = DATE_FONT;
     QFontMetrics fm(m_timeFont);
     QString format;
     if (m_24HourFormat)
@@ -88,12 +89,26 @@ QSize DatetimeWidget::curTimeSize() const
         QStringList SL = timeString.split("\n");
         timeSize = QSize(fm.boundingRect(SL.at(0)).width(), fm.boundingRect(SL.at(0)).height() + fm.boundingRect(SL.at(1)).height());
     } else {
-        QSize dateSize = QFontMetrics(DATE_FONT).boundingRect("0000/00/00").size();
-        if (timeSize.width() < dateSize.width())
+        QSize dateSize = QFontMetrics(m_dateFont).boundingRect("0000/00/00").size();
+        if (timeSize.width() < dateSize.width() && rect().height() >= SHOW_DATE_MIN_HEIGHT)
             timeSize.setWidth(dateSize.width());
     }
 
     if (position == Dock::Bottom || position == Dock::Top) {
+        if (rect().height() >= SHOW_DATE_MIN_HEIGHT) {
+            QStringList SL = timeString.split("\n");
+            int date_dec=m_timeFont.pixelSize()-m_dateFont.pixelSize();
+            while (QFontMetrics(m_timeFont).boundingRect(timeString).size().height() + 11 > height()) {
+                m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
+                m_dateFont.setPixelSize(m_timeFont.pixelSize() - date_dec);
+            }
+        } else {
+            while (QFontMetrics(m_timeFont).boundingRect(timeString).size().height() > height() + 10) {
+                m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
+            }
+            timeSize.setWidth(QFontMetrics(m_timeFont).boundingRect(timeString).size().width());
+        }
+
         return QSize(timeSize.width(), height());
     } else {
         if (width() < timeSize.width()) {
@@ -158,6 +173,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     painter.setPen(QPen(palette().brightText(), 1));
 
     if (rect().height() >= SHOW_DATE_MIN_HEIGHT) {
+
         QRect timeRect = rect();
         timeRect.setBottom(rect().center().y() + m_timeOffset);
 
@@ -167,7 +183,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
             QRect dateRect = rect();
             dateRect.setTop(timeRect.bottom());
             format = "yyyy/MM/dd";
-            painter.setFont(DATE_FONT);
+            painter.setFont(m_dateFont);
             painter.drawText(dateRect, Qt::AlignTop | Qt::AlignHCenter, current.toString(format));
         } else {
             painter.drawText(rect(), Qt::AlignVCenter | Qt::AlignHCenter, current.toString(format));
