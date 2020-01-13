@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"strings"
 	"sync"
 	"time"
@@ -34,6 +35,7 @@ import (
 	"pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"
 )
 
@@ -44,6 +46,7 @@ const (
 	gsKeyOutputVolume             = "output-volume"
 	gsKeyHeadphoneOutputVolume    = "headphone-output-volume"
 	gsKeyHeadphoneUnplugAutoPause = "headphone-unplug-auto-pause"
+	gsKeyVolumeIncrease           = "volume-increase"
 
 	gsSchemaSoundEffect = "com.deepin.dde.sound-effect"
 	gsKeyEnabled        = "enabled"
@@ -54,6 +57,9 @@ const (
 
 	cmdSystemctl  = "systemctl"
 	cmdPulseaudio = "pulseaudio"
+	
+	increaseMaxVolume = 1.5
+	normalMaxVolume	  = 1.0
 )
 
 var (
@@ -84,11 +90,12 @@ type Audio struct {
 	// dbusutil-gen: equal=objectPathSliceEqual
 	Sinks []dbus.ObjectPath
 	// dbusutil-gen: equal=objectPathSliceEqual
-	Sources       []dbus.ObjectPath
-	DefaultSink   dbus.ObjectPath
-	DefaultSource dbus.ObjectPath
-	Cards         string
-	defaultPaCfg  defaultPaConfig
+	Sources        []dbus.ObjectPath
+	DefaultSink    dbus.ObjectPath
+	DefaultSource  dbus.ObjectPath
+	Cards          string
+	IncreaseVolume gsprop.Bool `prop:"access:rw"`
+	defaultPaCfg   defaultPaConfig
 
 	// dbusutil-gen: ignore
 	// 最大音量
@@ -139,7 +146,23 @@ func newAudio(service *dbusutil.Service) *Audio {
 	}
 
 	a.settings = gio.NewSettings(gsSchemaAudio)
+	a.IncreaseVolume.Bind(a.settings, gsKeyVolumeIncrease)
 	a.headphoneUnplugAutoPause = a.settings.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
+	if a.IncreaseVolume.Get(){
+		a.MaxUIVolume = increaseMaxVolume
+	} else {
+		a.MaxUIVolume = normalMaxVolume
+	}
+
+	gsettings.ConnectChanged(gsSchemaAudio, gsKeyVolumeIncrease, func(val string) {
+		tm := a.settings.GetBoolean(gsKeyVolumeIncrease)
+		if tm {
+			a.MaxUIVolume = increaseMaxVolume
+		} else {
+			a.MaxUIVolume = normalMaxVolume
+		}
+		a.service.EmitPropertyChanged(a, "MaxUIVolume", a.MaxUIVolume)
+	})
 
 	a.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	a.syncConfig = dsync.NewConfig("audio", &syncConfig{a: a},
