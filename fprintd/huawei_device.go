@@ -9,6 +9,7 @@ import (
 
 	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	huawei_fprint "github.com/linuxdeepin/go-dbus-factory/com.huawei.fingerprint"
+	fprintd_common "pkg.deepin.io/dde/daemon/fprintd/common"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
@@ -16,10 +17,6 @@ import (
 
 const (
 	huaweiDevicePath = dbusPath + "/Device/huawei"
-	huaweiFprintDir  = "/var/lib/dde-daemon/fingerprint/huawei"
-
-	huaweiDeleteTypeOne = 0
-	huaweiDeleteTypeAll = 1
 )
 
 type HuaweiDevice struct {
@@ -276,7 +273,7 @@ func (dev *HuaweiDevice) enrollStart(sender dbus.Sender, finger string) error {
 			return err
 		}
 
-		reloadRet, err := dev.core.Reload(0, huaweiDeleteTypeOne)
+		reloadRet, err := dev.core.Reload(0, fprintd_common.HuaweiDeleteTypeOne)
 		if err != nil {
 			return err
 		}
@@ -290,11 +287,11 @@ func (dev *HuaweiDevice) enrollStart(sender dbus.Sender, finger string) error {
 }
 
 func ensureHuaweiFprintDir(userUuid string) (dir string, err error) {
-	err = os.MkdirAll(huaweiFprintDir, 0755)
+	err = os.MkdirAll(fprintd_common.HuaweiFprintDir, 0755)
 	if err != nil {
 		return
 	}
-	dir = filepath.Join(huaweiFprintDir, userUuid)
+	dir = filepath.Join(fprintd_common.HuaweiFprintDir, userUuid)
 	err = os.Mkdir(dir, 0700)
 	if err != nil && !os.IsExist(err) {
 		return "", err
@@ -377,7 +374,7 @@ func (dev *HuaweiDevice) deleteEnrolledFingers(sender dbus.Sender, username stri
 		}
 	}
 
-	reloadRet, err := dev.core.Reload(0, huaweiDeleteTypeAll)
+	reloadRet, err := dev.core.Reload(0, fprintd_common.HuaweiDeleteTypeAll)
 	if err != nil {
 		return err
 	}
@@ -421,7 +418,7 @@ func (dev *HuaweiDevice) deleteEnrolledFinger(sender dbus.Sender, username, fing
 		return err
 	}
 
-	reloadRet, err := dev.core.Reload(0, huaweiDeleteTypeOne)
+	reloadRet, err := dev.core.Reload(0, fprintd_common.HuaweiDeleteTypeOne)
 	if err != nil {
 		return err
 	}

@@ -29,9 +29,9 @@ import (
 	"strings"
 	"sync"
 
-	"pkg.deepin.io/gir/glib-2.0"
-
 	"pkg.deepin.io/dde/daemon/accounts/users"
+	fprintd_common "pkg.deepin.io/dde/daemon/fprintd/common"
+	"pkg.deepin.io/gir/glib-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
@@ -570,6 +570,13 @@ func (u *User) clearData() {
 		if err != nil {
 			logger.Warning("remove user custom icon failed:", err)
 		}
+	}
+
+	// delete enrolled fingers
+	err = fprintd_common.DeleteEnrolledFingers(u.UserName, u.UUID)
+	if err != nil {
+		logger.Warningf("failed to delete enrolled fingers (user: %q, uuid: %q): %v",
+			u.UserName, u.UUID, err)
 	}
 }
 
