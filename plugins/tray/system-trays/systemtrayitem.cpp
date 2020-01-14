@@ -219,7 +219,7 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
     hideNonModel();
 
     if (event->button() == Qt::RightButton) {
-        if (perfectIconRect().contains(event->pos())) {
+        if (perfectIconRect().contains(event->pos(), true)) {
             return showContextMenu();
         }
     }

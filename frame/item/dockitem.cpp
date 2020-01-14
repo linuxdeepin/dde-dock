@@ -198,8 +198,8 @@ const QRect DockItem::perfectIconRect() const
     QRect iconRect;
 
     if (itemType() == Plugins) {
-        iconRect.setWidth(itemRect.width() * 0.9);
-        iconRect.setHeight(itemRect.height() * 0.9);
+        iconRect.setWidth(itemRect.width());
+        iconRect.setHeight(itemRect.height());
     } else {
         const int iconSize = std::min(itemRect.width(), itemRect.height()) * 0.8;
         iconRect.setWidth(iconSize);

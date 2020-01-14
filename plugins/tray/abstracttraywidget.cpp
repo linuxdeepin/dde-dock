@@ -47,7 +47,7 @@ void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
     // when right button of mouse is pressed immediately in fashion mode
 
     // here we hide the right button press event when it is click in the special area
-    if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos())) {
+    if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos(), true)) {
         event->accept();
         return;
     }
@@ -108,7 +108,7 @@ void AbstractTrayWidget::handleMouseRelease()
 const QRect AbstractTrayWidget::perfectIconRect() const
 {
     const QRect itemRect = rect();
-    const int iconSize = std::min(itemRect.width(), itemRect.height()) * 0.8;
+    const int iconSize = std::min(itemRect.width(), itemRect.height());
 
     QRect iconRect;
     iconRect.setWidth(iconSize);
