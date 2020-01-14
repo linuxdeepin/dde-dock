@@ -221,7 +221,7 @@ void MainPanelControl::resizeEvent(QResizeEvent *event)
     if (m_position == Position::Right || m_position == Position::Left)
         m_desktopWidget->setFixedSize(width(), DESKTOP_SIZE);
     else
-       m_desktopWidget->setFixedSize(DESKTOP_SIZE, height());
+        m_desktopWidget->setFixedSize(DESKTOP_SIZE, height());
 
     if (DisplayMode::Fashion == m_dislayMode)
         m_desktopWidget->setFixedSize(0, 0);
@@ -334,40 +334,6 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 {
-    DockItem *sourceItem = qobject_cast<DockItem *>(e->source());
-    if (sourceItem) {
-        e->accept();
-        return;
-    }
-
-    // 拖app到dock上
-    const char *RequestDockKey = "RequestDock";
-    const char *RequestDockKeyFallback = "text/plain";
-    const char *DesktopMimeType = "application/x-desktop";
-
-    m_draggingMimeKey = e->mimeData()->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
-
-    // dragging item is NOT a desktop file
-    if (QMimeDatabase().mimeTypeForFile(e->mimeData()->data(m_draggingMimeKey)).name() != DesktopMimeType) {
-        m_draggingMimeKey.clear();
-        qDebug() << "dragging item is NOT a desktop file";
-        return;
-    }
-
-    //如果当前从桌面拖拽的的app是trash，则不能放入app任务栏中
-    QString str = "file://";
-    //启动器
-    QString str_t = "";
-
-    str.append(QStandardPaths::locate(QStandardPaths::DesktopLocation, "dde-trash.desktop"));
-    str_t.append(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "dde-trash.desktop"));
-
-    if ((str == e->mimeData()->data(m_draggingMimeKey)) || (str_t == e->mimeData()->data(m_draggingMimeKey)))
-        return;
-
-    if (m_delegate && m_delegate->appIsOnDock(e->mimeData()->data(m_draggingMimeKey)))
-        return;
-
     e->accept();
 }
 
@@ -473,6 +439,46 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
 
 void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 {
+    DockItem *sourceItem = qobject_cast<DockItem *>(e->source());
+    if (sourceItem) {
+        handleDragMove(e, false);
+        return;
+    }
+
+    // 拖app到dock上
+    const char *RequestDockKey = "RequestDock";
+    const char *RequestDockKeyFallback = "text/plain";
+    const char *DesktopMimeType = "application/x-desktop";
+    auto DragmineData=e->mimeData();
+
+    m_draggingMimeKey = DragmineData->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
+
+    // dragging item is NOT a desktop file
+    if (QMimeDatabase().mimeTypeForFile(DragmineData->data(m_draggingMimeKey)).name() != DesktopMimeType) {
+        m_draggingMimeKey.clear();
+        e->setAccepted(false);
+        qDebug() << "dragging item is NOT a desktop file";
+        return;
+    }
+
+    //如果当前从桌面拖拽的的app是trash，则不能放入app任务栏中
+    QString str = "file://";
+    //启动器
+    QString str_t = "";
+
+    str.append(QStandardPaths::locate(QStandardPaths::DesktopLocation, "dde-trash.desktop"));
+    str_t.append(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "dde-trash.desktop"));
+
+    if ((str == DragmineData->data(m_draggingMimeKey)) || (str_t == DragmineData->data(m_draggingMimeKey))) {
+        e->setAccepted(false);
+        return;
+    }
+
+    if (m_delegate && m_delegate->appIsOnDock(DragmineData->data(m_draggingMimeKey))) {
+        e->setAccepted(false);
+        return;
+    }
+
     handleDragMove(e, false);
 }
 
@@ -492,11 +498,11 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if (watched == m_desktopWidget){
-        if (event->type() == QEvent::Enter){
+    if (watched == m_desktopWidget) {
+        if (event->type() == QEvent::Enter) {
             m_isHover = true;
             update();
-        } else if (event->type() == QEvent::Leave){
+        } else if (event->type() == QEvent::Leave) {
             m_isHover = false;
             update();
         }
@@ -554,7 +560,7 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) {
         m_mousePressPos = e->globalPos();
 
-        QRect rect(m_desktopWidget->pos(),m_desktopWidget->size());
+        QRect rect(m_desktopWidget->pos(), m_desktopWidget->size());
         if (rect.contains(e->pos()))
             QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
     }
@@ -769,11 +775,11 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
     pen.setColor(penColor);
     painter.setPen(pen);
     painter.drawRect(m_desktopWidget->geometry());
-    if (m_isHover){
+    if (m_isHover) {
         painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 51));
         return;
     }
-     painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 25));
+    painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 25));
 }
 
 void MainPanelControl::resizeDockIcon()
@@ -940,7 +946,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
                 int width = pItem->sizeHint().width();
-                if(pItem->pluginName()=="AiAssistant")
+                if (pItem->pluginName() == "AiAssistant")
                     width = tray_item_size;
                 if (width > -1)
                     pItem->setFixedWidth(width);
@@ -956,7 +962,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
                 int height = pItem->sizeHint().height();
-                if(pItem->pluginName()=="AiAssistant")
+                if (pItem->pluginName() == "AiAssistant")
                     height = tray_item_size;
                 if (height > -1)
                     pItem->setFixedHeight(height);
