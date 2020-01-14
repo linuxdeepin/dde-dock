@@ -278,16 +278,19 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 
 			// ignore if device's old state is not available
 			if !isDeviceStateAvailable(oldState) {
+				logger.Debug("no notify, old state is not available")
 				return
 			}
 
 			// notify only when network enabled
 			if !nmGetNetworkEnabled() {
+				logger.Debug("no notify, network disabled")
 				return
 			}
 
 			// notify only when device enabled
 			if oldState == nm.NM_DEVICE_STATE_DISCONNECTED && !dsi.enabled {
+				logger.Debug("no notify, notify only when device enabled")
 				return
 			}
 
@@ -311,6 +314,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 
 			// ignore invalid reasons
 			if isDeviceStateReasonInvalid(reason) {
+				logger.Debug("no notify, device state reason invalid")
 				return
 			}
 

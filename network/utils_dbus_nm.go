@@ -97,7 +97,7 @@ func isDeviceStateInActivating(state uint32) bool {
 
 func isDeviceStateReasonInvalid(reason uint32) bool {
 	switch reason {
-	case nm.NM_DEVICE_STATE_REASON_UNKNOWN, nm.NM_DEVICE_STATE_REASON_NONE:
+	case nm.NM_DEVICE_STATE_REASON_UNKNOWN:
 		return true
 	}
 	return false
