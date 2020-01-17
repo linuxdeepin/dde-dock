@@ -31,6 +31,7 @@
 #include <DApplication>
 
 #define ICON_SIZE   24
+#define APP_TITLE_SIZE 150
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -56,7 +57,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_appBtn->setPixmap(getIconFromTheme(iconName, QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
     TipsWidget *titleLabel = new TipsWidget;
-    titleLabel->setText(m_inputInter->name());
+    titleLabel->setText(fontMetrics().elidedText(m_inputInter->name(), Qt::TextElideMode::ElideRight, APP_TITLE_SIZE));
 
     m_volumeBtnMin->setAccessibleName("volume-button");
     m_volumeBtnMin->setFixedSize(ICON_SIZE, ICON_SIZE);
