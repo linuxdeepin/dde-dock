@@ -36,9 +36,8 @@ func (entry *AppEntry) updateMenu() {
 
 	desktopActionMenuItems := entry.getMenuItemDesktopActions()
 	menu.AppendItem(desktopActionMenuItems...)
-
-	if entry.hasWindow() {
-		menu.AppendItem(entry.getMenuItemForceQuit())
+	hasWin := entry.hasWindow()
+	if hasWin {
 		menu.AppendItem(entry.getMenuItemAllWindows())
 	}
 
@@ -50,8 +49,11 @@ func (entry *AppEntry) updateMenu() {
 		menu.AppendItem(entry.getMenuItemDock())
 	}
 
-	if entry.hasAllowedCloseWindow() {
-		menu.AppendItem(entry.getMenuItemCloseAll())
+	if hasWin {
+		menu.AppendItem(entry.getMenuItemForceQuit())
+		if entry.hasAllowedCloseWindow() {
+			menu.AppendItem(entry.getMenuItemCloseAll())
+		}
 	}
 	entry.Menu.setMenu(menu)
 }
