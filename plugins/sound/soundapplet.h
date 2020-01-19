@@ -54,6 +54,7 @@ private slots:
     void sinkInputsChanged();
     void toggleMute();
     void onPlaySoundEffect();
+    void increaseVolumeChanged();
 
 private:
     void refreshIcon();
