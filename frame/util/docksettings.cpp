@@ -25,6 +25,7 @@
 
 #include <QDebug>
 #include <QX11Info>
+#include <QGSettings>
 
 #include <DApplication>
 #include <QScreen>
@@ -41,9 +42,16 @@ DWIDGET_USE_NAMESPACE
 
 extern const QPoint rawXPosition(const QPoint &scaledPos);
 
+static QGSettings *GSettingsByMenu()
+{
+    static QGSettings settings("com.deepin.dde.dock.module.menu");
+    return &settings;
+}
+
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_menuVisible(true)
     , m_autoHide(true)
     , m_opacity(0.4)
     , m_fashionModeAct(tr("Fashion Mode"), this)
@@ -114,6 +122,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.setTitle("Settings Menu");
 
     connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
+    connect(GSettingsByMenu(), &QGSettings::changed, this, &DockSettings::onGSettingsChanged);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::onDisplayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
@@ -311,6 +320,20 @@ void DockSettings::menuActionClicked(QAction *action)
     for (auto *p : m_itemManager->pluginList()) {
         if (p->pluginName() == data)
             return p->pluginStateSwitched();
+    }
+}
+
+void DockSettings::onGSettingsChanged(const QString &key)
+{
+    if (key != "enable") {
+        return;
+    }
+
+    QGSettings *setting = GSettingsByMenu();
+
+    if (setting->keys().contains("enable")) {
+        const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
+        m_menuVisible=isEnable && setting->get("enable").toBool();
     }
 }
 

@@ -74,6 +74,7 @@ public:
     
     QSize m_mainWindowSize;
     DBusDock *m_dockInter;
+    bool m_menuVisible;
 
 signals:
     void dataChanged() const;
@@ -91,6 +92,7 @@ public slots:
 
 private slots:
     void menuActionClicked(QAction *action);
+    void onGSettingsChanged(const QString &key);
     void onPositionChanged();
     void onDisplayModeChanged();
     void hideModeChanged();

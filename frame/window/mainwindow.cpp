@@ -347,7 +347,7 @@ void MainWindow::showEvent(QShowEvent *e)
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
-    if (e->button() == Qt::RightButton) {
+    if (e->button() == Qt::RightButton && m_settings->m_menuVisible) {
         m_settings->showDockSettingsMenu();
         return;
     }
