@@ -45,6 +45,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_volumeBtn(new DImageButton)
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
+    , m_soundShow(new TipsWidget)
     , m_audioInter(new DBusAudio(this))
     , m_defSinkInter(nullptr)
 {
@@ -54,12 +55,21 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
 
     m_volumeSlider->setAccessibleName("volume-slider");
+    m_soundShow->setText(QString("%1%").arg(0));
 
     TipsWidget *deviceLabel = new TipsWidget;
     deviceLabel->setText(tr("Device"));
 
+
+    QHBoxLayout *deviceLayout =new QHBoxLayout;
+    deviceLayout->addSpacing(2);
+    deviceLayout->addWidget(deviceLabel,0, Qt::AlignLeft);
+    deviceLayout->addWidget(m_soundShow,0,Qt::AlignRight);
+    deviceLayout->setSpacing(0);
+    deviceLayout->setMargin(0);
+
     QVBoxLayout *deviceLineLayout = new QVBoxLayout;
-    deviceLineLayout->addWidget(deviceLabel);
+    deviceLineLayout->addLayout(deviceLayout);
 //    deviceLineLayout->addSpacing(12);
     deviceLineLayout->addWidget(new HorizontalSeparator);
     deviceLineLayout->setMargin(0);
@@ -95,7 +105,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);
-    m_volumeSlider->setMaximum(1500);
+    m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 1000.0f);
 
     m_centralLayout = new QVBoxLayout;
     m_centralLayout->addLayout(deviceLineLayout);
@@ -140,6 +150,11 @@ VolumeSlider *SoundApplet::mainSlider()
     return m_volumeSlider;
 }
 
+void SoundApplet::setSoundShow(QString value) const
+{
+    m_soundShow->setText(value);
+}
+
 void SoundApplet::defaultSinkChanged()
 {
     delete m_defSinkInter;
@@ -167,6 +182,7 @@ void SoundApplet::onVolumeChanged()
 void SoundApplet::volumeSliderValueChanged()
 {
     m_defSinkInter->SetVolumeQueued(m_volumeSlider->value() / 1000.0f, false);
+    m_soundShow->setText(QString("%1%").arg(m_volumeSlider->value() / 10));
 }
 
 void SoundApplet::sinkInputsChanged()
@@ -202,6 +218,11 @@ void SoundApplet::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
     m_defSinkInter->SetMuteQueued(false);
+}
+
+void SoundApplet::increaseVolumeChanged()
+{
+    m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 1000.0f);
 }
 
 void SoundApplet::refreshIcon()

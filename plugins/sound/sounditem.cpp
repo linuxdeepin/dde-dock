@@ -216,6 +216,7 @@ void SoundItem::refreshTips(const bool force)
             value = QString::number(int(m_sinkInter->volume() * 100)) + '%';
     }
     m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
+    m_applet->setSoundShow(value);
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)

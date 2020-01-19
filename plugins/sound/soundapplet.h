@@ -32,6 +32,7 @@
 #include <QSlider>
 #include <dimagebutton.h>
 
+class TipsWidget;
 class SoundApplet : public QScrollArea
 {
     Q_OBJECT
@@ -41,7 +42,7 @@ public:
 
     int volumeValue() const;
     VolumeSlider *mainSlider();
-
+    void setSoundShow(QString value) const;
 signals:
     void volumeChanged(const int value) const;
     void defaultSinkChanged(DBusSink *sink) const;
@@ -63,6 +64,7 @@ private:
     Dtk::Widget::DImageButton *m_volumeBtn;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
+    TipsWidget *m_soundShow;
     QVBoxLayout *m_centralLayout;
 
     DBusAudio *m_audioInter;
