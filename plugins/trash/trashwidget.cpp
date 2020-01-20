@@ -98,6 +98,9 @@ void TrashWidget::invokeMenuItem(const QString &menuId, const bool checked)
 
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
 {
+    if (!e->mimeData()->hasUrls())
+        return e->ignore();
+
     if (e->mimeData()->hasFormat("RequestDock")) {
         // accept prevent the event from being propgated to the dock main panel
         // which also takes drag event;
@@ -110,9 +113,6 @@ void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
 
         return;
     }
-
-    if (!e->mimeData()->hasUrls())
-        e->ignore();
 
     e->setDropAction(Qt::MoveAction);
 
