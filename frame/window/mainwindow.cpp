@@ -375,6 +375,11 @@ void MainWindow::enterEvent(QEvent *e)
         QApplication::restoreOverrideCursor();
 }
 
+void MainWindow::mouseMoveEvent(QMouseEvent *e)
+{
+    //重写mouseMoveEvent 解决bug12866  leaveEvent事件失效
+}
+
 void MainWindow::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);

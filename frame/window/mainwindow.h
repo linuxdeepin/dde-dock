@@ -69,6 +69,7 @@ private:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
 
     void initSNIHost();
     void initComponents();
