@@ -46,7 +46,6 @@ type powerSavePlan struct {
 	// key output name, value old brightness
 	oldBrightnessTable map[string]float64
 	mu                 sync.Mutex
-	idleOn             bool
 	screensaverRunning bool
 
 	atomNetWMStateFullscreen    x.Atom
@@ -350,8 +349,8 @@ func (psp *powerSavePlan) stopScreensaver() {
 }
 
 func (psp *powerSavePlan) makeSystemSleep() {
-	psp.stopScreensaver()
 	logger.Info("sleep")
+	psp.stopScreensaver()
 	//psp.manager.setDPMSModeOn()
 	psp.resetBrightness()
 	psp.manager.doSuspend()
@@ -453,9 +452,8 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if psp.idleOn || psp.manager.shouldIgnoreIdleOn() {
+	if psp.manager.shouldIgnoreIdleOn() {
 		logger.Info("HandleIdleOn : IGNORE =========")
-		psp.idleOn = true
 		return
 	}
 
@@ -480,7 +478,6 @@ func (psp *powerSavePlan) HandleIdleOn() {
 		}
 		return
 	}
-	psp.idleOn = true
 
 	logger.Info("HandleIdleOn")
 
@@ -506,14 +503,13 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if !psp.idleOn || psp.manager.shouldIgnoreIdleOff() {
+	if psp.manager.shouldIgnoreIdleOff() {
 		psp.manager.setPrepareSuspend(suspendStateFinish)
-		psp.idleOn = false
 		logger.Info("HandleIdleOff : IGNORE =========")
 		return
 	}
 
-	psp.idleOn = false
+	psp.manager.setPrepareSuspend(suspendStateFinish)
 	logger.Info("HandleIdleOff")
 	psp.interruptTasks()
 	psp.manager.setDPMSModeOn()
