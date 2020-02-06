@@ -24,6 +24,7 @@ Build-Depends: debhelper (>= 9), golang-go,
  golang-github-kelvins-sunrisesunset-dev,
  golang-github-mozillazg-go-pinyin-dev,
  golang-golang-x-xerrors-dev,
+ golang-github-davecgh-go-spew-dev,
  dde-api-dev (>> 3.17.1+),
  libudev-dev,
  libglib2.0-dev,
@@ -78,6 +79,7 @@ Depends: ${shlibs:Depends},
  libpam-runtime (>= 1.1.3-2~),
  xkb-data,
  libnotify-bin,
+ rfkill,
  hwinfo
 Breaks: dde-daemon(<< 2.92.2), dde-workspace, lastore-daemon(<< 0.9.64)
 Replaces: lastore-daemon(<< 0.9.64)

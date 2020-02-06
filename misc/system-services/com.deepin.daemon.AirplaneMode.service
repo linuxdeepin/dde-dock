@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.deepin.daemon.AirplaneMode
+Exec=/usr/lib/deepin-daemon/dde-system-daemon
+User=root
