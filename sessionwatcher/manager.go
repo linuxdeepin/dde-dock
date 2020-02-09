@@ -53,6 +53,13 @@ type Manager struct {
 	}
 }
 
+var (
+	_validSessionList = []string{
+		"x11",
+		"wayland",
+	}
+)
+
 func newManager(service *dbusutil.Service) (*Manager, error) {
 	manager := &Manager{
 		service:  service,
@@ -237,9 +244,14 @@ func (m *Manager) getActiveSession() *login1.Session {
 
 func (m *Manager) IsX11SessionActive() (bool, *dbus.Error) {
 	m.mu.Lock()
-	isActive := m.activeSessionType == "x11"
+	ty := m.activeSessionType
 	m.mu.Unlock()
-	return isActive, nil
+	for _, session := range _validSessionList {
+		if session == ty {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func (m *Manager) GetSessions() (ret []dbus.ObjectPath, err *dbus.Error) {
