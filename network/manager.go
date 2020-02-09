@@ -168,29 +168,33 @@ func (m *Manager) init() {
 		return
 	}
 
-	secServiceObj := secrets.NewService(sessionBus)
-	sa, err := newSecretAgent(secServiceObj)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	m.secretAgent = sa
+	// TODO(jouyouyun): improve in future
+	// Sometimes the 'org.freedesktop.secrets' is not exists, this would block the 'init' function, so move to goroutinue
+	go func() {
+		secServiceObj := secrets.NewService(sessionBus)
+		sa, err := newSecretAgent(secServiceObj)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		m.secretAgent = sa
 
-	logger.Debug("unique name on system bus:", systemBus.Names()[0])
-	err = sysService.Export("/org/freedesktop/NetworkManager/SecretAgent", sa)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
+		logger.Debug("unique name on system bus:", systemBus.Names()[0])
+		err = sysService.Export("/org/freedesktop/NetworkManager/SecretAgent", sa)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
 
-	// register secret agent
-	nmAgentManager := nmdbus.NewAgentManager(systemBus)
-	err = nmAgentManager.Register(0, "com.deepin.daemon.network.SecretAgent")
-	if err != nil {
-		logger.Debug("failed to register secret agent:", err)
-	} else {
-		logger.Debug("register secret agent ok")
-	}
+		// register secret agent
+		nmAgentManager := nmdbus.NewAgentManager(systemBus)
+		err = nmAgentManager.Register(0, "com.deepin.daemon.network.SecretAgent")
+		if err != nil {
+			logger.Debug("failed to register secret agent:", err)
+		} else {
+			logger.Debug("register secret agent ok")
+		}
+	}()
 
 	// initialize device and connection handlers
 	m.initConnectionManage()
