@@ -1,4 +1,5 @@
-auth	[success=2 default=ignore]	pam_lsass.so
+-auth	[success=3 default=ignore]	pam_ldap.so
+-auth	[success=2 default=ignore]	pam_lsass.so
 auth	[success=1 default=ignore]	pam_unix.so nullok_secure try_first_pass
 auth	requisite	pam_deny.so
 auth	required	pam_permit.so
