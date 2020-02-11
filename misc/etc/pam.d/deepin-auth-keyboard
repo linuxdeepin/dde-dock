@@ -1,5 +1,8 @@
--auth	[success=3 default=ignore]	pam_ldap.so
--auth	[success=2 default=ignore]	pam_lsass.so
-auth	[success=1 default=ignore]	pam_unix.so nullok_secure try_first_pass
+auth	[success=5 default=ignore]	pam_unix.so nullok_secure
+-auth	[success=4 default=ignore]	pam_lsass.so
+-auth	[authinfo_unavail=ignore success=3 default=ignore]	pam_ldap.so minimum_uid=1000 use_first_pass
+-auth	[success=2 default=ignore] pam_ccreds.so minimum_uid=1000 action=validate use_first_pass
+-auth   [default=ignore] pam_ccreds.so minimum_uid=1000 action=update
 auth	requisite	pam_deny.so
 auth	required	pam_permit.so
+-auth	optional	pam_ccreds.so minimum_uid=1000 action=store
