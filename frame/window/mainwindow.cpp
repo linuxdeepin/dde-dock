@@ -134,6 +134,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_platformWindowHandle(this),
       m_wmHelper(DWindowManagerHelper::instance()),
+      m_regionMonitor(new DRegionMonitor(this)),
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
@@ -217,8 +218,10 @@ MainWindow::MainWindow(QWidget *parent)
 
         if (m_curDockPos == Dock::Top || m_curDockPos == Dock::Bottom) {
             QWidget::setFixedHeight(val);
+            m_mainPanel->setFixedHeight(val);
         } else {
             QWidget::setFixedWidth(val);
+            m_mainPanel->setFixedWidth(val);
         }
 
         m_mainPanel->setFixedSize(windowRect.width(), windowRect.height());
@@ -282,10 +285,13 @@ MainWindow::MainWindow(QWidget *parent)
 
         QWidget::move(windowRect.left(), windowRect.top());
         QWidget::setFixedSize(windowRect.size());
-
         m_mainPanel->move(QPoint(0, 0));
         m_mainPanel->setFixedSize(QWidget::size());
+        if (m_settings->hideMode() != KeepShowing)
+            this->setVisible(false);
     });
+
+    updateRegionMonitorWatch();
 }
 
 MainWindow::~MainWindow()
@@ -505,6 +511,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::autoHideChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
+    connect(m_settings, &DockSettings::trayCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
     connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
@@ -536,6 +543,7 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
+    connect(m_regionMonitor, &DRegionMonitor::cursorMove, this, &MainWindow::onRegionMonitorChanged);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -595,6 +603,7 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
         }
 
         updatePanelVisible();
+        updateRegionMonitorWatch();
     });
 }
 
@@ -622,12 +631,16 @@ void MainWindow::updateGeometry()
     internalMove(windowRect.topLeft());
 
     QWidget::move(windowRect.topLeft());
-    QWidget::setFixedSize(windowRect.size());
+    QWidget::setFixedSize(m_settings->m_mainWindowSize);
 
     resizeMainPanelWindow();
 
     m_mainPanel->update();
-    m_mainPanel->getTrayVisableItemCount();
+}
+
+void MainWindow::getTrayVisableItemCount()
+{
+   m_mainPanel->getTrayVisableItemCount();
 }
 
 void MainWindow::clearStrutPartial()
@@ -724,6 +737,7 @@ void MainWindow::setStrutPartial()
 void MainWindow::expand()
 {
     qApp->processEvents();
+    setVisible(true);
 
     if (m_panelHideAni->state() == QPropertyAnimation::Running)
         return;
@@ -794,6 +808,7 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
         return;
 
     resizeMainPanelWindow();
+    updateRegionMonitorWatch();
     if (m_size != m_settings->m_mainWindowSize) {
         m_size = m_settings->m_mainWindowSize;
         setStrutPartial();
@@ -941,6 +956,7 @@ void MainWindow::updateDisplayMode()
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     setStrutPartial();
     adjustShadowMask();
+    updateRegionMonitorWatch();
 }
 
 void MainWindow::onMainWindowSizeChanged(QPoint offset)
@@ -1002,5 +1018,37 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
             m_platformWindowHandle.setBorderColor(QColor(QColor::Invalid));
     }
 }
+
+void MainWindow::onRegionMonitorChanged()
+{
+    if (m_settings->hideMode() == KeepShowing)
+        return;
+
+    if (!isVisible())
+        setVisible(true);
+}
+
+void MainWindow::updateRegionMonitorWatch()
+{
+    if (m_settings->hideMode() == KeepShowing)
+        return;
+
+    int val = 2;
+    const int margin = m_settings->dockMargin();
+    if (Dock::Top == m_curDockPos) {
+        m_regionMonitor->setWatchedRegion(QRegion(margin, 0, m_settings->primaryRect().width() - margin*2, val));
+    } else if (Dock::Bottom == m_curDockPos) {
+        m_regionMonitor->setWatchedRegion(QRegion(margin, m_settings->primaryRect().height() - val, m_settings->primaryRect().width() - margin*2, val));
+    } else if (Dock::Left == m_curDockPos) {
+        m_regionMonitor->setWatchedRegion(QRegion(0, margin, val,m_settings->primaryRect().height() - margin*2));
+    } else {
+        m_regionMonitor->setWatchedRegion(QRegion(m_settings->primaryRect().width() - val, margin, val,m_settings->primaryRect().height()- margin*2));
+    }
+
+    if (!m_regionMonitor->registered()){
+        m_regionMonitor->registerRegion();
+    }
+}
+
 
 #include "mainwindow.moc"

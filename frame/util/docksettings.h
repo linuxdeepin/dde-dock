@@ -85,6 +85,7 @@ signals:
     void windowHideModeChanged() const;
     void windowGeometryChanged() const;
     void opacityChanged(const quint8 value) const;
+    void trayCountChanged() const;
 
 public slots:
     void updateGeometry();

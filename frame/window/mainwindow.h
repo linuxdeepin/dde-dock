@@ -37,6 +37,7 @@
 #include <DWindowManagerHelper>
 #include <DBlurEffectWidget>
 #include <DGuiApplicationHelper>
+#include <DRegionMonitor>
 
 DWIDGET_USE_NAMESPACE
 
@@ -81,6 +82,9 @@ private:
     void x11MoveWindow(const int x, const int y);
     void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
     bool appIsOnDock(const QString &appDesktop);
+    void onRegionMonitorChanged();
+    void updateRegionMonitorWatch();
+    void getTrayVisableItemCount();
 
 signals:
     void panelGeometryChanged();
@@ -114,6 +118,7 @@ private:
 
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
+    DRegionMonitor *m_regionMonitor;
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;

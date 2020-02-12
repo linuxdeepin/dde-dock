@@ -511,7 +511,7 @@ void DockSettings::onOpacityChanged(const double value)
 
 void DockSettings::trayVisableCountChanged(const int &count)
 {
-    emit windowGeometryChanged();
+    emit trayCountChanged();
 }
 
 void DockSettings::calculateWindowConfig()
