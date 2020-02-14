@@ -151,6 +151,9 @@ DockSettings::DockSettings(QWidget *parent)
     resetFrontendGeometry();
 
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
 }
 
 DockSettings &DockSettings::Instance()
@@ -221,6 +224,10 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
 
 void DockSettings::showDockSettingsMenu()
 {
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
+
     m_autoHide = false;
 
     // create actions

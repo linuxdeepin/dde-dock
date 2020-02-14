@@ -97,6 +97,11 @@ public slots:
     void removeItem(DockItem *item);
     void itemUpdated(DockItem *item);
 
+   // void
+    void onGSettingsChanged(const QString &key);
+    
+protected:
+    void showEvent(QShowEvent *event) override;
 private:
     QBoxLayout *m_mainPanelLayout;
     QWidget *m_fixedAreaWidget;
@@ -123,6 +128,7 @@ private:
     int m_trayIconCount;
     TrayPluginItem *m_tray = nullptr;
     bool m_isHover;//判断鼠标是否移到desktop区域
+    bool m_isEnableLaunch;//判断是否使能了com.deepin.dde.dock.module.launcher
 };
 
 #endif // MAINPANELCONTROL_H
