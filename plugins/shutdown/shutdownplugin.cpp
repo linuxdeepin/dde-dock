@@ -116,7 +116,11 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.push_back(reboot);
 
 #ifndef DISABLE_POWER_OPTIONS
-    if (valueByQSettings<bool>("Power", "sleep", true)) {
+
+    QProcessEnvironment enviromentVar = QProcessEnvironment::systemEnvironment();
+    bool can_sleep = enviromentVar.contains("POWER_CAN_SLEEP") ? QVariant(enviromentVar.value("POWER_CAN_SLEEP")).toBool()
+                                                         : valueByQSettings<bool>("Power", "sleep", true);
+    if(can_sleep){
         QMap<QString, QVariant> suspend;
         suspend["itemId"] = "Suspend";
         suspend["itemText"] = tr("Suspend");
@@ -124,13 +128,16 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         items.push_back(suspend);
     }
 
-    if (checkSwap()) {
+    bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ? QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool()
+                                                         : checkSwap();
+    if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
         hibernate["itemId"] = "Hibernate";
         hibernate["itemText"] = tr("Hibernate");
         hibernate["isActive"] = true;
         items.push_back(hibernate);
     }
+
 #endif
 
     QMap<QString, QVariant> lock;
