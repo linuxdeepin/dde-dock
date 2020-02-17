@@ -218,10 +218,8 @@ MainWindow::MainWindow(QWidget *parent)
 
         if (m_curDockPos == Dock::Top || m_curDockPos == Dock::Bottom) {
             QWidget::setFixedHeight(val);
-            m_mainPanel->setFixedHeight(val);
         } else {
             QWidget::setFixedWidth(val);
-            m_mainPanel->setFixedWidth(val);
         }
 
         m_mainPanel->setFixedSize(windowRect.width(), windowRect.height());
@@ -274,7 +272,6 @@ MainWindow::MainWindow(QWidget *parent)
         QWidget::setFixedSize(windowRect.size());
 
         m_mainPanel->move(QPoint(0, 0));
-        m_mainPanel->setFixedSize(QWidget::size());
 
         resizeMainPanelWindow();
     });
@@ -286,7 +283,6 @@ MainWindow::MainWindow(QWidget *parent)
         QWidget::move(windowRect.left(), windowRect.top());
         QWidget::setFixedSize(windowRect.size());
         m_mainPanel->move(QPoint(0, 0));
-        m_mainPanel->setFixedSize(QWidget::size());
         if (m_settings->hideMode() != KeepShowing)
             this->setVisible(false);
     });
@@ -603,8 +599,9 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
         }
 
         updatePanelVisible();
-        updateRegionMonitorWatch();
     });
+
+    updateRegionMonitorWatch();
 }
 
 void MainWindow::updatePosition()
@@ -932,7 +929,7 @@ void MainWindow::resizeMainWindow()
 
 void MainWindow::resizeMainPanelWindow()
 {
-    m_mainPanel->setFixedSize(QWidget::size());
+    m_mainPanel->setFixedSize(m_settings->m_mainWindowSize);
 
     switch (m_curDockPos) {
     case Dock::Top:
