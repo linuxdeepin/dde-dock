@@ -31,7 +31,9 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
-      m_tipsLabel(new TipsWidget)
+      m_tipsLabel(new TipsWidget),
+      m_login1Inter(new DBusLogin1Manager("org.freedesktop.login1", "/org/freedesktop/login1", QDBusConnection::systemBus(), this))
+
 {
     m_tipsLabel->setVisible(false);
 }
@@ -119,7 +121,9 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 
     QProcessEnvironment enviromentVar = QProcessEnvironment::systemEnvironment();
     bool can_sleep = enviromentVar.contains("POWER_CAN_SLEEP") ? QVariant(enviromentVar.value("POWER_CAN_SLEEP")).toBool()
-                                                         : valueByQSettings<bool>("Power", "sleep", true);
+                                                         : valueByQSettings<bool>("Power", "sleep", true) &&
+                                                           m_login1Inter->CanSuspend().value().contains("yes");
+;
     if(can_sleep){
         QMap<QString, QVariant> suspend;
         suspend["itemId"] = "Suspend";
@@ -129,7 +133,8 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     }
 
     bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ? QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool()
-                                                         : checkSwap();
+                                                         : checkSwap() && m_login1Inter->CanHibernate().value().contains("yes");
+
     if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
         hibernate["itemId"] = "Hibernate";

@@ -25,6 +25,7 @@
 #include "pluginsiteminterface.h"
 #include "pluginwidget.h"
 #include "../widgets/tipswidget.h"
+#include "./dbus/dbuslogin1manager.h"
 
 #include <QLabel>
 
@@ -108,6 +109,7 @@ private:
 
     PluginWidget *m_shutdownWidget;
     TipsWidget *m_tipsLabel;
+    DBusLogin1Manager* m_login1Inter;
 };
 
 #endif // SHUTDOWNPLUGIN_H
