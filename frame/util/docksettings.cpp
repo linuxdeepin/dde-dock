@@ -48,6 +48,12 @@ static QGSettings *GSettingsByMenu()
     return &settings;
 }
 
+static QGSettings *GSettingsByTrash()
+{
+    static QGSettings settings("com.deepin.dde.dock.module.trash");
+    return &settings;
+}
+
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
@@ -65,6 +71,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_smartHideAct(tr("Smart Hide"), this)
     , m_displayInter(new DBusDisplay(this))
     , m_itemManager(DockItemManager::instance(this))
+    , m_trashPluginShow(true)
 {
     checkService();
 
@@ -140,6 +147,8 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+    connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
+    QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -240,10 +249,9 @@ void DockSettings::showDockSettingsMenu()
         const QString &name = p->pluginName();
         const QString &display = p->pluginDisplayName();
 
-//        // do not show trash in context menu under Efficient mode
-//        if (m_displayMode == Efficient && name == "trash") {
-//            continue;
-//        }
+        if (!m_trashPluginShow && name == "trash") {
+            continue;
+        }
 
         QAction *act = new QAction(display, this);
         act->setCheckable(true);
@@ -617,5 +625,18 @@ void DockSettings::checkService()
                 disconnect(ifc);
             }
         });
+    }
+}
+
+void DockSettings::onTrashGSettingsChanged(const QString &key)
+{
+    if (key != "enable") {
+        return ;
+    }
+
+    QGSettings *setting = GSettingsByTrash();
+
+    if (setting->keys().contains("enable")) {
+         m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
     }
 }
