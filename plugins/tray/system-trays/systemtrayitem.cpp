@@ -46,7 +46,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     m_centralWidget->setVisible(true);
     m_centralWidget->installEventFilter(this);
 
-    QBoxLayout *hLayout = new QHBoxLayout;
+    QBoxLayout *hLayout = new QHBoxLayout(this);
     hLayout->addWidget(m_centralWidget);
     hLayout->setSpacing(0);
     hLayout->setMargin(0);
@@ -97,6 +97,11 @@ SystemTrayItem::~SystemTrayItem()
 {
     if (m_popupShown)
         popupWindowAccept();
+
+    if(nullptr != m_gsettings){
+        m_gsettings->deleteLater();
+        m_gsettings = nullptr;
+    }
 }
 
 QString SystemTrayItem::itemKeyForConfig()

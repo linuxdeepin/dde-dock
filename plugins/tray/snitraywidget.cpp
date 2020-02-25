@@ -139,6 +139,10 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
 
 SNITrayWidget::~SNITrayWidget()
 {
+    if(m_tipsLabel != nullptr){
+        m_tipsLabel->deleteLater();
+        m_tipsLabel = nullptr;
+    }
 }
 
 QString SNITrayWidget::itemKeyForConfig()

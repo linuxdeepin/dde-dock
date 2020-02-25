@@ -4,7 +4,7 @@
 AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
       m_trayPlugin(trayPlugin),
-      m_wrapperLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
+      m_wrapperLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
       m_currentDraggingWrapper(nullptr),
       m_expand(true),
       m_dockPosition(Dock::Position::Bottom),
