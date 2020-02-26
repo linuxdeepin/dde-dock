@@ -99,6 +99,10 @@ func (*Daemon) Start() error {
 		if err != nil {
 			logger.Warning(err)
 		}
+		if globalWayland {
+			handleInputDeviceChanged(service, false)
+			return
+		}
 		startDeviceListener()
 	}()
 	return nil
@@ -123,6 +127,10 @@ func (*Daemon) Stop() error {
 	}
 	_manager = nil
 
+	if globalWayland {
+		handleInputDeviceChanged(nil, true)
+		return nil
+	}
 	// TODO endDeviceListener will be stuck
 	endDeviceListener()
 	return nil

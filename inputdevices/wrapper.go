@@ -29,6 +29,7 @@ import (
 	"strings"
 
 	"pkg.deepin.io/dde/api/dxinput"
+	"pkg.deepin.io/dde/api/dxinput/common"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 )
 
@@ -37,7 +38,7 @@ type dxTouchpads []*dxinput.Touchpad
 type dxWacoms []*dxinput.Wacom
 
 var (
-	devInfos   dxutils.DeviceInfos
+	devInfos   common.DeviceInfos
 	mouseInfos dxMouses
 	tpadInfos  dxTouchpads
 	wacomInfos dxWacoms
@@ -74,7 +75,7 @@ func handleDeviceChanged() {
 	_manager.kbd.handleDeviceChanged()
 }
 
-func getDeviceInfos(force bool) dxutils.DeviceInfos {
+func getDeviceInfos(force bool) common.DeviceInfos {
 	if force || len(devInfos) == 0 {
 		devInfos = dxutils.ListDevice()
 	}
@@ -100,7 +101,7 @@ func getMouseInfos(force bool) dxMouses {
 
 	mouseInfos = dxMouses{}
 	for _, info := range getDeviceInfos(force) {
-		if info.Type == dxutils.DevTypeMouse {
+		if info.Type == common.DevTypeMouse {
 			tmp, _ := dxinput.NewMouseFromDeviceInfo(info)
 			mouseInfos = append(mouseInfos, tmp)
 		}
@@ -116,7 +117,7 @@ func getTPadInfos(force bool) dxTouchpads {
 
 	tpadInfos = dxTouchpads{}
 	for _, info := range getDeviceInfos(false) {
-		if info.Type == dxutils.DevTypeTouchpad {
+		if info.Type == common.DevTypeTouchpad {
 			tmp, _ := dxinput.NewTouchpadFromDevInfo(info)
 			tpadInfos = append(tpadInfos, tmp)
 		}
@@ -132,7 +133,7 @@ func getWacomInfos(force bool) dxWacoms {
 
 	wacomInfos = dxWacoms{}
 	for _, info := range getDeviceInfos(false) {
-		if info.Type == dxutils.DevTypeWacom {
+		if info.Type == common.DevTypeWacom {
 			tmp, _ := dxinput.NewWacomFromDevInfo(info)
 			wacomInfos = append(wacomInfos, tmp)
 		}
