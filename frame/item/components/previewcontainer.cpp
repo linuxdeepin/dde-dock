@@ -221,13 +221,11 @@ void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
 
 void PreviewContainer::onSnapshotClicked(const WId wid)
 {
-    if (!m_wmHelper->hasComposite()) {
-        emit requestActivateWindow(wid);
-    }
-
+    Q_EMIT requestActivateWindow(wid);
     m_needActivate = true;
-    // the leaveEvent of this widget will be called after this signal
-    Q_EMIT requestHidePopup();
+    m_waitForShowPreviewTimer->stop();
+    requestCancelPreviewWindow();
+    requestHidePopup();
 }
 
 void PreviewContainer::previewEntered(const WId wid)
