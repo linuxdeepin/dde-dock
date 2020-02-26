@@ -257,8 +257,11 @@ void PreviewContainer::previewEntered(const WId wid)
 
 void PreviewContainer::previewFloating()
 {
-    m_floatingPreview->setVisible(true);
-    m_floatingPreview->raise();
-
-    emit requestPreviewWindow(m_currentWId);
+    if (!m_waitForShowPreviewTimer->isActive()) {
+        m_floatingPreview->setVisible(true);
+        m_floatingPreview->raise();
+        
+        requestPreviewWindow(m_currentWId);
+    }
+    return;
 }
