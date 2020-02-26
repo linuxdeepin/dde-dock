@@ -70,16 +70,18 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     const int batteryState = m_powerInter->batteryState()["Display"];
     const bool plugged = !m_powerInter->onBattery();
 
+    /*根据新需求，电池电量显示分别是*/
+    /* 0-5%; 6-20%  21-40% 41-60% 61-80% 81-100% */
     QString percentageStr;
-    if (percentage < 10 && percentage >= 0) {
+    if (percentage <= 5 && percentage >= 0) {
         percentageStr = "000";
-    } else if (percentage < 30) {
+    } else if (percentage <= 20) {
         percentageStr = "020";
-    } else if (percentage < 50) {
+    } else if (percentage <= 40) {
         percentageStr = "040";
-    } else if (percentage < 70) {
+    } else if (percentage <= 60) {
         percentageStr = "060";
-    } else if (percentage < 90) {
+    } else if (percentage < 80) {
         percentageStr = "080";
     } else if (percentage <= 100){
         percentageStr = "100";
