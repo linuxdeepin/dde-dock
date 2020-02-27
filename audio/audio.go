@@ -66,6 +66,7 @@ var (
 	defaultInputVolume           = 0.1
 	defaultOutputVolume          = 0.5
 	defaultHeadphoneOutputVolume = 0.17
+	gMaxUIVolume float64
 )
 
 //go:generate dbusutil-gen -type Audio,Sink,SinkInput,Source,Meter -import pkg.deepin.io/lib/dbus1 audio.go sink.go sinkinput.go source.go meter.go
@@ -153,7 +154,7 @@ func newAudio(service *dbusutil.Service) *Audio {
 	} else {
 		a.MaxUIVolume = normalMaxVolume
 	}
-
+	gMaxUIVolume = a.MaxUIVolume
 	gsettings.ConnectChanged(gsSchemaAudio, gsKeyVolumeIncrease, func(val string) {
 		tm := a.settings.GetBoolean(gsKeyVolumeIncrease)
 		if tm {
@@ -161,6 +162,7 @@ func newAudio(service *dbusutil.Service) *Audio {
 		} else {
 			a.MaxUIVolume = normalMaxVolume
 		}
+		gMaxUIVolume = a.MaxUIVolume
 		a.service.EmitPropertyChanged(a, "MaxUIVolume", a.MaxUIVolume)
 	})
 

@@ -32,11 +32,11 @@ import (
 	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/pulse"
+	//"pkg.deepin.io/lib/pulse"
 )
 
 func isVolumeValid(v float64) bool {
-	if v < 0 || v > pulse.VolumeUIMax {
+	if v < 0 || v > gMaxUIVolume {
 		return false
 	}
 	return true
