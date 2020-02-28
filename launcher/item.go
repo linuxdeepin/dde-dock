@@ -109,33 +109,7 @@ func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
 
 func (item *Item) getXCategory() CategoryID {
 	logger.Debug("getXCategory item.categories:", item.categories)
-	categoriesCountMap := make(map[CategoryID]int)
-	if len(item.categories) == 1 {
-		return parseXCategoryString(item.categories[0])
-	}
-
-	for _, categoryStr := range item.categories {
-		cid := parseXCategoryString(categoryStr)
-		categoriesCountMap[cid] = categoriesCountMap[cid] + 1
-	}
-
-	// ignore CategoryOthers
-	delete(categoriesCountMap, CategoryOthers)
-	logger.Debug("getXCategory categoriesCountMap:", categoriesCountMap)
-
-	if len(categoriesCountMap) > 0 {
-		var categoryCountMax int
-		categoryMax := CategoryOthers
-		for cid, count := range categoriesCountMap {
-			if count > categoryCountMax {
-				categoryCountMax = count
-				categoryMax = cid
-			}
-		}
-		logger.Debugf("category max %v count %v", categoryMax, categoryCountMax)
-		return categoryMax
-	}
-	return CategoryOthers
+	return getXCategory(item.categories)
 }
 
 const (
