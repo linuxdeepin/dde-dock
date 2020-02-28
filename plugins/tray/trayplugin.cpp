@@ -29,9 +29,7 @@
 #include <QWidget>
 #include <QX11Info>
 #include <QGSettings>
-#include <QMetaType>
 
-#include "snitraywidget.h"
 #include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
 
@@ -47,7 +45,6 @@ TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
 {
-    qRegisterMetaType<Command>("Command");//注册Command类型
 }
 
 const QString TrayPlugin::pluginName() const
@@ -417,23 +414,24 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
     QStringList list = sniServicePath.split("/");
     QString nsiServerName = list.takeFirst();
 
+    QProcess p;
+    p.start("qdbus", {nsiServerName});
+    if (!p.waitForFinished(100)) {
+        qWarning() << "sni dbus service error : " << nsiServerName;
+        return;
+    }
 
-    Controller *control = new Controller;
-    control->operate(Command::TraySniAdded,nsiServerName,sniServicePath);
-    connect(control,&Controller::resultReady,this,[=](const QString &text){
-        if(text.isEmpty())
-            return;
-        SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
-        if (!trayWidget->isValid())
-            return;
+    SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
+    if (!trayWidget->isValid())
+        return;
 
-        if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
-            m_passiveSNITrayMap.insert(itemKey, trayWidget);
-        } else {
-            addTrayWidget(itemKey, trayWidget);
-        }
-        connect(trayWidget, &SNITrayWidget::statusChanged, this, &TrayPlugin::onSNIItemStatusChanged);
-    });
+    if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
+        m_passiveSNITrayMap.insert(itemKey, trayWidget);
+    } else {
+        addTrayWidget(itemKey, trayWidget);
+    }
+
+    connect(trayWidget, &SNITrayWidget::statusChanged, this, &TrayPlugin::onSNIItemStatusChanged);
 }
 
 void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indicatorName)
@@ -456,7 +454,7 @@ void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indic
     }
 
     connect(indicatorTray, &IndicatorTray::delayLoaded,
-            indicatorTray, [ = ]() {
+    indicatorTray, [ = ]() {
         addTrayWidget(itemKey, indicatorTray->widget());
     }, Qt::UniqueConnection);
 
