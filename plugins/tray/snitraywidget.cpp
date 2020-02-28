@@ -156,7 +156,7 @@ QString SNITrayWidget::itemKeyForConfig()
         }
 
         key = QDBusInterface(m_dbusService, m_dbusPath, StatusNotifierItem::staticInterfaceName())
-              .property("Id").toString();
+                .property("Id").toString();
         if (!key.isEmpty()) {
             break;
         }
@@ -268,8 +268,8 @@ void SNITrayWidget::initSNIPropertys()
     m_sniStatus = m_sniInter->status();
 
     m_updateIconTimer->start();
-//    m_updateOverlayIconTimer->start();
-//    m_updateAttentionIconTimer->start();
+    //    m_updateOverlayIconTimer->start();
+    //    m_updateAttentionIconTimer->start();
 }
 
 void SNITrayWidget::initMenu()
@@ -582,25 +582,12 @@ void SNITrayWidget::showHoverTips()
     if (!r.contains(QCursor::pos()))
         return;
 
-    QProcess p;
-    p.start("qdbus", {m_dbusService});
-    if (!p.waitForFinished(100)) {
-        qWarning() << "sni dbus service error : " << m_dbusService;
-        return;
-    }
-
-    QDBusInterface infc(m_dbusService, m_dbusPath);
-    QDBusMessage msg = infc.call("Get", "org.kde.StatusNotifierItem", "ToolTip");
-    if (msg.type() == QDBusMessage::ReplyMessage) {
-        QDBusArgument arg = msg.arguments().at(0).value<QDBusVariant>().variant().value<QDBusArgument>();
-        DBusToolTip tooltip = qdbus_cast<DBusToolTip>(arg);
-
-        if (tooltip.title.isEmpty())
-            return;
-
-        m_tipsLabel->setText(tooltip.title);
+    Controller *control = new Controller;
+    control->operate(Command::GetHoverTips,m_dbusService,m_dbusPath);
+    connect(control,&Controller::resultReady,this,[=](const QString &text){
+        m_tipsLabel->setText(text);
         showPopupWindow(m_tipsLabel);
-    }
+    });
 }
 
 void SNITrayWidget::hideNonModel()
@@ -652,7 +639,7 @@ const QPoint SNITrayWidget::popupMarkPoint() const
         p += QPoint(r.width() / 2, r.height() + (wr.height() - r.height()) / 2);
         break;
     case Dock::Position::Bottom:
-      p += QPoint(r.width() / 2, 0 - (wr.height() - r.height()) / 2);
+        p += QPoint(r.width() / 2, 0 - (wr.height() - r.height()) / 2);
         break;
     case Dock::Position::Left:
         p += QPoint(r.width() + (wr.width() - r.width()) / 2, r.height() / 2);

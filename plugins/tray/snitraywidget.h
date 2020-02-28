@@ -32,12 +32,85 @@
 
 #include <QMenu>
 #include <QDBusObjectPath>
+#include <QThread>
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 //using namespace com::deepin::dde;
 using namespace org::kde;
 
+enum Command{
+    GetHoverTips,
+    TraySniAdded
+};
+
+class Worker : public QObject
+{
+    Q_OBJECT
+
+public slots:
+    void doWork(Command com,const QString& dbusService,const QString& dbusPath) {
+        QProcess p;
+        p.start("qdbus", {dbusService});
+        if (p.waitForFinished()) {
+            switch (com) {
+            case GetHoverTips:
+            {
+                QDBusInterface infc(dbusService, dbusPath);
+                QDBusMessage msg = infc.call("Get", "org.kde.StatusNotifierItem", "ToolTip");
+                if (msg.type() == QDBusMessage::ReplyMessage) {
+                    QDBusArgument arg = msg.arguments().at(0).value<QDBusVariant>().variant().value<QDBusArgument>();
+                    DBusToolTip tooltip = qdbus_cast<DBusToolTip>(arg);
+                    emit resultReady(tooltip.title);
+                    return;
+                }
+            }
+                break;
+            case TraySniAdded:
+                break;
+            default:
+                break;
+            }
+        }
+        else {
+            qWarning() << "sni dbus service error : " << dbusService;
+        }
+
+        emit resultReady("");
+    }
+
+signals:
+    void resultReady(const QString &);
+};
+
+class Controller : public QObject
+{
+    Q_OBJECT
+    QThread workerThread;
+public:
+    Controller() {
+        Worker *worker = new Worker;
+        worker->moveToThread(&workerThread);
+        connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
+        connect(this, &Controller::operate, worker, &Worker::doWork);
+        connect(worker, &Worker::resultReady, this, &Controller::handleResults);
+        workerThread.start();
+    }
+    ~Controller() {
+        workerThread.quit();
+        workerThread.wait();
+    }
+public slots:
+    void handleResults(const QString &text)
+    {
+        if(!text.isEmpty())
+            emit resultReady(text);
+        this->deleteLater();
+    }
+signals:
+    void operate(Command com,const QString& dbusService,const QString& dbusPath);
+    void resultReady(const QString &);
+};
 class SNITrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
