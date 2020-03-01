@@ -86,7 +86,7 @@ QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     const int count = m_trashWidget->trashItemCount();
-    if (count < 2)
+    if (count == 1)
         m_tipsLabel->setText(tr("Trash - %1 file").arg(count));
     else
         m_tipsLabel->setText(tr("Trash - %1 files").arg(count));
