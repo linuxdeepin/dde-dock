@@ -20,7 +20,6 @@
  */
 
 #include "sinkinputwidget.h"
-#include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 
 #include <QHBoxLayout>
@@ -47,10 +46,11 @@ const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qre
 SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     : QWidget(parent)
     , m_inputInter(new DBusSinkInput(inputPath, this))
-    , m_volumeBtnMin(new DImageButton)
-    , m_volumeIconMax(new QLabel)
-    , m_appBtn(new DImageButton)
-    , m_volumeSlider(new VolumeSlider)
+    , m_volumeBtnMin(new DImageButton(this))
+    , m_volumeIconMax(new QLabel(this))
+    , m_appBtn(new DImageButton(this))
+    , m_volumeSlider(new VolumeSlider(this))
+    , m_volumeLabel(new TipsWidget(this))
 {
     const QString iconName = m_inputInter->icon();
     m_appBtn->setAccessibleName("app-" + iconName + "-icon");
@@ -70,11 +70,13 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_volumeSlider->setMaximum(1000);
 
     // 应用图标+名称
-    QHBoxLayout *appLayout = new QHBoxLayout;
+    QHBoxLayout *appLayout = new QHBoxLayout();
     appLayout->setAlignment(Qt::AlignLeft);
     appLayout->addWidget(m_appBtn);
     appLayout->addSpacing(10);
     appLayout->addWidget(titleLabel);
+    appLayout->addStretch();
+    appLayout->addWidget(m_volumeLabel, 0, Qt::AlignRight);
     appLayout->setSpacing(0);
     appLayout->setMargin(0);
 
@@ -97,6 +99,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     centralLayout->setMargin(0);
 
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
+    connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::onVolumeChanged);
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
     connect(m_appBtn, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_volumeBtnMin, &DImageButton::clicked, this, &SinkInputWidget::setMute);
@@ -114,6 +117,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 
     setMuteIcon();
     refreshIcon();
+    onVolumeChanged();
 
     emit m_inputInter->VolumeChanged();
 }
@@ -205,4 +209,10 @@ void SinkInputWidget::refreshIcon()
     ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
     m_volumeBtnMin->setPixmap(ret);
 
+}
+
+void SinkInputWidget:: onVolumeChanged()
+{
+    QString str = QString::number(int(m_inputInter->volume() * 100)) + '%';
+    m_volumeLabel->setText(str);
 }
