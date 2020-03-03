@@ -81,7 +81,7 @@ func (m *Manager) handleBeforeSuspend() {
 	m.setPrepareSuspend(suspendStatePrepare)
 	logger.Debug("before sleep")
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		m.lockWaitShow(4*time.Second, false)
+		m.lockWaitShow(5*time.Second, false)
 	}
 }
 
@@ -172,7 +172,7 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 				// after 3 seconds, lock and then show dde low power
 				go func() {
 					if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-						m.lockWaitShow(2*time.Second, false)
+						m.lockWaitShow(5*time.Second, false)
 					}
 					doShowDDELowPower()
 				}()
