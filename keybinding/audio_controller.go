@@ -140,11 +140,17 @@ func (c *AudioController) changeSinkVolume(raised bool) error {
 		osd = "AudioDown"
 	}
 
+	maxVolume, err := c.audioDaemon.MaxUIVolume().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		maxVolume = volumeMax
+	}
+
 	v += step
 	if v < volumeMin {
 		v = volumeMin
-	} else if v > volumeMax {
-		v = volumeMax
+	} else if v > maxVolume {
+		v = maxVolume
 	}
 
 	logger.Debug("[changeSinkVolume] will set volume to:", v)
