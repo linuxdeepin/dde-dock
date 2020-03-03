@@ -584,7 +584,7 @@ void SNITrayWidget::showHoverTips()
 
     QProcess p;
     p.start("qdbus", {m_dbusService});
-    if (!p.waitForFinished(100)) {
+    if (!p.waitForFinished(1000)) {
         qWarning() << "sni dbus service error : " << m_dbusService;
         return;
     }
@@ -601,6 +601,7 @@ void SNITrayWidget::showHoverTips()
         m_tipsLabel->setText(tooltip.title);
         showPopupWindow(m_tipsLabel);
     }
+
 }
 
 void SNITrayWidget::hideNonModel()

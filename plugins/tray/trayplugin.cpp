@@ -416,7 +416,7 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
 
     QProcess p;
     p.start("qdbus", {nsiServerName});
-    if (!p.waitForFinished(100)) {
+    if (!p.waitForFinished(1000)) {
         qWarning() << "sni dbus service error : " << nsiServerName;
         return;
     }
