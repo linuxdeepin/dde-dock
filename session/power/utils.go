@@ -89,8 +89,14 @@ func (m *Manager) lockWaitShow(timeout time.Duration, autoStartAuth bool) {
 
 func (m *Manager) setDPMSModeOn() {
 	logger.Info("DPMS On")
-	c := m.helper.xConn
-	err := dpms.ForceLevelChecked(c, dpms.DPMSModeOn).Check(c)
+	var err error
+
+	if m.UseWayland {
+		_, err = exec.Command("dde_wldpms", "-s", "On").Output()
+	} else {
+		c := m.helper.xConn
+		err = dpms.ForceLevelChecked(c, dpms.DPMSModeOn).Check(c)
+	}
 	if err != nil {
 		logger.Warning("Set DPMS on error:", err)
 	}
@@ -98,8 +104,13 @@ func (m *Manager) setDPMSModeOn() {
 
 func (m *Manager) setDPMSModeOff() {
 	logger.Info("DPMS Off")
-	c := m.helper.xConn
-	err := dpms.ForceLevelChecked(c, dpms.DPMSModeOff).Check(c)
+	var err error
+	if m.UseWayland {
+		_, err = exec.Command("dde_wldpms", "-s", "Off").Output()
+	} else {
+		c := m.helper.xConn
+		err = dpms.ForceLevelChecked(c, dpms.DPMSModeOff).Check(c)	
+	}
 	if err != nil {
 		logger.Warning("Set DPMS off error:", err)
 	}

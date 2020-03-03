@@ -22,6 +22,7 @@ package power
 import (
 	"sync"
 	"syscall"
+	"os"
 
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
@@ -51,7 +52,8 @@ type Manager struct {
 	LidIsPresent bool
 	// 是否使用电池, 接通电源时为 false, 使用电池时为 true
 	OnBattery bool
-
+	//是否使用Wayland
+	UseWayland bool
 	// 警告级别
 	WarnLevel WarnLevel
 
@@ -185,6 +187,12 @@ func (m *Manager) init() {
 	m.claimOrReleaseAmbientLight()
 	m.sessionSigLoop.Start()
 	m.systemSigLoop.Start()
+
+	if len(os.Getenv("WAYLAND_DISPLAY")) != 0 {
+		m.UseWayland = true
+	} else {
+		m.UseWayland = false
+	}
 
 	m.helper.initSignalExt(m.systemSigLoop, m.sessionSigLoop)
 
