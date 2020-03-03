@@ -82,9 +82,7 @@ func (h *LidSwitchHandler) onLidClosed() {
 		return
 	}
 	logger.Debug("working outputs:", outputs)
-	outputs = outputsAfterLidClosed(outputs)
-	logger.Debug("working outputs after lid closed:", outputs)
-	if len(outputs) > 0 {
+	if len(outputs) > 1 {
 		if err := h.startAskUser(); err != nil {
 			logger.Warning("LidSwitchHandler.startAskUser failed", err)
 		}
