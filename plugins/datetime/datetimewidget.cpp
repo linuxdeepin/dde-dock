@@ -31,7 +31,6 @@
 #include <DGuiApplicationHelper>
 
 #define PLUGIN_STATE_KEY    "enable"
-#define SHOW_DATE_MIN_HEIGHT 40
 #define TIME_FONT DFontSizeManager::instance()->t4()
 #define DATE_FONT DFontSizeManager::instance()->t10()
 
@@ -40,14 +39,6 @@ DWIDGET_USE_NAMESPACE
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
 {
-    QFontMetrics fm_time(TIME_FONT);
-    int timeHeight =  fm_time.boundingRect("88:88").height();
-
-    QFontMetrics fm_date(DATE_FONT);
-    int dateHeight =  fm_date.boundingRect("8888/88/88").height();
-
-    m_timeOffset = (timeHeight - dateHeight) / 2;
-
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 }
 
@@ -133,11 +124,24 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     painter.setFont(m_timeFont);
     painter.setPen(QPen(palette().brightText(), 1));
 
+    //由于时间和日期字体不是同等缩小，会导致时间和日期位置不居中，需要整体往下移动几个像素，
+    int offsetY = 0;
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    if (position == Dock::Bottom || position == Dock::Top) {
+        if (height() >= 60)
+            offsetY = 5;
+        else if (height() >= 50)
+            offsetY = 4;
+        else if (height() >= 40)
+            offsetY = 2;
+        else if (height() >= 20)
+            offsetY = 1;
+    }
     QRect timeRect = rect();
-    timeRect.setBottom(rect().center().y() + 2);
+    timeRect.setBottom(rect().center().y() + offsetY);
     painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, current.toString(format));
     QRect dateRect = rect();
-    dateRect.setTop(timeRect.bottom());
+    dateRect.setTop(timeRect.bottom() - 2);
     format = "yyyy/MM/dd";
     painter.setFont(m_dateFont);
     painter.drawText(dateRect, Qt::AlignTop | Qt::AlignHCenter, current.toString(format));
