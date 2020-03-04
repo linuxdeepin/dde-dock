@@ -41,7 +41,6 @@ public slots:
     void set24HourFormat(const bool value);
 
 private:
-    void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
     QSize curTimeSize() const;
 
