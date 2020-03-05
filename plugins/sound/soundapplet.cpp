@@ -151,11 +151,6 @@ VolumeSlider *SoundApplet::mainSlider()
     return m_volumeSlider;
 }
 
-void SoundApplet::setSoundShow(QString value) const
-{
-    m_soundShow->setText(value);
-}
-
 void SoundApplet::defaultSinkChanged()
 {
     delete m_defSinkInter;
@@ -175,8 +170,8 @@ void SoundApplet::onVolumeChanged()
 
     m_volumeSlider->setValue(std::min(1500.0f, volume * 1000.0f));
 
+    m_soundShow->setText(QString::number(volume * 100) + '%');
     emit volumeChanged(m_volumeSlider->value());
-
     refreshIcon();
 }
 

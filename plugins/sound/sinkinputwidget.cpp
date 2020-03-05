@@ -106,6 +106,8 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
     connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [ = ] {
         m_volumeSlider->setValue(m_inputInter->volume() * 1000);
+        QString str = QString::number(int(m_inputInter->volume() * 100)) + '%';
+        m_volumeLabel->setText(str);
         refreshIcon();
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SinkInputWidget::refreshIcon);
@@ -125,7 +127,6 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 void SinkInputWidget::setVolume(const int value)
 {
     m_inputInter->SetVolumeQueued(double(value) / 1000.0, false);
-
     refreshIcon();
 }
 

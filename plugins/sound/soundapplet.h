@@ -42,7 +42,6 @@ public:
 
     int volumeValue() const;
     VolumeSlider *mainSlider();
-    void setSoundShow(QString value) const;
 signals:
     void volumeChanged(const int value) const;
     void defaultSinkChanged(DBusSink *sink) const;
