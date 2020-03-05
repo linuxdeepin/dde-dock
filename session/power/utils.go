@@ -84,6 +84,10 @@ func (m *Manager) waitLockShowing(timeout time.Duration) {
 
 func (m *Manager) lockWaitShow(timeout time.Duration, autoStartAuth bool) {
 	m.doLock(autoStartAuth)
+	if m.UseWayland {
+		logger.Debug("In wayland environment, unsupported check lock whether showin")
+		return
+	}
 	m.waitLockShowing(timeout)
 }
 
@@ -109,7 +113,7 @@ func (m *Manager) setDPMSModeOff() {
 		_, err = exec.Command("dde_wldpms", "-s", "Off").Output()
 	} else {
 		c := m.helper.xConn
-		err = dpms.ForceLevelChecked(c, dpms.DPMSModeOff).Check(c)	
+		err = dpms.ForceLevelChecked(c, dpms.DPMSModeOff).Check(c)
 	}
 	if err != nil {
 		logger.Warning("Set DPMS off error:", err)
