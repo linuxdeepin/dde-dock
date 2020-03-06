@@ -21,15 +21,17 @@ package launcher
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync/atomic"
 
 	"pkg.deepin.io/dde/api/soundutils"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
+	"pkg.deepin.io/lib/procfs"
 )
 
 const (
@@ -37,6 +39,7 @@ const (
 	dbusObjPath        = "/com/deepin/dde/daemon/Launcher"
 	dbusInterface      = dbusServiceName
 	desktopMainSection = "Desktop Entry"
+	launcherExecPath   = "/usr/bin/dde-launcher"
 )
 
 var errorInvalidID = errors.New("invalid ID")
@@ -149,10 +152,23 @@ func (m *Manager) MarkLaunched(id string) *dbus.Error {
 }
 
 // purge is useless
-func (m *Manager) RequestUninstall(id string, purge bool) *dbus.Error {
+func (m *Manager) RequestUninstall(sender dbus.Sender, id string, purge bool) *dbus.Error {
+	logger.Infof("RequestUninstall sender: %q id: %q", sender, id)
+
+	execPath, err := m.getExecutablePath(sender)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
+	if execPath != launcherExecPath {
+		err = fmt.Errorf("%q is not allowed to uninstall packages", execPath)
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	go func() {
-		logger.Infof("RequestUninstall id: %q", id)
-		err := m.uninstall(id)
+		err = m.uninstall(id)
 		if err != nil {
 			logger.Warningf("uninstall %q failed: %v", id, err)
 			m.service.Emit(m, "UninstallFailed", id, err.Error())
@@ -211,4 +227,18 @@ func (m *Manager) GetDisableScaling(id string) (bool, *dbus.Error) {
 
 func (m *Manager) SetDisableScaling(id string, val bool) *dbus.Error {
 	return m.setUseFeature(gsKeyAppsDisableScaling, id, val)
+}
+
+func (m *Manager) getExecutablePath(sender dbus.Sender) (string, error) {
+	pid, err := m.service.GetConnPID(string(sender))
+	if err != nil {
+		return "", err
+	}
+
+	execPath, err := procfs.Process(pid).Exe()
+	if err != nil {
+		return "", err
+	}
+
+	return execPath, nil
 }
