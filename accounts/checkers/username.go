@@ -50,7 +50,7 @@ type ErrorInfo struct {
 const (
 	ErrCodeEmpty ErrorCode = iota + 1
 	ErrCodeInvalidChar
-	ErrCodeFirstNotLower
+	ErrCodeFirstNotAlphabetic
 	ErrCodeExist
 	ErrCodeSystemUsed
 	ErrCodeLen
@@ -62,9 +62,9 @@ func (code ErrorCode) Error() *ErrorInfo {
 	case ErrCodeEmpty:
 		err = fmt.Errorf(Tr("Username cannot be empty"))
 	case ErrCodeInvalidChar:
-		err = fmt.Errorf(Tr("Username must only contain a~z, 0~9, - or _"))
-	case ErrCodeFirstNotLower:
-		err = fmt.Errorf(Tr("The first character must be in lower case"))
+		err = fmt.Errorf(Tr("Username must only contain a~z, A-Z, 0~9, - or _"))
+	case ErrCodeFirstNotAlphabetic:
+		err = fmt.Errorf(Tr("Username must begin with an alphabetic character"))
 	case ErrCodeExist:
 		err = fmt.Errorf(Tr("The username already exists"))
 	case ErrCodeSystemUsed:
@@ -100,8 +100,8 @@ func CheckUsernameValid(name string) *ErrorInfo {
 		}
 	}
 
-	if !Username(name).isLowerCharStart() {
-		return ErrCodeFirstNotLower.Error()
+	if !Username(name).isAlphabeticCharStart() {
+		return ErrCodeFirstNotAlphabetic.Error()
 	}
 
 	if !Username(name).isStringValid() {
@@ -128,8 +128,8 @@ func (name Username) isNameExist() bool {
 	return true
 }
 
-func (name Username) isLowerCharStart() bool {
-	match := regexp.MustCompile(`^[a-z]`)
+func (name Username) isAlphabeticCharStart() bool {
+	match := regexp.MustCompile(`^[a-zA-Z]`)
 	if !match.MatchString(string(name)) {
 		return false
 	}
@@ -138,7 +138,7 @@ func (name Username) isLowerCharStart() bool {
 }
 
 func (name Username) isStringValid() bool {
-	match := regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)
+	match := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]*$`)
 	if !match.MatchString(string(name)) {
 		return false
 	}
