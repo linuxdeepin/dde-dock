@@ -98,21 +98,23 @@ void TrashWidget::invokeMenuItem(const QString &menuId, const bool checked)
 
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
 {
-    if (!e->mimeData()->hasUrls())
-        return e->ignore();
-
     if (e->mimeData()->hasFormat("RequestDock")) {
         // accept prevent the event from being propgated to the dock main panel
         // which also takes drag event;
-        e->accept();
 
         if (!e->mimeData()->hasFormat("Removable")) {
             // show the forbit dropping cursor.
             e->setDropAction(Qt::IgnoreAction);
+        } else {
+            e->setDropAction(Qt::MoveAction);
+            e->accept();
         }
 
         return;
     }
+
+    if (!e->mimeData()->hasUrls())
+        return e->ignore();
 
     e->setDropAction(Qt::MoveAction);
 
@@ -171,7 +173,7 @@ void TrashWidget::paintEvent(QPaintEvent *e)
 
 void TrashWidget::updateIcon()
 {
-//    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    //    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     Dock::DisplayMode displayMode = Dock::Fashion;
 
     QString iconString = "user-trash";
@@ -183,10 +185,9 @@ void TrashWidget::updateIcon()
     int size = std::min(width(), height());
     if (size < PLUGIN_ICON_MIN_SIZE)
         size = PLUGIN_ICON_MIN_SIZE;
-    if (size > PLUGIN_BACKGROUND_MAX_SIZE)
-    {
+    if (size > PLUGIN_BACKGROUND_MAX_SIZE) {
         size *= ((Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) ? 0.8 : 0.7);
-        if(size < PLUGIN_BACKGROUND_MAX_SIZE)
+        if (size < PLUGIN_BACKGROUND_MAX_SIZE)
             size = PLUGIN_BACKGROUND_MAX_SIZE;
     }
 

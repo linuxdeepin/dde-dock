@@ -365,7 +365,8 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 {
-    e->accept();
+    if(!m_pluginAreaWidget->geometry().contains(e->pos()))
+        e->accept();
 }
 
 void MainPanelControl::dragLeaveEvent(QDragLeaveEvent *e)
