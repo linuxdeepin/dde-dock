@@ -27,6 +27,11 @@
 #include "../widgets/tipswidget.h"
 
 #include <QLabel>
+#include <com_deepin_dde_daemon_dock.h>
+#include <com_deepin_dde_daemon_dock_entry.h>
+
+using DBusDock = com::deepin::dde::daemon::Dock;
+using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 
 class OnboardPlugin : public QObject, PluginsItemInterface
 {
@@ -63,6 +68,7 @@ private:
 
 private:
     bool m_pluginLoaded;
+    bool m_startupState;
 
     OnboardItem *m_onboardItem;
     TipsWidget *m_tipsLabel;

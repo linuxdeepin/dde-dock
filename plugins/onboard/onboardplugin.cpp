@@ -30,6 +30,7 @@ OnboardPlugin::OnboardPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
+      m_startupState(false),
       m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setText(tr("Onboard"));
@@ -111,8 +112,38 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId == "onboard-settings")
-        QProcess::startDetached("onboard-settings");
+    if (menuId != "onboard-settings") return;
+    if(!m_startupState) {
+        QProcess *process = new QProcess;
+        connect(process,&QProcess::started, this, [ = ] {
+            m_startupState = true;
+        });
+
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+              [ = ](int exitCode, QProcess::ExitStatus exitStatus){
+            Q_UNUSED(exitCode)
+            Q_UNUSED(exitStatus)
+
+            m_startupState = false;
+            process->close();
+            process->deleteLater();
+        });
+        process->start("onboard-settings");
+    }
+
+    DBusDock DockInter("com.deepin.dde.daemon.Dock",
+                       "/com/deepin/dde/daemon/Dock",
+                       QDBusConnection::sessionBus(), this);
+
+    for (auto entry : DockInter.entries()) {
+        DockEntryInter AppInter("com.deepin.dde.daemon.Dock",
+                                entry.path(),
+                                QDBusConnection::sessionBus(), this);
+        if(AppInter.name() == "Onboard-Settings" && !AppInter.isActive()) {
+            AppInter.Activate(0);
+            break;
+        }
+    }
 }
 
 void OnboardPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
