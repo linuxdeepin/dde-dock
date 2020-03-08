@@ -91,6 +91,15 @@ func (m *Manager) handleWakeup() {
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
 		m.doLock(true)
 	}
+
+	// Fix wayland sometimes no dpms event after wakeup
+	if m.UseWayland {
+		err := m.helper.ScreenSaver.SimulateUserActivity(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
 	m.setDPMSModeOn()
 	m.helper.Power.RefreshBatteries(0)
 	playSound(soundutils.EventWakeup)
