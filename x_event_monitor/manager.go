@@ -28,6 +28,7 @@ import (
 	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/ge"
 	"github.com/linuxdeepin/go-x11-client/ext/input"
+	"github.com/linuxdeepin/go-x11-client/ext/xfixes"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -56,10 +57,12 @@ type coordinateRange struct {
 }
 
 type Manager struct {
-	xConn      *x.Conn
-	keySymbols *keysyms.KeySymbols
-	service    *dbusutil.Service
-	signals    *struct {
+	hideCursorWhenTouch bool
+	cursorShowed        bool
+	xConn               *x.Conn
+	keySymbols          *keysyms.KeySymbols
+	service             *dbusutil.Service
+	signals             *struct {
 		CancelAllArea struct{}
 
 		CursorInto, CursorOut, CursorMove struct {
@@ -99,15 +102,17 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		return nil, err
 	}
 	keySymbols := keysyms.NewKeySymbols(xConn)
-
-	return &Manager{
-		xConn:           xConn,
-		keySymbols:      keySymbols,
-		service:         service,
-		pidAidsMap:      make(map[uint32]strv.Strv),
-		idAreaInfoMap:   make(map[string]*coordinateInfo),
-		idReferCountMap: make(map[string]int32),
-	}, nil
+	m := &Manager{
+		xConn:               xConn,
+		hideCursorWhenTouch: true,
+		cursorShowed:        true,
+		keySymbols:          keySymbols,
+		service:             service,
+		pidAidsMap:          make(map[uint32]strv.Strv),
+		idAreaInfoMap:       make(map[string]*coordinateInfo),
+		idReferCountMap:     make(map[string]int32),
+	}
+	return m, nil
 }
 
 func (m *Manager) queryPointer() (*x.QueryPointerReply, error) {
@@ -118,42 +123,93 @@ func (m *Manager) queryPointer() (*x.QueryPointerReply, error) {
 
 func (m *Manager) selectXInputEvents() {
 	logger.Debug("select input events")
-	root := m.xConn.GetDefaultScreen().Root
-	err := input.XISelectEventsChecked(m.xConn, root, []input.EventMask{
-		{
-			DeviceId: input.DeviceAllMaster,
-			Mask: []uint32{
-				input.XIEventMaskRawMotion |
-					input.XIEventMaskRawButtonPress |
-					input.XIEventMaskRawButtonRelease |
-					input.XIEventMaskRawKeyPress |
-					input.XIEventMaskRawKeyRelease |
-					input.XIEventMaskRawTouchBegin |
-					input.XIEventMaskRawTouchEnd,
-			},
-		},
-	}).Check(m.xConn)
-	if err != nil {
+	var evMask uint32 = input.XIEventMaskRawMotion |
+		input.XIEventMaskRawButtonPress |
+		input.XIEventMaskRawButtonRelease |
+		input.XIEventMaskRawKeyPress |
+		input.XIEventMaskRawKeyRelease |
+		input.XIEventMaskRawTouchBegin |
+		input.XIEventMaskRawTouchEnd
+	err := m.doXISelectEvents(evMask)
+	if errAreasRegistered != nil {
 		logger.Warning(err)
 	}
 }
+
+const evMaskForHideCursor uint32 = input.XIEventMaskRawMotion | input.XIEventMaskRawTouchBegin
 
 func (m *Manager) deselectXInputEvents() {
+	var evMask uint32
+	if m.hideCursorWhenTouch {
+		evMask = evMaskForHideCursor
+	}
+
 	logger.Debug("deselect input events")
-	root := m.xConn.GetDefaultScreen().Root
-	err := input.XISelectEventsChecked(m.xConn, root, []input.EventMask{
-		{
-			DeviceId: input.DeviceAllMaster,
-			Mask:     []uint32{0},
-		},
-	}).Check(m.xConn)
+	err := m.doXISelectEvents(evMask)
 	if err != nil {
 		logger.Warning(err)
 	}
 }
 
-func (m *Manager) handleXEvent() {
-	_, err := ge.QueryVersion(m.xConn, ge.MajorVersion, ge.MinorVersion).Reply(m.xConn)
+func (m *Manager) doXISelectEvents(evMask uint32) error {
+	root := m.xConn.GetDefaultScreen().Root
+	err := input.XISelectEventsChecked(m.xConn, root, []input.EventMask{
+		{
+			DeviceId: input.DeviceAllMaster,
+			Mask:     []uint32{evMask},
+		},
+	}).Check(m.xConn)
+	return err
+}
+
+func (m *Manager) BeginTouch() *dbus.Error {
+	m.beginTouch()
+	return nil
+}
+
+func (m *Manager) beginMoveMouse() {
+	if m.cursorShowed {
+		return
+	}
+	err := m.doShowCursor(true)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.cursorShowed = true
+}
+
+func (m *Manager) beginTouch() {
+	if !m.cursorShowed {
+		return
+	}
+	err := m.doShowCursor(false)
+	if err != nil {
+		logger.Warning(err)
+	}
+	m.cursorShowed = false
+}
+
+func (m *Manager) doShowCursor(show bool) error {
+	rootWin := m.xConn.GetDefaultScreen().Root
+	var cookie x.VoidCookie
+	if show {
+		logger.Debug("xfixes show cursor")
+		cookie = xfixes.ShowCursorChecked(m.xConn, rootWin)
+	} else {
+		logger.Debug("xfixes hide cursor")
+		cookie = xfixes.HideCursorChecked(m.xConn, rootWin)
+	}
+	err := cookie.Check(m.xConn)
+	return err
+}
+
+func (m *Manager) initXExtensions() {
+	_, err := xfixes.QueryVersion(m.xConn, xfixes.MajorVersion, xfixes.MinorVersion).Reply(m.xConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = ge.QueryVersion(m.xConn, ge.MajorVersion, ge.MinorVersion).Reply(m.xConn)
 	if err != nil {
 		logger.Warning(err)
 		return
@@ -165,6 +221,15 @@ func (m *Manager) handleXEvent() {
 		return
 	}
 
+	if m.hideCursorWhenTouch {
+		err = m.doXISelectEvents(evMaskForHideCursor)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+}
+
+func (m *Manager) handleXEvent() {
 	eventChan := make(chan x.GenericEvent, 10)
 	m.xConn.AddEventChan(eventChan)
 	inputExtData := m.xConn.GetExtensionData(input.Ext())
@@ -181,6 +246,10 @@ func (m *Manager) handleXEvent() {
 			if geEvent.Extension == inputExtData.MajorOpcode {
 				switch geEvent.EventType {
 				case input.RawMotionEventCode:
+					//logger.Debug("raw motion event")
+					if m.hideCursorWhenTouch {
+						m.beginMoveMouse()
+					}
 					qpReply, err := m.queryPointer()
 					if err != nil {
 						logger.Warning(err)
@@ -238,6 +307,10 @@ func (m *Manager) handleXEvent() {
 					}
 
 				case input.RawTouchBeginEventCode:
+					//logger.Debug("raw touch begin event")
+					if m.hideCursorWhenTouch {
+						m.beginTouch()
+					}
 					qpReply, err := m.queryPointer()
 					if err != nil {
 						logger.Warning(err)

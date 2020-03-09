@@ -64,6 +64,7 @@ func (d *Daemon) Start() error {
 	if err != nil {
 		return err
 	}
+	m.initXExtensions()
 	go m.handleXEvent()
 
 	err = service.Export(dbusPath, m)
