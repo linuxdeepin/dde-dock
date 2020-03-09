@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-19 17:00+0800\n"
+"POT-Creation-Date: 2020-03-09 17:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,39 +31,35 @@ msgstr ""
 msgid "Username cannot be empty"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr ""
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr ""
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
 msgstr ""
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr ""
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr ""
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr ""
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr ""
 
@@ -142,15 +138,15 @@ msgstr ""
 msgid "Bluetooth connection failed"
 msgstr ""
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr ""
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr ""
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr ""
@@ -188,27 +184,27 @@ msgstr ""
 msgid "Schedule Reminder"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr ""
 
@@ -510,7 +506,7 @@ msgstr ""
 msgid "Protected EAP"
 msgstr ""
 
-#: ../../network/manager_connection.go:317 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr ""
 
@@ -906,35 +902,35 @@ msgstr ""
 msgid "%q connected"
 msgstr ""
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr ""
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr ""
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
 msgstr ""
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:265
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr ""
 
@@ -977,24 +973,24 @@ msgid ""
 "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:151
+#: ../../session/power/manager_events.go:176
 msgid "Battery Critically Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:152
+#: ../../session/power/manager_events.go:177
 msgid "Computer will suspend very soon, please plug in now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
 msgid "Battery Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:176
+#: ../../session/power/manager_events.go:201
 msgid "Computer will suspend soon, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr ""
 

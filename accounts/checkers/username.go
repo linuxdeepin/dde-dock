@@ -20,7 +20,7 @@
 package checkers
 
 import (
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"os/user"
 	"regexp"
@@ -50,7 +50,7 @@ type ErrorInfo struct {
 const (
 	ErrCodeEmpty ErrorCode = iota + 1
 	ErrCodeInvalidChar
-	ErrCodeFirstNotAlphabetic
+	ErrCodeFirstCharInvalid
 	ErrCodeExist
 	ErrCodeSystemUsed
 	ErrCodeLen
@@ -60,17 +60,18 @@ func (code ErrorCode) Error() *ErrorInfo {
 	var err error
 	switch code {
 	case ErrCodeEmpty:
-		err = fmt.Errorf(Tr("Username cannot be empty"))
+		err = errors.New(Tr("Username cannot be empty"))
 	case ErrCodeInvalidChar:
-		err = fmt.Errorf(Tr("Username must only contain a~z, A-Z, 0~9, - or _"))
-	case ErrCodeFirstNotAlphabetic:
-		err = fmt.Errorf(Tr("Username must begin with an alphabetic character"))
+		// NOTE: 一般由界面上控制可以键入的字符，不需要做翻译了。
+		err = errors.New("Username must only contain a~z, A-Z, 0~9, - or _")
+	case ErrCodeFirstCharInvalid:
+		err = errors.New(Tr("The first character must be a letter or number"))
 	case ErrCodeExist:
-		err = fmt.Errorf(Tr("The username already exists"))
+		err = errors.New(Tr("The username already exists"))
 	case ErrCodeSystemUsed:
-		err = fmt.Errorf(Tr("The username has been used by system"))
+		err = errors.New(Tr("The username has been used by system"))
 	case ErrCodeLen:
-		err = fmt.Errorf(Tr("Username must be between 3 and 32 characters"))
+		err = errors.New(Tr("Username must be between 3 and 32 characters"))
 	default:
 		return nil
 	}
@@ -100,8 +101,8 @@ func CheckUsernameValid(name string) *ErrorInfo {
 		}
 	}
 
-	if !Username(name).isAlphabeticCharStart() {
-		return ErrCodeFirstNotAlphabetic.Error()
+	if !Username(name).isFirstCharValid() {
+		return ErrCodeFirstCharInvalid.Error()
 	}
 
 	if !Username(name).isStringValid() {
@@ -128,8 +129,8 @@ func (name Username) isNameExist() bool {
 	return true
 }
 
-func (name Username) isAlphabeticCharStart() bool {
-	match := regexp.MustCompile(`^[a-zA-Z]`)
+func (name Username) isStringValid() bool {
+	match := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
 	if !match.MatchString(string(name)) {
 		return false
 	}
@@ -137,12 +138,11 @@ func (name Username) isAlphabeticCharStart() bool {
 	return true
 }
 
-func (name Username) isStringValid() bool {
-	match := regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]*$`)
+func (name Username) isFirstCharValid() bool {
+	match := regexp.MustCompile(`^[a-zA-Z0-9]`)
 	if !match.MatchString(string(name)) {
 		return false
 	}
-
 	return true
 }
 

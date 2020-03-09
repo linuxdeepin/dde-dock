@@ -223,6 +223,7 @@ func (m *Manager) IsUsernameValid(sender dbus.Sender, name string) (valid bool,
 	}
 
 	msg = info.Error.Error()
+	logger.Debug("locale:", locale)
 	if locale != "" {
 		gettext.SetLocale(gettext.LcAll, locale)
 		msg = gettext.Tr(msg)

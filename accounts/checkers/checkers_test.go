@@ -47,10 +47,13 @@ func (*testWrapper) TestCheckUsername(c *C.C) {
 		{"music-player", 0},
 		{"music_player", 0},
 		{"MusicPlayer", 0},
+		{"Music-_-Player", 0},
+		{"0MusicPlayer", 0},
+		{"-MusicPlayer", ErrCodeFirstCharInvalid},
+		{"_MusicPlayer", ErrCodeFirstCharInvalid},
 		{"a11111111111111111111111111111111", ErrCodeLen},
 		{"a1", ErrCodeLen},
 		{"root", ErrCodeSystemUsed},
-		{"123", ErrCodeFirstNotAlphabetic},
 		{"a123*&", ErrCodeInvalidChar},
 	}
 
