@@ -27,6 +27,7 @@
 #include "../item/appitem.h"
 #include "../item/pluginsitem.h"
 #include "../item/traypluginitem.h"
+#include "../controller/dockitemmanager.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -34,6 +35,7 @@
 #include <QString>
 #include <QApplication>
 #include <QGSettings>
+#include <QPointer>
 
 #include <DGuiApplicationHelper>
 #include <DWindowManagerHelper>
@@ -149,7 +151,7 @@ void MainPanelControl::onGSettingsChanged(const QString &key)
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByLaunch()->keys().contains("enable") && GSettingsByLaunch()->get("enable").toBool();
-        if(isEnable && setting->get("enable").toBool()){
+        if (isEnable && setting->get("enable").toBool()) {
             m_fixedAreaWidget->setVisible(true);
             m_fixedSpliter->setVisible(true);
             m_isEnableLaunch = true;
@@ -365,7 +367,16 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 {
-    if(!m_pluginAreaWidget->geometry().contains(e->pos()))
+    QRect rect = QRect();
+    foreach (auto item, DockItemManager::instance()->itemList()) {
+        DockItem *dockItem = item.data();
+        PluginsItem *pluginItem = qobject_cast<PluginsItem *>(dockItem);
+        if (pluginItem && pluginItem->pluginName() == "trash") {
+            rect = pluginItem->geometry();
+        }
+    }
+
+    if (!rect.contains(e->pos()))
         e->accept();
 }
 
@@ -481,7 +492,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
     const char *RequestDockKey = "RequestDock";
     const char *RequestDockKeyFallback = "text/plain";
     const char *DesktopMimeType = "application/x-desktop";
-    auto DragmineData=e->mimeData();
+    auto DragmineData = e->mimeData();
 
     m_draggingMimeKey = DragmineData->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
 
@@ -783,8 +794,9 @@ void MainPanelControl::itemUpdated(DockItem *item)
     resizeDockIcon();
 }
 
-void MainPanelControl::showEvent(QShowEvent* event) {
-    QTimer::singleShot(0, this, [=] {
+void MainPanelControl::showEvent(QShowEvent *event)
+{
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -803,7 +815,7 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
         painter.setOpacity(0.1);
     }
 
-    if(m_isEnableLaunch)
+    if (m_isEnableLaunch)
         painter.fillRect(m_fixedSpliter->geometry(), color);
     painter.fillRect(m_appSpliter->geometry(), color);
     painter.fillRect(m_traySpliter->geometry(), color);
