@@ -204,6 +204,8 @@ func (m *Manager) sendNotify(icon, summary, body string) {
 	}
 }
 
+const iconBatteryLow = "notification-battery-low"
+
 func playSound(name string) {
 	logger.Debug("play system sound", name)
 	go soundutils.PlaySystemSound(name, "")
