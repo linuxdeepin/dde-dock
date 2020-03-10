@@ -3,14 +3,14 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Il Plugin %1 non risulta compatibile col Sistema.</translation>
+        <translation>Il plugin %1 non risulta compatibile col Sistema.</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Aggiunti un layout della Tastiera</translation>
+        <translation>Aggiungi un layout della Tastiera</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>Tastiera</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -213,12 +213,16 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Carica %1, %2 ore e %3 min. per la carica completa</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostra desktop</translation>
+        <translation>Mostra Desktop</translation>
     </message>
     <message>
         <source>Undock</source>

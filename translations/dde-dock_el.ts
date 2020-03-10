@@ -213,6 +213,10 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Φόρτιση %1, 2% ώρες και %3 λεπτά μέχρι να γεμίσει</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>

@@ -213,6 +213,10 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>%1 मा चार्ज हुंदै, पुर्ण हुन %2 घण्टा %3 मिनट लाग्छ</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>

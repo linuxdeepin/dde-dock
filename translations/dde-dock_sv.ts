@@ -213,6 +213,10 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Laddar %1, %2 hr %3 min tills fulladdad</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>

@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>多任務檢視</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -212,6 +212,10 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>正在充電 %1，距離完成尚餘 %2 小時 %3 分鐘</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

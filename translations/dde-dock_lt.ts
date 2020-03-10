@@ -213,6 +213,10 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Įkraunama %1, iki pilnos liko %2 val. %3 min.</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>

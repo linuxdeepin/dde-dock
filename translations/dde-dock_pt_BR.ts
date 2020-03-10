@@ -10,7 +10,7 @@
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar layout de teclado</translation>
+        <translation>Adicionar Layout de Teclado</translation>
     </message>
 </context>
 <context>
@@ -36,11 +36,11 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Ativar rede</translation>
+        <translation>Ativar Rede</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Desativar rede</translation>
+        <translation>Desativar Rede</translation>
     </message>
     <message>
         <source>Network settings</source>
@@ -140,11 +140,11 @@
     </message>
     <message>
         <source>Status</source>
-        <translation>Condição</translation>
+        <translation>Estado</translation>
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Complementos</translation>
     </message>
 </context>
 <context>
@@ -158,11 +158,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Ver Multitarefa</translation>
+        <translation>Multitarefa</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Desencaixar</translation>
+        <translation>Remover da Dock</translation>
     </message>
 </context>
 <context>
@@ -195,15 +195,15 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>%1 Carregado  |  %2min restantes</translation>
+        <translation>%1 carregado | %2m restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>%1 Carregado  |  %2h%3min restantes</translation>
+        <translation>%1 carregado | %2h%3 restantes</translation>
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 Carregado</translation>
+        <translation>%1 carregado</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -213,23 +213,27 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Carregando %1  |  %2h%3min até completar</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostrar à Área de Trabalho</translation>
+        <translation>Exibir Área de Trabalho</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Desencaixar</translation>
+        <translation>Remover da Dock</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energia</translation>
+        <translation>Sessão</translation>
     </message>
     <message>
         <source>Shut down</source>
@@ -257,7 +261,7 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>Alternar de conta</translation>
+        <translation>Alternar Conta</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -279,11 +283,11 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Ativar som</translation>
+        <translation>Com Áudio</translation>
     </message>
     <message>
         <source>Mute</source>
-        <translation>Sem som</translation>
+        <translation>Sem Áudio</translation>
     </message>
     <message>
         <source>Audio Settings</source>

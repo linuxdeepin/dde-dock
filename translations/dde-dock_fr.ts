@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Le plugin %1 n&apos;est pas compatible avec le système</translation>
+        <translation>L&apos;extension %1 n&apos;est pas compatible avec le système</translation>
     </message>
 </context>
 <context>
@@ -140,7 +140,7 @@
     </message>
     <message>
         <source>Status</source>
-        <translation>Status </translation>
+        <translation>Statut</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vue Multitâche</translation>
+        <translation>Vue multitâche</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -207,11 +207,15 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>En charge (%1), %2 minutes avant la charge complète</translation>
+        <translation>En charge %1, %2 minutes avant la charge complète</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>En charge (%1), %2 heures et %3 minutes avant la charge complète</translation>
+        <translation>En charge %1, %2 heures et %3 minutes avant la charge complète</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -222,7 +226,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Enlever du dock</translation>
+        <translation>Détacher du dock</translation>
     </message>
 </context>
 <context>
