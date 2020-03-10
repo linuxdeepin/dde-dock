@@ -235,8 +235,10 @@ void PowerPlugin::refreshTipsData()
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
         QString tips;
-
-        if (hour == 0) {
+        if(timeToFull == 0) {
+            tips = tr("Charging %1 ....").arg(value);
+        }
+        else if (hour == 0) {
             tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
         }
         else {
