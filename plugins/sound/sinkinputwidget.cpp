@@ -172,7 +172,7 @@ void SinkInputWidget::setMuteIcon()
 void SinkInputWidget::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
-    m_inputInter->SetMuteQueued(false);
+    m_inputInter->SetMuteQueued(true);
 }
 
 void SinkInputWidget::refreshIcon()
