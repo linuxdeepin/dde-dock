@@ -100,7 +100,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::onVolumeChanged);
-    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
+//    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
     connect(m_appBtn, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_volumeBtnMin, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
@@ -172,7 +172,7 @@ void SinkInputWidget::setMuteIcon()
 void SinkInputWidget::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
-    m_inputInter->SetMuteQueued(true);
+    m_inputInter->SetMuteQueued(false);
 }
 
 void SinkInputWidget::refreshIcon()
