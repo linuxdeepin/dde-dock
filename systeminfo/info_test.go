@@ -20,9 +20,10 @@
 package systeminfo
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"os"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestCPUInfo(t *testing.T) {
@@ -41,7 +42,11 @@ func TestCPUInfo(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		cpu, err = GetCPUInfo("testdata/arm-cpuinfo")
-		So(cpu, ShouldEqual, "ARMv7 Processor rev 0 (v7l) x 4")
+		So(cpu, ShouldEqual, "NANOPI2 x 4")
+		So(err, ShouldBeNil)
+
+		cpu, err = GetCPUInfo("testdata/hw_kirin-cpuinfo")
+		So(cpu, ShouldEqual, "HUAWEI Kirin 990 x 8")
 		So(err, ShouldBeNil)
 	})
 }

@@ -34,6 +34,7 @@ const (
 	cpuKeyMHz          = "CPU frequency [MHz]"
 	cpuKeyActive       = "cpus active"
 	cpuKeyARMProcessor = "Processor"
+	cpuKeyHardware     = "Hardware"
 )
 
 func GetCPUInfo(file string) (string, error) {
@@ -49,6 +50,12 @@ func GetCPUInfo(file string) (string, error) {
 
 	// Loongson
 	cpu, _ = getCPUInfoFromMap(cpuKeyModel, cpuKeyProcessor, data)
+	if len(cpu) != 0 {
+		return cpu, nil
+	}
+
+	// huawei kirin
+	cpu = hwKirinCPUInfo(data)
 	if len(cpu) != 0 {
 		return cpu, nil
 	}
@@ -76,6 +83,20 @@ func swCPUInfo(data map[string]string) string {
 	number, _ := getCPUNumber(cpuKeyActive, data)
 	if number != 1 {
 		cpu = fmt.Sprintf("%s x %v", cpu, number)
+	}
+
+	return cpu
+}
+
+func hwKirinCPUInfo(data map[string]string) string {
+	cpu, err := getCPUName(cpuKeyHardware, data)
+	if err != nil {
+		return ""
+	}
+
+	number, _ := getCPUNumber(cpuKeyProcessor, data)
+	if number != 1 {
+		cpu = fmt.Sprintf("%s x %v", cpu, number+1)
 	}
 
 	return cpu
