@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>عرض متعدد الواجهات</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -212,6 +212,10 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>جاري الشحن 1%, 2% ساعة 3% دقيقة للاكتمال</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

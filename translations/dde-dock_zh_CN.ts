@@ -213,6 +213,10 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>正在充电%1，还需%2小时%3分钟</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation>电量%1...</translation>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>

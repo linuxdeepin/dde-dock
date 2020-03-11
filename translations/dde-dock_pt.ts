@@ -51,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Tem a certeza que deseja eliminar % 1 itens?</translation>
+        <translation>Tem a certeza que deseja eliminar %1 itens?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -63,7 +63,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Esta ação não pode ser restaurada</translation>
+        <translation>Esta ação não pode ser restabelecida</translation>
     </message>
 </context>
 <context>
@@ -124,11 +124,11 @@
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Manter Escondido</translation>
+        <translation>Manter Oculta</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Esconder Inteligente</translation>
+        <translation>Ocultar Inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vista multitarefa</translation>
+        <translation>Vista de Tarefas</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -207,18 +207,22 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>A carregar %1, %2 min até ficar completa</translation>
+        <translation>A carregar %1, %2 min até ficar carregada</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>A carregar %1, %2 hr %3 min até ficar completa</translation>
+        <translation>A carregar %1, %2 hr %3 min até ficar carregada</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostrar ambiente de trabalho</translation>
+        <translation>Mostrar Ambiente de trabalho</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -249,7 +253,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Trancar</translation>
+        <translation>Bloquear</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -287,7 +291,7 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Definições de áudio</translation>
+        <translation>Definições de som</translation>
     </message>
     <message>
         <source>Current Volume %1</source>

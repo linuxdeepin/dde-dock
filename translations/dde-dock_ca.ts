@@ -195,11 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacitat %1, %2 min restants</translation>
+        <translation>Capacitat: %1, %2 min restants</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacitat %1, %2 h %3 min restants</translation>
+        <translation>Capacitat: %1, %2 h %3 min restants</translation>
     </message>
     <message>
         <source>Charged %1</source>
@@ -207,11 +207,15 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>S&apos;està carregant %1, %2 min fins càrrega completa</translation>
+        <translation>Es carrega %1, %2 min per completar-la.</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>S&apos;està carregant %1, %2 h %3 min fins càrrega completa</translation>
+        <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

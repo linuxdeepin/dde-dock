@@ -21,11 +21,11 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>Horario de 12 horas</translation>
+        <translation>Formato de 12 horas</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>Horario de 24 horas</translation>
+        <translation>Formato de 24 horas</translation>
     </message>
     <message>
         <source>Time Settings</source>
@@ -51,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>¿Estás seguro de vaciar %1 elementos?</translation>
+        <translation>¿Está seguro de vaciar %1 elementos?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -108,7 +108,7 @@
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Inferior</translation>
+        <translation>Abajo</translation>
     </message>
     <message>
         <source>Left</source>
@@ -158,11 +158,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vista Multitarea</translation>
+        <translation>Vista multitarea</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Desacoplar</translation>
+        <translation>Desanclar</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>Teclado en pantalla</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -213,16 +213,20 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Cargando %1, %2 h %3 min para completarse</translation>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostrar Escritorio</translation>
+        <translation>Mostrar escritorio</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Desacoplar</translation>
+        <translation>Desanclar</translation>
     </message>
 </context>
 <context>

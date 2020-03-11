@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>%1 uygulama eki bu sistem ile uyumlu değil.</translation>
+        <translation>%1 eklentisi sistemle uyumlu değil.</translation>
     </message>
 </context>
 <context>
@@ -195,11 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>%1 ve boşalıyor, %2 dakika kaldı</translation>
+        <translation>%1 ve azalıyor, %2 dakika kaldı</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>%1 ve boşalıyor, %2 saat %3 dakika kaldı</translation>
+        <translation>%1 ve azalıyor, %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
         <source>Charged %1</source>
@@ -212,6 +212,10 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -291,7 +295,7 @@
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Geçerli Ses Düzeyi %1</translation>
+        <translation>Mevcut Ses Düzeyi %1</translation>
     </message>
 </context>
 <context>

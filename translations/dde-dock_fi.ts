@@ -17,7 +17,7 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Päivänaika</translation>
+        <translation>Kello</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Näkymät</translation>
+        <translation>Työpöydät</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -176,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Näppis</translation>
+        <translation>Näppäimistö</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Virta-asetukset</translation>
+        <translation>Asetukset virta</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -212,6 +212,10 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Lataa %1, %2 t %3 min täyteen</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -261,7 +265,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Virta-asetukset</translation>
+        <translation>Asetukset virta</translation>
     </message>
 </context>
 <context>
@@ -279,7 +283,7 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Vapauta</translation>
+        <translation>Ääntä</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -291,7 +295,7 @@
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Äänenvoimakkuus: %1</translation>
+        <translation>Äänitaso %1</translation>
     </message>
 </context>
 <context>
@@ -342,7 +346,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Langallinen yhteys: %1</translation>
+        <translation>Kaapeli kytketty: %1</translation>
     </message>
 </context>
 <context>

@@ -1,217 +1,217 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Přídavný modul %1 není slučitelný se systémem.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Přidat rozvržení klávesnice</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Datum</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>12 hodinový čas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>24 hodinový čas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Time Settings</source>
-        <translation>Nastavení času</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Povolit síť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Zakázat síť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Nastavení sítě</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Opravdu chcete smazat %1 položek ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Smazat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Tento krok nelze vrátit zpět</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation>Neznámé zařízení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Neznámý obsah</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation>Disk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open</source>
-        <translation>Otevřít</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>Odpojit vše</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Návykový režim</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Účelný režim</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Top</source>
-        <translation>Nahoře</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Dole</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Left</source>
-        <translation>Vlevo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Right</source>
-        <translation>Vpravo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Ukázat vždy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Vždy skrýt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Skrýt chytře</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mode</source>
-        <translation>Režim</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Location</source>
-        <translation>Umístění</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Status</source>
-        <translation>Stav</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Přídavné moduly</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Spouštěč</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Víceúlohový pohled</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Zrušit ukotvení</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
-        <translation>Síť</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Virtuální klávesnice</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Napájení</translation>
+        <translation>शक्ति</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Správa napájení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Stav %1, %2 min zbývá</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Stav %1, %2 h %3 min zbývá</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Nabito %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Nabíjení %1, %2 min do úplného nabití</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Nabíjení %1, %2 h %3 min do úplného nabití</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1 ....</source>
@@ -222,157 +222,157 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Ukázat pracovní plochu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Zrušit ukotvení</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Napájení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Vypnout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Restartovat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uspat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Hibernovat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Uzamknout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Log out</source>
-        <translation>Odhlásit se</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Switch account</source>
-        <translation>Přepnout účet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Správa napájení</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
-        <translation>Zařízení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Application</source>
-        <translation>Program</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Zhlasit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mute</source>
-        <translation>Ztlumit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Nastavení zvuku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Hlasitost %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation>Zvuk</translation>
+        <translation>ध्वनि</translation>
     </message>
 </context>
 <context>
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>Koš</translation>
+        <translation>रद्दी</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation>Smazat %1 soubor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation>Smazat %1 souborů</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>Otevřít</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Empty</source>
-        <translation>Prázdný</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TrayPlugin</name>
     <message>
         <source>System Tray</source>
-        <translation>Oznamovací oblast panelu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation>Neznámý</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Drátové připojení: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>Žádná síť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Bezdrátové připojení: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Připojeno, ale bez přístupu k internetu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Bezdrátová síť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>Bezdrátová síť %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
