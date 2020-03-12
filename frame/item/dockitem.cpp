@@ -21,12 +21,13 @@
 
 #include "dockitem.h"
 #include "components/hoverhighlighteffect.h"
+#include "pluginsitem.h"
 
 #include <QMouseEvent>
 #include <QJsonObject>
 #include <QCursor>
 
-#define PLUGIN_MARGEN  10
+#define PLUGIN_MARGIN  10
 
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
@@ -356,15 +357,22 @@ bool DockItem::checkAndResetTapHoldGestureState()
     return ret;
 }
 
-const QPoint DockItem::popupMarkPoint() const
+const QPoint DockItem::popupMarkPoint()
 {
     QPoint p(topleftPoint());
-
+    int margin = PLUGIN_MARGIN;
+    if (itemType() == Plugins){
+        PluginsItem *pluginItem = dynamic_cast<PluginsItem*>(this);
+        if (nullptr != pluginItem){
+            if (pluginItem->pluginName() == "datetime")
+                margin = 0;
+        }
+    }
     const QRect r = rect();
     switch (DockPosition) {
     case Top: {
         if (itemType() == Plugins) {
-            p += QPoint(r.width() / 2, r.height() + PLUGIN_MARGEN);
+            p += QPoint(r.width() / 2, r.height() + margin);
         } else {
             p += QPoint(r.width() / 2, r.height());
         }
@@ -372,7 +380,7 @@ const QPoint DockItem::popupMarkPoint() const
     }
     case Bottom: {
         if (itemType() == Plugins) {
-            p += QPoint(r.width() / 2, 0 - PLUGIN_MARGEN);
+            p += QPoint(r.width() / 2, 0 - margin);
         } else {
             p += QPoint(r.width() / 2, 0);
         }
@@ -380,7 +388,7 @@ const QPoint DockItem::popupMarkPoint() const
     }
     case Left: {
         if (itemType() == Plugins) {
-            p += QPoint(r.width() + PLUGIN_MARGEN, r.height() / 2);
+            p += QPoint(r.width() + margin, r.height() / 2);
         } else {
             p += QPoint(r.width(), r.height() / 2);
         }
@@ -388,7 +396,7 @@ const QPoint DockItem::popupMarkPoint() const
     }
     case Right: {
         if (itemType() == Plugins) {
-            p += QPoint(0 - PLUGIN_MARGEN, r.height() / 2);
+            p += QPoint(0 - margin, r.height() / 2);
         } else {
             p += QPoint(0, r.height() / 2);
         }
@@ -437,3 +445,4 @@ bool DockItem::isDragging()
 {
     return m_draging;
 }
+

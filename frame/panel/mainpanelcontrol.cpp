@@ -132,7 +132,6 @@ void MainPanelControl::init()
     // 插件
     m_pluginAreaWidget->setLayout(m_pluginLayout);
     m_pluginLayout->setMargin(0);
-    m_pluginLayout->setContentsMargins(10, 10, 10, 10);
     m_pluginLayout->setSpacing(10);
 
     //桌面
@@ -186,6 +185,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_trayAreaLayout->setDirection(QBoxLayout::LeftToRight);
         m_appAreaSonLayout->setDirection(QBoxLayout::LeftToRight);
         m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
+        m_pluginLayout->setContentsMargins(10, 0, 10, 0);
         break;
     case Position::Right:
     case Position::Left:
@@ -199,6 +199,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_trayAreaLayout->setDirection(QBoxLayout::TopToBottom);
         m_appAreaSonLayout->setDirection(QBoxLayout::TopToBottom);
         m_trayAreaLayout->setContentsMargins(10, 0, 10, 0);
+        m_pluginLayout->setContentsMargins(0, 10, 0, 10);
         break;
     }
 }
@@ -984,6 +985,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             shutdownPlugin->setFixedSize(tray_item_size, h - 20);
         if (keyboardPlugin)
             keyboardPlugin->setFixedSize(tray_item_size, h - 20);
+
     } else {
         m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
 
@@ -998,15 +1000,13 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
-                int width = pItem->sizeHint().width();
-                if (pItem->pluginName() == "AiAssistant")
-                    width = tray_item_size;
-                if (width > -1)
-                    pItem->setFixedWidth(width);
-                else {
-                    pItem->setFixedWidth(h - 20);
+                if (pItem->pluginName() == "datetime"){
+                    pItem->setFixedSize(pItem->sizeHint().width(), h);
+                } else if (pItem->pluginName() == "AiAssistant"){
+                    pItem->setFixedSize(tray_item_size, h - 20);
+                } else {
+                    pItem->setFixedSize(pItem->sizeHint().width(), h - 20);
                 }
-                pItem->setFixedHeight(h - 20);
             }
         }
     } else {
@@ -1014,15 +1014,13 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
-                int height = pItem->sizeHint().height();
-                if (pItem->pluginName() == "AiAssistant")
-                    height = tray_item_size;
-                if (height > -1)
-                    pItem->setFixedHeight(height);
-                else {
-                    pItem->setFixedHeight(w - 20);
+                if (pItem->pluginName() == "datetime"){
+                    pItem->setFixedSize(w, pItem->sizeHint().height());
+                } else if (pItem->pluginName() == "AiAssistant"){
+                    pItem->setFixedSize(w - 20, tray_item_size);
+                } else {
+                    pItem->setFixedSize(w - 20, pItem->sizeHint().height());
                 }
-                pItem->setFixedWidth(w - 20);
             }
         }
     }

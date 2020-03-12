@@ -48,6 +48,8 @@ private:
     bool m_24HourFormat;
     mutable QFont m_timeFont;
     mutable QFont m_dateFont;
+    mutable int m_timeOffset;
+
 };
 
 #endif // DATETIMEWIDGET_H
