@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"errors"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"sync"
@@ -146,7 +145,7 @@ func (m *Manager) listenRfkillEvents() {
 		}
 		err = cmd.Wait()
 		if err != nil {
-			log.Fatal(err)
+			logger.Warning(err)
 		}
 	}()
 }
