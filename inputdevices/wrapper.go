@@ -58,7 +58,7 @@ func handleDeviceChanged() {
 
 	getDeviceInfos(true)
 	mouseInfos = dxMouses{}
-	getMouseInfos(false)
+	getMouseInfos(true)
 	tpadInfos = dxTouchpads{}
 	getTPadInfos(false)
 	wacomInfos = dxWacoms{}
