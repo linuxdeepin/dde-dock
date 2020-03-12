@@ -73,6 +73,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_itemManager(DockItemManager::instance(this))
     , m_trashPluginShow(true)
 {
+    m_settingsMenu.setAccessibleName("dock-settingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -98,12 +99,14 @@ DockSettings::DockSettings(QWidget *parent)
     m_smartHideAct.setCheckable(true);
 
     QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
+    modeSubMenu->setAccessibleName("modesubmenu");
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
     QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
     QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
+    locationSubMenu->setAccessibleName("locationsubmenu");
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
     locationSubMenu->addAction(&m_leftPosAct);
@@ -112,6 +115,7 @@ DockSettings::DockSettings(QWidget *parent)
     locationSubMenuAct->setMenu(locationSubMenu);
 
     QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
+    statusSubMenu->setAccessibleName("statussubmenu");
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
     statusSubMenu->addAction(&m_smartHideAct);
@@ -119,6 +123,7 @@ DockSettings::DockSettings(QWidget *parent)
     statusSubMenuAct->setMenu(statusSubMenu);
 
     m_hideSubMenu = new QMenu(&m_settingsMenu);
+    m_hideSubMenu->setAccessibleName("pluginsmenu");
     QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
     hideSubMenuAct->setMenu(m_hideSubMenu);
 

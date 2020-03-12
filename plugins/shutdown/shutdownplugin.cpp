@@ -235,7 +235,7 @@ void ShutdownPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_shutdownWidget = new PluginWidget;
+    m_shutdownWidget = new ShutdownWidget;
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());

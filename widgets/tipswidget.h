@@ -9,6 +9,7 @@ class TipsWidget : public QFrame
 public:
     explicit TipsWidget(QWidget *parent = nullptr);
 
+    const QString& text(){return m_text;}
     void setText(const QString &text);
     void refreshFont();
     

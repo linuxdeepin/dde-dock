@@ -55,6 +55,7 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     m_mainBoxLayout->setSpacing(0);
 
     m_leftSpace->setFixedSize(TraySpace, TraySpace);
+    m_leftSpace->setAccessibleName("leftspace");
 
     m_mainBoxLayout->addWidget(m_leftSpace);
     m_mainBoxLayout->addWidget(m_normalContainer);

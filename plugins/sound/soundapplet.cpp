@@ -29,6 +29,7 @@
 
 #include <QLabel>
 #include <QIcon>
+#include <QScrollBar>
 #include <DApplication>
 
 #define WIDTH       200
@@ -49,17 +50,21 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_audioInter(new DBusAudio(this))
     , m_defSinkInter(nullptr)
 {
-//    QIcon::setThemeName("deepin");
-
+    //    QIcon::setThemeName("deepin");
+    m_centralWidget->setAccessibleName("volumn-centralwidget");
     m_volumeBtn->setAccessibleName("volume-button");
+    m_volumeIconMax->setAccessibleName("volume-iconmax");
+    m_volumeSlider->setAccessibleName("volume-slider");
+    m_soundShow->setAccessibleName("volume-soundtips");
+    this->horizontalScrollBar()->setAccessibleName("volume-horizontalscrollbar");
+    this->verticalScrollBar()->setAccessibleName("volume-verticalscrollbar");
+
     m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
 
-    m_volumeSlider->setAccessibleName("volume-slider");
     m_soundShow->setText(QString("%1%").arg(0));
 
     TipsWidget *deviceLabel = new TipsWidget;
     deviceLabel->setText(tr("Device"));
-
 
     QHBoxLayout *deviceLayout =new QHBoxLayout;
     deviceLayout->addSpacing(2);
@@ -70,7 +75,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     QVBoxLayout *deviceLineLayout = new QVBoxLayout;
     deviceLineLayout->addLayout(deviceLayout);
-//    deviceLineLayout->addSpacing(12);
+    //    deviceLineLayout->addSpacing(12);
     deviceLineLayout->addWidget(new HorizontalSeparator);
     deviceLineLayout->setMargin(0);
     deviceLineLayout->setSpacing(10);
@@ -102,6 +107,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     appLineVLayout->setMargin(0);
 
     m_applicationTitle->setLayout(appLineVLayout);
+    m_applicationTitle->setAccessibleName("applicationtitle");
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);

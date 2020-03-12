@@ -48,6 +48,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
 
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);
+    m_centralWidget->setAccessibleName("centralwidget");
     m_centralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;

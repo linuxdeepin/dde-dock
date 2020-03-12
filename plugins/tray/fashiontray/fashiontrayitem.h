@@ -23,7 +23,7 @@
 #define FASHIONTRAYITEM_H
 
 #include "constants.h"
-#include "trayplugin.h"
+#include "../trayplugin.h"
 #include "fashiontraywidgetwrapper.h"
 #include "fashiontraycontrolwidget.h"
 #include "containers/normalcontainer.h"
@@ -35,7 +35,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 
-#include <abstracttraywidget.h>
+#include "../abstracttraywidget.h"
 
 #define FASHION_MODE_ITEM_KEY   "fashion-mode-item"
 

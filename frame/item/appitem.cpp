@@ -181,6 +181,11 @@ void AppItem::setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry
     }
 }
 
+QString AppItem::accessibleName()
+{
+    return m_itemEntryInter->name();
+}
+
 void AppItem::moveEvent(QMoveEvent *e)
 {
     DockItem::moveEvent(e);
@@ -342,8 +347,8 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     e->accept();
 
     // handle preview
-//    if (e->buttons() == Qt::NoButton)
-//        return showPreview();
+    //    if (e->buttons() == Qt::NoButton)
+    //        return showPreview();
 
     // handle drag
     if (e->buttons() != Qt::LeftButton)
@@ -641,7 +646,7 @@ void AppItem::playSwingEffect()
     stopSwingEffect();
 
     QPair<QGraphicsView *, QGraphicsItemAnimation *> pair =  SwingEffect(
-                                                                 this, m_appIcon, rect(), devicePixelRatioF());
+                this, m_appIcon, rect(), devicePixelRatioF());
 
     m_swingEffectView = pair.first;
     m_itemAnimation = pair.second;
@@ -688,8 +693,8 @@ void AppItem::onGSettingsChanged(const QString &key)
     }
 
     QGSettings *setting = m_itemEntryInter->isDocked()
-                          ? GSettingsByDockApp()
-                          : GSettingsByActiveApp();
+            ? GSettingsByDockApp()
+            : GSettingsByActiveApp();
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByApp()->keys().contains("enable") && GSettingsByApp()->get("enable").toBool();
@@ -700,11 +705,11 @@ void AppItem::onGSettingsChanged(const QString &key)
 bool AppItem::checkGSettingsControl() const
 {
     QGSettings *setting = m_itemEntryInter->isDocked()
-                          ? GSettingsByDockApp()
-                          : GSettingsByActiveApp();
+            ? GSettingsByDockApp()
+            : GSettingsByActiveApp();
 
     return (setting->keys().contains("control") && setting->get("control").toBool()) ||
-           (GSettingsByApp()->keys().contains("control") && GSettingsByApp()->get("control").toBool());
+            (GSettingsByApp()->keys().contains("control") && GSettingsByApp()->get("control").toBool());
 }
 
 void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)

@@ -40,9 +40,9 @@ LauncherItem::LauncherItem(QWidget *parent)
 {
     m_launcherInter->setSync(true, false);
 
-    setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
+    m_tips->setAccessibleName("launchertips");
 
     connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
 }

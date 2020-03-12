@@ -23,7 +23,7 @@
 #define SHUTDOWNPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "pluginwidget.h"
+#include "shutdownwidget.h"
 #include "../widgets/tipswidget.h"
 #include "./dbus/dbuslogin1manager.h"
 
@@ -107,7 +107,7 @@ private:
 private:
     bool m_pluginLoaded;
 
-    PluginWidget *m_shutdownWidget;
+    ShutdownWidget *m_shutdownWidget;
     TipsWidget *m_tipsLabel;
     DBusLogin1Manager* m_login1Inter;
 };
