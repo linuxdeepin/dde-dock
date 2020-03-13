@@ -28,12 +28,12 @@
 #include "../../widgets/tipswidget.h"
 
 #include <org_kde_statusnotifieritem.h>
-#include <dbusmenu-qt5/dbusmenuimporter.h>
 
 #include <QMenu>
 #include <QDBusObjectPath>
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
+class DBusMenuImporter;
 
 //using namespace com::deepin::dde;
 using namespace org::kde;

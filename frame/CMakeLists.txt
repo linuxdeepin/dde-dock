@@ -33,6 +33,7 @@ target_include_directories(${BIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                               ${DtkGUI_INCLUDE_DIRS}
                                               ${Qt5Svg_INCLUDE_DIRS}
                                               ../interfaces)
+
 target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}

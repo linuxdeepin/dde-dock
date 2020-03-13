@@ -79,6 +79,11 @@ QSize DockItem::sizeHint() const
     return QSize(size, size);
 }
 
+QString DockItem::accessibleName()
+{
+    return QString();
+}
+
 DockItem::~DockItem()
 {
     if (m_popupShown)

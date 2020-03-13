@@ -140,7 +140,7 @@ void OverlayWarningPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_warningWidget = new PluginWidget;
+    m_warningWidget = new OverlayWarningWidget;
 
     if (!isOverlayRoot()) {
         return;

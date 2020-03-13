@@ -97,7 +97,7 @@ public slots:
     void removeItem(DockItem *item);
     void itemUpdated(DockItem *item);
 
-   // void
+    // void
     void onGSettingsChanged(const QString &key);
     
 protected:
@@ -114,7 +114,7 @@ private:
     QBoxLayout *m_pluginLayout;
     QWidget *m_appAreaSonWidget;
     QBoxLayout *m_appAreaSonLayout;
-    QBoxLayout *m_appAreaLayout;
+    //    QBoxLayout *m_appAreaLayout;
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
     MainPanelDelegate *m_delegate;

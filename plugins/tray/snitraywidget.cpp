@@ -21,7 +21,7 @@
 
 #include "snitraywidget.h"
 #include "util/themeappicon.h"
-
+#include <dbusmenu-qt5/dbusmenuimporter.h>
 #include <QPainter>
 #include <QApplication>
 

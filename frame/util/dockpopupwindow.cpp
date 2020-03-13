@@ -24,6 +24,8 @@
 #include <QScreen>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QAccessible>
+#include <QAccessibleEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -37,6 +39,8 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 {
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
+
+    setAccessibleName("popup");
 
     m_wmHelper = DWindowManagerHelper::instance();
 
@@ -65,6 +69,9 @@ void DockPopupWindow::setContent(QWidget *content)
     if (lastWidget)
         lastWidget->removeEventFilter(this);
     content->installEventFilter(this);
+
+    QAccessibleEvent event(this, QAccessible::NameChanged);
+    QAccessible::updateAccessibility(&event);
 
     setAccessibleName(content->objectName() + "-popup");
 

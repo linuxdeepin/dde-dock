@@ -149,6 +149,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_dragWidget(new DragWidget(this))
 {
     setAccessibleName("dock-mainwindow");
+    m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(true);
     setAcceptDrops(true);
