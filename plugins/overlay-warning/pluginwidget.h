@@ -23,16 +23,16 @@
 #ifndef PLUGINWIDGET_H
 #define PLUGINWIDGET_H
 
-#include "../../interfaces/constants.h"
+#include "constants.h"
 
 #include <QWidget>
 
-class OverlayWarningWidget : public QWidget
+class PluginWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit OverlayWarningWidget(QWidget *parent = 0);
+    explicit PluginWidget(QWidget *parent = 0);
 
 protected:
     QSize sizeHint() const;

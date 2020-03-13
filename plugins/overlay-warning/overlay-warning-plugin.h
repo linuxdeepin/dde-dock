@@ -24,7 +24,7 @@
 #define OVERLAY_WARNING_PLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "overlaywarningwidget.h"
+#include "pluginwidget.h"
 #include "../widgets/tipswidget.h"
 
 #include <QLabel>
@@ -71,7 +71,7 @@ private slots:
 private:
     bool m_pluginLoaded;
 
-    OverlayWarningWidget *m_warningWidget;
+    PluginWidget *m_warningWidget;
     QTimer *m_showDisableOverlayDialogTimer;
 };
 

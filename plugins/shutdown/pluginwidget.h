@@ -27,12 +27,12 @@
 #include <QWidget>
 #include <QIcon>
 
-class ShutdownWidget : public QWidget
+class PluginWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ShutdownWidget(QWidget *parent = 0);
+    explicit PluginWidget(QWidget *parent = 0);
 
 protected:
     void paintEvent(QPaintEvent *e) override;

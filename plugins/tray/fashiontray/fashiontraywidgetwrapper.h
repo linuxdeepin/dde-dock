@@ -22,7 +22,7 @@
 #ifndef FASHIONTRAYWIDGETWRAPPER_H
 #define FASHIONTRAYWIDGETWRAPPER_H
 
-#include "../abstracttraywidget.h"
+#include "abstracttraywidget.h"
 
 #include <QWidget>
 #include <QVBoxLayout>

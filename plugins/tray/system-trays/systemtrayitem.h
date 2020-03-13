@@ -23,7 +23,7 @@
 #define SYSTEMTRAYITEM_H
 
 #include "constants.h"
-#include "../abstracttraywidget.h"
+#include "abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
 #include "pluginsiteminterface.h"
 

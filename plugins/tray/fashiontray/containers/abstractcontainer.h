@@ -2,7 +2,7 @@
 #define ABSTRACTCONTAINER_H
 
 #include "constants.h"
-#include "../../trayplugin.h"
+#include "trayplugin.h"
 #include "../fashiontraywidgetwrapper.h"
 
 #include <QWidget>

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "shutdownwidget.h"
+#include "pluginwidget.h"
 
 #include <QSvgRenderer>
 #include <QPainter>
@@ -32,7 +32,7 @@
 
 DWIDGET_USE_NAMESPACE;
 
-ShutdownWidget::ShutdownWidget(QWidget *parent)
+PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent)
     , m_hover(false)
     , m_pressed(false)
@@ -46,7 +46,7 @@ ShutdownWidget::ShutdownWidget(QWidget *parent)
     m_icon = QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg");
 }
 
-void ShutdownWidget::paintEvent(QPaintEvent *e)
+void PluginWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
@@ -110,7 +110,7 @@ void ShutdownWidget::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / pixmap.devicePixelRatioF(), pixmap);
 }
 
-const QPixmap ShutdownWidget::loadSvg(const QString &fileName, const QSize &size) const
+const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) const
 {
     const auto ratio = devicePixelRatioF();
 
@@ -121,7 +121,7 @@ const QPixmap ShutdownWidget::loadSvg(const QString &fileName, const QSize &size
     return pixmap;
 }
 
-void ShutdownWidget::mousePressEvent(QMouseEvent *event)
+void PluginWidget::mousePressEvent(QMouseEvent *event)
 {
     m_pressed = true;
     update();
@@ -129,7 +129,7 @@ void ShutdownWidget::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
-void ShutdownWidget::mouseReleaseEvent(QMouseEvent *event)
+void PluginWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     m_pressed = false;
     m_hover = false;
@@ -138,13 +138,13 @@ void ShutdownWidget::mouseReleaseEvent(QMouseEvent *event)
     QWidget::mouseReleaseEvent(event);
 }
 
-void ShutdownWidget::mouseMoveEvent(QMouseEvent *event)
+void PluginWidget::mouseMoveEvent(QMouseEvent *event)
 {
     m_hover = true;
     QWidget::mouseMoveEvent(event);
 }
 
-void ShutdownWidget::leaveEvent(QEvent *event)
+void PluginWidget::leaveEvent(QEvent *event)
 {
     m_hover = false;
     m_pressed = false;

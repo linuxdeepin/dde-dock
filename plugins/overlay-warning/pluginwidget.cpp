@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "overlaywarningwidget.h"
+#include "pluginwidget.h"
 
 #include <QSvgRenderer>
 #include <QPainter>
@@ -28,17 +28,17 @@
 #include <QApplication>
 #include <QIcon>
 
-OverlayWarningWidget::OverlayWarningWidget(QWidget *parent)
+PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent)
 {
 }
 
-QSize OverlayWarningWidget::sizeHint() const
+QSize PluginWidget::sizeHint() const
 {
     return QSize(26, 26);
 }
 
-void OverlayWarningWidget::paintEvent(QPaintEvent *e)
+void PluginWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
@@ -62,7 +62,7 @@ void OverlayWarningWidget::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / devicePixelRatioF(), pixmap);
 }
 
-const QPixmap OverlayWarningWidget::loadSvg(const QString &fileName, const QSize &size) const
+const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) const
 {
     const auto ratio = devicePixelRatioF();
 

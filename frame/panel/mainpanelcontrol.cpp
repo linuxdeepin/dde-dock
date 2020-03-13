@@ -96,10 +96,6 @@ MainPanelControl::~MainPanelControl()
 void MainPanelControl::init()
 {
     // 主窗口
-    m_fixedSpliter->setAccessibleName("spliter_fix");
-    m_appSpliter->setAccessibleName("spliter_app");
-    m_traySpliter->setAccessibleName("spliter_tray");
-
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);
     m_mainPanelLayout->addWidget(m_appAreaWidget);
@@ -117,28 +113,24 @@ void MainPanelControl::init()
 
     // 固定区域
     m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
-    m_fixedAreaWidget->setAccessibleName("fixedarea");
     m_fixedAreaLayout->setMargin(0);
     m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_fixedAreaLayout->setSpacing(0);
 
     // 应用程序
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
-    m_appAreaSonWidget->setAccessibleName("apparea");
     m_appAreaSonLayout->setMargin(0);
     m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_appAreaSonLayout->setSpacing(0);
 
     // 托盘
     m_trayAreaWidget->setLayout(m_trayAreaLayout);
-    m_trayAreaWidget->setAccessibleName("trayarea");
     m_trayAreaLayout->setMargin(0);
     m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
     m_trayAreaLayout->setSpacing(0);
 
     // 插件
     m_pluginAreaWidget->setLayout(m_pluginLayout);
-    m_pluginAreaWidget->setAccessibleName("pluginarea");
     m_pluginLayout->setMargin(0);
     m_pluginLayout->setContentsMargins(10, 10, 10, 10);
     m_pluginLayout->setSpacing(10);

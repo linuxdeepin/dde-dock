@@ -59,7 +59,6 @@ public:
     inline virtual ItemType itemType() const {Q_UNREACHABLE(); return App;}
 
     QSize sizeHint() const override;
-    virtual QString accessibleName();
 
 public slots:
     virtual void refershIcon() {}

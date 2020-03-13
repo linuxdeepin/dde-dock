@@ -60,13 +60,11 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
 {
     m_closeBtn2D->setFixedSize(24, 24);
-    m_closeBtn2D->setAccessibleName("closebutton-2d");
     m_closeBtn2D->setNormalPic(":/icons/resources/close_round_normal.svg");
     m_closeBtn2D->setHoverPic(":/icons/resources/close_round_hover.svg");
     m_closeBtn2D->setPressPic(":/icons/resources/close_round_press.svg");
     m_closeBtn2D->setVisible(false);
     m_title->setObjectName("AppSnapshotTitle");
-    m_title->setAccessibleName("AppSnapshotTitle");
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_title);

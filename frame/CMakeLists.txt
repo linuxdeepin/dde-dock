@@ -32,10 +32,7 @@ target_include_directories(${BIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                               ${QGSettings_INCLUDE_DIRS}
                                               ${DtkGUI_INCLUDE_DIRS}
                                               ${Qt5Svg_INCLUDE_DIRS}
-                                              ${XCB_LIBS_INCLUDE_DIRS}
-                                              ${Qt5DBus_INCLUDE_DIRS}
                                               ../interfaces)
-
 target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
@@ -47,7 +44,6 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
     ${DtkGUI_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
-    ${XCB_LIBS_LIBRARIES}
 )
 
 if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")

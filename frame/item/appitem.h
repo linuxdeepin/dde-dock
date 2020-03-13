@@ -55,7 +55,6 @@ public:
 
     inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
     QPixmap appIcon(){ return m_appIcon; }
-    virtual QString accessibleName();
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -81,6 +80,7 @@ private:
     void invokedMenuItem(const QString &itemId, const bool checked) Q_DECL_OVERRIDE;
     const QString contextMenu() const Q_DECL_OVERRIDE;
     QWidget *popupTips() Q_DECL_OVERRIDE;
+
     void startDrag();
     bool hasAttention() const;
 
