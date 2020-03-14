@@ -35,6 +35,8 @@
 #include <unistd.h>
 #include "dbus/dbusdockadaptors.h"
 
+#include <sys/mman.h>
+
 DWIDGET_USE_NAMESPACE
 #ifdef DCORE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -110,6 +112,9 @@ int main(int argc, char *argv[])
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
+
+    // 锁定物理内存，用于国测测试
+    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
