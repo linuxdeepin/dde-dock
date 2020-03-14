@@ -46,6 +46,8 @@
         <file>resources/wireless/disconnect_dark.svg</file>
         <file>resources/wireless/refresh.svg</file>
         <file>resources/wireless/refresh_dark.svg</file>
+        <file>resources/wireless/wireless-disabled-symbolic-dark.svg</file>
+        <file>resources/wireless/wireless-disabled-symbolic.svg</file>
     </qresource>
     <qresource prefix="/wireless/indicator">
         <file>resources/wireless/spinner14/Spinner01.png</file>
