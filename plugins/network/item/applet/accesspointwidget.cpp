@@ -89,7 +89,6 @@ AccessPointWidget::AccessPointWidget()
 void AccessPointWidget::updateAP(const AccessPoint &ap)
 {
     m_ap = ap;
-
     m_ssidBtn->setText(ap.ssid());
 
     setStrengthIcon(ap.strength());

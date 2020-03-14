@@ -86,6 +86,7 @@ private:
     QWidget *m_wirelessApplet;
     TipsWidget *m_wirelessTips;
     WirelessList *m_APList;
+    QJsonObject m_activeApInfo;
 };
 
 #endif // WIRELESSITEM_H

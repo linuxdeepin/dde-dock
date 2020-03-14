@@ -58,6 +58,14 @@ WirelessItem::WirelessItem(WirelessDevice *device)
         update();
     });
 
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ] (QJsonObject info){
+        const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
+        if(activeApInfo.value("Ssid").toString() == info.value("Ssid").toString()) {
+             m_activeApInfo = info;
+        }
+        update();
+    });
+
     //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     QTimer::singleShot(0, this, &WirelessItem::refreshTips);
     init();
@@ -172,12 +180,11 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
             break;
         }
         case NetworkDevice::DeviceStatus::Activated: {
-            const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
-            if (activeApInfo.isEmpty()) {
+            if (m_activeApInfo.isEmpty()) {
                 strength = 100;
                 m_refreshTimer->start();
             } else {
-                strength = activeApInfo.value("Strength").toInt();
+                strength = m_activeApInfo.value("Strength").toInt();
             }
             break;
         }

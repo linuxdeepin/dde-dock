@@ -189,7 +189,7 @@ void WirelessList::APPropertiesChanged(const QJsonObject &apInfo)
     AccessPoint ap(apInfo);
     const auto mIndex = m_apList.indexOf(ap);
     if (mIndex != -1) {
-        if (ap > m_apList.at(mIndex)) {
+        if (ap > m_apList.at(mIndex) || ap < m_apList.at(mIndex)) {
             m_apList.replace(mIndex, ap);
             m_updateAPTimer->start();
         }
