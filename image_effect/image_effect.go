@@ -195,10 +195,14 @@ func (ie *ImageEffect) get(uid int, effect, filename string, envVars []string) (
 
 	outputFileInfo, err := os.Stat(outputFile)
 	if err == nil {
-		// check mod time
-		if modTimeEqual(inputFileInfo.ModTime(), outputFileInfo.ModTime()) {
-			logger.Debug("mod time equal")
-			return
+		if outputFileInfo.Size() == 0 {
+			logger.Warningf("file %q already exists, but the content is empty", outputFile)
+		} else {
+			// check mod time
+			if modTimeEqual(inputFileInfo.ModTime(), outputFileInfo.ModTime()) {
+				logger.Debug("mod time equal")
+				return
+			}
 		}
 	} else if !os.IsNotExist(err) {
 		err = xerrors.Errorf("failed to stat outputFile: %w", err)
