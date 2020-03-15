@@ -3,7 +3,8 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Cindy0514, 2018-2019
+# Cindy0514, 2018-2020
+# Cindy0514, 2020
 # deepin_transifex <xiabin@linuxdeepin.com>, 2017-2018
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
@@ -15,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-19 17:00+0800\n"
-"PO-Revision-Date: 2019-12-19 09:08+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-03-16 09:17+0000\n"
+"Last-Translator: Cindy0514\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,39 +40,35 @@ msgstr "密码必须包含英文（区分大小写）、数字或特殊符号（
 msgid "Username cannot be empty"
 msgstr "用户名不能为空"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "用户名只能由a~z,0~9,-,_组成"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "首字符必须为字母或数字"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "首字符必须为小写字母"
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr "此用户名已存在"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "此用户名已被系统使用"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
 msgstr "用户名长度必须介于3到32个字符之间"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "设置成功"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "设置屏幕缩放后请注销用户再查看"
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "屏幕缩放"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "即将设置屏幕缩放"
 
@@ -150,15 +147,15 @@ msgstr "请确定%q已打开而且在通讯范围内"
 msgid "Bluetooth connection failed"
 msgstr "蓝牙连接失败"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "今天"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "明天"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s至%s"
@@ -196,27 +193,27 @@ msgstr "稍后提醒"
 msgid "Schedule Reminder"
 msgstr "日程提醒"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "打开"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr "关闭所有"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr "强制退出"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr "驻留"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr "移除驻留"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "所有窗口"
 
@@ -298,105 +295,109 @@ msgstr "桌面智能助手"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr "阅读"
+msgstr "语音朗读"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr "听写"
+msgstr "语音听写"
 
 #: ../../keybinding/shortcuts/id_name_map.go:48
 msgid "Clipboard"
 msgstr "剪贴板"
 
-#: ../../keybinding/shortcuts/id_name_map.go:55
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "文本翻译"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "切换键盘布局"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "切换到左边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "切换到右边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "切换到上方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "切换到下方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "切换同类型窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "反向切换同类型窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "切换窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:82
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "反向切换窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:93
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "显示桌面"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "恢复窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "关闭窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "移动窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "改变窗口大小"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "移动到左边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "移动到右边工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "移动到上方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "移动到下方工作区"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "显示所有工作区的窗口  "
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "显示当前工作区的窗口"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "显示工作区 "
 
@@ -518,7 +519,7 @@ msgstr "隧道TLS"
 msgid "Protected EAP"
 msgstr "受保护的EAP"
 
-#: ../../network/manager_connection.go:317 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "有线连接"
 
@@ -798,8 +799,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "ModemManager未运行或异常退出"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "802.11 Wi-Fi网络无法找到"
+msgid "The 802.11 WLAN network could not be found"
+msgstr "802.11 WLAN网络无法找到"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -915,35 +916,35 @@ msgstr "热点共享已开启"
 msgid "%q connected"
 msgstr "已连接%q"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr "热点共享已关闭"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q已断开"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "无法共享热点，请检查dnsmasq 相关设置"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "未能加入%q，请尝试靠近无线路由器"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "未能加入%q，请检查路由器或网线。"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
 msgstr "连接%q需要密码"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "连接失败，未能加入%q，密码不正确"
 
-#: ../../network/utils_dbus_nm.go:265
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "未知"
 
@@ -986,24 +987,24 @@ msgstr "已连接"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "“%s”没有通过系统安全验证，无法运行"
 
-#: ../../session/power/manager_events.go:151
+#: ../../session/power/manager_events.go:176
 msgid "Battery Critically Low"
 msgstr "电池电量耗尽"
 
-#: ../../session/power/manager_events.go:152
+#: ../../session/power/manager_events.go:177
 msgid "Computer will suspend very soon, please plug in now"
 msgstr "计算机马上进入待机状态，请连接电源以恢复使用"
 
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
 msgid "Battery Low"
 msgstr "电池电量低"
 
-#: ../../session/power/manager_events.go:176
+#: ../../session/power/manager_events.go:201
 msgid "Computer will suspend soon, please plug in"
 msgstr "计算机将要进入待机状态，请连接电源"
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "电池电量低，请连接电源"
 
