@@ -247,7 +247,9 @@ void PreviewContainer::previewEntered(const WId wid)
     m_currentWId = wid;
 
     m_floatingPreview->trackWindow(snap);
-
+    
+    requestCancelPreviewWindow();
+    
     if (m_waitForShowPreviewTimer->isActive()) {
         return;
     }
