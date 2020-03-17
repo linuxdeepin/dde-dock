@@ -54,12 +54,12 @@ void RegisterDdeSession()
 
     if (!cookie.isEmpty()) {
         QDBusPendingReply<bool> r = DDBusSender()
-                .interface("com.deepin.SessionManager")
-                .path("/com/deepin/SessionManager")
-                .service("com.deepin.SessionManager")
-                .method("Register")
-                .arg(QString(cookie))
-                .call();
+                                    .interface("com.deepin.SessionManager")
+                                    .path("/com/deepin/SessionManager")
+                                    .service("com.deepin.SessionManager")
+                                    .method("Register")
+                                    .arg(QString(cookie))
+                                    .call();
 
         qDebug() << Q_FUNC_INFO << r.value();
     }
@@ -69,41 +69,48 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 {
     QAccessibleInterface *interface = nullptr;
 
-    USE_ACCESSIBLE(classname,MainPanelControl);
-    USE_ACCESSIBLE(classname,LauncherItem);
-    USE_ACCESSIBLE(classname,AppItem);
-    USE_ACCESSIBLE(classname,PreviewContainer);
-    USE_ACCESSIBLE(classname,PluginsItem);
-    USE_ACCESSIBLE(classname,TrayPluginItem);
-    USE_ACCESSIBLE(classname,PlaceholderItem);
-    USE_ACCESSIBLE(classname,AppDragWidget);
-    USE_ACCESSIBLE(classname,AppSnapshot);
-    USE_ACCESSIBLE(classname,FloatingPreview);
-    USE_ACCESSIBLE(classname,SNITrayWidget);
-    USE_ACCESSIBLE(classname,SystemTrayItem);
-    USE_ACCESSIBLE(classname,FashionTrayItem);
-    USE_ACCESSIBLE(classname,FashionTrayWidgetWrapper);
-    USE_ACCESSIBLE(classname,FashionTrayControlWidget);
-    USE_ACCESSIBLE(classname,AttentionContainer);
-    USE_ACCESSIBLE(classname,HoldContainer);
-    USE_ACCESSIBLE(classname,NormalContainer);
-    USE_ACCESSIBLE(classname,SpliterAnimated);
-    USE_ACCESSIBLE(classname,IndicatorTrayWidget);
-    USE_ACCESSIBLE(classname,XEmbedTrayWidget);
-    USE_ACCESSIBLE(classname,ShowDesktopWidget);
-    USE_ACCESSIBLE(classname,SoundItem);
-    USE_ACCESSIBLE(classname,SoundApplet);
-    USE_ACCESSIBLE(classname,SinkInputWidget);
-    USE_ACCESSIBLE(classname,VolumeSlider);
-    USE_ACCESSIBLE(classname,HorizontalSeparator);
-    USE_ACCESSIBLE(classname,TipsWidget);
-    USE_ACCESSIBLE(classname,DatetimeWidget);
-    USE_ACCESSIBLE(classname,OnboardItem);
-    USE_ACCESSIBLE(classname,TrashWidget);
-    USE_ACCESSIBLE(classname,PopupControlWidget);
-    USE_ACCESSIBLE(classname,ShutdownWidget);
-    USE_ACCESSIBLE(classname,MultitaskingWidget);
-//    USE_ACCESSIBLE(classname,OverlayWarningWidget);
+    GET_ACCESSIBLE(classname, MainWindow);
+    GET_ACCESSIBLE(classname, MainPanelControl);
+    GET_ACCESSIBLE(classname, TipsWidget);
+    GET_ACCESSIBLE(classname, DockPopupWindow);
+    GET_ACCESSIBLE(classname, LauncherItem);
+    GET_ACCESSIBLE(classname, AppItem);
+    GET_ACCESSIBLE(classname, PreviewContainer);
+    GET_ACCESSIBLE(classname, PluginsItem);
+    GET_ACCESSIBLE(classname, TrayPluginItem);
+    GET_ACCESSIBLE(classname, PlaceholderItem);
+    GET_ACCESSIBLE(classname, AppDragWidget);
+    GET_ACCESSIBLE(classname, AppSnapshot);
+    GET_ACCESSIBLE(classname, FloatingPreview);
+    GET_ACCESSIBLE(classname, SNITrayWidget);
+    GET_ACCESSIBLE(classname, SystemTrayItem);
+    GET_ACCESSIBLE(classname, FashionTrayItem);
+    GET_ACCESSIBLE(classname, FashionTrayWidgetWrapper);
+    GET_ACCESSIBLE(classname, FashionTrayControlWidget);
+    GET_ACCESSIBLE(classname, AttentionContainer);
+    GET_ACCESSIBLE(classname, HoldContainer);
+    GET_ACCESSIBLE(classname, NormalContainer);
+    GET_ACCESSIBLE(classname, SpliterAnimated);
+    GET_ACCESSIBLE(classname, IndicatorTrayWidget);
+    GET_ACCESSIBLE(classname, XEmbedTrayWidget);
+    GET_ACCESSIBLE(classname, SoundItem);
+    GET_ACCESSIBLE(classname, SoundApplet);
+    GET_ACCESSIBLE(classname, SinkInputWidget);
+    GET_ACCESSIBLE(classname, VolumeSlider);
+    GET_ACCESSIBLE(classname, HorizontalSeparator);
+    GET_ACCESSIBLE(classname, DatetimeWidget);
+    GET_ACCESSIBLE(classname, OnboardItem);
+    GET_ACCESSIBLE(classname, TrashWidget);
+    GET_ACCESSIBLE(classname, PopupControlWidget);
+    GET_ACCESSIBLE(classname, ShutdownWidget);
+    GET_ACCESSIBLE(classname, MultitaskingWidget);
+    GET_ACCESSIBLE(classname, ShowDesktopWidget);
+    //    USE_ACCESSIBLE(classname,OverlayWarningWidget);
+    GET_ACCESSIBLE_BY_OBJECTNAME(classname, QWidget, "dock-showdesktoparea");//TODO 点击坐标有偏差
+    GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-2d");
+    GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-3d");
+    GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
+    GET_ACCESSIBLE(classname, QPushButton);
     return interface;
 }
 
@@ -124,8 +131,6 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
 
-    QAccessible::installFactory(accessibleFactory);
-
     // load dde-network-utils translator
     QTranslator translator;
     translator.load("/usr/share/dde-network-utils/translations/dde-network-utils_" + QLocale::system().name());
@@ -133,6 +138,8 @@ int main(int argc, char *argv[])
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
+
+    QAccessible::installFactory(accessibleFactory);
 
     QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
     QCommandLineParser parser;

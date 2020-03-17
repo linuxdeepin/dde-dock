@@ -73,7 +73,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_itemManager(DockItemManager::instance(this))
     , m_trashPluginShow(true)
 {
-    m_settingsMenu.setAccessibleName("dock-settingsmenu");
+    m_settingsMenu.setAccessibleName("docksettingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -153,7 +153,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
-    QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
+    QTimer::singleShot(0, this, [ = ] {onGSettingsChanged("enable");});
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -165,7 +165,7 @@ DockSettings::DockSettings(QWidget *parent)
     resetFrontendGeometry();
 
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 }
@@ -238,7 +238,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
 
 void DockSettings::showDockSettingsMenu()
 {
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -353,7 +353,7 @@ void DockSettings::onGSettingsChanged(const QString &key)
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
-        m_menuVisible=isEnable && setting->get("enable").toBool();
+        m_menuVisible = isEnable && setting->get("enable").toBool();
     }
 }
 
@@ -388,7 +388,7 @@ void DockSettings::onDisplayModeChanged()
     emit displayModeChanegd();
     calculateWindowConfig();
 
-   //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
+    //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }
 
 void DockSettings::hideModeChanged()
@@ -642,6 +642,6 @@ void DockSettings::onTrashGSettingsChanged(const QString &key)
     QGSettings *setting = GSettingsByTrash();
 
     if (setting->keys().contains("enable")) {
-         m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
+        m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
     }
 }

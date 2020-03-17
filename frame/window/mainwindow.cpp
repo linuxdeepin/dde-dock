@@ -148,8 +148,6 @@ MainWindow::MainWindow(QWidget *parent)
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
-    setAccessibleName("dock-mainwindow");
-    m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(true);
     setAcceptDrops(true);
@@ -175,6 +173,7 @@ MainWindow::MainWindow(QWidget *parent)
     for (auto item : DockItemManager::instance()->itemList())
         m_mainPanel->insertItem(-1, item);
 
+    m_dragWidget->setAccessibleName("dock-dragwidget");
     m_dragWidget->setMouseTracking(true);
     m_dragWidget->setFocusPolicy(Qt::NoFocus);
 
@@ -327,24 +326,24 @@ void MainWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
-//    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
-//    windowHandle(), [this](QScreen * new_screen) {
-//        QScreen *old_screen = windowHandle()->screen();
-//        windowHandle()->setScreen(new_screen);
-//        // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
-//        // 比如：窗口大小为 100 x 100, 显示在缩放比为 1.0 的屏幕上，此时窗口的真实大小 = 100x100
-//        // 随后窗口被移动到了缩放比为 2.0 的屏幕上，应该将真实大小改为 200x200。另外，只能使用
-//        // QPlatformWindow直接设置大小来绕过QWidget和QWindow对新旧geometry的比较。
-//        const qreal scale = devicePixelRatioF();
-//        const QPoint screenPos = new_screen->geometry().topLeft();
-//        const QPoint posInScreen = this->pos() - old_screen->geometry().topLeft();
-//        const QPoint pos = screenPos + posInScreen * scale;
-//        const QSize size = this->size() * scale;
+    //    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
+    //    windowHandle(), [this](QScreen * new_screen) {
+    //        QScreen *old_screen = windowHandle()->screen();
+    //        windowHandle()->setScreen(new_screen);
+    //        // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
+    //        // 比如：窗口大小为 100 x 100, 显示在缩放比为 1.0 的屏幕上，此时窗口的真实大小 = 100x100
+    //        // 随后窗口被移动到了缩放比为 2.0 的屏幕上，应该将真实大小改为 200x200。另外，只能使用
+    //        // QPlatformWindow直接设置大小来绕过QWidget和QWindow对新旧geometry的比较。
+    //        const qreal scale = devicePixelRatioF();
+    //        const QPoint screenPos = new_screen->geometry().topLeft();
+    //        const QPoint posInScreen = this->pos() - old_screen->geometry().topLeft();
+    //        const QPoint pos = screenPos + posInScreen * scale;
+    //        const QSize size = this->size() * scale;
 
-//        windowHandle()->handle()->setGeometry(QRect(pos, size));
-//    }, Qt::UniqueConnection);
+    //        windowHandle()->handle()->setGeometry(QRect(pos, size));
+    //    }, Qt::UniqueConnection);
 
-//    windowHandle()->setScreen(qGuiApp->primaryScreen());
+    //    windowHandle()->setScreen(qGuiApp->primaryScreen());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
@@ -445,8 +444,8 @@ void MainWindow::compositeChanged()
     const bool composite = m_wmHelper->hasComposite();
     setComposite(composite);
 
-// NOTE(justforlxz): On the sw platform, there is an unstable
-// display position error, disable animation solution
+    // NOTE(justforlxz): On the sw platform, there is an unstable
+    // display position error, disable animation solution
 #ifndef DISABLE_SHOW_ANIMATION
     const int duration = composite ? 300 : 0;
 #else
@@ -499,7 +498,7 @@ void MainWindow::internalMove(const QPoint &p)
     }
 
     // using platform window to set real window position
-//    windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
+    //    windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
 }
 
 void MainWindow::initConnections()
@@ -638,7 +637,7 @@ void MainWindow::updateGeometry()
 
 void MainWindow::getTrayVisableItemCount()
 {
-   m_mainPanel->getTrayVisableItemCount();
+    m_mainPanel->getTrayVisableItemCount();
 }
 
 void MainWindow::clearStrutPartial()
@@ -848,8 +847,8 @@ void MainWindow::updatePanelVisible()
             break;
         }
 
-//        const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
-//        move(windowRect.topLeft());
+        //        const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
+        //        move(windowRect.topLeft());
 
         return narrow(m_curDockPos);
 
@@ -1034,16 +1033,16 @@ void MainWindow::updateRegionMonitorWatch()
     int val = 2;
     const int margin = m_settings->dockMargin();
     if (Dock::Top == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin, 0, m_settings->primaryRect().width() - margin*2, val));
+        m_regionMonitor->setWatchedRegion(QRegion(margin, 0, m_settings->primaryRect().width() - margin * 2, val));
     } else if (Dock::Bottom == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin, m_settings->primaryRect().height() - val, m_settings->primaryRect().width() - margin*2, val));
+        m_regionMonitor->setWatchedRegion(QRegion(margin, m_settings->primaryRect().height() - val, m_settings->primaryRect().width() - margin * 2, val));
     } else if (Dock::Left == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(0, margin, val,m_settings->primaryRect().height() - margin*2));
+        m_regionMonitor->setWatchedRegion(QRegion(0, margin, val, m_settings->primaryRect().height() - margin * 2));
     } else {
-        m_regionMonitor->setWatchedRegion(QRegion(m_settings->primaryRect().width() - val, margin, val,m_settings->primaryRect().height()- margin*2));
+        m_regionMonitor->setWatchedRegion(QRegion(m_settings->primaryRect().width() - val, margin, val, m_settings->primaryRect().height() - margin * 2));
     }
 
-    if (!m_regionMonitor->registered()){
+    if (!m_regionMonitor->registered()) {
         m_regionMonitor->registerRegion();
     }
 }

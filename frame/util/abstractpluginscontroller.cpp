@@ -188,7 +188,6 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         Dtk::Core::DUtil::DNotifySender(notifyMessage.arg(QFileInfo(pluginFile).fileName())).appIcon("dialog-warning").call();
         return;
     }
-
     if ((Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) && (interface->pluginName() == "multitasking"))
         return;
 
