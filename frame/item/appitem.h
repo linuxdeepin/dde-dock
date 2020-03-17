@@ -47,6 +47,7 @@ public:
     ~AppItem();
 
     const QString appId() const;
+    const QString appName() const;
     const bool isValid() const;
     void updateWindowIconGeometries();
     void undock();

@@ -25,6 +25,7 @@
 #include "item/pluginsitem.h"
 #include "item/traypluginitem.h"
 #include "util/docksettings.h"
+#include "util/themeappicon.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -201,6 +202,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     }
 
     emit itemInserted(insertIndex, item);
+    QTimer::singleShot(1000, this, [=]{ ThemeAppIcon::removeCache(item->appName()); });
 }
 
 void DockItemManager::appItemRemoved(const QString &appId)
@@ -221,6 +223,7 @@ void DockItemManager::appItemRemoved(const QString &appId)
 
 void DockItemManager::appItemRemoved(AppItem *appItem)
 {
+    ThemeAppIcon::insertCache(appItem->appName(), appItem->appIcon());
     emit itemRemoved(appItem);
     m_itemList.removeOne(appItem);
 

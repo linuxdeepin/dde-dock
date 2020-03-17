@@ -28,6 +28,8 @@
 #include <QPixmapCache>
 #include <QCryptographicHash>
 
+QMap<QString, QIcon> ThemeAppIcon::m_iconCache;
+
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
 
@@ -80,7 +82,15 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
         }
 
         // load pixmap from Icon-Theme
-        const QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+        QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+        if(m_iconCache.contains(iconName)) {
+            if(QIcon::hasThemeIcon(iconName)) {
+                m_iconCache.remove(iconName);
+            } else {
+                icon = m_iconCache[iconName];
+            }
+        }
+
         const int fakeSize = std::max(48, s); // cannot use 16x16, cause 16x16 is label icon
         pixmap = icon.pixmap(QSize(fakeSize, fakeSize));
         if (!pixmap.isNull())

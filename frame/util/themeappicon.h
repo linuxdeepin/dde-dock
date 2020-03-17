@@ -23,15 +23,28 @@
 #define THEMEAPPICON_H
 
 #include <QObject>
+#include <QIcon>
+#include <QMap>
 
 class ThemeAppIcon : public QObject
 {
     Q_OBJECT
 public:
-    explicit ThemeAppIcon(QObject *parent = 0);
+    explicit ThemeAppIcon(QObject *parent = nullptr);
     ~ThemeAppIcon();
 
+    static void insertCache(const QString& iconName, const QIcon& icon) {
+        if(!m_iconCache.contains(iconName)) m_iconCache.insert(iconName, icon);
+    }
+
+    static void removeCache(const QString& iconName) {
+        if(m_iconCache.contains(iconName)) m_iconCache.remove(iconName);
+    }
+
     static const QPixmap getIcon(const QString iconName, const int size, const qreal ratio);
+
+private:
+    static QMap<QString, QIcon> m_iconCache;
 };
 
 #endif // THEMEAPPICON_H

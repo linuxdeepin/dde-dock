@@ -142,6 +142,11 @@ const QString AppItem::appId() const
     return m_id;
 }
 
+const QString AppItem::appName() const
+{
+    return m_itemEntryInter->icon();
+}
+
 const bool AppItem::isValid() const
 {
     return m_itemEntryInter->isValid() && !m_itemEntryInter->id().isEmpty();
