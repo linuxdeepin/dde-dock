@@ -80,7 +80,7 @@ func (m *Manager) initOnBatteryChangedHandler() {
 func (m *Manager) handleBeforeSuspend() {
 	m.setPrepareSuspend(suspendStatePrepare)
 	logger.Debug("before sleep")
-	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+	if m.SleepLock.Get() {
 		m.lockWaitShow(5*time.Second, false)
 	}
 }
@@ -88,7 +88,7 @@ func (m *Manager) handleBeforeSuspend() {
 func (m *Manager) handleWakeup() {
 	m.setPrepareSuspend(suspendStateWakeup)
 	logger.Debug("wakeup")
-	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+	if m.SleepLock.Get() {
 		m.doLock(true)
 	}
 
@@ -180,7 +180,7 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 			if count == 3 {
 				// after 3 seconds, lock and then show dde low power
 				go func() {
-					if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+					if m.SleepLock.Get() {
 						m.lockWaitShow(5*time.Second, false)
 					}
 					doShowDDELowPower()
