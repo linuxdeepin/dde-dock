@@ -541,10 +541,12 @@ func (psp *powerSavePlan) isWindowFullScreenAndFocused(xid x.Window) (bool, erro
 	for _, s := range states {
 		if s == psp.atomNetWMStateFullscreen {
 			found++
-		} else if s == psp.atomNetWMStateFocused {
-			found++
 		}
-		if found == 2 {
+		//后端的代码之前是基于deepin-wm这个窗口适配，现在换成了kwin,state中没有 focus 这个属性了
+		//else if s == psp.atomNetWMStateFocused {
+		//	found++
+		//}
+		if found == 1 {
 			return true, nil
 		}
 	}
