@@ -246,8 +246,7 @@ func (g *Grub2) PrepareGfxmodeDetect(sender dbus.Sender) *dbus.Error {
 
 	gfxmodes, err := g.getGfxmodesFromXRandr(sender)
 	if err != nil {
-		logger.Warning("failed to get gfxmodes from XRandr:", err)
-		return dbusutil.ToError(err)
+		logger.Debug("failed to get gfxmodes from XRandr:", err)
 	}
 
 	gfxmodes.SortDesc()

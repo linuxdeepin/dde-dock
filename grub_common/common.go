@@ -220,7 +220,7 @@ func IsGfxmodeDetectFailed(params map[string]string) bool {
 
 func HasDeepinGfxmodeMod() bool {
 	dir := "/boot/grub"
-	for _, platform := range []string{"i386-pc", "x86_64-efi"} {
+	for _, platform := range []string{"i386-pc", "x86_64-efi", "arm64-efi"} {
 		modFile := filepath.Join(dir, platform, "deepin_gfxmode.mod")
 		_, err := os.Stat(modFile)
 		if err == nil {

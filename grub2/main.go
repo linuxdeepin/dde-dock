@@ -80,7 +80,7 @@ func PrepareGfxmodeDetect() error {
 
 	gfxmodes, err := grub_common.GetGfxmodesFromXRandr()
 	if err != nil {
-		return err
+		logger.Debug("failed to gfxmodes from XRandr:", err)
 	}
 	gfxmodes.SortDesc()
 	logger.Debug("gfxmodes:", gfxmodes)
