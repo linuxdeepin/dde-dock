@@ -173,7 +173,7 @@ MainWindow::MainWindow(QWidget *parent)
     for (auto item : DockItemManager::instance()->itemList())
         m_mainPanel->insertItem(-1, item);
 
-    m_dragWidget->setAccessibleName("dock-dragwidget");
+    m_dragWidget->setAccessibleName("Form_dragwidget");
     m_dragWidget->setMouseTracking(true);
     m_dragWidget->setFocusPolicy(Qt::NoFocus);
 

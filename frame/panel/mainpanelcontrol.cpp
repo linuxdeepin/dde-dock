@@ -96,16 +96,16 @@ MainPanelControl::~MainPanelControl()
 void MainPanelControl::init()
 {
     // 主窗口
-    m_fixedSpliter->setAccessibleName("spliter_fix");
-    m_appSpliter->setAccessibleName("spliter_app");
-    m_traySpliter->setAccessibleName("spliter_tray");
+    m_fixedSpliter->setAccessibleName("Splitter_fix");
+    m_appSpliter->setAccessibleName("Splitter_app");
+    m_traySpliter->setAccessibleName("Splitter_tray");
 
-    m_appAreaWidget->setAccessibleName("dock-apparea");
-    m_trayAreaWidget->setAccessibleName("dock-trayarea");
-    m_fixedAreaWidget->setAccessibleName("dock-fixedarea");
-    m_appAreaSonWidget->setAccessibleName("dock-appsonarea");
-    m_pluginAreaWidget->setAccessibleName("dock-pluginarea");
-    m_desktopWidget->setObjectName("dock-showdesktoparea");// 单独处理，accessible标记为button类型
+    m_appAreaWidget->setAccessibleName("Form_apparea");
+    m_trayAreaWidget->setAccessibleName("Form_trayarea");
+    m_fixedAreaWidget->setAccessibleName("Form_fixedarea");
+    m_appAreaSonWidget->setAccessibleName("Form_appsonarea");
+    m_pluginAreaWidget->setAccessibleName("Form_pluginarea");
+    m_desktopWidget->setObjectName("Btn-showdesktoparea");// 单独处理，accessible标记为button类型
 
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);

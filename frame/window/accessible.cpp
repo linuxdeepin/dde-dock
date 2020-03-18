@@ -23,6 +23,11 @@
 
 QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
 {
+    // 避免重复生成
+    static QMap< QObject *, QString > objnameMap;
+    if (!objnameMap[w].isEmpty())
+        return objnameMap[w];
+
     static QMap< QAccessible::Role, QList< QString > > accessibleMap;
     QString oldAccessName = w->accessibleName();
     oldAccessName.replace(SEPEATOR, "");
@@ -41,20 +46,25 @@ QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
     accessibleName += oldAccessName.isEmpty() ? fallback : oldAccessName;
 
     // 检查名称是否唯一
-
     if (accessibleMap[r].contains(accessibleName)) {
         // 获取编号，然后+1
         int pos = accessibleName.indexOf(SEPEATOR);
         int id = accessibleName.mid(pos + 1).toInt();
+
         QString newAccessibleName;
         do {
+            // 一直找到一个不重复的名字
             newAccessibleName = accessibleName + SEPEATOR + QString::number(++id);
         } while (accessibleMap[r].contains(newAccessibleName));
+
         accessibleMap[r].append(newAccessibleName);
+        objnameMap.insert(w, newAccessibleName);
 
         return newAccessibleName;
     } else {
         accessibleMap[r].append(accessibleName);
+        objnameMap.insert(w, accessibleName);
+
         return accessibleName;
     }
 }
@@ -97,7 +107,7 @@ QString AccessibleDockPopupWindow::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w, this->role(), "DockPopupWindow");
+        return getAccesibleName(m_w, this->role(), "PopupWindow");
     case QAccessible::Description:
         return m_description;
     default:
@@ -144,7 +154,7 @@ QString AccessiblePluginsItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return "plugin-" + m_w->pluginName();
+        return getAccesibleName(m_w, this->role(), m_w->pluginName());
     case QAccessible::Description:
         return m_description;
     default:
@@ -156,7 +166,7 @@ QString AccessibleTrayPluginItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return "trayplugin-" + m_w->pluginName();
+        return getAccesibleName(m_w, this->role(), m_w->pluginName());
     case QAccessible::Description:
         return m_description;
     default:

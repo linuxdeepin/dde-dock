@@ -73,8 +73,6 @@ void DockPopupWindow::setContent(QWidget *content)
     QAccessibleEvent event(this, QAccessible::NameChanged);
     QAccessible::updateAccessibility(&event);
 
-    setAccessibleName(content->objectName() + "-popup");
-
     DArrowRectangle::setContent(content);
 }
 
@@ -129,9 +127,8 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
         return false;
 
     // FIXME: ensure position move after global mouse release event
-    if (isVisible())
-    {
-        QTimer::singleShot(10, this, [=] {
+    if (isVisible()) {
+        QTimer::singleShot(10, this, [ = ] {
             // NOTE(sbw): double check is necessary, in this time, the popup maybe already hided.
             if (isVisible())
                 show(m_lastPoint, m_model);
@@ -146,7 +143,7 @@ void DockPopupWindow::onGlobMouseRelease(const QPoint &mousePos, const int flag)
     Q_ASSERT(m_model);
 
     if (!((flag == DRegionMonitor::WatchedFlags::Button_Left) ||
-          (flag == DRegionMonitor::WatchedFlags::Button_Right))) {
+            (flag == DRegionMonitor::WatchedFlags::Button_Right))) {
         return;
     }
 

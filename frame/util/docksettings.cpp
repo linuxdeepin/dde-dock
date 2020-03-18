@@ -73,7 +73,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_itemManager(DockItemManager::instance(this))
     , m_trashPluginShow(true)
 {
-    m_settingsMenu.setAccessibleName("docksettingsmenu");
+    m_settingsMenu.setTitle("docksettingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -99,14 +99,14 @@ DockSettings::DockSettings(QWidget *parent)
     m_smartHideAct.setCheckable(true);
 
     QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
-    modeSubMenu->setAccessibleName("modesubmenu");
+    modeSubMenu->setAccessibleName("Menu_modesub");
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
     QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
     QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
-    locationSubMenu->setAccessibleName("locationsubmenu");
+    locationSubMenu->setAccessibleName("Menu_locationsub");
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
     locationSubMenu->addAction(&m_leftPosAct);
@@ -115,7 +115,7 @@ DockSettings::DockSettings(QWidget *parent)
     locationSubMenuAct->setMenu(locationSubMenu);
 
     QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
-    statusSubMenu->setAccessibleName("statussubmenu");
+    statusSubMenu->setAccessibleName("Menu_statussub");
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
     statusSubMenu->addAction(&m_smartHideAct);
@@ -123,7 +123,7 @@ DockSettings::DockSettings(QWidget *parent)
     statusSubMenuAct->setMenu(statusSubMenu);
 
     m_hideSubMenu = new QMenu(&m_settingsMenu);
-    m_hideSubMenu->setAccessibleName("pluginsmenu");
+    m_hideSubMenu->setAccessibleName("Menu_plugins");
     QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
     hideSubMenuAct->setMenu(m_hideSubMenu);
 
@@ -131,7 +131,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(locationSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
     m_settingsMenu.addAction(hideSubMenuAct);
-    m_settingsMenu.setTitle("Settings Menu");
+    m_settingsMenu.setAccessibleName("Menu_settingsmenu");
 
     connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(GSettingsByMenu(), &QGSettings::changed, this, &DockSettings::onGSettingsChanged);

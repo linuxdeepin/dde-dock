@@ -89,7 +89,10 @@ DWIDGET_USE_NAMESPACE
     QString m_description;\
 
 // 左键点击
-#define FUNC_PRESS(classobj)     QStringList actionNames() const override{return QStringList() << pressAction();}\
+#define FUNC_PRESS(classobj)     QStringList actionNames() const override{\
+        if(classobj->isEnabled())\
+            return QStringList();\
+        return QStringList() << pressAction();}\
     void doAction(const QString &actionName) override{\
         if(actionName == pressAction())\
         {\
@@ -102,7 +105,10 @@ DWIDGET_USE_NAMESPACE
     }\
 
 // 右键点击
-#define FUNC_SHOWMENU(classobj)     QStringList actionNames() const override{return QStringList() << showMenuAction();}\
+#define FUNC_SHOWMENU(classobj)     QStringList actionNames() const override{\
+        if(classobj->isEnabled())\
+            return QStringList();\
+        return QStringList() << showMenuAction();}\
     void doAction(const QString &actionName) override{\
         if(actionName == showMenuAction())\
         {\
@@ -115,7 +121,10 @@ DWIDGET_USE_NAMESPACE
     }\
 
 // 左键和右键点击
-#define FUNC_PRESS_SHOWMENU(classobj)     QStringList actionNames() const override{return QStringList() << pressAction() << showMenuAction();}\
+#define FUNC_PRESS_SHOWMENU(classobj)     QStringList actionNames() const override{\
+        if(classobj->isEnabled())\
+            return QStringList();\
+        return QStringList() << pressAction() << showMenuAction();}\
     void doAction(const QString &actionName) override{\
         if(actionName == pressAction())\
         {\
@@ -208,7 +217,7 @@ SET_LABEL_ACCESSIBLE(TipsWidget)
 SET_FORM_ACCESSIBLE(DockPopupWindow)
 
 SET_BUTTON_ACCESSIBLE(LauncherItem)
-SET_BUTTON_ACCESSIBLE(AppItem)
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(AppItem)
 SET_BUTTON_ACCESSIBLE(PreviewContainer)
 SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(PluginsItem)
 SET_BUTTON_ACCESSIBLE(TrayPluginItem)

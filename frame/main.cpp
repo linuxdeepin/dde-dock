@@ -106,7 +106,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     GET_ACCESSIBLE(classname, MultitaskingWidget);
     GET_ACCESSIBLE(classname, ShowDesktopWidget);
     //    USE_ACCESSIBLE(classname,OverlayWarningWidget);
-    GET_ACCESSIBLE_BY_OBJECTNAME(classname, QWidget, "dock-showdesktoparea");//TODO 点击坐标有偏差
+    GET_ACCESSIBLE_BY_OBJECTNAME(classname, QWidget, "Btn-showdesktoparea");//TODO 点击坐标有偏差
     GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-2d");
     GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-3d");
     GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
