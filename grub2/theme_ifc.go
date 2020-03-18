@@ -68,17 +68,17 @@ func (theme *Theme) GetBackground() (string, *dbus.Error) {
 	theme.g.PropsMu.RUnlock()
 
 	if strings.Contains(themeFile, "/deepin/") {
-		_, err := os.Stat(themeBgFile)
+		_, err := os.Stat(defaultGrubBackground)
 		if err != nil {
 			if os.IsNotExist(err) {
-				return fallbackThemeBgFile, nil
+				return fallbackGrubBackground, nil
 			}
 			return "", dbusutil.ToError(err)
 		} else {
-			return themeBgFile, nil
+			return defaultGrubBackground, nil
 		}
 	} else if strings.Contains(themeFile, "/deepin-fallback/") {
-		return fallbackThemeBgFile, nil
+		return fallbackGrubBackground, nil
 	} else {
 		return "", nil
 	}

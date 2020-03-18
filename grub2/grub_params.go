@@ -10,22 +10,25 @@ import (
 )
 
 const (
-	grubParamsFile = "/etc/default/grub"
-)
+	grubParamsFile   = "/etc/default/grub"
+	themesDir        = "/boot/grub/themes"
+	defaultThemeDir  = themesDir + "/deepin"
+	fallbackThemeDir = defaultThemeDir + "-fallback"
 
-const (
 	grubBackground = "GRUB_BACKGROUND"
 	grubDefault    = "GRUB_DEFAULT"
 	grubGfxmode    = "GRUB_GFXMODE"
 	grubTheme      = "GRUB_THEME"
 	grubTimeout    = "GRUB_TIMEOUT"
 
-	defaultGrubTheme      = "/boot/grub/themes/deepin/theme.txt"
-	fallbackGrubTheme     = "/boot/grub/themes/deepin-fallback/theme.txt"
-	defaultGrubDefault    = "0"
-	defaultGrubDefaultInt = 0
-	defaultGrubGfxMode    = "auto"
-	defaultGrubTimeoutInt = 5
+	defaultGrubTheme       = defaultThemeDir + "/theme.txt"
+	fallbackGrubTheme      = fallbackThemeDir + "/theme.txt"
+	defaultGrubBackground  = defaultThemeDir + "/background.jpg"
+	fallbackGrubBackground = fallbackThemeDir + "/background.jpg"
+	defaultGrubDefault     = "0"
+	defaultGrubDefaultInt  = 0
+	defaultGrubGfxMode     = "auto"
+	defaultGrubTimeoutInt  = 5
 )
 
 func decodeShellValue(in string) string {

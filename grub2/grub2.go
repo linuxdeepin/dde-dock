@@ -155,11 +155,12 @@ func getModifyTaskEnableTheme(enable bool, lang string, gfxmodeDetectState gfxmo
 			if gfxmodeDetectState == gfxmodeDetectStateNone {
 				// normal
 				params[grubTheme] = quoteString(defaultGrubTheme)
+				params[grubBackground] = quoteString(defaultGrubBackground)
 			} else {
 				// detecting or failed
 				params[grubTheme] = quoteString(fallbackGrubTheme)
+				params[grubBackground] = quoteString(fallbackGrubBackground)
 			}
-			params[grubBackground] = ""
 		}
 		return modifyTask{
 			paramsModifyFunc: f,
@@ -169,7 +170,7 @@ func getModifyTaskEnableTheme(enable bool, lang string, gfxmodeDetectState gfxmo
 	} else {
 		f := func(params map[string]string) {
 			delete(params, grubTheme)
-			delete(params, grubBackground)
+			params[grubBackground] = ""
 		}
 		return modifyTask{
 			paramsModifyFunc: f,
@@ -223,10 +224,10 @@ func getModifyFuncPrepareGfxmodeDetect(gfxmodesStr string) func(map[string]strin
 		if params[grubTheme] != "" {
 			// theme enabled
 			params[grubTheme] = fallbackGrubTheme
-			delete(params, grubBackground)
+			params[grubBackground] = fallbackGrubBackground
 		} else {
 			delete(params, grubTheme)
-			delete(params, grubBackground)
+			params[grubBackground] = ""
 		}
 
 		params[grub_common.DeepinGfxmodeDetect] = "1"
@@ -297,8 +298,8 @@ func (g *Grub2) finishGfxmodeDetect(params map[string]string) {
 		paramsModifyFunc: func(params map[string]string) {
 			if themeEnabled {
 				params[grubTheme] = quoteString(defaultGrubTheme)
+				params[grubBackground] = quoteString(defaultGrubBackground)
 			}
-			delete(params, grubBackground)
 			params[grubGfxmode] = currentGfxmodeStr
 			params[grub_common.DeepinGfxmodeAdjusted] = "1"
 			delete(params, grub_common.DeepinGfxmodeDetect)

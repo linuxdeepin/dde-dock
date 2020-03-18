@@ -25,13 +25,6 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 )
 
-const (
-	themeDir            = "/boot/grub/themes/deepin"
-	fallbackThemeDir    = "/boot/grub/themes/deepin-fallback"
-	themeBgFile         = themeDir + "/background.jpg"
-	fallbackThemeBgFile = fallbackThemeDir + "/background.jpg"
-)
-
 // Theme is a dbus object which provide properties and methods to
 // setup deepin grub2 theme.
 type Theme struct {
