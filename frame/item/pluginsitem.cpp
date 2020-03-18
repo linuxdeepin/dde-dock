@@ -57,7 +57,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     hLayout->setMargin(0);
 
     setLayout(hLayout);
-    setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
+    setAccessibleName(pluginInter->pluginName());
     setAttribute(Qt::WA_TranslucentBackground);
 
     const QByteArray &schema{
@@ -210,8 +210,8 @@ void PluginsItem::leaveEvent(QEvent *event)
     // here we should check the mouse position to ensure the mouse is really leaved
     // because this leaveEvent will also be called if setX11PassMouseEvent(false) is invoked
     // in XWindowTrayWidget::sendHoverEvent()
-        m_hover = false;
-        update();
+    m_hover = false;
+    update();
 
     DockItem::leaveEvent(event);
 }

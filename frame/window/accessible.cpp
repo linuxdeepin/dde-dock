@@ -92,6 +92,7 @@ QString AccessibleMainPanelControl::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleTipsWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -154,6 +155,7 @@ QString AccessiblePluginsItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
+        qDebug() << m_w->pluginName();
         return getAccesibleName(m_w, this->role(), m_w->pluginName());
     case QAccessible::Description:
         return m_description;
@@ -508,7 +510,7 @@ QString AccessibleDImageButton::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return m_w->objectName();
+        return getAccesibleName(m_w, this->role(), m_w->objectName());
     case QAccessible::Description:
         return m_description;
     default:
@@ -519,21 +521,11 @@ QString AccessibleDSwitchButton::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return /*m_w->objectName()*/"DSwitchButton";
+        return getAccesibleName(m_w, this->role(), m_w->text());
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
-QString AccessibleQPushButton::text(QAccessible::Text t) const
-{
-    switch (t) {
-    case QAccessible::Name:
-        return m_w->text();
-    case QAccessible::Description:
-        return m_description;
-    default:
-        return QString();
-    }
-}
+

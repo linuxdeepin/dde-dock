@@ -60,7 +60,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
 {
     m_closeBtn2D->setFixedSize(24, 24);
-    m_closeBtn2D->setObjectName("closebutton-2d");
+    m_closeBtn2D->setObjectName("Btn_closebutton-2d");
     m_closeBtn2D->setNormalPic(":/icons/resources/close_round_normal.svg");
     m_closeBtn2D->setHoverPic(":/icons/resources/close_round_hover.svg");
     m_closeBtn2D->setPressPic(":/icons/resources/close_round_press.svg");

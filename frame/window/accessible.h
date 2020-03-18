@@ -74,6 +74,7 @@
 
 #include <DImageButton>
 #include <DSwitchButton>
+#include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -260,8 +261,6 @@ SET_BUTTON_ACCESSIBLE(QWidget)
 SET_BUTTON_ACCESSIBLE(DImageButton)
 SET_BUTTON_ACCESSIBLE(DSwitchButton)
 
-// qt class
-SET_BUTTON_ACCESSIBLE(QPushButton)
 #endif // ACCESSIBLE_H
 
 // TODO list

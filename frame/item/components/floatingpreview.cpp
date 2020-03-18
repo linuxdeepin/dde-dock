@@ -38,7 +38,7 @@ FloatingPreview::FloatingPreview(QWidget *parent)
     , m_closeBtn3D(new DImageButton)
     , m_titleBtn(new DPushButton)
 {
-    m_closeBtn3D->setObjectName("closebutton-3d");
+    m_closeBtn3D->setObjectName("Btn_closebutton-3d");
     m_closeBtn3D->setFixedSize(24, 24);
     m_closeBtn3D->setNormalPic(":/icons/resources/close_round_normal.svg");
     m_closeBtn3D->setHoverPic(":/icons/resources/close_round_hover.svg");
@@ -48,7 +48,7 @@ FloatingPreview::FloatingPreview(QWidget *parent)
     m_titleBtn->setForegroundRole(QPalette::Text);
     m_titleBtn->setFocusPolicy(Qt::NoFocus);
     m_titleBtn->setAttribute(Qt::WA_TransparentForMouseEvents);
-    m_titleBtn->setAccessibleName("title");
+    m_titleBtn->setAccessibleName("Btn_title");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_closeBtn3D);
