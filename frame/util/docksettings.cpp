@@ -54,6 +54,12 @@ static QGSettings *GSettingsByTrash()
     return &settings;
 }
 
+static QGSettings *GSettingsAiAssistant()
+{
+    static QGSettings settings("com.deepin.dde.dock.module.AiAssistant");
+    return &settings;
+}
+
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
@@ -71,7 +77,8 @@ DockSettings::DockSettings(QWidget *parent)
     , m_smartHideAct(tr("Smart Hide"), this)
     , m_displayInter(new DBusDisplay(this))
     , m_itemManager(DockItemManager::instance(this))
-    , m_trashPluginShow(true)
+    , m_trashVisible(true)
+    , m_aiAssistantVisible(true)
 {
     m_settingsMenu.setTitle("docksettingsmenu");
     checkService();
@@ -153,7 +160,10 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
-    QTimer::singleShot(0, this, [ = ] {onGSettingsChanged("enable");});
+
+    QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
+    connect(GSettingsAiAssistant(), &QGSettings::changed, this, &DockSettings::onAiassitantGSettingsChanged);
+    QTimer::singleShot(0, this, [=] {onAiassitantGSettingsChanged("enable");});
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -254,7 +264,11 @@ void DockSettings::showDockSettingsMenu()
         const QString &name = p->pluginName();
         const QString &display = p->pluginDisplayName();
 
-        if (!m_trashPluginShow && name == "trash") {
+        if (!m_trashVisible && name == "trash") {
+            continue;
+        }
+
+        if (!m_aiAssistantVisible && name == "AiAssistant") {
             continue;
         }
 
@@ -642,6 +656,19 @@ void DockSettings::onTrashGSettingsChanged(const QString &key)
     QGSettings *setting = GSettingsByTrash();
 
     if (setting->keys().contains("enable")) {
-        m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
+         m_trashVisible = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
+    }
+}
+
+void DockSettings::onAiassitantGSettingsChanged(const QString &key)
+{
+    if (key != "enable") {
+        return ;
+    }
+
+    QGSettings *setting = GSettingsAiAssistant();
+
+    if (setting->keys().contains("enable")) {
+         m_aiAssistantVisible = GSettingsAiAssistant()->keys().contains("enable") && GSettingsAiAssistant()->get("enable").toBool();
     }
 }

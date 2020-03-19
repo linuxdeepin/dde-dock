@@ -106,6 +106,7 @@ private slots:
     void trayVisableCountChanged(const int &count);
     void onWindowSizeChanged();
     void onTrashGSettingsChanged(const QString &key);
+    void onAiassitantGSettingsChanged(const QString &key);
 
 private:
     DockSettings(QWidget *parent = 0);
@@ -146,7 +147,8 @@ private:
 
     DBusDisplay *m_displayInter;
     DockItemManager *m_itemManager;
-    bool m_trashPluginShow;
+    bool m_trashVisible;
+    bool m_aiAssistantVisible;
 };
 
 #endif // DOCKSETTINGS_H
