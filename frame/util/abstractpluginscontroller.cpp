@@ -188,8 +188,10 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         Dtk::Core::DUtil::DNotifySender(notifyMessage.arg(QFileInfo(pluginFile).fileName())).appIcon("dialog-warning").call();
         return;
     }
-    if ((Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) && (interface->pluginName() == "multitasking"))
-        return;
+    if (interface->pluginName() == "multitasking") {
+        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer)
+            return;
+    }
 
     m_pluginsMap.insert(interface, QMap<QString, QObject *>());
 
