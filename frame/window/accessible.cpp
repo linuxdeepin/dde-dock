@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "accessible.h"
-#define SEPEATOR "_"
+#define SEPARATOR "_"
 
 QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
 {
@@ -30,7 +30,7 @@ QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
 
     static QMap< QAccessible::Role, QList< QString > > accessibleMap;
     QString oldAccessName = w->accessibleName();
-    oldAccessName.replace(SEPEATOR, "");
+    oldAccessName.replace(SEPARATOR, "");
 
     // 按照类型添加固定前缀
     QMetaEnum metaEnum = QMetaEnum::fromType<QAccessible::Role>();
@@ -42,19 +42,19 @@ QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
     }
 
     // 再加上标识
-    QString accessibleName = QString::fromLatin1(prefix) + SEPEATOR;
+    QString accessibleName = QString::fromLatin1(prefix) + SEPARATOR;
     accessibleName += oldAccessName.isEmpty() ? fallback : oldAccessName;
 
     // 检查名称是否唯一
     if (accessibleMap[r].contains(accessibleName)) {
         // 获取编号，然后+1
-        int pos = accessibleName.indexOf(SEPEATOR);
+        int pos = accessibleName.indexOf(SEPARATOR);
         int id = accessibleName.mid(pos + 1).toInt();
 
         QString newAccessibleName;
         do {
             // 一直找到一个不重复的名字
-            newAccessibleName = accessibleName + SEPEATOR + QString::number(++id);
+            newAccessibleName = accessibleName + SEPARATOR + QString::number(++id);
         } while (accessibleMap[r].contains(newAccessibleName));
 
         accessibleMap[r].append(newAccessibleName);
@@ -104,6 +104,7 @@ QString AccessibleTipsWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleDockPopupWindow::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -139,6 +140,7 @@ QString AccessibleAppItem::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessiblePreviewContainer::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -175,6 +177,7 @@ QString AccessibleTrayPluginItem::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessiblePlaceholderItem::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -186,6 +189,7 @@ QString AccessiblePlaceholderItem::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleAppDragWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -197,6 +201,7 @@ QString AccessibleAppDragWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleAppSnapshot::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -244,6 +249,7 @@ QString AccessibleSystemTrayItem::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleFashionTrayItem::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -255,6 +261,7 @@ QString AccessibleFashionTrayItem::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleFashionTrayWidgetWrapper::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -266,6 +273,7 @@ QString AccessibleFashionTrayWidgetWrapper::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleFashionTrayControlWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -277,6 +285,7 @@ QString AccessibleFashionTrayControlWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleAttentionContainer::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -288,6 +297,7 @@ QString AccessibleAttentionContainer::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleHoldContainer::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -299,6 +309,7 @@ QString AccessibleHoldContainer::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleNormalContainer::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -310,6 +321,7 @@ QString AccessibleNormalContainer::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleSpliterAnimated::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -321,6 +333,7 @@ QString AccessibleSpliterAnimated::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleIndicatorTrayWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -416,6 +429,7 @@ QString AccessibleDatetimeWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleOnboardItem::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -427,6 +441,7 @@ QString AccessibleOnboardItem::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleTrashWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -438,6 +453,7 @@ QString AccessibleTrashWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessiblePopupControlWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -449,6 +465,7 @@ QString AccessiblePopupControlWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleShutdownWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -460,6 +477,7 @@ QString AccessibleShutdownWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleMultitaskingWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -495,6 +513,7 @@ QString AccessibleShowDesktopWidget::text(QAccessible::Text t) const
 //        return QString();
 //    }
 //}
+
 QString AccessibleQWidget::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -506,6 +525,7 @@ QString AccessibleQWidget::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleDImageButton::text(QAccessible::Text t) const
 {
     switch (t) {
@@ -517,6 +537,7 @@ QString AccessibleDImageButton::text(QAccessible::Text t) const
         return QString();
     }
 }
+
 QString AccessibleDSwitchButton::text(QAccessible::Text t) const
 {
     switch (t) {

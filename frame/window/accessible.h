@@ -91,7 +91,7 @@ DWIDGET_USE_NAMESPACE
 
 // 左键点击
 #define FUNC_PRESS(classobj)     QStringList actionNames() const override{\
-        if(classobj->isEnabled())\
+        if(!classobj->isEnabled())\
             return QStringList();\
         return QStringList() << pressAction();}\
     void doAction(const QString &actionName) override{\
@@ -107,7 +107,7 @@ DWIDGET_USE_NAMESPACE
 
 // 右键点击
 #define FUNC_SHOWMENU(classobj)     QStringList actionNames() const override{\
-        if(classobj->isEnabled())\
+        if(!classobj->isEnabled())\
             return QStringList();\
         return QStringList() << showMenuAction();}\
     void doAction(const QString &actionName) override{\
@@ -123,7 +123,7 @@ DWIDGET_USE_NAMESPACE
 
 // 左键和右键点击
 #define FUNC_PRESS_SHOWMENU(classobj)     QStringList actionNames() const override{\
-        if(classobj->isEnabled())\
+        if(!classobj->isEnabled())\
             return QStringList();\
         return QStringList() << pressAction() << showMenuAction();}\
     void doAction(const QString &actionName) override{\
@@ -234,7 +234,7 @@ SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SNITrayWidget)
 SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SystemTrayItem)
 SET_FORM_ACCESSIBLE(FashionTrayItem)
 SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper)
-SET_FORM_ACCESSIBLE(FashionTrayControlWidget)
+SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget)
 SET_FORM_ACCESSIBLE(AttentionContainer)
 SET_FORM_ACCESSIBLE(HoldContainer)
 SET_FORM_ACCESSIBLE(NormalContainer)
@@ -248,13 +248,13 @@ SET_SLIDER_ACCESSIBLE(VolumeSlider)
 SET_SEPARATOR_ACCESSIBLE(HorizontalSeparator)
 
 // fixed plugin
-SET_BUTTON_ACCESSIBLE(DatetimeWidget)
-SET_BUTTON_ACCESSIBLE(OnboardItem)
-SET_BUTTON_ACCESSIBLE(TrashWidget)
+SET_FORM_ACCESSIBLE(DatetimeWidget)
+SET_FORM_ACCESSIBLE(OnboardItem)
+SET_FORM_ACCESSIBLE(TrashWidget)
 SET_BUTTON_ACCESSIBLE(PopupControlWidget)
-SET_BUTTON_ACCESSIBLE(ShutdownWidget)
-SET_BUTTON_ACCESSIBLE(MultitaskingWidget)
-SET_BUTTON_ACCESSIBLE(ShowDesktopWidget)
+SET_FORM_ACCESSIBLE(ShutdownWidget)
+SET_FORM_ACCESSIBLE(MultitaskingWidget)
+SET_FORM_ACCESSIBLE(ShowDesktopWidget)
 
 // special class for other useage
 SET_BUTTON_ACCESSIBLE(QWidget)
@@ -262,12 +262,3 @@ SET_BUTTON_ACCESSIBLE(DImageButton)
 SET_BUTTON_ACCESSIBLE(DSwitchButton)
 
 #endif // ACCESSIBLE_H
-
-// TODO list
-//Dtk::Widget::DArrowRectangle
-//PluginsItem PowerStatusWidget(0xa54b30)
-//PowerStatusWidget
-//QAbstractButton
-//SsidButton
-//WiredItem
-//WirelessItem
