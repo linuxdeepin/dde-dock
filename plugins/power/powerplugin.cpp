@@ -234,6 +234,10 @@ void PowerPlugin::refreshTipsData()
         QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
+        uint sencond = time.toString("ss").toUInt();
+        if (min == 0 && sencond > 0) {
+            min = 1;
+        }
         QString tips;
         if(timeToFull == 0) {
             tips = tr("Charging %1 ....").arg(value);
