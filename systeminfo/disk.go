@@ -89,30 +89,18 @@ func (set diskInfoMap) Get(key dbus.ObjectPath) *diskInfo {
 }
 
 func getDiskCap() (uint64, error) {
-	set, err := parseUDisksManagers()
+	dlist, err := GetDiskList()
 	if err != nil {
+		fmt.Println("Failed to get disk list:", err)
 		return 0, err
 	}
 
-	key := set.GetRootDrive()
-	info := set.Get(key)
-	if info != nil {
-		return info.Size, nil
+	rdisk := dlist.GetRoot()
+	if rdisk == nil {
+		fmt.Println("Failed to get root disk")
+		return 0, err
 	}
-
-	key = set.GetRootTable()
-	info = set.Get(key)
-	if info != nil {
-		return info.Size, nil
-	}
-
-	// not found drive and table, try root mount point
-	size := set.GetRootSize()
-	err = nil
-	if size == 0 {
-		err = fmt.Errorf("failed to get disk capacity: not found root mount point")
-	}
-	return size, err
+	return uint64(rdisk.Size), err
 }
 
 func parseUDisksManagers() (diskInfoMap, error) {
