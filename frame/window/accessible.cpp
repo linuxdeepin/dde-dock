@@ -19,18 +19,97 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "accessible.h"
+#define SEPARATOR "_"
 
-
-QString getAccesibleName(QWidget *w,QString fallback)
+QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
 {
-    return w->accessibleName().isEmpty()?fallback:w->accessibleName();
+    // 避免重复生成
+    static QMap< QObject *, QString > objnameMap;
+    if (!objnameMap[w].isEmpty())
+        return objnameMap[w];
+
+    static QMap< QAccessible::Role, QList< QString > > accessibleMap;
+    QString oldAccessName = w->accessibleName();
+    oldAccessName.replace(SEPARATOR, "");
+
+    // 按照类型添加固定前缀
+    QMetaEnum metaEnum = QMetaEnum::fromType<QAccessible::Role>();
+    QByteArray prefix = metaEnum.valueToKeys(r);
+    switch (r) {
+    case QAccessible::Button:       prefix = "Btn";         break;
+    case QAccessible::StaticText:   prefix = "Label";       break;
+    default:                        break;
+    }
+
+    // 再加上标识
+    QString accessibleName = QString::fromLatin1(prefix) + SEPARATOR;
+    accessibleName += oldAccessName.isEmpty() ? fallback : oldAccessName;
+
+    // 检查名称是否唯一
+    if (accessibleMap[r].contains(accessibleName)) {
+        // 获取编号，然后+1
+        int pos = accessibleName.indexOf(SEPARATOR);
+        int id = accessibleName.mid(pos + 1).toInt();
+
+        QString newAccessibleName;
+        do {
+            // 一直找到一个不重复的名字
+            newAccessibleName = accessibleName + SEPARATOR + QString::number(++id);
+        } while (accessibleMap[r].contains(newAccessibleName));
+
+        accessibleMap[r].append(newAccessibleName);
+        objnameMap.insert(w, newAccessibleName);
+
+        return newAccessibleName;
+    } else {
+        accessibleMap[r].append(accessibleName);
+        objnameMap.insert(w, accessibleName);
+
+        return accessibleName;
+    }
+}
+
+QString AccessibleMainWindow::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return getAccesibleName(m_w, this->role(), "mainwindow");
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
 }
 
 QString AccessibleMainPanelControl::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"mainpanelcontrol");
+        return getAccesibleName(m_w, this->role(), "mainpanelcontrol");
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
+}
+
+QString AccessibleTipsWidget::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return getAccesibleName(m_w, this->role(), "Tips");
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
+}
+
+QString AccessibleDockPopupWindow::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return getAccesibleName(m_w, this->role(), "PopupWindow");
     case QAccessible::Description:
         return m_description;
     default:
@@ -42,7 +121,7 @@ QString AccessibleLauncherItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"launcheritem");
+        return getAccesibleName(m_w, this->role(), "launcheritem");
     case QAccessible::Description:
         return m_description;
     default:
@@ -54,18 +133,19 @@ QString AccessibleAppItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->accessibleName());
+        return getAccesibleName(m_w, this->role(), "AppItem");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessiblePreviewContainer::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"previewcontainer");
+        return getAccesibleName(m_w, this->role(), "previewcontainer");
     case QAccessible::Description:
         return m_description;
     default:
@@ -77,7 +157,8 @@ QString AccessiblePluginsItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->pluginName());
+        qDebug() << m_w->pluginName();
+        return getAccesibleName(m_w, this->role(), m_w->pluginName());
     case QAccessible::Description:
         return m_description;
     default:
@@ -89,40 +170,43 @@ QString AccessibleTrayPluginItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->pluginName());
+        return getAccesibleName(m_w, this->role(), m_w->pluginName());
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessiblePlaceholderItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"placeholderitem");
+        return getAccesibleName(m_w, this->role(), "placeholderitem");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleAppDragWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"appdragwidget");
+        return getAccesibleName(m_w, this->role(), "appdragwidget");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleAppSnapshot::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"appsnapshot");
+        return getAccesibleName(m_w, this->role(), "appsnapshot");
     case QAccessible::Description:
         return m_description;
     default:
@@ -134,7 +218,7 @@ QString AccessibleFloatingPreview::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"floatingpreview");
+        return getAccesibleName(m_w, this->role(), "floatingpreview");
     case QAccessible::Description:
         return m_description;
     default:
@@ -146,7 +230,7 @@ QString AccessibleSNITrayWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->itemKeyForConfig());
+        return getAccesibleName(m_w, this->role(), m_w->itemKeyForConfig());
     case QAccessible::Description:
         return m_description;
     default:
@@ -158,95 +242,103 @@ QString AccessibleSystemTrayItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->itemKeyForConfig());
+        return getAccesibleName(m_w, this->role(), m_w->itemKeyForConfig());
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleFashionTrayItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"fashiontrayitem");
+        return getAccesibleName(m_w, this->role(), "fashiontrayitem");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleFashionTrayWidgetWrapper::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"fashiontraywrapper");
+        return getAccesibleName(m_w, this->role(), "fashiontraywrapper");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleFashionTrayControlWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"fashiontraycontrolwidget");
+        return getAccesibleName(m_w, this->role(), "fashiontraycontrolwidget");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleAttentionContainer::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"attentioncontainer");
+        return getAccesibleName(m_w, this->role(), "attentioncontainer");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleHoldContainer::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"holdcontainer");
+        return getAccesibleName(m_w, this->role(), "holdcontainer");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleNormalContainer::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"normalcontainer");
+        return getAccesibleName(m_w, this->role(), "normalcontainer");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleSpliterAnimated::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"spliteranimated");
+        return getAccesibleName(m_w, this->role(), "spliteranimated");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleIndicatorTrayWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->itemKeyForConfig());
+        return getAccesibleName(m_w, this->role(), m_w->itemKeyForConfig());
     case QAccessible::Description:
         return m_description;
     default:
@@ -258,19 +350,7 @@ QString AccessibleXEmbedTrayWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->itemKeyForConfig());
-    case QAccessible::Description:
-        return m_description;
-    default:
-        return QString();
-    }
-}
-
-QString AccessibleShowDesktopWidget::text(QAccessible::Text t) const
-{
-    switch (t) {
-    case QAccessible::Name:
-        return getAccesibleName(m_w,"showdesktop");
+        return getAccesibleName(m_w, this->role(), m_w->itemKeyForConfig());
     case QAccessible::Description:
         return m_description;
     default:
@@ -282,7 +362,7 @@ QString AccessibleSoundItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"sounditem");
+        return getAccesibleName(m_w, this->role(), "plugin-sounditem");
     case QAccessible::Description:
         return m_description;
     default:
@@ -294,7 +374,7 @@ QString AccessibleSoundApplet::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"soundapplet");
+        return getAccesibleName(m_w, this->role(), "soundapplet");
     case QAccessible::Description:
         return m_description;
     default:
@@ -306,7 +386,7 @@ QString AccessibleSinkInputWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"sinkinputwidget");
+        return getAccesibleName(m_w, this->role(), "sinkinputwidget");
     case QAccessible::Description:
         return m_description;
     default:
@@ -318,7 +398,7 @@ QString AccessibleVolumeSlider::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"volumeslider");
+        return getAccesibleName(m_w, this->role(), "volumeslider");
     case QAccessible::Description:
         return m_description;
     default:
@@ -330,90 +410,98 @@ QString AccessibleHorizontalSeparator::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"horizontalseparator");
+        return getAccesibleName(m_w, this->role(), "horizontalseparator");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
-QString AccessibleTipsWidget::text(QAccessible::Text t) const
-{
-    switch (t) {
-    case QAccessible::Name:
-        return getAccesibleName(m_w,m_w->text());
-    case QAccessible::Description:
-        return m_description;
-    default:
-        return QString();
-    }
-}
+
 QString AccessibleDatetimeWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"datetimewidget");
+        return getAccesibleName(m_w, this->role(), "plugin-datetime");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleOnboardItem::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"onboarditem");
+        return getAccesibleName(m_w, this->role(), "plugin-onboard");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleTrashWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"trashwidget");
+        return getAccesibleName(m_w, this->role(), "plugin-trash");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessiblePopupControlWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"popupcontrolwidget");
+        return getAccesibleName(m_w, this->role(), "popupcontrolwidget");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleShutdownWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"shutdownwidget");
+        return getAccesibleName(m_w, this->role(), "plugin-shutdown");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
 QString AccessibleMultitaskingWidget::text(QAccessible::Text t) const
 {
     switch (t) {
     case QAccessible::Name:
-        return getAccesibleName(m_w,"multitaskingwidget");
+        return getAccesibleName(m_w, this->role(), "plugin-multitasking");
     case QAccessible::Description:
         return m_description;
     default:
         return QString();
     }
 }
+
+QString AccessibleShowDesktopWidget::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return getAccesibleName(m_w, this->role(), "plugin-showdesktop");
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
+}
+
 //QString AccessibleOverlayWarningWidget::text(QAccessible::Text t) const
 //{
 //    switch (t) {
@@ -425,3 +513,40 @@ QString AccessibleMultitaskingWidget::text(QAccessible::Text t) const
 //        return QString();
 //    }
 //}
+
+QString AccessibleQWidget::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return m_w->objectName();
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
+}
+
+QString AccessibleDImageButton::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return getAccesibleName(m_w, this->role(), m_w->objectName());
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
+}
+
+QString AccessibleDSwitchButton::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Name:
+        return getAccesibleName(m_w, this->role(), m_w->text());
+    case QAccessible::Description:
+        return m_description;
+    default:
+        return QString();
+    }
+}
+

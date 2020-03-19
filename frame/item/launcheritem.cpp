@@ -42,7 +42,6 @@ LauncherItem::LauncherItem(QWidget *parent)
 
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
-    m_tips->setAccessibleName("launchertips");
 
     connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
 }
@@ -50,8 +49,7 @@ LauncherItem::LauncherItem(QWidget *parent)
 void LauncherItem::refershIcon()
 {
     const int iconSize = qMin(width(), height());
-    if (DockDisplayMode == Efficient)
-    {
+    if (DockDisplayMode == Efficient) {
         m_icon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7, devicePixelRatioF());
     } else {
         m_icon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8, devicePixelRatioF());
@@ -60,8 +58,9 @@ void LauncherItem::refershIcon()
     update();
 }
 
-void LauncherItem::showEvent(QShowEvent* event) {
-    QTimer::singleShot(0, this, [=] {
+void LauncherItem::showEvent(QShowEvent *event)
+{
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -126,7 +125,8 @@ QWidget *LauncherItem::popupTips()
     return m_tips;
 }
 
-void LauncherItem::onGSettingsChanged(const QString& key) {
+void LauncherItem::onGSettingsChanged(const QString &key)
+{
     if (key != "enable") {
         return;
     }
@@ -139,5 +139,5 @@ void LauncherItem::onGSettingsChanged(const QString& key) {
 bool LauncherItem::checkGSettingsControl() const
 {
     return m_gsettings->keys().contains("control")
-            && m_gsettings->get("control").toBool();
+           && m_gsettings->get("control").toBool();
 }

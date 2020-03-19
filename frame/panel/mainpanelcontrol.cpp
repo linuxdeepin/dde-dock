@@ -96,9 +96,16 @@ MainPanelControl::~MainPanelControl()
 void MainPanelControl::init()
 {
     // 主窗口
-    m_fixedSpliter->setAccessibleName("spliter_fix");
-    m_appSpliter->setAccessibleName("spliter_app");
-    m_traySpliter->setAccessibleName("spliter_tray");
+    m_fixedSpliter->setAccessibleName("Splitter_fix");
+    m_appSpliter->setAccessibleName("Splitter_app");
+    m_traySpliter->setAccessibleName("Splitter_tray");
+
+    m_appAreaWidget->setAccessibleName("Form_apparea");
+    m_trayAreaWidget->setAccessibleName("Form_trayarea");
+    m_fixedAreaWidget->setAccessibleName("Form_fixedarea");
+    m_appAreaSonWidget->setAccessibleName("Form_appsonarea");
+    m_pluginAreaWidget->setAccessibleName("Form_pluginarea");
+    m_desktopWidget->setObjectName("Btn_showdesktoparea");// 单独处理，accessible标记为button类型
 
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);
@@ -117,28 +124,25 @@ void MainPanelControl::init()
 
     // 固定区域
     m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
-    m_fixedAreaWidget->setAccessibleName("fixedarea");
     m_fixedAreaLayout->setMargin(0);
     m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_fixedAreaLayout->setSpacing(0);
 
     // 应用程序
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
-    m_appAreaSonWidget->setAccessibleName("apparea");
     m_appAreaSonLayout->setMargin(0);
     m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_appAreaSonLayout->setSpacing(0);
 
     // 托盘
     m_trayAreaWidget->setLayout(m_trayAreaLayout);
-    m_trayAreaWidget->setAccessibleName("trayarea");
+
     m_trayAreaLayout->setMargin(0);
     m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
     m_trayAreaLayout->setSpacing(0);
 
     // 插件
     m_pluginAreaWidget->setLayout(m_pluginLayout);
-    m_pluginAreaWidget->setAccessibleName("pluginarea");
     m_pluginLayout->setMargin(0);
     m_pluginLayout->setSpacing(10);
 
@@ -611,7 +615,6 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_mousePressPos = e->globalPos();
-
         QRect rect(m_desktopWidget->pos(), m_desktopWidget->size());
         if (rect.contains(e->pos()))
             QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
@@ -1008,9 +1011,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
-                if (pItem->pluginName() == "datetime"){
+                if (pItem->pluginName() == "datetime") {
                     pItem->setFixedSize(pItem->sizeHint().width(), h);
-                } else if (pItem->pluginName() == "AiAssistant"){
+                } else if (pItem->pluginName() == "AiAssistant") {
                     pItem->setFixedSize(tray_item_size, h - 20);
                 } else {
                     pItem->setFixedSize(pItem->sizeHint().width(), h - 20);
@@ -1022,9 +1025,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
             if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
-                if (pItem->pluginName() == "datetime"){
+                if (pItem->pluginName() == "datetime") {
                     pItem->setFixedSize(w, pItem->sizeHint().height());
-                } else if (pItem->pluginName() == "AiAssistant"){
+                } else if (pItem->pluginName() == "AiAssistant") {
                     pItem->setFixedSize(w - 20, tray_item_size);
                 } else {
                     pItem->setFixedSize(w - 20, pItem->sizeHint().height());

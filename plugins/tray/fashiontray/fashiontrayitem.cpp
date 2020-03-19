@@ -55,7 +55,7 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     m_mainBoxLayout->setSpacing(0);
 
     m_leftSpace->setFixedSize(TraySpace, TraySpace);
-    m_leftSpace->setAccessibleName("leftspace");
+    m_leftSpace->setAccessibleName("Form_leftspace");
 
     m_mainBoxLayout->addWidget(m_leftSpace);
     m_mainBoxLayout->addWidget(m_normalContainer);
@@ -356,7 +356,7 @@ void FashionTrayItem::resizeTray()
         return;
 
     if (m_dockpos == Dock::Position::Top || m_dockpos == Dock::Position::Bottom) {
-        if (m_attentionContainer->itemCount() != 0){
+        if (m_attentionContainer->itemCount() != 0) {
             m_mainBoxLayout->setContentsMargins(0, 0, TraySpace, 0);
         } else {
             m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -370,18 +370,18 @@ void FashionTrayItem::resizeTray()
         m_controlWidget->setFixedSize(m_iconSize, QWIDGETSIZE_MAX);
     } else {
         m_holdContainer->setFixedWidth(QWIDGETSIZE_MAX);
-        if (m_attentionContainer->itemCount() != 0){
+        if (m_attentionContainer->itemCount() != 0) {
             m_mainBoxLayout->setContentsMargins(0, 0, 0, TraySpace);
         } else {
             m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
         }
 
-         m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
         m_attentionContainer->setFixedWidth(QWIDGETSIZE_MAX);
         m_attentionContainer->setFixedHeight(m_iconSize * m_attentionContainer->itemCount());
 
         m_controlWidget->setFixedSize(QWIDGETSIZE_MAX, m_iconSize);
-    }    
+    }
 
     m_normalContainer->updateSize();
 }

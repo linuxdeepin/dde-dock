@@ -31,7 +31,6 @@ ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
     , m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
-    m_tipsLabel->setAccessibleName("show-desktop");
 }
 
 const QString ShowDesktopPlugin::pluginName() const

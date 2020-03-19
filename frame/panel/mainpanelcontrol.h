@@ -99,7 +99,7 @@ public slots:
 
     // void
     void onGSettingsChanged(const QString &key);
-    
+
 protected:
     void showEvent(QShowEvent *event) override;
 private:
@@ -114,7 +114,6 @@ private:
     QBoxLayout *m_pluginLayout;
     QWidget *m_appAreaSonWidget;
     QBoxLayout *m_appAreaSonLayout;
-    //    QBoxLayout *m_appAreaLayout;
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
     MainPanelDelegate *m_delegate;

@@ -278,10 +278,8 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
     }
 
     m_itemList.insert(insertIndex, item);
-    if(pluginType == DockItem::FixedPlugin)
-    {
+    if (pluginType == DockItem::FixedPlugin) {
         insertIndex ++;
-        item->setAccessibleName("plugins");
     }
 
     emit itemInserted(insertIndex - firstPluginPosition, item);

@@ -80,7 +80,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_trashVisible(true)
     , m_aiAssistantVisible(true)
 {
-    m_settingsMenu.setAccessibleName("dock-settingsmenu");
+    m_settingsMenu.setTitle("docksettingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -106,14 +106,14 @@ DockSettings::DockSettings(QWidget *parent)
     m_smartHideAct.setCheckable(true);
 
     QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
-    modeSubMenu->setAccessibleName("modesubmenu");
+    modeSubMenu->setAccessibleName("Menu_modesub");
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
     QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
     QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
-    locationSubMenu->setAccessibleName("locationsubmenu");
+    locationSubMenu->setAccessibleName("Menu_locationsub");
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
     locationSubMenu->addAction(&m_leftPosAct);
@@ -122,7 +122,7 @@ DockSettings::DockSettings(QWidget *parent)
     locationSubMenuAct->setMenu(locationSubMenu);
 
     QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
-    statusSubMenu->setAccessibleName("statussubmenu");
+    statusSubMenu->setAccessibleName("Menu_statussub");
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
     statusSubMenu->addAction(&m_smartHideAct);
@@ -130,7 +130,7 @@ DockSettings::DockSettings(QWidget *parent)
     statusSubMenuAct->setMenu(statusSubMenu);
 
     m_hideSubMenu = new QMenu(&m_settingsMenu);
-    m_hideSubMenu->setAccessibleName("pluginsmenu");
+    m_hideSubMenu->setAccessibleName("Menu_plugins");
     QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
     hideSubMenuAct->setMenu(m_hideSubMenu);
 
@@ -138,7 +138,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(locationSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
     m_settingsMenu.addAction(hideSubMenuAct);
-    m_settingsMenu.setTitle("Settings Menu");
+    m_settingsMenu.setAccessibleName("Menu_settingsmenu");
 
     connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(GSettingsByMenu(), &QGSettings::changed, this, &DockSettings::onGSettingsChanged);
@@ -160,6 +160,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
+
     QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
     connect(GSettingsAiAssistant(), &QGSettings::changed, this, &DockSettings::onAiassitantGSettingsChanged);
     QTimer::singleShot(0, this, [=] {onAiassitantGSettingsChanged("enable");});
@@ -174,7 +175,7 @@ DockSettings::DockSettings(QWidget *parent)
     resetFrontendGeometry();
 
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 }
@@ -247,7 +248,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
 
 void DockSettings::showDockSettingsMenu()
 {
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -366,7 +367,7 @@ void DockSettings::onGSettingsChanged(const QString &key)
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
-        m_menuVisible=isEnable && setting->get("enable").toBool();
+        m_menuVisible = isEnable && setting->get("enable").toBool();
     }
 }
 
@@ -401,7 +402,7 @@ void DockSettings::onDisplayModeChanged()
     emit displayModeChanegd();
     calculateWindowConfig();
 
-   //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
+    //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }
 
 void DockSettings::hideModeChanged()

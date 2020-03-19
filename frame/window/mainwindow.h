@@ -41,6 +41,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+
 class DragWidget;
 class MainPanel;
 class MainPanelControl;
