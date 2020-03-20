@@ -179,8 +179,8 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 	switch level {
 	case WarnLevelAction:
 		playSound(soundutils.EventBatteryLow)
-		m.sendNotify(iconBatteryLow, Tr("Battery Critically Low"),
-			Tr("Computer will suspend very soon, please plug in now"))
+		m.sendNotify(iconBatteryLow, "",
+			Tr("Battery critically low"))
 
 		m.warnLevelCountTicker = newCountTicker(time.Second, func(count int) {
 			if count == 3 {
@@ -199,18 +199,18 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 		})
 
 	case WarnLevelCritical:
-		m.warnLevelCountTicker = newCountTicker(time.Second, func(count int) {
-			// notify every 60 seconds
-			if count%60 == 0 {
-				playSound(soundutils.EventBatteryLow)
-				m.sendNotify(iconBatteryLow, Tr("Battery Low"),
-					Tr("Computer will suspend soon, please plug in"))
-			}
-		})
+		playSound(soundutils.EventBatteryLow)
+		m.sendNotify(iconBatteryLow,"",
+			Tr("Battery low, please plug in"))
+
+	case WarnLevelDanger:
+		playSound(soundutils.EventBatteryLow)
+		m.sendNotify(iconBatteryLow, "",
+			Tr("Battery low, please plug in"))
 
 	case WarnLevelLow:
 		playSound(soundutils.EventBatteryLow)
-		m.sendNotify(iconBatteryLow, Tr("Battery Low"),
+		m.sendNotify(iconBatteryLow, "",
 			Tr("Battery low, please plug in"))
 
 	case WarnLevelNone:

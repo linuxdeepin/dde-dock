@@ -24,6 +24,7 @@ type WarnLevel uint32
 const (
 	WarnLevelNone WarnLevel = iota
 	WarnLevelLow
+	WarnLevelDanger
 	WarnLevelCritical
 	WarnLevelAction
 )
@@ -34,6 +35,8 @@ func (lv WarnLevel) String() string {
 		return "None"
 	case WarnLevelLow:
 		return "Low"
+	case WarnLevelDanger:
+		return "Danger"
 	case WarnLevelCritical:
 		return "Critical"
 	case WarnLevelAction:
@@ -57,8 +60,11 @@ func getWarnLevel(config *warnLevelConfig, onBattery bool,
 		if percentage > config.LowPercentage || percentage == 0.0 {
 			return WarnLevelNone
 		}
-		if percentage > config.CriticalPercentage {
+		if percentage > config.DangerPercentage {
 			return WarnLevelLow
+		}
+		if percentage > config.CriticalPercentage {
+			return WarnLevelDanger
 		}
 		if percentage > config.ActionPercentage {
 			return WarnLevelCritical
@@ -68,8 +74,11 @@ func getWarnLevel(config *warnLevelConfig, onBattery bool,
 		if timeToEmpty > config.LowTime || timeToEmpty == 0 {
 			return WarnLevelNone
 		}
-		if timeToEmpty > config.CriticalTime {
+		if timeToEmpty > config.DangerTime {
 			return WarnLevelLow
+		}
+		if timeToEmpty > config.CriticalTime {
+			return WarnLevelDanger
 		}
 		if timeToEmpty > config.ActionTime {
 			return WarnLevelCritical
