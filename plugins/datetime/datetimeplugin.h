@@ -62,7 +62,6 @@ public:
 
 private slots:
     void updateCurrentTimeString();
-    void refreshPluginItemsVisible();
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
@@ -71,6 +70,7 @@ private:
     QTimer *m_refershTimer;
 
     QString m_currentTimeString;
+    QSettings m_settings;
 };
 
 #endif // DATETIMEPLUGIN_H

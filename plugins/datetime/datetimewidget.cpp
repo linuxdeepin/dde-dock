@@ -28,17 +28,17 @@
 #include <QSvgRenderer>
 #include <QMouseEvent>
 
-#define PLUGIN_STATE_KEY    "enable"
+#define PLUGIN_STATE_KEY "enable"
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
 {
-
 }
 
 void DatetimeWidget::set24HourFormat(const bool value)
 {
-    if (m_24HourFormat == value) {
+    if (m_24HourFormat == value)
+    {
         return;
     }
 
@@ -47,7 +47,8 @@ void DatetimeWidget::set24HourFormat(const bool value)
     m_cachedTime.clear();
     update();
 
-    if (isVisible()) {
+    if (isVisible())
+    {
         emit requestUpdateGeometry();
     }
 }
@@ -57,9 +58,9 @@ QSize DatetimeWidget::sizeHint() const
     QFontMetrics fm(qApp->font());
 
     if (m_24HourFormat)
-        return fm.boundingRect("88:88").size() + QSize(20, 10);
+        return fm.boundingRect(this->rect(), Qt::AlignCenter, "88:88:88\n88/88/8888").size() + QSize(20, 10);
     else
-        return fm.boundingRect("88:88 A.A.").size() + QSize(20, 20);
+        return fm.boundingRect(this->rect(), Qt::AlignCenter, "88:88:88 A.A.\n88/88/8888").size() + QSize(20, 20);
 }
 
 void DatetimeWidget::resizeEvent(QResizeEvent *e)
@@ -85,23 +86,22 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     {
         QString format;
         if (m_24HourFormat)
-            format = "hh:mm";
+            format = "hh:mm:ss\nd/M/yyyy";
         else
         {
             if (position == Dock::Top || position == Dock::Bottom)
-                format = "hh:mm AP";
+                format = "hh:mm:ss AP\nd/M/yyyy";
             else
                 format = "hh:mm\nAP";
         }
 
-        painter.setPen(Qt::white);
-        painter.drawText(rect(), Qt::AlignCenter, current.time().toString(format));
+        painter.setPen(QPen(palette().brightText(), 1));
+        painter.drawText(rect(), Qt::AlignCenter, current.toString(format));
         return;
     }
 
     // use language Chinese to fix can not find image resources which will be drawn
-    const QString currentTimeString = QLocale(QLocale::Chinese, QLocale::system().country())
-            .toString(current, m_24HourFormat ? "hhmm" : "hhmma");
+    const QString currentTimeString = current.toString(m_24HourFormat ? "hhmmss" : "hhmmssa");
 
     // check cache valid
     if (m_cachedTime != currentTimeString)
@@ -167,7 +167,9 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 
             const QPoint tipsOffset = bigNum2Offset + QPoint(bigNumWidth + 2, bigNumHeight - tips_height);
             p.drawPixmap(tipsOffset, tips);
-        } else {
+        }
+        else
+        {
             // draw small num 1
             const QString smallNum1Path = QString(":/icons/resources/icons/small%1.svg").arg(currentTimeString[2]);
             const QPixmap smallNum1 = loadSvg(smallNum1Path, QSize(smallNumWidth, smallNumHeight));

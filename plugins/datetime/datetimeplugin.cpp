@@ -29,8 +29,24 @@
 #define TIME_FORMAT_KEY "24HourFormat"
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_dateTipsLabel(new TipsWidget),
+
+      m_refershTimer(new QTimer(this)),
+      m_settings("deepin", "dde-dock-datetime")
 {
+    m_dateTipsLabel->setObjectName("datetime");
+    m_dateTipsLabel->setStyleSheet("color:white;"
+                                   "padding:0px 3px;");
+
+    m_refershTimer->setInterval(1000);
+    m_refershTimer->start();
+
+    m_centralWidget = new DatetimeWidget;
+
+    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
+
+    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
 
 const QString DatetimePlugin::pluginName() const
@@ -47,42 +63,21 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    // transfer config
-    QSettings settings("deepin", "dde-dock-datetime");
-    if (QFile::exists(settings.fileName())) {
-        Dock::DisplayMode mode = displayMode();
-        const QString     key  = QString("pos_%1").arg(mode);
-        proxyInter->saveValue(this, key, settings.value(key, mode == Dock::DisplayMode::Fashion ? 5 : -1));
-        QFile::remove(settings.fileName());
+    if (!pluginIsDisable())
+    {
+        m_proxyInter->itemAdded(this, pluginName());
+        m_centralWidget->set24HourFormat(m_settings.value(TIME_FORMAT_KEY, true).toBool());
     }
-
-    if (pluginIsDisable()) {
-        return;
-    }
-
-    m_dateTipsLabel = new TipsWidget;
-    m_refershTimer = new QTimer(this);
-    m_dateTipsLabel->setObjectName("datetime");
-
-    m_refershTimer->setInterval(1000);
-    m_refershTimer->start();
-
-    m_centralWidget = new DatetimeWidget;
-
-    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
-
-    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
-    m_proxyInter->itemAdded(this, pluginName());
-    
-    const bool value = m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool();
-    m_centralWidget->set24HourFormat(value);
 }
 
 void DatetimePlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
 
-    refreshPluginItemsVisible();
+    if (!pluginIsDisable())
+        m_proxyInter->itemAdded(this, pluginName());
+    else
+        m_proxyInter->itemRemoved(this, pluginName());
 }
 
 bool DatetimePlugin::pluginIsDisable()
@@ -94,14 +89,8 @@ int DatetimePlugin::itemSortKey(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1").arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 3).toInt();
-    } else {
-        return m_proxyInter->getValue(this, key, -1).toInt();
-    }
+    const QString key = QString("pos_%1").arg(displayMode());
+    return m_settings.value(key, 0).toInt();
 }
 
 void DatetimePlugin::setSortKey(const QString &itemKey, const int order)
@@ -168,7 +157,8 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId == "open") {
+    if (menuId == "open")
+    {
         DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
@@ -176,18 +166,23 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
             .method(QString("ShowModule"))
             .arg(QString("datetime"))
             .call();
-    } else {
-        const bool value = m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool();
-        m_proxyInter->saveValue(this, TIME_FORMAT_KEY, !value);
+    }
+    else
+    {
+        const bool value = m_settings.value(TIME_FORMAT_KEY, true).toBool();
+        m_settings.setValue(TIME_FORMAT_KEY, !value);
         m_centralWidget->set24HourFormat(!value);
     }
 }
 
 void DatetimePlugin::pluginSettingsChanged()
 {
-    m_centralWidget->set24HourFormat(m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool());
+    m_centralWidget->set24HourFormat(m_settings.value(TIME_FORMAT_KEY, true).toBool());
 
-    refreshPluginItemsVisible();
+    if (!pluginIsDisable())
+        m_proxyInter->itemAdded(this, pluginName());
+    else
+        m_proxyInter->itemRemoved(this, pluginName());
 }
 
 void DatetimePlugin::updateCurrentTimeString()
@@ -199,19 +194,11 @@ void DatetimePlugin::updateCurrentTimeString()
     else
         m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss A"));
 
-    const QString currentString = currentDateTime.toString("mm");
+    const QString currentString = currentDateTime.toString("ss");
 
     if (currentString == m_currentTimeString)
         return;
 
     m_currentTimeString = currentString;
     m_centralWidget->update();
-}
-
-void DatetimePlugin::refreshPluginItemsVisible()
-{
-    if (!pluginIsDisable())
-        m_proxyInter->itemAdded(this, pluginName());
-    else
-        m_proxyInter->itemRemoved(this, pluginName());
 }
