@@ -20,6 +20,7 @@
 package power
 
 import (
+	"os"
 	"os/exec"
 	"time"
 
@@ -141,6 +142,11 @@ func (m *Manager) doLock(autoStartAuth bool) {
 }
 
 func (m *Manager) doSuspend() {
+	if os.Getenv("POWER_CAN_SLEEP") == "0" {
+		logger.Info("can not suspend, env POWER_CAN_SLEEP == 0")
+		return
+	}
+
 	sessionManager := m.helper.SessionManager
 	can, err := sessionManager.CanSuspend(0)
 	if err != nil {
