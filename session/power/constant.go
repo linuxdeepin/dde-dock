@@ -45,10 +45,12 @@ const (
 
 	settingKeyPowerModuleInitialized = "power-module-initialized"
 	settingKeyLowPercentage          = "percentage-low"
+	settingKeyDangerlPercentage      = "percentage-danger"
 	settingKeyCriticalPercentage     = "percentage-critical"
 	settingKeyActionPercentage       = "percentage-action"
 
 	settingKeyLowTime      = "time-to-empty-low"
+	settingKeyDangerTime   = "time-to-empty-danger"
 	settingKeyCriticalTime = "time-to-empty-critical"
 	settingKeyActionTime   = "time-to-empty-action"
 
