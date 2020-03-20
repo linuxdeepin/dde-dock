@@ -336,6 +336,11 @@ func (psp *powerSavePlan) resetBrightness() {
 }
 
 func (psp *powerSavePlan) startScreensaver() {
+	if os.Getenv("DESKTOP_CAN_SCREENSAVER") == "N" {
+		logger.Info("do not start screensaver, env DESKTOP_CAN_SCREENSAVER == N")
+		return
+	}
+
 	startScreensaver()
 	psp.screensaverRunning = true
 }
