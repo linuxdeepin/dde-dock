@@ -619,7 +619,7 @@ func (b *Bluetooth) getPairedDeviceList() []*device {
 	for _, aobj := range b.adapters {
 		logger.Info("[DEBUG] Auto connect adapter:", aobj.Path)
 		list := b.devices[aobj.Path]
-		if len(list) == 0 || b.config.getAdapterConfigPowered(aobj.address) {
+		if len(list) == 0 || !b.config.getAdapterConfigPowered(aobj.address) {
 			continue
 		}
 		for _, dev := range list {
