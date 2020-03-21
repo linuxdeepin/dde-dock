@@ -114,7 +114,7 @@ void DeviceControlWidget::refreshNetwork()
 
     m_loadingIndicator->setLoading(true);
 
-    QTimer::singleShot(1000, this, [=] {
+    QTimer::singleShot(2000, this, [=] {
         m_loadingIndicator->setLoading(false);
     });
 }

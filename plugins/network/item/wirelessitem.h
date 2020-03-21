@@ -58,7 +58,7 @@ Q_SIGNALS:
     void queryActiveConnInfo();
     void requestWirelessScan();
     void createApConfig(const QString &devPath, const QString &apPath);
-    void queryConnectionSession( const QString &devPath, const QString &uuid );
+    void queryConnectionSession(const QString &devPath, const QString &uuid);
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
