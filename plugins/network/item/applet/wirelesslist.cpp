@@ -69,7 +69,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     setFrameShape(QFrame::NoFrame);
     setFixedWidth(300);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
 
@@ -92,10 +92,10 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
     connect(m_device, &WirelessDevice::activeWirelessConnectionInfoChanged, this, &WirelessList::onActiveConnectionInfoChanged);
-    connect(m_device, static_cast<void (WirelessDevice:: *) (NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_device, static_cast<void (WirelessDevice::*)(NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_device, &WirelessDevice::activeConnectionsChanged, this, &WirelessList::updateIndicatorPos, Qt::QueuedConnection);
 
-    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [=] {
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [ = ] {
         auto apw = accessPointWidgetByAp(m_activatingAP);
         if (!apw) return;
 
@@ -161,6 +161,13 @@ void WirelessList::setDeviceInfo(const int index)
         m_controlPanel->setDeviceName(tr("Wireless Network %1").arg(index));
 }
 
+void WirelessList::refreshNetwork()
+{
+    if (m_controlPanel) {
+        m_controlPanel->refreshNetwork();
+    }
+}
+
 void WirelessList::loadAPList()
 {
     if (m_device.isNull()) {
@@ -207,19 +214,18 @@ void WirelessList::updateAPList()
     int avaliableAPCount = 0;
 
     //if (m_networkInter->IsDeviceEnabled(m_device.dbusPath()))
-    if (m_device->enabled())
-    {
-//        if (m_device->hotspotEnabled()) {
-//            m_apList.clear();
-//            m_apList.append(m_activeHotspotAP);
-//        }
+    if (m_device->enabled()) {
+        //        if (m_device->hotspotEnabled()) {
+        //            m_apList.clear();
+        //            m_apList.append(m_activeHotspotAP);
+        //        }
 
         // sort ap list by strength
         // std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
         //        const bool wirelessActived = m_device.state() == NetworkDevice::Activated;
 
         // NOTE: Keep the amount consistent
-        if(m_apList.size() > m_apwList.size()) {
+        if (m_apList.size() > m_apwList.size()) {
             int i = m_apList.size() - m_apwList.size();
             for (int index = 0; index != i; index++) {
                 AccessPointWidget *apw = new AccessPointWidget;
@@ -229,7 +235,7 @@ void WirelessList::updateAPList()
 
                 connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessList::activateAP);
                 connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
-                connect(apw, &AccessPointWidget::requestActiveAP, this, [=] {
+                connect(apw, &AccessPointWidget::requestActiveAP, this, [ = ] {
                     m_clickedAPW = apw;
                 }, Qt::UniqueConnection);
             }
@@ -245,7 +251,7 @@ void WirelessList::updateAPList()
             }
         }
 
-        std::sort(m_apList.begin(), m_apList.end(), [&] (const AccessPoint &ap1, const AccessPoint &ap2) {
+        std::sort(m_apList.begin(), m_apList.end(), [&](const AccessPoint & ap1, const AccessPoint & ap2) {
             if (ap1 == m_activeAP)
                 return true;
 
@@ -380,7 +386,7 @@ void WirelessList::onActiveConnectionInfoChanged()
     // 那么也就无法给m_activeAP正确的值，所以在这里使用timer等待一下后端的数据，再执行遍历m_apList给m_activeAP赋值的操作
     if (m_device->enabled() && m_device->status() == NetworkDevice::Activated
             && m_apList.size() == 0) {
-        QTimer::singleShot(1000, [=]{onActiveConnectionInfoChanged();});
+        QTimer::singleShot(1000, [ = ] {onActiveConnectionInfoChanged();});
         return;
     }
 
@@ -407,18 +413,18 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
 
     if (clickedAP.path() == apPath) {
         qDebug() << "wireless connect failed and may require more configuration,"
-            << "path:" << clickedAP.path() << "ssid" << clickedAP.ssid()
-            << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength();
+                 << "path:" << clickedAP.path() << "ssid" << clickedAP.ssid()
+                 << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength();
         m_updateAPTimer->start();
 
         DDBusSender()
-                .service("com.deepin.dde.ControlCenter")
-                .interface("com.deepin.dde.ControlCenter")
-                .path("/com/deepin/dde/ControlCenter")
-                .method("ShowPage")
-                .arg(QString("network"))
-                .arg(QString("%1,%2").arg(m_device->path()).arg(uuid))
-                .call();
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method("ShowPage")
+        .arg(QString("network"))
+        .arg(QString("%1,%2").arg(m_device->path()).arg(uuid))
+        .call();
 
         Q_EMIT requestSetAppletVisible(false);
     }
@@ -428,7 +434,7 @@ void WirelessList::onHotspotEnabledChanged(const bool enabled)
 {
     // Note: the obtained hotspot info is not complete
     m_activeHotspotAP = enabled ? AccessPoint(m_device->activeHotspotInfo().value("Hotspot").toObject())
-                                : AccessPoint();
+                        : AccessPoint();
     isHotposActive = enabled;
     m_updateAPTimer->start();
 }
