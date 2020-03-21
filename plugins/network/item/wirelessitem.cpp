@@ -58,10 +58,10 @@ WirelessItem::WirelessItem(WirelessDevice *device)
         update();
     });
 
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ] (QJsonObject info){
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ](QJsonObject info) {
         const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
-        if(activeApInfo.value("Ssid").toString() == info.value("Ssid").toString()) {
-             m_activeApInfo = info;
+        if (activeApInfo.value("Ssid").toString() == info.value("Ssid").toString()) {
+            m_activeApInfo = info;
         }
         update();
     });
@@ -99,7 +99,7 @@ bool WirelessItem::eventFilter(QObject *o, QEvent *e)
     if (o == m_APList && e->type() == QEvent::Resize)
         QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection);
     if (o == m_APList && e->type() == QEvent::Show)
-        Q_EMIT requestWirelessScan();
+        m_APList->refreshNetwork();
 
     return false;
 }
@@ -284,7 +284,7 @@ void WirelessItem::refreshTips()
         return;
     }
 
-    if (m_APList->isHotposActive){
+    if (m_APList->isHotposActive) {
         m_wirelessTips->setText(tr("Connected but no Internet access"));
         return;
     }

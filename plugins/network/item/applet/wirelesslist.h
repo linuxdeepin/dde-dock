@@ -57,6 +57,9 @@ signals:
     void requestWirelessScan();
     void requestSetAppletVisible(const bool visible) const;
 
+public slots:
+    void refreshNetwork();
+
 private slots:
     void loadAPList();
     void APAdded(const QJsonObject &apInfo);
@@ -83,7 +86,7 @@ private:
     AccessPoint m_activatingAP;
     AccessPoint m_activeHotspotAP;
     QList<AccessPoint> m_apList;
-    QList<AccessPointWidget*> m_apwList;
+    QList<AccessPointWidget *> m_apwList;
 
     QTimer *m_updateAPTimer;
     Dtk::Widget::DPictureSequenceView *m_indicator;
