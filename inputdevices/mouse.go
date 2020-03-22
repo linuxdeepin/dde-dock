@@ -92,8 +92,8 @@ func newMouse(service *dbusutil.Service, touchPad *Touchpad) *Mouse {
 func (m *Mouse) init() {
 	if !m.Exist {
 		tpad := m.touchPad
-		if tpad.Exist && !tpad.TPadEnable.Get() {
-			tpad.TPadEnable.Set(true)
+		if tpad.Exist && tpad.TPadEnable.Get() {
+			tpad.enable(true)
 		}
 		return
 	}
@@ -121,9 +121,11 @@ func (m *Mouse) updateDXMouses() {
 			continue
 		}
 
-		tmp := m.devInfos.get(info.Id)
-		if tmp != nil {
-			continue
+		if !globalWayland {
+			tmp := m.devInfos.get(info.Id)
+			if tmp != nil {
+				continue
+			}
 		}
 		m.devInfos = append(m.devInfos, info)
 	}
