@@ -37,13 +37,14 @@ func handleInputDeviceChanged(srv *dbusutil.Service, stop bool) {
 
 	kwinManager.InitSignalExt(_manager.sessionSigLoop, true)
 	addedID, err := kwinManager.ConnectDeviceAdded(func(sysName string) {
+		logger.Debug("[Device Added]:", sysName)
 		doHandleKWinDeviceAdded(sysName)
 	})
 	if err == nil {
 		kwinIdList = append(kwinIdList, addedID)
 	}
 	removedID, err := kwinManager.ConnectDeviceRemoved(func(sysName string) {
-		logger.Info("[Device Removed]:", sysName)
+		logger.Debug("[Device Removed]:", sysName)
 		doHandleKWinDeviceRemoved(sysName)
 	})
 	if err == nil {
@@ -60,15 +61,33 @@ func doHandleKWinDeviceAdded(sysName string) {
 	if info == nil {
 		return
 	}
-	logger.Info("[Device Changed] added:", info.Id, info.Type, info.Name, info.Enabled)
+	logger.Debug("[Device Changed] added:", info.Id, info.Type, info.Name, info.Enabled)
 	switch info.Type {
 	case common.DevTypeMouse:
 		v, _ := dxinput.NewMouseFromDeviceInfo(info)
-		mouseInfos = append(mouseInfos, v)
+		if len(mouseInfos) == 0 {
+			mouseInfos = append(mouseInfos, v)
+		} else {
+			for _, tmp := range mouseInfos {
+				if tmp.Id == v.Id {
+					continue
+				}
+				mouseInfos = append(mouseInfos, v)
+			}
+		}
 		_manager.mouse.handleDeviceChanged()
 	case common.DevTypeTouchpad:
 		v, _ := dxinput.NewTouchpadFromDevInfo(info)
-		tpadInfos = append(tpadInfos, v)
+		if len(tpadInfos) == 0 {
+			tpadInfos = append(tpadInfos, v)
+		} else {
+			for _, tmp := range tpadInfos {
+				if tmp.Id == v.Id {
+					continue
+				}
+				tpadInfos = append(tpadInfos, v)
+			}
+		}
 		_manager.tpad.handleDeviceChanged()
 	}
 }
@@ -76,7 +95,7 @@ func doHandleKWinDeviceAdded(sysName string) {
 func doHandleKWinDeviceRemoved(sysName string) {
 	str := strings.TrimLeft(sysName, kwayland.SysNamePrefix)
 	id, _ := strconv.Atoi(str)
-	logger.Info("----------------items:", sysName, str, id)
+	logger.Debug("----------------items:", sysName, str, id)
 
 	var minfos dxMouses
 	var changed bool
@@ -88,7 +107,7 @@ func doHandleKWinDeviceRemoved(sysName string) {
 		minfos = append(minfos, tmp)
 	}
 	if changed {
-		logger.Info("[Device Removed] mouse:", sysName)
+		logger.Debug("[Device Removed] mouse:", sysName, minfos)
 		mouseInfos = minfos
 		_manager.mouse.handleDeviceChanged()
 		return
@@ -103,7 +122,7 @@ func doHandleKWinDeviceRemoved(sysName string) {
 		tinfos = append(tinfos, tmp)
 	}
 	if changed {
-		logger.Info("[Device Removed] touchpad:", sysName)
+		logger.Debug("[Device Removed] touchpad:", sysName)
 		tpadInfos = tinfos
 		_manager.tpad.handleDeviceChanged()
 	}
