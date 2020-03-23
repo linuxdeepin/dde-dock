@@ -245,6 +245,10 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 	case nm.NM_DEVICE_TYPE_ADSL:
 		err = fmt.Errorf("could not get adsl device identifier now")
 		logger.Error(err)
+	case nm.NM_DEVICE_TYPE_ETHERNET:
+		// some device the 'hw_addr_perm' unset by driver, so use 'hw_addr' as id
+		// PMS Bug ID: 16704
+		devId, err = nmGeneralGetDeviceHwAddr(devPath, false)
 	default:
 		devId, err = nmGeneralGetDeviceHwAddr(devPath, true)
 	}

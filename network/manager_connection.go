@@ -25,7 +25,7 @@ import (
 
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )

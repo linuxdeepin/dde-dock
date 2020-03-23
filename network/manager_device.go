@@ -161,10 +161,14 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		}
 
 		if nmHasSystemSettingsModifyPermission() {
-			logger.Debug("ensure wired connection exists", dev.Path)
-			_, _, err = m.ensureWiredConnectionExists(dev.Path, true)
-			if err != nil {
-				logger.Warning(err)
+			carrier, _ := nmDev.Wired().Carrier().Get(0)
+			logger.Debug("[Wired] carrier:", dev.HwAddress, dev.Path, carrier)
+			if carrier {
+				logger.Debug("ensure wired connection exists", dev.Path)
+				_, _, err = m.ensureWiredConnectionExists(dev.Path, true)
+				if err != nil {
+					logger.Warning(err)
+				}
 			}
 		} else {
 			logger.Debug("do not have modify permission")
