@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
     QTimer::singleShot(1, &mw, &MainWindow::launch);
 
     if (!parser.isSet(disablePlugOption)) {
-        DockItemManager::instance()->startLoadPlugins();
+        QObject::connect(&mw, &MainWindow::loaderPlugins, DockItemManager::instance(), &DockItemManager::startLoadPlugins);
     }
 
     return app.exec();
