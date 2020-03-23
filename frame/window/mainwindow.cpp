@@ -298,14 +298,26 @@ MainWindow::~MainWindow()
 void MainWindow::launch()
 {
     setVisible(false);
-    QTimer::singleShot(400, this, [&] {
-        m_launched = true;
-        qApp->processEvents();
-        QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
-        setVisible(true);
-        updatePanelVisible();
-        expand();
-        resetPanelEnvironment(false);
+    QTimer *waitServerTimer = new QTimer(this);
+    waitServerTimer->start(100);
+    connect(waitServerTimer, &QTimer::timeout, this, [ = ] {
+        QDBusInterface interface("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock",
+                                 "com.deepin.dde.daemon.Dock",
+                                 QDBusConnection::sessionBus());
+        if(interface.isValid()) {
+            waitServerTimer->stop();
+            waitServerTimer->deleteLater();
+            emit loaderPlugins();
+            QTimer::singleShot(400, this, [&] {
+                m_launched = true;
+                qApp->processEvents();
+                QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
+                setVisible(true);
+                updatePanelVisible();
+                expand();
+                resetPanelEnvironment(false);
+            });
+        }
     });
 }
 
