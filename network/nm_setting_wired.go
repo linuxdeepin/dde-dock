@@ -20,13 +20,15 @@
 package network
 
 import (
+	"net"
+
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {
 	logger.Infof("new wired connection, id=%s, uuid=%s, devPath=%s", id, uuid, devPath)
-	data := newWiredConnectionData(id, uuid)
+	data := newWiredConnectionData(id, uuid, devPath)
 
 	setSettingConnectionAutoconnect(data, true)
 	cpath, err = nmAddConnection(data)
@@ -43,7 +45,7 @@ func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, activ
 	return cpath, nil
 }
 
-func newWiredConnectionData(id, uuid string) (data connectionData) {
+func newWiredConnectionData(id, uuid string, devPath dbus.ObjectPath) (data connectionData) {
 	data = make(connectionData)
 
 	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
@@ -51,14 +53,26 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, nm.NM_SETTING_WIRED_SETTING_NAME)
 
-	initSettingSectionWired(data)
+	initSettingSectionWired(data, devPath)
 
 	initSettingSectionIpv4(data)
 	initSettingSectionIpv6(data)
 	return
 }
 
-func initSettingSectionWired(data connectionData) {
+func initSettingSectionWired(data connectionData, devPath dbus.ObjectPath) {
 	addSetting(data, nm.NM_SETTING_WIRED_SETTING_NAME)
 	setSettingWiredDuplex(data, "full")
+
+	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath, true)
+	if err != nil {
+		return
+	}
+
+	macAddr, err := net.ParseMAC(hwAddr)
+	if err != nil {
+		return
+	}
+
+	setSettingWiredMacAddress(data, macAddr)
 }
