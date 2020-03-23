@@ -712,21 +712,22 @@ void MainWindow::setStrutPartial()
     }
 
     // pass if strut area is intersect with other screen
-    int count = 0;
-    const QRect pr = m_settings->primaryRect();
-    for (auto *screen : qApp->screens()) {
-        const QRect sr = screen->geometry();
-        if (sr == pr)
-            continue;
+    //优化了文件管理的代码 会导致bug 15351 需要注释一下代码
+//    int count = 0;
+//    const QRect pr = m_settings->primaryRect();
+//    for (auto *screen : qApp->screens()) {
+//        const QRect sr = screen->geometry();
+//        if (sr == pr)
+//            continue;
 
-        if (sr.intersects(strutArea))
-            ++count;
-    }
-    if (count > 0) {
-        qWarning() << "strutArea is intersects with another screen.";
-        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
-        return;
-    }
+//        if (sr.intersects(strutArea))
+//            ++count;
+//    }
+//    if (count > 0) {
+//        qWarning() << "strutArea is intersects with another screen.";
+//        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
+//        return;
+//    }
 
     m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
 }
