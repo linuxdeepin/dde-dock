@@ -65,6 +65,12 @@ const (
 	gsKeyAppsHidden         = "apps-hidden"
 )
 
+// Read /var/lib/lastore/applications.json data struct
+type ApplicationsData struct {
+	Category       string `json:"category"`
+	PackageName    string `json:"package_name"`
+}
+
 type Manager struct {
 	service        *dbusutil.Service
 	sysSigLoop     *dbusutil.SignalLoop
@@ -457,18 +463,18 @@ func (m *Manager) loadPkgCategoryMap() error {
 	}
 	defer f.Close()
 	decoder := json.NewDecoder(bufio.NewReader(f))
-	var jsonData map[string]struct{ Category string }
+	var jsonData map[string]ApplicationsData
 	if err := decoder.Decode(&jsonData); err != nil {
 		return err
 	}
 
 	infos := make(map[string]CategoryID)
-	for pkg, v := range jsonData {
+	for _, v := range jsonData {
 		cid, ok := parseCategoryString(v.Category)
 		if !ok {
 			logger.Warningf("loadPkgCategoryMap: failed to parse category %s", v.Category)
 		}
-		infos[pkg] = cid
+		infos[v.PackageName] = cid
 	}
 	//logger.Debugf("loadPkgCategoryMap jsonData %#v", jsonData)
 	//logger.Debugf("loadPkgCategoryMap infos %#v", infos)
