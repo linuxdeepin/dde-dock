@@ -20,6 +20,7 @@
 package shortcuts
 
 import (
+	"os"
 	"regexp"
 	"strings"
 	"sync"
@@ -783,6 +784,16 @@ func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
 		if name == "" {
 			name = id
 		}
+		if id == "terminal-quake"{
+			continue
+		}
+		session := os.Getenv("XDG_SESSION_TYPE")
+		if strings.Contains(session, "wayland") {
+			if id == "deepin-screen-recorder" || id == "wm-switcher" {
+				continue
+			}
+		}
+
 		keystrokes := gsettings.GetStrv(id)
 		gs := NewGSettingsShortcut(gsettings, id, ShortcutTypeSystem, keystrokes, name)
 		sysShortcut := &SystemShortcut{
