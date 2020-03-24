@@ -169,6 +169,20 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				if err != nil {
 					logger.Warning(err)
 				}
+			} else {
+				// ensure wired connection exsis on wired plug-in
+				nmDev.Wired().Carrier().ConnectChanged(func(hasValue, value bool) {
+					if !hasValue || !value {
+						return
+					}
+
+					logger.Info("wired plugin", dev.Path)
+					logger.Debug("ensure wired connection exists", dev.Path)
+					_, _, err = m.ensureWiredConnectionExists(dev.Path, true)
+					if err != nil {
+						logger.Warning(err)
+					}
+				})
 			}
 		} else {
 			logger.Debug("do not have modify permission")
