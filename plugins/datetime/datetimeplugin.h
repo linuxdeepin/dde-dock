@@ -24,6 +24,7 @@
 
 #include "pluginsiteminterface.h"
 #include "datetimewidget.h"
+// #include "datetimedialog.h"
 #include "../../widgets/tipswidget.h"
 
 #include <QTimer>
@@ -38,6 +39,7 @@ class DatetimePlugin : public QObject, PluginsItemInterface
 
 public:
     explicit DatetimePlugin(QObject *parent = 0);
+    virtual ~DatetimePlugin() override;
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -62,6 +64,7 @@ public:
 
 private slots:
     void updateCurrentTimeString();
+    void dialogFormat();
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;

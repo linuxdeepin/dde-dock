@@ -35,8 +35,20 @@
         <translation>24-часовой Формат</translation>
     </message>
     <message>
+        <source>Time Format</source>
+        <translation>Формат Времени</translation>
+    </message>
+    <message>
         <source>Time Settings</source>
         <translation>Настройки Времени</translation>
+    </message>
+    <message>
+        <source>Time display format</source>
+        <translation>Формат отображения времени</translation>
+    </message>
+        <message>
+        <source>Such as:</source>
+        <translation>Такие как:</translation>
     </message>
 </context>
 <context>

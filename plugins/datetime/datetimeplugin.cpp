@@ -21,17 +21,36 @@
 
 #include "datetimeplugin.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+#include <DBlurEffectWidget>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <DDBusSender>
-#include <QLabel>
 #include <QDebug>
+#include <QStyleFactory>
+
+#include "ddialog.h"
+#include "dlineedit.h"
+#include "dpushbutton.h"
+#include "dlabel.h"
+#include "dinputdialog.h"
+#include "dboxwidget.h"
+#include "dhidpihelper.h"
+
+DWIDGET_USE_NAMESPACE
 
 #define PLUGIN_STATE_KEY "enable"
 #define TIME_FORMAT_KEY "24HourFormat"
+#define DATETIME_FORMAT_KEY "format"
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent),
-      m_dateTipsLabel(new TipsWidget),
 
+      m_dateTipsLabel(new TipsWidget),
       m_refershTimer(new QTimer(this)),
       m_settings("deepin", "dde-dock-datetime")
 {
@@ -47,6 +66,11 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
 
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
+}
+
+DatetimePlugin::~DatetimePlugin()
+{
+    delete m_refershTimer;
 }
 
 const QString DatetimePlugin::pluginName() const
@@ -67,6 +91,7 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
     {
         m_proxyInter->itemAdded(this, pluginName());
         m_centralWidget->set24HourFormat(m_settings.value(TIME_FORMAT_KEY, true).toBool());
+        m_centralWidget->setDateTimeFormat(m_settings.value(DATETIME_FORMAT_KEY, "hh:mm:ss\nd MMM yyyy").toString());
     }
 }
 
@@ -134,14 +159,42 @@ const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
     QList<QVariant> items;
     items.reserve(1);
 
-    QMap<QString, QVariant> settings;
-    settings["itemId"] = "settings";
-    if (m_centralWidget->is24HourFormat())
-        settings["itemText"] = tr("12 Hour Time");
+    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+
+    if (displayMode == Dock::Efficient)
+    {
+        if (position == Dock::Top || position == Dock::Bottom)
+        {
+            QMap<QString, QVariant> format;
+            format["itemId"] = "format";
+            format["itemText"] = tr("Time Format");
+            format["isActive"] = true;
+            items.push_back(format);
+        }
+        else
+        {
+            QMap<QString, QVariant> settings;
+            settings["itemId"] = "settings";
+            if (m_centralWidget->is24HourFormat())
+                settings["itemText"] = tr("12 Hour Time");
+            else
+                settings["itemText"] = tr("24 Hour Time");
+            settings["isActive"] = true;
+            items.push_back(settings);
+        }
+    }
     else
-        settings["itemText"] = tr("24 Hour Time");
-    settings["isActive"] = true;
-    items.push_back(settings);
+    {
+        QMap<QString, QVariant> settings;
+        settings["itemId"] = "settings";
+        if (m_centralWidget->is24HourFormat())
+            settings["itemText"] = tr("12 Hour Time");
+        else
+            settings["itemText"] = tr("24 Hour Time");
+        settings["isActive"] = true;
+        items.push_back(settings);
+    }
 
     QMap<QString, QVariant> open;
     open["itemId"] = "open";
@@ -172,7 +225,13 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
             .arg(QString("datetime"))
             .call();
     }
-    else
+
+    if (menuId == "format")
+    {
+        dialogFormat();
+    }
+
+    if (menuId == "settings")
     {
         const bool value = m_settings.value(TIME_FORMAT_KEY, true).toBool();
         m_settings.setValue(TIME_FORMAT_KEY, !value);
@@ -206,4 +265,44 @@ void DatetimePlugin::updateCurrentTimeString()
 
     m_currentTimeString = currentString;
     m_centralWidget->update();
+}
+
+void DatetimePlugin::dialogFormat()
+{
+    QIcon m_dialogIcon;
+    QString format;
+    DInputDialog *dialog = new DInputDialog();
+
+    dialog->setInputMode(DInputDialog::InputMode::TextInput);
+
+    dialog->setBackgroundColor(DBlurEffectWidget::DarkColor);
+
+    dialog->setTitle(tr("Time display format"));
+
+    m_dialogIcon.addPixmap(DHiDPIHelper::loadNxPixmap(":/icons/resources/icons/clock.svg"));
+    dialog->setIcon(m_dialogIcon, QSize(64, 64));
+
+    format = m_settings.value(DATETIME_FORMAT_KEY, "hh:mm:ss\nd MMM yyyy").toString();
+    format = format.replace("\n", "\\n");
+    dialog->setTextValue(format);
+    dialog->addSpacing(10);
+
+    DHBoxWidget *hbox = new DHBoxWidget;
+    hbox->addWidget(new DLabel(tr("Such as:")));
+    hbox->addWidget(new DLabel("hh:mm:ss\\nddd, d MMM yyyy\nHH:mm AP ddd\\nyyyy/M/d"));
+    dialog->addContent(hbox);
+
+    connect(dialog, SIGNAL(okButtonClicked()), dialog, SLOT(accept()));
+    connect(dialog, SIGNAL(cancelButtonClicked()), dialog, SLOT(reject()));
+
+    if (dialog->exec() == DDialog::Accepted)
+    {
+        format = dialog->textValue();
+        format = format.replace("\\n", "\n");
+        m_settings.setValue(DATETIME_FORMAT_KEY, format);
+        m_centralWidget->setDateTimeFormat(format);
+        m_centralWidget->update();
+    }
+
+    dialog->close();
 }

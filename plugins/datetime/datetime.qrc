@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
+        <file>resources/icons/clock.svg</file>
         <file>resources/icons/background.svg</file>
         <file>resources/icons/big0.svg</file>
         <file>resources/icons/big1.svg</file>

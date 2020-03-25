@@ -32,6 +32,7 @@ public:
     explicit DatetimeWidget(QWidget *parent = 0);
 
     bool is24HourFormat() const { return m_24HourFormat; }
+    void setDateTimeFormat(const QString format);
 
 signals:
     void requestUpdateGeometry() const;
@@ -50,6 +51,7 @@ private:
     QPixmap m_cachedIcon;
     QString m_cachedTime;
     bool m_24HourFormat;
+    QString m_dateTimeFormat;
 };
 
 #endif // DATETIMEWIDGET_H

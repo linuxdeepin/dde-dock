@@ -37,8 +37,20 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Time Format</source>
+        <translation>type="unfinished"</translation>
+    </message>
+    <message>
         <source>Time Settings</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time display format</source>
+        <translation>type="unfinished"</translation>
+    </message>
+        <message>
+        <source>Such as:</source>
+        <translation>type="unfinished"</translation>
     </message>
 </context>
 <context>
