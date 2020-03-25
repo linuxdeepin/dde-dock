@@ -21,23 +21,11 @@
 
 #include "datetimeplugin.h"
 
-#include <QApplication>
-#include <QDesktopWidget>
-#include <DBlurEffectWidget>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <DDBusSender>
 #include <QDebug>
-#include <QStyleFactory>
 
-#include "ddialog.h"
-#include "dlineedit.h"
-#include "dpushbutton.h"
-#include "dlabel.h"
 #include "dinputdialog.h"
+#include "dlabel.h"
 #include "dboxwidget.h"
 #include "dhidpihelper.h"
 
@@ -269,18 +257,16 @@ void DatetimePlugin::updateCurrentTimeString()
 
 void DatetimePlugin::dialogFormat()
 {
-    QIcon m_dialogIcon;
+    QIcon dialogIcon;
     QString format;
     DInputDialog *dialog = new DInputDialog();
 
     dialog->setInputMode(DInputDialog::InputMode::TextInput);
 
-    dialog->setBackgroundColor(DBlurEffectWidget::DarkColor);
-
     dialog->setTitle(tr("Time display format"));
 
-    m_dialogIcon.addPixmap(DHiDPIHelper::loadNxPixmap(":/icons/resources/icons/clock.svg"));
-    dialog->setIcon(m_dialogIcon, QSize(64, 64));
+    dialogIcon.addPixmap(DHiDPIHelper::loadNxPixmap(":/icons/resources/icons/clock.svg"));
+    dialog->setIcon(dialogIcon, QSize(64, 64));
 
     format = m_settings.value(DATETIME_FORMAT_KEY, "hh:mm:ss\nd MMM yyyy").toString();
     format = format.replace("\n", "\\n");

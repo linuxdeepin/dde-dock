@@ -24,11 +24,9 @@
 
 #include "pluginsiteminterface.h"
 #include "datetimewidget.h"
-// #include "datetimedialog.h"
 #include "../../widgets/tipswidget.h"
 
 #include <QTimer>
-#include <QLabel>
 #include <QSettings>
 
 class DatetimePlugin : public QObject, PluginsItemInterface
