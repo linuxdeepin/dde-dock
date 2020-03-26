@@ -20,7 +20,6 @@
 package grub2
 
 import (
-	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -72,10 +71,6 @@ func PrepareGfxmodeDetect() error {
 	params, err := grub_common.LoadGrubParams()
 	if err != nil {
 		logger.Warning(err)
-	}
-
-	if grub_common.InGfxmodeDetectionMode(params) {
-		return errors.New("already in detection mode")
 	}
 
 	gfxmodes, err := grub_common.GetGfxmodesFromXRandr()
