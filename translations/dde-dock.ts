@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -21,15 +23,27 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>12 Hour Time</translation>
+        <translation type="vanished">12 Hour Time</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>24 Hour Time</translation>
+        <translation type="vanished">24 Hour Time</translation>
     </message>
     <message>
         <source>Time Settings</source>
-        <translation>Time Settings</translation>
+        <translation type="vanished">Time Settings</translation>
+    </message>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -203,7 +217,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Charged %1</translation>
+        <translation type="vanished">Charged %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -216,6 +230,10 @@
     <message>
         <source>Charging %1 ....</source>
         <translation>Charging %1 ....</translation>
+    </message>
+    <message>
+        <source>%1 charged</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -241,7 +259,7 @@
     </message>
     <message>
         <source>Restart</source>
-        <translation>Restart</translation>
+        <translation type="vanished">Restart</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -267,6 +285,10 @@
         <source>Power settings</source>
         <translation>Power settings</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -291,11 +313,19 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Audio Settings</translation>
+        <translation type="vanished">Audio Settings</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Current Volume %1</translation>
+        <translation type="vanished">Current Volume %1</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -357,11 +387,15 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Wireless Connection: %1</translation>
+        <translation type="vanished">Wireless Connection: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>
         <translation>Connected but no Internet access</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

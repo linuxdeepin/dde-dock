@@ -228,7 +228,7 @@ void PowerPlugin::refreshTipsData()
         m_tipsLabel->setText(tips);
     }
     else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.){
-        m_tipsLabel->setText(tr("Charged %1").arg(value));
+        m_tipsLabel->setText(tr("%1 charged").arg(value));
     }else {
         qulonglong timeToFull = m_systemPowerInter->batteryTimeToFull();
         QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();

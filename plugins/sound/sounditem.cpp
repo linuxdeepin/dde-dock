@@ -53,6 +53,7 @@ SoundItem::SoundItem(QWidget *parent)
 
     connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
     connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refreshTips, Qt::QueuedConnection);
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshIcon();
     });
@@ -89,7 +90,7 @@ const QString SoundItem::contextMenu() const
 
     QMap<QString, QVariant> settings;
     settings["itemId"] = SETTINGS;
-    settings["itemText"] = tr("Audio Settings");
+    settings["itemText"] = tr("Sound settings");
     settings["isActive"] = true;
     items.push_back(settings);
 
@@ -214,7 +215,7 @@ void SoundItem::refreshTips(const bool force)
         else
             value = QString::number(int(m_sinkInter->volume() * 100)) + '%';
     }
-    m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
+    m_tipsLabel->setText(QString(tr("Volume %1").arg(value)));
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)
