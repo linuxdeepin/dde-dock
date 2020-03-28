@@ -6,7 +6,42 @@ import (
 	"strings"
 
 	"github.com/jinzhu/gorm"
+	"pkg.deepin.io/lib/gettext"
 )
+
+const (
+	jobTypeWork = iota + 1
+	jobTypeLife
+	jobTypeOther
+	JobTypeFestival
+)
+
+var globalPredefinedTypes []*JobTypeJSON
+
+func initPredefinedJobTypes() {
+	globalPredefinedTypes = []*JobTypeJSON{
+		{
+			ID:    jobTypeWork,
+			Name:  gettext.Tr("Work"),
+			Color: "#FF0000", // red
+		},
+		{
+			ID:    jobTypeLife,
+			Name:  gettext.Tr("Life"),
+			Color: "#00FF00", // green
+		},
+		{
+			ID:    jobTypeOther,
+			Name:  gettext.Tr("Other"),
+			Color: "#800080", // purple
+		},
+		{
+			ID:    JobTypeFestival,
+			Name:  gettext.Tr("Festival"),
+			Color: "#FFFF00", // yellow
+		},
+	}
+}
 
 type JobType struct {
 	gorm.Model

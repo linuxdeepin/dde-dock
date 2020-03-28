@@ -4,14 +4,18 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/jinzhu/gorm"
+	lunarcalendar "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.lunarcalendar"
 	libdate "github.com/rickb777/date"
 	"github.com/teambition/rrule-go"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gettext"
 )
 
@@ -160,13 +164,17 @@ type jobTime struct {
 	recurID int
 }
 
-func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool) (wraps []dateJobsWrap) {
+func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool, queryKey string, needFestival bool) (wraps []dateJobsWrap) {
 	days := endDate.Sub(startDate)
 	wraps = make([]dateJobsWrap, days+1)
 	date := startDate
 	for idx := range wraps {
 		wraps[idx].date = date
 		date = date.Add(1)
+	}
+
+	if needFestival {
+		fillFestivalJobs(startDate, endDate, queryKey, wraps)
 	}
 
 	for _, job := range jobs {
@@ -217,6 +225,87 @@ func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool) (
 	}
 
 	return
+}
+
+var festivalIdMap = make(map[string]uint)
+var nextFestivalJobId uint = math.MaxUint32
+var festivalIdMapMu sync.Mutex
+
+func getFestivalJobId(name string) uint {
+	festivalIdMapMu.Lock()
+	defer festivalIdMapMu.Unlock()
+
+	id, ok := festivalIdMap[name]
+	if ok {
+		return id
+	}
+
+	id = nextFestivalJobId
+	festivalIdMap[name] = id
+	nextFestivalJobId--
+	return id
+}
+
+func fillFestivalJobs(startDate, endDate libdate.Date, queryKey string, wraps []dateJobsWrap) {
+	sessionBus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	lc := lunarcalendar.NewLunarCalendar(sessionBus)
+	dayFestivalSlice, err := lc.GetFestivalsInRange(0, startDate.String(), endDate.String())
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if queryKey != "" {
+		dayFestivalSlice = filterDayFestivalSlice(dayFestivalSlice, queryKey)
+	}
+
+	for _, dayFestival := range dayFestivalSlice {
+		if len(dayFestival.Festivals) == 0 {
+			continue
+		}
+		d := libdate.New(int(dayFestival.Year), time.Month(dayFestival.Month), int(dayFestival.Day))
+		idx := int(d.Sub(startDate))
+		//logger.Debugf("id: %d, d: %v, festivals: %v", idx, d, dayFestival.Festivals)
+		if 0 <= idx && idx < len(wraps) {
+			for _, festival := range dayFestival.Festivals {
+				j := &Job{
+					Title:  festival,
+					Type:   JobTypeFestival,
+					AllDay: true,
+					Start:  newTimeYMDHM(d.Year(), d.Month(), d.Day(), 0, 0),
+					End:    newTimeYMDHM(d.Year(), d.Month(), d.Day(), 23, 59),
+					RRule:  "FREQ=YEARLY",
+				}
+				j.ID = getFestivalJobId(festival)
+				wraps[idx].jobs = append(wraps[idx].jobs, j)
+			}
+		}
+	}
+}
+
+func filterDayFestivalSlice(dayFestivalSlice []lunarcalendar.DayFestival, queryKey string) []lunarcalendar.DayFestival {
+	var result []lunarcalendar.DayFestival
+	for _, dayFestival := range dayFestivalSlice {
+		var festivals []string
+		for _, festival := range dayFestival.Festivals {
+			if strings.Contains(festival, queryKey) {
+				festivals = append(festivals, festival)
+			}
+		}
+		if len(festivals) == 0 {
+			continue
+		}
+		result = append(result, lunarcalendar.DayFestival{
+			Year:      dayFestival.Year,
+			Month:     dayFestival.Month,
+			Day:       dayFestival.Day,
+			Festivals: festivals,
+		})
+	}
+	return result
 }
 
 const recurrenceLimit = 3650

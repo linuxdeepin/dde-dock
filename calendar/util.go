@@ -1,9 +1,11 @@
 package calendar
 
 import (
+	"strings"
 	"time"
 
 	"encoding/json"
+	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/libc"
 )
 
@@ -47,4 +49,9 @@ func cFormatTime(format string, t time.Time) string {
 	tm := libc.NewTm(t)
 	v := libc.Strftime(format, tm)
 	return v
+}
+
+func isZH() bool {
+	lang := gettext.QueryLang()
+	return strings.HasPrefix(lang, "zh")
 }
