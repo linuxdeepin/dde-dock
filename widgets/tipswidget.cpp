@@ -1,10 +1,13 @@
 #include "tipswidget.h"
 
+#include <QApplication>
 #include <QPainter>
 
 TipsWidget::TipsWidget(QWidget *parent) : QFrame(parent)
 {
-
+    connect(qApp, &QApplication::fontChanged, this, [=] {
+         setText(m_text);
+     });
 }
 
 void TipsWidget::setText(const QString &text)
@@ -16,16 +19,9 @@ void TipsWidget::setText(const QString &text)
     update();
 }
 
-void TipsWidget::refreshFont()
-{
-    setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
-    update();
-}
-
 void TipsWidget::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
-    refreshFont();
 
     QPainter painter(this);
     painter.setPen(QPen(palette().brightText(), 1));

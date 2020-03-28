@@ -366,8 +366,8 @@ void DockSettings::onGSettingsChanged(const QString &key)
     QGSettings *setting = GSettingsByMenu();
 
     if (setting->keys().contains("enable")) {
-        const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
-        m_menuVisible = isEnable && setting->get("enable").toBool();
+        const bool isEnable =  setting->get("enable").toBool();
+        m_menuVisible = isEnable;
     }
 }
 
