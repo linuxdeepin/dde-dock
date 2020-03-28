@@ -67,8 +67,8 @@ const (
 
 // Read /var/lib/lastore/applications.json data struct
 type ApplicationsData struct {
-	Category       string `json:"category"`
-	PackageName    string `json:"package_name"`
+	Category    string `json:"category"`
+	PackageName string `json:"package_name"`
 }
 
 type Manager struct {
