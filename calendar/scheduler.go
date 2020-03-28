@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"encoding/json"
+	"errors"
 	"strings"
 	"sync"
 	"time"
@@ -25,6 +26,7 @@ type Scheduler struct {
 	timerGroup          timerGroup
 	remindLaterTimers   map[uint]*time.Timer // key is job id
 	remindLaterTimersMu sync.Mutex
+	festivalJobEnabled  bool
 
 	changeChan chan []uint
 	quitChan   chan struct{}
@@ -63,6 +65,9 @@ func newScheduler(db *gorm.DB, service *dbusutil.Service) *Scheduler {
 		notifications:     notifications.NewNotifications(sessionBus),
 		notifyJobMap:      make(map[uint32]*JobJSON),
 		remindLaterTimers: make(map[uint]*time.Timer),
+	}
+	if isZH() {
+		s.festivalJobEnabled = true
 	}
 	s.signalLoop = dbusutil.NewSignalLoop(sessionBus, 10)
 	s.signalLoop.Start()
@@ -220,7 +225,7 @@ func (s *Scheduler) getJobs(startDate, endDate libdate.Date) ([]dateJobsWrap, er
 	}
 
 	t0 := time.Now()
-	result := getJobsBetween(startDate, endDate, allJobs, true)
+	result := getJobsBetween(startDate, endDate, allJobs, true, "", s.festivalJobEnabled)
 	logger.Debug("cost time:", time.Since(t0))
 	return result, nil
 }
@@ -251,7 +256,7 @@ func (s *Scheduler) queryJobs(key string, startTime, endTime time.Time) ([]dateJ
 	startDate := libdate.NewAt(startTime)
 	endDate := libdate.NewAt(endTime)
 
-	result := getJobsBetween(startDate, endDate, allJobs, true)
+	result := getJobsBetween(startDate, endDate, allJobs, true, key, s.festivalJobEnabled)
 
 	timeRange := TimeRange{
 		start: startTime,
@@ -352,26 +357,33 @@ func (s *Scheduler) createJob(job *Job) error {
 }
 
 func (s *Scheduler) getTypes() ([]*JobTypeJSON, error) {
-	var types []JobType
-	err := s.db.Find(&types).Error
-	if err != nil {
-		return nil, err
-	}
-
-	result := make([]*JobTypeJSON, len(types))
-	for idx, t := range types {
-		result[idx] = t.toJobTypeJSON()
-	}
-	return result, nil
+	return globalPredefinedTypes, nil
+	//var types []JobType
+	//err := s.db.Find(&types).Error
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//result := make([]*JobTypeJSON, len(types))
+	//for idx, t := range types {
+	//	result[idx] = t.toJobTypeJSON()
+	//}
+	//return result, nil
 }
 
 func (s *Scheduler) getType(id uint) (*JobTypeJSON, error) {
-	var jobType JobType
-	err := s.db.First(&jobType, id).Error
-	if err != nil {
-		return nil, err
+	for _, jobType := range globalPredefinedTypes {
+		if jobType.ID == id {
+			return jobType, nil
+		}
 	}
-	return jobType.toJobTypeJSON(), nil
+	return nil, errors.New("job type not found")
+	//var jobType JobType
+	//err := s.db.First(&jobType, id).Error
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return jobType.toJobTypeJSON(), nil
 }
 
 func (s *Scheduler) deleteType(id uint) error {
@@ -727,7 +739,7 @@ func (s *Scheduler) getRemindJobs(tr TimeRange) ([]*Job, error) {
 
 	var result []*Job
 
-	wraps := getJobsBetween(startDate, endDate, allJobs, false)
+	wraps := getJobsBetween(startDate, endDate, allJobs, false, "", false)
 	for _, wrap := range wraps {
 		for _, job := range wrap.jobs {
 			remindT, err := job.getRemindTime()
