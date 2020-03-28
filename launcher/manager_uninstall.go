@@ -212,6 +212,15 @@ func (m *Manager) uninstall(id string) error {
 	if err != nil {
 		logger.Warning(err)
 	}
+
+	if pkg == "" {
+		// try again
+		pkg, err = queryPkgNameWithDpkg(item.Path)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
 	if pkg != "" {
 		// is pkg installed?
 		installed, err := m.lastore.PackageExists(0, pkg)
@@ -252,6 +261,21 @@ func (m *Manager) uninstall(id string) error {
 	}
 
 	return m.uninstallDesktopFile(item)
+}
+
+func queryPkgNameWithDpkg(itemPath string) (string, error) {
+	out, err := exec.Command("dpkg", "-S", itemPath).Output()
+	if err != nil {
+		return "", err
+	}
+	lines := strings.Split(string(out), "\n")
+	if len(lines) > 0 {
+		parts := strings.SplitN(lines[0], ":", 2)
+		if len(parts) == 2 {
+			return strings.TrimSpace(parts[0]), nil
+		}
+	}
+	return "", errors.New("command dpkg -S do not print the package name")
 }
 
 const (
