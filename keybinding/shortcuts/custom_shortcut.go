@@ -22,6 +22,7 @@ package shortcuts
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"pkg.deepin.io/dde/daemon/keybinding/util"
 	"pkg.deepin.io/lib/keyfile"
@@ -74,6 +75,16 @@ func (cs *CustomShortcut) Save() error {
 }
 
 func (cs *CustomShortcut) GetAction() *Action {
+	_, err := os.Stat(cs.Cmd)
+	if !os.IsNotExist(err) {
+		if strings.HasSuffix(cs.Cmd, ".desktop") {
+			return &Action{
+				Type: ActionTypeDesktopFile,
+				Arg:  cs.Cmd,
+			}
+		}
+	}
+
 	a := &Action{
 		Type: ActionTypeExecCmd,
 		Arg: &ActionExecCmdArg{

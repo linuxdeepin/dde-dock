@@ -19,14 +19,13 @@
 
 package shortcuts
 
-import ()
-
 type ActionType uint
 
 const (
 	ActionTypeNonOp ActionType = iota
 	ActionTypeExecCmd
 	ActionTypeOpenMimeType
+	ActionTypeDesktopFile
 	ActionTypeShowNumLockOSD
 	ActionTypeShowCapsLockOSD
 	ActionTypeSystemShutdown

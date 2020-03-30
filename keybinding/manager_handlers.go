@@ -128,6 +128,17 @@ func (m *Manager) initHandlers() {
 		}()
 	}
 
+	m.handlers[ActionTypeDesktopFile] = func(ev *KeyEvent) {
+		action := ev.Shortcut.GetAction()
+
+		go func() {
+			err := m.runDesktopFile(action.Arg.(string))
+			if err != nil {
+				logger.Warning("runDesktopFile error:", err)
+			}
+		}()
+	}
+
 	m.handlers[ActionTypeAudioCtrl] = buildHandlerFromController(m.audioController)
 	m.handlers[ActionTypeMediaPlayerCtrl] = buildHandlerFromController(m.mediaPlayerController)
 	m.handlers[ActionTypeDisplayCtrl] = buildHandlerFromController(m.displayController)
