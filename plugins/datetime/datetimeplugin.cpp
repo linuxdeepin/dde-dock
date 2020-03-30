@@ -59,7 +59,7 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
     if (QFile::exists(settings.fileName())) {
         Dock::DisplayMode mode = displayMode();
         const QString     key  = QString("pos_%1").arg(mode);
-        proxyInter->saveValue(this, key, settings.value(key, mode == Dock::DisplayMode::Fashion ? 5 : -1));
+        proxyInter->saveValue(this, key, settings.value(key, 6));
         QFile::remove(settings.fileName());
     }
 
@@ -110,7 +110,7 @@ int DatetimePlugin::itemSortKey(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     const QString key = QString("pos_%1").arg(Dock::Efficient);
-    return m_proxyInter->getValue(this, key, 5).toInt();
+    return m_proxyInter->getValue(this, key, 6).toInt();
 }
 
 void DatetimePlugin::setSortKey(const QString &itemKey, const int order)
