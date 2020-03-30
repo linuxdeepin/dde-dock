@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>bluetooth-active-symbolic-dark.svg</file>
+        <file>bluetooth-active-symbolic.svg</file>
+        <file>bluetooth-disable-symbolic-dark.svg</file>
+        <file>bluetooth-disable-symbolic.svg</file>
+        <file>bluetooth-waiting-symbolic-dark.svg</file>
+        <file>bluetooth-waiting-symbolic.svg</file>
+        <file>list_select.png</file>
+        <file>list_select@2x.png</file>
+        <file>notify_close_press.png</file>
+        <file>notify_close_press@2x.png</file>
+    </qresource>
+</RCC>
