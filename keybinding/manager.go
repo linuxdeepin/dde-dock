@@ -378,6 +378,10 @@ func (m *Manager) execCmd(cmd string, viaStartdde bool) error {
 	return m.startManager.RunCommand(0, "/bin/sh", []string{"-c", cmd})
 }
 
+func (m *Manager) runDesktopFile(desktop string) error {
+	return m.startManager.LaunchApp(0, desktop, 0, []string{})
+}
+
 func (m *Manager) eliminateKeystrokeConflict() {
 	for _, ks := range m.shortcutManager.ConflictingKeystrokes {
 		shortcut := ks.Shortcut
