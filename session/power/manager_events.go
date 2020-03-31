@@ -100,6 +100,12 @@ func (m *Manager) handleWakeup() {
 		}
 	}
 
+	if v := m.submodules[submodulePSP]; v != nil {
+		if psp := v.(*powerSavePlan); psp != nil {
+			psp.HandleIdleOff()
+		}
+	}
+
 	m.setDPMSModeOn()
 	m.helper.Power.RefreshBatteries(0)
 	playSound(soundutils.EventWakeup)
