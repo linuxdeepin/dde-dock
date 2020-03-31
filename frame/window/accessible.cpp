@@ -44,9 +44,13 @@ QString getAccesibleName(QWidget *w, QAccessible::Role r, QString fallback)
     // 再加上标识
     QString accessibleName = QString::fromLatin1(prefix) + SEPARATOR;
     accessibleName += oldAccessName.isEmpty() ? fallback : oldAccessName;
-
     // 检查名称是否唯一
     if (accessibleMap[r].contains(accessibleName)) {
+        if (objnameMap.key(accessibleName)) {
+            objnameMap.remove(objnameMap.key(accessibleName));
+            objnameMap.insert(w, accessibleName);
+            return accessibleName;
+        }
         // 获取编号，然后+1
         int pos = accessibleName.indexOf(SEPARATOR);
         int id = accessibleName.mid(pos + 1).toInt();
