@@ -383,6 +383,7 @@ void DockSettings::onPositionChanged()
 
     QTimer::singleShot(200, this, [this, nextPos] {
         m_position = nextPos;
+        qDebug()<<"===================dock position ="<<nextPos;
         DockItem::setDockPosition(nextPos);
         qApp->setProperty(PROP_POSITION, QVariant::fromValue(nextPos));
 
@@ -395,6 +396,7 @@ void DockSettings::onPositionChanged()
 void DockSettings::onDisplayModeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
+    qDebug()<<"=================dock displaymode = "<<m_dockInter->displayMode();
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     DockItem::setDockDisplayMode(m_displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
