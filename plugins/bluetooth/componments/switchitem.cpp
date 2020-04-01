@@ -30,11 +30,15 @@ SwitchItem::SwitchItem(QWidget *parent)
     , m_switchBtn(new DSwitchButton(this))
     , m_default(false)
 {
+    setFixedHeight(35);
     auto switchLayout = new QHBoxLayout(this);
-    switchLayout->setMargin(2);
+    switchLayout->setSpacing(0);
+    switchLayout->setMargin(0);
+    switchLayout->addSpacing(5);
     switchLayout->addWidget(m_title);
     switchLayout->addStretch();
     switchLayout->addWidget(m_switchBtn);
+    switchLayout->addSpacing(5);
     setLayout(switchLayout);
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {

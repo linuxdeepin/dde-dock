@@ -34,7 +34,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     : QScrollArea(parent)
     , m_centralWidget(new QWidget(this))
     , m_line(new HorizontalSeparator(this))
-    , m_devGoupName(new QLabel(this))
     , m_deviceLayout(new QVBoxLayout)
     , m_openControlCenter(new MenueItem(this))
     , m_adaptersManager(adapterManager)
@@ -43,8 +42,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
 {
     m_centralWidget->setFixedWidth(Width);
     m_line->setVisible(true);
-    m_devGoupName->setText(tr("My Device"));
-    m_devGoupName->setVisible(false);
     m_deviceLayout->setMargin(0);
     m_deviceLayout->setSpacing(0);
     m_openControlCenter->setText("Bluetooth settings");
@@ -54,7 +51,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
 
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
-    m_deviceLayout->addWidget(m_devGoupName);
     m_deviceLayout->addWidget(m_openControlCenter);
     m_centralWidget->setFixedWidth(Width);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -94,10 +90,10 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     showDevices(adapter->powered());
 }
 
-int AdapterItem::pairedDeviceCount()
-{
-    return  m_pairedDeviceItems.size();
-}
+//int AdapterItem::pairedDeviceCount()
+//{
+//    return  m_pairedDeviceItems.size();
+//}
 
 int AdapterItem::deviceCount()
 {
@@ -111,18 +107,18 @@ void AdapterItem::setPowered(bool powered)
 
 void AdapterItem::deviceItemPaired(const bool paired)
 {
-    auto device = qobject_cast<Device *>(sender());
-    if (device) {
-        auto deviceId = device->id();
-        auto deviceItem = m_deviceItems.value(deviceId);
-        if (deviceItem) {
-            if (paired)
-                m_pairedDeviceItems[deviceId] = deviceItem;
-            else
-                m_pairedDeviceItems.remove(deviceId);
-        }
-        showDevices(m_adapter->powered());
-    }
+//    auto device = qobject_cast<Device *>(sender());
+//    if (device) {
+//        auto deviceId = device->id();
+//        auto deviceItem = m_deviceItems.value(deviceId);
+//        if (deviceItem) {
+//            if (paired)
+//                m_pairedDeviceItems[deviceId] = deviceItem;
+//            else
+//                m_pairedDeviceItems.remove(deviceId);
+//        }
+//        showDevices(m_adapter->powered());
+//    }
 }
 
 void AdapterItem::removeDeviceItem(const Device *device)
@@ -134,7 +130,7 @@ void AdapterItem::removeDeviceItem(const Device *device)
     if (deviceItem) {
         m_deviceItems.remove(device->id());
         if (device->paired()) {
-            m_pairedDeviceItems.remove(device->id());
+//            m_pairedDeviceItems.remove(device->id());
             m_deviceLayout->removeWidget(deviceItem);
         }
         delete deviceItem;
@@ -163,24 +159,41 @@ void AdapterItem::addDeviceItem(const Device *constDevice)
     showDevices(m_adapter->powered());
 }
 
+void AdapterItem::deviceChangeState(const Device::State state)
+{
+    auto device = qobject_cast<Device *>(sender());
+    if (device) {
+        auto deviceItem = m_deviceItems.value(device->id());
+        if (deviceItem && Device::StateConnected == state) {
+            auto fromWidget = m_deviceLayout->itemAt(2)->widget();
+            if (fromWidget) {
+                m_deviceLayout->replaceWidget(fromWidget, deviceItem);
+                m_deviceLayout->addWidget(fromWidget);
+            }
+        }
+    }
+
+    emit deviceStateChanged(state);
+}
+
 void AdapterItem::createDeviceItem(Device *device)
 {
     if (!device)
         return;
 
-    auto paired = device->paired();
+//    auto paired = device->paired();
     auto deviceId = device->id();
     auto deviceItem = new DeviceItem(device->name(), this);
     deviceItem->setDevice(device);
     m_deviceItems[deviceId] = deviceItem;
-    if (paired)
-        m_pairedDeviceItems[deviceId] = deviceItem;
-    deviceItem->setVisible(paired);
+//    if (paired)
+//        m_pairedDeviceItems[deviceId] = deviceItem;
+//    deviceItem->setVisible(paired);
 
-    connect(device, &Device::pairedChanged, this, &AdapterItem::deviceItemPaired);
+//    connect(device, &Device::pairedChanged, this, &AdapterItem::deviceItemPaired);
     connect(device, &Device::nameChanged, deviceItem, &DeviceItem::setTitle);
-    connect(device, &Device::stateChanged, deviceItem, &DeviceItem::chaneState);
-    connect(device, &Device::stateChanged, this, &AdapterItem::deviceStateChanged);
+    connect(device, &Device::stateChanged, deviceItem, &DeviceItem::changeState);
+    connect(device, &Device::stateChanged, this, &AdapterItem::deviceChangeState);
     connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, &AdaptersManager::connectDevice);
 }
 
@@ -194,7 +207,8 @@ void AdapterItem::updateView()
 
 void AdapterItem::showDevices(bool change)
 {
-    for (auto deviceItem : m_pairedDeviceItems) {
+//    for (auto deviceItem : m_pairedDeviceItems) {
+    for (auto deviceItem : m_deviceItems) {
         if (change)
             m_deviceLayout->addWidget(deviceItem);
         else {
@@ -202,9 +216,9 @@ void AdapterItem::showDevices(bool change)
         }
         deviceItem->setVisible(change);
     }
-    auto itemCount = m_pairedDeviceItems.size();
+//    auto itemCount = m_pairedDeviceItems.size();
+    auto itemCount = m_deviceItems.size();
     m_line->setVisible(change);
-    m_devGoupName->setVisible(itemCount && change);
     m_openControlCenter->setVisible(!itemCount);
     updateView();
 }

@@ -118,7 +118,7 @@ void BluetoothApplet::updateView()
     int itemCount = 0;
     for (auto adapterItem : m_adapterItems) {
         if (adapterItem)
-            itemCount += adapterItem->pairedDeviceCount();
+            itemCount += adapterItem->deviceCount();
     }
 
     if (m_adapterItems.size() > 1) {

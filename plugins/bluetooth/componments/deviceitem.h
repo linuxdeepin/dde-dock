@@ -52,7 +52,7 @@ signals:
     void clicked(Device *);
 
 public slots:
-    void chaneState(const Device::State state);
+    void changeState(const Device::State state);
 
 private:
     QLabel *m_title;
