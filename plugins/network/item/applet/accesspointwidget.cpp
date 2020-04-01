@@ -25,6 +25,7 @@
 #include "../frame/util/imageutil.h"
 #include <QHBoxLayout>
 #include <QDebug>
+#include "QFontMetrics"
 #include <dimagebutton.h>
 #include <DGuiApplicationHelper>
 #include <DApplication>
@@ -89,7 +90,16 @@ AccessPointWidget::AccessPointWidget()
 void AccessPointWidget::updateAP(const AccessPoint &ap)
 {
     m_ap = ap;
-    m_ssidBtn->setText(ap.ssid());
+
+    QString strSsid = ap.ssid();
+    m_ssidBtn->setText(strSsid);
+
+    QFontMetrics fontMetrics(m_ssidBtn->font());
+    if(fontMetrics.width(strSsid) > m_ssidBtn->width())
+    {
+        strSsid = QFontMetrics(m_ssidBtn->font()).elidedText(strSsid, Qt::ElideLeft, m_ssidBtn->width());
+    }
+    m_ssidBtn->setText(strSsid);
 
     setStrengthIcon(ap.strength());
 
