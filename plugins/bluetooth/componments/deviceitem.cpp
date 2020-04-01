@@ -27,14 +27,27 @@
 #include <QHBoxLayout>
 #include <QPainter>
 
+const int ItemHeight = 30;
+
 DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     : QWidget(parent)
-    , m_title(new QLabel(title, this))
+    , m_title(new QLabel(this))
     , m_state(new QLabel(this))
     , m_loadingStat(new DSpinner)
     , m_line(new HorizontalSeparator(this))
 {
-    m_state->setPixmap(QPixmap(":/list_select@2x.png"));
+    setFixedHeight(ItemHeight);
+//    m_state->setPixmap(QPixmap(":/list_select@2x.png"));
+    m_state->setPixmap(QPixmap(":/select_dark.svg"));
+
+    auto strTitle = title;
+    m_title->setText(strTitle);
+    QFontMetrics fontMetrics(m_title->font());
+    if(fontMetrics.width(strTitle) > m_title->width())
+    {
+        strTitle = QFontMetrics(m_title->font()).elidedText(strTitle, Qt::ElideRight, m_title->width());
+    }
+    m_title->setText(strTitle);
 
     m_line->setVisible(true);
     m_state->setVisible(false);
@@ -69,7 +82,8 @@ void DeviceItem::enterEvent(QEvent *event)
     QWidget::enterEvent(event);
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
-            m_state->setPixmap(QPixmap(":/notify_close_press@2x.png"));
+//            m_state->setPixmap(QPixmap(":/notify_close_press@2x.png"));
+            m_state->setPixmap(QPixmap(":/disconnect_dark.svg"));
         }
     }
 }
@@ -79,12 +93,13 @@ void DeviceItem::leaveEvent(QEvent *event)
     QWidget::enterEvent(event);
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
-            m_state->setPixmap(QPixmap(":/list_select@2x.png"));
+//            m_state->setPixmap(QPixmap(":/list_select@2x.png"));
+            m_state->setPixmap(QPixmap(":/select_dark.svg"));
         }
     }
 }
 
-void DeviceItem::chaneState(const Device::State state)
+void DeviceItem::changeState(const Device::State state)
 {
     switch (state) {
     case Device::StateUnavailable: {
@@ -123,7 +138,7 @@ void HorizontalSeparator::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.fillRect(rect(), QColor(0, 0, 0, 125));
+    painter.fillRect(rect(), QColor(0, 0, 0, 0));
 }
 
 MenueItem::MenueItem(QWidget *parent)

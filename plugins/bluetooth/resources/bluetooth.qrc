@@ -10,5 +10,11 @@
         <file>list_select@2x.png</file>
         <file>notify_close_press.png</file>
         <file>notify_close_press@2x.png</file>
+        <file>refresh_dark.svg</file>
+        <file>refresh.svg</file>
+        <file>select_dark.svg</file>
+        <file>select.svg</file>
+        <file>disconnect.svg</file>
+        <file>disconnect_dark.svg</file>
     </qresource>
 </RCC>
