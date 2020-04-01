@@ -21,11 +21,12 @@
  */
 
 #include "bluetoothapplet.h"
-
 #include "componments/switchitem.h"
 #include "componments/deviceitem.h"
 #include "componments/adapter.h"
 #include "componments/switchitem.h"
+#include "componments/adaptersmanager.h"
+#include "componments/adapteritem.h"
 
 const int Width = 200;
 

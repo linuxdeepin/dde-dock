@@ -1,5 +1,29 @@
+/*
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     zhaolong <zhaolong@uniontech.com>
+ *
+ * Maintainer: zhaolong <zhaolong@uniontech.com>
+ *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef ADAPTERITEM_H
 #define ADAPTERITEM_H
+
+#include "device.h"
 
 #include <QScrollArea>
 #include <QMap>
@@ -10,7 +34,6 @@ class HorizontalSeparator;
 class Adapter;
 class SwitchItem;
 class DeviceItem;
-class Device;
 class AdaptersManager;
 class MenueItem;
 class AdapterItem : public QScrollArea
@@ -23,7 +46,7 @@ public:
     void setPowered(bool powered);
 
 signals:
-    void deviceStateChanged(int state);
+    void deviceStateChanged(const Device::State state);
     void powerChanged(bool powered);
     void sizeChange();
 

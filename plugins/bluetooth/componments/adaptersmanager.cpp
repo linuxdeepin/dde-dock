@@ -21,6 +21,8 @@
  */
 
 #include "adaptersmanager.h"
+#include "adapter.h"
+#include "device.h"
 
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -99,15 +101,12 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
         if (powered) {
             QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
             connect(watcher, &QDBusPendingCallWatcher::finished, [this, call, adapter] {
-                if (!call.isError())
-                {
+                if (!call.isError()) {
                     QDBusObjectPath dPath(adapter->id());
                     m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
                     m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
-
                     m_bluetoothInter->RequestDiscovery(dPath);
-                } else
-                {
+                } else {
                     qWarning() << call.error().message();
                 }
             });
@@ -132,16 +131,14 @@ void AdaptersManager::connectDevice(Device *device)
     if (device) {
         QDBusObjectPath path(device->id());
         switch (device->state()) {
-        case 0:
-        {
+        case Device::StateUnavailable: {
             m_bluetoothInter->ConnectDevice(path);
             qDebug() << "connect to device: " << device->name();
         }
             break;
-        case 1:
+        case Device::StateAvailable:
             break;
-        case 2:
-        {
+        case Device::StateConnected: {
             m_bluetoothInter->DisconnectDevice(path);
             qDebug() << "disconnect device: " << device->name();
         }
@@ -247,9 +244,8 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
     QDBusPendingCall call = m_bluetoothInter->GetDevices(dPath);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, [this, adapter, call, watcher] {
-        if (adapter)
-        {
-            if (!call.isError())  {
+        if (adapter) {
+            if (!call.isError()) {
                 QDBusReply<QString> reply = call.reply();
                 const QString replyStr = reply.value();
                 auto doc = QJsonDocument::fromJson(replyStr.toUtf8());

@@ -23,8 +23,9 @@
 #ifndef BLUETOOTHITEM_H
 #define BLUETOOTHITEM_H
 
+#include "componments/device.h"
+
 #include <QWidget>
-#include <QIcon>
 
 #define BLUETOOTH_KEY "bluetooth-item-key"
 
@@ -60,7 +61,7 @@ private:
     BluetoothApplet *m_applet;
     QPixmap m_iconPixmap;
 
-    int m_devState;
+    Device::State m_devState;
     bool m_adapterPowered;
 };
 

@@ -22,17 +22,15 @@
 
 #include "bluetoothitem.h"
 #include "constants.h"
-#include "bluetoothapplet.h"
-
-#include <QPainter>
-#include <QIcon>
-#include <QMouseEvent>
-#include <QApplication>
-#include <DApplication>
-#include <DDBusSender>
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
+#include "bluetoothapplet.h"
+
+#include <DApplication>
+#include <DDBusSender>
 #include <DGuiApplicationHelper>
+
+#include <QPainter>
 
 // menu actions
 #define SHIFT     "shift"
@@ -53,7 +51,7 @@ BluetoothItem::BluetoothItem(QWidget *parent)
         m_adapterPowered = powered;
         refreshIcon();
     });
-    connect(m_applet, &BluetoothApplet::deviceStateChanged, [&](int state) {
+    connect(m_applet, &BluetoothApplet::deviceStateChanged, [&](const Device::State state) {
         m_devState = state;
         refreshIcon();
     });
@@ -123,7 +121,7 @@ void BluetoothItem::refreshIcon()
 
     QString stateString;
 
-    m_adapterPowered ? (m_devState == 2 ? stateString = "waiting" : stateString = "active") : stateString = "disable";
+    m_adapterPowered ? (m_devState == Device::StateConnected ? stateString = "waiting" : stateString = "active") : stateString = "disable";
 
     QString iconString = QString("bluetooth-%1-symbolic").arg(stateString);
 

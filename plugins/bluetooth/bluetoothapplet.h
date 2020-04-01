@@ -23,13 +23,16 @@
 #ifndef BLUETOOTHAPPLET_H
 #define BLUETOOTHAPPLET_H
 
-#include "componments/adaptersmanager.h"
-#include "componments/adapteritem.h"
+#include "componments/device.h"
 
+#include <QScrollArea>
 #include <QLabel>
 #include <QVBoxLayout>
 
+class Adapter;
 class AdapterItem;
+class HorizontalSeparator;
+class AdaptersManager;
 class BluetoothApplet : public QScrollArea
 {
     Q_OBJECT
@@ -45,7 +48,7 @@ public slots :
 
 signals:
     void powerChanged(bool state);
-    void deviceStateChanged(int state);
+    void deviceStateChanged(const Device::State state);
     void noAdapter();
 
 private:

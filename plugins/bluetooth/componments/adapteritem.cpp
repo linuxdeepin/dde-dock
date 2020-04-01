@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     zhaolong <zhaolong@uniontech.com>
+ *
+ * Maintainer: zhaolong <zhaolong@uniontech.com>
+ *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "adapteritem.h"
 #include "switchitem.h"
 #include "deviceitem.h"
@@ -30,7 +52,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered());
 
-//    m_deviceLayout->setMargin(5);
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
     m_deviceLayout->addWidget(m_devGoupName);
@@ -146,6 +167,7 @@ void AdapterItem::createDeviceItem(Device *device)
 {
     if (!device)
         return;
+
     auto paired = device->paired();
     auto deviceId = device->id();
     auto deviceItem = new DeviceItem(device->name(), this);
@@ -153,12 +175,13 @@ void AdapterItem::createDeviceItem(Device *device)
     m_deviceItems[deviceId] = deviceItem;
     if (paired)
         m_pairedDeviceItems[deviceId] = deviceItem;
+    deviceItem->setVisible(paired);
+
     connect(device, &Device::pairedChanged, this, &AdapterItem::deviceItemPaired);
     connect(device, &Device::nameChanged, deviceItem, &DeviceItem::setTitle);
     connect(device, &Device::stateChanged, deviceItem, &DeviceItem::chaneState);
     connect(device, &Device::stateChanged, this, &AdapterItem::deviceStateChanged);
     connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, &AdaptersManager::connectDevice);
-    deviceItem->setVisible(paired);
 }
 
 void AdapterItem::updateView()

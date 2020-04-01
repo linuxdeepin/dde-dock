@@ -65,7 +65,7 @@ public:
 Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void pairedChanged(const bool paired) const;
-    void stateChanged(int state) const;
+    void stateChanged(const State state) const;
     void trustedChanged(const bool trusted) const;
     void connectingChanged(const bool &connecting) const;
 

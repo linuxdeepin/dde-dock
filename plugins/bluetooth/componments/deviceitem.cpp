@@ -22,12 +22,10 @@
 
 #include "deviceitem.h"
 
-#include "device.h"
-
 #include <DStyle>
+
 #include <QHBoxLayout>
 #include <QPainter>
-
 
 DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     : QWidget(parent)
@@ -70,7 +68,7 @@ void DeviceItem::enterEvent(QEvent *event)
 {
     QWidget::enterEvent(event);
     if (m_device) {
-        if (2 == m_device->state()) {
+        if (Device::StateConnected == m_device->state()) {
             m_state->setPixmap(QPixmap(":/notify_close_press@2x.png"));
         }
     }
@@ -80,30 +78,30 @@ void DeviceItem::leaveEvent(QEvent *event)
 {
     QWidget::enterEvent(event);
     if (m_device) {
-        if (2 == m_device->state()) {
+        if (Device::StateConnected == m_device->state()) {
             m_state->setPixmap(QPixmap(":/list_select@2x.png"));
         }
     }
 }
 
-void DeviceItem::chaneState(int state)
+void DeviceItem::chaneState(const Device::State state)
 {
     switch (state) {
-    case 0: {
+    case Device::StateUnavailable: {
         m_state->setVisible(false);
         m_loadingStat->stop();
         m_loadingStat->hide();
         m_loadingStat->setVisible(false);
     }
         break;
-    case 1: {
+    case Device::StateAvailable: {
         m_state->setVisible(false);
         m_loadingStat->start();
         m_loadingStat->show();
         m_loadingStat->setVisible(true);
     }
         break;
-    case 2: {
+    case Device::StateConnected: {
         m_loadingStat->stop();
         m_loadingStat->hide();
         m_loadingStat->setVisible(false);

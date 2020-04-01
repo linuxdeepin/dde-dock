@@ -23,12 +23,14 @@
 #ifndef DEVICEITEM_H
 #define DEVICEITEM_H
 
+#include "device.h"
+
 #include <DSpinner>
+
 #include <QLabel>
 
 DWIDGET_USE_NAMESPACE
 
-class Device;
 class HorizontalSeparator;
 class DeviceItem : public QWidget
 {
@@ -50,7 +52,7 @@ signals:
     void clicked(Device *);
 
 public slots:
-    void chaneState(int state);
+    void chaneState(const Device::State state);
 
 private:
     QLabel *m_title;
