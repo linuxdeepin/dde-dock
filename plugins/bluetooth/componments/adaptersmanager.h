@@ -23,11 +23,11 @@
 #ifndef ADAPTERSMANAGER_H
 #define ADAPTERSMANAGER_H
 
-#include "adapter.h"
-
 #include <com_deepin_daemon_bluetooth.h>
 using  DBusBluetooth = com::deepin::daemon::Bluetooth;
 
+class Adapter;
+class Device;
 class AdaptersManager : public QObject
 {
     Q_OBJECT

@@ -21,6 +21,7 @@
  */
 
 #include "adapter.h"
+#include "device.h"
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -88,7 +89,6 @@ void Adapter::updateDevice(const QJsonObject &json)
 
     auto constdevice = m_devices.value(id);
     auto device = const_cast<Device *>(constdevice);
-
     if (device) {
         device->setId(id);
         device->setName(name);

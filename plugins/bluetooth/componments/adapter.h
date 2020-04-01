@@ -23,8 +23,10 @@
 #ifndef ADAPTER_H
 #define ADAPTER_H
 
-#include "device.h"
+#include <QObject>
+#include <QMap>
 
+class Device;
 class Adapter : public QObject
 {
     Q_OBJECT
