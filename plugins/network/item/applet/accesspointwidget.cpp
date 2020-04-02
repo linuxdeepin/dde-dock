@@ -97,7 +97,7 @@ void AccessPointWidget::updateAP(const AccessPoint &ap)
     QFontMetrics fontMetrics(m_ssidBtn->font());
     if(fontMetrics.width(strSsid) > m_ssidBtn->width())
     {
-        strSsid = QFontMetrics(m_ssidBtn->font()).elidedText(strSsid, Qt::ElideLeft, m_ssidBtn->width());
+        strSsid = QFontMetrics(m_ssidBtn->font()).elidedText(strSsid, Qt::ElideRight, m_ssidBtn->width());
     }
     m_ssidBtn->setText(strSsid);
 
