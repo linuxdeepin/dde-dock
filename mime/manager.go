@@ -30,6 +30,7 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/fsnotify"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
@@ -80,6 +81,11 @@ func NewManager(service *dbusutil.Service) *Manager {
 		}
 	}
 	m.userManager = userManager
+
+	gsettings.ConnectChanged(gsSchemaDefaultTerminal, gsKeyAppId, func(key string) {
+		logger.Debug("default terminal app-id changed")
+		m.emitSignalChange()
+	})
 
 	m.fsWatcher, err = fsnotify.NewWatcher()
 	if err == nil {
@@ -161,7 +167,10 @@ func (m *Manager) deferEmitChange() {
 }
 
 func (m *Manager) emitSignalChange() {
-	m.service.Emit(m, "Change")
+	err := m.service.Emit(m, "Change")
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) destroy() {
