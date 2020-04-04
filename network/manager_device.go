@@ -21,6 +21,7 @@ package network
 
 import (
 	"fmt"
+	"net"
 	"strings"
 	"time"
 
@@ -114,6 +115,22 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	if !isDeviceTypeValid(devType) {
 		err = fmt.Errorf("ignore invalid device type %d", devType)
 		logger.Info(err)
+		return
+	}
+
+	// todo NetworkManager 升级 1.22 后，直接使用 InterfaceFlags
+	// 若没有 UP flag，则不创建设备
+	devInterfaceName, err := nmDev.Interface().Get(0)
+	if err != nil {
+		return
+	}
+	devInterface, err := net.InterfaceByName(devInterfaceName)
+	if err != nil {
+		return
+	}
+	if devInterface.Flags&net.FlagUp == 0 {
+		err = fmt.Errorf("interface %s is not marked UP", devInterfaceName)
+		logger.Debug(err)
 		return
 	}
 
