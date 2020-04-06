@@ -48,8 +48,9 @@ const (
 	gsKeyHeadphoneUnplugAutoPause = "headphone-unplug-auto-pause"
 	gsKeyVolumeIncrease           = "volume-increase"
 
-	gsSchemaSoundEffect = "com.deepin.dde.sound-effect"
-	gsKeyEnabled        = "enabled"
+	gsSchemaSoundEffect  = "com.deepin.dde.sound-effect"
+	gsKeyEnabled         = "enabled"
+	gsKeyDisableAutoMute = "disable-auto-mute"
 
 	dbusServiceName = "com.deepin.daemon.Audio"
 	dbusPath        = "/com/deepin/daemon/Audio"
@@ -57,16 +58,16 @@ const (
 
 	cmdSystemctl  = "systemctl"
 	cmdPulseaudio = "pulseaudio"
-	
+
 	increaseMaxVolume = 1.5
-	normalMaxVolume	  = 1.0
+	normalMaxVolume   = 1.0
 )
 
 var (
 	defaultInputVolume           = 0.1
 	defaultOutputVolume          = 0.5
 	defaultHeadphoneOutputVolume = 0.17
-	gMaxUIVolume float64
+	gMaxUIVolume                 float64
 )
 
 //go:generate dbusutil-gen -type Audio,Sink,SinkInput,Source,Meter -import pkg.deepin.io/lib/dbus1 audio.go sink.go sinkinput.go source.go meter.go
@@ -149,7 +150,7 @@ func newAudio(service *dbusutil.Service) *Audio {
 	a.settings = gio.NewSettings(gsSchemaAudio)
 	a.IncreaseVolume.Bind(a.settings, gsKeyVolumeIncrease)
 	a.headphoneUnplugAutoPause = a.settings.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
-	if a.IncreaseVolume.Get(){
+	if a.IncreaseVolume.Get() {
 		a.MaxUIVolume = increaseMaxVolume
 	} else {
 		a.MaxUIVolume = normalMaxVolume
@@ -217,6 +218,12 @@ func getCtx() (ctx *pulse.Context, err error) {
 }
 
 func (a *Audio) init() error {
+	if a.settings.GetBoolean(gsKeyDisableAutoMute) {
+		err := disableAutoMuteMode()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
 	a.initDefaultVolumes()
 	ctx, err := getCtx()
 	if err != nil {
