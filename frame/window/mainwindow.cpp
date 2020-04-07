@@ -516,6 +516,7 @@ void MainWindow::internalMove(const QPoint &p)
 void MainWindow::initConnections()
 {
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_settings, &DockSettings::regionChanged, this, &MainWindow::updateRegion);
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::autoHideChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
@@ -1036,6 +1037,13 @@ void MainWindow::onRegionMonitorChanged()
 
     if (!isVisible())
         setVisible(true);
+}
+
+void MainWindow::updateRegion()
+{
+    if (m_settings->hideMode() == KeepHidden) {
+        updateRegionMonitorWatch();
+    }
 }
 
 void MainWindow::updateRegionMonitorWatch()
