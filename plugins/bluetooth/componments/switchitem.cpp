@@ -24,7 +24,7 @@
 
 #include "QHBoxLayout"
 
-const int ControlHeight = 35;
+extern const int ControlHeight = 35;
 
 SwitchItem::SwitchItem(QWidget *parent)
     : QWidget(parent)
