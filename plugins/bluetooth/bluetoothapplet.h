@@ -59,7 +59,6 @@ private:
     QLabel *m_appletName;
     QWidget *m_centralWidget;
     QVBoxLayout *m_centrealLayout;
-    int sixteenDeviceHeight = 0;
 
     AdaptersManager *m_adaptersManager;
 
