@@ -27,7 +27,7 @@
 #include <QHBoxLayout>
 #include <QPainter>
 
-const int ItemHeight = 30;
+extern const int ItemHeight = 30;
 
 DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     : QWidget(parent)
