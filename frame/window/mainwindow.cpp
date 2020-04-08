@@ -1041,7 +1041,7 @@ void MainWindow::onRegionMonitorChanged()
 
 void MainWindow::updateRegion()
 {
-    if (m_settings->hideMode() == KeepHidden) {
+    if ((m_settings->hideMode() == KeepHidden) || (m_settings->hideMode() == SmartHide)) {
         updateRegionMonitorWatch();
     }
 }

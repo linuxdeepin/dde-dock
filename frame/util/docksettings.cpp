@@ -159,7 +159,6 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::regionChanged, Qt::QueuedConnection);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
 
     QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
@@ -443,6 +442,7 @@ void DockSettings::primaryScreenChanged()
 
     updateForbidPostions();
     emit dataChanged();
+    emit regionChanged();
     calculateWindowConfig();
 
     // 主屏切换时，如果缩放比例不一样，需要刷新item的图标(bug:3176)
