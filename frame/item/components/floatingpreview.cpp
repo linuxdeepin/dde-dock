@@ -88,16 +88,17 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
     m_closeBtn3D->setVisible(m_tracked->closeAble());
 
     QFontMetrics fm(m_titleBtn->font());
-    int textWidth = fm.width(m_tracked->title()) + 10 + BTN_TITLE_MARGIN;
+
+    QString str = m_tracked->title();
+    /*某些特殊字符只显示一半 如"Q"," W"，所以加一个空格保证字符显示完整,*/
+    str.insert(0, " ");
+    int textWidth = fm.width(str) + 10 + BTN_TITLE_MARGIN;
     int titleWidth = width() - (TITLE_MARGIN * 2  + BORDER_MARGIN);
 
     if (textWidth  < titleWidth) {
         m_titleBtn->setFixedWidth(textWidth);
         m_titleBtn->setText(m_tracked->title());
     } else {
-        QString str = m_tracked->title();
-        /*某些特殊字符只显示一半 如"Q"," W"，所以加一个空格保证字符显示完整,*/
-        str.insert(0, " ");
         QString strTtile = m_titleBtn->fontMetrics().elidedText(str, Qt::ElideRight, titleWidth - BTN_TITLE_MARGIN);
         m_titleBtn->setText(strTtile);
         m_titleBtn->setFixedWidth(titleWidth + BTN_TITLE_MARGIN);
