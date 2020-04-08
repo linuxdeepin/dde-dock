@@ -44,6 +44,7 @@ public:
 //    int pairedDeviceCount();
     int deviceCount();
     void setPowered(bool powered);
+    bool isPowered();
 
 signals:
     void deviceStateChanged(const Device::State state);

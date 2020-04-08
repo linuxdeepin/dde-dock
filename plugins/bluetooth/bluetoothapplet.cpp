@@ -28,6 +28,8 @@
 #include "componments/adaptersmanager.h"
 #include "componments/adapteritem.h"
 
+extern int ControlHeight;
+extern int ItemHeight;
 const int Width = 200;
 
 BluetoothApplet::BluetoothApplet(QWidget *parent)
@@ -115,10 +117,13 @@ void BluetoothApplet::removeAdapter(Adapter *adapter)
 
 void BluetoothApplet::updateView()
 {
+    int contentHeight = 0;
     int itemCount = 0;
     for (auto adapterItem : m_adapterItems) {
-        if (adapterItem)
+        if (adapterItem && adapterItem->isPowered()) {
             itemCount += adapterItem->deviceCount();
+            contentHeight += ControlHeight;
+        }
     }
 
     if (m_adapterItems.size() > 1) {
@@ -129,17 +134,15 @@ void BluetoothApplet::updateView()
         m_appletName->setVisible(false);
     }
 
-    int contentHeight = 0;
     if (itemCount <= 16) {
-        contentHeight = m_centralWidget->sizeHint().height();
+        contentHeight += itemCount * ItemHeight;
         m_centralWidget->setFixedHeight(contentHeight);
         setFixedHeight(contentHeight);
-        if (16 == itemCount)
-            sixteenDeviceHeight = contentHeight;
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     } else {
-        contentHeight = m_centralWidget->sizeHint().height();
+        contentHeight += 16 * ItemHeight;
         m_centralWidget->setFixedHeight(contentHeight);
-        setFixedHeight(sixteenDeviceHeight);
+        setFixedHeight(contentHeight);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
 }

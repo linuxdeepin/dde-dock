@@ -105,6 +105,11 @@ void AdapterItem::setPowered(bool powered)
     m_switchItem->setChecked(powered);
 }
 
+bool AdapterItem::isPowered()
+{
+    return m_adapter->powered();
+}
+
 void AdapterItem::deviceItemPaired(const bool paired)
 {
 //    auto device = qobject_cast<Device *>(sender());

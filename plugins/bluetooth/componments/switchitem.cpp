@@ -24,13 +24,15 @@
 
 #include "QHBoxLayout"
 
+const int ControlHeight = 35;
+
 SwitchItem::SwitchItem(QWidget *parent)
     : QWidget(parent)
     , m_title(new QLabel(this))
     , m_switchBtn(new DSwitchButton(this))
     , m_default(false)
 {
-    setFixedHeight(35);
+    setFixedHeight(ControlHeight);
     auto switchLayout = new QHBoxLayout(this);
     switchLayout->setSpacing(0);
     switchLayout->setMargin(0);
