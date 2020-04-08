@@ -44,6 +44,9 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    if (m_bluetoothItem)
+        return;
+
     m_bluetoothItem = new BluetoothItem;
 
     connect(m_bluetoothItem, &BluetoothItem::noAdapter, [&]{
