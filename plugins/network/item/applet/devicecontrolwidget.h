@@ -49,7 +49,7 @@ public:
 
     void setDeviceName(const QString &name);
     void setDeviceEnabled(const bool enable);
-//    void setSeperatorVisible(const bool visible)
+//    void setSeperatorVisible(const bool visible);
 
 signals:
     void enableButtonToggled(const bool enable) const;
@@ -59,7 +59,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
     void refreshIcon();
 
-public slots:
+private slots:
     void refreshNetwork();
 
 private:

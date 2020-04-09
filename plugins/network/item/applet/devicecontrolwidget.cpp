@@ -34,6 +34,8 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+extern const int ItemHeight = 30;
+
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
     , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
@@ -63,7 +65,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(20, 0, 5, 0);
+    infoLayout->setContentsMargins(10, 0, 5, 0);
 
 //    m_seperator = new HorizontalSeperator;
 //    m_seperator->setFixedHeight(1);
@@ -78,7 +80,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     centralLayout->setSpacing(0);
 
     setLayout(centralLayout);
-    setFixedHeight(30);
+    setFixedHeight(ItemHeight);
 
     connect(m_switchBtn, &DSwitchButton::clicked, this, &DeviceControlWidget::enableButtonToggled);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &DeviceControlWidget::refreshIcon);
@@ -116,7 +118,7 @@ void DeviceControlWidget::refreshNetwork()
 
     m_loadingIndicator->setLoading(true);
 
-    QTimer::singleShot(2000, this, [=] {
+    QTimer::singleShot(1000, this, [=] {
         m_loadingIndicator->setLoading(false);
     });
 }
