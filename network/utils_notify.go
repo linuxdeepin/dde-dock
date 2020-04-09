@@ -20,6 +20,7 @@
 package network
 
 import (
+	"container/list"
 	"sync"
 	"time"
 
@@ -57,11 +58,17 @@ const (
 )
 
 var (
-	notifyEnabled = true
-	notification  *notifications.Notifications
-	notifyId      uint32
-	notifyIdMu    sync.Mutex
+	notifyEnabled       = true
+	notification        *notifications.Notifications
+	notifyId            uint32
+	notifyIdMu          sync.Mutex
+	globalNotifyManager *NotifyManager
 )
+
+func initNotifyManager() {
+	globalNotifyManager = newNotifyManager()
+	go globalNotifyManager.loop()
+}
 
 func enableNotify() {
 	go func() {
@@ -73,7 +80,86 @@ func disableNotify() {
 	notifyEnabled = false
 }
 
+type notifyMsgQueue list.List
+
+func newNotifyMsgQueue() *notifyMsgQueue {
+	l := list.New()
+	return (*notifyMsgQueue)(l)
+}
+
+func (q *notifyMsgQueue) toList() *list.List {
+	return (*list.List)(q)
+}
+
+type notifyMsg struct {
+	icon    string
+	summary string
+	body    string
+}
+
+// 入队列
+func (q *notifyMsgQueue) enqueue(val *notifyMsg) {
+	q.toList().PushBack(val)
+}
+
+// 出队列
+func (q *notifyMsgQueue) dequeue() *notifyMsg {
+	l := q.toList()
+	elem := l.Front()
+	if elem == nil {
+		return nil
+	}
+	val := l.Remove(elem)
+	return val.(*notifyMsg)
+}
+
+type NotifyManager struct {
+	queue *notifyMsgQueue
+	mu    sync.Mutex
+	cond  *sync.Cond
+}
+
+func newNotifyManager() *NotifyManager {
+	sm := &NotifyManager{}
+	sm.queue = newNotifyMsgQueue()
+	sm.cond = sync.NewCond(&sm.mu)
+	return sm
+}
+
+func (nm *NotifyManager) addMsg(msg *notifyMsg) {
+	nm.mu.Lock()
+	nm.queue.enqueue(msg)
+	nm.cond.Signal()
+	nm.mu.Unlock()
+}
+
+func (nm *NotifyManager) loop() {
+	for {
+		nm.mu.Lock()
+		msg := nm.queue.dequeue()
+
+		if msg == nil {
+			nm.cond.Wait()
+		} else {
+			_notify(msg.icon, msg.summary, msg.body)
+		}
+		nm.mu.Unlock()
+
+		if msg != nil {
+			time.Sleep(1500 * time.Millisecond) // sleep 1.5 seconds
+		}
+	}
+}
+
 func notify(icon, summary, body string) {
+	globalNotifyManager.addMsg(&notifyMsg{
+		icon:    icon,
+		summary: summary,
+		body:    body,
+	})
+}
+
+func _notify(icon, summary, body string) {
 	logger.Debugf("notify icon: %q, summary: %q, body: %q", icon, summary, body)
 	if !notifyEnabled {
 		logger.Debug("notify disabled")

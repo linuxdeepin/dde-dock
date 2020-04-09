@@ -124,6 +124,7 @@ func (d *Module) Start() error {
 
 	initSlices() // initialize slice code
 	initSysSignalLoop()
+	initNotifyManager()
 	go func() {
 		t0 := time.Now()
 		err := d.start()
