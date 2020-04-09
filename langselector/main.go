@@ -57,6 +57,7 @@ func Run() {
 		logger.Fatal("failed to request name:", err)
 	}
 
+	initNotifyTxt()
 	lang.connectSettingsChanged()
 	err = gsettings.StartMonitor()
 	if err != nil {

@@ -92,6 +92,13 @@ var (
 	ErrLocaleChangeFailed = fmt.Errorf("Changing locale failed")
 )
 
+var (
+	//save old language notifycation data
+	notifyTxtStartWithInstall string
+	notifyTxtStart string
+	notifyTxtDone string
+)
+
 //go:generate dbusutil-gen -type LangSelector locale.go
 type LangSelector struct {
 	service      *dbusutil.Service
@@ -146,6 +153,12 @@ func (infos LocaleInfos) Get(locale string) (LocaleInfo, error) {
 		}
 	}
 	return LocaleInfo{}, fmt.Errorf("invalid locale %q", locale)
+}
+
+func initNotifyTxt() {
+	notifyTxtStartWithInstall = Tr("Changing system language and installing the required language packages, please wait...")
+	notifyTxtStart = Tr("Changing system language, please wait...")
+	notifyTxtDone = Tr("System language changed, please log out and then log in")
 }
 
 func newLangSelector(service *dbusutil.Service) (*LangSelector, error) {
@@ -410,11 +423,9 @@ func (lang *LangSelector) setLocale(locale string) {
 	}
 
 	if networkEnabled {
-		sendNotify(localeIconStart, "",
-			Tr("Changing system language and installing the required language packages, please wait..."))
+		sendNotify(localeIconStart, "", notifyTxtStartWithInstall)
 	} else {
-		sendNotify(localeIconStart, "",
-			Tr("Changing system language, please wait..."))
+		sendNotify(localeIconStart, "", notifyTxtStart)
 	}
 
 	// generate locale
@@ -461,8 +472,7 @@ func (lang *LangSelector) setLocale(locale string) {
 		}
 	}
 
-	sendNotify(localeIconFinished, "",
-		Tr("System language changed, please log out and then log in"))
+	sendNotify(localeIconFinished, "", notifyTxtDone)
 
 	// end
 	lang.PropsMu.Lock()
