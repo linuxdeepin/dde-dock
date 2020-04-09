@@ -38,11 +38,33 @@ class WirelessItem : public DeviceItem
     Q_OBJECT
 
 public:
+    enum WirelessStatus
+    {
+        Unknow              = 0,
+        Enabled             = 0x00010000,
+        Disabled            = 0x00020000,
+        Connected           = 0x00040000,
+        Disconnected        = 0x00080000,
+        Connecting          = 0x00100000,
+        Authenticating      = 0x00200000,
+        ObtainingIP         = 0x00400000,
+        ObtainIpFailed      = 0x00800000,
+        ConnectNoInternet   = 0x01000000,
+        Failed              = 0x02000000,
+    };
+    Q_ENUM(WirelessStatus)
+
+public:
     explicit WirelessItem(dde::network::WirelessDevice *device);
     ~WirelessItem();
 
     QWidget *itemApplet();
-    QWidget *itemTips();
+    int APcount();
+    bool deviceActivated();
+    void setDeviceEnabled(bool enable);
+    WirelessStatus getDeviceState();
+    QJsonObject &getConnectedApInfo();
+    QJsonObject getActiveWiredConnectionInfo();
 
 public Q_SLOTS:
     // set the device name displayed
@@ -52,39 +74,24 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
-    void requestSetAppletVisible(const bool visible) const;
     void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
     void cancelSecret(const QString &connectionPath, const QString &settingName);
     void queryActiveConnInfo();
     void requestWirelessScan();
     void createApConfig(const QString &devPath, const QString &apPath);
-    void queryConnectionSession(const QString &devPath, const QString &uuid);
+    void queryConnectionSession( const QString &devPath, const QString &uuid );
+    void deviceStateChanged();
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
-
-private:
-    const QPixmap iconPix(const Dock::DisplayMode displayMode, const int size);
-    const QPixmap backgroundPix(const int size);
-    const QPixmap cachedPix(const QString &key, const int size);
 
 private slots:
     void init();
     void adjustHeight();
-    void refreshIcon();
-    void refreshTips();
-    void deviceStateChanged();
-    void onRefreshTimeout();
 
 private:
-    QHash<QString, QPixmap> m_icons;
-    bool m_reloadIcon;
-
     QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
-    TipsWidget *m_wirelessTips;
     WirelessList *m_APList;
     QJsonObject m_activeApInfo;
 };
