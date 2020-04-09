@@ -21,6 +21,7 @@
 
 #include "wirelesslist.h"
 #include "accesspointwidget.h"
+#include "constants.h"
 
 #include <QJsonDocument>
 #include <QScreen>
@@ -35,9 +36,8 @@ DWIDGET_USE_NAMESPACE
 
 using namespace dde::network;
 
-#define WIDTH           300
-#define MAX_HEIGHT      300
-#define ITEM_HEIGHT     30
+extern const int ItemWidth = 250;
+extern const int ItemHeight;
 
 WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     : QScrollArea(parent),
@@ -51,14 +51,14 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
       m_centralWidget(new QWidget),
       m_controlPanel(new DeviceControlWidget)
 {
-    setFixedHeight(WIDTH);
+    setFixedHeight(ItemHeight);
 
     const auto ratio = devicePixelRatioF();
 
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
 
-    m_centralWidget->setFixedWidth(WIDTH);
+    m_centralWidget->setFixedWidth(ItemWidth);
     m_centralWidget->setLayout(m_centralLayout);
 
     m_centralLayout->addWidget(m_controlPanel);
@@ -67,16 +67,19 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
     setWidget(m_centralWidget);
     setFrameShape(QFrame::NoFrame);
-    setFixedWidth(300);
+    setFixedWidth(ItemWidth);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
 
-    m_indicator = new DPictureSequenceView(this);
-    m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
-    m_indicator->setFixedSize(QSize(14, 14) * ratio);
-    m_indicator->setVisible(false);
+//    m_indicator = new DPictureSequenceView(this);
+//    m_indicator->setPictureSequence(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png", QPair<int, int>(1, 91), 2);
+//    m_indicator->setFixedSize(QSize(14, 14) * ratio);
+//    m_indicator->setVisible(false);
+    m_loadingStat = new DSpinner(this);
+    m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
+    m_loadingStat->setVisible(false);
     isHotposActive = false;
 
     connect(m_device, &WirelessDevice::apAdded, this, &WirelessList::APAdded);
@@ -92,15 +95,17 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
     connect(m_device, &WirelessDevice::activeWirelessConnectionInfoChanged, this, &WirelessList::onActiveConnectionInfoChanged);
-    connect(m_device, static_cast<void (WirelessDevice::*)(NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_device, static_cast<void (WirelessDevice:: *) (NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_device, &WirelessDevice::activeConnectionsChanged, this, &WirelessList::updateIndicatorPos, Qt::QueuedConnection);
 
-    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [ = ] {
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [=] {
         auto apw = accessPointWidgetByAp(m_activatingAP);
         if (!apw) return;
 
-        const int h = -(apw->height() - m_indicator->height()) / 2;
-        m_indicator->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+//        const int h = -(apw->height() - m_indicator->height()) / 2;
+//        m_indicator->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+        const int h = -(apw->height() - m_loadingStat->height()) / 2;
+        m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
     });
 
     QMetaObject::invokeMethod(this, "loadAPList", Qt::QueuedConnection);
@@ -113,6 +118,11 @@ WirelessList::~WirelessList()
 QWidget *WirelessList::controlPanel()
 {
     return m_controlPanel;
+}
+
+int WirelessList::APcount()
+{
+    return m_apList.size();
 }
 
 
@@ -161,13 +171,6 @@ void WirelessList::setDeviceInfo(const int index)
         m_controlPanel->setDeviceName(tr("Wireless Network %1").arg(index));
 }
 
-void WirelessList::refreshNetwork()
-{
-    if (m_controlPanel) {
-        m_controlPanel->refreshNetwork();
-    }
-}
-
 void WirelessList::loadAPList()
 {
     if (m_device.isNull()) {
@@ -196,7 +199,7 @@ void WirelessList::APPropertiesChanged(const QJsonObject &apInfo)
     AccessPoint ap(apInfo);
     const auto mIndex = m_apList.indexOf(ap);
     if (mIndex != -1) {
-        if (ap > m_apList.at(mIndex) || ap < m_apList.at(mIndex)) {
+        if (ap > m_apList.at(mIndex)) {
             m_apList.replace(mIndex, ap);
             m_updateAPTimer->start();
         }
@@ -214,28 +217,29 @@ void WirelessList::updateAPList()
     int avaliableAPCount = 0;
 
     //if (m_networkInter->IsDeviceEnabled(m_device.dbusPath()))
-    if (m_device->enabled()) {
-        //        if (m_device->hotspotEnabled()) {
-        //            m_apList.clear();
-        //            m_apList.append(m_activeHotspotAP);
-        //        }
+    if (m_device->enabled())
+    {
+//        if (m_device->hotspotEnabled()) {
+//            m_apList.clear();
+//            m_apList.append(m_activeHotspotAP);
+//        }
 
         // sort ap list by strength
         // std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
         //        const bool wirelessActived = m_device.state() == NetworkDevice::Activated;
 
         // NOTE: Keep the amount consistent
-        if (m_apList.size() > m_apwList.size()) {
+        if(m_apList.size() > m_apwList.size()) {
             int i = m_apList.size() - m_apwList.size();
             for (int index = 0; index != i; index++) {
                 AccessPointWidget *apw = new AccessPointWidget;
-                apw->setFixedHeight(ITEM_HEIGHT);
+                apw->setFixedHeight(ItemHeight);
                 m_apwList << apw;
                 m_centralLayout->addWidget(apw);
 
                 connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessList::activateAP);
                 connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
-                connect(apw, &AccessPointWidget::requestActiveAP, this, [ = ] {
+                connect(apw, &AccessPointWidget::requestActiveAP, this, [=] {
                     m_clickedAPW = apw;
                 }, Qt::UniqueConnection);
             }
@@ -251,7 +255,7 @@ void WirelessList::updateAPList()
             }
         }
 
-        std::sort(m_apList.begin(), m_apList.end(), [&](const AccessPoint & ap1, const AccessPoint & ap2) {
+        std::sort(m_apList.begin(), m_apList.end(), [&] (const AccessPoint &ap1, const AccessPoint &ap2) {
             if (ap1 == m_activeAP)
                 return true;
 
@@ -276,23 +280,33 @@ void WirelessList::updateAPList()
         }
 
         // If the order of item changes
-        if (m_indicator->isVisible() && !m_activatingAP.isEmpty() && m_apList.contains(m_activatingAP)) {
+//        if (m_indicator->isVisible() && !m_activatingAP.isEmpty() && m_apList.contains(m_activatingAP)) {
+//            AccessPointWidget *apw = accessPointWidgetByAp(m_activatingAP);
+//            if (apw) {
+//                const int h = -(apw->height() - m_indicator->height()) / 2;
+//                m_indicator->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+//            }
+//        }
+        if (m_loadingStat->isVisible() && !m_activatingAP.isEmpty() && m_apList.contains(m_activatingAP)) {
             AccessPointWidget *apw = accessPointWidgetByAp(m_activatingAP);
             if (apw) {
-                const int h = -(apw->height() - m_indicator->height()) / 2;
-                m_indicator->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+                const int h = -(apw->height() - m_loadingStat->height()) / 2;
+                m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
             }
         }
 
         if (deviceStatus <= NetworkDevice::Disconnected || deviceStatus >= NetworkDevice::Activated) {
-            m_indicator->stop();
-            m_indicator->hide();
+//            m_indicator->stop();
+//            m_indicator->hide();
+            m_loadingStat->stop();
+            m_loadingStat->hide();
         }
     }
 
-    const int contentHeight = avaliableAPCount * ITEM_HEIGHT;
+    const int contentHeight = avaliableAPCount * ItemHeight;
     m_centralWidget->setFixedHeight(contentHeight);
-    setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
+    setFixedHeight(contentHeight);
+    emit requestUpdatePopup();
 
     QTimer::singleShot(100, this, &WirelessList::updateIndicatorPos);
 }
@@ -364,14 +378,17 @@ void WirelessList::updateIndicatorPos()
     AccessPointWidget *apw = accessPointWidgetByAp(m_activatingAP);
 
     if (activeSsid.isEmpty() || m_activatingAP.isEmpty() || !apw) {
-        m_indicator->hide();
+//        m_indicator->hide();
+        m_loadingStat->hide();
         return;
     }
 
-    const int h = -(apw->height() - m_indicator->height()) / 2;
-    m_indicator->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
-    m_indicator->show();
-    m_indicator->play();
+//    const int h = -(apw->height() - m_indicator->height()) / 2;
+    const int h = -(apw->height() - m_loadingStat->height()) / 2;
+    m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+    m_loadingStat->show();
+//    m_indicator->play();
+    m_loadingStat->start();
 }
 
 void WirelessList::onActiveConnectionInfoChanged()
@@ -386,7 +403,7 @@ void WirelessList::onActiveConnectionInfoChanged()
     // 那么也就无法给m_activeAP正确的值，所以在这里使用timer等待一下后端的数据，再执行遍历m_apList给m_activeAP赋值的操作
     if (m_device->enabled() && m_device->status() == NetworkDevice::Activated
             && m_apList.size() == 0) {
-        QTimer::singleShot(1000, [ = ] {onActiveConnectionInfoChanged();});
+        QTimer::singleShot(1000, [=]{onActiveConnectionInfoChanged();});
         return;
     }
 
@@ -413,20 +430,18 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
 
     if (clickedAP.path() == apPath) {
         qDebug() << "wireless connect failed and may require more configuration,"
-                 << "path:" << clickedAP.path() << "ssid" << clickedAP.ssid()
-                 << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength();
+            << "path:" << clickedAP.path() << "ssid" << clickedAP.ssid()
+            << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength();
         m_updateAPTimer->start();
 
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method("ShowPage")
-        .arg(QString("network"))
-        .arg(QString("%1,%2").arg(m_device->path()).arg(uuid))
-        .call();
-
-        Q_EMIT requestSetAppletVisible(false);
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method("ShowPage")
+                .arg(QString("network"))
+                .arg(QString("%1,%2").arg(m_device->path()).arg(uuid))
+                .call();
     }
 }
 
@@ -434,7 +449,7 @@ void WirelessList::onHotspotEnabledChanged(const bool enabled)
 {
     // Note: the obtained hotspot info is not complete
     m_activeHotspotAP = enabled ? AccessPoint(m_device->activeHotspotInfo().value("Hotspot").toObject())
-                        : AccessPoint();
+                                : AccessPoint();
     isHotposActive = enabled;
     m_updateAPTimer->start();
 }
