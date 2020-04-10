@@ -231,7 +231,7 @@ void NetworkItem::invokeMenuItem(const QString &menuId, const bool checked)
                 .interface("com.deepin.dde.ControlCenter")
                 .path("/com/deepin/dde/ControlCenter")
                 .method(QString("ShowModule"))
-                .arg(QString("sound"))
+                .arg(QString("network"))
                 .call();
 }
 
