@@ -36,7 +36,6 @@ public:
     AccessPoint(const AccessPoint &ap);
     bool operator==(const AccessPoint &ap) const;
     bool operator>(const AccessPoint &ap) const;
-    bool operator<(const AccessPoint &ap) const;
     AccessPoint &operator=(const AccessPoint &ap);
 
     const QString ssid() const;

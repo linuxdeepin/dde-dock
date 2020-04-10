@@ -29,7 +29,7 @@ class HorizontalSeperator : public QWidget
     Q_OBJECT
 
 public:
-    explicit HorizontalSeperator(QWidget *parent = 0);
+    explicit HorizontalSeperator(QWidget *parent = nullptr);
 
     void setColor(const QColor color);
 
