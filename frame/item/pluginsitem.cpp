@@ -135,6 +135,13 @@ QWidget *PluginsItem::centralWidget() const
     return m_centralWidget;
 }
 
+void PluginsItem::setDraging(bool bDrag)
+{
+    DockItem::setDraging(bDrag);
+
+    m_centralWidget->setVisible(!bDrag);
+}
+
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
     if (checkGSettingsControl()) {
@@ -266,6 +273,12 @@ QWidget *PluginsItem::popupTips()
     }
 
     return m_pluginInter->itemTipsWidget(m_itemKey);
+}
+
+void PluginsItem::resizeEvent(QResizeEvent *event)
+{
+    setMaximumSize(m_centralWidget->maximumSize());
+    return DockItem::resizeEvent(event);
 }
 
 void PluginsItem::startDrag()

@@ -27,9 +27,9 @@
 #include "../widgets/tipswidget.h"
 
 #include <QFrame>
-
-#include <dimagebutton.h>
 #include <QPainter>
+
+#include <DImageButton>
 
 class SinkInputWidget : public QWidget
 {
