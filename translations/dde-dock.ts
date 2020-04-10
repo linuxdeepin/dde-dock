@@ -1,9 +1,40 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>The plugin %1 is not compatible with the system.</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21,15 +52,27 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>12 Hour Time</translation>
+        <translation type="vanished">12 Hour Time</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>24 Hour Time</translation>
+        <translation type="vanished">24 Hour Time</translation>
     </message>
     <message>
         <source>Time Settings</source>
-        <translation>Time Settings</translation>
+        <translation type="vanished">Time Settings</translation>
+    </message>
+    <message>
+        <source>12-hour time</source>
+        <translation>12-hour time</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24-hour time</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Time settings</translation>
     </message>
 </context>
 <context>
@@ -166,6 +209,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation type="unfinished">Disable network</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation type="unfinished">Enable network</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation type="unfinished">Network settings</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished">Wireless connection: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation type="unfinished">Wired connection: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected but not Internet access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -203,7 +313,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Charged %1</translation>
+        <translation type="vanished">Charged %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -216,6 +326,10 @@
     <message>
         <source>Charging %1 ....</source>
         <translation>Charging %1 ....</translation>
+    </message>
+    <message>
+        <source>%1 charged</source>
+        <translation>%1 charged</translation>
     </message>
 </context>
 <context>
@@ -241,7 +355,7 @@
     </message>
     <message>
         <source>Restart</source>
-        <translation>Restart</translation>
+        <translation type="vanished">Restart</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -267,6 +381,10 @@
         <source>Power settings</source>
         <translation>Power settings</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reboot</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -291,11 +409,19 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Audio Settings</translation>
+        <translation type="vanished">Audio Settings</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Current Volume %1</translation>
+        <translation type="vanished">Current Volume %1</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Sound settings</translation>
+    </message>
+    <message>
+        <source>Volume %1</source>
+        <translation>Volume %1</translation>
     </message>
 </context>
 <context>
@@ -342,26 +468,30 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation>Unknown</translation>
+        <translation type="vanished">Unknown</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Wired connection: %1</translation>
+        <translation type="vanished">Wired connection: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>No Network</translation>
+        <translation type="vanished">No Network</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Wireless Connection: %1</translation>
+        <translation type="vanished">Wireless Connection: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Connected but no Internet access</translation>
+        <translation type="vanished">Connected but no Internet access</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="vanished">Wireless connection: %1</translation>
     </message>
 </context>
 <context>
