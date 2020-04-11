@@ -29,7 +29,6 @@ const (
 	cpuKeyDelim        = ":"
 	cpuKeyProcessor    = "processor"
 	cpuKeyName         = "model name"
-	cpuKeyModel        = "cpu model"
 	cpuKeyCPU          = "cpu"
 	cpuKeyMHz          = "CPU frequency [MHz]"
 	cpuKeyActive       = "cpus active"
@@ -44,12 +43,6 @@ func GetCPUInfo(file string) (string, error) {
 	}
 
 	cpu := swCPUInfo(data)
-	if len(cpu) != 0 {
-		return cpu, nil
-	}
-
-	// Loongson
-	cpu, _ = getCPUInfoFromMap(cpuKeyModel, cpuKeyProcessor, data)
 	if len(cpu) != 0 {
 		return cpu, nil
 	}
