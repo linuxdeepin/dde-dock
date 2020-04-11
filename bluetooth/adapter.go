@@ -21,6 +21,7 @@ package bluetooth
 
 import (
 	"fmt"
+	"os"
 
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	dbus "pkg.deepin.io/lib/dbus1"
@@ -48,6 +49,24 @@ func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *a
 	a.core.InitSignalExt(systemSigLoop, true)
 	a.connectProperties()
 	a.address, _ = a.core.Address().Get(0)
+
+	// fix alias
+	alias, _ := a.core.Alias().Get(0)
+	if alias == "first-boot-hostname" {
+		hostname, err := os.Hostname()
+		if err == nil {
+			if hostname != "first-boot-hostname" {
+				// reset alias
+				err = a.core.Alias().Set(0, "")
+				if err != nil {
+					logger.Warning(err)
+				}
+			}
+		} else {
+			logger.Warning("failed to get hostname:", err)
+		}
+	}
+
 	a.Alias, _ = a.core.Alias().Get(0)
 	a.Name, _ = a.core.Name().Get(0)
 	a.Powered, _ = a.core.Powered().Get(0)
