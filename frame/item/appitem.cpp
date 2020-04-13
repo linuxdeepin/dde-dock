@@ -595,14 +595,6 @@ void AppItem::refershIcon()
     else
         m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8, devicePixelRatioF());
 
-    //TO FIX:目前deepinwine部分情况会有异常,暂时这样处理，见bug19982
-    if(m_appIcon.isNull())
-    {
-        if (DockDisplayMode == Efficient)
-            m_appIcon = ThemeAppIcon::getIcon("deepinwine" + icon, iconSize * 0.7, devicePixelRatioF());
-        else
-            m_appIcon = ThemeAppIcon::getIcon("deepinwine" + icon, iconSize * 0.8, devicePixelRatioF());
-    }
     if (m_appIcon.isNull()) {
         if (m_retryTimes < 5) {
             m_retryTimes++;

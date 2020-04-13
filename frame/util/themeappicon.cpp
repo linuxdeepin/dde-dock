@@ -42,7 +42,7 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
 {
     QPixmap pixmap;
     QString key;
-
+    QIcon icon;
     // 把size改为小于size的最大偶数 :)
     const int s = int(size * ratio) & ~1;
 
@@ -79,8 +79,14 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
                 break;
         }
 
+        icon = QIcon::fromTheme(iconName);
+        if(icon.isNull()){
+            icon = QIcon::fromTheme("deepinwine-"+iconName);
+        }else{
+            icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+        }
+
         // load pixmap from Icon-Theme
-        const QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
         const int fakeSize = std::max(48, s); // cannot use 16x16, cause 16x16 is label icon
         pixmap = icon.pixmap(QSize(fakeSize, fakeSize));
         if (!pixmap.isNull())
