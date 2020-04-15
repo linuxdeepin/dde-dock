@@ -33,6 +33,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/system/swapsched"
 	_ "pkg.deepin.io/dde/daemon/system/timedated"
 	_ "pkg.deepin.io/dde/daemon/system/airplane_mode"
+	_ "pkg.deepin.io/dde/daemon/system/systeminfo"
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/gir/glib-2.0"
