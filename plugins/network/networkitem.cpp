@@ -26,7 +26,6 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_tipsWidget(new TipsWidget(this))
     , m_applet(new QScrollArea(this))
     , m_line(new HorizontalSeperator(this))
-    , m_sixteenDeviceHeight(0)
     , m_switchWire(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
@@ -953,6 +952,8 @@ void NetworkItem::getPluginState()
 
 void NetworkItem::updateView()
 {
+    // 固定显示高度即为固定示项目数
+    const int constDisplayItemCnt = 10;
     int contentHeight = 0;
     int itemCount = 0;
     if (m_switchWirelessBtnState) {
@@ -986,18 +987,16 @@ void NetworkItem::updateView()
     m_line->setVisible(hasDevice);
 
     auto centralWidget = m_applet->widget();
-    if (itemCount <= 16) {
+    if (itemCount <= constDisplayItemCnt) {
         contentHeight += (itemCount - wiredItemsCount) * ItemHeight;
         contentHeight += wiredItemsCount * ItemHeight;
         centralWidget->setFixedHeight(contentHeight);
         m_applet->setFixedHeight(contentHeight);
-        if (16 == itemCount)
-            m_sixteenDeviceHeight = contentHeight;
     } else {
         contentHeight += (itemCount - wiredItemsCount) * ItemHeight;
         contentHeight += wiredItemsCount * ItemHeight;
         centralWidget->setFixedHeight(contentHeight);
-        m_applet->setFixedHeight(m_sixteenDeviceHeight);
+        m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight);
         m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
 }

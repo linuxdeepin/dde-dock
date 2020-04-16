@@ -94,7 +94,6 @@ private:
     QWidget *m_wirelessControlPanel;
     bool m_switchWirelessBtnState;
 
-    int m_sixteenDeviceHeight;
     bool m_switchWire;
 
     QMap<QString, WiredItem *> m_wiredItems;
