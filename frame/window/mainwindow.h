@@ -38,6 +38,7 @@
 #include <DBlurEffectWidget>
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
+#include <com_deepin_sessionmanager.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -135,6 +136,7 @@ private:
 
     QDBusConnectionInterface *m_dbusDaemonInterface;
     org::kde::StatusNotifierWatcher *m_sniWatcher;
+    com::deepin::SessionManager *m_sessionManagerInter;
     QString m_sniHostService;
     QSize m_size;
     DragWidget *m_dragWidget;
