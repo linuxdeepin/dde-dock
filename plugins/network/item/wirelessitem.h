@@ -67,7 +67,7 @@ public:
     void setDeviceEnabled(bool enable);
     WirelessStatus getDeviceState();
     QJsonObject &getConnectedApInfo();
-    QJsonObject getActiveWiredConnectionInfo();
+    QJsonObject getActiveWirelessConnectionInfo();
 
 public Q_SLOTS:
     // set the device name displayed

@@ -209,7 +209,7 @@ QJsonObject &WirelessItem::getConnectedApInfo()
     return  m_activeApInfo;
 }
 
-QJsonObject WirelessItem::getActiveWiredConnectionInfo()
+QJsonObject WirelessItem::getActiveWirelessConnectionInfo()
 {
     return static_cast<WirelessDevice *>(m_device.data())->activeWirelessConnectionInfo();
 }
