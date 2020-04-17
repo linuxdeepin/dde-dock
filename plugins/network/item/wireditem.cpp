@@ -94,12 +94,12 @@ bool WiredItem::deviceActivated()
     switch (m_device->status()) {
     case NetworkDevice::Unknow:
     case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable:
-    case NetworkDevice::Disconnected:
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed: {
+    case NetworkDevice::Unavailable: {
         return false;
     }
+    case NetworkDevice::Disconnected:
+    case NetworkDevice::Deactivation:
+    case NetworkDevice::Failed:
     case NetworkDevice::Prepare:
     case NetworkDevice::Config:
     case NetworkDevice::NeedAuth:
@@ -107,7 +107,10 @@ bool WiredItem::deviceActivated()
     case NetworkDevice::IpCheck:
     case NetworkDevice::Secondaries:
     case NetworkDevice::Activated: {
-        return true;
+        if (m_device->enabled())
+            return true;
+        else
+            return false;
     }
     }
 }
