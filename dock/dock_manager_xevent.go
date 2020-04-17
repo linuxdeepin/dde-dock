@@ -46,7 +46,15 @@ func (m *Manager) registerWindow(win x.Window) {
 	m.windowInfoMap[win] = winInfo
 	m.windowInfoMapMutex.Unlock()
 
-	m.attachOrDetachWindow(winInfo)
+	pid := getWmPid(win)
+	wmClass, _ := getWmClass(win)
+	if pid == 0 || wmClass == nil {
+		time.AfterFunc(300*time.Millisecond, func() {
+			m.attachOrDetachWindow(winInfo)
+		})
+	} else {
+		m.attachOrDetachWindow(winInfo)
+	}
 }
 
 func (m *Manager) isWindowRegistered(win x.Window) bool {
