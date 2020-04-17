@@ -38,7 +38,7 @@ WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
     , m_wiredIcon(new QLabel(this))
     , m_stateButton(new StateLabel(this))
     , m_loadingStat(new DSpinner(this))
-    , m_line(new HorizontalSeperator(this))
+//    , m_line(new HorizontalSeperator(this))
 {
     setFixedHeight(ItemHeight);
 
@@ -54,12 +54,12 @@ WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
     m_stateButton->setVisible(false);
     m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_loadingStat->setVisible(false);
-    m_line->setVisible(false);
+//    m_line->setVisible(false);
 
     auto connectionLayout = new QVBoxLayout(this);
     connectionLayout->setMargin(0);
     connectionLayout->setSpacing(0);
-    connectionLayout->addWidget(m_line);
+//    connectionLayout->addWidget(m_line);
     auto itemLayout = new QHBoxLayout;
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
