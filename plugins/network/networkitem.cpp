@@ -126,7 +126,6 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
                 tempWirelessItems.remove(path);
             } else {
                 wirelessItem->setParent(this);
-                // 命名应是网卡，现无网卡文案
                 wirelessItem->setDeviceInfo(wirelessItemCount == 1 ? -1 : ++index);
                 m_wirelessItems.insert(path, wirelessItem);
             }
@@ -147,14 +146,18 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
 
     for (auto wirelessItem : tempWirelessItems) {
         if (wirelessItem) {
-            m_wirelessItems.remove(wirelessItem->device()->path());
+            auto path = wirelessItem->device()->path();
+            m_wirelessItems.remove(path);
+            m_connectedWirelessDevice.remove(path);
             m_wirelessLayout->removeWidget(wirelessItem->itemApplet());
             delete wirelessItem;
         }
     }
     for (auto wiredItem : tempWiredItems) {
         if (wiredItem) {
-            m_wiredItems.remove(wiredItem->device()->path());
+            auto path = wiredItem->device()->path();
+            m_wiredItems.remove(path);
+            m_connectedWiredDevice.remove(path);
             m_wiredLayout->removeWidget(wiredItem);
             delete wiredItem;
         }
@@ -1090,7 +1093,7 @@ void NetworkItem::refreshTips()
         QString strTips;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
-                auto info = wirelessItem->getActiveWiredConnectionInfo();
+                auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
                     break;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
@@ -1118,7 +1121,7 @@ void NetworkItem::refreshTips()
         QString strTips;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
-                auto info = wirelessItem->getActiveWiredConnectionInfo();
+                auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
                     break;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
