@@ -31,9 +31,12 @@
 
 DGUI_USE_NAMESPACE
 const int ItemHeight = 30;
+extern const QString DarkType = "_dark.svg";
+extern const QString LightType = ".svg";
 
-WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
+WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *parent)
     : DeviceItem(device, parent)
+    , m_deviceName(deviceName)
     , m_connectedName(new QLabel(this))
     , m_wiredIcon(new QLabel(this))
     , m_stateButton(new StateLabel(this))
@@ -43,18 +46,24 @@ WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
     setFixedHeight(ItemHeight);
 
 //    m_connectedName->setVisible(false);
-    auto iconPix = Utils::renderSVG(":/wired/resources/wired/network-wired-symbolic-dark.svg",
-                                    QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
+
+    auto pixpath = QString(":/wired/resources/wired/network-wired-symbolic");
+    pixpath = isLight ? pixpath + "-dark.svg" : pixpath + LightType;
+    auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
     m_wiredIcon->setPixmap(iconPix);
     m_wiredIcon->setVisible(false);
-    iconPix = Utils::renderSVG(":/common/resources/common/list_select@2x.png",
-                               QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+    pixpath = QString(":/wireless/resources/wireless/select");
+    pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+    iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
     m_stateButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_stateButton->setPixmap(iconPix);
     m_stateButton->setVisible(false);
     m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_loadingStat->setVisible(false);
 //    m_line->setVisible(false);
+
+    m_connectedName->setText(m_deviceName);
 
     auto connectionLayout = new QVBoxLayout(this);
     connectionLayout->setMargin(0);
@@ -73,6 +82,8 @@ WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
     connectionLayout->addLayout(itemLayout);
     setLayout(connectionLayout);
 
+    connect(m_device, static_cast<void (NetworkDevice::*)(const bool) const>(&NetworkDevice::enableChanged),
+            this, &WiredItem::enableChanged);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
             this, &WiredItem::deviceStateChanged);
 
@@ -89,30 +100,16 @@ WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
     deviceStateChanged(m_device->status());
 }
 
-bool WiredItem::deviceActivated()
+void WiredItem::setTitle(const QString &name)
 {
-    switch (m_device->status()) {
-    case NetworkDevice::Unknow:
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable: {
-        return false;
-    }
-    case NetworkDevice::Disconnected:
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed:
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:
-    case NetworkDevice::NeedAuth:
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries:
-    case NetworkDevice::Activated: {
-        if (m_device->enabled())
-            return true;
-        else
-            return false;
-    }
-    }
+    if (m_device->status() != NetworkDevice::Activated)
+        m_connectedName->setText(name);
+    m_deviceName = name;
+}
+
+bool WiredItem::deviceEabled()
+{
+    return m_device->enabled();
 }
 
 void WiredItem::setDeviceEnabled(bool enabled)
@@ -155,9 +152,27 @@ QJsonObject WiredItem::getActiveWiredConnectionInfo()
     return static_cast<WiredDevice *>(m_device.data())->activeWiredConnectionInfo();
 }
 
+void WiredItem::setThemeType(DGuiApplicationHelper::ColorType themeType)
+{
+    bool isLight = (themeType == DGuiApplicationHelper::LightType);
+
+    auto pixpath = QString(":/wired/resources/wired/network-wired-symbolic");
+    pixpath = isLight ? pixpath + "-dark.svg" : pixpath +  LightType;
+    auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+    m_wiredIcon->setPixmap(iconPix);
+
+    if (m_device) {
+        if (NetworkDevice::Activated == m_device->status()) {
+            pixpath = QString(":/wireless/resources/wireless/select");
+            pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+            auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+            m_stateButton->setPixmap(iconPix);
+        }
+    }
+}
+
 void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
-    emit wiredState(state);
     QPixmap iconPix;
     switch (state) {
     case NetworkDevice::Unknow:
@@ -169,6 +184,8 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
         m_loadingStat->stop();
         m_loadingStat->hide();
         m_loadingStat->setVisible(false);
+        if (!m_device->enabled())
+            m_stateButton->setVisible(false);
     }
         break;
     case NetworkDevice::Prepare:
@@ -197,6 +214,9 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 
 void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
 {
+    if (connInfo.isEmpty())
+        m_stateButton->setVisible(false);
+
     auto strTitle = connInfo.value("ConnectionName").toString();
     m_connectedName->setText(strTitle);
     QFontMetrics fontMetrics(m_connectedName->font());
@@ -205,7 +225,7 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
     }
 
     if (strTitle.isEmpty())
-        m_connectedName->setText(m_device->usingHwAdr());
+        m_connectedName->setText(m_deviceName);
     else
         m_connectedName->setText(strTitle);
 }
@@ -213,9 +233,11 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
 void WiredItem::buttonEnter()
 {
     if (m_device) {
+        bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
         if (NetworkDevice::Activated == m_device->status()) {
-            auto iconPix = Utils::renderSVG(":/common/resources/common/notify_close_press@2x.png",
-                                            QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+            auto pixpath = QString(":/wireless/resources/wireless/disconnect");
+            pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+            auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
             m_stateButton->setPixmap(iconPix);
         }
     }
@@ -224,9 +246,11 @@ void WiredItem::buttonEnter()
 void WiredItem::buttonLeave()
 {
     if (m_device) {
+        bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
         if (NetworkDevice::Activated == m_device->status()) {
-            auto iconPix = Utils::renderSVG(":/common/resources/common/list_select@2x.png",
-                                            QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+            auto pixpath = QString(":/wireless/resources/wireless/select");
+            pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+            auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
             m_stateButton->setPixmap(iconPix);
         }
     }

@@ -171,6 +171,14 @@
         <source>Network</source>
         <translation>网络</translation>
     </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>有线网络</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>有线网络%1</translation>
+    </message>
 </context>
 <context>
     <name>OnboardPlugin</name>

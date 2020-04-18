@@ -164,20 +164,42 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
     QMap<QString, WirelessItem*> wirelessItems;
     QMap<QString, WiredItem *> wiredItems;
 
+    int wiredDeviceCnt = 0;
+    int wirelessDeviceCnt = 0;
+    for (auto device : devices) {
+        if (device && device->type() == NetworkDevice::Wired)
+            wiredDeviceCnt++;
+        else
+            wirelessDeviceCnt++;
+    }
+
+    // 编号 (与控制中心有线设备保持一致命名)
+    int wiredNum = 0;
+    int wirelessNum = 0;
+    QString text;
+
     for (auto device : devices) {
         const QString &path = device->path();
         // new device
         DeviceItem *item = nullptr;
         switch (device->type()) {
         case NetworkDevice::Wired:
-            item = new WiredItem(static_cast<WiredDevice *>(device));
+            wiredNum++;
+            if (wiredDeviceCnt == 1)
+                text = tr("Wired Network");
+            else
+                text = tr("Wired Network %1").arg(wiredNum);
+            item = new WiredItem(static_cast<WiredDevice *>(device), text);
             wiredItems.insert(path, static_cast<WiredItem *>(item));
 
             connect(static_cast<WiredItem *>(item), &WiredItem::wiredStateChanged,
                     m_networkItem, &NetworkItem::updateSelf);
+            connect(static_cast<WiredItem *>(item), &WiredItem::enableChanged,
+                    m_networkItem, &NetworkItem::updateSelf);
             break;
         case NetworkDevice::Wireless:
             item = new WirelessItem(static_cast<WirelessDevice *>(device));
+            static_cast<WirelessItem *>(item)->setDeviceInfo(wirelessDeviceCnt == 1 ? -1 : ++wirelessNum);
             wirelessItems.insert(path, static_cast<WirelessItem *>(item));
 
             connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
@@ -207,8 +229,6 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             Q_UNREACHABLE();
         }
 
-        connect(device, &dde::network::NetworkDevice::removed,
-                m_networkItem, &NetworkItem::deviceDel);
         connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
         connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
     }
