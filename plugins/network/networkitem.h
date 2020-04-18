@@ -1,6 +1,7 @@
 #ifndef NETWORKITEM_H
 #define NETWORKITEM_H
 
+#include <DGuiApplicationHelper>
 #include <DSwitchButton>
 
 #include <QScrollArea>
@@ -8,6 +9,7 @@
 #include <QLabel>
 #include <QTimer>
 
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class PluginState;
@@ -58,7 +60,6 @@ public:
     void refreshTips();
 
 public slots:
-    void deviceDel();
     void updateSelf();
     void refreshIcon();
 
@@ -69,6 +70,7 @@ protected:
 private slots:
     void wiredsEnable(bool enable);
     void wirelessEnable(bool enable);
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     void getPluginState();
@@ -86,7 +88,7 @@ private:
     QWidget *m_wiredControlPanel;
     bool m_switchWiredBtnState;
 
-    HorizontalSeperator *m_line;
+//    HorizontalSeperator *m_line;
 
     QLabel *m_wirelessTitle;
     DSwitchButton *m_switchWirelessBtn;

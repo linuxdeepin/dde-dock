@@ -89,30 +89,9 @@ int WirelessItem::APcount()
     return m_APList->APcount();
 }
 
-bool WirelessItem::deviceActivated()
+bool WirelessItem::deviceEanbled()
 {
-    switch (m_device->status()) {
-    case NetworkDevice::Unknow:
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable: {
-        return false;
-    }
-    case NetworkDevice::Disconnected:
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed:
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:
-    case NetworkDevice::NeedAuth:
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries:
-    case NetworkDevice::Activated: {
-        if (m_device->enabled())
-            return true;
-        else
-            return false;
-    }
-    }
+    return m_device->enabled();
 }
 
 void WirelessItem::setDeviceEnabled(bool enable)
@@ -163,6 +142,7 @@ QJsonObject WirelessItem::getActiveWirelessConnectionInfo()
 void WirelessItem::setDeviceInfo(const int index)
 {
     m_APList->setDeviceInfo(index);
+    m_index = index;
 }
 
 bool WirelessItem::eventFilter(QObject *o, QEvent *e)

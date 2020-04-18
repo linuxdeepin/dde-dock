@@ -38,6 +38,9 @@ using namespace dde::network;
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+extern const QString DarkType;
+extern const QString LightType;
+
 AccessPointWidget::AccessPointWidget()
     : QFrame(nullptr)
     , m_activeState(NetworkDevice::Unknow)
@@ -52,12 +55,17 @@ AccessPointWidget::AccessPointWidget()
     m_ssidBtn->setObjectName("Ssid");
 
 //    m_disconnectBtn->setVisible(false);
-    auto iconPix = Utils::renderSVG(":/common/resources/common/list_select@2x.png",
-                               QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
+
+    auto pixpath = QString(":/wireless/resources/wireless/select");
+    pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+    auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
     m_stateButton->setPixmap(iconPix);
     m_stateButton->setVisible(false);
 
-    m_securityPixmap = Utils::renderSVG(":/wireless/resources/wireless/security.svg", QSize(16, 16), devicePixelRatioF());
+    pixpath = QString(":/wireless/resources/wireless/security");
+    pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+    m_securityPixmap = Utils::renderSVG(pixpath, QSize(16, 16), devicePixelRatioF());
     m_securityIconSize = m_securityPixmap.size();
     m_securityLabel->setPixmap(m_securityPixmap);
     m_securityLabel->setFixedSize(m_securityIconSize / devicePixelRatioF());
@@ -188,9 +196,12 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     m_securityPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_securityLabel->setPixmap(m_securityPixmap);
 
-//    m_disconnectBtn->setNormalPic(isLight ? ":/wireless/resources/wireless/select_dark.svg" : ":/wireless/resources/wireless/select.svg");
-//    m_disconnectBtn->setHoverPic(isLight ? ":/wireless/resources/wireless/disconnect_dark.svg" : ":/wireless/resources/wireless/disconnect.svg");
-//    m_disconnectBtn->setPressPic(isLight ? ":/wireless/resources/wireless/disconnect_dark.svg" : ":/wireless/resources/wireless/disconnect.svg");
+    if (NetworkDevice::Activated == m_activeState) {
+        auto pixpath = QString(":/wireless/resources/wireless/select");
+        pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+        auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+        m_stateButton->setPixmap(iconPix);
+    }
 }
 
 void AccessPointWidget::ssidClicked()
@@ -210,18 +221,22 @@ void AccessPointWidget::disconnectBtnClicked()
 
 void AccessPointWidget::buttonEnter()
 {
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
     if (NetworkDevice::Activated == m_activeState) {
-        auto iconPix = Utils::renderSVG(":/common/resources/common/notify_close_press@2x.png",
-                                        QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+        auto pixpath = QString(":/wireless/resources/wireless/disconnect");
+        pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+        auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
         m_stateButton->setPixmap(iconPix);
     }
 }
 
 void AccessPointWidget::buttonLeave()
 {
+    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
     if (NetworkDevice::Activated == m_activeState) {
-        auto iconPix = Utils::renderSVG(":/common/resources/common/list_select@2x.png",
-                                        QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
+        auto pixpath = QString(":/wireless/resources/wireless/select");
+        pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
+        auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
         m_stateButton->setPixmap(iconPix);
     }
 }

@@ -38,7 +38,7 @@ extern const int ItemHeight = 30;
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_deviceName = new TipsWidget;
+    m_deviceName = new QLabel(this);
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_switchBtn = new DSwitchButton;
@@ -116,7 +116,7 @@ void DeviceControlWidget::refreshNetwork()
 
     m_loadingIndicator->setLoading(true);
 
-    QTimer::singleShot(1000, this, [=] {
+    QTimer::singleShot(1000, this, [ = ] {
         m_loadingIndicator->setLoading(false);
     });
 }
