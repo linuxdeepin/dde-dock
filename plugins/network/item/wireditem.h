@@ -25,12 +25,14 @@
 #include "deviceitem.h"
 
 #include <WiredDevice>
+#include <DGuiApplicationHelper>
 #include <DSpinner>
 
 #include <QLabel>
 #include <QVBoxLayout>
 
 using namespace dde::network;
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 namespace Dock {
@@ -61,17 +63,19 @@ public:
     Q_ENUM(WiredStatus)
 
 public:
-    explicit WiredItem(dde::network::WiredDevice *device, QWidget *parent = nullptr);
-    inline void setTitle(const QString &name) { m_connectedName->setText(name); }
-    bool deviceActivated();
+    explicit WiredItem(dde::network::WiredDevice *device, const QString &deviceName, QWidget *parent = nullptr);
+    void setTitle(const QString &name);
+    bool deviceEabled();
     void setDeviceEnabled(bool enabled);
     WiredStatus getDeviceState();
     QJsonObject getActiveWiredConnectionInfo();
+    inline QString &deviceName() { return m_deviceName; }
+    void setThemeType(DGuiApplicationHelper::ColorType themeType);
 
 signals:
     void requestActiveConnection(const QString &devPath, const QString &uuid);
-    void wiredState(NetworkDevice::DeviceStatus state);
     void wiredStateChanged();
+    void enableChanged();
 
 private slots:
     void deviceStateChanged(NetworkDevice::DeviceStatus state);
@@ -80,10 +84,12 @@ private slots:
     void buttonLeave();
 
 private:
+    QString m_deviceName;
     QLabel *m_connectedName;
     QLabel *m_wiredIcon;
     StateLabel *m_stateButton;
     DSpinner *m_loadingStat;
+
 //    HorizontalSeperator *m_line;
 };
 

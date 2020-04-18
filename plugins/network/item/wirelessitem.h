@@ -63,11 +63,12 @@ public:
 
     QWidget *itemApplet();
     int APcount();
-    bool deviceActivated();
+    bool deviceEanbled();
     void setDeviceEnabled(bool enable);
     WirelessStatus getDeviceState();
     QJsonObject &getConnectedApInfo();
     QJsonObject getActiveWirelessConnectionInfo();
+    inline int deviceInfo() { return m_index; }
 
 public Q_SLOTS:
     // set the device name displayed
@@ -93,6 +94,7 @@ private slots:
     void adjustHeight();
 
 private:
+    int m_index;
     QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
 
