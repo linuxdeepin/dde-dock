@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 
 extern const int ItemWidth;
+extern const int ItemMargin;
 extern const int ItemHeight;
 const int ControlItemHeight = 35;
 const QString MenueEnable = "enable";
@@ -70,7 +71,7 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     auto centralWidget = new QWidget(m_applet);
     auto centralLayout = new QVBoxLayout;
-    centralLayout->setContentsMargins(QMargins(10, 0, 10, 0));
+    centralLayout->setContentsMargins(QMargins(ItemMargin, 0, ItemMargin, 0));
     centralLayout->setSpacing(0);
     centralLayout->addWidget(m_wirelessControlPanel);
     centralLayout->addLayout(m_wirelessLayout);
