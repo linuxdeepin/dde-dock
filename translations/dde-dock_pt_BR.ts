@@ -7,6 +7,35 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Desativar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ativar</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Configurações de Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -41,7 +70,7 @@
     </message>
     <message>
         <source>Time settings</source>
-        <translation>Configurações de data e hora</translation>
+        <translation>Configurações de Data e Hora</translation>
     </message>
 </context>
 <context>
@@ -63,7 +92,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Limpar %1 itens?</translation>
+        <translation>Esvaziar %1 itens?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -93,7 +122,7 @@
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation>Disco</translation>
+        <translation>Dispositivos</translation>
     </message>
     <message>
         <source>Open</source>
@@ -178,6 +207,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Conexão Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Conexão cabeada</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Desativar a conexão cabeada</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Ativar a conexão cabeada</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Desativar a conexão Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Ativar a conexão Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Desativar rede</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ativar rede</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Configurações de rede</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Dispositivo desativado</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Conexão Wi-Fi: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Conexão cabeada: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Não conectado</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Conectando</translation>
+    </message>
+    <message>
+        <source>Connected but not Internet access</source>
+        <translation>Conectado, sem Internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Cabo de rede desconectado</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -207,31 +303,35 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>%1 carregado | %2m restantes</translation>
+        <translation>%1 Carregado - %2m restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>%1 carregado | %2h%3 restantes</translation>
+        <translation>%1 Carregado - %2h%3 restantes</translation>
     </message>
     <message>
         <source>Charged %1</source>
-        <translation type="vanished">%1 carregado</translation>
+        <translation type="vanished">%1 Carregado</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Carregando %1  |  %2min até completar</translation>
+        <translation>Carregando %1 - %2m até completar</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Carregando %1  |  %2h%3min até completar</translation>
+        <translation>Carregando %1 - %2h%3 até completar</translation>
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation>Carregando %1 ...</translation>
+        <translation>Carregando %1...</translation>
     </message>
     <message>
         <source>%1 charged</source>
-        <translation>%1 carregado</translation>
+        <translation>%1 Carregado</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ....</source>
+        <translation>%1 Carregado</translation>
     </message>
 </context>
 <context>
@@ -319,7 +419,7 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation>Configurações de som</translation>
+        <translation>Configurações de Som</translation>
     </message>
     <message>
         <source>Volume %1</source>
@@ -370,18 +470,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation>Desconhecido</translation>
+        <translation type="vanished">Desconhecido</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Conexão Cabeada: %1</translation>
+        <translation type="vanished">Conexão Cabeada: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>Sem Rede</translation>
+        <translation type="vanished">Sem Rede</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -389,11 +489,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Conectado, sem Internet</translation>
+        <translation type="vanished">Conectado, sem Internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Conexão Wi-Fi: %1</translation>
+        <translation type="vanished">Conexão Wi-Fi: %1</translation>
     </message>
 </context>
 <context>

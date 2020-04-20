@@ -7,6 +7,35 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Sluk</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Tænd</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth-indstillinger</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -178,6 +207,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connected but not Internet access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -232,6 +328,10 @@
     <message>
         <source>%1 charged</source>
         <translation>%1 opladet</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -370,18 +470,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation>Ukendt</translation>
+        <translation type="vanished">Ukendt</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Kablet forbindelse: %1</translation>
+        <translation type="vanished">Kablet forbindelse: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>Intet netværk</translation>
+        <translation type="vanished">Intet netværk</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -389,11 +489,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Tilsluttet men ingen internetadgang</translation>
+        <translation type="vanished">Tilsluttet men ingen internetadgang</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Trådløs forbindelse: %1</translation>
+        <translation type="vanished">Trådløs forbindelse: %1</translation>
     </message>
 </context>
 <context>

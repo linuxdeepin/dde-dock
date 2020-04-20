@@ -7,6 +7,35 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Блутут</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Искључи</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Укључи</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Блутут подешавања</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Блутут</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -178,6 +207,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connected but not Internet access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -203,7 +299,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Подешавање напајања</translation>
+        <translation>Управљање напајањем</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -232,6 +328,10 @@
     <message>
         <source>%1 charged</source>
         <translation>%1 напуњено</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -281,7 +381,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Подешавање напајања</translation>
+        <translation>Управљање напајањем</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -370,18 +470,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation>Непознато</translation>
+        <translation type="vanished">Непознато</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Жичана веза: %1</translation>
+        <translation type="vanished">Жичана веза: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>Нема мреже</translation>
+        <translation type="vanished">Нема мреже</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -389,11 +489,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Повезани сте, али нема интернета</translation>
+        <translation type="vanished">Повезани сте, али нема интернета</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Бежична веза: %1</translation>
+        <translation type="vanished">Бежична веза: %1</translation>
     </message>
 </context>
 <context>
