@@ -28,9 +28,9 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/gir/gudev-1.0"
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
+	"pkg.deepin.io/gir/gudev-1.0"
 	"pkg.deepin.io/lib/arch"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -288,7 +288,7 @@ func (m *Manager) addBattery(dev *gudev.Device) (*Battery, bool) {
 
 	bat = newBattery(m, dev)
 	if bat == nil {
-		logger.Warningf("add batteries failed, sysfsPath %q, new battery failed", sysfsPath)
+		logger.Debugf("add batteries failed, sysfsPath %q, new battery failed", sysfsPath)
 		return nil, false
 	}
 

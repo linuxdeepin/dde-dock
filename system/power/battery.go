@@ -89,7 +89,10 @@ func newBattery(manager *Manager, device *gudev.Device) *Battery {
 		gudevClient: manager.gudevClient,
 		SysfsPath:   sysfsPath,
 	}
-	bat.refresh(device)
+	ok := bat.refresh(device)
+	if !ok {
+		return nil
+	}
 	bat.resetUpdateInterval(60 * time.Second)
 	return bat
 }
@@ -148,9 +151,12 @@ func (bat *Battery) notifyChange(propNames ...string) {
 	bat.changedProperties = append(bat.changedProperties, propNames...)
 }
 
-func (bat *Battery) refresh(dev *gudev.Device) {
+func (bat *Battery) refresh(dev *gudev.Device) (ok bool) {
 	endDelay := bat.service.DelayEmitPropertyChanged(bat)
 	batInfo := battery.GetBatteryInfo(dev)
+	if batInfo == nil {
+		return
+	}
 
 	setTimeToFull := true
 	if batInfo.Status == battery.StatusCharging {
@@ -173,8 +179,13 @@ func (bat *Battery) refresh(dev *gudev.Device) {
 
 	bat._refresh(batInfo, setTimeToFull)
 	if endDelay != nil {
-		endDelay()
+		err := endDelay()
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
+	ok = true
+	return
 }
 
 func (bat *Battery) _refresh(info *battery.BatteryInfo, setTimeToFull bool) {
