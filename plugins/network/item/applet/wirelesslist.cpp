@@ -37,6 +37,7 @@ DWIDGET_USE_NAMESPACE
 using namespace dde::network;
 
 extern const int ItemWidth = 250;
+extern const int ItemMargin = 10;
 extern const int ItemHeight;
 
 WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
@@ -58,7 +59,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
 
-    m_centralWidget->setFixedWidth(ItemWidth);
+    m_centralWidget->setFixedWidth(ItemWidth - 2*ItemMargin);
     m_centralWidget->setLayout(m_centralLayout);
 
     m_centralLayout->addWidget(m_controlPanel);
@@ -67,7 +68,6 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
     setWidget(m_centralWidget);
     setFrameShape(QFrame::NoFrame);
-    setFixedWidth(ItemWidth);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);

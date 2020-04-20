@@ -64,6 +64,7 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
 //    m_line->setVisible(false);
 
     m_connectedName->setText(m_deviceName);
+    m_connectedName->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
 
     auto connectionLayout = new QVBoxLayout(this);
     connectionLayout->setMargin(0);
@@ -75,7 +76,6 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     itemLayout->addSpacing(10);
     itemLayout->addWidget(m_wiredIcon);
     itemLayout->addWidget(m_connectedName);
-    itemLayout->addStretch();
     itemLayout->addWidget(m_stateButton);
     itemLayout->addWidget(m_loadingStat);
     itemLayout->addSpacing(10);
