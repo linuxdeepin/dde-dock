@@ -255,8 +255,8 @@ void NetworkPlugin::loadPlugin()
 void NetworkPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, STATE_KEY);
+        m_proxyInter->itemRemoved(this, NETWORK_KEY);
     } else {
-        m_proxyInter->itemAdded(this, STATE_KEY);
+        m_proxyInter->itemAdded(this, NETWORK_KEY);
     }
 }
