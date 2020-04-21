@@ -26,8 +26,9 @@
 
 using namespace dde::network;
 
-DeviceItem::DeviceItem(dde::network::NetworkDevice *device, QWidget *parent)
-    : QWidget(parent),
+DeviceItem::DeviceItem(dde::network::NetworkDevice *device)
+    : QWidget(nullptr),
+
       m_device(device),
       m_path(device->path())
 {

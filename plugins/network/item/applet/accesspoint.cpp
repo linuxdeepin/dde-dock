@@ -61,6 +61,11 @@ bool AccessPoint::operator>(const AccessPoint &ap) const
     return m_strength > ap.m_strength;
 }
 
+bool AccessPoint::operator<(const AccessPoint &ap) const
+{
+    return m_strength < ap.m_strength;
+}
+
 AccessPoint &AccessPoint::operator=(const AccessPoint &ap)
 {
     m_strength = ap.m_strength;

@@ -141,10 +141,4 @@
         <file>resources/wireless/spinner14/Spinner89.png</file>
         <file>resources/wireless/spinner14/Spinner90.png</file>
     </qresource>
-    <qresource prefix="/common">
-        <file>resources/common/list_select.png</file>
-        <file>resources/common/list_select@2x.png</file>
-        <file>resources/common/notify_close_press.png</file>
-        <file>resources/common/notify_close_press@2x.png</file>
-    </qresource>
 </RCC>

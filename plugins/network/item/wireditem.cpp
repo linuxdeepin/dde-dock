@@ -22,209 +22,200 @@
 
 #include "constants.h"
 #include "wireditem.h"
-#include "applet/horizontalseperator.h"
+#include "networkplugin.h"
+#include "../frame/util/imageutil.h"
 #include "../widgets/tipswidget.h"
-#include "util/utils.h"
-
 #include <DGuiApplicationHelper>
-#include <NetworkModel>
 
+#include <QPainter>
+#include <QMouseEvent>
+#include <QIcon>
+#include <QApplication>
+
+using namespace dde::network;
 DGUI_USE_NAMESPACE
-const int ItemHeight = 30;
 
-WiredItem::WiredItem(WiredDevice *device, QWidget *parent)
-    : DeviceItem(device, parent)
-    , m_connectedName(new QLabel(this))
-    , m_wiredIcon(new QLabel(this))
-    , m_stateButton(new StateLabel(this))
-    , m_loadingStat(new DSpinner(this))
-    , m_line(new HorizontalSeperator(this))
+WiredItem::WiredItem(WiredDevice *device)
+    : DeviceItem(device),
+
+      m_itemTips(new TipsWidget(this)),
+      m_delayTimer(new QTimer(this))
 {
-    setFixedHeight(ItemHeight);
+    m_delayTimer->setSingleShot(true);
+    m_delayTimer->setInterval(200);
 
-//    m_connectedName->setVisible(false);
-    auto iconPix = Utils::renderSVG(":/wired/resources/wired/network-wired-symbolic-dark.svg",
-                                    QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-    m_wiredIcon->setPixmap(iconPix);
-    m_wiredIcon->setVisible(false);
-    iconPix = Utils::renderSVG(":/common/resources/common/list_select@2x.png",
-                               QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-    m_stateButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    m_stateButton->setPixmap(iconPix);
-    m_stateButton->setVisible(false);
-    m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
-    m_loadingStat->setVisible(false);
-    m_line->setVisible(false);
+    m_itemTips->setObjectName("wired-" + m_device->path());
+    m_itemTips->setVisible(false);
+    m_itemTips->setText(tr("Unknown"));
 
-    auto connectionLayout = new QVBoxLayout(this);
-    connectionLayout->setMargin(0);
-    connectionLayout->setSpacing(0);
-    connectionLayout->addWidget(m_line);
-    auto itemLayout = new QHBoxLayout;
-    itemLayout->setMargin(0);
-    itemLayout->setSpacing(0);
-    itemLayout->addSpacing(10);
-    itemLayout->addWidget(m_wiredIcon);
-    itemLayout->addWidget(m_connectedName);
-    itemLayout->addStretch();
-    itemLayout->addWidget(m_stateButton);
-    itemLayout->addWidget(m_loadingStat);
-    itemLayout->addSpacing(10);
-    connectionLayout->addLayout(itemLayout);
-    setLayout(connectionLayout);
-
-    connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
-            this, &WiredItem::deviceStateChanged);
-
-    connect(static_cast<WiredDevice*>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
-            this, &WiredItem::changedActiveWiredConnectionInfo);
-
-    connect(m_stateButton, &StateLabel::click, this, [&]{
-        auto enableState = m_device->enabled();
-        emit requestSetDeviceEnable(path(), !enableState);
+    connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
+    connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged), this, &WiredItem::deviceStateChanged);
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::connectionsChanged, this, &WiredItem::deviceStateChanged);
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged, this, &WiredItem::deviceStateChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshIcon();
     });
-    connect(m_stateButton, &StateLabel::enter, this , &WiredItem::buttonEnter);
-    connect(m_stateButton, &StateLabel::leave, this , &WiredItem::buttonLeave);
 
-    deviceStateChanged(m_device->status());
+    QTimer::singleShot(0, this, &WiredItem::refreshTips);
+    QTimer::singleShot(0, this, &WiredItem::refreshIcon);
+
 }
 
-bool WiredItem::deviceActivated()
+QWidget *WiredItem::itemTips()
 {
-    switch (m_device->status()) {
-    case NetworkDevice::Unknow:
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable:
-    case NetworkDevice::Disconnected:
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed: {
-        return false;
-    }
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:
-    case NetworkDevice::NeedAuth:
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries:
-    case NetworkDevice::Activated: {
-        return true;
-    }
-    }
+    refreshTips();
+
+    return m_itemTips;
 }
 
-void WiredItem::setDeviceEnabled(bool enabled)
+const QString WiredItem::itemCommand() const
 {
-    emit requestSetDeviceEnable(path(), enabled);
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowPage \"string:network\" \"string:%1\"").arg(path());
 }
 
-WiredItem::WiredStatus WiredItem::getDeviceState()
+void WiredItem::paintEvent(QPaintEvent *e)
 {
-    if (!m_device->enabled()) {
-        return Disabled;
+    QWidget::paintEvent(e);
+
+    QPainter painter(this);
+    const auto ratio = devicePixelRatioF();
+    const QRectF &rf = rect();
+    const QRectF &rfp = QRectF(m_icon.rect());
+    const int x = rf.center().x() - rfp.center().x() / ratio;
+    const int y = rf.center().y() - rfp.center().y() / ratio;
+    painter.drawPixmap(x, y, m_icon);
+}
+
+void WiredItem::resizeEvent(QResizeEvent *e)
+{
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
     }
-    if (m_device->status() == NetworkDevice::Activated
-            && NetworkModel::connectivity() != Connectivity::Full) {
-        return ConnectNoInternet;
+
+    DeviceItem::resizeEvent(e);
+
+    m_delayTimer->start();
+}
+
+void WiredItem::refreshIcon()
+{
+    m_delayTimer->start();
+
+    refreshTips();
+}
+
+void WiredItem::reloadIcon()
+{
+    Q_ASSERT(sender() == m_delayTimer);
+
+    if (m_device.isNull()) {
+        return;
     }
+
+//    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
+    const auto ratio = devicePixelRatioF();
+//    const int iconSize = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
+    const int iconSize = PLUGIN_ICON_MAX_SIZE;
+
+    QString iconName = "network-";
+    NetworkDevice::DeviceStatus devState = m_device->status();
+
+    if (m_device->enabled()) {
+        switch (devState) {
+        case NetworkDevice::DeviceStatus::Unknow:
+        case NetworkDevice::DeviceStatus::Unmanaged:
+        case NetworkDevice::DeviceStatus::Unavailable: {
+            iconName.append("error");
+            break;
+        }
+        case NetworkDevice::DeviceStatus::Disconnected: {
+            iconName.append("none");
+            break;
+        }
+        case NetworkDevice::DeviceStatus::Prepare:
+        case NetworkDevice::DeviceStatus::Config:
+        case NetworkDevice::DeviceStatus::NeedAuth:
+        case NetworkDevice::DeviceStatus::IpConfig:
+        case NetworkDevice::DeviceStatus::IpCheck:
+        case NetworkDevice::DeviceStatus::Secondaries: {
+            m_delayTimer->start();
+            const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
+            const int num = (index % 5) + 1;
+
+            m_icon = ImageUtil::loadSvg(QString("network-wired-symbolic-connecting%1.svg").arg(num), ":/wired/resources/wired/", iconSize, ratio);
+            update();
+            return;
+        }
+        case NetworkDevice::DeviceStatus::Activated: {
+            iconName.append("online");
+            break;
+        }
+        case NetworkDevice::DeviceStatus::Deactivation:
+        case NetworkDevice::DeviceStatus::Failed: {
+            iconName.append("none");
+            break;
+        }
+        default:;
+        }
+    } else {
+        iconName.append("disabled");
+    }
+
+    if (devState == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) {
+        iconName = "network-offline";
+    }
+
     if (m_device->obtainIpFailed()) {
-        return ObtainIpFailed;
+        iconName = "network-warning";
     }
 
-    switch (m_device->status()) {
-    case NetworkDevice::Unknow:        return Unknow;
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable:   return Nocable;
-    case NetworkDevice::Disconnected:  return Disconnected;
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:        return Connecting;
-    case NetworkDevice::NeedAuth:      return Authenticating;
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries:   return ObtainingIP;
-    case NetworkDevice::Activated:     return Connected;
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed:        return Failed;
-    }
+    m_delayTimer->stop();
+
+    if (displayMode == Dock::Efficient)
+        iconName.append("-symbolic");
+
+    // 最小尺寸时采用深色图标
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    m_icon = ImageUtil::loadSvg(iconName, ":/wired/resources/wired/", iconSize, ratio);
+    update();
 }
 
-QJsonObject WiredItem::getActiveWiredConnectionInfo()
+void WiredItem::deviceStateChanged()
 {
-    return static_cast<WiredDevice *>(m_device.data())->activeWiredConnectionInfo();
+    refreshTips();
+
+    m_delayTimer->start();
 }
 
-void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
+void WiredItem::refreshTips()
 {
-    emit wiredState(state);
-    QPixmap iconPix;
-    switch (state) {
-    case NetworkDevice::Unknow:
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable:
-    case NetworkDevice::Disconnected:
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed: {
-        m_loadingStat->stop();
-        m_loadingStat->hide();
-        m_loadingStat->setVisible(false);
-    }
-        break;
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:
-    case NetworkDevice::NeedAuth:
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries: {
-        m_stateButton->setVisible(false);
-        m_loadingStat->setVisible(true);
-        m_loadingStat->start();
-        m_loadingStat->show();
-    }
-        break;
-    case NetworkDevice::Activated: {
-        m_loadingStat->stop();
-        m_loadingStat->hide();
-        m_loadingStat->setVisible(false);
-        m_stateButton->setVisible(true);
-    }
-        break;
+    if (m_device.isNull()) {
+        return;
     }
 
-    emit wiredStateChanged();
-}
+    m_itemTips->setText(m_device->statusStringDetail());
 
-void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
-{
-    auto strTitle = connInfo.value("ConnectionName").toString();
-    m_connectedName->setText(strTitle);
-    QFontMetrics fontMetrics(m_connectedName->font());
-    if(fontMetrics.width(strTitle) > m_connectedName->width()) {
-        strTitle = QFontMetrics(m_connectedName->font()).elidedText(strTitle, Qt::ElideRight, m_connectedName->width());
-    }
-
-    if (strTitle.isEmpty())
-        m_connectedName->setText(m_device->usingHwAdr());
-    else
-        m_connectedName->setText(strTitle);
-}
-
-void WiredItem::buttonEnter()
-{
-    if (m_device) {
-        if (NetworkDevice::Activated == m_device->status()) {
-            auto iconPix = Utils::renderSVG(":/common/resources/common/notify_close_press@2x.png",
-                                            QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-            m_stateButton->setPixmap(iconPix);
-        }
-    }
-}
-
-void WiredItem::buttonLeave()
-{
-    if (m_device) {
-        if (NetworkDevice::Activated == m_device->status()) {
-            auto iconPix = Utils::renderSVG(":/common/resources/common/list_select@2x.png",
-                                            QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-            m_stateButton->setPixmap(iconPix);
-        }
+    if (NetworkPlugin::isConnectivity()) {
+        do {
+            if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
+                break;
+            }
+            const QJsonObject info = static_cast<WiredDevice *>(m_device.data())->activeWiredConnectionInfo();
+            if (!info.contains("Ip4"))
+                break;
+            const QJsonObject ipv4 = info.value("Ip4").toObject();
+            if (!ipv4.contains("Address"))
+                break;
+            m_itemTips->setText(tr("Wired connection: %1").arg(ipv4.value("Address").toString()));
+        } while (false);
     }
 }

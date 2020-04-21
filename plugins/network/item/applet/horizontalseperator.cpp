@@ -25,7 +25,7 @@
 
 HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     : QWidget(parent),
-      m_color(255, 255, 255, 25)
+      m_color(255, 255, 255, 255 * 0.1)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }

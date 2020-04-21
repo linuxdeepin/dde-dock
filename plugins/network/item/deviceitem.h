@@ -30,13 +30,15 @@
 class DeviceItem : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit DeviceItem(dde::network::NetworkDevice *device, QWidget *parent = nullptr);
+    explicit DeviceItem(dde::network::NetworkDevice *device);
 
     const QString &path() const { return m_path; }
 
     inline const QPointer<dde::network::NetworkDevice> device() { return m_device; }
 
+    virtual void refreshIcon() = 0;
     virtual const QString itemCommand() const;
     virtual const QString itemContextMenu();
     virtual QWidget *itemApplet();
