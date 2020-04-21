@@ -253,7 +253,7 @@
         <translation>正在连接</translation>
     </message>
     <message>
-        <source>Connected but not Internet access</source>
+        <source>Connected but no Internet access</source>
         <translation>已连接网络但无法访问互联网</translation>
     </message>
     <message>
