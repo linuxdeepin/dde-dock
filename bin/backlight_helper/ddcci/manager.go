@@ -37,7 +37,7 @@ func NewManager() (*Manager, error) {
 	var err error
 	m.ddcci, err = newDDCCI()
 	if err != nil {
-		return nil, fmt.Errorf("failed to init ddc/ci: %w", err)
+		return nil, fmt.Errorf("failed to init ddc/ci: %s", err)
 	}
 
 	return m, nil
