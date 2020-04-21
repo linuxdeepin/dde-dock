@@ -1135,7 +1135,7 @@ void NetworkItem::refreshTips()
     case ConnectNoInternet:
     case AconnectNoInternet:
     case BconnectNoInternet:
-        m_tipsWidget->setText(tr("Connected but not Internet access"));
+        m_tipsWidget->setText(tr("Connected but no Internet access"));
         break;
     case Bfailed:
         m_tipsWidget->setText(tr("Network cable unplugged"));

@@ -166,6 +166,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>无线网络</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>有线网络</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>关闭有线网络</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>启用有线网络</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>关闭无线网络</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>启用无线网络</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>关闭网络</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>启用网络</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>网络设置</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>设备已禁用</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>无线连接：%1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>有线连接：%1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>未连接</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>正在连接</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>已连接网络但无法访问互联网</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>未插入网线</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
