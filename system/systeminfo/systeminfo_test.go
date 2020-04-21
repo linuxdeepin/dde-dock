@@ -55,7 +55,7 @@ func Test_parseXml(t *testing.T) {
 		value, err := parseXml([]byte(xmlData))
 		v := value.Size
 		t.Log(v)
-		So(v, ShouldEqual,  6442450944)
+		So(v, ShouldEqual,  uint64(6442450944))
 		So(err, ShouldBeNil)
 	})
 }
