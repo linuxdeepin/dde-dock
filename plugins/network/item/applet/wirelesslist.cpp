@@ -105,7 +105,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 //        const int h = -(apw->height() - m_indicator->height()) / 2;
 //        m_indicator->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
         const int h = -(apw->height() - m_loadingStat->height()) / 2;
-        m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+        m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(23, h));
     });
 
     QMetaObject::invokeMethod(this, "loadAPList", Qt::QueuedConnection);
@@ -291,7 +291,7 @@ void WirelessList::updateAPList()
             AccessPointWidget *apw = accessPointWidgetByAp(m_activatingAP);
             if (apw) {
                 const int h = -(apw->height() - m_loadingStat->height()) / 2;
-                m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+                m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(23, h));
             }
         }
 
@@ -385,7 +385,7 @@ void WirelessList::updateIndicatorPos()
 
 //    const int h = -(apw->height() - m_indicator->height()) / 2;
     const int h = -(apw->height() - m_loadingStat->height()) / 2;
-    m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(35, h));
+    m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(23, h));
     m_loadingStat->show();
 //    m_indicator->play();
     m_loadingStat->start();

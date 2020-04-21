@@ -78,7 +78,7 @@ AccessPointWidget::AccessPointWidget()
     infoLayout->addWidget(m_ssidBtn);
 //    infoLayout->addWidget(m_disconnectBtn);
     infoLayout->addWidget(m_stateButton);
-    infoLayout->addSpacing(10);
+    infoLayout->addSpacing(3);
     infoLayout->setSpacing(0);
     infoLayout->setContentsMargins(5, 0, 0, 0);
 

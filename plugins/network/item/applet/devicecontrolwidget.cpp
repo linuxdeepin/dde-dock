@@ -63,7 +63,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(10, 0, 5, 0);
+    infoLayout->setContentsMargins(10, 0, 3, 0);
 
 //    m_seperator = new HorizontalSeperator;
 //    m_seperator->setFixedHeight(1);
