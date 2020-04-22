@@ -1,47 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>The plugin %1 is not compatible with the system.</translation>
-    </message>
-</context>
-<context>
-    <name>AdapterItem</name>
-    <message>
-        <source>My Device</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
