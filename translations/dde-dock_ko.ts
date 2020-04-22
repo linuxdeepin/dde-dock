@@ -7,6 +7,35 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>블루투스</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>끄기</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>켜기</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>블루투스 설정</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>블루투스</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -178,6 +207,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connected but not Internet access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -232,6 +328,10 @@
     <message>
         <source>%1 charged</source>
         <translation>%1 충전됨</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -370,18 +470,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation>알 수 없음</translation>
+        <translation type="vanished">알 수 없음</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>유선 연결: %1</translation>
+        <translation type="vanished">유선 연결: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>네트워크 없음</translation>
+        <translation type="vanished">네트워크 없음</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -389,11 +489,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>연결됨, 인터넷 없음</translation>
+        <translation type="vanished">연결됨, 인터넷 없음</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>무선 연결: %1</translation>
+        <translation type="vanished">무선 연결: %1</translation>
     </message>
 </context>
 <context>

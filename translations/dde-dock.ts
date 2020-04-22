@@ -178,6 +178,73 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Wireless connection</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Wired connection</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Disable wired connection</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Enable wired connection</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Disable wireless connection</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Enable wireless connection</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Disable network</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Enable network</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Network settings</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Device disabled</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Wireless connection: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Wired connection: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Not connected</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Connecting</translation>
+    </message>
+    <message>
+        <source>Connected but not Internet access</source>
+        <translation>Connected but not Internet access</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Network cable unplugged</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -232,6 +299,10 @@
     <message>
         <source>%1 charged</source>
         <translation>%1 charged</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ....</source>
+        <translation>Capacity %1 ....</translation>
     </message>
 </context>
 <context>
