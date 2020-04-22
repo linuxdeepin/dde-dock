@@ -4,6 +4,8 @@
 #include "../../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 
+
+#include <DApplicationHelper>
 #include <DDBusSender>
 
 #include <QVBoxLayout>
@@ -18,11 +20,29 @@ const QString MenueWiredEnable = "wireEnable";
 const QString MenueWirelessEnable = "wirelessEnable";
 const QString MenueSettings = "settings";
 
+extern void initFontColor(QWidget *widget)
+{
+    if (!widget)
+        return;
+
+    auto fontChange = [&](QWidget *widget){
+        QPalette defaultPalette = widget->palette();
+        defaultPalette.setBrush(QPalette::WindowText, defaultPalette.brightText());
+        widget->setPalette(defaultPalette);
+    };
+
+    fontChange(widget);
+
+    QObject::connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, widget, [=]{
+        fontChange(widget);
+    });
+}
 
 NetworkItem::NetworkItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsWidget(new TipsWidget(this))
     , m_applet(new QScrollArea(this))
+//    , m_line(new HorizontalSeperator(this))
     , m_switchWire(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
@@ -31,9 +51,14 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     m_tipsWidget->setVisible(false);
 
+    auto defaultFont = font();
+    auto titlefont = QFont(defaultFont.family(), defaultFont.pointSize() + 2);
+
     m_wirelessControlPanel = new QWidget(this);
     m_wirelessTitle = new QLabel(m_wirelessControlPanel);
     m_wirelessTitle->setText(tr("Wireless connection"));
+    m_wirelessTitle->setFont(titlefont);
+    initFontColor(m_wirelessTitle);
     m_switchWirelessBtn = new DSwitchButton(m_wirelessControlPanel);
     m_switchWirelessBtnState = false;
     m_wirelessLayout = new QVBoxLayout;
@@ -51,8 +76,11 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_wirelessControlPanel->setFixedHeight(ControlItemHeight);
 
     m_wiredControlPanel = new QWidget(this);
+
     m_wiredTitle = new QLabel(m_wiredControlPanel);
     m_wiredTitle->setText(tr("Wired connection"));
+    m_wiredTitle->setFont(titlefont);
+    initFontColor(m_wiredTitle);
     m_switchWiredBtn = new DSwitchButton(m_wiredControlPanel);
     m_switchWiredBtnState = false;
     m_wiredLayout = new QVBoxLayout;
@@ -431,6 +459,7 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     for (auto wiredItem : m_wiredItems) {
         wiredItem->setThemeType(themeType);
     }
+    refreshIcon();
 }
 
 void NetworkItem::getPluginState()
@@ -942,12 +971,20 @@ void NetworkItem::updateView()
     const int constDisplayItemCnt = 10;
     int contentHeight = 0;
     int itemCount = 0;
+
+    auto wirelessCnt = m_wirelessItems.size();
     if (m_switchWirelessBtnState) {
         for (auto wirelessItem : m_wirelessItems) {
             if (wirelessItem) {
                 if (wirelessItem->device()->enabled())
                     itemCount += wirelessItem->APcount();
                 // 单个设备开关控制项
+                if (wirelessCnt == 1) {
+                    wirelessItem->setControlPanelVisible(false);
+                    continue;
+                } else {
+                    wirelessItem->setControlPanelVisible(true);
+                }
                 itemCount++;
             }
         }

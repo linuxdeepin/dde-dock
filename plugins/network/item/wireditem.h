@@ -88,7 +88,7 @@ private:
     StateLabel *m_stateButton;
     DSpinner *m_loadingStat;
 
-//    HorizontalSeperator *m_line;
+    HorizontalSeperator *m_line;
 };
 
 class StateLabel : public QLabel

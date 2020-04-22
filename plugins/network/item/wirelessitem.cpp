@@ -139,6 +139,25 @@ QJsonObject WirelessItem::getActiveWirelessConnectionInfo()
     return static_cast<WirelessDevice *>(m_device.data())->activeWirelessConnectionInfo();
 }
 
+void WirelessItem::setControlPanelVisible(bool visible)
+{
+    auto layout = m_wirelessApplet->layout();
+    auto controlPanel = m_APList->controlPanel();
+    if (layout && controlPanel) {
+        if (visible) {
+            layout->removeWidget(controlPanel);
+            layout->removeWidget(m_APList);
+
+            layout->addWidget(controlPanel);
+            layout->addWidget(m_APList);
+        } else {
+            layout->removeWidget(controlPanel);
+        }
+        controlPanel->setVisible(visible);
+        adjustHeight(visible);
+    }
+}
+
 void WirelessItem::setDeviceInfo(const int index)
 {
     m_APList->setDeviceInfo(index);
@@ -179,8 +198,14 @@ void WirelessItem::init()
     });
 }
 
-void WirelessItem::adjustHeight()
+void WirelessItem::adjustHeight(bool visibel)
 {
-    m_wirelessApplet->setFixedHeight(m_APList->height() + m_APList->controlPanel()->height());
+    auto controlPanel = m_APList->controlPanel();
+    if (!controlPanel)
+        return;
+
+    auto height = visibel ? (m_APList->height() + controlPanel->height())
+                          : m_APList->height();
+    m_wirelessApplet->setFixedHeight(height);
 }
 

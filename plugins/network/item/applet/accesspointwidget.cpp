@@ -40,6 +40,7 @@ DGUI_USE_NAMESPACE
 
 extern const QString DarkType;
 extern const QString LightType;
+extern void initFontColor(QWidget *widget);
 
 AccessPointWidget::AccessPointWidget()
     : QFrame(nullptr)
@@ -53,6 +54,7 @@ AccessPointWidget::AccessPointWidget()
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_ssidBtn->setObjectName("Ssid");
+    initFontColor(m_ssidBtn);
 
 //    m_disconnectBtn->setVisible(false);
     bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
@@ -72,7 +74,9 @@ AccessPointWidget::AccessPointWidget()
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_securityLabel);
-    infoLayout->addSpacing(5);
+    infoLayout->setMargin(0);
+    infoLayout->setSpacing(0);
+    infoLayout->addSpacing(2);
     infoLayout->addWidget(m_strengthLabel);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_ssidBtn);
@@ -80,7 +84,6 @@ AccessPointWidget::AccessPointWidget()
     infoLayout->addWidget(m_stateButton);
     infoLayout->addSpacing(3);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(5, 0, 0, 0);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addLayout(infoLayout);
