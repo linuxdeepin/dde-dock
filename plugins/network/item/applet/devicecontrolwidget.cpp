@@ -35,6 +35,7 @@ DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 extern const int ItemHeight = 30;
+extern void initFontColor(QWidget *widget);
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
@@ -46,6 +47,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     m_deviceName = new QLabel(this);
 >>>>>>> 0231f82a... fix(network):Abnormal hot swap of wired network
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    initFontColor(m_deviceName);
 
     m_switchBtn = new DSwitchButton;
 
@@ -63,13 +65,15 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     refreshIcon();
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
+    infoLayout->setMargin(0);
+    infoLayout->setSpacing(0);
+    infoLayout->addSpacing(3);
     infoLayout->addWidget(m_deviceName);
     infoLayout->addStretch();
     infoLayout->addWidget(m_loadingIndicator);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
-    infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(10, 0, 3, 0);
+    infoLayout->addSpacing(3);
 
 //    m_seperator = new HorizontalSeperator;
 //    m_seperator->setFixedHeight(1);
