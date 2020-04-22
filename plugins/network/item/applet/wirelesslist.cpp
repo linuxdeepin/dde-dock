@@ -131,11 +131,7 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
     AccessPoint ap(apInfo);
     const auto mIndex = m_apList.indexOf(ap);
     if (mIndex != -1) {
-        if (ap > m_apList.at(mIndex)) {
-            m_apList.replace(mIndex, ap);
-        } else {
-            return;
-        }
+        m_apList.replace(mIndex, ap);
     } else {
         m_apList.append(ap);
     }
@@ -183,9 +179,7 @@ void WirelessList::loadAPList()
         if (mIndex != -1) {
             // indexOf() will use AccessPoint reimplemented function "operator==" as comparison condition
             // this means that the ssid of the AP is a comparison condition
-            if (ap > m_apList.at(mIndex)) {
-                m_apList.replace(mIndex, ap);
-            }
+            m_apList.replace(mIndex, ap);
         } else {
             m_apList.append(ap);
         }
@@ -199,10 +193,8 @@ void WirelessList::APPropertiesChanged(const QJsonObject &apInfo)
     AccessPoint ap(apInfo);
     const auto mIndex = m_apList.indexOf(ap);
     if (mIndex != -1) {
-        if (ap > m_apList.at(mIndex)) {
-            m_apList.replace(mIndex, ap);
-            m_updateAPTimer->start();
-        }
+        m_apList.replace(mIndex, ap);
+        m_updateAPTimer->start();
     }
 }
 
