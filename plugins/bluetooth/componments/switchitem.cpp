@@ -36,14 +36,15 @@ SwitchItem::SwitchItem(QWidget *parent)
     auto switchLayout = new QHBoxLayout(this);
     switchLayout->setSpacing(0);
     switchLayout->setMargin(0);
-    switchLayout->addSpacing(5);
+    switchLayout->addSpacing(12);
     switchLayout->addWidget(m_title);
     switchLayout->addStretch();
     switchLayout->addWidget(m_switchBtn);
-    switchLayout->addSpacing(5);
+    switchLayout->addSpacing(12);
     setLayout(switchLayout);
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {
+        m_checkState = change;
         emit checkedChanged(change);
     });
 }
@@ -51,6 +52,7 @@ SwitchItem::SwitchItem(QWidget *parent)
 void SwitchItem::setChecked(const bool checked)
 {
     m_switchBtn->setChecked(checked);
+    m_checkState = checked;
 }
 
 void SwitchItem::setTitle(const QString &title)

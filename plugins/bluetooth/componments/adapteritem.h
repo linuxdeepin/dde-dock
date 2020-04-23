@@ -45,6 +45,9 @@ public:
     int deviceCount();
     void setPowered(bool powered);
     bool isPowered();
+    int viewHeight();
+    inline Device::State initDeviceState() { return  m_initDeviceState; }
+    inline Device::State currentDeviceState() { return m_currentDeviceState; }
 
 signals:
     void deviceStateChanged(const Device::State state);
@@ -74,6 +77,8 @@ private:
     Adapter *m_adapter;
     SwitchItem *m_switchItem;
     QMap<QString, DeviceItem*> m_deviceItems;
+    Device::State m_initDeviceState;
+    Device::State m_currentDeviceState;
 //    QMap<QString, DeviceItem*> m_pairedDeviceItems;
 };
 

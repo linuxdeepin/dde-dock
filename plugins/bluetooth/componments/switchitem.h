@@ -36,6 +36,7 @@ public:
     explicit SwitchItem(QWidget *parent = nullptr);
     void setChecked(const bool checked = true);
     void setTitle(const QString &title);
+    inline bool checkState() { return m_checkState; }
 
     inline bool isdefault() { return m_default; }
     inline void setDefault(bool def) { m_default = def; }
@@ -51,6 +52,7 @@ private:
     QLabel *m_title;
     DSwitchButton *m_switchBtn;
     bool m_default;
+    bool m_checkState;
 };
 
 #endif // SWITCHITEM_H

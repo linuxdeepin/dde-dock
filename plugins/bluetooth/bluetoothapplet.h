@@ -41,6 +41,7 @@ public:
     void setAdapterPowered(bool powered);
     bool poweredInitState();
     bool hasAadapter();
+    Device::State initDeviceState();
 
 public slots :
     void addAdapter(Adapter *constadapter);
@@ -50,6 +51,11 @@ signals:
     void powerChanged(bool state);
     void deviceStateChanged(const Device::State state);
     void noAdapter();
+    void justHasAdapter();
+
+private slots:
+    void onPowerChanged(bool state);
+    void onDeviceStateChanged(const Device::State state);
 
 private:
     void updateView();
@@ -63,6 +69,7 @@ private:
     AdaptersManager *m_adaptersManager;
 
     QMap<QString, AdapterItem *> m_adapterItems;
+    Device::State m_initDeviceState;
 };
 
 #endif // BLUETOOTHAPPLET_H

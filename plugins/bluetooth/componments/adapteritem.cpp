@@ -28,6 +28,8 @@
 
 #include <DDBusSender>
 
+extern const int ItemHeight;
+extern const int ControlHeight;
 const int Width = 200;
 
 AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWidget *parent)
@@ -45,6 +47,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_deviceLayout->setMargin(0);
     m_deviceLayout->setSpacing(0);
     m_openControlCenter->setText("Bluetooth settings");
+    m_openControlCenter->setFixedHeight(ItemHeight);
     m_openControlCenter->setVisible(false);
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered());
@@ -69,6 +72,21 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
         auto device = const_cast<Device *>(constDevice);
         if (device) {
             createDeviceItem(device);
+        }
+    }
+
+    m_initDeviceState = Device::StateUnavailable;
+    for (auto constDevice : myDevices) {
+        auto device = const_cast<Device *>(constDevice);
+        if (device) {
+            if (device->state() == Device::StateAvailable) {
+                m_initDeviceState = Device::StateConnected;
+                continue;
+            }
+            if (device->state() == Device::StateConnected) {
+                m_initDeviceState = Device::StateConnected;
+                break;
+            }
         }
     }
 
@@ -107,7 +125,12 @@ void AdapterItem::setPowered(bool powered)
 
 bool AdapterItem::isPowered()
 {
-    return m_adapter->powered();
+    return m_switchItem->checkState();
+}
+
+int AdapterItem::viewHeight()
+{
+    return m_openControlCenter->isVisible() ? ControlHeight + ItemHeight : ControlHeight;
 }
 
 void AdapterItem::deviceItemPaired(const bool paired)
@@ -136,21 +159,21 @@ void AdapterItem::removeDeviceItem(const Device *device)
         m_deviceItems.remove(device->id());
         if (device->paired()) {
 //            m_pairedDeviceItems.remove(device->id());
-            m_deviceLayout->removeWidget(deviceItem);
         }
+        m_deviceLayout->removeWidget(deviceItem);
         delete deviceItem;
-        showDevices(m_adapter->powered());
     }
+    showDevices(m_adapter->powered());
 }
 
 void AdapterItem::showAndConnect(bool change)
 {
-    showDevices(change);
-
     m_adaptersManager->setAdapterPowered(m_adapter, change);
     if (change) {
-        m_adaptersManager->connectAllPairedDevice(m_adapter);
+//        m_adaptersManager->connectAllPairedDevice(m_adapter);
     }
+    showDevices(change);
+
     emit powerChanged(change);
 }
 
@@ -178,6 +201,7 @@ void AdapterItem::deviceChangeState(const Device::State state)
         }
     }
 
+    m_currentDeviceState = state;
     emit deviceStateChanged(state);
 }
 
@@ -204,7 +228,8 @@ void AdapterItem::createDeviceItem(Device *device)
 
 void AdapterItem::updateView()
 {   
-    auto contentHeight = m_centralWidget->sizeHint().height();
+    auto contentHeight = m_switchItem->height();
+    contentHeight += (m_deviceLayout->count() - 3) * ItemHeight;
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(contentHeight);
     emit sizeChange();

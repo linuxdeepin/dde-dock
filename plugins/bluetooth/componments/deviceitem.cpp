@@ -61,12 +61,12 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     auto itemLayout = new QHBoxLayout(this);
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
-    itemLayout->addSpacing(5);
+    itemLayout->addSpacing(12);
     itemLayout->addWidget(m_title);
     itemLayout->addStretch();
     itemLayout->addWidget(m_state);
     itemLayout->addWidget(m_loadingStat);
-    itemLayout->addSpacing(5);
+    itemLayout->addSpacing(12);
     deviceLayout->addLayout(itemLayout);
     setLayout(deviceLayout);
 }

@@ -43,6 +43,7 @@ AdaptersManager::AdaptersManager(QObject *parent)
     connect(m_bluetoothInter, &DBusBluetooth::DeviceRemoved, this, &AdaptersManager::removeDevice);
     connect(m_bluetoothInter, &DBusBluetooth::DevicePropertiesChanged, this, &AdaptersManager::onDevicePropertiesChanged);
 
+#ifdef QT_DEBUG
     connect(m_bluetoothInter, &DBusBluetooth::RequestAuthorization, this, [](const QDBusObjectPath & in0) {
         qDebug() << "request authorization: " << in0.path();
     });
@@ -62,6 +63,7 @@ AdaptersManager::AdaptersManager(QObject *parent)
     connect(m_bluetoothInter, &DBusBluetooth::DisplayPinCode, this, [](const QDBusObjectPath & in0, const QString & in1) {
         qDebug() << "request display pincode: " << in0.path() << in1;
     });
+#endif
 
     QDBusInterface *inter = new QDBusInterface("com.deepin.daemon.Bluetooth",
                                                "/com/deepin/daemon/Bluetooth",
@@ -116,7 +118,7 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
 
 void AdaptersManager::connectAllPairedDevice(const Adapter *adapter)
 {
-    for (const Device *d : adapter->devices()) {
+    for (const Device *d : adapter->paredDevices()) {
         Device *vd = const_cast<Device *>(d);
         if (vd) {
             QDBusObjectPath path(vd->id());
@@ -162,9 +164,13 @@ void AdaptersManager::onAdapterPropertiesChanged(const QString &json)
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     const QJsonObject obj = doc.object();
     const QString id = obj["Path"].toString();
+    const bool isDiscovering = obj["Discovering"].toBool();
+    QDBusObjectPath dPath(id);
 
     Adapter *adapter = const_cast<Adapter *>(m_adapters[id]);
     if (adapter) {
+        if (!isDiscovering)
+            m_bluetoothInter->SetAdapterDiscovering(dPath, true);
         inflateAdapter(adapter, obj);
     }
 }

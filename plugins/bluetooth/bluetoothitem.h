@@ -55,6 +55,7 @@ protected:
 signals:
     void requestContextMenu() const;
     void noAdapter();
+    void justHasAdapter();
 
 private:
 //    TipsWidget *m_tipsLabel;
@@ -63,6 +64,7 @@ private:
 
     Device::State m_devState;
     bool m_adapterPowered;
+    QTimer *m_timer;
 };
 
 #endif // BLUETOOTHITEM_H

@@ -45,9 +45,16 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     m_appletName->setText(tr("Bluetooth"));
     m_appletName->setVisible(false);
 
+    auto appletNameLayout = new QHBoxLayout;
+    appletNameLayout->setMargin(0);
+    appletNameLayout->setSpacing(0);
+    appletNameLayout->addSpacing(12);
+    appletNameLayout->addWidget(m_appletName);
+    appletNameLayout->addStretch();
+
     m_centrealLayout->setMargin(0);
     m_centrealLayout->setSpacing(0);
-    m_centrealLayout->addWidget(m_appletName);
+    m_centrealLayout->addLayout(appletNameLayout);
     m_centrealLayout->addWidget(m_line);
     m_centralWidget->setLayout(m_centrealLayout);
     m_centralWidget->setFixedWidth(Width);
@@ -83,18 +90,71 @@ bool BluetoothApplet::hasAadapter()
     return m_adaptersManager->adaptersCount();
 }
 
+Device::State BluetoothApplet::initDeviceState()
+{
+    m_initDeviceState = Device::StateUnavailable;
+    for (auto adapterItem : m_adapterItems) {
+        if (adapterItem)
+            if (Device::StateAvailable  == adapterItem->initDeviceState()) {
+                m_initDeviceState = Device::StateAvailable;
+                continue;
+            }
+        if (Device::StateConnected  == adapterItem->initDeviceState()) {
+            m_initDeviceState = Device::StateConnected;
+            break;
+        }
+    }
+    return m_initDeviceState;
+}
+
+void BluetoothApplet::onPowerChanged(bool state)
+{
+    Q_UNUSED(state)
+    bool powerState = false;
+    for (auto adapterItem : m_adapterItems) {
+         if (adapterItem->isPowered()) {
+             powerState = true;
+             break;
+         }
+    }
+    emit powerChanged(powerState);
+}
+
+void BluetoothApplet::onDeviceStateChanged(const Device::State state)
+{
+    Q_UNUSED(state)
+
+    Device::State deviceState = Device::StateUnavailable;
+    for (auto adapterItem : m_adapterItems) {
+        if (Device::StateAvailable == adapterItem->currentDeviceState()) {
+            deviceState = Device::StateAvailable;
+            continue;
+        }
+        if (Device::StateConnected == adapterItem->currentDeviceState()) {
+            deviceState = Device::StateConnected;
+            break;
+        }
+    }
+
+    emit deviceStateChanged(deviceState);
+}
+
 void BluetoothApplet::addAdapter(Adapter *adapter)
 {
     if (!adapter)
         return;
+
+    if (!m_adapterItems.size()) {
+        emit justHasAdapter();
+    }
 
     auto adapterId = adapter->id();
     auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
     m_adapterItems[adapterId] = adatpterItem;
     m_centrealLayout->addWidget(adatpterItem);
 
-    connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::deviceStateChanged);
-    connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::powerChanged);
+    connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
+    connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
     connect(adatpterItem, &AdapterItem::sizeChange, this, &BluetoothApplet::updateView);
 
     updateView();
@@ -120,13 +180,15 @@ void BluetoothApplet::updateView()
     int contentHeight = 0;
     int itemCount = 0;
     for (auto adapterItem : m_adapterItems) {
-        if (adapterItem && adapterItem->isPowered()) {
-            itemCount += adapterItem->deviceCount();
-            contentHeight += ControlHeight;
+        if (adapterItem) {
+            contentHeight += adapterItem->viewHeight();
+            if (adapterItem->isPowered())
+                itemCount += adapterItem->deviceCount();
         }
     }
 
-    if (m_adapterItems.size() > 1) {
+    auto adaptersCnt = m_adapterItems.size();
+    if (adaptersCnt > 1) {
         m_line->setVisible(true);
         m_appletName->setVisible(true);
     } else {
@@ -134,15 +196,18 @@ void BluetoothApplet::updateView()
         m_appletName->setVisible(false);
     }
 
-    if (itemCount <= 16) {
+    if (adaptersCnt > 1)
+        contentHeight += m_appletName->height();
+
+    if (itemCount <= 10) {
         contentHeight += itemCount * ItemHeight;
         m_centralWidget->setFixedHeight(contentHeight);
         setFixedHeight(contentHeight);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     } else {
-        contentHeight += 16 * ItemHeight;
+        contentHeight += itemCount * ItemHeight;
         m_centralWidget->setFixedHeight(contentHeight);
-        setFixedHeight(contentHeight);
+        setFixedHeight(10 * ItemHeight);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
 }

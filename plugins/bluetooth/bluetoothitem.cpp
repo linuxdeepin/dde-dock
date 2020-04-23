@@ -43,10 +43,14 @@ DGUI_USE_NAMESPACE
 BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_applet(new BluetoothApplet(this))
+    , m_timer(new QTimer(this))
 {
     m_applet->setVisible(false);
     m_adapterPowered = m_applet->poweredInitState();
 
+    m_devState = m_applet->initDeviceState();
+
+    connect(m_timer, &QTimer::timeout, this, &BluetoothItem::refreshIcon);
     connect(m_applet, &BluetoothApplet::powerChanged, [&](bool powered) {
         m_adapterPowered = powered;
         refreshIcon();
@@ -56,6 +60,7 @@ BluetoothItem::BluetoothItem(QWidget *parent)
         refreshIcon();
     });
     connect(m_applet, SIGNAL(noAdapter()), this, SIGNAL(noAdapter()));
+    connect(m_applet, SIGNAL(justHasAdapter()), this, SIGNAL(justHasAdapter()));
 }
 
 //QWidget *BluetoothItem::tipsWidget()
@@ -120,10 +125,37 @@ void BluetoothItem::refreshIcon()
         return;
 
     QString stateString;
+    QString iconString;
 
-    m_adapterPowered ? (m_devState == Device::StateConnected ? stateString = "waiting" : stateString = "active") : stateString = "disable";
+    if (m_adapterPowered) {
+        switch (m_devState) {
+        case Device::StateConnected:
+            stateString = "active";
+            break;
+        case Device::StateAvailable: {
+            m_timer->start();
+            stateString = "waiting";
+            iconString = QString("bluetooth-%1-symbolic").arg(stateString);
+            const auto ratio = devicePixelRatioF();
+            int iconSize = PLUGIN_ICON_MAX_SIZE;
+            if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+                iconString.append(PLUGIN_MIN_ICON_NAME);
 
-    QString iconString = QString("bluetooth-%1-symbolic").arg(stateString);
+            m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+
+            update();
+            return ;
+        }
+        case Device::StateUnavailable: {
+            stateString = "disable";
+        }      break;
+        }
+    } else {
+        stateString = "disable";
+    }
+
+    m_timer->stop();
+    iconString = QString("bluetooth-%1-symbolic").arg(stateString);
 
     const auto ratio = devicePixelRatioF();
     int iconSize = PLUGIN_ICON_MAX_SIZE;
@@ -165,5 +197,9 @@ void BluetoothItem::paintEvent(QPaintEvent *e)
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
     painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
+    if (m_devState == Device::StateAvailable) {
+        QTime time = QTime::currentTime();
+        painter.rotate((time.second() + (time.msec() / 1000.0)) * 6.0);
+    }
 }
 
