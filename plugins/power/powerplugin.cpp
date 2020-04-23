@@ -217,8 +217,10 @@ void PowerPlugin::refreshTipsData()
         uint min = time.toString("mm").toUInt();
 
         QString tips;
-
-        if (hour == 0) {
+        if (timeToEmpty == 0) {
+            tips = tr("Capacity %1 ....").arg(value);
+        }
+        else if (hour == 0 && min != 0) {
             tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
         }
         else {
@@ -252,3 +254,4 @@ void PowerPlugin::refreshTipsData()
         m_tipsLabel->setText(tips);
     }
 }
+
