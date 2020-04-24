@@ -44,6 +44,7 @@ const (
 	DBusServiceName = "com.deepin.daemon.SoundEffect"
 	dbusPath        = "/com/deepin/daemon/SoundEffect"
 	dbusInterface   = DBusServiceName
+	allowPlaySoundMaxCount = 3
 )
 
 type Manager struct {
@@ -137,9 +138,13 @@ func (m *Manager) PlaySound(name string) *dbus.Error {
 		logger.Debug("start", m.count)
 		m.countMu.Unlock()
 
-		err := soundutils.PlaySystemSound(name, "")
-		if err != nil {
-			logger.Error(err)
+		if m.count <= allowPlaySoundMaxCount {
+			err := soundutils.PlaySystemSound(name, "")
+			if err != nil {
+				logger.Error(err)
+			}
+		} else {
+			logger.Warning("PlaySystemSound thread more than 3")
 		}
 
 		m.countMu.Lock()
