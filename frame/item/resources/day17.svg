@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" height="26" viewBox="0 0 28 26">
+  <defs>
+    <path id="day17-b" d="M8.484375,22.2216797 L8.484375,3 L5.72900391,3 L3,4.99072266 L3,7.91748047 L5.72900391,5.91357422 L5.72900391,22.2216797 L8.484375,22.2216797 Z M18.2553711,22.2216797 L24.7680664,5.75537109 L24.7680664,3 L13.8256836,3 L13.8256836,8.53710938 L16.5810547,8.53710938 L16.5810547,5.75537109 L21.6831055,5.75537109 L15.1835938,22.2216797 L18.2553711,22.2216797 Z"/>
+    <filter id="day17-a" width="132.2%" height="136.4%" x="-16.1%" y="-13%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.000854821203   0 0 0 0 0.168099661   0 0 0 0 0.309386322  0 0 0 0.2 0"/>
+    </filter>
+  </defs>
+  <g fill="none" transform="rotate(-8 13.884 12.61)">
+    <use fill="#000" filter="url(#day17-a)" xlink:href="#day17-b"/>
+    <use fill="#000" fill-opacity=".7" xlink:href="#day17-b"/>
+    <use fill="#2D394F" xlink:href="#day17-b"/>
+  </g>
+</svg>

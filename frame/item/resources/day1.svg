@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" height="26" viewBox="0 0 28 26">
+  <defs>
+    <polygon id="day1-b" points="15.484 22.222 15.484 3 12.729 3 10 4.991 10 7.917 12.729 5.914 12.729 22.222"/>
+    <filter id="day1-a" width="227.6%" height="136.4%" x="-63.8%" y="-13%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.000854821203   0 0 0 0 0.168099661   0 0 0 0 0.309386322  0 0 0 0.2 0"/>
+    </filter>
+  </defs>
+  <g fill="none" transform="rotate(-8 12.742 12.61)">
+    <use fill="#000" filter="url(#day1-a)" xlink:href="#day1-b"/>
+    <use fill="#000" fill-opacity=".7" xlink:href="#day1-b"/>
+    <use fill="#2D394F" xlink:href="#day1-b"/>
+  </g>
+</svg>

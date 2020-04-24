@@ -29,6 +29,7 @@ class ImageUtil
 {
 public:
     static const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
+    static const QPixmap loadSvg(const QString &iconName, const QSize size, const qreal ratio);
 };
 
 #endif // IMAGEUTIL_H
