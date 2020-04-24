@@ -224,9 +224,6 @@ MainWindow::MainWindow(QWidget *parent)
         } else {
             QWidget::setFixedWidth(val);
         }
-
-        m_mainPanel->setFixedSize(windowRect.width(), windowRect.height());
-
     });
 
     connect(m_panelHideAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
