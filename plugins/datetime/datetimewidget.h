@@ -31,21 +31,26 @@ class DatetimeWidget : public QWidget
 public:
     explicit DatetimeWidget(QWidget *parent = 0);
 
-    bool is24HourFormat() const { return m_24HourFormat; }
+    bool is24HourFormat() const { return m_use24HourFormat; }
     QSize sizeHint() const;
 
 signals:
     void requestUpdateGeometry() const;
 
 public slots:
-    void set24HourFormat(const bool value);
+    void setDateTimeFormat(bool use24HourFormat, int weekDayFormat, int shortDateFormat, int shortTimeFormat);
 
 private:
     void paintEvent(QPaintEvent *e);
     QSize curTimeSize() const;
 
 private:
-    bool m_24HourFormat;
+    bool m_use24HourFormat;
+    QString m_shortDateFormat;
+    QString m_shortTimeFormat;
+    QString m_weekDayFormat;
+    QString m_dateText;
+    QString m_timeText;
     mutable QFont m_timeFont;
     mutable QFont m_dateFont;
     mutable int m_timeOffset;

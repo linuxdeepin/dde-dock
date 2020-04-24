@@ -20,6 +20,7 @@
  */
 
 #include "datetimeplugin.h"
+#include "datetimehelper.h"
 
 #include <DDBusSender>
 #include <QLabel>
@@ -28,8 +29,12 @@
 
 #include <unistd.h>
 
-#define PLUGIN_STATE_KEY "enable"
-#define TIME_FORMAT_KEY "Use24HourFormat"
+#define PLUGIN_STATE_KEY   "enable"
+#define USE_24_HOUR_FORMAT "Use24HourFormat"
+#define SHORT_DATE_FORMAT  "ShortDateFormat"
+#define SHORT_TIME_FORMAT  "ShortTimeFormat"
+#define WEEKDAY_FORMAT     "WeekdayFormat"
+
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
@@ -186,9 +191,13 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         .arg(QString("datetime"))
         .call();
     } else {
-        const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
-        timedateInterface()->setProperty(TIME_FORMAT_KEY, !value);
-        m_centralWidget->set24HourFormat(!value);
+        const bool value = timedateInterface()->property(USE_24_HOUR_FORMAT).toBool();
+        const int shortDateFormat = timedateInterface()->property(SHORT_DATE_FORMAT).toInt();
+        const int shortTimeFormat = timedateInterface()->property(SHORT_TIME_FORMAT).toInt();
+        const int weekdayFormat = timedateInterface()->property(WEEKDAY_FORMAT).toInt();
+        timedateInterface()->setProperty(USE_24_HOUR_FORMAT, !value);
+
+        m_centralWidget->setDateTimeFormat(!value, weekdayFormat, shortDateFormat, shortTimeFormat);
     }
 }
 
@@ -197,10 +206,20 @@ void DatetimePlugin::pluginSettingsChanged()
     if (!m_pluginLoaded)
         return;
 
-    const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
+    bool use24HourFormat = timedateInterface()->property(USE_24_HOUR_FORMAT).toBool();
+    int shortDateFormat = timedateInterface()->property(SHORT_DATE_FORMAT).toInt();
+    int shortTimeFormat = timedateInterface()->property(SHORT_TIME_FORMAT).toInt();
+    int weekdayFormat = timedateInterface()->property(WEEKDAY_FORMAT).toInt();
 
-    m_proxyInter->saveValue(this, TIME_FORMAT_KEY, value);
-    m_centralWidget->set24HourFormat(value);
+    m_proxyInter->saveValue(this, USE_24_HOUR_FORMAT, use24HourFormat);
+
+    m_centralWidget->setDateTimeFormat(use24HourFormat, weekdayFormat, shortDateFormat, shortTimeFormat);
+
+    m_currentTimeString = QString("%1 %2 %3%4")
+                          .arg(DateTimeHelper::ShortDateFormatString(shortDateFormat))
+                          .arg(DateTimeHelper::WeekDayFormatString(weekdayFormat))
+                          .arg(DateTimeHelper::ShortTimeFormatString(shortTimeFormat))
+                          .arg(use24HourFormat ? "" : " ap");
 
     refreshPluginItemsVisible();
 }
@@ -208,18 +227,7 @@ void DatetimePlugin::pluginSettingsChanged()
 void DatetimePlugin::updateCurrentTimeString()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
-
-    if (m_centralWidget->is24HourFormat())
-        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
-    else
-        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss A"));
-
-    const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
-
-    if (currentString == m_currentTimeString)
-        return;
-
-    m_currentTimeString = currentString;
+    m_dateTipsLabel->setText(currentDateTime.toString(m_currentTimeString));
     m_centralWidget->update();
 }
 
