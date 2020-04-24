@@ -37,11 +37,13 @@ class DeviceItem : public QWidget
     Q_OBJECT
 public:
     explicit DeviceItem(const QString &title, QWidget *parent = nullptr);
+    bool operator <(const DeviceItem &item);
 
     inline void setTitle(const QString &name) { m_title->setText(name); }
 
-    inline void setDevice(Device *d) { m_device = d; }
+    void setDevice(Device *d);
     inline Device *device() { return m_device; }
+    inline const Device *device() const { return  m_device; }
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -60,6 +62,7 @@ private:
     DSpinner *m_loadingStat;
     Device *m_device = nullptr;
     HorizontalSeparator *m_line;
+    QString m_statSuffix;
 };
 
 class HorizontalSeparator : public QWidget

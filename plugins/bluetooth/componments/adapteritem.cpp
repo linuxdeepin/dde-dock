@@ -31,6 +31,7 @@
 extern const int ItemHeight;
 extern const int ControlHeight;
 const int Width = 200;
+extern void initFontColor(QWidget *widget);
 
 AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWidget *parent)
     : QScrollArea(parent)
@@ -46,7 +47,8 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_line->setVisible(true);
     m_deviceLayout->setMargin(0);
     m_deviceLayout->setSpacing(0);
-    m_openControlCenter->setText("Bluetooth settings");
+    m_openControlCenter->setText(tr("Bluetooth settings"));
+    initFontColor(m_openControlCenter);
     m_openControlCenter->setFixedHeight(ItemHeight);
     m_openControlCenter->setVisible(false);
     m_switchItem->setTitle(adapter->name());
@@ -71,7 +73,11 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     for (auto constDevice : myDevices) {
         auto device = const_cast<Device *>(constDevice);
         if (device) {
-            createDeviceItem(device);
+            DeviceItem *deviceItem = createDeviceItem(device);
+            if (device->state() == Device::StateConnected)
+                m_sortConnected << deviceItem;
+            else
+                m_sortUnConnect << deviceItem;
         }
     }
 
@@ -157,6 +163,8 @@ void AdapterItem::removeDeviceItem(const Device *device)
     auto deviceItem = m_deviceItems.value(device->id());
     if (deviceItem) {
         m_deviceItems.remove(device->id());
+        m_sortConnected.removeOne(deviceItem);
+        m_sortUnConnect.removeOne(deviceItem);
         if (device->paired()) {
 //            m_pairedDeviceItems.remove(device->id());
         }
@@ -192,11 +200,26 @@ void AdapterItem::deviceChangeState(const Device::State state)
     auto device = qobject_cast<Device *>(sender());
     if (device) {
         auto deviceItem = m_deviceItems.value(device->id());
-        if (deviceItem && Device::StateConnected == state) {
-            auto fromWidget = m_deviceLayout->itemAt(2)->widget();
-            if (fromWidget) {
-                m_deviceLayout->replaceWidget(fromWidget, deviceItem);
-                m_deviceLayout->addWidget(fromWidget);
+        if (deviceItem) {
+            switch (state) {
+            case Device::StateUnavailable:
+            case Device::StateAvailable: {
+                int index = m_sortConnected.indexOf(deviceItem);
+                if (index < 0) {
+                    m_sortConnected.removeOne(deviceItem);
+                    m_sortUnConnect << deviceItem;
+                    qSort(m_sortUnConnect);
+                    moveDeviceItem(state, deviceItem);
+                }
+            }
+                break;
+            case Device::StateConnected: {
+                m_sortUnConnect.removeOne(deviceItem);
+                m_sortConnected << deviceItem;
+                qSort(m_sortConnected);
+                moveDeviceItem(state, deviceItem);
+            }
+                break;
             }
         }
     }
@@ -205,10 +228,31 @@ void AdapterItem::deviceChangeState(const Device::State state)
     emit deviceStateChanged(state);
 }
 
-void AdapterItem::createDeviceItem(Device *device)
+void AdapterItem::moveDeviceItem(Device::State state, DeviceItem *item)
+{
+    int size = m_sortConnected.size();
+    int index = 0;
+    switch (state) {
+    case Device::StateUnavailable:
+    case Device::StateAvailable: {
+        index = m_sortUnConnect.indexOf(item);
+        index += size;
+    }
+        break;
+    case Device::StateConnected: {
+        index = m_sortUnConnect.indexOf(item);
+    }
+        break;
+    }
+    index += 2;
+    m_deviceLayout->removeWidget(item);
+    m_deviceLayout->insertWidget(index, item);
+}
+
+DeviceItem *AdapterItem::createDeviceItem(Device *device)
 {
     if (!device)
-        return;
+        return nullptr;
 
 //    auto paired = device->paired();
     auto deviceId = device->id();
@@ -223,11 +267,25 @@ void AdapterItem::createDeviceItem(Device *device)
     connect(device, &Device::nameChanged, deviceItem, &DeviceItem::setTitle);
     connect(device, &Device::stateChanged, deviceItem, &DeviceItem::changeState);
     connect(device, &Device::stateChanged, this, &AdapterItem::deviceChangeState);
+    connect(device, &Device::rssiChanged, [&]{
+        auto device = qobject_cast<Device *>(sender());
+        if (device) {
+            auto deviceItem = m_deviceItems.value(device->id());
+            auto state = device->state();
+            if (deviceItem && Device::StateConnected == state)
+                qSort(m_sortConnected);
+            else
+                qSort(m_sortUnConnect);
+            moveDeviceItem(state, deviceItem);
+        }
+    });
     connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, &AdaptersManager::connectDevice);
+
+    return  deviceItem;
 }
 
 void AdapterItem::updateView()
-{   
+{
     auto contentHeight = m_switchItem->height();
     contentHeight += (m_deviceLayout->count() - 3) * ItemHeight;
     m_centralWidget->setFixedHeight(contentHeight);
@@ -237,16 +295,22 @@ void AdapterItem::updateView()
 
 void AdapterItem::showDevices(bool change)
 {
-//    for (auto deviceItem : m_pairedDeviceItems) {
-    for (auto deviceItem : m_deviceItems) {
+    if (m_sortConnected.size())
+        qSort(m_sortConnected);
+    if (m_sortUnConnect.size())
+        qSort(m_sortUnConnect);
+
+    QList<DeviceItem *> deviceItems;
+    deviceItems << m_sortConnected << m_sortUnConnect;
+
+    for (DeviceItem *deviceItem : deviceItems) {
         if (change)
             m_deviceLayout->addWidget(deviceItem);
-        else {
+        else
             m_deviceLayout->removeWidget(deviceItem);
-        }
         deviceItem->setVisible(change);
     }
-//    auto itemCount = m_pairedDeviceItems.size();
+
     auto itemCount = m_deviceItems.size();
     m_line->setVisible(change);
     m_openControlCenter->setVisible(!itemCount);

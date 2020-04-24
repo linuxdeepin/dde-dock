@@ -39,7 +39,6 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
-
 BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_applet(new BluetoothApplet(this))
@@ -59,6 +58,7 @@ BluetoothItem::BluetoothItem(QWidget *parent)
         m_devState = state;
         refreshIcon();
     });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothItem::refreshIcon);
     connect(m_applet, SIGNAL(noAdapter()), this, SIGNAL(noAdapter()));
     connect(m_applet, SIGNAL(justHasAdapter()), this, SIGNAL(justHasAdapter()));
 }

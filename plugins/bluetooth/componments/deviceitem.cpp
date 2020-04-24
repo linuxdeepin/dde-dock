@@ -22,12 +22,18 @@
 
 #include "deviceitem.h"
 
+#include <DApplicationHelper>
 #include <DStyle>
 
 #include <QHBoxLayout>
 #include <QPainter>
 
+DGUI_USE_NAMESPACE
+
 extern const int ItemHeight = 30;
+const QString LightSuffix = "_dark.svg";
+const QString DarkSuffix = ".svg";
+extern void initFontColor(QWidget *widget);
 
 DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     : QWidget(parent)
@@ -37,8 +43,16 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     , m_line(new HorizontalSeparator(this))
 {
     setFixedHeight(ItemHeight);
-//    m_state->setPixmap(QPixmap(":/list_select@2x.png"));
-    m_state->setPixmap(QPixmap(":/select_dark.svg"));
+    auto themeChanged = [&](DApplicationHelper::ColorType themeType){
+        switch (themeType) {
+        case DApplicationHelper::UnknownType:
+        case DApplicationHelper::LightType:  m_statSuffix = LightSuffix; break;
+        case DApplicationHelper::DarkType:  m_statSuffix = DarkSuffix; break;
+        }
+        m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
+    };
+
+    themeChanged(DApplicationHelper::instance()->themeType());
 
     auto strTitle = title;
     m_title->setText(strTitle);
@@ -48,6 +62,7 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
         strTitle = QFontMetrics(m_title->font()).elidedText(strTitle, Qt::ElideRight, m_title->width());
     }
     m_title->setText(strTitle);
+    initFontColor(m_title);
 
     m_line->setVisible(true);
     m_state->setVisible(false);
@@ -69,6 +84,21 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     itemLayout->addSpacing(12);
     deviceLayout->addLayout(itemLayout);
     setLayout(deviceLayout);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, themeChanged);
+}
+
+bool DeviceItem::operator <(const DeviceItem &item)
+{
+    return  this->device()->rssi() < item.device()->rssi();
+}
+
+void DeviceItem::setDevice(Device *d)
+{
+    if (d) {
+        m_device = d;
+        changeState(d->state());
+    }
 }
 
 void DeviceItem::mousePressEvent(QMouseEvent *event)
@@ -83,7 +113,7 @@ void DeviceItem::enterEvent(QEvent *event)
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
 //            m_state->setPixmap(QPixmap(":/notify_close_press@2x.png"));
-            m_state->setPixmap(QPixmap(":/disconnect_dark.svg"));
+            m_state->setPixmap(QPixmap(":/disconnect" + m_statSuffix));
         }
     }
 }
@@ -94,7 +124,7 @@ void DeviceItem::leaveEvent(QEvent *event)
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
 //            m_state->setPixmap(QPixmap(":/list_select@2x.png"));
-            m_state->setPixmap(QPixmap(":/select_dark.svg"));
+            m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
         }
     }
 }

@@ -50,6 +50,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     const QString id = deviceObj["Path"].toString();
     const QString name = deviceObj["Alias"].toString();
     const bool paired = deviceObj["Paired"].toBool();
+    const int rssi = deviceObj["RSSI"].toInt();
     const Device::State state = Device::State(deviceObj["State"].toInt());
 
     removeDevice(id);
@@ -60,6 +61,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     device->setName(name);
     device->setPaired(paired);
     device->setState(state);
+    device->setRssi(rssi);
     device->setAdapterId(m_id);
 
     m_devices[id] = device;
@@ -85,6 +87,7 @@ void Adapter::updateDevice(const QJsonObject &json)
     const QString id = json["Path"].toString();
     const QString name = json["Alias"].toString();
     const bool paired = json["Paired"].toBool();
+    const int rssi = json["RSSI"].toInt();
     const Device::State state = Device::State(json["State"].toInt());
 
     auto constdevice = m_devices.value(id);
@@ -93,6 +96,7 @@ void Adapter::updateDevice(const QJsonObject &json)
         device->setId(id);
         device->setName(name);
         device->setPaired(paired);
+        device->setRssi(rssi);
         device->setState(state);
     }
 }
@@ -145,6 +149,7 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         const QString id = deviceObj["Path"].toString();
         const QString name = deviceObj["Alias"].toString();
         const bool paired = deviceObj["Paired"].toBool();
+        const int rssi = deviceObj["RSSI"].toInt();
         const Device::State state = Device::State(deviceObj["State"].toInt());
 
         auto device = new Device(this);
@@ -152,6 +157,7 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         device->setName(name);
         device->setPaired(paired);
         device->setState(state);
+        device->setRssi(rssi);
         device->setAdapterId(adapterId);
 
         m_devices[id] = device;

@@ -60,9 +60,10 @@ private slots:
     void showAndConnect(bool change);
     void addDeviceItem(const Device *constDevice);
     void deviceChangeState(const Device::State state);
+    void moveDeviceItem(Device::State state, DeviceItem *item);
 
 private:
-    void createDeviceItem(Device *device);
+    DeviceItem *createDeviceItem(Device *device);
     void updateView();
     void showDevices(bool change);
 
@@ -79,6 +80,8 @@ private:
     QMap<QString, DeviceItem*> m_deviceItems;
     Device::State m_initDeviceState;
     Device::State m_currentDeviceState;
+    QList<DeviceItem *> m_sortConnected;
+    QList<DeviceItem *> m_sortUnConnect;
 //    QMap<QString, DeviceItem*> m_pairedDeviceItems;
 };
 

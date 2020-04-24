@@ -28,9 +28,30 @@
 #include "componments/adaptersmanager.h"
 #include "componments/adapteritem.h"
 
+#include <DApplicationHelper>
+DGUI_USE_NAMESPACE
+
 extern int ControlHeight;
 extern int ItemHeight;
 const int Width = 200;
+
+extern void initFontColor(QWidget *widget)
+{
+    if (!widget)
+        return;
+
+    auto fontChange = [&](QWidget *widget){
+        QPalette defaultPalette = widget->palette();
+        defaultPalette.setBrush(QPalette::WindowText, defaultPalette.brightText());
+        widget->setPalette(defaultPalette);
+    };
+
+    fontChange(widget);
+
+    QObject::connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, widget, [=]{
+        fontChange(widget);
+    });
+}
 
 BluetoothApplet::BluetoothApplet(QWidget *parent)
     : QScrollArea(parent)
@@ -42,7 +63,12 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 {
     m_line->setVisible(false);
 
+    auto defaultFont = font();
+    auto titlefont = QFont(defaultFont.family(), defaultFont.pointSize() + 2);
+
     m_appletName->setText(tr("Bluetooth"));
+    m_appletName->setFont(titlefont);
+    initFontColor(m_appletName);
     m_appletName->setVisible(false);
 
     auto appletNameLayout = new QHBoxLayout;

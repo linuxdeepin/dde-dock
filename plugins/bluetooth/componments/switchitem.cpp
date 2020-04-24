@@ -25,6 +25,7 @@
 #include "QHBoxLayout"
 
 extern const int ControlHeight = 35;
+extern void initFontColor(QWidget *widget);
 
 SwitchItem::SwitchItem(QWidget *parent)
     : QWidget(parent)
@@ -32,6 +33,8 @@ SwitchItem::SwitchItem(QWidget *parent)
     , m_switchBtn(new DSwitchButton(this))
     , m_default(false)
 {
+    initFontColor(m_title);
+
     setFixedHeight(ControlHeight);
     auto switchLayout = new QHBoxLayout(this);
     switchLayout->setSpacing(0);

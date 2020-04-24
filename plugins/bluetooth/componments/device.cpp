@@ -29,6 +29,7 @@ Device::Device(QObject *parent) :
     m_paired(false),
     m_trusted(false),
     m_connecting(false),
+    m_rssi(0),
     m_state(StateUnavailable),
     m_adapterId(QString())
 {
@@ -76,6 +77,14 @@ void Device::setConnecting(bool connecting)
     if (connecting != m_connecting) {
         m_connecting = connecting;
         Q_EMIT connectingChanged(connecting);
+    }
+}
+
+void Device::setRssi(int rssi)
+{
+    if (m_rssi != rssi) {
+        m_rssi = rssi;
+        Q_EMIT rssiChanged(rssi);
     }
 }
 
