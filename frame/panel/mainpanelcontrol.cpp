@@ -87,6 +87,12 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
     m_desktopWidget->installEventFilter(this);
+
+    //在设置每条线大小前，应该设置fixedsize(0,0)
+    //应为paintEvent函数会先调用设置背景颜色，大小为随机值
+    m_fixedSpliter->setFixedSize(0,0);
+    m_appSpliter ->setFixedSize(0,0);
+    m_traySpliter->setFixedSize(0,0);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -214,12 +220,22 @@ void MainPanelControl::updateMainPanelLayout()
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
+    if(m_position == Position::Top || m_position == Position::Bottom){
+        wdg->setMaximumSize(height(),height());
+    } else {
+        wdg->setMaximumSize(width(),width());
+    }
     m_fixedAreaLayout->insertWidget(index, wdg);
     resizeDockIcon();
 }
 
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
+    if(m_position == Position::Top || m_position == Position::Bottom){
+        wdg->setMaximumSize(height(),height());
+    } else {
+        wdg->setMaximumSize(width(),width());
+    }
     m_appAreaSonLayout->insertWidget(index, wdg);
     resizeDockIcon();
 }

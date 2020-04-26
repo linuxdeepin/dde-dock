@@ -304,7 +304,6 @@ void MainWindow::launch()
         QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
         setVisible(true);
         updatePanelVisible();
-        expand();
         resetPanelEnvironment(false);
     });
 }
