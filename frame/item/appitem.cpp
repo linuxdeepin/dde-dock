@@ -40,6 +40,7 @@
 #include <QX11Info>
 #include <QGSettings>
 #include <DGuiApplicationHelper>
+#include <QDateTime>
 
 #define APP_DRAG_THRESHOLD      20
 
@@ -300,14 +301,14 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    int curTimestamp = QX11Info::getTimestamp();
+    qint64 curTimestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     if ((curTimestamp - m_lastclickTimes) < 300)
         return;
 
     m_lastclickTimes = curTimestamp;
 
     if (e->button() == Qt::MiddleButton) {
-        m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
+        m_itemEntryInter->NewInstance(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
         // play launch effect
         if (m_windowInfos.isEmpty())
@@ -322,7 +323,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
                  << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
-        m_itemEntryInter->Activate(QX11Info::getTimestamp());
+        m_itemEntryInter->Activate(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
         // play launch effect
         if (m_windowInfos.isEmpty())

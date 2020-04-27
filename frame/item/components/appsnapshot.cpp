@@ -274,7 +274,7 @@ SHMInfo *AppSnapshot::getImageDSHM()
 {
     const auto display = QX11Info::display();
 
-    Atom atom_prop = XInternAtom(display, "_DEEPIN_DXCB_SHM_INFO", true);
+    Atom atom_prop = 0;
     if (!atom_prop) {
         return nullptr;
     }
@@ -296,12 +296,14 @@ SHMInfo *AppSnapshot::getImageDSHM()
 
 XImage *AppSnapshot::getImageXlib()
 {
-    const auto display = QX11Info::display();
-    Window unused_window;
-    int unused_int;
-    unsigned unused_uint, w, h;
-    XGetGeometry(display, m_wid, &unused_window, &unused_int, &unused_int, &w, &h, &unused_uint, &unused_uint);
-    return XGetImage(display, m_wid, 0, 0, w, h, AllPlanes, ZPixmap);
+//    const auto display = QX11Info::display();
+//    Window unused_window;
+//    int unused_int;
+//    unsigned unused_uint, w, h;
+//    XGetGeometry(display, m_wid, &unused_window, &unused_int, &unused_int, &w, &h, &unused_uint, &unused_uint);
+//    return XGetImage(display, m_wid, 0, 0, w, h, AllPlanes, ZPixmap);
+
+    return nullptr;
 }
 
 QRect AppSnapshot::rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk)
