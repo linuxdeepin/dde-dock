@@ -207,11 +207,12 @@ func (a *Audio) doSaveConfig() {
 	if err != nil && !os.IsNotExist(err) {
 		logger.Warning(err)
 	}
-	err = saveConfig(&info)
-	if err != nil {
-		logger.Warning("Save config file failed:", info.string(), err)
-	}
-
+	if len(info.SourcePort) != 0 {
+		err = saveConfig(&info)
+		if err != nil {
+			logger.Warning("save config file failed:", info.string(), err)
+		}
+        }
 	err = a.saveAudioState()
 	if err != nil {
 		logger.Warning(err)
