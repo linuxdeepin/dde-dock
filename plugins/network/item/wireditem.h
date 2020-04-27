@@ -74,6 +74,7 @@ signals:
     void requestActiveConnection(const QString &devPath, const QString &uuid);
     void wiredStateChanged();
     void enableChanged();
+    void activeConnectionChanged();
 
 private slots:
     void deviceStateChanged(NetworkDevice::DeviceStatus state);
