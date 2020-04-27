@@ -131,7 +131,7 @@ private:
     QVariantAnimation *m_panelShowAni;
     QVariantAnimation *m_panelHideAni;
 
-    XcbMisc *m_xcbMisc;
+    //XcbMisc *m_xcbMisc;
     DockSettings *m_settings;
 
     QDBusConnectionInterface *m_dbusDaemonInterface;

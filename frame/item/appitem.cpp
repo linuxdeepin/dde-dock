@@ -24,7 +24,6 @@
 
 #include "util/themeappicon.h"
 #include "util/imagefactory.h"
-#include "xcb/xcb_misc.h"
 #include "components/appswingeffectbuilder.h"
 #include "components/appspreviewprovider.h"
 
@@ -157,12 +156,12 @@ const bool AppItem::isValid() const
 // window behaviors like minimization.
 void AppItem::updateWindowIconGeometries()
 {
-    const QRect r(mapToGlobal(QPoint(0, 0)),
-                  mapToGlobal(QPoint(width(), height())));
-    auto *xcb_misc = XcbMisc::instance();
+//    const QRect r(mapToGlobal(QPoint(0, 0)),
+//                  mapToGlobal(QPoint(width(), height())));
+//    auto *xcb_misc = XcbMisc::instance();
 
-    for (auto it(m_windowInfos.cbegin()); it != m_windowInfos.cend(); ++it)
-        xcb_misc->set_window_icon_geometry(it.key(), r);
+//    for (auto it(m_windowInfos.cbegin()); it != m_windowInfos.cend(); ++it)
+//        xcb_misc->set_window_icon_geometry(it.key(), r);
 }
 
 void AppItem::undock()

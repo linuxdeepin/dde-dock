@@ -117,7 +117,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 int main(int argc, char *argv[])
 {
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
-    DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
 
     // 锁定物理内存，用于国测测试

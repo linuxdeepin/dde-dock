@@ -146,7 +146,6 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_panelShowAni(new QVariantAnimation(this)),
       m_panelHideAni(new QVariantAnimation(this)),
-      m_xcbMisc(XcbMisc::instance()),
       m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
       m_sessionManagerInter(new SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this)),
@@ -156,7 +155,6 @@ MainWindow::MainWindow(QWidget *parent)
     setMouseTracking(true);
     setAcceptDrops(true);
 
-    DPlatformWindowHandle::enableDXcbForWindow(this, true);
     m_platformWindowHandle.setEnableBlurWindow(true);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
@@ -164,7 +162,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_platformWindowHandle.setShadowColor(QColor(0, 0, 0, 0.3 * 255));
 
     m_settings = &DockSettings::Instance();
-    m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
     m_size = m_settings->m_mainWindowSize;
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     initSNIHost();
@@ -300,7 +297,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete m_xcbMisc;
 }
 
 void MainWindow::launch()
@@ -663,7 +659,7 @@ void MainWindow::getTrayVisableItemCount()
 
 void MainWindow::clearStrutPartial()
 {
-    m_xcbMisc->clear_strut_partial(winId());
+    //m_xcbMisc->clear_strut_partial(winId());
 }
 
 void MainWindow::setStrutPartial()
@@ -750,7 +746,7 @@ void MainWindow::setStrutPartial()
 //        return;
 //    }
 
-    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
+    //m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
 }
 
 void MainWindow::expand()
