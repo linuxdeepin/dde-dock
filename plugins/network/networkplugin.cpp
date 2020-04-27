@@ -196,6 +196,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     m_networkItem, &NetworkItem::updateSelf);
             connect(static_cast<WiredItem *>(item), &WiredItem::enableChanged,
                     m_networkItem, &NetworkItem::updateSelf);
+            connect(static_cast<WiredItem *>(item), &WiredItem::activeConnectionChanged,
+                    m_networkItem, &NetworkItem::updateSelf);
             break;
         case NetworkDevice::Wireless:
             item = new WirelessItem(static_cast<WirelessDevice *>(device));
