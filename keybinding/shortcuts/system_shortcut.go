@@ -107,6 +107,7 @@ var defaultSysActionCmdMap = map[string]string{
 	"disable-touchpad":      "gsettings set com.deepin.dde.touchpad touchpad-enabled false",
 	"wm-switcher":           "dbus-send --type=method_call --dest=com.deepin.WMSwitcher /com/deepin/WMSwitcher com.deepin.WMSwitcher.RequestSwitchWM",
 	"turn-off-screen":       "sleep 0.5; xset dpms force off",
+	"notification-center":    "dbus-send --print-reply --dest=com.deepin.dde.osd /org/freedesktop/Notifications com.deepin.dde.Notification.Toggle",
 }
 
 type actionHandler struct {
