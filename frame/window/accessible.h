@@ -1,27 +1,9 @@
-/*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     fpc_diesel <fanpengcheng@uniontech.com>
- *
- * Maintainer: fpc_diesel <fanpengcheng@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-#ifndef ACCESSIBLE_H
-#define ACCESSIBLE_H
+#include "accessibledefine.h"
 
+#include "mainwindow.h"
 #include "../panel/mainpanelcontrol.h"
+#include "../../widgets/tipswidget.h"
+#include "../util/dockpopupwindow.h"
 
 #include "../item/launcheritem.h"
 #include "../item/appitem.h"
@@ -53,194 +35,107 @@
 #include "../plugins/sound/componments/volumeslider.h"
 #include "../plugins/sound/componments/horizontalseparator.h"
 
-#include "../../widgets/tipswidget.h"
-
+//#include "../plugins/network/item/deviceitem.h" //TODO
 #include "../plugins/datetime/datetimewidget.h"
 #include "../plugins/onboard/onboarditem.h"
 #include "../plugins/trash/trashwidget.h"
 #include "../plugins/trash/popupcontrolwidget.h"
 #include "../plugins/shutdown/shutdownwidget.h"
 #include "../plugins/multitasking/multitaskingwidget.h"
-//#include "../plugins/overlay-warning/overlaywarningwidget.h"
+//#include "../plugins/overlay-warning/overlaywarningwidget.h"// TODO
 
-#include <QAccessible>
-#include <QAccessibleWidget>
-#include <QEvent>
-#include <QMouseEvent>
-#include <QApplication>
+#include <DImageButton>
+#include <DSwitchButton>
+#include <DPushButton>
 
-/**************************************************************************************/
-// 构造函数
-#define FUNC_CREATE(classname,accessibletype,accessdescription)    Accessible##classname(classname *w) \
-    : QAccessibleWidget(w,accessibletype,#classname)\
-    , m_w(w)\
-    , m_description(accessdescription)\
-{}\
-    private:\
-    classname *m_w;\
-    QString m_description;\
-
-// 左键点击
-#define FUNC_PRESS(classobj)     QStringList actionNames() const override{return QStringList() << pressAction();}\
-    void doAction(const QString &actionName) override{\
-    if(actionName == pressAction())\
-{\
-    QPointF localPos = classobj->geometry().center();\
-    QMouseEvent event(QEvent::MouseButtonPress,localPos,Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);\
-    QMouseEvent event2(QEvent::MouseButtonRelease,localPos,Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);\
-    qApp->sendEvent(classobj,&event);\
-    qApp->sendEvent(classobj,&event2);\
-    }\
-    }\
-
-// 右键点击
-#define FUNC_SHOWMENU(classobj)     QStringList actionNames() const override{return QStringList() << showMenuAction();}\
-    void doAction(const QString &actionName) override{\
-    if(actionName == showMenuAction())\
-{\
-    QPointF localPos = classobj->geometry().center();\
-    QMouseEvent event(QEvent::MouseButtonPress,localPos,Qt::RightButton,Qt::RightButton,Qt::NoModifier);\
-    QMouseEvent event2(QEvent::MouseButtonRelease,localPos,Qt::RightButton,Qt::RightButton,Qt::NoModifier);\
-    qApp->sendEvent(classobj,&event);\
-    qApp->sendEvent(classobj,&event2);\
-    }\
-    }\
-
-// 左键和右键点击
-#define FUNC_PRESS_SHOWMENU(classobj)     QStringList actionNames() const override{return QStringList() << pressAction() << showMenuAction();}\
-    void doAction(const QString &actionName) override{\
-    if(actionName == pressAction())\
-{\
-    QPointF localPos = classobj->geometry().center();\
-    QMouseEvent event(QEvent::MouseButtonPress,localPos,Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);\
-    QMouseEvent event2(QEvent::MouseButtonRelease,localPos,Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);\
-    qApp->sendEvent(classobj,&event);\
-    qApp->sendEvent(classobj,&event2);\
-    }\
-    else if(actionName == showMenuAction())\
-{\
-    QPointF localPos = classobj->geometry().center();\
-    QMouseEvent event(QEvent::MouseButtonPress,localPos,Qt::RightButton,Qt::RightButton,Qt::NoModifier);\
-    QMouseEvent event2(QEvent::MouseButtonRelease,localPos,Qt::RightButton,Qt::RightButton,Qt::NoModifier);\
-    qApp->sendEvent(classobj,&event);\
-    qApp->sendEvent(classobj,&event2);\
-    }\
-    }\
-
-// 实现rect接口
-#define FUNC_RECT(classobj) QRect rect() const override{\
-    if (!classobj->isVisible())\
-    return QRect();\
-    return classobj->geometry();\
-    }\
-
-// 启用accessible
-#define USE_ACCESSIBLE(classnamestring,classname)    if (classnamestring == QLatin1String(#classname) && object && object->isWidgetType())\
-{\
-    interface = new Accessible##classname(static_cast<classname *>(object));\
-    }\
-
-//// 启用accessible[指定objectname]---适用同一个类，但objectname不同的情况
-//#define USE_ACCESSIBLE_BY_OBJECTNAME(classnamestring,classname,objectname)    if (classnamestring == QLatin1String(#classname) && object && (object->objectName() == objectname) && object->isWidgetType())\
-//{\
-//    interface = new Accessible##classname(static_cast<classname *>(object));\
-//    }\
-
-// 按钮类型的控件[仅有左键点击]
-#define SET_BUTTON_ACCESSIBLE_PRESS_DESCRIPTION(classname,accessdescription)  class Accessible##classname : public QAccessibleWidget\
-{\
-    public:\
-    FUNC_CREATE(classname,QAccessible::Button,accessdescription)\
-    QString text(QAccessible::Text t) const override;/*需要单独实现*/\
-    FUNC_PRESS(m_w)\
-    };\
-
-// 按钮类型的控件[仅有右键点击]
-#define SET_BUTTON_ACCESSIBLE_SHOWMENU_DESCRIPTION(classname,accessdescription)  class Accessible##classname : public QAccessibleWidget\
-{\
-    public:\
-    FUNC_CREATE(classname,QAccessible::Button,accessdescription)\
-    QString text(QAccessible::Text t) const override;/*需要单独实现*/\
-    FUNC_SHOWMENU(m_w)\
-    };\
-
-// 按钮类型的控件[有左键点击和右键点击]
-#define SET_BUTTON_ACCESSIBLE_PRESS_SHOEMENU_DESCRIPTION(classname,accessdescription)  class Accessible##classname : public QAccessibleWidget\
-{\
-    public:\
-    FUNC_CREATE(classname,QAccessible::Button,accessdescription)\
-    QString text(QAccessible::Text t) const override;/*需要单独实现*/\
-    FUNC_PRESS_SHOWMENU(m_w)\
-    };\
-
-// 标签类型的控件
-#define SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,aaccessibletype,accessdescription)  class Accessible##classname : public QAccessibleWidget\
-{\
-    public:\
-    FUNC_CREATE(classname,aaccessibletype,accessdescription)\
-    QString text(QAccessible::Text t) const override;/*需要单独实现*/\
-    FUNC_RECT(m_w)\
-    };\
-
-// 简化使用
-#define SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(classname)         SET_BUTTON_ACCESSIBLE_PRESS_SHOEMENU_DESCRIPTION(classname,"")
-#define SET_BUTTON_ACCESSIBLE_SHOWMENU(classname)               SET_BUTTON_ACCESSIBLE_SHOWMENU_DESCRIPTION(classname,"")
-#define SET_BUTTON_ACCESSIBLE(classname)                        SET_BUTTON_ACCESSIBLE_PRESS_DESCRIPTION(classname,"")
-
-#define SET_LABEL_ACCESSIBLE(classname)                         SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::StaticText,"")
-#define SET_FORM_ACCESSIBLE(classname)                          SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::Form,"")
-#define SET_SLIDER_ACCESSIBLE(classname)                        SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::Slider,"")
-#define SET_SEPARATOR_ACCESSIBLE(classname)                     SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::Separator,"")
-/**************************************************************************************/
+DWIDGET_USE_NAMESPACE
 
 // 添加accessible
-SET_BUTTON_ACCESSIBLE_SHOWMENU(MainPanelControl)
+SET_FORM_ACCESSIBLE(MainWindow,"mainwindow")
+SET_BUTTON_ACCESSIBLE_SHOWMENU(MainPanelControl,"mainpanelcontrol")
+SET_LABEL_ACCESSIBLE(TipsWidget,"Tips")
+SET_FORM_ACCESSIBLE(DockPopupWindow,"PopupWindow")
+SET_BUTTON_ACCESSIBLE(LauncherItem,"launcheritem")
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(AppItem,"AppItem")
+SET_BUTTON_ACCESSIBLE(PreviewContainer,"previewcontainer")
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(PluginsItem,m_w->pluginName())
+SET_BUTTON_ACCESSIBLE(TrayPluginItem,m_w->pluginName())
+SET_BUTTON_ACCESSIBLE(PlaceholderItem,"placeholderitem")
+SET_BUTTON_ACCESSIBLE(AppDragWidget,"appdragwidget")
+SET_BUTTON_ACCESSIBLE(AppSnapshot,"appsnapshot")
+SET_BUTTON_ACCESSIBLE(FloatingPreview,"floatingpreview")
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(XEmbedTrayWidget,m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(IndicatorTrayWidget,m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SNITrayWidget,m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SystemTrayItem,m_w->itemKeyForConfig())
+SET_FORM_ACCESSIBLE(FashionTrayItem,"fashiontrayitem")
+SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper,"fashiontraywrapper")
+SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget,"fashiontraycontrolwidget")
+SET_FORM_ACCESSIBLE(AttentionContainer,"attentioncontainer")
+SET_FORM_ACCESSIBLE(HoldContainer,"holdcontainer")
+SET_FORM_ACCESSIBLE(NormalContainer,"normalcontainer")
+SET_FORM_ACCESSIBLE(SpliterAnimated,"spliteranimated")
+SET_BUTTON_ACCESSIBLE(SoundItem,"plugin-sounditem")
+SET_FORM_ACCESSIBLE(SoundApplet,"soundapplet")
+SET_FORM_ACCESSIBLE(SinkInputWidget,"sinkinputwidget")
+SET_SLIDER_ACCESSIBLE(VolumeSlider,"volumeslider")
+SET_SEPARATOR_ACCESSIBLE(HorizontalSeparator,"horizontalseparator")
+SET_FORM_ACCESSIBLE(DatetimeWidget,"plugin-datetime")
+SET_FORM_ACCESSIBLE(OnboardItem,"plugin-onboard")
+SET_FORM_ACCESSIBLE(TrashWidget,"plugin-trash")
+SET_BUTTON_ACCESSIBLE(PopupControlWidget,"popupcontrolwidget")
+SET_FORM_ACCESSIBLE(ShutdownWidget,"plugin-shutdown")
+SET_FORM_ACCESSIBLE(MultitaskingWidget,"plugin-multitasking")
+SET_FORM_ACCESSIBLE(ShowDesktopWidget,"plugin-showdesktop")
+SET_BUTTON_ACCESSIBLE(QWidget,m_w->objectName())
+SET_BUTTON_ACCESSIBLE(DImageButton,m_w->objectName())
+SET_BUTTON_ACCESSIBLE(DSwitchButton,m_w->text())
 
-SET_BUTTON_ACCESSIBLE(LauncherItem)
-SET_BUTTON_ACCESSIBLE(AppItem)
-SET_BUTTON_ACCESSIBLE(PreviewContainer)
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(PluginsItem)
-SET_BUTTON_ACCESSIBLE(TrayPluginItem)
-SET_BUTTON_ACCESSIBLE(PlaceholderItem)
-SET_BUTTON_ACCESSIBLE(AppDragWidget)
-SET_BUTTON_ACCESSIBLE(AppSnapshot)
-SET_BUTTON_ACCESSIBLE(FloatingPreview)
+QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
+{
+    QAccessibleInterface *interface = nullptr;
 
-// tray plugin
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(XEmbedTrayWidget)
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(IndicatorTrayWidget)
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SNITrayWidget)
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SystemTrayItem)
-SET_FORM_ACCESSIBLE(FashionTrayItem)
-SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper)
-SET_FORM_ACCESSIBLE(FashionTrayControlWidget)
-SET_FORM_ACCESSIBLE(AttentionContainer)
-SET_FORM_ACCESSIBLE(HoldContainer)
-SET_FORM_ACCESSIBLE(NormalContainer)
-SET_FORM_ACCESSIBLE(SpliterAnimated)
+    USE_ACCESSIBLE(classname, MainWindow);
+    USE_ACCESSIBLE(classname, MainPanelControl);
+    USE_ACCESSIBLE(classname, TipsWidget);
+    USE_ACCESSIBLE(classname, DockPopupWindow);
+    USE_ACCESSIBLE(classname, LauncherItem);
+    USE_ACCESSIBLE(classname, AppItem);
+    USE_ACCESSIBLE(classname, PreviewContainer);
+    USE_ACCESSIBLE(classname, PluginsItem);
+    USE_ACCESSIBLE(classname, TrayPluginItem);
+    USE_ACCESSIBLE(classname, PlaceholderItem);
+    USE_ACCESSIBLE(classname, AppDragWidget);
+    USE_ACCESSIBLE(classname, AppSnapshot);
+    USE_ACCESSIBLE(classname, FloatingPreview);
+    USE_ACCESSIBLE(classname, SNITrayWidget);
+    USE_ACCESSIBLE(classname, SystemTrayItem);
+    USE_ACCESSIBLE(classname, FashionTrayItem);
+    USE_ACCESSIBLE(classname, FashionTrayWidgetWrapper);
+    USE_ACCESSIBLE(classname, FashionTrayControlWidget);
+    USE_ACCESSIBLE(classname, AttentionContainer);
+    USE_ACCESSIBLE(classname, HoldContainer);
+    USE_ACCESSIBLE(classname, NormalContainer);
+    USE_ACCESSIBLE(classname, SpliterAnimated);
+    USE_ACCESSIBLE(classname, IndicatorTrayWidget);
+    USE_ACCESSIBLE(classname, XEmbedTrayWidget);
+    USE_ACCESSIBLE(classname, SoundItem);
+    USE_ACCESSIBLE(classname, SoundApplet);
+    USE_ACCESSIBLE(classname, SinkInputWidget);
+    USE_ACCESSIBLE(classname, VolumeSlider);
+    USE_ACCESSIBLE(classname, HorizontalSeparator);
+    USE_ACCESSIBLE(classname, DatetimeWidget);
+    USE_ACCESSIBLE(classname, OnboardItem);
+    USE_ACCESSIBLE(classname, TrashWidget);
+    USE_ACCESSIBLE(classname, PopupControlWidget);
+    USE_ACCESSIBLE(classname, ShutdownWidget);
+    USE_ACCESSIBLE(classname, MultitaskingWidget);
+    USE_ACCESSIBLE(classname, ShowDesktopWidget);
+    //    USE_ACCESSIBLE(classname,OverlayWarningWidget);
+    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QWidget, "Btn_showdesktoparea");//TODO 点击坐标有偏差
+    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-2d");
+    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-3d");
+    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
 
-// showdesktop plugin
-SET_BUTTON_ACCESSIBLE(ShowDesktopWidget)// 未生效
-
-// sound plugin
-SET_BUTTON_ACCESSIBLE(SoundItem)
-SET_FORM_ACCESSIBLE(SoundApplet)
-SET_FORM_ACCESSIBLE(SinkInputWidget)
-SET_SLIDER_ACCESSIBLE(VolumeSlider)
-SET_SEPARATOR_ACCESSIBLE(HorizontalSeparator)
-
-SET_LABEL_ACCESSIBLE(TipsWidget)
-
-// fixed plugin
-SET_FORM_ACCESSIBLE(DatetimeWidget)
-SET_FORM_ACCESSIBLE(OnboardItem)
-SET_FORM_ACCESSIBLE(TrashWidget)
-SET_FORM_ACCESSIBLE(PopupControlWidget)
-SET_FORM_ACCESSIBLE(ShutdownWidget)
-
-// multitasking plugin
-SET_FORM_ACCESSIBLE(MultitaskingWidget)
-
-//SET_FORM_ACCESSIBLE(OverlayWarningWidget)
-
-#endif // ACCESSIBLE_H
+    return interface;
+}
