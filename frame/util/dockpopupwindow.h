@@ -26,6 +26,9 @@
 #include <dregionmonitor.h>
 #include <DWindowManagerHelper>
 
+#include <com_deepin_sessionmanager.h>
+using UserInter = com::deepin::SessionManager;
+
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
@@ -72,6 +75,7 @@ private:
 
     DRegionMonitor *m_regionInter;
     DWindowManagerHelper *m_wmHelper;
+    UserInter *m_userInter;
 };
 
 #endif // DOCKPOPUPWINDOW_H

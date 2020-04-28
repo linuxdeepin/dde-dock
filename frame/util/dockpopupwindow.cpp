@@ -30,12 +30,11 @@
 DWIDGET_USE_NAMESPACE
 
 DockPopupWindow::DockPopupWindow(QWidget *parent)
-    : DArrowRectangle(ArrowBottom, parent),
-      m_model(false),
-
-      m_acceptDelayTimer(new QTimer(this)),
-
-      m_regionInter(new DRegionMonitor(this))
+    : DArrowRectangle(ArrowBottom, parent)
+    , m_model(false)
+    , m_acceptDelayTimer(new QTimer(this))
+    , m_regionInter(new DRegionMonitor(this))
+    , m_userInter(new UserInter("com.deepin.SessionManager", "/com/deepin/SessionManager", QDBusConnection::sessionBus(), this))
 {
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
@@ -52,6 +51,9 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
     connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_userInter, &UserInter::LockedChanged, [=]{
+        this->hide();
+    });
 }
 
 DockPopupWindow::~DockPopupWindow()
