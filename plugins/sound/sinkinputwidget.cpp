@@ -140,34 +140,35 @@ void SinkInputWidget::setMute()
 
 void SinkInputWidget::setMuteIcon()
 {
-    if (m_inputInter->mute()) {
-        const auto ratio = devicePixelRatioF();
-        QString iconString = "audio-volume-muted-symbolic";
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-            iconString.append("-dark");
-        }
-        QPixmap muteIcon = QIcon::fromTheme(iconString).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
-        muteIcon.setDevicePixelRatio(ratio);
-        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
+    //app应用为静音时，只需要将音量图标设置成静音，无需将应用图标设置为静音图标
+//    if (m_inputInter->mute()) {
+//        const auto ratio = devicePixelRatioF();
+//        QString iconString = "audio-volume-muted-symbolic";
+//        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+//            iconString.append("-dark");
+//        }
+//        QPixmap muteIcon = QIcon::fromTheme(iconString).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+//        muteIcon.setDevicePixelRatio(ratio);
+//        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
-        QPixmap temp(appIconSource.size());
-        temp.fill(Qt::transparent);
-        temp.setDevicePixelRatio(ratio);
-        QPainter p1(&temp);
-        p1.drawPixmap(0, 0, appIconSource);
-        p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p1.fillRect(temp.rect(), QColor(0, 0, 0, 40));
-        p1.end();
-        appIconSource = temp;
+//        QPixmap temp(appIconSource.size());
+//        temp.fill(Qt::transparent);
+//        temp.setDevicePixelRatio(ratio);
+//        QPainter p1(&temp);
+//        p1.drawPixmap(0, 0, appIconSource);
+//        p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+//        p1.fillRect(temp.rect(), QColor(0, 0, 0, 40));
+//        p1.end();
+//        appIconSource = temp;
 
-        QPainter p(&appIconSource);
-        p.drawPixmap(0, 0, muteIcon);
+//        QPainter p(&appIconSource);
+//        p.drawPixmap(0, 0, muteIcon);
 
-        appIconSource.setDevicePixelRatio(ratio);
-        m_appBtn->setPixmap(appIconSource);
-    } else {
-        m_appBtn->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
-    }
+//        appIconSource.setDevicePixelRatio(ratio);
+//        m_appBtn->setPixmap(appIconSource);
+//    } else {
+//        m_appBtn->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
+//    }
 
     refreshIcon();
 }
