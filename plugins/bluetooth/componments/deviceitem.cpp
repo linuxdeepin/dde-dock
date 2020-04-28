@@ -133,6 +133,7 @@ void DeviceItem::changeState(const Device::State state)
 {
     switch (state) {
     case Device::StateUnavailable: {
+        m_state->setPixmap(QPixmap(":/disconnect" + m_statSuffix));
         m_state->setVisible(false);
         m_loadingStat->stop();
         m_loadingStat->hide();
@@ -147,6 +148,7 @@ void DeviceItem::changeState(const Device::State state)
     }
         break;
     case Device::StateConnected: {
+        m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
         m_loadingStat->stop();
         m_loadingStat->hide();
         m_loadingStat->setVisible(false);

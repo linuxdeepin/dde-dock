@@ -72,13 +72,8 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     auto myDevices = adapter->devices();
     for (auto constDevice : myDevices) {
         auto device = const_cast<Device *>(constDevice);
-        if (device) {
-            DeviceItem *deviceItem = createDeviceItem(device);
-            if (device->state() == Device::StateConnected)
-                m_sortConnected << deviceItem;
-            else
-                m_sortUnConnect << deviceItem;
-        }
+        if (device)
+            createDeviceItem(device);
     }
 
     m_initDeviceState = Device::StateUnavailable;
@@ -114,11 +109,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     showDevices(adapter->powered());
 }
 
-//int AdapterItem::pairedDeviceCount()
-//{
-//    return  m_pairedDeviceItems.size();
-//}
-
 int AdapterItem::deviceCount()
 {
     return m_deviceItems.size();
@@ -141,18 +131,32 @@ int AdapterItem::viewHeight()
 
 void AdapterItem::deviceItemPaired(const bool paired)
 {
-//    auto device = qobject_cast<Device *>(sender());
-//    if (device) {
-//        auto deviceId = device->id();
-//        auto deviceItem = m_deviceItems.value(deviceId);
-//        if (deviceItem) {
-//            if (paired)
-//                m_pairedDeviceItems[deviceId] = deviceItem;
-//            else
-//                m_pairedDeviceItems.remove(deviceId);
-//        }
-//        showDevices(m_adapter->powered());
-//    }
+    auto device = qobject_cast<Device *>(sender());
+    if (device) {
+        auto deviceItem = m_deviceItems.value(device->id());
+        if (paired) {
+            m_sortUnConnect.removeOne(deviceItem);
+            m_sortConnected << deviceItem;
+        } else {
+            m_sortConnected.removeOne(deviceItem);
+            m_sortUnConnect << deviceItem;
+        }
+        showDevices(m_adapter->powered());
+    }
+}
+
+void AdapterItem::deviceRssiChanged()
+{
+    auto device = qobject_cast<Device *>(sender());
+    if (device) {
+        auto deviceItem = m_deviceItems.value(device->id());
+        auto state = device->state();
+        if (deviceItem && Device::StateConnected == state)
+            qSort(m_sortConnected);
+        else
+            qSort(m_sortUnConnect);
+        moveDeviceItem(state, deviceItem);
+    }
 }
 
 void AdapterItem::removeDeviceItem(const Device *device)
@@ -165,9 +169,6 @@ void AdapterItem::removeDeviceItem(const Device *device)
         m_deviceItems.remove(device->id());
         m_sortConnected.removeOne(deviceItem);
         m_sortUnConnect.removeOne(deviceItem);
-        if (device->paired()) {
-//            m_pairedDeviceItems.remove(device->id());
-        }
         m_deviceLayout->removeWidget(deviceItem);
         delete deviceItem;
     }
@@ -177,11 +178,7 @@ void AdapterItem::removeDeviceItem(const Device *device)
 void AdapterItem::showAndConnect(bool change)
 {
     m_adaptersManager->setAdapterPowered(m_adapter, change);
-    if (change) {
-//        m_adaptersManager->connectAllPairedDevice(m_adapter);
-    }
     showDevices(change);
-
     emit powerChanged(change);
 }
 
@@ -202,9 +199,8 @@ void AdapterItem::deviceChangeState(const Device::State state)
         auto deviceItem = m_deviceItems.value(device->id());
         if (deviceItem) {
             switch (state) {
-            case Device::StateUnavailable:
-            case Device::StateAvailable: {
-                int index = m_sortConnected.indexOf(deviceItem);
+            case Device::StateUnavailable: {
+                int index = m_sortUnConnect.indexOf(deviceItem);
                 if (index < 0) {
                     m_sortConnected.removeOne(deviceItem);
                     m_sortUnConnect << deviceItem;
@@ -213,11 +209,16 @@ void AdapterItem::deviceChangeState(const Device::State state)
                 }
             }
                 break;
+            case Device::StateAvailable:
+                break;
             case Device::StateConnected: {
-                m_sortUnConnect.removeOne(deviceItem);
-                m_sortConnected << deviceItem;
-                qSort(m_sortConnected);
-                moveDeviceItem(state, deviceItem);
+                int index = m_sortConnected.indexOf(deviceItem);
+                if (index < 0) {
+                    m_sortUnConnect.removeOne(deviceItem);
+                    m_sortConnected << deviceItem;
+                    qSort(m_sortConnected);
+                    moveDeviceItem(state, deviceItem);
+                }
             }
                 break;
             }
@@ -249,39 +250,26 @@ void AdapterItem::moveDeviceItem(Device::State state, DeviceItem *item)
     m_deviceLayout->insertWidget(index, item);
 }
 
-DeviceItem *AdapterItem::createDeviceItem(Device *device)
+void AdapterItem::createDeviceItem(Device *device)
 {
     if (!device)
-        return nullptr;
+        return;
 
-//    auto paired = device->paired();
     auto deviceId = device->id();
     auto deviceItem = new DeviceItem(device->name(), this);
     deviceItem->setDevice(device);
     m_deviceItems[deviceId] = deviceItem;
-//    if (paired)
-//        m_pairedDeviceItems[deviceId] = deviceItem;
-//    deviceItem->setVisible(paired);
+    if (device->state() == Device::StateConnected)
+        m_sortConnected << deviceItem;
+    else
+        m_sortUnConnect << deviceItem;
 
-//    connect(device, &Device::pairedChanged, this, &AdapterItem::deviceItemPaired);
+    connect(device, &Device::pairedChanged, this, &AdapterItem::deviceItemPaired);
     connect(device, &Device::nameChanged, deviceItem, &DeviceItem::setTitle);
     connect(device, &Device::stateChanged, deviceItem, &DeviceItem::changeState);
     connect(device, &Device::stateChanged, this, &AdapterItem::deviceChangeState);
-    connect(device, &Device::rssiChanged, [&]{
-        auto device = qobject_cast<Device *>(sender());
-        if (device) {
-            auto deviceItem = m_deviceItems.value(device->id());
-            auto state = device->state();
-            if (deviceItem && Device::StateConnected == state)
-                qSort(m_sortConnected);
-            else
-                qSort(m_sortUnConnect);
-            moveDeviceItem(state, deviceItem);
-        }
-    });
+    connect(device, &Device::rssiChanged, this, &AdapterItem::deviceRssiChanged);
     connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, &AdaptersManager::connectDevice);
-
-    return  deviceItem;
 }
 
 void AdapterItem::updateView()

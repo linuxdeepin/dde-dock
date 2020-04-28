@@ -41,7 +41,6 @@ class AdapterItem : public QScrollArea
     Q_OBJECT
 public:
     explicit AdapterItem(AdaptersManager *a, Adapter *adapter, QWidget *parent = nullptr);
-//    int pairedDeviceCount();
     int deviceCount();
     void setPowered(bool powered);
     bool isPowered();
@@ -56,6 +55,7 @@ signals:
 
 private slots:
     void deviceItemPaired(const bool paired);
+    void deviceRssiChanged();
     void removeDeviceItem(const Device *device);
     void showAndConnect(bool change);
     void addDeviceItem(const Device *constDevice);
@@ -63,7 +63,7 @@ private slots:
     void moveDeviceItem(Device::State state, DeviceItem *item);
 
 private:
-    DeviceItem *createDeviceItem(Device *device);
+    void createDeviceItem(Device *device);
     void updateView();
     void showDevices(bool change);
 
@@ -82,7 +82,6 @@ private:
     Device::State m_currentDeviceState;
     QList<DeviceItem *> m_sortConnected;
     QList<DeviceItem *> m_sortUnConnect;
-//    QMap<QString, DeviceItem*> m_pairedDeviceItems;
 };
 
 #endif // ADAPTERITEM_H
