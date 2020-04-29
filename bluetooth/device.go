@@ -122,9 +122,6 @@ func (d *device) setDisconnectPhase(value disconnectPhase) {
 	}
 	d.updateState()
 	d.notifyDevicePropertiesChanged()
-	if d.Paired && d.State == 2 {
-		notifyConnected(d.Alias)
-	}
 }
 
 func (d *device) getDisconnectPhase() disconnectPhase {
@@ -153,6 +150,9 @@ func (d *device) setConnectPhase(value connectPhase) {
 
 	d.updateState()
 	d.notifyDevicePropertiesChanged()
+	if d.Paired && d.State == deviceStateConnected {
+		notifyConnected(d.Alias)
+	}
 }
 
 func (d *device) getConnectPhase() connectPhase {
@@ -270,7 +270,7 @@ func (d *device) connectProperties() {
 		d.updateState()
 		d.notifyDevicePropertiesChanged()
 
-		if needNotify && d.Paired && d.State ==2 {
+		if needNotify && d.Paired && d.State == deviceStateConnected {
 			d.notifyConnectedChanged()
 		}
 		return
@@ -392,7 +392,7 @@ func (d *device) notifyConnectedChanged() {
 		return
 	}
 
-	if d.connected && d.Paired && d.State ==2 {
+	if d.connected {
 		notifyConnected(d.Alias)
 		//} else {
 		//	if time.Since(d.pairingFailedTime) < 2*time.Second {
@@ -474,7 +474,7 @@ func (d *device) doConnect(hasNotify bool) error {
 		return err
 	}
 
-	if hasNotify {
+	if hasNotify && d.Paired && d.State == deviceStateConnected {
 		notifyConnected(d.Alias)
 	}
 	return nil
