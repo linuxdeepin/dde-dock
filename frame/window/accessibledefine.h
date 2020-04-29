@@ -85,7 +85,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, QString fallba
     QString accessibleName = QString::fromLatin1(prefix) + SEPARATOR;
     accessibleName += oldAccessName.isEmpty() ? fallback : oldAccessName;
     // 检查名称是否唯一
-    if (accessibleMap[r].contains(accessibleName)) {
+    if (accessibleMap[r].contains(accessibleName) && !objnameMap.key(accessibleName)) {
         if (objnameMap.key(accessibleName)) {
             objnameMap.remove(objnameMap.key(accessibleName));
             objnameMap.insert(w, accessibleName);
