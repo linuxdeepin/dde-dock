@@ -41,7 +41,7 @@ class PreviewContainer : public QWidget
     Q_OBJECT
 
 public:
-    explicit PreviewContainer(QWidget *parent = 0);
+    explicit PreviewContainer(const QDBusObjectPath &entry , QWidget *parent = 0);
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -76,6 +76,7 @@ private slots:
 private:
     bool m_needActivate;
     QMap<WId, AppSnapshot *> m_snapshots;
+    QDBusObjectPath m_entry;
 
     FloatingPreview *m_floatingPreview;
     QBoxLayout *m_windowListLayout;

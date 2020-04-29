@@ -4,11 +4,11 @@
 
 #include "previewcontainer.h"
 
-static PreviewContainer *PreviewWindow(const WindowInfoMap &infos, const WindowList &allowClose, const Dock::Position dockPos)
+static PreviewContainer *PreviewWindow(const WindowInfoMap &infos, const WindowList &allowClose, const Dock::Position dockPos,const QDBusObjectPath &entry )
 {
     static PreviewContainer *preview;
     if (!preview) {
-        preview = new PreviewContainer;
+        preview = new PreviewContainer(entry);
     }
 
     preview->disconnect();

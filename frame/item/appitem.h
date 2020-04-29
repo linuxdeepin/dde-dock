@@ -110,6 +110,7 @@ private:
     DWindowManagerHelper *m_wmHelper;
 
     QPointer<AppDrag> m_drag;
+    QDBusObjectPath m_entry;
 
     bool m_dragging;
     bool m_active;

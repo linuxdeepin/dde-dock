@@ -32,8 +32,14 @@
 
 #include <com_deepin_dde_daemon_dock_entry.h>
 
+#include <xcb/xproto.h>
+#include <xcb/xcb_util.h>
+#include <xcb/xfixes.h>
+#include <xcb/xcb_image.h>
+
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
+using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 
 #define SNAP_WIDTH       200
 #define SNAP_HEIGHT      130
@@ -47,7 +53,7 @@ class AppSnapshot : public QWidget
     Q_OBJECT
 
 public:
-    explicit AppSnapshot(const WId wid, QWidget *parent = 0);
+    explicit AppSnapshot(const WId wid, const QDBusObjectPath &entry,QWidget *parent = 0);
 
     inline WId wid() const { return m_wid; }
     inline bool attentioned() const { return m_windowInfo.attention; }
@@ -57,6 +63,10 @@ public:
     inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
     inline const QString title() const { return m_windowInfo.title; }
 
+    bool isKWinAvailable();
+    void KWinDBusScreenshotHelper(quint64 pixmapId);
+    QRect getDrawableGeometry(xcb_drawable_t drawable);
+    QPixmap getPixmapFromDrawable(xcb_drawable_t drawableId, const QRect &rect);
 signals:
     void entered(const WId wid) const;
     void clicked(const WId wid) const;
@@ -78,11 +88,24 @@ private:
     SHMInfo *getImageDSHM();
     XImage * getImageXlib();
     QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);
+    QPixmap convertFromNative(xcb_image_t *xcbImage);
+
+    template <typename T> using CScopedPointer = QScopedPointer<T, QScopedPointerPodDeleter>;
+
+ public:
+    struct ScopedPointerXcbImageDeleter
+    {
+        static inline void cleanup(xcb_image_t *xcbImage) {
+            if (xcbImage) {
+                xcb_image_destroy(xcbImage);
+            }
+        }
+    };
+
 
 private:
     const WId m_wid;
     WindowInfo m_windowInfo;
-
     bool m_closeAble;
 
     QImage m_snapshot;
@@ -92,6 +115,7 @@ private:
     QTimer *m_waitLeaveTimer;
     DImageButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
+    DockEntryInter *m_itemEntryInter;
 };
 
 #endif // APPSNAPSHOT_H

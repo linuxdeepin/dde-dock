@@ -30,13 +30,14 @@
 #define MARGIN            0
 #define SNAP_HEIGHT_WITHOUT_COMPOSITE       30
 
-PreviewContainer::PreviewContainer(QWidget *parent)
+PreviewContainer::PreviewContainer(const QDBusObjectPath &entry,QWidget *parent)
     : QWidget(parent),
       m_needActivate(false),
-
+      m_entry(entry),
       m_floatingPreview(new FloatingPreview(this)),
       m_mouseLeaveTimer(new QTimer(this)),
       m_wmHelper(DWindowManagerHelper::instance())
+
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     m_windowListLayout->setSpacing(SPACING);
@@ -165,7 +166,7 @@ void PreviewContainer::adjustSize()
 
 void PreviewContainer::appendSnapWidget(const WId wid)
 {
-    AppSnapshot *snap = new AppSnapshot(wid);
+    AppSnapshot *snap = new AppSnapshot(wid,m_entry);
 
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
