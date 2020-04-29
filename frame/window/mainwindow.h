@@ -82,7 +82,7 @@ private:
     void x11MoveWindow(const int x, const int y);
     void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
     bool appIsOnDock(const QString &appDesktop);
-    void onRegionMonitorChanged();
+    void onRegionMonitorChanged(const QPoint &p);
     void updateRegionMonitorWatch();
     void getTrayVisableItemCount();
 
