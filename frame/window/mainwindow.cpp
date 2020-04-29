@@ -839,7 +839,15 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
 void MainWindow::updatePanelVisible()
 {
     if (m_settings->hideMode() == KeepShowing) {
+        if(m_regionMonitor->registered()){
+            m_regionMonitor->unregisterRegion();
+        }
         return expand();
+    }
+
+    if(!m_regionMonitor->registered()){
+        m_regionMonitor->registerRegion();
+        m_regionMonitor->setCoordinateType(DRegionMonitor::ScaleRatio);
     }
 
     const Dock::HideState state = m_settings->hideState();
@@ -1040,7 +1048,7 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     }
 }
 
-void MainWindow::onRegionMonitorChanged()
+void MainWindow::onRegionMonitorChanged(const QPoint &p)
 {
     if (m_settings->hideMode() == KeepShowing)
         return;
@@ -1060,22 +1068,37 @@ void MainWindow::updateRegionMonitorWatch()
 {
     if (m_settings->hideMode() == KeepShowing)
         return;
+    int val = 5;
 
-    int val = 2;
+    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
+    const QRect windowRect = m_settings->windowRect(m_curDockPos, isHide);
+    const qreal scale = devicePixelRatioF();
     const int margin = m_settings->dockMargin();
-    if (Dock::Top == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin, 0, m_settings->primaryRect().width() - margin * 2, val));
-    } else if (Dock::Bottom == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin, m_settings->primaryRect().height() - val, m_settings->primaryRect().width() - margin * 2, val));
-    } else if (Dock::Left == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(0, margin, val, m_settings->primaryRect().height() - margin * 2));
-    } else {
-        m_regionMonitor->setWatchedRegion(QRegion(m_settings->primaryRect().width() - val, margin, val, m_settings->primaryRect().height() - margin * 2));
-    }
+    int x, y, w, h;
 
-    if (!m_regionMonitor->registered()) {
-        m_regionMonitor->registerRegion();
-    }
+    if (Dock::Top == m_curDockPos) {
+            x = windowRect.topLeft().x();
+            y = windowRect.topLeft().y();
+            w = m_settings->primaryRect().width();
+            h = val+ margin;
+        } else if (Dock::Bottom == m_curDockPos) {
+            x = windowRect.bottomLeft().x();
+            y = windowRect.bottomLeft().y() - val;
+            w = m_settings->primaryRect().width();
+            h = val+ margin;
+        } else if (Dock::Left == m_curDockPos) {
+            x = windowRect.topLeft().x();
+            y = windowRect.topLeft().y();
+            h = val+ margin;
+            h = m_settings->primaryRect().height();
+        } else {
+            x = windowRect.topRight().x() - val - margin;
+            y = windowRect.topRight().y();
+            w = m_settings->primaryRect().width();
+            h = m_settings->primaryRect().height();
+        }
+
+    m_regionMonitor->setWatchedRegion(QRegion(x * scale, y * scale, w * scale, h * scale));
 }
 
 
