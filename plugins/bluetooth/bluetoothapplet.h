@@ -41,7 +41,6 @@ public:
     void setAdapterPowered(bool powered);
     bool poweredInitState();
     bool hasAadapter();
-    Device::State initDeviceState();
 
 public slots :
     void addAdapter(Adapter *constadapter);
@@ -55,10 +54,11 @@ signals:
 
 private slots:
     void onPowerChanged(bool state);
-    void onDeviceStateChanged(const Device::State state);
+    void onDeviceStateChanged();
 
 private:
     void updateView();
+    void getDevieInitState(AdapterItem *item);
 
 private:
     HorizontalSeparator *m_line;

@@ -27,13 +27,10 @@
 #include "componments/switchitem.h"
 #include "componments/adaptersmanager.h"
 #include "componments/adapteritem.h"
+#include "componments/bluetoothconstants.h"
 
 #include <DApplicationHelper>
 DGUI_USE_NAMESPACE
-
-extern int ControlHeight;
-extern int ItemHeight;
-const int Width = 200;
 
 extern void initFontColor(QWidget *widget)
 {
@@ -74,7 +71,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     auto appletNameLayout = new QHBoxLayout;
     appletNameLayout->setMargin(0);
     appletNameLayout->setSpacing(0);
-    appletNameLayout->addSpacing(12);
+    appletNameLayout->addSpacing(MARGIN);
     appletNameLayout->addWidget(m_appletName);
     appletNameLayout->addStretch();
 
@@ -83,10 +80,10 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     m_centrealLayout->addLayout(appletNameLayout);
     m_centrealLayout->addWidget(m_line);
     m_centralWidget->setLayout(m_centrealLayout);
-    m_centralWidget->setFixedWidth(Width);
+    m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
-    setFixedWidth(Width);
+    setFixedWidth(POPUPWIDTH);
     setWidget(m_centralWidget);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -116,23 +113,6 @@ bool BluetoothApplet::hasAadapter()
     return m_adaptersManager->adaptersCount();
 }
 
-Device::State BluetoothApplet::initDeviceState()
-{
-    m_initDeviceState = Device::StateUnavailable;
-    for (auto adapterItem : m_adapterItems) {
-        if (adapterItem)
-            if (Device::StateAvailable  == adapterItem->initDeviceState()) {
-                m_initDeviceState = Device::StateAvailable;
-                continue;
-            }
-        if (Device::StateConnected  == adapterItem->initDeviceState()) {
-            m_initDeviceState = Device::StateConnected;
-            break;
-        }
-    }
-    return m_initDeviceState;
-}
-
 void BluetoothApplet::onPowerChanged(bool state)
 {
     Q_UNUSED(state)
@@ -146,10 +126,8 @@ void BluetoothApplet::onPowerChanged(bool state)
     emit powerChanged(powerState);
 }
 
-void BluetoothApplet::onDeviceStateChanged(const Device::State state)
+void BluetoothApplet::onDeviceStateChanged()
 {
-    Q_UNUSED(state)
-
     Device::State deviceState = Device::StateUnavailable;
     for (auto adapterItem : m_adapterItems) {
         if (Device::StateAvailable == adapterItem->currentDeviceState()) {
@@ -178,6 +156,7 @@ void BluetoothApplet::addAdapter(Adapter *adapter)
     auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
     m_adapterItems[adapterId] = adatpterItem;
     m_centrealLayout->addWidget(adatpterItem);
+    getDevieInitState(adatpterItem);
 
     connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
     connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
@@ -226,14 +205,50 @@ void BluetoothApplet::updateView()
         contentHeight += m_appletName->height();
 
     if (itemCount <= 10) {
-        contentHeight += itemCount * ItemHeight;
+        contentHeight += itemCount * ITEMHEIGHT;
         m_centralWidget->setFixedHeight(contentHeight);
         setFixedHeight(contentHeight);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     } else {
-        contentHeight += itemCount * ItemHeight;
+        contentHeight += itemCount * ITEMHEIGHT;
         m_centralWidget->setFixedHeight(contentHeight);
-        setFixedHeight(10 * ItemHeight);
+        setFixedHeight(10 * ITEMHEIGHT);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
+}
+
+void BluetoothApplet::getDevieInitState(AdapterItem *item)
+{
+    if (!item)
+        return;
+
+    Device::State deviceState = item->initDeviceState();
+    Device::State otherDeviceState = Device::StateUnavailable;
+    for (auto adapterItem : m_adapterItems) {
+        if (adapterItem != item) {
+            if (Device::StateAvailable == adapterItem->currentDeviceState()) {
+                otherDeviceState = Device::StateAvailable;
+                continue;
+            }
+            if (Device::StateConnected == adapterItem->currentDeviceState()) {
+                otherDeviceState = Device::StateConnected;
+                break;
+            }
+        }
+    }
+    switch (deviceState) {
+    case Device::StateConnected:
+        emit deviceStateChanged(deviceState);
+        break;
+    case Device::StateUnavailable:
+        emit deviceStateChanged(otherDeviceState);
+        break;
+    case Device::StateAvailable: {
+        if (otherDeviceState != Device::StateConnected)
+            emit deviceStateChanged(deviceState);
+        else
+            emit deviceStateChanged(otherDeviceState);
+    }
+        break;
     }
 }

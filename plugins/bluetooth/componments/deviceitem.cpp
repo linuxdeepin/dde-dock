@@ -21,6 +21,8 @@
  */
 
 #include "deviceitem.h"
+#include "constants.h"
+#include "bluetoothconstants.h"
 
 #include <DApplicationHelper>
 #include <DStyle>
@@ -30,9 +32,6 @@
 
 DGUI_USE_NAMESPACE
 
-extern const int ItemHeight = 30;
-const QString LightSuffix = "_dark.svg";
-const QString DarkSuffix = ".svg";
 extern void initFontColor(QWidget *widget);
 
 DeviceItem::DeviceItem(const QString &title, QWidget *parent)
@@ -42,25 +41,19 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     , m_loadingStat(new DSpinner)
     , m_line(new HorizontalSeparator(this))
 {
-    setFixedHeight(ItemHeight);
+    setFixedHeight(ITEMHEIGHT);
     auto themeChanged = [&](DApplicationHelper::ColorType themeType){
         switch (themeType) {
         case DApplicationHelper::UnknownType:
-        case DApplicationHelper::LightType:  m_statSuffix = LightSuffix; break;
-        case DApplicationHelper::DarkType:  m_statSuffix = DarkSuffix; break;
+        case DApplicationHelper::LightType:  m_statSuffix = LIGHTSUFFIX; break;
+        case DApplicationHelper::DarkType:  m_statSuffix = DARKSUFFIX; break;
         }
         m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
     };
 
     themeChanged(DApplicationHelper::instance()->themeType());
 
-    auto strTitle = title;
-    m_title->setText(strTitle);
-    QFontMetrics fontMetrics(m_title->font());
-    if(fontMetrics.width(strTitle) > m_title->width())
-    {
-        strTitle = QFontMetrics(m_title->font()).elidedText(strTitle, Qt::ElideRight, m_title->width());
-    }
+    QString strTitle = QFontMetrics(m_title->font()).elidedText(title, Qt::ElideRight, POPUPWIDTH - MARGIN * 2 - PLUGIN_ICON_MIN_SIZE - 3);
     m_title->setText(strTitle);
     initFontColor(m_title);
 
@@ -76,12 +69,12 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     auto itemLayout = new QHBoxLayout(this);
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
-    itemLayout->addSpacing(12);
+    itemLayout->addSpacing(MARGIN);
     itemLayout->addWidget(m_title);
     itemLayout->addStretch();
     itemLayout->addWidget(m_state);
     itemLayout->addWidget(m_loadingStat);
-    itemLayout->addSpacing(12);
+    itemLayout->addSpacing(MARGIN);
     deviceLayout->addLayout(itemLayout);
     setLayout(deviceLayout);
 

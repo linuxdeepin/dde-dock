@@ -21,10 +21,11 @@
  */
 
 #include "switchitem.h"
+#include "bluetoothconstants.h"
+#include "bluetoothconstants.h"
 
 #include "QHBoxLayout"
 
-extern const int ControlHeight = 35;
 extern void initFontColor(QWidget *widget);
 
 SwitchItem::SwitchItem(QWidget *parent)
@@ -35,15 +36,15 @@ SwitchItem::SwitchItem(QWidget *parent)
 {
     initFontColor(m_title);
 
-    setFixedHeight(ControlHeight);
+    setFixedHeight(CONTROLHEIGHT);
     auto switchLayout = new QHBoxLayout(this);
     switchLayout->setSpacing(0);
     switchLayout->setMargin(0);
-    switchLayout->addSpacing(12);
+    switchLayout->addSpacing(MARGIN);
     switchLayout->addWidget(m_title);
     switchLayout->addStretch();
     switchLayout->addWidget(m_switchBtn);
-    switchLayout->addSpacing(12);
+    switchLayout->addSpacing(MARGIN);
     setLayout(switchLayout);
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {

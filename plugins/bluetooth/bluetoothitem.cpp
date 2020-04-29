@@ -47,8 +47,6 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     m_applet->setVisible(false);
     m_adapterPowered = m_applet->poweredInitState();
 
-    m_devState = m_applet->initDeviceState();
-
     connect(m_timer, &QTimer::timeout, this, &BluetoothItem::refreshIcon);
     connect(m_applet, &BluetoothApplet::powerChanged, [&](bool powered) {
         m_adapterPowered = powered;

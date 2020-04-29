@@ -25,12 +25,10 @@
 #include "deviceitem.h"
 #include "adapter.h"
 #include "adaptersmanager.h"
+#include "bluetoothconstants.h"
 
 #include <DDBusSender>
 
-extern const int ItemHeight;
-extern const int ControlHeight;
-const int Width = 200;
 extern void initFontColor(QWidget *widget);
 
 AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWidget *parent)
@@ -43,13 +41,13 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     , m_adapter(adapter)
     , m_switchItem(new SwitchItem(this))
 {
-    m_centralWidget->setFixedWidth(Width);
+    m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_line->setVisible(true);
     m_deviceLayout->setMargin(0);
     m_deviceLayout->setSpacing(0);
     m_openControlCenter->setText(tr("Bluetooth settings"));
     initFontColor(m_openControlCenter);
-    m_openControlCenter->setFixedHeight(ItemHeight);
+    m_openControlCenter->setFixedHeight(ITEMHEIGHT);
     m_openControlCenter->setVisible(false);
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered());
@@ -57,11 +55,11 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
     m_deviceLayout->addWidget(m_openControlCenter);
-    m_centralWidget->setFixedWidth(Width);
+    m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     m_centralWidget->setLayout(m_deviceLayout);
 
-    setFixedWidth(Width);
+    setFixedWidth(POPUPWIDTH);
     setWidget(m_centralWidget);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -126,7 +124,7 @@ bool AdapterItem::isPowered()
 
 int AdapterItem::viewHeight()
 {
-    return m_openControlCenter->isVisible() ? ControlHeight + ItemHeight : ControlHeight;
+    return m_openControlCenter->isVisible() ? CONTROLHEIGHT + ITEMHEIGHT : CONTROLHEIGHT;
 }
 
 void AdapterItem::deviceItemPaired(const bool paired)
@@ -223,10 +221,9 @@ void AdapterItem::deviceChangeState(const Device::State state)
                 break;
             }
         }
+        m_currentDeviceState = state;
+        emit deviceStateChanged(state);
     }
-
-    m_currentDeviceState = state;
-    emit deviceStateChanged(state);
 }
 
 void AdapterItem::moveDeviceItem(Device::State state, DeviceItem *item)
@@ -275,7 +272,7 @@ void AdapterItem::createDeviceItem(Device *device)
 void AdapterItem::updateView()
 {
     auto contentHeight = m_switchItem->height();
-    contentHeight += (m_deviceLayout->count() - 3) * ItemHeight;
+    contentHeight += (m_deviceLayout->count() - 3) * ITEMHEIGHT;
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(contentHeight);
     emit sizeChange();
