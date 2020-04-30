@@ -34,6 +34,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     : AbstractTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
+    , m_open(false)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_popupTipsDelayTimer(new QTimer(this))
@@ -249,7 +250,11 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
 
     event->accept();
 
-    showPopupApplet(trayPopupApplet());
+    if (!m_open) {
+        showPopupApplet(trayPopupApplet());
+        m_open = true;
+    } else
+        m_open = false;
 
     if (!trayClickCommand().isEmpty()) {
         QProcess::startDetached(trayClickCommand());
@@ -331,6 +336,13 @@ void SystemTrayItem::popupWindowAccept()
     disconnect(PopupWindow.data(), &DockPopupWindow::accept, this, &SystemTrayItem::popupWindowAccept);
 
     hidePopup();
+
+    QWidget *item = m_pluginInter->itemWidget(m_itemKey);
+    Q_ASSERT(item);
+    QPoint point = item->mapFromGlobal(QCursor::pos());
+    if (!item->rect().contains(point)) {
+        m_open = false;
+    }
 }
 
 void SystemTrayItem::showPopupApplet(QWidget *const applet)
