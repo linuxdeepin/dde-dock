@@ -424,6 +424,12 @@ void DockSettings::primaryScreenChanged()
     m_screenRawHeight = m_displayInter->screenRawHeight();
     m_screenRawWidth = m_displayInter->screenRawWidth();
 
+    //为了防止当后端发送错误值，然后发送正确值时，任务栏没有移动在相应的位置
+    //当ｑｔ没有获取到屏幕资源时候，move函数会失效。可以直接return
+    if (m_screenRawHeight == 0 || m_screenRawWidth == 0){
+        return;
+    }
+
     updateForbidPostions();
     emit dataChanged();
     calculateWindowConfig();

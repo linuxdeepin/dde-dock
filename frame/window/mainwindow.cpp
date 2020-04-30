@@ -613,6 +613,13 @@ void MainWindow::updatePosition()
 void MainWindow::updateGeometry()
 {
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
+
+    //为了防止当后端发送错误值，然后发送正确值时，任务栏没有移动在相应的位置
+    //当ｑｔ没有获取到屏幕资源时候，move函数会失效。可以直接return
+    if(m_settings->primaryRect().width() ==0 || m_settings->primaryRect().height() == 0){
+        return;
+    }
+
     setStrutPartial();
 
     m_mainPanel->setDisplayMode(m_settings->displayMode());
