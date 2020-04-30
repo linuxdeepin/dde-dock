@@ -139,6 +139,25 @@ void AppSnapshot::fetchSnapshot()
     XImage *ximage = nullptr;
     unsigned char *prop_to_return_gtk = nullptr;
 
+    // xcb_window_t activeWindow = KWindowSystem::activeWindow();
+     // if KWin is available, use the KWin DBus interfaces
+     if (isKWinAvailable()) {
+         QDBusConnection bus = QDBusConnection::sessionBus();
+          auto  reuslt =  bus.connect(QStringLiteral("org.kde.KWin"),
+                     QStringLiteral("/Screenshot"),
+                     QStringLiteral("org.kde.kwin.Screenshot"),
+                     QStringLiteral("screenshotCreated"),
+                     this, SLOT(KWinDBusScreenshotHelper(quint64)));
+
+
+
+         QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
+         qDebug() << "windowsID:"<< m_itemEntryInter->currentWindow()<<reuslt;
+
+         interface.call(QStringLiteral("screenshotForWindow"), (quint64)m_itemEntryInter->currentWindow());
+         return;
+     }
+
     do {
         // get window image from shm(only for deepin app)
         info = getImageDSHM();
@@ -228,6 +247,7 @@ bool AppSnapshot::isKWinAvailable()
 
 void AppSnapshot::KWinDBusScreenshotHelper(quint64 pixmapId)
 {
+    qDebug() <<"============================================KWinDBusScreenshotHelper";
     // obtain width and height and grab an image (x and y are always zero for pixmaps)
     QRect pixrect = getDrawableGeometry((xcb_drawable_t)pixmapId);
     QPixmap mPixmap = getPixmapFromDrawable((xcb_drawable_t)pixmapId, pixrect);
@@ -235,7 +255,6 @@ void AppSnapshot::KWinDBusScreenshotHelper(quint64 pixmapId)
     if (!mPixmap.isNull()) {
         m_snapshotSrcRect = pixrect;
         m_snapshot = mPixmap.toImage();
-        return;
     }
 
     QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());

@@ -102,7 +102,6 @@ private:
         }
     };
 
-
 private:
     const WId m_wid;
     WindowInfo m_windowInfo;
