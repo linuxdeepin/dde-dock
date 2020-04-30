@@ -7,5 +7,6 @@
 #define LIGHTSUFFIX ("_dark.svg")
 #define DARKSUFFIX (".svg")
 #define MARGIN (12)
+#define SWITCHBUTTONWIDTH (50)
 
 #endif // BLUETOOTHCONSTANTS_H

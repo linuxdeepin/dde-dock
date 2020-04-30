@@ -24,7 +24,8 @@
 #include "bluetoothconstants.h"
 #include "bluetoothconstants.h"
 
-#include "QHBoxLayout"
+#include <QHBoxLayout>
+#include <QFontMetrics>
 
 extern void initFontColor(QWidget *widget);
 
@@ -35,6 +36,8 @@ SwitchItem::SwitchItem(QWidget *parent)
     , m_default(false)
 {
     initFontColor(m_title);
+
+    m_switchBtn->setFixedWidth(SWITCHBUTTONWIDTH);
 
     setFixedHeight(CONTROLHEIGHT);
     auto switchLayout = new QHBoxLayout(this);
@@ -61,7 +64,9 @@ void SwitchItem::setChecked(const bool checked)
 
 void SwitchItem::setTitle(const QString &title)
 {
-    m_title->setText(title);
+    int width = POPUPWIDTH - MARGIN * 2 - m_switchBtn->width() - 3;
+    QString strTitle = QFontMetrics(m_title->font()).elidedText(title, Qt::ElideRight, width);
+    m_title->setText(strTitle);
 }
 
 //void SwitchItem::mousePressEvent(QMouseEvent *event)
