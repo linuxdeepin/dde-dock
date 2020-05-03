@@ -51,14 +51,13 @@ struct SHMInfo {
     } rect;
 };
 
-AppSnapshot::AppSnapshot(const WId wid, const QDBusObjectPath &entry,QWidget *parent)
+AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
     , m_title(new TipsWidget)
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DImageButton)
     , m_wmHelper(DWindowManagerHelper::instance())
-    , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
 {
     m_closeBtn2D->setFixedSize(24, 24);
     m_closeBtn2D->setObjectName("Btn_closebutton-2d");
@@ -140,78 +139,52 @@ void AppSnapshot::fetchSnapshot()
     unsigned char *prop_to_return_gtk = nullptr;
 
     // xcb_window_t activeWindow = KWindowSystem::activeWindow();
-     // if KWin is available, use the KWin DBus interfaces
-     if (isKWinAvailable()) {
-         QDBusConnection bus = QDBusConnection::sessionBus();
-          auto  reuslt =  bus.connect(QStringLiteral("org.kde.KWin"),
-                     QStringLiteral("/Screenshot"),
-                     QStringLiteral("org.kde.kwin.Screenshot"),
-                     QStringLiteral("screenshotCreated"),
-                     this, SLOT(KWinDBusScreenshotHelper(quint64)));
-
-
-
-         QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
-         qDebug() << "windowsID:"<< m_itemEntryInter->currentWindow()<<reuslt;
-
-         interface.call(QStringLiteral("screenshotForWindow"), (quint64)m_itemEntryInter->currentWindow());
-         return;
-     }
-
-    do {
-        // get window image from shm(only for deepin app)
-        info = getImageDSHM();
-        if (info) {
-            qDebug() << "get Image from dxcbplugin SHM...";
-            //qDebug() << info->shmid << info->width << info->height << info->bytesPerLine << info->format << info->rect.x << info->rect.y << info->rect.width << info->rect.height;
-            image_data = (uchar *)shmat(info->shmid, 0, 0);
-            if ((qint64)image_data != -1) {
-                m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
-                m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
-                break;
-            }
-            qDebug() << "invalid pointer of shm!";
-            image_data = nullptr;
-        }
-
-        if (!image_data || qimage.isNull()) {
-            // get window image from XGetImage(a little slow)
-            qDebug() << "get Image from dxcbplugin SHM failed!";
-            qDebug() << "get Image from Xlib...";
-            ximage = getImageXlib();
-            if (!ximage) {
-                qDebug() << "get Image from Xlib failed! giving up...";
-                emit requestCheckWindow();
-                return;
-            }
-            qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
-        }
-
-        Q_ASSERT(!qimage.isNull());
-
-        // remove shadow frame
-        m_snapshotSrcRect = rectRemovedShadow(qimage, prop_to_return_gtk);
-        m_snapshot = qimage;
-    } while (false);
-
-
-   // xcb_window_t activeWindow = KWindowSystem::activeWindow();
     // if KWin is available, use the KWin DBus interfaces
-    if (isKWinAvailable()) {
-        QDBusConnection bus = QDBusConnection::sessionBus();
-        bus.connect(QStringLiteral("org.kde.KWin"),
-                    QStringLiteral("/Screenshot"),
-                    QStringLiteral("org.kde.kwin.Screenshot"),
-                    QStringLiteral("screenshotCreated"),
-                    this, SLOT(KWinDBusScreenshotHelper(quint64)));
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    if (isKWinAvailable() && env.value("QT_QPA_PLATFORM").contains("wayland")) {
         QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
+        qDebug() << "windowsID:"<< m_wid;
 
+        QDBusReply<QString> reply = interface.call(QStringLiteral("screenshotForWindowExtend"), m_wid);
+        if (reply.isValid()) {
+            m_snapshot = QImage(reply.value());
+        }
+    } else {
+        do {
+            // get window image from shm(only for deepin app)
+            info = getImageDSHM();
+            if (info) {
+                qDebug() << "get Image from dxcbplugin SHM...";
+                //qDebug() << info->shmid << info->width << info->height << info->bytesPerLine << info->format << info->rect.x << info->rect.y << info->rect.width << info->rect.height;
+                image_data = (uchar *)shmat(info->shmid, 0, 0);
+                if ((qint64)image_data != -1) {
+                    m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
+                    m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
+                    break;
+                }
+                qDebug() << "invalid pointer of shm!";
+                image_data = nullptr;
+            }
 
-        //interface.call(QStringLiteral("screenshotForWindow"), (quint64)activeWindow);
+            if (!image_data || qimage.isNull()) {
+                // get window image from XGetImage(a little slow)
+                qDebug() << "get Image from dxcbplugin SHM failed!";
+                qDebug() << "get Image from Xlib...";
+                ximage = getImageXlib();
+                if (!ximage) {
+                    qDebug() << "get Image from Xlib failed! giving up...";
+                    emit requestCheckWindow();
+                    return;
+                }
+                qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+            }
 
-        m_snapshotSrcRect = rectRemovedShadow(qimage, prop_to_return_gtk);
-        m_snapshot = qimage;
-        return;
+            Q_ASSERT(!qimage.isNull());
+
+            // remove shadow frame
+            m_snapshotSrcRect = rectRemovedShadow(qimage, prop_to_return_gtk);
+            m_snapshot = qimage;
+        } while (false);
     }
 
     QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());
@@ -244,133 +217,6 @@ bool AppSnapshot::isKWinAvailable()
     }
     return false;
 }
-
-void AppSnapshot::KWinDBusScreenshotHelper(quint64 pixmapId)
-{
-    qDebug() <<"============================================KWinDBusScreenshotHelper";
-    // obtain width and height and grab an image (x and y are always zero for pixmaps)
-    QRect pixrect = getDrawableGeometry((xcb_drawable_t)pixmapId);
-    QPixmap mPixmap = getPixmapFromDrawable((xcb_drawable_t)pixmapId, pixrect);
-
-    if (!mPixmap.isNull()) {
-        m_snapshotSrcRect = pixrect;
-        m_snapshot = mPixmap.toImage();
-    }
-
-    QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());
-    const auto ratio = devicePixelRatioF();
-    size = m_snapshotSrcRect.size().scaled(size * ratio, Qt::KeepAspectRatio);
-    qreal scale = qreal(size.width()) / m_snapshotSrcRect.width();
-    m_snapshot = m_snapshot.scaled(qRound(m_snapshot.width() * scale), qRound(m_snapshot.height() * scale),
-                                   Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    m_snapshotSrcRect.moveTop(m_snapshotSrcRect.top() * scale + 0.5);
-    m_snapshotSrcRect.moveLeft(m_snapshotSrcRect.left() * scale + 0.5);
-    m_snapshotSrcRect.setWidth(size.width() - 0.5);
-    m_snapshotSrcRect.setHeight(size.height() - 0.5);
-    m_snapshot.setDevicePixelRatio(ratio);
-
-    update();
-
-    // Cannot retrieve pixmap from KWin, just fallback to fullscreen capture. We
-    // could try to detect the original action (window under cursor or active
-    // window), but that is too complex for this edge case.
-}
-
-QRect AppSnapshot::getDrawableGeometry(xcb_drawable_t drawable)
-{
-    xcb_connection_t *xcbConn = QX11Info::connection();
-
-    xcb_get_geometry_cookie_t geomCookie = xcb_get_geometry_unchecked(xcbConn, drawable);
-    CScopedPointer<xcb_get_geometry_reply_t> geomReply(xcb_get_geometry_reply(xcbConn, geomCookie, NULL));
-
-    if (geomReply.isNull()) {
-        return QRect();
-    }
-    return QRect(geomReply->x, geomReply->y, geomReply->width, geomReply->height);
-}
-
-QPixmap AppSnapshot::getPixmapFromDrawable(xcb_drawable_t drawableId, const QRect &rect)
- {
-     xcb_connection_t *xcbConn = QX11Info::connection();
-
-     // proceed to get an image based on the geometry (in device pixels)
-
-     QScopedPointer<xcb_image_t, ScopedPointerXcbImageDeleter> xcbImage(
-         xcb_image_get(
-             xcbConn,
-             drawableId,
-             rect.x(),
-             rect.y(),
-             rect.width(),
-             rect.height(),
-             ~0,
-             XCB_IMAGE_FORMAT_Z_PIXMAP
-         )
-     );
-
-     // too bad, the capture failed.
-     if (xcbImage.isNull()) {
-         return QPixmap();
-     }
-
-     // now process the image
-
-     QPixmap nativePixmap = convertFromNative(xcbImage.data());
-     return nativePixmap;
- }
-
-
-QPixmap AppSnapshot::convertFromNative(xcb_image_t *xcbImage)
-{
-    QImage::Format format = QImage::Format_Invalid;
-
-    switch (xcbImage->depth) {
-    case 1:
-        format = QImage::Format_MonoLSB;
-        break;
-    case 16:
-        format = QImage::Format_RGB16;
-        break;
-    case 24:
-        format = QImage::Format_RGB32;
-        break;
-    case 30:
-        format = QImage::Format_BGR30;
-        break;
-    case 32:
-        format = QImage::Format_ARGB32_Premultiplied;
-        break;
-    default:
-        return QPixmap(); // we don't know
-    }
-
-    // The RGB32 format requires data format 0xffRRGGBB, ensure that this fourth byte really is 0xff
-    if (format == QImage::Format_RGB32) {
-        quint32 *data = reinterpret_cast<quint32 *>(xcbImage->data);
-        for (int i = 0; i < xcbImage->width * xcbImage->height; i++) {
-            data[i] |= 0xff000000;
-        }
-    }
-
-    QImage image(xcbImage->data, xcbImage->width, xcbImage->height, format);
-
-    if (image.isNull()) {
-        return QPixmap();
-    }
-
-    // work around an abort in QImage::color
-
-    if (image.format() == QImage::Format_MonoLSB) {
-        image.setColorCount(2);
-        image.setColor(0, QColor(Qt::white).rgb());
-        image.setColor(1, QColor(Qt::black).rgb());
-    }
-
-    // Image is ready. Since the backing data from xcbImage could be freed
-    // before the QPixmap goes away, a deep copy is necessary.
-    return QPixmap::fromImage(image).copy();
-}
-
 
 void AppSnapshot::enterEvent(QEvent *e)
 {
@@ -452,7 +298,7 @@ SHMInfo *AppSnapshot::getImageDSHM()
 {
     const auto display = QX11Info::display();
 
-    Atom atom_prop = 0;
+    Atom atom_prop = XInternAtom(display, "_DEEPIN_DXCB_SHM_INFO", true);
     if (!atom_prop) {
         return nullptr;
     }
@@ -474,14 +320,12 @@ SHMInfo *AppSnapshot::getImageDSHM()
 
 XImage *AppSnapshot::getImageXlib()
 {
-//    const auto display = QX11Info::display();
-//    Window unused_window;
-//    int unused_int;
-//    unsigned unused_uint, w, h;
-//    XGetGeometry(display, m_wid, &unused_window, &unused_int, &unused_int, &w, &h, &unused_uint, &unused_uint);
-//    return XGetImage(display, m_wid, 0, 0, w, h, AllPlanes, ZPixmap);
-
-    return nullptr;
+    const auto display = QX11Info::display();
+    Window unused_window;
+    int unused_int;
+    unsigned unused_uint, w, h;
+    XGetGeometry(display, m_wid, &unused_window, &unused_int, &unused_int, &w, &h, &unused_uint, &unused_uint);
+    return XGetImage(display, m_wid, 0, 0, w, h, AllPlanes, ZPixmap);
 }
 
 QRect AppSnapshot::rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk)

@@ -67,12 +67,11 @@ static QGSettings *GSettingsByDockApp()
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent),
       m_appNameTips(new TipsWidget(this)),
-      m_appPreviewTips(new PreviewContainer( entry,nullptr)),
+      m_appPreviewTips(new PreviewContainer(nullptr)),
       m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this)),
 
       m_swingEffectView(nullptr),
       m_itemAnimation(nullptr),
-      m_entry (entry),
       m_wmHelper(DWindowManagerHelper::instance()),
 
       m_drag(nullptr),
@@ -627,7 +626,7 @@ void AppItem::showPreview()
     if (m_windowInfos.isEmpty())
         return;
 
-    m_appPreviewTips = PreviewWindow(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value(), DockPosition,m_entry);
+    m_appPreviewTips = PreviewWindow(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value(), DockPosition);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
