@@ -116,6 +116,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 
 int main(int argc, char *argv[])
 {
+    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication app(argc, argv);
 
