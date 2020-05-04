@@ -42,6 +42,7 @@
 #define SessionManagerService "com.deepin.SessionManager"
 #define SessionManagerPath "/com/deepin/SessionManager"
 
+#define WINDOWS_DOCK 0x00000081
 #define MAINWINDOW_MAX_SIZE       DOCK_MAX_SIZE
 #define MAINWINDOW_MIN_SIZE       (40)
 #define DRAG_AREA_SIZE (5)
@@ -151,7 +152,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_sessionManagerInter(new SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
-    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window);
+    Qt::WindowFlags flags = Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window | (Qt::WindowFlags)WINDOWS_DOCK;
+    setWindowFlags(windowFlags() | flags);
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(true);
     setAcceptDrops(true);
