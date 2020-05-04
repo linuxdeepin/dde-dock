@@ -141,13 +141,17 @@ void AppSnapshot::fetchSnapshot()
     // xcb_window_t activeWindow = KWindowSystem::activeWindow();
     // if KWin is available, use the KWin DBus interfaces
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    if (isKWinAvailable() && env.value("QT_QPA_PLATFORM").contains("wayland")) {
+    if (isKWinAvailable() && env.value("XDG_SESSION_TYPE").contains("wayland")) {
         QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
         qDebug() << "windowsID:"<< m_wid;
 
         QDBusReply<QString> reply = interface.call(QStringLiteral("screenshotForWindowExtend"), m_wid);
         if (reply.isValid()) {
-            m_snapshot = QImage(reply.value());
+            m_snapshot.load(reply.value());
+            m_snapshotSrcRect = m_snapshot.rect();
+
+            QFile file(reply.value());
+            file.remove(reply.value());
         }
     } else {
         do {
