@@ -54,7 +54,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     : QScrollArea(parent)
     , m_line(new HorizontalSeparator(this))
     , m_appletName(new QLabel(this))
-    , m_centralWidget(new QWidget(this))
+    , m_centralWidget(new QWidget)
     , m_centrealLayout(new QVBoxLayout)
     , m_adaptersManager(new AdaptersManager(this))
 {
@@ -118,10 +118,10 @@ void BluetoothApplet::onPowerChanged(bool state)
     Q_UNUSED(state)
     bool powerState = false;
     for (auto adapterItem : m_adapterItems) {
-         if (adapterItem->isPowered()) {
-             powerState = true;
-             break;
-         }
+        if (adapterItem->isPowered()) {
+            powerState = true;
+            break;
+        }
     }
     emit powerChanged(powerState);
 }
@@ -153,16 +153,16 @@ void BluetoothApplet::addAdapter(Adapter *adapter)
     }
 
     auto adapterId = adapter->id();
-    auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
-    m_adapterItems[adapterId] = adatpterItem;
-    m_centrealLayout->addWidget(adatpterItem);
-    getDevieInitState(adatpterItem);
+    auto adatpterItem = new AdapterItem(m_adaptersManager, adapter);
+//    m_adapterItems[adapterId] = adatpterItem;
+//    m_centrealLayout->addWidget(adatpterItem);
+//    getDevieInitState(adatpterItem);
 
-    connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
-    connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
-    connect(adatpterItem, &AdapterItem::sizeChange, this, &BluetoothApplet::updateView);
+//    connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
+//    connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
+//    connect(adatpterItem, &AdapterItem::sizeChange, this, &BluetoothApplet::updateView);
 
-    updateView();
+//    updateView();
 }
 
 void BluetoothApplet::removeAdapter(Adapter *adapter)
@@ -171,6 +171,7 @@ void BluetoothApplet::removeAdapter(Adapter *adapter)
         auto adapterId = adapter->id();
         auto adapterItem = m_adapterItems.value(adapterId);
         if (adapterItem) {
+            m_centrealLayout->removeWidget(adapterItem);
             delete  adapterItem;
             m_adapterItems.remove(adapterId);
             updateView();
@@ -204,17 +205,10 @@ void BluetoothApplet::updateView()
     if (adaptersCnt > 1)
         contentHeight += m_appletName->height();
 
-    if (itemCount <= 10) {
-        contentHeight += itemCount * ITEMHEIGHT;
-        m_centralWidget->setFixedHeight(contentHeight);
-        setFixedHeight(contentHeight);
-        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    } else {
-        contentHeight += itemCount * ITEMHEIGHT;
-        m_centralWidget->setFixedHeight(contentHeight);
-        setFixedHeight(10 * ITEMHEIGHT);
-        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    }
+    contentHeight += itemCount * ITEMHEIGHT;
+    m_centralWidget->setFixedHeight(contentHeight);
+    setFixedHeight(qMin(10,itemCount) * ITEMHEIGHT);
+    setVerticalScrollBarPolicy(itemCount <= 10 ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAlwaysOn);
 }
 
 void BluetoothApplet::getDevieInitState(AdapterItem *item)

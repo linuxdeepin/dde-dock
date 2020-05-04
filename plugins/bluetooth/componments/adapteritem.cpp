@@ -50,7 +50,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_openControlCenter->setFixedHeight(ITEMHEIGHT);
     m_openControlCenter->setVisible(false);
     m_switchItem->setTitle(adapter->name());
-    m_switchItem->setChecked(adapter->powered());
+    m_switchItem->setChecked(adapter->powered(),false);
 
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
@@ -93,7 +93,9 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     connect(adapter, &Adapter::nameChanged, m_switchItem, &SwitchItem::setTitle);
     connect(adapter, &Adapter::deviceAdded, this, &AdapterItem::addDeviceItem);
     connect(adapter, &Adapter::deviceRemoved, this, &AdapterItem::removeDeviceItem);
-    connect(adapter, &Adapter::poweredChanged, m_switchItem, &SwitchItem::setChecked);
+    connect(adapter, &Adapter::poweredChanged, m_switchItem, [=](const bool powered){
+        m_switchItem->setChecked(powered,false);
+    });
     connect(m_openControlCenter, &MenueItem::clicked, []{
         DDBusSender()
         .service("com.deepin.dde.ControlCenter")
@@ -114,7 +116,7 @@ int AdapterItem::deviceCount()
 
 void AdapterItem::setPowered(bool powered)
 {
-    m_switchItem->setChecked(powered);
+    m_switchItem->setChecked(powered,true);
 }
 
 bool AdapterItem::isPowered()

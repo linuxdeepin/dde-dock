@@ -62,11 +62,11 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     m_loadingStat->setFixedSize(20, 20);
     m_loadingStat->setVisible(false);
 
-    auto deviceLayout = new QVBoxLayout(this);
+    auto deviceLayout = new QVBoxLayout;
     deviceLayout->setMargin(0);
     deviceLayout->setSpacing(0);
     deviceLayout->addWidget(m_line);
-    auto itemLayout = new QHBoxLayout(this);
+    auto itemLayout = new QHBoxLayout;
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
     itemLayout->addSpacing(MARGIN);

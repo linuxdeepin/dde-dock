@@ -56,9 +56,18 @@ SwitchItem::SwitchItem(QWidget *parent)
     });
 }
 
-void SwitchItem::setChecked(const bool checked)
+void SwitchItem::setChecked(const bool checked,bool notify)
 {
-    m_switchBtn->setChecked(checked);
+    if(!notify)// 防止收到蓝牙开启或关闭信号后再触发一次打开或关闭
+    {
+        m_switchBtn->blockSignals(true);
+        m_switchBtn->setChecked(checked);
+        m_switchBtn->blockSignals(false);
+    }
+    else {
+        m_switchBtn->setChecked(checked);
+    }
+
     m_checkState = checked;
 }
 

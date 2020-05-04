@@ -34,19 +34,15 @@ class SwitchItem : public QWidget
     Q_OBJECT
 public:
     explicit SwitchItem(QWidget *parent = nullptr);
-    void setChecked(const bool checked = true);
+    void setChecked(const bool checked = true,bool notify = false);
     void setTitle(const QString &title);
     inline bool checkState() { return m_checkState; }
 
     inline bool isdefault() { return m_default; }
     inline void setDefault(bool def) { m_default = def; }
 
-//protected:
-//    void mousePressEvent(QMouseEvent *event) override;
-
 signals:
     void checkedChanged(bool checked);
-//    void clicked(const QString &adapterId);
 
 private:
     QLabel *m_title;
