@@ -49,9 +49,10 @@ func getApSecTypeFromConnData(data connectionData) (apSecType, error) {
 		return apSecNone, nil
 	}
 	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
+	authAlg := getSettingWirelessSecurityAuthAlg(data) 
 	switch keyMgmt {
 	case "none":
-		if "open" == getSettingWirelessSecurityAuthAlg(data) {
+		if authAlg == "open" || authAlg == "shared" {
 			return apSecWep, nil
 		}
 	case "wpa-psk":
