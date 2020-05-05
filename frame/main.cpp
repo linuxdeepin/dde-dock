@@ -104,6 +104,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname,ShutdownWidget);
     USE_ACCESSIBLE(classname,MultitaskingWidget);
 //    USE_ACCESSIBLE(classname,OverlayWarningWidget);
+
     return interface;
 }
 
