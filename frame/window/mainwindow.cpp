@@ -148,7 +148,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
-    setAccessibleName("dock-mainwindow");
+    setAccessibleName("mainwindow");
     m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(true);

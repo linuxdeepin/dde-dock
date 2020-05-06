@@ -73,7 +73,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_itemManager(DockItemManager::instance(this))
     , m_trashPluginShow(true)
 {
-    m_settingsMenu.setAccessibleName("dock-settingsmenu");
+    m_settingsMenu.setAccessibleName("settingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();

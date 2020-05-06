@@ -35,14 +35,13 @@
 #include "../plugins/sound/componments/volumeslider.h"
 #include "../plugins/sound/componments/horizontalseparator.h"
 
-//#include "../plugins/network/item/deviceitem.h" //TODO
 #include "../plugins/datetime/datetimewidget.h"
 #include "../plugins/onboard/onboarditem.h"
 #include "../plugins/trash/trashwidget.h"
 #include "../plugins/trash/popupcontrolwidget.h"
 #include "../plugins/shutdown/shutdownwidget.h"
 #include "../plugins/multitasking/multitaskingwidget.h"
-//#include "../plugins/overlay-warning/overlaywarningwidget.h"// TODO
+#include "../plugins/overlay-warning/overlaywarningwidget.h"
 
 #include <DImageButton>
 #include <DSwitchButton>
@@ -51,45 +50,47 @@
 DWIDGET_USE_NAMESPACE
 
 // 添加accessible
-SET_FORM_ACCESSIBLE(MainWindow,"mainwindow")
-SET_BUTTON_ACCESSIBLE_SHOWMENU(MainPanelControl,"mainpanelcontrol")
-SET_LABEL_ACCESSIBLE(TipsWidget,"Tips")
-SET_FORM_ACCESSIBLE(DockPopupWindow,"PopupWindow")
-SET_BUTTON_ACCESSIBLE(LauncherItem,"launcheritem")
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(AppItem,"AppItem")
-SET_BUTTON_ACCESSIBLE(PreviewContainer,"previewcontainer")
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(PluginsItem,m_w->pluginName())
-SET_BUTTON_ACCESSIBLE(TrayPluginItem,m_w->pluginName())
-SET_BUTTON_ACCESSIBLE(PlaceholderItem,"placeholderitem")
-SET_BUTTON_ACCESSIBLE(AppDragWidget,"appdragwidget")
-SET_BUTTON_ACCESSIBLE(AppSnapshot,"appsnapshot")
-SET_BUTTON_ACCESSIBLE(FloatingPreview,"floatingpreview")
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(XEmbedTrayWidget,m_w->itemKeyForConfig())
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(IndicatorTrayWidget,m_w->itemKeyForConfig())
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SNITrayWidget,m_w->itemKeyForConfig())
-SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SystemTrayItem,m_w->itemKeyForConfig())
-SET_FORM_ACCESSIBLE(FashionTrayItem,"fashiontrayitem")
-SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper,"fashiontraywrapper")
-SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget,"fashiontraycontrolwidget")
-SET_FORM_ACCESSIBLE(AttentionContainer,"attentioncontainer")
-SET_FORM_ACCESSIBLE(HoldContainer,"holdcontainer")
-SET_FORM_ACCESSIBLE(NormalContainer,"normalcontainer")
-SET_FORM_ACCESSIBLE(SpliterAnimated,"spliteranimated")
-SET_BUTTON_ACCESSIBLE(SoundItem,"plugin-sounditem")
-SET_FORM_ACCESSIBLE(SoundApplet,"soundapplet")
-SET_FORM_ACCESSIBLE(SinkInputWidget,"sinkinputwidget")
-SET_SLIDER_ACCESSIBLE(VolumeSlider,"volumeslider")
-SET_SEPARATOR_ACCESSIBLE(HorizontalSeparator,"horizontalseparator")
-SET_FORM_ACCESSIBLE(DatetimeWidget,"plugin-datetime")
-SET_FORM_ACCESSIBLE(OnboardItem,"plugin-onboard")
-SET_FORM_ACCESSIBLE(TrashWidget,"plugin-trash")
-SET_BUTTON_ACCESSIBLE(PopupControlWidget,"popupcontrolwidget")
-SET_FORM_ACCESSIBLE(ShutdownWidget,"plugin-shutdown")
-SET_FORM_ACCESSIBLE(MultitaskingWidget,"plugin-multitasking")
-SET_FORM_ACCESSIBLE(ShowDesktopWidget,"plugin-showdesktop")
-SET_BUTTON_ACCESSIBLE(QWidget,m_w->objectName())
-SET_BUTTON_ACCESSIBLE(DImageButton,m_w->objectName())
-SET_BUTTON_ACCESSIBLE(DSwitchButton,m_w->text())
+SET_FORM_ACCESSIBLE(MainWindow, "mainwindow")
+SET_BUTTON_ACCESSIBLE_SHOWMENU(MainPanelControl, "mainpanelcontrol")
+SET_LABEL_ACCESSIBLE(TipsWidget, "tips")
+SET_FORM_ACCESSIBLE(DockPopupWindow, "popupwindow")
+SET_BUTTON_ACCESSIBLE(LauncherItem, "launcheritem")
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(AppItem, "appitem")
+SET_BUTTON_ACCESSIBLE(PreviewContainer, "previewcontainer")
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(PluginsItem, m_w->pluginName())
+SET_BUTTON_ACCESSIBLE(TrayPluginItem, m_w->pluginName())
+SET_BUTTON_ACCESSIBLE(PlaceholderItem, "placeholderitem")
+SET_BUTTON_ACCESSIBLE(AppDragWidget, "appdragwidget")
+SET_BUTTON_ACCESSIBLE(AppSnapshot, "appsnapshot")
+SET_BUTTON_ACCESSIBLE(FloatingPreview, "floatingpreview")
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(XEmbedTrayWidget, m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(IndicatorTrayWidget, m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SNITrayWidget, m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(SystemTrayItem, m_w->itemKeyForConfig())
+SET_FORM_ACCESSIBLE(FashionTrayItem, "fashiontrayitem")
+SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper, "fashiontraywrapper")
+SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget, "fashiontraycontrolwidget")
+SET_FORM_ACCESSIBLE(AttentionContainer, "attentioncontainer")
+SET_FORM_ACCESSIBLE(HoldContainer, "holdcontainer")
+SET_FORM_ACCESSIBLE(NormalContainer, "normalcontainer")
+SET_FORM_ACCESSIBLE(SpliterAnimated, "spliteranimated")
+SET_BUTTON_ACCESSIBLE(SoundItem, "plugin-sounditem")
+SET_FORM_ACCESSIBLE(SoundApplet, "soundapplet")
+SET_FORM_ACCESSIBLE(SinkInputWidget, "sinkinputwidget")
+SET_SLIDER_ACCESSIBLE(VolumeSlider, "volumeslider")
+SET_SEPARATOR_ACCESSIBLE(HorizontalSeparator, "horizontalseparator")
+SET_FORM_ACCESSIBLE(DatetimeWidget, "plugin-datetime")
+SET_FORM_ACCESSIBLE(OnboardItem, "plugin-onboard")
+SET_FORM_ACCESSIBLE(TrashWidget, "plugin-trash")
+SET_BUTTON_ACCESSIBLE(PopupControlWidget, "popupcontrolwidget")
+SET_FORM_ACCESSIBLE(ShutdownWidget, "plugin-shutdown")
+SET_FORM_ACCESSIBLE(MultitaskingWidget, "plugin-multitasking")
+SET_FORM_ACCESSIBLE(ShowDesktopWidget, "plugin-showdesktop")
+SET_FORM_ACCESSIBLE(OverlayWarningWidget, "plugin-overlaywarningwidget")
+SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
+SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
+SET_BUTTON_ACCESSIBLE(DImageButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
+SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
@@ -131,8 +132,13 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, ShutdownWidget);
     USE_ACCESSIBLE(classname, MultitaskingWidget);
     USE_ACCESSIBLE(classname, ShowDesktopWidget);
-    //    USE_ACCESSIBLE(classname,OverlayWarningWidget);
+    USE_ACCESSIBLE(classname, OverlayWarningWidget);
     USE_ACCESSIBLE_BY_OBJECTNAME(classname, QWidget, "Btn_showdesktoparea");//TODO 点击坐标有偏差
+    USE_ACCESSIBLE(classname, QWidget);
+    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_fix");
+    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_app");
+    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_tray");
+    USE_ACCESSIBLE(classname, QLabel);
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-2d");
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-3d");
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
