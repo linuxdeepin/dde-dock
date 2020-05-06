@@ -38,13 +38,14 @@ class BluetoothItem : public QWidget
 public:
     explicit BluetoothItem(QWidget *parent = nullptr);
 
-//    QWidget *tipsWidget();
+    QWidget *tipsWidget();
     QWidget *popupApplet();
 
     const QString contextMenu() const;
     void invokeMenuItem(const QString menuId, const bool checked);
 
     void refreshIcon();
+    void refreshTips();
 
     bool hasAdapter();
 
@@ -58,7 +59,7 @@ signals:
     void justHasAdapter();
 
 private:
-//    TipsWidget *m_tipsLabel;
+    TipsWidget *m_tipsLabel;
     BluetoothApplet *m_applet;
     QPixmap m_iconPixmap;
 

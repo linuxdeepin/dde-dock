@@ -11,7 +11,7 @@
 <context>
     <name>AdapterItem</name>
     <message>
-        <source>My Device</source>
+        <source>Bluetooth settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -34,6 +34,18 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

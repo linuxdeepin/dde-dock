@@ -41,6 +41,7 @@ DGUI_USE_NAMESPACE
 
 BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
+    , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
     , m_timer(new QTimer(this))
 {
@@ -61,9 +62,11 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     connect(m_applet, SIGNAL(justHasAdapter()), this, SIGNAL(justHasAdapter()));
 }
 
-//QWidget *BluetoothItem::tipsWidget()
-//{
-//}
+QWidget *BluetoothItem::tipsWidget()
+{
+    refreshTips();
+    return m_tipsLabel;
+}
 
 QWidget *BluetoothItem::popupApplet()
 {
@@ -164,6 +167,39 @@ void BluetoothItem::refreshIcon()
 
     update();
 }
+
+void BluetoothItem::refreshTips()
+{
+    if (!m_applet)
+        return;
+
+    QString tipsText;
+
+    if (m_adapterPowered) {
+        switch (m_devState) {
+        case Device::StateConnected: {
+            QStringList textList;
+            for (QString devName : m_applet->connectedDevsName()) {
+                textList << tr("%1 connected").arg(devName);
+            }
+            m_tipsLabel->setTextList(textList);
+            return;
+        }
+        case Device::StateAvailable: {
+            tipsText = tr("Connecting...");
+            return ;
+        }
+        case Device::StateUnavailable: {
+            tipsText = tr("Bluetooth");
+        }      break;
+        }
+    } else {
+        tipsText = tr("Bluetooth");
+    }
+
+    m_tipsLabel->setText(tipsText);
+}
+
 
 bool BluetoothItem::hasAdapter()
 {

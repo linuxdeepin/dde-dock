@@ -41,6 +41,7 @@ public:
     void setAdapterPowered(bool powered);
     bool poweredInitState();
     bool hasAadapter();
+    QStringList connectedDevsName();
 
 public slots :
     void addAdapter(Adapter *adapter);

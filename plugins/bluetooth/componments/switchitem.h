@@ -42,6 +42,7 @@ public:
 
 signals:
     void checkedChanged(bool checked);
+    void justUpdateView(bool checked);
 
 private:
     QLabel *m_title;

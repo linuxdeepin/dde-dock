@@ -117,6 +117,17 @@ bool BluetoothApplet::hasAadapter()
     return m_adaptersManager->adaptersCount();
 }
 
+QStringList BluetoothApplet::connectedDevsName()
+{
+    QStringList devicesName;
+    for (AdapterItem *adapterItem : m_adapterItems) {
+        if (adapterItem) {
+            devicesName << adapterItem->connectedDevsName();
+        }
+    }
+    return devicesName;
+}
+
 void BluetoothApplet::onPowerChanged()
 {
     bool powerState = false;
@@ -210,7 +221,7 @@ void BluetoothApplet::updateView()
 
     contentHeight += itemCount * ITEMHEIGHT;
     m_centralWidget->setFixedHeight(contentHeight);
-    setFixedHeight(qMin(10,itemCount) * ITEMHEIGHT);
+    setFixedHeight(itemCount <= 10 ? contentHeight : 10 * ITEMHEIGHT);
     setVerticalScrollBarPolicy(itemCount <= 10 ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAlwaysOn);
 }
 

@@ -93,11 +93,15 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     }
 
     connect(m_switchItem, &SwitchItem::checkedChanged, this, &AdapterItem::showAndConnect);
+    connect(m_switchItem, &SwitchItem::justUpdateView, [&](bool checked){
+        showDevices(checked);
+        emit powerChanged(checked);
+    });
     connect(adapter, &Adapter::nameChanged, m_switchItem, &SwitchItem::setTitle);
     connect(adapter, &Adapter::deviceAdded, this, &AdapterItem::addDeviceItem);
     connect(adapter, &Adapter::deviceRemoved, this, &AdapterItem::removeDeviceItem);
     connect(adapter, &Adapter::poweredChanged, m_switchItem, [=](const bool powered){
-        m_switchItem->setChecked(powered,false);
+        m_switchItem->setChecked(powered, false);
     });
     connect(m_openControlCenter, &MenueItem::clicked, []{
         DDBusSender()
@@ -130,6 +134,18 @@ bool AdapterItem::isPowered()
 int AdapterItem::viewHeight()
 {
     return m_openControlCenter->isVisible() ? CONTROLHEIGHT + ITEMHEIGHT : CONTROLHEIGHT;
+}
+
+QStringList AdapterItem::connectedDevsName()
+{
+    QStringList devsName;
+    for (DeviceItem *devItem : m_sortConnected) {
+        if (devItem) {
+            devsName << devItem->title();
+        }
+    }
+
+    return devsName;
 }
 
 void AdapterItem::deviceItemPaired(const bool paired)

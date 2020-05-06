@@ -40,6 +40,7 @@ public:
     bool operator <(const DeviceItem &item);
 
     inline void setTitle(const QString &name) { m_title->setText(name); }
+    inline QString title() { return m_title->text(); }
 
     void setDevice(Device *device);
     inline Device *device() { return m_device; }

@@ -16,21 +16,45 @@ void TipsWidget::setText(const QString &text)
     update();
 }
 
-void TipsWidget::refreshFont()
+void TipsWidget::setTextList(const QStringList &textList)
 {
-    setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
+    m_textList = textList;
+
+    int maxLength = 0;
+    int k = fontMetrics().height() * m_textList.size();
+    setFixedHeight(k);
+    for (QString text : m_textList) {
+        int fontLength = fontMetrics().width(text) + 6;
+        maxLength = maxLength > fontLength ? maxLength : fontLength;
+    }
+    m_width = maxLength;
+    setFixedWidth(maxLength);
+
     update();
 }
 
 void TipsWidget::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
-    refreshFont();
 
     QPainter painter(this);
     painter.setPen(QPen(palette().brightText(), 1));
-
     QTextOption option;
+    int fontHeight = fontMetrics().height();
     option.setAlignment(Qt::AlignCenter);
-    painter.drawText(rect(), m_text, option);
+
+    if (!m_text.isEmpty() && m_textList.isEmpty()) {
+        painter.drawText(rect(), m_text, option);
+    }
+
+    int y = 0;
+    if (m_text.isEmpty() && !m_textList.isEmpty()) {
+        if (m_textList.size() != 1)
+            option.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        for (QString text : m_textList) {
+            painter.drawText(QRect(0, y, m_width, fontHeight), text, option);
+            y += fontHeight;
+        }
+    }
+
 }

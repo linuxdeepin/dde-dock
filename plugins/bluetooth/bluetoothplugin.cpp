@@ -85,14 +85,14 @@ QWidget *BluetoothPlugin::itemWidget(const QString &itemKey)
     return nullptr;
 }
 
-//QWidget *BluetoothPlugin::itemTipsWidget(const QString &itemKey)
-//{
-//    if (itemKey == BLUETOOTH_KEY) {
-//        return m_bluetoothItem->tipsWidget();
-//    }
+QWidget *BluetoothPlugin::itemTipsWidget(const QString &itemKey)
+{
+    if (itemKey == BLUETOOTH_KEY) {
+        return m_bluetoothItem->tipsWidget();
+    }
 
-//    return nullptr;
-//}
+    return nullptr;
+}
 
 QWidget *BluetoothPlugin::itemPopupApplet(const QString &itemKey)
 {
