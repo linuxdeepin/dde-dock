@@ -120,8 +120,8 @@ int main(int argc, char *argv[])
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication app(argc, argv);
 
-    // 锁定物理内存，用于国测测试
-    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
+    // 锁定物理内存，用于国测测试[会显著增加内存占用]
+//    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
