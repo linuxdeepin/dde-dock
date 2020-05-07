@@ -89,7 +89,6 @@ private:
 
 signals:
     void panelGeometryChanged();
-    void loaderPlugins();
 
 private slots:
     void positionChanged(const Position prevPos, const Position nextPos);
