@@ -375,8 +375,8 @@ void NetworkItem::refreshIcon()
     }
     case ConnectNoInternet:
     case AconnectNoInternet:
-        stateString = "offline";//待图标 暂用有线错误图标
-        iconString = QString("network-%1-symbolic").arg(stateString);
+        stateString = "offline";
+        iconString = QString("network-wireless-%1-symbolic").arg(stateString);
         break;
     case BconnectNoInternet:
         stateString = "offline";
