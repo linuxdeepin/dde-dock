@@ -43,7 +43,6 @@ public:
     int deviceCount();
     void setPowered(bool powered);
     bool isPowered();
-    int viewHeight();
     inline Device::State initDeviceState() { return  m_initDeviceState; }
     inline Device::State currentDeviceState() { return m_currentDeviceState; }
     QStringList connectedDevsName();
@@ -71,7 +70,6 @@ private:
     QWidget *m_centralWidget;
     HorizontalSeparator *m_line;
     QVBoxLayout *m_deviceLayout;
-    MenueItem *m_openControlCenter;
 
     AdaptersManager *m_adaptersManager;
 

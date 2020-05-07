@@ -30,6 +30,7 @@
 #include "componments/bluetoothconstants.h"
 
 #include <DApplicationHelper>
+#include <DDBusSender>
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -60,6 +61,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_appletName(new QLabel(this))
     , m_centralWidget(new QWidget)
     , m_centrealLayout(new QVBoxLayout)
+    , m_openControlCenter(new MenueItem(this))
     , m_adaptersManager(new AdaptersManager(this))
 {
     m_line->setVisible(false);
@@ -72,6 +74,11 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     initFontColor(m_appletName);
     m_appletName->setVisible(false);
 
+    m_openControlCenter->setText(tr("Bluetooth settings"));
+    initFontColor(m_openControlCenter);
+    m_openControlCenter->setFixedHeight(ITEMHEIGHT);
+    m_openControlCenter->setVisible(false);
+
     auto appletNameLayout = new QHBoxLayout;
     appletNameLayout->setMargin(0);
     appletNameLayout->setSpacing(0);
@@ -79,10 +86,19 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     appletNameLayout->addWidget(m_appletName);
     appletNameLayout->addStretch();
 
+    m_menueLayout = new QHBoxLayout;
+    m_menueLayout->setMargin(0);
+    m_menueLayout->setSpacing(0);
+    m_menueLayout->addSpacing(MARGIN);
+
+    m_adapterLayout = new QVBoxLayout;
+
     m_centrealLayout->setMargin(0);
     m_centrealLayout->setSpacing(0);
     m_centrealLayout->addLayout(appletNameLayout);
     m_centrealLayout->addWidget(m_line);
+    m_centrealLayout->addLayout(m_adapterLayout);
+    m_centrealLayout->addLayout(m_menueLayout);
     m_centralWidget->setLayout(m_centrealLayout);
     m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -97,6 +113,15 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 
     connect(m_adaptersManager, &AdaptersManager::adapterIncreased, this, &BluetoothApplet::addAdapter);
     connect(m_adaptersManager, &AdaptersManager::adapterDecreased, this, &BluetoothApplet::removeAdapter);
+    connect(m_openControlCenter, &MenueItem::clicked, []{
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowModule"))
+        .arg(QString("bluetooth"))
+        .call();
+    });
 }
 
 void BluetoothApplet::setAdapterPowered(bool powered)
@@ -155,6 +180,7 @@ void BluetoothApplet::onDeviceStateChanged()
     }
 
     emit deviceStateChanged(deviceState);
+    updateView();
 }
 
 void BluetoothApplet::addAdapter(Adapter *adapter)
@@ -169,7 +195,7 @@ void BluetoothApplet::addAdapter(Adapter *adapter)
     QString adapterId = adapter->id();
     auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
     m_adapterItems[adapterId] = adatpterItem;
-    m_centrealLayout->addWidget(adatpterItem);
+    m_adapterLayout->addWidget(adatpterItem);
     getDevieInitState(adatpterItem);
 
     connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
@@ -185,7 +211,7 @@ void BluetoothApplet::removeAdapter(Adapter *adapter)
         QString adapterId = adapter->id();
         AdapterItem *adapterItem = m_adapterItems.value(adapterId);
         if (adapterItem) {
-            m_centrealLayout->removeWidget(adapterItem);
+            m_adapterLayout->removeWidget(adapterItem);
             delete  adapterItem;
             m_adapterItems.remove(adapterId);
             updateView();
@@ -199,13 +225,23 @@ void BluetoothApplet::updateView()
 {
     int contentHeight = 0;
     int itemCount = 0;
+    bool isAdapterConnected = true;
     for (AdapterItem *adapterItem : m_adapterItems) {
         if (adapterItem) {
-            contentHeight += adapterItem->viewHeight();
+            contentHeight += CONTROLHEIGHT;
             if (adapterItem->isPowered())
                 itemCount += adapterItem->deviceCount();
+            if (adapterItem->connectedDevsName().size())
+                isAdapterConnected = false;
         }
     }
+
+    m_openControlCenter->setVisible(isAdapterConnected);
+    if (isAdapterConnected) {
+        m_menueLayout->addWidget(m_openControlCenter);
+        contentHeight += ITEMHEIGHT;
+    } else
+        m_menueLayout->removeWidget(m_openControlCenter);
 
     int adaptersCnt = m_adapterItems.size();
     if (adaptersCnt > 1) {

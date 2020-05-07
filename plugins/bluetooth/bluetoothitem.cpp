@@ -187,11 +187,12 @@ void BluetoothItem::refreshTips()
         }
         case Device::StateAvailable: {
             tipsText = tr("Connecting...");
-            return ;
         }
+            break ;
         case Device::StateUnavailable: {
             tipsText = tr("Bluetooth");
-        }      break;
+        }
+            break;
         }
     } else {
         tipsText = tr("Bluetooth");

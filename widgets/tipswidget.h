@@ -6,6 +6,11 @@
 class TipsWidget : public QFrame
 {
     Q_OBJECT
+    enum ShowType
+    {
+        SingleLine,
+        MultiLine
+    };
 public:
     explicit TipsWidget(QWidget *parent = nullptr);
 
@@ -21,6 +26,7 @@ private:
     QString m_text;
     QStringList m_textList;
     int m_width;
+    ShowType m_type;
 };
 
 #endif // TIPSWIDGET_H

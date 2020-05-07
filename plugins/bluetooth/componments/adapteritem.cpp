@@ -27,8 +27,6 @@
 #include "adaptersmanager.h"
 #include "bluetoothconstants.h"
 
-#include <DDBusSender>
-
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -39,7 +37,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     , m_centralWidget(new QWidget(this))
     , m_line(new HorizontalSeparator(this))
     , m_deviceLayout(new QVBoxLayout)
-    , m_openControlCenter(new MenueItem(this))
     , m_adaptersManager(adapterManager)
     , m_adapter(adapter)
     , m_switchItem(new SwitchItem(this))
@@ -48,16 +45,12 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_line->setVisible(true);
     m_deviceLayout->setMargin(0);
     m_deviceLayout->setSpacing(0);
-    m_openControlCenter->setText(tr("Bluetooth settings"));
-    initFontColor(m_openControlCenter);
-    m_openControlCenter->setFixedHeight(ITEMHEIGHT);
-    m_openControlCenter->setVisible(false);
+
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered(),false);
 
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
-    m_deviceLayout->addWidget(m_openControlCenter);
     m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     m_centralWidget->setLayout(m_deviceLayout);
@@ -103,15 +96,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     connect(adapter, &Adapter::poweredChanged, m_switchItem, [=](const bool powered){
         m_switchItem->setChecked(powered, false);
     });
-    connect(m_openControlCenter, &MenueItem::clicked, []{
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
-        .arg(QString("bluetooth"))
-        .call();
-    });
 
     showDevices(adapter->powered());
 }
@@ -129,11 +113,6 @@ void AdapterItem::setPowered(bool powered)
 bool AdapterItem::isPowered()
 {
     return m_switchItem->checkState();
-}
-
-int AdapterItem::viewHeight()
-{
-    return m_openControlCenter->isVisible() ? CONTROLHEIGHT + ITEMHEIGHT : CONTROLHEIGHT;
 }
 
 QStringList AdapterItem::connectedDevsName()
@@ -293,7 +272,7 @@ void AdapterItem::createDeviceItem(Device *device)
 void AdapterItem::updateView()
 {
     int contentHeight = m_switchItem->height();
-    contentHeight += (m_deviceLayout->count() - 3) * ITEMHEIGHT;
+    contentHeight += (m_deviceLayout->count() - 2) * ITEMHEIGHT;
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(contentHeight);
     emit sizeChange();
@@ -317,8 +296,6 @@ void AdapterItem::showDevices(bool powered)
         deviceItem->setVisible(powered);
     }
 
-    int itemCount = m_deviceItems.size();
     m_line->setVisible(powered);
-    m_openControlCenter->setVisible(!itemCount);
     updateView();
 }

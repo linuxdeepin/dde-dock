@@ -29,9 +29,11 @@
 
 class QLabel;
 class QVBoxLayout;
+class QHBoxLayout;
 class Adapter;
 class AdapterItem;
 class HorizontalSeparator;
+class MenueItem;
 class AdaptersManager;
 class BluetoothApplet : public QScrollArea
 {
@@ -66,6 +68,9 @@ private:
     QLabel *m_appletName;
     QWidget *m_centralWidget;
     QVBoxLayout *m_centrealLayout;
+    QVBoxLayout *m_adapterLayout;
+    QHBoxLayout *m_menueLayout;
+    MenueItem *m_openControlCenter;
 
     AdaptersManager *m_adaptersManager;
 
