@@ -162,7 +162,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Enlever du dock</translation>
+        <translation>Détacher du dock</translation>
     </message>
 </context>
 <context>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Chargé à %1</translation>
+        <translation type="vanished">Chargé à %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,7 +215,11 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Chargement de %1 en cours....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Chargé</translation>
     </message>
 </context>
 <context>

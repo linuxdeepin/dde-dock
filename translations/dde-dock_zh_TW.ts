@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 充電完成</translation>
+        <translation type="vanished">%1 充電完成</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,7 +215,11 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>電量%1...</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>充電完成</translation>
     </message>
 </context>
 <context>

@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>已充满%1</translation>
+        <translation type="vanished">已充满%1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -216,6 +216,10 @@
     <message>
         <source>Charging %1 ....</source>
         <translation>电量%1...</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>已充满</translation>
     </message>
 </context>
 <context>

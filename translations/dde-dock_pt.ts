@@ -17,7 +17,7 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Data e hora</translation>
+        <translation>Data hora</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Manter Oculta</translation>
+        <translation>Manter oculta</translation>
     </message>
     <message>
         <source>Smart Hide</source>
@@ -158,11 +158,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vista de Tarefas</translation>
+        <translation>Vista de tarefas</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da dock</translation>
+        <translation>Remover da doca</translation>
     </message>
 </context>
 <context>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Carregado %1</translation>
+        <translation type="vanished">Carregado %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,18 +215,22 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>A carregar %1 ....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Carregado</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostrar Ambiente de trabalho</translation>
+        <translation>Mostrar ambiente de trabalho</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da dock</translation>
+        <translation>Remover da doca</translation>
     </message>
 </context>
 <context>
@@ -361,7 +365,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Ligado, mas sem acesso à Internet</translation>
+        <translation>Ligado mas sem acesso à Internet</translation>
     </message>
 </context>
 <context>

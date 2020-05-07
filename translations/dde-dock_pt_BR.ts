@@ -10,7 +10,7 @@
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar Layout de Teclado</translation>
+        <translation>Adicionar o layout de teclado</translation>
     </message>
 </context>
 <context>
@@ -21,11 +21,11 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>12 Horas</translation>
+        <translation>Formato de 12 Horas</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>24 Horas</translation>
+        <translation>Formato de 24 Horas</translation>
     </message>
     <message>
         <source>Time Settings</source>
@@ -51,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Quer realmente limpar %1 itens?</translation>
+        <translation>Esvaziar %1 itens?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -81,7 +81,7 @@
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation>Disco</translation>
+        <translation>Dispositivos</translation>
     </message>
     <message>
         <source>Open</source>
@@ -195,27 +195,31 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>%1 carregado | %2m restantes</translation>
+        <translation>%1 Carregado - %2m restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>%1 carregado | %2h%3 restantes</translation>
+        <translation>%1 Carregado - %2h%3 restantes</translation>
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 carregado</translation>
+        <translation type="vanished">%1 Carregado</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Carregando %1  |  %2min até completar</translation>
+        <translation>Carregando %1 - %2m até completar</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Carregando %1  |  %2h%3min até completar</translation>
+        <translation>Carregando %1 - %2h%3 até completar</translation>
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Carregando %1...</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Carregado</translation>
     </message>
 </context>
 <context>

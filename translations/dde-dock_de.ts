@@ -203,19 +203,23 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 aufgeladen</translation>
+        <translation type="vanished">%1 aufgeladen</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Lade %1, %2 Min. bis geladen</translation>
+        <translation>%1 wird aufgeladen, %2 Min. bis vollständig geladen</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Lade %1, %2 Std. %3 Min. bis geladen</translation>
+        <translation>%1 wird aufgeladen, %2 Std. %3 Min. bis vollständig geladen</translation>
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>%1 wird aufgeladen ....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Aufgeladen</translation>
     </message>
 </context>
 <context>

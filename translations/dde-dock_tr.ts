@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 Şarj Oldu</translation>
+        <translation type="vanished">%1 Şarj oldu</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,7 +215,11 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>%1 Şarj oluyor...</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Şarj edildi</translation>
     </message>
 </context>
 <context>

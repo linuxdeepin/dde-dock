@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Přídavný modul %1 není slučitelný se systémem.</translation>
+        <translation>Zásuvný modul %1 není kompatibilní se systémem.</translation>
     </message>
 </context>
 <context>
@@ -17,7 +17,7 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Datum</translation>
+        <translation>Datum a čas</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
@@ -51,11 +51,11 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Opravdu chcete smazat %1 položek ?</translation>
+        <translation>Opravdu chcete %1 položek smazat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -74,7 +74,7 @@
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Neznámý obsah</translation>
+        <translation>Neznámý svazek</translation>
     </message>
 </context>
 <context>
@@ -96,7 +96,7 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Návykový režim</translation>
+        <translation>Módní režim</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -120,15 +120,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Ukázat vždy</translation>
+        <translation>Vždy zobrazeno</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Vždy skrýt</translation>
+        <translation>Vždy skryto</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Skrýt chytře</translation>
+        <translation>Chytré skrývání</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Přídavné moduly</translation>
+        <translation>Zásuvné moduly</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Virtuální klávesnice</translation>
+        <translation>Onboard</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Správa napájení</translation>
+        <translation>Nastavení správy napájení</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Nabito %1</translation>
+        <translation type="vanished">Nabito %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,14 +215,18 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjení %1…</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Nabito</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Ukázat pracovní plochu</translation>
+        <translation>Ukázat plochu</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -249,7 +253,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Hibernovat</translation>
+        <translation>Uspat na disk</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -265,7 +269,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Správa napájení</translation>
+        <translation>Nastavení správy napájení</translation>
     </message>
 </context>
 <context>
@@ -276,14 +280,14 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>Program</translation>
+        <translation>Aplikace</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Zhlasit</translation>
+        <translation>Zrušit ztlumení</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -295,7 +299,7 @@
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Hlasitost %1</translation>
+        <translation>Stávající hlasitost %1</translation>
     </message>
 </context>
 <context>
@@ -313,11 +317,11 @@
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation>Smazat %1 soubor</translation>
+        <translation>Koš – %1 soubor</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation>Smazat %1 souborů</translation>
+        <translation>Koš – %1 souborů</translation>
     </message>
 </context>
 <context>
@@ -361,7 +365,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Připojeno, ale bez přístupu k internetu</translation>
+        <translation>Připojeno, ale bez přístupu k Internetu</translation>
     </message>
 </context>
 <context>

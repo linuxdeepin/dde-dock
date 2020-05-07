@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Įkrauta %1</translation>
+        <translation type="vanished">Įkrauta %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,6 +215,10 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
+        <translation>Įkraunama %1....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
 </context>

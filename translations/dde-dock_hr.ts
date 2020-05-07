@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Napunjeno %1</translation>
+        <translation type="vanished">Napunjeno %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -216,6 +216,10 @@
     <message>
         <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Napunjeno</translation>
     </message>
 </context>
 <context>
