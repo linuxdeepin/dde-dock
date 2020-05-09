@@ -741,7 +741,9 @@ void MainWindow::expand()
     setVisible(true);
 
     if (m_panelHideAni->state() == QPropertyAnimation::Running)
+    {
         m_panelHideAni->stop();
+    }
 
     const auto showAniState = m_panelShowAni->state();
 
