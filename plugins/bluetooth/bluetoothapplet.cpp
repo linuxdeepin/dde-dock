@@ -196,7 +196,7 @@ void BluetoothApplet::addAdapter(Adapter *adapter)
     auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
     m_adapterItems[adapterId] = adatpterItem;
     m_adapterLayout->addWidget(adatpterItem);
-    getDevieInitState(adatpterItem);
+    getDevieInitStatus(adatpterItem);
 
     connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
     connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
@@ -261,10 +261,21 @@ void BluetoothApplet::updateView()
     setVerticalScrollBarPolicy(itemCount <= 10 ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAlwaysOn);
 }
 
-void BluetoothApplet::getDevieInitState(AdapterItem *item)
+void BluetoothApplet::getDevieInitStatus(AdapterItem *item)
 {
     if (!item)
         return;
+
+    bool powered = item->isPowered();
+    for (AdapterItem *adapterItem : m_adapterItems) {
+        if (adapterItem != item) {
+            if (adapterItem->isPowered()) {
+                powered = true;
+                break;
+            }
+        }
+    }
+    emit powerChanged(powered);
 
     Device::State deviceState = item->initDeviceState();
     Device::State otherDeviceState = Device::StateUnavailable;
@@ -280,6 +291,7 @@ void BluetoothApplet::getDevieInitState(AdapterItem *item)
             }
         }
     }
+
     switch (deviceState) {
     case Device::StateConnected:
         emit deviceStateChanged(deviceState);

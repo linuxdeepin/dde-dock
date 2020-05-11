@@ -61,7 +61,7 @@ private slots:
 
 private:
     void updateView();
-    void getDevieInitState(AdapterItem *item);
+    void getDevieInitStatus(AdapterItem *item);
 
 private:
     HorizontalSeparator *m_line;
