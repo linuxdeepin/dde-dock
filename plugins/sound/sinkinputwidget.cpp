@@ -28,9 +28,10 @@
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
 #include <DApplication>
+#include <DLabel>
 
 #define ICON_SIZE   24
-#define APP_TITLE_SIZE 150
+#define APP_TITLE_SIZE 110
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -56,8 +57,9 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_appBtn->setAccessibleName("app-" + iconName + "-icon");
     m_appBtn->setPixmap(getIconFromTheme(iconName, QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
-    TipsWidget *titleLabel = new TipsWidget;
-    titleLabel->setText(fontMetrics().elidedText(m_inputInter->name(), Qt::TextElideMode::ElideRight, APP_TITLE_SIZE));
+    DLabel *titleLabel = new DLabel;
+    titleLabel->setForegroundRole(DPalette::TextTitle);
+    titleLabel->setText(titleLabel->fontMetrics().elidedText(m_inputInter->name(), Qt::TextElideMode::ElideRight, APP_TITLE_SIZE));
 
     m_volumeBtnMin->setAccessibleName("volume-button");
     m_volumeBtnMin->setFixedSize(ICON_SIZE, ICON_SIZE);
