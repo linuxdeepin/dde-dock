@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>Disattiva</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>Attiva</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>Impostazioni Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -210,67 +181,67 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Connessione WiFi</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Connessione cablata</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Disattiva connessione cablata</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Attiva connessione cablata</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Disattiva connessione WiFi</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Attiva connessione WiFi</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Disabilita Rete</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Abilita Rete</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Impostazioni Rete</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Dispositivo disattivato</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Connessione WiFi: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Connessione cablata: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Non connesso</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Connessione in corso</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Connesso senza accesso ad internet</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Cavo di rete scollegato</translation>
     </message>
 </context>
 <context>
@@ -331,7 +302,7 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Carica %1 ...</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Sconosciuto</translation>
+        <translation>Sconosciuto</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Connessione cablata: %1</translation>
+        <translation>Connessione cablata: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Nessuna Rete</translation>
+        <translation>Nessuna Rete</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,11 +460,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Connesso senza accesso ad internet</translation>
+        <translation>Connesso senza accesso ad internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="vanished">Connessione WiFi: %1</translation>
+        <translation>Connessione WiFi: %1</translation>
     </message>
 </context>
 <context>

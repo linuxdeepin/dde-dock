@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>ব্লুটুথ</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>ব্লুটুথ</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -234,19 +205,19 @@
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">নেটওয়ার্ক বন্ধ করুন</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">নেটওয়ার্ক চালু করুন</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">নেটওয়ার্কের সেটিংস</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">ডিভাইস নিষ্ক্রিয়</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
@@ -254,15 +225,15 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">তারের সংযোগঃ %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">সংযুক্ত নয়</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">সংযুক্ত হচ্ছে</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
@@ -270,7 +241,7 @@
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">নেটওয়ার্ক তার তোলা হয়েছে</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">অজানা</translation>
+        <translation>অজানা</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">তারের সংযোগঃ %1</translation>
+        <translation>তারের সংযোগঃ %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">নেটওয়ার্ক নেই</translation>
+        <translation>নেটওয়ার্ক নেই</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,7 +460,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
+        <translation>সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>

@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -234,19 +205,19 @@
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Hálózat letiltása</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Hálózat engedélyezése</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Hálózati beállítások</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Eszköz letiltva</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
@@ -254,15 +225,15 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Vezetékes kapcsolat: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Nincs csatlakozva</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Csatlakozás</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
@@ -270,7 +241,7 @@
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Hálózati kábel kihúzva</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Ismeretlen</translation>
+        <translation>Ismeretlen</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Vezetékes kapcsolat: %1</translation>
+        <translation>Vezetékes kapcsolat: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Nincs hálózat</translation>
+        <translation>Nincs hálózat</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,7 +460,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Csatlakozva helyi hálózathoz</translation>
+        <translation>Csatlakozva helyi hálózathoz</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>

@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -234,19 +205,19 @@
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">ネットワークを無効にする</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">ネットワークを有効にする</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">ネットワーク設定</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">デバイスが無効</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
@@ -254,15 +225,15 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">有線接続: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">未接続</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">接続試行中</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
@@ -270,7 +241,7 @@
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">ネットワークケーブル未接続</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">不明</translation>
+        <translation>不明</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">有線接続: %1</translation>
+        <translation>有線接続: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">ネットワークなし</translation>
+        <translation>ネットワークなし</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,7 +460,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">接続済み、インターネットアクセスなし</translation>
+        <translation>接続済み、インターネットアクセスなし</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>

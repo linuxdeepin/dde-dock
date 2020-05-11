@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>بلوتوث</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>بلوتوث</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -234,19 +205,19 @@
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">غیر فعال کردن شبکه</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">فعال کردن شبکه</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">تنظیمات شبکه</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">دستگاه غیرفعال است</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
@@ -254,15 +225,15 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">اتصال سیمی %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">متصل نیست</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">در حال اتصال</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
@@ -270,7 +241,7 @@
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">کابل شبکه وصل نشده است</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">ناشناخته</translation>
+        <translation>ناشناخته</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">اتصال سیمی %1</translation>
+        <translation>اتصال سیمی %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">بدون شبکه</translation>
+        <translation>بدون شبکه</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,7 +460,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">متصل است اما دسترسی به اینترنت ندارد</translation>
+        <translation>متصل است اما دسترسی به اینترنت ندارد</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>

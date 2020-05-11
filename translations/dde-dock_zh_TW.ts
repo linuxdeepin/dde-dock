@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>關閉藍牙</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>開啟藍牙</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>藍牙設定</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -210,67 +181,67 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">無線連接</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">有線連接</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">關閉有線網路</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">啟用有線網路</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">關閉無線網路</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">啟用有線網路</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">停用網路</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">啟用網路</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">網路設定</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">已停用裝置</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">無線連接：%1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">有線網路：%1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">未連線</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">正在連線</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">已連線但不能存取網路</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">已拔除網路線</translation>
     </message>
 </context>
 <context>
@@ -323,7 +294,7 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation>電量%1...</translation>
+        <translation>電量 %1...</translation>
     </message>
     <message>
         <source>%1 charged</source>
@@ -331,7 +302,7 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>電量 %1 ....</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">未知</translation>
+        <translation>未知</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">有線網路：%1</translation>
+        <translation>有線網路：%1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">無網路連線</translation>
+        <translation>無網路連線</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,11 +460,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">已連線但不能存取網路</translation>
+        <translation>已連線但不能存取網路</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="vanished">無線連接：%1</translation>
+        <translation>無線連接：%1</translation>
     </message>
 </context>
 <context>

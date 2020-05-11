@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>Desactivar</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>Activar</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>Ajustes de Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -210,67 +181,67 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Conexión inalámbrica</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Conexión cableada</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Deshabilitar conexión cableada</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Habilitar conexión cableada</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Deshabilitar conexión inalámbrica</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Habilitar conexión inalámbrica</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Deshabilitar red</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Habilitar red</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Ajustes de red</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Dispositivo deshabilitado</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Conexión inalámbrica: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Conexión cableada: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">No conectado</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Conectando</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Conectado pero sin acceso a internet</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Cable de red desconectado</translation>
     </message>
 </context>
 <context>
@@ -331,7 +302,7 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Capacidad %1 ....</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Desconocido</translation>
+        <translation>Desconocido</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Conexión cableada: %1</translation>
+        <translation>Conexión cableada: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Sin red</translation>
+        <translation>Sin red</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,11 +460,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Conectado pero sin acceso a internet</translation>
+        <translation>Conectado pero sin acceso a internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="vanished">Conexión inalámbrica: %1</translation>
+        <translation>Conexión inalámbrica: %1</translation>
     </message>
 </context>
 <context>

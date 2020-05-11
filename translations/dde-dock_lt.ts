@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -210,59 +181,59 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Belaidis ryšys</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Laidinis ryšys</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Išjungti laidinį ryšį</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Įjungti laidinį ryšį</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Išjungti belaidį ryšį</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Įjungti belaidį ryšį</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Išjungti tinklą</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Įjungti tinklą</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Tinklo nustatymai</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Įrenginys išjungtas</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Belaidis ryšys: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Laidinis ryšys: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Neprijungta</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Jungiamasi</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
@@ -270,7 +241,7 @@
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Atjungtas tinklo laidas</translation>
     </message>
 </context>
 <context>
@@ -331,7 +302,7 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Talpa %1 ....</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Nežinoma</translation>
+        <translation>Nežinoma</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Laidinis ryšys: %1</translation>
+        <translation>Laidinis ryšys: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Nėra tinklo</translation>
+        <translation>Nėra tinklo</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,11 +460,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Prisijungta, bet nėra prieigos prie interneto</translation>
+        <translation>Prisijungta, bet nėra prieigos prie interneto</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="vanished">Belaidis ryšys: %1</translation>
+        <translation>Belaidis ryšys: %1</translation>
     </message>
 </context>
 <context>

@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>Matikan</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>Hidupkan</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>Tetapan Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -234,43 +205,43 @@
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Lumpuhkan rangkaian</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Benarkan rangkaian</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Tetapan rangkaian</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Peranti dilumpuhkan</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Sambungan tanpa wayar: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Sambungan berwayar: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Tidak bersambung</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Menyambung</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Bersambung tetapi tiada capaian internet</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Kabel rangkaian telah dicabut</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Tidak diketahui</translation>
+        <translation>Tidak diketahui</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Sambungan berwayar: %1</translation>
+        <translation>Sambungan berwayar: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Tiada Rangkaian</translation>
+        <translation>Tiada Rangkaian</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,11 +460,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Bersambung tetapi tiada capaian Internet</translation>
+        <translation>Bersambung tetapi tiada capaian Internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="vanished">Sambungan tanpa wayar: %1</translation>
+        <translation>Sambungan tanpa wayar: %1</translation>
     </message>
 </context>
 <context>

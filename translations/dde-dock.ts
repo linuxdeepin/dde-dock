@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -181,67 +183,67 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation>Wireless connection</translation>
+        <translation type="vanished">Wireless connection</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation>Wired connection</translation>
+        <translation type="vanished">Wired connection</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
-        <translation>Disable wired connection</translation>
+        <translation type="vanished">Disable wired connection</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation>Enable wired connection</translation>
+        <translation type="vanished">Enable wired connection</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation>Disable wireless connection</translation>
+        <translation type="vanished">Disable wireless connection</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation>Enable wireless connection</translation>
+        <translation type="vanished">Enable wireless connection</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Disable network</translation>
+        <translation type="vanished">Disable network</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation>Enable network</translation>
+        <translation type="vanished">Enable network</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Network settings</translation>
+        <translation type="vanished">Network settings</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation>Device disabled</translation>
+        <translation type="vanished">Device disabled</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Wireless connection: %1</translation>
+        <translation type="vanished">Wireless connection: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Wired connection: %1</translation>
+        <translation type="vanished">Wired connection: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation>Not connected</translation>
+        <translation type="vanished">Not connected</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation>Connecting</translation>
+        <translation type="vanished">Connecting</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
-        <translation>Connected but not Internet access</translation>
+        <translation type="vanished">Connected but not Internet access</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation>Network cable unplugged</translation>
+        <translation type="vanished">Network cable unplugged</translation>
     </message>
 </context>
 <context>

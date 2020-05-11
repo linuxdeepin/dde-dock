@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>Desativar</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>Ativar</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>Configurações de Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -50,11 +21,11 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation type="vanished">12 Horas</translation>
+        <translation type="vanished">Formato de 12 Horas</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation type="vanished">24 Horas</translation>
+        <translation type="vanished">Formato de 24 Horas</translation>
     </message>
     <message>
         <source>Time Settings</source>
@@ -62,11 +33,11 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>12 horas</translation>
+        <translation>Formato de 12 Horas</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>24 horas</translation>
+        <translation>Formato de 24 Horas</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -210,67 +181,67 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation>Conexão Wi-Fi</translation>
+        <translation type="vanished">Conexão Wi-Fi</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation>Conexão cabeada</translation>
+        <translation type="vanished">Conexão Cabeada</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
-        <translation>Desativar a conexão cabeada</translation>
+        <translation type="vanished">Desativar a conexão cabeada</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation>Ativar a conexão cabeada</translation>
+        <translation type="vanished">Ativar a conexão cabeada</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation>Desativar a conexão Wi-Fi</translation>
+        <translation type="vanished">Desativar a conexão Wi-Fi</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation>Ativar a conexão Wi-Fi</translation>
+        <translation type="vanished">Ativar a conexão Wi-Fi</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Desativar rede</translation>
+        <translation type="vanished">Desativar rede</translation>
     </message>
     <message>
         <source>Enable network</source>
-        <translation>Ativar rede</translation>
+        <translation type="vanished">Ativar rede</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Configurações de rede</translation>
+        <translation type="vanished">Configurações de rede</translation>
     </message>
     <message>
         <source>Device disabled</source>
-        <translation>Dispositivo desativado</translation>
+        <translation type="vanished">Dispositivo desativado</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Conexão Wi-Fi: %1</translation>
+        <translation type="vanished">Conexão Wi-Fi: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Conexão cabeada: %1</translation>
+        <translation type="vanished">Conexão Cabeada: %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation>Não conectado</translation>
+        <translation type="vanished">Não conectado</translation>
     </message>
     <message>
         <source>Connecting</source>
-        <translation>Conectando</translation>
+        <translation type="vanished">Conectando</translation>
     </message>
     <message>
         <source>Connected but not Internet access</source>
-        <translation>Conectado, sem Internet</translation>
+        <translation type="vanished">Conectado, sem Internet</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation>Cabo de rede desconectado</translation>
+        <translation type="vanished">Cabo de rede desconectado</translation>
     </message>
 </context>
 <context>
@@ -470,18 +441,18 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Desconhecido</translation>
+        <translation>Desconhecido</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Conexão Cabeada: %1</translation>
+        <translation>Conexão Cabeada: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Sem Rede</translation>
+        <translation>Sem Rede</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
@@ -489,11 +460,11 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Conectado, sem Internet</translation>
+        <translation>Conectado, sem Internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="vanished">Conexão Wi-Fi: %1</translation>
+        <translation>Conexão Wi-Fi: %1</translation>
     </message>
 </context>
 <context>
