@@ -234,8 +234,8 @@ void PowerPlugin::refreshTipsData()
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
         QString tips;
-        if (timeToFull == 0) {
-            tips = tr("Charging %1 ....").arg(value);
+        if(timeToFull == 0) {   // 电量已充満或电量计算中,剩余充满时间会返回0
+            tips = tr("Capacity %1 ....").arg(value);
         } else if (hour == 0) {
             tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
         } else {

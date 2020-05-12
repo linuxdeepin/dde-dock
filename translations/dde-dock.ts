@@ -221,6 +221,10 @@
         <source>Charged</source>
         <translation>Charged</translation>
     </message>
+    <message>
+        <source>Capacity %1 ....</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
