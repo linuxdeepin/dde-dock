@@ -194,6 +194,8 @@ bool SystemTrayItem::event(QEvent *event)
 void SystemTrayItem::enterEvent(QEvent *event)
 {
     if (checkGSettingsControl()) {
+        //网络需要显示Tips，需要特殊处理。
+        if (m_pluginInter->pluginName() != "network")
         return;
     }
 
