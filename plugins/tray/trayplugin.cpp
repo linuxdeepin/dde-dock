@@ -387,12 +387,13 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
         return;
     }
 
-    AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
-    if (trayWidget->isValid())
-        addTrayWidget(itemKey, trayWidget);
-    else {
-        qDebug() << "-- invalid tray windowid" << winId;
-    }
+    //Todo: wayland will crash
+//    AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
+//    if (trayWidget->isValid())
+//        addTrayWidget(itemKey, trayWidget);
+//    else {
+//        qDebug() << "-- invalid tray windowid" << winId;
+//    }
 }
 
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
