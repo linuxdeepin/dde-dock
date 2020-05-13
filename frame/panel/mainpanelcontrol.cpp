@@ -54,15 +54,23 @@ static QGSettings *GSettingsByLaunch()
     return &settings;
 }
 
+static QGSettings *GSettingsByWorkSpace()
+{
+    static QGSettings settings("com.deepin.dde.dock.module.launcher");
+    return &settings;
+}
+
 MainPanelControl::MainPanelControl(QWidget *parent)
     : QWidget(parent)
     , m_mainPanelLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_fixedAreaWidget(new QWidget(this))
+    , m_workSpaceWidget(new QWidget(this))
     , m_appAreaWidget(new QWidget(this))
     , m_trayAreaWidget(new QWidget(this))
     , m_pluginAreaWidget(new QWidget(this))
     , m_desktopWidget(new QWidget(this))
     , m_fixedAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    , m_workSpaceLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_trayAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_appAreaSonWidget(new QWidget(this))
@@ -107,6 +115,7 @@ void MainPanelControl::init()
     m_traySpliter->setAccessibleName("spliter_tray");
 
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
+    m_mainPanelLayout->addWidget(m_workSpaceWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);
     m_mainPanelLayout->addWidget(m_appAreaWidget);
     m_mainPanelLayout->addWidget(m_appSpliter);
@@ -127,6 +136,13 @@ void MainPanelControl::init()
     m_fixedAreaLayout->setMargin(0);
     m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_fixedAreaLayout->setSpacing(0);
+
+    // 工作区插件
+    m_workSpaceWidget->setLayout(m_workSpaceLayout);
+    m_workSpaceWidget->setAccessibleName("workspacearea");
+    m_workSpaceLayout->setMargin(0);
+    m_workSpaceLayout->setContentsMargins(0, 0, 0, 0);
+    m_workSpaceLayout->setSpacing(0);
 
     // 应用程序
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
@@ -152,8 +168,30 @@ void MainPanelControl::init()
     m_mainPanelLayout->addWidget(m_desktopWidget);
 
     connect(GSettingsByLaunch(), &QGSettings::changed, this, &MainPanelControl::onGSettingsChanged);
+    connect(GSettingsByWorkSpace(), &QGSettings::changed, this, &MainPanelControl::onWorkSpaceGSettingsChanged);
 }
 
+void MainPanelControl::onWorkSpaceGSettingsChanged(const QString &key)
+{
+    if (key != "enable") {
+        return;
+    }
+
+    QGSettings *setting = GSettingsByLaunch();
+
+    if (setting->keys().contains("enable")) {
+        const bool isEnable = GSettingsByLaunch()->keys().contains("enable") && GSettingsByLaunch()->get("enable").toBool();
+        if (isEnable && setting->get("enable").toBool()) {
+            m_workSpaceWidget->setVisible(true);
+//            m_fixedSpliter->setVisible(true);
+//            m_isEnableLaunch = true;
+        } else {
+            m_workSpaceWidget->setVisible(false);
+//            m_fixedSpliter->setVisible(false);
+//            m_isEnableLaunch = false;
+        }
+    }
+}
 void MainPanelControl::onGSettingsChanged(const QString &key)
 {
     if (key != "enable") {
@@ -219,6 +257,17 @@ void MainPanelControl::updateMainPanelLayout()
 }
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
+{
+    if(m_position == Position::Top || m_position == Position::Bottom){
+        wdg->setMaximumSize(height(),height());
+    } else {
+        wdg->setMaximumSize(width(),width());
+    }
+    m_fixedAreaLayout->insertWidget(index, wdg);
+    resizeDockIcon();
+}
+
+void MainPanelControl::addWorkSpaceItem(int index, QWidget *wdg)
 {
     if(m_position == Position::Top || m_position == Position::Bottom){
         wdg->setMaximumSize(height(),height());
@@ -332,6 +381,9 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         break;
     case DockItem::Plugins:
         addPluginAreaItem(index, item);
+        break;
+    case DockItem::WorkSpace:
+        addWorkSpaceItem(index,item);
         break;
     default:
         break;

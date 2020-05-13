@@ -22,6 +22,7 @@
 #include "dockitemmanager.h"
 #include "item/appitem.h"
 #include "item/launcheritem.h"
+#include "item/workspaceitem.h"
 #include "item/pluginsitem.h"
 #include "item/traypluginitem.h"
 #include "util/docksettings.h"
@@ -39,6 +40,10 @@ DockItemManager::DockItemManager(QObject *parent)
 {
     //固定区域：启动器
     m_itemList.append(new LauncherItem);
+
+    // 工作区
+    for (int i = 0; i < 4; ++i)
+        m_itemList.append(new WorkSpaceItem);
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {

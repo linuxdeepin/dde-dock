@@ -50,6 +50,7 @@ public:
     ~MainPanelControl();
 
     void addFixedAreaItem(int index, QWidget *wdg);
+    void addWorkSpaceItem(int index, QWidget *wdg);
     void addAppAreaItem(int index, QWidget *wdg);
     void addTrayAreaItem(int index, QWidget *wdg);
     void addPluginAreaItem(int index, QWidget *wdg);
@@ -99,17 +100,20 @@ public slots:
 
     // void
     void onGSettingsChanged(const QString &key);
+    void onWorkSpaceGSettingsChanged(const QString &key);
     
 protected:
     void showEvent(QShowEvent *event) override;
 private:
     QBoxLayout *m_mainPanelLayout;
     QWidget *m_fixedAreaWidget;
+    QWidget *m_workSpaceWidget;
     QWidget *m_appAreaWidget;
     QWidget *m_trayAreaWidget;
     QWidget *m_pluginAreaWidget;
     QWidget *m_desktopWidget;
     QBoxLayout *m_fixedAreaLayout;
+     QBoxLayout *m_workSpaceLayout;
     QBoxLayout *m_trayAreaLayout;
     QBoxLayout *m_pluginLayout;
     QWidget *m_appAreaSonWidget;

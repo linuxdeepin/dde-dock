@@ -47,6 +47,7 @@ public:
         FixedPlugin,
         Placeholder,
         TrayPlugin,
+        WorkSpace,
     };
 
 public:
