@@ -25,6 +25,7 @@ type Job struct {
 	Type        int    // 类型
 	Title       string // 标题
 	Description string // 描述
+	TitlePinyin string // 拼音
 
 	AllDay bool // 全天
 
@@ -91,6 +92,7 @@ func (j *JobJSON) toJob() (*Job, error) {
 	job := &Job{
 		Type:        j.Type,
 		Title:       j.Title,
+		TitlePinyin: createPinyin(j.Title),
 		Description: j.Description,
 		AllDay:      j.AllDay,
 		Start:       j.Start,
@@ -258,6 +260,7 @@ func fillFestivalJobs(startDate, endDate libdate.Date, queryKey string, wraps []
 		logger.Warning(err)
 		return
 	}
+
 	if queryKey != "" {
 		dayFestivalSlice = filterDayFestivalSlice(dayFestivalSlice, queryKey)
 	}
@@ -292,6 +295,9 @@ func filterDayFestivalSlice(dayFestivalSlice []lunarcalendar.DayFestival, queryK
 		var festivals []string
 		for _, festival := range dayFestival.Festivals {
 			if strings.Contains(festival, queryKey) {
+				festivals = append(festivals, festival)
+			}
+			if canQueryByPinyin(queryKey) && pinyinMatch(festival, queryKey) {
 				festivals = append(festivals, festival)
 			}
 		}

@@ -244,8 +244,11 @@ func (s *Scheduler) queryJobs(key string, startTime, endTime time.Time) ([]dateJ
 	db := s.db
 
 	key = strings.TrimSpace(key)
-	if key != "" {
-		db = db.Where("instr(title, ?)", key)
+	if canQueryByPinyin(key) {
+		var pinyin = createPinyinQuery(strings.ToLower(key))
+		db = db.Where("instr(UPPER(title), UPPER(?)) OR title_pinyin LIKE ?", key, pinyin)
+	} else if key != "" {
+		db = db.Where("instr(UPPER(title), UPPER(?))", key)
 	}
 
 	err := db.Find(&allJobs).Error
@@ -316,6 +319,9 @@ func (s *Scheduler) updateJob(job *Job) error {
 	}
 	if job0.Title != job.Title {
 		diffMap["Title"] = job.Title
+	}
+	if job0.TitlePinyin != job.TitlePinyin {
+		diffMap["TitlePinyin"] = job.TitlePinyin
 	}
 	if job0.Description != job.Description {
 		diffMap["Description"] = job.Description
