@@ -25,12 +25,11 @@
 #include "controller/dockitemmanager.h"
 
 #include <QAccessible>
+#include <QDir>
 
 #include <DApplication>
 #include <DLog>
 #include <DDBusSender>
-
-#include <QDir>
 #include <DGuiApplicationHelper>
 
 #include <unistd.h>
