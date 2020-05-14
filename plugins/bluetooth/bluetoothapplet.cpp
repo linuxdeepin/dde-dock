@@ -30,6 +30,10 @@
 #include "componments/bluetoothconstants.h"
 
 #include <DApplicationHelper>
+
+#include <QLabel>
+#include <QVBoxLayout>
+
 DGUI_USE_NAMESPACE
 
 extern void initFontColor(QWidget *widget)
@@ -60,7 +64,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 {
     m_line->setVisible(false);
 
-    auto defaultFont = font();
+    QFont defaultFont = font();
     auto titlefont = QFont(defaultFont.family(), defaultFont.pointSize() + 2);
 
     m_appletName->setText(tr("Bluetooth"));
@@ -97,7 +101,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 
 void BluetoothApplet::setAdapterPowered(bool powered)
 {
-    for (auto adapterItem : m_adapterItems) {
+    for (AdapterItem *adapterItem : m_adapterItems) {
         if (adapterItem)
             adapterItem->setPowered(powered);
     }
@@ -113,15 +117,14 @@ bool BluetoothApplet::hasAadapter()
     return m_adaptersManager->adaptersCount();
 }
 
-void BluetoothApplet::onPowerChanged(bool state)
+void BluetoothApplet::onPowerChanged()
 {
-    Q_UNUSED(state)
     bool powerState = false;
-    for (auto adapterItem : m_adapterItems) {
-        if (adapterItem->isPowered()) {
-            powerState = true;
-            break;
-        }
+    for (AdapterItem *adapterItem : m_adapterItems) {
+         if (adapterItem->isPowered()) {
+             powerState = true;
+             break;
+         }
     }
     emit powerChanged(powerState);
 }
@@ -129,7 +132,7 @@ void BluetoothApplet::onPowerChanged(bool state)
 void BluetoothApplet::onDeviceStateChanged()
 {
     Device::State deviceState = Device::StateUnavailable;
-    for (auto adapterItem : m_adapterItems) {
+    for (AdapterItem *adapterItem : m_adapterItems) {
         if (Device::StateAvailable == adapterItem->currentDeviceState()) {
             deviceState = Device::StateAvailable;
             continue;
@@ -152,24 +155,24 @@ void BluetoothApplet::addAdapter(Adapter *adapter)
         emit justHasAdapter();
     }
 
-    auto adapterId = adapter->id();
-    auto adatpterItem = new AdapterItem(m_adaptersManager, adapter);
-//    m_adapterItems[adapterId] = adatpterItem;
-//    m_centrealLayout->addWidget(adatpterItem);
-//    getDevieInitState(adatpterItem);
+    QString adapterId = adapter->id();
+    auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
+    m_adapterItems[adapterId] = adatpterItem;
+    m_centrealLayout->addWidget(adatpterItem);
+    getDevieInitState(adatpterItem);
 
-//    connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
-//    connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
-//    connect(adatpterItem, &AdapterItem::sizeChange, this, &BluetoothApplet::updateView);
+    connect(adatpterItem, &AdapterItem::deviceStateChanged, this, &BluetoothApplet::onDeviceStateChanged);
+    connect(adatpterItem, &AdapterItem::powerChanged, this, &BluetoothApplet::onPowerChanged);
+    connect(adatpterItem, &AdapterItem::sizeChange, this, &BluetoothApplet::updateView);
 
-//    updateView();
+    updateView();
 }
 
 void BluetoothApplet::removeAdapter(Adapter *adapter)
 {
     if (adapter) {
-        auto adapterId = adapter->id();
-        auto adapterItem = m_adapterItems.value(adapterId);
+        QString adapterId = adapter->id();
+        AdapterItem *adapterItem = m_adapterItems.value(adapterId);
         if (adapterItem) {
             m_centrealLayout->removeWidget(adapterItem);
             delete  adapterItem;
@@ -185,7 +188,7 @@ void BluetoothApplet::updateView()
 {
     int contentHeight = 0;
     int itemCount = 0;
-    for (auto adapterItem : m_adapterItems) {
+    for (AdapterItem *adapterItem : m_adapterItems) {
         if (adapterItem) {
             contentHeight += adapterItem->viewHeight();
             if (adapterItem->isPowered())
@@ -193,7 +196,7 @@ void BluetoothApplet::updateView()
         }
     }
 
-    auto adaptersCnt = m_adapterItems.size();
+    int adaptersCnt = m_adapterItems.size();
     if (adaptersCnt > 1) {
         m_line->setVisible(true);
         m_appletName->setVisible(true);
@@ -218,7 +221,7 @@ void BluetoothApplet::getDevieInitState(AdapterItem *item)
 
     Device::State deviceState = item->initDeviceState();
     Device::State otherDeviceState = Device::StateUnavailable;
-    for (auto adapterItem : m_adapterItems) {
+    for (AdapterItem *adapterItem : m_adapterItems) {
         if (adapterItem != item) {
             if (Device::StateAvailable == adapterItem->currentDeviceState()) {
                 otherDeviceState = Device::StateAvailable;

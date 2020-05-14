@@ -29,6 +29,9 @@
 
 #include <DDBusSender>
 
+#include <QLabel>
+#include <QVBoxLayout>
+
 extern void initFontColor(QWidget *widget);
 
 AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWidget *parent)
@@ -67,15 +70,15 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
 
-    auto myDevices = adapter->devices();
-    for (auto constDevice : myDevices) {
+    QMap<QString, const Device *> myDevices = adapter->devices();
+    for (const Device *constDevice : myDevices) {
         auto device = const_cast<Device *>(constDevice);
         if (device)
             createDeviceItem(device);
     }
 
     m_initDeviceState = Device::StateUnavailable;
-    for (auto constDevice : myDevices) {
+    for (const Device *constDevice : myDevices) {
         auto device = const_cast<Device *>(constDevice);
         if (device) {
             if (device->state() == Device::StateAvailable) {
@@ -133,7 +136,7 @@ void AdapterItem::deviceItemPaired(const bool paired)
 {
     auto device = qobject_cast<Device *>(sender());
     if (device) {
-        auto deviceItem = m_deviceItems.value(device->id());
+        DeviceItem *deviceItem = m_deviceItems.value(device->id());
         if (paired) {
             m_sortUnConnect.removeOne(deviceItem);
             m_sortConnected << deviceItem;
@@ -149,8 +152,8 @@ void AdapterItem::deviceRssiChanged()
 {
     auto device = qobject_cast<Device *>(sender());
     if (device) {
-        auto deviceItem = m_deviceItems.value(device->id());
-        auto state = device->state();
+        DeviceItem *deviceItem = m_deviceItems.value(device->id());
+        Device::State state = device->state();
         if (deviceItem && Device::StateConnected == state)
             qSort(m_sortConnected);
         else
@@ -164,7 +167,7 @@ void AdapterItem::removeDeviceItem(const Device *device)
     if (!device)
         return;
 
-    auto deviceItem = m_deviceItems.value(device->id());
+    DeviceItem *deviceItem = m_deviceItems.value(device->id());
     if (deviceItem) {
         m_deviceItems.remove(device->id());
         m_sortConnected.removeOne(deviceItem);
@@ -196,7 +199,7 @@ void AdapterItem::deviceChangeState(const Device::State state)
 {
     auto device = qobject_cast<Device *>(sender());
     if (device) {
-        auto deviceItem = m_deviceItems.value(device->id());
+        DeviceItem *deviceItem = m_deviceItems.value(device->id());
         if (deviceItem) {
             switch (state) {
             case Device::StateUnavailable: {
@@ -254,7 +257,7 @@ void AdapterItem::createDeviceItem(Device *device)
     if (!device)
         return;
 
-    auto deviceId = device->id();
+    QString deviceId = device->id();
     auto deviceItem = new DeviceItem(device->name(), this);
     deviceItem->setDevice(device);
     m_deviceItems[deviceId] = deviceItem;
@@ -273,14 +276,14 @@ void AdapterItem::createDeviceItem(Device *device)
 
 void AdapterItem::updateView()
 {
-    auto contentHeight = m_switchItem->height();
+    int contentHeight = m_switchItem->height();
     contentHeight += (m_deviceLayout->count() - 3) * ITEMHEIGHT;
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(contentHeight);
     emit sizeChange();
 }
 
-void AdapterItem::showDevices(bool change)
+void AdapterItem::showDevices(bool powered)
 {
     if (m_sortConnected.size())
         qSort(m_sortConnected);
@@ -291,15 +294,15 @@ void AdapterItem::showDevices(bool change)
     deviceItems << m_sortConnected << m_sortUnConnect;
 
     for (DeviceItem *deviceItem : deviceItems) {
-        if (change)
+        if (powered)
             m_deviceLayout->addWidget(deviceItem);
         else
             m_deviceLayout->removeWidget(deviceItem);
-        deviceItem->setVisible(change);
+        deviceItem->setVisible(powered);
     }
 
-    auto itemCount = m_deviceItems.size();
-    m_line->setVisible(change);
+    int itemCount = m_deviceItems.size();
+    m_line->setVisible(powered);
     m_openControlCenter->setVisible(!itemCount);
     updateView();
 }

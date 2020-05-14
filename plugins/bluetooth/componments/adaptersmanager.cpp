@@ -35,6 +35,7 @@ AdaptersManager::AdaptersManager(QObject *parent)
                                          "/com/deepin/daemon/Bluetooth",
                                          QDBusConnection::sessionBus(),
                                          this))
+    , m_defaultAdapterState(false)
 {
     connect(m_bluetoothInter, &DBusBluetooth::AdapterAdded, this, &AdaptersManager::addAdapter);
     connect(m_bluetoothInter, &DBusBluetooth::AdapterRemoved, this, &AdaptersManager::removeAdapter);
@@ -77,10 +78,7 @@ AdaptersManager::AdaptersManager(QObject *parent)
     for (int index = 0; index < arr.size(); index++) {
         auto *adapter = new Adapter(this);
         adapterAdd(adapter, arr[index].toObject());
-        if (!index) {
-            adapter->setCurrent(true);
-            m_defaultAdapterState = adapter->powered();
-        }
+        m_defaultAdapterState |= adapter->powered();
     }
 }
 
@@ -179,7 +177,7 @@ void AdaptersManager::onDevicePropertiesChanged(const QString &json)
 {
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     const QJsonObject obj = doc.object();
-    for (auto constAdapter : m_adapters) {
+    for (const Adapter *constAdapter : m_adapters) {
         auto adapter = const_cast<Adapter *>(constAdapter);
         if (adapter)
             adapter->updateDevice(obj);
@@ -254,7 +252,7 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
             if (!call.isError()) {
                 QDBusReply<QString> reply = call.reply();
                 const QString replyStr = reply.value();
-                auto doc = QJsonDocument::fromJson(replyStr.toUtf8());
+                QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
                 adapter->initDevicesList(doc);
                 emit this->adapterIncreased(adapter);
             } else {
@@ -264,7 +262,7 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
         delete watcher;
     });
 
-    auto id = adapter->id();
+    QString id = adapter->id();
     if (!id.isEmpty()) {
         m_adapters[id] = adapter;
     }

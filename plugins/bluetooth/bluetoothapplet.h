@@ -26,9 +26,9 @@
 #include "componments/device.h"
 
 #include <QScrollArea>
-#include <QLabel>
-#include <QVBoxLayout>
 
+class QLabel;
+class QVBoxLayout;
 class Adapter;
 class AdapterItem;
 class HorizontalSeparator;
@@ -43,17 +43,17 @@ public:
     bool hasAadapter();
 
 public slots :
-    void addAdapter(Adapter *constadapter);
+    void addAdapter(Adapter *adapter);
     void removeAdapter(Adapter *adapter);
 
 signals:
-    void powerChanged(bool state);
+    void powerChanged(bool powered);
     void deviceStateChanged(const Device::State state);
     void noAdapter();
     void justHasAdapter();
 
 private slots:
-    void onPowerChanged(bool state);
+    void onPowerChanged();
     void onDeviceStateChanged();
 
 private:

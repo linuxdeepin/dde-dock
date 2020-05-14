@@ -49,8 +49,8 @@ public:
     bool hasAdapter();
 
 protected:
-    void resizeEvent(QResizeEvent *e);
-    void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 signals:
     void requestContextMenu() const;

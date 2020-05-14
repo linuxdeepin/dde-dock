@@ -33,8 +33,8 @@
 #include <QPainter>
 
 // menu actions
-#define SHIFT     "shift"
-#define SETTINGS "settings"
+#define SHIFT       "shift"
+#define SETTINGS    "settings"
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -134,7 +134,7 @@ void BluetoothItem::refreshIcon()
             m_timer->start();
             stateString = "waiting";
             iconString = QString("bluetooth-%1-symbolic").arg(stateString);
-            const auto ratio = devicePixelRatioF();
+            const qreal ratio = devicePixelRatioF();
             int iconSize = PLUGIN_ICON_MAX_SIZE;
             if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
                 iconString.append(PLUGIN_MIN_ICON_NAME);
@@ -155,7 +155,7 @@ void BluetoothItem::refreshIcon()
     m_timer->stop();
     iconString = QString("bluetooth-%1-symbolic").arg(stateString);
 
-    const auto ratio = devicePixelRatioF();
+    const qreal ratio = devicePixelRatioF();
     int iconSize = PLUGIN_ICON_MAX_SIZE;
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
@@ -170,9 +170,9 @@ bool BluetoothItem::hasAdapter()
     return m_applet->hasAadapter();
 }
 
-void BluetoothItem::resizeEvent(QResizeEvent *e)
+void BluetoothItem::resizeEvent(QResizeEvent *event)
 {
-    QWidget::resizeEvent(e);
+    QWidget::resizeEvent(event);
 
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     // 保持横纵比
@@ -187,9 +187,9 @@ void BluetoothItem::resizeEvent(QResizeEvent *e)
     refreshIcon();
 }
 
-void BluetoothItem::paintEvent(QPaintEvent *e)
+void BluetoothItem::paintEvent(QPaintEvent *event)
 {
-    QWidget::paintEvent(e);
+    QWidget::paintEvent(event);
 
     QPainter painter(this);
     const QRectF &rf = QRectF(rect());

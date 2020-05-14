@@ -41,7 +41,7 @@ public:
 
     inline void setTitle(const QString &name) { m_title->setText(name); }
 
-    void setDevice(Device *d);
+    void setDevice(Device *device);
     inline Device *device() { return m_device; }
     inline const Device *device() const { return  m_device; }
 

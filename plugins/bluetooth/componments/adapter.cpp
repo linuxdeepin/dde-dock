@@ -72,7 +72,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
 
 void Adapter::removeDevice(const QString &deviceId)
 {
-    auto constDevice = m_devices.value(deviceId);
+    const Device *constDevice = m_devices.value(deviceId);
     auto device = const_cast<Device *>(constDevice);
     if (device) {
         m_devices.remove(deviceId);
@@ -82,15 +82,15 @@ void Adapter::removeDevice(const QString &deviceId)
     }
 }
 
-void Adapter::updateDevice(const QJsonObject &json)
+void Adapter::updateDevice(const QJsonObject &dviceJson)
 {
-    const QString id = json["Path"].toString();
-    const QString name = json["Alias"].toString();
-    const bool paired = json["Paired"].toBool();
-    const int rssi = json["RSSI"].toInt();
-    const Device::State state = Device::State(json["State"].toInt());
+    const QString id = dviceJson["Path"].toString();
+    const QString name = dviceJson["Alias"].toString();
+    const bool paired = dviceJson["Paired"].toBool();
+    const int rssi = dviceJson["RSSI"].toInt();
+    const Device::State state = Device::State(dviceJson["State"].toInt());
 
-    auto constdevice = m_devices.value(id);
+    const Device *constdevice = m_devices.value(id);
     auto device = const_cast<Device *>(constdevice);
     if (device) {
         device->setId(id);
@@ -142,9 +142,9 @@ void Adapter::setPowered(bool powered)
 
 void Adapter::initDevicesList(const QJsonDocument &doc)
 {
-    auto arr = doc.array();
+    QJsonArray arr = doc.array();
     for (QJsonValue val : arr) {
-        auto deviceObj = val.toObject();
+        QJsonObject deviceObj = val.toObject();
         const QString adapterId = deviceObj["AdapterPath"].toString();
         const QString id = deviceObj["Path"].toString();
         const QString name = deviceObj["Alias"].toString();

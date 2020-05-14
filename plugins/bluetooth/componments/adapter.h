@@ -51,7 +51,7 @@ public:
     void initDevicesList(const QJsonDocument &doc);
     void addDevice(const QJsonObject &deviceObj);
     void removeDevice(const QString &deviceId);
-    void updateDevice(const QJsonObject &json);
+    void updateDevice(const QJsonObject &dviceJson);
     void removeAllDevices();
     const QMap<QString, const Device *> &paredDevices() const;
     int paredDevicesCount() const;

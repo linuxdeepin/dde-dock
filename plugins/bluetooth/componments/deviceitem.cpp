@@ -86,11 +86,11 @@ bool DeviceItem::operator <(const DeviceItem &item)
     return  this->device()->rssi() < item.device()->rssi();
 }
 
-void DeviceItem::setDevice(Device *d)
+void DeviceItem::setDevice(Device *device)
 {
-    if (d) {
-        m_device = d;
-        changeState(d->state());
+    if (device) {
+        m_device = device;
+        changeState(device->state());
     }
 }
 
@@ -105,7 +105,6 @@ void DeviceItem::enterEvent(QEvent *event)
     QWidget::enterEvent(event);
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
-//            m_state->setPixmap(QPixmap(":/notify_close_press@2x.png"));
             m_state->setPixmap(QPixmap(":/disconnect" + m_statSuffix));
         }
     }
@@ -116,7 +115,6 @@ void DeviceItem::leaveEvent(QEvent *event)
     QWidget::enterEvent(event);
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
-//            m_state->setPixmap(QPixmap(":/list_select@2x.png"));
             m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
         }
     }

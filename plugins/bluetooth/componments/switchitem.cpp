@@ -26,6 +26,7 @@
 
 #include <QHBoxLayout>
 #include <QFontMetrics>
+#include <QLabel>
 
 extern void initFontColor(QWidget *widget);
 
@@ -40,7 +41,7 @@ SwitchItem::SwitchItem(QWidget *parent)
     m_switchBtn->setFixedWidth(SWITCHBUTTONWIDTH);
 
     setFixedHeight(CONTROLHEIGHT);
-    auto switchLayout = new QHBoxLayout(this);
+    auto switchLayout = new QHBoxLayout;
     switchLayout->setSpacing(0);
     switchLayout->setMargin(0);
     switchLayout->addSpacing(MARGIN);

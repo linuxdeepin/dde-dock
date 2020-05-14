@@ -26,10 +26,9 @@
 #include "device.h"
 
 #include <QScrollArea>
-#include <QMap>
-#include <QVBoxLayout>
-#include <QLabel>
 
+class QLabel;
+class QVBoxLayout;
 class HorizontalSeparator;
 class Adapter;
 class SwitchItem;
@@ -65,7 +64,7 @@ private slots:
 private:
     void createDeviceItem(Device *device);
     void updateView();
-    void showDevices(bool change);
+    void showDevices(bool powered);
 
 private:
     QWidget *m_centralWidget;
@@ -77,7 +76,7 @@ private:
 
     Adapter *m_adapter;
     SwitchItem *m_switchItem;
-    QMap<QString, DeviceItem*> m_deviceItems;
+    QMap<QString, DeviceItem *> m_deviceItems;
     Device::State m_initDeviceState;
     Device::State m_currentDeviceState;
     QList<DeviceItem *> m_sortConnected;

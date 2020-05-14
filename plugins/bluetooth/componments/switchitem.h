@@ -25,10 +25,9 @@
 
 #include <DSwitchButton>
 
-#include <QLabel>
-
 DWIDGET_USE_NAMESPACE
 
+class QLabel;
 class SwitchItem : public QWidget
 {
     Q_OBJECT
