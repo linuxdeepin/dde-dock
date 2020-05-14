@@ -21,6 +21,7 @@
  */
 
 #include "overlaywarningwidget.h"
+#include "../../interfaces/constants.h"
 
 #include <QSvgRenderer>
 #include <QPainter>

@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Time Settings</source>
-        <translation>Ajustes de tiempo</translation>
+        <translation>Ajustes de fecha y hora</translation>
     </message>
 </context>
 <context>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Cargado %1</translation>
+        <translation type="vanished">Cargado %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,7 +215,11 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Cargando %1…</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Cargado</translation>
     </message>
 </context>
 <context>

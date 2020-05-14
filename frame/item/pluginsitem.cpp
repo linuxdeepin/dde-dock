@@ -57,7 +57,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     hLayout->setMargin(0);
 
     setLayout(hLayout);
-    setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
+    setAccessibleName(pluginInter->pluginName());
     setAttribute(Qt::WA_TranslucentBackground);
 
     const QByteArray &schema{

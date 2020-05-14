@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Càrrega: %1</translation>
+        <translation type="vanished">Càrrega: %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,6 +215,10 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
+        <translation>Es carrega %1...</translation>
+    </message>
+    <message>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -253,7 +257,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloqueja</translation>
+        <translation>Bloca</translation>
     </message>
     <message>
         <source>Log out</source>

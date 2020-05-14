@@ -158,11 +158,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>マルチタスク画面</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>ドックから削除</translation>
     </message>
 </context>
 <context>
@@ -195,26 +195,30 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>残量 %1、残り %2 分</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>残量 %1、残り %2 時間 %3 分</translation>
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>充電完了 %1</translation>
+        <translation type="vanished">充電完了 %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>充電中 %1、充電完了まで %2 分</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>充電中 %1、充電完了まで %2 時間 %3 分</translation>
     </message>
     <message>
         <source>Charging %1 ....</source>
+        <translation>充電中 %1 …</translation>
+    </message>
+    <message>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -226,7 +230,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>ドックから削除</translation>
     </message>
 </context>
 <context>

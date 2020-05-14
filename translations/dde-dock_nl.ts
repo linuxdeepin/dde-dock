@@ -162,7 +162,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Undock</translation>
     </message>
 </context>
 <context>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 Opgeladen</translation>
+        <translation type="vanished">%1 Opgeladen</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -217,6 +217,10 @@
         <source>Charging %1 ....</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Charged</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
@@ -226,7 +230,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Undock</translation>
     </message>
 </context>
 <context>

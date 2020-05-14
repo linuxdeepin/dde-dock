@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Time Settings</source>
-        <translation>Поставке времена</translation>
+        <translation>Подешавање времена</translation>
     </message>
 </context>
 <context>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Поставке мреже</translation>
+        <translation>Подешавање мреже</translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Поставке напајања</translation>
+        <translation>Управљање напајањем</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Напуњено %1</translation>
+        <translation type="vanished">Напуњено %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,6 +215,10 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
+        <translation>Пуни се %1 ....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -265,7 +269,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Поставке напајања</translation>
+        <translation>Управљање напајањем</translation>
     </message>
 </context>
 <context>
@@ -291,7 +295,7 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Поставке звука</translation>
+        <translation>Подешавање звука</translation>
     </message>
     <message>
         <source>Current Volume %1</source>

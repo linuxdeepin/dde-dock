@@ -20,10 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLUGINWIDGET_H
-#define PLUGINWIDGET_H
-
-#include "../../interfaces/constants.h"
+#ifndef OVERLAYWARNINGWIDGET_H
+#define OVERLAYWARNINGWIDGET_H
 
 #include <QWidget>
 
@@ -40,9 +38,6 @@ protected:
 
 private:
     const QPixmap loadSvg(const QString &fileName, const QSize &size) const;
-
-private:
-    Dock::DisplayMode m_displayMode;
 };
 
-#endif // PLUGINWIDGET_H
+#endif // OVERLAYWARNINGWIDGET_H

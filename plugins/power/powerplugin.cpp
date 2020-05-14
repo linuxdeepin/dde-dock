@@ -211,37 +211,34 @@ void PowerPlugin::refreshTipsData()
     const int batteryState = m_powerInter->batteryState()["Display"];
 
     if (batteryState == BatteryState::DIS_CHARGING || batteryState == BatteryState::NOT_CHARGED || batteryState == BatteryState::UNKNOWN) {
+        QString tips;
         qulonglong timeToEmpty = m_systemPowerInter->batteryTimeToEmpty();
         QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
-
-        QString tips;
-
         if (hour == 0) {
-            tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
-        }
-        else {
+            if (min == 0)
+                tips = tr("Charged");
+            else
+                tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
+        } else {
             tips = tr("Capacity %1, %2 hr %3 min remaining").arg(value).arg(hour).arg(min);
         }
 
         m_tipsLabel->setText(tips);
-    }
-    else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.){
-        m_tipsLabel->setText(tr("Charged %1").arg(value));
-    }else {
+    } else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.) {
+        m_tipsLabel->setText(tr("Charged"));
+    } else {
         qulonglong timeToFull = m_systemPowerInter->batteryTimeToFull();
         QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
         QString tips;
-        if(timeToFull == 0) {
-            tips = tr("Charging %1 ....").arg(value);
-        }
-        else if (hour == 0) {
+        if(timeToFull == 0) {   // 电量已充満或电量计算中,剩余充满时间会返回0
+            tips = tr("Capacity %1 ....").arg(value);
+        } else if (hour == 0) {
             tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
-        }
-        else {
+        } else {
             tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
         }
 

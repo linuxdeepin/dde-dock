@@ -25,12 +25,11 @@
 #include "controller/dockitemmanager.h"
 
 #include <QAccessible>
+#include <QDir>
 
 #include <DApplication>
 #include <DLog>
 #include <DDBusSender>
-
-#include <QDir>
 #include <DGuiApplicationHelper>
 
 #include <unistd.h>
@@ -66,57 +65,14 @@ void RegisterDdeSession()
     }
 }
 
-QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
-{
-    QAccessibleInterface *interface = nullptr;
-
-    USE_ACCESSIBLE(classname,MainPanelControl);
-    USE_ACCESSIBLE(classname,LauncherItem);
-    USE_ACCESSIBLE(classname,AppItem);
-    USE_ACCESSIBLE(classname,PreviewContainer);
-    USE_ACCESSIBLE(classname,PluginsItem);
-    USE_ACCESSIBLE(classname,TrayPluginItem);
-    USE_ACCESSIBLE(classname,PlaceholderItem);
-    USE_ACCESSIBLE(classname,AppDragWidget);
-    USE_ACCESSIBLE(classname,AppSnapshot);
-    USE_ACCESSIBLE(classname,FloatingPreview);
-    USE_ACCESSIBLE(classname,SNITrayWidget);
-    USE_ACCESSIBLE(classname,SystemTrayItem);
-    USE_ACCESSIBLE(classname,FashionTrayItem);
-    USE_ACCESSIBLE(classname,FashionTrayWidgetWrapper);
-    USE_ACCESSIBLE(classname,FashionTrayControlWidget);
-    USE_ACCESSIBLE(classname,AttentionContainer);
-    USE_ACCESSIBLE(classname,HoldContainer);
-    USE_ACCESSIBLE(classname,NormalContainer);
-    USE_ACCESSIBLE(classname,SpliterAnimated);
-    USE_ACCESSIBLE(classname,IndicatorTrayWidget);
-    USE_ACCESSIBLE(classname,XEmbedTrayWidget);
-    USE_ACCESSIBLE(classname,ShowDesktopWidget);
-    USE_ACCESSIBLE(classname,SoundItem);
-    USE_ACCESSIBLE(classname,SoundApplet);
-    USE_ACCESSIBLE(classname,SinkInputWidget);
-    USE_ACCESSIBLE(classname,VolumeSlider);
-    USE_ACCESSIBLE(classname,HorizontalSeparator);
-    USE_ACCESSIBLE(classname,TipsWidget);
-    USE_ACCESSIBLE(classname,DatetimeWidget);
-    USE_ACCESSIBLE(classname,OnboardItem);
-    USE_ACCESSIBLE(classname,TrashWidget);
-    USE_ACCESSIBLE(classname,PopupControlWidget);
-    USE_ACCESSIBLE(classname,ShutdownWidget);
-    USE_ACCESSIBLE(classname,MultitaskingWidget);
-//    USE_ACCESSIBLE(classname,OverlayWarningWidget);
-
-    return interface;
-}
-
 int main(int argc, char *argv[])
 {
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
 
-    // 锁定物理内存，用于国测测试
-    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
+    // 锁定物理内存，用于国测测试[会显著增加内存占用]
+//    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");

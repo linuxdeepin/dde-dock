@@ -149,7 +149,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
-    setAccessibleName("dock-mainwindow");
+    setAccessibleName("mainwindow");
     m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(true);
@@ -614,6 +614,13 @@ void MainWindow::updatePosition()
 void MainWindow::updateGeometry()
 {
     // DockDisplayMode and DockPosition MUST be set before invoke setFixedSize method of MainPanel
+
+    //为了防止当后端发送错误值，然后发送正确值时，任务栏没有移动在相应的位置
+    //当ｑｔ没有获取到屏幕资源时候，move函数会失效。可以直接return
+    if(m_settings->primaryRect().width() ==0 || m_settings->primaryRect().height() == 0){
+        return;
+    }
+
     setStrutPartial();
 
     m_mainPanel->setDisplayMode(m_settings->displayMode());
@@ -735,7 +742,10 @@ void MainWindow::expand()
     setVisible(true);
 
     if (m_panelHideAni->state() == QPropertyAnimation::Running)
-        return;
+    {
+        m_panelHideAni->stop();
+        emit m_panelHideAni->finished();
+    }
 
     const auto showAniState = m_panelShowAni->state();
 

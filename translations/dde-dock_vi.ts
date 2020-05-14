@@ -3,14 +3,14 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Tiện ích %1 không tương thích với hệ thống</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Thêm bố cục bàn phím</translation>
     </message>
 </context>
 <context>
@@ -51,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Bạn có chắc chắn muốn làm trống mục %1 không?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -158,11 +158,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Chế độ xem đa nhiệm</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Gỡ khỏi dock</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Onboard</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -195,27 +195,31 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Năng lượng %1, %2 còn lại</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Năng lượng %1, %2 giờ %3 phút còn lại</translation>
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Được nạp %1</translation>
+        <translation type="vanished">Được nạp %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Đang sạc %1, %2 phút sẽ đầy</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Đang sạc %1, %2 giờ %3 phút sẽ đầy</translation>
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Đang sạc %1 ...</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Được sạt</translation>
     </message>
 </context>
 <context>
@@ -226,7 +230,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Gỡ khỏi dock</translation>
     </message>
 </context>
 <context>
@@ -249,7 +253,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>Ngủ đông</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -361,7 +365,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="unfinished"/>
+        <translation>Đã kết nối nhưng không có truy cập Internet</translation>
     </message>
 </context>
 <context>

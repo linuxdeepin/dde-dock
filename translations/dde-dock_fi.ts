@@ -104,11 +104,11 @@
     </message>
     <message>
         <source>Top</source>
-        <translation>Yläosa</translation>
+        <translation>Ylös</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Alaosa</translation>
+        <translation>Alas</translation>
     </message>
     <message>
         <source>Left</source>
@@ -120,15 +120,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Pidä näkyvänä</translation>
+        <translation>Näytä aina</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Pidä piilotettuna</translation>
+        <translation>Piilotta paneeli</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Älykäs piilotus</translation>
+        <translation>Piilota automaattisesti</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -140,7 +140,7 @@
     </message>
     <message>
         <source>Status</source>
-        <translation>Tila</translation>
+        <translation>Näytä</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Työpöydät</translation>
+        <translation>Työtilan ikkunat</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -176,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Näppäimistö</translation>
+        <translation>Näyttönäppäimistö</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Ladattu: %1</translation>
+        <translation type="vanished">Ladattu: %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,6 +215,10 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
+        <translation>Ladataan: %1 ....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -291,7 +295,7 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Äänen asetukset</translation>
+        <translation>Ääniasetukset</translation>
     </message>
     <message>
         <source>Current Volume %1</source>

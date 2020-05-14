@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Opladet %1</translation>
+        <translation type="vanished">Opladet %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,7 +215,11 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Oplader %1 ....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Opladet</translation>
     </message>
 </context>
 <context>

@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Заряжено %1</translation>
+        <translation type="vanished">Заряжено %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -215,7 +215,11 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Зарядка %1 ....</translation>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Заряжен</translation>
     </message>
 </context>
 <context>
@@ -361,7 +365,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Подключено без доступа к Интернет</translation>
+        <translation>Подключено, без доступа к Интернету</translation>
     </message>
 </context>
 <context>

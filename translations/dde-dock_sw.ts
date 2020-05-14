@@ -217,6 +217,10 @@
         <source>Charging %1 ....</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Charged</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
