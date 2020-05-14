@@ -96,18 +96,18 @@ func startNTPbyFirstBoot(core *timedate1.Timedate) error {
 		logger.Error(err)
 		file, e := os.OpenFile(filePath, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0666)
 		if e != nil {
-			logger.Error("文件创建失败！！", e)
+			logger.Error("create file error ! !", e)
 			return e
 		}
 		writer := bufio.NewWriter(file)
 		_, e = writer.Write([]byte("This system first boot complete, do not delete this file\n"))
 		if e != nil {
-			logger.Error("内容写入缓冲区失败！！", e)
+			logger.Error("write content failed！！", e)
 			return e
 		}
 		e = writer.Flush()
 		if e != nil {
-			logger.Error("内容刷入文件失败！！", e)
+			logger.Error("flush content error！！", e)
 			return e
 		}
 
