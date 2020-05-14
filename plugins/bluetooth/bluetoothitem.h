@@ -65,7 +65,7 @@ private:
 
     Device::State m_devState;
     bool m_adapterPowered;
-    QTimer *m_timer;
+    QTimer *m_refreshIconTimer;
 };
 
 #endif // BLUETOOTHITEM_H

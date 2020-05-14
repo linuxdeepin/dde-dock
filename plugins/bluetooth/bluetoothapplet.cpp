@@ -61,6 +61,8 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_appletName(new QLabel(this))
     , m_centralWidget(new QWidget)
     , m_centrealLayout(new QVBoxLayout)
+    , m_adapterLayout(new QVBoxLayout)
+    , m_menueLayout(new QHBoxLayout)
     , m_openControlCenter(new MenueItem(this))
     , m_adaptersManager(new AdaptersManager(this))
 {
@@ -79,19 +81,16 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     m_openControlCenter->setFixedHeight(ITEMHEIGHT);
     m_openControlCenter->setVisible(false);
 
-    auto appletNameLayout = new QHBoxLayout;
+    QHBoxLayout *appletNameLayout = new QHBoxLayout;
     appletNameLayout->setMargin(0);
     appletNameLayout->setSpacing(0);
     appletNameLayout->addSpacing(MARGIN);
     appletNameLayout->addWidget(m_appletName);
     appletNameLayout->addStretch();
 
-    m_menueLayout = new QHBoxLayout;
     m_menueLayout->setMargin(0);
     m_menueLayout->setSpacing(0);
     m_menueLayout->addSpacing(MARGIN);
-
-    m_adapterLayout = new QVBoxLayout;
 
     m_centrealLayout->setMargin(0);
     m_centrealLayout->setSpacing(0);

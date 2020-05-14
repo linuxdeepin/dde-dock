@@ -43,12 +43,12 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
-    , m_timer(new QTimer(this))
+    , m_refreshIconTimer(new QTimer(this))
 {
     m_applet->setVisible(false);
     m_adapterPowered = m_applet->poweredInitState();
-
-    connect(m_timer, &QTimer::timeout, this, &BluetoothItem::refreshIcon);
+    m_refreshIconTimer->setInterval(100);
+    connect(m_refreshIconTimer, &QTimer::timeout, this, &BluetoothItem::refreshIcon);
     connect(m_applet, &BluetoothApplet::powerChanged, [&](bool powered) {
         m_adapterPowered = powered;
         refreshIcon();
@@ -58,8 +58,8 @@ BluetoothItem::BluetoothItem(QWidget *parent)
         refreshIcon();
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothItem::refreshIcon);
-    connect(m_applet, SIGNAL(noAdapter()), this, SIGNAL(noAdapter()));
-    connect(m_applet, SIGNAL(justHasAdapter()), this, SIGNAL(justHasAdapter()));
+    connect(m_applet,&BluetoothApplet::noAdapter,this,&BluetoothItem::noAdapter);
+    connect(m_applet,&BluetoothApplet::justHasAdapter,this,&BluetoothItem::justHasAdapter);
 }
 
 QWidget *BluetoothItem::tipsWidget()
@@ -134,7 +134,7 @@ void BluetoothItem::refreshIcon()
             stateString = "active";
             break;
         case Device::StateAvailable: {
-            m_timer->start();
+            m_refreshIconTimer->start();
             stateString = "waiting";
             iconString = QString("bluetooth-%1-symbolic").arg(stateString);
             const qreal ratio = devicePixelRatioF();
@@ -155,7 +155,7 @@ void BluetoothItem::refreshIcon()
         stateString = "disable";
     }
 
-    m_timer->stop();
+    m_refreshIconTimer->stop();
     iconString = QString("bluetooth-%1-symbolic").arg(stateString);
 
     const qreal ratio = devicePixelRatioF();
