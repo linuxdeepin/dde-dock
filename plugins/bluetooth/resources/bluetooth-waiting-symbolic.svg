@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g fill="#FFF" fill-rule="evenodd" transform="translate(2 2)">
+    <circle cx="3.67" cy="10.5" r="2" opacity=".01" transform="rotate(-120 3.67 10.5)"/>
+    <circle cx="3.302" cy="9.71" r="2" opacity=".02" transform="rotate(-110 3.302 9.71)"/>
+    <circle cx="3.076" cy="8.868" r="2" opacity=".03" transform="rotate(-100 3.076 8.868)"/>
+    <circle cx="3" cy="8" r="2" opacity=".04" transform="rotate(-90 3 8)"/>
+    <circle cx="3.076" cy="7.132" r="2" opacity=".05" transform="rotate(-80 3.076 7.132)"/>
+    <circle cx="3.302" cy="6.29" r="2" opacity=".1" transform="rotate(-70 3.302 6.29)"/>
+    <circle cx="3.67" cy="5.5" r="2" opacity=".15" transform="rotate(-60 3.67 5.5)"/>
+    <circle cx="4.17" cy="4.786" r="2" opacity=".3" transform="rotate(-50 4.17 4.786)"/>
+    <circle cx="4.786" cy="4.17" r="2" transform="rotate(-40 4.786 4.17)"/>
+    <circle cx="8" cy="3" r="2" opacity=".01"/>
+    <circle cx="8.868" cy="3.076" r="2" opacity=".02" transform="rotate(10 8.868 3.076)"/>
+    <circle cx="9.71" cy="3.302" r="2" opacity=".03" transform="rotate(20 9.71 3.302)"/>
+    <circle cx="10.5" cy="3.67" r="2" opacity=".04" transform="rotate(30 10.5 3.67)"/>
+    <circle cx="11.214" cy="4.17" r="2" opacity=".05" transform="rotate(40 11.214 4.17)"/>
+    <circle cx="11.83" cy="4.786" r="2" opacity=".1" transform="rotate(50 11.83 4.786)"/>
+    <circle cx="12.33" cy="5.5" r="2" opacity=".15" transform="rotate(60 12.33 5.5)"/>
+    <circle cx="12.698" cy="6.29" r="2" opacity=".3" transform="rotate(70 12.698 6.29)"/>
+    <circle cx="12.924" cy="7.132" r="2" transform="rotate(80 12.924 7.132)"/>
+    <circle cx="12.33" cy="10.5" r="2" opacity=".01" transform="rotate(120 12.33 10.5)"/>
+    <circle cx="11.83" cy="11.214" r="2" opacity=".02" transform="rotate(130 11.83 11.214)"/>
+    <circle cx="11.214" cy="11.83" r="2" opacity=".03" transform="rotate(140 11.214 11.83)"/>
+    <circle cx="10.5" cy="12.33" r="2" opacity=".04" transform="rotate(150 10.5 12.33)"/>
+    <circle cx="9.71" cy="12.698" r="2" opacity=".05" transform="rotate(160 9.71 12.698)"/>
+    <circle cx="8.868" cy="12.924" r="2" opacity=".1" transform="rotate(170 8.868 12.924)"/>
+    <circle cx="8" cy="13" r="2" opacity=".15" transform="rotate(180 8 13)"/>
+    <circle cx="7.132" cy="12.924" r="2" opacity=".3" transform="rotate(-170 7.132 12.924)"/>
+    <circle cx="6.29" cy="12.698" r="2" transform="rotate(-160 6.29 12.698)"/>
+  </g>
+</svg>
