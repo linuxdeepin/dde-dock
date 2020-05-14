@@ -111,7 +111,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);
-    m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 1000.0f);
+    m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 100.0f);
 
     m_centralLayout = new QVBoxLayout;
     m_centralLayout->addLayout(deviceLineLayout);
@@ -174,7 +174,7 @@ void SoundApplet::onVolumeChanged()
 {
     const float volume = m_defSinkInter->volume();
 
-    m_volumeSlider->setValue(std::min(1500.0f, volume * 1000.0f));
+    m_volumeSlider->setValue(std::min(150.0f, volume * 100.0f));
 
     m_soundShow->setText(QString::number(volume * 100) + '%');
     emit volumeChanged(m_volumeSlider->value());
@@ -183,8 +183,8 @@ void SoundApplet::onVolumeChanged()
 
 void SoundApplet::volumeSliderValueChanged()
 {
-    m_defSinkInter->SetVolumeQueued(m_volumeSlider->value() / 1000.0f, false);
-    m_soundShow->setText(QString("%1%").arg(m_volumeSlider->value() / 10));
+    m_defSinkInter->SetVolumeQueued(m_volumeSlider->value() / 100.0f, false);
+    m_soundShow->setText(QString("%1%").arg(m_volumeSlider->value()));
 }
 
 void SoundApplet::sinkInputsChanged()
@@ -224,7 +224,7 @@ void SoundApplet::onPlaySoundEffect()
 
 void SoundApplet::increaseVolumeChanged()
 {
-    m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 1000.0f);
+    m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 100.0f);
 }
 
 void SoundApplet::refreshIcon()
