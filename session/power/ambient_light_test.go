@@ -7,7 +7,7 @@ import (
 )
 
 func Test_calcBrWithLightLevel(t *testing.T) {
-	Convey("calcBrWithLightLevel", t, func() {
+	Convey("calcBrWithLightLevel", t, func(c C) {
 		var arr = []struct {
 			lightLevel float64
 			br         byte
@@ -25,7 +25,7 @@ func Test_calcBrWithLightLevel(t *testing.T) {
 		}
 
 		for _, value := range arr {
-			So(calcBrWithLightLevel(value.lightLevel), ShouldEqual, value.br)
+			c.So(calcBrWithLightLevel(value.lightLevel), ShouldEqual, value.br)
 		}
 	})
 }

@@ -20,8 +20,9 @@
 package main
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestFilterList(t *testing.T) {
@@ -47,9 +48,9 @@ func TestFilterList(t *testing.T) {
 		},
 	}
 
-	Convey("Test filterList", t, func() {
+	Convey("Test filterList", t, func(c C) {
 		for _, info := range infos {
-			So(filterList(info.origin, info.condition),
+			c.So(filterList(info.origin, info.condition),
 				ShouldResemble, info.ret)
 		}
 	})

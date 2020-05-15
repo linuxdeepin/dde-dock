@@ -27,73 +27,73 @@ import (
 )
 
 func TestCPUInfo(t *testing.T) {
-	Convey("Test cpu info", t, func() {
+	Convey("Test cpu info", t, func(c C) {
 		cpu, err := GetCPUInfo("testdata/cpuinfo")
-		So(cpu, ShouldEqual,
+		c.So(cpu, ShouldEqual,
 			"Intel(R) Core(TM) i3 CPU M 330 @ 2.13GHz x 4")
-		So(err, ShouldBeNil)
+		c.So(err, ShouldBeNil)
 
 		cpu, err = GetCPUInfo("testdata/sw-cpuinfo")
-		So(cpu, ShouldEqual, "sw 1.40GHz x 4")
-		So(err, ShouldBeNil)
+		c.So(cpu, ShouldEqual, "sw 1.40GHz x 4")
+		c.So(err, ShouldBeNil)
 
 		cpu, err = GetCPUInfo("testdata/arm-cpuinfo")
-		So(cpu, ShouldEqual, "NANOPI2 x 4")
-		So(err, ShouldBeNil)
+		c.So(cpu, ShouldEqual, "NANOPI2 x 4")
+		c.So(err, ShouldBeNil)
 
 		cpu, err = GetCPUInfo("testdata/hw_kirin-cpuinfo")
-		So(cpu, ShouldEqual, "HUAWEI Kirin 990 x 8")
-		So(err, ShouldBeNil)
+		c.So(cpu, ShouldEqual, "HUAWEI Kirin 990 x 8")
+		c.So(err, ShouldBeNil)
 	})
 }
 
 func TestMemInfo(t *testing.T) {
-	Convey("Test memory info", t, func() {
+	Convey("Test memory info", t, func(c C) {
 		mem, err := getMemoryFromFile("testdata/meminfo")
-		So(mem, ShouldEqual, uint64(4005441536))
-		So(err, ShouldBeNil)
+		c.So(mem, ShouldEqual, uint64(4005441536))
+		c.So(err, ShouldBeNil)
 	})
 }
 
 func TestVersion(t *testing.T) {
-	Convey("Test os version", t, func() {
+	Convey("Test os version", t, func(c C) {
 		lang := os.Getenv("LANGUAGE")
 		os.Setenv("LANGUAGE", "en_US")
 		defer os.Setenv("LANGUAGE", lang)
 
 		deepin, err := getVersionFromDeepin("testdata/deepin-version")
-		So(deepin, ShouldEqual, "2015 Desktop Alpha1")
-		So(err, ShouldBeNil)
+		c.So(deepin, ShouldEqual, "2015 Desktop Alpha1")
+		c.So(err, ShouldBeNil)
 
 		lsb, err := getVersionFromLSB("testdata/lsb-release")
-		So(lsb, ShouldEqual, "2014.3")
-		So(err, ShouldBeNil)
+		c.So(lsb, ShouldEqual, "2014.3")
+		c.So(err, ShouldBeNil)
 	})
 }
 
 func TestDistro(t *testing.T) {
-	Convey("Test os distro", t, func() {
+	Convey("Test os distro", t, func(c C) {
 		lang := os.Getenv("LANGUAGE")
 		os.Setenv("LANGUAGE", "en_US")
 		defer os.Setenv("LANGUAGE", lang)
 
 		distroId, distroDesc, distroVer, err := getDistroFromLSB("testdata/lsb-release")
-		So(distroId, ShouldEqual, "Deepin")
-		So(distroDesc, ShouldEqual, "Deepin 2014.3")
-		So(distroVer, ShouldEqual, "2014.3")
-		So(err, ShouldBeNil)
+		c.So(distroId, ShouldEqual, "Deepin")
+		c.So(distroDesc, ShouldEqual, "Deepin 2014.3")
+		c.So(distroVer, ShouldEqual, "2014.3")
+		c.So(err, ShouldBeNil)
 	})
 }
 
 func TestSystemBit(t *testing.T) {
-	Convey("Test getconf", t, func() {
+	Convey("Test getconf", t, func(c C) {
 		v := systemBit()
 		if v != "32" {
-			So(v, ShouldEqual, "64")
+			c.So(v, ShouldEqual, "64")
 		}
 
 		if v != "64" {
-			So(v, ShouldEqual, "32")
+			c.So(v, ShouldEqual, "32")
 		}
 	})
 }

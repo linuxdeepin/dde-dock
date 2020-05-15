@@ -1,8 +1,9 @@
 package systeminfo
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 var xmlData string = `<?xml version="1.0" standalone="yes" ?>
@@ -51,11 +52,11 @@ var xmlData string = `<?xml version="1.0" standalone="yes" ?>
 </list>`
 
 func Test_parseXml(t *testing.T) {
-	Convey("parseXml", t, func() {
+	Convey("parseXml", t, func(c C) {
 		value, err := parseXml([]byte(xmlData))
 		v := value.Size
 		t.Log(v)
-		So(v, ShouldEqual,  uint64(6442450944))
-		So(err, ShouldBeNil)
+		c.So(v, ShouldEqual, 6442450944)
+		c.So(err, ShouldBeNil)
 	})
 }

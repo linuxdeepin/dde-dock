@@ -20,33 +20,34 @@
 package accounts
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestGetLocaleFromFile(t *testing.T) {
-	Convey("getLocaleFromFile", t, func() {
-		So(getLocaleFromFile("testdata/locale"), ShouldEqual, "zh_CN.UTF-8")
+	Convey("getLocaleFromFile", t, func(c C) {
+		c.So(getLocaleFromFile("testdata/locale"), ShouldEqual, "zh_CN.UTF-8")
 	})
 }
 
 func TestSystemLayout(t *testing.T) {
-	Convey("Get system layout", t, func() {
+	Convey("Get system layout", t, func(c C) {
 		layout, err := getSystemLayout("testdata/keyboard_us")
-		So(err, ShouldBeNil)
-		So(layout, ShouldEqual, "us;")
+		c.So(err, ShouldBeNil)
+		c.So(layout, ShouldEqual, "us;")
 		layout, _ = getSystemLayout("testdata/keyboard_us_chr")
-		So(layout, ShouldEqual, "us;chr")
+		c.So(layout, ShouldEqual, "us;chr")
 	})
 }
 
 func TestAvailableShells(t *testing.T) {
-	Convey("Get available shells", t, func() {
+	Convey("Get available shells", t, func(c C) {
 		var ret = []string{"/bin/sh", "/bin/bash",
 			"/bin/zsh", "/usr/bin/zsh",
 			"/usr/bin/fish",
 		}
 		shells := getAvailableShells("testdata/shells")
-		So(shells, ShouldResemble, ret)
+		c.So(shells, ShouldResemble, ret)
 	})
 }

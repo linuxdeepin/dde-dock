@@ -20,16 +20,17 @@
 package apps
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"os"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func Test_getHomeByUid(t *testing.T) {
-	Convey("getHomeByUid", t, func() {
+	Convey("getHomeByUid", t, func(c C) {
 		uid := os.Getuid()
 		home, err := getHomeByUid(uid)
-		So(err, ShouldBeNil)
-		So(home, ShouldEqual, os.Getenv("HOME"))
+		c.So(err, ShouldBeNil)
+		c.So(home, ShouldEqual, os.Getenv("HOME"))
 	})
 }
