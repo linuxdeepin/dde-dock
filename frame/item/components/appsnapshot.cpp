@@ -145,14 +145,23 @@ void AppSnapshot::fetchSnapshot()
         QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
         qDebug() << "windowsID:"<< m_wid;
 
-        QDBusReply<QString> reply = interface.call(QStringLiteral("screenshotForWindowExtend"), m_wid);
-        if (reply.isValid()) {
-            m_snapshot.load(reply.value());
-            m_snapshotSrcRect = m_snapshot.rect();
+        QList<QVariant> args;
+        args << QVariant::fromValue(m_wid);
+        QDBusPendingCall call = interface.asyncCallWithArgumentList(QStringLiteral("screenshotForWindowExtend"), args);
+        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+        connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
+            if(!call.isError()) {
+                QDBusReply<QString> reply = call.reply();
 
-            QFile file(reply.value());
-            file.remove(reply.value());
-        }
+                m_snapshot.load(reply.value());
+            } else {
+                qDebug() << "get current workspace bckground error: " << call.error().message();
+            }
+
+            watcher->deleteLater();
+        });
+
+        m_snapshotSrcRect = m_snapshot.rect();
     } else {
         do {
             // get window image from shm(only for deepin app)
