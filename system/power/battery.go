@@ -225,7 +225,7 @@ func (bat *Battery) _refresh(info *battery.BatteryInfo, setTimeToFull bool) {
 	/* lie to full */
 	bat.appendToHistory(info.Percentage)
 	if info.Percentage > 97.0 && bat.getHistoryLength() >= 10 && bat.calcHistoryVariance() < 0.3 {
-		logger.Debugf("fake 100% : true percentage %.4f%% variance %.4f%%", info.Percentage, bat.calcHistoryVariance())
+		logger.Debugf("fake 100 : true percentage %.4f%% variance %.4f%%", info.Percentage, bat.calcHistoryVariance())
 		info.Percentage = 100.0
 		info.TimeToFull = 0
 	}
