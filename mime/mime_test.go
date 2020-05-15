@@ -27,7 +27,7 @@ import (
 )
 
 func TestAppInfos(t *testing.T) {
-	Convey("Delete info", t, func() {
+	Convey("Delete info", t, func(c C) {
 		var infos = AppInfos{
 			&AppInfo{
 				Id:   "gvim.desktop",
@@ -39,27 +39,27 @@ func TestAppInfos(t *testing.T) {
 				Name: "Firefox",
 				Exec: "firefox",
 			}}
-		So(len(infos.Delete("gvim.desktop")), ShouldEqual, 1)
-		So(len(infos.Delete("vim.desktop")), ShouldEqual, 2)
+		c.So(len(infos.Delete("gvim.desktop")), ShouldEqual, 1)
+		c.So(len(infos.Delete("vim.desktop")), ShouldEqual, 2)
 	})
 }
 
 func TestUnmarshal(t *testing.T) {
-	Convey("Test unmarsal", t, func() {
+	Convey("Test unmarsal", t, func(c C) {
 		table, err := unmarshal("testdata/data.json")
-		So(err, ShouldBeNil)
-		So(len(table.Apps), ShouldEqual, 2)
+		c.So(err, ShouldBeNil)
+		c.So(len(table.Apps), ShouldEqual, 2)
 
-		So(table.Apps[0].AppId, ShouldResemble, []string{"org.gnome.Nautilus.desktop"})
-		So(table.Apps[0].AppType, ShouldEqual, "file-manager")
-		So(table.Apps[0].Types, ShouldResemble, []string{
+		c.So(table.Apps[0].AppId, ShouldResemble, []string{"org.gnome.Nautilus.desktop"})
+		c.So(table.Apps[0].AppType, ShouldEqual, "file-manager")
+		c.So(table.Apps[0].Types, ShouldResemble, []string{
 			"inode/directory",
 			"application/x-gnome-saved-search",
 		})
 
-		So(table.Apps[1].AppId, ShouldResemble, []string{"org.gnome.gedit.desktop"})
-		So(table.Apps[1].AppType, ShouldEqual, "editor")
-		So(table.Apps[1].Types, ShouldResemble, []string{
+		c.So(table.Apps[1].AppId, ShouldResemble, []string{"org.gnome.gedit.desktop"})
+		c.So(table.Apps[1].AppType, ShouldEqual, "editor")
+		c.So(table.Apps[1].Types, ShouldResemble, []string{
 			"text/plain",
 		})
 
@@ -67,15 +67,15 @@ func TestUnmarshal(t *testing.T) {
 }
 
 func TestIsStrInList(t *testing.T) {
-	Convey("Test str whether in list", t, func() {
+	Convey("Test str whether in list", t, func(c C) {
 		var list = []string{"abc", "abs"}
-		So(isStrInList("abs", list), ShouldEqual, true)
-		So(isStrInList("abd", list), ShouldEqual, false)
+		c.So(isStrInList("abs", list), ShouldEqual, true)
+		c.So(isStrInList("abd", list), ShouldEqual, false)
 	})
 }
 
 func TestUserAppInfo(t *testing.T) {
-	Convey("User appinfo test", t, func() {
+	Convey("User appinfo test", t, func(c C) {
 		var infos = userAppInfos{
 			{
 				DesktopId: "test-web.desktop",
@@ -97,19 +97,19 @@ func TestUserAppInfo(t *testing.T) {
 			appInfos: infos,
 			filename: file,
 		}
-		So(manager.Get("application/test.xml")[0].DesktopId, ShouldEqual, "test-web.desktop")
-		So(manager.Get("application/test.ppt"), ShouldBeNil)
-		So(manager.Add([]string{"application/test.xml"}, "test-web.desktop"), ShouldEqual, false)
-		So(manager.Add([]string{"application/test.ppt"}, "test-doc.desktop"), ShouldEqual, true)
-		So(manager.Get("application/test.ppt")[0].DesktopId, ShouldEqual, "test-doc.desktop")
-		So(manager.Delete("test-web.desktop"), ShouldBeNil)
-		So(manager.Delete("test-xxx.desktop"), ShouldNotBeNil)
-		So(manager.Get("application/test.xml"), ShouldBeNil)
-		So(manager.Write(), ShouldBeNil)
+		c.So(manager.Get("application/test.xml")[0].DesktopId, ShouldEqual, "test-web.desktop")
+		c.So(manager.Get("application/test.ppt"), ShouldBeNil)
+		c.So(manager.Add([]string{"application/test.xml"}, "test-web.desktop"), ShouldEqual, false)
+		c.So(manager.Add([]string{"application/test.ppt"}, "test-doc.desktop"), ShouldEqual, true)
+		c.So(manager.Get("application/test.ppt")[0].DesktopId, ShouldEqual, "test-doc.desktop")
+		c.So(manager.Delete("test-web.desktop"), ShouldBeNil)
+		c.So(manager.Delete("test-xxx.desktop"), ShouldNotBeNil)
+		c.So(manager.Get("application/test.xml"), ShouldBeNil)
+		c.So(manager.Write(), ShouldBeNil)
 		tmp, err := newUserAppManager(file)
-		So(err, ShouldBeNil)
-		So(tmp.Get("application/test.xml"), ShouldBeNil)
-		So(tmp.Get("application/test.ppt")[0].DesktopId, ShouldEqual, "test-doc.desktop")
+		c.So(err, ShouldBeNil)
+		c.So(tmp.Get("application/test.xml"), ShouldBeNil)
+		c.So(tmp.Get("application/test.ppt")[0].DesktopId, ShouldEqual, "test-doc.desktop")
 		os.Remove(file)
 	})
 }

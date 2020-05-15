@@ -26,27 +26,27 @@ import (
 )
 
 func TestScanner(t *testing.T) {
-	Convey("getBgFilesInDir", t, func() {
-		So(getBgFilesInDir("testdata/Theme1/wallpapers"), ShouldResemble,
+	Convey("getBgFilesInDir", t, func(c C) {
+		c.So(getBgFilesInDir("testdata/Theme1/wallpapers"), ShouldResemble,
 			[]string{
 				"testdata/Theme1/wallpapers/desktop.jpg",
 			})
-		So(getBgFilesInDir("testdata/Theme2/wallpapers"), ShouldBeNil)
+		c.So(getBgFilesInDir("testdata/Theme2/wallpapers"), ShouldBeNil)
 	})
 }
 
 func TestFileInDirs(t *testing.T) {
-	Convey("Test file whether in dirs", t, func() {
+	Convey("Test file whether in dirs", t, func(c C) {
 		var dirs = []string{
 			"/tmp/backgrounds",
 			"/tmp/wallpapers",
 		}
 
-		So(isFileInDirs("/tmp/backgrounds/1.jpg", dirs),
+		c.So(isFileInDirs("/tmp/backgrounds/1.jpg", dirs),
 			ShouldEqual, true)
-		So(isFileInDirs("/tmp/wallpapers/1.jpg", dirs),
+		c.So(isFileInDirs("/tmp/wallpapers/1.jpg", dirs),
 			ShouldEqual, true)
-		So(isFileInDirs("/tmp/background/1.jpg", dirs),
+		c.So(isFileInDirs("/tmp/background/1.jpg", dirs),
 			ShouldEqual, false)
 	})
 }

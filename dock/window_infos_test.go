@@ -26,44 +26,44 @@ import (
 )
 
 func Test_windowInfosTypeEqual(t *testing.T) {
-	Convey("windowInfosType Equal", t, func() {
-		a := windowInfosType{
+	Convey("windowInfosType Equal", t, func(c C) {
+		wa := windowInfosType{
 			0: {"a", false},
 			1: {"b", false},
 			2: {"c", true},
 		}
-		b := windowInfosType{
+		wb := windowInfosType{
 			2: {"c", true},
 			1: {"b", false},
 			0: {"a", false},
 		}
-		So(a.Equal(b), ShouldBeTrue)
+		c.So(wa.Equal(wb), ShouldBeTrue)
 
-		c := windowInfosType{
+		wc := windowInfosType{
 			1: {"b", false},
 			2: {"c", false},
 		}
-		So(c.Equal(a), ShouldBeFalse)
+		c.So(wc.Equal(wa), ShouldBeFalse)
 
-		d := windowInfosType{
+		wd := windowInfosType{
 			0: {"aa", false},
 			1: {"b", false},
 			2: {"c", false},
 		}
-		So(d.Equal(a), ShouldBeFalse)
+		c.So(wd.Equal(wa), ShouldBeFalse)
 
-		e := windowInfosType{
+		we := windowInfosType{
 			0: {"a", false},
 			1: {"b", false},
 			3: {"c", false},
 		}
-		So(e.Equal(a), ShouldBeFalse)
+		c.So(we.Equal(wa), ShouldBeFalse)
 
-		f := windowInfosType{
+		wf := windowInfosType{
 			0: {"a", false},
 			1: {"b", false},
 			2: {"c", false},
 		}
-		So(f.Equal(a), ShouldBeFalse)
+		c.So(wf.Equal(wa), ShouldBeFalse)
 	})
 }

@@ -20,18 +20,19 @@
 package power
 
 import (
+	"testing"
+
 	. "github.com/smartystreets/goconvey/convey"
 	"pkg.deepin.io/lib/dbus"
-	"testing"
 )
 
 func Test_getValidName(t *testing.T) {
-	Convey("getValidName", t, func() {
+	Convey("getValidName", t, func(c C) {
 		names := []string{"BAT0", "test.t", "test:t", "test-t", "test.1:2-3.4:5-6"}
 		for _, name := range names {
 			path := dbus.ObjectPath("/battery_" + getValidName(name))
 			t.Log(path)
-			So(path.IsValid(), ShouldBeTrue)
+			c.So(path.IsValid(), ShouldBeTrue)
 		}
 	})
 }

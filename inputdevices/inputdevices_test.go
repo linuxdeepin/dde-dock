@@ -21,58 +21,59 @@ package inputdevices
 
 import (
 	"fmt"
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestSystemLayout(t *testing.T) {
-	Convey("Get system layout", t, func() {
+	Convey("Get system layout", t, func(c C) {
 		layout, err := getSystemLayout("testdata/keyboard")
-		So(err, ShouldBeNil)
-		So(layout, ShouldEqual, "us;")
+		c.So(err, ShouldBeNil)
+		c.So(layout, ShouldEqual, "us;")
 	})
 }
 
 func TestParseXKBFile(t *testing.T) {
-	Convey("Parse xkb rule file", t, func() {
+	Convey("Parse xkb rule file", t, func(c C) {
 		handler, err := getLayoutsFromFile("testdata/base.xml")
-		So(err, ShouldBeNil)
-		So(handler, ShouldNotBeNil)
+		c.So(err, ShouldBeNil)
+		c.So(handler, ShouldNotBeNil)
 	})
 }
 
 func TestStrList(t *testing.T) {
 	var list = []string{"abc", "xyz", "123"}
-	Convey("Add item to list", t, func() {
+	Convey("Add item to list", t, func(c C) {
 		ret, added := addItemToList("456", list)
-		So(len(ret), ShouldEqual, 4)
-		So(added, ShouldEqual, true)
+		c.So(len(ret), ShouldEqual, 4)
+		c.So(added, ShouldEqual, true)
 
 		ret, added = addItemToList("123", list)
-		So(len(ret), ShouldEqual, 3)
-		So(added, ShouldEqual, false)
+		c.So(len(ret), ShouldEqual, 3)
+		c.So(added, ShouldEqual, false)
 	})
 
-	Convey("Delete item from list", t, func() {
+	Convey("Delete item from list", t, func(c C) {
 		ret, deleted := delItemFromList("123", list)
-		So(len(ret), ShouldEqual, 2)
-		So(deleted, ShouldEqual, true)
+		c.So(len(ret), ShouldEqual, 2)
+		c.So(deleted, ShouldEqual, true)
 
 		ret, deleted = delItemFromList("456", list)
-		So(len(ret), ShouldEqual, 3)
-		So(deleted, ShouldEqual, false)
+		c.So(len(ret), ShouldEqual, 3)
+		c.So(deleted, ShouldEqual, false)
 	})
 
-	Convey("Is item in list", t, func() {
-		So(isItemInList("123", list), ShouldEqual, true)
-		So(isItemInList("456", list), ShouldEqual, false)
+	Convey("Is item in list", t, func(c C) {
+		c.So(isItemInList("123", list), ShouldEqual, true)
+		c.So(isItemInList("456", list), ShouldEqual, false)
 	})
 }
 
 func TestSyndaemonExist(t *testing.T) {
-	Convey("Test syndaemon exist", t, func() {
-		So(isSyndaemonExist("testdata/syndaemon.pid"), ShouldEqual, false)
-		So(isProcessExist("testdata/dde-desktop-cmdline", "dde-desktop"),
+	Convey("Test syndaemon exist", t, func(c C) {
+		c.So(isSyndaemonExist("testdata/syndaemon.pid"), ShouldEqual, false)
+		c.So(isProcessExist("testdata/dde-desktop-cmdline", "dde-desktop"),
 			ShouldEqual, true)
 	})
 }

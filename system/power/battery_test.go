@@ -26,7 +26,7 @@ import (
 )
 
 func Test_checkTimeStabilized(t *testing.T) {
-	Convey("checkTimeStabilized", t, func() {
+	Convey("checkTimeStabilized", t, func(c C) {
 		data := []uint64{
 			9455,
 			5467,
@@ -40,14 +40,14 @@ func Test_checkTimeStabilized(t *testing.T) {
 			1675,
 		}
 
-		Convey("fewer than 3", func() {
-			So(checkTimeStabilized(data[:2], data[2]), ShouldBeFalse)
+		c.Convey("fewer than 3", func() {
+			c.So(checkTimeStabilized(data[:2], data[2]), ShouldBeFalse)
 		})
-		Convey("not stablized", func() {
-			So(checkTimeStabilized(data[:6], data[6]), ShouldBeFalse)
+		c.Convey("not stablized", func() {
+			c.So(checkTimeStabilized(data[:6], data[6]), ShouldBeFalse)
 		})
-		Convey("stablized", func() {
-			So(checkTimeStabilized(data[:9], data[9]), ShouldBeTrue)
+		c.Convey("stablized", func() {
+			c.So(checkTimeStabilized(data[:9], data[9]), ShouldBeTrue)
 		})
 	})
 }
