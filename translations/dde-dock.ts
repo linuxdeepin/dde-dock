@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -292,8 +294,8 @@
         <translation>Charging %1, %2 hr %3 min until full</translation>
     </message>
     <message>
-        <source>%1 charged</source>
-        <translation>%1 charged</translation>
+        <source>Charging %1 ....</source>
+        <translation type="vanished">Charging %1 ....</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
@@ -302,6 +304,14 @@
     <message>
         <source>Capacity %1 </source>
         <translation>Capacity %1 </translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
