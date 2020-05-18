@@ -16,7 +16,7 @@ var xmlData string = `<?xml version="1.0" standalone="yes" ?>
    <description>System Memory</description>
    <physid>34</physid>
    <slot>System board or motherboard</slot>
-   <size units="bytes">6442450944</size>
+   <size units="bytes">3221225472</size>
    <hints>
     <hint name="icon" value="memory" />
    </hints>
@@ -56,7 +56,7 @@ func Test_parseXml(t *testing.T) {
 		value, err := parseXml([]byte(xmlData))
 		v := value.Size
 		t.Log(v)
-		c.So(v, ShouldEqual, 6442450944)
+		c.So(v, ShouldEqual, uint64(3221225472))
 		c.So(err, ShouldBeNil)
 	})
 }
