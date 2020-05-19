@@ -21,22 +21,26 @@ package bluetooth
 
 import (
 	"fmt"
-	"sync"
 
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	dbus "pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
+	"strconv"
+	"sync"
+	"time"
 )
 
 const (
 	notifyIconBluetoothConnected     = "notification-bluetooth-connected"
 	notifyIconBluetoothDisconnected  = "notification-bluetooth-disconnected"
 	notifyIconBluetoothConnectFailed = "notification-bluetooth-error"
+	bluetoothPinCodeDialogBin        = "/usr/lib/deepin-daemon/dde-bluetooth-dialog"
 )
 
 var globalNotifications *notifications.Notifications
 var globalNotifyId uint32
 var globalNotifyMu sync.Mutex
+var globalNotifyTimer *time.Timer
 
 func initNotifications() error {
 	sessionBus, err := dbus.SessionBus()
@@ -44,6 +48,14 @@ func initNotifications() error {
 		return err
 	}
 	globalNotifications = notifications.NewNotifications(sessionBus)
+	globalNotifyTimer = time.NewTimer(60 * time.Second)
+	globalNotifyTimer = time.AfterFunc(60 * time.Second, func() {
+		globalNotifyMu.Lock()
+		globalNotifications.CloseNotification(0, globalNotifyId)
+		globalNotifyMu.Unlock()
+	})
+	globalNotifyTimer.Stop()
+
 	return nil
 }
 
@@ -81,3 +93,39 @@ func notifyConnectFailedHostDown(alias string) {
 func notifyConnectFailedAux(alias, format string) {
 	notify(notifyIconBluetoothConnectFailed, Tr("Bluetooth connection failed"), fmt.Sprintf(format, alias))
 }
+
+func notifyRequestConfirm(alias string, devPath dbus.ObjectPath, pinCode string) {
+	format := Tr("Click here to connect to %q")
+	summary := Tr("Add Bluetooth devices")
+	body := fmt.Sprintf(format, alias)
+
+	logger.Info("notify", notifyIconBluetoothConnected, summary, body)
+
+	globalNotifyMu.Lock()
+	nid := globalNotifyId
+	globalNotifyMu.Unlock()
+
+	if isDialogExist("dde-bluetooth-dialog") {
+		logger.Info("notifyConnectTry dialog exist")
+		return
+	}
+
+	var as = []string{"pair", Tr("Pair")}
+	var timestamp = strconv.FormatInt(time.Now().UnixNano(), 10)
+
+	command := bluetoothPinCodeDialogBin + "," + pinCode + "," + string(devPath) + "," + timestamp
+	hints := map[string]dbus.Variant{"x-deepin-action-pair": dbus.MakeVariant(command)}
+
+	nid, err := globalNotifications.Notify(0, "dde-control-center", nid, notifyIconBluetoothConnected,
+		summary, body, as, hints, 65000)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	globalNotifyMu.Lock()
+	globalNotifyId = nid
+	globalNotifyMu.Unlock()
+	globalNotifyTimer.Reset(60 * time.Second)
+}
+
