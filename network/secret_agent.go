@@ -452,6 +452,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 	if !ok {
 		return nil, errors.New("not found connection uuid")
 	}
+	connId, _ := getConnectionDataString(connectionData, "connection", "id")
 
 	logger.Debug("uuid:", connUUID)
 	secretsData = make(map[string]map[string]dbus.Variant)
@@ -533,6 +534,15 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 					isMustAsk(connectionData, settingName, secretKey) {
 					askItems = append(askItems, secretKey)
 				}
+			} else if secretFlags == secretFlagAgentOwned {
+				resultSaved, err := sa.getAll(connUUID, settingName)
+				if err != nil {
+					return nil, err
+				}		
+				logger.Debugf("getAll resultSaved: %#v", resultSaved)
+			        if len(resultSaved) == 0 && allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
+					askItems = append(askItems, secretKey)
+				}
 			}
 		}
 
@@ -542,8 +552,26 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 			if err != nil {
 				logger.Warning("askPasswords error:", err)
 			} else {
+				var items []settingItem
 				for key, value := range resultAsk {
 					setting[key] = dbus.MakeVariant(value)
+					secretFlags, _ := getConnectionDataUint32(connectionData, settingName,
+					getSecretFlagsKeyName(key))
+					if secretFlags == secretFlagAgentOwned {
+						valueStr, ok := setting[key].Value().(string)
+						if ok {
+							label := fmt.Sprintf("Network secret for %s/%s/%s", connId, settingName, key)
+							items = append(items, settingItem{
+								settingName: settingName,
+								settingKey:  key,
+								value:       valueStr,
+								label:       label,
+							})
+						}
+					}
+				}
+			        for _, item := range items {
+					sa.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
 				}
 			}
 		}
