@@ -112,6 +112,22 @@
       </description>
     </key>
   </schema>
+  <schema path="/com/deepin/dde/dock/module/bluetooth/" id="com.deepin.dde.dock.module.bluetooth" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
   <schema path="/com/deepin/dde/dock/module/power/" id="com.deepin.dde.dock.module.power" gettext-domain="DDE">
     <key type="b" name="control">
       <default>false</default>
