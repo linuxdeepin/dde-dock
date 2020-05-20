@@ -265,7 +265,7 @@
     </message>
     <message>
         <source>Charging %1 ....</source>
-        <translation>Charging %1 ....</translation>
+        <translation type="vanished">Charging %1 ....</translation>
     </message>
     <message>
         <source>Charged</source>
@@ -273,6 +273,14 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -20,6 +20,7 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../syst
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
+                                                 ${QGSettings_INCLUDE_DIRS}
                                                  ../../interfaces)
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
@@ -27,6 +28,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5Svg_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
+    ${QGSettings_LIBRARIES}
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays)
