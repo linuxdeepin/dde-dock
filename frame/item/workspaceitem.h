@@ -36,11 +36,15 @@ class WorkSpaceItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit WorkSpaceItem(QWidget *parent = nullptr) ;
+    explicit WorkSpaceItem(int index =0, bool active = false, QWidget *parent = nullptr) ;
 
     inline ItemType itemType() const override {return WorkSpace;}
-
+    inline void setActive(bool active){m_active = active;}
     void refershIcon() override;
+
+signals:
+    void requestActivateWindow(const int wid) const;
+
 
 protected:
     void showEvent(QShowEvent* event) override;
@@ -62,6 +66,8 @@ private:
 //    LauncherInter *m_launcherInter;
 //    TipsWidget *m_tips;
     QGSettings* m_gsettings;
+    int m_index;
+    bool m_active;
 };
 
 

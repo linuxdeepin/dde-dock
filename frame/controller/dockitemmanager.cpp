@@ -37,13 +37,20 @@ DockItemManager::DockItemManager(QObject *parent)
     , m_updatePluginsOrderTimer(new QTimer(this))
     , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_pluginsInter(new DockPluginsController(this))
+    , m_wmInter(new DBusWm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
 {
     //固定区域：启动器
     m_itemList.append(new LauncherItem);
 
     // 工作区
-    for (int i = 0; i < 4; ++i)
-        m_itemList.append(new WorkSpaceItem);
+   int currentWorkSpace = m_wmInter->GetCurrentWorkspace();
+   for (int i = 1; i <= 4; ++i) {
+         WorkSpaceItem *workspace = new WorkSpaceItem(i, currentWorkSpace == i);
+         manageItem(workspace);
+         m_itemList.append(workspace);
+         m_workItems.append(workspace);
+         connect(workspace, &WorkSpaceItem::requestActivateWindow, this, &DockItemManager::requestActivateWindow, Qt::UniqueConnection);
+     }
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
@@ -78,6 +85,9 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
+
+    // 窗管信号
+    connect(m_wmInter, &DBusWm::WorkspaceSwitched, this, &DockItemManager::workspaceswitched, Qt::QueuedConnection);
 }
 
 
@@ -356,3 +366,29 @@ void DockItemManager::manageItem(DockItem *item)
     connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);
     connect(item, &DockItem::requestWindowAutoHide, this, &DockItemManager::requestWindowAutoHide, Qt::UniqueConnection);
 }
+
+void DockItemManager::requestActivateWindow(const int nindex)
+{
+    qDebug() << "nindex:" << nindex;
+    for (int i = 0; i < m_workItems.size(); ++i) {
+        if (i + 1 == nindex) {
+            QString strCommand = "dbus-send --session --dest=com.deepin.wm --print-reply /com/deepin/wm com.deepin.wm.SetCurrentWorkspace int32:";
+            strCommand += tr("%1").arg(nindex);
+            QProcess::startDetached(strCommand);
+            break;
+        }
+    }
+}
+
+void DockItemManager::workspaceswitched(int from, int to)
+{
+    qDebug() << "from :" << from << "to :" << to;
+    for (int i = 0; i < m_workItems.size(); ++i) {
+        if (i + 1 == to) {
+            m_workItems.at(i)->setActive(true);
+        } else
+            m_workItems.at(i)->setActive(false);
+        m_workItems.at(i)->update();
+    }
+}
+

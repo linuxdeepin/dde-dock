@@ -32,11 +32,13 @@
 
 DCORE_USE_NAMESPACE
 
-WorkSpaceItem::WorkSpaceItem(QWidget *parent)
+WorkSpaceItem::WorkSpaceItem(int index, bool active, QWidget *parent)
     : DockItem(parent)
 //    , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
 //    , m_tips(new TipsWidget(this))
     , m_gsettings(new QGSettings("com.deepin.dde.dock.module.workspace"))
+    , m_index(index)
+    , m_active(active)
 {
 //    m_launcherInter->setSync(true, false);
 
@@ -80,7 +82,17 @@ void WorkSpaceItem::paintEvent(QPaintEvent *e)
     QColor color = this->palette().color(QPalette::Base);
     color.setAlpha(100);
 
-    painter.fillRect(rect().marginsRemoved(QMargins(10,10,10,10)),color);
+    //painter.fillRect(rect().marginsRemoved(QMargins(10,10,10,10)),color);
+    const QRectF itemRect = rect();
+    qreal min = qMin(itemRect.width(), itemRect.height());
+    QRectF backgroundRect = QRectF(itemRect.x(), itemRect.y(), min, min);
+    backgroundRect = backgroundRect.marginsRemoved(QMargins(6, 8, 6, 8));
+    backgroundRect.moveCenter(itemRect.center());
+
+    QPainterPath path;
+    path.addRoundedRect(backgroundRect, 4, 4);
+    painter.fillPath(path, m_active ? QColor(0, 0, 0, 255 * 0.8) : QColor(0, 0, 0, 255 * 0.3));
+
 }
 
 void WorkSpaceItem::resizeEvent(QResizeEvent *e)
@@ -96,9 +108,9 @@ void WorkSpaceItem::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-//    hidePopup();
-
-    return QWidget::mousePressEvent(e);
+    hidePopup();
+    Q_EMIT requestActivateWindow(m_index);
+    return DockItem::mousePressEvent(e);
 }
 
 void WorkSpaceItem::mouseReleaseEvent(QMouseEvent *e)
