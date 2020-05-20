@@ -127,6 +127,13 @@
           Control Module Enable
       </description>
     </key>
+    <key type="b" name="showtimetofull">
+      <default>true</default>
+      <summary>Show TimeToFull</summary>
+      <description>
+          Show TimeToFull
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/shutdown/" id="com.deepin.dde.dock.module.shutdown" gettext-domain="DDE">
     <key type="b" name="control">
