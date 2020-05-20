@@ -111,9 +111,9 @@ const QPoint rawXPosition(const QPoint &scaledPos)
     QScreen const *screen = Utils::screenAtByScaled(scaledPos);
 
     return screen ? screen->geometry().topLeft() +
-           (scaledPos - screen->geometry().topLeft()) *
-           screen->devicePixelRatio()
-           : scaledPos;
+                    (scaledPos - screen->geometry().topLeft()) *
+                    screen->devicePixelRatio()
+                  : scaledPos;
 }
 
 const QPoint scaledPos(const QPoint &rawXPos)
@@ -121,9 +121,9 @@ const QPoint scaledPos(const QPoint &rawXPos)
     QScreen const *screen = Utils::screenAt(rawXPos);
 
     return screen
-           ? screen->geometry().topLeft() +
-           (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
-           : rawXPos;
+            ? screen->geometry().topLeft() +
+              (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
+            : rawXPos;
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -460,8 +460,8 @@ void MainWindow::internalMove(const QPoint &p)
 {
     const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
     const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
-                            isHide &&
-                            m_panelShowAni->state() == QVariantAnimation::Stopped;
+            isHide &&
+            m_panelShowAni->state() == QVariantAnimation::Stopped;
     if (!pos_adjust) {
         m_mainPanel->move(0, 0);
         return QWidget::move(p);
@@ -717,21 +717,22 @@ void MainWindow::setStrutPartial()
     }
 
     // pass if strut area is intersect with other screen
-    int count = 0;
-    const QRect pr = m_settings->primaryRect();
-    for (auto *screen : qApp->screens()) {
-        const QRect sr = screen->geometry();
-        if (sr == pr)
-            continue;
+    //优化了文件管理的代码 会导致bug 15351 需要注释一下代码
+    //    int count = 0;
+    //    const QRect pr = m_settings->primaryRect();
+    //    for (auto *screen : qApp->screens()) {
+    //        const QRect sr = screen->geometry();
+    //        if (sr == pr)
+    //            continue;
 
-        if (sr.intersects(strutArea))
-            ++count;
-    }
-    if (count > 0) {
-        qWarning() << "strutArea is intersects with another screen.";
-        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
-        return;
-    }
+    //        if (sr.intersects(strutArea))
+    //            ++count;
+    //    }
+    //    if (count > 0) {
+    //        qWarning() << "strutArea is intersects with another screen.";
+    //        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
+    //        return;
+    //    }
 
     m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
 }
@@ -1033,8 +1034,8 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 
 void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
 {
-//    if (m_registerKey != key)
-//        return;
+    //    if (m_registerKey != key)
+    //        return;
 
     if (m_settings->hideMode() == KeepShowing)
         return;
@@ -1042,7 +1043,7 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
     if (!isVisible())
         setVisible(true);
 
-//    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
+    //    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
 }
 
 void MainWindow::updateRegionMonitorWatch()
@@ -1050,74 +1051,57 @@ void MainWindow::updateRegionMonitorWatch()
     if (m_settings->hideMode() == KeepShowing)
         return;
 
-//    if (!m_registerKey.isEmpty()) {
-//        m_eventInter->UnregisterArea(m_registerKey);
-//        m_registerKey.clear();
-//    }
+    //    if (!m_registerKey.isEmpty()) {
+    //        m_eventInter->UnregisterArea(m_registerKey);
+    //        m_registerKey.clear();
+    //    }
 
     const int flags = Motion | Button | Key;
-//    QList<QRect> screensRect = m_settings->monitorsRect();
-//    QList<QRect> monitorAreas;
-    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
-    const QRect windowRect = m_settings->windowRect(m_curDockPos, isHide);
-    const qreal scale = devicePixelRatioF();
-    int val = 5;
+    //    QList<QRect> screensRect = m_settings->monitorsRect();
+    //    QList<QRect> monitorAreas;
+    int val = 2;
     const int margin = m_settings->dockMargin();
     int x, y, w, h;
 
-//    if (screensRect.size()) {
-        switch (m_curDockPos) {
-        case Dock::Top: {
-            x = windowRect.topLeft().x();
-            y = windowRect.topLeft().y();
-            w = m_settings->primaryRect().width();
-            h = val+ margin;
-//            for (QRect rect : screensRect) {
-//                monitorAreas << QRect(rect.x() + margin, rect.y(), rect.width() - margin * 2, val);
-//            }
-        }
-            break;
-        case Dock::Bottom: {
-            x = windowRect.bottomLeft().x();
-            y = windowRect.bottomLeft().y() - val;
-            w = m_settings->primaryRect().width();
-            h = val+ margin;
-//            for (QRect rect : screensRect) {
-//                monitorAreas << QRect(rect.x() + margin, rect.y() + rect.height() - val, rect.width() - margin * 2, val);
-//            }
-        }
-            break;
-        case Dock::Left: {
-            x = windowRect.topLeft().x();
-            y = windowRect.topLeft().y();
-            h = val+ margin;
-            h = m_settings->primaryRect().height();
-//            for (QRect rect : screensRect) {
-//                monitorAreas << QRect(rect.x(), rect.y() + margin, val, rect.height() - margin * 2);
-//            }
-        }
-            break;
-        case Dock::Right: {
-            x = windowRect.topRight().x() - val - margin;
-            y = windowRect.topRight().y();
-            w = m_settings->primaryRect().width();
-            h = m_settings->primaryRect().height();
-//            for (QRect rect : screensRect) {
-//                monitorAreas << QRect(rect.x() + rect.width() - val, rect.y() + margin, val, rect.height() - margin * 2);
-//            }
-        }
-            break;
-        }
-//        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
-//    } else {
-//        m_registerKey = m_eventInter->RegisterFullScreen();
-//    }
+    //    if (screensRect.size()) {
+    switch (m_curDockPos) {
+    case Dock::Top: {
+        m_eventInter->RegisterArea(margin, 0, m_settings->currentRect().width() - margin * 2, val, flags);
+        //            for (QRect rect : screensRect) {
+        //                monitorAreas << QRect(rect.x() + margin, rect.y(), rect.width() - margin * 2, val);
+        //            }
+    }
+        break;
+    case Dock::Bottom: {
+        m_eventInter->RegisterArea(margin, m_settings->currentRect().height() - val, m_settings->currentRect().width() - margin * 2, val, flags);
+        //            for (QRect rect : screensRect) {
+        //                monitorAreas << QRect(rect.x() + margin, rect.y() + rect.height() - val, rect.width() - margin * 2, val);
+        //            }
+    }
+        break;
+    case Dock::Left: {
+        m_eventInter->RegisterArea(0, margin, val, m_settings->currentRect().height() - margin * 2, flags);
+        //            for (QRect rect : screensRect) {
+        //                monitorAreas << QRect(rect.x(), rect.y() + margin, val, rect.height() - margin * 2);
+        //            }
+    }
+        break;
+    case Dock::Right: {
+        m_eventInter->RegisterArea(m_settings->currentRect().width() - val, margin, val, m_settings->currentRect().height() - margin * 2, flags);
+        //            for (QRect rect : screensRect) {
+        //                monitorAreas << QRect(rect.x() + rect.width() - val, rect.y() + margin, val, rect.height() - margin * 2);
+        //            }
+    }
+        break;
+    }
+    //        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
+    //    } else {
+    //        m_registerKey = m_eventInter->RegisterFullScreen();
+    //    }
 
-    m_eventInter->RegisterArea(x * scale, y * scale, w * scale, h * scale, flags);
-
-//    if (!m_regionMonitor->registered()) {
-//        m_regionMonitor->registerRegion();
-//    }
+    //    if (!m_regionMonitor->registered()) {
+    //        m_regionMonitor->registerRegion();
+    //    }
 }
 
 
