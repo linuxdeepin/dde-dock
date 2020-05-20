@@ -64,6 +64,8 @@ type Manager struct {
 	BatteryTimeToEmpty uint64
 	BatteryTimeToFull  uint64
 
+	BatteryCapacity float64
+
 	PowerSavingModeEnabled bool `prop:"access:rw"`
 	PowerSavingModeAuto    bool `prop:"access:rw"`
 
