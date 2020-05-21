@@ -9,16 +9,13 @@
     </message>
 </context>
 <context>
-    <name>AdapterItem</name>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
