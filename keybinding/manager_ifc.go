@@ -22,7 +22,6 @@ package keybinding
 import (
 	"errors"
 	"fmt"
-	"runtime"
 	"strings"
 	"time"
 
@@ -63,31 +62,23 @@ func (*Manager) GetInterfaceName() string {
 	return dbusInterface
 }
 
-// 获取正在运行的函数名
-func runFuncName() string {
-	pc := make([]uintptr, 1)
-	runtime.Callers(2, pc)
-	f := runtime.FuncForPC(pc[0])
-	return f.Name()
-}
-
 //true : ignore
 func (m *Manager)isIgnoreRepeat(name string) bool  {
 	const minKeyEventInterval = 200 * time.Millisecond
 	now := time.Now()
-	duration := now.Sub(m.lastKeyEventTime)
+	duration := now.Sub(m.lastMethodCalledTime)
 	logger.Debug("duration:", duration)
 	if 0 < duration && duration < minKeyEventInterval {
 		logger.Debug(">>Ignore ", name)
 		return true
 	}
-	m.lastKeyEventTime = now
+	m.lastMethodCalledTime = now
 	return false
 }
 
 // Reset reset all shortcut
 func (m *Manager) Reset() *dbus.Error {
-	if (m.isIgnoreRepeat(runFuncName())) {
+	if (m.isIgnoreRepeat("Reset")) {
 		return nil
 	}
 

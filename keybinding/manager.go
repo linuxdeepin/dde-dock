@@ -100,6 +100,7 @@ type Manager struct {
 	handlers            []shortcuts.KeyEventFunc
 	lastKeyEventTime    time.Time
 	lastExecCmdTime     time.Time
+	lastMethodCalledTime    time.Time
 	grabScreenKeystroke *shortcuts.Keystroke
 
 	// for switch kbd layout
