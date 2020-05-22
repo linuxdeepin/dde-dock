@@ -47,7 +47,7 @@ public:
     ~AppItem();
 
     const QString appId() const;
-    const bool isValid() const;
+    bool isValid() const;
     void updateWindowIconGeometries();
     void undock();
     QWidget *appDragWidget();
@@ -113,7 +113,7 @@ private:
     bool m_dragging;
     bool m_active;
     int m_retryTimes;
-    int  m_lastShowDay;
+    int m_lastShowDay;
     unsigned long m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;
