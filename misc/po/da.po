@@ -6,14 +6,14 @@
 # 31c8ff7daf246c6bd598eefe84c1433c, 2016-2017
 # Cindy0514, 2019
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2016,2018
-# scootergrisen, 2017-2019
+# scootergrisen, 2017-2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 10:15+0000\n"
+"Last-Translator: Cindy0514\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,49 +35,45 @@ msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og sm�
 msgid "Username cannot be empty"
 msgstr "Brugernavnet må ikke være tomt"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "Brugernavnet må kun indeholde a~z, 0~9, - eller _"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Det første tegn skal være et bogstav eller et tal"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "Det første tegn skal være med småt"
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr "Brugernavnet findes allerede"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "Brugernavnet er blevet brugt af systemet"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
 msgstr "Brugernavnet skal være mellem 3-32 tegn langt"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "Sat"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "Log venligst ind igen for at vise ændringerne"
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Skærmskalering"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Sætter skærmskalering"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
-msgid "Fingerprint verification failed"
-msgstr "Verifikation af fingeraftryk mislykkedes"
-
 #: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification failed"
+msgstr "Bekræftelse af fingeraftryk mislykkedes"
+
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
-msgstr "Verifikation med fingeraftryk fik timeout"
+msgstr "Bekræftelse af fingeraftryk fik timeout"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -127,96 +123,108 @@ msgstr "Adgang til beskeder"
 msgid "Message notification"
 msgstr "Meddelelsesnotifikation"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Tilsluttet"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Tilslutning af %q lykkedes"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Afbrudt"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Sørg for at %q er tændt og inden for rækkevidde"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Kunne ikke tilslutte %q, parring mislykkedes"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr ""
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
 msgstr "i dag"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
 msgstr "i morgen"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
 msgstr "%s til %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
 msgstr "Arbejde"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
 msgstr "Leve"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Andre"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
 msgstr "En dag før start"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Luk"
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
 msgstr "Påmind mig i morgen"
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:508
 msgid "Remind me later"
 msgstr "Påmind mig senere"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
 msgstr "Planlæg påmindelse"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../calendar/type.go:40
+msgid "Festival"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Åbn"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr "Luk alle"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr "Gennemtving afslut"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr "Dok"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr "Fjern fra dok"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Alle vinduer"
 
@@ -294,105 +302,113 @@ msgstr "Deepin pipette"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "AI-assistent for skrivebordet"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Tekst til tale"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Tale til tekst"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Udklipsholder"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Oversættelse"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Skift layout"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Skift til venstre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Skift til højre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Skift til øvre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Skift til nedre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Skift lignende vinduer"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Skift lignende vinduer baglæns"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Skift vinduer"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Skift vinduer baglæns"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Vis skrivebord"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Maksimer vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Gendan vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Minimer vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Luk vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Flyt vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Juster vindue"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Flyt til venstre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Flyt til højre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Flyt til øvre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Flyt til nedre arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Vis vinduer fra alle arbejdsområder"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Vis vinduer på nuværende arbejdsområde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Vis arbejdsområde"
 
@@ -400,72 +416,68 @@ msgstr "Vis arbejdsområde"
 msgid "Authentication is required to switch language"
 msgstr "Der kræves autentifikation for at skifte sprog"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Skifter systemsproget og installerer de påkrævede sprogpakker, vent venligst..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr "Skifter systemsprog, vent venligst..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
 msgstr "Systemsproget blev ændret. Log venligst ud og ind igen"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Genskab"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Annuller"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Prøv igen"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Annuller"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q installeret."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "%q blev ikke installeret."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q fjernet."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "%q blev ikke fjernet."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "Tilslut venligst strømforsyningen for at opdatere normalt så automatisk nedlukning forhindres."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "Pakke-mellemlager ryddet"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "Dit system er blevet ændret. Genskab venligst til officiel kilde for at bruge det normalt"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q fjernet"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Kunne ikke afinstallere %q"
 
@@ -518,7 +530,7 @@ msgstr "Tunneled TLS"
 msgid "Protected EAP"
 msgstr "Beskyttet EAP"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Kablet forbindelse"
 
@@ -798,8 +810,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "ModemManager har ikke kørt eller afbrudt uventet"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "802.11 Wi-Fi-netværk kunne ikke findes"
+msgid "The 802.11 WLAN network could not be found"
+msgstr "802.11 WLAN-netværket blev ikke fundet"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -915,86 +927,84 @@ msgstr "Hotspottet blev aktiveret"
 msgid "%q connected"
 msgstr "%q tilsluttet"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr "Hotspottet blev deaktiveret"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q afbrudt"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Kan ikke dele hotspot, tjek venligst dnsmasq-indstillinger"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse router"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kan ikke forbinde %q, check din router eller netværkskabel."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
 msgstr "Der kræves adgangskode for at oprette forbindelse til %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr "Du er nu offline."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr "Flytilstand aktiveret."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr "Adgangspunkttilstand understøttes ikke af enheden."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Netværk"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er nødvendigt."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr "Systemproxy er indstillet."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "Systemproxy er annulleret."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Batteriet er kritisk lavt"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Tilsluttet"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "Computeren går meget snart i hvile, tilslut venligst strømforsyningen nu"
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Batteriet er lavt"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "Computeren går snart i hvile, tilslut venligst strømforsyningen"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" bestod ikke bekræftelse af systemsikkerhed og kan ikke køre nu"
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Batteriet er kritisk lavt"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "Batteriet er lavt. Tilslut venligst strømforsyningen"
 

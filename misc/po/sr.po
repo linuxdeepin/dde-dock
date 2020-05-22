@@ -4,15 +4,16 @@
 # 
 # Translators:
 # kolera <koleramilan@gmail.com>, 2017
-# Марко Пејовић <3acejax@gmail.com>, 2018-2019
-# Марко Пејовић <3acejax@gmail.com>, 2018-2019
+# Марко Пејовић <markopejovic@tutanota.com>, 2018-2019
+# Марко Пејовић <markopejovic@tutanota.com>, 2018-2020
+# Марко Пејовић <markopejovic@tutanota.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 12:02+0000\n"
+"Last-Translator: Марко Пејовић <markopejovic@tutanota.com>\n"
 "Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,53 +29,49 @@ msgstr "Молимо унесите лозинку од најмање 8 кар�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Лозинка може садржати само слова алфабета (осетљива на величину), бројеве или специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Лозинка може садржати само слова абецеде (осетљива на величину), бројеве или специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
 msgstr "Корисничко име не може бити празно"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "Корисничко име мора бити састављено од a~z, 0~9, - или _"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Први карактер мора бити слово или број"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "Први карактер мора бити мало слово"
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr "Корисничко име већ постоји"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "Корисничко име се већ користи"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
 msgstr "Корисничко име мора садржати између 3-32 карактера"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "Успешно подешено"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "Поново се пријавите да видите промене"
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Скалирање приказа"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Подешавање салираног приказа"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr "Неуспешна верификација отиска прста"
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr "Време за верификацију отиска прста је истекло"
 
@@ -126,96 +123,108 @@ msgstr "Приступ порукама"
 msgid "Message notification"
 msgstr "Обавештење о пристиглим порукама"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Повезани сте"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Повезивање са %q успешно"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Нисте поевзани"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Проверите да ли је %q укључен и да је у домету"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Неуспешно повезивање са %q, упаривање неуспешно"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
 msgstr "Блутут повезивање неуспешно"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr "Кликни овде за повезивање са %q"
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr "Додај Блутут уређаје"
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr "Упари"
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
 msgstr "данас"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
 msgstr "сутра"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
 msgstr "%s до %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
 msgstr "Посао"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
 msgstr "Живот"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Остало"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
 msgstr "Један дан пре пчетка"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Затвори"
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
 msgstr "Подсети ме сутра"
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:508
 msgid "Remind me later"
 msgstr "Подсети касније"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
 msgstr "Подсетник догађаја"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../calendar/type.go:40
+msgid "Festival"
+msgstr "Празник"
+
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Покрени"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr "Затвори све"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr "Принудно изађи"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
-msgstr "Док"
+msgstr "Закачи"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr "Откачи"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Сви прозори"
 
@@ -237,7 +246,7 @@ msgstr "Снимач Екрана"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Закључавање екрана"
+msgstr "Закључaj екран"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
@@ -293,105 +302,113 @@ msgstr "Дипин Пипета"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "ВИ Помоћник"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Текст у говор"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Говор у текст"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Бележница"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr " Превод"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Промени распоред"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Премести се на леви радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Премести се на десни радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Премести се на горњи радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Премести се на доњи радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Промена између прозора истог програма"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Промена између прозора истог програма обрнутим редоследом"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Промена прозора"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Промена прозора обрнутим редоследом"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Приказ радне површине"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Максимализуј прозор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Врати прозор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Минимализуј прозор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Затвори прозор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Помери прозор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Промени величину прозора"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Премести на леви радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Премести на десни радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Премести на горњи радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Премести на доњи радни простор"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Приказ прозора свих радних површина"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Приказ прозора тренутне радне површине"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Приказ активности"
 
@@ -399,72 +416,68 @@ msgstr "Приказ активности"
 msgid "Authentication is required to switch language"
 msgstr "Аутентификација је неопходна за промену језика"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Неуспешна промена језика система, молимо покушајте касније"
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Промена језика система и инсталирање потребних језичких пакета, молимо сачекајте..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr "Промена језика система, молимо сачекајте..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
-msgstr "Језик система је промењен, одјавите се, па се пријавите"
+msgstr "Језик система је промењен, одјавите се, затим се пријавите"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Врати"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Неуспешна промена језика система, молимо покушајте касније"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Откажи"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Поново"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Откажи"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q инсталација успешна."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "%q инсталација неуспешна."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q уклањање успешно."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "%q уклањање неуспешно."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "Прикључите пуњач да избегнете самостално искључивање."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "Кеш пакета уклоњен"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "Извор система је промењен, молимо вратите се на званични извор за нормално коришћење."
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q уклањање успешно"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Уклањање %q неуспешно"
 
@@ -517,7 +530,7 @@ msgstr "Тунелни ТЛС"
 msgid "Protected EAP"
 msgstr "Заштићени ЕАП"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Жичана веза"
 
@@ -797,8 +810,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "УправникМодема се није покренуо или се неочекивано зауставио"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "802.11 Вај-Фај мрежа није пронађена"
+msgid "The 802.11 WLAN network could not be found"
+msgstr "802.11 ВЛАН мрежа није пронађена"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -914,86 +927,84 @@ msgstr "Врућа тачка укључена"
 msgid "%q connected"
 msgstr "%q повезани сте"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr "Врућа тачка искључена"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q нисте поевзани"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Немогуће делити врућу тачку, проверите dnsmasq поставке"
+msgstr "Немогуће делити врућу тачку, проверите dnsmasq подешавања"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Неуспешно повезивање на %q, будите ближе бежичном рутеру"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Неуспешно повезивање на %q, проверите ваш рутер или мрежни кабл."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
 msgstr "Лозинка је потребна за повезивање %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Неуспешно повезивање на %q, погрешна лозинка"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Непознато"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr "Сада сте ван мреже."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr "Авионски режим укључен."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr "Режим приступне тачке није подржан на овом уређају."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Мрежа"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Хардверски прекидач ВЛАН картице је искључен, молимо укључите по потреби."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr "Системски посредник успешно подешен."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "Системски посредник је отказан."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Батерија критично испражњена"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Повезани сте"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "Рачунар ће обуставити рад ускоро, укључите пуњач одмах"
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Батерија при крају"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "Рачунар ће обуставити рад ускоро, укључите пуњач"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" није успешно прошао безбедносну проверу и тренутно се не може покренути"
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Батерија критично испражњена"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "Батерија при крају, прикључите пуњач"
 

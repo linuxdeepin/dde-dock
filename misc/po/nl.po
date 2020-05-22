@@ -6,16 +6,17 @@
 # Bernard Flach <bernard@deepin.nl>, 2019
 # Cindy0514, 2019
 # dragnadh, 2016-2018
+# dragnadh, 2020
 # Hans van Schooten <hans@schootenvan.nl>, 2017
-# Lars Acou <lars.acou@gmail.com>, 2017
+# Lars Acou <lars.acou@gmail.com>, 2017,2020
 # René Devers <rene.devers@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 10:15+0000\n"
+"Last-Translator: Lars Acou <lars.acou@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,47 +38,43 @@ msgstr "Het wachtwoord moet letters (hoofdlettergevoelig), cijfers en speciale t
 msgid "Username cannot be empty"
 msgstr "Gebruikersnaam mag niet leeg zijn"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr ""
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Het eerste teken moet een letter of cijfer zijn"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "Het eerste teken mag geen hoofdletter zijn"
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
-msgstr ""
+msgstr "De gebruikersnaam bestaat al"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "De gebruikersnaam wordt gebruikt door het systeem"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
+msgstr "De gebruikersnaam moet tussen de 3 en 32 tekens lang zijn"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "Succesvol ingesteld"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "Gelieve opnieuw in te loggen om de wijzigingen te zien"
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Schaling weergeven"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Beeldgrootte instellen"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr "Vingerafdruk verificatie mislukt"
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr "Vingerafdrukauthenticatie is verlopen"
 
@@ -129,96 +126,108 @@ msgstr "Berichttoegang"
 msgid "Message notification"
 msgstr "Berichtmelding"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Verbonden"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Verbinden %q succesvol"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Ontkoppeld"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Zorg ervoor dat %q ingeschakeld en binnen bereik is."
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Verbinden met %q mislukt, paren mislukt"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
 msgstr "Bluetoothverbinding mislukt"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr ""
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
-msgstr ""
+msgstr "vandaag"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
-msgstr ""
+msgstr "morgen"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s naar %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
-msgstr ""
+msgstr "Werk"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
-msgstr ""
+msgstr "Privé"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Overig"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
-msgstr ""
+msgstr "Een dag voor aanvang"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../../calendar/scheduler.go:482
-msgid "Remind me tomorrow"
-msgstr ""
-
-#: ../../calendar/scheduler.go:490
-msgid "Remind me later"
-msgstr ""
-
 #: ../../calendar/scheduler.go:500
+msgid "Remind me tomorrow"
+msgstr "Herinner me er morgen aan"
+
+#: ../../calendar/scheduler.go:508
+msgid "Remind me later"
+msgstr "Herinner me er later aan"
+
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
+msgstr "Herinnering planning"
+
+#: ../../calendar/type.go:40
+msgid "Festival"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Openen"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
-msgstr ""
+msgstr "Alles sluiten"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
-msgstr ""
+msgstr "Afsluiten forceren"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
-msgstr ""
+msgstr "Dock"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
-msgstr ""
+msgstr "Undock"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Alle vensters"
 
@@ -236,7 +245,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "Schermopname"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -288,7 +297,7 @@ msgstr "Snel scherm uit"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "Systeemmonitor"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -296,105 +305,113 @@ msgstr "Deepin Kiezen"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "Bureaublad AI Assistent"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Tekst naar spraak"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Spraak naar tekst"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "klembord"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Vertaling"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Wissel Lay-out"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Ga naar linker werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Ga naar rechter werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Ga naar bovenste werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Ga naar onderste werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Verwissel gelijkaardige vensters"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Verwissel gelijkaardige vensters in omgekeerde volgorde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Verwissel vensters"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Verwissel vensters in omgekeerde volgorde"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Toon bureaublad"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Venster maximaliseren"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Venster herstellen"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Venster minimaliseren"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Sluit venster"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Verplaats venster"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Venstergrootte aanpassen"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Verplaats naar linker werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Verplaats naar rechter werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Verplaats naar bovenste werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Verplaats naar onderste werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Toon vensters van alle werkruimtes"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Toon vensters van de huidige werkruimte"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Toon werkruimte"
 
@@ -402,72 +419,68 @@ msgstr "Toon werkruimte"
 msgid "Authentication is required to switch language"
 msgstr "Authenticatie is vereist om taal te wijzigen"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Wijzigen van systeemtaal mislukt, probeer later opnieuw"
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Systeemtaal wordt gewijzigd en de vereiste taalpaketten worden geïnstalleerd, even geduld ..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr "Systeemtaal wordt gewijzigd, even geduld ..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
 msgstr "Systeemtaal werd gewijzigd, gelieve opnieuw in te loggen"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Herstellen"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Wijzigen van systeemtaal mislukt, probeer later opnieuw"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Annuleren"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Opnieuw proberen"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q is succesvol geïnstalleerd."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "Het installeren van %q is mislukt."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q is succesvol verwijderd."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "Het verwijderen van %q is mislukt."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "Om te voorkomen dat de computer automatisch wordt afgesloten, moet u deze op de netstroom aansluiten."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "Pakket cache uitgewist"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "Uw systeembron is gewijzigd. Herstel de officiële bron voor normaal gebruik"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q succesvol verplaatst"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "%q mislukt om te verwijderen"
 
@@ -520,7 +533,7 @@ msgstr "Tunneled TLS"
 msgid "Protected EAP"
 msgstr "Beschermd EAP"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Bekabelde verbinding"
 
@@ -800,8 +813,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "Modembeheer is onverwacht afgesloten of was niet aan"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "Het 802.11 Wi-Fi netwerk kon niet gevonden worden"
+msgid "The 802.11 WLAN network could not be found"
+msgstr "Het 802.11 WLAN netwerk kon niet gevonden worden"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -903,100 +916,98 @@ msgstr "De verbinding is verwijderd van instellingen"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Hotspot inschakelen"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Verbinden met %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot ingeschakeld"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q verbonden"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot uitgeschakeld"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q ontkoppeld"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Kan hotspot niet delen, controleer de instellingen van dnsmasq"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Kon %q niet verbinden, blijf dichter bij de draadloze router"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Kan %q niet verbinden, controleer uw router of netwerk kabel"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Wachtwoord is nodig om verbinding te maken met %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Verbinding mislukt, kan geen verbinding maken met %q, verkeerd wachtwoord"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr "Je bent nu offline."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr "Vliegtuigstand ingeschakeld."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr "Access Point modus wordt niet ondersteund door dit apparaat."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Netwerk"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "De hardwareswitch van de WLAN-kaart is uitgeschakeld, gelieve in te schakelen indien nodig."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr "Systeemproxy met succes ingesteld."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "Systeemproxy werd geannuleerd."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Batterijniveau kritiek laag"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Verbonden"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "Computer gaat weldra in pauzestand, sluit de oplader nu aan"
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Batterij is laag"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "Computer gaat weldra in pauzestand, sluit de oplader aan"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" voldeed niet aan de systeemveiligheidsvereisten en kan momenteel niet draaien"
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Batterij kritiek laag"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "Batterij is bijna leeg, sluit aan op netstroom"
 
@@ -1012,7 +1023,7 @@ msgstr "Authenticatie is vereist om te bepalen of netwerktijdsynchronisatie moet
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "Authenticatie is vereist om de NTP-server te wijzigen"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""

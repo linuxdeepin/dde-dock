@@ -4,17 +4,17 @@
 # 
 # Translators:
 # Maggie Liu <maggie.liufei@gmail.com>, 2016
-# Marck Hrin <marck741@gmail.com>, 2017,2019
-# Yevhenii Miziev <zmekinski@yahoo.com>, 2017
-# Yuri Chornoivan <yurchor@ukr.net>, 2018
+# Marck Hrin, 2017,2019-2020
+# Євгеній Мізєв <zmekinski@yahoo.com>, 2017
+# Yuri Chornoivan <yurchor@ukr.net>, 2018-2020
 # Максим Назаренко <mnaz261295@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 10:15+0000\n"
+"Last-Translator: Cindy0514\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,47 +36,43 @@ msgstr "Пароль повинен містити англійські літе
 msgid "Username cannot be empty"
 msgstr "Поле, призначене для імені користувача, не може бути пустим"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "Ім'я користувача повинне містити такі символи, як a~z, 0~9, - або _"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Перший символ має бути літерою або цифрою"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "Перший символ має бути у нижньому регістрі."
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr "Таке ім'я користувача вже існує"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "Це ім'я користувача вже використовувалося в системі."
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
 msgstr "Ім'я користувача має містити 3-32 символи"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "Успішно встановлено"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "Увійдіть знову, щоб переглянути зміни"
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Маштабування дисплею"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Налаштування масштабування зображення"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr "Помилка перевірки відбитка пальця"
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr "Минув час перевірки, відбитка пальця"
 
@@ -128,96 +124,108 @@ msgstr "Доступ до повідомлень"
 msgid "Message notification"
 msgstr "Сповіщення про повідомлення"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Підключено"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Підключення %q успішне"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Відключено"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Переконайтеся, що %q увімкнений і знаходиться у межах досяжності "
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Помилка підключення до %q, пара не створена"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
 msgstr "Збій підключення з Bluetooth"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr ""
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
 msgstr "сьогодні"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
 msgstr "завтра"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
 msgstr "%s до %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
 msgstr "Робота"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
 msgstr "Життя"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Інше"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
 msgstr "За день до початку"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Закрити"
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
 msgstr "Нагадати мені завтра"
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:508
 msgid "Remind me later"
 msgstr "Нагадати мені пізніше"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
 msgstr "Розклад нагадування"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../calendar/type.go:40
+msgid "Festival"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Відкрити"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr "Закрити всі"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr "Примусово Вийти"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr "Док"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr "Розстикуватись"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Усі вікна"
 
@@ -295,105 +303,113 @@ msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "Настільний ШІ помічник"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Перетворення тексту в мову"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Мова в текст"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Буфер обміну"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Переклад"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Переключити компонування"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Перемикання на ліву робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Перемикання на правий робочий простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Перемикання на верхнє робочий простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Перемикання на нижчій робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Замінити схожі вікна"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Перемикання між подібними вікнами у зворотному порядку"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Перехід між вікнами"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Перемикання між вікнами у зворотному порядку"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Показати стільницю"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Розгорнути вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Відновити вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Згорнути вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Закрити вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Перемістити вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Змінити розмір вікна"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Перемістити на лівий робочий простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Перемістити на правий робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Перемістити на верхній робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Перемістити на нижчій робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Відображати вікна всіх робочих просторів"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Показати вікна поточного робочого простору"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Показати робочій простір"
 
@@ -401,72 +417,68 @@ msgstr "Показати робочій простір"
 msgid "Authentication is required to switch language"
 msgstr "Аутентифікація потрібна для перемикання мови"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Змінюється мова системи та встановлюються необхідні мовні пакети, зачекайте..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr "Зміна мови системи, зачекайте..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
 msgstr "Змінено мову системи, вийдіть із системи та увійдіть"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Відновити"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Скасувати"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Спробувати ще раз"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q інстальовано успішно."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "Не вдалося встановити %q."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q успішно видалено."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "Не вдалося видалити %q."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "Підключіть, щоб запобігти автоматичному вимкненню й належним чином здійснити оновлення."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "Очищення кешу пакету"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "Ваше джерело системи було змінено, будь ласка, відновіть офіційне джерело для нормального використання"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q успішно видалено"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Не вдалося встановити %q"
 
@@ -519,7 +531,7 @@ msgstr "Тунельований TLS"
 msgid "Protected EAP"
 msgstr "Захищений EAP"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Дротове підключення"
 
@@ -799,8 +811,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "МодемМенеджер не запустився, або несподівано припинив роботу."
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "Мережу Wi-Fi 802.11 не знайдено."
+msgid "The 802.11 WLAN network could not be found"
+msgstr "Мережу 802.11 WLAN не знайдено."
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -916,86 +928,84 @@ msgstr "Точка доступу увімкнена"
 msgid "%q connected"
 msgstr "%q підключено"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr "Точка доступу вимкнена"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q відключено"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Неможливо поділитися точкою доступу, перевірте налаштування dnsmasq"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Неможливо підключити %q, будь ласка, тримайтеся ближче до бездротового маршрутизатора"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Не вдалося з'єднатися із %q. Будь ласка, перевірте, чи працює ваш маршрутизатор або мережевий кабель."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
 msgstr "Пароль, необхідний для підключення %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Помилка підключення, неможливо підключити %q, невірний пароль"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr "Ви наразі оффлайн."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr "Режим аероплана увімкнено."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr "Режим Точки Доступу не підтримується цим пристроєм."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Мережа"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Апаратний перемикач WLAN Card вимкнений, будь ласка, увімкніть його в разі потреби."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr "Системний проксі-сервер успішно налаштовано."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "Системний проксі було скасовано."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Акумулятор критично розряджено"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Підключено"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "Невдовзі система перейде до стану сну, будь ласка, приєднайте комп'ютер до мережі живлення"
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Низький заряд батареї"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "Невдовзі система перейде до стану сну, будь ласка, приєднайте комп'ютер до мережі живлення"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "«%s» не пройдено перевіркою засобів захисту системи. Цю програму зараз не можна запускати."
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Акумулятор критично розряджено"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "Низький рівень заряду акумулятора, будь ласка, приєднайте комп'ютер до мережі живлення"
 

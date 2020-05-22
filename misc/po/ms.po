@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# abuyop <abuyop@gmail.com>, 2016-2019
+# abuyop <abuyop@gmail.com>, 2016-2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 10:15+0000\n"
+"Last-Translator: Cindy0514\n"
 "Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,47 +32,43 @@ msgstr "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nom
 msgid "Username cannot be empty"
 msgstr "Nama pengguna tidak boleh kosong"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr ""
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Aksara pertama mestilah satu abjad atau angka"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "Aksara pertama mesti berhuruf kecil"
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
-msgstr ""
+msgstr "Nama pengguna sudah wujud"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "Nama pengguna telah digunakan oleh sistem"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
+msgstr "Nama pengguna mestilah antara 3 hingga 32 aksara"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "Berjaya ditetapkan"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "Sila daftar masuk kembali untuk melihat perubahan yang berlaku"
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Penskalaan paparan"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Menetapkan penskalaan paparan"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr "Pengecaman cap jari gagal"
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr "Pengecaman cap jari telah tamat masa"
 
@@ -124,96 +120,108 @@ msgstr "Capaian mesej"
 msgid "Message notification"
 msgstr "Pemberitahuan mesej"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Bersambung"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Sambungan %q berjaya"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Terputus"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Pastikan %q dihidupkan dan berada dalam julat"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Gagal menyambung dengan %q, perpasangan gagal"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr ""
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
-msgstr ""
+msgstr "hari ini"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
-msgstr ""
+msgstr "semalam"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s hingga %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
-msgstr ""
+msgstr "Kerja"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
-msgstr ""
+msgstr "Lapang"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Lain-lain"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
-msgstr ""
+msgstr "Satu hari sebelum mula"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Tutup"
 
-#: ../../calendar/scheduler.go:482
-msgid "Remind me tomorrow"
-msgstr ""
-
-#: ../../calendar/scheduler.go:490
-msgid "Remind me later"
-msgstr ""
-
 #: ../../calendar/scheduler.go:500
+msgid "Remind me tomorrow"
+msgstr "Ingatkan saya esok hari"
+
+#: ../../calendar/scheduler.go:508
+msgid "Remind me later"
+msgstr "Ingatkan saya kemudian"
+
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
+msgstr "Peringatan Berjadual"
+
+#: ../../calendar/type.go:40
+msgid "Festival"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Buka"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
-msgstr ""
+msgstr "Tutup Semua"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
-msgstr ""
+msgstr "Paksa Keluar"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
-msgstr ""
+msgstr "Labuh"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
-msgstr ""
+msgstr "Nyahlabuh"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Semua Tetingkap"
 
@@ -231,7 +239,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "Perakam Skrin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -283,7 +291,7 @@ msgstr "Skrin Pantas Mati"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "Pemantau Sistem"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -291,105 +299,113 @@ msgstr "Pemilih Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "Pembantu AI Desktop"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Teks ke Pertuturan"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Pertuturan ke Teks"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Papan Keratan"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Terjemahan"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Tukar Bentangan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Tukar ke ruang kerja kiri"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Tukar ke ruang kerja kanan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Tukar ke ruang kerja atas"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Tukar ke ruang kerja bawah"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Tukar tetingkap yang serupa"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Tukar tetingkap yang serupa secara songsang"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Tukar tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Tukar tetingkap secara songsang"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Tunjuk desktop"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Maksimumkan tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Pulih tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Minimumkan tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Tutup tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Alih tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Saiz semula tetingkap"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Alih ke ruang kerja kiri"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Alih ke ruang kerja kanan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Alih ke ruang kerja aras"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Alih ke ruang kerja bawah"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Papar tetingkap pada semua ruang kerja"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Papar tetingkap pada ruang kerja semasa"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Papar ruang kerja"
 
@@ -397,72 +413,68 @@ msgstr "Papar ruang kerja"
 msgid "Authentication is required to switch language"
 msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu sebentar..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr "Mengubah bahasa sistem, tunggu sebentar..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
 msgstr "Bahasa sistem telah diubah, sila daftar keluar kemudian daftar masuk"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Pulih"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Batal"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Cuba lagi"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Batal"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q berjaya dipasangkan."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "%q gagal dipasangkan."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q berjaya dibuang."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "%q gagal dibuang."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi kemaskini biasa."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "Cache pakej disapu bersih"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk kegunaan biasa anda"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q berjaya dibuang"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Gagal menyahpasang %q"
 
@@ -515,7 +527,7 @@ msgstr "TLS Berterowong"
 msgid "Protected EAP"
 msgstr "EAP Terlindung"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Sambungan Berwayar"
 
@@ -795,8 +807,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "Pengurus Modem tidak dijalankan atau keluar tanpa dijangka"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "Rangkaian Wi-Fi 802.11 tidak ditemui"
+msgid "The 802.11 WLAN network could not be found"
+msgstr "Rangkaian WLAN 802.11 tidak ditemui"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -898,100 +910,98 @@ msgstr "Sambungan telah dipadam dari tetapan"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Membenarkan kawasan khas"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Menyambungkan %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Kawasan khas dibenarkan"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q bersambung"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Kawasan khas dilumpuhkan"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q terputus"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Tidak boleh berkongsi kawasan khas, sila periksa tetapan dnsmasq"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Kata laluan diperlukan untuk bersambung dengan %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr "Anda kini berada diluar talian."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr "Mod kapal terbang dibenarkan."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr "Mod Titik Capaian tidak disokong oleh peranti ini."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Rangkaian"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Suis perkakasan Kad WLAN dimatikan, sila hidupkan jika perlu."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr "Proksi sistem berjaya ditetapkan."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "Proksi sistem dibatalkan."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Kuasa Bateri Sangat Rendah"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Bersambung"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "Komputer akan ditangguhkan tidak lama lagi, sila palamkan kabel kuasa sekarang"
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Kuasa Bateri Rendah"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "Komputer akan ditangguhkan tidak lama lagi, sila palamkan kabel kuasa sekarang"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" tidak melepasi pengesahan keselamatan sistem, dan kini tidak dapat dijalankan"
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Kuasa bateri sangat rendah"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "Kuasa bateri lemah, sila palamkan kuasa"
 
@@ -1007,7 +1017,7 @@ msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangk
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "Pengesahihan diperlukan untuk mengubah pelayan NTP"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""

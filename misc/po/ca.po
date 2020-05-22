@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Jaime Muñoz Martín <jmmartin_5@outlook.com>, 2018
-# Davidmp <medipas@gmail.com>, 2017-2019
+# Jaime Muñoz Martín <jmmartin_5@outlook.com>, 2018,2020
+# Davidmp <medipas@gmail.com>, 2017-2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 10:52+0000\n"
+"Last-Translator: Jaime Muñoz Martín <jmmartin_5@outlook.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,47 +33,43 @@ msgstr "La contrasenya ha de contenir lletres angleses (majúscules o minúscule
 msgid "Username cannot be empty"
 msgstr "El nom d'usuari no es pot deixar en blanc."
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "El nom d'usuari ha de contenir lletres de la a a la z, números del 0 al 9, - o _"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "El primer caràcter ha de ser una lletra o un número."
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "El primer caràcter ha de ser en minúscules."
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr "El nom d'usuari ja existeix."
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "El nom d'usuari ja l'ha usat el sistema."
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
 msgstr "El nom d'usuari ha de tenir de 3 a 32 caràcters de llargada."
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
 msgstr "Establiment correcte"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr "Si us plau, torneu a entrar per veure'n els canvis."
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Escalat de la pantalla"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Establiment de l'escalat de la pantalla"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
+#: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
 msgstr "La verificació de l'empremta ha fallat."
 
-#: ../../bin/dde-authority/fprint_transaction.go:21
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
 msgstr "La verificació de l'empremta ha trigat massa."
 
@@ -125,96 +121,108 @@ msgstr "Accés a missatges"
 msgid "Message notification"
 msgstr "Notificació de missatge"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Connectat"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Connexió amb %q correcta"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Desconnectat"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Assegureu-vos que %q estigui activada i a l'abast."
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Ha fallat connectar amb %q. Ha fallat l'aparellament."
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
 msgstr "Ha fallat la connexió de Bluetooth."
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr "Feu clic aquí per connectar-vos a %q"
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr "Afegeix dispositius Bluetooth"
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr "Enllaça"
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
 msgstr "avui"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
 msgstr "demà"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
 msgstr "%s a %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
 msgstr "Feina"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
 msgstr "Vida"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Altres"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
 msgstr "Un dia abans de l'inici"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Tanca"
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
 msgstr "Recorda-m'ho demà."
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:508
 msgid "Remind me later"
 msgstr "Recorda-m'ho més tard."
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
 msgstr "Programació del recrdatori"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../calendar/type.go:40
+msgid "Festival"
+msgstr "Festival"
+
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Obre"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr "Tanca-ho tot"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr "Força'n la sortida"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr "Acoblador"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr "Treu de l'acoblador"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Totes les finestres"
 
@@ -236,7 +244,7 @@ msgstr "Gravador de pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Bloqueja la pantalla"
+msgstr "Pantalla de bloqueig"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
@@ -292,105 +300,113 @@ msgstr "Selector del Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "Assistent d'IA per a l'escriptori"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "De text a discurs"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "De discurs a text"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Porta-retalls"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Traducció"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Commuta la disposició"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Ves a l'espai de treball de l'esquerra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Ves a l'espai de treball de la dreta"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Ves a l'espai de treball de dalt"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Ves a l'espai de treball de baix"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Commuta finestres semblants"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Commuta finestres semblants a la inversa"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Commuta finestres"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Commuta finestres a la inversa"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Mostra l'escriptori"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Maximitza la finestra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Restaura la finestra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Minimitza la finestra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Tanca la finestra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Mou la finestra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Canvia la mida de la finestra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Mou a l'espai de treball de l'esquerra"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Mou a l'espai de treball de la dreta"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Mou a l'espai de treball de dalt"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Mou a l'espai de treball de baix"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Mostra les finestres de tots els espais de treball"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Mostra les finestres de l'espai de treball actual"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Mostra l'espai de treball"
 
@@ -398,72 +414,68 @@ msgstr "Mostra l'espai de treball"
 msgid "Authentication is required to switch language"
 msgstr "Cal autenticació per canviar la llengua."
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més tard."
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "Es canvia la llengua del sistema i s'instal·len els paquets de llengua necessaris. Espereu, si us plau..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr "Es canvia la llengua del sistema. Espereu, si us plau..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
 msgstr "S'ha canviat la llengua del sistema. Si us plau, sortiu de la sessió i torneu-hi a entrar."
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Restaura"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més tard."
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Torna-ho a provar"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q s'ha instal·lat correctament."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "Ha fallat la instal·lació de %q"
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q s'ha eliminat correctament."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "Ha fallat l'eliminació de %q."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "Per tal d'evitar l'aturada automàtica, connecteu-vos per a l'actualització normal."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "S'ha netejat la cau de paquets."
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "La font del sistema s'ha modificat; si us plau, restaureu-la a la font oficial per a un ús normal."
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q eliminada correctament"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Ha fallat desinstal·lar %q."
 
@@ -516,7 +528,7 @@ msgstr "TLS per túnel"
 msgid "Protected EAP"
 msgstr "EAP protegit"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Connexió amb fil"
 
@@ -554,31 +566,31 @@ msgstr "Connexió de mòbil CDMA"
 
 #: ../../network/nm_custom_type.go:241
 msgid "VPN Connection"
-msgstr "Connexió VPN"
+msgstr "Connexió d'XPV"
 
 #: ../../network/nm_custom_type.go:243
 msgid "VPN L2TP"
-msgstr "VPN L2TP"
+msgstr "XPV L2TP"
 
 #: ../../network/nm_custom_type.go:245
 msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
+msgstr "XPV OpenConnect"
 
 #: ../../network/nm_custom_type.go:247
 msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
+msgstr "XPV OpenVPN"
 
 #: ../../network/nm_custom_type.go:249
 msgid "VPN PPTP"
-msgstr "VPN PPTP"
+msgstr "XPV PPTP"
 
 #: ../../network/nm_custom_type.go:251
 msgid "VPN StrongSwan"
-msgstr "VPN StrongSwan"
+msgstr "XPV StrongSwan"
 
 #: ../../network/nm_custom_type.go:253
 msgid "VPN VPNC"
-msgstr "VPN VPNC"
+msgstr "XPV VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
@@ -796,8 +808,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "El ModemManager no s'executava o ha sortit inesperadament."
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "No s'ha pogut trobar la xarxa sense fil 802.11."
+msgid "The 802.11 WLAN network could not be found"
+msgstr "La xarxa WLAN 802.11 no s'ha pogut trobar."
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -850,48 +862,48 @@ msgstr "Si us plau, assegureu-vos que teniu una contractació correcta sense un 
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr "Ha fallat activar la connexió de VPN. No se'n sap el motiu."
+msgstr "Ha fallat activar la connexió d'XPV. No se'n sap el motiu."
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr "Ha fallat activar la connexió de VPN."
+msgstr "Ha fallat activar la connexió d'XPV."
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió feta per usuaris."
+msgstr "La connexió d'XPV ha canviat l'estat a causa de la desconnexió feta per usuaris."
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "La connexió de VPN ha canviat l'estat a causa de la desconnexió de dispositius."
+msgstr "La connexió d'XPV ha canviat l'estat a causa de la desconnexió de dispositius."
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr "El servei VPN s'ha aturat."
+msgstr "El servei d'XPV s'ha aturat."
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr "La configuració d'IP de la connexió de VPN no és vàlida."
+msgstr "La configuració d'IP de la connexió d'XPV no és vàlida."
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
-msgstr "L'intent de connexió al servei de VPN ha esgotat el temps d'espera."
+msgstr "L'intent de connexió al servei d'XPV ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr "L'inici del servei de VPN ha esgotat el temps d'espera."
+msgstr "L'inici del servei d'XPV ha esgotat el temps d'espera."
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
-msgstr "El servei de VPN ha fallat l'inici."
+msgstr "El servei d'XPV ha fallat l'inici."
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr "No s'ha proporcionat la contrasenya de la connexió de VPN."
+msgstr "No s'ha proporcionat la contrasenya de la connexió d'XPV."
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr "Ha fallat l'autenticació al servidor de VPN."
+msgstr "Ha fallat l'autenticació al servidor d'XPV."
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
@@ -903,7 +915,7 @@ msgstr "S'habilita el punt d'accés."
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr "Connectant amb %q"
+msgstr "Es connecta amb %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
@@ -913,88 +925,86 @@ msgstr "Punt d'accés habilitat"
 msgid "%q connected"
 msgstr "%q connectada"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr "Punt d'accés inhabilitat"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q desconnectada"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "No es pot compartir el punt d'accés. Si us plau, comproveu la configuració de dnsmasq."
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de l'encaminador."
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "No es pot connectar a %q, comproveu el vostre encaminador o el cable de xarxa."
+msgstr "No es pot connectar amb %q, comproveu l'encaminador o el cable de xarxa."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
 msgstr "Cal la contrasenya per connectar amb %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Ha fallat la connexió. No es pot connectar amb %q. Contrasenya incorrecta."
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr "Ara esteu fora de línia."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr "Mode d'avió habilitat."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr "El mode de punt d'accés no l'admet aquest dispositiu."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Xarxa"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "L'interruptor de la targeta WLAN està desactivat. Activeu-lo quan sigui necessari."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr "L'intermediari del sistema s'ha configurat correctament."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "L'intermediari del sistema s'ha cancel·lat."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Bateria molt baixa"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Connectat"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "L'ordinador se suspendrà molt aviat, endolleu-lo ara."
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Bateria baixa"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "L'ordinador se suspendrà aviat, endolleu-lo ara."
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" no ha superat el sistema de verificació de seguretat i no es pot executar ara."
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Bateria molt baixa"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
-msgstr "Bateria baixa, endolleu-lo"
+msgstr "Bateria baixa. Si us plau, endolleu-me."
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

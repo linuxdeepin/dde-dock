@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Alex Wender, 2019
-# Alex Wender, 2017,2019
+# Alex Wender, 2017,2019-2020
 # Bruno Gama <brunnogama@gmail.com>, 2017
 # 58fae44c6c4ff84516f8c8656a7fb14d, 2018
 # Bruno Melnic Incao <brunomelnic@gmail.com>, 2017
@@ -14,14 +14,14 @@
 # Danilo Silva, 2016
 # Danilo Silva, 2016
 # Duarte Campos <dcduartejrcampos@gmail.com>, 2016
-# Felipe André <lip.dre@gmail.com>, 2017
-# Felipe André <lip.dre@gmail.com>, 2018
+# Felipe André Alves Santos <lip.dre@gmail.com>, 2017
+# Felipe André Alves Santos <lip.dre@gmail.com>, 2018
 # Gean Carlos Kerber Nunes <geanckn@gmail.com>, 2017
 # marcelo oliveira <marcelinuz@hotmail.com>, 2017
 # Marco Araujo <marco.araujo.junior@gmail.com>, 2017
 # Matheus Campagnol <mate175@gmail.com>, 2017
 # Paulo Schopf, 2019
-# Peterson SB <manitiolo@outlook.com>, 2018
+# Peterson SB, 2018
 # cfbf5006c0257e233b15e3cdf09c3c3f, 2017
 # Raphael Miquelis <raphaelmiquelis@gmail.com>, 2016-2017
 # Raphael Matheus Pereira <raphaelmatheus.exp@gmail.com>, 2018
@@ -29,9 +29,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 13:03+0000\n"
+"Last-Translator: Alex Wender\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,61 +41,57 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
-msgstr "Digite uma senha com até 8 caracteres"
+msgstr "Digite uma senha com pelo menos 8 caracteres"
 
 #: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "A senha deve conter caracteres (sensível a maiúsculas e minúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "A senha deve conter letras em Inglês (sensível a maiúsculas e minúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
-msgstr "O nome de usuário não pode estar vazio"
+msgstr "O nome de usuário não pode ficar em branco"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr "O nome de usuário deve conter apenas a~z, 0~9, - ou _"
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "O primeiro caractere deve ser uma letra ou número"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr "O primeiro caractere deve estar em minúsculas"
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
 msgstr "O nome de usuário já existe"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
 msgstr "O nome de usuário foi usado pelo sistema"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
-msgstr "O nome de usuário deve ter entre 3 à 32 caracteres"
-
-#: ../../appearance/scale.go:61
-msgid "Set successfully"
-msgstr "Ajustado com sucesso"
-
-#: ../../appearance/scale.go:62
-msgid "Please log back in to view the changes"
-msgstr "Por favor, logue-se novamente para ver as alterações"
+msgstr "O Nome de Usuário deve ter entre 3 à 32 caracteres"
 
 #: ../../appearance/scale.go:66
+msgid "Set successfully"
+msgstr "Definido"
+
+#: ../../appearance/scale.go:67
+msgid "Please log back in to view the changes"
+msgstr "Faça login novamente para ver as alterações"
+
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "Escala de Exibição"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
 msgstr "Configurando a escala de exibição"
 
-#: ../../bin/dde-authority/fprint_transaction.go:20
-msgid "Fingerprint verification failed"
-msgstr "Falha na verificação da digital"
-
 #: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification failed"
+msgstr "Falha ao verificar a impressão digital"
+
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
-msgstr "Tempo expirado na verificação da digital"
+msgstr "O tempo de verificação da impressão digital expirou"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -107,7 +103,7 @@ msgstr "Conexão discada"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr "Dispositivo de mãos-livres"
+msgstr "Dispositivo de Mãos Livres"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
@@ -145,102 +141,114 @@ msgstr "Acesso às mensagens"
 msgid "Message notification"
 msgstr "Notificação de mensagem"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Conectado"
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "Conectado à %q"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
 msgstr "Verifique se %q está ligado e próximo"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr "Falha ao conectar a %q, o emparelhamento falhou"
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
-msgstr "Falha na conexão bluetooth"
+msgstr "Falha na conexão Bluetooth"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr "Clique aqui para conectar-se à %q"
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr "Adicionar dispositivos Bluetooth"
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr "Parear"
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
 msgstr "hoje"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
 msgstr "amanhã"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
 msgstr "%s às %s"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
 msgstr "Trabalho"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
 msgstr "Vida"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr "Outro"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
 msgstr "Um dia antes do início"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr "Fechar"
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
 msgstr "Lembre-me amanhã"
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:508
 msgid "Remind me later"
 msgstr "Lembre-me mais tarde"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
-msgstr "Agendar lembrete"
+msgstr "Agendar Lembrete"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../calendar/type.go:40
+msgid "Festival"
+msgstr "Festival"
+
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Abrir"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
 msgstr "Fechar Tudo"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
 msgstr "Forçar Saída"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr "Dock"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
-msgstr "Desencaixar"
+msgstr "Remover da Dock"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Todas as Janelas"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Espaço insuficiente no disco. Favor liberar espaço!"
+msgstr "Espaço insuficiente em disco; será necessário liberar espaço!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -256,11 +264,11 @@ msgstr "Gravador de Tela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr "Bloquear tela"
+msgstr "Bloquear Tela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr "Mostrar/Ocultar a dock"
+msgstr "Exibir/Ocultar a Dock"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
@@ -280,11 +288,11 @@ msgstr "Captura de tela cheia"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr "Captura da janela"
+msgstr "Captura da Janela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Captura com atraso"
+msgstr "Atrasar captura"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -296,7 +304,7 @@ msgstr "Desativar Touchpad"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr "Alternar efeitos de janela"
+msgstr "Alternar o efeito janela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
@@ -304,7 +312,7 @@ msgstr "Desligar Rapidamente a Tela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr "Monitor do Sistema"
+msgstr "Monitor de Sistema"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -312,178 +320,182 @@ msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "Assistente Virtual"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Texto para Fala"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Fala para Texto"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Área de Transferência"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Tradução"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Alternar Layout"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
-msgid "Switch to left workspace"
-msgstr "Alternar para o espaço de trabalho esquerdo"
-
-#: ../../keybinding/shortcuts/id_name_map.go:74
-msgid "Switch to right workspace"
-msgstr "Alternar para o espaço de trabalho direito"
-
 #: ../../keybinding/shortcuts/id_name_map.go:75
-msgid "Switch to upper workspace"
-msgstr "Alternar para o espaço de trabalho superior"
+msgid "Switch to left workspace"
+msgstr "Alternar para Área de Trabalho à esquerda"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
-msgid "Switch to lower workspace"
-msgstr "Alternar para o espaço de trabalho inferior"
+msgid "Switch to right workspace"
+msgstr "Alternar para Área de Trabalho à direita"
+
+#: ../../keybinding/shortcuts/id_name_map.go:77
+msgid "Switch to upper workspace"
+msgstr "Alternar para Área de Trabalho superior"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
+msgid "Switch to lower workspace"
+msgstr "Alternar para Área de Trabalho inferior"
+
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Alternar entre janelas similares"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Alternar entre janelas semelhantes em reverso"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Alternar entre janelas"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Alternar entre janelas em reverso"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
-msgstr "Mostrar à Área de Trabalho"
+msgstr "Exibir Área de Trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
-msgstr "Maximizar janela"
-
-#: ../../keybinding/shortcuts/id_name_map.go:102
-msgid "Restore window"
-msgstr "Restaurar janela"
+msgstr "Maximizar Janela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
-msgid "Minimize window"
-msgstr "Minimizar janela"
-
-#: ../../keybinding/shortcuts/id_name_map.go:105
-msgid "Close window"
-msgstr "Fechar janela"
+msgid "Restore window"
+msgstr "Restaurar Janela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:106
-msgid "Move window"
-msgstr "Mover janela"
+msgid "Minimize window"
+msgstr "Minimizar Janela"
 
 #: ../../keybinding/shortcuts/id_name_map.go:107
-msgid "Resize window"
-msgstr "Redimensionar janela"
+msgid "Close window"
+msgstr "Fechar Janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:108
+msgid "Move window"
+msgstr "Mover Janela"
+
+#: ../../keybinding/shortcuts/id_name_map.go:109
+msgid "Resize window"
+msgstr "Redimensionar Janela"
+
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Mover para o espaço de trabalho esquerdo"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Mover para o espaço de trabalho direito"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Mover para o espaço de trabalho superior"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Mover para o espaço de trabalho inferior"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
-msgid "Display windows of all workspaces"
-msgstr "Exibir janelas de todos os espaços de trabalho"
-
-#: ../../keybinding/shortcuts/id_name_map.go:148
-msgid "Display windows of current workspace"
-msgstr "Exibir janelas do espaço de trabalho atual"
-
 #: ../../keybinding/shortcuts/id_name_map.go:149
+msgid "Display windows of all workspaces"
+msgstr "Exibir as janelas de todas as áreas de trabalho"
+
+#: ../../keybinding/shortcuts/id_name_map.go:150
+msgid "Display windows of current workspace"
+msgstr "Exibir as janelas da área de trabalho atual"
+
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
-msgstr "Exibir espaço de trabalho"
+msgstr "Exibir área de trabalho"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "É necessária autenticação para alternar o idioma"
+msgstr "A autenticação é necessária para alternar o idioma"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr "Não foi possível alterar o idioma do sistema, tente mais tarde"
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Alterando o idioma do sistema e instalando os pacotes necessários, aguarde..."
+msgstr "Alterando o idioma do sistema, aguarde..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
-msgstr "Mudando o idioma do sistema, aguarde..."
+msgstr "Alterando o idioma do sistema, aguarde..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
-msgstr "O idioma do sistema foi alterado, saia e faça login novamente"
+msgstr "O idioma do sistema foi alterado; é necessário encerrar a sessão para efetivá-lo"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Restaurar"
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "Falha ao alterar o idioma do sistema; tente novamente"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Tentar novamente"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "%q foi instalado."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
-msgstr "Falha na instalação do %q."
+msgstr "Falha ao instalar %q."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "%q foi desinstalado."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "Falha ao remover %q."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Para evitar o desligamento, conecte o carregador."
+msgstr "Para evitar o desligamento; conecte o carregador."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr "O cache de pacotes foi esvaziado"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "A fonte do sistema foi modificada, restaure a fonte oficial para o seu uso normal"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q foi desinstalado"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Falha ao remover %q"
 
@@ -536,7 +548,7 @@ msgstr "TLS em túnel"
 msgid "Protected EAP"
 msgstr "EAP protegido"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Conexão Cabeada"
 
@@ -623,7 +635,7 @@ msgstr "O dispositivo não está pronto para configuração"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "A configuração IP não pôde ser reservada (sem endereço disponível, tempo limite, etc.)"
+msgstr "A configuração IP não pôde ser reservada (nenhum endereço disponível, tempo limite, etc.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -631,7 +643,7 @@ msgstr "A configuração de IP não é válida"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr "As senhas foram necessárias, mas não fornecidas"
+msgstr "As senhas eram necessárias, mas não foram fornecidas"
 
 #: ../../network/state_handler.go:47
 msgid ""
@@ -737,7 +749,7 @@ msgstr "O tempo limite para o registro na rede expirou"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr "Falha ao registrar na rede GSM solicitada"
+msgstr "Falha ao registrar-se na rede GSM solicitada"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -757,7 +769,7 @@ msgstr "O Gerenciador de Rede está inativo"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr "A conexão ativa do dispositivo foi removida ou desapareceu"
+msgstr "A conexão do dispositivo ativo foi removida ou desapareceu"
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
@@ -816,8 +828,8 @@ msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "O Gerenciador do Modem não foi executado ou encerrado inesperadamente"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr "Não foi possível encontrar a rede Wi-Fi 802.11"
+msgid "The 802.11 WLAN network could not be found"
+msgstr "Não foi possível encontrar a rede WLAN 802.11"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -845,7 +857,7 @@ msgstr "O PIN do SIM está incorreto"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
-msgstr "A ativação da nova conexão está sendo solicitada"
+msgstr "A ativação da nova conexão está na fila"
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
@@ -857,7 +869,7 @@ msgstr "O estado de gerenciamento do dispositivo pai foi alterado"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr "O Cabo de Rede está desconectado"
+msgstr "O cabo de rede está desconectado"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
@@ -866,7 +878,7 @@ msgstr "Verifique se o cartão SIM inserido possuí sinal de rede móvel"
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Verifique o plano selecionado sem ter débitos atrasados no cartão SIM"
+msgstr "Verifique se o plano selecionado não tem débitos atrasados no cartão SIM"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -933,102 +945,100 @@ msgstr "Hotspot ativado"
 msgid "%q connected"
 msgstr "%q conectada"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
 msgstr "Hotspot desativado"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr "%q desconectado"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Não foi possível compartilhar o Hotspot; verifique as configurações do dnsmasq"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Não é possível conectar-se a %q; verifique a intensidade do sinal Wi-Fi"
+msgstr "Não é possível conectar-se à %q; verifique a intensidade do sinal Wi-Fi"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Não foi possível conectar-se a %q. Verifique as conexões e dispositivos de rede."
+msgstr "Não foi possível conectar-se à %q; verifique as conexões ou os dispositivos de rede."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
-msgstr "É necessária uma senha para conectar a %q"
+msgstr "Uma senha é necessária para conectar-se à %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Falha na conexão, incapaz de conectar %q, senha incorreta"
+msgstr "A conexão falhou, senha incorreta. Incapaz de conectar-se à %q"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
-msgstr "Agora você está offline."
+msgstr "Agora está off-line."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
-msgstr "Modo Avião ativado."
+msgstr "Modo avião ativado."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
-msgstr "O modo de Ponto de Acesso não é suportado por este dispositivo."
+msgstr "O modo de ponto de acesso não é suportado neste dispositivo."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr "Rede"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "A chave de hardware da placa WLAN está desligada. Alterne-a conforme necessidade."
+msgstr "A placa WLAN está desligada fisicamente; ative-a sempre que necessário."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
-msgstr "O proxy do sistema foi definido com sucesso."
+msgstr "O proxy do sistema foi definido."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr "O proxy do sistema foi cancelado."
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr "Bateria Criticamente Fraca"
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "Conectado"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr "Em instantes, o computador será suspenso. Conecte o carregador!"
-
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "Bateria Fraca"
-
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr "O computador entrará em suspensão. Conecte o carregador!"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" não passou na verificação de segurança e não pode ser executado agora"
 
 #: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Bateria criticamente fraca"
+
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
-msgstr "Bateria fraca! Conecte o carregador"
+msgstr "A bateria está com pouca carga; conecte o carregador"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr "A autenticação é necessária para definir a hora do sistema"
+msgstr "A autenticação é necessária para alterar a hora do sistema"
 
 #: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "A autenticação é necessária para controlar a sincronização do horário da rede"
+msgstr "A autenticação é necessária para alterar a sincronização da hora"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr "É necessária autenticação para alterar o servidor NTP"
+msgstr "A autenticação é necessária para alterar o Servidor NTP"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""
@@ -1038,4 +1048,4 @@ msgstr "A autenticação é necessária para controlar se o RTC armazena a hora 
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr "A autenticação é necessária para definir o fuso horário do sistema"
+msgstr "A autenticação é necessária para alterar o fuso horário"
