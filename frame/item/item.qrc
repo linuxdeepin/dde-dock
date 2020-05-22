@@ -6,6 +6,7 @@
         <file>resources/indicator_active_ver.svg</file>
         <file>resources/indicator_dark_ver.svg</file>
         <file>resources/indicator_active.svg</file>
+        <file>resources/calendar_bg.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>resources/arrow-up.svg</file>
@@ -16,5 +17,55 @@
         <file>resources/close_round_hover.svg</file>
         <file>resources/close_round_press.svg</file>
         <file>resources/close_round_normal.svg</file>
+        <file>resources/day1.svg</file>
+        <file>resources/day2.svg</file>
+        <file>resources/day3.svg</file>
+        <file>resources/day4.svg</file>
+        <file>resources/day5.svg</file>
+        <file>resources/day6.svg</file>
+        <file>resources/day7.svg</file>
+        <file>resources/day8.svg</file>
+        <file>resources/day9.svg</file>
+        <file>resources/day10.svg</file>
+        <file>resources/day11.svg</file>
+        <file>resources/day12.svg</file>
+        <file>resources/day13.svg</file>
+        <file>resources/day14.svg</file>
+        <file>resources/day15.svg</file>
+        <file>resources/day16.svg</file>
+        <file>resources/day17.svg</file>
+        <file>resources/day18.svg</file>
+        <file>resources/day19.svg</file>
+        <file>resources/day20.svg</file>
+        <file>resources/day21.svg</file>
+        <file>resources/day22.svg</file>
+        <file>resources/day23.svg</file>
+        <file>resources/day24.svg</file>
+        <file>resources/day25.svg</file>
+        <file>resources/day26.svg</file>
+        <file>resources/day27.svg</file>
+        <file>resources/day28.svg</file>
+        <file>resources/day29.svg</file>
+        <file>resources/day30.svg</file>
+        <file>resources/day31.svg</file>
+        <file>resources/month1.svg</file>
+        <file>resources/month2.svg</file>
+        <file>resources/month3.svg</file>
+        <file>resources/month4.svg</file>
+        <file>resources/month5.svg</file>
+        <file>resources/month6.svg</file>
+        <file>resources/month7.svg</file>
+        <file>resources/month8.svg</file>
+        <file>resources/month9.svg</file>
+        <file>resources/month10.svg</file>
+        <file>resources/month11.svg</file>
+        <file>resources/month12.svg</file>
+        <file>resources/week1.svg</file>
+        <file>resources/week2.svg</file>
+        <file>resources/week3.svg</file>
+        <file>resources/week4.svg</file>
+        <file>resources/week5.svg</file>
+        <file>resources/week6.svg</file>
+        <file>resources/week7.svg</file>
     </qresource>
 </RCC>

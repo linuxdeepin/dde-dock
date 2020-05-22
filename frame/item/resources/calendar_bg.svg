@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <filter id="calendar备份-14-a" width="125.9%" height="127.8%" x="-12%" y="-12%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0"/>
+      <feMerge>
+        <feMergeNode in="shadowMatrixOuter1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="calendar备份-14-b" cx="54.324%" cy="55.779%" r="61.914%" fx="54.324%" fy="55.779%" gradientTransform="matrix(-.81914 -.50611 .72543 -.9141 .584 1.343)">
+      <stop offset="0%"/>
+      <stop offset="100%" stop-opacity=".148"/>
+    </radialGradient>
+    <linearGradient id="calendar备份-14-e" x1="69.809%" x2="57.001%" y1="71.097%" y2="57.701%">
+      <stop offset="0%" stop-color="#C6C6C6"/>
+      <stop offset="53.052%" stop-color="#E7E7E7"/>
+      <stop offset="100%" stop-color="#F4F4F4"/>
+    </linearGradient>
+    <path id="calendar备份-14-d" d="M54,36.5 C54,36.5 52.7578833,40.9842333 52,42.5 C51,44.5 49.9672131,44.1321429 48,46.5 C46.0327869,48.8678571 47.3606557,49.325 44.4098361,51.8142857 C42.8284824,53.1483019 38.5,54 38.5,54 C50.7336066,54 54,42.9964286 54,36.5 Z"/>
+    <filter id="calendar备份-14-c" width="125.8%" height="122.9%" x="-12.9%" y="-5.7%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation=".5"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.05 0"/>
+    </filter>
+  </defs>
+  <g fill="none" fill-rule="evenodd" filter="url(#calendar备份-14-a)" transform="rotate(-8 65.252 -6.252)">
+    <rect width="54" height="54" fill="#FFF" rx="9.75"/>
+    <path fill="url(#calendar备份-14-b)" fill-opacity=".39" d="M54,37 L54,44.25 C54,49.6347763 49.6347763,54 44.25,54 L39,54 C44.125,53.375 47.7291667,51.3958333 49.8125,48.0625 C51.8958333,44.7291667 53.2916667,41.0416667 54,37 Z"/>
+    <use fill="#000" filter="url(#calendar备份-14-c)" xlink:href="#calendar备份-14-d"/>
+    <use fill="url(#calendar备份-14-e)" xlink:href="#calendar备份-14-d"/>
+  </g>
+</svg>
