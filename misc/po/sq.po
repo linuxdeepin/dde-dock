@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Besnik Bleta <besnik@programeshqip.org>, 2020
+# Florind Murtezi <florindmurtezi88@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:06+0800\n"
-"PO-Revision-Date: 2019-03-13 08:34+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
+"POT-Creation-Date: 2020-05-20 10:40+0800\n"
+"PO-Revision-Date: 2020-05-21 17:16+0000\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,75 +19,79 @@ msgstr ""
 "Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../accounts/checkers/password.go:54
+#: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "Ju lutemi, jepni një fjalëkalim jo më të pakët se 8 shenja"
 
-#: ../../accounts/checkers/password.go:56
+#: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
-
-#: ../../accounts/checkers/username.go:59
-msgid "Username can not be empty."
-msgstr ""
-
-#: ../../accounts/checkers/username.go:61
-msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "Fjalëkalimet mund të përmbajnë vetëm shkronja anglisht (bëhet dallimi mes shkrimit me të mëdha dhe të vogla), numra ose simbole speciale (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
-msgid "The first character must be in lower case."
-msgstr "Shenja e parë duhet të jetë me të vogla."
+msgid "Username cannot be empty"
+msgstr "Emri i përdoruesit s’mund të jetë i zbrazët"
 
-#: ../../accounts/checkers/username.go:65
-msgid "The username exists."
-msgstr ""
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Shenja e parë duhet të jetë shkronjë ose numër"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The username has been used by system."
-msgstr "Emri i përdoruesit është përdorur nga sistemi."
+#: ../../accounts/checkers/username.go:70
+msgid "The username already exists"
+msgstr "Emri i përdoruesi ekziston tashmë"
 
-#: ../../accounts/checkers/username.go:69
-msgid "The username's length exceeds the limit"
-msgstr ""
+#: ../../accounts/checkers/username.go:72
+msgid "The username has been used by system"
+msgstr "Emri i përdoruesit është përdorur nga sistemi"
 
-#: ../../appearance/scale.go:48
-msgid "Display scaling"
-msgstr ""
+#: ../../accounts/checkers/username.go:74
+msgid "Username must be between 3 and 32 characters"
+msgstr "Emri i përdoruesit duhet të jetë mes 3 dhe 32 shenja i gjatë"
 
-#: ../../appearance/scale.go:49
-msgid "Setting display scaling"
-msgstr ""
-
-#: ../../appearance/scale.go:72
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
-msgstr ""
+msgstr "U caktua me sukses"
 
-#: ../../appearance/scale.go:73
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "Ju lutemi, që të shihni ndryshimet, ribëni hyrjen"
+
+#: ../../appearance/scale.go:74
+msgid "Display scaling"
+msgstr "Ripërmasim ekrani"
+
+#: ../../appearance/scale.go:75
+msgid "Setting display scaling"
+msgstr "PO ujdiset ripërmasim ekrani"
+
+#: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification failed"
+msgstr "Verifikimi i shenjave të gishtit dështoi"
+
+#: ../../bin/dde-authority/fprint_transaction.go:22
+msgid "Fingerprint verification timed out"
+msgstr "Verifikimit të shenjave të gishtit"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
-msgstr ""
+msgstr "Portë seriale"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Dial-Up networking"
-msgstr ""
+msgstr "Rrjet dial-up"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Hands-Free device"
-msgstr ""
+msgstr "Pajisje hands-free"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free voice gateway"
-msgstr ""
+msgstr "Kanal zëri për hands-free"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Headset voice gateway"
-msgstr ""
+msgstr "Kanal zëri për headset"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Object push"
@@ -93,102 +99,160 @@ msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "File transfer"
-msgstr ""
+msgstr "Shpërngulje kartelash"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Synchronization"
-msgstr ""
+msgstr "Njëkohësim"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "Phone book access"
-msgstr ""
+msgstr "Hyrje në libër telefonash"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access client"
-msgstr ""
+msgstr "Klient hyrjeje në libër telefonash"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Message access"
-msgstr ""
+msgstr "Hyrje në mesazhe"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Message notification"
-msgstr ""
+msgstr "Njoftim mesazhesh"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr ""
+#: ../../bluetooth/utils_notify.go:88
+msgid "Connect %q successfully"
+msgstr "%q u lidh me sukses"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
-msgstr ""
+msgstr "Po shkëputet"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:96
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Sigurohuni që %q është hapur dhe brenda intervali"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:101
 msgid "Bluetooth connection failed"
+msgstr "Lidhja përmes Bluetooth-it dështoi"
+
+#: ../../bluetooth/utils_notify.go:115
+msgid "Click here to connect to %q"
+msgstr "Klikoni këtu që të lidhet me %q"
+
+#: ../../bluetooth/utils_notify.go:116
+msgid "Add Bluetooth devices"
+msgstr "Shtoni pajisje Bluetooth"
+
+#: ../../bluetooth/utils_notify.go:130
+msgid "Pair"
+msgstr "Çiftoje"
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
+msgid "today"
+msgstr "sot"
+
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
+msgid "tomorrow"
+msgstr "nesër"
+
+#: ../../calendar/job.go:536
+#, c-format
+msgid "%s to %s"
+msgstr "%s në %s"
+
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
+msgid "Work"
+msgstr "Pune"
+
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
+msgid "Life"
+msgstr "Jete"
+
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
+msgid "Other"
+msgstr "Të tjera"
+
+#: ../../calendar/scheduler.go:495
+msgid "One day before start"
+msgstr "Një ditë para fillimit"
+
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+msgid "Close"
+msgstr "Mbylle"
+
+#: ../../calendar/scheduler.go:500
+msgid "Remind me tomorrow"
+msgstr "Kujtoma nesër"
+
+#: ../../calendar/scheduler.go:508
+msgid "Remind me later"
+msgstr "Kujtoma më vonë"
+
+#: ../../calendar/scheduler.go:518
+msgid "Schedule Reminder"
+msgstr "Kujtues Planesh"
+
+#: ../../calendar/type.go:40
+msgid "Festival"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:100
-msgid "_Open"
-msgstr ""
+#: ../../dock/app_entry_menu.go:102
+msgid "Open"
+msgstr "Hap"
 
-#: ../../dock/app_entry_menu.go:107
-msgid "_Close All"
-msgstr ""
+#: ../../dock/app_entry_menu.go:109
+msgid "Close All"
+msgstr "Mbylli Krejt"
 
-#: ../../dock/app_entry_menu.go:128
-msgid "_Force Quit"
-msgstr ""
+#: ../../dock/app_entry_menu.go:125
+msgid "Force Quit"
+msgstr "Detyro Dalje"
 
-#: ../../dock/app_entry_menu.go:135
-msgid "_Dock"
-msgstr ""
+#: ../../dock/app_entry_menu.go:132
+msgid "Dock"
+msgstr "Panel"
 
-#: ../../dock/app_entry_menu.go:142
-msgid "_Undock"
-msgstr ""
+#: ../../dock/app_entry_menu.go:139
+msgid "Undock"
+msgstr "Hiqe nga paneli"
 
-#: ../../dock/app_entry_menu.go:149
-msgid "_All windows"
-msgstr ""
+#: ../../dock/app_entry_menu.go:146
+msgid "All Windows"
+msgstr "Tërë Dritaret"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Hapësirë e pamjaftueshme disku, ju lutemi, ka ardhur koha të bëni pastrim!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr ""
+msgstr "Nisës"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
 msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
-msgid "Deepin Screen Recorder"
-msgstr ""
+msgid "Screen Recorder"
+msgstr "Regjistrues Ekrani"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
-msgstr ""
+msgstr "Kyçe ekranin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Show/Hide the dock"
-msgstr ""
+msgstr "Shfaq/Fshih panelin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
-msgid "Shutdown Interface"
-msgstr ""
+msgid "Shutdown interface"
+msgstr "Fike ndërfaqen"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -196,27 +260,27 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr ""
+msgstr "Foto ekrani"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr ""
+msgstr "Foto ekrani e plotë"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
-msgstr ""
+msgstr "Foto ekrani e dritares"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr ""
+msgstr "Vonesë fotoje ekrani"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
-msgstr ""
+msgstr "Përgjegjës kartelash"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr ""
+msgstr "Çaktivizo Touchpad-in"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -227,497 +291,513 @@ msgid "Fast Screen Off"
 msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
-msgid "Deepin System Monitor"
-msgstr ""
+msgid "System Monitor"
+msgstr "Mbikëqyrës Sistemi"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
-msgstr ""
+msgstr "Zgjedhës Deepin"
 
-#: ../../keybinding/shortcuts/id_name_map.go:51
+#: ../../keybinding/shortcuts/id_name_map.go:45
+msgid "Desktop AI Assistant"
+msgstr "Asistent AI Desktop"
+
+#: ../../keybinding/shortcuts/id_name_map.go:46
+msgid "Text to Speech"
+msgstr "Tekst në të Folur"
+
+#: ../../keybinding/shortcuts/id_name_map.go:47
+msgid "Speech to Text"
+msgstr "E Folur në Tekst"
+
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "E papastër"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Përkthim"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:70
-msgid "Switch to left workspace"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:71
-msgid "Switch to right workspace"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:72
-msgid "Switch to upper workspace"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:73
-msgid "Switch to lower workspace"
-msgstr ""
+msgstr "Ndërroni Skemë"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
-msgid "Switch similar windows"
-msgstr ""
+msgid "Switch to left workspace"
+msgstr "Kalo te hapësira e punës majtas"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
-msgid "Switch similar windows in reverse"
-msgstr ""
+msgid "Switch to right workspace"
+msgstr "Kalo te hapësira e punës djathtas"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
-msgid "Switch windows"
-msgstr ""
+msgid "Switch to upper workspace"
+msgstr "Kaloje dritaren te hapësira e sipërme e punës"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
+msgid "Switch to lower workspace"
+msgstr "Kalo te hapësira e poshtme e punës"
+
+#: ../../keybinding/shortcuts/id_name_map.go:80
+msgid "Switch similar windows"
+msgstr "Këmbe dritare të ngjashme"
+
+#: ../../keybinding/shortcuts/id_name_map.go:81
+msgid "Switch similar windows in reverse"
+msgstr "Këmbe dritare të ngjashme në të kundërt"
+
+#: ../../keybinding/shortcuts/id_name_map.go:82
+msgid "Switch windows"
+msgstr "Këmbe dritare"
+
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "Këmbe dritare në të kundërt"
 
-#: ../../keybinding/shortcuts/id_name_map.go:89
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:98
-msgid "Maximize window"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:99
-msgid "Restore window"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:101
-msgid "Minimize window"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:102
-msgid "Close window"
-msgstr ""
+msgstr "Shfaq desktop"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
-msgid "Move window"
-msgstr ""
+msgid "Maximize window"
+msgstr "Maksimizo dritaren"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
+msgid "Restore window"
+msgstr "Riktheje dritaren"
+
+#: ../../keybinding/shortcuts/id_name_map.go:106
+msgid "Minimize window"
+msgstr "Minimizoje dritaren"
+
+#: ../../keybinding/shortcuts/id_name_map.go:107
+msgid "Close window"
+msgstr "Mbylle dritaren"
+
+#: ../../keybinding/shortcuts/id_name_map.go:108
+msgid "Move window"
+msgstr "Lëvizeni dritaren"
+
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
-msgstr ""
+msgstr "Ripërmasojeni dritaren"
 
-#: ../../keybinding/shortcuts/id_name_map.go:119
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
-msgstr ""
+msgstr "Kaloje te hapësira e punës majtas"
 
-#: ../../keybinding/shortcuts/id_name_map.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
-msgstr ""
+msgstr "Kaloje te hapësira e punës djathtas"
 
-#: ../../keybinding/shortcuts/id_name_map.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
-msgstr ""
+msgstr "Kaloje te hapësira e sipërme e punës"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
-msgstr ""
+msgstr "Kaloje te hapësira e poshtme e punës"
 
-#: ../../keybinding/shortcuts/id_name_map.go:144
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "Shfaq dritaret e krejt hapësirave të punës"
 
-#: ../../keybinding/shortcuts/id_name_map.go:145
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "Shfaq dritaret e hapësirës së tanishme të punës"
 
-#: ../../keybinding/shortcuts/id_name_map.go:146
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
-msgstr ""
+msgstr "Shfaq hapësirë pune"
 
-#: ../../langselector/locale.go:61
+#: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Që të këmbehet gjuha, lypset mirëfilltësim"
 
-#: ../../langselector/locale.go:354
-msgid "Failed to change system language, please try later"
-msgstr ""
-
-#: ../../langselector/locale.go:378
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr ""
+msgstr "Po ndryshohet gjuhë sistemi dhe po instalohen paketat e domosdoshme të gjuhës, ju lutemi, pritni…"
 
-#: ../../langselector/locale.go:381
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Po ndryshohet gjuhë sistemi, ju lutemi, pritni…"
 
-#: ../../langselector/locale.go:429
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "Gjuha e sistemit u ndryshua, ju lutemi, dilni dhe mandej hyni"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr ""
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr "S’u arrit të ndryshohej gjuhë sistemi, ju lutemi, provoni më vonë"
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:241
+#: ../../lastore/lastore.go:247
+msgid "Retry"
+msgstr "Riprovo"
+
+#: ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Anuloje"
 
-#: ../../lastore/lastore.go:233
-msgid "Retry"
-msgstr ""
-
-#: ../../lastore/notify.go:82
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
-msgstr ""
+msgstr "%q u instalua me sukses."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
-msgstr ""
+msgstr "S’u arrit të instalohej %q."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
-msgstr ""
+msgstr "%q u hoq me sukses."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
-msgstr ""
+msgstr "S’u arrit të hiqej %q."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr ""
+msgstr "Që të parandalohet fikje e automatizuar, ju lutemi, vëreni në prizë për përditësim normal."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
-msgstr ""
+msgstr "U spastrua fshehtinë pakete"
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr ""
-
-#: ../../launcher/manager_uninstall.go:69
-msgid "%q removed successfully"
-msgstr ""
+msgstr "Burimi i sistemit tuaj u ndryshua, ju lutemi, për përdorimin tuaj normal, rikthejeni te burimi zyrtar"
 
 #: ../../launcher/manager_uninstall.go:71
+msgid "%q removed successfully"
+msgstr "%q u hoq me sukses"
+
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "S’u arrit të çinstalohej %q"
 
 #: ../../network/manager_active_conn.go:318
 msgid "A (5 GHz)"
-msgstr ""
+msgstr "A (5 GHz)"
 
 #: ../../network/manager_active_conn.go:320
 msgid "BG (2.4 GHz)"
-msgstr ""
+msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active_conn.go:322
 msgid "Automatic"
-msgstr ""
+msgstr "Automatik"
 
 #: ../../network/manager_active_conn.go:333
 #: ../../network/manager_active_conn.go:338
 msgid "None"
-msgstr ""
+msgstr "Asnjë"
 
 #: ../../network/manager_active_conn.go:340
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "Kyç WEP 40/128-bit"
 
 #: ../../network/manager_active_conn.go:342
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_active_conn.go:350
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: ../../network/manager_active_conn.go:352
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: ../../network/manager_active_conn.go:354
 msgid "LEAP"
-msgstr ""
+msgstr "LEAP"
 
 #: ../../network/manager_active_conn.go:356
 msgid "FAST"
-msgstr ""
+msgstr "FAST"
 
 #: ../../network/manager_active_conn.go:358
 msgid "Tunneled TLS"
-msgstr ""
+msgstr "TLS përmes tuneli"
 
 #: ../../network/manager_active_conn.go:360
 msgid "Protected EAP"
-msgstr ""
+msgstr "EAP i mbrojtur"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
-msgstr ""
+msgstr "Lidhje Me Fill"
 
 #: ../../network/nm_custom_type.go:223
 msgid "Connection"
-msgstr ""
+msgstr "Lidhje"
 
 #: ../../network/nm_custom_type.go:227
 msgid "Wireless Connection"
-msgstr ""
+msgstr "Lidhje Pa Fill"
 
 #: ../../network/nm_custom_type.go:229
 msgid "Wireless Ad-Hoc"
-msgstr ""
+msgstr "Wireless Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:231
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr "Wireless Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:233
 msgid "PPPoE Connection"
-msgstr ""
+msgstr "Lidhje PPPoE"
 
 #: ../../network/nm_custom_type.go:235
 msgid "Mobile Connection"
-msgstr ""
+msgstr "Lidhje Celulare"
 
 #: ../../network/nm_custom_type.go:237
 msgid "Mobile GSM Connection"
-msgstr ""
+msgstr "Lidhje Celulare GSM"
 
 #: ../../network/nm_custom_type.go:239
 msgid "Mobile CDMA Connection"
-msgstr ""
+msgstr "Lidhje Celulare CDMA"
 
 #: ../../network/nm_custom_type.go:241
 msgid "VPN Connection"
-msgstr ""
+msgstr "Lidhje VPN"
 
 #: ../../network/nm_custom_type.go:243
 msgid "VPN L2TP"
-msgstr ""
+msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:245
 msgid "VPN OpenConnect"
-msgstr ""
+msgstr "VPN OpenConnect"
 
 #: ../../network/nm_custom_type.go:247
 msgid "VPN OpenVPN"
-msgstr ""
+msgstr "VPN OpenVPN"
 
 #: ../../network/nm_custom_type.go:249
 msgid "VPN PPTP"
-msgstr ""
+msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:251
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:253
 msgid "VPN VPNC"
-msgstr ""
+msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr ""
+msgstr "Gjendja e pajisjes ndryshoi"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Gjendja e pajisjes ndryshoi, arsye e panjohur"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr ""
+msgstr "Pajisja tani administrohet"
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Pajisja s’administrohet më"
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Pajisja s’ka qenë gati për formësim"
 
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "S’u rezervua dot formësim IP-je (s’ka adresë, mbarim kohe, etj)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "Formësimi IP s’është më i vlefshëm"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Lypseshin fjalëkalime, por s’u dhanë të tilla"
 
 #: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "Lutësi 802.1X u shkëput prej pikës së hyrjeve ose prej shërbyesit të mirëfilltësimeve"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Formësimi i lutësit 802.1X dështoi"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "Lutësi 802.1X u mbyll ose dështoi në mënyrë të papritur"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "Lutësi 802.1X e zgjati shumë mirëfilltësimin"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "Dështoi nisja e shërbimit PPP brenda kohës së lejuar"
 
 #: ../../network/state_handler.go:52
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "Shërbimi PPP u shkëput papritmas"
 
 #: ../../network/state_handler.go:53
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Shërbimi PPP u mbyll ose dështoi papritmas"
 
 #: ../../network/state_handler.go:54
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "Dështoi nisja e shërbyesit DHCP brenda kohës së lejuar"
 
 #: ../../network/state_handler.go:55
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "Shërbyesi DHCP raportoi një gabim të papritur"
 
 #: ../../network/state_handler.go:56
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Shërbimi DHCP u mbyll ose dështoi papritmas"
 
 #: ../../network/state_handler.go:57
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Dështoi nisja e shërbimit për lidhje të përbashkët"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Shërbimi për lidhje të përbashkët u mbyll ose dështoi në mënyrë të papritur"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "Dështoi nisja e shërbimit AutoIP"
 
 #: ../../network/state_handler.go:60
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "Shërbimi AutoIP raportoi një gabim të papritur"
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Shërbimi AutoIP u mbyll ose dështoi papritmas"
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "Thirrja e numrit dështoi, ngaqë linja qe e zënë"
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "Thirrja e numrit dështoi, ngaqë s’kish sinjal"
 
 #: ../../network/state_handler.go:64
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "Thirrja e numrit dështoi, ngaqë s’kish operator shërbimi"
 
 #: ../../network/state_handler.go:65
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Thirrjes së numrit i mbaroi koha"
 
 #: ../../network/state_handler.go:66
 msgid "Dialing failed"
-msgstr ""
+msgstr "Thirrja e numrit dështoi"
 
 #: ../../network/state_handler.go:67
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Gatitja e modemit dështoi"
 
 #: ../../network/state_handler.go:68
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "U dështua në përzgjedhjen e APN-së GSM të dhën"
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
-msgstr ""
+msgstr "S’u kërkua në rrjete"
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Regjistrimi i rrjetit s’u pranua"
 
 #: ../../network/state_handler.go:71
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Regjistrimit të rrjetit i mbaroi koha"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "S’u arrit të bëhej regjistrimi me rrjetin e kërkuar GSM"
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
-msgstr ""
+msgstr "Kontrolli i PIN-it dështoi"
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "Mund të mungojë firmware i domosdoshëm për pajisjen"
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
-msgstr ""
+msgstr "Pajisja u hoq"
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "NetworkManager shkoi të flejë"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "Lidhja aktive e pajisjes u hoq, ose u zhduk"
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "Një përdorues ose klient kërkoi shkëputjen"
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "Operatori/lidhja e pajisjes ndryshoi"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "U mor e mirëqenë lidhja ekzistuese e pajisjes"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "Lutësi 802.1X tani është gati"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
-msgstr ""
+msgstr "S’u gjet dot modemi"
 
 #: ../../network/state_handler.go:83
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "Lidhja përmes Bluetooth-it dështoi ose i mbaroi koha"
 
 #: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "S’u fut karta SIM e modemit GSM"
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "Lypset PIN SIM-i modemi GSM"
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "Lypset PUK SIM-i modemi GSM"
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
-msgstr ""
+msgstr "Gabim karte SIM në modem GSM"
 
 #: ../../network/state_handler.go:88
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "Pajisja InfiniBand nuk mbulon mënyrën e lidhur"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "Një varësi e lidhjes është e paplotësuar"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -725,19 +805,19 @@ msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "ModemManager s’u xhirua ose u mbyll papritmas"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgid "The 802.11 WLAN network could not be found"
+msgstr "S’u gjet dot rrjet 802.11 WLAN"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "Dështoi një lidhje dytësore e lidhjes bazë"
 
 #: ../../network/state_handler.go:96
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "Ujdisja e DCB-së ose FCoE-së dështoi"
 
 #: ../../network/state_handler.go:97
 msgid "Network teaming control failed"
@@ -745,15 +825,15 @@ msgstr ""
 
 #: ../../network/state_handler.go:98
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "Modemi s’u arrit të vihej në punë ose s’ka"
 
 #: ../../network/state_handler.go:99
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Modem tani gati dhe i përdorshëm"
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "PIN-i i SIM-it është i pasaktë"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
@@ -761,19 +841,19 @@ msgstr ""
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
-msgstr ""
+msgstr "Pajisja mëmë u ndryshua"
 
 #: ../../network/state_handler.go:103
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Gjendja e administrimit të pajisjes mëmë ndryshoi"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "Kablloja e rrjetit është e hequr"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Ju lutemi, sigurohuni se karta SIM është futur me sinjal rrjeti celular"
 
 #: ../../network/state_handler.go:108
 msgid ""
@@ -782,164 +862,170 @@ msgstr ""
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "S’u arrit të aktivizohej lidhje VPN, arsye e panjohur"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "S’u arrit të aktivizohet lidhja VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "Gjendja e lidhjes VPN ndryshoi për shkak shkëputje nga përdoruesi"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "Gjendja e lidhjes VPN ndryshoi për shkak shkëputjeje nga pajisje"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr ""
+msgstr "Shërbimi VPN u ndal"
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "Formësimi i IP-së për lidhjen VPN është i pavlefshëm"
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Përpjekjes për lidhje me shërbimin VPN i mbaroi koha"
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "Nisjes së shërbimit VPN i mbaroi koha"
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "Dështoi nisja e shërbimit AutoIP"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "S’u dha fjalëkalim lidhjeje VPN"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Mirëfilltësimi te shërbyesi VPN dështoi"
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "Lidhja u fshi prej rregullimeve"
 
 #: ../../network/state_handler.go:251
-msgid "Try enabling hotspot"
-msgstr ""
+msgid "Enabling hotspot"
+msgstr "Po aktivizohet hotspot-i"
 
 #: ../../network/state_handler.go:253
-msgid "Try connecting %q"
-msgstr ""
+msgid "Connecting %q"
+msgstr "Po lidhet %q"
 
 #: ../../network/state_handler.go:261
-msgid "Hotspot share enabled"
-msgstr ""
+msgid "Hotspot enabled"
+msgstr "Hotspot-i u aktivizua"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
-msgstr ""
+msgstr "%q u lidh"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
-msgid "Hotspot share turned off"
-msgstr ""
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+msgid "Hotspot disabled"
+msgstr "Hotspot-i u çaktivizua"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:343
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
-msgstr ""
-
-#: ../../network/state_handler.go:333
-msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr ""
-
-#: ../../network/state_handler.go:335
-msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "%q u shkëput"
 
 #: ../../network/state_handler.go:337
+msgid "Unable to share hotspot, please check dnsmasq settings"
+msgstr "S’arrihet të ndahet hotspot me të tjerë, ju lutemi, kontrolloni rregullimet për dnsmasq"
+
+#: ../../network/state_handler.go:339
+msgid "Unable to connect %q, please keep closer to the wireless router"
+msgstr "S’arrihet të lidhet %q, ju lutemi, jini më afër rrugëzuesit pa fill"
+
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "S’arrihet të lidhet %q, ju lutemi, kontrolloni kabllon e rrugëzuesit ose rrjetit tuaj."
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
+msgid "Password is required to connect %q"
+msgstr "Për lidhjen e %q lypset fjalëkalim"
+
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "Lidhja dështoi, s’arrihet të lidhet %q, fjalëkalim i gabuar"
 
-#: ../../network/utils_dbus_nm.go:227
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
-msgstr ""
+msgstr "E panjohur"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
-msgstr ""
+msgstr "Tani jeni i palidhur."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "U aktivizua mënyra aeroplan."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
-msgstr ""
+msgstr "Mënyra Pikë Hyrjeje nuk mbulohet nga kjo pajisje."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
-msgstr ""
+msgstr "Rrjet"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "Çelësi hardware i kartës WLAN është i mbyllur, ju lutemi, hapeni, kur nevojitet."
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "Ndërmjetësi i sistemit u ujdis me sukses."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "Ndërmjetësi i sistemit është anuluar."
 
-#: ../../session/power/manager_events.go:133
-msgid "Battery Critically Low"
-msgstr ""
+#: ../../network/utils_notify.go:212
+msgid "Connected"
+msgstr "U lidh"
 
-#: ../../session/power/manager_events.go:134
-msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "\"%s\" s’e kaloi verifikimin e sigurisë së sistemit, dhe s’mund të xhirohet këtë herë"
 
-#: ../../session/power/manager_events.go:157
-#: ../../session/power/manager_events.go:164
-msgid "Battery Low"
-msgstr ""
+#: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
+msgstr "Bateri e pakët në nivel kritik"
 
-#: ../../session/power/manager_events.go:158
-msgid "Computer will suspend soon, please plug in"
-msgstr ""
-
-#: ../../session/power/manager_events.go:165
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Bateri e pakët, ju lutemi, vëreni në prizë"
 
-#: ../../timedate/manager_ifc.go:56
-msgid "Authentication is required to set the system time."
-msgstr ""
+#: ../../timedate/manager_ifc.go:59
+msgid "Authentication is required to set the system time"
+msgstr "Që të ujdisni kohën e sistemit, lypset mirëfilltësim"
 
-#: ../../timedate/manager_ifc.go:69
+#: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
-"shall be enabled."
-msgstr ""
+"shall be enabled"
+msgstr "Që të kontrolloni nëse duhet aktivizuar apo jo njëkohësimi i kohës së rrjetit, lypset mirëfilltësim"
 
-#: ../../timedate/manager_ifc.go:89
+#: ../../timedate/manager_ifc.go:82
+msgid "Authentication is required to change NTP server"
+msgstr "Që të ndryshoni shërbyes NTP, lypset mirëfilltësim"
+
+#: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
-"UTC time."
-msgstr ""
+"UTC time"
+msgstr "Që të kontrolloni nëse RTC-ja depoziton kohën vendore apo atë UTC, lypset mirëfilltësim"
 
-#: ../../timedate/manager_ifc.go:108
-msgid "Authentication is required to set the system timezone."
-msgstr ""
+#: ../../timedate/manager_ifc.go:141
+msgid "Authentication is required to set the system timezone"
+msgstr "Që të ujdisni zonën kohore të sistemit, lypset mirëfilltësim"

@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Die Authentifizierung ist erforderlich, um Ihre eigenen Benutzerdaten zu ändern</translation>
+			<translation>Zum Ändern Ihrer eigenen Benutzerdaten ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
 			<source>Authentication is required to change user data</source>
-			<translation>Zur Änderung von Benutzerdaten ist eine Legitimierung erforderlich</translation>
+			<translation>Zum Ändern von Benutzerdaten ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
@@ -24,7 +24,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation>Die Authentifizierung ist erforderlich um die automatische Anmeldung einzuschalten</translation>
+			<translation>Zum Aktivieren der automatischen Anmeldung ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
@@ -34,7 +34,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation>Die Authentifizierung ist erforderlich, um die automatische Anmeldung auszuschalten</translation>
+			<translation>Zum Deaktivieren der automatischen Anmeldung ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
@@ -44,7 +44,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Die Authentifizierung ist erforderlich, um die Anmeldung ohne Passwort zu aktivieren</translation>
+			<translation>Zum Aktivieren der Anmeldung ohne Passwort ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
@@ -54,7 +54,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Die Authentifizierung ist erforderlich, um die Anmeldung ohne Passwort zu deaktivieren</translation>
+			<translation>Zum Deaktivieren der Anmeldung ohne Passwort ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
@@ -64,7 +64,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation>Anmeldung erforderlich um das Tastaturlayout zu ändern</translation>
+			<translation>Zum Festlegen der Tastaturbelegung ist eine Authentifizierung erforderlich</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
