@@ -46,3 +46,13 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPa
 
     return pixmap;
 }
+
+const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, const qreal ratio)
+{
+    QIcon icon = QIcon::fromTheme(iconName);
+    if (!icon.isNull()) {
+        QPixmap pixmap = icon.pixmap(size*ratio);
+        pixmap.setDevicePixelRatio(ratio);
+        return pixmap;
+    }
+}
