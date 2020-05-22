@@ -53,45 +53,13 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPa
     return pixmap;
 }
 
-
-QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize)
+const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, const qreal ratio)
 {
-    if (theme == nullptr || cursorName == nullptr || cursorSize <= 0)
-        return nullptr;
-
-   XcursorImages *images = XcursorLibraryLoadImages(cursorName, theme, cursorSize);
-    if (images == nullptr || images->images[0] == nullptr) {
-        qWarning() << "loadCursorFalied, theme =" << theme << ", cursorName=" << cursorName;
-        return nullptr;
+    QIcon icon = QIcon::fromTheme(iconName);
+    if (!icon.isNull()) {
+        QPixmap pixmap = icon.pixmap(size*ratio);
+        pixmap.setDevicePixelRatio(ratio);
+        return pixmap;
     }
-    const int imgW = images->images[0]->width;
-    const int imgH = images->images[0]->height;
-    QImage img((const uchar*)images->images[0]->pixels, imgW, imgH, QImage::Format_ARGB32);
-    QPixmap pixmap = QPixmap::fromImage(img);
-    QCursor *cursor = new QCursor(pixmap, images->images[0]->xhot, images->images[0]->yhot);
-    delete images;
-    return cursor;
-}
-
-void ImageUtil::loadQCursorForUpdateMenu(QWidget *menu_win)
-{
-    static QCursor *lastArrowCursor = nullptr;
-    static QString  lastCursorTheme;
-    int lastCursorSize = 0;
-    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
-    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
-    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
-    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
-    {
-        qDebug() << QString("Menu Update Cursor (theme=%1,%2 ; size=%3,%4)...").arg(lastCursorTheme).arg(theme).arg(lastCursorSize).arg(cursorSize);
-        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
-        lastCursorTheme = theme;
-        lastCursorSize = cursorSize;
-        if(menu_win)
-            menu_win->setCursor(*cursor);
-        if (lastArrowCursor != nullptr)
-            delete lastArrowCursor;
-
-        lastArrowCursor = cursor;
-    }
+    return QPixmap();
 }

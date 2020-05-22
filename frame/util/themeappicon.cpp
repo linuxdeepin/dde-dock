@@ -27,6 +27,11 @@
 #include <QApplication>
 #include <QPixmapCache>
 #include <QCryptographicHash>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QDate>
+
+#include "../frame/util/imageutil.h"
 
 QMap<QString, QIcon> ThemeAppIcon::m_iconCache;
 
@@ -47,6 +52,54 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
 
     // 把size改为小于size的最大偶数 :)
     const int s = int(size * ratio) & ~1;
+    const float iconZoom = size /64.0*0.8;
+
+    if(iconName == "dde-calendar"){
+        QDate const date(QDate::currentDate());
+
+        auto pixday  =  ImageUtil::loadSvg(":/indicator/resources/calendar_bg.svg","",size,ratio);
+        auto calendar = new QWidget() ;
+        calendar->setFixedSize(s,s);
+
+        calendar->setAutoFillBackground(true);
+            QPalette palette = calendar->palette();
+            palette.setBrush(QPalette::Window,
+                    QBrush(QPixmap(":/indicator/resources/calendar_bg.svg").scaled(
+                        calendar->size(),
+                        Qt::IgnoreAspectRatio,
+                        Qt::SmoothTransformation)));
+         calendar->setPalette(palette);
+
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->setSpacing(0);
+        auto month = new QLabel();
+        month->setPixmap( ImageUtil::loadSvg(QString(":/icons/resources/month%1.svg").arg(date.month()),QSize(36,16)*iconZoom,ratio));
+        month->setFixedHeight(month->pixmap()->height());
+        month->setAlignment(Qt::AlignCenter);
+        month->setFixedWidth(s-5*iconZoom);
+        layout->addWidget(month,Qt::AlignVCenter);
+
+        auto day = new QLabel();
+        day->setPixmap( ImageUtil::loadSvg(QString(":/icons/resources/day%1.svg").arg(date.day()),QSize(32,30)*iconZoom,ratio));
+        day->setAlignment(Qt::AlignCenter);
+        day->setFixedHeight(day->pixmap()->height());
+        day->raise();
+        layout->addWidget(day,Qt::AlignVCenter);
+
+        auto week = new QLabel();
+        week->setPixmap( ImageUtil::loadSvg(QString(":/icons/resources/week%1.svg").arg(date.dayOfWeek()),QSize(26,13)*iconZoom,ratio));
+        week->setFixedHeight(week->pixmap()->height());
+        week->setAlignment(Qt::AlignCenter);
+        week->setFixedWidth(s+5*iconZoom);
+        layout->addWidget(week,Qt::AlignVCenter);
+        layout->setSpacing(0);
+        layout->setContentsMargins(0,10*iconZoom,0,10*iconZoom);
+        calendar->setLayout(layout);
+        pixmap = calendar->grab(calendar->rect());
+
+        return pixmap;
+    }
+
 
     do {
 

@@ -114,6 +114,7 @@ private:
     bool m_dragging;
     bool m_active;
     int m_retryTimes;
+    int  m_lastShowDay;
     unsigned long m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;
@@ -126,6 +127,9 @@ private:
 
     QTimer *m_updateIconGeometryTimer;
     QTimer *m_retryObtainIconTimer;
+    QTimer *m_refershIconTimer;
+
+    QDate m_curDate;
 
     QFutureWatcher<QPixmap> *m_smallWatcher;
     QFutureWatcher<QPixmap> *m_largeWatcher;
