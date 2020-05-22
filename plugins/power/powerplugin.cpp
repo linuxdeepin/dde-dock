@@ -255,7 +255,7 @@ void PowerPlugin::refreshTipsData()
             if(m_showTimeToFull)
                 tips = tr("Capacity %1, %2 hr %3 min remaining").arg(value).arg(hour).arg(min);
             else {
-                tips = tr("Capacity %1").arg(value).arg(hour);
+                tips = tr("Capacity %1").arg(value);
             }
         }
 
