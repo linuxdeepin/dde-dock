@@ -488,6 +488,9 @@ func (m *Manager) activateConnection(uuid string, devPath dbus.ObjectPath) (cpat
 		return
 	}
 	_, err = nmActivateConnection(cpath, devPath)
+	m.ActiveConnectDevpath = devPath
+	m.ActiveConnectUuid = uuid
+	m.ActiveConnectSettingPath = cpath
 	return
 }
 

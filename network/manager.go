@@ -89,6 +89,10 @@ type Manager struct {
 	sessionSigLoop *dbusutil.SignalLoop
 	syncConfig     *dsync.Config
 
+	ActiveConnectDevpath 	 dbus.ObjectPath
+	ActiveConnectUuid 		 string
+	ActiveConnectSettingPath dbus.ObjectPath
+
 	signals *struct {
 		AccessPointAdded, AccessPointRemoved, AccessPointPropertiesChanged struct {
 			devPath, apJSON string
@@ -172,7 +176,7 @@ func (m *Manager) init() {
 	// Sometimes the 'org.freedesktop.secrets' is not exists, this would block the 'init' function, so move to goroutinue
 	go func() {
 		secServiceObj := secrets.NewService(sessionBus)
-		sa, err := newSecretAgent(secServiceObj)
+		sa, err := newSecretAgent(secServiceObj,m)
 		if err != nil {
 			logger.Warning(err)
 			return
@@ -197,6 +201,7 @@ func (m *Manager) init() {
 	}()
 
 	// initialize device and connection handlers
+
 	m.initConnectionManage()
 	m.initDeviceManage()
 	m.initActiveConnectionManage()
