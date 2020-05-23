@@ -24,20 +24,26 @@
 #include "../widgets/tipswidget.h"
 
 #include <DHiDPIHelper>
+#include <DGuiApplicationHelper>
+
 #include <QTimer>
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QEvent>
-#include <DGuiApplicationHelper>
+#include <QLabel>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+extern const int ItemHeight = 30;
+extern void initFontColor(QWidget *widget);
+
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_deviceName = new TipsWidget;
+    m_deviceName = new QLabel(this);
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    initFontColor(m_deviceName);
 
     m_switchBtn = new DSwitchButton;
 
@@ -55,28 +61,25 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     refreshIcon();
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
+    infoLayout->setMargin(0);
+    infoLayout->setSpacing(0);
+    infoLayout->addSpacing(3);
     infoLayout->addWidget(m_deviceName);
     infoLayout->addStretch();
     infoLayout->addWidget(m_loadingIndicator);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
-    infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(20, 0, 5, 0);
-
-//    m_seperator = new HorizontalSeperator;
-//    m_seperator->setFixedHeight(1);
-//    m_seperator->setColor(Qt::black);
+    infoLayout->addSpacing(3);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addStretch();
     centralLayout->addLayout(infoLayout);
     centralLayout->addStretch();
-//    centralLayout->addWidget(m_seperator);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
     setLayout(centralLayout);
-    setFixedHeight(30);
+    setFixedHeight(ItemHeight);
 
     connect(m_switchBtn, &DSwitchButton::clicked, this, &DeviceControlWidget::enableButtonToggled);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &DeviceControlWidget::refreshIcon);
@@ -114,7 +117,7 @@ void DeviceControlWidget::refreshNetwork()
 
     m_loadingIndicator->setLoading(true);
 
-    QTimer::singleShot(1000, this, [=] {
+    QTimer::singleShot(1000, this, [ = ] {
         m_loadingIndicator->setLoading(false);
     });
 }
@@ -129,8 +132,3 @@ void DeviceControlWidget::refreshIcon()
 
     m_loadingIndicator->setImageSource(pixmap);
 }
-
-//void DeviceControlWidget::setSeperatorVisible(const bool visible)
-//{
-//    m_seperator->setVisible(visible);
-//}

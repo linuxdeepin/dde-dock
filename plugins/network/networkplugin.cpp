@@ -20,22 +20,22 @@
  */
 
 #include "networkplugin.h"
+#include "networkitem.h"
 #include "item/wireditem.h"
 #include "item/wirelessitem.h"
 
+#include <DDBusSender>
+
 using namespace dde::network;
 
-#define WIRED_ITEM      "wired"
-#define WIRELESS_ITEM   "wireless"
 #define STATE_KEY       "enabled"
 
 NetworkPlugin::NetworkPlugin(QObject *parent)
-    : QObject(parent),
-
-      m_networkModel(nullptr),
-      m_networkWorker(nullptr),
-      m_delayRefreshTimer(new QTimer),
-      m_pluginLoaded(false)
+    : QObject(parent)
+    , m_networkModel(nullptr)
+    , m_networkWorker(nullptr)
+    , m_networkItem(nullptr)
+    , m_hasDevice(false)
 {
 }
 
@@ -53,10 +53,10 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_delayRefreshTimer->setSingleShot(true);
-    m_delayRefreshTimer->setInterval(2000);
+    if (m_networkItem)
+        return;
 
-    connect(m_delayRefreshTimer, &QTimer::timeout, this, &NetworkPlugin::refreshWiredItemVisible);
+    m_networkItem = new NetworkItem;
 
     if (!pluginIsDisable()) {
         loadPlugin();
@@ -65,22 +65,15 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 
 void NetworkPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
-    Q_UNUSED(checked)
-
-    DeviceItem *item = itemByPath(itemKey);
-    if (item) {
-        return item->invokeMenuItem(menuId);
+    if (itemKey == NETWORK_KEY) {
+        return m_networkItem->invokeMenuItem(menuId, checked);
     }
-
-    Q_UNREACHABLE();
 }
 
 void NetworkPlugin::refreshIcon(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
-
-    for (auto item : m_itemsMap.values()) {
-        item->refreshIcon();
+    if (itemKey == NETWORK_KEY) {
+        m_networkItem->refreshIcon();
     }
 }
 
@@ -98,50 +91,47 @@ bool NetworkPlugin::pluginIsDisable()
 
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
 {
-    DeviceItem *item = itemByPath(itemKey);
-    if (item) {
-        return item->itemCommand();
-    }
-
-    Q_UNREACHABLE();
-    return QString();
+    Q_UNUSED(itemKey)
+    return m_hasDevice ? QString() : QString("dbus-send --print-reply "
+                                             "--dest=com.deepin.dde.ControlCenter "
+                                             "/com/deepin/dde/ControlCenter "
+                                             "com.deepin.dde.ControlCenter.ShowModule "
+                                             "\"string:network\"");
 }
 
 const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
 {
-    DeviceItem *item = itemByPath(itemKey);
-    if (item) {
-        return item->itemContextMenu();
+    if (itemKey == NETWORK_KEY) {
+        return m_networkItem->contextMenu();
     }
 
-    Q_UNREACHABLE();
     return QString();
 }
 
 QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
 {
-    return itemByPath(itemKey);
+    if (itemKey == NETWORK_KEY) {
+        return m_networkItem;
+    }
+
+    return nullptr;
 }
 
 QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
 {
-    DeviceItem *item = itemByPath(itemKey);
-    if (item) {
-        return item->itemTips();
+    if (itemKey == NETWORK_KEY) {
+        return m_networkItem->itemTips();
     }
 
-    Q_UNREACHABLE();
     return nullptr;
 }
 
 QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 {
-    DeviceItem *item = itemByPath(itemKey);
-    if (item) {
-        return item->itemApplet();
+    if (itemKey == NETWORK_KEY && m_hasDevice) {
+        return m_networkItem->itemApplet();
     }
 
-    Q_UNREACHABLE();
     return nullptr;
 }
 
@@ -171,139 +161,86 @@ bool NetworkPlugin::isConnectivity()
 
 void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 {
-    QList<QString> mPaths = m_itemsMap.keys();
-    QList<QString> newPaths;
+    QMap<QString, WirelessItem*> wirelessItems;
+    QMap<QString, WiredItem *> wiredItems;
 
-    QList<WirelessItem *> wirelessItems;
+    int wiredDeviceCnt = 0;
+    int wirelessDeviceCnt = 0;
+    for (auto device : devices) {
+        if (device && device->type() == NetworkDevice::Wired)
+            wiredDeviceCnt++;
+        else
+            wirelessDeviceCnt++;
+    }
+
+    // 编号 (与控制中心有线设备保持一致命名)
+    int wiredNum = 0;
+    int wirelessNum = 0;
+    QString text;
 
     for (auto device : devices) {
         const QString &path = device->path();
-        newPaths << path;
         // new device
-        if (!mPaths.contains(path)) {
-            DeviceItem *item = nullptr;
-            switch (device->type()) {
-                case NetworkDevice::Wired:
-                    item = new WiredItem(static_cast<WiredDevice *>(device));
-                    break;
-                case NetworkDevice::Wireless:
-                    item = new WirelessItem(static_cast<WirelessDevice *>(device));
-                    wirelessItems.append(static_cast<WirelessItem *>(item));
+        DeviceItem *item = nullptr;
+        switch (device->type()) {
+        case NetworkDevice::Wired:
+            wiredNum++;
+            if (wiredDeviceCnt == 1)
+                text = tr("Wired Network");
+            else
+                text = tr("Wired Network %1").arg(wiredNum);
+            item = new WiredItem(static_cast<WiredDevice *>(device), text);
+            wiredItems.insert(path, static_cast<WiredItem *>(item));
 
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
-                            m_networkWorker, &NetworkWorker::queryActiveConnInfo);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
-                            m_networkWorker, &NetworkWorker::activateAccessPoint);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
-                            m_networkWorker, &NetworkWorker::disconnectDevice);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::feedSecret,
-                            m_networkWorker, &NetworkWorker::feedSecret);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::cancelSecret,
-                            m_networkWorker, &NetworkWorker::cancelSecret);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
-                            m_networkWorker, &NetworkWorker::requestWirelessScan);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::createApConfig,
-                            m_networkWorker, &NetworkWorker::createApConfig);
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
-                            m_networkWorker, &NetworkWorker::queryConnectionSession);
-
-                    connect(static_cast<WirelessItem *>(item), &WirelessItem::requestSetAppletVisible,
-                            this, &NetworkPlugin::onItemRequestSetAppletVisible);
-
-                    m_networkWorker->queryAccessPoints(path);
-                    m_networkWorker->requestWirelessScan();
-                    break;
-                default:
-                    Q_UNREACHABLE();
-            }
-
-            mPaths << path;
-            m_itemsMap.insert(path, item);
-
-            connect(device, &dde::network::NetworkDevice::enableChanged,
-                    m_delayRefreshTimer, static_cast<void (QTimer:: *)()>(&QTimer::start));
-
-            connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
-            connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshIcon);
-        }
-    }
-
-    for (auto mPath : mPaths) {
-        // removed device
-        if (!newPaths.contains(mPath)) {
-            m_proxyInter->itemRemoved(this, mPath);
-            m_itemsMap.take(mPath)->deleteLater();
+            connect(static_cast<WiredItem *>(item), &WiredItem::wiredStateChanged,
+                    m_networkItem, &NetworkItem::updateSelf);
+            connect(static_cast<WiredItem *>(item), &WiredItem::enableChanged,
+                    m_networkItem, &NetworkItem::updateSelf);
+            connect(static_cast<WiredItem *>(item), &WiredItem::activeConnectionChanged,
+                    m_networkItem, &NetworkItem::updateSelf);
             break;
+        case NetworkDevice::Wireless:
+            item = new WirelessItem(static_cast<WirelessDevice *>(device));
+            static_cast<WirelessItem *>(item)->setDeviceInfo(wirelessDeviceCnt == 1 ? -1 : ++wirelessNum);
+            wirelessItems.insert(path, static_cast<WirelessItem *>(item));
+
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
+                    m_networkWorker, &NetworkWorker::queryActiveConnInfo);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
+                    m_networkWorker, &NetworkWorker::activateAccessPoint);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
+                    m_networkWorker, &NetworkWorker::disconnectDevice);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::feedSecret,
+                    m_networkWorker, &NetworkWorker::feedSecret);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::cancelSecret,
+                    m_networkWorker, &NetworkWorker::cancelSecret);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
+                    m_networkWorker, &NetworkWorker::requestWirelessScan);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::createApConfig,
+                    m_networkWorker, &NetworkWorker::createApConfig);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
+                    m_networkWorker, &NetworkWorker::queryConnectionSession);
+
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::deviceStateChanged,
+                    m_networkItem, &NetworkItem::updateSelf);
+
+            m_networkWorker->queryAccessPoints(path);
+            m_networkWorker->requestWirelessScan();
+            break;
+        default:
+            Q_UNREACHABLE();
         }
 
-        if (pluginIsDisable()) {
-            m_proxyInter->itemRemoved(this, mPath);
-        } else {
-            m_proxyInter->itemAdded(this, mPath);
-        }
+        connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
+        connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
     }
 
-    int wirelessItemCount = wirelessItems.size();
-    for (int i = 0; i < wirelessItemCount; ++i) {
-        QTimer::singleShot(1, [=] {
-            wirelessItems.at(i)->setDeviceInfo(wirelessItemCount == 1 ? -1 : i + 1);
-        });
-    }
-
-    m_delayRefreshTimer->start();
-}
-
-void NetworkPlugin::refreshWiredItemVisible()
-{
-    if (pluginIsDisable()) {
-        return;
-    }
-
-    bool hasWireless = false;
-    QList<WiredItem *> wiredItems;
-
-    for (auto item : m_itemsMap.values()) {
-        if (!item->device().isNull() && item->device()->type() == NetworkDevice::Wireless) {
-            hasWireless = true;
-        } else {
-            wiredItems.append(static_cast<WiredItem *>(item));
-        }
-    }
-
-    if (!hasWireless) {
-        return;
-    }
-
-    for (auto wiredItem : wiredItems) {
-        if (!wiredItem->device().isNull() && !wiredItem->device()->enabled()) {
-            m_proxyInter->itemRemoved(this, wiredItem->path());
-        } else {
-            m_proxyInter->itemAdded(this, wiredItem->path());
-        }
-    }
-}
-
-DeviceItem *NetworkPlugin::itemByPath(const QString &path)
-{
-    for (auto item : m_itemsMap.values()) {
-        if (item->path() == path) {
-            return item;
-        }
-    }
-
-    Q_UNREACHABLE();
-    return nullptr;
+    m_hasDevice = wiredItems.size() || wirelessItems.size();
+    m_networkItem->updateDeviceItems(wiredItems, wirelessItems);
 }
 
 void NetworkPlugin::loadPlugin()
 {
-    if (m_pluginLoaded) {
-        qDebug() << "network plugin has been loaded! return";
-        return;
-    }
-
-    m_pluginLoaded = true;
-
     m_networkModel = new NetworkModel;
     m_networkWorker = new NetworkWorker(m_networkModel);
 
@@ -313,29 +250,15 @@ void NetworkPlugin::loadPlugin()
     m_networkWorker->moveToThread(qApp->thread());
 
     onDeviceListChanged(m_networkModel->devices());
-}
 
-void NetworkPlugin::onItemRequestSetAppletVisible(const bool visible)
-{
-    DeviceItem *item = qobject_cast<DeviceItem *>(sender());
-    Q_ASSERT(item);
-
-    m_proxyInter->requestSetAppletVisible(this, item->path(), visible);
+    m_proxyInter->itemAdded(this, NETWORK_KEY);
 }
 
 void NetworkPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {
-        for (auto itemKey : m_itemsMap.keys()) {
-            m_proxyInter->itemRemoved(this, itemKey);
-        }
-        return;
+        m_proxyInter->itemRemoved(this, NETWORK_KEY);
+    } else {
+        m_proxyInter->itemAdded(this, NETWORK_KEY);
     }
-
-    if (!m_pluginLoaded) {
-        loadPlugin();
-        return;
-    }
-
-    onDeviceListChanged(m_networkModel->devices());
 }

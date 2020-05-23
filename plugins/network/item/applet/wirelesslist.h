@@ -26,17 +26,18 @@
 #include "accesspoint.h"
 
 #include <QScrollArea>
-#include <QVBoxLayout>
 #include <QList>
-#include <QTimer>
 #include <QPointer>
 
-#include <dpicturesequenceview.h>
 #include <WirelessDevice>
+
+#include <DSpinner>
 
 DWIDGET_USE_NAMESPACE
 
 class AccessPointWidget;
+class QVBoxLayout;
+class QTimer;
 class WirelessList : public QScrollArea
 {
     Q_OBJECT
@@ -46,16 +47,18 @@ public:
     ~WirelessList();
 
     QWidget *controlPanel();
+    int APcount();
 
 public Q_SLOTS:
     void setDeviceInfo(const int index);
+    void onEnableButtonToggle(const bool enable);
 
 signals:
     void requestSetDeviceEnable(const QString &path, const bool enable) const;
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
     void requestWirelessScan();
-    void requestSetAppletVisible(const bool visible) const;
+    void requestUpdatePopup();
 
 private slots:
     void loadAPList();
@@ -63,7 +66,6 @@ private slots:
     void APRemoved(const QJsonObject &apInfo);
     void APPropertiesChanged(const QJsonObject &apInfo);
     void updateAPList();
-    void onEnableButtonToggle(const bool enable);
     void onDeviceEnableChanged(const bool enable);
     void activateAP(const QString &apPath, const QString &ssid);
     void deactiveAP();
@@ -83,10 +85,10 @@ private:
     AccessPoint m_activatingAP;
     AccessPoint m_activeHotspotAP;
     QList<AccessPoint> m_apList;
-    QList<AccessPointWidget*> m_apwList;
+    QList<AccessPointWidget *> m_apwList;
 
     QTimer *m_updateAPTimer;
-    Dtk::Widget::DPictureSequenceView *m_indicator;
+    DSpinner *m_loadingStat;
 
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;
@@ -96,7 +98,6 @@ private:
 
 public:
     bool isHotposActive;
-
 };
 
 #endif // WIRELESSAPPLET_H

@@ -18,19 +18,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef DEVICECONTROLWIDGET_H
 #define DEVICECONTROLWIDGET_H
 
 #include "horizontalseperator.h"
 
 #include <QWidget>
-#include <QLabel>
+
 #include <dloadingindicator.h>
 #include <dswitchbutton.h>
 
 DWIDGET_USE_NAMESPACE
 class TipsWidget;
+class QLabel;
 class DeviceControlWidget : public QWidget
 {
     Q_OBJECT
@@ -40,7 +40,6 @@ public:
 
     void setDeviceName(const QString &name);
     void setDeviceEnabled(const bool enable);
-//    void setSeperatorVisible(const bool visible);
 
 signals:
     void enableButtonToggled(const bool enable) const;
@@ -54,9 +53,8 @@ private slots:
     void refreshNetwork();
 
 private:
-    TipsWidget *m_deviceName;
+    QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
-//    HorizontalSeperator *m_seperator;
     DLoadingIndicator *m_loadingIndicator;
 };
 

@@ -24,26 +24,28 @@
 
 #include "accesspoint.h"
 
-#include <QWidget>
-#include <QLabel>
-#include <QPushButton>
-#include <QDBusObjectPath>
+#include <DImageButton>
 
-#include <dimagebutton.h>
 #include <NetworkDevice>
 
+#include <QWidget>
+#include <QLabel>
+#include <QDBusObjectPath>
+
+class StateLabel;
 class SsidButton : public QLabel
 {
     Q_OBJECT
 public:
-    SsidButton(QWidget *parent = nullptr) : QLabel(parent){}
+    SsidButton(QWidget *parent = nullptr) : QLabel(parent) {}
     virtual ~SsidButton() {}
 
 signals:
     void clicked();
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *event) override {
+    void mouseReleaseEvent(QMouseEvent *event) override
+    {
         QLabel::mouseReleaseEvent(event);
 
         Q_EMIT clicked();
@@ -77,15 +79,18 @@ private:
 private slots:
     void ssidClicked();
     void disconnectBtnClicked();
+    void buttonEnter();
+    void buttonLeave();
+
 
 private:
     dde::network::NetworkDevice::DeviceStatus m_activeState;
 
     AccessPoint m_ap;
     SsidButton *m_ssidBtn;
-    Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityLabel;
     QLabel *m_strengthLabel;
+    StateLabel *m_stateButton;
 
     QPixmap m_securityPixmap;
     QSize m_securityIconSize;

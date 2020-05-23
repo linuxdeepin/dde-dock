@@ -28,6 +28,9 @@
 #include <NetworkWorker>
 #include <NetworkModel>
 
+#define NETWORK_KEY "network-item-key"
+
+class NetworkItem;
 class NetworkPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -35,7 +38,7 @@ class NetworkPlugin : public QObject, PluginsItemInterface
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "network.json")
 
 public:
-    explicit NetworkPlugin(QObject *parent = 0);
+    explicit NetworkPlugin(QObject *parent = nullptr);
 
     const QString pluginName() const Q_DECL_OVERRIDE;
     const QString pluginDisplayName() const Q_DECL_OVERRIDE;
@@ -60,22 +63,18 @@ public:
 
 private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
-    void refreshWiredItemVisible();
-    void onItemRequestSetAppletVisible(const bool visible);
-    void refreshPluginItemsVisible();
 
 private:
-    DeviceItem *itemByPath(const QString &path);
     void loadPlugin();
+    void refreshPluginItemsVisible();
 
 private:
     dde::network::NetworkModel *m_networkModel;
     dde::network::NetworkWorker *m_networkWorker;
 
-    QMap<QString, DeviceItem *> m_itemsMap;
-    QTimer *m_delayRefreshTimer;
+    NetworkItem *m_networkItem;
 
-    bool m_pluginLoaded;
+    bool m_hasDevice;
 };
 
 #endif // NETWORKPLUGIN_H
