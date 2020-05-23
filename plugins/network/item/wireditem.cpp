@@ -28,6 +28,7 @@
 
 #include <DGuiApplicationHelper>
 #include <NetworkModel>
+#include <QVBoxLayout>
 
 DGUI_USE_NAMESPACE
 
@@ -43,18 +44,18 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     , m_wiredIcon(new QLabel(this))
     , m_stateButton(new StateLabel(this))
     , m_loadingStat(new DSpinner(this))
-//    , m_line(new HorizontalSeperator(this))
 {
     setFixedHeight(ItemHeight);
 
-//    m_connectedName->setVisible(false);
     bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
 
     auto pixpath = QString(":/wired/resources/wired/network-wired-symbolic");
     pixpath = isLight ? pixpath + "-dark.svg" : pixpath + LightType;
+
     auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
     m_wiredIcon->setPixmap(iconPix);
     m_wiredIcon->setVisible(false);
+
     pixpath = QString(":/wireless/resources/wireless/select");
     pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
     iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
@@ -63,16 +64,15 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     m_stateButton->setVisible(false);
     m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_loadingStat->setVisible(false);
-//    m_line->setVisible(true);
 
     m_connectedName->setText(m_deviceName);
-    m_connectedName->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_connectedName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     initFontColor(m_connectedName);
 
     auto connectionLayout = new QVBoxLayout(this);
     connectionLayout->setMargin(0);
     connectionLayout->setSpacing(0);
-//    connectionLayout->addWidget(m_line);
+
     auto itemLayout = new QHBoxLayout;
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
@@ -90,15 +90,15 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
             this, &WiredItem::deviceStateChanged);
 
-    connect(static_cast<WiredDevice*>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
             this, &WiredItem::changedActiveWiredConnectionInfo);
 
-    connect(m_stateButton, &StateLabel::click, this, [&]{
+    connect(m_stateButton, &StateLabel::click, this, [&] {
         auto enableState = m_device->enabled();
         emit requestSetDeviceEnable(path(), !enableState);
     });
-    connect(m_stateButton, &StateLabel::enter, this , &WiredItem::buttonEnter);
-    connect(m_stateButton, &StateLabel::leave, this , &WiredItem::buttonLeave);
+    connect(m_stateButton, &StateLabel::enter, this, &WiredItem::buttonEnter);
+    connect(m_stateButton, &StateLabel::leave, this, &WiredItem::buttonLeave);
 
     deviceStateChanged(m_device->status());
 }
@@ -190,7 +190,7 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
         if (!m_device->enabled())
             m_stateButton->setVisible(false);
     }
-        break;
+    break;
     case NetworkDevice::Prepare:
     case NetworkDevice::Config:
     case NetworkDevice::NeedAuth:
@@ -202,14 +202,14 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
         m_loadingStat->start();
         m_loadingStat->show();
     }
-        break;
+    break;
     case NetworkDevice::Activated: {
         m_loadingStat->stop();
         m_loadingStat->hide();
         m_loadingStat->setVisible(false);
         m_stateButton->setVisible(true);
     }
-        break;
+    break;
     }
 
     emit wiredStateChanged();
@@ -223,7 +223,7 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
     auto strTitle = connInfo.value("ConnectionName").toString();
     m_connectedName->setText(strTitle);
     QFontMetrics fontMetrics(m_connectedName->font());
-    if(fontMetrics.width(strTitle) > m_connectedName->width()) {
+    if (fontMetrics.width(strTitle) > m_connectedName->width()) {
         strTitle = QFontMetrics(m_connectedName->font()).elidedText(strTitle, Qt::ElideRight, m_connectedName->width());
     }
 

@@ -22,6 +22,7 @@
 #include "deviceitem.h"
 
 #include <DDBusSender>
+
 #include <QJsonDocument>
 
 using namespace dde::network;
@@ -88,16 +89,14 @@ void DeviceItem::invokeMenuItem(const QString &menuId)
     }
 
     if (menuId == "settings")
-        //QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"");
         DDBusSender()
-                .service("com.deepin.dde.ControlCenter")
-                .interface("com.deepin.dde.ControlCenter")
-                .path("/com/deepin/dde/ControlCenter")
-                .method("ShowPage")
-                .arg(QString("network"))
-                .arg(m_path)
-                .call();
-
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method("ShowPage")
+        .arg(QString("network"))
+        .arg(m_path)
+        .call();
     else if (menuId == "enable")
         Q_EMIT requestSetDeviceEnable(m_path, !m_device->enabled());
 }

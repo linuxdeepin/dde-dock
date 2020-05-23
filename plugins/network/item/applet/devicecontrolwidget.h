@@ -18,14 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef DEVICECONTROLWIDGET_H
 #define DEVICECONTROLWIDGET_H
 
 #include "horizontalseperator.h"
 
 #include <QWidget>
-#include <QLabel>
+
 #include <dloadingindicator.h>
 #include <dswitchbutton.h>
 
@@ -38,7 +37,7 @@ DWIDGET_USE_NAMESPACE
 
 namespace Dock {
 class TipsWidget;
-}
+class QLabel;
 
 class DeviceControlWidget : public QWidget
 {
@@ -49,7 +48,6 @@ public:
 
     void setDeviceName(const QString &name);
     void setDeviceEnabled(const bool enable);
-//    void setSeperatorVisible(const bool visible);
 
 signals:
     void enableButtonToggled(const bool enable) const;
@@ -66,7 +64,6 @@ private:
     QLabel *m_deviceName;
 
     Dtk::Widget::DSwitchButton *m_switchBtn;
-//    HorizontalSeperator *m_seperator;
     DLoadingIndicator *m_loadingIndicator;
 
     AirplanInter *m_airplaninter;           //飞行模式dbus接口(system dbus)  com.deepin.daemon.AirplaneMode

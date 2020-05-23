@@ -23,12 +23,14 @@
 #include "networkplugin.h"
 #include "../frame/util/imageutil.h"
 #include "../widgets/tipswidget.h"
+
 #include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QIcon>
+#include <QLayout>
 
 using namespace dde::network;
 DGUI_USE_NAMESPACE
@@ -44,13 +46,15 @@ WirelessItem::WirelessItem(WirelessDevice *device)
 
     m_wirelessApplet->setVisible(false);
 
-    connect(m_refreshTimer, &QTimer::timeout, [&]{
-        if (m_device.isNull()) {
+    connect(m_refreshTimer, &QTimer::timeout, [&] {
+        if (m_device.isNull())
+        {
             return;
         }
         WirelessDevice *dev = static_cast<WirelessDevice *>(m_device.data());
         // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
-        if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled()) {
+        if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled())
+        {
             Q_EMIT queryActiveConnInfo();
             return;
         }
@@ -262,7 +266,7 @@ void WirelessItem::adjustHeight(bool visibel)
         return;
 
     auto height = visibel ? (m_APList->height() + controlPanel->height())
-                          : m_APList->height();
+                  : m_APList->height();
     m_wirelessApplet->setFixedHeight(height);
 }
 
