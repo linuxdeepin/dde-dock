@@ -41,11 +41,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
     , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
-<<<<<<< HEAD
-    m_deviceName = new Dock::TipsWidget;
-=======
     m_deviceName = new QLabel(this);
->>>>>>> 0231f82a... fix(network):Abnormal hot swap of wired network
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     initFontColor(m_deviceName);
 
