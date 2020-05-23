@@ -21,6 +21,7 @@ package systeminfo
 
 import (
 	"fmt"
+	"os/exec"
 	"strconv"
 	"strings"
 )
@@ -34,7 +35,69 @@ const (
 	cpuKeyActive       = "cpus active"
 	cpuKeyARMProcessor = "Processor"
 	cpuKeyHardware     = "Hardware"
+	cpuKeyMaxMHz	   = "CPU max MHz" //lscpu
 )
+
+func runLscpucode() (out []byte, err error) {
+	cmd := exec.Command("lscpu")
+	out,err = cmd.Output()
+	if err != nil {
+		logger.Error(err)
+	}
+	return out, err
+}
+
+//From string parse "CPU max MHz"
+func parseCPUMaxMHz(bytes []byte, systemType int) (result float64, err error) {
+	logger.Debug("parseCPUMaxMHz data: ", string(bytes))
+	lines := strings.Split(string(bytes), "\n")
+	for _, line := range lines {
+		if !strings.Contains(line, "CPU max MHz:") {
+			continue
+		}
+		items := strings.Split(line, "CPU max MHz:")
+		ret := ""
+		if len(items) > 0 {
+			for _, item := range items {
+				if item != "" {
+					ret += item
+				}
+			}
+			value, err := strconv.ParseFloat(strings.TrimSpace(ret), systemType)
+			if err != nil {
+				logger.Error(err)
+				return result, err
+			}
+			result = value
+		}
+		break
+	}
+	return result, err
+}
+
+func GetCPUMaxMHz(systemType int) (float64, error) {
+	ret, err := getCPUMaxMHz(systemType)
+	if err != nil {
+		logger.Error(err)
+	}
+	return ret, err
+}
+
+func getCPUMaxMHz(systemType int) (float64, error) {
+	ret := 0.0
+	cmdOutBuf, err := runLscpucode()
+	if err != nil {
+		logger.Error(err)
+		return ret, err
+	}
+	ret, err = parseCPUMaxMHz(cmdOutBuf, systemType)
+	if err != nil {
+		logger.Error(err)
+		return ret, err
+	}
+	logger.Debug("GetCPUMaxMHz :", ret)
+	return ret, err
+}
 
 func GetCPUInfo(file string) (string, error) {
 	data, err := parseInfoFile(file, cpuKeyDelim)
