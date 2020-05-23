@@ -216,7 +216,9 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
     }
 
     if (m_device->obtainIpFailed()) {
-        key = "network-wireless-warning-symbolic";
+        //确认 在关闭DHCP服务获取不到ip地址时应该显示未连接图标
+        //key = "network-wireless-warning-symbolic";
+        key = "wireless-0-symbolic";
     }
 
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
