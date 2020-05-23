@@ -49,6 +49,8 @@ type SystemInfo struct {
 	MemoryCap uint64
 	// System type: 32bit or 64bit
 	SystemType int64
+	// CPU max MHz
+	CPUMaxMHz float64
 }
 
 type Daemon struct {
@@ -153,6 +155,13 @@ func (info *SystemInfo) init() {
 	if err != nil {
 		logger.Warning("Get disk capacity failed:", err)
 	}
+
+	go func() {
+		info.CPUMaxMHz, err = GetCPUMaxMHz(int(info.SystemType))
+		if err != nil {
+			logger.Warning("Get CPU Max MHz failed:", err)
+		}
+	}()
 }
 
 func (info *SystemInfo) isValidity() bool {
