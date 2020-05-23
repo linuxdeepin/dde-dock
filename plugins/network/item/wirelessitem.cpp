@@ -171,7 +171,7 @@ void WirelessItem::setDeviceInfo(const int index)
 bool WirelessItem::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_APList && e->type() == QEvent::Resize)
-        QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection,Q_ARG(bool, m_APList->controlPanel()->isVisible()));
     if (o == m_APList && e->type() == QEvent::Show)
         Q_EMIT requestWirelessScan();
 
