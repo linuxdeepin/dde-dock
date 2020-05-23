@@ -23,39 +23,34 @@
 #define MAINWINDOW_H
 
 #include "xcb/xcb_misc.h"
+#include "dbus/dbusdisplay.h"
+#include "dbus/dbusdockadaptors.h"
 #include "dbus/sni/statusnotifierwatcher_interface.h"
+#include "util/docksettings.h"
 #include "panel/mainpanelcontrol.h"
 
-#include <com_deepin_api_xeventmonitor.h>
+#include <QWidget>
+#include <QTimer>
+#include <QRect>
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
 #include <DBlurEffectWidget>
 #include <DGuiApplicationHelper>
-
-#include <QWidget>
+#include <DRegionMonitor>
 
 DWIDGET_USE_NAMESPACE
 
-using XEventMonitor = ::com::deepin::api::XEventMonitor;
-
-class DockSettings;
 class DragWidget;
 class MainPanel;
 class MainPanelControl;
-class QTimer;
+class DBusDockAdaptors;
 class MainWindow : public DBlurEffectWidget, public MainPanelDelegate
 {
     Q_OBJECT
 
-    enum Flag{
-        Motion = 1 << 0,
-        Button = 1 << 1,
-        Key    = 1 << 2
-    };
-
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void setEffectEnabled(const bool enabled);
     void setComposite(const bool hasComposite);
@@ -87,7 +82,7 @@ private:
     void x11MoveWindow(const int x, const int y);
     void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
     bool appIsOnDock(const QString &appDesktop);
-    void onRegionMonitorChanged(int x, int y, const QString &key);
+    void onRegionMonitorChanged();
     void updateRegionMonitorWatch();
     void getTrayVisableItemCount();
 
@@ -123,9 +118,7 @@ private:
 
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
-    XEventMonitor *m_eventInter;
-    QString m_registerKey;
-    QStringList m_registerKeys;
+    DRegionMonitor *m_regionMonitor;
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
