@@ -26,18 +26,18 @@
 #include "accesspoint.h"
 
 #include <QScrollArea>
-#include <QVBoxLayout>
 #include <QList>
-#include <QTimer>
 #include <QPointer>
 
-//#include <dpicturesequenceview.h>
 #include <WirelessDevice>
+
 #include <DSpinner>
 
 DWIDGET_USE_NAMESPACE
 
 class AccessPointWidget;
+class QVBoxLayout;
+class QTimer;
 class WirelessList : public QScrollArea
 {
     Q_OBJECT
@@ -85,10 +85,9 @@ private:
     AccessPoint m_activatingAP;
     AccessPoint m_activeHotspotAP;
     QList<AccessPoint> m_apList;
-    QList<AccessPointWidget*> m_apwList;
+    QList<AccessPointWidget *> m_apwList;
 
     QTimer *m_updateAPTimer;
-//    Dtk::Widget::DPictureSequenceView *m_indicator;
     DSpinner *m_loadingStat;
 
     QVBoxLayout *m_centralLayout;
@@ -99,7 +98,6 @@ private:
 
 public:
     bool isHotposActive;
-
 };
 
 #endif // WIRELESSAPPLET_H

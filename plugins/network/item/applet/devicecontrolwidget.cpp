@@ -24,11 +24,13 @@
 #include "../widgets/tipswidget.h"
 
 #include <DHiDPIHelper>
+#include <DGuiApplicationHelper>
+
 #include <QTimer>
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QEvent>
-#include <DGuiApplicationHelper>
+#include <QLabel>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -69,15 +71,10 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     infoLayout->addWidget(m_switchBtn);
     infoLayout->addSpacing(3);
 
-//    m_seperator = new HorizontalSeperator;
-//    m_seperator->setFixedHeight(1);
-//    m_seperator->setColor(Qt::black);
-
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addStretch();
     centralLayout->addLayout(infoLayout);
     centralLayout->addStretch();
-//    centralLayout->addWidget(m_seperator);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
@@ -135,8 +132,3 @@ void DeviceControlWidget::refreshIcon()
 
     m_loadingIndicator->setImageSource(pixmap);
 }
-
-//void DeviceControlWidget::setSeperatorVisible(const bool visible)
-//{
-//    m_seperator->setVisible(visible);
-//}

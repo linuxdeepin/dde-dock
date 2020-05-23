@@ -25,11 +25,11 @@
 #include "deviceitem.h"
 
 #include <WiredDevice>
+
 #include <DGuiApplicationHelper>
 #include <DSpinner>
 
 #include <QLabel>
-#include <QVBoxLayout>
 
 using namespace dde::network;
 DGUI_USE_NAMESPACE
@@ -43,8 +43,7 @@ class WiredItem : public DeviceItem
     Q_OBJECT
 
 public:
-    enum WiredStatus
-    {
+    enum WiredStatus {
         Unknow              = 0,
         Enabled             = 0x00000001,
         Disabled            = 0x00000002,
@@ -105,15 +104,18 @@ signals:
     void click();
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override {
+    void mousePressEvent(QMouseEvent *event) override
+    {
         QLabel::mousePressEvent(event);
         emit click();
     }
-    void enterEvent(QEvent *event) override {
+    void enterEvent(QEvent *event) override
+    {
         QLabel::enterEvent(event);
         emit enter();
     }
-    void leaveEvent(QEvent *event) override {
+    void leaveEvent(QEvent *event) override
+    {
         QLabel::leaveEvent(event);
         emit leave();
     }

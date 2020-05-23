@@ -23,7 +23,6 @@
 #define WIRELESSITEM_H
 
 #include "constants.h"
-
 #include "deviceitem.h"
 #include "applet/wirelesslist.h"
 
@@ -38,8 +37,7 @@ class WirelessItem : public DeviceItem
     Q_OBJECT
 
 public:
-    enum WirelessStatus
-    {
+    enum WirelessStatus {
         Unknow              = 0,
         Enabled             = 0x00010000,
         Disabled            = 0x00020000,
@@ -81,7 +79,7 @@ Q_SIGNALS:
     void queryActiveConnInfo();
     void requestWirelessScan();
     void createApConfig(const QString &devPath, const QString &apPath);
-    void queryConnectionSession( const QString &devPath, const QString &uuid );
+    void queryConnectionSession(const QString &devPath, const QString &uuid);
     void deviceStateChanged();
 
 protected:
