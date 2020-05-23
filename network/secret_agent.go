@@ -56,6 +56,8 @@ type SecretAgent struct {
 	saveSecretsTasks   map[saveSecretsTaskKey]saveSecretsTask
 	saveSecretsTasksMu sync.Mutex
 
+	m *Manager
+
 	methods *struct {
 		GetSecrets        func() `in:"connection,connectionPath,settingName,hints,flags" out:"secrets"`
 		CancelGetSecrets  func() `in:"connectionPath,settingName"`
@@ -129,7 +131,7 @@ func (sa *SecretAgent) getDefaultCollection() (*secrets.Collection, error) {
 	return collectionObj, err
 }
 
-func newSecretAgent(secServiceObj *secrets.Service) (*SecretAgent, error) {
+func newSecretAgent(secServiceObj *secrets.Service, manager *Manager) (*SecretAgent, error) {
 	_, sessionPath, err := secServiceObj.OpenSession(0, "plain", dbus.MakeVariant(""))
 	if err != nil {
 		return nil, err
@@ -139,6 +141,7 @@ func newSecretAgent(secServiceObj *secrets.Service) (*SecretAgent, error) {
 	sa.secretSessionPath = sessionPath
 	sa.secretService = secServiceObj
 	sa.saveSecretsTasks = make(map[saveSecretsTaskKey]saveSecretsTask)
+	sa.m = manager
 	logger.Debug("session path:", sessionPath)
 	return sa, nil
 }
@@ -541,6 +544,9 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 				settingName, askItems, requestNew)
 			if err != nil {
 				logger.Warning("askPasswords error:", err)
+				if sa.m.ActiveConnectSettingPath == connectionPath {
+					sa.m.DisconnectDevice(sa.m.ActiveConnectDevpath)
+				}
 			} else {
 				for key, value := range resultAsk {
 					setting[key] = dbus.MakeVariant(value)
