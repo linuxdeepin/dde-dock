@@ -215,6 +215,9 @@ void MainPanelControl::updateMainPanelLayout()
         m_pluginLayout->setContentsMargins(0, 10, 0, 10);
         break;
     }
+
+    resizeDesktopWidget();
+    resizeDockIcon();
 }
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
@@ -265,14 +268,7 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
-    if (m_position == Position::Right || m_position == Position::Left)
-        m_desktopWidget->setFixedSize(width(), DESKTOP_SIZE);
-    else
-        m_desktopWidget->setFixedSize(DESKTOP_SIZE, height());
-
-    if (DisplayMode::Fashion == m_dislayMode)
-        m_desktopWidget->setFixedSize(0, 0);
-
+    resizeDesktopWidget();
     resizeDockIcon();
     return QWidget::resizeEvent(event);
 }
@@ -1088,4 +1084,15 @@ void MainPanelControl::updatePanelCursor()
 
         lastArrowCursor = cursor;
     }
+}
+
+void MainPanelControl::resizeDesktopWidget()
+{
+    if (m_position == Position::Right || m_position == Position::Left)
+        m_desktopWidget->setFixedSize(width(), DESKTOP_SIZE);
+    else
+        m_desktopWidget->setFixedSize(DESKTOP_SIZE, height());
+
+    if (DisplayMode::Fashion == m_dislayMode)
+        m_desktopWidget->setFixedSize(0, 0);
 }
