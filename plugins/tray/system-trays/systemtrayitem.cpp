@@ -250,6 +250,10 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
 
     event->accept();
 
+    if (PopupWindow->isVisible()) {
+        hidePopup();
+    }
+
     if (!m_open) {
         showPopupApplet(trayPopupApplet());
         m_open = true;
