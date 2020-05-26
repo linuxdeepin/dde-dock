@@ -29,6 +29,7 @@
 #include <QCursor>
 
 #define PLUGIN_MARGIN  10
+#define ITEM_MAXSIZE    100
 
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
@@ -90,6 +91,8 @@ DockItem::DockItem(QWidget *parent)
 QSize DockItem::sizeHint() const
 {
     int size = qMin(maximumWidth(), maximumHeight());
+    if (size > ITEM_MAXSIZE)
+        size = ITEM_MAXSIZE;
 
     return QSize(size, size);
 }
