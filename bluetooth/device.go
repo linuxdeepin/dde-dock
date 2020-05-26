@@ -80,7 +80,6 @@ type device struct {
 	retryConnectCount int
 	connecting        bool
 	agentWorking      bool
-	isActiveDoConnect bool
 
 	connectPhase      connectPhase
 	disconnectPhase   disconnectPhase
@@ -88,19 +87,6 @@ type device struct {
 	mu                sync.Mutex
 	confirmation      chan bool
 	pairingFailedTime time.Time
-}
-
-func (d *device) getActiveDoConnect() bool {
-	d.mu.Lock()
-	value := d.isActiveDoConnect
-	d.mu.Unlock()
-	return value
-}
-
-func (d *device) setActiveDoConnect(value bool) {
-	d.mu.Lock()
-	d.isActiveDoConnect = value
-	d.mu.Unlock()
 }
 
 type connectPhase uint32
@@ -581,7 +567,6 @@ func (d *device) audioA2DPWorkaround() {
 
 func (d *device) Connect() {
 	logger.Debug(d, "call Connect()")
-	d.setActiveDoConnect(true)
 	d.doConnect(true)
 }
 

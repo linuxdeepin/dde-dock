@@ -21,9 +21,7 @@ package bluetooth
 
 import (
 	"fmt"
-	"os/exec"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
 
@@ -323,30 +321,6 @@ func (a *agent) emitCancelled() {
 	}
 }
 
-func isDialogExist(dialog string) bool {
-	cmd := `ps ux | awk '/` + dialog + `/ && !/awk/ {print $2}'`
-	result, err := exec.Command("/bin/sh", "-c", cmd).Output()
-	if err != nil {
-		return true
-	}
-	return strings.TrimSpace(string(result)) != ""
-}
-
-func showConfirmDialog(devPath dbus.ObjectPath, pinCode string) {
-	if isDialogExist("dde-bluetooth-dialog") {
-		logger.Info("notifyActiveConnectTry dialog exist")
-		return
-	}
-
-	var timestamp = strconv.FormatInt(time.Now().UnixNano(), 10)
-	cmd := exec.Command(bluetoothPinCodeDialogBin, pinCode, string(devPath), timestamp)
-	if err := cmd.Start(); err != nil {
-		logger.Error(err)
-		return
-	}
-	go cmd.Wait()
-}
-
 func (a *agent) emitRequest(devPath dbus.ObjectPath, signal string, args ...interface{}) (auth authorize, err error) {
 	logger.Info("emitRequest", devPath, signal, args)
 
@@ -354,23 +328,14 @@ func (a *agent) emitRequest(devPath dbus.ObjectPath, signal string, args ...inte
 	a.requestDevice = devPath
 	a.mu.Unlock()
 
-	d, err := a.b.getDevice(devPath)
+	_, err = a.b.getDevice(devPath)
 	if nil != err {
 		logger.Warningf("emitRequest can not find device: %v, %v", devPath, err)
 		return auth, errBluezCanceled
 	}
 
-	if signal == "RequestConfirmation" {
-		if d.getActiveDoConnect() {
-			showConfirmDialog(devPath, args[0].(string))
-		} else {
-			notifyRequestConfirm(d.Alias, devPath, args[0].(string))
-		}
-		d.setActiveDoConnect(false)
-	} else {
-		logger.Debug("Send Signal for device: ", devPath, signal, args)
-		a.emit(signal, devPath, args...)
-	}
+	logger.Debug("Send Signal for device: ", devPath, signal, args)
+	a.emit(signal, devPath, args...)
 
 	return a.waitResponse()
 }
