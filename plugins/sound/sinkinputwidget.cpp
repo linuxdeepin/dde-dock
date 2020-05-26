@@ -179,23 +179,26 @@ void SinkInputWidget::onPlaySoundEffect()
 
 void SinkInputWidget::refreshIcon()
 {
+//    qDebug() << __PRETTY_FUNCTION__ << __LINE__ << __FILE__;
     if (!m_inputInter)
         return;
 
-    const float volume = m_inputInter->volume();
-    const bool mute = m_inputInter->mute();
+//    const float volume = m_inputInter->volume();
+//    const bool mute = m_inputInter->mute();
 
-    QString volumeString;
+//    QString volumeString;
 
-    if (mute) {
-        volumeString = "muted";
-    } else if (volume >= double(2) / 3) {
-        volumeString = "high";
-    } else if (volume >= double(1) / 3) {
-        volumeString = "medium";
-    } else {
-        volumeString = "low";
-    }
+//    if (mute) {
+//        volumeString = "muted";
+//    } else if (int(volume) == 0) {
+//        volumeString = "off";
+//    } else if (volume >= double(2) / 3) {
+//        volumeString = "high";
+//    } else if (volume >= double(1) / 3) {
+//        volumeString = "medium";
+//    } else {
+//        volumeString = "low";
+//    }
 
     QString iconLeft = QString(m_inputInter->mute() ? "audio-volume-muted-symbolic" : "audio-volume-low-symbolic");
     QString iconRight = QString("audio-volume-high-symbolic");
