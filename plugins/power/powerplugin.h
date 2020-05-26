@@ -72,10 +72,12 @@ private:
     void updateBatteryVisible();
     void loadPlugin();
     void refreshPluginItemsVisible();
+    void onGSettingsChanged(const QString &key);
     void refreshTipsData();
 
 private:
     bool m_pluginLoaded;
+    bool m_showTimeToFull;
 
     PowerStatusWidget *m_powerStatusWidget;
     TipsWidget *m_tipsLabel;
