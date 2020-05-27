@@ -12,54 +12,54 @@
     <name>AppEditDialog</name>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit</translation>
     </message>
     <message>
         <source>Change icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Change icon</translation>
     </message>
     <message>
         <source>SVG only; dimensions: 96*96; size: ≤1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>Change icon</translation>
     </message>
     <message>
         <source>App name</source>
-        <translation type="unfinished"></translation>
+        <translation>App name</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirm</translation>
     </message>
     <message>
         <source>Unsupported file format</source>
-        <translation type="unfinished"></translation>
+        <translation>Unsupported file format</translation>
     </message>
     <message>
         <source>The file is too large</source>
-        <translation type="unfinished"></translation>
+        <translation>The file is too large</translation>
     </message>
     <message>
         <source>Unsupported dimensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Unsupported dimensions</translation>
     </message>
     <message>
         <source>\/:*?&quot;&lt;&gt;| are not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>\/:*?&quot;&lt;&gt;| are not allowed</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Images</translation>
     </message>
 </context>
 <context>
     <name>AppItem</name>
     <message>
         <source>edit</source>
-        <translation type="unfinished"></translation>
+        <translation>edit</translation>
     </message>
 </context>
 <context>
@@ -152,7 +152,7 @@
     <name>DockItem</name>
     <message>
         <source>edit</source>
-        <translation type="unfinished"></translation>
+        <translation>edit</translation>
     </message>
 </context>
 <context>

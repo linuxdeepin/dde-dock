@@ -12,54 +12,54 @@
     <name>AppEditDialog</name>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <source>Change icon</source>
-        <translation type="unfinished"></translation>
+        <translation>点击更换图标</translation>
     </message>
     <message>
         <source>SVG only; dimensions: 96*96; size: ≤1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>仅限svg格式；尺寸：96*96；大小：不可超过1M</translation>
     </message>
     <message>
         <source>App name</source>
-        <translation type="unfinished"></translation>
+        <translation>应用名称</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>确定</translation>
     </message>
     <message>
         <source>Unsupported file format</source>
-        <translation type="unfinished"></translation>
+        <translation>文件格式不符合</translation>
     </message>
     <message>
         <source>The file is too large</source>
-        <translation type="unfinished"></translation>
+        <translation>文件大小不符合</translation>
     </message>
     <message>
         <source>Unsupported dimensions</source>
-        <translation type="unfinished"></translation>
+        <translation>文件尺寸不符合</translation>
     </message>
     <message>
         <source>\/:*?&quot;&lt;&gt;| are not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>不能使用以下字符：\/:*?&quot;&lt;&gt;|</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>图片</translation>
     </message>
 </context>
 <context>
     <name>AppItem</name>
     <message>
         <source>edit</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑</translation>
     </message>
 </context>
 <context>
@@ -152,7 +152,7 @@
     <name>DockItem</name>
     <message>
         <source>edit</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑</translation>
     </message>
 </context>
 <context>
