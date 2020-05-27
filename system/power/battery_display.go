@@ -35,6 +35,7 @@ func (m *Manager) refreshBatteryDisplay() {
 	var percentage float64
 	var status battery.Status
 	var timeToEmpty, timeToFull uint64
+	var energyCapacity, energyFullTotal, energyFullDesignTotal float64
 
 	batteryCount := len(m.batteries)
 	if batteryCount == 0 {
@@ -53,14 +54,17 @@ func (m *Manager) refreshBatteryDisplay() {
 		status = bat0.Status
 		timeToEmpty = bat0.TimeToEmpty
 		timeToFull = bat0.TimeToFull
+		energyFullTotal = bat0.EnergyFull
+		energyFullDesignTotal = bat0.EnergyFullDesign
 		bat0.PropsMu.RUnlock()
 	} else {
-		var energyTotal, energyFullTotal, energyRateTotal float64
+		var energyTotal, energyRateTotal float64
 		statusSlice := make([]battery.Status, 0, batteryCount)
 		for _, bat := range m.batteries {
 			bat.PropsMu.RLock()
 			energyTotal += bat.Energy
 			energyFullTotal += bat.EnergyFull
+			energyFullDesignTotal += bat.EnergyFullDesign
 			energyRateTotal += bat.EnergyRate
 			statusSlice = append(statusSlice, bat.Status)
 			bat.PropsMu.RUnlock()
@@ -97,8 +101,11 @@ func (m *Manager) refreshBatteryDisplay() {
 	m.setPropBatteryStatus(status)
 	m.setPropBatteryTimeToEmpty(timeToEmpty)
 	m.setPropBatteryTimeToFull(timeToFull)
+	energyCapacity = rightPercentage(energyFullTotal / energyFullDesignTotal * 100.0)
+	m.setPropBatteryCapacity(energyCapacity)
 	m.PropsMu.Unlock()
 
+	logger.Debugf("BatteryCapacity %.1f%%", energyCapacity)
 	logger.Debugf("percentage: %.1f%%", percentage)
 	logger.Debug("status:", status, uint32(status))
 	logger.Debugf("timeToEmpty %v (%vs), timeToFull %v (%vs)",
@@ -115,6 +122,7 @@ func (m *Manager) resetBatteryDisplay() {
 	m.setPropBatteryStatus(battery.StatusUnknown)
 	m.setPropBatteryTimeToEmpty(0)
 	m.setPropBatteryTimeToFull(0)
+	m.setPropBatteryCapacity(0)
 	m.PropsMu.Unlock()
 }
 

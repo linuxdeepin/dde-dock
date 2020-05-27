@@ -97,6 +97,19 @@ func (v *Manager) emitPropChangedBatteryTimeToFull(value uint64) error {
 	return v.service.EmitPropertyChanged(v, "BatteryTimeToFull", value)
 }
 
+func (v *Manager) setPropBatteryCapacity(value float64) (changed bool) {
+	if v.BatteryCapacity != value {
+		v.BatteryCapacity = value
+		v.emitPropChangedBatteryCapacity(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedBatteryCapacity(value float64) error {
+	return v.service.EmitPropertyChanged(v, "BatteryCapacity", value)
+}
+
 func (v *Manager) setPropPowerSavingModeEnabled(value bool) (changed bool) {
 	if v.PowerSavingModeEnabled != value {
 		v.PowerSavingModeEnabled = value
