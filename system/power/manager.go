@@ -70,7 +70,7 @@ type Manager struct {
 	BatteryTimeToFull  uint64
 	// 电池容量
 	BatteryCapacity float64
-
+	
 	// 开启和关闭节能模式
 	PowerSavingModeEnabled bool `prop:"access:rw"`
 
