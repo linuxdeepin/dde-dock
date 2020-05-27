@@ -107,6 +107,8 @@ void MainPanelControl::init()
     m_appSpliter->setObjectName("spliter_app");
     m_traySpliter->setObjectName("spliter_tray");
 
+    m_appAreaWidget->setAccessibleName("AppFullArea");
+
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);
     m_mainPanelLayout->addWidget(m_appAreaWidget);

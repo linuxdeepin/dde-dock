@@ -32,15 +32,11 @@ DWIDGET_USE_NAMESPACE
 DockPopupWindow::DockPopupWindow(QWidget *parent)
     : DArrowRectangle(ArrowBottom, parent),
       m_model(false),
-
       m_acceptDelayTimer(new QTimer(this)),
-
       m_regionInter(new DRegionMonitor(this))
 {
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
-
-    setAccessibleName("popup");
 
     m_wmHelper = DWindowManagerHelper::instance();
 

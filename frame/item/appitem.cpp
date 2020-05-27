@@ -88,7 +88,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
-    setAccessibleName(m_itemEntryInter->name());
+    setObjectName(m_itemEntryInter->name());
     setAcceptDrops(true);
     setLayout(centralLayout);
 
@@ -96,7 +96,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_active = m_itemEntryInter->isActive();
 
     m_appNameTips->setObjectName("AppItemTips");
-    m_appNameTips->setAccessibleName(m_itemEntryInter->name());
+    m_appNameTips->setObjectName(m_itemEntryInter->name());
     m_appNameTips->setVisible(false);
     m_appNameTips->installEventFilter(this);
 

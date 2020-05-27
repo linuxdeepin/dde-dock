@@ -29,11 +29,13 @@
 
 #include "../plugins/show-desktop/showdesktopwidget.h"
 
-#include "../plugins/sound/sounditem.h"
-#include "../plugins/sound/soundapplet.h"
-#include "../plugins/sound/sinkinputwidget.h"
-#include "../plugins/sound/componments/volumeslider.h"
-#include "../plugins/sound/componments/horizontalseparator.h"
+// 这部分由sound插件单独维护,这样做是因为在标记volumeslider这个类时,需要用到其setValue的实现,
+// 但插件的源文件dock这边并没有包含,不想引入复杂的包含关系,其实最好的做法就是像sound插件这样,谁维护谁的
+//#include "../plugins/sound/sounditem.h"
+//#include "../plugins/sound/soundapplet.h"
+//#include "../plugins/sound/sinkinputwidget.h"
+//#include "../plugins/sound/componments/volumeslider.h"
+//#include "../plugins/sound/componments/horizontalseparator.h"
 
 #include "../plugins/datetime/datetimewidget.h"
 #include "../plugins/onboard/onboarditem.h"
@@ -50,10 +52,10 @@
 DWIDGET_USE_NAMESPACE
 
 // 添加accessible
-SET_WIDGET_ACCESSIBLE(MainWindow, QAccessible::Form, "mainwindow")
+SET_FORM_ACCESSIBLE(MainWindow, "mainwindow")
 SET_BUTTON_ACCESSIBLE(MainPanelControl, "mainpanelcontrol")
 SET_LABEL_ACCESSIBLE(TipsWidget, "tips")
-SET_WIDGET_ACCESSIBLE(DockPopupWindow, QAccessible::Form, "popupwindow")
+SET_FORM_ACCESSIBLE(DockPopupWindow, "popupwindow")
 SET_BUTTON_ACCESSIBLE(LauncherItem, "launcheritem")
 SET_BUTTON_ACCESSIBLE(AppItem, "appitem")
 SET_BUTTON_ACCESSIBLE(PreviewContainer, "previewcontainer")
@@ -67,27 +69,27 @@ SET_BUTTON_ACCESSIBLE(XEmbedTrayWidget, m_w->itemKeyForConfig())
 SET_BUTTON_ACCESSIBLE(IndicatorTrayWidget, m_w->itemKeyForConfig())
 SET_BUTTON_ACCESSIBLE(SNITrayWidget, m_w->itemKeyForConfig())
 SET_BUTTON_ACCESSIBLE(SystemTrayItem, m_w->itemKeyForConfig())
-SET_WIDGET_ACCESSIBLE(FashionTrayItem, QAccessible::Form, "fashiontrayitem")
-SET_WIDGET_ACCESSIBLE(FashionTrayWidgetWrapper, QAccessible::Form, "fashiontraywrapper")
+SET_FORM_ACCESSIBLE(FashionTrayItem, "fashiontrayitem")
+SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper, "fashiontraywrapper")
 SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget, "fashiontraycontrolwidget")
-SET_WIDGET_ACCESSIBLE(AttentionContainer, QAccessible::Form, "attentioncontainer")
-SET_WIDGET_ACCESSIBLE(HoldContainer, QAccessible::Form, "holdcontainer")
-SET_WIDGET_ACCESSIBLE(NormalContainer, QAccessible::Form, "normalcontainer")
-SET_WIDGET_ACCESSIBLE(SpliterAnimated, QAccessible::Form, "spliteranimated")
-SET_BUTTON_ACCESSIBLE(SoundItem, "plugin-sounditem")
-SET_WIDGET_ACCESSIBLE(SoundApplet, QAccessible::Form, "soundapplet")
-SET_WIDGET_ACCESSIBLE(SinkInputWidget, QAccessible::Form, "sinkinputwidget")
-SET_WIDGET_ACCESSIBLE(VolumeSlider, QAccessible::Slider, "volumeslider")
-SET_WIDGET_ACCESSIBLE(HorizontalSeparator, QAccessible::Separator, "horizontalseparator")
-SET_WIDGET_ACCESSIBLE(DatetimeWidget, QAccessible::Form, "plugin-datetime")
-SET_WIDGET_ACCESSIBLE(OnboardItem, QAccessible::Form, "plugin-onboard")
-SET_WIDGET_ACCESSIBLE(TrashWidget, QAccessible::Form, "plugin-trash")
+SET_FORM_ACCESSIBLE(AttentionContainer, "attentioncontainer")
+SET_FORM_ACCESSIBLE(HoldContainer, "holdcontainer")
+SET_FORM_ACCESSIBLE(NormalContainer, "normalcontainer")
+SET_FORM_ACCESSIBLE(SpliterAnimated, "spliteranimated")
+//SET_BUTTON_ACCESSIBLE(SoundItem, "plugin-sounditem")
+//SET_FORM_ACCESSIBLE(SoundApplet, "soundapplet")
+//SET_FORM_ACCESSIBLE(SinkInputWidget, "sinkinputwidget")
+//SET_SLIDER_ACCESSIBLE(VolumeSlider, QAccessible::Slider, "volumeslider")
+//SET_FORM_ACCESSIBLE(HorizontalSeparator, "horizontalseparator")
+SET_FORM_ACCESSIBLE(DatetimeWidget, "plugin-datetime")
+SET_FORM_ACCESSIBLE(OnboardItem, "plugin-onboard")
+SET_FORM_ACCESSIBLE(TrashWidget, "plugin-trash")
 SET_BUTTON_ACCESSIBLE(PopupControlWidget, "popupcontrolwidget")
-SET_WIDGET_ACCESSIBLE(ShutdownWidget, QAccessible::Form, "plugin-shutdown")
-SET_WIDGET_ACCESSIBLE(MultitaskingWidget, QAccessible::Form, "plugin-multitasking")
-SET_WIDGET_ACCESSIBLE(ShowDesktopWidget, QAccessible::Form, "plugin-showdesktop")
-SET_WIDGET_ACCESSIBLE(OverlayWarningWidget, QAccessible::Form, "plugin-overlaywarningwidget")
-SET_WIDGET_ACCESSIBLE(QWidget, QAccessible::Form, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
+SET_FORM_ACCESSIBLE(ShutdownWidget, "plugin-shutdown")
+SET_FORM_ACCESSIBLE(MultitaskingWidget, "plugin-multitasking")
+SET_FORM_ACCESSIBLE(ShowDesktopWidget, "plugin-showdesktop")
+SET_FORM_ACCESSIBLE(OverlayWarningWidget, "plugin-overlaywarningwidget")
+SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
 SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
 SET_BUTTON_ACCESSIBLE(DImageButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
@@ -120,11 +122,11 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, SpliterAnimated);
     USE_ACCESSIBLE(classname, IndicatorTrayWidget);
     USE_ACCESSIBLE(classname, XEmbedTrayWidget);
-    USE_ACCESSIBLE(classname, SoundItem);
-    USE_ACCESSIBLE(classname, SoundApplet);
-    USE_ACCESSIBLE(classname, SinkInputWidget);
-    USE_ACCESSIBLE(classname, VolumeSlider);
-    USE_ACCESSIBLE(classname, HorizontalSeparator);
+//    USE_ACCESSIBLE(classname, SoundItem);
+//    USE_ACCESSIBLE(classname, SoundApplet);
+//    USE_ACCESSIBLE(classname, SinkInputWidget);
+//    USE_ACCESSIBLE(classname, VolumeSlider);
+//    USE_ACCESSIBLE(classname, HorizontalSeparator);
     USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, OnboardItem);
     USE_ACCESSIBLE(classname, TrashWidget);

@@ -20,7 +20,10 @@
  */
 
 #include "soundplugin.h"
+#include "soundaccessible.h"
+
 #include <QDebug>
+#include <QAccessible>
 
 #define STATE_KEY  "enable"
 
@@ -28,6 +31,7 @@ SoundPlugin::SoundPlugin(QObject *parent)
     : QObject(parent),
       m_soundItem(nullptr)
 {
+    QAccessible::installFactory(soundAccessibleFactory);
 }
 
 const QString SoundPlugin::pluginName() const
