@@ -1,6 +1,7 @@
 package network
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -11,9 +12,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
+	secrets "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )
@@ -463,35 +464,36 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 
 	if settingName == "vpn" {
 		vpnSecretsData := make(map[string]string)
-
-		vpnSecretsMap, ok := getConnectionDataMapStrStr(connectionData, "vpn",
-			"secrets")
-		if ok {
-			for key, value := range vpnSecretsMap {
-				vpnSecretsData[key] = value
+		if getSettingVpnServiceType(connectionData) == nmOpenConnectServiceType {
+			vpnSecretsData, ok = <- sa.createPendingKey(connectionData, hints, flags)
+			if !ok {
+				return nil, errors.New("failed to createPendingKey")
 			}
-		}
-		vpnDataMap, _ := getConnectionDataMapStrStr(connectionData, "vpn",
-			"data")
+		} else {
+			vpnSecretsData, _ = getConnectionDataMapStrStr(connectionData, "vpn",
+				"secrets")
+			vpnDataMap, _ := getConnectionDataMapStrStr(connectionData, "vpn",
+				"data")
 
-		var askItems []string
-		for _, secretKey := range vpnSecretKeys {
-			secretFlag := vpnDataMap[getSecretFlagsKeyName(secretKey)]
-			if secretFlag == secretFlagAskStr {
-				logger.Debug("ask for password", settingName, secretKey)
-				askItems = append(askItems, secretKey)
+			var askItems []string
+			for _, secretKey := range vpnSecretKeys {
+				secretFlag := vpnDataMap[getSecretFlagsKeyName(secretKey)]
+				if secretFlag == secretFlagAskStr {
+					logger.Debug("ask for password", settingName, secretKey)
+					askItems = append(askItems, secretKey)
+				}
 			}
-		}
 
-		if allowInteraction && len(askItems) > 0 {
-			resultAsk, err := sa.askPasswords(connectionPath, connectionData, connUUID,
-				settingName, askItems, requestNew)
-			if err != nil {
-				logger.Debug("waring askPasswords error:", err)
-				return nil, err
-			}
-			for key, value := range resultAsk {
-				vpnSecretsData[key] = value
+			if allowInteraction && len(askItems) > 0 {
+				resultAsk, err := sa.askPasswords(connectionPath, connectionData, connUUID,
+					settingName, askItems, requestNew)
+				if err != nil {
+					logger.Debug("waring askPasswords error:", err)
+					return nil, err
+				}
+				for key, value := range resultAsk {
+					vpnSecretsData[key] = value
+				}
 			}
 		}
 
@@ -510,7 +512,6 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 		}
 
 		setting["secrets"] = dbus.MakeVariant(vpnSecretsData)
-
 	} else if secretKeys, ok := secretSettingKeys[settingName]; ok {
 
 		var askItems []string
@@ -592,6 +593,97 @@ func (sa *SecretAgent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingN
 	}
 
 	return nil
+}
+
+func (a *SecretAgent) createPendingKey(connectionData map[string]map[string]dbus.Variant, hints []string, flags uint32) chan map[string]string {
+	ch := make(chan map[string]string)
+
+	// for vpn connections, ask password for vpn auth dialogs
+	vpnAuthDilogBin := getVpnAuthDialogBin(connectionData)
+	go func() {
+		args := []string{
+			"-u", getSettingConnectionUuid(connectionData),
+			"-n", getSettingConnectionId(connectionData),
+			"-s", getSettingVpnServiceType(connectionData),
+		}
+		if flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 {
+			args = append(args, "-i")
+		}
+		if flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW != 0 {
+			args = append(args, "-r")
+		}
+		// add hints
+		for _, h := range hints {
+			args = append(args, "-t", h)
+		}
+
+		// run vpn auth dialog
+		logger.Info("run vpn auth dialog:", vpnAuthDilogBin, args)
+		// process, stdin, stdout, _, err := execWithIO(vpnAuthDilogBin, args...)
+		_, stdin, stdout, _, err := execWithIO(vpnAuthDilogBin, args...)
+		if err != nil {
+			logger.Warning("failed to run vpn auth dialog", err)
+			close(ch)
+			return
+		}
+
+		stdinWriter := bufio.NewWriter(stdin)
+		stdoutReader := bufio.NewReader(stdout)
+
+		vpnData := getSettingVpnData(connectionData)
+		vpnSecretData := getSettingVpnSecrets(connectionData)
+
+		// send vpn connection data to the authentication dialog binary
+		for key, value := range vpnData {
+			stdinWriter.WriteString("DATA_KEY=" + key + "\n")
+			stdinWriter.WriteString("DATA_VAL=" + value + "\n\n")
+		}
+		for key, value := range vpnSecretData {
+			stdinWriter.WriteString("SECRET_KEY=" + key + "\n")
+			stdinWriter.WriteString("SECRET_VAL=" + value + "\n\n")
+		}
+		stdinWriter.WriteString("DONE\n\n")
+		stdinWriter.Flush()
+
+		newVpnSecretData := make(map[string]string)
+		lastKey := ""
+		// read output until there are two empty lines printed
+		emptyLines := 0
+		for {
+			lineBytes, _, err := stdoutReader.ReadLine()
+			if err != nil {
+				break
+			}
+			line := string(lineBytes)
+
+			if len(line) == 0 {
+				emptyLines++
+			} else {
+				// the secrets key and value are split as line
+				if len(lastKey) == 0 {
+					lastKey = line
+				} else {
+					newVpnSecretData[lastKey] = line
+					lastKey = ""
+				}
+			}
+			if emptyLines == 2 {
+				break
+			}
+		}
+
+		// notify auth dialog to quit
+		stdinWriter.WriteString("QUIT\n\n")
+		err = stdinWriter.Flush()
+		if err == nil {
+			ch <- newVpnSecretData
+		} else {
+			logger.Warning("failed to flush auth dialog data", err)
+			close(ch)
+		}
+	}()
+
+	return ch
 }
 
 type settingItem struct {
