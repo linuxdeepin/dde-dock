@@ -112,6 +112,8 @@ private slots:
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
+    void showAppEditDialog(const QString& appName, const QString& appIcon, const QString& desktopId);
+
 private:
     bool m_launched;
     MainPanelControl *m_mainPanel;

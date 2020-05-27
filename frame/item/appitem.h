@@ -54,6 +54,7 @@ public:
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
     inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
+    inline bool isDocked() const Q_DECL_OVERRIDE { return m_itemEntryInter->isDocked(); }
     QPixmap appIcon(){ return m_appIcon; }
     virtual QString accessibleName();
 
@@ -61,6 +62,7 @@ signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
+    void requestEditApp(const QString& appName, const QString& appIcon, const QString& desktopId) const;
     void dragReady(QWidget *dragWidget);
 
 private:

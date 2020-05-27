@@ -11,10 +11,6 @@
 #include <QFileDialog>
 #include <DFileDialog>
 
-#define UnsupportedFileFormat tr("Unsupported file format")
-#define UnsupportedDimensions tr("Unsupported dimensions")
-#define TheFileIsTooLarge tr("The file is too large")
-
 constexpr int MaxAppIconByteSize = 1024 * 1024 * 1;
 static const int DialogWidth = 380;
 static const int DIalogHeight = 390;
@@ -47,15 +43,9 @@ void AppEditDialog::initUi()
     m_iconEditWidget->updateIcon(m_iconName);
     addContent(m_iconEditWidget, Qt::AlignHCenter);
 
-    addSpacing(20);
-
-    addContent(new DLabel(tr("Change icon"), this), Qt::AlignHCenter);
-
-    addSpacing(6);
+    addContent(new DLabel(tr("Change icon"), this), Qt::AlignCenter);
 
     addContent(new DLabel(tr("SVG only; dimensions: 96*96; size: ≤1 MB"), this), Qt::AlignHCenter);
-
-    addSpacing(10);
 
     DWidget* edit = new DWidget(this);
     QVBoxLayout* editLayout = new QVBoxLayout(edit);
@@ -67,8 +57,6 @@ void AppEditDialog::initUi()
     m_appNameEdit->setFixedHeight(36)   ;
     lineEditLayout->addWidget(m_appNameEdit);
     editLayout->addLayout(lineEditLayout);
-
-    lineEditLayout->addSpacing(10);
 
     m_errorLabel = new DLabel(this);
     m_errorLabel->setFixedHeight(18);
@@ -105,15 +93,15 @@ void AppEditDialog::updateErrorPrompt(ErrorType errorType)
         }
         break;
         case FileTypeError: {
-            m_errorLabel->setText(UnsupportedFileFormat);
+            m_errorLabel->setText(tr("Unsupported file format"));
         }
         break;
         case FileSizeError: {
-            m_errorLabel->setText(TheFileIsTooLarge);
+            m_errorLabel->setText(tr("The file is too large"));
         }
         break;
         case IconSizeError: {
-            m_errorLabel->setText(tr("SVG only; dimensions: 96*96; size: ≤1 MB"));
+            m_errorLabel->setText(tr("Unsupported dimensions"));
         }
         break;
         case AppNameError: {
@@ -133,8 +121,6 @@ void AppEditDialog::changeAppInfo()
         return;
     }
 
-    //if ()
-
     emit updateAppInfo(m_appName, m_newIconPath);
 
     close();
@@ -142,8 +128,6 @@ void AppEditDialog::changeAppInfo()
 
 AppEditDialog::ErrorType AppEditDialog::checkAppIcon(const QString &iconPath)
 {
-    qDebug() << __FUNCTION__ << "iconPath: " << iconPath;
-
     QFileInfo iconFile(iconPath);
     if (!iconFile.exists() || iconFile.size() > MaxAppIconByteSize) {
         return FileSizeError;
@@ -194,11 +178,12 @@ void AppEditDialog::onIconClicked()
 
     ErrorType err = checkAppIcon(m_newIconPath);
     if (NoIconError != err) {
-        m_newIconPath.clear();
         updateErrorPrompt(err);
+        m_newIconPath.clear();
         return;
     }
 
+    updateErrorPrompt(err);
     m_iconEditWidget->updateIcon(m_newIconPath);
 }
 
@@ -218,7 +203,6 @@ IconWidget::~IconWidget()
 
 void IconWidget::updateIcon(const QString &iconName)
 {
-    qDebug() << __FUNCTION__ << "iconName: " << iconName;
     m_appIcon = ThemeAppIcon::getIcon(iconName, width(), 1.0);
     update();
 }

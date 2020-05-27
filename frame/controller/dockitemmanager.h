@@ -53,6 +53,7 @@ signals:
     void trayVisableCountChanged(const int &count) const;
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
+    void requestEditApp(const QString& appName, const QString& appIcon, const QString& desktopId) const;
 
 public slots:
     void refershItemsIcon();

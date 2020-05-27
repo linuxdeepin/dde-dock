@@ -1,9 +1,65 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>The plugin %1 is not compatible with the system.</translation>
+    </message>
+</context>
+<context>
+    <name>AppEditDialog</name>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SVG only; dimensions: 96*96; size: ≤1 MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>App name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file is too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported dimensions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>\/:*?&quot;&lt;&gt;| are not allowed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AppItem</name>
+    <message>
+        <source>edit</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -90,6 +146,13 @@
     <message>
         <source>Unmount all</source>
         <translation>Unmount all</translation>
+    </message>
+</context>
+<context>
+    <name>DockItem</name>
+    <message>
+        <source>edit</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
