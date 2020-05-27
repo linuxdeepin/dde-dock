@@ -152,15 +152,15 @@ const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
     QMap<QString, QVariant> settings;
     settings["itemId"] = "settings";
     if (m_centralWidget->is24HourFormat())
-        settings["itemText"] = tr("12 Hour Time");
+        settings["itemText"] = tr("12-hour time");
     else
-        settings["itemText"] = tr("24 Hour Time");
+        settings["itemText"] = tr("24-hour time");
     settings["isActive"] = true;
     items.push_back(settings);
 
     QMap<QString, QVariant> open;
     open["itemId"] = "open";
-    open["itemText"] = tr("Time Settings");
+    open["itemText"] = tr("Time settings");
     open["isActive"] = true;
     items.push_back(open);
 
