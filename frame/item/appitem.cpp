@@ -468,15 +468,7 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
     Q_UNUSED(checked);
 
     if (itemId == tr("edit")) {
-        QString desktopId = m_itemEntryInter->desktopFile();
-        desktopId = desktopId.mid(desktopId.lastIndexOf("/") + 1);
-        if (desktopId.endsWith(".desktop")) {
-            desktopId = desktopId.left(desktopId.lastIndexOf("."));
-        }
-
-        qDebug()  << __FUNCTION__ << "desktopId: " << desktopId;
-
-        emit requestEditApp(m_itemEntryInter->name(), m_itemEntryInter->icon(), desktopId);
+        emit requestEditApp(m_itemEntryInter->name(), m_itemEntryInter->icon(), m_itemEntryInter->id());
         return;
     }
 
@@ -597,14 +589,10 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
 
 void AppItem::refershIcon()
 {
-    qDebug() << m_id << __FUNCTION__;
-
     if (!isVisible())
         return;
 
     const QString icon = m_itemEntryInter->icon();
-
-    qDebug() << "new icon:" << icon;
 
     const int iconSize = qMin(width(), height());
 

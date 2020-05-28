@@ -31,10 +31,10 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QX11Info>
-#include <DDBusSender>
 #include <qpa/qplatformwindow.h>
 #include <DStyle>
 #include <DPlatformWindowHandle>
+#include <DDBusSender>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>
@@ -1020,12 +1020,12 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     }
 }
 
-void MainWindow::showAppEditDialog(const QString& appName, const QString& appIcon, const QString& desktopId)
+void MainWindow::showAppEditDialog(const QString& appName, const QString& appIcon, const QString& appId)
 {
     AppEditDialog dlg(appName, appIcon, this);
-    connect(&dlg, &AppEditDialog::updateAppInfo, this, [=](const QString&appName, const QString& iconPath){
+    connect(&dlg, &AppEditDialog::updateAppInfo, this, [=](const QString& appName, const QString& iconPath){
 
-        qDebug() << __FUNCTION__ << "desktopId:" << desktopId << "appName:" << appName << ", iconPath:" << iconPath;
+        qDebug() << "edit app: appId:" << appId << "appName:" << appName << ", iconPath:" << iconPath;
 
         if (appName.isEmpty() && iconPath.isEmpty()) {
             return;
@@ -1036,7 +1036,7 @@ void MainWindow::showAppEditDialog(const QString& appName, const QString& appIco
         .interface("com.deepin.dde.daemon.Dock")
         .path("/com/deepin/dde/daemon/Dock")
         .method(QString("EditAppIcon"))
-        .arg(desktopId)
+        .arg(appId)
         .arg(appName)
         .arg(iconPath)
         .call();

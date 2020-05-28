@@ -62,7 +62,7 @@ signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
-    void requestEditApp(const QString& appName, const QString& appIcon, const QString& desktopId) const;
+    void requestEditApp(const QString& appName, const QString& appIcon, const QString& appId) const;
     void dragReady(QWidget *dragWidget);
 
 private:

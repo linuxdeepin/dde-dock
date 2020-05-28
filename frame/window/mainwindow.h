@@ -112,7 +112,7 @@ private slots:
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
-    void showAppEditDialog(const QString& appName, const QString& appIcon, const QString& desktopId);
+    void showAppEditDialog(const QString& appName, const QString& appIcon, const QString& appId);
 
 private:
     bool m_launched;
