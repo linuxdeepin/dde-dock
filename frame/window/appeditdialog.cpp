@@ -3,17 +3,16 @@
 
 #include <QDebug>
 #include <QHBoxLayout>
-#include <DLabel>
-#include <DButtonBox>
-#include <DWidget>
 #include <QPaintEvent>
 #include <QStandardPaths>
 #include <QFileDialog>
-#include <DFileDialog>
+
+#include <DWidget>
+#include <DLineEdit>
 
 constexpr int MaxAppIconByteSize = 1024 * 1024 * 1;
 static const int DialogWidth = 380;
-static const int DIalogHeight = 390;
+static const int DialogHeight = 390;
 
 AppEditDialog::AppEditDialog(const QString& appName, const QString& iconName,  QWidget *parent)
     : DDialog(parent)
@@ -31,7 +30,7 @@ AppEditDialog::~AppEditDialog()
 
 void AppEditDialog::initUi()
 {
-    setFixedSize(DialogWidth, DIalogHeight);
+    setFixedSize(DialogWidth, DialogHeight);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 
     addContent(new DLabel(tr("Edit"), this), Qt::AlignHCenter);
