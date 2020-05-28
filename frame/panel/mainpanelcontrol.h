@@ -94,6 +94,7 @@ private:
     void resizeDesktopWidget();
 
     void updatePanelCursor();
+    void calcuDockIconSize(const int w, const int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
 
 public slots:
     void insertItem(const int index, DockItem *item);
