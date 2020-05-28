@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             zhaolong <zhaolong@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,6 +74,8 @@ DockSettings::DockSettings(QWidget *parent)
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_itemManager(DockItemManager::instance(this))
     , m_trashPluginShow(true)
+    , m_isMouseMoveCause(false)
+    , m_mouseCauseDockScreen(nullptr)
 {
     m_settingsMenu.setAccessibleName("settingsmenu");
     checkService();
@@ -206,24 +209,33 @@ const QRect DockSettings::primaryRect() const
     return rect;
 }
 
-const QRect DockSettings::currentRect() const
+const QRect DockSettings::currentRect()
 {
     QRect rect;
-    bool positionAllowed = false;
-    QList<Monitor*> monitors = m_monitors.keys();
-    for (Monitor *monitor : monitors) {
-        switch (m_position) {
-        case Top:       positionAllowed = monitor->dockPosition().topDock;      break;
-        case Right:     positionAllowed = monitor->dockPosition().rightDock;    break;
-        case Bottom:    positionAllowed = monitor->dockPosition().bottomDock;   break;
-        case Left:      positionAllowed = monitor->dockPosition().leftDock;     break;
-        }
-        if (positionAllowed) {
-            rect = monitor->rect();
-            if (monitor->isPrimary())
-                break;
+    QString currentScrName;
+    if (m_isMouseMoveCause) {
+        rect = m_mouseCauseDockScreen->rect();
+        currentScrName = m_mouseCauseDockScreen->name();
+    } else {
+        bool positionAllowed = false;
+        QList<Monitor*> monitors = m_monitors.keys();
+        for (Monitor *monitor : monitors) {
+            switch (m_position) {
+            case Top:       positionAllowed = monitor->dockPosition().topDock;      break;
+            case Right:     positionAllowed = monitor->dockPosition().rightDock;    break;
+            case Bottom:    positionAllowed = monitor->dockPosition().bottomDock;   break;
+            case Left:      positionAllowed = monitor->dockPosition().leftDock;     break;
+            }
+            if (positionAllowed) {
+                rect = monitor->rect();
+                currentScrName = monitor->name();
+                if (monitor->isPrimary())
+                    break;
+            }
         }
     }
+
+    m_currentScreen = currentScrName;
     m_currentRawRect = rect;
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     rect.setWidth(std::round(qreal(rect.width()) / scale));
@@ -244,7 +256,7 @@ const QSize DockSettings::panelSize() const
     return m_mainWindowSize;
 }
 
-const QRect DockSettings::windowRect(const Position position, const bool hide) const
+const QRect DockSettings::windowRect(const Position position, const bool hide)
 {
     QSize size = m_mainWindowSize;
     if (hide) {
@@ -357,6 +369,7 @@ void DockSettings::menuActionClicked(QAction *action)
     if (action == &m_efficientModeAct)
         return m_dockInter->setDisplayMode(Efficient);
 
+    m_isMouseMoveCause = false;
     calculateMultiScreensPos();
     if (action == &m_topPosAct)
         return m_dockInter->setPosition(Top);
@@ -492,6 +505,18 @@ void DockSettings::resetFrontendGeometry()
 void DockSettings::updateFrontendGeometry()
 {
     resetFrontendGeometry();
+}
+
+void DockSettings::setDockScreen(const QString &scrName)
+{
+    m_isMouseMoveCause = true;
+    QList<Monitor*> monitors = m_monitors.keys();
+    for (Monitor *monitor : monitors) {
+        if (monitor && monitor->name() == scrName) {
+            m_mouseCauseDockScreen = monitor;
+            break;
+        }
+    }
 }
 
 void DockSettings::onOpacityChanged(const double value)

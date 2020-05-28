@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             zhaolong <zhaolong@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +26,9 @@
 #include "util/utils.h"
 #include "util/docksettings.h"
 
+#include <DStyle>
+#include <DPlatformWindowHandle>
+
 #include <QDebug>
 #include <QEvent>
 #include <QResizeEvent>
@@ -32,8 +36,6 @@
 #include <QGuiApplication>
 #include <QX11Info>
 #include <qpa/qplatformwindow.h>
-#include <DStyle>
-#include <DPlatformWindowHandle>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>
@@ -127,27 +129,28 @@ const QPoint scaledPos(const QPoint &rawXPos)
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : DBlurEffectWidget(parent),
+    : DBlurEffectWidget(parent)
 
-      m_launched(false),
+    , m_launched(false)
 
-      m_mainPanel(new MainPanelControl(this)),
+    , m_mainPanel(new MainPanelControl(this))
 
-      m_platformWindowHandle(this),
-      m_wmHelper(DWindowManagerHelper::instance()),
-      m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus())),
+    , m_platformWindowHandle(this)
+    , m_wmHelper(DWindowManagerHelper::instance())
+    , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
 
-      m_positionUpdateTimer(new QTimer(this)),
-      m_expandDelayTimer(new QTimer(this)),
-      m_leaveDelayTimer(new QTimer(this)),
-      m_shadowMaskOptimizeTimer(new QTimer(this)),
+    , m_positionUpdateTimer(new QTimer(this))
+    , m_expandDelayTimer(new QTimer(this))
+    , m_leaveDelayTimer(new QTimer(this))
+    , m_shadowMaskOptimizeTimer(new QTimer(this))
 
-      m_panelShowAni(new QVariantAnimation(this)),
-      m_panelHideAni(new QVariantAnimation(this)),
-      m_xcbMisc(XcbMisc::instance()),
-      m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
-      m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
-      m_dragWidget(new DragWidget(this))
+    , m_panelShowAni(new QVariantAnimation(this))
+    , m_panelHideAni(new QVariantAnimation(this))
+    , m_xcbMisc(XcbMisc::instance())
+    , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
+    , m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
+    , m_dragWidget(new DragWidget(this))
+    , m_mouseCauseDock(false)
 {
     setAccessibleName("mainwindow");
     m_mainPanel->setAccessibleName("mainpanel");
@@ -236,24 +239,26 @@ MainWindow::MainWindow(QWidget *parent)
         const QRectF windowRect = m_settings->windowRect(m_curDockPos, false);
         const int margin = m_settings->dockMargin();
 
-        switch (m_curDockPos) {
-        case Dock::Top:
-            m_mainPanel->move(0, val - windowRect.height());
-            QWidget::move(windowRect.left(), windowRect.top() - margin);
-            break;
-        case Dock::Bottom:
-            m_mainPanel->move(0, 0);
-            QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
-            break;
-        case Dock::Left:
-            m_mainPanel->move(val - windowRect.width(), 0);
-            QWidget::move(windowRect.left() - margin, windowRect.top());
-            break;
-        case Dock::Right:
-            m_mainPanel->move(0, 0);
-            QWidget::move(windowRect.right() - val + margin, windowRect.top());
-            break;
-        default: break;
+        if (!m_mouseCauseDock) {
+            switch (m_curDockPos) {
+            case Dock::Top:
+                m_mainPanel->move(0, val - windowRect.height());
+                QWidget::move(windowRect.left(), windowRect.top() - margin);
+                break;
+            case Dock::Bottom:
+                m_mainPanel->move(0, 0);
+                QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
+                break;
+            case Dock::Left:
+                m_mainPanel->move(val - windowRect.width(), 0);
+                QWidget::move(windowRect.left() - margin, windowRect.top());
+                break;
+            case Dock::Right:
+                m_mainPanel->move(0, 0);
+                QWidget::move(windowRect.right() - val + margin, windowRect.top());
+                break;
+            default: break;
+            }
         }
 
         if (m_curDockPos == Dock::Top || m_curDockPos == Dock::Bottom) {
@@ -276,6 +281,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(m_panelHideAni, &QVariantAnimation::finished, [ this ]() {
+        m_mouseCauseDock = false;
         m_curDockPos = m_newDockPos;
         const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
 
@@ -1034,74 +1040,97 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 
 void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
 {
-    //    if (m_registerKey != key)
-    //        return;
-
-    if (m_settings->hideMode() == KeepShowing)
+    if (m_registerKey != key)
         return;
 
-    if (!isVisible())
-        setVisible(true);
+    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
 
-    //    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
+    if (screen->name() == m_settings->currentDockScreen()) {
+        if (m_settings->hideMode() == KeepShowing)
+            return;
+
+        if (!isVisible())
+            setVisible(true);
+    } else {
+        // 移动Dock至相应屏相应位置
+        m_mouseCauseDock = true;
+        m_settings->setDockScreen(screen->name());
+        positionChanged(m_curDockPos, m_curDockPos);
+    }
 }
 
 void MainWindow::updateRegionMonitorWatch()
 {
-    if (m_settings->hideMode() == KeepShowing)
-        return;
-
-    //    if (!m_registerKey.isEmpty()) {
-    //        m_eventInter->UnregisterArea(m_registerKey);
-    //        m_registerKey.clear();
-    //    }
+    if (!m_registerKey.isEmpty()) {
+        m_eventInter->UnregisterArea(m_registerKey);
+        m_registerKey.clear();
+    }
 
     const int flags = Motion | Button | Key;
-    //    QList<QRect> screensRect = m_settings->monitorsRect();
-    //    QList<QRect> monitorAreas;
-    int val = 2;
-    const int margin = m_settings->dockMargin();
+
+    QList<QRect> screensRect = m_settings->monitorsRect();
+    QList<MonitRect> monitorAreas;
+
+    const qreal scale = devicePixelRatioF();
+    int val = 3;
     int x, y, w, h;
 
-    //    if (screensRect.size()) {
-    switch (m_curDockPos) {
-    case Dock::Top: {
-        m_eventInter->RegisterArea(margin, 0, m_settings->currentRect().width() - margin * 2, val, flags);
-        //            for (QRect rect : screensRect) {
-        //                monitorAreas << QRect(rect.x() + margin, rect.y(), rect.width() - margin * 2, val);
-        //            }
-    }
-        break;
-    case Dock::Bottom: {
-        m_eventInter->RegisterArea(margin, m_settings->currentRect().height() - val, m_settings->currentRect().width() - margin * 2, val, flags);
-        //            for (QRect rect : screensRect) {
-        //                monitorAreas << QRect(rect.x() + margin, rect.y() + rect.height() - val, rect.width() - margin * 2, val);
-        //            }
-    }
-        break;
-    case Dock::Left: {
-        m_eventInter->RegisterArea(0, margin, val, m_settings->currentRect().height() - margin * 2, flags);
-        //            for (QRect rect : screensRect) {
-        //                monitorAreas << QRect(rect.x(), rect.y() + margin, val, rect.height() - margin * 2);
-        //            }
-    }
-        break;
-    case Dock::Right: {
-        m_eventInter->RegisterArea(m_settings->currentRect().width() - val, margin, val, m_settings->currentRect().height() - margin * 2, flags);
-        //            for (QRect rect : screensRect) {
-        //                monitorAreas << QRect(rect.x() + rect.width() - val, rect.y() + margin, val, rect.height() - margin * 2);
-        //            }
-    }
-        break;
-    }
-    //        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
-    //    } else {
-    //        m_registerKey = m_eventInter->RegisterFullScreen();
-    //    }
+    auto func = [&](MonitRect &monitRect){
+        monitRect.x1 = int(x * scale);
+        monitRect.y1 = int(y * scale);
+        monitRect.x2 = int((x + w) * scale);
+        monitRect.y2 = int((y + h) * scale);
+        monitorAreas << monitRect;
+    };
 
-    //    if (!m_regionMonitor->registered()) {
-    //        m_regionMonitor->registerRegion();
-    //    }
+    if (screensRect.size()) {
+        MonitRect monitRect;
+        switch (m_curDockPos) {
+        case Dock::Top: {
+            for (QRect rect : screensRect) {
+                x = rect.x();
+                y = rect.y();
+                w = rect.width();
+                h = val;
+                func(monitRect);
+            }
+        }
+            break;
+        case Dock::Bottom: {
+            for (QRect rect : screensRect) {
+                x = rect.x();
+                y = rect.y() + rect.height() - val;
+                w = rect.width();
+                h = val;
+                func(monitRect);
+            }
+        }
+            break;
+        case Dock::Left: {
+            for (QRect rect : screensRect) {
+                x = rect.x();
+                y = rect.y();
+                w = val;
+                h = rect.height();
+                func(monitRect);
+            }
+        }
+            break;
+        case Dock::Right: {
+            for (QRect rect : screensRect) {
+                x = rect.x() + rect.width() - val;
+                y = rect.y();
+                w = val;
+                h = rect.height();
+                func(monitRect);
+            }
+        }
+            break;
+        }
+        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
+    } else {
+        m_registerKey = m_eventInter->RegisterFullScreen();
+    }
 }
 
 

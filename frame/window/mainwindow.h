@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             zhaolong <zhaolong@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,6 +145,7 @@ private:
     DragWidget *m_dragWidget;
     Position m_curDockPos;
     Position m_newDockPos;
+    bool m_mouseCauseDock;
 };
 
 #endif // MAINWINDOW_H
