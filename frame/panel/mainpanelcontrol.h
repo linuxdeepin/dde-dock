@@ -91,7 +91,7 @@ private:
     void paintEvent(QPaintEvent *event) override;
     void resizeDockIcon();
     void calcuDockIconSize(const int w, const int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
-
+    void resizeDesktopWidget();
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
