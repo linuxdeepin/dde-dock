@@ -870,6 +870,7 @@ void MainPanelControl::resizeDockIcon()
     PluginsItem *trashPlugin = nullptr;
     PluginsItem *shutdownPlugin = nullptr;
     PluginsItem *keyboardPlugin = nullptr;
+    PluginsItem *notificationPlugin = nullptr;
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         PluginsItem *w = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
         if (w->pluginName() == "trash") {
@@ -878,6 +879,8 @@ void MainPanelControl::resizeDockIcon()
             shutdownPlugin = w;
         } else if (w->pluginName() == "onboard") {
             keyboardPlugin = w;
+        } else if (w->pluginName() == "notifications") {
+            notificationPlugin = w;
         }
     }
 
@@ -896,12 +899,14 @@ void MainPanelControl::resizeDockIcon()
         if (trashPlugin) totalLength += trashPlugin->width();
         if (shutdownPlugin) totalLength += shutdownPlugin->width();
         if (keyboardPlugin) totalLength += keyboardPlugin->width();
+        if (notificationPlugin) totalLength += keyboardPlugin->width();
         totalLength -= m_desktopWidget->width();
     } else {
         totalLength -= m_pluginAreaWidget->height();
         if (trashPlugin) totalLength += trashPlugin->height();
         if (shutdownPlugin) totalLength += shutdownPlugin->height();
         if (keyboardPlugin) totalLength += keyboardPlugin->height();
+        if (notificationPlugin) totalLength += keyboardPlugin->height();
         totalLength -= m_desktopWidget->height();
     }
 
@@ -909,7 +914,7 @@ void MainPanelControl::resizeDockIcon()
         return;
 
     // 参与计算的插件的个数（包含托盘和插件，垃圾桶，关机，屏幕键盘）
-    int pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0);
+    int pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
 
     // icon个数
     int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + pluginCount;
@@ -939,20 +944,20 @@ void MainPanelControl::resizeDockIcon()
 
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         if (iconSize >= height()) {
-            calcuDockIconSize(height(), height(), trashPlugin, shutdownPlugin, keyboardPlugin);
+            calcuDockIconSize(height(), height(), trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         } else {
-            calcuDockIconSize(iconSize, height(), trashPlugin, shutdownPlugin, keyboardPlugin);
+            calcuDockIconSize(iconSize, height(), trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         }
     } else {
         if (iconSize >= width()) {
-            calcuDockIconSize(width(), width(), trashPlugin, shutdownPlugin, keyboardPlugin);
+            calcuDockIconSize(width(), width(), trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         } else {
-            calcuDockIconSize(width(), iconSize, trashPlugin, shutdownPlugin, keyboardPlugin);
+            calcuDockIconSize(width(), iconSize, trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         }
     }
 }
 
-void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin)
+void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin)
 {
     for (int i = 0; i < m_fixedAreaLayout->count(); ++ i) {
         m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize(w, h);
@@ -1010,6 +1015,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             shutdownPlugin->setFixedSize(tray_item_size, h - 20);
         if (keyboardPlugin)
             keyboardPlugin->setFixedSize(tray_item_size, h - 20);
+        if (notificationPlugin) {
+            notificationPlugin->setFixedSize(tray_item_size, h - 20);
+        }
 
     } else {
         m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
@@ -1018,13 +1026,16 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             shutdownPlugin->setFixedSize(w - 20, tray_item_size);
         if (keyboardPlugin)
             keyboardPlugin->setFixedSize(w - 20, tray_item_size);
+        if (notificationPlugin) {
+            notificationPlugin->setFixedSize(w - 20, tray_item_size);
+        }
     }
 
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-            if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
+            if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
                 if (pItem->pluginName() == "datetime"){
                     pItem->setFixedSize(pItem->sizeHint().width(), h);
                 } else if (pItem->pluginName() == "AiAssistant"){
@@ -1038,7 +1049,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-            if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin) {
+            if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
                 if (pItem->pluginName() == "datetime"){
                     pItem->setFixedSize(w, pItem->sizeHint().height());
                 } else if (pItem->pluginName() == "AiAssistant"){
