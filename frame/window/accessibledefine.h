@@ -84,11 +84,21 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         accessibleMap[r].append(newAccessibleName);
         objnameMap.insert(w, newAccessibleName);
 
+        // 对象销毁后移除占用名称
+        QObject::connect(w, &QWidget::destroyed, [ = ] (QObject *obj) {
+            objnameMap.remove(obj);
+            accessibleMap[r].removeOne(newAccessibleName);
+         });
         return newAccessibleName;
     } else {
         accessibleMap[r].append(accessibleName);
         objnameMap.insert(w, accessibleName);
 
+        // 对象销毁后移除占用名称
+        QObject::connect(w, &QWidget::destroyed, [ = ] (QObject *obj) {
+            objnameMap.remove(obj);
+            accessibleMap[r].removeOne(accessibleName);
+        });
         return accessibleName;
     }
 }
@@ -219,18 +229,47 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     }\
     }\
     QString text(int startOffset, int endOffset) const override;\
-    void selection(int selectionIndex, int *startOffset, int *endOffset) const override {}\
+    void selection(int selectionIndex, int *startOffset, int *endOffset) const override {\
+    Q_UNUSED(selectionIndex)\
+    Q_UNUSED(startOffset)\
+    Q_UNUSED(endOffset)\
+    }\
     int selectionCount() const override { return 0; }\
-    void addSelection(int startOffset, int endOffset) override {}\
-    void removeSelection(int selectionIndex) override {}\
-    void setSelection(int selectionIndex, int startOffset, int endOffset) override {}\
+    void addSelection(int startOffset, int endOffset) override {\
+    Q_UNUSED(startOffset)\
+    Q_UNUSED(endOffset)\
+    }\
+    void removeSelection(int selectionIndex) override {\
+    Q_UNUSED(selectionIndex)\
+    }\
+    void setSelection(int selectionIndex, int startOffset, int endOffset) override {\
+    Q_UNUSED(selectionIndex)\
+    Q_UNUSED(startOffset)\
+    Q_UNUSED(endOffset)\
+    }\
     int cursorPosition() const override { return 0; }\
-    void setCursorPosition(int position) override {}\
+    void setCursorPosition(int position) override {\
+    Q_UNUSED(position)\
+    }\
     int characterCount() const override { return 0; }\
-    QRect characterRect(int offset) const override { return QRect(); }\
-    int offsetAtPoint(const QPoint &point) const override { return 0; }\
-    void scrollToSubstring(int startIndex, int endIndex) override {}\
-    QString attributes(int offset, int *startOffset, int *endOffset) const override { return QString(); }\
+    QRect characterRect(int offset) const override {\
+    Q_UNUSED(offset)\
+    return QRect();\
+    }\
+    int offsetAtPoint(const QPoint &point) const override {\
+    Q_UNUSED(point)\
+    return 0;\
+    }\
+    void scrollToSubstring(int startIndex, int endIndex) override {\
+    Q_UNUSED(startIndex)\
+    Q_UNUSED(endIndex)\
+    }\
+    QString attributes(int offset, int *startOffset, int *endOffset) const override {\
+    Q_UNUSED(offset)\
+    Q_UNUSED(startOffset)\
+    Q_UNUSED(endOffset)\
+    return QString();\
+    }\
     private:\
     classname *m_w;\
     QString m_description;\

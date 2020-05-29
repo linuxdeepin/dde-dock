@@ -50,6 +50,7 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
 {
     setStyleSheet("background: transparent;");
     setAcceptDrops(true);
+    setObjectName(itemKey);
 
     m_layout->setSpacing(0);
     m_layout->setMargin(0);

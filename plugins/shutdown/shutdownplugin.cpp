@@ -36,6 +36,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
 
 {
     m_tipsLabel->setVisible(false);
+    m_tipsLabel->setAccessibleName(tr("shutdown"));
 }
 
 const QString ShutdownPlugin::pluginName() const
