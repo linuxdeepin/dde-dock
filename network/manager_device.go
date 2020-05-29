@@ -453,9 +453,17 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) *dbus.Erro
 }
 
 func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	err = m.sysNetwork.EnableDevice(0, string(devPath), enabled)
+	cpath, err := m.sysNetwork.EnableDevice(0, string(devPath), enabled)
 	if err != nil {
 		return
+	}
+	if enabled {
+		var uuid string
+		uuid, err = nmGetConnectionUuid(cpath)
+		if err != nil {
+			return
+		}
+		m.ActivateConnection(uuid,devPath)
 	}
 
 	m.stateHandler.locker.Lock()

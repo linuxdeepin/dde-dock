@@ -111,7 +111,7 @@ type Network struct {
 	sigLoop        *dbusutil.SignalLoop
 	methods        *struct {
 		IsDeviceEnabled       func() `in:"pathOrIface" out:"enabled"`
-		EnableDevice          func() `in:"pathOrIface,enabled"`
+		EnableDevice          func() `in:"pathOrIface,enabled" out:"cpath"`
 		Ping                  func() `in:"host"`
 		ToggleWirelessEnabled func() `out:"enabled"`
 	}
@@ -365,27 +365,27 @@ func newNetwork() *Network {
 	return n
 }
 
-func (n *Network) EnableDevice(pathOrIface string, enabled bool) *dbus.Error {
+func (n *Network) EnableDevice(pathOrIface string, enabled bool) (cpath dbus.ObjectPath, error *dbus.Error) {
 	logger.Debug("call EnableDevice", pathOrIface, enabled)
-	err := n.enableDevice(pathOrIface, enabled)
-	return dbusutil.ToError(err)
+	cpath, err := n.enableDevice(pathOrIface, enabled)
+	return cpath, dbusutil.ToError(err)
 }
 
-func (n *Network) enableDevice(pathOrIface string, enabled bool) error {
+func (n *Network) enableDevice(pathOrIface string, enabled bool) (cpath dbus.ObjectPath, err error) {
 	d := n.findDevice(pathOrIface)
 	if d == nil {
-		return errors.New("not found device")
+		return "/", errors.New("not found device")
 	}
 
 	n.enableIface(d.iface, enabled)
 
-	err := n.service.Emit(n, "DeviceEnabled", d.nmDevice.Path_(), enabled)
+	err = n.service.Emit(n, "DeviceEnabled", d.nmDevice.Path_(), enabled)
 	if err != nil {
 		logger.Warning(err)
 	}
 
 	if enabled {
-		err = n.enableDevice1(d)
+		cpath, err = n.enableDevice1(d)
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -394,6 +394,7 @@ func (n *Network) enableDevice(pathOrIface string, enabled bool) error {
 		if err != nil {
 			logger.Warning(err)
 		}
+		cpath = "/"
 	}
 
 	err = n.saveConfig()
@@ -401,35 +402,35 @@ func (n *Network) enableDevice(pathOrIface string, enabled bool) error {
 		logger.Warning(err)
 	}
 
-	return nil
+	return cpath, nil
 }
 
-func (n *Network) enableDevice1(d *device) error {
-	err := n.enableNetworking()
+func (n *Network) enableDevice1(d *device) (cpath dbus.ObjectPath, err error) {
+	err = n.enableNetworking()
 	if err != nil {
-		return err
+		return "/", err
 	}
 
 	if d.type0 == nm.NM_DEVICE_TYPE_WIFI {
 		err = n.enableWireless()
 		if err != nil {
-			return err
+			return "/", err
 		}
 	}
 
 	err = setDeviceAutoConnect(d.nmDevice, true)
 	if err != nil {
-		return err
+		return "/", err
 	}
 
 	err = setDeviceManaged(d.nmDevice, true)
 	if err != nil {
-		return err
+		return "/", err
 	}
 
 	connPaths, err := d.nmDevice.AvailableConnections().Get(0)
 	if err != nil {
-		return err
+		return "/", err
 	}
 	logger.Debug("available connections:", connPaths)
 
@@ -461,12 +462,12 @@ func (n *Network) enableDevice1(d *device) error {
 	}
 
 	if connPath0 != "" {
-		logger.Debug("activate connection", connPath0)
+	/*	logger.Debug("activate connection", connPath0)
 		_, err = n.nmManager.ActivateConnection(0, connPath0,
-			d.nmDevice.Path_(), "/")
-		return err
+			d.nmDevice.Path_(), "/")*/
+		return connPath0, err
 	}
-	return nil
+	return "/", nil
 }
 
 func (n *Network) disableDevice(d *device) error {
@@ -593,7 +594,7 @@ func (n *Network) toggleWirelessEnabled() (bool, error) {
 	device := n.getWirelessDevices()
 	for _, d := range device {
 		devPath := d.nmDevice.Path_()
-		err = n.enableDevice(string(devPath), enabled)
+		_, err = n.enableDevice(string(devPath), enabled)
 		if err != nil {
             logger.Warningf("failed to enable %v device %s: %v", enabled, devPath, err)
 		}
