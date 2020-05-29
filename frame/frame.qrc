@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>qss/frame.qss</file>
+        <file>window/resources/edit_btn_press.svg</file>
+        <file>window/resources/edit_btn_normal.svg</file>
+        <file>window/resources/edit_btn_hover.svg</file>
     </qresource>
 </RCC>

@@ -1,9 +1,65 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>插件%1和系统版本不兼容。</translation>
+    </message>
+</context>
+<context>
+    <name>AppEditDialog</name>
+    <message>
+        <source>Edit</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <source>Change icon</source>
+        <translation>点击更换图标</translation>
+    </message>
+    <message>
+        <source>SVG only; dimensions: 96*96; size: ≤1 MB</source>
+        <translation>仅限svg格式；尺寸：96*96；大小：不可超过1M</translation>
+    </message>
+    <message>
+        <source>App name</source>
+        <translation>应用名称</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <source>Unsupported file format</source>
+        <translation>文件格式不符合</translation>
+    </message>
+    <message>
+        <source>The file is too large</source>
+        <translation>文件大小不符合</translation>
+    </message>
+    <message>
+        <source>Unsupported dimensions</source>
+        <translation>文件尺寸不符合</translation>
+    </message>
+    <message>
+        <source>\/:*?&quot;&lt;&gt;| are not allowed</source>
+        <translation>不能使用以下字符：\/:*?&quot;&lt;&gt;|</translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation>图片</translation>
+    </message>
+</context>
+<context>
+    <name>AppItem</name>
+    <message>
+        <source>edit</source>
+        <translation>编辑</translation>
     </message>
 </context>
 <context>
@@ -90,6 +146,13 @@
     <message>
         <source>Unmount all</source>
         <translation>卸载全部</translation>
+    </message>
+</context>
+<context>
+    <name>DockItem</name>
+    <message>
+        <source>edit</source>
+        <translation>编辑</translation>
     </message>
 </context>
 <context>

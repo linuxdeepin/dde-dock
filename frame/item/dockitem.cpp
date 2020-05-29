@@ -241,6 +241,12 @@ void DockItem::showContextMenu()
         m_contextMenu.addAction(action);
     }
 
+    if (itemType() == App && isDocked()) {
+        QAction *action = new QAction(tr("edit"));
+        action->setData(tr("edit"));
+        m_contextMenu.addAction(action);
+    }
+
     hidePopup();
     emit requestWindowAutoHide(false);
 

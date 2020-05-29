@@ -20,6 +20,7 @@
  */
 
 #include "mainwindow.h"
+#include "appeditdialog.h"
 #include "panel/mainpanelcontrol.h"
 #include "controller/dockitemmanager.h"
 #include "util/utils.h"
@@ -33,6 +34,7 @@
 #include <qpa/qplatformwindow.h>
 #include <DStyle>
 #include <DPlatformWindowHandle>
+#include <DDBusSender>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>
@@ -535,6 +537,7 @@ void MainWindow::initConnections()
     connect(DockItemManager::instance(), &DockItemManager::itemUpdated, m_mainPanel, &MainPanelControl::itemUpdated, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(DockItemManager::instance(), &DockItemManager::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
+    connect(DockItemManager::instance(), &DockItemManager::requestEditApp, this, &MainWindow::showAppEditDialog);
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
     connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
@@ -1015,6 +1018,32 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
         else
             m_platformWindowHandle.setBorderColor(QColor(QColor::Invalid));
     }
+}
+
+void MainWindow::showAppEditDialog(const QString& appName, const QString& appIcon, const QString& appId)
+{
+    AppEditDialog dlg(appName, appIcon, this);
+    connect(&dlg, &AppEditDialog::updateAppInfo, this, [=](const QString& appName, const QString& iconPath){
+
+        qDebug() << "edit app: appId:" << appId << "appName:" << appName << ", iconPath:" << iconPath;
+
+        if (appName.isEmpty() && iconPath.isEmpty()) {
+            return;
+        }
+
+        QDBusPendingReply<QString> res = DDBusSender()
+        .service("com.deepin.dde.daemon.Dock")
+        .interface("com.deepin.dde.daemon.Dock")
+        .path("/com/deepin/dde/daemon/Dock")
+        .method(QString("EditAppIcon"))
+        .arg(appId)
+        .arg(appName)
+        .arg(iconPath)
+        .call();
+
+        qDebug() << res;
+    });
+    dlg.exec();
 }
 
 void MainWindow::onRegionMonitorChanged()

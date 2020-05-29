@@ -467,6 +467,11 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(checked);
 
+    if (itemId == tr("edit")) {
+        emit requestEditApp(m_itemEntryInter->name(), m_itemEntryInter->icon(), m_itemEntryInter->id());
+        return;
+    }
+
     m_itemEntryInter->HandleMenuItem(QX11Info::getTimestamp(), itemId);
 }
 
@@ -588,6 +593,7 @@ void AppItem::refershIcon()
         return;
 
     const QString icon = m_itemEntryInter->icon();
+
     const int iconSize = qMin(width(), height());
 
     if (DockDisplayMode == Efficient)
