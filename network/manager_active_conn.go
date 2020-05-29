@@ -40,6 +40,17 @@ type activeConnection struct {
 	Vpn     bool
 }
 
+var frequencyChannelMap = map[uint32]int32{
+	2412: 1, 2417: 2, 2422: 3, 2427: 4, 2432: 5, 2437: 6, 2442: 7,
+	2447: 8, 2452: 9, 2457: 10, 2462: 11, 2467: 12, 2472: 13, 2484: 14,
+	5035: 7, 5040: 8, 5045: 9, 5055: 11, 5060: 12, 5080: 16, 5170: 34,
+	5180: 36, 5190: 38, 5200: 40, 5220: 44, 5230: 44, 5240: 48, 5260: 52, 5280: 56, 5300: 60,
+	5320: 64, 5500: 100, 5520: 104, 5540: 108, 5560: 112, 5580: 116, 5600: 120,
+	5620: 124, 5640: 128, 5660: 132, 5680: 136, 5700: 140, 5745: 149, 5765: 153,
+	5785: 157, 5805: 161, 5825: 165,
+	4915: 183, 4920: 184, 4925: 185, 4935: 187, 4940: 188, 4945: 189, 4960: 192, 4980: 196,
+}
+
 type activeConnectionInfo struct {
 	IsPrimaryConnection bool
 	Device              dbus.ObjectPath
@@ -70,8 +81,9 @@ type ip6ConnectionInfo struct {
 	Dnses    []string
 }
 type hotspotConnectionInfo struct {
-	Ssid string
-	Band string
+	Ssid    string
+	Band    string
+	Channel int32 // wireless channel
 }
 
 func (m *Manager) initActiveConnectionManage() {
@@ -310,17 +322,20 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 	connName = getSettingConnectionId(cdata)
 	connType = getCustomConnectionType(cdata)
-	if connType == connectionWirelessHotspot {
-		hotspotInfo.Ssid = decodeSsid(getSettingWirelessSsid(cdata))
-		band := getSettingWirelessBand(cdata)
-		switch band {
-		case "a":
-			hotspotInfo.Band = Tr("A (5 GHz)")
-		case "bg":
-			hotspotInfo.Band = Tr("BG (2.4 GHz)")
-		default:
-			hotspotInfo.Band = Tr("Automatic")
+	if connType == connectionWirelessHotspot || connType == connectionWireless {
+		apPath, _ := nmDev.Wireless().ActiveAccessPoint().Get(0)
+		nmAp, _ := nmNewAccessPoint(apPath)
+		ssid, _ := nmAp.Ssid().Get(0)
+		hotspotInfo.Ssid = decodeSsid(ssid)
+		frequency, _ := nmAp.Frequency().Get(0)
+		if frequency >= 4915 && frequency <= 5825 {
+			hotspotInfo.Band = "a"
+		} else if frequency >= 2412 && frequency <= 2484 {
+			hotspotInfo.Band = "bg"
+		} else {
+			hotspotInfo.Band = "unknown"
 		}
+		hotspotInfo.Channel = frequencyChannelMap[frequency]
 	}
 
 	// security
