@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:
+ *
+ * Maintainer:  zhaolong <zhaolong@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "normalcontainer.h"
 #include "../fashiontrayconstants.h"
 
@@ -164,7 +185,7 @@ int NormalContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
     // 如果没有对图标进行过排序则使用下面的默认排序算法:
     // 所有应用图标在系统图标的左侧
     // 新的应用图标在最左侧的应用图标处插入
-    // 新的系统图标在最左侧的系统图标处插入
+    // 系统图标按插件默认顺序（收缩箭头起从右往左由大到小排）在应用图标右侧插入
     return whereToInsertByDefault(wrapper);
 }
 
