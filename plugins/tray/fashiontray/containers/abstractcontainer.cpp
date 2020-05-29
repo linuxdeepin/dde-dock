@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:
+ *
+ * Maintainer:  zhaolong <zhaolong@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "abstractcontainer.h"
 #include "../fashiontrayconstants.h"
 
@@ -263,7 +284,7 @@ int AbstractContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
     }
 
     //根据配置文件记录的顺序排序
-    const int destSortKey = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    int destSortKey = m_trayPlugin->itemSortKey(wrapper->itemKey());
 
     if (destSortKey < -1) {
         return 0;
@@ -271,6 +292,9 @@ int AbstractContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
     if (destSortKey == -1) {
         return m_wrapperList.size();
     }
+
+    if (wrapper->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray)
+        destSortKey += m_wrapperList.size();
 
     // 当目标插入位置为列表的大小时将从最后面追加到列表中
     int destIndex = m_wrapperList.size();
