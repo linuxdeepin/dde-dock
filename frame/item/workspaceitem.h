@@ -23,12 +23,6 @@
 #define WORKSPACEITEM_H
 
 #include "dockitem.h"
-//#include "../widgets/tipswidget.h"
-
-//#include <com_deepin_dde_launcher.h>
-
-
-//using LauncherInter = com::deepin::dde::Launcher;
 
 class QGSettings;
 class WorkSpaceItem : public DockItem
@@ -45,7 +39,6 @@ public:
 signals:
     void requestActivateWindow(const int wid) const;
 
-
 protected:
     void showEvent(QShowEvent* event) override;
 
@@ -54,17 +47,11 @@ private:
     void resizeEvent(QResizeEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
-
-//    QWidget *popupTips() override;
-
     void onGSettingsChanged(const QString& key);
-
     bool checkGSettingsControl() const;
 
 private:
     QPixmap m_icon;
-//    LauncherInter *m_launcherInter;
-//    TipsWidget *m_tips;
     QGSettings* m_gsettings;
     int m_index;
     bool m_active;

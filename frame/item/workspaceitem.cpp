@@ -23,10 +23,11 @@
 #include "util/themeappicon.h"
 #include "util/imagefactory.h"
 
+#include <DDBusSender>
+
 #include <QPainter>
 #include <QProcess>
 #include <QMouseEvent>
-#include <DDBusSender>
 #include <QApplication>
 #include <QGSettings>
 
@@ -34,18 +35,10 @@ DCORE_USE_NAMESPACE
 
 WorkSpaceItem::WorkSpaceItem(int index, bool active, QWidget *parent)
     : DockItem(parent)
-//    , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
-//    , m_tips(new TipsWidget(this))
     , m_gsettings(new QGSettings("com.deepin.dde.dock.module.workspace"))
     , m_index(index)
     , m_active(active)
 {
-//    m_launcherInter->setSync(true, false);
-
-//    m_tips->setVisible(false);
-//    m_tips->setObjectName("launcher");
-//    m_tips->setAccessibleName("launchertips");
-
     connect(m_gsettings, &QGSettings::changed, this, &WorkSpaceItem::onGSettingsChanged);
 }
 
@@ -82,7 +75,6 @@ void WorkSpaceItem::paintEvent(QPaintEvent *e)
     QColor color = this->palette().color(QPalette::Base);
     color.setAlpha(100);
 
-    //painter.fillRect(rect().marginsRemoved(QMargins(10,10,10,10)),color);
     const QRectF itemRect = rect();
     qreal min = qMin(itemRect.width(), itemRect.height());
     QRectF backgroundRect = QRectF(itemRect.x(), itemRect.y(), min, min);
@@ -121,21 +113,7 @@ void WorkSpaceItem::mouseReleaseEvent(QMouseEvent *e)
 
     if (e->button() != Qt::LeftButton)
         return;
-
-//    if (!m_launcherInter->IsVisible()) {
-//        m_launcherInter->Show();
-//    }
 }
-
-//QWidget *WorkSpaceItem::popupTips()
-//{
-//    if (checkGSettingsControl()) {
-//        return nullptr;
-//    }
-
-////    m_tips->setText(tr("Launcher"));
-//    return nullptr;
-//}
 
 void WorkSpaceItem::onGSettingsChanged(const QString& key) {
     if (key != "enable") {
