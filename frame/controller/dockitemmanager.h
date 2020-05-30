@@ -27,12 +27,15 @@
 #include "item/dockitem.h"
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
+#include "item/workspaceitem.h"
 
 #include <com_deepin_dde_daemon_dock.h>
+#include <com_deepin_wm.h>
 
 #include <QObject>
 
 using DBusDock = com::deepin::dde::daemon::Dock;
+using DBusWm = com::deepin::wm;
 
 class DockItemManager : public QObject
 {
@@ -61,6 +64,8 @@ public slots:
     void updatePluginsItemOrderKey();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);
+    void requestActivateWindow(const int nindex);
+    void workspaceswitched(int from, int to);
 
 private:
     explicit DockItemManager(QObject *parent = nullptr);
@@ -76,10 +81,12 @@ private:
     QTimer *m_updatePluginsOrderTimer;
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
+    DBusWm *m_wmInter;
 
     static DockItemManager *INSTANCE;
 
     QList<QPointer<DockItem>> m_itemList;
+    QList<QPointer<WorkSpaceItem>> m_workItems;
 };
 
 #endif // DOCKITEMMANAGER_H

@@ -224,9 +224,6 @@ MainWindow::MainWindow(QWidget *parent)
         } else {
             QWidget::setFixedWidth(val);
         }
-
-        m_mainPanel->setFixedSize(windowRect.width(), windowRect.height());
-
     });
 
     connect(m_panelHideAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
@@ -301,14 +298,26 @@ MainWindow::~MainWindow()
 void MainWindow::launch()
 {
     setVisible(false);
-    QTimer::singleShot(400, this, [&] {
-        m_launched = true;
-        qApp->processEvents();
-        QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
-        setVisible(true);
-        updatePanelVisible();
-        expand();
-        resetPanelEnvironment(false);
+    QTimer *waitServerTimer = new QTimer(this);
+    waitServerTimer->start(100);
+    connect(waitServerTimer, &QTimer::timeout, this, [ = ] {
+        QDBusInterface interface("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock",
+                                 "com.deepin.dde.daemon.Dock",
+                                 QDBusConnection::sessionBus());
+        if(interface.isValid()) {
+            waitServerTimer->stop();
+            waitServerTimer->deleteLater();
+            emit loaderPlugins();
+            QTimer::singleShot(400, this, [&] {
+                m_launched = true;
+                qApp->processEvents();
+                QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
+                setVisible(true);
+                updatePanelVisible();
+                expand();
+                resetPanelEnvironment(false);
+            });
+        }
     });
 }
 
@@ -819,7 +828,15 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
 void MainWindow::updatePanelVisible()
 {
     if (m_settings->hideMode() == KeepShowing) {
+        if (m_regionMonitor->registered()){
+            m_regionMonitor->unregisterRegion();
+        }
         return expand();
+    }
+
+    if (!m_regionMonitor->registered()){
+        m_regionMonitor->registerRegion();
+        m_regionMonitor->setCoordinateType(DRegionMonitor::ScaleRatio);
     }
 
     const Dock::HideState state = m_settings->hideState();
@@ -1060,20 +1077,17 @@ void MainWindow::updateRegionMonitorWatch()
     if (m_settings->hideMode() == KeepShowing)
         return;
 
-    int val = 2;
+    int val = 5;
+    const qreal scale = devicePixelRatioF();
     const int margin = m_settings->dockMargin();
     if (Dock::Top == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin, 0, m_settings->primaryRect().width() - margin*2, val));
+        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, 0, (m_settings->primaryRect().width() - margin*2) * scale, val *scale));
     } else if (Dock::Bottom == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin, m_settings->primaryRect().height() - val, m_settings->primaryRect().width() - margin*2, val));
+        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, (m_settings->primaryRect().height() - val)* scale, (m_settings->primaryRect().width() - margin*2)*scale, val * scale));
     } else if (Dock::Left == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(0, margin, val,m_settings->primaryRect().height() - margin*2));
+        m_regionMonitor->setWatchedRegion(QRegion(0, margin * scale, val * scale, (m_settings->primaryRect().height() - margin*2) * scale));
     } else {
-        m_regionMonitor->setWatchedRegion(QRegion(m_settings->primaryRect().width() - val, margin, val,m_settings->primaryRect().height()- margin*2));
-    }
-
-    if (!m_regionMonitor->registered()){
-        m_regionMonitor->registerRegion();
+        m_regionMonitor->setWatchedRegion(QRegion((m_settings->primaryRect().width() - val) * scale, margin * scale, val * scale, (m_settings->primaryRect().height()- margin*2)*scale));
     }
 }
 

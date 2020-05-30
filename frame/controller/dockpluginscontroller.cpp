@@ -129,6 +129,7 @@ void DockPluginsController::startLoader()
 {
     loadLocalPlugins();
     loadSystemPlugins();
+
 }
 
 void DockPluginsController::loadLocalPlugins()
