@@ -104,3 +104,11 @@ func (ms *MediaShortcut) GetAction() *Action {
 	}
 	return ActionNoOp
 }
+
+func GetAction(id string) *Action {
+	if action, ok := mediaIdActionMap[id]; ok {
+		return action
+	}
+
+	return ActionNoOp
+}
