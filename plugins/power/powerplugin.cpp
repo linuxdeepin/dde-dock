@@ -270,10 +270,9 @@ void PowerPlugin::refreshTipsData()
         }
 
         m_tipsLabel->setText(tips);
-    }
-    else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.){
-        m_tipsLabel->setText(tr("%1 charged").arg(value));
-    }else {
+    } else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.) {
+        m_tipsLabel->setText(tr("Capacity 1%, fully charged").arg(percentage));
+    } else {
         qulonglong timeToFull = m_systemPowerInter->batteryTimeToFull();
         QDateTime time = QDateTime::fromTime_t(timeToFull).toUTC();
         uint hour = time.toString("hh").toUInt();
@@ -284,7 +283,7 @@ void PowerPlugin::refreshTipsData()
         }
         QString tips;
         if(timeToFull == 0) {   // 电量已充満或电量计算中,剩余充满时间会返回0
-            tips = tr("Capacity %1 ....").arg(value);
+            tips = tr("Capacity %1 ...").arg(value);
         } else if (hour == 0) {
             if(m_showTimeToFull)
                 tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
