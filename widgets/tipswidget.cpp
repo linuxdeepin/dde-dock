@@ -25,7 +25,6 @@ void TipsWidget::refreshFont()
 void TipsWidget::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
-    refreshFont();
 
     QPainter painter(this);
     painter.setPen(QPen(palette().brightText(), 1));
