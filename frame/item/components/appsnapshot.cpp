@@ -77,11 +77,8 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     setLayout(centralLayout);
     setAcceptDrops(true);
-    resize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_closeBtn2D, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
-    QTimer::singleShot(1, this, &AppSnapshot::compositeChanged);
 }
 
 void AppSnapshot::closeWindow() const
@@ -129,8 +126,8 @@ void AppSnapshot::dragEnterEvent(QDragEnterEvent *e)
 
 void AppSnapshot::fetchSnapshot()
 {
-    if (!m_wmHelper->hasComposite())
-        return;
+    // 临时屏蔽预览功能
+    if (true) return;
 
     QImage qimage;
     SHMInfo *info = nullptr;
@@ -257,7 +254,7 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
 
-    if (!m_wmHelper->hasComposite()) {
+    if (true) {
         if (underMouse())
             painter.fillRect(rect(), QColor(255, 255, 255, 255 * .2));
         return;

@@ -53,7 +53,6 @@ PreviewContainer::PreviewContainer(QWidget *parent)
 
     setAcceptDrops(true);
     setLayout(m_windowListLayout);
-    setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_mouseLeaveTimer, &QTimer::timeout, this, &PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
     connect(m_waitForShowPreviewTimer, &QTimer::timeout, this, &PreviewContainer::previewFloating);
@@ -135,8 +134,8 @@ void PreviewContainer::prepareHide()
 void PreviewContainer::adjustSize()
 {
     const int count = m_snapshots.size();
-    const bool composite = m_wmHelper->hasComposite();
-    if (!composite)
+    // 临时让预览框只显示文字信息
+    if (true)
     {
         const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
         setFixedSize(SNAP_WIDTH, h);
