@@ -117,7 +117,6 @@ int WirelessList::APcount()
     return m_apList.size();
 }
 
-
 void WirelessList::APAdded(const QJsonObject &apInfo)
 {
     AccessPoint ap(apInfo);

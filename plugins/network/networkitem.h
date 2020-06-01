@@ -3,6 +3,7 @@
 
 #include <DGuiApplicationHelper>
 #include <DSwitchButton>
+#include <dloadingindicator.h>
 
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -66,8 +67,9 @@ public slots:
     void refreshIcon();
 
 protected:
-    void resizeEvent(QResizeEvent *e);
-    void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *obj,QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void wiredsEnable(bool enable);
@@ -90,9 +92,8 @@ private:
     QWidget *m_wiredControlPanel;
     bool m_switchWiredBtnState;
 
-//    HorizontalSeperator *m_line;
-
     QLabel *m_wirelessTitle;
+    DLoadingIndicator *m_loadingIndicator;
     DSwitchButton *m_switchWirelessBtn;
     QVBoxLayout *m_wirelessLayout;
     QWidget *m_wirelessControlPanel;
