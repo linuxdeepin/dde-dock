@@ -17,7 +17,7 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothapplet.cpp" line="79"/>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth postavke</translation>
     </message>
 </context>
 <context>
@@ -25,27 +25,27 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="85"/>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Isključi</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="87"/>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Uključi</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="93"/>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth postavke</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 povezan</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Povezujem...</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
@@ -400,7 +400,7 @@
         <location filename="../plugins/power/powerplugin.cpp" line="251"/>
         <location filename="../plugins/power/powerplugin.cpp" line="258"/>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitet %1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="256"/>
@@ -458,8 +458,8 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
-        <translation>Ponovno pokreni</translation>
+        <source>Reboot</source>
+        <translation>Ponovno podigni sustav</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>

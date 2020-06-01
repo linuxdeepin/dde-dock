@@ -458,8 +458,8 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
-        <translation>Reštartovať</translation>
+        <source>Reboot</source>
+        <translation>Reštart</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>

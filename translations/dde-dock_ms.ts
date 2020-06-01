@@ -458,8 +458,8 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
-        <translation>Mula semula</translation>
+        <source>Reboot</source>
+        <translation>But semula</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>

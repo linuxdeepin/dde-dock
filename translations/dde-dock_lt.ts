@@ -458,7 +458,7 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
+        <source>Reboot</source>
         <translation>Paleisti iš naujo</translation>
     </message>
     <message>

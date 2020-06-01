@@ -400,7 +400,7 @@
         <location filename="../plugins/power/powerplugin.cpp" line="251"/>
         <location filename="../plugins/power/powerplugin.cpp" line="258"/>
         <source>Capacity %1</source>
-        <translation>电量 %1</translation>
+        <translation>电量%1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="256"/>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
+        <source>Reboot</source>
         <translation>重启</translation>
     </message>
     <message>

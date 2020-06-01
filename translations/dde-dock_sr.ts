@@ -4,7 +4,7 @@
     <message>
         <location filename="../frame/util/abstractpluginscontroller.cpp" line="187"/>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Додатак %1 није компатибилан са системом.</translation>
+        <translation>Додатак %1 није усаглашен са системом.</translation>
     </message>
 </context>
 <context>
@@ -40,12 +40,12 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 повезано</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Повезивање...</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
@@ -238,7 +238,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="125"/>
         <source>Launcher</source>
-        <translation>Покретач програма</translation>
+        <translation>Покретач Програма</translation>
     </message>
 </context>
 <context>
@@ -435,7 +435,7 @@
         <location filename="../plugins/show-desktop/showdesktopplugin.cpp" line="44"/>
         <location filename="../plugins/show-desktop/showdesktopplugin.cpp" line="103"/>
         <source>Show Desktop</source>
-        <translation>Прикажи радну површину</translation>
+        <translation>Прикажи Радну Површину</translation>
     </message>
     <message>
         <location filename="../plugins/show-desktop/showdesktopplugin.cpp" line="109"/>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
+        <source>Reboot</source>
         <translation>Поново покрени</translation>
     </message>
     <message>

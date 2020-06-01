@@ -17,7 +17,7 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothapplet.cpp" line="79"/>
         <source>Bluetooth settings</source>
-        <translation>Definições Bluetooth</translation>
+        <translation>Definições bluetooth</translation>
     </message>
 </context>
 <context>
@@ -35,17 +35,17 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="93"/>
         <source>Bluetooth settings</source>
-        <translation>Definições Bluetooth</translation>
+        <translation>Definições bluetooth</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 ligado</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>A ligar...</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
@@ -180,27 +180,27 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="66"/>
         <source>Top</source>
-        <translation>Topo</translation>
+        <translation>Superior</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="67"/>
         <source>Bottom</source>
-        <translation>Fundo</translation>
+        <translation>Inferior</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Left</source>
-        <translation>Esquerdo</translation>
+        <translation>Esquerda</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="69"/>
         <source>Right</source>
-        <translation>Direito</translation>
+        <translation>Direita</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="70"/>
         <source>Keep Shown</source>
-        <translation>Manter Visível</translation>
+        <translation>Manter visível</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="71"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="72"/>
         <source>Smart Hide</source>
-        <translation>Ocultar Inteligente</translation>
+        <translation>Ocultar inteligente</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="109"/>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
+        <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
     <message>

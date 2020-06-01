@@ -17,7 +17,7 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothapplet.cpp" line="79"/>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>බ්ලූටූත් සැකසුම්</translation>
     </message>
 </context>
 <context>
@@ -25,27 +25,27 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="85"/>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>වසා දමන්න</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="87"/>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>ක්‍රියාත්මක කරන්න</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="93"/>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>බ්ලූටූත් සැකසුම්</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 සම්බන්ධයි</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>සම්බන්ධ වෙමින්...</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
@@ -356,7 +356,7 @@
     <message>
         <location filename="../plugins/network/networkplugin.cpp" line="191"/>
         <source>Wired Network %1</source>
-        <translation type="unfinished"/>
+        <translation>රැහැන්ගත ජාලය %1</translation>
     </message>
 </context>
 <context>
@@ -458,8 +458,8 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
-        <translation>නැවත පටන්ගන්න </translation>
+        <source>Reboot</source>
+        <translation>පද්ධතිය නැවත අරඹන්න</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>

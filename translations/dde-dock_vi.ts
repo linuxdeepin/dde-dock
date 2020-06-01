@@ -40,12 +40,12 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 đã kết nối</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Đang kết nối...</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
@@ -400,7 +400,7 @@
         <location filename="../plugins/power/powerplugin.cpp" line="251"/>
         <location filename="../plugins/power/powerplugin.cpp" line="258"/>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Phù hợp %1</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="256"/>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
+        <source>Reboot</source>
         <translation>Khởi động lại</translation>
     </message>
     <message>

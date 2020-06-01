@@ -40,12 +40,12 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 u lidh</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Po lidhet…</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="281"/>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Po ngarkohet %1, edhe %2 hr % e 3min deri sa të jetë plot</translation>
+        <translation>Po ngarkohet %1, edhe %2 hr e %3 min deri sa të jetë plot</translation>
     </message>
 </context>
 <context>
@@ -458,8 +458,8 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
-        <translation>Rinise</translation>
+        <source>Reboot</source>
+        <translation>Rinisu</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>

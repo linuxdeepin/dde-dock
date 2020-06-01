@@ -40,7 +40,7 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
         <source>%1 connected</source>
-        <translation>%1 conectada</translation>
+        <translation>%1 conectado</translation>
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="189"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="114"/>
         <source>This action cannot be restored</source>
-        <translation>Esta acción no puede ser restaurada</translation>
+        <translation>Esta acción no se puede deshacer</translation>
     </message>
 </context>
 <context>
@@ -389,7 +389,7 @@
         <location filename="../plugins/power/powerplugin.cpp" line="245"/>
         <location filename="../plugins/power/powerplugin.cpp" line="264"/>
         <source>Charged</source>
-        <translation>Cargado</translation>
+        <translation>Cargada</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="249"/>
@@ -449,7 +449,7 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
         <source>Power</source>
-        <translation>Energía</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
-        <source>Restart</source>
+        <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
