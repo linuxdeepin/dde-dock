@@ -4,7 +4,7 @@
 #include "../../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 
-
+#include <DHiDPIHelper>
 #include <DApplicationHelper>
 #include <DDBusSender>
 
@@ -25,7 +25,7 @@ extern void initFontColor(QWidget *widget)
     if (!widget)
         return;
 
-    auto fontChange = [&](QWidget *widget){
+    auto fontChange = [&](QWidget * widget) {
         QPalette defaultPalette = widget->palette();
         defaultPalette.setBrush(QPalette::WindowText, defaultPalette.brightText());
         widget->setPalette(defaultPalette);
@@ -33,7 +33,7 @@ extern void initFontColor(QWidget *widget)
 
     fontChange(widget);
 
-    QObject::connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, widget, [=]{
+    QObject::connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, widget, [ = ] {
         fontChange(widget);
     });
 }
@@ -42,7 +42,6 @@ NetworkItem::NetworkItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsWidget(new TipsWidget(this))
     , m_applet(new QScrollArea(this))
-//    , m_line(new HorizontalSeperator(this))
     , m_switchWire(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
@@ -61,6 +60,20 @@ NetworkItem::NetworkItem(QWidget *parent)
     initFontColor(m_wirelessTitle);
     m_switchWirelessBtn = new DSwitchButton(m_wirelessControlPanel);
     m_switchWirelessBtnState = false;
+
+    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
+
+    m_loadingIndicator = new DLoadingIndicator;
+    m_loadingIndicator->setLoading(false);
+    m_loadingIndicator->setSmooth(true);
+    m_loadingIndicator->setAniDuration(1000);
+    m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
+    m_loadingIndicator->installEventFilter(this);
+    m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
+    m_loadingIndicator->viewport()->setAutoFillBackground(false);
+    m_loadingIndicator->setFrameShape(QFrame::NoFrame);
+    m_loadingIndicator->installEventFilter(this);
+
     m_wirelessLayout = new QVBoxLayout;
     m_wirelessLayout->setMargin(0);
     m_wirelessLayout->setSpacing(0);
@@ -70,6 +83,8 @@ NetworkItem::NetworkItem(QWidget *parent)
     switchWirelessLayout->addSpacing(2);
     switchWirelessLayout->addWidget(m_wirelessTitle);
     switchWirelessLayout->addStretch();
+    switchWirelessLayout->addWidget(m_loadingIndicator);
+    switchWirelessLayout->addSpacing(10);
     switchWirelessLayout->addWidget(m_switchWirelessBtn);
     switchWirelessLayout->addSpacing(2);
     m_wirelessControlPanel->setLayout(switchWirelessLayout);
@@ -270,6 +285,14 @@ void NetworkItem::invokeMenuItem(const QString &menuId, const bool checked)
 
 void NetworkItem::refreshIcon()
 {
+    // 刷新按钮图标
+    QPixmap pixmap;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_dark.svg");
+    else
+        pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
+    m_loadingIndicator->setImageSource(pixmap);
+
     QString stateString;
     QString iconString;
     const auto ratio = devicePixelRatioF();
@@ -429,6 +452,24 @@ void NetworkItem::paintEvent(QPaintEvent *e)
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
     painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(),
                        m_iconPixmap);
+}
+
+bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_loadingIndicator) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            for (auto wirelessItem : m_wirelessItems) {
+                if (wirelessItem) {
+                    wirelessItem->requestWirelessScan();
+                }
+            }
+            m_loadingIndicator->setLoading(true);
+            QTimer::singleShot(1000, this, [ = ] {
+                m_loadingIndicator->setLoading(false);
+            });
+        }
+    }
+    return false;
 }
 
 void NetworkItem::wiredsEnable(bool enable)
@@ -1056,6 +1097,7 @@ void NetworkItem::updateMasterControlSwitch()
     }
     m_switchWirelessBtn->blockSignals(true);
     m_switchWirelessBtn->setChecked(deviceState);
+    m_loadingIndicator->setVisible(deviceState);
     m_switchWirelessBtn->blockSignals(false);
     if (deviceState) {
         for (auto wirelessItem : m_wirelessItems) {
