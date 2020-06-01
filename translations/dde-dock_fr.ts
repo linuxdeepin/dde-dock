@@ -20,15 +20,15 @@
         <translation>Date et heure</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 Heures</translation>
+        <source>12-hour time</source>
+        <translation>Affichage 12 heures</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 Heures</translation>
+        <source>24-hour time</source>
+        <translation>Affichage 24 heures</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Réglages de l&apos;heure</translation>
     </message>
 </context>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Paramètres du réseau</translation>
+        <translation>Paramètres réseau</translation>
     </message>
 </context>
 <context>
@@ -128,7 +128,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Masquer intelligemment</translation>
+        <translation>Masquage intelligemment</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -195,15 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacité : %1, %2 minutes restantes</translation>
+        <translation>Capacité: %1, %2 minutes restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacité : %1, %2 heures et %3 minutes restantes</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Chargé à %1</translation>
+        <translation>Capacité: %1, %2 heures et %3 minutes restantes</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -214,12 +210,24 @@
         <translation>En charge %1, %2 heures et %3 minutes avant la charge complète</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Chargement de %1 en cours....</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Chargé</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Capacité %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>En charge %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -241,19 +249,15 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Arrêter</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Redémarrer</translation>
+        <translation>Éteindre</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Mettre en veille </translation>
+        <translation>Mise en veille </translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Hiberner</translation>
+        <translation>Mise en hibernation</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Options d&apos;alimentation</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Redémarrer</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Muet</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Paramètres audio</translation>
+        <source>Sound settings</source>
+        <translation>Paramètres sonores</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volume actuel %1</translation>
+        <source>Volume %1</source>
+        <translation>Volume %1</translation>
     </message>
 </context>
 <context>
@@ -332,7 +340,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Vider</translation>
+        <translation>Vide</translation>
     </message>
 </context>
 <context>
@@ -350,7 +358,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire : %1</translation>
+        <translation>Connexion filaire: %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Pas de réseau</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Connexion sans fil : %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connecté mais pas d’accès internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Connexion sans fil: %1</translation>
     </message>
 </context>
 <context>

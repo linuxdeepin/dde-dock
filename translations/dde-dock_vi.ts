@@ -20,16 +20,16 @@
         <translation>Ngày giờ</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Thời gian dạng 12 Giờ</translation>
+        <source>12-hour time</source>
+        <translation>Chế độ 12 giờ</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Thời gian dạng 24 Giờ</translation>
+        <source>24-hour time</source>
+        <translation>Chế độ 24 giờ</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Những Thiết lập Thời gian</translation>
+        <source>Time settings</source>
+        <translation>Cài đặt thời gian</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Năng lượng %1, %2 giờ %3 phút còn lại</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Được nạp %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Đang sạc %1, %2 phút sẽ đầy</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Đang sạc %1, %2 giờ %3 phút sẽ đầy</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Đang sạc %1 ...</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Được sạt</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Phù hợp %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Đang nạp %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Tắt máy</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Khởi động lại</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Thiết lập năng lượng</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Khởi động lại</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Câm</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Thiết lập Âm thanh</translation>
+        <source>Sound settings</source>
+        <translation>Cài đặt âm thanh</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Âm lượng Hiện tại %1</translation>
+        <source>Volume %1</source>
+        <translation>Âm lượng %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Không có Mạng</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Kết nối Không dây: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Đã kết nối nhưng không có truy cập Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Kết nối không dây: %1</translation>
     </message>
 </context>
 <context>

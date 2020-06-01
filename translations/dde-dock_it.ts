@@ -20,15 +20,15 @@
         <translation>Orologio</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>Formato 12 ore</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>Formato 24 ore</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Impostazioni orarie</translation>
     </message>
 </context>
@@ -195,15 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacità %1, %2 min. rimanenti</translation>
+        <translation>Carica %1, %2 min. rimanenti</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacità %1, %2 ore e %3 min. rimanenti</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Carica %1</translation>
+        <translation>Carica %1, %2 ore e %3 min. rimanenti</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -214,12 +210,24 @@
         <translation>Carica %1, %2 ore e %3 min. per la carica completa</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>In carica %1 ....</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Carico</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Carica %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>In carica %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Spegni</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Riavvia</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Impostazioni Alimentazione</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Riavvia</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Muto</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Impostazioni Audio</translation>
+        <source>Sound settings</source>
+        <translation>Impostazioni audio</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volume attuale %1</translation>
+        <source>Volume %1</source>
+        <translation>Volume %1</translation>
     </message>
 </context>
 <context>
@@ -360,19 +368,19 @@
         <translation>Nessuna Rete</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Connessione WiFi: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connesso senza accesso ad internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Connessione WiFi: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>WiFi</translation>
+        <translation>Rete wireless</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

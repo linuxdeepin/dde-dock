@@ -300,7 +300,7 @@ void WirelessItem::refreshTips()
             const QJsonObject ipv4 = info.value("Ip4").toObject();
             if (!ipv4.contains("Address"))
                 break;
-            m_wirelessTips->setText(tr("Wireless Connection: %1").arg(ipv4.value("Address").toString()));
+            m_wirelessTips->setText(tr("Wireless connection: %1").arg(ipv4.value("Address").toString()));
         } while (false);
     }
 }

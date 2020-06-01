@@ -22,16 +22,16 @@
         <translation>Datetime</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 Hour Time</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 Hour Time</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Time Settings</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -204,10 +204,6 @@
         <translation>Capacity %1, %2 hr %3 min remaining</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Charged %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Charging %1, %2 min until full</translation>
     </message>
@@ -220,15 +216,19 @@
         <translation>Charged</translation>
     </message>
     <message>
-        <source>Capacity %1 ....</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Charging %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -254,10 +254,6 @@
         <translation>Shut down</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Restart</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Suspend</translation>
     </message>
@@ -280,6 +276,10 @@
     <message>
         <source>Power settings</source>
         <translation>Power settings</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -304,12 +304,12 @@
         <translation>Mute</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Audio Settings</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Current Volume %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -370,12 +370,12 @@
         <translation>No Network</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Wireless Connection: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connected but no Internet access</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -20,15 +20,15 @@
         <translation>날짜시간</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 시간</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 시간</translation>
+        <source>24-hour time</source>
+        <translation>24시간</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>시간 설정</translation>
     </message>
 </context>
@@ -202,10 +202,6 @@
         <translation>용량 %1, %2시간 %3분 남음</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 충전됨</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>%1 충전중, 완전 충전까지 %2분 남음</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>%1 충전중, 완전 충전까지 %2시간 %3분 남음</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>%1 충전중 ...</translation>
+        <source>Charged</source>
+        <translation>충전됨</translation>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>%1 충전중</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,12 +252,8 @@
         <translation>종료</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>재시작</translation>
-    </message>
-    <message>
         <source>Suspend</source>
-        <translation>일시 중지</translation>
+        <translation>절전 모드</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -257,7 +261,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>잠그기</translation>
+        <translation>잠금</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>전원 설정</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>재부팅</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -280,7 +288,7 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>응용 프로그램</translation>
+        <translation>응용프로그램</translation>
     </message>
 </context>
 <context>
@@ -294,19 +302,19 @@
         <translation>음소거</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>오디오 설정</translation>
+        <source>Sound settings</source>
+        <translation>사운드 설정</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>현재 볼륨 %1</translation>
+        <source>Volume %1</source>
+        <translation>음량 %1%</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation>소리</translation>
+        <translation>사운드</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>네트워크 없음</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>무선 연결: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>연결됨, 인터넷 없음</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>무선 연결: %1</translation>
     </message>
 </context>
 <context>

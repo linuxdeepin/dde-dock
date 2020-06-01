@@ -20,16 +20,16 @@
         <translation>Дата, час</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 Годинний Час</translation>
+        <source>12-hour time</source>
+        <translation>12-годинний час</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 Годинний Час</translation>
+        <source>24-hour time</source>
+        <translation>24-годинний час</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Налаштування Часу</translation>
+        <source>Time settings</source>
+        <translation>Параметри часу</translation>
     </message>
 </context>
 <context>
@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Вилучити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -202,10 +202,6 @@
         <translation>Батарея %1, %2 год %3 хв залишилося</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Заряджений на %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Зарядка %1, %2 хв до повної</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>Зарядка %1, %2 год %3 хв до повної</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Заряджаємо %1....</translation>
+        <source>Charged</source>
+        <translation>Заряджено</translation>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation>Ємність %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Заряджається %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>Вимкнути</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Перезавантажити</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Призупинити</translation>
     </message>
@@ -261,7 +265,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Вийти</translation>
+        <translation>Вихід</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Параметри живлення</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Перезавантажити</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Вимкнути звук</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Налаштування аудіо</translation>
+        <source>Sound settings</source>
+        <translation>Параметри звуку</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Поточна гучність %1</translation>
+        <source>Volume %1</source>
+        <translation>Гучність %1</translation>
     </message>
 </context>
 <context>
@@ -350,7 +358,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Бездротове підключення: %1</translation>
+        <translation>Дротове з&apos;єднання %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Немає мережі</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Бездротове підключення: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>З&apos;єднано, але доступу до інтернету немає</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Бездротове з&apos;єднання: %1</translation>
     </message>
 </context>
 <context>

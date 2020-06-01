@@ -20,16 +20,16 @@
         <translation>Дата и время</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12-часовой Формат</translation>
+        <source>12-hour time</source>
+        <translation>12-часовой формат времени</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24-часовой Формат</translation>
+        <source>24-hour time</source>
+        <translation>24-часовой формат времени</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Настройки Времени</translation>
+        <source>Time settings</source>
+        <translation>Настройки времени</translation>
     </message>
 </context>
 <context>
@@ -151,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation> Выбор программ</translation>
+        <translation>Выбор Программ</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Емкость %1, %2 час. %3 мин. осталось</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Заряжено %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Зарядка %1, %2 мин. до полной зарядки</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Зарядка %1, %2 час. %3 мин. до полной зарядки</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Зарядка %1 ....</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Заряжен</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Объем %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Заряжается %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Выключить</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Перезагрузить</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Параметры питания</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Перезагрузить</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Приглушить</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Настройки Звука</translation>
+        <source>Sound settings</source>
+        <translation>Настройки звука</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Уровень Громкости %1</translation>
+        <source>Volume %1</source>
+        <translation>Том %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Нет Сети</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Беспроводное Подключение: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Подключено, без доступа к Интернету</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Беспроводное соединение: %1</translation>
     </message>
 </context>
 <context>

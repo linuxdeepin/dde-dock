@@ -20,15 +20,15 @@
         <translation>Data și ora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Oră în format 12 ore</translation>
+        <source>12-hour time</source>
+        <translation>Format 12-ore</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Oră în format 24 de ore</translation>
+        <source>24-hour time</source>
+        <translation>Format 24-ore</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Configurări pentru timp</translation>
     </message>
 </context>
@@ -55,11 +55,11 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anulare</translation>
+        <translation>Anulează</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Ștergere</translation>
+        <translation>Ștergeți</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -202,10 +202,6 @@
         <translation>Capacitate %1, %2 Ore %3 Min rămase</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Încărcat %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Încărcare %1, %2 Min până la plin</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>Încărcare %1, %2 Ore %3 Min rămase până la plin</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Se încarcă %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>Închidere</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Repornire</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Suspendare</translation>
     </message>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Setări pentru administrare de energie</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Repornire</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -291,15 +299,15 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Mut</translation>
+        <translation>Mute</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Setări audio</translation>
+        <source>Sound settings</source>
+        <translation>Setări Sunet</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volumul actual %1</translation>
+        <source>Volume %1</source>
+        <translation>Volum %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Fără conexiune</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Conexiune fără fir: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Conectat dar fară acces Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Conexiune fără fir: %1</translation>
     </message>
 </context>
 <context>

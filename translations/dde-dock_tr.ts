@@ -20,16 +20,16 @@
         <translation>Tarih Saat</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 Saatlik Zaman</translation>
+        <source>12-hour time</source>
+        <translation>12-saatlik zaman</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 Saatlik Zaman</translation>
+        <source>24-hour time</source>
+        <translation>24-saatlik zaman</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Zaman Ayarları</translation>
+        <source>Time settings</source>
+        <translation>Zaman ayarları</translation>
     </message>
 </context>
 <context>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Ağ ayarları</translation>
+        <translation>Ay ayarları</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>%1 ve azalıyor, %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 Şarj oldu</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>%1 ve doluyor, tam dolmaya %2 dakika kaldı</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>%1 Şarj oluyor...</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Şarj edildi</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Kapasite %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>%1 Şarj Oluyor</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Kapat</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Yeniden başlat</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Güç ayarları</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Yeniden başlat</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -291,15 +299,15 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Sessiz</translation>
+        <translation>Sesi kapat</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Ses Ayarları</translation>
+        <source>Sound settings</source>
+        <translation>Ses ayarları</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Mevcut Ses Düzeyi %1</translation>
+        <source>Volume %1</source>
+        <translation>Ses %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Ağ Yok</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Kablosuz Bağlantı: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Bağlı ancak İnternet erişimi yok</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Kablosuz bağlantı: %1</translation>
     </message>
 </context>
 <context>

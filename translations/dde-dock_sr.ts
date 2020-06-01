@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Додатак %1 није компатибилан са системом.</translation>
+        <translation>Додатак %1 није усаглашен са системом.</translation>
     </message>
 </context>
 <context>
@@ -20,15 +20,15 @@
         <translation>Датум и сат</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12-часовно време</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24-часовно време</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Подешавање времена</translation>
     </message>
 </context>
@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Испразни</translation>
+        <translation>Обриши</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>Отвори</translation>
+        <translation>Покрени</translation>
     </message>
     <message>
         <source>Unmount all</source>
@@ -96,7 +96,7 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Улицкан режим</translation>
+        <translation>Модеран режим</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -195,15 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Капацитет %1, %2 мин преостало</translation>
+        <translation>Ниво %1, %2 мин преостало</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Капацитет %1, %2 ч %3 мин преостало</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Напуњено %1</translation>
+        <translation>Ниво %1, %2 ч %3 мин преостало</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -214,11 +210,23 @@
         <translation>Пуни се %1, %2 ч %3 мин преостало</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Пуни се %1 ....</translation>
+        <source>Charged</source>
+        <translation>Напуњено</translation>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation>Ниво %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Пуни се %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -226,7 +234,7 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Прикажи радну површину</translation>
+        <translation>Прикажи Радну Површину</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Искључи</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Поново покрени</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Управљање напајањем</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Поново покрени</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Ућуткај</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Подешавање звука</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Јачина звука %1</translation>
+        <source>Volume %1</source>
+        <translation>Јачина %1</translation>
     </message>
 </context>
 <context>
@@ -328,7 +336,7 @@
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>Отвори</translation>
+        <translation>Покрени</translation>
     </message>
     <message>
         <source>Empty</source>
@@ -360,12 +368,12 @@
         <translation>Нема мреже</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Бежична веза: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Повезани сте, али нема интернета</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Бежична веза: %1</translation>
     </message>
 </context>
 <context>

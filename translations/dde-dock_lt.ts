@@ -20,15 +20,15 @@
         <translation>Data ir laikas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 valandų laikas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 valandų laikas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Laiko nustatymai</translation>
     </message>
 </context>
@@ -202,10 +202,6 @@
         <translation>Talpa %1, liko %2 val. %3 min.</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Įkrauta %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Įkraunama %1, iki pilnos liko %2 min.</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>Įkraunama %1, iki pilnos liko %2 val. %3 min.</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Įkraunama %1....</translation>
+        <source>Charged</source>
+        <translation>Įkrauta</translation>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Įkraunama %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>Išjungti</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Paleisti iš naujo</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Pristabdyti</translation>
     </message>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Energijos nustatymai</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Paleisti iš naujo</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Nutildyti</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Garso nustatymai</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Esamas garsis %1</translation>
+        <source>Volume %1</source>
+        <translation>Garsis %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Nėra tinklo</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Belaidis ryšys: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Prisijungta, bet nėra prieigos prie interneto</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Belaidis ryšys: %1</translation>
     </message>
 </context>
 <context>

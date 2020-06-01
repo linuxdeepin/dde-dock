@@ -20,16 +20,16 @@
         <translation>Dátum és idő</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 órás idő</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 órás idő</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Idő beállítás</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -55,7 +55,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Mégse</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -202,10 +202,6 @@
         <translation>Akkukapacitás %1, %2 óra %3 perc van még hátra</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Töltve %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Töltés %1, %2 perc van a feltöltés befejezéséig</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Töltés %1, %2 óra %3 perc van a feltöltés befejezéséig</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
+        <translation>Feltöltve</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Feltöltve</translation>
+        <source>Charging %1</source>
+        <translation>Töltés %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Leállítás</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Újraindítás </translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Energiagazdálkodási beállítások</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Újraindítás</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Némítás</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Hangeszköz beállítások</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Jelenlegi hangerő %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Nincs hálózat</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Vezeték nélküli kapcsolat: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Csatlakozva helyi hálózathoz</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

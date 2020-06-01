@@ -20,15 +20,15 @@
         <translation>Fecha y hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>Formato de 12 horas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>Formato de 24 horas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Ajustes de fecha y hora</translation>
     </message>
 </context>
@@ -63,7 +63,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Esta acción no puede ser restaurada</translation>
+        <translation>Esta acción no se puede deshacer</translation>
     </message>
 </context>
 <context>
@@ -169,7 +169,7 @@
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
-        <translation>Redes</translation>
+        <translation>Red</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Capacidad %1, %2 h %3 min restante</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Cargado %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Cargando %1, %2 min para completarse</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Cargando %1, %2 h %3 min para completarse</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Cargando %1…</translation>
+        <source>Charged</source>
+        <translation>Cargada</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Cargado</translation>
+        <source>Capacity %1</source>
+        <translation>Capacidad %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Cargando %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Apagar</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Ajustes de energía</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reiniciar</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Silenciar</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Ajustes audio</translation>
+        <source>Sound settings</source>
+        <translation>Ajustes de sonido</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volumen actual %1</translation>
+        <source>Volume %1</source>
+        <translation>Volumen %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Sin red</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Conexión inalámbrica: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Conectado pero sin acceso a internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Conexión inalámbrica: %1</translation>
     </message>
 </context>
 <context>

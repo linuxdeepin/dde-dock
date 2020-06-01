@@ -20,16 +20,16 @@
         <translation>Дата и час</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 часово време</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 часово време</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Настройки на времето</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Капацитет %1, остават %2 ч. % 3 мин. </translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Заредено %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Зареждане на %1, %2 мин. до пълно зареждане</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Зареждане на %1, %2 ч. %3 мин. до пълно зареждане</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
+        <translation>Зареден</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Зареден</translation>
+        <source>Charging %1</source>
+        <translation>Зареждане %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Изключване</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Рестартиране</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Настройки на захранването</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Рестартиране</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Заглушаване</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Настройки на звука</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Текущо ниво на звука %1 </translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Няма мрежа</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Безжична връзка: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Свързан но няма Интернет връзка</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

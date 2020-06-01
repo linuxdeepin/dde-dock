@@ -20,16 +20,16 @@
         <translation>Datumtid</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 timmars tid</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 timmars tid</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Tidsinställningar</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -132,7 +132,7 @@
     </message>
     <message>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation>Läge</translation>
     </message>
     <message>
         <source>Location</source>
@@ -151,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Startare</translation>
+        <translation>Launcher</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Kapacitet %1, %2 hr %3 min återstår</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Laddad %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Laddar %1, %2 min tills fulladdad</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>Laddar %1, %2 hr %3 min tills fulladdad</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Laddar %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>Stäng av</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Starta om</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Vänteläge</translation>
     </message>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Ströminställningar</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Starta om</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Tysta</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Ljudinställningar</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Aktuell volym %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Inga nätverk</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Trådlös anslutning: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Uppkopplad men ingen internet åtkomst</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -20,16 +20,16 @@
         <translation>Datë dhe kohë</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Format Kohe 12 Orësh</translation>
+        <source>12-hour time</source>
+        <translation>orë 12-orëshe</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Format Kohe 24 Orësh</translation>
+        <source>24-hour time</source>
+        <translation>orë 24-orëshe</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Rregullime Kohe</translation>
+        <source>Time settings</source>
+        <translation>Rregullime kohe</translation>
     </message>
 </context>
 <context>
@@ -202,23 +202,31 @@
         <translation>Kapacitet %1, edhe %2 hr %3 min</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">E ngarkuar %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Po ngarkohet %1, edhe %2 min deri sa të jetë plot</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Po ngarkohet %1, edhe %2 hr % e 3min deri sa të jetë plot</translation>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation>Po ngarkohet %1 …</translation>
+        <translation>Po ngarkohet %1, edhe %2 hr e %3 min deri sa të jetë plot</translation>
     </message>
     <message>
         <source>Charged</source>
+        <translation>E ngarkuar</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Kapacitet %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Po ngarkohet %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>Fike</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Rinise</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Pezulloje</translation>
     </message>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Rregullime energjie</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Rinisu</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -291,15 +299,15 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Hiqi zërin</translation>
+        <translation>Pa zë</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Rregullime Audio</translation>
+        <source>Sound settings</source>
+        <translation>Rregullime zëri</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volumi i Tanishëm %1</translation>
+        <source>Volume %1</source>
+        <translation>Volumi %1</translation>
     </message>
 </context>
 <context>
@@ -332,7 +340,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Zbraze</translation>
+        <translation>E zbrazët</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>S’ka Rrjet</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Lidhje Pa Fill: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>I lidhur, por pa hyrje Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Lidhje pa fill: %1</translation>
     </message>
 </context>
 <context>

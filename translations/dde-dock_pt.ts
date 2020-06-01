@@ -20,16 +20,16 @@
         <translation>Data hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Horário de 12 Horas</translation>
+        <source>12-hour time</source>
+        <translation>12 horas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Horário de 24 Horas</translation>
+        <source>24-hour time</source>
+        <translation>24 horas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Definições Horárias</translation>
+        <source>Time settings</source>
+        <translation>Definições horárias</translation>
     </message>
 </context>
 <context>
@@ -104,11 +104,11 @@
     </message>
     <message>
         <source>Top</source>
-        <translation>Topo</translation>
+        <translation>Superior</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Fundo</translation>
+        <translation>Inferior</translation>
     </message>
     <message>
         <source>Left</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Manter Visível</translation>
+        <translation>Manter visível</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
@@ -128,7 +128,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Ocultar Inteligente</translation>
+        <translation>Ocultar inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -202,10 +202,6 @@
         <translation>Capacidade %1, %2 hr %3 min restantes</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Carregado %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>A carregar %1, %2 min até ficar carregada</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>A carregar %1, %2 hr %3 min até ficar carregada</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>A carregar %1 ....</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Carregado</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Capacidade %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>A carregar %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Encerrar</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Definições de energia</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reiniciar</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Silenciar</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Definições de som</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volume atual %1</translation>
+        <source>Volume %1</source>
+        <translation>Volume %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Sem Rede</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Ligação sem fios: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Ligado mas sem acesso à Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Ligação sem fios: %1</translation>
     </message>
 </context>
 <context>

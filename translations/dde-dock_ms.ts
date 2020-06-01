@@ -20,16 +20,16 @@
         <translation>Tarikhwaktu</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Waktu 12 Jam</translation>
+        <source>12-hour time</source>
+        <translation>Waktu 12-jam</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Waktu 24 Jam</translation>
+        <source>24-hour time</source>
+        <translation>Waktu 24-jam</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Tetapan Waktu</translation>
+        <source>Time settings</source>
+        <translation>Tetapan waktu</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Kapasiti %1, %2 j %3 min berbaki</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 dicaskan</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Mengecas %1, %2 min sehingga penuh</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Mengecas %1, %2 j %3 min sehingga penuh</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Mengecas %1 ....</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Dicas</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Mengecas %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Matikan</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Mula semula</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Tetapan kuasa</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>But semula</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Senyap</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Tetapan Audio</translation>
+        <source>Sound settings</source>
+        <translation>Tetapan bunyi</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volum Semasa %1</translation>
+        <source>Volume %1</source>
+        <translation>Volum %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Tiada Rangkaian</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Sambungan Tanpa Wayar: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Bersambung tetapi tiada capaian Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Sambungan tanpa wayar: %1</translation>
     </message>
 </context>
 <context>

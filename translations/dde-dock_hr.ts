@@ -20,15 +20,15 @@
         <translation>Datum vrijeme</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 satno vrijeme</translation>
+        <source>12-hour time</source>
+        <translation>12-satno vrijeme</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 satno vrijeme</translation>
+        <source>24-hour time</source>
+        <translation>24-satno vrijeme</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Postavke vremena</translation>
     </message>
 </context>
@@ -202,10 +202,6 @@
         <translation>Kapacitet %1, %2 hr %3 min preostalo</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Napunjeno %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Punim %1, %2 min dok ne bude potpuno pun</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Punim %1, %2 hr %3 min dok ne bude potpuno pun</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
+        <translation>Napunjeno</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Kapacitet %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Punjenje %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Napunjeno</translation>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Isključi</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Ponovno pokreni</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Energetske postavke</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Ponovno podigni sustav</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Utišaj</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Zvučne postavke</translation>
+        <source>Sound settings</source>
+        <translation>Postavke zvuka</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Trenutna glasnoća %1</translation>
+        <source>Volume %1</source>
+        <translation>Glasnoća %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Bez mreže</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Bežična veza: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Spojen ali nema pristupa internetu</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bežična veza: %1</translation>
     </message>
 </context>
 <context>

@@ -20,15 +20,15 @@
         <translation>Data e Hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>Formato de 12 Horas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>Formato de 24 Horas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Configurações de Data e Hora</translation>
     </message>
 </context>
@@ -36,15 +36,15 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Ativar Rede</translation>
+        <translation>Ativar rede</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Desativar Rede</translation>
+        <translation>Desativar rede</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Configurações de Rede</translation>
+        <translation>Configurações de rede</translation>
     </message>
 </context>
 <context>
@@ -96,11 +96,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Fashion</translation>
+        <translation>Modo Fashion</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Eficiente</translation>
+        <translation>Modo Eficiente</translation>
     </message>
     <message>
         <source>Top</source>
@@ -202,10 +202,6 @@
         <translation>%1 Carregado - %2h%3 restantes</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 Carregado</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Carregando %1 - %2m até completar</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Carregando %1 - %2h%3 até completar</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Carregando %1...</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Carregado</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>%1 Carregado</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Carregando %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,15 +245,11 @@
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Sessão</translation>
+        <translation>Energia</translation>
     </message>
     <message>
         <source>Shut down</source>
         <translation>Desligar</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -261,7 +265,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Sair</translation>
+        <translation>Encerrar sessão</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Configurações de Energia</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reiniciar</translation>
     </message>
 </context>
 <context>
@@ -294,11 +302,11 @@
         <translation>Sem Áudio</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Configurações de Áudio</translation>
+        <source>Sound settings</source>
+        <translation>Configurações de Som</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
+        <source>Volume %1</source>
         <translation>Volume %1</translation>
     </message>
 </context>
@@ -360,12 +368,12 @@
         <translation>Sem Rede</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Conexão Wi-Fi: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Conectado, sem Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Conexão Wi-Fi: %1</translation>
     </message>
 </context>
 <context>

@@ -20,15 +20,15 @@
         <translation>Datum/Zeit</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12-Stunden-Zeit</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24-Stunden-Zeit</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Zeiteinstellungen</translation>
     </message>
 </context>
@@ -187,7 +187,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Ein/Aus</translation>
+        <translation>Energie</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -202,10 +202,6 @@
         <translation>Kapazität %1, %2 Std. %3 Min. verbleibend</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 aufgeladen</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>%1 wird aufgeladen, %2 Min. bis vollständig geladen</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>%1 wird aufgeladen, %2 Std. %3 Min. bis vollständig geladen</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>%1 wird aufgeladen ....</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Aufgeladen</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Kapazität %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>%1 wird aufgeladen</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -242,10 +250,6 @@
     <message>
         <source>Shut down</source>
         <translation>Herunterfahren</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Neu starten</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +275,10 @@
         <source>Power settings</source>
         <translation>Energieeinstellungen</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Neu starten</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -294,12 +302,12 @@
         <translation>Stummschalten</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Audioeinstellungen</translation>
+        <source>Sound settings</source>
+        <translation>Toneinstellungen</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Aktuelle Lautstärke %1</translation>
+        <source>Volume %1</source>
+        <translation>Lautstärke: %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Kein Netzwerk</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Drahtlosverbindung: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Verbunden, aber kein Internetzugang</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Drahtlosverbindung: %1</translation>
     </message>
 </context>
 <context>

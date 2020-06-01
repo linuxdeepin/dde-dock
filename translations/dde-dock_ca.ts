@@ -20,16 +20,16 @@
         <translation>Dia i hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 hores</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 hores</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Configuració del dia i l&apos;hora</translation>
+        <source>Time settings</source>
+        <translation>Configuració de l&apos;hora</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Capacitat: %1, %2 h %3 min restants</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Càrrega: %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Es carrega %1, %2 min per completar-la.</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Es carrega %1...</translation>
+        <source>Charged</source>
+        <translation>Carregada</translation>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation>Capacitat %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Carregant: %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>Atura&apos;t</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Reinicia</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Suspèn</translation>
     </message>
@@ -261,7 +265,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Surt de la sessió</translation>
+        <translation>Tanca la sessió</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Configuració de l&apos;energia</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reinicia</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Silencia</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Configuració de l&apos;àudio</translation>
+        <source>Sound settings</source>
+        <translation>Configuració del so</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volum actual: %1</translation>
+        <source>Volume %1</source>
+        <translation>Volum: %1</translation>
     </message>
 </context>
 <context>
@@ -332,7 +340,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Buida</translation>
+        <translation>Buit</translation>
     </message>
 </context>
 <context>
@@ -360,19 +368,19 @@
         <translation>Sense xarxa</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Connexió sense fil: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connectat però sense accés a Internet</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Connexió sense fil: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Xarxa sense fils</translation>
+        <translation>Xarxa sense fil</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

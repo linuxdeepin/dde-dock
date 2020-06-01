@@ -20,16 +20,16 @@
         <translation>DatumTijd</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12-uurs weergave</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24-uurs weergave</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Tijdinstellingen</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -158,7 +158,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Multitasking Beeld</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -202,10 +202,6 @@
         <translation>Capaciteit %1, %2 hr %3 min resterend</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 Opgeladen</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Opladen %1, %2 min tot vol</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>Opladen %1, %2 hr %3 min tot vol</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
+        <translation>Opgeladen</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Charging %1</source>
+        <translation>Laden %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,12 +252,8 @@
         <translation>Afsluiten</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Herstarten</translation>
-    </message>
-    <message>
         <source>Suspend</source>
-        <translation>Onderbreken</translation>
+        <translation>Pauzestand</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Energie-instellingen</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Herstarten</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Dempen</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Geluidsinstellingen</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Huidige Volume %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -332,7 +340,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Legen</translation>
+        <translation>Leeg</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Geen netwerk</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Draadloze Verbinding: %1</translation>
+        <source>Connected but no Internet access</source>
+        <translation>Verbonden maar geen internettoegang</translation>
     </message>
     <message>
-        <source>Connected but no Internet access</source>
-        <translation>Verbonden maar geen internet verbinding</translation>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

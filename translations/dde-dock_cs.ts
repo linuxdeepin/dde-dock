@@ -20,15 +20,15 @@
         <translation>Datum a čas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 hodinový čas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 hodinový čas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Nastavení času</translation>
     </message>
 </context>
@@ -202,10 +202,6 @@
         <translation>Stav %1, %2 h %3 min zbývá</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Nabito %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Nabíjení %1, %2 min do úplného nabití</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Nabíjení %1, %2 h %3 min do úplného nabití</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Nabíjení %1…</translation>
-    </message>
-    <message>
         <source>Charged</source>
         <translation>Nabito</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Kapacita %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Nabíjení: %1</translation>
+    </message>
+    <message>
+        <source>Capacity 1%, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -241,11 +249,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Vypnout</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Restartovat</translation>
+        <translation>Vypínání</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -261,7 +265,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Odhlásit se</translation>
+        <translation>Odhlašování se</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Nastavení správy napájení</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Restartovat</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Ztlumit</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Nastavení zvuku</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Stávající hlasitost %1</translation>
+        <source>Volume %1</source>
+        <translation>Hlasitost %1</translation>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Žádná síť</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Bezdrátové připojení: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Připojeno, ale bez přístupu k Internetu</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bezdrátové připojení: %1</translation>
     </message>
 </context>
 <context>
