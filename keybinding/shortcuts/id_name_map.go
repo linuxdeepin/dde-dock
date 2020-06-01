@@ -155,19 +155,58 @@ func getWMIdNameMap() map[string]string {
 
 func getMediaIdNameMap() map[string]string {
 	var idNameMap = map[string]string{
-		"calculator":  "Calculator",
-		"eject":       "Eject",
-		"email":       "Email client",
-		"www":         "Web broswer",
-		"media":       "Media player",
-		"play":        "Play/Pause",
-		"pause":       "Pause",
-		"stop":        "Stop",
-		"previous":    "Previous",
-		"next":        "Next",
-		"volume-mute": "Mute",
-		"volume-down": "Volume down",
-		"volume-up":   "Volume up",
+		"messenger":           "Messenger",         // XF86Messenger
+		"save":                "Save",              // XF86Save
+		"new":                 "New",               // XF86New
+		"wake-up":             "WakeUp",            // XF86WakeUp
+		"audio-rewind":        "AudioRewind",       // XF86AudioRewind
+		"audio-mute":          "AudioMute",         // XF86AudioMute
+		"mon-brightness-up":   "MonBrightnessUp",   // XF86MonBrightnessUp
+		"wlan":                "WLAN",              // XF86WLAN
+		"audio-media":         "AudioMedia",        // XF86AudioMedia
+		"reply":               "Reply",             // XF86Reply
+		"favorites":           "Favorites",         // XF86Favorites
+		"audio-play":          "AudioPlay",         // XF86AudioPlay
+		"audio-mic-mute":      "AudioMicMute",      // XF86AudioMicMute
+		"audio-pause":         "AudioPause",        // XF86AudioPause
+		"audio-stop":          "AudioStop",         // XF86AudioStop
+		"power-off":           "PowerOff",          // XF86PowerOff
+		"documents":           "Documents",         // XF86Documents
+		"game":                "Game",              // XF86Game
+		"search":              "Search",            // XF86Search
+		"audio-record":        "AudioRecord",       // XF86AudioRecord
+		"display":             "Display",           // XF86Display
+		"reload":              "Reload",            // XF86Reload
+		"explorer":            "Explorer",          // XF86Explorer
+		"calculator":          "Calculator",        // XF86Calculator
+		"calendar":            "Calendar",          // XF86Calendar
+		"forward":             "Forward",           // XF86Forward
+		"cut":                 "Cut",               // XF86Cut
+		"mon-brightness-down": "MonBrightnessDown", // XF86MonBrightnessDown
+		"copy":                "Copy",              // XF86Copy
+		"tools":               "Tools",             // XF86Tools
+		"audio-raise-volume":  "AudioRaiseVolume",  // XF86AudioRaiseVolume
+		"close":               "Close",             // XF86Close
+		"www":                 "WWW",               // XF86WWW
+		"home-page":           "HomePage",          // XF86HomePage
+		"sleep":               "Sleep",             // XF86Sleep
+		"audio-lower-volume":  "AudioLowerVolume",  // XF86AudioLowerVolume
+		"audio-prev":          "AudioPrev",         // XF86AudioPrev
+		"audio-next":          "AudioNext",         // XF86AudioNext
+		"paste":               "Paste",             // XF86Paste
+		"open":                "Open",              // XF86Open
+		"send":                "Send",              // XF86Send
+		"my-computer":         "MyComputer",        // XF86MyComputer
+		"mail":                "Mail",              // XF86Mail
+		"adjust-brightness":   "BrightnessAdjust",  // XF86BrightnessAdjust
+		"log-off":             "LogOff",            // XF86LogOff
+		"pictures":            "Pictures",          // XF86Pictures
+		"terminal":            "Terminal",          // XF86Terminal
+		"video":               "Video",             // XF86Video
+		"music":               "Music",             // XF86Music
+		"app-left":            "ApplicationLeft",   // XF86ApplicationLeft
+		"app-right":           "ApplicationRight",  // XF86ApplicationRight
+		"meeting":             "Meeting",           // XF86Meeting
 	}
 	return idNameMap
 }

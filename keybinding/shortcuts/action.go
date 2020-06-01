@@ -30,6 +30,8 @@ const (
 	ActionTypeShowCapsLockOSD
 	ActionTypeSystemShutdown
 	ActionTypeSystemSuspend
+	ActionTypeSystemLogOff
+	ActionTypeSystemAway
 
 	// controllers
 	ActionTypeAudioCtrl
@@ -103,6 +105,7 @@ const (
 	MonitorBrightnessUp
 	MonitorBrightnessDown
 	DisplayModeSwitch
+	AdjustBrightnessSwitch
 
 	// keyboard backlight ctrl
 	KbdLightToggle

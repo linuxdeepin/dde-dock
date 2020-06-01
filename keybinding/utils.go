@@ -100,6 +100,16 @@ func systemSuspend() {
 	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestSuspend", 0)
 }
 
+func systemLogout() {
+	sessionDBus, _ := dbus.SessionBus()
+	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLogout", 0)
+}
+
+func systemAway() {
+	sessionDBus, _ := dbus.SessionBus()
+	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLock", 0)
+}
+
 func queryCommandByMime(mime string) string {
 	app := gio.AppInfoGetDefaultForType(mime, false)
 	if app == nil {
