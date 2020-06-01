@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             zhaolong <zhaolong@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +57,7 @@ public:
     inline int narrowTimeout() const { return 100; }
     inline bool autoHide() const { return m_autoHide; }
     const QRect primaryRect() const;
-    const QRect currentRect() const;
+    const QRect currentRect();
     const QList<QRect> monitorsRect() const;
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
     inline const QRect currentRawRect() const { return m_currentRawRect; }
@@ -66,11 +67,14 @@ public:
     const int dockMargin() const;
 
     const QSize panelSize() const;
-    const QRect windowRect(const Position position, const bool hide = false) const;
+    const QRect windowRect(const Position position, const bool hide = false);
     qreal dockRatio() const;
 
     void showDockSettingsMenu();
     void updateFrontendGeometry();
+
+    void setDockScreen(const QString &scrName);
+    QString &currentDockScreen() { return m_currentScreen; }
     
     QSize m_mainWindowSize;
     DBusDock *m_dockInter;
@@ -137,7 +141,7 @@ private:
     HideState m_hideState;
     DisplayMode m_displayMode;
     QRect m_primaryRawRect;
-    mutable QRect m_currentRawRect;
+    QRect m_currentRawRect;
     QRect m_frontendRect;
 
     QMenu m_settingsMenu;
@@ -157,6 +161,9 @@ private:
     bool m_trashPluginShow;
 
     QMap<Monitor *, MonitorInter *> m_monitors;
+    bool m_isMouseMoveCause;
+    Monitor *m_mouseCauseDockScreen;
+    QString m_currentScreen;
 };
 
 #endif // DOCKSETTINGS_H
