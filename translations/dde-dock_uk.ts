@@ -20,16 +20,16 @@
         <translation>Дата, час</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 Годинний Час</translation>
+        <source>12-hour time</source>
+        <translation>12-годинний час</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 Годинний Час</translation>
+        <source>24-hour time</source>
+        <translation>24-годинний час</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Налаштування Часу</translation>
+        <source>Time settings</source>
+        <translation>Параметри часу</translation>
     </message>
 </context>
 <context>
@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Вилучити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Бездротове підключення</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Дротове підключення</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Вимкнути дротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Увімкнути дротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Вимкнути бездротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Увімкнути бездротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Вимкнути мережу</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Увімкнути мережу</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Налаштування Інтернет-мережі</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Пристрій вимкнено</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Бездротове з&apos;єднання: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Дротове з&apos;єднання %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Не підключено</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>З&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Вийнято інтернет-кабель</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>З&apos;єднано, але доступу до інтернету немає</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Мережа</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Провідна мережа</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Дротова мережа %1</translation>
     </message>
 </context>
 <context>
@@ -214,8 +289,8 @@
         <translation>Зарядка %1, %2 год %3 хв до повної</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <source>Charging %1 ...</source>
+        <translation>Заряджаємо %1 ...</translation>
     </message>
 </context>
 <context>
@@ -240,10 +315,6 @@
         <translation>Вимкнути</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Перезавантажити</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Призупинити</translation>
     </message>
@@ -257,7 +328,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Вийти</translation>
+        <translation>Вихід</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Параметри живлення</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Перезавантажити</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Вимкнути звук</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Налаштування аудіо</translation>
+        <source>Sound settings</source>
+        <translation>Параметри звуку</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Поточна гучність %1</translation>
+        <source>Volume %1</source>
+        <translation>Гучність %1</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Системний трей</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Невідомо</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Бездротове підключення: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Немає мережі</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Бездротове підключення: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>З&apos;єднано, але доступу до інтернету немає</translation>
     </message>
 </context>
 <context>

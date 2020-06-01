@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>蓝牙</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>关闭蓝牙</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>开启蓝牙</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>蓝牙设置</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>蓝牙</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -49,15 +20,15 @@
         <translation>时间</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12小时制</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24小时制</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>时间设置</translation>
     </message>
 </context>
@@ -198,11 +169,11 @@
     <name>NetworkItem</name>
     <message>
         <source>Wireless connection</source>
-        <translation>无线网络</translation>
+        <translation>无线连接</translation>
     </message>
     <message>
         <source>Wired connection</source>
-        <translation>有线网络</translation>
+        <translation>有线连接</translation>
     </message>
     <message>
         <source>Disable wired connection</source>
@@ -253,12 +224,12 @@
         <translation>正在连接</translation>
     </message>
     <message>
-        <source>Connected but no Internet access</source>
-        <translation>已连接网络但无法访问互联网</translation>
-    </message>
-    <message>
         <source>Network cable unplugged</source>
         <translation>未插入网线</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>已连接网络但无法访问互联网</translation>
     </message>
 </context>
 <context>
@@ -273,7 +244,7 @@
     </message>
     <message>
         <source>Wired Network %1</source>
-        <translation>有线网络%1</translation>
+        <translation>有线网络 %1</translation>
     </message>
 </context>
 <context>
@@ -291,7 +262,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>电源</translation>
+        <translation>电源管理</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -318,7 +289,7 @@
         <translation>正在充电%1，还需%2小时%3分钟</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation>电量%1...</translation>
     </message>
 </context>
@@ -337,15 +308,11 @@
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>电源</translation>
+        <translation>电源管理</translation>
     </message>
     <message>
         <source>Shut down</source>
         <translation>关机</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>重启</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -371,6 +338,10 @@
         <source>Power settings</source>
         <translation>电源设置</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>重启</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -394,12 +365,12 @@
         <translation>静音</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>音量设置</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>当前音量%1</translation>
+        <source>Volume %1</source>
+        <translation>当前音量 %1</translation>
     </message>
 </context>
 <context>
@@ -432,7 +403,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>清空</translation>
+        <translation>清空列表</translation>
     </message>
 </context>
 <context>
@@ -443,32 +414,6 @@
     </message>
 </context>
 <context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>未知</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>有线连接：%1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>无网络访问</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>无线连接：%1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>已连接网络但无法访问互联网</translation>
-    </message>
-</context>
-<context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
@@ -476,7 +421,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>无线网络%1</translation>
+        <translation>无线网络 %1</translation>
     </message>
 </context>
 </TS>

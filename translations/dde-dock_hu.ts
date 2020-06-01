@@ -20,16 +20,16 @@
         <translation>Dátum és idő</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 órás idő</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 órás idő</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Idő beállítás</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -55,7 +55,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Mégse</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Hálózat letiltása</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Hálózat engedélyezése</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Hálózati beállítások</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Eszköz letiltva</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Vezetékes kapcsolat: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Nincs csatlakozva</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Csatlakozás</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Hálózati kábel kihúzva</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Csatlakozva helyi hálózathoz</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Hálózat</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Vezetékes hálózat </translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Vezetékes hálózat %1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>Töltés %1, %2 óra %3 perc van a feltöltés befejezéséig</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>Leállítás</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Újraindítás </translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Felfüggesztés</translation>
     </message>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Energiagazdálkodási beállítások</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Újraindítás</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Némítás</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Hangeszköz beállítások</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Jelenlegi hangerő %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Rendszertálca</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Ismeretlen</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Vezetékes kapcsolat: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Nincs hálózat</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Vezeték nélküli kapcsolat: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Csatlakozva helyi hálózathoz</translation>
     </message>
 </context>
 <context>

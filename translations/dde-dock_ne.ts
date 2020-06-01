@@ -20,16 +20,16 @@
         <translation>मिति समय</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 घण्टाको समय</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 घण्टाको समय</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>समय सेटिंग्स</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -132,7 +132,7 @@
     </message>
     <message>
         <source>Mode</source>
-        <translation>शैली</translation>
+        <translation>मोड</translation>
     </message>
     <message>
         <source>Location</source>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>नेटवर्क निस्क्रिय </translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>नेटवर्क सुचारु गर्नुहोस</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>नेटवर्क सेटिंग्स</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>तारको जडान:% 1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>जोडिएको छैन</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>नेटवर्क</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>वायर्ड नेटवर्क</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>तारको जडान:% 1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>%1 मा चार्ज हुंदै, पुर्ण हुन %2 घण्टा %3 मिनट लाग्छ</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>बन्द गर्नुहोस्</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>फेरि शुरु गर्नु</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>निलम्बन गर्नुहोस्</translation>
     </message>
@@ -267,6 +338,10 @@
         <source>Power settings</source>
         <translation>पावर सेटिङहरू</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>रिबुट गर्नुहोस्</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -276,7 +351,7 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>एप्लिकेशन</translation>
+        <translation>Application</translation>
     </message>
 </context>
 <context>
@@ -290,19 +365,19 @@
         <translation>म्यूट गर्नुहोस्</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>अडियो सेटिंग्स</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>हालको भोल्युम% 1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation>ध्वनि</translation>
+        <translation>ध्वनि/आवाज</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>प्रणाली ट्रे</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>अज्ञात</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>तारको जडान:% 1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>नेटवर्क छैन</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>वायरलेस जडान:% 1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>

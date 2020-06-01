@@ -20,15 +20,15 @@
         <translation>Datum vrijeme</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 satno vrijeme</translation>
+        <source>12-hour time</source>
+        <translation>12-satno vrijeme</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 satno vrijeme</translation>
+        <source>24-hour time</source>
+        <translation>24-satno vrijeme</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Postavke vremena</translation>
     </message>
 </context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Bežično povezivanje</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Žično povezivanje</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Onemogući žično povezivanje</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Omogući žično povezivanje</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Onemogući bežično povezivaqnje</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Omogući bežično povezivanje</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Onemogući mrežu</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Omogući mrežu</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Mrežne postavke</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Uređaj je onemogućen</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bežična veza: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Žična  veza: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Nije spojeno</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Povezujem se</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Mrežni kabel je isključen</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Spojen ali nema pristupa internetu</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Mreža</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Žična mreža</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Žična mreža %1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>Punim %1, %2 hr %3 min dok ne bude potpuno pun</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>Isključi</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Ponovno pokreni</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Suspendiraj</translation>
     </message>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Energetske postavke</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Ponovno podigni sustav</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Utišaj</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Zvučne postavke</translation>
+        <source>Sound settings</source>
+        <translation>Postavke zvuka</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Trenutna glasnoća %1</translation>
+        <source>Volume %1</source>
+        <translation>Glasnoća %1</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Sustavski pladanj</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Nepoznato</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Žična  veza: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Bez mreže</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Bežična veza: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Spojen ali nema pristupa internetu</translation>
     </message>
 </context>
 <context>

@@ -20,16 +20,16 @@
         <translation>Tarih Saat</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 Saatlik Zaman</translation>
+        <source>12-hour time</source>
+        <translation>12-saatlik zaman</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 Saatlik Zaman</translation>
+        <source>24-hour time</source>
+        <translation>24-saatlik zaman</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Zaman Ayarları</translation>
+        <source>Time settings</source>
+        <translation>Zaman ayarları</translation>
     </message>
 </context>
 <context>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Ağ ayarları</translation>
+        <translation>Ay ayarları</translation>
     </message>
 </context>
 <context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Kablosuz bağlantı</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Kablolu bağlantı</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Kablolu bağlantıyı devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Kablolu bağlantıyı etkinleştir</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Kablosuz bağlantıyı devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Kablosuz bağlantıyı etkinleştir</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Ağı devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ağı etkinleştir</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Ay ayarları</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Aygıt devre dışı</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Kablosuz bağlantı: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Kablolu bağlantı: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Bağlı değil</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Bağlanıyor</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Ağ kablosu takılı değil</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Bağlı ancak İnternet erişimi yok</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Ağ</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kablolu Ağ</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Kablolu Ağ %1</translation>
     </message>
 </context>
 <context>
@@ -203,7 +278,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>%1 Şarj Oldu</translation>
+        <translation>%1 Şarj oldu</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -214,7 +289,7 @@
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>Kapat</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Yeniden başlat</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Askıya al</translation>
     </message>
@@ -267,6 +338,10 @@
         <source>Power settings</source>
         <translation>Güç ayarları</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Yeniden başlat</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -287,15 +362,15 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Sessiz</translation>
+        <translation>Sesi kapat</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Ses Ayarları</translation>
+        <source>Sound settings</source>
+        <translation>Ses ayarları</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Mevcut Ses Düzeyi %1</translation>
+        <source>Volume %1</source>
+        <translation>Ses %1</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Sistem Tepsisi</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Bilinmiyor</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kablolu bağlantı: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Ağ Yok</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Kablosuz Bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Bağlı ancak İnternet erişimi yok</translation>
     </message>
 </context>
 <context>

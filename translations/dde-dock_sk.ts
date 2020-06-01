@@ -20,15 +20,15 @@
         <translation>Dátum Čas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 hodinový čas</translation>
+        <source>12-hour time</source>
+        <translation>12-hodinový čas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 hodinový čas</translation>
+        <source>24-hour time</source>
+        <translation>24-hodinový čas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Nastavenia času</translation>
     </message>
 </context>
@@ -158,11 +158,78 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Multitaskingový pohľad</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Odopnúť z panela</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Bezdrôtové pripojenie</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Káblové pripojenie</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Vypnúť káblové pripojenie</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Zapnúť káblové pripojenie</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Vypnúť bezdrôtové pripojenie</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Zapnúť bezdrôtové pripojenie</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Zakázať sieť</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Povoliť sieť</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Nastavenia siete</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Zariadenie zakázané</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bezdrôtové pripojenie: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Káblové pripojenie: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Nepripojené</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Pripájanie</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Sieťový kábel odpojený</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Pripojené, ale bez prístupu na internet</translation>
     </message>
 </context>
 <context>
@@ -170,6 +237,14 @@
     <message>
         <source>Network</source>
         <translation>Sieť</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Drôtová sieť</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -195,11 +270,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjanie %1, zostávajú %2 min</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjanie %1, zostáva %2 hod %3 min</translation>
     </message>
     <message>
         <source>Charged %1</source>
@@ -207,14 +282,14 @@
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjanie %1, %2 min do plnej kapacity</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjanie %1, %2 hod %3 min do plnej kapacity</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -226,7 +301,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Odopnúť z panela</translation>
     </message>
 </context>
 <context>
@@ -238,10 +313,6 @@
     <message>
         <source>Shut down</source>
         <translation>Vypnúť</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Reštartovať</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -267,6 +338,10 @@
         <source>Power settings</source>
         <translation>Nastavenia napájania</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reštart</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -290,12 +365,12 @@
         <translation>Stlmiť</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Nastavenia zvuku</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Aktuálna hlasitosť %1</translation>
+        <source>Volume %1</source>
+        <translation>Hlasitosť %1</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Systémový panel</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Neznámy</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Káblové pripojenie: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Žiadna sieť</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Bezdrôtové pripojenie: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Pripojené, ale bez prístupu na internet</translation>
     </message>
 </context>
 <context>

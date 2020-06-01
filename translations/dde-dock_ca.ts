@@ -20,16 +20,16 @@
         <translation>Dia i hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 hores</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 hores</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Configuració del dia i l&apos;hora</translation>
+        <source>Time settings</source>
+        <translation>Configuració de l&apos;hora</translation>
     </message>
 </context>
 <context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Connexió sense fil</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Connexió amb fil</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Inhabilita la connexió amb fil</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Habilita la connexió amb fil</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Inhabilita la connexió sense fil</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Habilita la connexió sense fil</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Inhabilita la xarxa</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Habilita la xarxa</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Configuració de la xarxa</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Dispositiu inhabilitat</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Connexió sense fil: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Connexió amb fil: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>No connectat</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Es connecta</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>El cable de xarxa està desendollat.</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connectat però sense accés a Internet</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Xarxa</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Xarxa amb fil</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Xarxa amb fil: %1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>Atura&apos;t</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Reinicia</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Suspèn</translation>
     </message>
@@ -253,11 +324,11 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloqueja</translation>
+        <translation>Bloca</translation>
     </message>
     <message>
         <source>Log out</source>
-        <translation>Surt de la sessió</translation>
+        <translation>Tanca la sessió</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Configuració de l&apos;energia</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reinicia</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Silencia</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Configuració de l&apos;àudio</translation>
+        <source>Sound settings</source>
+        <translation>Configuració del so</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volum actual: %1</translation>
+        <source>Volume %1</source>
+        <translation>Volum: %1</translation>
     </message>
 </context>
 <context>
@@ -328,7 +403,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Buida</translation>
+        <translation>Buit</translation>
     </message>
 </context>
 <context>
@@ -339,36 +414,10 @@
     </message>
 </context>
 <context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Desconegut</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Connexió amb fil: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Sense xarxa</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Connexió sense fil: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connectat però sense accés a Internet</translation>
-    </message>
-</context>
-<context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Xarxa sense fils</translation>
+        <translation>Xarxa sense fil</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

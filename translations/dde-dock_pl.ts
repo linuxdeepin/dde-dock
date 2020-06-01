@@ -20,15 +20,15 @@
         <translation>Data i czas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Czas 12-godzinny</translation>
+        <source>12-hour time</source>
+        <translation>Czas 12 godziny</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Czas 24-godzinny</translation>
+        <source>24-hour time</source>
+        <translation>czas 24 godziny</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Ustawienia czasu</translation>
     </message>
 </context>
@@ -151,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Aktywator</translation>
+        <translation>Launcher</translation>
     </message>
 </context>
 <context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Połączenie bezprzewodowe</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Połączenie przewodowe</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Wyłącz połączenie przewodowe</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Włącz połączenie przewodowe</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Wyłącz połączenie bezprzewodowe</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Włącz połączenie bezprzewodowe</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Wyłącz sieć</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Włącz sieć</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Ustawienia sieci</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Urządzenie jest wyłączone</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Połączenie bezprzewodowe: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Połączenie przewodowe: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Brak połączenia</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Łączenie</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Kabel sieciowy jest odłączony</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Połączono, ale brak dostępu do Internetu</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Sieć</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Sieć przewodowa</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Sieć przewodowa %1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>Ładowanie %1, %2:%3 do końca</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>Wyłącz</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Uruchom ponownie</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Wstrzymaj</translation>
     </message>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Ustawienia zasilania</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Uruchom ponownie</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Wycisz</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Ustawienia dźwięku</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Obecna głośność %1</translation>
+        <source>Volume %1</source>
+        <translation>Głośność %1</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Obszar powiadamiania</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Nieznany</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Połączenie przewodowe: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Brak sieci</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Połączenie bezprzewodowe: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Połączono, ale brak dostępu do Internetu</translation>
     </message>
 </context>
 <context>

@@ -20,15 +20,15 @@
         <translation>Dato og klokkeslæt</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12-timers klokkeslæt</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24-timers klokkeslæt</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Tidsindstillinger</translation>
     </message>
 </context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Trådløs forbindelse</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Kablet forbindelse</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Deaktivér kablet forbindelse</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Aktivér kablet forbindelse</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Deaktivér trådløs forbindelse</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Aktivér trådløs forbindelse</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Deaktivér netværk</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Aktivér netværk</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Netværksindstillinger</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Enhed deaktiveret</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Trådløs forbindelse: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Kablet forbindelse: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Ikke tilsluttet</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Opretter forbindelse</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Netværkskablet er frakoblet</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Tilsluttet men ingen internetadgang</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Netværk</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kablet netværk</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Kablet netværk %1</translation>
     </message>
 </context>
 <context>
@@ -187,7 +262,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Session</translation>
+        <translation>Strøm</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -214,7 +289,7 @@
         <translation>Oplader %1, %2 timer %3 minutter til fuldt</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>Luk ned</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Genstart</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Hvile</translation>
     </message>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Strømindstillinger</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Genstart</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Lydløs</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Lydindstillinger</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Nuværende lydstyrke %1</translation>
+        <source>Volume %1</source>
+        <translation>Lydstyrke %1</translation>
     </message>
 </context>
 <context>
@@ -328,7 +403,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Tom</translation>
+        <translation>Tomt</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Systembakke</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Ukendt</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kablet forbindelse: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Intet netværk</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Trådløs forbindelse: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Tilsluttet men ingen internetadgang</translation>
     </message>
 </context>
 <context>

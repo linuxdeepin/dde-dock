@@ -91,7 +91,7 @@ const QString SoundItem::contextMenu() const
 
     QMap<QString, QVariant> settings;
     settings["itemId"] = SETTINGS;
-    settings["itemText"] = tr("Audio Settings");
+    settings["itemText"] = tr("Sound settings");
     settings["isActive"] = true;
     items.push_back(settings);
 
@@ -216,7 +216,7 @@ void SoundItem::refreshTips(const bool force)
         else
             value = QString::number(int(m_sinkInter->volume() * 100)) + '%';
     }
-    m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
+    m_tipsLabel->setText(QString(tr("Volume %1").arg(value)));
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)

@@ -20,16 +20,16 @@
         <translation>Ημερομηνία ώρα</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12ωρος Χρόνος</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24ώρος Χρόνος</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Ρυθμίσεις ώρας </translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Απενεργοποίηση δικτύου</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ενεργοποίηση δικτύου </translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Ρυθμίσεις δικτύου </translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Συσκευή Αποσυνδέθηκε</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Ενσύρματη Σύνδεση: %1 </translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Δεν Συνδέθηκε</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Σύνδεση</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Το καλώδιο δικτύου, αποσυνδέθηκε</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Συνδεδεμένο αλλά χωρίς πρόσβαση στο διαδίκτυο</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Δίκτυο</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Ενσύρματο Δίκτυο</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>Φόρτιση %1, 2% ώρες και %3 λεπτά μέχρι να γεμίσει</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,16 +315,12 @@
         <translation>Τερματισμός λειτουργίας</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Επανεκκίνηση</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Αναστολή</translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Αδράνεια</translation>
+        <translation>Αδρανοποίηση</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>Ρυθμίσεις ενέργειας</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Επανεκκίνηση</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Σίγαση</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Ρυθμίσεις Ήχου</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Τρέχουσα Ένταση %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Tray Συστήματος</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Άγνωστο</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Ενσύρματη Σύνδεση: %1 </translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Χωρίς δίκτυο  </translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Ασύρματη Σύνδεση: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Συνδεδεμένο αλλά χωρίς πρόσβαση στο διαδίκτυο</translation>
     </message>
 </context>
 <context>

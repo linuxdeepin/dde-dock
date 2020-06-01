@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Додатак %1 није компатибилан са системом.</translation>
+        <translation>Додатак %1 није усаглашен са системом.</translation>
     </message>
 </context>
 <context>
@@ -20,16 +20,16 @@
         <translation>Датум и сат</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12-часовно време</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24-часовно време</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Поставке времена</translation>
+        <source>Time settings</source>
+        <translation>Подешавање времена</translation>
     </message>
 </context>
 <context>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Поставке мреже</translation>
+        <translation>Подешавање мреже</translation>
     </message>
 </context>
 <context>
@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Испразни</translation>
+        <translation>Обриши</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>Отвори</translation>
+        <translation>Покрени</translation>
     </message>
     <message>
         <source>Unmount all</source>
@@ -96,7 +96,7 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Улицкан режим</translation>
+        <translation>Модеран режим</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Бежична веза</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Жичана веза</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Искључи жичану везу</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Укључи жичану везу</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Искључи бежичану везу</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Укључи бежичану везу</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Искључи мрежу</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Укључи мрежу</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Подешавање мреже</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Уређај је онемогућен</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Бежична веза: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Жичана веза: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Нисте повезани</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Повезивање</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Мрежни кабл је ископчан</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Повезани сте, али нема интернета</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Мрежа</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Жичана мрежа</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Жичана мрежа %1</translation>
     </message>
 </context>
 <context>
@@ -191,15 +266,15 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Поставке напајања</translation>
+        <translation>Управљање напајањем</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Капацитет %1, %2 мин преостало</translation>
+        <translation>Ниво %1, %2 мин преостало</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Капацитет %1, %2 ч %3 мин преостало</translation>
+        <translation>Ниво %1, %2 ч %3 мин преостало</translation>
     </message>
     <message>
         <source>Charged %1</source>
@@ -214,7 +289,7 @@
         <translation>Пуни се %1, %2 ч %3 мин преостало</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -222,7 +297,7 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Прикажи радну површину</translation>
+        <translation>Прикажи Радну Површину</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -238,10 +313,6 @@
     <message>
         <source>Shut down</source>
         <translation>Искључи</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Поново покрени</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -265,7 +336,11 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Поставке напајања</translation>
+        <translation>Управљање напајањем</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Поново покрени</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>Ућуткај</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Поставке звука</translation>
+        <source>Sound settings</source>
+        <translation>Подешавање звука</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Јачина звука %1</translation>
+        <source>Volume %1</source>
+        <translation>Јачина %1</translation>
     </message>
 </context>
 <context>
@@ -324,7 +399,7 @@
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>Отвори</translation>
+        <translation>Покрени</translation>
     </message>
     <message>
         <source>Empty</source>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Системска касета</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Непознато</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Жичана веза: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Нема мреже</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Бежична веза: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Повезани сте, али нема интернета</translation>
     </message>
 </context>
 <context>

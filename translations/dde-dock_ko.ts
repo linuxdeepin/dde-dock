@@ -20,15 +20,15 @@
         <translation>날짜시간</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 시간</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 시간</translation>
+        <source>24-hour time</source>
+        <translation>24시간</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>시간 설정</translation>
     </message>
 </context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>무선 연결</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>유선 연결</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>유선 연결 사용안함</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>유선 연결 사용가능</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>무선 연결 사용안함</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>무선 연결 사용가능</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>네트워크 사용안함</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>네트워크 사용</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>네트워크 설정</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>디바이스 사용해제됨</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>무선 연결: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>유선 연결: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>연결되지 않음</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>연결 중</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>네트워크 케이블 제거됨</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>연결됨, 인터넷 없음</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>네트워크</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>유선 네트워크</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>유선 네트워크 %1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>%1 충전중, 완전 충전까지 %2시간 %3분 남음</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,12 +315,8 @@
         <translation>종료</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>재시작</translation>
-    </message>
-    <message>
         <source>Suspend</source>
-        <translation>일시 중지</translation>
+        <translation>절전 모드</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -253,7 +324,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>잠그기</translation>
+        <translation>잠금</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -267,6 +338,10 @@
         <source>Power settings</source>
         <translation>전원 설정</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>재부팅</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -276,7 +351,7 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>응용 프로그램</translation>
+        <translation>응용프로그램</translation>
     </message>
 </context>
 <context>
@@ -290,19 +365,19 @@
         <translation>음소거</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>오디오 설정</translation>
+        <source>Sound settings</source>
+        <translation>사운드 설정</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>현재 볼륨 %1</translation>
+        <source>Volume %1</source>
+        <translation>음량 %1%</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation>소리</translation>
+        <translation>사운드</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>시스템 트레이</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>알 수 없음</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>유선 연결: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>네트워크 없음</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>무선 연결: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>연결됨, 인터넷 없음</translation>
     </message>
 </context>
 <context>

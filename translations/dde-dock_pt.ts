@@ -17,19 +17,19 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Data e hora</translation>
+        <translation>Data hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Horário de 12 Horas</translation>
+        <source>12-hour time</source>
+        <translation>12 horas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Horário de 24 Horas</translation>
+        <source>24-hour time</source>
+        <translation>24 horas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Definições Horárias</translation>
+        <source>Time settings</source>
+        <translation>Definições horárias</translation>
     </message>
 </context>
 <context>
@@ -104,11 +104,11 @@
     </message>
     <message>
         <source>Top</source>
-        <translation>Topo</translation>
+        <translation>Superior</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Fundo</translation>
+        <translation>Inferior</translation>
     </message>
     <message>
         <source>Left</source>
@@ -120,15 +120,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Manter Visível</translation>
+        <translation>Manter visível</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Manter Oculta</translation>
+        <translation>Manter oculta</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Ocultar Inteligente</translation>
+        <translation>Ocultar inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -158,11 +158,78 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vista de Tarefas</translation>
+        <translation>Vista de tarefas</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da dock</translation>
+        <translation>Remover da doca</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Ligação sem fios</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Ligação por cabo</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Desativar ligação por cabo</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Ativar ligação por cabo</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Desativar ligação sem fios</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Ativar ligação sem fios</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Desativar rede</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ativar rede</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Definições de rede</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Dispositivo desativado</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Ligação sem fios: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Ligação por cabo: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Desligado</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>A ligar</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Cabo de rede desligado</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Ligado mas sem acesso à Internet</translation>
     </message>
 </context>
 <context>
@@ -170,6 +237,14 @@
     <message>
         <source>Network</source>
         <translation>Rede</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rede por cabo</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Rede por cabo %1</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>A carregar %1, %2 hr %3 min até ficar carregada</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -222,11 +297,11 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Mostrar Ambiente de trabalho</translation>
+        <translation>Mostrar ambiente de trabalho</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da dock</translation>
+        <translation>Remover da doca</translation>
     </message>
 </context>
 <context>
@@ -238,10 +313,6 @@
     <message>
         <source>Shut down</source>
         <translation>Encerrar</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -267,6 +338,10 @@
         <source>Power settings</source>
         <translation>Definições de energia</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reiniciar</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -290,12 +365,12 @@
         <translation>Silenciar</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Definições de som</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volume atual %1</translation>
+        <source>Volume %1</source>
+        <translation>Volume %1</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Área de notificação do sistema</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Desconhecido</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Ligação por cabo: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Sem Rede</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Ligação sem fios: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Ligado, mas sem acesso à Internet</translation>
     </message>
 </context>
 <context>

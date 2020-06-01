@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Přídavný modul %1 není slučitelný se systémem.</translation>
+        <translation>Zásuvný modul %1 není kompatibilní se systémem.</translation>
     </message>
 </context>
 <context>
@@ -17,18 +17,18 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Datum</translation>
+        <translation>Datum a čas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 hodinový čas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 hodinový čas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>Nastavení času</translation>
     </message>
 </context>
@@ -51,11 +51,11 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Opravdu chcete smazat %1 položek ?</translation>
+        <translation>Opravdu chcete %1 položek smazat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -74,7 +74,7 @@
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Neznámý obsah</translation>
+        <translation>Neznámý svazek</translation>
     </message>
 </context>
 <context>
@@ -96,7 +96,7 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Návykový režim</translation>
+        <translation>Módní režim</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -120,15 +120,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Ukázat vždy</translation>
+        <translation>Vždy zobrazeno</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Vždy skrýt</translation>
+        <translation>Vždy skryto</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Skrýt chytře</translation>
+        <translation>Chytré skrývání</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Přídavné moduly</translation>
+        <translation>Zásuvné moduly</translation>
     </message>
 </context>
 <context>
@@ -166,17 +166,92 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Bezdrátové připojení</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Drátové připojení</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Vypnout drátové připojení</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Zapnout drátové připojení</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Vypnout bezdrátové připojení</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Zapnout bezdrátové připojení</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Zakázat síť</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Povolit síť</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Nastavení sítě</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Zařízení zakázáno</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bezdrátové připojení: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Drátové připojení: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Nepřipojeno</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Připojuje se</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Síťový kabel odpojen</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Připojeno, ale bez přístupu k Internetu</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Síť</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Drátová síť</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Drátová síť %1</translation>
     </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Virtuální klávesnice</translation>
+        <translation>Onboard</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -191,11 +266,11 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Správa napájení</translation>
+        <translation>Nastavení správy napájení</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Stav %1, %2 min zbývá</translation>
+        <translation>Energie %1, %2 min zbývá</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
@@ -214,15 +289,15 @@
         <translation>Nabíjení %1, %2 h %3 min do úplného nabití</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <source>Charging %1 ...</source>
+        <translation>Nabíjení %1…</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Ukázat pracovní plochu</translation>
+        <translation>Ukázat plochu</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -237,11 +312,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Vypnout</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Restartovat</translation>
+        <translation>Vypínání</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -249,7 +320,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Hibernovat</translation>
+        <translation>Uspat na disk</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -257,7 +328,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Odhlásit se</translation>
+        <translation>Odhlašování se</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -265,7 +336,11 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Správa napájení</translation>
+        <translation>Nastavení správy napájení</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Restartovat</translation>
     </message>
 </context>
 <context>
@@ -276,25 +351,25 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>Program</translation>
+        <translation>Aplikace</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Zhlasit</translation>
+        <translation>Zrušit ztlumení</translation>
     </message>
     <message>
         <source>Mute</source>
         <translation>Ztlumit</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>Nastavení zvuku</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
+        <source>Volume %1</source>
         <translation>Hlasitost %1</translation>
     </message>
 </context>
@@ -313,11 +388,11 @@
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation>Smazat %1 soubor</translation>
+        <translation>Koš – %1 soubor</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation>Smazat %1 souborů</translation>
+        <translation>Koš – %1 souborů</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>Oznamovací oblast panelu</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Neznámý</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Drátové připojení: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Žádná síť</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Bezdrátové připojení: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Připojeno, ale bez přístupu k internetu</translation>
     </message>
 </context>
 <context>

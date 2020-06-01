@@ -20,15 +20,15 @@
         <translation>الوقت والتاريخ</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>توقيت الـ 12 ساعة</translation>
+        <source>12-hour time</source>
+        <translation>توقيت 12-ساعة</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>توقيت الـ 24 ساعة</translation>
+        <source>24-hour time</source>
+        <translation>توقيت 24-ساعة</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>إعدادات الوقت</translation>
     </message>
 </context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>اتصال لاسلكي</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>اتصال سلكي</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>تعطيل الاتصال السلكي</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>تفعيل الاتصال السلكي</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>تعطيل الاتصال اللاسلكي</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>تفعيل الاتصال اللاسلكي</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>تعطيل الشبكة</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>تمكين الشبكة</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>إعدادات الشبكة</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>جهاز ملغى</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>الاتصال اللاسلكي: 1%</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>اتصال سلكي بـ : %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>غير متصل</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>يتصل</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>سلك الشبكة غير موصول</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>متصل لكن لا يوجد اتصال بالإنترنت</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>الشبكة</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>شبكة سلكية</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>شبكة سلكية 1%</translation>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>جاري الشحن 1%, 2% ساعة 3% دقيقة للاكتمال</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>إيقاف التشغيل</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>إعادة التشغيل</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>إسبات</translation>
     </message>
@@ -267,12 +338,16 @@
         <source>Power settings</source>
         <translation>إعدادت الطاقة</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>إعادة التشغيل</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
-        <translation>جهاز</translation>
+        <translation>الجهاز</translation>
     </message>
     <message>
         <source>Application</source>
@@ -290,12 +365,12 @@
         <translation>صامت</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>إعدادات الصوت</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>الحجم الحالي %1</translation>
+        <source>Volume %1</source>
+        <translation>الصوت 1%</translation>
     </message>
 </context>
 <context>
@@ -328,7 +403,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>إفراغ</translation>
+        <translation>فارغ</translation>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>منطقة إعلام النظام</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>غير معروف</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>اتصال سلكي بـ : %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>لا توجد شبكة</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>اتصال لاسلكي بـ : %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>متصل لكن لا يوجد اتصال بالإنترنت</translation>
     </message>
 </context>
 <context>

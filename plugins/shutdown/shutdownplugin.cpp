@@ -113,7 +113,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 
     QMap<QString, QVariant> reboot;
     reboot["itemId"] = "Restart";
-    reboot["itemText"] = tr("Restart");
+    reboot["itemText"] = tr("Reboot");
     reboot["isActive"] = true;
     items.push_back(reboot);
 

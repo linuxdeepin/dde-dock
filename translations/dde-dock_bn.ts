@@ -20,16 +20,16 @@
         <translation>তারিখ ও সময়</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 ঘন্টা সময়</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 ঘন্টা সময়</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>সময় সেটিংস</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -166,10 +166,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>নেটওয়ার্ক বন্ধ করুন</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>নেটওয়ার্ক চালু করুন</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>নেটওয়ার্কের সেটিংস</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>ডিভাইস নিষ্ক্রিয়</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>তারের সংযোগঃ %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>সংযুক্ত নয়</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>সংযুক্ত হচ্ছে</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>নেটওয়ার্ক তার তোলা হয়েছে</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>নেটওয়ার্ক</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>ওয়্যার্ড নেটওয়ার্ক</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -214,7 +289,7 @@
         <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 hr %3 min বাকি আছে</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charging %1 ...</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -240,10 +315,6 @@
         <translation>বন্ধ করুন</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation> রিস্টার্ট দিন</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>সাময়িক ভাবে বন্ধ করুন</translation>
     </message>
@@ -266,6 +337,10 @@
     <message>
         <source>Power settings</source>
         <translation>পাওয়ার সেটিংস</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>পুনঃরায় চালু করুন</translation>
     </message>
 </context>
 <context>
@@ -290,12 +365,12 @@
         <translation>নীরব</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>অডিও সেটিংস</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>বর্তমান ভলিউম %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -336,32 +411,6 @@
     <message>
         <source>System Tray</source>
         <translation>সিস্টেম ট্রে</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>অজানা</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>তারের সংযোগঃ %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>নেটওয়ার্ক নেই</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>তারবিহীন সংযোগঃ %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
     </message>
 </context>
 <context>
