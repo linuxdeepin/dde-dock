@@ -133,11 +133,19 @@ void AdapterItem::deviceItemPaired(const bool paired)
     if (device) {
         DeviceItem *deviceItem = m_deviceItems.value(device->id());
         if (paired) {
-            m_sortUnConnect.removeOne(deviceItem);
-            m_sortConnected << deviceItem;
+            int index = m_sortConnected.indexOf(deviceItem);
+
+            if (index < 0) {
+                m_sortUnConnect.removeOne(deviceItem);
+                m_sortConnected << deviceItem;
+            }
         } else {
-            m_sortConnected.removeOne(deviceItem);
-            m_sortUnConnect << deviceItem;
+            int index = m_sortUnConnect.indexOf(deviceItem);
+
+            if(index < 0){
+                m_sortConnected.removeOne(deviceItem);
+                m_sortUnConnect << deviceItem;
+            }
         }
         showDevices(m_adapter->powered());
     }
