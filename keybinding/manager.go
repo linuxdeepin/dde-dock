@@ -25,6 +25,7 @@ import (
 	"strings"
 	"time"
 
+	lockfront "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.lockfront"
 	backlight "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	inputdevices "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
 	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
@@ -80,8 +81,8 @@ type Manager struct {
 
 	customShortcutManager *shortcuts.CustomShortcutManager
 
-	lockFrontSessionBus *dbus.Conn
-	lockFrontSigChan chan *dbus.Signal
+	lockFront *lockfront.LockFront
+
 	sessionSigLoop  *dbusutil.SignalLoop
 	systemSigLoop   *dbusutil.SignalLoop
 	startManager    *sessionmanager.StartManager
@@ -176,26 +177,10 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		return nil, err
 	}
 
-	lockSessionBus, err := dbus.SessionBus()
-	if err != nil {
-		return nil, err
-	}
-
-	// when session is locked, we need handle some keyboard function event
-	err = dbusutil.NewMatchRuleBuilder().Type("signal").
-		PathNamespace("/com/deepin/dde/lockFront").
-		Interface("com.deepin.dde.lockFront").
-		Member("ChangKey").Build().AddTo(lockSessionBus)
-	if err != nil {
-		logger.Warning(err)
-	}
-
 	var m = Manager{
 		service:               service,
 		enableListenGSettings: true,
 		conn:                  conn,
-		lockFrontSessionBus:   lockSessionBus,
-		lockFrontSigChan:      make(chan *dbus.Signal, 10),
 		keySymbols:            keysyms.NewKeySymbols(conn),
 	}
 
@@ -207,9 +192,6 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.ShortcutSwitchLayout.Bind(m.gsKeyboard, gsKeyShortcutSwitchLayout)
 	m.sessionSigLoop.Start()
 	m.systemSigLoop.Start()
-
-	lockSessionBus.Signal(m.lockFrontSigChan)
-	go m.handleKeyEventFromLockFront()
 
 	if m.gsKeyboard.GetBoolean(gsKeySaveNumLockState) {
 		nlState := NumLockState(m.NumLockState.Get())
@@ -236,6 +218,13 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.shortcutManager.AddSpecial()
 	m.shortcutManager.AddSystem(m.gsSystem)
 	m.shortcutManager.AddMedia(m.gsMediaKey)
+
+	// when session is locked, we need handle some keyboard function event
+	m.lockFront = lockfront.NewLockFront(sessionBus)
+	m.lockFront.InitSignalExt(m.sessionSigLoop, true)
+	m.lockFront.ConnectChangKey(func(changKey string) {
+		m.handleKeyEventFromLockFront(changKey)
+	})
 
 	m.wm = wm.NewWm(sessionBus)
 
@@ -275,54 +264,42 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	return &m, nil
 }
 
-func (m *Manager) handleKeyEventFromLockFront(){
-	for {
-		select {
-		case sig := <- m.lockFrontSigChan:
-			if sig.Path == "/com/deepin/dde/lockFront" && sig.Name == "com.deepin.dde.lockFront.ChangKey" {
-				var changKeyStr string
-				err := dbus.Store(sig.Body, &changKeyStr)
-				if err != nil {
-					logger.Warning(err)
-				}
-				logger.Debugf("Receive LockFront ChangKey Event %s", changKeyStr)
-				action := shortcuts.GetAction(changKeyStr)
+func (m *Manager) handleKeyEventFromLockFront(changKey string){
+	logger.Debugf("Receive LockFront ChangKey Event %s", changKey)
+	action := shortcuts.GetAction(changKey)
 
-				// numlock/capslock
-				if action.Type == shortcuts.ActionTypeShowNumLockOSD ||
-					action.Type == shortcuts.ActionTypeShowCapsLockOSD {
-					if handler := m.handlers[int(action.Type)]; handler != nil {
-						handler(nil)
-					} else {
-						logger.Warning("handler is nil")
+	// numlock/capslock
+	if action.Type == shortcuts.ActionTypeShowNumLockOSD ||
+		action.Type == shortcuts.ActionTypeShowCapsLockOSD {
+		if handler := m.handlers[int(action.Type)]; handler != nil {
+			handler(nil)
+		} else {
+			logger.Warning("handler is nil")
+		}
+	} else {
+		cmd, ok := action.Arg.(shortcuts.ActionCmd)
+		if !ok {
+			logger.Warning(errTypeAssertionFail)
+		} else {
+			if action.Type == shortcuts.ActionTypeAudioCtrl {
+				// audio-mute/audio-lower-volume/audio-raise-volume
+				if m.audioController != nil {
+					if err := m.audioController.ExecCmd(cmd); err != nil {
+						logger.Warning(m.audioController.Name(), "Controller exec cmd err:", err)
 					}
-				} else {
-					cmd, ok := action.Arg.(shortcuts.ActionCmd)
-					if !ok {
-						logger.Warning(errTypeAssertionFail)
-					} else {
-						if action.Type == shortcuts.ActionTypeAudioCtrl {
-							// audio-mute/audio-lower-volume/audio-raise-volume
-							if m.audioController != nil {
-								if err := m.audioController.ExecCmd(cmd); err != nil {
-									logger.Warning(m.audioController.Name(), "Controller exec cmd err:", err)
-								}
-							}
-						} else if action.Type == shortcuts.ActionTypeDisplayCtrl {
-							// mon-brightness-up/mon-brightness-down
-							if m.displayController != nil {
-								if err := m.displayController.ExecCmd(cmd); err != nil {
-									logger.Warning(m.displayController.Name(), "Controller exec cmd err:", err)
-								}
-							}
-						} else if action.Type == shortcuts.ActionTypeTouchpadCtrl {
-							// touchpad-toggle/touchpad-on/touchpad-off
-							if m.touchPadController != nil {
-								if err := m.touchPadController.ExecCmd(cmd); err != nil {
-									logger.Warning(m.touchPadController.Name(), "Controller exec cmd err:", err)
-								}
-							}
-						}
+				}
+			} else if action.Type == shortcuts.ActionTypeDisplayCtrl {
+				// mon-brightness-up/mon-brightness-down
+				if m.displayController != nil {
+					if err := m.displayController.ExecCmd(cmd); err != nil {
+						logger.Warning(m.displayController.Name(), "Controller exec cmd err:", err)
+					}
+				}
+			} else if action.Type == shortcuts.ActionTypeTouchpadCtrl {
+				// touchpad-toggle/touchpad-on/touchpad-off
+				if m.touchPadController != nil {
+					if err := m.touchPadController.ExecCmd(cmd); err != nil {
+						logger.Warning(m.touchPadController.Name(), "Controller exec cmd err:", err)
 					}
 				}
 			}
@@ -332,15 +309,6 @@ func (m *Manager) handleKeyEventFromLockFront(){
 
 func (m *Manager) destroy() {
 	m.service.StopExport(m)
-
-	if m.lockFrontSessionBus != nil {
-		err := m.lockFrontSessionBus.BusObject().RemoveMatchSignal("com.deepin.dde.lockFront", "ChangKey",
-			dbus.WithMatchObjectPath("/com/deepin/dde/lockFront")).Err
-		if err != nil {
-			logger.Warning(err)
-		}
-		m.lockFrontSessionBus.RemoveSignal(m.lockFrontSigChan)
-	}
 
 	if m.shortcutManager != nil {
 		m.shortcutManager.Destroy()
