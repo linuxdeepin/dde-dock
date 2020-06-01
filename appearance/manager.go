@@ -111,7 +111,7 @@ const (
 	dbusInterface   = dbusServiceName
 )
 
-var wrConfigFile = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/appearance/wallpaper-slideshow.json")
+var wsConfigFile = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/appearance/wallpaper-slideshow.json")
 
 // Manager shows current themes and fonts settings, emit 'Changed' signal if modified
 // if themes list changed will emit 'Refreshed' signal
@@ -134,8 +134,8 @@ type Manager struct {
 	WallpaperSlideShow gsprop.String `prop:"access:rw"`
 	QtActiveColor      string        `prop:"access:rw"`
 
-	wsLoop      *WSLoop
-	wsScheduler *WSScheduler
+	wsLoopMap          map[string]*WSLoop
+	wsSchedulerMap     map[string]*WSScheduler
 
 	userObj             *accounts.User
 	imageBlur           *accounts.ImageBlur
@@ -163,7 +163,7 @@ type Manager struct {
 
 	desktopBgs []string
 	greeterBg  string
-
+	curMonitorSpace string
 	wm *wm.Wm
 
 	signals *struct {
@@ -189,9 +189,14 @@ type Manager struct {
 		Thumbnail             func() `in:"type,name" out:"file"`
 		SetScreenScaleFactors func() `in:"scaleFactors"`
 		GetScreenScaleFactors func() `out:"scaleFactors"`
+		SetMonitorBackground  func() `in:"monitorName,imageFile"`
+		SetWallpaperSlideShow func() `in:"monitorName,wallpaperSlideShow"`
+		GetWallpaperSlideShow func() `in:"monitorName" out:"slideShow"`
 	}
 }
 
+type mapMonitorWorkspaceWSPolicy map[string]string
+type mapMonitorWorkspaceWSConfig map[string]WSConfig
 // NewManager will create a 'Manager' object
 func newManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
@@ -215,8 +220,15 @@ func newManager(service *dbusutil.Service) *Manager {
 		logger.Warning(err)
 	}
 
-	m.wsLoop = newWSLoop()
-	m.wsScheduler = newWSScheduler()
+	m.wsLoopMap = make(map[string]*WSLoop)
+	m.wsSchedulerMap = make(map[string]*WSScheduler)
+	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	if err == nil {
+		for icfg := range cfg {
+			m.wsLoopMap[icfg] = newWSLoop()
+			m.wsSchedulerMap[icfg] = newWSScheduler()
+		}
+	}
 
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
@@ -289,8 +301,10 @@ func (m *Manager) destroy() {
 
 	m.sysSigLoop.Stop()
 	m.login1Manager.RemoveHandler(proxy.RemoveAllHandlers)
+	for iSche := range m.wsSchedulerMap{
+		m.wsSchedulerMap[iSche].stop()
+	}
 
-	m.wsScheduler.stop()
 
 	if m.setting != nil {
 		m.setting.Unref()
@@ -630,6 +644,88 @@ func (m *Manager) doSetCursorTheme(value string) error {
 	return subthemes.SetCursorTheme(value)
 }
 
+func (m *Manager) doSetMonitorBackground(monitorName string, imageFile string) (string, error) {
+	logger.Debugf("call doSetMonitorBackground monitor:%q file:%q", monitorName, imageFile)
+	if !background.IsBackgroundFile(imageFile) {
+		return "", errors.New("invalid background")
+	}
+	file, err := background.Prepare(imageFile)
+	if err != nil {
+		logger.Warning("failed to prepare:", err)
+		return "", err
+	}
+	logger.Debug("prepare result:", file)
+	uri := dutils.EncodeURI(file, dutils.SCHEME_FILE)
+	err = m.wm.SetCurrentWorkspaceBackgroundForMonitor(0, uri, monitorName)
+	if err != nil {
+		return "", err
+	}
+	_, err = m.imageBlur.Get(0, file)
+	if err != nil {
+		logger.Warning("call imageBlur.Get err:", err)
+	}
+	go func() {
+		outputFile, err := m.imageEffect.Get(0, "", file)
+		if err != nil {
+			logger.Warning("imageEffect Get err:", err)
+		} else {
+			logger.Warning("imageEffect Get outputFile:", outputFile)
+		}
+	}()
+	return file, nil
+}
+
+func (m *Manager) doUnmarshalWallpaperSlideshow(jsonString string)(mapMonitorWorkspaceWSPolicy, error){
+	var cfg mapMonitorWorkspaceWSPolicy
+	var byteWallpaperSlideShow []byte = []byte(jsonString)
+	err := json.Unmarshal(byteWallpaperSlideShow, &cfg)
+	return cfg, err
+}
+
+func (m *Manager) doMarshalWallpaperSlideshow(cfg mapMonitorWorkspaceWSPolicy)(string, error){
+	data, err := json.Marshal(cfg)
+	if err != nil {
+		return "", err
+	}
+	return string(data), err
+}
+
+func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow string) error {
+	idx, err := m.wm.GetCurrentWorkspace(0)
+	if err != nil {
+		logger.Warning("Get Current Workspace failure:", err)
+		return err
+	}
+	cfg ,err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	if cfg == nil {
+		cfg = make(mapMonitorWorkspaceWSPolicy)
+	}
+	key := monitorName + "&&" + strconv.Itoa(int(idx))
+	cfg[key] = wallpaperSlideShow
+	strAllWallpaperSlideShow, err := m.doMarshalWallpaperSlideshow(cfg)
+	if err != nil {
+		logger.Warning("Marshal Wallpaper Slideshow failure:", err)
+	}
+	m.WallpaperSlideShow.Set(strAllWallpaperSlideShow)
+	m.curMonitorSpace = key
+	return nil
+}
+
+func (m *Manager) doGetWallpaperSlideShow(monitorName string)(string, error) {
+	idx, err := m.wm.GetCurrentWorkspace(0)
+	if err != nil {
+		logger.Warning("Get Current Workspace failure:", err)
+		return "",err
+	}
+	cfg ,err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	if err != nil {
+		return "", nil
+	}
+	key := monitorName + "&&" + strconv.Itoa(int(idx))
+	wallpaperSlideShow := cfg[key]
+	return wallpaperSlideShow , nil
+}
+
 func (m *Manager) doSetBackground(value string) (string, error) {
 	logger.Debugf("call doSetBackground %q", value)
 	if !background.IsBackgroundFile(value) {
@@ -790,29 +886,42 @@ func (*Manager) GetInterfaceName() string {
 	return dbusInterface
 }
 
-func (m *Manager) saveWSConfig(t time.Time) error {
-	cfg := &WSConfig{
-		LastChange: t,
-		Showed:     m.wsLoop.GetShowed(),
+func (m *Manager) saveWSConfig(monitorSpace string,t time.Time) error {
+	cfg, _ := loadWSConfig(wsConfigFile)
+	var tempCfg WSConfig
+	tempCfg.LastChange = t
+	tempCfg.Showed = m.wsLoopMap[monitorSpace].GetShowed()
+	if cfg == nil {
+		cfg = make(mapMonitorWorkspaceWSConfig)
 	}
-
-	return cfg.save(wrConfigFile)
+	cfg[monitorSpace]=tempCfg
+	return cfg.save(wsConfigFile)
 }
 
-func (m *Manager) autoChangeBg(t time.Time) {
-	logger.Debug("autoChangeBg", t)
-	file := m.wsLoop.GetNext()
+func (m *Manager) autoChangeBg(monitorSpace string, t time.Time) {
+	logger.Debug("autoChangeBg", monitorSpace, t)
+	file := m.wsLoopMap[monitorSpace].GetNext()
 	if file == "" {
 		logger.Warning("file is empty")
 		return
 	}
-
-	_, err := m.doSetBackground(file)
+	idx, err:= m.wm.GetCurrentWorkspace(0)
 	if err != nil {
-		logger.Warning("failed to set background:", err)
+		logger.Warning(err)
 	}
-
-	err = m.saveWSConfig(t)
+	strIdx := strconv.Itoa(int(idx))
+	splitter := strings.Index(monitorSpace, "&&")
+	if splitter == -1 {
+		logger.Warning("monitorSpace format error")
+		return
+	}
+	if strIdx == monitorSpace[splitter + len("&&") :]{
+		_, err := m.doSetMonitorBackground(monitorSpace[:splitter] ,file)
+		if err != nil {
+			logger.Warning("failed to set background:", err)
+		}
+	}
+	err = m.saveWSConfig(monitorSpace, t)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -831,28 +940,30 @@ func (m *Manager) initWallpaperSlideshow() {
 	// if err != nil {
 	// 	logger.Warning(err)
 	// }
-	m.wsScheduler.fn = m.autoChangeBg
-
-	policy := m.WallpaperSlideShow.Get()
-
-	if isValidWSPolicy(policy) {
-		m.loadWSConfig()
-	}
-
-	if policy == wsPolicyLogin {
-		err := m.changeBgAfterLogin()
-		if err != nil {
-			logger.Warning("failed to change background after login:", err)
-		}
-	} else {
-		nSec, err := strconv.ParseUint(policy, 10, 32)
-		if err == nil {
-			m.wsScheduler.updateInterval(time.Duration(nSec) * time.Second)
+	m.loadWSConfig()
+	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	if err == nil {
+		for icfg := range cfg{
+			m.wsSchedulerMap[icfg].fn = m.autoChangeBg
+			policy := cfg[icfg]
+			if isValidWSPolicy(policy) {
+				if policy == wsPolicyLogin {
+					err := m.changeBgAfterLogin(icfg)
+					if err != nil {
+						logger.Warning("failed to change background after login:", err)
+					}
+				} else {
+					nSec, err := strconv.ParseUint(policy, 10, 32)
+					if err == nil {
+						m.wsSchedulerMap[icfg].updateInterval(icfg, time.Duration(nSec) * time.Second)
+					}
+				}
+			}
 		}
 	}
 }
 
-func (m *Manager) changeBgAfterLogin() error {
+func (m *Manager) changeBgAfterLogin(monitorSpace string) error {
 	runDir, err := basedir.GetUserRuntimeDir(true)
 	if err != nil {
 		return err
@@ -877,7 +988,7 @@ func (m *Manager) changeBgAfterLogin() error {
 	}
 
 	if needChangeBg {
-		m.autoChangeBg(time.Now())
+		m.autoChangeBg(monitorSpace, time.Now())
 		err = ioutil.WriteFile(markFile, []byte(currentSessionId), 0644)
 		if err != nil {
 			return err
@@ -895,29 +1006,56 @@ func getSessionId(filename string) (string, error) {
 }
 
 func (m *Manager) loadWSConfig() {
-	cfg := loadWSConfigSafe(wrConfigFile)
-	logger.Debug("loadWSConfig lastChange:", cfg.LastChange)
+	cfg := loadWSConfigSafe(wsConfigFile)
+	for monitorSpace := range cfg {
+		_, ok := m.wsSchedulerMap[monitorSpace]
+		if !ok {
+			m.wsSchedulerMap[monitorSpace] = newWSScheduler()
+		}
+		m.wsSchedulerMap[monitorSpace].mu.Lock()
+		m.wsSchedulerMap[monitorSpace].lastSetBg = cfg[monitorSpace].LastChange
+		m.wsSchedulerMap[monitorSpace].mu.Unlock()
 
-	m.wsScheduler.mu.Lock()
-	m.wsScheduler.lastRun = cfg.LastChange
-	m.wsScheduler.mu.Unlock()
-
-	m.wsLoop.mu.Lock()
-	for _, file := range cfg.Showed {
-		m.wsLoop.showed[file] = struct{}{}
+		_, ok = m.wsLoopMap[monitorSpace]
+		if !ok {
+			m.wsLoopMap[monitorSpace] = newWSLoop()
+		}
+		m.wsLoopMap[monitorSpace].mu.Lock()
+		for _, file := range cfg[monitorSpace].Showed {
+			m.wsLoopMap[monitorSpace].showed[file] = struct{}{}
+		}
+		m.wsLoopMap[monitorSpace].mu.Unlock()
 	}
-	m.wsLoop.mu.Unlock()
 }
 
 func (m *Manager) updateWSPolicy(policy string) {
-	if isValidWSPolicy(policy) {
-		m.loadWSConfig()
-	}
-	nSec, err := strconv.ParseUint(policy, 10, 32)
+	cfg, err := m.doUnmarshalWallpaperSlideshow(policy)
+	m.loadWSConfig()
 	if err == nil {
-		m.wsScheduler.updateInterval(time.Duration(nSec) * time.Second)
-	} else {
-		m.wsScheduler.stop()
+		for icfg := range cfg {
+			policy = cfg[icfg]
+			_ ,ok := m.wsSchedulerMap[icfg]
+			if !ok {
+				m.wsSchedulerMap[icfg]=newWSScheduler()
+			}
+			_ ,ok = m.wsLoopMap[icfg]
+			if !ok {
+				m.wsLoopMap[icfg]=newWSLoop()
+			}
+			if m.curMonitorSpace == icfg && isValidWSPolicy(policy) {
+				nSec, err := strconv.ParseUint(policy, 10, 32)
+				if err == nil {
+					m.wsSchedulerMap[m.curMonitorSpace].lastSetBg = time.Now()
+					m.wsSchedulerMap[m.curMonitorSpace].updateInterval(icfg, time.Duration(nSec) * time.Second)
+					err = m.saveWSConfig(m.curMonitorSpace, time.Now())
+					if err != nil {
+						logger.Warning(err)
+					}
+				} else {
+					m.wsSchedulerMap[m.curMonitorSpace].stop()
+				}
+			}
+		}
 	}
 }
 

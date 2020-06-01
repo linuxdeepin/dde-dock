@@ -166,10 +166,10 @@ func (m *Manager) set(ty, value string) error {
 		if err == nil {
 			m.CursorTheme.Set(value)
 		}
-	case TypeBackground:
+	case TypeBackground: //old change wallpaple interface (no used)
 		file, err := m.doSetBackground(value)
 		if err == nil {
-			m.wsLoop.AddToShowed(file)
+			m.wsLoopMap[m.curMonitorSpace].AddToShowed(file)
 		}
 	case TypeGreeterBackground:
 		err = m.doSetGreeterBackground(value)
@@ -207,6 +207,31 @@ func (m *Manager) set(ty, value string) error {
 		return fmt.Errorf("invalid type: %v", ty)
 	}
 	return err
+}
+
+func (m *Manager) SetMonitorBackground(monitorName string, imageFile string) *dbus.Error {
+	logger.Debugf("Set Background '%s' for Monitor '%s'", imageFile, monitorName)
+	file, err := m.doSetMonitorBackground(monitorName, imageFile)
+	if err == nil {
+		idx, err := m.wm.GetCurrentWorkspace(0)
+		if err == nil {
+			m.wsLoopMap[monitorName + "&&" + strconv.Itoa(int(idx))].AddToShowed(file)
+			return dbusutil.ToError(err)
+		}
+	}
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) SetWallpaperSlideShow(monitorName string, wallpaperSlideShow string) *dbus.Error {
+	logger.Debugf("Set Current Workspace Wallpaper SlideShow '%s' For Monitor '%s'", wallpaperSlideShow, monitorName)
+	err := m.doSetWallpaperSlideShow(monitorName, wallpaperSlideShow)
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) GetWallpaperSlideShow(monitorName string)(string, *dbus.Error) {
+	logger.Debugf("Get Current Workspace Wallpaper SlideShow For Monitor '%s'", monitorName)
+	slideShow, err := m.doGetWallpaperSlideShow(monitorName)
+	return slideShow, dbusutil.ToError(err)
 }
 
 // Delete delete the special 'name'

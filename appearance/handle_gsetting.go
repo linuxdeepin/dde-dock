@@ -123,8 +123,14 @@ func (m *Manager) listenBgGSettings() {
 			logger.Warning(err)
 			return
 		}
-
-		m.wsLoop.AddToShowed(file)
+		if m.curMonitorSpace == ""{
+			return
+		}
+		_, ok := m.wsLoopMap[m.curMonitorSpace]
+		if !ok {
+			m.wsLoopMap[m.curMonitorSpace] = newWSLoop()
+		}
+		m.wsLoopMap[m.curMonitorSpace].AddToShowed(file)
 	})
 
 	if m.gnomeBgSetting == nil {
@@ -143,6 +149,6 @@ func (m *Manager) listenBgGSettings() {
 			return
 		}
 
-		m.wsLoop.AddToShowed(file)
+		m.wsLoopMap[m.curMonitorSpace].AddToShowed(file)
 	})
 }

@@ -84,7 +84,9 @@ func (m *Manager) handleThemeChanged() {
 						continue
 					}
 					background.NotifyChanged()
-					m.wsLoop.NotifyFsChanged()
+					for iloop := range m.wsLoopMap{
+						m.wsLoopMap[iloop].NotifyFsChanged()
+					}
 
 				case hasEventOccurred(file, gtkDirs):
 					logger.Debug("fs event in gtkDirs")

@@ -18,12 +18,12 @@ import (
 // wallpaper slideshow scheduler
 type WSScheduler struct {
 	mu              sync.Mutex
-	lastRun         time.Time
+	lastSetBg         time.Time  //last set wallpaper time
 	interval        time.Duration
 	quit            chan chan struct{}
 	intervalChanged chan struct{}
 	running         bool
-	fn              func(t time.Time)
+	fn              func(monitorSpace string, t time.Time)
 }
 
 func newWSScheduler() *WSScheduler {
@@ -38,7 +38,7 @@ func (s *WSScheduler) remainDuration() time.Duration {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	elapsed := time.Since(s.lastRun)
+	elapsed := time.Since(s.lastSetBg)
 	if elapsed < 0 {
 		elapsed = 0
 	}
@@ -46,7 +46,7 @@ func (s *WSScheduler) remainDuration() time.Duration {
 	return result
 }
 
-func (s *WSScheduler) loopCheck() {
+func (s *WSScheduler) loopCheck(mointorSpace string) {
 	s.running = true
 	for {
 		select {
@@ -54,9 +54,9 @@ func (s *WSScheduler) loopCheck() {
 			continue
 		case t := <-time.After(s.remainDuration()):
 			if s.fn != nil {
-				go s.fn(t)
+				go s.fn(mointorSpace, t)
 			}
-			s.lastRun = t
+			s.lastSetBg = t
 		case ch := <-s.quit:
 			s.running = false
 			close(ch)
@@ -65,7 +65,7 @@ func (s *WSScheduler) loopCheck() {
 	}
 }
 
-func (s *WSScheduler) updateInterval(v time.Duration) {
+func (s *WSScheduler) updateInterval(monitorSpace string, v time.Duration) {
 	if v < time.Second {
 		v = time.Second
 	}
@@ -80,7 +80,7 @@ func (s *WSScheduler) updateInterval(v time.Duration) {
 	}
 
 	s.mu.Unlock()
-	go s.loopCheck()
+	go s.loopCheck(monitorSpace)
 }
 
 func (s *WSScheduler) stop() {
@@ -104,8 +104,8 @@ type WSConfig struct {
 	Showed     []string
 }
 
-func loadWSConfig(filename string) (*WSConfig, error) {
-	var cfg WSConfig
+func loadWSConfig(filename string) (mapMonitorWorkspaceWSConfig, error) {
+	var cfg mapMonitorWorkspaceWSConfig
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -114,20 +114,15 @@ func loadWSConfig(filename string) (*WSConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &cfg, nil
+	return cfg, nil
 }
 
-func loadWSConfigSafe(filename string) *WSConfig {
-	cfg, err := loadWSConfig(filename)
-	if err != nil {
-		return &WSConfig{
-			LastChange: time.Now(),
-		}
-	}
+func loadWSConfigSafe(filename string) mapMonitorWorkspaceWSConfig {
+	cfg, _ := loadWSConfig(filename)
 	return cfg
 }
 
-func (c *WSConfig) save(filename string) error {
+func (c mapMonitorWorkspaceWSConfig) save(filename string) error {
 	data, err := json.Marshal(c)
 	if err != nil {
 		return err
@@ -242,7 +237,7 @@ func (wrl *WSLoop) NotifyFsChanged() {
 }
 
 func isValidWSPolicy(policy string) bool {
-	if policy == wsPolicyWakeup || policy == wsPolicyLogin {
+	if policy == wsPolicyWakeup || policy == wsPolicyLogin || policy == ""{
 		return true
 	}
 

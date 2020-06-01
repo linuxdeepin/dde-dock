@@ -58,10 +58,14 @@ func HandlePrepareForSleep(sleep bool) {
 	if sleep {
 		return
 	}
-	if _m.WallpaperSlideShow.Get() != wsPolicyWakeup {
-		return
+	cfg, err := _m.doUnmarshalWallpaperSlideshow(_m.WallpaperSlideShow.Get())
+	if err == nil {
+		for icfg := range cfg {
+			if cfg[icfg] == wsPolicyWakeup {
+				_m.autoChangeBg(icfg, time.Now())
+			}
+		}
 	}
-	_m.autoChangeBg(time.Now())
 }
 
 func (*Module) GetDependencies() []string {
