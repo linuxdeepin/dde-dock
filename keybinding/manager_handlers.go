@@ -216,6 +216,14 @@ func (m *Manager) initHandlers() {
 		systemSuspend()
 	}
 
+	m.handlers[ActionTypeSystemLogOff] = func(ev *KeyEvent) {
+		systemLogout()
+	}
+
+	m.handlers[ActionTypeSystemAway] = func(ev *KeyEvent) {
+		systemAway()
+	}
+
 	// handle Switch Kbd Layout
 	m.handlers[ActionTypeSwitchKbdLayout] = func(ev *KeyEvent) {
 		logger.Debug("Switch Kbd Layout state", m.switchKbdLayoutState)

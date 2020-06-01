@@ -34,6 +34,18 @@ const (
 	mimeTypeImagePng   = "image/png"
 )
 
+const (
+	cmdMyComputer      = "gvfs-open computer:///"
+	cmdDocuments       = "gvfs-open ~/Documents"
+	cmdEject           = "eject -r"
+	cmdCalculator      = "deepin-calculator"
+	cmdCalendar        = "dde-calendar"
+	cmdMeeting         = "deepin-contacts"
+	cmdTerminal        = "/usr/lib/deepin-daemon/default-terminal"
+	cmdMessenger       = "dbus-send --print-reply --dest=com.deepin.dde.osd /com/deepin/dde/Notification com.deepin.dde.Notification.Toggle"
+	cmdLauncher        = "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
+)
+
 var mediaIdActionMap = map[string]*Action{
 	"numlock":  &Action{Type: ActionTypeShowNumLockOSD},
 	"capslock": &Action{Type: ActionTypeShowCapsLockOSD},
@@ -43,14 +55,21 @@ var mediaIdActionMap = map[string]*Action{
 	"explorer":    NewOpenMimeTypeAction(mimeTypeDir),
 	"mail":        NewOpenMimeTypeAction(mimeTypeMail),
 	"audio-media": NewOpenMimeTypeAction(mimeTypeAudioMedia),
+	"music":       NewOpenMimeTypeAction(mimeTypeAudioMedia),
 	"pictures":    NewOpenMimeTypeAction(mimeTypeImagePng),
 	"video":       NewOpenMimeTypeAction(mimeTypeVideoMp4),
-	"my-computer": NewExecCmdAction("gvfs-open computer:///", false),
-	// eject CD/ROM
-	"eject":      NewExecCmdAction("eject -r", false),
-	"calculator": NewExecCmdAction("gnome-calculator", false),
-	"calculater": NewExecCmdAction("gnome-calculator", false),
-	"calendar":   NewExecCmdAction("dde-calendar", false),
+
+	// command
+	"my-computer": NewExecCmdAction(cmdMyComputer, false),
+	"documents":   NewExecCmdAction(cmdDocuments, false),
+	"eject":       NewExecCmdAction(cmdEject, false),
+	"calculator":  NewExecCmdAction(cmdCalculator, false),
+	"calendar":    NewExecCmdAction(cmdCalendar, false),
+	"meeting":     NewExecCmdAction(cmdMeeting, false),
+	"terminal":    NewExecCmdAction(cmdTerminal, false),
+	"messenger":   NewExecCmdAction(cmdMessenger, false),
+	"app-left":    NewExecCmdAction(cmdLauncher, false),
+	"app-right":   NewExecCmdAction(cmdLauncher, false),
 
 	// audio control
 	"audio-mute":         NewAudioCtrlAction(AudioSinkMuteToggle),
@@ -74,6 +93,7 @@ var mediaIdActionMap = map[string]*Action{
 	"mon-brightness-down": NewDisplayCtrlAction(MonitorBrightnessDown),
 	"switch-monitors":     NewDisplayCtrlAction(DisplayModeSwitch),
 	"display":             NewDisplayCtrlAction(DisplayModeSwitch),
+	"adjust-brightness":   NewDisplayCtrlAction(AdjustBrightnessSwitch),
 
 	// kbd light control
 	"kbd-light-on-off":    NewKbdBrightnessCtrlAction(KbdLightToggle),
@@ -90,6 +110,8 @@ var mediaIdActionMap = map[string]*Action{
 	"power-down": &Action{Type: ActionTypeSystemShutdown},
 	"suspend":    &Action{Type: ActionTypeSystemSuspend},
 	"sleep":      &Action{Type: ActionTypeSystemSuspend},
+	"log-off":    &Action{Type: ActionTypeSystemLogOff},
+	"away":       &Action{Type: ActionTypeSystemAway},
 
 	// We do not need to deal with XF86Wlan key default,
 	// but can be specially by 'EnableNetworkController'

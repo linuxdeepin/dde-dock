@@ -83,3 +83,12 @@ func (c *DisplayController) changeBrightness(raised bool) error {
 	showOSD(osd)
 	return nil
 }
+
+
+func (c *DisplayController) switchAdjustBrightness() error {
+	gs := gio.NewSettings("com.deepin.dde.power")
+	defer gs.Unref()
+	value := gs.GetBoolean(gsKeyAmbientLightAdjustBrightness)
+	gs.SetBoolean(gsKeyAmbientLightAdjustBrightness, !value)
+	return nil
+}
