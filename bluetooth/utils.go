@@ -21,6 +21,8 @@ package bluetooth
 
 import (
 	"encoding/json"
+	"os/exec"
+	"strings"
 )
 
 func isStringInArray(str string, list []string) bool {
@@ -40,4 +42,14 @@ func marshalJSON(v interface{}) (strJSON string) {
 	}
 	strJSON = string(byteJSON)
 	return
+}
+
+// check if needed dialog exist
+func isDialogExist(dialog string) bool {
+	//cmd := `ps ux | awk '/` + dialog + `/ && !/awk/ {print $2}'`
+	result, err := exec.Command("pgrep", "-la", "-f", dialog).Output()
+	if err != nil {
+		return true
+	}
+	return strings.TrimSpace(string(result)) != ""
 }

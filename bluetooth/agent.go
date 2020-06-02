@@ -328,14 +328,39 @@ func (a *agent) emitRequest(devPath dbus.ObjectPath, signal string, args ...inte
 	a.requestDevice = devPath
 	a.mu.Unlock()
 
-	_, err = a.b.getDevice(devPath)
+	d, err := a.b.getDevice(devPath)
 	if nil != err {
 		logger.Warningf("emitRequest can not find device: %v, %v", devPath, err)
 		return auth, errBluezCanceled
 	}
 
-	logger.Debug("Send Signal for device: ", devPath, signal, args)
-	a.emit(signal, devPath, args...)
-
+	// if signal is request confirmation, we deal signal self
+	if signal == "RequestConfirmation" {
+		// judge ensure state, if is true, means pc request a connection
+		// dont need to show notification window
+		if d.GetInitiativeConnect() {
+			// reset state
+			d.SetInitiativeConnect(false)
+			//if true, means pc active invoke the connect request
+			err = notifyInitiativeConnect(d, args[0].(string))
+			if err != nil {
+				logger.Warningf("notify initiative connect failed,err:%v", err)
+			}
+		} else {
+			// if not, means device invoke the connect request,
+			// need to show notification window
+			err = notifyPassiveConnect(d, args[0].(string))
+			if err != nil {
+				logger.Warningf("notify passive connect failed,err:%v", err)
+			}
+		}
+	} else {
+		//if signal is not request confirmation, we emit it to dbus
+		logger.Debug("Send Signal for device: ", devPath, signal, args)
+		err = a.emit(signal, devPath, args...)
+		if err != nil {
+			logger.Warningf("emitRequest emit signal failed,err:%v", err)
+		}
+	}
 	return a.waitResponse()
 }

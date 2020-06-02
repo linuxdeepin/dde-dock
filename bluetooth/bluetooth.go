@@ -201,6 +201,10 @@ func (b *Bluetooth) init() {
 
 	systemBus := b.systemSigLoop.Conn()
 
+	// start bluetooth goroutine
+	// monitor click signal or time out signal to close notification window
+	go beginTimerNotify(globalTimerNotifier)
+
 	b.apiDevice = apidevice.NewDevice(systemBus)
 	b.sysDBusDaemon = ofdbus.NewDBus(systemBus)
 	b.sysDBusDaemon.InitSignalExt(b.systemSigLoop, true)
