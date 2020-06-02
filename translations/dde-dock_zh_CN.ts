@@ -49,9 +49,13 @@
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
-        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
         <source>Bluetooth</source>
         <translation>蓝牙</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
+        <source>Turned off</source>
+        <translation>蓝牙关闭</translation>
     </message>
 </context>
 <context>
@@ -168,67 +172,67 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="64"/>
+        <location filename="../frame/util/docksettings.cpp" line="65"/>
         <source>Fashion Mode</source>
         <translation>时尚模式</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="65"/>
+        <location filename="../frame/util/docksettings.cpp" line="66"/>
         <source>Efficient Mode</source>
         <translation>高效模式</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="66"/>
+        <location filename="../frame/util/docksettings.cpp" line="67"/>
         <source>Top</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="67"/>
+        <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Bottom</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="68"/>
+        <location filename="../frame/util/docksettings.cpp" line="69"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="69"/>
+        <location filename="../frame/util/docksettings.cpp" line="70"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="70"/>
+        <location filename="../frame/util/docksettings.cpp" line="71"/>
         <source>Keep Shown</source>
         <translation>一直显示</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="71"/>
+        <location filename="../frame/util/docksettings.cpp" line="72"/>
         <source>Keep Hidden</source>
         <translation>一直隐藏</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="72"/>
+        <location filename="../frame/util/docksettings.cpp" line="73"/>
         <source>Smart Hide</source>
         <translation>智能隐藏</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="112"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="118"/>
+        <location filename="../frame/util/docksettings.cpp" line="121"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="126"/>
+        <location filename="../frame/util/docksettings.cpp" line="129"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="131"/>
+        <location filename="../frame/util/docksettings.cpp" line="134"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
@@ -258,85 +262,85 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="59"/>
+        <location filename="../plugins/network/networkitem.cpp" line="58"/>
         <source>Wireless connection</source>
         <translation>无线连接</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="81"/>
+        <location filename="../plugins/network/networkitem.cpp" line="96"/>
         <source>Wired connection</source>
         <translation>有线连接</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="210"/>
+        <location filename="../plugins/network/networkitem.cpp" line="225"/>
         <source>Disable wired connection</source>
         <translation>关闭有线网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="212"/>
+        <location filename="../plugins/network/networkitem.cpp" line="227"/>
         <source>Enable wired connection</source>
         <translation>启用有线网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="219"/>
+        <location filename="../plugins/network/networkitem.cpp" line="234"/>
         <source>Disable wireless connection</source>
         <translation>关闭无线网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="221"/>
+        <location filename="../plugins/network/networkitem.cpp" line="236"/>
         <source>Enable wireless connection</source>
         <translation>启用无线网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="229"/>
+        <location filename="../plugins/network/networkitem.cpp" line="244"/>
         <source>Disable network</source>
         <translation>关闭网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="231"/>
+        <location filename="../plugins/network/networkitem.cpp" line="246"/>
         <source>Enable network</source>
         <translation>启用网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="238"/>
+        <location filename="../plugins/network/networkitem.cpp" line="253"/>
         <source>Network settings</source>
         <translation>网络设置</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1097"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1139"/>
         <source>Device disabled</source>
         <translation>设备已禁用</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1109"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1137"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1151"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1179"/>
         <source>Wireless connection: %1</source>
         <translation>无线连接：%1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1120"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1154"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1162"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1196"/>
         <source>Wired connection: %1</source>
         <translation>有线连接：%1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1164"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1206"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1169"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Connecting</source>
         <translation>正在连接</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1175"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1217"/>
         <source>Connected but no Internet access</source>
         <translation>已连接网络但无法访问互联网</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1178"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1182"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1220"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1224"/>
         <source>Network cable unplugged</source>
         <translation>未插入网线</translation>
     </message>
@@ -578,12 +582,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="157"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network</source>
         <translation>无线网络</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="159"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network %1</source>
         <translation>无线网络 %1</translation>
     </message>

@@ -195,7 +195,7 @@ void BluetoothItem::refreshTips()
             break;
         }
     } else {
-        tipsText = tr("Bluetooth");
+        tipsText = tr("Turned off");
     }
 
     m_tipsLabel->setText(tipsText);

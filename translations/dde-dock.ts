@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -49,9 +51,13 @@
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
-        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
+        <source>Turned off</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -168,67 +174,67 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="64"/>
+        <location filename="../frame/util/docksettings.cpp" line="65"/>
         <source>Fashion Mode</source>
         <translation>Fashion Mode</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="65"/>
+        <location filename="../frame/util/docksettings.cpp" line="66"/>
         <source>Efficient Mode</source>
         <translation>Efficient Mode</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="66"/>
+        <location filename="../frame/util/docksettings.cpp" line="67"/>
         <source>Top</source>
         <translation>Top</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="67"/>
+        <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Bottom</source>
         <translation>Bottom</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="68"/>
+        <location filename="../frame/util/docksettings.cpp" line="69"/>
         <source>Left</source>
         <translation>Left</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="69"/>
+        <location filename="../frame/util/docksettings.cpp" line="70"/>
         <source>Right</source>
         <translation>Right</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="70"/>
+        <location filename="../frame/util/docksettings.cpp" line="71"/>
         <source>Keep Shown</source>
         <translation>Keep Shown</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="71"/>
+        <location filename="../frame/util/docksettings.cpp" line="72"/>
         <source>Keep Hidden</source>
         <translation>Keep Hidden</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="72"/>
+        <location filename="../frame/util/docksettings.cpp" line="73"/>
         <source>Smart Hide</source>
         <translation>Smart Hide</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="112"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="118"/>
+        <location filename="../frame/util/docksettings.cpp" line="121"/>
         <source>Location</source>
         <translation>Location</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="126"/>
+        <location filename="../frame/util/docksettings.cpp" line="129"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="131"/>
+        <location filename="../frame/util/docksettings.cpp" line="134"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
@@ -258,85 +264,85 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="59"/>
+        <location filename="../plugins/network/networkitem.cpp" line="58"/>
         <source>Wireless connection</source>
         <translation>Wireless connection</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="81"/>
+        <location filename="../plugins/network/networkitem.cpp" line="96"/>
         <source>Wired connection</source>
         <translation>Wired connection</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="210"/>
+        <location filename="../plugins/network/networkitem.cpp" line="225"/>
         <source>Disable wired connection</source>
         <translation>Disable wired connection</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="212"/>
+        <location filename="../plugins/network/networkitem.cpp" line="227"/>
         <source>Enable wired connection</source>
         <translation>Enable wired connection</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="219"/>
+        <location filename="../plugins/network/networkitem.cpp" line="234"/>
         <source>Disable wireless connection</source>
         <translation>Disable wireless connection</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="221"/>
+        <location filename="../plugins/network/networkitem.cpp" line="236"/>
         <source>Enable wireless connection</source>
         <translation>Enable wireless connection</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="229"/>
+        <location filename="../plugins/network/networkitem.cpp" line="244"/>
         <source>Disable network</source>
         <translation>Disable network</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="231"/>
+        <location filename="../plugins/network/networkitem.cpp" line="246"/>
         <source>Enable network</source>
         <translation>Enable network</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="238"/>
+        <location filename="../plugins/network/networkitem.cpp" line="253"/>
         <source>Network settings</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1097"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1139"/>
         <source>Device disabled</source>
         <translation>Device disabled</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1109"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1137"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1151"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1179"/>
         <source>Wireless connection: %1</source>
         <translation>Wireless connection: %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1120"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1154"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1162"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1196"/>
         <source>Wired connection: %1</source>
         <translation>Wired connection: %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1164"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1206"/>
         <source>Not connected</source>
         <translation>Not connected</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1169"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Connecting</source>
         <translation>Connecting</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1175"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1217"/>
         <source>Connected but no Internet access</source>
         <translation>Connected but no Internet access</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1178"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1182"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1220"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1224"/>
         <source>Network cable unplugged</source>
         <translation>Network cable unplugged</translation>
     </message>
@@ -578,12 +584,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="157"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network</source>
         <translation>Wireless Network</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="159"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network %1</source>
         <translation>Wireless Network %1</translation>
     </message>
