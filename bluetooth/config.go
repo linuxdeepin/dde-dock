@@ -21,6 +21,7 @@ package bluetooth
 
 import (
 	"strings"
+	"time"
 
 	"pkg.deepin.io/lib/utils"
 )
@@ -39,7 +40,20 @@ type adapterConfig struct {
 }
 
 type deviceConfig struct {
+	// add icon info to mark device type
+	Icon string
+	// device connect status
 	Connected bool
+	// record latest time to do compare with other devices
+	LatestTime time.Duration
+}
+
+// add address message
+type deviceConfigWithAddress struct {
+	Icon       string
+	Connected  bool
+	LatestTime time.Duration
+	Address    string
 }
 
 func newConfig() (c *config) {
@@ -180,12 +194,21 @@ func (c *config) isDeviceConfigExist(address string) (ok bool) {
 	return
 }
 
-func (c *config) addDeviceConfig(address string) {
-	if c.isDeviceConfigExist(address) {
+// add device detail info into config file
+func (c *config) addDeviceConfig(addDevice *device) {
+	// check if device exist
+	if c.isDeviceConfigExist(addDevice.getAddress()) {
 		return
 	}
 	c.core.Lock()
-	c.Devices[address] = newDeviceConfig()
+	// save device info
+	deviceInfo := newDeviceConfig()
+	deviceInfo.Icon = addDevice.Icon
+	// connect status is set false as default,so device has not been connected yet
+	deviceInfo.LatestTime = 0
+	deviceInfo.Connected = false
+	//add device info to devices map
+	c.Devices[addDevice.getAddress()] = deviceInfo
 	c.core.Unlock()
 	c.save()
 }
@@ -215,16 +238,78 @@ func (c *config) getDeviceConfigConnected(address string) (connected bool) {
 	return dc.Connected
 }
 
-func (c *config) setDeviceConfigConnected(address string, connected bool) {
-	dc, ok := c.getDeviceConfig(address)
+func (c *config) setDeviceConfigConnected(device *device, connected bool) {
+	dc, ok := c.getDeviceConfig(device.getAddress())
 	if !ok {
 		return
 	}
 
 	c.core.Lock()
 	dc.Connected = connected
+	// when status is connect, set connected status as true, update latest time
+	dc.Connected = connected
+	dc.Icon = device.Icon
+	if connected == true {
+		dc.LatestTime = time.Duration(time.Now().Unix())
+	}
+
 	c.core.Unlock()
 
 	c.save()
 	return
+}
+
+// select latest devices from devAddressMap, each type only contain one device
+func (c *config) filterDemandedTypeDevices(devAddressMap map[string]*device) []*device {
+	// prepare map to contain different type device, each device is distributed one nil element
+	// to fill suitable device
+	typeDeviceConfigMap := make(map[string]*deviceConfigWithAddress, len(DeviceTypes))
+	for _, value := range DeviceTypes {
+		typeDeviceConfigMap[value] = nil
+	}
+
+	// find latest devices to fill ordered type device
+	for _, deviceUnit := range devAddressMap {
+		// if device's address is empty, ignore this device
+		if deviceUnit.getAddress() == "" {
+			continue
+		}
+
+		// check if device type is included in required types
+		if _, ok := typeDeviceConfigMap[deviceUnit.Icon]; !ok {
+			continue
+		}
+
+		// get device info from config devices according to address
+		devConfig := c.Devices[deviceUnit.getAddress()]
+		if devConfig == nil {
+			continue
+		}
+
+		// only paired but not connected devices allowed to auto connect
+		if !deviceUnit.Paired || deviceUnit.connected {
+			continue
+		}
+
+		// if element in target address is nil or time is less than new time,then replace the element
+		if typeDeviceConfigMap[deviceUnit.Icon] == nil || typeDeviceConfigMap[deviceUnit.Icon].LatestTime < devConfig.LatestTime {
+			typeDeviceConfigMap[deviceUnit.Icon] = &deviceConfigWithAddress{
+				Icon:       devConfig.Icon,
+				Connected:  devConfig.Connected,
+				LatestTime: devConfig.LatestTime,
+				Address:    deviceUnit.getAddress(),
+			}
+		}
+	}
+
+	var deviceList []*device
+	for _, value := range typeDeviceConfigMap {
+		// check if device or dev config is nil
+		if value == nil {
+			continue
+		}
+		deviceList = append(deviceList, devAddressMap[value.Address])
+	}
+
+	return deviceList
 }

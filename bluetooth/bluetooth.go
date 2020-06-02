@@ -56,6 +56,21 @@ const (
 	StateConnected   = 2
 )
 
+var DeviceTypes []string = []string{
+	"computer",
+	//"phone",
+	"modem",
+	"network-wireless",
+	"audio-card",
+	"camera-video",
+	"input-gaming",
+	"input-keyboard",
+	"input-tablet",
+	"input-mouse",
+	//"printer",
+	"camera-photo",
+}
+
 type dbusObjectData map[string]dbus.Variant
 
 //go:generate dbusutil-gen -type Bluetooth bluetooth.go
@@ -341,7 +356,8 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 		return
 	}
 
-	b.config.addDeviceConfig(d.getAddress())
+	// device detail info is needed to write into config file
+	b.config.addDeviceConfig(d)
 
 	b.devicesLock.Lock()
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
@@ -613,25 +629,37 @@ func (b *Bluetooth) tryConnectPairedDevices() {
 	}
 }
 
+// get paired device list
 func (b *Bluetooth) getPairedDeviceList() []*device {
+	// memory lock
 	b.adaptersLock.Lock()
 	defer b.adaptersLock.Unlock()
 	b.devicesLock.Lock()
 	defer b.devicesLock.Unlock()
 
-	var devList []*device
+	// get all paired devices list from adapters
+	var devAddressMap = make(map[string]*device)
 	for _, aobj := range b.adapters {
 		logger.Info("[DEBUG] Auto connect adapter:", aobj.Path)
+
+		// check if devices list in current adapter is legal
 		list := b.devices[aobj.Path]
 		if len(list) == 0 || !b.config.getAdapterConfigPowered(aobj.address) {
 			continue
 		}
-		for _, dev := range list {
-			if dev.Paired && !dev.connected {
-				devList = append(devList, dev)
+
+		// add devices info to list
+		for _, value := range list {
+			if value == nil {
+				continue
 			}
+			devAddressMap[value.getAddress()] = value
 		}
 	}
+
+	// select the latest devices of each deviceType and add them into list
+	devList := b.config.filterDemandedTypeDevices(devAddressMap)
+
 	return devList
 }
 
