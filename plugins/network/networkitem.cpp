@@ -1225,3 +1225,38 @@ void NetworkItem::refreshTips()
         break;
     }
 }
+
+bool NetworkItem::isShowControlCenter()
+{
+    bool onlyOneTypeDevice = false;
+    if ((m_wiredItems.size() == 0 && m_wirelessItems.size() > 0)
+            || (m_wiredItems.size() > 0 && m_wirelessItems.size() == 0))
+        onlyOneTypeDevice = true;
+
+    if (onlyOneTypeDevice) {
+        switch (m_pluginState) {
+        case Unknow:
+        case Nocable:
+        case Bfailed:
+        case AconnectNoInternet:
+        case BconnectNoInternet:
+        case Adisconnected:
+        case Bdisconnected:
+        case Adisabled:
+        case Bdisabled:
+            return true;
+        }
+    } else {
+        switch (m_pluginState) {
+        case Unknow:
+        case Nocable:
+        case Bfailed:
+        case ConnectNoInternet:
+        case Disconnected:
+        case Disabled:
+            return true;
+        }
+    }
+
+    return false;
+}
