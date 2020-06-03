@@ -38,6 +38,9 @@ public:
     };
     Q_ENUM(State)
 
+private:
+    static QMap<QString,QString> deviceType2Icon;
+
 public:
     explicit Device(QObject *parent = nullptr);
 
@@ -65,6 +68,9 @@ public:
     inline void setAdapterId(const QString &id) { m_adapterId = id; }
     inline const QString &getAdapterId() const { return m_adapterId; }
 
+    inline QString deviceType() const { return m_deviceType; }
+    void setDeviceType(const QString &deviceType);
+
 Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void pairedChanged(const bool paired) const;
@@ -82,6 +88,7 @@ private:
     int m_rssi;
     State m_state;
     QString m_adapterId;
+    QString m_deviceType;
 };
 
 QDebug &operator<<(QDebug &stream, const Device *device);

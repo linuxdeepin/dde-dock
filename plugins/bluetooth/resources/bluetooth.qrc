@@ -16,5 +16,41 @@
         <file>select.svg</file>
         <file>disconnect.svg</file>
         <file>disconnect_dark.svg</file>
+        <file>dark/buletooth_camera_dark.svg</file>
+        <file>dark/buletooth_clang_dark.svg</file>
+        <file>dark/buletooth_keyboard_dark.svg</file>
+        <file>dark/buletooth_lan_dark.svg</file>
+        <file>dark/buletooth_laptop_dark.svg</file>
+        <file>dark/buletooth_microphone_dark.svg</file>
+        <file>dark/buletooth_mouse_dark.svg</file>
+        <file>dark/buletooth_other_dark.svg</file>
+        <file>dark/buletooth_pad_dark.svg</file>
+        <file>dark/buletooth_pc_dark.svg</file>
+        <file>dark/buletooth_pen_dark.svg</file>
+        <file>dark/buletooth_pheadset_dark.svg</file>
+        <file>dark/buletooth_phone_dark.svg</file>
+        <file>dark/buletooth_print_dark.svg</file>
+        <file>dark/buletooth_scaner_dark.svg</file>
+        <file>dark/buletooth_touchpad_dark.svg</file>
+        <file>dark/buletooth_tv_dark.svg</file>
+        <file>dark/buletooth_vidicon_dark.svg</file>
+        <file>light/buletooth_camera_light.svg</file>
+        <file>light/buletooth_clang_light.svg</file>
+        <file>light/buletooth_keyboard_light.svg</file>
+        <file>light/buletooth_lan_light.svg</file>
+        <file>light/buletooth_laptop_light.svg</file>
+        <file>light/buletooth_microphone_light.svg</file>
+        <file>light/buletooth_mouse_light.svg</file>
+        <file>light/buletooth_other_light.svg</file>
+        <file>light/buletooth_pad_light.svg</file>
+        <file>light/buletooth_pc_light.svg</file>
+        <file>light/buletooth_pen_light.svg</file>
+        <file>light/buletooth_pheadset_light.svg</file>
+        <file>light/buletooth_phone_light.svg</file>
+        <file>light/buletooth_print_light.svg</file>
+        <file>light/buletooth_scaner_light.svg</file>
+        <file>light/buletooth_touchpad_light.svg</file>
+        <file>light/buletooth_tv_light.svg</file>
+        <file>light/buletooth_vidicon_light.svg</file>
     </qresource>
 </RCC>

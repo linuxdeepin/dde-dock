@@ -261,8 +261,7 @@ void AdapterItem::createDeviceItem(Device *device)
         return;
 
     QString deviceId = device->id();
-    auto deviceItem = new DeviceItem(device->name(), this);
-    deviceItem->setDevice(device);
+    auto deviceItem = new DeviceItem(device, this);
     m_deviceItems[deviceId] = deviceItem;
     if (device->state() == Device::StateConnected)
         m_sortConnected << deviceItem;
