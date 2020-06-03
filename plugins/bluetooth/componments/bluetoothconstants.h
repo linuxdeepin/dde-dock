@@ -9,4 +9,9 @@
 #define MARGIN (12)
 #define SWITCHBUTTONWIDTH (50)
 
+#define LIGHTICON   "light/buletooth_"
+#define DARKICON    "dark/buletooth_"
+#define LIGHTICONSUFFIX   "_light.svg"
+#define DARKICONSUFFIX    "_dark.svg"
+
 #endif // BLUETOOTHCONSTANTS_H

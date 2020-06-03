@@ -36,13 +36,12 @@ class DeviceItem : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceItem(const QString &title, QWidget *parent = nullptr);
+    explicit DeviceItem(Device *d, QWidget *parent = nullptr);
     bool operator <(const DeviceItem &item);
 
-    inline void setTitle(const QString &name) { m_title->setText(name); }
+    void setTitle(const QString &name);
     inline QString title() { return m_title->text(); }
 
-    void setDevice(Device *device);
     inline Device *device() { return m_device; }
     inline const Device *device() const { return  m_device; }
 
@@ -58,12 +57,16 @@ public slots:
     void changeState(const Device::State state);
 
 private:
+    QString nameDecorated(const QString &name);
+
+private:
     QLabel *m_title;
     QLabel *m_state;
     DSpinner *m_loadingStat;
-    Device *m_device = nullptr;
+    Device *m_device;
     HorizontalSeparator *m_line;
-    QString m_statSuffix;
+    QString m_stateSuffix;
+    QLabel *m_typeIcon;
 };
 
 class HorizontalSeparator : public QWidget

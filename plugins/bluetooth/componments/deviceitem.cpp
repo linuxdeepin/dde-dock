@@ -23,6 +23,7 @@
 #include "deviceitem.h"
 #include "constants.h"
 #include "bluetoothconstants.h"
+#include "../frame/util/imageutil.h"
 
 #include <DApplicationHelper>
 #include <DStyle>
@@ -34,27 +35,48 @@ DGUI_USE_NAMESPACE
 
 extern void initFontColor(QWidget *widget);
 
-DeviceItem::DeviceItem(const QString &title, QWidget *parent)
+DeviceItem::DeviceItem(Device *d, QWidget *parent)
     : QWidget(parent)
     , m_title(new QLabel(this))
     , m_state(new QLabel(this))
     , m_loadingStat(new DSpinner)
     , m_line(new HorizontalSeparator(this))
+    , m_typeIcon(new QLabel(this))
 {
+    m_device = d;
+
     setFixedHeight(ITEMHEIGHT);
     auto themeChanged = [&](DApplicationHelper::ColorType themeType){
+        QString iconPrefix;
+        QString iconSuffix;
         switch (themeType) {
         case DApplicationHelper::UnknownType:
-        case DApplicationHelper::LightType:  m_statSuffix = LIGHTSUFFIX; break;
-        case DApplicationHelper::DarkType:  m_statSuffix = DARKSUFFIX; break;
+        case DApplicationHelper::LightType: {
+            iconPrefix = LIGHTICON;
+            iconSuffix = LIGHTICONSUFFIX;
+            m_stateSuffix = LIGHTSUFFIX;
         }
-        m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
+            break;
+        case DApplicationHelper::DarkType: {
+            iconPrefix = DARKICON;
+            m_stateSuffix = DARKSUFFIX;
+            iconSuffix = DARKICONSUFFIX;
+        }
+        }
+
+        m_state->setPixmap(QPixmap(":/select" + m_stateSuffix));
+
+        QString iconString;
+        if (!m_device->deviceType().isEmpty())
+            iconString = iconPrefix + m_device->deviceType() + iconSuffix;
+        else
+            iconString = iconPrefix + QString("other") + iconSuffix;
+        m_typeIcon->setPixmap(ImageUtil::loadSvg(iconString, ":/", PLUGIN_ICON_MIN_SIZE, devicePixelRatioF()));
     };
 
     themeChanged(DApplicationHelper::instance()->themeType());
 
-    QString strTitle = QFontMetrics(m_title->font()).elidedText(title, Qt::ElideRight, POPUPWIDTH - MARGIN * 2 - PLUGIN_ICON_MIN_SIZE - 3);
-    m_title->setText(strTitle);
+    m_title->setText(nameDecorated(m_device->name()));
     initFontColor(m_title);
 
     m_line->setVisible(true);
@@ -70,6 +92,8 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
     itemLayout->addSpacing(MARGIN);
+    itemLayout->addWidget(m_typeIcon);
+    itemLayout->addSpacing(5);
     itemLayout->addWidget(m_title);
     itemLayout->addStretch();
     itemLayout->addWidget(m_state);
@@ -79,6 +103,8 @@ DeviceItem::DeviceItem(const QString &title, QWidget *parent)
     setLayout(deviceLayout);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, themeChanged);
+
+    changeState(m_device->state());
 }
 
 bool DeviceItem::operator <(const DeviceItem &item)
@@ -86,12 +112,9 @@ bool DeviceItem::operator <(const DeviceItem &item)
     return  this->device()->rssi() < item.device()->rssi();
 }
 
-void DeviceItem::setDevice(Device *device)
+void DeviceItem::setTitle(const QString &name)
 {
-    if (device) {
-        m_device = device;
-        changeState(device->state());
-    }
+    m_title->setText(nameDecorated(name));
 }
 
 void DeviceItem::mousePressEvent(QMouseEvent *event)
@@ -105,7 +128,7 @@ void DeviceItem::enterEvent(QEvent *event)
     QWidget::enterEvent(event);
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
-            m_state->setPixmap(QPixmap(":/disconnect" + m_statSuffix));
+            m_state->setPixmap(QPixmap(":/disconnect" + m_stateSuffix));
         }
     }
 }
@@ -115,7 +138,7 @@ void DeviceItem::leaveEvent(QEvent *event)
     QWidget::enterEvent(event);
     if (m_device) {
         if (Device::StateConnected == m_device->state()) {
-            m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
+            m_state->setPixmap(QPixmap(":/select" + m_stateSuffix));
         }
     }
 }
@@ -124,7 +147,7 @@ void DeviceItem::changeState(const Device::State state)
 {
     switch (state) {
     case Device::StateUnavailable: {
-        m_state->setPixmap(QPixmap(":/disconnect" + m_statSuffix));
+        m_state->setPixmap(QPixmap(":/disconnect" + m_stateSuffix));
         m_state->setVisible(false);
         m_loadingStat->stop();
         m_loadingStat->hide();
@@ -139,7 +162,7 @@ void DeviceItem::changeState(const Device::State state)
     }
         break;
     case Device::StateConnected: {
-        m_state->setPixmap(QPixmap(":/select" + m_statSuffix));
+        m_state->setPixmap(QPixmap(":/select" + m_stateSuffix));
         m_loadingStat->stop();
         m_loadingStat->hide();
         m_loadingStat->setVisible(false);
@@ -147,6 +170,11 @@ void DeviceItem::changeState(const Device::State state)
     }
         break;
     }
+}
+
+QString DeviceItem::nameDecorated(const QString &name)
+{
+    return QFontMetrics(m_title->font()).elidedText(name, Qt::ElideRight, POPUPWIDTH - MARGIN * 2 - PLUGIN_ICON_MIN_SIZE - 30);
 }
 
 HorizontalSeparator::HorizontalSeparator(QWidget *parent)

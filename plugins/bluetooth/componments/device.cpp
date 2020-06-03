@@ -22,16 +22,32 @@
 
 #include "device.h"
 
-Device::Device(QObject *parent) :
-    QObject(parent),
-    m_id(""),
-    m_name(""),
-    m_paired(false),
-    m_trusted(false),
-    m_connecting(false),
-    m_rssi(0),
-    m_state(StateUnavailable),
-    m_adapterId(QString())
+QMap<QString,QString> Device::deviceType2Icon = {
+    {"unknow","other"},
+    {"computer","pc"},
+    {"phone","phone"},
+    {"video-display","vidicon"},
+    {"multimedia-player","tv"},
+    {"scanner","scaner"},
+    {"input-keyboard","keyboard"},
+    {"input-mouse","mouse"},
+    {"input-gaming","other"},
+    {"input-tablet","touchpad"},
+    {"audio-card","pheadset"},
+    {"network-wireless","lan"},
+    {"camera-video","vidicon"},
+    {"printer","print"},
+    {"camera-photo","camera"},
+    {"modem","other"}
+};
+
+Device::Device(QObject *parent)
+    : QObject(parent)
+    , m_paired(false)
+    , m_trusted(false)
+    , m_connecting(false)
+    , m_rssi(0)
+    , m_state(StateUnavailable)
 {
 }
 
@@ -86,6 +102,11 @@ void Device::setRssi(int rssi)
         m_rssi = rssi;
         Q_EMIT rssiChanged(rssi);
     }
+}
+
+void Device::setDeviceType(const QString &deviceType)
+{
+    m_deviceType = deviceType2Icon[deviceType];
 }
 
 QDebug &operator<<(QDebug &stream, const Device *device)
