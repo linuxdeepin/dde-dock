@@ -68,6 +68,8 @@ type SecretAgent struct {
 	}
 }
 
+var errSecretAgentUserCanceled = errors.New("user canceled")
+
 func (sa *SecretAgent) addSaveSecretsTask(connPath dbus.ObjectPath,
 	settingName string, process *os.Process) {
 	sa.saveSecretsTasksMu.Lock()
@@ -376,6 +378,12 @@ func (sa *SecretAgent) GetSecrets(connectionData map[string]map[string]dbus.Vari
 	var err error
 	secretsData, err = sa.getSecrets(connectionData, connectionPath, settingName, hints, flags)
 	if err != nil {
+		if err == errSecretAgentUserCanceled {
+			return nil, &dbus.Error{
+				Name: "org.freedesktop.NetworkManager.SecretAgent.UserCanceled",
+				Body: []interface{}{"user canceled"},
+			}
+		}
 		return nil, dbusutil.ToError(err)
 	}
 
@@ -525,6 +533,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 		}
 
 		setting["secrets"] = dbus.MakeVariant(vpnSecretsData)
+
 	} else if secretKeys, ok := secretSettingKeys[settingName]; ok {
 
 		var askItems []string
@@ -550,7 +559,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 					isMustAsk(connectionData, settingName, secretKey) {
 					askItems = append(askItems, secretKey)
 				}
-			} else if secretFlags == secretFlagAgentOwned {
+			} else if secretFlags == secretFlagAgentOwned && sa.m.saveToKeyring {
 				resultSaved, err := sa.getAll(connUUID, settingName)
 				if err != nil {
 					return nil, err
@@ -558,6 +567,11 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 				logger.Debugf("getAll resultSaved: %#v", resultSaved)
 				if len(resultSaved) == 0 && allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
 					askItems = append(askItems, secretKey)
+				}
+			} else if !sa.m.saveToKeyring {
+				err = sa.deleteAll(connUUID)
+				if err != nil {
+					return nil, err
 				}
 			}
 		}
@@ -567,16 +581,15 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 				settingName, askItems, requestNew)
 			if err != nil {
 				logger.Warning("askPasswords error:", err)
-				if sa.m.activeConnectSettingPath == connectionPath {
-					sa.m.DisconnectDevice(sa.m.activeConnectDevpath)
-				}
+				return nil, errSecretAgentUserCanceled
 			} else {
-				var items []settingItem
 				for key, value := range resultAsk {
 					setting[key] = dbus.MakeVariant(value)
 					secretFlags, _ := getConnectionDataUint32(connectionData, settingName,
 						getSecretFlagsKeyName(key))
 					if secretFlags == secretFlagAgentOwned {
+						sa.m.hasSaveSecret = false
+						var items []settingItem
 						valueStr, ok := setting[key].Value().(string)
 						if ok {
 							label := fmt.Sprintf("Network secret for %s/%s/%s", connId, settingName, key)
@@ -587,14 +600,24 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 								label:       label,
 							})
 						}
+						sa.m.items = items
 					}
-				}
-				for _, item := range items {
-					sa.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
 				}
 			}
 		}
 
+		if !sa.m.saveToKeyring {
+			for _, item := range sa.m.items {
+				secretFlags, _ := getConnectionDataUint32(connectionData, item.settingName,
+					getSecretFlagsKeyName(item.settingKey))
+				if secretFlags == secretFlagAgentOwned {
+					sa.m.hasSaveSecret = false
+					sa.m.saveToKeyring = true
+					setting[item.settingKey] = dbus.MakeVariant(item.value)
+					return
+				}
+			}
+		}
 		resultSaved, err := sa.getAll(connUUID, settingName)
 		if err != nil {
 			return nil, err
@@ -908,10 +931,17 @@ func (sa *SecretAgent) saveSecrets(connectionData map[string]map[string]dbus.Var
 	for _, item := range arr {
 		label := item.label
 		if label == "" {
-			label = fmt.Sprintf("Network secret for %s/%s/%s", connId,
+			item.label = fmt.Sprintf("Network secret for %s/%s/%s", connId,
 				item.settingName, item.settingKey)
 		}
-		sa.set(label, connUUID, item.settingName, item.settingKey, item.value)
+		secretFlags, _ := getConnectionDataUint32(connectionData, item.settingName,
+			getSecretFlagsKeyName(item.settingKey))
+		if secretFlags == secretFlagAgentOwned {
+			sa.m.saveToKeyring = false
+			sa.m.items = arr
+			continue
+		}
+		sa.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
 	}
 
 	// delete
