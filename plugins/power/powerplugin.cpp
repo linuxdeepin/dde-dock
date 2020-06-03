@@ -26,6 +26,7 @@
 #include <QGSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
+#define DELAYTIME           (20 * 1000)
 
 static QGSettings *GSettingsByApp()
 {
@@ -38,9 +39,12 @@ PowerPlugin::PowerPlugin(QObject *parent)
     , m_pluginLoaded(false)
     , m_showTimeToFull(true)
     , m_tipsLabel(new Dock::TipsWidget)
+    , m_delayTimer(new QTimer(this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("power");
+    m_delayTimer->setInterval(DELAYTIME);
+    m_delayTimer->setSingleShot(true);
 }
 
 const QString PowerPlugin::pluginName() const
@@ -189,7 +193,11 @@ void PowerPlugin::loadPlugin()
     m_systemPowerInter->setSync(true);
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &PowerPlugin::onGSettingsChanged);
-    connect(m_systemPowerInter, &SystemPowerInter::BatteryStatusChanged, this, &PowerPlugin::refreshTipsData);
+    connect(m_systemPowerInter, &SystemPowerInter::BatteryStatusChanged, [&](uint  value){
+        if (value == BatteryState::CHARGING)
+            m_delayTimer->start();
+        refreshTipsData();
+    });
     connect(m_systemPowerInter, &SystemPowerInter::BatteryTimeToEmptyChanged, this, &PowerPlugin::refreshTipsData);
     connect(m_systemPowerInter, &SystemPowerInter::BatteryTimeToFullChanged, this, &PowerPlugin::refreshTipsData);
     connect(m_systemPowerInter, &SystemPowerInter::OnBatteryChanged, this, &PowerPlugin::refreshTipsData);
@@ -282,19 +290,23 @@ void PowerPlugin::refreshTipsData()
             min = 1;
         }
         QString tips;
-        if(timeToFull == 0) {   // 电量已充満或电量计算中,剩余充满时间会返回0
+        if (m_delayTimer->isActive())
             tips = tr("Capacity %1 ...").arg(value);
-        } else if (hour == 0) {
-            if(m_showTimeToFull)
-                tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
-            else {
-                tips = tr("Charging %1").arg(value);
-            }
-        } else {
-            if(m_showTimeToFull)
-                tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
-            else {
-                tips = tr("Charging %1").arg(value);
+        else {
+            if(timeToFull == 0) {   // 电量已充満或电量计算中,剩余充满时间会返回0
+                tips = tr("Capacity %1 ...").arg(value);
+            } else if (hour == 0) {
+                if(m_showTimeToFull)
+                    tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
+                else {
+                    tips = tr("Charging %1").arg(value);
+                }
+            } else {
+                if(m_showTimeToFull)
+                    tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
+                else {
+                    tips = tr("Charging %1").arg(value);
+                }
             }
         }
 
