@@ -56,6 +56,7 @@ type activeConnectionInfo struct {
 	Device              dbus.ObjectPath
 	SettingPath         dbus.ObjectPath
 	ConnectionType      string
+	Protocol            string
 	ConnectionName      string
 	ConnectionUuid      string
 	MobileNetworkType   string
@@ -340,7 +341,9 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 
 	// security
 	use8021xSecurity := false
-	switch getSettingConnectionType(cdata) {
+	// get protocol from data
+	protocol := getSettingConnectionType(cdata)
+	switch protocol {
 	case nm.NM_SETTING_WIRED_SETTING_NAME:
 		if getSettingVk8021xEnable(cdata) {
 			use8021xSecurity = true
@@ -404,6 +407,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 		Device:              devPath,
 		SettingPath:         nmConn.Path_(),
 		ConnectionType:      connType,
+		Protocol:            protocol,
 		ConnectionName:      connName,
 		ConnectionUuid:      nmAConnUuid,
 		MobileNetworkType:   mobileNetworkType,
