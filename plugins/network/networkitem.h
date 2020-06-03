@@ -59,6 +59,7 @@ public:
     const QString contextMenu() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
     void refreshTips();
+    bool isShowControlCenter();
 
 public slots:
     void updateSelf();
