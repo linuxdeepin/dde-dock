@@ -29,8 +29,8 @@ import (
 	"strings"
 	"sync"
 
+	authenticate "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.authenticate"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	fprintd_common "pkg.deepin.io/dde/daemon/fprintd/common"
 	"pkg.deepin.io/gir/glib-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -572,12 +572,26 @@ func (u *User) clearData() {
 		}
 	}
 
-	// delete enrolled fingers
-	err = fprintd_common.DeleteEnrolledFingers(u.UserName, u.UUID)
+	u.clearFingers()
+}
+
+func (u *User) clearFingers() {
+	logger.Debug("clearFingers")
+
+	sysBus, err := dbus.SystemBus()
 	if err != nil {
-		logger.Warningf("failed to delete enrolled fingers (user: %q, uuid: %q): %v",
-			u.UserName, u.UUID, err)
+		logger.Warning("connect to system bus failed:", err)
+		return
 	}
+
+	fpObj := authenticate.NewFingerprint(sysBus)
+	err = fpObj.DeleteAllFingers(0, u.UserName)
+	if err != nil {
+		logger.Warning("failed to delete enrolled fingers:", err)
+		return
+	}
+
+	logger.Debug("clear fingers succesed")
 }
 
 // userPath must be composed with 'userDBusPath + uid'

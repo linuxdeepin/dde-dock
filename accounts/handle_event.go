@@ -204,6 +204,14 @@ func (m *Manager) addUser(uInfo *users.UserInfo) {
 
 func (m *Manager) deleteUser(uid string) {
 	logger.Debug("deleteUser", uid)
+
+	user := m.getUserByUid(uid)
+	if user != nil {
+		user.clearFingers()
+	} else {
+		logger.Warningf("uid %s not found", uid)
+	}
+
 	userPath := userDBusPathPrefix + uid
 	m.stopExportUser(userPath)
 	err := m.service.Emit(m, "UserDeleted", userPath)

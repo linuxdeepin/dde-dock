@@ -24,7 +24,7 @@ import (
 	"sync"
 
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/tasker"
 	dutils "pkg.deepin.io/lib/utils"
@@ -219,6 +219,18 @@ func (m *Manager) getUserByName(name string) *User {
 
 	for _, user := range m.usersMap {
 		if user.UserName == name {
+			return user
+		}
+	}
+	return nil
+}
+
+func (m *Manager) getUserByUid(uid string) *User {
+	m.usersMapMu.Lock()
+	defer m.usersMapMu.Unlock()
+
+	for _, user := range m.usersMap {
+		if user.Uid == uid {
 			return user
 		}
 	}
