@@ -21,12 +21,12 @@ package bluetooth
 
 import (
 	"fmt"
-	"os"
-
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	"os"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
+	"time"
 )
 
 type adapter struct {
@@ -40,7 +40,11 @@ type adapter struct {
 	Discovering         bool
 	Discoverable        bool
 	DiscoverableTimeout uint32
+	// discovering timer, when time is up, stop discovering until start button is clicked next time
+	discoveringTimeout *time.Timer
 }
+
+var defaultDiscoveringTimeout = 1 * time.Minute
 
 func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *adapter) {
 	a = &adapter{Path: apath}
@@ -49,7 +53,15 @@ func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *a
 	a.core.InitSignalExt(systemSigLoop, true)
 	a.connectProperties()
 	a.address, _ = a.core.Address().Get(0)
-
+	// 用于定时停止扫描
+	a.discoveringTimeout = time.AfterFunc(defaultDiscoveringTimeout, func() {
+		logger.Debug("discovery time out, stop discovering")
+		if err := a.core.StopDiscovery(0); err != nil {
+			logger.Warningf("stop discovery failed, err:%v", err)
+		}
+	})
+	// stop timer at first
+	a.discoveringTimeout.Stop()
 	// fix alias
 	alias, _ := a.core.Alias().Get(0)
 	if alias == "first-boot-hostname" {

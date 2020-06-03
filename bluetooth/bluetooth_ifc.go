@@ -114,6 +114,10 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) *dbus.Error {
 	err = a.core.StartDiscovery(0)
 	if err != nil {
 		logger.Warningf("failed to start %s discovery %v:", a, err)
+	} else {
+		// start discovering success, reset discovering timer
+		logger.Debug("reset timer for stop scan")
+		a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
 	}
 
 	return nil
@@ -146,6 +150,10 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		err = a.core.StartDiscovery(0)
 		if err != nil {
 			logger.Warningf("failed to start discovery for %s: %v", a, err)
+		} else {
+			logger.Debug("reset timer for stop scan")
+			// start discovering success, reset discovering timer
+			a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
 		}
 		go b.tryConnectPairedDevices()
 	}
@@ -210,6 +218,10 @@ func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath,
 		if err != nil {
 			logger.Warningf("failed to start discovery for %s: %v", a, err)
 			return dbusutil.ToError(err)
+		} else {
+			logger.Debug("reset timer for stop scan")
+			// start discovering success, reset discovering timer
+			a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
 		}
 	} else {
 		err = a.core.StopDiscovery(0)
