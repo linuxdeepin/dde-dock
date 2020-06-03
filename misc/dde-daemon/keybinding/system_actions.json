@@ -83,7 +83,7 @@
         {
             "Key": "translation",
             "Action": "dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToTranslate"
-        }
+        },
 	{
             "key":"notification-center",
             "Action":"dbus-send --print-reply --dest=com.deepin.dde.osd /org/freedesktop/Notifications com.deepin.dde.Notification.Toggle"
