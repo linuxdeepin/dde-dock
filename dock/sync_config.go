@@ -43,29 +43,35 @@ func (sc *syncConfig) setPluginSettings(settings pluginSettings) {
 
 func (sc *syncConfig) setDockedApps(dockedApps []string) {
 	m := sc.m
-	added, removed := diffStrSlice(m.DockedApps.Get(), dockedApps)
-
-	for _, value := range added {
-		desktopFile := unzipDesktopPath(value)
-		_, err := os.Stat(desktopFile)
-		if err == nil {
-			_, err = m.requestDock(desktopFile, -1)
-			if err != nil {
-				logger.Warning(err)
-			}
-		}
-	}
-
+	added := dockedApps
+	removed := m.DockedApps.Get()
 	for _, value := range removed {
 		desktopFile := unzipDesktopPath(value)
-
 		_, err := m.requestUndock(desktopFile)
 		if err != nil {
 			logger.Warning(err)
 		}
 	}
 
-	m.DockedApps.Set(dockedApps)
+	var index = 0
+	for _, value := range added {
+		desktopFile := unzipDesktopPath(value)
+		_, err := os.Stat(desktopFile)
+		if err == nil {
+			_, err = m.requestDock(desktopFile, int32(index))
+			if err != nil {
+				logger.Warning(err)
+			} else {
+				index++
+			}
+		}
+	}
+
+	// emit signal
+	err := m.service.Emit(m, "DockAppSettingsSynced")
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (sc *syncConfig) Set(data []byte) error {
