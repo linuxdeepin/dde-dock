@@ -46,8 +46,11 @@ func (*DisplayController) Name() string {
 func (c *DisplayController) ExecCmd(cmd ActionCmd) error {
 	switch cmd {
 	case DisplayModeSwitch:
-		showOSD("SwitchMonitors")
-		return nil
+		displayList, err := c.display.ListOutputNames(0)
+		if err == nil && len(displayList) > 1 {
+			showOSD("SwitchMonitors")
+		}
+		return err
 
 	case MonitorBrightnessUp:
 		return c.changeBrightness(true)
