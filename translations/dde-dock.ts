@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -57,7 +55,7 @@
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
         <source>Turned off</source>
-        <translation type="unfinished"></translation>
+        <translation>Turned off</translation>
     </message>
 </context>
 <context>
@@ -355,12 +353,12 @@
         <translation>Network</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="189"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
         <source>Wired Network</source>
         <translation>Wired Network</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="193"/>
         <source>Wired Network %1</source>
         <translation>Wired Network %1</translation>
     </message>
@@ -393,44 +391,48 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="245"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="264"/>
         <source>Charged</source>
         <translation>Charged</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="249"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="248"/>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacity %1, %2 min remaining</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="251"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="258"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="250"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="257"/>
         <source>Capacity %1</source>
         <translation>Capacity %1</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="256"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="255"/>
         <source>Capacity %1, %2 hr %3 min remaining</source>
         <translation>Capacity %1, %2 hr %3 min remaining</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="272"/>
-        <source>Capacity %1 ....</source>
-        <translation>Capacity %1 ....</translation>
+        <location filename="../plugins/power/powerplugin.cpp" line="263"/>
+        <source>Capacity 1%, fully charged</source>
+        <translation>Capacity 1%, fully charged</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="275"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="271"/>
+        <source>Capacity %1 ...</source>
+        <translation>Capacity %1 ...</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="274"/>
         <source>Charging %1, %2 min until full</source>
         <translation>Charging %1, %2 min until full</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="277"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="283"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="276"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="282"/>
         <source>Charging %1</source>
         <translation>Charging %1</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="281"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="280"/>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Charging %1, %2 hr %3 min until full</translation>
     </message>

@@ -353,12 +353,12 @@
         <translation>網路</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="189"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
         <source>Wired Network</source>
         <translation>有線網路</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="193"/>
         <source>Wired Network %1</source>
         <translation>有線網路 %1</translation>
     </message>
@@ -391,44 +391,48 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="245"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="264"/>
         <source>Charged</source>
         <translation>充電完成</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="249"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="248"/>
         <source>Capacity %1, %2 min remaining</source>
         <translation>電量 %1，剩餘 %2 分鐘</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="251"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="258"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="250"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="257"/>
         <source>Capacity %1</source>
         <translation>電量 %1</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="256"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="255"/>
         <source>Capacity %1, %2 hr %3 min remaining</source>
         <translation>電量 %1，剩餘 %2 小時 %3 分鐘</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="272"/>
-        <source>Capacity %1 ....</source>
-        <translation>電量 %1 ....</translation>
+        <location filename="../plugins/power/powerplugin.cpp" line="263"/>
+        <source>Capacity 1%, fully charged</source>
+        <translation>電量%1，已充滿</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="275"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="271"/>
+        <source>Capacity %1 ...</source>
+        <translation>電量%1 ...</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="274"/>
         <source>Charging %1, %2 min until full</source>
         <translation>正在充電 %1，距離完成尚餘 %2 分鐘</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="277"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="283"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="276"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="282"/>
         <source>Charging %1</source>
         <translation>%1 正在充電</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="281"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="280"/>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>正在充電 %1，距離完成尚餘 %2 小時 %3 分鐘</translation>
     </message>

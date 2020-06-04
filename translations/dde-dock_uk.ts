@@ -49,9 +49,13 @@
     </message>
     <message>
         <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="193"/>
-        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="198"/>
+        <source>Turned off</source>
+        <translation>Вимкнено</translation>
     </message>
 </context>
 <context>
@@ -168,67 +172,67 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="64"/>
+        <location filename="../frame/util/docksettings.cpp" line="65"/>
         <source>Fashion Mode</source>
         <translation>Модний режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="65"/>
+        <location filename="../frame/util/docksettings.cpp" line="66"/>
         <source>Efficient Mode</source>
         <translation>Режим ефективності</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="66"/>
+        <location filename="../frame/util/docksettings.cpp" line="67"/>
         <source>Top</source>
         <translation>Верх</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="67"/>
+        <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Bottom</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="68"/>
+        <location filename="../frame/util/docksettings.cpp" line="69"/>
         <source>Left</source>
         <translation>Ліворуч</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="69"/>
+        <location filename="../frame/util/docksettings.cpp" line="70"/>
         <source>Right</source>
         <translation>Праворуч</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="70"/>
+        <location filename="../frame/util/docksettings.cpp" line="71"/>
         <source>Keep Shown</source>
         <translation>Показувати постійно</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="71"/>
+        <location filename="../frame/util/docksettings.cpp" line="72"/>
         <source>Keep Hidden</source>
         <translation>Приховувати</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="72"/>
+        <location filename="../frame/util/docksettings.cpp" line="73"/>
         <source>Smart Hide</source>
         <translation>Розумне приховування</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
+        <location filename="../frame/util/docksettings.cpp" line="112"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="118"/>
+        <location filename="../frame/util/docksettings.cpp" line="121"/>
         <source>Location</source>
         <translation>Місце знаходження</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="126"/>
+        <location filename="../frame/util/docksettings.cpp" line="129"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="131"/>
+        <location filename="../frame/util/docksettings.cpp" line="134"/>
         <source>Plugins</source>
         <translation>Плагіни</translation>
     </message>
@@ -258,85 +262,85 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="59"/>
+        <location filename="../plugins/network/networkitem.cpp" line="58"/>
         <source>Wireless connection</source>
         <translation>Бездротове підключення</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="81"/>
+        <location filename="../plugins/network/networkitem.cpp" line="96"/>
         <source>Wired connection</source>
         <translation>Дротове підключення</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="210"/>
+        <location filename="../plugins/network/networkitem.cpp" line="225"/>
         <source>Disable wired connection</source>
         <translation>Вимкнути дротове з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="212"/>
+        <location filename="../plugins/network/networkitem.cpp" line="227"/>
         <source>Enable wired connection</source>
         <translation>Увімкнути дротове з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="219"/>
+        <location filename="../plugins/network/networkitem.cpp" line="234"/>
         <source>Disable wireless connection</source>
         <translation>Вимкнути бездротове з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="221"/>
+        <location filename="../plugins/network/networkitem.cpp" line="236"/>
         <source>Enable wireless connection</source>
         <translation>Увімкнути бездротове з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="229"/>
+        <location filename="../plugins/network/networkitem.cpp" line="244"/>
         <source>Disable network</source>
         <translation>Вимкнути мережу</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="231"/>
+        <location filename="../plugins/network/networkitem.cpp" line="246"/>
         <source>Enable network</source>
         <translation>Увімкнути мережу</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="238"/>
+        <location filename="../plugins/network/networkitem.cpp" line="253"/>
         <source>Network settings</source>
         <translation>Налаштування Інтернет-мережі</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1097"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1139"/>
         <source>Device disabled</source>
         <translation>Пристрій вимкнено</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1109"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1137"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1151"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1179"/>
         <source>Wireless connection: %1</source>
         <translation>Бездротове з&apos;єднання: %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1120"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1154"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1162"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1196"/>
         <source>Wired connection: %1</source>
         <translation>Дротове з&apos;єднання %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1164"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1206"/>
         <source>Not connected</source>
         <translation>Не підключено</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1169"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Connecting</source>
         <translation>З&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1175"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1217"/>
         <source>Connected but no Internet access</source>
         <translation>З&apos;єднано, але доступу до інтернету немає</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1178"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1182"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1220"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1224"/>
         <source>Network cable unplugged</source>
         <translation>Вийнято інтернет-кабель</translation>
     </message>
@@ -349,12 +353,12 @@
         <translation>Мережа</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="189"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
         <source>Wired Network</source>
         <translation>Провідна мережа</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
+        <location filename="../plugins/network/networkplugin.cpp" line="193"/>
         <source>Wired Network %1</source>
         <translation>Дротова мережа %1</translation>
     </message>
@@ -387,44 +391,48 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="245"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="264"/>
         <source>Charged</source>
         <translation>Заряджено</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="249"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="248"/>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Батарея %1, %2 хв залишилося</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="251"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="258"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="250"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="257"/>
         <source>Capacity %1</source>
         <translation>Ємність %1</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="256"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="255"/>
         <source>Capacity %1, %2 hr %3 min remaining</source>
         <translation>Батарея %1, %2 год %3 хв залишилося</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="272"/>
-        <source>Capacity %1 ....</source>
-        <translation>Ємність %1 ....</translation>
+        <location filename="../plugins/power/powerplugin.cpp" line="263"/>
+        <source>Capacity 1%, fully charged</source>
+        <translation>Ємність 1%, повністю заряджено</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="275"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="271"/>
+        <source>Capacity %1 ...</source>
+        <translation>Ємність %1 ...</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="274"/>
         <source>Charging %1, %2 min until full</source>
         <translation>Зарядка %1, %2 хв до повної</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="277"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="283"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="276"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="282"/>
         <source>Charging %1</source>
         <translation>Заряджається %1</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="281"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="280"/>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Зарядка %1, %2 год %3 хв до повної</translation>
     </message>
@@ -578,12 +586,12 @@
 <context>
     <name>WirelessList</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="157"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="156"/>
         <source>Wireless Network</source>
         <translation>Бездротова мережа</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="159"/>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="158"/>
         <source>Wireless Network %1</source>
         <translation>Бездротова мережа %1</translation>
     </message>
