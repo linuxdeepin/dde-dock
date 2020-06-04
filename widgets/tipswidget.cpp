@@ -1,6 +1,7 @@
 #include "tipswidget.h"
 
 #include <QPainter>
+#include <QAccessible>
 
 TipsWidget::TipsWidget(QWidget *parent) : QFrame(parent)
 {
@@ -15,6 +16,13 @@ void TipsWidget::setText(const QString &text)
     setFixedSize(fontMetrics().width(text) + 6, fontMetrics().height());
 
     update();
+
+#ifndef QT_NO_ACCESSIBILITY
+    if (accessibleName().isEmpty()) {
+        QAccessibleEvent event(this, QAccessible::NameChanged);
+        QAccessible::updateAccessibility(&event);
+    }
+#endif
 }
 
 void TipsWidget::setTextList(const QStringList &textList)

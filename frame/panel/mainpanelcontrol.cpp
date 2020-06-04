@@ -61,7 +61,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_appAreaWidget(new QWidget(this))
     , m_trayAreaWidget(new QWidget(this))
     , m_pluginAreaWidget(new QWidget(this))
-    , m_desktopWidget(new QWidget(this))
+    , m_desktopWidget(new DesktopWidget(this))
     , m_fixedAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_trayAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight))
@@ -106,6 +106,8 @@ void MainPanelControl::init()
     m_fixedSpliter->setObjectName("spliter_fix");
     m_appSpliter->setObjectName("spliter_app");
     m_traySpliter->setObjectName("spliter_tray");
+
+    m_appAreaWidget->setAccessibleName("AppFullArea");
 
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);

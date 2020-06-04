@@ -60,6 +60,7 @@ private:
 public:
     DragWidget(QWidget *parent) : QWidget(parent)
     {
+        setObjectName(tr("DragWidget"));
         m_dragStatus = false;
     }
 

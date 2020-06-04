@@ -63,6 +63,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
+        arrowRectangle->setObjectName("systemtraypopup");
         PopupWindow = arrowRectangle;
     }
 
