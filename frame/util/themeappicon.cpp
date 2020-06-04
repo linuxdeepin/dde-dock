@@ -57,7 +57,6 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
     if (iconName == "dde-calendar") {
         QDate const date(QDate::currentDate());
 
-        auto pixday  =  ImageUtil::loadSvg(":/indicator/resources/calendar_bg.svg", "", size, ratio);
         auto calendar = new QWidget() ;
         calendar->setFixedSize(s, s);
 
@@ -73,21 +72,24 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
         QVBoxLayout *layout = new QVBoxLayout;
         layout->setSpacing(0);
         auto month = new QLabel();
-        month->setPixmap(ImageUtil::loadSvg(QString(":/icons/resources/month%1.svg").arg(date.month()), QSize(36, 16)*iconZoom, ratio));
+        auto monthPix = ImageUtil::loadSvg(QString(":/icons/resources/month%1.svg").arg(date.month()), QSize(36, 16)*iconZoom, ratio);
+        month->setPixmap(monthPix.scaled(monthPix.width()*ratio,monthPix.height()*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         month->setFixedHeight(month->pixmap()->height());
         month->setAlignment(Qt::AlignCenter);
         month->setFixedWidth(s - 5 * iconZoom);
         layout->addWidget(month, Qt::AlignVCenter);
 
         auto day = new QLabel();
-        day->setPixmap(ImageUtil::loadSvg(QString(":/icons/resources/day%1.svg").arg(date.day()), QSize(32, 30)*iconZoom, ratio));
+        auto dayPix =ImageUtil::loadSvg(QString(":/icons/resources/day%1.svg").arg(date.day()), QSize(32, 30)*iconZoom, ratio);
+        day->setPixmap(dayPix.scaled(dayPix.width()*ratio,dayPix.height()*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         day->setAlignment(Qt::AlignCenter);
-        day->setFixedHeight(day->pixmap()->height());
+        day->setFixedHeight(day->pixmap()->height()/ratio);
         day->raise();
         layout->addWidget(day, Qt::AlignVCenter);
 
         auto week = new QLabel();
-        week->setPixmap(ImageUtil::loadSvg(QString(":/icons/resources/week%1.svg").arg(date.dayOfWeek()), QSize(26, 13)*iconZoom, ratio));
+        auto weekPix = ImageUtil::loadSvg(QString(":/icons/resources/week%1.svg").arg(date.dayOfWeek()), QSize(26, 13)*iconZoom, ratio);
+        week->setPixmap(weekPix.scaled(weekPix.width()*ratio,weekPix.height()*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         week->setFixedHeight(week->pixmap()->height());
         week->setAlignment(Qt::AlignCenter);
         week->setFixedWidth(s + 5 * iconZoom);
@@ -96,12 +98,13 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
         layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
         calendar->setLayout(layout);
         pixmap = calendar->grab(calendar->rect());
-
+        if (pixmap.size().width() != s) {
+            pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
         return pixmap;
     }
 
     do {
-
         // load pixmap from our Cache
         if (iconName.startsWith("data:image/")) {
             key = QCryptographicHash::hash(iconName.toUtf8(), QCryptographicHash::Md5).toHex();
@@ -160,6 +163,5 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
         pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
     pixmap.setDevicePixelRatio(ratio);
-
     return pixmap;
 }
