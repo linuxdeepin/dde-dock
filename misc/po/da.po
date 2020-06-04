@@ -1,20 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# 31c8ff7daf246c6bd598eefe84c1433c, 2016-2017
-# Cindy0514, 2019
-# Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2016,2018
-# scootergrisen, 2017-2020
+# Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2020
+# 31c8ff7daf246c6bd598eefe84c1433c, 2020
+# scootergrisen, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Danish (https://www.transifex.com/linuxdeepin/teams/3617/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +32,9 @@ msgstr "Indtast venligt en adgangskode, ikke mindre end 8 tegn"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Adgangskoden skal indeholde engelske bogstaver (forskel på store og små "
+"bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -123,34 +128,34 @@ msgstr "Adgang til beskeder"
 msgid "Message notification"
 msgstr "Meddelelsesnotifikation"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Tilslutning af %q lykkedes"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Afbrudt"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Sørg for at %q er tændt og inden for rækkevidde"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -274,7 +279,7 @@ msgstr "Skærmbillede af vindue"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Forsinket skærmbillede"
+msgstr "Forsink skærmbillede"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -420,7 +425,9 @@ msgstr "Der kræves autentifikation for at skifte sprog"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Skifter systemsproget og installerer de påkrævede sprogpakker, vent venligst..."
+msgstr ""
+"Skifter systemsproget og installerer de påkrævede sprogpakker, vent "
+"venligst..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -461,7 +468,9 @@ msgstr "%q blev ikke fjernet."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Tilslut venligst strømforsyningen for at opdatere normalt så automatisk nedlukning forhindres."
+msgstr ""
+"Tilslut venligst strømforsyningen for at opdatere normalt så automatisk "
+"nedlukning forhindres."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -471,7 +480,9 @@ msgstr "Pakke-mellemlager ryddet"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Dit system er blevet ændret. Genskab venligst til officiel kilde for at bruge det normalt"
+msgstr ""
+"Dit system er blevet ændret. Genskab venligst til officiel kilde for at "
+"bruge det normalt"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -481,52 +492,40 @@ msgstr "%q fjernet"
 msgid "Failed to uninstall %q"
 msgstr "Kunne ikke afinstallere %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automatisk"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
-msgstr "Ingen"
+msgstr "Intet"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit-nøgle"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 personlig"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Tunneled TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "Beskyttet EAP"
 
@@ -617,7 +616,9 @@ msgstr "Enheden har ikke været klar til konfiguration"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP-konfiguration kunne ikke reserveres (ingen tilgængelig adresse, timeout osv.)"
+msgstr ""
+"IP-konfiguration kunne ikke reserveres (ingen tilgængelig adresse, timeout "
+"osv.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -631,7 +632,8 @@ msgstr "Adgangskoder blev påkrævet, men ikke angivet"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X-supplicanten afbrudt fra access point eller godkendelsesserveren"
+msgstr ""
+"802.1X-supplicanten afbrudt fra access point eller godkendelsesserveren"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -860,7 +862,9 @@ msgstr "Sørg for, at SIM-kortet er blevet indsat med mobilnet-signal"
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Sørg venligst for, at en korrekt plan blev valgt uden at genoprette SIM-kortet"
+msgstr ""
+"Sørg venligst for, at en korrekt plan blev valgt uden at genoprette SIM-"
+"kortet"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -872,12 +876,16 @@ msgstr "Kunne ikke aktivere VPN-forbindelse"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt af brugerne"
+msgstr ""
+"VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt af "
+"brugerne"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt fra enhederne"
+msgstr ""
+"VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt fra"
+" enhederne"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -941,7 +949,9 @@ msgstr "Kan ikke dele hotspot, tjek venligst dnsmasq-indstillinger"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse router"
+msgstr ""
+"Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse "
+"router"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
@@ -953,7 +963,9 @@ msgstr "Der kræves adgangskode for at oprette forbindelse til %q"
 
 #: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
+msgstr ""
+"Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert "
+"adgangskode"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
@@ -979,7 +991,9 @@ msgstr "Netværk"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er nødvendigt."
+msgstr ""
+"Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er "
+"nødvendigt."
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -1008,6 +1022,39 @@ msgstr "Batteriet er kritisk lavt"
 msgid "Battery low, please plug in"
 msgstr "Batteriet er lavt. Tilslut venligst strømforsyningen"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Autentifikation kræves for at sætte systemets tid"
@@ -1016,7 +1063,8 @@ msgstr "Autentifikation kræves for at sætte systemets tid"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres"
+msgstr ""
+"Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1026,7 +1074,9 @@ msgstr "Der kræves autentifikation for at ændre NTP-server"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Der kræves autentifikation for at styre om RTC'en lagre den lokale tid eller UTC-tiden"
+msgstr ""
+"Der kræves autentifikation for at styre om RTC'en lagre den lokale tid eller"
+" UTC-tiden"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

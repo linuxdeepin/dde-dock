@@ -1,17 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Marian c <dark1ro@yahoo.com>, 2019
+# Tiberiu Fratila <tiberiu.fratila@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# 828d47520e99d69ec3431069179181cf_e9ac56f <4304e9d7f33368a6d7fc5290e16492fe_204731>, 2020
+# e45655a7feca4008b49fd878e446e184_1635295 <8a74d2bff1d5702d82b6f0f88f4ddbf3_206482>, 2020
+# Vasile Rusu <basil_russu@hotmail.com>, 2020
+# Cindy0514, 2020
+# Marian c <dark1ro@yahoo.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Romanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ro/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Marian c <dark1ro@yahoo.com>, 2020\n"
+"Language-Team: Romanian (https://www.transifex.com/linuxdeepin/teams/3617/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +35,9 @@ msgstr "Intoduceţi o parolă nu mai mica de 8 caractere"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Noua parolă trebuie să conțină litere in Engleza (sensibil la litere mari), numere sau simboluri speciale (~!@#$%^&*()[]{}|/?,.<>)"
+msgstr ""
+"Noua parolă trebuie să conțină litere in Engleza (sensibil la litere mari), "
+"numere sau simboluri speciale (~!@#$%^&*()[]{}|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -34,7 +45,7 @@ msgstr "Câmpul nume utilizator nu poate fi gol"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr ""
+msgstr "Primul caracter trebuie să fie o literă sau un număr"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -58,7 +69,7 @@ msgstr "Rugam relogare pentru a vizualiza schimbările"
 
 #: ../../appearance/scale.go:74
 msgid "Display scaling"
-msgstr "Potrivirea afișajului"
+msgstr "Redimensionați afișajul"
 
 #: ../../appearance/scale.go:75
 msgid "Setting display scaling"
@@ -120,36 +131,36 @@ msgstr "Acces mesaj"
 msgid "Message notification"
 msgstr "Notificare mesaj"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Contectare %q cu succes"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Deconectat"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Asiguraţi-vă că %q este pornit şi în zona de acoperire"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Conexiune Bluetooth eşuată"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
-msgstr ""
+msgstr "Faceți clic aici pentru a vă conecta la %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
-msgstr ""
+msgstr "Adăugați dispozitive Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
-msgstr ""
+msgstr "Împerechează"
 
 #: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
@@ -199,7 +210,7 @@ msgstr "Programare Reminder"
 
 #: ../../calendar/type.go:40
 msgid "Festival"
-msgstr ""
+msgstr "Festival"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -235,7 +246,7 @@ msgstr "Lansator"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
-msgstr "Terminalul"
+msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
@@ -315,7 +326,7 @@ msgstr "Clipboard"
 
 #: ../../keybinding/shortcuts/id_name_map.go:49
 msgid "Translation"
-msgstr ""
+msgstr "Traducere"
 
 #: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
@@ -417,7 +428,9 @@ msgstr "Autentificarea este necesară pentru a schimba limba"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Schimbarea limbii sistemului și instalarea pachetelor lingvistice necesare, vă rugăm așteptați ..."
+msgstr ""
+"Schimbarea limbii sistemului și instalarea pachetelor lingvistice necesare, "
+"vă rugăm așteptați ..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -437,7 +450,7 @@ msgstr "Încercaţi din nou"
 
 #: ../../lastore/lastore.go:255
 msgid "Cancel"
-msgstr "Anulare"
+msgstr "Anulează"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -458,7 +471,9 @@ msgstr "ștergerea %q a eșuat."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Pentru a preveni închiderea automată, vă rugăm conectați pentru actualizare normală."
+msgstr ""
+"Pentru a preveni închiderea automată, vă rugăm conectați pentru actualizare "
+"normală."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -468,7 +483,9 @@ msgstr "Pachete cache şterse"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Sursa sistemului  modificată, reveniți la sursa oficială pentru utilizarea normală"
+msgstr ""
+"Sursa sistemului  modificată, reveniți la sursa oficială pentru utilizarea "
+"normală"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -478,52 +495,40 @@ msgstr "%q eliminate cu succes"
 msgid "Failed to uninstall %q"
 msgstr "Dezinstalare eşuată %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automat"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Nici un"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "Cheie WEP 40/128-bit"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "TLS tunelizat"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "EAP Protejat"
 
@@ -614,7 +619,9 @@ msgstr "Dispozitiv nepregătit pentru configurare"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Configurația IP nu a putut fi rezervată (nicio adresă disponibilă, expirare etc.)"
+msgstr ""
+"Configurația IP nu a putut fi rezervată (nicio adresă disponibilă, expirare "
+"etc.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -628,7 +635,9 @@ msgstr "Parole obligatorii dar nefurnizate"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Suplicantul 802.1X deconectat de la punct de acces sau serverul de autentificare"
+msgstr ""
+"Suplicantul 802.1X deconectat de la punct de acces sau serverul de "
+"autentificare"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -808,7 +817,7 @@ msgstr "Manager Modem nepornit sau renuntat pe neasteptate"
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 WLAN network could not be found"
-msgstr ""
+msgstr "Rețeaua 802.11 WLAN nu a putut fi găsită"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -869,12 +878,16 @@ msgstr "Activare conexiune VPAN eşuată"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "Statut conexiune VPN schimbată datorită faptului că a fost deconectat de utilizatori"
+msgstr ""
+"Statut conexiune VPN schimbată datorită faptului că a fost deconectat de "
+"utilizatori"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "Statut conexiune VPN schimbată datorită faptului că a fost deconectat de dispozitive"
+msgstr ""
+"Statut conexiune VPN schimbată datorită faptului că a fost deconectat de "
+"dispozitive"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -976,7 +989,9 @@ msgstr "Reţea"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Comutatorul  dispozitivului WLAN este în poziția oprit, vă rugăm să-l porniți."
+msgstr ""
+"Comutatorul  dispozitivului WLAN este în poziția oprit, vă rugăm să-l "
+"porniți."
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -994,6 +1009,8 @@ msgstr "Conectat"
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr ""
+"\"%s\"  nu a trecut verificarea de securitate a sistemului și nu poate fi "
+"executat acum"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1005,6 +1022,39 @@ msgstr "Baterie critic scăzută"
 msgid "Battery low, please plug in"
 msgstr "Baterie scăzută, vă rugăm conectați"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Autentificare necesară pentru setare timp sistem"
@@ -1013,7 +1063,9 @@ msgstr "Autentificare necesară pentru setare timp sistem"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Autentificare necesară pentru a controla dacă sincronizarea timpului de rețea trebuie activată"
+msgstr ""
+"Autentificare necesară pentru a controla dacă sincronizarea timpului de "
+"rețea trebuie activată"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1023,7 +1075,9 @@ msgstr "Autentificare necesară pentru scimbare server NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Autentificare necesară pentru a controla dacă RTC stochează ora locală sau UTC"
+msgstr ""
+"Autentificare necesară pentru a controla dacă RTC stochează ora locală sau "
+"UTC"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

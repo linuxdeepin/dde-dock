@@ -1,18 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
+# Cindy0514, 2020
 # Besnik Bleta <besnik@programeshqip.org>, 2020
-# Florind Murtezi <florindmurtezi88@gmail.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 17:16+0000\n"
-"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
-"Language-Team: Albanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sq/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>, 2020\n"
+"Language-Team: Albanian (https://www.transifex.com/linuxdeepin/teams/3617/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +30,10 @@ msgstr "Ju lutemi, jepni një fjalëkalim jo më të pakët se 8 shenja"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Fjalëkalimet mund të përmbajnë vetëm shkronja anglisht (bëhet dallimi mes shkrimit me të mëdha dhe të vogla), numra ose simbole speciale (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Fjalëkalimet mund të përmbajnë vetëm shkronja anglisht (bëhet dallimi mes "
+"shkrimit me të mëdha dhe të vogla), numra ose simbole speciale "
+"(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -63,7 +69,7 @@ msgstr "Ripërmasim ekrani"
 
 #: ../../appearance/scale.go:75
 msgid "Setting display scaling"
-msgstr "PO ujdiset ripërmasim ekrani"
+msgstr "Po ujdiset ripërmasim ekrani"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
@@ -121,34 +127,34 @@ msgstr "Hyrje në mesazhe"
 msgid "Message notification"
 msgstr "Njoftim mesazhesh"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "%q u lidh me sukses"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
-msgstr "Po shkëputet"
+msgstr "E shkëputur"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Sigurohuni që %q është hapur dhe brenda intervali"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Lidhja përmes Bluetooth-it dështoi"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "Klikoni këtu që të lidhet me %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "Shtoni pajisje Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "Çiftoje"
 
@@ -175,7 +181,7 @@ msgstr "Jete"
 
 #: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
-msgstr "Të tjera"
+msgstr "Tjetër"
 
 #: ../../calendar/scheduler.go:495
 msgid "One day before start"
@@ -228,7 +234,8 @@ msgstr "Tërë Dritaret"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Hapësirë e pamjaftueshme disku, ju lutemi, ka ardhur koha të bëni pastrim!"
+msgstr ""
+"Hapësirë e pamjaftueshme disku, ju lutemi, ka ardhur koha të bëni pastrim!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -256,7 +263,7 @@ msgstr "Fike ndërfaqen"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "Dritare Terminali Quake"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
@@ -284,7 +291,7 @@ msgstr "Çaktivizo Touchpad-in"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
-msgstr ""
+msgstr "Ndërro efekte dritaresh"
 
 #: ../../keybinding/shortcuts/id_name_map.go:42
 msgid "Fast Screen Off"
@@ -308,7 +315,7 @@ msgstr "Tekst në të Folur"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr "E Folur në Tekst"
+msgstr "E folur në Tekst"
 
 #: ../../keybinding/shortcuts/id_name_map.go:48
 msgid "Clipboard"
@@ -418,7 +425,9 @@ msgstr "Që të këmbehet gjuha, lypset mirëfilltësim"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Po ndryshohet gjuhë sistemi dhe po instalohen paketat e domosdoshme të gjuhës, ju lutemi, pritni…"
+msgstr ""
+"Po ndryshohet gjuhë sistemi dhe po instalohen paketat e domosdoshme të "
+"gjuhës, ju lutemi, pritni…"
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -459,7 +468,9 @@ msgstr "S’u arrit të hiqej %q."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Që të parandalohet fikje e automatizuar, ju lutemi, vëreni në prizë për përditësim normal."
+msgstr ""
+"Që të parandalohet fikje e automatizuar, ju lutemi, vëreni në prizë për "
+"përditësim normal."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -469,7 +480,9 @@ msgstr "U spastrua fshehtinë pakete"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Burimi i sistemit tuaj u ndryshua, ju lutemi, për përdorimin tuaj normal, rikthejeni te burimi zyrtar"
+msgstr ""
+"Burimi i sistemit tuaj u ndryshua, ju lutemi, për përdorimin tuaj normal, "
+"rikthejeni te burimi zyrtar"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -479,52 +492,40 @@ msgstr "%q u hoq me sukses"
 msgid "Failed to uninstall %q"
 msgstr "S’u arrit të çinstalohej %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automatik"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Asnjë"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "Kyç WEP 40/128-bit"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "TLS përmes tuneli"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "EAP i mbrojtur"
 
@@ -629,7 +630,9 @@ msgstr "Lypseshin fjalëkalime, por s’u dhanë të tilla"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Lutësi 802.1X u shkëput prej pikës së hyrjeve ose prej shërbyesit të mirëfilltësimeve"
+msgstr ""
+"Lutësi 802.1X u shkëput prej pikës së hyrjeve ose prej shërbyesit të "
+"mirëfilltësimeve"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -673,7 +676,8 @@ msgstr "Dështoi nisja e shërbimit për lidhje të përbashkët"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Shërbimi për lidhje të përbashkët u mbyll ose dështoi në mënyrë të papritur"
+msgstr ""
+"Shërbimi për lidhje të përbashkët u mbyll ose dështoi në mënyrë të papritur"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
@@ -853,7 +857,8 @@ msgstr "Kablloja e rrjetit është e hequr"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Ju lutemi, sigurohuni se karta SIM është futur me sinjal rrjeti celular"
+msgstr ""
+"Ju lutemi, sigurohuni se karta SIM është futur me sinjal rrjeti celular"
 
 #: ../../network/state_handler.go:108
 msgid ""
@@ -935,7 +940,9 @@ msgstr "%q u shkëput"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "S’arrihet të ndahet hotspot me të tjerë, ju lutemi, kontrolloni rregullimet për dnsmasq"
+msgstr ""
+"S’arrihet të ndahet hotspot me të tjerë, ju lutemi, kontrolloni rregullimet "
+"për dnsmasq"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -943,7 +950,9 @@ msgstr "S’arrihet të lidhet %q, ju lutemi, jini më afër rrugëzuesit pa fil
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "S’arrihet të lidhet %q, ju lutemi, kontrolloni kabllon e rrugëzuesit ose rrjetit tuaj."
+msgstr ""
+"S’arrihet të lidhet %q, ju lutemi, kontrolloni kabllon e rrugëzuesit ose "
+"rrjetit tuaj."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -977,7 +986,9 @@ msgstr "Rrjet"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Çelësi hardware i kartës WLAN është i mbyllur, ju lutemi, hapeni, kur nevojitet."
+msgstr ""
+"Çelësi hardware i kartës WLAN është i mbyllur, ju lutemi, hapeni, kur "
+"nevojitet."
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -989,12 +1000,14 @@ msgstr "Ndërmjetësi i sistemit është anuluar."
 
 #: ../../network/utils_notify.go:212
 msgid "Connected"
-msgstr "U lidh"
+msgstr "E lidhur"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" s’e kaloi verifikimin e sigurisë së sistemit, dhe s’mund të xhirohet këtë herë"
+msgstr ""
+"\"%s\" s’e kaloi verifikimin e sigurisë së sistemit, dhe s’mund të xhirohet "
+"këtë herë"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1006,6 +1019,39 @@ msgstr "Bateri e pakët në nivel kritik"
 msgid "Battery low, please plug in"
 msgstr "Bateri e pakët, ju lutemi, vëreni në prizë"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "kompjuteri juaj do të fiket"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "kompjuteri juaj do të pezullohet"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "kompjuteri juaj do të kalojë në fjetje"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "monitori juaj do të fiket"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "s’do të ndodhë gjë në kompjuterin tuaj"
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Që të ujdisni kohën e sistemit, lypset mirëfilltësim"
@@ -1014,7 +1060,9 @@ msgstr "Që të ujdisni kohën e sistemit, lypset mirëfilltësim"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Që të kontrolloni nëse duhet aktivizuar apo jo njëkohësimi i kohës së rrjetit, lypset mirëfilltësim"
+msgstr ""
+"Që të kontrolloni nëse duhet aktivizuar apo jo njëkohësimi i kohës së "
+"rrjetit, lypset mirëfilltësim"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1024,7 +1072,9 @@ msgstr "Që të ndryshoni shërbyes NTP, lypset mirëfilltësim"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Që të kontrolloni nëse RTC-ja depoziton kohën vendore apo atë UTC, lypset mirëfilltësim"
+msgstr ""
+"Që të kontrolloni nëse RTC-ja depoziton kohën vendore apo atë UTC, lypset "
+"mirëfilltësim"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

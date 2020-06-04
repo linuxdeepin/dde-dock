@@ -93,7 +93,7 @@ func (m *Manager) refreshBatteryDisplay() {
 			timeToFull = 0
 		}
 	}
-
+	m.changeBatteryLowByBatteryPercentage(percentage)
 	// report
 	m.PropsMu.Lock()
 	m.setPropHasBattery(true)
@@ -113,6 +113,15 @@ func (m *Manager) refreshBatteryDisplay() {
 		timeToEmpty,
 		time.Duration(timeToFull)*time.Second,
 		timeToFull)
+}
+
+func (m *Manager) changeBatteryLowByBatteryPercentage(percentage float64) {
+	logger.Debug("changeBatteryLowByBatteryPercentage, battery percentage: ", percentage)
+	batteryLow := percentage <= lowBatteryThreshold
+	if m.batteryLow != batteryLow {
+		m.batteryLow = batteryLow
+		m.updatePowerSavingMode()
+	}
 }
 
 func (m *Manager) resetBatteryDisplay() {

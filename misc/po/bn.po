@@ -1,18 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Siam Sami <justfortest16162215@gmail.com>, 2017
-# Md. Emruz Hossain <hossainemruz@gmail.com>, 2018-2019
+# Sekander Badsha <badsha_eee@yahoo.com>, 2020
+# Md. Emruz Hossain <hossainemruz@gmail.com>, 2020
+# Siam Sami <justfortest16162215@gmail.com>, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
-"Language-Team: Bengali (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/bn/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Bengali (https://www.transifex.com/linuxdeepin/teams/3617/bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,13 +26,16 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
-msgstr "দয়া করে একটি পাসওয়ার্ড লিখুন যা ইংরেজি 8টি বা বাংলা ৮টি অক্ষরের কম নয়"
+msgstr ""
+"দয়া করে একটি পাসওয়ার্ড লিখুন যা ইংরেজি 8টি বা বাংলা ৮টি অক্ষরের কম নয়"
 
 #: ../../accounts/checkers/password.go:55
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "পাসওয়ার্ডটিতে ইংরেজি অক্ষর (কেস-সংবেদনশীল), সংখ্যা বা বিশেষ চিহ্ন (~! @ # $% ^ & * () [] {} \\ | /?,। <>) থাকতে হবে"
+msgstr ""
+"পাসওয়ার্ডটিতে ইংরেজি অক্ষর (কেস-সংবেদনশীল), সংখ্যা বা বিশেষ চিহ্ন (~! @ # "
+"$% ^ & * () [] {} \\ | /?,। <>) থাকতে হবে"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -121,34 +129,34 @@ msgstr "বার্তা অ্যাক্সেস"
 msgid "Message notification"
 msgstr "বার্তা বিজ্ঞপ্তি"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "অসংযুক্ত"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "নিশ্চিত করুন যে% q চালু এবং পরিসরের মধ্যে"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "ব্লুটুথ সংযোগ ব্যর্থ হয়েছে"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -418,7 +426,9 @@ msgstr "ভাষা পরিবর্তন করতে প্রমাণী
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "সিস্টেমের ভাষা পরিবর্তন করা হচ্ছে এবং প্রয়োজনীয় ভাষার প্যাকেজ ইন্সটল করা হচ্ছে।  দয়া করে অপেক্ষা করুন..."
+msgstr ""
+"সিস্টেমের ভাষা পরিবর্তন করা হচ্ছে এবং প্রয়োজনীয় ভাষার প্যাকেজ ইন্সটল করা "
+"হচ্ছে।  দয়া করে অপেক্ষা করুন..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -438,7 +448,7 @@ msgstr "পুনরায় চেষ্টা করুন"
 
 #: ../../lastore/lastore.go:255
 msgid "Cancel"
-msgstr "বাতিল"
+msgstr "বাতিল করুন"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -459,7 +469,9 @@ msgstr "%q মুছে ফেলতে ব্যর্থ হয়েছে"
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "স্বয়ংক্রিয়ভাবে বন্ধ হয়ে যাওয়া প্রতিরোধ করার জন্য, অনুগ্রহ করে স্বাভাবিক আপডেট নির্বাচন করুন।"
+msgstr ""
+"স্বয়ংক্রিয়ভাবে বন্ধ হয়ে যাওয়া প্রতিরোধ করার জন্য, অনুগ্রহ করে স্বাভাবিক "
+"আপডেট নির্বাচন করুন।"
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -469,7 +481,9 @@ msgstr "প্যাকেজ ক্যাশ মুছে ফেলা হয�
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "আপনার সিস্টেমের source ফাইলটি পরিবর্তন করা হয়েছে, স্বাভাবিক ব্যবহারের জন্য অনুগ্রহ করে অফিশিয়াল source ফাইলে ফিরে যান"
+msgstr ""
+"আপনার সিস্টেমের source ফাইলটি পরিবর্তন করা হয়েছে, স্বাভাবিক ব্যবহারের জন্য "
+"অনুগ্রহ করে অফিশিয়াল source ফাইলে ফিরে যান"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -479,52 +493,40 @@ msgstr "%q সফলভাবে মুছে ফেলা হয়েছে"
 msgid "Failed to uninstall %q"
 msgstr "%q আনইনস্টল করতে ব্যর্থ হয়েছে"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "স্বয়ংক্রিয়"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
-msgstr "একটাও না"
+msgstr "কোনটিই নয়"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-বিট কী"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA / WPA2 ব্যক্তিগত"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "টিএলএস"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "লিপ"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "দ্রুত"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "টানেলড টিএলএস"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "সুরক্ষিত EAP"
 
@@ -615,7 +617,8 @@ msgstr "ডিভাইসটি কনফিগারেশনের জন্�
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "আইপি কনফিগারেশন সংরক্ষিত করা যায়নি (কোনও উপলভ্য ঠিকানা, সময়সীমা, ইত্যাদি)"
+msgstr ""
+"আইপি কনফিগারেশন সংরক্ষিত করা যায়নি (কোনও উপলভ্য ঠিকানা, সময়সীমা, ইত্যাদি)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -629,7 +632,9 @@ msgstr "পাসওয়ার্ড প্রয়োজন কিন্ত�
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "অ্যাক্সেস পয়েন্ট বা প্রমাণীকরণ সার্ভার থেকে 802.1X supplicant সংযোগ বিচ্ছিন্ন হয়েছে"
+msgstr ""
+"অ্যাক্সেস পয়েন্ট বা প্রমাণীকরণ সার্ভার থেকে 802.1X supplicant সংযোগ "
+"বিচ্ছিন্ন হয়েছে"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -853,12 +858,15 @@ msgstr "নেটওয়ার্কের তার খুলে রাখা
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "দয়া করে নিশ্চিত করুন যে মোবাইল নেটওয়ার্ক সংকেতসহ SIM কার্ড ঢোকানো হয়েছে"
+msgstr ""
+"দয়া করে নিশ্চিত করুন যে মোবাইল নেটওয়ার্ক সংকেতসহ SIM কার্ড ঢোকানো হয়েছে"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "অনুগ্রহ করে নিশ্চিত করুন যে সিম কার্ডের বকেয়া ছাড়া একটি সঠিক পরিকল্পনা নির্বাচন করা হয়েছে"
+msgstr ""
+"অনুগ্রহ করে নিশ্চিত করুন যে সিম কার্ডের বকেয়া ছাড়া একটি সঠিক পরিকল্পনা "
+"নির্বাচন করা হয়েছে"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -870,12 +878,16 @@ msgstr "ভিপিএন সংযোগ সক্রিয় করতে ব�
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "ব্যবহারকারী সংযোগ বিচ্ছিন্ন করার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত হয়েছে"
+msgstr ""
+"ব্যবহারকারী সংযোগ বিচ্ছিন্ন করার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত "
+"হয়েছে"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "ডিভাইস সমূহ হতে সংযোগ বিচ্ছিন্ন হওয়ার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত হয়েছে"
+msgstr ""
+"ডিভাইস সমূহ হতে সংযোগ বিচ্ছিন্ন হওয়ার কারণে ভিপিএন সংযোগটির অবস্থা পরিবর্তিত"
+" হয়েছে"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -939,11 +951,13 @@ msgstr "হটস্পট শেয়ার করতে অক্ষম, দয�
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে ওয়ারলেস রাউটারের কাছাকাছি রাখুন"
+msgstr ""
+"%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে ওয়ারলেস রাউটারের কাছাকাছি রাখুন"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে রাউটার বা নেটওয়ার্কের তার চেক করুন"
+msgstr ""
+"%q এর সাথে সংযুক্ত করতে অক্ষম, দয়া করে রাউটার বা নেটওয়ার্কের তার চেক করুন"
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -977,7 +991,8 @@ msgstr "নেটওয়ার্ক"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "WLAN কার্ড এর হার্ডওয়্যার সুইচ বন্ধ, অনুগ্রহ করে প্রয়োজন অনুযায়ী চালু করুন।"
+msgstr ""
+"WLAN কার্ড এর হার্ডওয়্যার সুইচ বন্ধ, অনুগ্রহ করে প্রয়োজন অনুযায়ী চালু করুন।"
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -1006,6 +1021,39 @@ msgstr ""
 msgid "Battery low, please plug in"
 msgstr "ব্যাটারি কম, অনুগ্রহ করে চার্জার সংযুক্ত করুন"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "সিস্টেমের সময় সেট করার জন্য প্রমাণীকরণ প্রয়োজন।"
@@ -1014,7 +1062,9 @@ msgstr "সিস্টেমের সময় সেট করার জন�
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "নেটওয়ার্ক সাথে সময় সিনক্রোনাইজেশন চালু করা হবে কিনা সেটা নিয়ন্ত্রণ করতে প্রমাণীকরণের প্রয়োজন।"
+msgstr ""
+"নেটওয়ার্ক সাথে সময় সিনক্রোনাইজেশন চালু করা হবে কিনা সেটা নিয়ন্ত্রণ করতে "
+"প্রমাণীকরণের প্রয়োজন।"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1024,7 +1074,9 @@ msgstr ""
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "RTC স্থানীয় সময় না UTC সময় সংরক্ষণ করবে সেটা নিয়ন্ত্রণ করার জন্য প্রমাণীকরণের প্রয়োজন।"
+msgstr ""
+"RTC স্থানীয় সময় না UTC সময় সংরক্ষণ করবে সেটা নিয়ন্ত্রণ করার জন্য "
+"প্রমাণীকরণের প্রয়োজন।"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

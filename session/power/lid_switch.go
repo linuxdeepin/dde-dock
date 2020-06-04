@@ -65,29 +65,23 @@ func (h *LidSwitchHandler) onLidClosed() {
 	onBattery = h.manager.OnBattery
 	m.PropsMu.Unlock()
 	m.claimOrReleaseAmbientLight()
-
+	var lidCloseAction int32
 	if onBattery {
-		if !m.BatteryLidClosedSleep.Get() {
-			return
-		}
+		lidCloseAction = m.BatteryLidClosedAction.Get() // 获取合盖操作
 	} else {
-		if !m.LinePowerLidClosedSleep.Get() {
-			return
-		}
+		lidCloseAction = m.LinePowerLidClosedAction.Get() // 获取合盖操作
 	}
-
-	outputs, err := getWorkingOutputNames(m.helper)
-	if err != nil {
-		logger.Warning("getWorkingOutputNames failed:", err)
-		return
-	}
-	logger.Debug("working outputs:", outputs)
-	if len(outputs) > 1 {
-		if err := h.startAskUser(); err != nil {
-			logger.Warning("LidSwitchHandler.startAskUser failed", err)
-		}
-	} else {
+	switch lidCloseAction {
+	case powerActionShutdown:
+		m.doShutdown()
+	case powerActionSuspend:
 		m.doSuspend()
+	case powerActionHibernate:
+		m.doHibernate()
+	case powerActionTurnOffScreen:
+		m.doTurnOffScreen()
+	case powerActionDoNothing:
+		return
 	}
 }
 

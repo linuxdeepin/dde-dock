@@ -1,26 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Galvanize87 <ajg.silva@hotmail.com>, 2019
-# Dickprince, 2017
-# Cindy0514, 2019
-# Gabriel Vicente <gabrielvicent98@gmail.com>, 2017
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2019-2020
-# José Vieira <jvieira33@sapo.pt>, 2019
-# Luís Lima <geral@liqensoft.com>, 2016
-# Luís Lima <geral@liqensoft.com>, 2017-2018
-# Manuela Silva <manuelarodsilva@gmail.com>, 2017-2018
-# Ricardo Simões <xmcorporation@gmail.com>, 2016-2019
+# Manuela Silva <manuelarodsilva@gmail.com>, 2020
+# Luís Lima <geral@liqensoft.com>, 2020
+# Ricardo Simões <xmcorporation@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Jesse Brandao <www.jwb@gmail.com>, 2020
+# Cindy0514, 2020
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 13:29+0000\n"
-"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
-"Language-Team: Portuguese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2020\n"
+"Language-Team: Portuguese (https://www.transifex.com/linuxdeepin/teams/3617/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,7 +35,9 @@ msgstr "Introduza uma palavra-passe não inferior a 8 caracteres"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "A palavra-passe tem de conter letras inglesas (sensível a maiúsculas/minúsculas), números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"A senha deve conter letras Inglesas (diferencia maiúsculas de minúsculas), "
+"números ou símbolos especiais (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -43,7 +45,7 @@ msgstr "O nome de utilizador não pode estar em branco"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "O primeiro carácter deve ser uma letra ou número"
+msgstr "O primeiro caracter deve ser uma letra ou número"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -129,34 +131,34 @@ msgstr "Acesso de mensagem"
 msgid "Message notification"
 msgstr "Notificação de mensagem"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Ligar a %q com sucesso"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Desligado"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Certifique-se que %q está ligado e dentro do alcance"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Falha na ligação por Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "Clique aqui para ligar a %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "Adicionar dispositivos Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "Emparelhar"
 
@@ -320,7 +322,7 @@ msgstr "Voz para texto"
 
 #: ../../keybinding/shortcuts/id_name_map.go:48
 msgid "Clipboard"
-msgstr "Copiar para área de transferência"
+msgstr "Área de transferência"
 
 #: ../../keybinding/shortcuts/id_name_map.go:49
 msgid "Translation"
@@ -426,7 +428,9 @@ msgstr "É necessária a autenticação para alterar o idioma"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "A alterar o idioma do sistema e a instalar os pacotes de idioma necessários, aguarde..."
+msgstr ""
+"A alterar o idioma do sistema e a instalar os pacotes de idioma necessários,"
+" aguarde..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -467,7 +471,9 @@ msgstr "%q falhou ao remover."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "A fim de evitar o encerramento automático, ligar à corrente para atualização normal."
+msgstr ""
+"A fim de evitar o encerramento automático, ligar à corrente para atualização"
+" normal."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -477,7 +483,9 @@ msgstr "Cache dos pacotes apagada"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "A fonte do seu sistema foi modificada, restaure para a fonte oficial para a sua utilização normal"
+msgstr ""
+"A fonte do seu sistema foi modificada, restaure para a fonte oficial para a "
+"sua utilização normal"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -487,52 +495,40 @@ msgstr "%q removido com sucesso"
 msgid "Failed to uninstall %q"
 msgstr "Falha ao desinstalar %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automático"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Nenhum"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "Chave WEP 40/128-bit"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Pessoal"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "TLS Tunelado"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "EAP Protegido"
 
@@ -623,7 +619,9 @@ msgstr "O dispositivo não esteve pronto para configuração"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Não foi possível reservar a configuração do IP (endereço indisponível, tempo expirado, etc)"
+msgstr ""
+"Não foi possível reservar a configuração do IP (endereço indisponível, tempo"
+" expirado, etc)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -637,7 +635,9 @@ msgstr "As palavras-passe eram necessárias mas não foram fornecidas"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "O requerente 802.1X desligou-se do ponto de acesso ou servidor de autenticação"
+msgstr ""
+"O requerente 802.1X desligou-se do ponto de acesso ou servidor de "
+"autenticação"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -725,7 +725,7 @@ msgstr "Falha ao selecionar o GSM APN especificado."
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
-msgstr "Nenhumas redes procuradas"
+msgstr "Nenhuma rede pesquisada"
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
@@ -861,12 +861,15 @@ msgstr "O cabo de rede está desligado"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Certifique-se de que o cartão SIM está inserido com sinal de rede móvel"
+msgstr ""
+"Certifique-se de que o cartão SIM está inserido com sinal de rede móvel"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Certifique-se de que um plano correto foi selecionado e o cartão SIM tem saldo suficiente"
+msgstr ""
+"Certifique-se de que um plano correto foi selecionado e o cartão SIM tem "
+"saldo suficiente"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -878,12 +881,16 @@ msgstr "Falha ao ativar ligação VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "O estado da ligação VPN alterou-se devido a ter sido desligada por utilizadores"
+msgstr ""
+"O estado da ligação VPN alterou-se devido a ter sido desligada por "
+"utilizadores"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "O estado da ligação VPN alterou-se devido a ter sido desligada a partir de dispositivos"
+msgstr ""
+"O estado da ligação VPN alterou-se devido a ter sido desligada a partir de "
+"dispositivos"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -985,7 +992,9 @@ msgstr "Rede"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "O interruptor da placa de rede sem fios está desligado, ligue conforme necessário."
+msgstr ""
+"O interruptor da placa de rede sem fios está desligado, ligue conforme "
+"necessário."
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -1002,7 +1011,9 @@ msgstr "Ligado"
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "O \"%s\" não passou na verificação de segurança do sistema e não pode ser executado agora"
+msgstr ""
+"O \"%s\" não passou na verificação de segurança do sistema e não pode ser "
+"executado agora"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1014,6 +1025,39 @@ msgstr "Bateria em estado crítico"
 msgid "Battery low, please plug in"
 msgstr "Bateria fraca, ligue à corrente"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "o computador será encerrado"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "o computador irá suspender"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "o computador irá hibernar"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "o monitor será desligado"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "não fará nada ao computador"
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "É necessária a autenticação para definir a hora do sistema"
@@ -1022,7 +1066,9 @@ msgstr "É necessária a autenticação para definir a hora do sistema"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "É necessária a autenticação para controlar se a sincronização da hora através da rede deverá estar ativada"
+msgstr ""
+"É necessária a autenticação para controlar se a sincronização da hora "
+"através da rede deverá estar ativada"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1032,7 +1078,9 @@ msgstr "É necessária autenticação para alterar o servidor NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "É necessária a autenticação para controlar se o RTC guarda UTC ou a hora local"
+msgstr ""
+"É necessária a autenticação para controlar se o RTC guarda UTC ou a hora "
+"local"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

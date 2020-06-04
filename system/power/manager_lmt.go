@@ -21,6 +21,8 @@ const (
 	lmtConfigDisabled = 3
 )
 
+const lowBatteryThreshold = 20.0
+
 func isLaptopModeBinOk() bool {
 	_, err := os.Stat(laptopModeBin)
 	return err == nil
@@ -167,16 +169,15 @@ func writeLmtConfigTemp(lines []string) (string, error) {
 func (m *Manager) writePowerSavingModeEnabledCb(write *dbusutil.PropertyWrite) *dbus.Error {
 	logger.Debug("set laptop mode enabled", write.Value)
 
-	m.PropsMu.Lock()
-	if m.PowerSavingModeAuto {
-		m.PowerSavingModeAuto = false
-		m.emitPropChangedPowerSavingModeAuto(false)
-	}
-	m.PropsMu.Unlock()
-
 	enabled := write.Value.(bool)
 	var err error
 	var lmtCfgChanged bool
+
+	m.PropsMu.Lock()
+	m.setPropPowerSavingModeAuto(false)
+	m.setPropPowerSavingModeAutoWhenBatteryLow(false)
+	m.PropsMu.Unlock()
+
 	if enabled {
 		lmtCfgChanged, err = setLMTConfig(lmtConfigEnabled)
 	} else {
@@ -197,41 +198,56 @@ func (m *Manager) writePowerSavingModeEnabledCb(write *dbusutil.PropertyWrite) *
 	return nil
 }
 
-func (m *Manager) writePowerSavingModeAutoCb(write *dbusutil.PropertyWrite) *dbus.Error {
-	logger.Debug("set laptop mode auto switch", write.Value)
-
-	autoSwitch := write.Value.(bool)
-	var err error
+func (m *Manager) updatePowerSavingMode() { // 根据用户设置以及当前状态,修改节能模式
+	if !m.initDone {
+		// 初始化未完成时，暂不提供功能
+		return
+	}
+	var enable bool
 	var lmtCfgChanged bool
-	if autoSwitch {
-		m.PropsMu.Lock()
-		m.setPropPowerSavingModeEnabled(m.OnBattery)
-		m.PropsMu.Unlock()
-
-		lmtCfgChanged, err = setLMTConfig(lmtConfigAuto)
-
+	var err error
+	if m.PowerSavingModeAuto == true && m.PowerSavingModeAutoWhenBatteryLow == true {
+		if m.OnBattery || m.batteryLow {
+			enable = true
+		} else {
+			enable = false
+		}
+	} else if m.PowerSavingModeAuto == true && m.PowerSavingModeAutoWhenBatteryLow == false {
+		if m.OnBattery {
+			enable = true
+		} else {
+			enable = false
+		}
+	} else if m.PowerSavingModeAuto == false && m.PowerSavingModeAutoWhenBatteryLow == true {
+		if m.batteryLow {
+			enable = true
+		} else {
+			enable = false
+		}
 	} else {
-		m.PropsMu.RLock()
-		enabled := m.PowerSavingModeEnabled
-		m.PropsMu.RUnlock()
-
-		if enabled {
+		return // 未开启两个自动节能开关
+	}
+	logger.Info("updatePowerSavingMode PowerSavingModeEnabled: ", enable)
+	m.PropsMu.Lock()
+	changed := m.setPropPowerSavingModeEnabled(enable)
+	m.PropsMu.Unlock()
+	if changed {
+		if enable {
 			lmtCfgChanged, err = setLMTConfig(lmtConfigEnabled)
+			if err != nil {
+				logger.Warning("failed to set LMT config:", err)
+			}
 		} else {
 			lmtCfgChanged, err = setLMTConfig(lmtConfigDisabled)
+			if err != nil {
+				logger.Warning("failed to set LMT config:", err)
+			}
+		}
+		if lmtCfgChanged {
+			err := reloadLaptopModeService()
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	}
-
-	if err != nil {
-		logger.Warning("failed to set LMT config:", err)
-	}
-
-	if lmtCfgChanged {
-		err := reloadLaptopModeService()
-		if err != nil {
-			logger.Warning(err)
-		}
-	}
-
-	return nil
 }

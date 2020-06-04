@@ -22,8 +22,11 @@ package keybinding
 import (
 	"bytes"
 	"errors"
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -98,6 +101,72 @@ const sessionManagerObjPath = "/com/deepin/SessionManager"
 func systemSuspend() {
 	sessionDBus, _ := dbus.SessionBus()
 	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestSuspend", 0)
+}
+
+func (m *Manager) systemHibernate() {
+	if os.Getenv("POWER_CAN_SLEEP") == "0" {
+		logger.Info("can not Hibernate, env POWER_CAN_SLEEP == 0")
+		return
+	}
+	can, err := m.sessionManager.CanHibernate(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not Hibernate")
+		return
+	}
+
+	logger.Debug("Hibernate")
+	err = m.sessionManager.RequestHibernate(0)
+	if err != nil {
+		logger.Warning("failed to Hibernate:", err)
+	}
+}
+
+func (m *Manager) systemShutdown() {
+	can, err := m.sessionManager.CanShutdown(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not Shutdown")
+		return
+	}
+
+	logger.Debug("Shutdown")
+	err = m.sessionManager.RequestShutdown(0)
+	if err != nil {
+		logger.Warning("failed to Shutdown:", err)
+	}
+}
+
+func (m *Manager) systemTurnOffScreen() {
+	logger.Info("DPMS Off")
+	var err error
+	var UseWayland bool
+	if len(os.Getenv("WAYLAND_DISPLAY")) != 0 {
+		UseWayland = true
+	} else {
+		UseWayland = false
+	}
+
+	if UseWayland {
+		_, err = exec.Command("dde_wldpms", "-s", "Off").Output()
+	} else {
+		xConn, err := x.NewConn()
+		if err != nil {
+			logger.Error(err)
+		}
+		err = dpms.ForceLevelChecked(xConn, dpms.DPMSModeOff).Check(xConn)
+	}
+	if err != nil {
+		logger.Warning("Set DPMS off error:", err)
+	}
 }
 
 func queryCommandByMime(mime string) string {

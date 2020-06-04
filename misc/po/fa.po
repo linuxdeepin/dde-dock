@@ -1,19 +1,29 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Alik Miankoli <alikmiankoliid@gmail.com>, 2016
-# amirhosein lesani <xenups@gmail.com>, 2019
-# AmirHosein Lesani <xenups@outlook.com>, 2019
+# pej A, 2020
+# Maahyar Motevakel <mahyar.motevakel@gmail.com>, 2020
+# mohammad raufzahed <mohammadraufzahed1389@gmail.com>, 2020
+# Hootan Baraary <h.baraary@yahoo.com>, 2020
+# Hadi Kamell <beemeyl@gmail.com>, 2020
+# Amir Dadash <dadashamir25@gmail.com>, 2020
+# Alik Miankoli <alikmiankoliid@gmail.com>, 2020
+# AmirHosein Lesani <xenups@outlook.com>, 2020
+# amirhosein lesani <xenups@gmail.com>, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Persian (https://www.transifex.com/linuxdeepin/teams/3617/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +38,9 @@ msgstr "لطفاً یک گذرواژه که کمتر از 8 نویسه نباش�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "گذرواژه باید حاوی حروف انگلیسی ( حساس به حالت ) , اعداد یا نمادهای خاص باشد ( ~ ! @ # % ^ * * ( ) { } ^ * ? , . < >)"
+msgstr ""
+"رمزعبور باید حاوی حروف انگلیسی ( حساس به حالت ) , اعداد یا نمادهای خاص باشد "
+"(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -122,34 +134,34 @@ msgstr "دسترسی پیام"
 msgid "Message notification"
 msgstr "مدیریت اعلان"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "اتصال %q با موفقیت انجام شد"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
-msgstr "اتصال قطع شد"
+msgstr "قطع اتصال"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "اطمینان حاصل کنید که %q روشن و در دامنه است"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "اتصال  بلوتوث ناموفق بود"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -233,7 +245,7 @@ msgstr "فضای دیسک کافی نیست ، لطفا به موقع تمیز �
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "اجرا کننده"
+msgstr "لانچر"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -460,7 +472,9 @@ msgstr "%q نتوانست حذف شود."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی عادی، سیستم را به برق متصل کنید "
+msgstr ""
+"برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی عادی، سیستم را به برق متصل"
+" کنید "
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -470,7 +484,9 @@ msgstr "حافظه پنهان بسته پاک شد"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "منبع سیستم شما تغییر یافته است ، لطفاً برای استفاده عادی خود به منبع رسمی برگردید"
+msgstr ""
+"منبع سیستم شما تغییر یافته است ، لطفاً برای استفاده عادی خود به منبع رسمی "
+"برگردید"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -480,52 +496,40 @@ msgstr "%q با موفقیت حذف شد"
 msgid "Failed to uninstall %q"
 msgstr "%q حذف انجام نشد"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "اتوماتیک"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
-msgstr "هیچ کدام"
+msgstr "هیچ "
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Tunneled TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "Protected EAP"
 
@@ -616,7 +620,9 @@ msgstr "دستگاه برای پیکر بندی آماده نیست."
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "پیکربندی IP نمی تواند محفوظ باشد (بدون آدرس ، زمان بندی و غیره در دسترس نیست)"
+msgstr ""
+"پیکربندی IP نمی تواند محفوظ باشد (بدون آدرس ، زمان بندی و غیره در دسترس "
+"نیست)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -854,12 +860,15 @@ msgstr "کابل شبکه جدا شده."
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "لطفاً مطمئن شوید که سیم کارت درج شده است و دستگاه دارای  سیگنال شبکه است"
+msgstr ""
+"لطفاً مطمئن شوید که سیم کارت درج شده است و دستگاه دارای  سیگنال شبکه است"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "لطفاً اطمینان حاصل کنید که یک طرح صحیح و بدون عقب افتادگی سیم کارت انتخاب شده است"
+msgstr ""
+"لطفاً اطمینان حاصل کنید که یک طرح صحیح و بدون عقب افتادگی سیم کارت انتخاب "
+"شده است"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -936,7 +945,8 @@ msgstr "%q قطع شد"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "اشتراک هات اسپات امکان پذیر نیست ، لطفاً تنظیمات dnsmasq را بررسی کنید"
+msgstr ""
+"اشتراک هات اسپات امکان پذیر نیست ، لطفاً تنظیمات dnsmasq را بررسی کنید"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -944,7 +954,8 @@ msgstr "اتصال %q امکان پذیر نیست ، لطفاً به روتر �
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "اتصال %q امکان پذیر نیست ، لطفاً روتر یا کابل اینترنت خود را بررسی کنید."
+msgstr ""
+"اتصال %q امکان پذیر نیست ، لطفاً روتر یا کابل اینترنت خود را بررسی کنید."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -990,7 +1001,7 @@ msgstr "تنظیم کردن  پراکسی سیستم لغو شد."
 
 #: ../../network/utils_notify.go:212
 msgid "Connected"
-msgstr "متصل شد"
+msgstr "متصل شده"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
@@ -1006,6 +1017,39 @@ msgstr "باتری بسیار کم است"
 #: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "باتری شما کم است ، لطفاً دستگاه را برق وصل کنید"
+
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
@@ -1025,7 +1069,9 @@ msgstr "برای تغییر سرور NTP احراز هویت لازم است"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "احراز هویت برای کنترل اینکه آیا RTC زمان محلی و یا UTC را ذخیره کند  لازم است "
+msgstr ""
+"احراز هویت برای کنترل اینکه آیا RTC زمان محلی و یا UTC را ذخیره کند  لازم "
+"است "
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

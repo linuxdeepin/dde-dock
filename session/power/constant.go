@@ -36,9 +36,17 @@ const (
 	settingKeyAmbientLightAdjuestBrightness = "ambient-light-adjust-brightness"
 	settingKeyScreenBlackLock               = "screen-black-lock"
 	settingKeySleepLock                     = "sleep-lock"
-	settingKeyLinePowerLidClosedSleep       = "lid-closed-sleep"
-	settingKeyBatteryLidClosedSleep         = "battery-lid-closed-sleep"
-	settingKeyPowerButtonPressedExec        = "power-button-pressed-exec"
+
+	settingKeyLinePowerLidClosedAction     = "line-power-lid-closed-action"
+	settingKeyLinePowerPressPowerBtnAction = "line-power-press-power-button"
+	settingKeyBatteryLidClosedAction       = "battery-lid-closed-action"
+	settingKeyBatteryPressPowerBtnAction   = "battery-press-power-button"
+	settingKeyLowPowerNotifyEnable         = "low-power-notify-enable"
+	settingKeyLowPowerNotifyThreshold      = "percentage-low"
+	settingKeyLowPowerAutoSleepThreshold   = "percentage-action"
+	settingKeyBrightnessDropPercent        = "brightness-drop-percent"
+
+	settingKeyPowerButtonPressedExec = "power-button-pressed-exec"
 
 	settingKeyFullScreenWorkaroundEnabled = "fullscreen-workaround-enabled"
 	settingKeyUsePercentageForPolicy      = "use-percentage-for-policy"
@@ -58,4 +66,12 @@ const (
 	cmdDDELowPower = "/usr/lib/deepin-daemon/dde-lowpower"
 
 	batteryDisplay = "Display"
+)
+
+const (
+	powerActionShutdown int32 = iota
+	powerActionSuspend
+	powerActionHibernate
+	powerActionTurnOffScreen
+	powerActionDoNothing
 )

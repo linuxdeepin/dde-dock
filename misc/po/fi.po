@@ -1,18 +1,28 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Deathmist, 2018
-# Kimmo Kujansuu <mrkujansuu@gmail.com>, 2019-2020
+# Kimmo Siniluoto <robotti1984@gmail.com>, 2020
+# Joonas Tamminen <hippimunqqi@gmail.com>, 2020
+# artor <arto@rusanen.me>, 2020
+# ImSpaceman, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Puppelimies, 2020
+# Deathmist, 2020
+# Cindy0514, 2020
+# Kimmo Kujansuu <mrkujansuu@gmail.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 19:45+0000\n"
-"Last-Translator: Kimmo Kujansuu <mrkujansuu@gmail.com>\n"
-"Language-Team: Finnish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fi/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Kimmo Kujansuu <mrkujansuu@gmail.com>, 2020\n"
+"Language-Team: Finnish (https://www.transifex.com/linuxdeepin/teams/3617/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +37,9 @@ msgstr "Syötä salasana, jonka pituus on vähintään 8 merkkiä"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Salasanan pitää sisältää kirjaimia (isot ja pienet kirjaimet), numeroita tai erikoismerkkejä (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Salasanan pitää sisältää kirjaimia (isot ja pienet kirjaimet), numeroita tai"
+" erikoismerkkejä (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -121,34 +133,34 @@ msgstr "Viesteihin pääsy"
 msgid "Message notification"
 msgstr "Ilmoitusviesti"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Yhdistetty %q onnistuneesti"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Katkaistu"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Varmista että %q on päällä ja kantaman sisällä"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-yhteyden muodostaminen epäonnistui"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "Yhteys napsauttamalla tätä %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "Lisää Bluetooth-laitteita"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "Pari"
 
@@ -256,11 +268,11 @@ msgstr "Sammuttamisen käyttöliittymä"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
-msgstr "Terminal Quake ikkuna"
+msgstr "Quake terminaali"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Ruudunkaappaus"
+msgstr "Kuvakaappaus"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
@@ -372,7 +384,7 @@ msgstr "Pienennä ikkuna"
 
 #: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
-msgstr "Sulje ikkuna"
+msgstr "Sulje paneeli"
 
 #: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
@@ -418,7 +430,9 @@ msgstr "Kielen vaihtaminen vaatii tunnistautumisen"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Järjestelmän kielen muuttaminen ja tarvittavien kielipakettien asentaminen odota ..."
+msgstr ""
+"Järjestelmän kielen muuttaminen ja tarvittavien kielipakettien asentaminen "
+"odota ..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -459,7 +473,8 @@ msgstr "Kohteen %q poistaminen ei onnistunut."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Kytke pistoke päivityksen ajaksi ja automaattisen sammutuksen estämiseksi."
+msgstr ""
+"Kytke pistoke päivityksen ajaksi ja automaattisen sammutuksen estämiseksi."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -469,7 +484,9 @@ msgstr "Pakettien välimuisti tyhjennettiin"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Järjestelmän ohjelmistolähdettä on muutettu, palauta virallinen lähde toimivuuden takaamiseksi"
+msgstr ""
+"Järjestelmän ohjelmistolähdettä on muutettu, palauta virallinen lähde "
+"toimivuuden takaamiseksi"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -479,52 +496,40 @@ msgstr "%q poistettu onnistuneesti"
 msgid "Failed to uninstall %q"
 msgstr "Kohteen %q poistaminen epäonnistui"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2,4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automaattinen"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Mitään"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit-avain"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "Oma WPA/WPA2"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
-msgstr "HYPPÄÄ"
+msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
-msgstr "NOPEA"
+msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Tunneloitu TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "Suojattu EAP"
 
@@ -615,7 +620,9 @@ msgstr "Laite ei ole ollut valmis kokoonpanoa varten"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP-määrityksiä ei voitu varata (ei käytettävissä olevaa osoitetta, aikakatkaisua jne.)"
+msgstr ""
+"IP-määrityksiä ei voitu varata (ei käytettävissä olevaa osoitetta, "
+"aikakatkaisua jne.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -858,7 +865,9 @@ msgstr "Varmista, että SIM-kortti on asetettu ja mobiiliverkossa on signaali."
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Ole hyvä ja varmista, että valitsit oikean suunnitelman poistamatta SIM-korttia. "
+msgstr ""
+"Ole hyvä ja varmista, että valitsit oikean suunnitelman poistamatta SIM-"
+"korttia. "
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -939,7 +948,8 @@ msgstr "Hotspot-yhteyden jako epäonnistui, tarkista dnsmasq:n asetukset"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Yhteys kohteeseen %q epäonnistui, pysyttele lähempänä langatonta reititintä"
+msgstr ""
+"Yhteys kohteeseen %q epäonnistui, pysyttele lähempänä langatonta reititintä"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
@@ -977,7 +987,8 @@ msgstr "Verkko"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "WLAN-kortin laitteistokytkin on pois päältä, laita tarvittaessa päälle."
+msgstr ""
+"WLAN-kortin laitteistokytkin on pois päältä, laita tarvittaessa päälle."
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -994,7 +1005,9 @@ msgstr "Yhdistetty"
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" ei läpäistänyt järjestelmän suojauksen vahvistusta, eikä sitä voi suorittaa nyt"
+msgstr ""
+"\"%s\" ei läpäistänyt järjestelmän suojauksen vahvistusta, eikä sitä voi "
+"suorittaa nyt"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1006,6 +1019,39 @@ msgstr "Akku kriittisesti alhainen"
 msgid "Battery low, please plug in"
 msgstr "Virtataso alhainen, ole hyvä ja yhdistä verkkovirtaan"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr "Virta-asetukset muuttuneet"
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr "Kun kansi on kiinni,"
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr "Kun painat virtapainiketta,"
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "tietokoneesi sammuu"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "tietokoneesi siirtyy lepotilaan"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "tietokoneesi siirtyy nukkumaan"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "näyttö sammuu"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "se ei tee mitään"
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Ajan asettaminen vaatii tunnistautumisen."
@@ -1014,7 +1060,9 @@ msgstr "Ajan asettaminen vaatii tunnistautumisen."
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Todennus on tarpeen, jotta voidaan määrittää, onko verkkoajan synkronointi käytössä"
+msgstr ""
+"Todennus on tarpeen, jotta voidaan määrittää, onko verkkoajan synkronointi "
+"käytössä"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"

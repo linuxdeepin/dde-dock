@@ -47,7 +47,7 @@ func (lv WarnLevel) String() string {
 }
 
 func getWarnLevel(config *warnLevelConfig, onBattery bool,
-	percentage float64, timeToEmpty uint64) WarnLevel {
+	percentage float64, timeToEmpty uint64) WarnLevel { // 低电量的处理
 
 	if !onBattery {
 		return WarnLevelNone

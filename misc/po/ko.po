@@ -1,21 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Cindy0514, 2019
+# Thomas Sungjin Kang <potopro@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Sangmin Lee <sangminlee7648@gmail.com>, 2020
 # MarongHappy <daemul72@gmail.com>, 2020
-# MarongHappy <daemul72@gmail.com>, 2019-2020
-# ElnathK <drjekyll1@gmail.com>, 2018
-# Sangmin Lee <sangminlee7648@gmail.com>, 2016
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Korean (https://www.transifex.com/linuxdeepin/teams/3617/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +33,7 @@ msgstr "비밀번호를 8자 이상 입력하십시오"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "비밀 번호는 영어 알파벳 (대소문자 구분 주의), 숫자, 또는 특수기호 (~!@#$%^&*()[]{}\\|/?,.<>) 를 반드시 포함하여야 합니다."
+msgstr "비밀번호는 영문자(대소문자 구분), 숫자 또는 특수 기호(~!@#$%^&*()[]{}|/?,.<>)만 포함해야 합니다  "
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -38,7 +41,7 @@ msgstr "사용자 이름은 비워 둘 수 없습니다"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "첫 번째 문자는 문자 또는 숫자 여야합니다"
+msgstr "첫 번째 문자는 문자 또는 숫자여야 합니다."
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -50,7 +53,7 @@ msgstr "사용자 이름이 시스템에서 사용되었습니다"
 
 #: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
-msgstr "사용자 이름은 3 ~ 32자 사이여야 합니다"
+msgstr "사용자 이름은 3 ~ 32 자 사이 여야합니다"
 
 #: ../../appearance/scale.go:66
 msgid "Set successfully"
@@ -124,34 +127,34 @@ msgstr "메시지 접근"
 msgid "Message notification"
 msgstr "메시지 알림"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "%q 연결 성공"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "연결 끊김"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "%q(이)가 활성화 되어있고 범위 내에 있는지 확인하세요"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "블루투스 연결 실패"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -235,7 +238,7 @@ msgstr "디스크 공간이 부족합니다. 정리하십시오!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "런쳐"
+msgstr "실행도구"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -375,7 +378,7 @@ msgstr "창 최소화"
 
 #: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
-msgstr "윈도우 닫기"
+msgstr "창 닫기"
 
 #: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
@@ -482,52 +485,40 @@ msgstr "%q을(를) 성공적으로 제거했습니다"
 msgid "Failed to uninstall %q"
 msgstr "%q을(를) 제거하지 못했습니다"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "자동"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "없음"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "개인 WPA/WPA2"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "보호된 EAP"
 
@@ -1007,7 +998,40 @@ msgstr "배터리 잔량 부족"
 #: ../../session/power/manager_events.go:209
 #: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
-msgstr "배터리 부족, 전원을 연결하십시오"
+msgstr "배터리 부족,. 전원을 연결하세요"
+
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

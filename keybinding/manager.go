@@ -25,9 +25,9 @@ import (
 	"strings"
 	"time"
 
-	lockfront "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.lockfront"
 	backlight "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	inputdevices "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
+	lockfront "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.lockfront"
 	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 
@@ -56,11 +56,20 @@ const (
 	gsKeyShowCapsLockOSD      = "capslock-toggle"
 	gsKeyUpperLayerWLAN       = "upper-layer-wlan"
 
-	gsSchemaSystem   = "com.deepin.dde.keybinding.system"
-	gsSchemaMediaKey = "com.deepin.dde.keybinding.mediakey"
-	gsSchemaGnomeWM  = "com.deepin.wrap.gnome.desktop.wm.keybindings"
+	gsSchemaSystem       = "com.deepin.dde.keybinding.system"
+	gsSchemaMediaKey     = "com.deepin.dde.keybinding.mediakey"
+	gsSchemaGnomeWM      = "com.deepin.wrap.gnome.desktop.wm.keybindings"
+	gsSchemaSessionPower = "com.deepin.dde.power"
 
 	customConfigFile = "deepin/dde-daemon/keybinding/custom.ini"
+)
+
+const ( // power按键事件的响应
+	powerActionShutdown int32 = iota
+	powerActionSuspend
+	powerActionHibernate
+	powerActionTurnOffScreen
+	powerActionShowUI
 )
 
 type Manager struct {
@@ -76,6 +85,7 @@ type Manager struct {
 	gsSystem   *gio.Settings
 	gsMediaKey *gio.Settings
 	gsGnomeWM  *gio.Settings
+	gsPower    *gio.Settings
 
 	enableListenGSettings bool
 
@@ -86,6 +96,7 @@ type Manager struct {
 	sessionSigLoop  *dbusutil.SignalLoop
 	systemSigLoop   *dbusutil.SignalLoop
 	startManager    *sessionmanager.StartManager
+	sessionManager  *sessionmanager.SessionManager
 	backlightHelper *backlight.Backlight
 	keyboard        *inputdevices.Keyboard
 	keyboardLayout  string
@@ -213,6 +224,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	// init settings
 	m.gsSystem = gio.NewSettings(gsSchemaSystem)
 	m.gsMediaKey = gio.NewSettings(gsSchemaMediaKey)
+	m.gsPower = gio.NewSettings(gsSchemaSessionPower)
 
 	m.shortcutManager = shortcuts.NewShortcutManager(m.conn, m.keySymbols, m.handleKeyEvent)
 	m.shortcutManager.AddSpecial()
@@ -244,6 +256,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.mediaPlayerController = NewMediaPlayerController(m.systemSigLoop, sessionBus)
 
 	m.startManager = sessionmanager.NewStartManager(sessionBus)
+	m.sessionManager = sessionmanager.NewSessionManager(sessionBus)
 	m.keyboard = inputdevices.NewKeyboard(sessionBus)
 	m.keyboard.InitSignalExt(m.sessionSigLoop, true)
 	m.keyboard.CurrentLayout().ConnectChanged(func(hasValue bool, layout string) {
@@ -264,7 +277,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	return &m, nil
 }
 
-func (m *Manager) handleKeyEventFromLockFront(changKey string){
+func (m *Manager) handleKeyEventFromLockFront(changKey string) {
 	logger.Debugf("Receive LockFront ChangKey Event %s", changKey)
 	action := shortcuts.GetAction(changKey)
 

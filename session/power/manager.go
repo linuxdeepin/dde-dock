@@ -20,9 +20,9 @@
 package power
 
 import (
+	"os"
 	"sync"
 	"syscall"
-	"os"
 
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
@@ -89,15 +89,35 @@ type Manager struct {
 
 	// 废弃
 	LidClosedSleep gsprop.Bool `prop:"access:rw"`
-	// 接通电源时，笔记本电脑盖上盖子是否睡眠
-	LinePowerLidClosedSleep gsprop.Bool `prop:"access:rw"`
-	// 使用电池时，笔记本电脑盖上盖子是否睡眠
-	BatteryLidClosedSleep gsprop.Bool `prop:"access:rw"`
+
+	// 接通电源时，笔记本电脑盖上盖子 待机（默认选择）、睡眠、关闭显示器、无任何操作
+	LinePowerLidClosedAction gsprop.Enum `prop:"access:rw"`
+
+	// 接通电源时，按下电源按钮 关机（默认选择）、待机、睡眠、关闭显示器、无任何操作
+	LinePowerPressPowerBtnAction gsprop.Enum `prop:"access:rw"` // keybinding中监听power按键事件,获取gsettings的值
+
+	// 使用电池时，笔记本电脑盖上盖子 待机（默认选择）、睡眠、关闭显示器、无任何操作
+	BatteryLidClosedAction gsprop.Enum `prop:"access:rw"`
+
+	// 使用电池时，按下电源按钮 关机（默认选择）、待机、睡眠、关闭显示器、无任何操作
+	BatteryPressPowerBtnAction gsprop.Enum `prop:"access:rw"` // keybinding中监听power按键事件,获取gsettings的值
 
 	// 接通电源时，不做任何操作，到自动锁屏的时间
 	LinePowerLockDelay gsprop.Int `prop:"access:rw"`
 	// 使用电池时，不做任何操作，到自动锁屏的时间
 	BatteryLockDelay gsprop.Int `prop:"access:rw"`
+
+	// 打开电量通知
+	LowPowerNotifyEnable gsprop.Bool `prop:"access:rw"` // 开启后默认当电池仅剩余达到电量水平低时（默认15%）发出系统通知“电池电量低，请连接电源”；
+	// 当电池仅剩余为设置低电量时（默认5%），发出系统通知“电池电量耗尽”，进入待机模式；
+
+	// 电池低电量通知百分比
+	LowPowerNotifyThreshold gsprop.Int `prop:"access:rw"` // 设置电量低提醒的阈值，可设置范围10%-25%，默认为20%
+
+	// 自动待机电量百分比
+	LowPowerAutoSleepThreshold gsprop.Int `prop:"access:rw"` // 设置电池电量进入待机模式（s3）的阈值，可设置范围为1%-9%，默认为5%（范围待确定）
+
+	savingModeBrightnessDropPercent gsprop.Int // 用来接收和保存来自system power中降低的屏幕亮度值
 
 	AmbientLightAdjustBrightness gsprop.Bool `prop:"access:rw"`
 	ambientLightClaimed          bool
@@ -144,9 +164,17 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.BatteryLockDelay.Bind(m.settings, settingKeyBatteryLockDelay)
 	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)
 	m.SleepLock.Bind(m.settings, settingKeySleepLock)
-	m.LidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedSleep)
-	m.LinePowerLidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedSleep)
-	m.BatteryLidClosedSleep.Bind(m.settings, settingKeyBatteryLidClosedSleep)
+	//m.LidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedAction)  // 弃用
+
+	m.LinePowerLidClosedAction.Bind(m.settings, settingKeyLinePowerLidClosedAction)
+	m.LinePowerPressPowerBtnAction.Bind(m.settings, settingKeyLinePowerPressPowerBtnAction)
+	m.BatteryLidClosedAction.Bind(m.settings, settingKeyBatteryLidClosedAction)
+	m.BatteryPressPowerBtnAction.Bind(m.settings, settingKeyBatteryPressPowerBtnAction)
+	m.LowPowerNotifyEnable.Bind(m.settings, settingKeyLowPowerNotifyEnable)
+	m.LowPowerNotifyThreshold.Bind(m.settings, settingKeyLowPowerNotifyThreshold)
+	m.LowPowerAutoSleepThreshold.Bind(m.settings, settingKeyLowPowerAutoSleepThreshold)
+	m.savingModeBrightnessDropPercent.Bind(m.settings, settingKeyBrightnessDropPercent)
+	m.initGSettingsConnectChanged()
 	m.AmbientLightAdjustBrightness.Bind(m.settings,
 		settingKeyAmbientLightAdjuestBrightness)
 
@@ -332,16 +360,23 @@ func (m *Manager) Reset() *dbus.Error {
 		settingKeyLinePowerScreenBlackDelay,
 		settingKeyLinePowerSleepDelay,
 		settingKeyLinePowerLockDelay,
-		settingKeyLinePowerLidClosedSleep,
+		settingKeyLinePowerLidClosedAction,
+		settingKeyLinePowerPressPowerBtnAction,
 
 		settingKeyBatteryScreenBlackDelay,
 		settingKeyBatterySleepDelay,
 		settingKeyBatteryLockDelay,
-		settingKeyBatteryLidClosedSleep,
+		settingKeyBatteryLidClosedAction,
+		settingKeyBatteryPressPowerBtnAction,
 
 		settingKeyScreenBlackLock,
 		settingKeySleepLock,
 		settingKeyPowerButtonPressedExec,
+
+		settingKeyLowPowerNotifyEnable,
+		settingKeyLowPowerNotifyThreshold,
+		settingKeyLowPowerAutoSleepThreshold,
+		settingKeyBrightnessDropPercent,
 	}
 	for _, key := range settingKeys {
 		logger.Debug("reset setting", key)

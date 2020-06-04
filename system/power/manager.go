@@ -54,6 +54,11 @@ type Manager struct {
 	ac          *AC
 	gudevClient *gudev.Client
 
+	// 电池是否电量低
+	batteryLow bool
+	// 初始化是否完成
+	initDone bool
+
 	PropsMu      sync.RWMutex
 	OnBattery    bool
 	HasLidSwitch bool
@@ -63,11 +68,20 @@ type Manager struct {
 	BatteryStatus      battery.Status
 	BatteryTimeToEmpty uint64
 	BatteryTimeToFull  uint64
-
+	// 电池容量
 	BatteryCapacity float64
 
+	// 开启和关闭节能模式
 	PowerSavingModeEnabled bool `prop:"access:rw"`
-	PowerSavingModeAuto    bool `prop:"access:rw"`
+
+	// 自动切换节能模式，依据为是否插拔电源
+	PowerSavingModeAuto bool `prop:"access:rw"`
+
+	// 低电量时自动开启
+	PowerSavingModeAutoWhenBatteryLow bool `prop:"access:rw"`
+
+	// 开启节能模式时降低亮度的百分比值
+	PowerSavingModeBrightnessDropPercent uint32 `prop:"access:rw"`
 
 	methods *struct {
 		GetBatteries func() `out:"batteries"`
@@ -94,7 +108,8 @@ type Manager struct {
 
 func newManager(service *dbusutil.Service) (*Manager, error) {
 	m := &Manager{
-		service: service,
+		service:           service,
+		BatteryPercentage: 100,
 	}
 	err := m.init()
 	if err != nil {
@@ -121,17 +136,16 @@ func (ac *AC) newDevice() *gudev.Device {
 	return ac.gudevClient.QueryBySysfsPath(ac.sysfsPath)
 }
 
-func (m *Manager) refreshAC(ac *gudev.Device) {
+func (m *Manager) refreshAC(ac *gudev.Device) { // 拔插电源时候触发
 	online := ac.GetPropertyAsBoolean("POWER_SUPPLY_ONLINE")
 	logger.Debug("ac online:", online)
 	onBattery := !online
 
 	m.PropsMu.Lock()
 	m.setPropOnBattery(onBattery)
-	if m.PowerSavingModeAuto {
-		m.setPropPowerSavingModeEnabled(onBattery)
-	}
 	m.PropsMu.Unlock()
+	// 根据OnBattery的状态,修改节能模式
+	m.updatePowerSavingMode()
 }
 
 func (m *Manager) initAC(devices []*gudev.Device) {
@@ -174,6 +188,14 @@ func (m *Manager) init() error {
 
 	m.initLidSwitch()
 	devices := powersupply.GetDevices(m.gudevClient)
+
+	cfg := loadConfigSafe()
+	// 将config.json中的配置完成初始化
+	m.PowerSavingModeEnabled = cfg.PowerSavingModeEnabled                             // 开启和关闭节能模式
+	m.PowerSavingModeAuto = cfg.PowerSavingModeAuto                                   // 自动切换节能模式，依据为是否插拔电源
+	m.PowerSavingModeAutoWhenBatteryLow = cfg.PowerSavingModeAutoWhenBatteryLow       // 低电量时自动开启
+	m.PowerSavingModeBrightnessDropPercent = cfg.PowerSavingModeBrightnessDropPercent // 开启节能模式时降低亮度的百分比值
+
 	m.initAC(devices)
 	m.initBatteries(devices)
 	for _, dev := range devices {
@@ -181,35 +203,9 @@ func (m *Manager) init() error {
 	}
 
 	m.gudevClient.Connect("uevent", m.handleUEvent)
-
-	cfg := loadConfigSafe()
-	m.PowerSavingModeEnabled = cfg.PowerSavingModeEnabled
-	m.PowerSavingModeAuto = cfg.PowerSavingModeAuto
-
+	m.initDone = true
 	// init LMT config
-	var err error
-	var lmtCfgChanged bool
-	if m.PowerSavingModeAuto {
-		m.PowerSavingModeEnabled = m.OnBattery
-		lmtCfgChanged, err = setLMTConfig(lmtConfigAuto)
-	} else {
-		if m.PowerSavingModeEnabled {
-			lmtCfgChanged, err = setLMTConfig(lmtConfigEnabled)
-		} else {
-			lmtCfgChanged, err = setLMTConfig(lmtConfigDisabled)
-		}
-	}
-
-	if err != nil {
-		logger.Warning("failed to set LMT config:", err)
-	}
-
-	if lmtCfgChanged {
-		err := reloadLaptopModeService()
-		if err != nil {
-			logger.Warning(err)
-		}
-	}
+	m.updatePowerSavingMode()
 
 	return nil
 }
@@ -355,8 +351,10 @@ func (m *Manager) destroy() {
 const configFile = "/var/lib/dde-daemon/power/config.json"
 
 type Config struct {
-	PowerSavingModeEnabled bool
-	PowerSavingModeAuto    bool
+	PowerSavingModeEnabled               bool
+	PowerSavingModeAuto                  bool
+	PowerSavingModeAutoWhenBatteryLow    bool
+	PowerSavingModeBrightnessDropPercent uint32
 }
 
 func loadConfig() (*Config, error) {
@@ -382,9 +380,17 @@ func loadConfigSafe() *Config {
 		}
 		return &Config{
 			// default config
-			PowerSavingModeAuto:    true,
-			PowerSavingModeEnabled: false,
+			PowerSavingModeAuto:                  true,
+			PowerSavingModeEnabled:               false,
+			PowerSavingModeAutoWhenBatteryLow:    false,
+			PowerSavingModeBrightnessDropPercent: 20,
 		}
+	}
+	// 新增字段后第一次启动时,缺少两个新增字段的json,导致亮度下降百分比字段默认为0,导致与默认值不符,需要处理
+	// 低电量自动待机字段的默认值为false,不会导致错误影响
+	// 正常情况下该字段范围为10-40,只有在该情况下会出现0的可能
+	if cfg.PowerSavingModeBrightnessDropPercent == 0 {
+		cfg.PowerSavingModeBrightnessDropPercent = 20
 	}
 	return cfg
 }
@@ -396,6 +402,8 @@ func (m *Manager) saveConfig() error {
 	m.PropsMu.RLock()
 	cfg.PowerSavingModeAuto = m.PowerSavingModeAuto
 	cfg.PowerSavingModeEnabled = m.PowerSavingModeEnabled
+	cfg.PowerSavingModeAutoWhenBatteryLow = m.PowerSavingModeAutoWhenBatteryLow
+	cfg.PowerSavingModeBrightnessDropPercent = m.PowerSavingModeBrightnessDropPercent
 	m.PropsMu.RUnlock()
 
 	dir := filepath.Dir(configFile)

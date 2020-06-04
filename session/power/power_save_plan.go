@@ -44,9 +44,10 @@ type powerSavePlan struct {
 	metaTasks          metaTasks
 	tasks              delayedTasks
 	// key output name, value old brightness
-	oldBrightnessTable map[string]float64
-	mu                 sync.Mutex
-	screensaverRunning bool
+	oldBrightnessTable        map[string]float64
+	mu                        sync.Mutex
+	screensaverRunning        bool
+	savingModeBrightnessTable map[string]float64 // 保存节能模式调节后的亮度信息
 
 	atomNetWMStateFullscreen    x.Atom
 	atomNetWMStateFocused       x.Atom
@@ -136,20 +137,83 @@ func (psp *powerSavePlan) Start() error {
 	helper := psp.manager.helper
 	power := helper.Power
 	screenSaver := helper.ScreenSaver
-
+	var err error
 	//OnBattery changed will effect current PowerSavePlan
 	power.OnBattery().ConnectChanged(func(hasValue bool, value bool) {
 		psp.Reset()
 	})
 
 	power.PowerSavingModeEnabled().ConnectChanged(psp.handlePowerSavingModeChanged)
-
+	power.PowerSavingModeBrightnessDropPercent().ConnectChanged(psp.handlePowerSavingModeBrightnessDropPercentChanged) // 监听自动降低亮度的属性的改变
 	screenSaver.ConnectIdleOn(psp.HandleIdleOn)
 	screenSaver.ConnectIdleOff(psp.HandleIdleOff)
+	psp.savingModeBrightnessTable, err = helper.Display.GetBrightness(0) // 获取当前亮度
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bool) {
+func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasValue bool, lowerValue uint32) { // 节能模式降低亮度的比例,并降低亮度
+	if !hasValue {
+		return
+	}
+	logger.Debug("power saving mode lower brightness changed to", lowerValue)
+	newLowerBrightnessScale := float64(lowerValue)
+	psp.manager.PropsMu.RLock()
+	hasLightSensor := psp.manager.HasAmbientLightSensor
+	psp.manager.PropsMu.RUnlock()
+
+	if hasLightSensor && psp.manager.AmbientLightAdjustBrightness.Get() {
+		return
+	}
+	oldLowerBrightnessScale := float64(psp.manager.savingModeBrightnessDropPercent.Get()) // 保存之前的亮度下降值
+	psp.manager.savingModeBrightnessDropPercent.Set(int32(lowerValue))
+	savingModeEnable, err := psp.manager.helper.Power.PowerSavingModeEnabled().Get(0)
+	if err != nil {
+		logger.Error("get current power savingMode state error : ", err)
+	}
+
+	brightnessTable, err := psp.manager.helper.Display.GetBrightness(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if savingModeEnable {
+		// adjust brightness by lowerBrightnessScale
+		var unSavingModeBrightness float64
+		// 判断亮度修改是手动调节亮度还是调节了节能选项
+		brightnessChangedByManual := psp.isBrightnessChangedByManual(brightnessTable)
+		lowerBrightnessScale := 1 - newLowerBrightnessScale/100
+		for key, value := range brightnessTable { // 反求未节能时的亮度
+			if !brightnessChangedByManual {
+				unSavingModeBrightness = value / (1 - oldLowerBrightnessScale/100)
+				if unSavingModeBrightness > 1 {
+					unSavingModeBrightness = 1
+				}
+			} else { // 在人为直接修改亮度之后,再使用节能选项调节,则不会按照比例反求亮度
+				unSavingModeBrightness = value
+			}
+
+			value = unSavingModeBrightness * lowerBrightnessScale
+			if value < 0.1 {
+				value = 0.1
+			}
+			brightnessTable[key] = value
+		}
+	} else {
+		return
+	} //else中(非节能状态下的调节)不需要做响应,需要降低亮度的预设值在之前已经保存了
+	psp.manager.setAndSaveDisplayBrightness(brightnessTable)
+	psp.savingModeBrightnessTable, err = psp.manager.helper.Display.GetBrightness(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+}
+
+func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bool) { //节能模式变化后的亮度修改
 	if !hasValue {
 		return
 	}
@@ -168,27 +232,41 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 		logger.Warning(err)
 		return
 	}
+	// 判断亮度修改是手动调节亮度还是调节了节能选项
+	brightnessChangedByManual := psp.isBrightnessChangedByManual(brightnessTable)
+	lowerBrightnessScale := 1 - float64(psp.manager.savingModeBrightnessDropPercent.Get())/100
 	if enabled {
-		// reduce brightness by 20%
+		// reduce brightness by lowerBrightnessScale
 		for key, value := range brightnessTable {
-			value = value * 0.8
+			value = value * lowerBrightnessScale
 			if value < 0.1 {
 				value = 0.1
 			}
 			brightnessTable[key] = value
 		}
-
 	} else {
-		// increase brightness by 25%
-		for key, value := range brightnessTable {
-			value = value * 1.25
-			if value > 1 {
-				value = 1
+		if !brightnessChangedByManual {
+			logger.Debug("not manual adjust brightness")
+			// increase brightness by lowerBrightnessScale
+			for key, value := range brightnessTable {
+				value = value / lowerBrightnessScale
+				if value > 1 {
+					value = 1
+				}
+				brightnessTable[key] = value
 			}
-			brightnessTable[key] = value
+		} else {
+			logger.Debug("manual adjust brightness")
+			return
+			// brightnessTable不变
 		}
 	}
 	psp.manager.setAndSaveDisplayBrightness(brightnessTable)
+	psp.savingModeBrightnessTable, err = psp.manager.helper.Display.GetBrightness(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 }
 
 // 取消之前的任务
@@ -210,6 +288,18 @@ func (psp *powerSavePlan) addTask(t *delayedTask) {
 	psp.mu.Lock()
 	psp.addTaskNoLock(t)
 	psp.mu.Unlock()
+}
+
+func (psp *powerSavePlan) isBrightnessChangedByManual(brightnessTable map[string]float64) bool {
+	if psp.savingModeBrightnessTable != nil {
+		for key, value := range brightnessTable { // 通过节能模式调节后的亮度与手动调节(或者未调节)的当前的亮度对比,判断是否用户手动调节过亮度
+			if brightnessRound(psp.savingModeBrightnessTable[key]) != brightnessRound(value) {
+				logger.Debug("brightness changed by manual!")
+				return true
+			}
+		}
+	}
+	return false
 }
 
 type metaTask struct {

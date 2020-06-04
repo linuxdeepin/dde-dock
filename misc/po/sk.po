@@ -1,19 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Cindy0514, 2019
-# Jozef Gaal <preklady@mayday.sk>, 2016,2020
-# Marek Bujko <marek.bujko@gmail.com>, 2016-2018
+# Marek Bujko <marek.bujko@gmail.com>, 2020
+# fasier <matus.ravas@outlook.com>, 2020
+# Microtus <hrabosmartin@gmail.com>, 2020
+# Cindy0514, 2020
+# Jozef Gaal <preklady@mayday.sk>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
-"Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Jozef Gaal <preklady@mayday.sk>, 2020\n"
+"Language-Team: Slovak (https://www.transifex.com/linuxdeepin/teams/3617/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +33,9 @@ msgstr "Prosím, zadajte heslo s viac ako 8 znakmi"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Heslo musí obsahovať písmená anglickej abecedy (veľké a malé písmená), číslice alebo špeciálne znaky (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Heslo musí obsahovať písmená anglickej abecedy (veľké a malé písmená), "
+"číslice alebo špeciálne znaky (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -122,36 +129,36 @@ msgstr "Prístup k správam"
 msgid "Message notification"
 msgstr "Upozornenie na správy"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
-msgstr ""
+msgstr "Pripojenie k %q úspešné"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Odpojené"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Uistite sa, že %q je zapnutý a v dosahu"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Pripojenie bluetooth zlyhalo"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
-msgstr ""
+msgstr "Kliknutím sem sa pripojíte k %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
-msgstr ""
+msgstr "Pridať Bluetooth zariadenia"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
-msgstr ""
+msgstr "Spárovať"
 
 #: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
@@ -201,7 +208,7 @@ msgstr "Nastaviť pripomienku"
 
 #: ../../calendar/type.go:40
 msgid "Festival"
-msgstr ""
+msgstr "Festival"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -305,11 +312,11 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Prevod textu na reč"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Prevod reči na text"
 
 #: ../../keybinding/shortcuts/id_name_map.go:48
 msgid "Clipboard"
@@ -413,13 +420,15 @@ msgstr "Pracovné prostredie"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "Na prepínanie jazyka je potrebná autentifikácia"
+msgstr "Na prepínanie jazyka je potrebné overenie"
 
 #: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Systémový jazyk sa zmení inštaláciou potrebných jazykových balíkov, prosím čakajte..."
+msgstr ""
+"Systémový jazyk sa zmení inštaláciou potrebných jazykových balíkov, prosím "
+"čakajte..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -460,7 +469,9 @@ msgstr "%q odstránenie zlyhalo."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Aby sa zabránilo automatickému vypnutiu, prosím pripojte normálne aktualizácie."
+msgstr ""
+"Aby sa zabránilo automatickému vypnutiu, prosím pripojte normálne "
+"aktualizácie."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -470,7 +481,9 @@ msgstr "Vyrovnávaciu pamäť balíčkov vymazaná"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Váš systémový zdroj bol upravený, obnovte ho na oficiálny zdroj pre bežné používanie"
+msgstr ""
+"Váš systémový zdroj bol upravený, obnovte ho na oficiálny zdroj pre bežné "
+"používanie"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -480,52 +493,40 @@ msgstr "%q úspešne odstránené"
 msgid "Failed to uninstall %q"
 msgstr "Nepodarilo sa odinštalovať %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automaticky"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
-msgstr "Žiadne"
+msgstr "Nič"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit kľúč"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Tunelované TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "Chránené EAP"
 
@@ -616,7 +617,9 @@ msgstr "Zariadenie nie je pripravené na konfiguráciu"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Konfigurácia IP nemôže byť vyhradená (nie je dostupná adresa, časový limit atď.)"
+msgstr ""
+"Konfigurácia IP nemôže byť vyhradená (nie je dostupná adresa, časový limit "
+"atď.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -630,7 +633,9 @@ msgstr "Boli požadované heslá, ale neboli poskytnuté"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Žiadateľ 802.1X sa odpojil od prístupového bodu alebo autentifikačného servera"
+msgstr ""
+"Žiadateľ 802.1X sa odpojil od prístupového bodu alebo autentifikačného "
+"servera"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -859,7 +864,9 @@ msgstr "Ubezpečte sa, že ste vložili SIM kartu so signálom mobilnej siete"
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Uistite sa, že ste vybrali správny plán bez toho, aby ste mali na SIM karte nedoplatky"
+msgstr ""
+"Uistite sa, že ste vybrali správny plán bez toho, aby ste mali na SIM karte "
+"nedoplatky"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -912,7 +919,7 @@ msgstr "Pripojenie bolo odstránené z nastavení"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Povoľuje sa Hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
@@ -920,7 +927,7 @@ msgstr "Pripája sa %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot povolený"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
@@ -928,7 +935,7 @@ msgstr "%q pripojený"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot vypnutý"
 
 #: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
@@ -940,7 +947,9 @@ msgstr "Nepodarilo sa zdieľať hotspot, skontrolujte nastavenia dnsmasq"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôtovému smerovaču"
+msgstr ""
+"Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôtovému "
+"smerovaču"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
@@ -948,7 +957,7 @@ msgstr "Nepodarilo sa pripojiť %q, skontrolujte router alebo sieťový kábel."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Na pripojenie k %q je potrebné heslo"
 
 #: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
@@ -1007,6 +1016,39 @@ msgstr "Kriticky nízka úroveň batérie"
 msgid "Battery low, please plug in"
 msgstr "Vybitá batéria, prosím pripojte kábel napájania"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "sa váš počítač vypne"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "váš počítač prejde do režimu pozastavenia"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "váš počítač prejde do režimu spánku"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "váš monitor sa vypne"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "váš počítač nespraví nič"
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Na nastavenie systémového času je potrebné overenie"
@@ -1025,7 +1067,9 @@ msgstr ""
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Autentifikácia je potrebná na kontrolu, či RTC ukladá miestny čas alebo čas UTC"
+msgstr ""
+"Autentifikácia je potrebná na kontrolu, či RTC ukladá miestny čas alebo čas "
+"UTC"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

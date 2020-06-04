@@ -1,20 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# kolera <koleramilan@gmail.com>, 2017
-# Марко Пејовић <markopejovic@tutanota.com>, 2018-2019
-# Марко Пејовић <markopejovic@tutanota.com>, 2018-2020
+# Slobodan Simić <slsimic@gmail.com>, 2020
+# kolera <koleramilan@gmail.com>, 2020
+# Smarty <kidsmart33@gmail.com>, 2020
+# Boki Ball <superdodgeballer@gmail.com>, 2020
+# Cindy0514, 2020
 # Марко Пејовић <markopejovic@tutanota.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 12:02+0000\n"
-"Last-Translator: Марко Пејовић <markopejovic@tutanota.com>\n"
-"Language-Team: Serbian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sr/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Марко Пејовић <markopejovic@tutanota.com>, 2020\n"
+"Language-Team: Serbian (https://www.transifex.com/linuxdeepin/teams/3617/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +34,9 @@ msgstr "Молимо унесите лозинку од најмање 8 кар�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Лозинка може садржати само слова абецеде (осетљива на величину), бројеве или специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Лозинка може садржати само слова абецеде (осетљива на величину), бројеве или"
+" специјалне карактере (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -65,7 +72,7 @@ msgstr "Скалирање приказа"
 
 #: ../../appearance/scale.go:75
 msgid "Setting display scaling"
-msgstr "Подешавање салираног приказа"
+msgstr "Подешавање скалираног приказа"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
@@ -123,34 +130,34 @@ msgstr "Приступ порукама"
 msgid "Message notification"
 msgstr "Обавештење о пристиглим порукама"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Повезивање са %q успешно"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Нисте поевзани"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Проверите да ли је %q укључен и да је у домету"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Блутут повезивање неуспешно"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "Кликни овде за повезивање са %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "Додај Блутут уређаје"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "Упари"
 
@@ -218,7 +225,7 @@ msgstr "Принудно изађи"
 
 #: ../../dock/app_entry_menu.go:132
 msgid "Dock"
-msgstr "Закачи"
+msgstr "Док"
 
 #: ../../dock/app_entry_menu.go:139
 msgid "Undock"
@@ -262,7 +269,7 @@ msgstr "Спуштајући терминал"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Слика екрана"
+msgstr "Слика Екрана"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
@@ -414,13 +421,15 @@ msgstr "Приказ активности"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "Аутентификација је неопходна за промену језика"
+msgstr "Идентификација је неопходна за промену језика"
 
 #: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Промена језика система и инсталирање потребних језичких пакета, молимо сачекајте..."
+msgstr ""
+"Промена језика система и инсталирање потребних језичких пакета, молимо "
+"сачекајте..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -471,7 +480,9 @@ msgstr "Кеш пакета уклоњен"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Извор система је промењен, молимо вратите се на званични извор за нормално коришћење."
+msgstr ""
+"Извор система је промењен, молимо вратите се на званични извор за нормално "
+"коришћење."
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -481,52 +492,40 @@ msgstr "%q уклањање успешно"
 msgid "Failed to uninstall %q"
 msgstr "Уклањање %q неуспешно"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Аутоматски"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Ништа"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "ВЕП 40/128-bit Кључ"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "ВПА/ВПА2 Лично"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "ТЛС"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "МД5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "ЛЕАП"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "ФАСТ"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Тунелни ТЛС"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "Заштићени ЕАП"
 
@@ -572,7 +571,7 @@ msgstr "ВПН Веза"
 
 #: ../../network/nm_custom_type.go:243
 msgid "VPN L2TP"
-msgstr "ВПН"
+msgstr "ВПН L2TP"
 
 #: ../../network/nm_custom_type.go:245
 msgid "VPN OpenConnect"
@@ -617,7 +616,9 @@ msgstr "Уређај није спреман за конфигурацију"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "ИП конфигурација није могла бити резервисана (нема доступне адресе, време је истекло, итд.)"
+msgstr ""
+"ИП конфигурација није могла бити резервисана (нема доступне адресе, време је"
+" истекло, итд.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -631,7 +632,9 @@ msgstr "Лозинке су биле потребне, али нису прил�
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X предлагач је прекинуо везу са приступном тачком или са сервером за аутентификацију"
+msgstr ""
+"802.1X предлагач је прекинуо везу са приступном тачком или са сервером за "
+"аутентификацију"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -860,7 +863,8 @@ msgstr "Уверите се да је СИМ картица убачена и д
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Please make sure a correct plan was selected without arrearage of SIM card"
+msgstr ""
+"Please make sure a correct plan was selected without arrearage of SIM card"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -979,7 +983,8 @@ msgstr "Мрежа"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Хардверски прекидач ВЛАН картице је искључен, молимо укључите по потреби."
+msgstr ""
+"Хардверски прекидач ВЛАН картице је искључен, молимо укључите по потреби."
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -996,7 +1001,9 @@ msgstr "Повезани сте"
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" није успешно прошао безбедносну проверу и тренутно се не може покренути"
+msgstr ""
+"\"%s\" није успешно прошао безбедносну проверу и тренутно се не може "
+"покренути"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1008,26 +1015,63 @@ msgstr "Батерија критично испражњена"
 msgid "Battery low, please plug in"
 msgstr "Батерија при крају, прикључите пуњач"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "рачунар ће се искључити"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "рачунар ће обуставити рад"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "рачунар спава"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "екран ће се угасити"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "то неће утицати на рад рачунара"
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr "Аутентификација је неопходна за подешавање времена система"
+msgstr "Идентификација је неопходна за подешавање времена система"
 
 #: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Аутентификација је неопходна да контролишете опцију мрежне синхронизације времена"
+msgstr ""
+"Идентификација је неопходна да контролишете опцију мрежне синхронизације "
+"времена"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr "Аутентификација је неопходна за промену НТП сервера"
+msgstr "Идентификација је неопходна за промену НТП сервера"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Аутентификација је неопходна да контролишете да ли RTC памти локално или UTC време"
+msgstr ""
+"Идентификација је неопходна да контролишете да ли RTC памти локално или UTC "
+"време"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr "Аутентификација је неопходна за поставку временске зоне"
+msgstr "Идентификација је неопходна за поставку временске зоне"

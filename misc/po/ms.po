@@ -1,17 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# abuyop <abuyop@gmail.com>, 2016-2020
+# abuyop <abuyop@gmail.com>, 2020
+# inashdeen <inashdeen@gmail.com>, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Malay (https://www.transifex.com/linuxdeepin/teams/3617/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +31,9 @@ msgstr "Sila masukkan kata aluan tidak kurang dari 8 aksara panjangnya"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor "
+"atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -34,7 +41,7 @@ msgstr "Nama pengguna tidak boleh kosong"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "Aksara pertama mestilah satu abjad atau angka"
+msgstr "Aksara pertama mesti satu abjad atau angka"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -120,34 +127,34 @@ msgstr "Capaian mesej"
 msgid "Message notification"
 msgstr "Pemberitahuan mesej"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Sambungan %q berjaya"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Terputus"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Pastikan %q dihidupkan dan berada dalam julat"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -417,7 +424,9 @@ msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu sebentar..."
+msgstr ""
+"Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu "
+"sebentar..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -458,7 +467,9 @@ msgstr "%q gagal dibuang."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi kemaskini biasa."
+msgstr ""
+"Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi "
+"kemaskini biasa."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -468,7 +479,9 @@ msgstr "Cache pakej disapu bersih"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk kegunaan biasa anda"
+msgstr ""
+"Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk"
+" kegunaan biasa anda"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -478,52 +491,40 @@ msgstr "%q berjaya dibuang"
 msgid "Failed to uninstall %q"
 msgstr "Gagal menyahpasang %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automatik"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Tiada"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "Kunci WEP 40/128-bit"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Persendirian"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "TLS Berterowong"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "EAP Terlindung"
 
@@ -614,7 +615,9 @@ msgstr "Peranti belum bersedia untuk konfigurasi"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-lain)"
+msgstr ""
+"Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-"
+"lain)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -672,7 +675,8 @@ msgstr "Perkhidmatan sambungan terkongsi gagal dimulakan"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
+msgstr ""
+"Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
@@ -852,12 +856,14 @@ msgstr "Kabel rangkaian telah dicabut"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
+msgstr ""
+"Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
+msgstr ""
+"Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -869,12 +875,15 @@ msgstr "Gagal mengaktifkan sambungan VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan pengguna"
+msgstr ""
+"Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan "
+"pengguna"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan peranti"
+msgstr ""
+"Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan peranti"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -938,11 +947,15 @@ msgstr "Tidak boleh berkongsi kawasan khas, sila periksa tetapan dnsmasq"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
+msgstr ""
+"Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala "
+"tanpa wayar"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
+msgstr ""
+"Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian"
+" anda."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -993,7 +1006,9 @@ msgstr "Bersambung"
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" tidak melepasi pengesahan keselamatan sistem, dan kini tidak dapat dijalankan"
+msgstr ""
+"\"%s\" tidak melepasi pengesahan keselamatan sistem, dan kini tidak dapat "
+"dijalankan"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1005,6 +1020,39 @@ msgstr "Kuasa bateri sangat rendah"
 msgid "Battery low, please plug in"
 msgstr "Kuasa bateri lemah, sila palamkan kuasa"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Pengesahihan diperlukan untuk menetap waktu sistem"
@@ -1013,7 +1061,9 @@ msgstr "Pengesahihan diperlukan untuk menetap waktu sistem"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan"
+msgstr ""
+"Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian"
+" dapat dibenarkan"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1023,7 +1073,9 @@ msgstr "Pengesahihan diperlukan untuk mengubah pelayan NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC"
+msgstr ""
+"Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat"
+" atau UTC"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

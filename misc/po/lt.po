@@ -1,19 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Jonas Motiejūnas <exjonas@gmail.com>, 2016
-# Lukas Zemeckis <nekaip3@gmail.com>, 2016
-# Moo, 2016-2020
+# Mantas Kriaučiūnas <mantas@akl.lt>, 2020
+# Lukas Zemeckis <nekaip3@gmail.com>, 2020
+# Moo, 2020
+# Jonas Motiejūnas <exjonas@gmail.com>, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Lithuanian (https://www.transifex.com/linuxdeepin/teams/3617/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +33,9 @@ msgstr "Prašome įrašyti ne trumpesnį, nei 8 simbolių slaptažodį"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), skaičiai ar ypatingi simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), "
+"skaičiai ar specialūs simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -122,34 +129,34 @@ msgstr "Žinučių prieiga"
 msgid "Message notification"
 msgstr "Žinučių pranešimai"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "%q sėkmingai prijungta"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Atsijungta"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Įsitikinkite, kad %q yra įjungtas ir yra pasiekiamame nuotolyje"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth ryšys nepavyko"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -419,7 +426,8 @@ msgstr "Norint perjungti kalbą, reikalingas tapatybės nustatymas"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Keičiama sistemos kalba ir įdiegiami reikalingi kalbos paketai, palaukite..."
+msgstr ""
+"Keičiama sistemos kalba ir įdiegiami reikalingi kalbos paketai, palaukite..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -460,7 +468,9 @@ msgstr "Nepavyko pašalinti %q."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Normaliam atnaujinimui, ir tam, kad būtų išvengta automatinio išjungimo, prašome prijungti maitinimo laidą."
+msgstr ""
+"Normaliam atnaujinimui, ir tam, kad būtų išvengta automatinio išjungimo, "
+"prašome prijungti maitinimo laidą."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -470,7 +480,9 @@ msgstr "Paketų podėlis išvalytas"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Jūsų sistemos šaltinis buvo modifikuotas. Normaliam naudojimui, atkurkite į oficialų šaltinį"
+msgstr ""
+"Jūsų sistemos šaltinis buvo modifikuotas. Normaliam naudojimui, atkurkite į "
+"oficialų šaltinį"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -480,52 +492,40 @@ msgstr "%q sėkmingai pašalintas"
 msgid "Failed to uninstall %q"
 msgstr "Nepavyko pašalinti %q"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Automatiškai"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Nėra"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bitų raktas"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 asmeninis"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Tuneliuotas TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "Apsaugota EAP"
 
@@ -616,7 +616,9 @@ msgstr "Įrenginys nebuvo pasiruošęs konfigūracijai"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Nepavyko užsirezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi laiko terminas ir t.t.)"
+msgstr ""
+"Nepavyko užsirezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi "
+"laiko terminas ir t.t.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -630,7 +632,9 @@ msgstr "Slaptažodžių buvo reikalaujama, tačiau jie nebuvo pateikti"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X pareiškėjas atsijungė nuo prieigos taško ar tapatybės nustatymo serverio"
+msgstr ""
+"802.1X pareiškėjas atsijungė nuo prieigos taško ar tapatybės nustatymo "
+"serverio"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -738,7 +742,8 @@ msgstr "PIN patikrinimas nepavyko"
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr "Gali būti, kad trūksta įrenginiui reikalingos programinės aparatinės įrangos"
+msgstr ""
+"Gali būti, kad trūksta įrenginiui reikalingos programinės aparatinės įrangos"
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
@@ -859,7 +864,8 @@ msgstr "Įsitikinkite, kad buvo įdėta SIM kortelė su mobiliojo tinklo signalu
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Įsitikinkite, kad buvo pasirinktas teisingas planas be SIM kortelės skolų "
+msgstr ""
+"Įsitikinkite, kad buvo pasirinktas teisingas planas be SIM kortelės skolų "
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -944,7 +950,8 @@ msgstr "Nepavyko prijungti %q, laikykite arčiau belaidžio maršrutizatoriaus"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Nepavyko prijungti %q, patikrinkite savo maršrutizatorių ar tinklo laidą."
+msgstr ""
+"Nepavyko prijungti %q, patikrinkite savo maršrutizatorių ar tinklo laidą."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -952,7 +959,8 @@ msgstr "Norint prijungti %q, reikalingas slaptažodis"
 
 #: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Ryšys patyrė nesėkmę, nepavyko prisijungti prie %q, neteisingas slaptažodis"
+msgstr ""
+"Ryšys patyrė nesėkmę, nepavyko prisijungti prie %q, neteisingas slaptažodis"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
@@ -978,7 +986,9 @@ msgstr "Tinklas"
 #: ../../network/utils_notify.go:201
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Belaidžio tinklo aparatinės įrangos perjungiklis yra išjungtas, prašome, jei būtina, jį įjungti"
+msgstr ""
+"Belaidžio tinklo aparatinės įrangos perjungiklis yra išjungtas, prašome, jei"
+" būtina, jį įjungti"
 
 #: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
@@ -995,7 +1005,8 @@ msgstr "Prisijungta"
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" nepraėjo sistemos saugumo patikrinimo ir dabar negali būti paleista"
+msgstr ""
+"\"%s\" nepraėjo sistemos saugumo patikrinimo ir dabar negali būti paleista"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1007,6 +1018,39 @@ msgstr "Kritiškai žema baterijos įkrova"
 msgid "Battery low, please plug in"
 msgstr "Baterija baigia išsikrauti, prijunkite maitinimą"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Norint nustatyti sistemos laiką, reikalingas tapatybės nustatymas"
@@ -1015,7 +1059,9 @@ msgstr "Norint nustatyti sistemos laiką, reikalingas tapatybės nustatymas"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Norint valdyti ar tinklo laiko sinchronizavimas turėtų būti įjungtas, reikalingas tapatybės nustatymas"
+msgstr ""
+"Norint valdyti ar tinklo laiko sinchronizavimas turėtų būti įjungtas, "
+"reikalingas tapatybės nustatymas"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1025,8 +1071,11 @@ msgstr "Norint pakeisti NTP serverį, reikalingas tapatybės nustatymas"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Norint valdyti ar RTC bus laikomas vietinis ar suderintasis pasaulinis laikas (UTC), reikalingas tapatybės nustatymas"
+msgstr ""
+"Norint valdyti ar RTC bus laikomas vietinis ar suderintasis pasaulinis "
+"laikas (UTC), reikalingas tapatybės nustatymas"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr "Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas"
+msgstr ""
+"Norint nustatyti sistemos laiko juostą, reikalingas tapatybės nustatymas"

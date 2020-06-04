@@ -1,25 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# meda <ademcal@yahoo.com>, 2017-2018
-# meda <ademcal@yahoo.com>, 2019
-# Emin Tufan <etcetin@gmail.com>, 2018
-# unc926 <win32-blackghost@hotmail.com>, 2017
-# Kaya Zeren <kayazeren@gmail.com>, 2018-2019
-# Murat Servan Kahraman, 2016
-# Ömer GÖK <omergok@outlook.com>, 2016
-# Serdar Sağlam <teknomobil@msn.com>, 2019-2020
-# yakup <mutouk@yandex.ru>, 2016
+# Sinan Eldem, 2020
+# Vahap Karataş <k.vahap@gmail.com>, 2020
+# Kaya Zeren <kayazeren@gmail.com>, 2020
+# yakup <mutouk@yandex.ru>, 2020
+# meda <ademcal@yahoo.com>, 2020
+# Cindy0514, 2020
+# Serdar Sağlam <teknomobil@msn.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:47+0000\n"
-"Last-Translator: Serdar Sağlam <teknomobil@msn.com>\n"
-"Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Serdar Sağlam <teknomobil@msn.com>, 2020\n"
+"Language-Team: Turkish (https://www.transifex.com/linuxdeepin/teams/3617/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,7 +35,9 @@ msgstr "Lütfen en az 8 karakter uzunluğunda bir parola yazın"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Parola, İngilizce harfler (büyük/küçük harf duyarlı), sayılar veya özel semboller içermelidir (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Parola, İngilizce harfler (büyük/küçük harf duyarlı), sayılar veya özel "
+"semboller içermelidir (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -66,11 +69,11 @@ msgstr "Lütfen değişiklikleri görüntülemek için yeniden oturum açın"
 
 #: ../../appearance/scale.go:74
 msgid "Display scaling"
-msgstr "Görüntü ölçeklendirme"
+msgstr "Görüntü ölçeği"
 
 #: ../../appearance/scale.go:75
 msgid "Setting display scaling"
-msgstr "Görüntü ölçeklendirmesi ayarlanıyor"
+msgstr "Görüntü ölçeği ayarı"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
 msgid "Fingerprint verification failed"
@@ -128,34 +131,34 @@ msgstr "İleti erişimi"
 msgid "Message notification"
 msgstr "İleti bildirimi"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "%q bağlantısı başarılı"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Bağlantı kesildi"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "%q ağının açık ve aralıkta olduğundan emin olun"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth bağlantısı kurulamadı"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "%q ağına bağlanmak için tıkla"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "Bluetooth aygıtları ekle"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "Eşleştir"
 
@@ -287,7 +290,7 @@ msgstr "Dosya yöneticisi"
 
 #: ../../keybinding/shortcuts/id_name_map.go:40
 msgid "Disable Touchpad"
-msgstr "Dokunmatik Yüzeyi Devre Dışı"
+msgstr "Dokunmatik Yüzey Devre Dışı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:41
 msgid "Switch window effects"
@@ -331,91 +334,91 @@ msgstr "Görünümü Değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
-msgstr "Sol Çalışma Alanına Geç"
+msgstr "Sol çalışma alanına geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
-msgstr "Sağ Çalışma Alanına Geç"
+msgstr "Sağ çalışma alanına geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
-msgstr "Üst Çalışma Alanına Geç"
+msgstr "Üst çalışma alanına geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
-msgstr "Alt Çalışma Alanına Geç"
+msgstr "Alt çalışma alanına geç"
 
 #: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
-msgstr "Benzer Pencerelerde İleri Git"
+msgstr "Benzer pencereleri değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
-msgstr "Benzer Pencerelerde Geri Git"
+msgstr "Benzer pencereleri tersine değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
-msgstr "Pencerelerde İleri Git"
+msgstr "Pencereleri değiştir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
-msgstr "Pencerelerde Geri Git"
+msgstr "Pencereleri ters çevir"
 
 #: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
-msgstr "Masaüstünü Görüntüle"
+msgstr "Masaüstünü görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
-msgstr "Pencereyi Büyüt"
+msgstr "Pencereyi büyüt"
 
 #: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
-msgstr "Pencereyi Önceki Boyutuna Döndür"
+msgstr "Pencereyi geri yükle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
-msgstr "Pencereyi Küçült"
+msgstr "Pencereyi küçült"
 
 #: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
-msgstr "Pencereyi Kapat"
+msgstr "Pencereyi kapat"
 
 #: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
-msgstr "Pencereyi Taşı"
+msgstr "Pencereyi taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
-msgstr "Pencerenin Boyutunu Değiştir"
+msgstr "Pencereyi boyutlandır"
 
 #: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
-msgstr "Sol Çalışma Alanına Taşı"
+msgstr "Sol çalışma alanına taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
-msgstr "Sağ Çalışma Alanına Taşı"
+msgstr "Sağ çalışma alanına taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
-msgstr "Üst Çalışma Alanına Taşı"
+msgstr "Üst çalışma alanına taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
-msgstr "Alt Çalışma Alanına Taşı"
+msgstr "Alt çalışma alanına taşı"
 
 #: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
-msgstr "Tüm Çalışma Alanlarındaki Pencereleri Görüntüle"
+msgstr "Çalışma alanlarındaki pencereleri görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
-msgstr "Geçerli Çalışma Alanındaki Pencereleri Görüntüle"
+msgstr "Mevcut çalışma alanının pencerelerini görüntüle"
 
 #: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
-msgstr "Çalışma Alanını Görüntüle"
+msgstr "Çalışma alanını görüntüle"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -425,15 +428,17 @@ msgstr "Dili değiştirmek için kimlik doğrulaması gerekli"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Sistem dili değiştiriliyor ve gerekli dil paketleri kuruluyor. Lütfen bekleyin..."
+msgstr ""
+"Sistem dili değiştiriliyor ve gerekli dil paketleri kuruluyor, lütfen "
+"bekleyin..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
-msgstr "Sistem dili değiştiriliyor. Lütfen bekleyin..."
+msgstr "Sistem dili değiştiriliyor, lütfen bekleyin..."
 
 #: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
-msgstr "Sistem dili değiştirildi. Lütfen oturumunuzu kapatıp yeniden açın"
+msgstr "Sistem dili değiştirildi, lütfen oturumu kapatıp yeniden açın"
 
 #: ../../langselector/locale.go:403
 msgid "Failed to change system language, please try later"
@@ -441,7 +446,7 @@ msgstr "Sistem dili değiştirilemedi, lütfen daha sonra yeniden dene"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
-msgstr "Yeniden Dene"
+msgstr "Yeniden dene"
 
 #: ../../lastore/lastore.go:255
 msgid "Cancel"
@@ -466,7 +471,7 @@ msgstr "%q kaldırılamadı."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Otomatik kapatmayı engellemek ve güncelleme işlemini normal şekilde yapmak için lütfen bilgisayarı fişe takın."
+msgstr "Otomatik kapanmayı önlemek için, fişe takılıyken güncelleyin."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -476,7 +481,9 @@ msgstr "Paket ön belleği silindi"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Sistem kaynağınız değiştirilmiş. Lütfen normal kullanımınız için resmi kaynağı geri yükleyin"
+msgstr ""
+"Sistem kaynağınız değiştirilmiş, lütfen normal kullanımınız için resmi "
+"kaynağı geri yükleyin"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -486,54 +493,42 @@ msgstr "%q kaldırıldı"
 msgid "Failed to uninstall %q"
 msgstr "%q kaldırılamadı"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Otomatik"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Yok"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Anahtar"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Kişisel"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
-msgstr "SIÇRAMA"
+msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
-msgstr "HIZLI"
+msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "Tünellenmiş TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
-msgstr "Korunmuş EAP"
+msgstr "Korumalı EAP"
 
 #: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
@@ -605,7 +600,7 @@ msgstr "Aygıt durumu değişti"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr "Aygıt durumu bilinmeyen bir nedenle değiştirildi"
+msgstr "Aygıt durumu değişti, nedeni bilinmiyor"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
@@ -622,7 +617,9 @@ msgstr "Bu aygıt yapılandırmaya hazır değil"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP yapılandırması kaydedilemedi (kullanılabilecek bir adres yok, zaman aşımı, vb.)"
+msgstr ""
+"IP yapılandırması kaydedilemedi (kullanılabilecek bir adres yok, zaman "
+"aşımı, vb.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -636,7 +633,9 @@ msgstr "Zorunlu parolalar sağlanmadı"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X istemcisinin erişim noktası ya da kimlik doğrulama sunucusu ile bağlantısını kesildi"
+msgstr ""
+"802.1X istemcisinin erişim noktası ya da kimlik doğrulama sunucusu ile "
+"bağlantısını kesildi"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -644,7 +643,8 @@ msgstr "802.1X istemcisi yapılandırılamadı"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr "802.1X destek hizmeti beklenmedik biçimde sona erdi ya da çalıştırılamadı"
+msgstr ""
+"802.1X istemcisi beklenmedik şekilde sonlandırıldı veya başarısız oldu"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
@@ -680,7 +680,9 @@ msgstr "Paylaşılan bağlantı hizmeti başlatılamadı"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Paylaşılan bağlantı hizmeti beklenmedik biçimde sona erdi ya da çalıştırılamadı"
+msgstr ""
+"Paylaşılan bağlantı hizmeti beklenmedik biçimde sona erdi ya da "
+"çalıştırılamadı"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
@@ -692,27 +694,27 @@ msgstr "AutoIP hizmeti beklenmeyen bir sorunla karşılaştı"
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr "AutoIP hizmeti beklenmedik biçimde sona erdi ya da çalıştırılamadı"
+msgstr "AutoIP hizmeti sonlandırıldı veya başarısız oldu"
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
-msgstr "Hatlar meşgul olduğundan numara araması tamamlanamadı"
+msgstr "Meşgul hatlar nedeniyle arama başarısız"
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
-msgstr "Çevir sesi olmadığından numara araması tamamlanamadı"
+msgstr "Çevir sesi olmadığından arama başarısız"
 
 #: ../../network/state_handler.go:64
 msgid "Dialing failed due to the carrier"
-msgstr "Taşıyıcı nedeniyle numara araması tamamlanamadı"
+msgstr "Operatör nedeniyle arama başarısız"
 
 #: ../../network/state_handler.go:65
 msgid "Dialing timed out"
-msgstr "Numara araması zaman aşımına uğradı"
+msgstr "Arama zaman aşımı"
 
 #: ../../network/state_handler.go:66
 msgid "Dialing failed"
-msgstr "Numara araması tamamlanamadı"
+msgstr "Arama başarısız"
 
 #: ../../network/state_handler.go:67
 msgid "Modem initialization failed"
@@ -860,12 +862,14 @@ msgstr "Ağ kablosu takılı değil"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Lütfen SIM kartın takılmış ve mobil ağ sinyalinin var olduğundan emin olun"
+msgstr ""
+"Lütfen SIM kartın takılmış ve mobil ağ sinyalinin var olduğundan emin olun"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "SIM kartın borçlu duruma düşmemesi için doğru planın seçildiğinden emin olun"
+msgstr ""
+"SIM kartın borçlu duruma düşmemesi için doğru planın seçildiğinden emin olun"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -877,12 +881,16 @@ msgstr "VPN bağlantısı etkinleştirilemedi"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "VPN bağlantısının durumu kullanıcıların bağlantıyı kesmesi nedeniyle değiştirildi"
+msgstr ""
+"VPN bağlantısının durumu kullanıcıların bağlantıyı kesmesi nedeniyle "
+"değiştirildi"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "VPN bağlantısının durumu aygıtların bağlantıyı kesmesi nedeniyle değiştirildi"
+msgstr ""
+"VPN bağlantısının durumu aygıtların bağlantıyı kesmesi nedeniyle "
+"değiştirildi"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -890,7 +898,7 @@ msgstr "VPN hizmeti durduruldu"
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr "VPN bağlantısının IP yapılandırması geçersizdi"
+msgstr "VPN bağlantısının IP yapılandırması geçersiz"
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
@@ -930,7 +938,7 @@ msgstr "Erişim noktası etkin"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
-msgstr "%q bağlantısı kuruldu"
+msgstr "%q bağlı"
 
 #: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
@@ -942,15 +950,17 @@ msgstr "%q bağlantısı kesildi"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "Erişim noktası paylaşılamadı, lütfen dnsmasq ayarlarını denetleyin"
+msgstr "Erişim noktası paylaşılamadı, dnsmasq ayarlarını denetle"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "%q bağlantısı kurulamadı, lütfen kablosuz erişim noktasına daha yakın durun"
+msgstr "%q bağlanılamıyor, lütfen kablosuz yönlendiriciye yakın tutun"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "%q bağlantısı kurulamadı, lütfen erişim noktanızı ya da ağ kablonuzu denetleyin."
+msgstr ""
+"%q bağlantısı kurulamadı, lütfen erişim noktanızı ya da ağ kablonuzu "
+"denetleyin."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -958,7 +968,8 @@ msgstr "%q bağlanmak için parola gerekli"
 
 #: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Bağlantı kurulamadı, parola yanlış olduğundan %q bağlantısı kurulamadı"
+msgstr ""
+"Bağlantı kurulamadı, parola yanlış olduğundan %q bağlantısı kurulamadı"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
@@ -1005,23 +1016,56 @@ msgstr "\"%s\" sistem güvenlik doğrulamasını geçemedi ve şimdi çalıştı
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
-msgstr "Batarya kritik derecede düşük"
+msgstr "Pil kritik derecede düşük"
 
 #: ../../session/power/manager_events.go:204
 #: ../../session/power/manager_events.go:209
 #: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
-msgstr "Pil düzeyi düşük, lütfen fişe takın"
+msgstr "Düşük pil düzeyi, lütfen fişe takın"
+
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "bilgisayarınız kapanacak"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "bilgisayarınız askıya alınacak"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "bilgisayarınız uyuyacak"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "ekranınız kapanacak"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "bilgisayarınıza hiçbir şey yapmaz"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr "Sistem zamanını ayarlamak için kimlik doğrulaması gerekiyor"
+msgstr "Sistem zamanını ayarlamak için kimlik doğrulaması gerekli"
 
 #: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Ağ zaman eşitlemesini etkinleştirmek için kimlik doğrulaması gerekiyor"
+msgstr "Ağ zaman eşitlemesini etkinleştirmek için kimlik doğrulaması gerekli"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1031,8 +1075,10 @@ msgstr "NTP sunucusunu değiştirmek için kimlik doğrulaması gerekli"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Gerçek zaman saatinde tutulacak zamanı yerel ya da UTC olarak ayarlamak için kimlik doğrulaması gerekiyor"
+msgstr ""
+"RTC'nin yerel veya UTC saatini depolayıp depolamayacağını kontrol etmek için"
+" kimlik doğrulama gerekir"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr "Sistem saat dilimini ayarlamak için kimlik doğrulaması gerekiyor"
+msgstr "Sistem saat dilimini ayarlamak için kimlik doğrulaması gerekli"

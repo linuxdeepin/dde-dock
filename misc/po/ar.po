@@ -1,28 +1,35 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Abdullah Alnahdy <abdullahalnahdy@gmail.com>, 2018
-# ahmad nourallah <ahmadnurallah@gmail.com>, 2017
-# hamdy abd elfatah <hamdy.elzankly@gmail.com>, 2018
-# Hussain Alramadhan <psvitamine1@gmail.com>, 2019
-# Idir Benkhellat <benkhellat.idir@gmail.com>, 2019
-# Khodr Abdallah <khodr000@gmail.com>, 2016
+# كريم أولاد الشلحة <herr.linux88@gmail.com>, 2020
+# Khodr Abdallah <khodr000@gmail.com>, 2020
+# ahmad nourallah <ahmadnurallah@gmail.com>, 2020
+# mo-hd <mo-hd@windowslive.com>, 2020
+# monzerissa169 <monzerissa169@yahoo.com>, 2020
+# alibacha19 <alibacha19@gmail.com>, 2020
+# MUHAAB SHAAM <muhaab.org@gmail.com>, 2020
+# Oukiki Saleh <salehoukiki@gmail.com>, 2020
 # Mahmoud Abdelsalam <mahmoud.ad@tutanota.com>, 2020
+# salem alBream <salembream@gmail.com>, 2020
+# hamdy abd elfatah <hamdy.elzankly@gmail.com>, 2020
+# أشرف بصرى <ashrafmn2008@gmail.com>, 2020
+# Hussain Alramadhan <psvitamine1@gmail.com>, 2020
+# Idir Benkhellat <benkhellat.idir@gmail.com>, 2020
 # Mohammed Alotaibi <mx_202@hotmail.com>, 2020
-# MUHAAB SHAAM <muhaab.org@gmail.com>, 2016-2019
-# Oukiki Saleh <salehoukiki@gmail.com>, 2019
-# أشرف بصرى <ashrafmn2008@gmail.com>, 2019
-# Abdellah Chadidi <chadidi97@gmail.com>, 2017
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Arabic (https://www.transifex.com/linuxdeepin/teams/3617/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,7 +44,9 @@ msgstr "يرجى إدخال كلمة مرور لا تقل عن 8 أحرف"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام "
+"أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -45,7 +54,7 @@ msgstr "اسم المستخدم لا يمكن أن يكون فارغاً"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "أول خانة يجب أن تكون حرف أو رقم"
+msgstr "المحرف اﻷول يجب أن يكون رقم أو حرف"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -131,34 +140,34 @@ msgstr "الوصول الى الرسائل"
 msgid "Message notification"
 msgstr "إشعار الرسائل"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "توصيل q% تم بنجاح"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "غير متصل"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "تأكد أن %q مشغل و بالمدى نفسه"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "فشل الاتصال بالبلوتوث"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr ""
 
@@ -469,7 +478,8 @@ msgstr "تعذر إزالة %q"
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "من أجل منع إيقاف التشغيل التلقائي، يرجى وصل الطاقة  للتحديث بشكل طبيعي."
+msgstr ""
+"من أجل منع إيقاف التشغيل التلقائي، يرجى وصل الطاقة  للتحديث بشكل طبيعي."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -489,52 +499,40 @@ msgstr "تمت إزالة %q بنجاح"
 msgid "Failed to uninstall %q"
 msgstr "تعذر إلغاء تثبيت %q "
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "تلقائي"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "لا شيء"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5 "
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "نفق TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "EAP محمي"
 
@@ -868,7 +866,8 @@ msgstr "الرجاء كن متأكداً من إدراج بطاقة SIM ، مع 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "الرجاء التأكد  من الطريقة الصحيحة المحددة بدون تأخير دفع رصيد بطاقة SIM  "
+msgstr ""
+"الرجاء التأكد  من الطريقة الصحيحة المحددة بدون تأخير دفع رصيد بطاقة SIM  "
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -1016,6 +1015,39 @@ msgstr "مستوى البطارية منخفض"
 msgid "Battery low, please plug in"
 msgstr "البطارية منخفضة، رجاءً اشبك السلك الكهربائي"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr ""
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr ""
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr ""
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr ""
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr ""
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "المصادقة مطلوبة لضبط وقت النظام"
@@ -1034,7 +1066,9 @@ msgstr "مطلوب المصادقة لتغيير خادم NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق"
+msgstr ""
+"المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت "
+"عالمي منسق"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

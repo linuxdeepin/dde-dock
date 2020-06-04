@@ -20,16 +20,18 @@
 package power
 
 import (
-	"os"
-	"os/exec"
-	"time"
-
+	"fmt"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
+	"os"
+	"os/exec"
 	"pkg.deepin.io/dde/api/soundutils"
 	dbus "pkg.deepin.io/lib/dbus1"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"
+	"time"
 )
 
 func (m *Manager) findWindow(wmClassInstance, wmClassClass string) x.Window {
@@ -166,6 +168,56 @@ func (m *Manager) doSuspend() {
 	}
 }
 
+func (m *Manager) doShutdown() {
+	sessionManager := m.helper.SessionManager
+	can, err := sessionManager.CanShutdown(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not Shutdown")
+		return
+	}
+
+	logger.Debug("Shutdown")
+	err = sessionManager.RequestShutdown(0)
+	if err != nil {
+		logger.Warning("failed to Shutdown:", err)
+	}
+}
+
+func (m *Manager) doHibernate() {
+	if os.Getenv("POWER_CAN_SLEEP") == "0" {
+		logger.Info("can not hibernate, env POWER_CAN_SLEEP == 0")
+		return
+	}
+
+	sessionManager := m.helper.SessionManager
+	can, err := sessionManager.CanHibernate(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not hibernate")
+		return
+	}
+
+	logger.Debug("hibernate")
+	err = sessionManager.RequestHibernate(0)
+	if err != nil {
+		logger.Warning("failed to hibernate:", err)
+	}
+}
+
+func (m *Manager) doTurnOffScreen() {
+	logger.Info("Turn off screen")
+	m.setDPMSModeOff()
+}
+
 func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
 	display := m.helper.Display
 	for output, brightness := range brightnessTable {
@@ -203,6 +255,18 @@ func doCloseDDELowPower() {
 }
 
 func (m *Manager) sendNotify(icon, summary, body string) {
+	if !m.LowPowerNotifyEnable.Get() {
+		logger.Info("notify switch is off ")
+		return
+	}
+	n := m.helper.Notifications
+	_, err := n.Notify(0, "dde-control-center", 0, icon, summary, body, nil, nil, -1)
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func (m *Manager) sendChangeNotify(icon, summary, body string) {
 	n := m.helper.Notifications
 	_, err := n.Notify(0, "dde-control-center", 0, icon, summary, body, nil, nil, -1)
 	if err != nil {
@@ -275,4 +339,70 @@ func suspendPulseSources(suspend int) {
 	for _, source := range ctx.GetSourceList() {
 		ctx.SuspendSourceById(source.Index, suspend)
 	}
+}
+
+func brightnessRound(x float64) string {
+	return fmt.Sprintf("%.2f", x)
+}
+
+const powerSettingsIcon = "preferences-system"
+
+func (m *Manager) initGSettingsConnectChanged() {
+
+	gsettings.ConnectChanged(gsSchemaPower, "*", func(key string) { // 监听session power属性的改变,并发送通知
+		logger.Debug("Power Settings Changed :", key)
+		switch key {
+		case settingKeyLinePowerLidClosedAction:
+			value := m.LinePowerLidClosedAction.Get()
+			notifyString := getNotifyString(settingKeyLinePowerLidClosedAction, value)
+			m.sendChangeNotify(powerSettingsIcon, Tr("Power settings changed"), notifyString)
+		case settingKeyLinePowerPressPowerBtnAction:
+			value := m.LinePowerPressPowerBtnAction.Get()
+			notifyString := getNotifyString(settingKeyLinePowerPressPowerBtnAction, value)
+			m.sendChangeNotify(powerSettingsIcon, Tr("Power settings changed"), notifyString)
+		case settingKeyBatteryLidClosedAction:
+			value := m.BatteryLidClosedAction.Get()
+			notifyString := getNotifyString(settingKeyBatteryLidClosedAction, value)
+			m.sendChangeNotify(powerSettingsIcon, Tr("Power settings changed"), notifyString)
+		case settingKeyBatteryPressPowerBtnAction:
+			value := m.BatteryPressPowerBtnAction.Get()
+			notifyString := getNotifyString(settingKeyBatteryPressPowerBtnAction, value)
+			m.sendChangeNotify(powerSettingsIcon, Tr("Power settings changed"), notifyString)
+		}
+	})
+}
+
+func getNotifyString(option string, action int32) string {
+	var notifyString string
+	var firstPart string
+	var secondPart string
+	switch option {
+	case
+		settingKeyLinePowerLidClosedAction,
+		settingKeyBatteryLidClosedAction:
+		firstPart = Tr("When the lid is closed, ")
+	case
+		settingKeyLinePowerPressPowerBtnAction,
+		settingKeyBatteryPressPowerBtnAction:
+		firstPart = Tr("When pressing the power button, ")
+	}
+	secondPart = getPowerActionString(action)
+	notifyString = firstPart + secondPart
+	return notifyString
+}
+
+func getPowerActionString(action int32) string {
+	switch action {
+	case powerActionShutdown:
+		return Tr("your computer will shut down")
+	case powerActionSuspend:
+		return Tr("your computer will suspend")
+	case powerActionHibernate:
+		return Tr("your computer will sleep")
+	case powerActionTurnOffScreen:
+		return Tr("your monitor will turn off")
+	case powerActionDoNothing:
+		return Tr("it will do nothing to your computer")
+	}
+	return ""
 }

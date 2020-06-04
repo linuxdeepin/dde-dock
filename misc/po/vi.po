@@ -1,21 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
+# Nam Anh <phamnamanh25@gmail.com>, 2020
+# Phạm Đông Giang <ginise99@yahoo.com>, 2020
+# mousewis <mousewis@gmail.com>, 2020
+# Vu Thanh An <banzin123@gmail.com>, 2020
+# Cindy0514, 2020
 # Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020
-# Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020
-# Nam Anh <phamnamanh25@gmail.com>, 2016
-# Phạm Đông Giang <ginise99@yahoo.com>, 2016-2017
-# Vu Thanh An <banzin123@gmail.com>, 2019
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-22 01:36+0000\n"
-"Last-Translator: Hoan Chu Đình <chudinhhoan277@gmail.com>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/vi/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020\n"
+"Language-Team: Vietnamese (https://www.transifex.com/linuxdeepin/teams/3617/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +34,9 @@ msgstr "Xin hãy nhập mật khẩu nhiều hơn hoặc bằng 8 ký tự"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ), số hay các ký hiệu đặc biệt (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ), số hay các ký hiệu "
+"đặc biệt (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -124,34 +130,34 @@ msgstr "Truy cập tin nhắn"
 msgid "Message notification"
 msgstr "Thông báo tin nhắn"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Kết nối %q thành công"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr "Đã ngắt kết nối"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "Bảo đảm rằng %q được mở và trong phạm vi"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "Kết nối bluetooth đã thất bại"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "Bấm vào đây để kết nối đến %q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "Thêm thiết bị Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "Kết nối"
 
@@ -421,7 +427,9 @@ msgstr "Chứng thực được đòi hỏi để đổi ngôn ngữ"
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Thay đổi ngôn ngữ hệ thống và cài đặt các gói ngôn ngữ cần thiết, vui lòng đợi ..."
+msgstr ""
+"Thay đổi ngôn ngữ hệ thống và cài đặt các gói ngôn ngữ cần thiết, vui lòng "
+"đợi ..."
 
 #: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
@@ -472,7 +480,9 @@ msgstr "Đã xóa Package cache"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Nguồn hệ thống của bạn đã được sửa đổi, vui lòng khôi phục về nguồn chính thức để sử dụng bình thường"
+msgstr ""
+"Nguồn hệ thống của bạn đã được sửa đổi, vui lòng khôi phục về nguồn chính "
+"thức để sử dụng bình thường"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -482,52 +492,40 @@ msgstr "%q đã được xóa thành công"
 msgid "Failed to uninstall %q"
 msgstr "Gỡ bỏ %q đã thất bại"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "Tự động"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "Không"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "Chìa khóa WEP 40/128-bit"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Cá nhân"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "TLS được tạo đường"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "EAP được bảo vệ"
 
@@ -618,7 +616,9 @@ msgstr "Thiết bị chưa sẵn sàng để cấu hình"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Cấu hình IP không thể được giữ lại (không có địa chỉ hiện có, hết thời gian,...)"
+msgstr ""
+"Cấu hình IP không thể được giữ lại (không có địa chỉ hiện có, hết thời "
+"gian,...)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -632,7 +632,8 @@ msgstr "Mật khẩu được đòi hỏi nhưng không được cung cấp"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Máy yêu cầu 802.1X đã ngắt kết nối ở điểm truy cập hoặc máy chủ xác thực"
+msgstr ""
+"Máy yêu cầu 802.1X đã ngắt kết nối ở điểm truy cập hoặc máy chủ xác thực"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -946,7 +947,8 @@ msgstr "Không thể kết nối %q, vui lòng để gần hơn với bộ phát
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Không thể kết nối %q, vui lòng kiểm tra bộ phát wifi hoặc cáp mạng của bạn."
+msgstr ""
+"Không thể kết nối %q, vui lòng kiểm tra bộ phát wifi hoặc cáp mạng của bạn."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -1009,6 +1011,39 @@ msgstr "Pin cực kỳ thấp"
 msgid "Battery low, please plug in"
 msgstr "Pin yếu,vui lòng cắm sạc"
 
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr ""
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr ""
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr ""
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "máy tính của bạn sẽ tắt"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "máy tính của bạn sẽ dừng"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "máy tính của bạn sẽ ngủ"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "màn hình máy tính sẽ tắt"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "nó sẽ không làm gì cho máy tính của bạn"
+
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
 msgstr "Cần có xác thực mật khẩu để đặt thời gian hệ thống"
@@ -1017,7 +1052,9 @@ msgstr "Cần có xác thực mật khẩu để đặt thời gian hệ thống
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Cần phải xác thực mật khẩu để kiểm soát xem có bật đồng bộ hóa thời gian mạng hay không"
+msgstr ""
+"Cần phải xác thực mật khẩu để kiểm soát xem có bật đồng bộ hóa thời gian "
+"mạng hay không"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1027,7 +1064,8 @@ msgstr "Cần phải xác thực để thay đổi máy chủ NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Cần phải xác thực để kiểm soát xem RTC lưu trữ thời gian cục bộ hay UTC"
+msgstr ""
+"Cần phải xác thực để kiểm soát xem RTC lưu trữ thời gian cục bộ hay UTC"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

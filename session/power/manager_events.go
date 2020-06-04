@@ -200,7 +200,7 @@ func (m *Manager) handleWarnLevelChanged(level WarnLevel) {
 
 	case WarnLevelCritical:
 		playSound(soundutils.EventBatteryLow)
-		m.sendNotify(iconBatteryLow,"",
+		m.sendNotify(iconBatteryLow, "",
 			Tr("Battery low, please plug in"))
 
 	case WarnLevelDanger:

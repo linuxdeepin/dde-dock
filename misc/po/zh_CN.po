@@ -1,25 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Cindy0514, 2018-2020
+# Michael Jay Tong <michaeljayt@gmail.com>, 2020
+# 李洪武 <lihongwu1987@gmail.com>, 2020
+# cxbii <mycxbii@gmail.com>, 2020
+# electricface <songwentai@linuxdeepin.com>, 2020
+# hualet <mr.asianwang@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# transifex deepin <transifex@deepin.com>, 2020
 # Cindy0514, 2020
-# deepin_transifex <xiabin@linuxdeepin.com>, 2017-2018
-# Maggie Liu <maggie.liufei@gmail.com>, 2016
-# Maggie Liu <maggie.liufei@gmail.com>, 2016
-# Maggie Liu <maggie.liufei@gmail.com>, 2017
-# Maggie Liu <maggie.liufei@gmail.com>, 2017
-# Michael Jay Tong <michaeljayt@gmail.com>, 2016-2017
-# transifex deepin <transifex@deepin.com>, 2019
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-22 01:22+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_CN/)\n"
+"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/linuxdeepin/teams/3617/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -128,34 +130,34 @@ msgstr "消息访问"
 msgid "Message notification"
 msgstr "消息通知"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "连接%q成功"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
 #: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
 #: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
 #: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
-msgstr "断开"
+msgstr "已断开"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr "请确定%q已打开而且在通讯范围内"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr "蓝牙连接失败"
 
-#: ../../bluetooth/utils_notify.go:115
+#: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
 msgstr "点击以设置添加%q"
 
-#: ../../bluetooth/utils_notify.go:116
+#: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
 msgstr "添加蓝牙设备"
 
-#: ../../bluetooth/utils_notify.go:130
+#: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
 msgstr "配对"
 
@@ -486,52 +488,40 @@ msgstr "成功卸载 %q "
 msgid "Failed to uninstall %q"
 msgstr "%q 卸载失败"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A（5 GHz）"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG（2.4 GHz）"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "自动"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr "无"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr "WEP40/128位密钥"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2个人版"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr "隧道TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr "受保护的EAP"
 
@@ -1012,6 +1002,39 @@ msgstr "电池电量耗尽"
 #: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr "电池电量低，请连接电源"
+
+#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
+#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+msgid "Power settings changed"
+msgstr "电源设置更改"
+
+#: ../../session/power/utils.go:383
+msgid "When the lid is closed, "
+msgstr "“笔记本合盖时”"
+
+#: ../../session/power/utils.go:387
+msgid "When pressing the power button, "
+msgstr "“按电源按钮时”"
+
+#: ../../session/power/utils.go:397
+msgid "your computer will shut down"
+msgstr "修改为关机"
+
+#: ../../session/power/utils.go:399
+msgid "your computer will suspend"
+msgstr "修改为待机"
+
+#: ../../session/power/utils.go:401
+msgid "your computer will sleep"
+msgstr "修改为睡眠"
+
+#: ../../session/power/utils.go:403
+msgid "your monitor will turn off"
+msgstr "修改为关闭显示器"
+
+#: ../../session/power/utils.go:405
+msgid "it will do nothing to your computer"
+msgstr "修改为无任何操作"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

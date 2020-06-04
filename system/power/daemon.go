@@ -66,17 +66,26 @@ func (d *Daemon) Start() (err error) {
 	if err != nil {
 		return
 	}
+	// 属性写入前触发的回调函数
 	serverObj.SetWriteCallback(d.manager, "PowerSavingModeEnabled",
 		d.manager.writePowerSavingModeEnabledCb)
 
-	serverObj.SetWriteCallback(d.manager, "PowerSavingModeAuto",
-		d.manager.writePowerSavingModeAutoCb)
-
 	serverObj.ConnectChanged(d.manager, "PowerSavingModeAuto", func(change *dbusutil.PropertyChanged) {
+		d.manager.updatePowerSavingMode()
 		d.manager.saveConfig()
 	})
 
 	serverObj.ConnectChanged(d.manager, "PowerSavingModeEnabled", func(change *dbusutil.PropertyChanged) {
+		d.manager.saveConfig()
+	})
+
+	// 属性改变后的回调函数
+	serverObj.ConnectChanged(d.manager, "PowerSavingModeAutoWhenBatteryLow", func(change *dbusutil.PropertyChanged) {
+		d.manager.updatePowerSavingMode()
+		d.manager.saveConfig()
+	})
+
+	serverObj.ConnectChanged(d.manager, "PowerSavingModeBrightnessDropPercent", func(change *dbusutil.PropertyChanged) {
 		d.manager.saveConfig()
 	})
 

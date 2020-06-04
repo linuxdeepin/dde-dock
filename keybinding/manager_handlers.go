@@ -21,6 +21,7 @@ package keybinding
 
 import (
 	"fmt"
+	power "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
 	"time"
 
 	sys_network "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
@@ -177,15 +178,38 @@ func (m *Manager) initHandlers() {
 		}
 	}
 
-	m.handlers[ActionTypeSystemShutdown] = func(ev *KeyEvent) {
-		cmd := getPowerButtonPressedExec()
+	m.handlers[ActionTypeSystemShutdown] = func(ev *KeyEvent) { // 电源键按下的handler
+		var powerPressAction int32
 
-		go func() {
-			err := m.execCmd(cmd, false)
-			if err != nil {
-				logger.Warning("execCmd error:", err)
-			}
-		}()
+		systemBus, _ := dbus.SystemBus()
+		systemPower := power.NewPower(systemBus)
+		onBattery, err := systemPower.OnBattery().Get(0)
+		if err != nil {
+			logger.Error(err)
+		}
+		if onBattery {
+			powerPressAction = m.gsPower.GetEnum("battery-press-power-button")
+		} else {
+			powerPressAction = m.gsPower.GetEnum("line-power-press-power-button")
+		}
+		switch powerPressAction {
+		case powerActionShutdown:
+			m.systemShutdown()
+		case powerActionSuspend:
+			systemSuspend()
+		case powerActionHibernate:
+			m.systemHibernate()
+		case powerActionTurnOffScreen:
+			m.systemTurnOffScreen()
+		case powerActionShowUI:
+			cmd := "dde-shutdown"
+			go func() {
+				err := m.execCmd(cmd, false)
+				if err != nil {
+					logger.Warning("execCmd error:", err)
+				}
+			}()
+		}
 	}
 
 	m.handlers[ActionTypeSystemSuspend] = func(ev *KeyEvent) {

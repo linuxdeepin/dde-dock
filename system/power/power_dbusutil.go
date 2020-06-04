@@ -136,6 +136,32 @@ func (v *Manager) emitPropChangedPowerSavingModeAuto(value bool) error {
 	return v.service.EmitPropertyChanged(v, "PowerSavingModeAuto", value)
 }
 
+func (v *Manager) setPropPowerSavingModeAutoWhenBatteryLow(value bool) (changed bool) {
+	if v.PowerSavingModeAutoWhenBatteryLow != value {
+		v.PowerSavingModeAutoWhenBatteryLow = value
+		v.emitPropChangedPowerSavingModeAutoWhenBatteryLow(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedPowerSavingModeAutoWhenBatteryLow(value bool) error {
+	return v.service.EmitPropertyChanged(v, "PowerSavingModeAutoWhenBatteryLow", value)
+}
+
+func (v *Manager) setPropPowerSavingModeBrightnessDropPercent(value uint32) (changed bool) {
+	if v.PowerSavingModeBrightnessDropPercent != value {
+		v.PowerSavingModeBrightnessDropPercent = value
+		v.emitPropChangedPowerSavingModeBrightnessDropPercent(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedPowerSavingModeBrightnessDropPercent(value uint32) error {
+	return v.service.EmitPropertyChanged(v, "PowerSavingModeBrightnessDropPercent", value)
+}
+
 func (v *Battery) setPropSysfsPath(value string) (changed bool) {
 	if v.SysfsPath != value {
 		v.SysfsPath = value
