@@ -30,7 +30,7 @@ type NotifyAction struct {
 	Callback func()
 }
 
-func getNotifyAppName() string {
+func getAppStoreAppName() string {
 	_, err := os.Stat("/usr/share/applications/deepin-app-store.desktop")
 	if err == nil {
 		return "deepin-app-store"
@@ -43,7 +43,7 @@ const (
 	notifyExpireTimeoutDefault = -1
 )
 
-func (l *Lastore) sendNotify(icon string, msg string, actions []NotifyAction, expireTimeout int32) {
+func (l *Lastore) sendNotify(icon string, msg string, actions []NotifyAction, expireTimeout int32, appName string) {
 	logger.Infof("sendNotify icon: %s, msg: %q, actions: %v, timeout: %d",
 		icon, msg, actions, expireTimeout)
 	n := l.notifications
@@ -55,7 +55,7 @@ func (l *Lastore) sendNotify(icon string, msg string, actions []NotifyAction, ex
 	if icon == "" {
 		icon = "deepin-appstore"
 	}
-	id, err := n.Notify(0, getNotifyAppName(), 0, icon, "",
+	id, err := n.Notify(0, appName, 0, icon, "",
 		msg, as, nil, expireTimeout)
 	if err != nil {
 		logger.Warningf("Notify failed: %q: %v\n", msg, err)
@@ -95,10 +95,10 @@ func (l *Lastore) notifyInstall(pkgId string, succeed bool, ac []NotifyAction) {
 	var msg string
 	if succeed {
 		msg = fmt.Sprintf(gettext.Tr("%q installed successfully."), pkgId)
-		l.sendNotify("package_install_succeed", msg, ac, notifyExpireTimeoutDefault)
+		l.sendNotify("package_install_succeed", msg, ac, notifyExpireTimeoutDefault, getAppStoreAppName())
 	} else {
 		msg = fmt.Sprintf(gettext.Tr("%q failed to install."), pkgId)
-		l.sendNotify("package_install_failed", msg, ac, notifyExpireTimeoutDefault)
+		l.sendNotify("package_install_failed", msg, ac, notifyExpireTimeoutDefault, getAppStoreAppName())
 	}
 }
 
@@ -109,21 +109,26 @@ func (l *Lastore) notifyRemove(pkgId string, succeed bool, ac []NotifyAction) {
 	} else {
 		msg = fmt.Sprintf(gettext.Tr("%q failed to remove."), pkgId)
 	}
-	l.sendNotify("deepin-appstore", msg, ac, notifyExpireTimeoutDefault)
+	l.sendNotify("deepin-appstore", msg, ac, notifyExpireTimeoutDefault, getAppStoreAppName())
 }
 
 //NotifyLowPower send notify for low power
 func (l *Lastore) notifyLowPower() {
 	msg := gettext.Tr("In order to prevent automatic shutdown, please plug in for normal update.")
-	l.sendNotify("notification-battery_low", msg, nil, notifyExpireTimeoutDefault)
+	l.sendNotify("notification-battery_low", msg, nil, notifyExpireTimeoutDefault, getAppStoreAppName())
 }
 
 func (l *Lastore) notifyAutoClean() {
 	msg := gettext.Tr("Package cache wiped")
-	l.sendNotify("deepin-appstore", msg, nil, notifyExpireTimeoutDefault)
+	l.sendNotify("deepin-appstore", msg, nil, notifyExpireTimeoutDefault, "dde-control-center")
 }
 
 func (l *Lastore) notifySourceModified(actions []NotifyAction) {
 	msg := gettext.Tr("Your system source has been modified, please restore to official source for your normal use")
-	l.sendNotify("dialog-warning", msg, actions, notifyExpireTimeoutNever)
+	l.sendNotify("dialog-warning", msg, actions, notifyExpireTimeoutNever, getAppStoreAppName())
+}
+
+func (l *Lastore) notifyUpdateSource(actions []NotifyAction) {
+	msg := gettext.Tr("New system edition available")
+	l.sendNotify("dde-control-center", msg, actions, notifyExpireTimeoutNever, "dde-control-center")
 }

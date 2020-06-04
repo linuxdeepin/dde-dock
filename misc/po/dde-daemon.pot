@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"POT-Creation-Date: 2020-06-04 15:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,69 +119,85 @@ msgstr ""
 msgid "Message notification"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
-#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
-#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
-#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
+#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
+#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
+#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
 msgid "Disconnected"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:77
+#: ../../bluetooth/utils_notify.go:106
 msgid "Make sure %q is turned on and in range"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:82
+#: ../../bluetooth/utils_notify.go:111
 msgid "Bluetooth connection failed"
 msgstr ""
 
-#: ../../calendar/job.go:419 ../../calendar/job.go:426
+#: ../../bluetooth/utils_notify.go:139
+msgid "Click here to connect to %q"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:140
+msgid "Add Bluetooth devices"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:150
+msgid "Pair"
+msgstr ""
+
+#: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
 msgstr ""
 
-#: ../../calendar/job.go:421 ../../calendar/job.go:428
+#: ../../calendar/job.go:516 ../../calendar/job.go:523
 msgid "tomorrow"
 msgstr ""
 
-#: ../../calendar/job.go:441
+#: ../../calendar/job.go:536
 #, c-format
 msgid "%s to %s"
 msgstr ""
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
 msgstr ""
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
 msgstr ""
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
 msgstr ""
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:495
 msgid "One day before start"
 msgstr ""
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
+#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
 msgid "Close"
 msgstr ""
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
 msgstr ""
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:508
 msgid "Remind me later"
 msgstr ""
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
+msgstr ""
+
+#: ../../calendar/type.go:40
+msgid "Festival"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
@@ -396,30 +412,34 @@ msgstr ""
 msgid "Authentication is required to switch language"
 msgstr ""
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr ""
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr ""
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
 msgstr ""
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
 msgstr ""
 
-#: ../../lastore/lastore.go:247
+#: ../../langselector/locale.go:403
+msgid "Failed to change system language, please try later"
+msgstr ""
+
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr ""
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
+msgstr ""
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
 msgstr ""
 
 #: ../../lastore/notify.go:97
@@ -453,6 +473,10 @@ msgid ""
 "your normal use"
 msgstr ""
 
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr ""
+
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr ""
@@ -461,52 +485,40 @@ msgstr ""
 msgid "Failed to uninstall %q"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr ""
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr ""
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr ""
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:351
+#: ../../network/manager_active_conn.go:356
 msgid "None"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:358
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:360
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:368
 msgid "TLS"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:370
 msgid "MD5"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:372
 msgid "LEAP"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:374
 msgid "FAST"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:376
 msgid "Tunneled TLS"
 msgstr ""
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:378
 msgid "Protected EAP"
 msgstr ""
 
@@ -910,7 +922,7 @@ msgstr ""
 msgid "Hotspot disabled"
 msgstr ""
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
 msgid "%q disconnected"
 msgstr ""
 
@@ -934,40 +946,40 @@ msgstr ""
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:267
+#: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr ""
 
-#: ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:185
 msgid "You are now offline."
 msgstr ""
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:189
 msgid "Airplane mode enabled."
 msgstr ""
 
-#: ../../network/utils_notify.go:111
+#: ../../network/utils_notify.go:197
 msgid "Access Point mode is not supported by this device."
 msgstr ""
 
-#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
-#: ../../network/utils_notify.go:122
+#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:208
 msgid "Network"
 msgstr ""
 
-#: ../../network/utils_notify.go:115
+#: ../../network/utils_notify.go:201
 msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
-#: ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:205
 msgid "System proxy is set successfully."
 msgstr ""
 
-#: ../../network/utils_notify.go:122
+#: ../../network/utils_notify.go:208
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../network/utils_notify.go:126
+#: ../../network/utils_notify.go:212
 msgid "Connected"
 msgstr ""
 
@@ -977,24 +989,13 @@ msgid ""
 "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:176
-msgid "Battery Critically Low"
+#: ../../session/power/manager_events.go:183
+msgid "Battery critically low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:177
-msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
-
-#: ../../session/power/manager_events.go:200
-#: ../../session/power/manager_events.go:207
-msgid "Battery Low"
-msgstr ""
-
-#: ../../session/power/manager_events.go:201
-msgid "Computer will suspend soon, please plug in"
-msgstr ""
-
-#: ../../session/power/manager_events.go:208
+#: ../../session/power/manager_events.go:204
+#: ../../session/power/manager_events.go:209
+#: ../../session/power/manager_events.go:214
 msgid "Battery low, please plug in"
 msgstr ""
 

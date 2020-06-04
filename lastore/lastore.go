@@ -1,6 +1,7 @@
 package lastore
 
 import (
+	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -262,6 +263,26 @@ func (l *Lastore) createJobFailedActions(jobId string) []NotifyAction {
 	return ac
 }
 
+func (l *Lastore) createUpdateActions() []NotifyAction {
+	ac := []NotifyAction{
+		{
+			Id:   "update",
+			Name: gettext.Tr("Update Now"),
+			Callback: func() {
+				go func() {
+					err := exec.Command("dde-control-center","-m", "update", "-p", "Checking").Run()
+					if err != nil {
+						logger.Warningf("createUpdateActions: %v",err)
+					}
+				}()
+			},
+		},
+	}
+
+
+	return ac
+}
+
 func (l *Lastore) notifyJob(path dbus.ObjectPath) {
 	l.checkBattery()
 
@@ -290,6 +311,10 @@ func (l *Lastore) notifyJob(path dbus.ObjectPath) {
 		if status == SucceedStatus &&
 			strings.Contains(info.Name, "+notify") {
 			l.notifyAutoClean()
+		}
+	case UpdateSourceJobType:
+		if status == SucceedStatus {
+			l.notifyUpdateSource(l.createUpdateActions())
 		}
 	}
 }
@@ -379,7 +404,7 @@ func guestJobTypeFromPath(path dbus.ObjectPath) string {
 	for _, jobType := range []string{
 		// job types:
 		InstallJobType, DownloadJobType, RemoveJobType,
-		PrepareDistUpgradeJobType, DistUpgradeJobType, CleanJobType,
+		UpdateSourceJobType, DistUpgradeJobType, CleanJobType,
 	} {
 		if strings.Contains(_path, jobType) {
 			return jobType
