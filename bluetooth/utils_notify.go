@@ -114,7 +114,7 @@ func notifyConnectFailedAux(alias, format string) {
 // notify pc initiative connect to device
 // so dont need to show notification window
 func notifyInitiativeConnect(dev *device, pinCode string) error {
-	if isDialogExist(bluetoothDialog) {
+	if checkProcessExists(bluetoothDialog) {
 		logger.Info("initiative already exist")
 		return nil
 	}
@@ -143,7 +143,7 @@ func notifyPassiveConnect(dev *device, pinCode string) error {
 	nid := globalNotifyId
 	globalNotifyMu.Unlock()
 	// check if bluetooth dialog is exist
-	if isDialogExist(bluetoothDialog) {
+	if checkProcessExists(bluetoothDialog) {
 		logger.Info("Passive is not exist")
 		return nil
 	}
