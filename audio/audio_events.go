@@ -107,6 +107,9 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 		time.AfterFunc(time.Millisecond*500, func() {
 			selectNewCardProfile(cardInfo)
 			logger.Debug("After select profile:", cardInfo.ActiveProfile.Name)
+			if cardInfo.ActiveProfile.Name == "a2dp_sink" {
+				a.disableBluezSourceIfProfileIsA2dp()
+			}
 		})
 	case pulse.EventTypeRemove:
 		cards, deleted := a.cards.delete(idx)
@@ -389,6 +392,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		if ok {
 			return
 		}
+		a.sourceIdx = idx
 		a.addSource(sourceInfo)
 
 		_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(sourceInfo.Card), sourceInfo.ActivePort.Name)

@@ -126,6 +126,7 @@ type Audio struct {
 	cards CardList
 
 	isSaving    bool
+	sourceIdx   uint32 //used to disable source if select a2dp profile
 	saverLocker sync.Mutex
 
 	portLocker sync.Mutex
@@ -899,4 +900,23 @@ func (a *Audio) fixActivePortNotAvailable() {
 func (a *Audio) NoRestartPulseAudio() *dbus.Error {
 	a.noRestartPulseAudio = true
 	return nil
+}
+
+//当蓝牙声卡配置文件选择a2dp时,不支持声音输入,所以需要禁用掉,否则会录入
+func (a *Audio) disableBluezSourceIfProfileIsA2dp() {
+	a.mu.Lock()
+	source, ok := a.sources[a.sourceIdx]
+	if !ok {
+		a.mu.Unlock()
+		return
+	}
+	delete(a.sources, a.sourceIdx)
+	a.mu.Unlock()
+	a.updatePropSources()
+
+	err := a.service.StopExport(source)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 }
