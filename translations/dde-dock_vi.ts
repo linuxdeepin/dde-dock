@@ -118,22 +118,22 @@
 <context>
     <name>DialogManager</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="89"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure you want to empty %1 items?</source>
         <translation>Bạn có chắc chắn muốn làm trống mục %1 không?</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="114"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
         <translation>Hành động này không thể được phục hồi</translation>
     </message>
@@ -238,9 +238,17 @@
     </message>
 </context>
 <context>
+    <name>DragWidget</name>
+    <message>
+        <location filename="../frame/window/mainwindow.cpp" line="63"/>
+        <source>DragWidget</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="125"/>
+        <location filename="../frame/item/launcheritem.cpp" line="124"/>
         <source>Launcher</source>
         <translation>Khởi chạy</translation>
     </message>
@@ -367,12 +375,13 @@
     <name>OnboardPlugin</name>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="36"/>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="47"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="38"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="48"/>
         <source>Onboard</source>
         <translation>Onboard</translation>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="98"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="99"/>
         <source>Settings</source>
         <translation>Cài đặt</translation>
     </message>
@@ -412,8 +421,8 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="263"/>
-        <source>Capacity 1%, fully charged</source>
-        <translation>Công suất 1%, sạc đã đầy</translation>
+        <source>Capacity %1, fully charged</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="271"/>
@@ -454,48 +463,53 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="39"/>
+        <source>shutdown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="49"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="65"/>
         <source>Power</source>
         <translation>Năng lượng</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="111"/>
         <source>Shut down</source>
         <translation>Tắt máy</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Reboot</source>
         <translation>Khởi động lại</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>Dừng</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Hibernate</source>
         <translation>Ngủ đông</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Lock</source>
         <translation>Khóa</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="156"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Log out</source>
         <translation>Thoát ra</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="163"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Switch account</source>
         <translation>Đổi tài khoản</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="171"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Power settings</source>
         <translation>Thiết lập năng lượng</translation>
     </message>
@@ -539,7 +553,7 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="44"/>
         <source>Sound</source>
         <translation>Âm thanh</translation>
     </message>
