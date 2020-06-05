@@ -424,20 +424,21 @@
         <translation>Capacity %1 ...</translation>
     </message>
     <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="274"/>
-        <source>Charging %1, %2 min until full</source>
-        <translation>Charging %1, %2 min until full</translation>
-    </message>
-    <message>
-        <location filename="../plugins/power/powerplugin.cpp" line="276"/>
-        <location filename="../plugins/power/powerplugin.cpp" line="282"/>
-        <source>Charging %1</source>
-        <translation>Charging %1</translation>
+        <source>Charged</source>
+        <translation>Charged</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="280"/>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Charging %1, %2 hr %3 min until full</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -99,8 +99,8 @@ private:
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
     void paintEvent(QPaintEvent *event) override;
     void resizeDockIcon();
-    void calcuDockIconSize(const int w, const int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
-    void resizeDesktopWidget();
+    void calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
+   void resizeDesktopWidget();
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);

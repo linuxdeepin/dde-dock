@@ -83,27 +83,27 @@ QPixmap PowerStatusWidget::getBatteryIcon()
         percentageStr = "020";
     } else if (percentage <= 30) {
         percentageStr = "030";
-    }else if (percentage <= 40) {
+    } else if (percentage <= 40) {
         percentageStr = "040";
     } else if (percentage <= 50) {
         percentageStr = "050";
-    }else if (percentage <= 60) {
+    } else if (percentage <= 60) {
         percentageStr = "060";
     } else if (percentage <= 70) {
         percentageStr = "070";
-    }else if (percentage < 80) {
+    } else if (percentage < 80) {
         percentageStr = "080";
     } else if (percentage <= 90) {
         percentageStr = "090";
-    }else if (percentage <= 100){
+    } else if (percentage <= 100) {
         percentageStr = "100";
     } else {
         percentageStr = "100";
     }
 
     QString iconStr = QString("battery-%1-%2")
-                                .arg(percentageStr)
-                                .arg(plugged ? "plugged-symbolic" : "symbolic");
+                      .arg(percentageStr)
+                      .arg(plugged ? "plugged-symbolic" : "symbolic");
 
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconStr.append(PLUGIN_MIN_ICON_NAME);

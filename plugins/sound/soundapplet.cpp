@@ -152,6 +152,11 @@ int SoundApplet::volumeValue() const
     return m_volumeSlider->value();
 }
 
+int SoundApplet::maxVolumeValue() const
+{
+    return m_volumeSlider->maximum();
+}
+
 VolumeSlider *SoundApplet::mainSlider()
 {
     return m_volumeSlider;

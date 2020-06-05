@@ -24,6 +24,7 @@
 #include "panel/mainpanelcontrol.h"
 #include "controller/dockitemmanager.h"
 #include "util/utils.h"
+#include "util/docksettings.h"
 
 #include <DStyle>
 #include <DPlatformWindowHandle>
@@ -113,9 +114,9 @@ const QPoint rawXPosition(const QPoint &scaledPos)
     QScreen const *screen = Utils::screenAtByScaled(scaledPos);
 
     return screen ? screen->geometry().topLeft() +
-                    (scaledPos - screen->geometry().topLeft()) *
-                    screen->devicePixelRatio()
-                  : scaledPos;
+           (scaledPos - screen->geometry().topLeft()) *
+           screen->devicePixelRatio()
+           : scaledPos;
 }
 
 const QPoint scaledPos(const QPoint &rawXPos)
@@ -123,9 +124,9 @@ const QPoint scaledPos(const QPoint &rawXPos)
     QScreen const *screen = Utils::screenAt(rawXPos);
 
     return screen
-            ? screen->geometry().topLeft() +
-              (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
-            : rawXPos;
+           ? screen->geometry().topLeft() +
+           (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
+           : rawXPos;
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -134,7 +135,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_mainPanel(new MainPanelControl(this))
     , m_platformWindowHandle(this)
     , m_wmHelper(DWindowManagerHelper::instance())
-    , m_regionMonitor(new DRegionMonitor(this))
+    , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
     , m_positionUpdateTimer(new QTimer(this))
     , m_expandDelayTimer(new QTimer(this))
     , m_leaveDelayTimer(new QTimer(this))
@@ -461,8 +462,8 @@ void MainWindow::internalMove(const QPoint &p)
 {
     const bool isHide = m_settings->hideState() == HideState::Hide && !testAttribute(Qt::WA_UnderMouse);
     const bool pos_adjust = m_settings->hideMode() != HideMode::KeepShowing &&
-            isHide &&
-            m_panelShowAni->state() == QVariantAnimation::Stopped;
+                            isHide &&
+                            m_panelShowAni->state() == QVariantAnimation::Stopped;
     if (!pos_adjust) {
         m_mainPanel->move(0, 0);
         return QWidget::move(p);
@@ -538,7 +539,7 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
-    connect(m_regionMonitor, &DRegionMonitor::cursorMove, this, &MainWindow::onRegionMonitorChanged);
+    connect(m_eventInter, &XEventMonitor::CursorMove, this, &MainWindow::onRegionMonitorChanged);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -618,7 +619,7 @@ void MainWindow::updateGeometry()
 
     //为了防止当后端发送错误值，然后发送正确值时，任务栏没有移动在相应的位置
     //当ｑｔ没有获取到屏幕资源时候，move函数会失效。可以直接return
-    if(m_settings->primaryRect().width() ==0 || m_settings->primaryRect().height() == 0){
+    if (m_settings->primaryRect().width() == 0 || m_settings->primaryRect().height() == 0) {
         return;
     }
 
@@ -643,7 +644,7 @@ void MainWindow::updateGeometry()
 
 void MainWindow::getTrayVisableItemCount()
 {
-   m_mainPanel->getTrayVisableItemCount();
+    m_mainPanel->getTrayVisableItemCount();
 }
 
 void MainWindow::clearStrutPartial()
@@ -668,7 +669,7 @@ void MainWindow::setStrutPartial()
     const Position side = m_curDockPos;
     const QPoint &p = rawXPosition(m_settings->windowRect(m_curDockPos).topLeft());
     const QSize &s = m_settings->windowSize();
-    const QRect &primaryRawRect = m_settings->primaryRawRect();
+    const QRect &primaryRawRect = m_settings->currentRawRect();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
@@ -743,8 +744,7 @@ void MainWindow::expand()
     qApp->processEvents();
     setVisible(true);
 
-    if (m_panelHideAni->state() == QPropertyAnimation::Running)
-    {
+    if (m_panelHideAni->state() == QPropertyAnimation::Running) {
         m_panelHideAni->stop();
         emit m_panelHideAni->finished();
     }
@@ -825,15 +825,14 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
 void MainWindow::updatePanelVisible()
 {
     if (m_settings->hideMode() == KeepShowing) {
-        if (m_regionMonitor->registered()){
-            m_regionMonitor->unregisterRegion();
+        if (!m_registerKey.isEmpty()) {
+            m_eventInter->UnregisterArea(m_registerKey);
         }
         return expand();
     }
 
-    if (!m_regionMonitor->registered()){
-        m_regionMonitor->registerRegion();
-        m_regionMonitor->setCoordinateType(DRegionMonitor::ScaleRatio);
+    if (m_registerKey.isEmpty()) {
+        updateRegionMonitorWatch();
     }
 
     const Dock::HideState state = m_settings->hideState();
@@ -1034,13 +1033,18 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     }
 }
 
-void MainWindow::onRegionMonitorChanged()
+void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
 {
+//    if (m_registerKey != key)
+//        return;
+
     if (m_settings->hideMode() == KeepShowing)
         return;
 
     if (!isVisible())
         setVisible(true);
+
+//    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
 }
 
 void MainWindow::updateRegionMonitorWatch()
@@ -1048,18 +1052,46 @@ void MainWindow::updateRegionMonitorWatch()
     if (m_settings->hideMode() == KeepShowing)
         return;
 
-    int val = 5;
+    const int flags = Motion | Button | Key;
+    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
+    const QRect windowRect = m_settings->windowRect(m_curDockPos, isHide);
     const qreal scale = devicePixelRatioF();
+    int val = 5;
     const int margin = m_settings->dockMargin();
-    if (Dock::Top == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, 0, (m_settings->primaryRect().width() - margin*2) * scale, val *scale));
-    } else if (Dock::Bottom == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, (m_settings->primaryRect().height() - val)* scale, (m_settings->primaryRect().width() - margin*2)*scale, val * scale));
-    } else if (Dock::Left == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(0, margin * scale, val * scale, (m_settings->primaryRect().height() - margin*2) * scale));
-    } else {
-        m_regionMonitor->setWatchedRegion(QRegion((m_settings->primaryRect().width() - val) * scale, margin * scale, val * scale, (m_settings->primaryRect().height()- margin*2)*scale));
+    int x, y, w, h;
+
+    switch (m_curDockPos) {
+    case Dock::Top: {
+        x = windowRect.topLeft().x();
+        y = windowRect.topLeft().y();
+        w = m_settings->primaryRect().width();
+        h = val + margin;
     }
+    break;
+    case Dock::Bottom: {
+        x = windowRect.bottomLeft().x();
+        y = windowRect.bottomLeft().y() - val;
+        w = m_settings->primaryRect().width();
+        h = val + margin;
+    }
+    break;
+    case Dock::Left: {
+        x = windowRect.topLeft().x();
+        y = windowRect.topLeft().y();
+        w = val + margin;
+        h = m_settings->primaryRect().height();
+    }
+    break;
+    case Dock::Right: {
+        x = windowRect.topRight().x() - val - margin;
+        y = windowRect.topRight().y();
+        w = m_settings->primaryRect().width();
+        h = m_settings->primaryRect().height();
+    }
+    break;
+    }
+
+    m_eventInter->RegisterArea(x * scale, y * scale, w * scale, h * scale, flags);
 }
 
 

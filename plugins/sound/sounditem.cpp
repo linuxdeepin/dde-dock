@@ -160,6 +160,7 @@ void SoundItem::refreshIcon()
         return;
 
     const double volmue = m_applet->volumeValue();
+    const double maxVolmue = m_applet->maxVolumeValue();
     const bool mute = m_sinkInter->mute();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
@@ -179,9 +180,11 @@ void SoundItem::refreshIcon()
         QString volumeString;
         if (mute)
             volumeString = "muted";
-        else if (volmue / 100.0f >= double(2) / 3)
+        else if (int(volmue) == 0)
+            volumeString = "off";
+        else if (volmue / maxVolmue >= double(2) / 3)
             volumeString = "high";
-        else if (volmue / 100.0f >= double(1) / 3)
+        else if (volmue / maxVolmue >= double(1) / 3)
             volumeString = "medium";
         else
             volumeString = "low";

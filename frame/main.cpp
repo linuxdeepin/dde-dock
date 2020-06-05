@@ -22,6 +22,7 @@
 #include "window/mainwindow.h"
 #include "window/accessible.h"
 #include "util/themeappicon.h"
+#include "controller/dockitemmanager.h"
 
 #include <QAccessible>
 #include <QDir>
