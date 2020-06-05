@@ -24,10 +24,12 @@
 #define DOCKSETTINGS_H
 
 #include "constants.h"
+#include "dbus/dbusmenumanager.h"
+#include "dbus/dbusdisplay.h"
 #include "monitor.h"
+#include "controller/dockitemmanager.h"
 
 #include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_daemon_display.h>
 
 #include <QAction>
 #include <QMenu>
@@ -35,11 +37,13 @@
 #include <QObject>
 #include <QSize>
 
+#include <QStyleFactory>
+
+DWIDGET_USE_NAMESPACE
+
 using namespace Dock;
 using DBusDock = com::deepin::dde::daemon::Dock;
-using DisplayInter = com::deepin::daemon::Display;
 
-class DockItemManager;
 class DockSettings : public QObject
 {
     Q_OBJECT
@@ -60,7 +64,6 @@ public:
     const QRect currentRect();
     const QList<QRect> monitorsRect() const;
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
-    inline const QRect currentRawRect() const { return m_currentRawRect; }
     inline const QRect frontendWindowRect() const { return m_frontendRect; }
     inline const QSize windowSize() const { return m_mainWindowSize; }
     inline const quint8 Opacity() const { return m_opacity * 255; }
@@ -105,28 +108,21 @@ private slots:
     void dockItemCountChanged();
     void primaryScreenChanged();
     void resetFrontendGeometry();
+    void updateForbidPostions();
     void onOpacityChanged(const double value);
     void trayVisableCountChanged(const int &count);
     void onWindowSizeChanged();
     void onTrashGSettingsChanged(const QString &key);
-    void onMonitorListChanged(const QList<QDBusObjectPath> &mons);
 
 private:
-    DockSettings(QWidget *parent = nullptr);
+    DockSettings(QWidget *parent = 0);
     DockSettings(DockSettings const &) = delete;
     DockSettings operator =(DockSettings const &) = delete;
 
+    bool test(const Position pos, const QList<QRect> &otherScreens) const;
     void calculateWindowConfig();
     void gtkIconThemeChanged();
     void checkService();
-
-    void calculateMultiScreensPos();
-    void monitorAdded(const QString &path);
-    void monitorRemoved(const QString &path);
-    void twoScreensCalPos();
-    void treeScreensCalPos();
-    void combination(QList<Monitor*> &screens);
-    void calculateRelativePos(Monitor *s1, Monitor *s2);
 
 private:
     int m_dockWindowSize;
@@ -156,7 +152,7 @@ private:
     QAction m_keepHiddenAct;
     QAction m_smartHideAct;
 
-    DisplayInter *m_displayInter;
+    DBusDisplay *m_displayInter;
     DockItemManager *m_itemManager;
     bool m_trashPluginShow;
 

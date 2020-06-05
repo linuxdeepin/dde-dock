@@ -24,7 +24,6 @@
 #include "panel/mainpanelcontrol.h"
 #include "controller/dockitemmanager.h"
 #include "util/utils.h"
-#include "util/docksettings.h"
 
 #include <DStyle>
 #include <DPlatformWindowHandle>
@@ -131,20 +130,15 @@ const QPoint scaledPos(const QPoint &rawXPos)
 
 MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
-
     , m_launched(false)
-
     , m_mainPanel(new MainPanelControl(this))
-
     , m_platformWindowHandle(this)
     , m_wmHelper(DWindowManagerHelper::instance())
-    , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
-
+    , m_regionMonitor(new DRegionMonitor(this))
     , m_positionUpdateTimer(new QTimer(this))
     , m_expandDelayTimer(new QTimer(this))
     , m_leaveDelayTimer(new QTimer(this))
     , m_shadowMaskOptimizeTimer(new QTimer(this))
-
     , m_panelShowAni(new QVariantAnimation(this))
     , m_panelHideAni(new QVariantAnimation(this))
     , m_xcbMisc(XcbMisc::instance())
@@ -544,7 +538,7 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
-    connect(m_eventInter, &XEventMonitor::CursorMove, this, &MainWindow::onRegionMonitorChanged);
+    connect(m_regionMonitor, &DRegionMonitor::cursorMove, this, &MainWindow::onRegionMonitorChanged);
 }
 
 const QPoint MainWindow::x11GetWindowPos()
@@ -674,7 +668,7 @@ void MainWindow::setStrutPartial()
     const Position side = m_curDockPos;
     const QPoint &p = rawXPosition(m_settings->windowRect(m_curDockPos).topLeft());
     const QSize &s = m_settings->windowSize();
-    const QRect &primaryRawRect = m_settings->currentRawRect();
+    const QRect &primaryRawRect = m_settings->primaryRawRect();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
@@ -831,14 +825,15 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
 void MainWindow::updatePanelVisible()
 {
     if (m_settings->hideMode() == KeepShowing) {
-        if (!m_registerKey.isEmpty()){
-            m_eventInter->UnregisterArea(m_registerKey);
+        if (m_regionMonitor->registered()){
+            m_regionMonitor->unregisterRegion();
         }
         return expand();
     }
 
-    if (m_registerKey.isEmpty()){
-        updateRegionMonitorWatch();
+    if (!m_regionMonitor->registered()){
+        m_regionMonitor->registerRegion();
+        m_regionMonitor->setCoordinateType(DRegionMonitor::ScaleRatio);
     }
 
     const Dock::HideState state = m_settings->hideState();
@@ -1039,98 +1034,31 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     }
 }
 
-void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
+void MainWindow::onRegionMonitorChanged()
 {
-    if (m_registerKey != key)
+    if (m_settings->hideMode() == KeepShowing)
         return;
 
-    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
-
-    if (screen->name() == m_settings->currentDockScreen()) {
-        if (m_settings->hideMode() == KeepShowing)
-            return;
-
-        if (!isVisible())
-            setVisible(true);
-    } else {
-        // 移动Dock至相应屏相应位置
-        m_mouseCauseDock = true;
-        m_settings->setDockScreen(screen->name());
-        positionChanged(m_curDockPos, m_curDockPos);
-    }
+    if (!isVisible())
+        setVisible(true);
 }
 
 void MainWindow::updateRegionMonitorWatch()
 {
-    if (!m_registerKey.isEmpty()) {
-        m_eventInter->UnregisterArea(m_registerKey);
-        m_registerKey.clear();
-    }
+    if (m_settings->hideMode() == KeepShowing)
+        return;
 
-    const int flags = Motion | Button | Key;
-
-    QList<QRect> screensRect = m_settings->monitorsRect();
-    QList<MonitRect> monitorAreas;
-
+    int val = 5;
     const qreal scale = devicePixelRatioF();
-    int val = 3;
-    int x, y, w, h;
-
-    auto func = [&](MonitRect &monitRect){
-        monitRect.x1 = int(x * scale);
-        monitRect.y1 = int(y * scale);
-        monitRect.x2 = int((x + w) * scale);
-        monitRect.y2 = int((y + h) * scale);
-        monitorAreas << monitRect;
-    };
-
-    if (screensRect.size()) {
-        MonitRect monitRect;
-        switch (m_curDockPos) {
-        case Dock::Top: {
-            for (QRect rect : screensRect) {
-                x = rect.x();
-                y = rect.y();
-                w = rect.width();
-                h = val;
-                func(monitRect);
-            }
-        }
-            break;
-        case Dock::Bottom: {
-            for (QRect rect : screensRect) {
-                x = rect.x();
-                y = rect.y() + rect.height() - val;
-                w = rect.width();
-                h = val;
-                func(monitRect);
-            }
-        }
-            break;
-        case Dock::Left: {
-            for (QRect rect : screensRect) {
-                x = rect.x();
-                y = rect.y();
-                w = val;
-                h = rect.height();
-                func(monitRect);
-            }
-        }
-            break;
-        case Dock::Right: {
-            for (QRect rect : screensRect) {
-                x = rect.x() + rect.width() - val;
-                y = rect.y();
-                w = val;
-                h = rect.height();
-                func(monitRect);
-            }
-        }
-            break;
-        }
-        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
+    const int margin = m_settings->dockMargin();
+    if (Dock::Top == m_curDockPos) {
+        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, 0, (m_settings->primaryRect().width() - margin*2) * scale, val *scale));
+    } else if (Dock::Bottom == m_curDockPos) {
+        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, (m_settings->primaryRect().height() - val)* scale, (m_settings->primaryRect().width() - margin*2)*scale, val * scale));
+    } else if (Dock::Left == m_curDockPos) {
+        m_regionMonitor->setWatchedRegion(QRegion(0, margin * scale, val * scale, (m_settings->primaryRect().height() - margin*2) * scale));
     } else {
-        m_registerKey = m_eventInter->RegisterFullScreen();
+        m_regionMonitor->setWatchedRegion(QRegion((m_settings->primaryRect().width() - val) * scale, margin * scale, val * scale, (m_settings->primaryRect().height()- margin*2)*scale));
     }
 }
 

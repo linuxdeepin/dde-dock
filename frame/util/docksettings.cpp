@@ -23,7 +23,6 @@
 #include "docksettings.h"
 #include "item/appitem.h"
 #include "util/utils.h"
-#include "controller/dockitemmanager.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -71,7 +70,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_keepShownAct(tr("Keep Shown"), this)
     , m_keepHiddenAct(tr("Keep Hidden"), this)
     , m_smartHideAct(tr("Smart Hide"), this)
-    , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new DBusDisplay(this))
     , m_itemManager(DockItemManager::instance(this))
     , m_trashPluginShow(true)
     , m_isMouseMoveCause(false)
@@ -80,12 +79,9 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.setAccessibleName("settingsmenu");
     checkService();
 
-    onMonitorListChanged(m_displayInter->monitors());
-
-    m_primaryRawRect = m_displayInter->primaryRect();
-    m_currentRawRect = m_primaryRawRect;
-    m_screenRawHeight = m_displayInter->screenHeight();
-    m_screenRawWidth = m_displayInter->screenWidth();
+    m_primaryRawRect = m_displayInter->primaryRawRect();
+    m_screenRawHeight = m_displayInter->screenRawHeight();
+    m_screenRawWidth = m_displayInter->screenRawWidth();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
@@ -155,11 +151,10 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_itemManager, &DockItemManager::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemManager, &DockItemManager::trayVisableCountChanged, this, &DockSettings::trayVisableCountChanged, Qt::QueuedConnection);
 
-    connect(m_displayInter, &DisplayInter::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::MonitorsChanged, this, &DockSettings::onMonitorListChanged);
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
     QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
 
@@ -168,28 +163,14 @@ DockSettings::DockSettings(QWidget *parent)
         connect(app, &DApplication::iconThemeChanged, this, &DockSettings::gtkIconThemeChanged);
     }
 
-    calculateMultiScreensPos();
     calculateWindowConfig();
+    updateForbidPostions();
     resetFrontendGeometry();
 
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
     QTimer::singleShot(0, this, [=] {
         onGSettingsChanged("enable");
     });
-}
-
-const QList<QRect> DockSettings::monitorsRect() const
-{
-    QList<QRect> monsRect;
-    QMapIterator<Monitor *, MonitorInter *> iterator(m_monitors);
-    while (iterator.hasNext()) {
-        iterator.next();
-        Monitor *monitor = iterator.key();
-        if (monitor) {
-            monsRect << monitor->rect();
-        }
-    }
-    return  monsRect;
 }
 
 DockSettings &DockSettings::Instance()
@@ -268,7 +249,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide)
         }
     }
 
-    const QRect primaryRect = this->currentRect();
+    const QRect primaryRect = this->primaryRect();
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
     int margin = hide ?  0 : this->dockMargin();
@@ -286,6 +267,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide)
     case Bottom:
         p = QPoint(offsetX, primaryRect.height() - size.height() - margin);
         break;
+    default: Q_UNREACHABLE();
     }
 
     return QRect(primaryRect.topLeft() + p, size);
@@ -334,9 +316,13 @@ void DockSettings::showDockSettingsMenu()
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
     m_topPosAct.setChecked(m_position == Top);
+    m_topPosAct.setEnabled(!m_forbidPositions.contains(Top));
     m_bottomPosAct.setChecked(m_position == Bottom);
+    m_bottomPosAct.setEnabled(!m_forbidPositions.contains(Bottom));
     m_leftPosAct.setChecked(m_position == Left);
+    m_leftPosAct.setEnabled(!m_forbidPositions.contains(Left));
     m_rightPosAct.setChecked(m_position == Right);
+    m_rightPosAct.setEnabled(!m_forbidPositions.contains(Right));
     m_keepShownAct.setChecked(m_hideMode == KeepShowing);
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
@@ -370,7 +356,7 @@ void DockSettings::menuActionClicked(QAction *action)
         return m_dockInter->setDisplayMode(Efficient);
 
     m_isMouseMoveCause = false;
-    calculateMultiScreensPos();
+//    calculateMultiScreensPos();
     if (action == &m_topPosAct)
         return m_dockInter->setPosition(Top);
     if (action == &m_bottomPosAct)
@@ -473,16 +459,15 @@ void DockSettings::dockItemCountChanged()
 void DockSettings::primaryScreenChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
-    m_primaryRawRect = m_displayInter->primaryRect();
-    m_screenRawHeight = m_displayInter->screenHeight();
-    m_screenRawWidth = m_displayInter->screenWidth();
+    m_primaryRawRect = m_displayInter->primaryRawRect();
+    m_screenRawHeight = m_displayInter->screenRawHeight();
+    m_screenRawWidth = m_displayInter->screenRawWidth();
 
     //为了防止当后端发送错误值，然后发送正确值时，任务栏没有移动在相应的位置
     //当ｑｔ没有获取到屏幕资源时候，move函数会失效。可以直接return
     if (m_screenRawHeight == 0 || m_screenRawWidth == 0){
         return;
     }
-    calculateMultiScreensPos();
     emit dataChanged();
     calculateWindowConfig();
 
@@ -507,16 +492,75 @@ void DockSettings::updateFrontendGeometry()
     resetFrontendGeometry();
 }
 
-void DockSettings::setDockScreen(const QString &scrName)
+bool DockSettings::test(const Position pos, const QList<QRect> &otherScreens) const
 {
-    m_isMouseMoveCause = true;
-    QList<Monitor*> monitors = m_monitors.keys();
-    for (Monitor *monitor : monitors) {
-        if (monitor && monitor->name() == scrName) {
-            m_mouseCauseDockScreen = monitor;
-            break;
-        }
+    QRect maxStrut(0, 0, m_screenRawWidth, m_screenRawHeight);
+    switch (pos) {
+    case Top:
+        maxStrut.setBottom(m_primaryRawRect.top() - 1);
+        maxStrut.setLeft(m_primaryRawRect.left());
+        maxStrut.setRight(m_primaryRawRect.right());
+        break;
+    case Bottom:
+        maxStrut.setTop(m_primaryRawRect.bottom() + 1);
+        maxStrut.setLeft(m_primaryRawRect.left());
+        maxStrut.setRight(m_primaryRawRect.right());
+        break;
+    case Left:
+        maxStrut.setRight(m_primaryRawRect.left() - 1);
+        maxStrut.setTop(m_primaryRawRect.top());
+        maxStrut.setBottom(m_primaryRawRect.bottom());
+        break;
+    case Right:
+        maxStrut.setLeft(m_primaryRawRect.right() + 1);
+        maxStrut.setTop(m_primaryRawRect.top());
+        maxStrut.setBottom(m_primaryRawRect.bottom());
+        break;
+    default:;
     }
+
+    if (maxStrut.width() == 0 || maxStrut.height() == 0)
+        return true;
+
+    for (const auto &r : otherScreens)
+        if (maxStrut.intersects(r))
+            return false;
+
+    return true;
+}
+
+void DockSettings::updateForbidPostions()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    const auto &screens = qApp->screens();
+    if (screens.size() < 2)
+        return m_forbidPositions.clear();
+
+    QSet<Position> forbids;
+    QList<QRect> rawScreenRects;
+    for (auto *s : screens) {
+        qInfo() << s->name() << s->geometry();
+
+        if (s == qApp->primaryScreen())
+            continue;
+
+        const QRect &g = s->geometry();
+        rawScreenRects << QRect(g.topLeft(), g.size() * s->devicePixelRatio());
+    }
+
+    qInfo() << rawScreenRects << m_screenRawWidth << m_screenRawHeight;
+
+    if (!test(Top, rawScreenRects))
+        forbids << Top;
+    if (!test(Bottom, rawScreenRects))
+        forbids << Bottom;
+    if (!test(Left, rawScreenRects))
+        forbids << Left;
+    if (!test(Right, rawScreenRects))
+        forbids << Right;
+
+    m_forbidPositions = std::move(forbids);
 }
 
 void DockSettings::onOpacityChanged(const double value)
@@ -536,7 +580,7 @@ void DockSettings::trayVisableCountChanged(const int &count)
 void DockSettings::calculateWindowConfig()
 {
     if (m_displayMode == Dock::Efficient) {
-        m_dockWindowSize = int(m_dockInter->windowSizeEfficient());
+        m_dockWindowSize = m_dockInter->windowSizeEfficient();
         if (m_dockWindowSize > WINDOW_MAX_SIZE || m_dockWindowSize < WINDOW_MIN_SIZE) {
             m_dockWindowSize = EffICIENT_DEFAULT_HEIGHT;
             m_dockInter->setWindowSize(EffICIENT_DEFAULT_HEIGHT);
@@ -546,17 +590,20 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(m_dockWindowSize);
-            m_mainWindowSize.setWidth(currentRect().width());
+            m_mainWindowSize.setWidth(primaryRect().width());
             break;
 
         case Left:
         case Right:
-            m_mainWindowSize.setHeight(currentRect().height());
+            m_mainWindowSize.setHeight(primaryRect().height());
             m_mainWindowSize.setWidth(m_dockWindowSize);
             break;
+
+        default:
+            Q_ASSERT(false);
         }
     } else if (m_displayMode == Dock::Fashion) {
-        m_dockWindowSize = int(m_dockInter->windowSizeFashion());
+        m_dockWindowSize = m_dockInter->windowSizeFashion();
         if (m_dockWindowSize > WINDOW_MAX_SIZE || m_dockWindowSize < WINDOW_MIN_SIZE) {
             m_dockWindowSize = FASHION_DEFAULT_HEIGHT;
             m_dockInter->setWindowSize(FASHION_DEFAULT_HEIGHT);
@@ -566,15 +613,17 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom: {
             m_mainWindowSize.setHeight(m_dockWindowSize);
-            m_mainWindowSize.setWidth(this->currentRect().width() - MAINWINDOW_MARGIN * 2);
+            m_mainWindowSize.setWidth(this->primaryRect().width() - MAINWINDOW_MARGIN * 2);
             break;
         }
         case Left:
         case Right: {
-            m_mainWindowSize.setHeight(this->currentRect().height() - MAINWINDOW_MARGIN * 2);
+            m_mainWindowSize.setHeight(this->primaryRect().height() - MAINWINDOW_MARGIN * 2);
             m_mainWindowSize.setWidth(m_dockWindowSize);
             break;
         }
+        default:
+            Q_ASSERT(false);
         }
     } else {
         Q_ASSERT(false);
@@ -611,7 +660,6 @@ void DockSettings::checkService()
 
     if (!ifc->isServiceRegistered(serverName)) {
         connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
-            Q_UNUSED(oldOwner)
             if (name == serverName && !newOwner.isEmpty()) {
 
                 m_dockInter = new DBusDock(serverName, "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
@@ -628,272 +676,6 @@ void DockSettings::checkService()
     }
 }
 
-void DockSettings::calculateMultiScreensPos()
-{
-    QList<Monitor *> monitors = m_monitors.keys();
-    for (Monitor *monitor : monitors) {
-        monitor->setDockPosition(Monitor::DockPosition(true, true, true, true));
-    }
-
-    switch (m_monitors.size()) {
-    case 0:
-        break;
-    case 1: {
-        QList<Monitor*>screens = m_monitors.keys();
-        Monitor* s1 = screens.at(0);
-        s1->setDockPosition(Monitor::DockPosition(true, true, true, true));
-    }
-        break;
-    case 2:
-        twoScreensCalPos();
-        break;
-    case 3:
-        treeScreensCalPos();
-        break;
-    }
-}
-
-void DockSettings::monitorAdded(const QString &path)
-{
-    MonitorInter *inter = new MonitorInter("com.deepin.daemon.Display", path, QDBusConnection::sessionBus(), this);
-    Monitor *mon = new Monitor(this);
-
-    connect(inter, &MonitorInter::XChanged, mon, &Monitor::setX);
-    connect(inter, &MonitorInter::YChanged, mon, &Monitor::setY);
-    connect(inter, &MonitorInter::WidthChanged, mon, &Monitor::setW);
-    connect(inter, &MonitorInter::HeightChanged, mon, &Monitor::setH);
-    connect(inter, &MonitorInter::MmWidthChanged, mon, &Monitor::setMmWidth);
-    connect(inter, &MonitorInter::MmHeightChanged, mon, &Monitor::setMmHeight);
-    connect(inter, &MonitorInter::RotationChanged, mon, &Monitor::setRotate);
-    connect(inter, &MonitorInter::NameChanged, mon, &Monitor::setName);
-    connect(inter, &MonitorInter::CurrentModeChanged, mon, &Monitor::setCurrentMode);
-    connect(inter, &MonitorInter::ModesChanged, mon, &Monitor::setModeList);
-    connect(inter, &MonitorInter::RotationsChanged, mon, &Monitor::setRotateList);
-    connect(inter, &MonitorInter::EnabledChanged, mon, &Monitor::setMonitorEnable);
-    connect(m_displayInter, static_cast<void (DisplayInter::*)(const QString &) const>(&DisplayInter::PrimaryChanged), mon, &Monitor::setPrimary);
-
-    // NOTE: DO NOT using async dbus call. because we need to have a unique name to distinguish each monitor
-    Q_ASSERT(inter->isValid());
-    mon->setName(inter->name());
-
-    mon->setMonitorEnable(inter->enabled());
-    mon->setPath(path);
-    mon->setX(inter->x());
-    mon->setY(inter->y());
-    mon->setW(inter->width());
-    mon->setH(inter->height());
-    mon->setRotate(inter->rotation());
-    mon->setCurrentMode(inter->currentMode());
-    mon->setModeList(inter->modes());
-
-    mon->setRotateList(inter->rotations());
-    mon->setPrimary(m_displayInter->primary());
-    mon->setMmWidth(inter->mmWidth());
-    mon->setMmHeight(inter->mmHeight());
-
-    m_monitors.insert(mon, inter);
-    inter->setSync(false);
-}
-
-void DockSettings::monitorRemoved(const QString &path)
-{
-    Monitor *monitor = nullptr;
-    for (auto it(m_monitors.cbegin()); it != m_monitors.cend(); ++it) {
-        if (it.key()->path() == path) {
-            monitor = it.key();
-            break;
-        }
-    }
-    if (!monitor)
-        return;
-
-    m_monitors.value(monitor)->deleteLater();
-    m_monitors.remove(monitor);
-
-    monitor->deleteLater();
-
-    calculateMultiScreensPos();
-}
-
-void DockSettings::twoScreensCalPos()
-{
-    QList<Monitor*>screens = m_monitors.keys();
-    Monitor* s1 = screens.at(0);
-    Monitor* s2 = screens.at(1);
-    if (!s1 && !s2)
-        return;
-
-    // 只在某屏显示时,其它屏禁用
-    bool s1Enabled = s1->enable();
-    bool s2Enabled = s2->enable();
-    if (!s1Enabled || !s2Enabled) {
-        if (!s1Enabled && s2Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s2->setDockPosition(Monitor::DockPosition(true, true, true, true));
-        } else if (!s2Enabled && s1Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(true, true, true, true));
-            s2->setDockPosition(Monitor::DockPosition(false, false, false, false));
-        } else if (!s1Enabled && !s2Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s2->setDockPosition(Monitor::DockPosition(false, false, false, false));
-        }
-        return;
-    }
-
-    combination(screens);
-}
-
-void DockSettings::treeScreensCalPos()
-{
-    QList<Monitor*>screens = m_monitors.keys();
-    Monitor* s1 = screens.at(0);
-    Monitor* s2 = screens.at(1);
-    Monitor* s3 = screens.at(2);
-    if (!s1 && !s2 && !s3)
-        return;
-
-    // 只在某屏显示时,其它屏禁用
-    bool s1Enabled = s1->enable();
-    bool s2Enabled = s2->enable();
-    bool s3Enabled = s3->enable();
-    if (!s1Enabled || !s2Enabled || !s3Enabled) {
-        if (!s1Enabled && !s2Enabled && s3Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s2->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s3->setDockPosition(Monitor::DockPosition(true, true, true, true));
-        } else if (!s1Enabled && s2Enabled && !s3Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s2->setDockPosition(Monitor::DockPosition(true, true, true, true));
-            s3->setDockPosition(Monitor::DockPosition(false, false, false, false));
-        } else if (s1Enabled && !s2Enabled && !s3Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(true, true, true, true));
-            s2->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s3->setDockPosition(Monitor::DockPosition(false, false, false, false));
-        } else if (!s1Enabled && !s2Enabled && !s3Enabled) {
-            s1->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s2->setDockPosition(Monitor::DockPosition(false, false, false, false));
-            s3->setDockPosition(Monitor::DockPosition(false, false, false, false));
-        }
-        return;
-    }
-
-    combination(screens);
-}
-
-void DockSettings::combination(QList<Monitor *> &screens)
-{
-    if (screens.size() < 2)
-        return;
-
-    Monitor *last = screens.takeLast();
-
-    for (Monitor *screen : screens) {
-        calculateRelativePos(last, screen);
-    }
-
-    combination(screens);
-}
-
-void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
-{
-    /* 鼠标可移动区另算 */
-    if (!s1 && !s2)
-        return;
-
-    // 对齐
-    bool isAligment = false;
-    // 左右拼
-    // s1左 s2右
-    if (s1->right() == s2->left() ) {
-        isAligment = (s1->topRight() == s2->topLeft())
-                && (s1->bottomRight() == s2->bottomLeft());
-        if (isAligment) {
-            s1->dockPosition().rightDock = false;
-            s2->dockPosition().leftDock = false;
-        } else {
-            if (!s1->isPrimary())
-                s1->dockPosition().rightDock = false;
-            if (!s2->isPrimary())
-                s2->dockPosition().leftDock = false;
-        }
-    }
-    // s1右 s2左
-    if (s1->left() == s2->right()) {
-        isAligment = (s1->topLeft() == s2->topRight())
-                && (s1->bottomLeft() == s2->bottomRight());
-        if (isAligment) {
-            s1->dockPosition().leftDock = false;
-            s2->dockPosition().rightDock = false;
-        } else {
-            if (!s1->isPrimary())
-                s1->dockPosition().leftDock = false;
-            if (!s2->isPrimary())
-                s2->dockPosition().rightDock = false;
-        }
-    }
-    // 上下拼
-    // s1上 s2下
-    if (s1->top() == s2->bottom()) {
-        isAligment = (s1->bottomLeft() == s2->topLeft())
-                && (s1->bottomRight() == s2->topRight());
-        if (isAligment) {
-            s1->dockPosition().bottomDock = false;
-            s2->dockPosition().topDock = false;
-        } else {
-            if (!s1->isPrimary())
-                s1->dockPosition().bottomDock = false;
-            if (!s2->isPrimary())
-                s2->dockPosition().topDock = false;
-        }
-    }
-    // s1下 s2上
-    if (s1->bottom() == s2->top()) {
-        isAligment = (s1->topLeft() == s2->bottomLeft())
-                && (s1->topRight() == s2->bottomRight());
-        if (isAligment) {
-            s1->dockPosition().topDock = false;
-            s2->dockPosition().bottomDock = false;
-        } else {
-            if (!s1->isPrimary())
-                s1->dockPosition().topDock = false;
-            if (!s2->isPrimary())
-                s2->dockPosition().bottomDock = false;
-        }
-    }
-
-    // 对角拼
-    bool isDiagonal = (s1->topLeft() == s2->bottomRight())
-            || (s1->topRight() == s2->bottomLeft())
-            ||  (s1->bottomLeft() == s2->topRight())
-            || (s1->bottomRight() == s2->topLeft());
-    if (isDiagonal) {
-        auto position = Monitor::DockPosition(false, false, false, false);
-        if (!s1->isPrimary())
-            s2->setDockPosition(position);
-        if (!s2->isPrimary())
-            s1->setDockPosition(position);
-
-        switch (m_position) {
-        case Top:
-            s1->dockPosition().topDock = true;
-            s2->dockPosition().topDock = true;
-            break;
-        case Bottom:
-            s1->dockPosition().bottomDock = true;
-            s2->dockPosition().bottomDock = true;
-            break;
-        case Left:
-            s1->dockPosition().leftDock = true;
-            s2->dockPosition().leftDock = true;
-            break;
-        case Right:
-            s1->dockPosition().rightDock = true;
-            s2->dockPosition().rightDock = true;
-            break;
-        }
-    }
-}
-
 void DockSettings::onTrashGSettingsChanged(const QString &key)
 {
     if (key != "enable") {
@@ -905,26 +687,4 @@ void DockSettings::onTrashGSettingsChanged(const QString &key)
     if (setting->keys().contains("enable")) {
          m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
     }
-}
-
-void DockSettings::onMonitorListChanged(const QList<QDBusObjectPath> &mons)
-{
-    if (mons.isEmpty())
-        return;
-
-    QList<QString> ops;
-    for (const auto *mon : m_monitors.keys())
-        ops << mon->path();
-
-    QList<QString> pathList;
-    for (const auto op : mons) {
-        const QString path = op.path();
-        pathList << path;
-        if (!ops.contains(path))
-            monitorAdded(path);
-    }
-
-    for (const auto op : ops)
-        if (!pathList.contains(op))
-            monitorRemoved(op);
 }
