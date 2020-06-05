@@ -148,6 +148,8 @@ func newAudio(service *dbusutil.Service) *Audio {
 	}
 
 	a.settings = gio.NewSettings(gsSchemaAudio)
+	a.settings.Reset(gsKeyInputVolume)
+	a.settings.Reset(gsKeyOutputVolume)
 	a.IncreaseVolume.Bind(a.settings, gsKeyVolumeIncrease)
 	a.headphoneUnplugAutoPause = a.settings.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
 	if a.IncreaseVolume.Get() {
@@ -560,7 +562,7 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
 }
 
 func (a *Audio) resetSinksVolume() {
-	logger.Debug("reset sink volume")
+	logger.Debug("reset sink volume",defaultOutputVolume)
 	for _, s := range a.ctx.GetSinkList() {
 		a.ctx.SetSinkMuteByIndex(s.Index, false)
 		curPort := s.ActivePort.Name
@@ -588,7 +590,7 @@ func (a *Audio) resetSinksVolume() {
 }
 
 func (a *Audio) resetSourceVolume() {
-	logger.Debug("reset source volume")
+	logger.Debug("reset source volume",defaultInputVolume)
 	for _, s := range a.ctx.GetSourceList() {
 		a.ctx.SetSourceMuteByIndex(s.Index, false)
 		cv := s.Volume.SetAvg(defaultInputVolume).SetBalance(s.ChannelMap,
