@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -23,15 +21,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"></translation>
+        <translation>12-hour time</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"></translation>
+        <translation>24-hour time</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Time settings</translation>
     </message>
 </context>
 <context>
@@ -217,19 +215,19 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Capacity %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"></translation>
+        <translation>Charging %1</translation>
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Capacity %1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation>Capacity %1, fully charged</translation>
     </message>
 </context>
 <context>
@@ -279,7 +277,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Reboot</translation>
     </message>
 </context>
 <context>
@@ -305,11 +303,11 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Sound settings</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume %1</translation>
     </message>
 </context>
 <context>
@@ -375,7 +373,7 @@
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Wireless connection: %1</translation>
     </message>
 </context>
 <context>

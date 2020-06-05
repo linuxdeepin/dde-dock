@@ -222,11 +222,11 @@
         <translation>%1 ආරෝපණය වෙමින්</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -384,7 +384,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය %1</translation>
+        <translation>රැහැන් රහිත ජාලය %1</translation>
     </message>
 </context>
 </TS>

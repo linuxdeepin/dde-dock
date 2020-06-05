@@ -222,12 +222,12 @@
         <translation>正在充电%1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation>电量%1，已充满</translation>
-    </message>
-    <message>
         <source>Capacity %1 ...</source>
         <translation>电量%1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation>电量%1，已充满</translation>
     </message>
 </context>
 <context>
@@ -365,7 +365,7 @@
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>无网络访问</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Connected but no Internet access</source>

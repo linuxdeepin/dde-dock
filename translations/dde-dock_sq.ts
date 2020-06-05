@@ -222,12 +222,12 @@
         <translation>Po ngarkohet %1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>Kapacitet %1 …</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Kapacitet 1%, plotësisht e ngarkuar</translation>
     </message>
 </context>
 <context>

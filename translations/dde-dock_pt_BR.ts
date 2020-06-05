@@ -222,12 +222,12 @@
         <translation>Carregando %1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>%1 Carregado...</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>%1 Carregado - Bateria Cheia</translation>
     </message>
 </context>
 <context>
