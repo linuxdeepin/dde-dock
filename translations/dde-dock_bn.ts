@@ -222,11 +222,11 @@
         <translation>%1 চার্জ করা হচ্ছে</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
+        <source>Capacity %1 ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>

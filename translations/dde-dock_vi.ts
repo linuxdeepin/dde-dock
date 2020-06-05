@@ -222,11 +222,11 @@
         <translation>Đang nạp %1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>Công suất 1%...</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>

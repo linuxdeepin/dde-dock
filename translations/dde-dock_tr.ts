@@ -222,12 +222,12 @@
         <translation>%1 Şarj Oluyor</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>Kapasite %1 ...</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Kapasite %1, tam şarjlı</translation>
     </message>
 </context>
 <context>

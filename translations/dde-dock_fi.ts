@@ -222,12 +222,12 @@
         <translation>Ladataan: %1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>Varaus %1 ...</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Varaus %1, täyteen ladattu</translation>
     </message>
 </context>
 <context>
@@ -358,7 +358,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Kaapeli kytketty: %1</translation>
+        <translation>Verkkokaapeli: %1</translation>
     </message>
 </context>
 <context>
@@ -373,7 +373,7 @@
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Langaton yhteys: %1</translation>
+        <translation>Langaton: %1</translation>
     </message>
 </context>
 <context>

@@ -222,12 +222,12 @@
         <translation>%1 正在充電</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation>電量%1，已充滿</translation>
-    </message>
-    <message>
         <source>Capacity %1 ...</source>
         <translation>電量%1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation>電量%1，已充滿</translation>
     </message>
 </context>
 <context>

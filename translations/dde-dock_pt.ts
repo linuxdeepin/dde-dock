@@ -222,12 +222,12 @@
         <translation>A carregar %1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>Capacidade %1 ...</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Capacidade 1%, totalmente carregada</translation>
     </message>
 </context>
 <context>

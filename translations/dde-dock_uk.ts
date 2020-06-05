@@ -222,12 +222,12 @@
         <translation>Заряджається %1</translation>
     </message>
     <message>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1 ...</source>
+        <translation>Ємність %1 ...</translation>
     </message>
     <message>
-        <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Ємність %1, повністю заряджено</translation>
     </message>
 </context>
 <context>
