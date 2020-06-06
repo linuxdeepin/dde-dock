@@ -1048,14 +1048,17 @@ void MainWindow::updateRegionMonitorWatch()
     int val = 5;
     const qreal scale = devicePixelRatioF();
     const int margin = m_settings->dockMargin();
+    int x = m_settings->primaryRect().x();
+    int y = m_settings->primaryRect().y();
+
     if (Dock::Top == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, 0, (m_settings->primaryRect().width() - margin*2) * scale, val *scale));
+        m_regionMonitor->setWatchedRegion(QRegion(x + margin * scale, y, (m_settings->primaryRect().width() - margin*2) * scale, val *scale));
     } else if (Dock::Bottom == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(margin * scale, (m_settings->primaryRect().height() - val)* scale, (m_settings->primaryRect().width() - margin*2)*scale, val * scale));
+        m_regionMonitor->setWatchedRegion(QRegion(x + margin * scale, y + (m_settings->primaryRect().height() - val)* scale, (m_settings->primaryRect().width() - margin*2)*scale, val * scale));
     } else if (Dock::Left == m_curDockPos) {
-        m_regionMonitor->setWatchedRegion(QRegion(0, margin * scale, val * scale, (m_settings->primaryRect().height() - margin*2) * scale));
+        m_regionMonitor->setWatchedRegion(QRegion(x, y + margin * scale, val * scale, (m_settings->primaryRect().height() - margin*2) * scale));
     } else {
-        m_regionMonitor->setWatchedRegion(QRegion((m_settings->primaryRect().width() - val) * scale, margin * scale, val * scale, (m_settings->primaryRect().height()- margin*2)*scale));
+        m_regionMonitor->setWatchedRegion(QRegion(x + (m_settings->primaryRect().width() - val) * scale, y + margin * scale, val * scale, (m_settings->primaryRect().height()- margin*2)*scale));
     }
 }
 
