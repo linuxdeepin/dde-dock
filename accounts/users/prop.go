@@ -532,7 +532,7 @@ func parseShadow(data []byte) map[string]ShadowInfo {
 		}
 
 		lastDateStr := string(items[2])
-		sInfo.LastChange = strToInt(lastDateStr, 0)
+		sInfo.LastChange = strToInt(lastDateStr, -1)
 		//minPasswordAge := string(items[3])
 
 		maxPasswordAgeStr := string(items[4])
