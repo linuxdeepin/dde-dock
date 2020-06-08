@@ -1,19 +1,29 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Alik Miankoli <alikmiankoliid@gmail.com>, 2016
-# amirhosein lesani <xenups@gmail.com>, 2019
-# AmirHosein Lesani <xenups@outlook.com>, 2019
+# Hootan Baraary <h.baraary@yahoo.com>, 2020
+# pej A, 2020
+# Amir Dadash <dadashamir25@gmail.com>, 2020
+# mohammad raufzahed <mohammadraufzahed1389@gmail.com>, 2020
+# Hadi Kamell <beemeyl@gmail.com>, 2020
+# Maahyar Motevakel <mahyar.motevakel@gmail.com>, 2020
+# Alik Miankoli <alikmiankoliid@gmail.com>, 2020
+# Cindy0514, 2020
+# AmirHosein Lesani <xenups@outlook.com>, 2020
+# amirhosein lesani <xenups@gmail.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: amirhosein lesani <xenups@gmail.com>, 2020\n"
+"Language-Team: Persian (https://www.transifex.com/linuxdeepin/teams/3617/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +38,9 @@ msgstr "لطفاً یک گذرواژه که کمتر از 8 نویسه نباش�
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "گذرواژه باید حاوی حروف انگلیسی ( حساس به حالت ) , اعداد یا نمادهای خاص باشد ( ~ ! @ # % ^ * * ( ) { } ^ * ? , . < >)"
+msgstr ""
+"رمزعبور باید حاوی حروف انگلیسی ( حساس به حالت ) , اعداد یا نمادهای خاص باشد "
+"(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -122,86 +134,70 @@ msgstr "دسترسی پیام"
 msgid "Message notification"
 msgstr "مدیریت اعلان"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "اتصال %q با موفقیت انجام شد"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
-msgstr "اتصال قطع شد"
+msgstr "قطع اتصال"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "اطمینان حاصل کنید که %q روشن و در دامنه است"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "اتصال  بلوتوث ناموفق بود"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "امروز"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "فردا"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s به %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "کار"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "زندگی"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "سایر"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "یک روز قبل از شروع"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "بستن"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "فردا یادم بنداز"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "بعدا ً به من یادآوری کن"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "یادآور برنامه"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -233,7 +229,7 @@ msgstr "فضای دیسک کافی نیست ، لطفا به موقع تمیز �
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "اجرا کننده"
+msgstr "لانچر"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -415,23 +411,23 @@ msgstr "نمایش فضای کار"
 msgid "Authentication is required to switch language"
 msgstr "احراز هویت برای تغییر زبان لازم است"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "تغییر زبان سیستم انجام نشد ، لطفاً بعداً امتحان کنید"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "تغییر زبان سیستم و نصب بسته‌های زبان مورد نیاز ، لطفا ً صبر کنید …"
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "در حال عوض کردن زبان سیستم ، لطفا ً صبر کنید ..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "زبان سیستم تغییر کرده است ، لطفاً  خارج شوید و سپس دوباره وارد شوید"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "تغییر زبان سیستم انجام نشد ، لطفاً بعداً امتحان کنید"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -460,7 +456,9 @@ msgstr "%q نتوانست حذف شود."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی عادی، سیستم را به برق متصل کنید "
+msgstr ""
+"برای جلوگیری از خاموش شدن خودکار و برای بروزرسانی عادی، سیستم را به برق متصل"
+" کنید "
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -470,7 +468,9 @@ msgstr "حافظه پنهان بسته پاک شد"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "منبع سیستم شما تغییر یافته است ، لطفاً برای استفاده عادی خود به منبع رسمی برگردید"
+msgstr ""
+"منبع سیستم شما تغییر یافته است ، لطفاً برای استفاده عادی خود به منبع رسمی "
+"برگردید"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -490,12 +490,12 @@ msgstr "BG (2.4 GHz)"
 
 #: ../../network/manager_active_conn.go:322
 msgid "Automatic"
-msgstr "اتوماتیک"
+msgstr "خودکار"
 
 #: ../../network/manager_active_conn.go:333
 #: ../../network/manager_active_conn.go:338
 msgid "None"
-msgstr "هیچ کدام"
+msgstr "هیچ "
 
 #: ../../network/manager_active_conn.go:340
 msgid "WEP 40/128-bit Key"
@@ -616,7 +616,9 @@ msgstr "دستگاه برای پیکر بندی آماده نیست."
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "پیکربندی IP نمی تواند محفوظ باشد (بدون آدرس ، زمان بندی و غیره در دسترس نیست)"
+msgstr ""
+"پیکربندی IP نمی تواند محفوظ باشد (بدون آدرس ، زمان بندی و غیره در دسترس "
+"نیست)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -854,12 +856,15 @@ msgstr "کابل شبکه جدا شده."
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "لطفاً مطمئن شوید که سیم کارت درج شده است و دستگاه دارای  سیگنال شبکه است"
+msgstr ""
+"لطفاً مطمئن شوید که سیم کارت درج شده است و دستگاه دارای  سیگنال شبکه است"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "لطفاً اطمینان حاصل کنید که یک طرح صحیح و بدون عقب افتادگی سیم کارت انتخاب شده است"
+msgstr ""
+"لطفاً اطمینان حاصل کنید که یک طرح صحیح و بدون عقب افتادگی سیم کارت انتخاب "
+"شده است"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -930,13 +935,14 @@ msgstr "%q متصل شده"
 msgid "Hotspot disabled"
 msgstr "هات اسپات غیرفعال شد"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q قطع شد"
 
 #: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
-msgstr "اشتراک هات اسپات امکان پذیر نیست ، لطفاً تنظیمات dnsmasq را بررسی کنید"
+msgstr ""
+"اشتراک هات اسپات امکان پذیر نیست ، لطفاً تنظیمات dnsmasq را بررسی کنید"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
@@ -944,7 +950,8 @@ msgstr "اتصال %q امکان پذیر نیست ، لطفاً به روتر �
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "اتصال %q امکان پذیر نیست ، لطفاً روتر یا کابل اینترنت خود را بررسی کنید."
+msgstr ""
+"اتصال %q امکان پذیر نیست ، لطفاً روتر یا کابل اینترنت خود را بررسی کنید."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -954,56 +961,69 @@ msgstr "برای اتصال به %q  نیاز به رمز عبور دارید"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "اتصال انجام نشد ، قادر به اتصال %q ، گذرواژه اشتباه است"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "شما هم اکنون آفلاین هستید."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "حالت هواپیما فعال شد."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "حالت Access point توسط این دستگاه پشتیبانی نمی شود."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "شبکه"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "کلید سخت افزاری WLAN خاموش است. لطفا آن را در صورت لزوم روشن کنید."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "تنظیمات پراکسی سیستم با موفقیت انجام شد."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "تنظیم کردن  پراکسی سیستم لغو شد."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
-msgstr "متصل شد"
+msgstr "متصل شده"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
 msgstr "باتری بسیار کم است"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr ""
+"کامپیوتر خیلی زود به حالت تعلیق در می آید ، لطفا آن را به برق متصل کنید"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "کمبود باتری"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr ""
+"کامپیوتر به زودی به حالت تعلیق در می آید ، لطفا آن را به برق متصل کنید"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "باتری شما کم است ، لطفاً دستگاه را برق وصل کنید"
 
@@ -1025,7 +1045,9 @@ msgstr "برای تغییر سرور NTP احراز هویت لازم است"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "احراز هویت برای کنترل اینکه آیا RTC زمان محلی و یا UTC را ذخیره کند  لازم است "
+msgstr ""
+"احراز هویت برای کنترل اینکه آیا RTC زمان محلی و یا UTC را ذخیره کند  لازم "
+"است "
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

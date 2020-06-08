@@ -1,21 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Maggie Liu <maggie.liufei@gmail.com>, 2016
-# Marck Hrin, 2017,2019-2020
-# Євгеній Мізєв <zmekinski@yahoo.com>, 2017
-# Yuri Chornoivan <yurchor@ukr.net>, 2018-2020
-# Максим Назаренко <mnaz261295@gmail.com>, 2018
+# Yuri Chornoivan <yurchor@ukr.net>, 2020
+# Yuriy Moskalchuk <termosyura@ukr.net>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Roman <dejitaru.tiger@gmail.com>, 2020
+# Marck Hrin, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Ukrainian (https://www.transifex.com/linuxdeepin/teams/3617/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +34,9 @@ msgstr "Пароль має бути не менше 8 символів"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Пароль повинен містити англійські літери (чутливі до регістру), цифри або спеціальні символи(~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Пароль має складатися з латинських літер (великі і малі літери вважаються "
+"різними), цифр та спеціальних символів (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -124,86 +130,70 @@ msgstr "Доступ до повідомлень"
 msgid "Message notification"
 msgstr "Сповіщення про повідомлення"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "Підключення %q успішне"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
-msgstr "Відключено"
+msgstr "Від’єднано"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Переконайтеся, що %q увімкнений і знаходиться у межах досяжності "
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Збій підключення з Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "сьогодні"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "завтра"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s до %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Робота"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Життя"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Інше"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "За день до початку"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Закрити"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "Нагадати мені завтра"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "Нагадати мені пізніше"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "Розклад нагадування"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -263,7 +253,7 @@ msgstr "Вікно Терміналу Quake"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Знімок екрана"
+msgstr "Знімок екрану"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
@@ -417,23 +407,25 @@ msgstr "Показати робочій простір"
 msgid "Authentication is required to switch language"
 msgstr "Аутентифікація потрібна для перемикання мови"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Змінюється мова системи та встановлюються необхідні мовні пакети, зачекайте..."
+msgstr ""
+"Змінюється мова системи та встановлюються необхідні мовні пакети, "
+"зачекайте..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Зміна мови системи, зачекайте..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Змінено мову системи, вийдіть із системи та увійдіть"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -462,7 +454,9 @@ msgstr "Не вдалося видалити %q."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Підключіть, щоб запобігти автоматичному вимкненню й належним чином здійснити оновлення."
+msgstr ""
+"Підключіть, щоб запобігти автоматичному вимкненню й належним чином здійснити"
+" оновлення."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -472,7 +466,9 @@ msgstr "Очищення кешу пакету"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Ваше джерело системи було змінено, будь ласка, відновіть офіційне джерело для нормального використання"
+msgstr ""
+"Ваше джерело системи було змінено, будь ласка, відновіть офіційне джерело "
+"для нормального використання"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -618,7 +614,9 @@ msgstr "Пристрій не був готовий до конфігураці�
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Не вдалося зарезервувати IP-конфігурацію (немає доступної адреси, завершився час очікування тощо)."
+msgstr ""
+"Не вдалося зарезервувати IP-конфігурацію (немає доступної адреси, завершився"
+" час очікування тощо)."
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -632,7 +630,9 @@ msgstr "Паролі вимагались, але не були надані."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Запитувальний прилад 802.1x від'єднано від точки доступу або серверу аутентифікації."
+msgstr ""
+"Запитувальний прилад 802.1x від'єднано від точки доступу або серверу "
+"аутентифікації."
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -640,7 +640,8 @@ msgstr "Не вдалося виконати конфігурацію запит
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr "Запитувальний пристрій 802.1X неочікувано вимкнувся або не відповідає."
+msgstr ""
+"Запитувальний пристрій 802.1X неочікувано вимкнувся або не відповідає."
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
@@ -856,12 +857,16 @@ msgstr "Мережевий кабель не підключено."
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Переконайтеся, будь ласка, що SIM-карта встановлена з сигналом мобільної мережі."
+msgstr ""
+"Переконайтеся, будь ласка, що SIM-карта встановлена з сигналом мобільної "
+"мережі."
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Будь ласка, упевніться, що був обраний правильний тарифний план без заборгованості на SIM-картці."
+msgstr ""
+"Будь ласка, упевніться, що був обраний правильний тарифний план без "
+"заборгованості на SIM-картці."
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -932,7 +937,7 @@ msgstr "%q підключено"
 msgid "Hotspot disabled"
 msgstr "Точка доступу вимкнена"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q відключено"
 
@@ -942,11 +947,15 @@ msgstr "Неможливо поділитися точкою доступу, п�
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Неможливо підключити %q, будь ласка, тримайтеся ближче до бездротового маршрутизатора"
+msgstr ""
+"Неможливо підключити %q, будь ласка, тримайтеся ближче до бездротового "
+"маршрутизатора"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Не вдалося з'єднатися із %q. Будь ласка, перевірте, чи працює ваш маршрутизатор або мережевий кабель."
+msgstr ""
+"Не вдалося з'єднатися із %q. Будь ласка, перевірте, чи працює ваш "
+"маршрутизатор або мережевий кабель."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -956,58 +965,79 @@ msgstr "Пароль, необхідний для підключення %q"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Помилка підключення, неможливо підключити %q, невірний пароль"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Ви наразі оффлайн."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Режим аероплана увімкнено."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Режим Точки Доступу не підтримується цим пристроєм."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Мережа"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Апаратний перемикач WLAN Card вимкнений, будь ласка, увімкніть його в разі потреби."
+msgstr ""
+"Апаратний перемикач WLAN Card вимкнений, будь ласка, увімкніть його в разі "
+"потреби."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Системний проксі-сервер успішно налаштовано."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Системний проксі було скасовано."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Підключено"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "«%s» не пройдено перевіркою засобів захисту системи. Цю програму зараз не можна запускати."
+msgstr ""
+"«%s» не пройдено перевіркою засобів захисту системи. Цю програму зараз не "
+"можна запускати."
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
 msgstr "Акумулятор критично розряджено"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr ""
+"Невдовзі система перейде до стану сну, будь ласка, приєднайте комп'ютер до "
+"мережі живлення"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Низький заряд батареї"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr ""
+"Невдовзі система перейде до стану сну, будь ласка, приєднайте комп'ютер до "
+"мережі живлення"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
-msgstr "Низький рівень заряду акумулятора, будь ласка, приєднайте комп'ютер до мережі живлення"
+msgstr ""
+"Низький рівень заряду акумулятора, будь ласка, приєднайте комп'ютер до "
+"мережі живлення"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
@@ -1017,7 +1047,9 @@ msgstr "Аутентифікація потрібна для встановле�
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Аутентифікація необхідна для того, щоб контролювати, чи має бути увімкнено синхронізацію часу мережі."
+msgstr ""
+"Аутентифікація необхідна для того, щоб контролювати, чи має бути увімкнено "
+"синхронізацію часу мережі."
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1027,7 +1059,9 @@ msgstr "Для зміни NTP-сервера потрібна автентифі
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Аутентифікація необхідна для контролю того, чи зберігає RTC місцевий або UTC час ."
+msgstr ""
+"Аутентифікація необхідна для контролю того, чи зберігає RTC місцевий або UTC"
+" час ."
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

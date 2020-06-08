@@ -1,17 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# abuyop <abuyop@gmail.com>, 2016-2020
+# inashdeen <inashdeen@gmail.com>, 2020
+# abuyop <abuyop@gmail.com>, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Malay (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ms/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Malay (https://www.transifex.com/linuxdeepin/teams/3617/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +31,9 @@ msgstr "Sila masukkan kata aluan tidak kurang dari 8 aksara panjangnya"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor "
+"atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -34,7 +41,7 @@ msgstr "Nama pengguna tidak boleh kosong"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "Aksara pertama mestilah satu abjad atau angka"
+msgstr "Aksara pertama mesti satu abjad atau angka"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -120,86 +127,70 @@ msgstr "Capaian mesej"
 msgid "Message notification"
 msgstr "Pemberitahuan mesej"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "Sambungan %q berjaya"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Terputus"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Pastikan %q dihidupkan dan berada dalam julat"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "hari ini"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "semalam"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s hingga %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Kerja"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Lapang"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Lain-lain"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "Satu hari sebelum mula"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Tutup"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "Ingatkan saya esok hari"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "Ingatkan saya kemudian"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "Peringatan Berjadual"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -413,23 +404,25 @@ msgstr "Papar ruang kerja"
 msgid "Authentication is required to switch language"
 msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu sebentar..."
+msgstr ""
+"Mengubah bahasa sistem dan  memasang pakej bahasa yang diperlukan, tunggu "
+"sebentar..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Mengubah bahasa sistem, tunggu sebentar..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Bahasa sistem telah diubah, sila daftar keluar kemudian daftar masuk"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -458,7 +451,9 @@ msgstr "%q gagal dibuang."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi kemaskini biasa."
+msgstr ""
+"Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi "
+"kemaskini biasa."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -468,7 +463,9 @@ msgstr "Cache pakej disapu bersih"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk kegunaan biasa anda"
+msgstr ""
+"Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk"
+" kegunaan biasa anda"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -614,7 +611,9 @@ msgstr "Peranti belum bersedia untuk konfigurasi"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-lain)"
+msgstr ""
+"Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-"
+"lain)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -672,7 +671,8 @@ msgstr "Perkhidmatan sambungan terkongsi gagal dimulakan"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr "Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
+msgstr ""
+"Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
@@ -852,12 +852,14 @@ msgstr "Kabel rangkaian telah dicabut"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
+msgstr ""
+"Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
+msgstr ""
+"Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -869,12 +871,15 @@ msgstr "Gagal mengaktifkan sambungan VPN"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan pengguna"
+msgstr ""
+"Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan "
+"pengguna"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan peranti"
+msgstr ""
+"Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan peranti"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -928,7 +933,7 @@ msgstr "%q bersambung"
 msgid "Hotspot disabled"
 msgstr "Kawasan khas dilumpuhkan"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q terputus"
 
@@ -938,11 +943,15 @@ msgstr "Tidak boleh berkongsi kawasan khas, sila periksa tetapan dnsmasq"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala tanpa wayar"
+msgstr ""
+"Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala "
+"tanpa wayar"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian anda."
+msgstr ""
+"Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian"
+" anda."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -952,56 +961,73 @@ msgstr "Kata laluan diperlukan untuk bersambung dengan %q"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Anda kini berada diluar talian."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Mod kapal terbang dibenarkan."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Mod Titik Capaian tidak disokong oleh peranti ini."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Rangkaian"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Suis perkakasan Kad WLAN dimatikan, sila hidupkan jika perlu."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Proksi sistem berjaya ditetapkan."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Proksi sistem dibatalkan."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Bersambung"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" tidak melepasi pengesahan keselamatan sistem, dan kini tidak dapat dijalankan"
+msgstr ""
+"\"%s\" tidak melepasi pengesahan keselamatan sistem, dan kini tidak dapat "
+"dijalankan"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr "Kuasa bateri sangat rendah"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "Kuasa Bateri Sangat Rendah"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr ""
+"Komputer akan ditangguhkan tidak lama lagi, sila palamkan kabel kuasa "
+"sekarang"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Kuasa Bateri Rendah"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr ""
+"Komputer akan ditangguhkan tidak lama lagi, sila palamkan kabel kuasa "
+"sekarang"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "Kuasa bateri lemah, sila palamkan kuasa"
 
@@ -1013,7 +1039,9 @@ msgstr "Pengesahihan diperlukan untuk menetap waktu sistem"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian dapat dibenarkan"
+msgstr ""
+"Pengesahihan diperlukan untuk mengawal sama ada penyegerakan waktu rangkaian"
+" dapat dibenarkan"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1023,7 +1051,9 @@ msgstr "Pengesahihan diperlukan untuk mengubah pelayan NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat atau UTC"
+msgstr ""
+"Pengesahihan diperlukan untuk mengawal sama ada RTC menyimpan waktu setempat"
+" atau UTC"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

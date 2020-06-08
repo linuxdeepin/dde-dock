@@ -1,28 +1,36 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Abdullah Alnahdy <abdullahalnahdy@gmail.com>, 2018
-# ahmad nourallah <ahmadnurallah@gmail.com>, 2017
-# hamdy abd elfatah <hamdy.elzankly@gmail.com>, 2018
-# Hussain Alramadhan <psvitamine1@gmail.com>, 2019
-# Idir Benkhellat <benkhellat.idir@gmail.com>, 2019
-# Khodr Abdallah <khodr000@gmail.com>, 2016
+# كريم أولاد الشلحة <herr.linux88@gmail.com>, 2020
+# Khodr Abdallah <khodr000@gmail.com>, 2020
+# Oukiki Saleh <salehoukiki@gmail.com>, 2020
 # Mahmoud Abdelsalam <mahmoud.ad@tutanota.com>, 2020
+# salem alBream <salembream@gmail.com>, 2020
+# hamdy abd elfatah <hamdy.elzankly@gmail.com>, 2020
+# Hussain Alramadhan <psvitamine1@gmail.com>, 2020
 # Mohammed Alotaibi <mx_202@hotmail.com>, 2020
-# MUHAAB SHAAM <muhaab.org@gmail.com>, 2016-2019
-# Oukiki Saleh <salehoukiki@gmail.com>, 2019
-# أشرف بصرى <ashrafmn2008@gmail.com>, 2019
-# Abdellah Chadidi <chadidi97@gmail.com>, 2017
+# mo-hd <mo-hd@windowslive.com>, 2020
+# monzerissa169 <monzerissa169@yahoo.com>, 2020
+# alibacha19 <alibacha19@gmail.com>, 2020
+# MUHAAB SHAAM <muhaab.org@gmail.com>, 2020
+# ahmad nourallah <ahmadnurallah@gmail.com>, 2020
+# Abdullah Alnahdy <abdullahalnahdy@gmail.com>, 2020
+# Cindy0514, 2020
+# أشرف بصرى <ashrafmn2008@gmail.com>, 2020
+# Idir Benkhellat <benkhellat.idir@gmail.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Idir Benkhellat <benkhellat.idir@gmail.com>, 2020\n"
+"Language-Team: Arabic (https://www.transifex.com/linuxdeepin/teams/3617/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,7 +45,9 @@ msgstr "يرجى إدخال كلمة مرور لا تقل عن 8 أحرف"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام "
+"أو رموز خاصة (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -45,7 +55,7 @@ msgstr "اسم المستخدم لا يمكن أن يكون فارغاً"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "أول خانة يجب أن تكون حرف أو رقم"
+msgstr "المحرف اﻷول يجب أن يكون رقم أو حرف"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -131,86 +141,70 @@ msgstr "الوصول الى الرسائل"
 msgid "Message notification"
 msgstr "إشعار الرسائل"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "توصيل q% تم بنجاح"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "غير متصل"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "تأكد أن %q مشغل و بالمدى نفسه"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "فشل الاتصال بالبلوتوث"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "اليوم"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "غدا"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s إلى %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "عمل"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "حياة"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "أخرى"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "يوم قبل البداية"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "إغلاق"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "ذكرني غدا"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "ذكرني لاحقا"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "تذكير بالبرنامج"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -424,23 +418,23 @@ msgstr "عرض مساحة العمل"
 msgid "Authentication is required to switch language"
 msgstr "المصادقة مطلوبة لتبديل اللغة"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة لاحقاً."
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr " يجري تعديل لغة النظام بتثبيت حزم اللغة الناقصة، الرجاء الانتظار ..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "جارى تغيير لغة النظام، يرجى الانتظار ..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "تم تغيير لغة النظام، يرجى تسجيل الخروج ثم تسجيل الدخول"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة لاحقاً."
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -469,7 +463,8 @@ msgstr "تعذر إزالة %q"
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "من أجل منع إيقاف التشغيل التلقائي، يرجى وصل الطاقة  للتحديث بشكل طبيعي."
+msgstr ""
+"من أجل منع إيقاف التشغيل التلقائي، يرجى وصل الطاقة  للتحديث بشكل طبيعي."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -868,7 +863,8 @@ msgstr "الرجاء كن متأكداً من إدراج بطاقة SIM ، مع 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "الرجاء التأكد  من الطريقة الصحيحة المحددة بدون تأخير دفع رصيد بطاقة SIM  "
+msgstr ""
+"الرجاء التأكد  من الطريقة الصحيحة المحددة بدون تأخير دفع رصيد بطاقة SIM  "
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -939,7 +935,7 @@ msgstr "%q متصل"
 msgid "Hotspot disabled"
 msgstr "نقطة البث معطلة"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q غير متصل"
 
@@ -963,41 +959,41 @@ msgstr "كلمة السر ضرورية لتوصيل q%"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "خطأ في الإتصال, لا يمكن الإتصال  %q, كلمة مرور خاطئة"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "أنت اﻵن غير متصل"
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "تم تفعيل وضع الطيران"
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "نقطة الوصول غير معتمدة من طرف هذا الجهاز"
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "الشبكة"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "مبدل الجهاز لبطاقة الشبكة \"متوقف\" ، يرجى التبديل على حسب الضرورة ."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "تم تعيين وكيل النظام بنجاح"
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "تم إلغاء وكيل النظام"
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "متصل"
 
@@ -1006,13 +1002,24 @@ msgstr "متصل"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "\"%s\" لم يجتز تحقق أمان النظام، ولن يمكن تشغيله الآن"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr "مستوى البطارية منخفض"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "البطارية منخفضة جداً"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr "الكمبيوتر سيتوقف قريباً جداً، رجاءً اشبك السلك الكهربائي الآن"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "طاقة البطارية منخفضة"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "الكمبيوتر سيتوقف قريباً جداً، رجاءً اشبك السلك الكهربائي"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "البطارية منخفضة، رجاءً اشبك السلك الكهربائي"
 
@@ -1034,7 +1041,9 @@ msgstr "مطلوب المصادقة لتغيير خادم NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت عالمي منسق"
+msgstr ""
+"المصادقة مطلوبة للتحكم بما إذا كان RTC  يحتوي على توقيت محلي أو على توقيت "
+"عالمي منسق"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

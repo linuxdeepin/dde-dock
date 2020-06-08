@@ -1,18 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# John Franzen <tndb82@gmail.com>, 2019
-# Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2016-2017
+# Tobias Ahlström <tobias.ahlstrom@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2020
+# Cindy0514, 2020
+# 94595490bb4a8f0d2bb452d023d6604b_82c10ac <26484501b3f9b24023bee4a6caa607eb_805378>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
-"Language-Team: Swedish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sv/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: 94595490bb4a8f0d2bb452d023d6604b_82c10ac <26484501b3f9b24023bee4a6caa607eb_805378>, 2020\n"
+"Language-Team: Swedish (https://www.transifex.com/linuxdeepin/teams/3617/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +33,9 @@ msgstr "Vänligen ange ett lösenord som inte har mindre än 8 tecken"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Lösenordet måste innehålla engelska bokstäver (skiftlägeskänsliga), siffror eller specialtecken (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Lösenordet måste innehålla engelska bokstäver (skiftlägeskänsliga), siffror "
+"eller specialtecken (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -121,85 +129,69 @@ msgstr "Meddelandeåtkomst"
 msgid "Message notification"
 msgstr "Meddealandenotifiering"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Se till att %q är påslagen och inom räckhåll"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-anslutningen misslyckades."
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr ""
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr ""
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr ""
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr ""
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr ""
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Övrigt"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr ""
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Stäng"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr ""
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr ""
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
-msgstr ""
-
-#: ../../calendar/type.go:40
-msgid "Festival"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
@@ -232,7 +224,7 @@ msgstr "Otillräckligt diskutrymme, var god rensa upp i tid!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "Startare"
+msgstr "Launcher"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -414,23 +406,25 @@ msgstr "Visa arbetsyta"
 msgid "Authentication is required to switch language"
 msgstr "Autentisering krävs för att byta språk"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Misslyckades med att byta systemspråk, var god försök igen senare"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Ändrar systemspråk och installerar de nödvändiga språkpaketen, var god vänta..."
+msgstr ""
+"Ändrar systemspråk och installerar de nödvändiga språkpaketen, var god "
+"vänta..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Ändrar systemspråk, var god vänta..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Systemspråk är ändrat, var god logga ut och in igen"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Misslyckades med att byta systemspråk, var god försök igen senare"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -459,7 +453,8 @@ msgstr "%q kunde inte tas bort."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "För att förhindra automatisk avstängning, anslut för normal uppdatering."
+msgstr ""
+"För att förhindra automatisk avstängning, anslut för normal uppdatering."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -469,7 +464,9 @@ msgstr "Paket cache rensad"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Din systemkälla har modifierats, vänligen återställ till den officiella källan för normalt användande"
+msgstr ""
+"Din systemkälla har modifierats, vänligen återställ till den officiella "
+"källan för normalt användande"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -615,7 +612,9 @@ msgstr "Enheten är inte redo för konfigurering."
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP-konfiguration kan inte reserveras (ingen tillgänglig adress, timeout, etc)."
+msgstr ""
+"IP-konfiguration kan inte reserveras (ingen tillgänglig adress, timeout, "
+"etc)."
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -629,7 +628,9 @@ msgstr "Lösenord krävdes men gavs inte."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X supplikanten bortkopplad från åtkomstpunkten eller autentiseringsservern."
+msgstr ""
+"802.1X supplikanten bortkopplad från åtkomstpunkten eller "
+"autentiseringsservern."
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -858,7 +859,9 @@ msgstr "Se till att SIM-kortet som satts in har fungerande täckning."
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Kontrollera att du har valt en korrekt plan utan förfallna betalningar på SIM-kortet."
+msgstr ""
+"Kontrollera att du har valt en korrekt plan utan förfallna betalningar på "
+"SIM-kortet."
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -929,7 +932,7 @@ msgstr "%q ansluten"
 msgid "Hotspot disabled"
 msgstr ""
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q ifrånkopplad"
 
@@ -939,11 +942,13 @@ msgstr "Kunde ej dela hotspot, var god kontrollera dnsmasq inställningarna"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Kunde ej ansluta till %q, försök komma närmre till den trådlösa routern"
+msgstr ""
+"Kunde ej ansluta till %q, försök komma närmre till den trådlösa routern"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Kunde ej ansluta till %q, var god kontrollera din router eller nätverkskabel"
+msgstr ""
+"Kunde ej ansluta till %q, var god kontrollera din router eller nätverkskabel"
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -953,41 +958,42 @@ msgstr ""
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Anslutning misslyckades, kunde ej ansluta till %q, fel lösenord"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Du är nu offline."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Flygplansläget är aktiverat"
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Access Point-läge stöds inte av denna enhet."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Nätverk"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hårdvaruomkopplare för WLAN-kort är avstängd, var god slå på vid behov."
+msgstr ""
+"Hårdvaruomkopplare för WLAN-kort är avstängd, var god slå på vid behov."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "System proxy ställdes framgångsrikt in."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "System proxy har blivit avbruten."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Ansluten"
 
@@ -996,13 +1002,24 @@ msgstr "Ansluten"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr ""
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "Batteriet kritiskt lågt"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr "Datorn kommer snart gå i viloläge, var god koppla in strömmen nu"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Batteri Låg"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "Datorn kommer snart gå i viloläge, var god koppla in strömmen "
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "Lågt batteri, vänligen anslut"
 
@@ -1014,7 +1031,8 @@ msgstr "Autentisering krävs för att ställa in system klockan"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Autentisering krävs för att ändra inställningarna för tidssynkronisering"
+msgstr ""
+"Autentisering krävs för att ändra inställningarna för tidssynkronisering"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1024,7 +1042,8 @@ msgstr ""
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Autentisering krävs för att bestämma om RTC sparar lokal eller UTC tid"
+msgstr ""
+"Autentisering krävs för att bestämma om RTC sparar lokal eller UTC tid"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

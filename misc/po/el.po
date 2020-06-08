@@ -1,22 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# geost <george.stefanakis@gmail.com>, 2016
-# geost <george.stefanakis@gmail.com>, 2016
-# nonviotale <nonviotale@gmail.com>, 2017
-# Jim Gios (Joker) <jgpers@gmail.com>, 2018
-# takis b, 2017
-# takis b, 2017
+# Tsvetan Bankov <emerge.life@gmail.com>, 2020
+# geost <george.stefanakis@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Francesko Isallari <francesko1989@gmail.com>, 2020
+# takis b, 2020
+# Cindy0514, 2020
+# Jim Gios <jgpers@gmail.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
-"Language-Team: Greek (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/el/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Jim Gios <jgpers@gmail.com>, 2020\n"
+"Language-Team: Greek (https://www.transifex.com/linuxdeepin/teams/3617/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,55 +35,53 @@ msgstr "Παρακαλώ εισάγετε ένα κωδικό πρόσβασης
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Ο κωδικός πρέπει να περιέχει Αγγλικά γράμματα (case-sensitive), νούμερα ή εδικά σύμβολα (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Ο κωδικός πρέπει να περιέχει Αγγλικά γράμματα (case-sensitive), νούμερα ή "
+"εδικά σύμβολα (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
-msgstr ""
+msgstr "Το όνομα χρήστη δεν μπορεί να είναι κενό"
 
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr ""
+#: ../../accounts/checkers/username.go:68
+msgid "The first character must be a letter or number"
+msgstr "Ο πρώτος χαρακτήρας πρέπει να είναι γράμμα ή αριθμός"
 
-#: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr ""
-
-#: ../../accounts/checkers/username.go:69
+#: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
-msgstr ""
+msgstr "Το όνομα χρήστη υπάρχει ήδη"
 
-#: ../../accounts/checkers/username.go:71
+#: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
-msgstr ""
+msgstr "Το όνομα χρήστη έχει χρησιμοποιηθεί από το σύστημα"
 
-#: ../../accounts/checkers/username.go:73
+#: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
+msgstr "Το όνομα χρήστη πρέπει να έχει μήκος μεταξύ 3-32 χαρακτήρων"
 
-#: ../../appearance/scale.go:61
+#: ../../appearance/scale.go:66
 msgid "Set successfully"
-msgstr ""
+msgstr "Ορισμός επιτυχής"
 
-#: ../../appearance/scale.go:62
+#: ../../appearance/scale.go:67
 msgid "Please log back in to view the changes"
 msgstr ""
 
-#: ../../appearance/scale.go:66
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
-msgstr ""
+msgstr "Κλίμακα οθόνης"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
-msgstr ""
-
-#: ../../bin/dde-authority/fprint_transaction.go:20
-msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "Ορισμός κλίμακας οθόνης"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
+msgid "Fingerprint verification failed"
+msgstr "Εσφαλμένη επαλήθευση αποτυπώματος"
+
+#: ../../bin/dde-authority/fprint_transaction.go:22
 msgid "Fingerprint verification timed out"
-msgstr ""
+msgstr "Εκτός χρόνου επαλήθευση αποτυπώματος"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Serial port"
@@ -129,49 +131,45 @@ msgstr "Πρόσβαση μηνύματος"
 msgid "Message notification"
 msgstr "Γνωστοποίηση μηνύματος"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "Συνδέθηκε"
+#: ../../bluetooth/utils_notify.go:69
+msgid "Connect %q successfully"
+msgstr "Σύνδεση %q επιτυχώς"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Αποσυνδέθηκε"
 
-#: ../../bluetooth/utils_notify.go:59
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Βεβαιωθείτε ότι το %q είναι ανοικτό και εντός εμβέλειας"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Η σύνδεση bluetooth απέτυχε"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
-msgstr ""
+msgstr "σήμερα"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
-msgstr ""
+msgstr "αύριο"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr ""
 
 #: ../../calendar/module.go:126
 msgid "Work"
-msgstr ""
+msgstr "Εργασία"
 
 #: ../../calendar/module.go:127
 msgid "Life"
-msgstr ""
+msgstr "Ζωή"
 
 #: ../../calendar/module.go:128
 msgid "Other"
@@ -179,7 +177,7 @@ msgstr "Άλλο"
 
 #: ../../calendar/scheduler.go:477
 msgid "One day before start"
-msgstr ""
+msgstr "Μια ημέρα πριν την εκκίνηση"
 
 #: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
 #: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
@@ -188,43 +186,43 @@ msgstr "Κλείσιμο"
 
 #: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Υπενθύμισέ μου αύριο"
 
 #: ../../calendar/scheduler.go:490
 msgid "Remind me later"
-msgstr ""
+msgstr "Υπεθύμισέ μου αργότερα"
 
 #: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
-msgstr ""
+msgstr "Κλείσιμο Όλων"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
-msgstr ""
+msgstr "Δυναμικό Κλείσιμο"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:132
 msgid "Dock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:139
 msgid "Undock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:146
 msgid "All Windows"
 msgstr "Όλα τα Παράθυρα"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Ανεπαρκής χώρος στο δίσκο, παρακαλώ καθαρίστε εγκαίρως!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
@@ -236,7 +234,7 @@ msgstr "Τερματικό"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "Εγγραφή Οθόνης"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -288,7 +286,7 @@ msgstr "Γρήγορο Κλείσιμο Οθόνης"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "Παρακολούθηση Συστήματος"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -300,101 +298,109 @@ msgstr ""
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Κείμενο σε Ομιλία"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Ομιλία σε Κείμενο"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "Πρόχειρο"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "Μετάφραση"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "Αλλαγή διάταξης"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "Αλλαγή αριστερού χώρου εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "Αλλαγή δεξιού Χώρου εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "Άλλα σε ανώτερο χώρο εργασίας."
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "Αλλαγή σε χαμηλότερο χώρο εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "Εναλλαγή παρόμοιων παραθύρων"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "Εναλλαγή παρόμοιων παραθύρων με αντίστροφη σειρά"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "Εναλλαγή παραθύρων"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "Εναλλαγή παραθύρων με αντίστροφη σειρά"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "Εμφάνιση επιφάνειας εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Μεγιστοποίηση παραθύρου"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Επαναφορά παράθυρου"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Ελαχιστοποίηση παραθύρου"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Κλείσιμο παράθυρου"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Μετακίνηση παραθύρου"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Αλλαγή μεγέθους παραθύρου"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Μετακίνηση προς το αριστερό χώρο εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Μετακίνηση προς το δεξιό χώρο εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Μετακίνηση σε ανώτερο χώρο εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Μετακινήστε σε χαμηλότερο χώρο εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Εμφάνιση παραθύρων όλων των χώρων εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Εμφάνιση παραθύρων του τρέχοντος χώρου εργασίας"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Εμφάνιση χώρου εργασίας"
 
@@ -404,70 +410,71 @@ msgstr "Απαιτείται πιστοποίηση για εναλλαγή γλ
 
 #: ../../langselector/locale.go:390
 msgid "Failed to change system language, please try later"
-msgstr ""
+msgstr "Αποτυχία αλλαγής γλώσσας συστήματος, παρακαλούμε προσπαθήστε αργότερα"
 
 #: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr ""
+"Αλλάζει η γλώσσα συστήματος και εγκατάσταση των απαραίτητων πακέτων γλώσσας,"
+" παρακαλώ περιμένετε..."
 
 #: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "Αλλάζει η γλώσσα συστήματος, παρακαλώ περιμένετε..."
 
 #: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr ""
+"Έχει αλλάξει η γλώσσα συστήματος, παρακαλώ αποσυνδεθείτε και μετά συνδεθείτε"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "Ανάκτηση"
-
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "Ακύρωση"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Επανάληψη"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#: ../../lastore/notify.go:97
 msgid "%q installed successfully."
 msgstr "Το %q εγκαταστάθηκε με επιτυχία."
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:100
 msgid "%q failed to install."
 msgstr "Αποτυχία εγκατάστασης του %q."
 
-#: ../../lastore/notify.go:93
+#: ../../lastore/notify.go:108
 msgid "%q removed successfully."
 msgstr "Το %q αφαιρέθηκε με επιτυχία."
 
-#: ../../lastore/notify.go:95
+#: ../../lastore/notify.go:110
 msgid "%q failed to remove."
 msgstr "Αποτυχία αφαίρεσης του %q."
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Προκειμένου να αποτραπεί η αυτόματη διακοπή λειτουργίας, παρακαλούμε συνδέστε στο ρεύμα για κανονική ενημέρωση."
+msgstr ""
+"Προκειμένου να αποτραπεί η αυτόματη διακοπή λειτουργίας, παρακαλούμε "
+"συνδέστε στο ρεύμα για κανονική ενημέρωση."
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:122
 msgid "Package cache wiped"
 msgstr ""
 
-#: ../../lastore/notify.go:112
+#: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr ""
 
-#: ../../launcher/manager_uninstall.go:69
-msgid "%q removed successfully"
-msgstr ""
-
 #: ../../launcher/manager_uninstall.go:71
+msgid "%q removed successfully"
+msgstr "Το %q αφαιρέθηκε επιτυχώς"
+
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "Αποτυχία απεγκατάστασης %q"
 
@@ -520,7 +527,7 @@ msgstr "TLS"
 msgid "Protected EAP"
 msgstr "Προστατευόμενη EAP"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
 msgid "Wired Connection"
 msgstr "Ενσύρματη Σύνδεση"
 
@@ -586,102 +593,108 @@ msgstr "VPN VPNC"
 
 #: ../../network/state_handler.go:39
 msgid "Device state changed"
-msgstr ""
+msgstr "Αλλαγή κατάστασης συσκευής"
 
 #: ../../network/state_handler.go:40
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "Άλλαγή κατάστασης συσκευής, άγνωστος λόγος"
 
 #: ../../network/state_handler.go:41
 msgid "The device is now managed"
-msgstr ""
+msgstr "Η συσκευή είναι πλέον διαχειριζόμενη"
 
 #: ../../network/state_handler.go:42
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Η συσκευή δεν διαχειρίζεται πλέον"
 
 #: ../../network/state_handler.go:43
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Η συσκευή δεν είναι έτοιμη για ρύθμιση"
 
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
 msgstr ""
+"Η ρύθμιση παραμέτρων IP δεν μπόρεσε να σωθεί (καμία διαθέσιμη διεύθυνση, "
+"χρονικό όριο, κλπ.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "Η ρύθμιση παραμέτρων IP δεν ισχύει πια"
 
 #: ../../network/state_handler.go:46
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Απαιτούνται κωδικοί εισόδου αλλά δεν έχουν παρασχεθεί"
 
 #: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
 msgstr ""
+"Η αίτηση άδειας πρόσβασης 802.1X. αποσυνδέθηκε από το σημείο πρόσβασης ή από"
+" τον διακομιστή ελέγχου ταυτότητας"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Αποτυχια ρύθμισης της αίτησης άδειας πρόσβασης 802.1X"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "Η αίτηση άδειας πρόσβασης 802.1X τερματίστηκε ή απέτυχε αναπάντεχα"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
 msgstr ""
+"Η αίτηση άδειας πρόσβασης 802.1X χρειάστηκε πολύ χρόνο για τον έλεγχο "
+"ταυτότητας"
 
 #: ../../network/state_handler.go:51
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "Η συνδεση PPP απέτυχε να ξεκινήσει εντός του επιτρεπτού χρόνου"
 
 #: ../../network/state_handler.go:52
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "Η υπηρεσία PPP αποσυνδέθηκε αναπάντεχα"
 
 #: ../../network/state_handler.go:53
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Η υπηρεσία τερματίστηκε ή απέτυχε αναπάντεχα"
 
 #: ../../network/state_handler.go:54
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "Η σύνδεση DHCP απέτυχε να ξεκινήσει εντός του επιτρεπτού χρόνου"
 
 #: ../../network/state_handler.go:55
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "Η υπηρεσία DHCP ανέφερε ένα αναπάντεχο λάθος"
 
 #: ../../network/state_handler.go:56
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Η υπηρεσία DHCP τερματίστηκε ή απέτυχε αναπάντεχα"
 
 #: ../../network/state_handler.go:57
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Απέτυχε να ξεκινήσει η υπηρεσία κοινόχρηστης σύνδεσης"
 
 #: ../../network/state_handler.go:58
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Η υπηρεσία κοινόχρηστης σύνδεσης τερματίστηκε ή απέτυχε αναπάντεχα"
 
 #: ../../network/state_handler.go:59
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "Η υπηρεσία AutoIP απέτυχε να ξεκινήσει"
 
 #: ../../network/state_handler.go:60
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "Η υπηρεσία AutoIP ανέφερε ένα αναπάντεχο σφάλμα"
 
 #: ../../network/state_handler.go:61
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Η υπηρεσία AutoIP τερματίστηκε ή απέτυχε αναπάντεχα"
 
 #: ../../network/state_handler.go:62
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "Απέτυχε η κλήση λόγω απασχολημένων γραμμών"
 
 #: ../../network/state_handler.go:63
 msgid "Dialing failed due to no dial tone"
@@ -705,7 +718,7 @@ msgstr "Απέτυχε η προετοιμασία του μόντεμ"
 
 #: ../../network/state_handler.go:68
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "Αποτυχία επιλογής του καθορισμένου GSM APN"
 
 #: ../../network/state_handler.go:69
 msgid "No networks searched"
@@ -713,71 +726,71 @@ msgstr "Δεν αναζητήθηκαν δίκτυα"
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Απορρίφθηκε η καταχώρηση δικτύου"
 
 #: ../../network/state_handler.go:71
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Υπέρβαση ορίου χρόνου εγγραφής δικτύου"
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Απέτυχε η εγγραφή στο ζητούμενο δίκτυο GSM "
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
-msgstr ""
+msgstr "Απέτυχε ο έλεγχος PIN"
 
 #: ../../network/state_handler.go:74
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "Ενδεχομένως να λείπει απαραίτητο υλικολογισμικό για την συσκευή"
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
-msgstr ""
+msgstr "Η συσκευή αφαιρέθηκε"
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "Το NetworkManager τέθηκε σε αναστολή λειτουργίας"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "Η ενεργή σύνδεση της συσκευής αφαιρέθηκε ή εξαφανίστηκε"
 
 #: ../../network/state_handler.go:78
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "Ένας χρήστης ή πελάτης ζήτησε να αποσυνδεθεί"
 
 #: ../../network/state_handler.go:79
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "Άλλαξε ο φορέας/σύνδεσμος της συσκευής"
 
 #: ../../network/state_handler.go:80
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "Η υπάρχουσα σύνδεση της συσκευής λήφθηκε"
 
 #: ../../network/state_handler.go:81
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "Η αίτηση άδειας πρόσβασης 802.1x είναι πλέον διαθέσιμη"
 
 #: ../../network/state_handler.go:82
 msgid "The modem could not be found"
-msgstr ""
+msgstr "Δεν βρέθηκε το μόντεμ"
 
 #: ../../network/state_handler.go:83
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "Η σύνδεση Bluetooth έληξε ή απέτυχε"
 
 #: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "Η κάρτα SIM του μόντεμ GSM δεν έχει εισαχθεί"
 
 #: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "Απαιτείται κωδικός PIN για τη SIM του GSM μόντεμ"
 
 #: ../../network/state_handler.go:86
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "Απαιτείται κωδικός PUK της SIM για το GSM μόντεμ"
 
 #: ../../network/state_handler.go:87
 msgid "SIM card error in GSM Modem"
@@ -785,7 +798,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:88
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "Η συσκευή InfiniBand δεν υποστηρίζει τη λειτουργία σύνδεσης"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
@@ -797,212 +810,228 @@ msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "Ο ModemManager δεν έτρεξε ή τερματίστηκε αναπάντεχα"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgid "The 802.11 WLAN network could not be found"
+msgstr "Το δίκτυο 802.11 Wi-Fi δεν βρέθηκε"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "Απέτυχε μια δευτερεύουσα σύνδεση της βασικής σύνδεσης"
 
 #: ../../network/state_handler.go:96
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "Η εγκατάσταση του DCB ή FCoE απέτυχε"
 
 #: ../../network/state_handler.go:97
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "Έλεγχος συνεργασίας δικτύου απέτυχε"
 
 #: ../../network/state_handler.go:98
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "Το μόντεμ απέτυχε να δουλέψει ή δεν είναι διαθέσιμο"
 
 #: ../../network/state_handler.go:99
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Το μόντεμ είναι τώρα έτοιμο και διαθέσιμο"
 
 #: ../../network/state_handler.go:100
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "Το PIN της SIM είναι λανθασμένο"
 
 #: ../../network/state_handler.go:101
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "Η ενεργοποίηση νέας σύνδεσης είναι στην ουρά της λίστας"
 
 #: ../../network/state_handler.go:102
 msgid "Parent device changed"
-msgstr ""
+msgstr "Η μητρική συσκευή άλλαξε"
 
 #: ../../network/state_handler.go:103
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Το καθεστώς διαχείρισης της μητρικής συσκευής άλλαξε"
 
 #: ../../network/state_handler.go:106
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "Το καλώδιο δικτύου δεν είναι συνδεδεμένο"
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
 msgstr ""
+"Παρακαλούμε βεβαιωθείτε ότι έχετε βάλει την  κάρτα SIM με σήμα κινητού "
+"δικτύου"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
 msgstr ""
+"Παρακαλούμε βεβαιωθείτε ότι επιλέχθηκε ένα σωστό πρόγραμμα  χωρίς "
+"καθυστερούμενα της κάρτας SIM"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgstr "Η ενεργοποίηση της σύνδεσης VPN απέτυχε, άγνωστος λόγος"
 
 #: ../../network/state_handler.go:112
 msgid "Failed to activate VPN connection"
-msgstr ""
+msgstr "Η ενεργοποίηση της σύνδεσης VPN απέτυχε"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "Άλλαξε η κατάσταση της σύνδεσης VPN λόγω αποσύνδεσης από τους χρήστες"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "Η κατάσταση σύνδεσης VPN άλλαξε λόγω αποσύνδεσης από τις συσκευές"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
-msgstr ""
+msgstr "Η υπηρεσία VPN σταμάτησε"
 
 #: ../../network/state_handler.go:116
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "Η ρύθμιση IP της σύνδεσης VPN δεν ήταν έγκυρη"
 
 #: ../../network/state_handler.go:117
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Έληξε το χρονικό όριο προσπάθειας σύνδεσης με την υπηρεσία VPN"
 
 #: ../../network/state_handler.go:118
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "Ο χρόνος εκκίνησης της υπηρεσίας VPN έληξε"
 
 #: ../../network/state_handler.go:119
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "Η υπηρεσία VPN απέτυχε να ξεκινήσει"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Δεν παρασχέθηκε ο απαραίτητος κωδικός πρόσβασης για την σύνδεση VPN"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Αποτυχία πιστοποίησης στο διακομιστή VPN"
 
 #: ../../network/state_handler.go:122
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "Η σύνδεση διαγράφηκε από τις ρυθμίσεις"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Ενεργοποίηση του hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Σύνδεση του %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Το hotspot ενεργοποιήθηκε"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
-msgstr ""
+msgstr "Το %q συνδέθηκε"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Το hotspot απενεργοποιήθηκε"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
-msgstr ""
+msgstr "Το %q αποσυνδέθηκε"
 
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:337
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Απαιτείται κωδικός για σύνδεση του %q"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: ../../network/utils_notify.go:80
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Είστε τώρα εκτός σύνδεσης."
 
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Λειτουργία πτήσης ενεργοποιημένη."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
-msgstr "Η λειτουργία Σημείου Πρόσβασης δεν υποστηρίζεται από αυτήν την συσκευή."
+msgstr ""
+"Η λειτουργία Σημείου Πρόσβασης δεν υποστηρίζεται από αυτήν την συσκευή."
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Δίκτυο"
 
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Ο διακόπτης υλίκου της κάρτας WLAN είναι κλειστός, παρακαλώ ενεργοποιήστε τον αν χρειάζεται "
+msgstr ""
+"Ο διακόπτης υλίκου της κάρτας WLAN είναι κλειστός, παρακαλώ ενεργοποιήστε "
+"τον αν χρειάζεται "
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Ο μεσολάβησης του συστήματος έχει οριστεί με επιτυχία."
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Ο μεσολάβησης του συστήματος έχει ακυρωθεί."
 
-#: ../../session/power/manager_events.go:151
+#: ../../network/utils_notify.go:126
+msgid "Connected"
+msgstr "Συνδέθηκε"
+
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr ""
+
+#: ../../session/power/manager_events.go:176
 msgid "Battery Critically Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:152
+#: ../../session/power/manager_events.go:177
 msgid "Computer will suspend very soon, please plug in now"
 msgstr ""
 
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
 msgid "Battery Low"
 msgstr "Χαμηλή Μπαταρία"
 
-#: ../../session/power/manager_events.go:176
+#: ../../session/power/manager_events.go:201
 msgid "Computer will suspend soon, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "Χαμηλή μπαταρία, παρακαλώ συνδέστε"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "Απαιτείται πιστοποίηση για ορισμό της ώρας του συστήματος"
 
 #: ../../timedate/manager_ifc.go:72
 msgid ""
@@ -1012,7 +1041,7 @@ msgstr ""
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "Απαιτείται πιστοποίηση για αλλαγή του NTP διακομιστή"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""
@@ -1022,4 +1051,4 @@ msgstr ""
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "Απαιτείται πιστοποίηση για ορισμό της ζώνης ώρας του συστήματος"

@@ -1,20 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# 31c8ff7daf246c6bd598eefe84c1433c, 2016-2017
-# Cindy0514, 2019
-# Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2016,2018
-# scootergrisen, 2017-2020
+# Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2020
+# 31c8ff7daf246c6bd598eefe84c1433c, 2020
+# scootergrisen, 2020
+# Cindy0514, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Danish (https://www.transifex.com/linuxdeepin/teams/3617/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +32,9 @@ msgstr "Indtast venligt en adgangskode, ikke mindre end 8 tegn"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Adgangskoden skal indeholde engelske bogstaver (forskel på store og små "
+"bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -123,86 +128,70 @@ msgstr "Adgang til beskeder"
 msgid "Message notification"
 msgstr "Meddelelsesnotifikation"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "Tilslutning af %q lykkedes"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Afbrudt"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Sørg for at %q er tændt og inden for rækkevidde"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "i dag"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "i morgen"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s til %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Arbejde"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Leve"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Andre"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "En dag før start"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Luk"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "Påmind mig i morgen"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "Påmind mig senere"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "Planlæg påmindelse"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -274,7 +263,7 @@ msgstr "Skærmbillede af vindue"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Forsinket skærmbillede"
+msgstr "Forsink skærmbillede"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -416,23 +405,25 @@ msgstr "Vis arbejdsområde"
 msgid "Authentication is required to switch language"
 msgstr "Der kræves autentifikation for at skifte sprog"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Skifter systemsproget og installerer de påkrævede sprogpakker, vent venligst..."
+msgstr ""
+"Skifter systemsproget og installerer de påkrævede sprogpakker, vent "
+"venligst..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Skifter systemsprog, vent venligst..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Systemsproget blev ændret. Log venligst ud og ind igen"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -461,7 +452,9 @@ msgstr "%q blev ikke fjernet."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Tilslut venligst strømforsyningen for at opdatere normalt så automatisk nedlukning forhindres."
+msgstr ""
+"Tilslut venligst strømforsyningen for at opdatere normalt så automatisk "
+"nedlukning forhindres."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -471,7 +464,9 @@ msgstr "Pakke-mellemlager ryddet"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Dit system er blevet ændret. Genskab venligst til officiel kilde for at bruge det normalt"
+msgstr ""
+"Dit system er blevet ændret. Genskab venligst til officiel kilde for at "
+"bruge det normalt"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -496,7 +491,7 @@ msgstr "Automatisk"
 #: ../../network/manager_active_conn.go:333
 #: ../../network/manager_active_conn.go:338
 msgid "None"
-msgstr "Ingen"
+msgstr "Intet"
 
 #: ../../network/manager_active_conn.go:340
 msgid "WEP 40/128-bit Key"
@@ -617,7 +612,9 @@ msgstr "Enheden har ikke været klar til konfiguration"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP-konfiguration kunne ikke reserveres (ingen tilgængelig adresse, timeout osv.)"
+msgstr ""
+"IP-konfiguration kunne ikke reserveres (ingen tilgængelig adresse, timeout "
+"osv.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -631,7 +628,8 @@ msgstr "Adgangskoder blev påkrævet, men ikke angivet"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X-supplicanten afbrudt fra access point eller godkendelsesserveren"
+msgstr ""
+"802.1X-supplicanten afbrudt fra access point eller godkendelsesserveren"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -860,7 +858,9 @@ msgstr "Sørg for, at SIM-kortet er blevet indsat med mobilnet-signal"
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Sørg venligst for, at en korrekt plan blev valgt uden at genoprette SIM-kortet"
+msgstr ""
+"Sørg venligst for, at en korrekt plan blev valgt uden at genoprette SIM-"
+"kortet"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -872,12 +872,16 @@ msgstr "Kunne ikke aktivere VPN-forbindelse"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt af brugerne"
+msgstr ""
+"VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt af "
+"brugerne"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt fra enhederne"
+msgstr ""
+"VPN-forbindelsestilstanden blev ændret pga. at forbindelsen blev afbrudt fra"
+" enhederne"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -931,7 +935,7 @@ msgstr "%q tilsluttet"
 msgid "Hotspot disabled"
 msgstr "Hotspottet blev deaktiveret"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q afbrudt"
 
@@ -941,7 +945,9 @@ msgstr "Kan ikke dele hotspot, tjek venligst dnsmasq-indstillinger"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse router"
+msgstr ""
+"Kan ikke oprette forbindelse til %q, vær venligst tættere på den trådlåse "
+"router"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
@@ -953,43 +959,47 @@ msgstr "Der kræves adgangskode for at oprette forbindelse til %q"
 
 #: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert adgangskode"
+msgstr ""
+"Forbindelsen mislykkedes, kan ikke oprette forbindelse til %q, forkert "
+"adgangskode"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Du er nu offline."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Flytilstand aktiveret."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Adgangspunkttilstand understøttes ikke af enheden."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Netværk"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er nødvendigt."
+msgstr ""
+"Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er "
+"nødvendigt."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Systemproxy er indstillet."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Systemproxy er annulleret."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Tilsluttet"
 
@@ -998,13 +1008,25 @@ msgstr "Tilsluttet"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "\"%s\" bestod ikke bekræftelse af systemsikkerhed og kan ikke køre nu"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
 msgstr "Batteriet er kritisk lavt"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr ""
+"Computeren går meget snart i hvile, tilslut venligst strømforsyningen nu"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Batteriet er lavt"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "Computeren går snart i hvile, tilslut venligst strømforsyningen"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "Batteriet er lavt. Tilslut venligst strømforsyningen"
 
@@ -1016,7 +1038,8 @@ msgstr "Autentifikation kræves for at sætte systemets tid"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres"
+msgstr ""
+"Autentifikation kræves for at styre om netværkssynkronisering skal aktiveres"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1026,7 +1049,9 @@ msgstr "Der kræves autentifikation for at ændre NTP-server"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Der kræves autentifikation for at styre om RTC'en lagre den lokale tid eller UTC-tiden"
+msgstr ""
+"Der kræves autentifikation for at styre om RTC'en lagre den lokale tid eller"
+" UTC-tiden"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

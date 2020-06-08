@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!message" line="0"/>
 			<source>Authentication is required to change the grub2 configuration</source>
-			<translation>Аутентификација је неопходна за промену grub2 поставки</translation>
+			<translation>Идентификација је неопходна за промену grub2 поставки</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
 			<source>Authentication is required to prepare grub2 display resolution detection</source>
-			<translation>Аутентификација је неопходна за припрему grub2 откривања резолуције екрана</translation>
+			<translation>Идентификација је неопходна за припрему grub2 откривања резолуције екрана</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>

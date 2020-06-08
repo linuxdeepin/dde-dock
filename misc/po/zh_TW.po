@@ -1,27 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# byStarTW (pan93412) <pan93412@gmail.com>, 2018-2019
+# 李洪武 <lihongwu1987@gmail.com>, 2020
+# 凡凡不想平凡 <freddy4212@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# LNDDYL, 2020
+# Julian Lai <laichiaheng@outlook.com>, 2020
+# jjzrh2 <jjzrh2@126.com>, 2020
+# byStarTW (pan93412) <pan93412@gmail.com>, 2020
 # Cindy0514, 2020
-# 凡凡不想平凡 <freddy4212@gmail.com>, 2016
-# jjzrh2 <jjzrh2@126.com>, 2017
-# Julian Lai <laichiaheng@outlook.com>, 2017
-# LNDDYL, 2016
-# Mingye Wang <arthur200126@gmail.com>, 2016
-# 凡凡不想平凡 <freddy4212@gmail.com>, 2017
-# 凡凡不想平凡 <freddy4212@gmail.com>, 2017
-# 吳宗峻 <iamrogerwu0321@gmail.com>, 2017
-# 凡凡不想平凡 <freddy4212@gmail.com>, 2017
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-22 01:24+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/zh_TW/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/linuxdeepin/teams/3617/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -130,86 +130,70 @@ msgstr "存取訊息"
 msgid "Message notification"
 msgstr "訊息通知"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "成功連線至 %q"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "已斷線"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "確認 %q 已開啟且在範圍內"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "藍牙連線失敗"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr "點擊以設定添加%q"
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr "添加藍牙裝置"
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr "配對"
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "今天"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "明天"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "自 %s 到 %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "工作"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "生活"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "其它"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "開始前一天"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "離開"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "明天再提醒"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "稍候再提醒"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "排程提醒工具"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr "節日"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -225,7 +209,7 @@ msgstr "強制離開"
 
 #: ../../dock/app_entry_menu.go:132
 msgid "Dock"
-msgstr "Dock"
+msgstr "駐停"
 
 #: ../../dock/app_entry_menu.go:139
 msgid "Undock"
@@ -269,7 +253,7 @@ msgstr "終端器雷神模式"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "螢幕截圖"
+msgstr "截圖"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
@@ -421,25 +405,25 @@ msgstr "顯示工作區"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
-msgstr "切換語言需要驗證"
+msgstr "切換語言需要授權"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "無法變更系統語言，請稍候再試"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "正在變更系統語言並安裝所需語言包，請稍候…"
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "正在變更系統語言，請稍候…"
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "已變更系統語言，請重新登入以套用變更"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "無法變更系統語言，請稍候再試"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -511,7 +495,7 @@ msgstr "WEP 40/128-bit 金鑰"
 
 #: ../../network/manager_active_conn.go:342
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 個人用戶"
+msgstr "WPA/WPA2 個人使用者"
 
 #: ../../network/manager_active_conn.go:350
 msgid "TLS"
@@ -938,7 +922,7 @@ msgstr "已連線到 %q 網路"
 msgid "Hotspot disabled"
 msgstr "已停用熱點"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "已斷開到 %q 的連線"
 
@@ -962,41 +946,41 @@ msgstr "連線至 %q 需要密碼"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "連線失敗：無法連線到 %q 網路，原因：密碼錯誤"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "未知"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "已離線。"
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "已開啟飛航模式。"
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "裝置不支援存取點功能。"
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "網路"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "無線網卡的硬體開關為關閉狀態，如要使用請先開啟。"
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "系統代理伺服器設定成功。"
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "系統代理伺服器已被取消。"
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "已連線"
 
@@ -1005,13 +989,24 @@ msgstr "已連線"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "“%s”沒有通過系統安全驗證，無法執行"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr "電量耗盡"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "電量過低"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr "電腦將在不久後休眠，請立即接上電源"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "電量偏低"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "電腦將在不久後休眠，請接上電源"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "電量剩餘不多，請接上電源"
 

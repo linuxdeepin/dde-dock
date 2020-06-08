@@ -4,17 +4,17 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!message" line="0"/>
 			<source>Authentication is required to change the grub2 configuration</source>
-			<translation>Pro změnu nastavení grub2 je požadováno ověření pravosti</translation>
+			<translation>Pro změnu nastavení grub2 je požadováno ověření se</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation>Změnit nastavení grub2</translation>
+			<translation>Změnit nastavení zavaděče grub2</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
 			<source>Authentication is required to prepare grub2 display resolution detection</source>
-			<translation>Pro zjištění rozlišení obrazovky grub2 je požadována autentizace</translation>
+			<translation>Pro zjištění rozlišení obrazovky grub2 je požadováno ověření se</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>

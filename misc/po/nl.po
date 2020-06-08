@@ -1,23 +1,31 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Bernard Flach <bernard@deepin.nl>, 2019
-# Cindy0514, 2019
-# dragnadh, 2016-2018
+# b619f8b7eb226a70bc7d5cadcfa79734_230f6d0 <5e8718ab95c3ca367d12d9e77a5e9072_4743>, 2020
+# Heimen Stoffels <vistausss@outlook.com>, 2020
 # dragnadh, 2020
-# Hans van Schooten <hans@schootenvan.nl>, 2017
-# Lars Acou <lars.acou@gmail.com>, 2017,2020
-# René Devers <rene.devers@gmail.com>, 2019
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# ba9c8d1b207d8f5ea706a592d740a01a, 2020
+# closeddoors1559 <mrvnp@msn.com>, 2020
+# René Devers <rene.devers@gmail.com>, 2020
+# Lars Acou <lars.acou@gmail.com>, 2020
+# Jan Wesselink <wesselaar@gmail.com>, 2020
+# Hans van Schooten <hans@schootenvan.nl>, 2020
+# Cindy0514, 2020
+# Bernard Flach <bernard@deepin.nl>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Lars Acou <lars.acou@gmail.com>\n"
-"Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Bernard Flach <bernard@deepin.nl>, 2020\n"
+"Language-Team: Dutch (https://www.transifex.com/linuxdeepin/teams/3617/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +40,9 @@ msgstr "Vul alstublieft een wachtwoord in met niet minder dan 8 tekens"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Het wachtwoord moet letters (hoofdlettergevoelig), cijfers en speciale tekens bevatten (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Het wachtwoord moet letters (hoofdlettergevoelig), cijfers en speciale "
+"tekens bevatten (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -126,86 +136,70 @@ msgstr "Berichttoegang"
 msgid "Message notification"
 msgstr "Berichtmelding"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "Verbinden %q succesvol"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Ontkoppeld"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Zorg ervoor dat %q ingeschakeld en binnen bereik is."
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Bluetoothverbinding mislukt"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "vandaag"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "morgen"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s naar %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Werk"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Privé"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
-msgstr "Overig"
+msgstr "Overige"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "Een dag voor aanvang"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "Herinner me er morgen aan"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "Herinner me er later aan"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "Herinnering planning"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -265,11 +259,11 @@ msgstr "Terminal Quake Venster"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "Schermopname"
+msgstr "Schermfoto"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
-msgstr "Volledige schermopname"
+msgstr "Volledig scherm"
 
 #: ../../keybinding/shortcuts/id_name_map.go:37
 msgid "Window screenshot"
@@ -277,7 +271,7 @@ msgstr "Schermopname venster"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Schermopname vertragen"
+msgstr "Schermfoto uitstellen"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -419,23 +413,25 @@ msgstr "Toon werkruimte"
 msgid "Authentication is required to switch language"
 msgstr "Authenticatie is vereist om taal te wijzigen"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Wijzigen van systeemtaal mislukt, probeer later opnieuw"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Systeemtaal wordt gewijzigd en de vereiste taalpaketten worden geïnstalleerd, even geduld ..."
+msgstr ""
+"Systeemtaal wordt gewijzigd en de vereiste taalpaketten worden "
+"geïnstalleerd, even geduld ..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Systeemtaal wordt gewijzigd, even geduld ..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Systeemtaal werd gewijzigd, gelieve opnieuw in te loggen"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Wijzigen van systeemtaal mislukt, probeer later opnieuw"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -464,17 +460,20 @@ msgstr "Het verwijderen van %q is mislukt."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Om te voorkomen dat de computer automatisch wordt afgesloten, moet u deze op de netstroom aansluiten."
+msgstr ""
+"Om te voorkomen dat de computer automatisch wordt afgesloten, moet u deze op"
+" de netstroom aansluiten."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
-msgstr "Pakket cache uitgewist"
+msgstr "Pakketcache opgeschoond"
 
 #: ../../lastore/notify.go:127
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Uw systeembron is gewijzigd. Herstel de officiële bron voor normaal gebruik"
+msgstr ""
+"Je systeembron is gewijzigd. Herstel de officiële bron voor normaal gebruik."
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -620,7 +619,9 @@ msgstr "Het apparaat is niet klaar voor configuratie"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "IP-configuratie kan niet gereserveerd worden (geen beschikbaar adres, time-out, enz.)"
+msgstr ""
+"IP-configuratie kan niet gereserveerd worden (geen beschikbaar adres, time-"
+"out, enz.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -634,7 +635,9 @@ msgstr "Wachtwoorden zijn vereist, maar niet verstrekt"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "De 802.1X aanvrager werd losgekoppeld van het toegangspunt van de authenticatieserver"
+msgstr ""
+"De 802.1X aanvrager werd losgekoppeld van het toegangspunt van de "
+"authenticatieserver"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -858,12 +861,15 @@ msgstr "Netwerkkabel is niet aangesloten."
 
 #: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr "Zorg ervoor dat er een SIM-kaart is geplaatst met een mobiel netwerk signaal"
+msgstr ""
+"Zorg ervoor dat er een SIM-kaart is geplaatst met een mobiel netwerk signaal"
 
 #: ../../network/state_handler.go:108
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr "Zorg ervoor dat de juiste plan werd gekozen zonder achterstand van de SIM-kaart"
+msgstr ""
+"Zorg ervoor dat de juiste plan werd gekozen zonder achterstand van de SIM-"
+"kaart"
 
 #: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection, reason unknown"
@@ -875,12 +881,16 @@ msgstr "Activatie van VPN verbinding mislukt"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr "De VPN verbindingsstatus is gewijzigd ten gevolge van verbreking door gebruikers"
+msgstr ""
+"De VPN verbindingsstatus is gewijzigd ten gevolge van verbreking door "
+"gebruikers"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr "De VPN verbindingsstatus is gewijzigd ten gevolge van verbreken van toetstellen"
+msgstr ""
+"De VPN verbindingsstatus is gewijzigd ten gevolge van verbreken van "
+"toetstellen"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -934,7 +944,7 @@ msgstr "%q verbonden"
 msgid "Hotspot disabled"
 msgstr "Hotspot uitgeschakeld"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q ontkoppeld"
 
@@ -956,58 +966,74 @@ msgstr "Wachtwoord is nodig om verbinding te maken met %q"
 
 #: ../../network/state_handler.go:347
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr "Verbinding mislukt, kan geen verbinding maken met %q, verkeerd wachtwoord"
+msgstr ""
+"Verbinding mislukt, kan geen verbinding maken met %q, verkeerd wachtwoord"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Je bent nu offline."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Vliegtuigstand ingeschakeld."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Access Point modus wordt niet ondersteund door dit apparaat."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Netwerk"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "De hardwareswitch van de WLAN-kaart is uitgeschakeld, gelieve in te schakelen indien nodig."
+msgstr ""
+"De hardwareswitch van de WLAN-kaart is uitgeschakeld, gelieve in te "
+"schakelen indien nodig."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Systeemproxy met succes ingesteld."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Systeemproxy werd geannuleerd."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Verbonden"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "\"%s\" voldeed niet aan de systeemveiligheidsvereisten en kan momenteel niet draaien"
+msgstr ""
+"\"%s\" voldeed niet aan de systeemveiligheidsvereisten en kan momenteel niet"
+" draaien"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr "Batterij kritiek laag"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "Batterijniveau kritiek laag"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr "Computer gaat weldra in pauzestand, sluit de oplader nu aan"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Batterij is laag"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "Computer gaat weldra in pauzestand, sluit de oplader aan"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "Batterij is bijna leeg, sluit aan op netstroom"
 
@@ -1019,7 +1045,9 @@ msgstr "Authenticatie vereist om gebruikersgegevens te kunnen veranderen"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Authenticatie is vereist om te bepalen of netwerktijdsynchronisatie moet worden ingeschakeld"
+msgstr ""
+"Authenticatie is vereist om te bepalen of netwerktijdsynchronisatie moet "
+"worden ingeschakeld"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1029,7 +1057,9 @@ msgstr "Authenticatie is vereist om de NTP-server te wijzigen"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Authenticatie is vereist om te bepalen of de RTC de lokale tijd of UTC-tijd opslaat"
+msgstr ""
+"Authenticatie is vereist om te bepalen of de RTC de lokale tijd of UTC-tijd "
+"opslaat"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

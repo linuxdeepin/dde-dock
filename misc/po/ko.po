@@ -1,21 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Cindy0514, 2019
+# Thomas Sungjin Kang <potopro@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Sangmin Lee <sangminlee7648@gmail.com>, 2020
+# Cindy0514, 2020
 # MarongHappy <daemul72@gmail.com>, 2020
-# MarongHappy <daemul72@gmail.com>, 2019-2020
-# ElnathK <drjekyll1@gmail.com>, 2018
-# Sangmin Lee <sangminlee7648@gmail.com>, 2016
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:15+0000\n"
-"Last-Translator: Cindy0514\n"
-"Language-Team: Korean (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ko/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: MarongHappy <daemul72@gmail.com>, 2020\n"
+"Language-Team: Korean (https://www.transifex.com/linuxdeepin/teams/3617/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +33,7 @@ msgstr "비밀번호를 8자 이상 입력하십시오"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "비밀 번호는 영어 알파벳 (대소문자 구분 주의), 숫자, 또는 특수기호 (~!@#$%^&*()[]{}\\|/?,.<>) 를 반드시 포함하여야 합니다."
+msgstr "비밀번호는 영문자(대소문자 구분), 숫자 또는 특수 기호(~!@#$%^&*()[]{}|/?,.<>)만 포함해야 합니다  "
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -38,7 +41,7 @@ msgstr "사용자 이름은 비워 둘 수 없습니다"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr "첫 번째 문자는 문자 또는 숫자 여야합니다"
+msgstr "첫 번째 문자는 문자 또는 숫자여야 합니다."
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
@@ -50,7 +53,7 @@ msgstr "사용자 이름이 시스템에서 사용되었습니다"
 
 #: ../../accounts/checkers/username.go:74
 msgid "Username must be between 3 and 32 characters"
-msgstr "사용자 이름은 3 ~ 32자 사이여야 합니다"
+msgstr "사용자 이름은 3 ~ 32 자 사이 여야합니다"
 
 #: ../../appearance/scale.go:66
 msgid "Set successfully"
@@ -124,86 +127,70 @@ msgstr "메시지 접근"
 msgid "Message notification"
 msgstr "메시지 알림"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "%q 연결 성공"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "연결 끊김"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "%q(이)가 활성화 되어있고 범위 내에 있는지 확인하세요"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "블루투스 연결 실패"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr ""
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr ""
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "오늘"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "내일"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s - %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "작업"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "생활"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "기타"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "시작 하루 전"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "닫기"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "내일 알림"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "나중에 알림"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "일정 알림"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr ""
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -235,7 +222,7 @@ msgstr "디스크 공간이 부족합니다. 정리하십시오!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Launcher"
-msgstr "런쳐"
+msgstr "실행도구"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "Terminal"
@@ -375,7 +362,7 @@ msgstr "창 최소화"
 
 #: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
-msgstr "윈도우 닫기"
+msgstr "창 닫기"
 
 #: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
@@ -417,23 +404,23 @@ msgstr "작업공간 표시"
 msgid "Authentication is required to switch language"
 msgstr "언어를 전화하려면 인증이 필요합니다"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "시스템 언어를 변경하지 못했습니다. 나중에 시도하십시오"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr "시스템 언어를 변경하고 필요한 언어 패키지를 설치합니다. 잠시 기다려 주십시오..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "시스템 언어를 변경하는 중입니다. 잠시 기다려 주십시오..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "시스템 언어가 변경되었습니다. 로그아웃한 후 로그인하십시오"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "시스템 언어를 변경하지 못했습니다. 나중에 시도하십시오"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -932,7 +919,7 @@ msgstr "%q 연결됨"
 msgid "Hotspot disabled"
 msgstr "핫스팟 사용안함"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q 연결 끊김"
 
@@ -956,41 +943,41 @@ msgstr "%q을(를) 연결하려면 비밀번호가 필요합니다"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "연결 실패, %q을(를) 연결할 수 없습니다. 비밀번호가 잘못되었습니다"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "오프라인 상태입니다."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "비행기 모드 활성화됨."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "이 장치는 액세스 포인트 모드를 지원하지 않습니다."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "네트워크"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "WLAN 카드의 하드웨어 스위치가 꺼져있습니다, 필요하시면 전원을 켜주십시오."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "시스템 프록시가 성공적으로 설정되었습니다."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "시스템 프록시가 취소되었습니다."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "연결됨"
 
@@ -999,15 +986,26 @@ msgstr "연결됨"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "\"%s\"가 시스템 보안 확인을 통과하지 못해 지금 실행할 수 없습니다."
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
 msgstr "배터리 잔량 부족"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr "컴퓨터가 곧 일시 중단됩니다. 지금 전원을 연결하십시오"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "배터리 부족"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "컴퓨터가 일시 중단됩니다. 전원을 연결하십시오"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
-msgstr "배터리 부족, 전원을 연결하십시오"
+msgstr "배터리 부족,. 전원을 연결하세요"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

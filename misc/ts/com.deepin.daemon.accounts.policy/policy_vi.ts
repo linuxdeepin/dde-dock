@@ -49,27 +49,27 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
 			<source>Enable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>Kích hoạt đăng nhập không cần mật khẩu</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation type="unfinished"/>
+			<translation>Cần có xác thực để vô hiệu hóa đăng nhập mà không cần mật khẩu</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
 			<source>Disable Login without password</source>
-			<translation type="unfinished"/>
+			<translation>Vô hiệu hóa Đăng nhập mà không cần mật khẩu</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Cần xác thực để đặt bố cục bàn phím</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>
 			<source>Set keyboard layout</source>
-			<translation type="unfinished"/>
+			<translation>Cài đặt bố cục bàn phím</translation>
 		</message>
 	</context>
 </TS>

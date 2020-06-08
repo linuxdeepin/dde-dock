@@ -1,21 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
+# mousewis <mousewis@gmail.com>, 2020
+# Phạm Đông Giang <ginise99@yahoo.com>, 2020
+# Nam Anh <phamnamanh25@gmail.com>, 2020
+# Cindy0514, 2020
+# Vu Thanh An <banzin123@gmail.com>, 2020
 # Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020
-# Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020
-# Nam Anh <phamnamanh25@gmail.com>, 2016
-# Phạm Đông Giang <ginise99@yahoo.com>, 2016-2017
-# Vu Thanh An <banzin123@gmail.com>, 2019
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-22 01:36+0000\n"
-"Last-Translator: Hoan Chu Đình <chudinhhoan277@gmail.com>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/vi/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020\n"
+"Language-Team: Vietnamese (https://www.transifex.com/linuxdeepin/teams/3617/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +34,9 @@ msgstr "Xin hãy nhập mật khẩu nhiều hơn hoặc bằng 8 ký tự"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ), số hay các ký hiệu đặc biệt (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Mật mã phải chứa ký tự Tiếng Anh (phân biệt kiểu chữ), số hay các ký hiệu "
+"đặc biệt (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -124,86 +130,70 @@ msgstr "Truy cập tin nhắn"
 msgid "Message notification"
 msgstr "Thông báo tin nhắn"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "Kết nối %q thành công"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Đã ngắt kết nối"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Bảo đảm rằng %q được mở và trong phạm vi"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Kết nối bluetooth đã thất bại"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr "Bấm vào đây để kết nối đến %q"
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr "Thêm thiết bị Bluetooth"
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr "Kết nối"
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "Hôm nay"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "Ngày mai"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s đến %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Công việc"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Cuộc sống"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Khác"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "Một ngày trước khi bắt đầu"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Đóng lại"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "Nhắc tôi ngày mai"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "Nhắc tôi sau"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "Lịch trình nhắc nhở"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr "Lễ hội"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -417,23 +407,25 @@ msgstr "Hiển thị không gian làm việc"
 msgid "Authentication is required to switch language"
 msgstr "Chứng thực được đòi hỏi để đổi ngôn ngữ"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Không thể thay đổi ngôn ngữ hệ thống, vui lòng thử lại sau"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Thay đổi ngôn ngữ hệ thống và cài đặt các gói ngôn ngữ cần thiết, vui lòng đợi ..."
+msgstr ""
+"Thay đổi ngôn ngữ hệ thống và cài đặt các gói ngôn ngữ cần thiết, vui lòng "
+"đợi ..."
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Thay đổi ngôn ngữ hệ thống, vui lòng đợi ..."
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Ngôn ngữ hệ thống đã thay đổi, vui lòng đăng xuất và sau đó đăng nhập"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Không thể thay đổi ngôn ngữ hệ thống, vui lòng thử lại sau"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -472,7 +464,9 @@ msgstr "Đã xóa Package cache"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Nguồn hệ thống của bạn đã được sửa đổi, vui lòng khôi phục về nguồn chính thức để sử dụng bình thường"
+msgstr ""
+"Nguồn hệ thống của bạn đã được sửa đổi, vui lòng khôi phục về nguồn chính "
+"thức để sử dụng bình thường"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -618,7 +612,9 @@ msgstr "Thiết bị chưa sẵn sàng để cấu hình"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Cấu hình IP không thể được giữ lại (không có địa chỉ hiện có, hết thời gian,...)"
+msgstr ""
+"Cấu hình IP không thể được giữ lại (không có địa chỉ hiện có, hết thời "
+"gian,...)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -632,7 +628,8 @@ msgstr "Mật khẩu được đòi hỏi nhưng không được cung cấp"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "Máy yêu cầu 802.1X đã ngắt kết nối ở điểm truy cập hoặc máy chủ xác thực"
+msgstr ""
+"Máy yêu cầu 802.1X đã ngắt kết nối ở điểm truy cập hoặc máy chủ xác thực"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -932,7 +929,7 @@ msgstr "%q đã kết nối"
 msgid "Hotspot disabled"
 msgstr "Điểm truy cập bị vô hiệu hóa"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q ngắt kết nối"
 
@@ -946,7 +943,8 @@ msgstr "Không thể kết nối %q, vui lòng để gần hơn với bộ phát
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Không thể kết nối %q, vui lòng kiểm tra bộ phát wifi hoặc cáp mạng của bạn."
+msgstr ""
+"Không thể kết nối %q, vui lòng kiểm tra bộ phát wifi hoặc cáp mạng của bạn."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -956,41 +954,41 @@ msgstr "Mật khẩu là bắt buộc để kết nối %q"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Kết nối thất bại, không thể kết nối %q, sai mật khẩu"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Không rõ"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Bây giờ bạn không trực tuyến."
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Chế độ trên máy bay đã kích hoạt."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Chế độ Điểm Truy cập không được hỗ trợ bởi thiết bị này."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Mạng"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Công tắc phần cứng của Thẻ WLAN đang tắt, xin hãy bật lên khi cần."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Ủy quyền hệ thống được thiết lập thành công."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Ủy quyền hệ thống đã bị hủy."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Đã kết nối"
 
@@ -999,13 +997,24 @@ msgstr "Đã kết nối"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "\"%s\" đã không vượt qua xác minh bảo mật hệ thống và không thể chạy"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr "Pin cực kỳ thấp"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "Pin Cực kỳ Thấp"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr "Máy tính sẽ tạm ngưng, vui lòng cắm nguồn ngay lập tức"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Pin Thấp"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr "Máy tính sẽ tạm ngưng, vui lòng cắm nguồn"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
 msgstr "Pin yếu,vui lòng cắm sạc"
 
@@ -1017,7 +1026,9 @@ msgstr "Cần có xác thực mật khẩu để đặt thời gian hệ thống
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Cần phải xác thực mật khẩu để kiểm soát xem có bật đồng bộ hóa thời gian mạng hay không"
+msgstr ""
+"Cần phải xác thực mật khẩu để kiểm soát xem có bật đồng bộ hóa thời gian "
+"mạng hay không"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1027,7 +1038,8 @@ msgstr "Cần phải xác thực để thay đổi máy chủ NTP"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Cần phải xác thực để kiểm soát xem RTC lưu trữ thời gian cục bộ hay UTC"
+msgstr ""
+"Cần phải xác thực để kiểm soát xem RTC lưu trữ thời gian cục bộ hay UTC"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"

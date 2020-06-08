@@ -1,21 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
+# fri, 2020
+# Pavel Borecki <pavel.borecki@gmail.com>, 2020
+# 李洪武 <lihongwu1987@gmail.com>, 2020
+# op6464 <op64@seznam.cz>, 2020
 # Cindy0514, 2020
-# op6464 <op64@seznam.cz>, 2016
-# Pavel Borecki <pavel.borecki@gmail.com>, 2019-2020
-# fri, 2016-2020
-# Tomáš Kratochvíl <kratochvil.tomas.dev@gmail.com>, 2018
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 10:40+0800\n"
-"PO-Revision-Date: 2020-05-21 10:59+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/cs/)\n"
+"POT-Creation-Date: 2020-03-16 05:11+0800\n"
+"PO-Revision-Date: 2020-06-08 13:08+0000\n"
+"Last-Translator: Cindy0514, 2020\n"
+"Language-Team: Czech (https://www.transifex.com/linuxdeepin/teams/3617/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +33,10 @@ msgstr "Zadejte heslo (délka nejméně 8 znaků)"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Je třeba, aby heslo bylo tvořeno písmeny z anglické abecedy (rozlišuje se velikost písmen), číslicemi a případně ještě speciálními symboly (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr ""
+"Je třeba, aby heslo bylo tvořeno písmeny z anglické abecedy (rozlišuje se "
+"velikost písmen), číslicemi a případně ještě speciálními symboly "
+"(~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/username.go:63
 msgid "Username cannot be empty"
@@ -124,86 +130,70 @@ msgstr "Přístup ke zprávám"
 msgid "Message notification"
 msgstr "Upozorňování na zprávy"
 
-#: ../../bluetooth/utils_notify.go:88
+#: ../../bluetooth/utils_notify.go:69
 msgid "Connect %q successfully"
 msgstr "%q úspěšně připojeno"
 
-#: ../../bluetooth/utils_notify.go:92 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
+#: ../../bluetooth/utils_notify.go:73 ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:103 ../../network/utils_notify.go:107
+#: ../../network/utils_notify.go:111 ../../network/utils_notify.go:129
+#: ../../network/utils_notify.go:132 ../../network/utils_notify.go:221
 msgid "Disconnected"
 msgstr "Odpojeno"
 
-#: ../../bluetooth/utils_notify.go:96
+#: ../../bluetooth/utils_notify.go:77
 msgid "Make sure %q is turned on and in range"
 msgstr "Ujistěte se, že zařízení %q je zapnuté a v dosahu"
 
-#: ../../bluetooth/utils_notify.go:101
+#: ../../bluetooth/utils_notify.go:82
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth připojení se nezdařilo"
 
-#: ../../bluetooth/utils_notify.go:115
-msgid "Click here to connect to %q"
-msgstr "Pro připojení k %q klikněte sem"
-
-#: ../../bluetooth/utils_notify.go:116
-msgid "Add Bluetooth devices"
-msgstr "Přidat Bluetooth zařízení"
-
-#: ../../bluetooth/utils_notify.go:130
-msgid "Pair"
-msgstr "Spárovat"
-
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:419 ../../calendar/job.go:426
 msgid "today"
 msgstr "dnes"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:421 ../../calendar/job.go:428
 msgid "tomorrow"
 msgstr "zítra"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:441
 #, c-format
 msgid "%s to %s"
 msgstr "%s až %s"
 
-#: ../../calendar/module.go:127 ../../calendar/type.go:25
+#: ../../calendar/module.go:126
 msgid "Work"
 msgstr "Práce"
 
-#: ../../calendar/module.go:128 ../../calendar/type.go:30
+#: ../../calendar/module.go:127
 msgid "Life"
 msgstr "Soukromé"
 
-#: ../../calendar/module.go:129 ../../calendar/type.go:35
+#: ../../calendar/module.go:128
 msgid "Other"
 msgstr "Ostatní"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:477
 msgid "One day before start"
 msgstr "Jeden den před začátkem"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
+#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
 msgid "Close"
 msgstr "Zavřít"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:482
 msgid "Remind me tomorrow"
 msgstr "Připomenout zítra"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:490
 msgid "Remind me later"
 msgstr "Připomenout později"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:500
 msgid "Schedule Reminder"
 msgstr "Připomínání naplánovaného"
-
-#: ../../calendar/type.go:40
-msgid "Festival"
-msgstr "Festival"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -275,7 +265,7 @@ msgstr "Snímek okna"
 
 #: ../../keybinding/shortcuts/id_name_map.go:38
 msgid "Delay screenshot"
-msgstr "Snímek pořídit s prodlevou"
+msgstr "Pořídit snímek s prodlevou"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "File manager"
@@ -417,23 +407,25 @@ msgstr "Zobrazit pracovní plochu"
 msgid "Authentication is required to switch language"
 msgstr "Pro přepnutí jazyka je požadováno ověření se"
 
-#: ../../langselector/locale.go:159
+#: ../../langselector/locale.go:390
+msgid "Failed to change system language, please try later"
+msgstr "Nepodařilo se změnit jazyk systému, zkuste to znovu později"
+
+#: ../../langselector/locale.go:414
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
-msgstr "Mění se jazyk systému a instalují se požadované jazykové balíčky – čekejte prosím…"
+msgstr ""
+"Mění se jazyk systému a instalují se požadované jazykové balíčky – čekejte "
+"prosím…"
 
-#: ../../langselector/locale.go:160
+#: ../../langselector/locale.go:417
 msgid "Changing system language, please wait..."
 msgstr "Mění se jazyk systému – čekejte prosím…"
 
-#: ../../langselector/locale.go:161
+#: ../../langselector/locale.go:465
 msgid "System language changed, please log out and then log in"
 msgstr "Systémový jazyk byl změněn – prosím odhlaste se a přihlaste nazpět"
-
-#: ../../langselector/locale.go:403
-msgid "Failed to change system language, please try later"
-msgstr "Nepodařilo se změnit jazyk systému, zkuste to znovu později"
 
 #: ../../lastore/lastore.go:247
 msgid "Retry"
@@ -462,7 +454,9 @@ msgstr "%q se nepodařilo odebrat."
 #: ../../lastore/notify.go:117
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
-msgstr "Abyste zabránili automatickému vypnutí, připojte ke zdroji napájení z elektrické sítě, aby aktualizace proběhla v pořádku."
+msgstr ""
+"Abyste zabránili automatickému vypnutí, připojte ke zdroji napájení z "
+"elektrické sítě, aby aktualizace proběhla v pořádku."
 
 #: ../../lastore/notify.go:122
 msgid "Package cache wiped"
@@ -472,7 +466,9 @@ msgstr "Mezipaměť balíčků vyčištěna"
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
-msgstr "Instalační zdroj pro systém byl upraven. Pro běžné používání prosím vraťte na používání oficiálního zdroje"
+msgstr ""
+"Instalační zdroj pro systém byl upraven. Pro běžné používání prosím vraťte "
+"na používání oficiálního zdroje"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -497,7 +493,7 @@ msgstr "Automaticky"
 #: ../../network/manager_active_conn.go:333
 #: ../../network/manager_active_conn.go:338
 msgid "None"
-msgstr "Žádný"
+msgstr "Žádné"
 
 #: ../../network/manager_active_conn.go:340
 msgid "WEP 40/128-bit Key"
@@ -505,7 +501,7 @@ msgstr "WEP klíč 40/128 bitů"
 
 #: ../../network/manager_active_conn.go:342
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 soukromé"
+msgstr "WPA/WPA2 osobní"
 
 #: ../../network/manager_active_conn.go:350
 msgid "TLS"
@@ -618,7 +614,9 @@ msgstr "Zařízení není připraveno pro nastavování"
 #: ../../network/state_handler.go:44
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr "Nepodařilo se zarezervovat si nastavení IP protokolu (není k dispozici volná adresa, překročen časový limit pokusu o nastavení, atd.)"
+msgstr ""
+"Nepodařilo se zarezervovat si nastavení IP protokolu (není k dispozici volná"
+" adresa, překročen časový limit pokusu o nastavení, atd.)"
 
 #: ../../network/state_handler.go:45
 msgid "The IP configuration is no longer valid"
@@ -632,7 +630,8 @@ msgstr "Hesla byla požadována, ale nebyla poskytnuta"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr "802.1X žádost byla zamítnuta přístupovým bodem nebo ověřovacím serverem"
+msgstr ""
+"802.1X žádost byla zamítnuta přístupovým bodem nebo ověřovacím serverem"
 
 #: ../../network/state_handler.go:48
 msgid "Configuration of the 802.1X supplicant failed"
@@ -640,7 +639,8 @@ msgstr "Nastavení komponenty pro 802.1X se nezdařilo"
 
 #: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr "Komponenta pro 802.1X (supplicant) neočekávaně skončila nebo zhavarovala"
+msgstr ""
+"Komponenta pro 802.1X (supplicant) neočekávaně skončila nebo zhavarovala"
 
 #: ../../network/state_handler.go:50
 msgid "The 802.1X supplicant took too long time to authenticate"
@@ -724,7 +724,7 @@ msgstr "Nevyhledány žádné sítě"
 
 #: ../../network/state_handler.go:70
 msgid "Network registration was denied"
-msgstr "Registrace do sítě byla odmítnuta"
+msgstr "Registrace do sítě byla zamítnuta"
 
 #: ../../network/state_handler.go:71
 msgid "Network registration timed out"
@@ -744,7 +744,7 @@ msgstr "Firmware potřebný pro zařízení nejspíš chybí"
 
 #: ../../network/state_handler.go:75
 msgid "The device was removed"
-msgstr "Zařízení bylo odstraněno"
+msgstr "Zařízení bylo odebráno"
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
@@ -932,7 +932,7 @@ msgstr "%q připojeno"
 msgid "Hotspot disabled"
 msgstr "Hotspot vypnut"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
+#: ../../network/state_handler.go:331 ../../network/state_handler.go:351
 msgid "%q disconnected"
 msgstr "%q odpojeno"
 
@@ -942,11 +942,13 @@ msgstr "Nedaří se sdílet hotspot – prosím zkontrolujte nastavení dnsmasq"
 
 #: ../../network/state_handler.go:339
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr "Nelze se připojit k %q. Přesuňte se blíže k bezdrátovému přístupovému bodu"
+msgstr ""
+"Nelze se připojit k %q. Přesuňte se blíže k bezdrátovému přístupovému bodu"
 
 #: ../../network/state_handler.go:341
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr "Nedaří se připojit k %q – zkontrolujte síťové zařízení a kabely prosím."
+msgstr ""
+"Nedaří se připojit k %q – zkontrolujte síťové zařízení a kabely prosím."
 
 #: ../../network/state_handler.go:344
 msgid "Password is required to connect %q"
@@ -956,58 +958,77 @@ msgstr "Pro připojení se k %q je požadováno heslo"
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Připojení k %q se nezdařilo – chybné heslo"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:267
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: ../../network/utils_notify.go:185
+#: ../../network/utils_notify.go:99
 msgid "You are now offline."
 msgstr "Nyní jste ve stavu bez připojení. "
 
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:103
 msgid "Airplane mode enabled."
 msgstr "Režim letadlo zapnut."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:111
 msgid "Access Point mode is not supported by this device."
 msgstr "Režim přístupového bodu není tímto zařízením podporován."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:119
+#: ../../network/utils_notify.go:122
 msgid "Network"
 msgstr "Síť"
 
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:115
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hardwarový vypínač Wi-Fi adaptéru je ve stavu vypnuto – prosím, zapněte ho."
+msgstr ""
+"Hardwarový vypínač Wi-Fi adaptéru je ve stavu vypnuto – prosím, zapněte ho."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:119
 msgid "System proxy is set successfully."
 msgstr "Systémová proxy úspěšně nastavena."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:122
 msgid "System proxy has been cancelled."
 msgstr "Systémová proxy byla zrušena."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:126
 msgid "Connected"
 msgstr "Připojeno"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr "„%s“ neprošlo systémovým ověřením zabezpečení a proto v tuto chvíli nelze spustit"
+msgstr ""
+"„%s“ neprošlo systémovým ověřením zabezpečení a proto v tuto chvíli nelze "
+"spustit"
 
-#: ../../session/power/manager_events.go:183
-msgid "Battery critically low"
-msgstr "Akumulátor téměř vybitý"
+#: ../../session/power/manager_events.go:176
+msgid "Battery Critically Low"
+msgstr "Naprosto vybitý akumulátor"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:177
+msgid "Computer will suspend very soon, please plug in now"
+msgstr ""
+"Počítač velmi brzy nuceně přejde do úsporného režimu – prosím připojte k "
+"napájení z elektrické sítě"
+
+#: ../../session/power/manager_events.go:200
+#: ../../session/power/manager_events.go:207
+msgid "Battery Low"
+msgstr "Téměř vybitý akumulátor"
+
+#: ../../session/power/manager_events.go:201
+msgid "Computer will suspend soon, please plug in"
+msgstr ""
+"Počítač brzy nuceně přejde do úsporného režimu – prosím připojte k napájení "
+"z elektrické sítě"
+
+#: ../../session/power/manager_events.go:208
 msgid "Battery low, please plug in"
-msgstr "Akumulátor je téměř vybitý – připojte počítač k napájení z elektrické sítě"
+msgstr ""
+"Akumulátor je téměř vybitý – připojte počítač k napájení z elektrické sítě"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
@@ -1017,7 +1038,9 @@ msgstr "Pro nastavení systémového času je požadováno ověření se"
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr "Pro ovládání toho, zda má být čas synchronizován ze sítě, je vyžadováno ověření se"
+msgstr ""
+"Pro ovládání toho, zda má být čas synchronizován ze sítě, je vyžadováno "
+"ověření se"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
@@ -1027,7 +1050,9 @@ msgstr "Pro změnu NTP serveru je vyžadováno ověření se"
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
-msgstr "Pro ovládání toho, zda mají hardwarové hodiny počítače být nařízené na místní nebo univerzální čas (UTC) je vyžadováno ověření se"
+msgstr ""
+"Pro ovládání toho, zda mají hardwarové hodiny počítače být nařízené na "
+"místní nebo univerzální čas (UTC) je vyžadováno ověření se"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
