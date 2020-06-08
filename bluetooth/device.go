@@ -245,8 +245,10 @@ func (d *device) connectProperties() {
 		needNotify := true
 
 		if connected {
+			d.ConnectState = true
 			d.connectedTime = time.Now()
 		} else {
+			d.ConnectState = false
 			// when disconnected quickly after connecting, automatically try to connect
 			sinceConnected := time.Since(d.connectedTime)
 			logger.Debug("sinceConnected:", sinceConnected)
@@ -460,6 +462,7 @@ func (d *device) doConnect(hasNotify bool) error {
 
 	err = d.doPair()
 	if err != nil {
+		d.ConnectState = false
 		if hasNotify {
 			notifyConnectFailedHostDown(d.Alias)
 		}
@@ -469,6 +472,7 @@ func (d *device) doConnect(hasNotify bool) error {
 
 	err = d.doRealConnect()
 	if err != nil {
+		d.ConnectState = false
 		if hasNotify {
 			notifyConnectFailedHostDown(d.Alias)
 		}
