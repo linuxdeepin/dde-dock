@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: n1coc4cola <n1coc4cola@gmail.com>, 2020\n"
 "Language-Team: French (https://www.transifex.com/linuxdeepin/teams/3617/fr/)\n"
@@ -455,13 +455,17 @@ msgid "Failed to change system language, please try later"
 msgstr ""
 "Impossible de changer la langue du système, veuillez réessayer plus tard"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Réessayer"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Annuler"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Mettre à jour maintenant"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -497,6 +501,10 @@ msgid ""
 msgstr ""
 "La source du système a été modifiée, veuillez restaurer la source officielle"
 " pour votre usage normal"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Nouvelle édition du système disponible"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

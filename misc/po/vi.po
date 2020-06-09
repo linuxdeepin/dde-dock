@@ -5,20 +5,20 @@
 # 
 # Translators:
 # Nam Anh <phamnamanh25@gmail.com>, 2020
-# Phạm Đông Giang <ginise99@yahoo.com>, 2020
 # mousewis <mousewis@gmail.com>, 2020
 # Vu Thanh An <banzin123@gmail.com>, 2020
-# Cindy0514, 2020
 # Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020
+# Phạm Đông Giang <ginise99@yahoo.com>, 2020
+# Cindy0514, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Hoan Chu Đình <chudinhhoan277@gmail.com>, 2020\n"
+"Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Vietnamese (https://www.transifex.com/linuxdeepin/teams/3617/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -443,13 +443,17 @@ msgstr "Ngôn ngữ hệ thống đã thay đổi, vui lòng đăng xuất và s
 msgid "Failed to change system language, please try later"
 msgstr "Không thể thay đổi ngôn ngữ hệ thống, vui lòng thử lại sau"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Thử lại"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Hủy"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Cập nhật Bây giờ"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -483,6 +487,10 @@ msgid ""
 msgstr ""
 "Nguồn hệ thống của bạn đã được sửa đổi, vui lòng khôi phục về nguồn chính "
 "thức để sử dụng bình thường"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Phiên bản hệ thống mới được phát hiện"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

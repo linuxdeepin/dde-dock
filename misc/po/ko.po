@@ -7,17 +7,17 @@
 # Thomas Sungjin Kang <potopro@gmail.com>, 2020
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Sangmin Lee <sangminlee7648@gmail.com>, 2020
-# MarongHappy <daemul72@gmail.com>, 2020
 # Cindy0514, 2020
+# MarongHappy <daemul72@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Cindy0514, 2020\n"
+"Last-Translator: MarongHappy <daemul72@gmail.com>, 2020\n"
 "Language-Team: Korean (https://www.transifex.com/linuxdeepin/teams/3617/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -438,13 +438,17 @@ msgstr "시스템 언어가 변경되었습니다. 로그아웃한 후 로그인
 msgid "Failed to change system language, please try later"
 msgstr "시스템 언어를 변경하지 못했습니다. 나중에 시도하십시오"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "재시도"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "취소"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "지금 업데이트"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -476,6 +480,10 @@ msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "시스템 소스가 수정되었습니다. 정상적으로 사용할 수 있도록 공식 소스로 복원하십시오"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "새로운 시스템 에디션 사용가능"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

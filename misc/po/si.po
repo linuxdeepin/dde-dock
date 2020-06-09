@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Roshan Karunarathna <rkvisit@gmail.com>, 2020\n"
 "Language-Team: Sinhala (https://www.transifex.com/linuxdeepin/teams/3617/si/)\n"
@@ -439,13 +439,17 @@ msgstr "පද්ධති භාෂාව වෙනස් වී ඇත, කර
 msgid "Failed to change system language, please try later"
 msgstr "පද්ධති භාෂාව වෙනස් කිරීමට අපොහොසත් විය, කරුණාකර පසුව උත්සාහ කරන්න"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "නැවත උත්සාහ කරන්න"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "අවලංගු කරන්න"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "දැන් යාවත්කාලීන කරන්න"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -481,6 +485,10 @@ msgid ""
 msgstr ""
 "ඔබේ පද්ධති ප්‍රභවය වෙනස් කර ඇත, කරුණාකර ඔබගේ සාමාන්‍ය භාවිතය සඳහා නිල "
 "ප්‍රභවයට නැවත පිහිටුවන්න"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "නව පද්ධති සංස්කරණය ලබා ගත හැක"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -1019,15 +1027,15 @@ msgstr "අඩු බැටරි ධාරිතාවක් පවතී, ක�
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "බල සැකසුම් වෙනස් විය"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "පියන වසා ඇති විට,"
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "බල බොත්තම එබීමේදී,"
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"

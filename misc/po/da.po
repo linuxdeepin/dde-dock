@@ -5,8 +5,8 @@
 # 
 # Translators:
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2020
-# 31c8ff7daf246c6bd598eefe84c1433c, 2020
 # scootergrisen, 2020
+# 31c8ff7daf246c6bd598eefe84c1433c, 2020
 # Cindy0514, 2020
 # 
 #, fuzzy
@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Danish (https://www.transifex.com/linuxdeepin/teams/3617/da/)\n"
@@ -441,13 +441,17 @@ msgstr "Systemsproget blev ændret. Log venligst ud og ind igen"
 msgid "Failed to change system language, please try later"
 msgstr "Kunne ikke skifte systemsprog, prøv venligst senere"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Prøv igen"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Annuller"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Opdater nu"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -483,6 +487,10 @@ msgid ""
 msgstr ""
 "Dit system er blevet ændret. Genskab venligst til officiel kilde for at "
 "bruge det normalt"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Ny systemudgave tilgængelig"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

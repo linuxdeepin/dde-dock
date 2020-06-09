@@ -5,12 +5,12 @@
 # 
 # Translators:
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
-# 凡凡不想平凡 <freddy4212@gmail.com>, 2020
 # 李洪武 <lihongwu1987@gmail.com>, 2020
 # LNDDYL, 2020
 # Julian Lai <laichiaheng@outlook.com>, 2020
 # jjzrh2 <jjzrh2@126.com>, 2020
 # byStarTW (pan93412) <pan93412@gmail.com>, 2020
+# 凡凡不想平凡 <freddy4212@gmail.com>, 2020
 # Cindy0514, 2020
 # 
 #, fuzzy
@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Chinese (Taiwan) (https://www.transifex.com/linuxdeepin/teams/3617/zh_TW/)\n"
@@ -441,13 +441,17 @@ msgstr "已變更系統語言，請重新登入以套用變更"
 msgid "Failed to change system language, please try later"
 msgstr "無法變更系統語言，請稍候再試"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "重試"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "取消"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "立刻更新"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -479,6 +483,10 @@ msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "您的系統來源已被變更過，請重設到官方來源以讓您能正常使用"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "有新系統版本可供使用"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

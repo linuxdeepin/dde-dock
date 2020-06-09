@@ -5,21 +5,21 @@
 # 
 # Translators:
 # Tiberiu Fratila <tiberiu.fratila@gmail.com>, 2020
-# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # 828d47520e99d69ec3431069179181cf_e9ac56f <4304e9d7f33368a6d7fc5290e16492fe_204731>, 2020
 # e45655a7feca4008b49fd878e446e184_1635295 <8a74d2bff1d5702d82b6f0f88f4ddbf3_206482>, 2020
 # Vasile Rusu <basil_russu@hotmail.com>, 2020
-# Cindy0514, 2020
 # Marian c <dark1ro@yahoo.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Cindy0514, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Marian c <dark1ro@yahoo.com>, 2020\n"
+"Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Romanian (https://www.transifex.com/linuxdeepin/teams/3617/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -444,13 +444,17 @@ msgstr "Limbajul sistemului a fost modificat, rugăm delogare şi relogare"
 msgid "Failed to change system language, please try later"
 msgstr "Schimbare limba sistem eşuat , reîncercați mai târziu"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Încercaţi din nou"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Anulează"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Actualizaţi acum"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -486,6 +490,10 @@ msgid ""
 msgstr ""
 "Sursa sistemului  modificată, reveniți la sursa oficială pentru utilizarea "
 "normală"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Noua ediție a sistemului disponibilă"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

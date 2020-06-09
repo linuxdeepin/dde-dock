@@ -7,19 +7,19 @@
 # geost <george.stefanakis@gmail.com>, 2020
 # takis b, 2020
 # Tsvetan Bankov <emerge.life@gmail.com>, 2020
-# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Francesko Isallari <francesko1989@gmail.com>, 2020
 # Cindy0514, 2020
 # Jim Gios <jgpers@gmail.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Jim Gios <jgpers@gmail.com>, 2020\n"
+"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>, 2020\n"
 "Language-Team: Greek (https://www.transifex.com/linuxdeepin/teams/3617/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -445,13 +445,17 @@ msgstr ""
 msgid "Failed to change system language, please try later"
 msgstr "Αποτυχία αλλαγής γλώσσας συστήματος, παρακαλούμε προσπαθήστε αργότερα"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Επανάληψη"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Ακύρωση"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Ενημέρωση Τώρα"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -484,6 +488,10 @@ msgstr ""
 msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
+msgstr ""
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
 msgstr ""
 
 #: ../../launcher/manager_uninstall.go:71
@@ -738,7 +746,7 @@ msgstr "Υπέρβαση ορίου χρόνου εγγραφής δικτύου
 
 #: ../../network/state_handler.go:72
 msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgstr "Απέτυχε η εγγραφή στο ζητούμενο δίκτυο GSM "
 
 #: ../../network/state_handler.go:73
 msgid "PIN check failed"
@@ -883,12 +891,12 @@ msgstr "Η ενεργοποίηση της σύνδεσης VPN απέτυχε"
 
 #: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
-msgstr ""
+msgstr "Άλλαξε η κατάσταση της σύνδεσης VPN λόγω αποσύνδεσης από τους χρήστες"
 
 #: ../../network/state_handler.go:114
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
-msgstr ""
+msgstr "Η κατάσταση σύνδεσης VPN άλλαξε λόγω αποσύνδεσης από τις συσκευές"
 
 #: ../../network/state_handler.go:115
 msgid "VPN service stopped"
@@ -912,7 +920,7 @@ msgstr "Η υπηρεσία VPN απέτυχε να ξεκινήσει"
 
 #: ../../network/state_handler.go:120
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "Δεν παρασχέθηκε ο απαραίτητος κωδικός πρόσβασης για την σύνδεση VPN"
 
 #: ../../network/state_handler.go:121
 msgid "Authentication to VPN server failed"

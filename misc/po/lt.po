@@ -4,10 +4,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Mantas Kriaučiūnas <mantas@akl.lt>, 2020
+# Mantas Kriaučiūnas Baltix <mantas@akl.lt>, 2020
 # Lukas Zemeckis <nekaip3@gmail.com>, 2020
-# Moo, 2020
 # Jonas Motiejūnas <exjonas@gmail.com>, 2020
+# Moo, 2020
 # Cindy0514, 2020
 # 
 #, fuzzy
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Lithuanian (https://www.transifex.com/linuxdeepin/teams/3617/lt/)\n"
@@ -441,13 +441,17 @@ msgstr "Sistemos kalba pakeista, atsijunkite ir vėl prisijunkite"
 msgid "Failed to change system language, please try later"
 msgstr "Nepavyko pakeisti sistemos kalbos, vėliau bandykite dar kartą"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Bandyti vėl"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Atsisakyti"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Atnaujinti dabar"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -483,6 +487,10 @@ msgid ""
 msgstr ""
 "Jūsų sistemos šaltinis buvo modifikuotas. Normaliam naudojimui, atkurkite į "
 "oficialų šaltinį"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Yra prieinama nauja sistemos laida"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Marek Bujko <marek.bujko@gmail.com>, 2020
 # fasier <matus.ravas@outlook.com>, 2020
 # Microtus <hrabosmartin@gmail.com>, 2020
 # Cindy0514, 2020
 # Jozef Gaal <preklady@mayday.sk>, 2020
+# Marek Bujko <marek.bujko@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Jozef Gaal <preklady@mayday.sk>, 2020\n"
+"Last-Translator: Marek Bujko <marek.bujko@gmail.com>, 2020\n"
 "Language-Team: Slovak (https://www.transifex.com/linuxdeepin/teams/3617/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -308,7 +308,7 @@ msgstr "Deepin Výber"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "UI Asistent plochy"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
@@ -442,13 +442,17 @@ msgstr "Systémový jazyk bol zmenený, po odhlásení sa znovu prihláste"
 msgid "Failed to change system language, please try later"
 msgstr "Jazyk systému sa nezmenil, skúste to prosím neskôr"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Skúsiť znova"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Zrušiť"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Teraz aktualizovať"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -484,6 +488,10 @@ msgid ""
 msgstr ""
 "Váš systémový zdroj bol upravený, obnovte ho na oficiálny zdroj pre bežné "
 "používanie"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -1004,7 +1012,7 @@ msgstr "Pripojené"
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr ""
+msgstr "\"%s\" neprešiel overením zabezpečenia systému a teraz ho nemožno spustiť"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1019,15 +1027,15 @@ msgstr "Vybitá batéria, prosím pripojte kábel napájania"
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "Nastavenia napájania boli zmenené"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "Po zatvorení veka,"
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "Po stlačení tlačidla vypnutia,"
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"
@@ -1061,7 +1069,7 @@ msgstr "Je potrebné overiť, či je zapnutá synchronizácia času v sieti"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "Na zmenu NTP servera je potrebné overenie"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""

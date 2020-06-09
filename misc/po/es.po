@@ -8,7 +8,6 @@
 # ICesarI <icesari@msn.com>, 2020
 # roberto lopez <riscogordo@gmail.com>, 2020
 # Chema Ramirez <josemrf1996@gmail.com>, 2020
-# jose luis <josemdance@outlook.com>, 2020
 # Luis Castillo <castilloluis2005@gmail.com>, 2020
 # efedezeta <pocodance@gmail.com>, 2020
 # deepin_transifex <xiabin@linuxdeepin.com>, 2020
@@ -17,18 +16,19 @@
 # Zaraza, 2020
 # jhalo <jhalo@protonmail.com>, 2020
 # Diego Sanguinetti, 2020
-# Cindy0514, 2020
 # Tomás Warynyca <tomas.warynyca@outlook.com>, 2020
 # Isaías Gätjens M <igatjens@gmail.com>, 2020
+# jose luis <josemdance@outlook.com>, 2020
+# Cindy0514, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Isaías Gätjens M <igatjens@gmail.com>, 2020\n"
+"Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Spanish (https://www.transifex.com/linuxdeepin/teams/3617/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -453,13 +453,17 @@ msgstr "El idioma del sistema cambió, por favor reinicie la sesión"
 msgid "Failed to change system language, please try later"
 msgstr "Error al cambiar el idioma del sistema, por favor intente más tarde"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Reintentar"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Cancelar"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Actualizar ahora"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -495,6 +499,10 @@ msgid ""
 msgstr ""
 "Se modificó le repositorio del sistema. Por favor, restablezca el "
 "repositorio oficial"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Nueva edición del sistema disponible"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

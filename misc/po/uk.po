@@ -6,19 +6,19 @@
 # Translators:
 # Yuriy Moskalchuk <termosyura@ukr.net>, 2020
 # Roman <dejitaru.tiger@gmail.com>, 2020
-# Maggie Liu <maggie.liufei@gmail.com>, 2020
-# Yuri Chornoivan <yurchor@ukr.net>, 2020
-# Cindy0514, 2020
 # Marck Hrin, 2020
+# Yuri Chornoivan <yurchor@ukr.net>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Cindy0514, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Marck Hrin, 2020\n"
+"Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Ukrainian (https://www.transifex.com/linuxdeepin/teams/3617/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -443,13 +443,17 @@ msgstr "Змінено мову системи, вийдіть із систем
 msgid "Failed to change system language, please try later"
 msgstr "Не вдалося змінити мову системи, спробуйте пізніше"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Спробувати ще раз"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Скасувати"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Оновити зараз"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -485,6 +489,10 @@ msgid ""
 msgstr ""
 "Ваше джерело системи було змінено, будь ласка, відновіть офіційне джерело "
 "для нормального використання"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Доступна нова системна версія"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -1031,15 +1039,15 @@ msgstr ""
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "Параметри живлення змінено"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "Якщо закрито кришку,"
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "Якщо натиснуто кнопку живлення,"
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"

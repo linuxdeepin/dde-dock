@@ -9,17 +9,18 @@
 # Kaya Zeren <kayazeren@gmail.com>, 2020
 # yakup <mutouk@yandex.ru>, 2020
 # meda <ademcal@yahoo.com>, 2020
-# Cindy0514, 2020
 # Serdar Sağlam <teknomobil@msn.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Cindy0514, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Serdar Sağlam <teknomobil@msn.com>, 2020\n"
+"Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Turkish (https://www.transifex.com/linuxdeepin/teams/3617/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -444,13 +445,17 @@ msgstr "Sistem dili değiştirildi, lütfen oturumu kapatıp yeniden açın"
 msgid "Failed to change system language, please try later"
 msgstr "Sistem dili değiştirilemedi, lütfen daha sonra yeniden dene"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Yeniden dene"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "İptal"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Şimdi Güncelle"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -484,6 +489,10 @@ msgid ""
 msgstr ""
 "Sistem kaynağınız değiştirilmiş, lütfen normal kullanımınız için resmi "
 "kaynağı geri yükleyin"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Yeni sistem sürümü mevcut"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -1027,15 +1036,15 @@ msgstr "Düşük pil düzeyi, lütfen fişe takın"
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "Güç ayarları değişti"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "Kapak kapatıldığında,"
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "Güç düğmesine basılınca,"
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Bengali (https://www.transifex.com/linuxdeepin/teams/3617/bn/)\n"
@@ -442,13 +442,17 @@ msgstr "সিস্টেমের ভাষা পরিবর্তন কর
 msgid "Failed to change system language, please try later"
 msgstr "সিস্টেম ভাষা পরিবর্তন করতে ব্যর্থ হয়েছে, দয়া করে পরে চেষ্টা করুন"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "পুনরায় চেষ্টা করুন"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "বাতিল করুন"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr ""
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -484,6 +488,10 @@ msgid ""
 msgstr ""
 "আপনার সিস্টেমের source ফাইলটি পরিবর্তন করা হয়েছে, স্বাভাবিক ব্যবহারের জন্য "
 "অনুগ্রহ করে অফিশিয়াল source ফাইলে ফিরে যান"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr ""
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

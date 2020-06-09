@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -434,13 +434,17 @@ msgstr "System language changed, please log out and then log in"
 msgid "Failed to change system language, please try later"
 msgstr "Failed to change system language, please try later"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Retry"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Cancel"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Update Now"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -475,6 +479,10 @@ msgid ""
 msgstr ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "New system edition available"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

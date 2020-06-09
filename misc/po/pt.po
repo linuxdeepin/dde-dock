@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2020\n"
 "Language-Team: Portuguese (https://www.transifex.com/linuxdeepin/teams/3617/pt/)\n"
@@ -444,13 +444,17 @@ msgstr "Idioma do sistema alterado, termine sessão e depois inicie novamente"
 msgid "Failed to change system language, please try later"
 msgstr "Falha ao alterar o idioma do sistema, tente novamente mais tarde"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Tentar Novamente"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Cancelar"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Atualizar agora"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -486,6 +490,10 @@ msgid ""
 msgstr ""
 "A fonte do seu sistema foi modificada, restaure para a fonte oficial para a "
 "sua utilização normal"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Uma nova edição do sistema disponível"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -1028,15 +1036,15 @@ msgstr "Bateria fraca, ligue à corrente"
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "Definições de energia alteradas"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "Ao fechar a tampa, "
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "Ao pressionar o botão de energia, "
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"

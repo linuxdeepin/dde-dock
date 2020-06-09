@@ -9,8 +9,8 @@
 # cxbii <mycxbii@gmail.com>, 2020
 # electricface <songwentai@linuxdeepin.com>, 2020
 # hualet <mr.asianwang@gmail.com>, 2020
-# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # transifex deepin <transifex@deepin.com>, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Cindy0514, 2020
 # 
 #, fuzzy
@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/linuxdeepin/teams/3617/zh_CN/)\n"
@@ -441,13 +441,17 @@ msgstr "语言切换成功，请注销后重新登录"
 msgid "Failed to change system language, please try later"
 msgstr "系统语言切换失败，请稍后重试"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "重试"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "取消"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "立即更新"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -479,6 +483,10 @@ msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "检测到您的系统源已被修改，为了您的正常使用，建议恢复到官方源"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "检测到有新系统版本"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

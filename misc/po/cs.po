@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# fri, 2020
 # 李洪武 <lihongwu1987@gmail.com>, 2020
 # op6464 <op64@seznam.cz>, 2020
-# Cindy0514, 2020
 # Pavel Borecki <pavel.borecki@gmail.com>, 2020
+# fri, 2020
+# Cindy0514, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2020\n"
+"Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Czech (https://www.transifex.com/linuxdeepin/teams/3617/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -443,13 +443,17 @@ msgstr "Systémový jazyk byl změněn – prosím odhlaste se a přihlaste nazp
 msgid "Failed to change system language, please try later"
 msgstr "Nepodařilo se změnit jazyk systému, zkuste to znovu později"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Zkusit znovu"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Storno"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Aktualizovat nyní"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -485,6 +489,10 @@ msgid ""
 msgstr ""
 "Instalační zdroj pro systém byl upraven. Pro běžné používání prosím vraťte "
 "na používání oficiálního zdroje"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Je k dispozici nové vydání systému"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
@@ -1022,15 +1030,15 @@ msgstr ""
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "Nastavení správy napájení změněna"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "Při přiklopení obrazovky,"
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "Při stisku tlačítka napájení,"
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"

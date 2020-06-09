@@ -9,7 +9,6 @@
 # ccedb894e6c246847bbbb58794dea50d, 2020
 # Kiss Zoltan <atari@freemail.hu>, 2020
 # c5c74d5c0e928622070863d16011fda8_265b1fe, 2020
-# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # vmarci21 <vmarci21@msn.com>, 2020
 # ddabrahim <ddabrahim@googlemail.com>, 2020
 # kdavid97 <kdavid97@gmail.hu>, 2020
@@ -20,6 +19,7 @@
 # Walton Henry <waltonh@mail.com>, 2020
 # hungi <lukacspeter1977@gmail.com>, 2020
 # e7b367b198a92ab3e6fd7f551a36a082, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Cindy0514, 2020
 # 
 #, fuzzy
@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Hungarian (https://www.transifex.com/linuxdeepin/teams/3617/hu/)\n"
@@ -454,13 +454,17 @@ msgstr "Rendszer nyelv váltása megtörtént, kérlek jelentkezz ki majd be"
 msgid "Failed to change system language, please try later"
 msgstr "A rendszer nyelv váltása sikertelen volt, próbáld meg később"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Újra"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "Mégsem"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "Frissítés most"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -496,6 +500,10 @@ msgid ""
 msgstr ""
 "A rendszer forrástárolója meg lett változtatva, állítsd vissza a hivatalos "
 "forrástárolót a megfelelő működés érdekében"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "Új rendszer verzió érhető el"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

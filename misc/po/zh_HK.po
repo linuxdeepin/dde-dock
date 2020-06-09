@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Chinese (Hong Kong) (https://www.transifex.com/linuxdeepin/teams/3617/zh_HK/)\n"
@@ -439,13 +439,17 @@ msgstr "語言切換成功，請註銷後重新登錄"
 msgid "Failed to change system language, please try later"
 msgstr "系統語言切換失敗，請稍後重試"
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "重試"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "取消"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "立即更新"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -477,6 +481,10 @@ msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr " 檢測到您的系統源已被修改，為了您的正常使用，建議恢復到官方源"
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "檢測到有新系統版本"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"

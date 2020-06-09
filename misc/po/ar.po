@@ -10,7 +10,6 @@
 # mo-hd <mo-hd@windowslive.com>, 2020
 # monzerissa169 <monzerissa169@yahoo.com>, 2020
 # alibacha19 <alibacha19@gmail.com>, 2020
-# MUHAAB SHAAM <muhaab.org@gmail.com>, 2020
 # Oukiki Saleh <salehoukiki@gmail.com>, 2020
 # Mahmoud Abdelsalam <mahmoud.ad@tutanota.com>, 2020
 # salem alBream <salembream@gmail.com>, 2020
@@ -19,6 +18,7 @@
 # Hussain Alramadhan <psvitamine1@gmail.com>, 2020
 # Idir Benkhellat <benkhellat.idir@gmail.com>, 2020
 # Mohammed Alotaibi <mx_202@hotmail.com>, 2020
+# MUHAAB SHAAM <muhaab.org@gmail.com>, 2020
 # Cindy0514, 2020
 # 
 #, fuzzy
@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 14:54+0800\n"
+"POT-Creation-Date: 2020-06-09 14:03+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Arabic (https://www.transifex.com/linuxdeepin/teams/3617/ar/)\n"
@@ -451,13 +451,17 @@ msgstr "تم تغيير لغة النظام، يرجى تسجيل الخروج �
 msgid "Failed to change system language, please try later"
 msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة لاحقاً."
 
-#: ../../lastore/lastore.go:247
+#: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "إعادة المحاولة"
 
-#: ../../lastore/lastore.go:255
+#: ../../lastore/lastore.go:256
 msgid "Cancel"
 msgstr "إلغاء"
+
+#: ../../lastore/lastore.go:270
+msgid "Update Now"
+msgstr "تحديث الآن"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -490,6 +494,10 @@ msgid ""
 "Your system source has been modified, please restore to official source for "
 "your normal use"
 msgstr "نظامك قد تم تعديله، يرجى الرجوع الى الضبط الأصلي للعمل بصورة صحيحة."
+
+#: ../../lastore/notify.go:132
+msgid "New system edition available"
+msgstr "متاح إصدار جديد من النظام"
 
 #: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
