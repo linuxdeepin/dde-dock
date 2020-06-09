@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
@@ -61,8 +62,26 @@ func (*Manager) GetInterfaceName() string {
 	return dbusInterface
 }
 
+//true : ignore
+func (m *Manager)isIgnoreRepeat(name string) bool  {
+	const minKeyEventInterval = 200 * time.Millisecond
+	now := time.Now()
+	duration := now.Sub(m.lastMethodCalledTime)
+	logger.Debug("duration:", duration)
+	if 0 < duration && duration < minKeyEventInterval {
+		logger.Debug(">>Ignore ", name)
+		return true
+	}
+	m.lastMethodCalledTime = now
+	return false
+}
+
 // Reset reset all shortcut
 func (m *Manager) Reset() *dbus.Error {
+	if (m.isIgnoreRepeat("Reset")) {
+		return nil
+	}
+
 	customShortcuts := m.customShortcutManager.List()
 	m.shortcutManager.UngrabAll()
 
