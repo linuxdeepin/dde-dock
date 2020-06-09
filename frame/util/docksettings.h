@@ -57,7 +57,7 @@ public:
     inline int narrowTimeout() const { return 100; }
     inline bool autoHide() const { return m_autoHide; }
     const QRect primaryRect() const;
-    const QRect currentRect() const;
+    const QRect currentRect();
     const QList<QRect> monitorsRect() const;
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
     inline const QRect currentRawRect() const { return m_currentRawRect; }
@@ -141,7 +141,7 @@ private:
     HideState m_hideState;
     DisplayMode m_displayMode;
     QRect m_primaryRawRect;
-    mutable QRect m_currentRawRect;
+    QRect m_currentRawRect;
     QRect m_frontendRect;
 
     QMenu m_settingsMenu;

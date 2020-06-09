@@ -1035,63 +1035,97 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 
 void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
 {
-//    if (m_registerKey != key)
-//        return;
-
-    if (m_settings->hideMode() == KeepShowing)
+    if (m_registerKey != key)
         return;
 
-    if (!isVisible())
-        setVisible(true);
+    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
 
-//    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
+    if (screen->name() == m_settings->currentDockScreen()) {
+        if (m_settings->hideMode() == KeepShowing)
+            return;
+
+        if (!isVisible())
+            setVisible(true);
+    } else {
+        // 移动Dock至相应屏相应位置
+        m_mouseCauseDock = true;
+        m_settings->setDockScreen(screen->name());
+        positionChanged(m_curDockPos, m_curDockPos);
+    }
 }
 
 void MainWindow::updateRegionMonitorWatch()
 {
-    if (m_settings->hideMode() == KeepShowing)
-        return;
+    if (!m_registerKey.isEmpty()) {
+        m_eventInter->UnregisterArea(m_registerKey);
+        m_registerKey.clear();
+    }
 
     const int flags = Motion | Button | Key;
-    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
-    const QRect windowRect = m_settings->windowRect(m_curDockPos, isHide);
+
+    QList<QRect> screensRect = m_settings->monitorsRect();
+    QList<MonitRect> monitorAreas;
+
     const qreal scale = devicePixelRatioF();
-    int val = 5;
-    const int margin = m_settings->dockMargin();
+    int val = 3;
     int x, y, w, h;
 
-    switch (m_curDockPos) {
-    case Dock::Top: {
-        x = windowRect.topLeft().x();
-        y = windowRect.topLeft().y();
-        w = m_settings->primaryRect().width();
-        h = val + margin;
-    }
-    break;
-    case Dock::Bottom: {
-        x = windowRect.bottomLeft().x();
-        y = windowRect.bottomLeft().y() - val;
-        w = m_settings->primaryRect().width();
-        h = val + margin;
-    }
-    break;
-    case Dock::Left: {
-        x = windowRect.topLeft().x();
-        y = windowRect.topLeft().y();
-        w = val + margin;
-        h = m_settings->primaryRect().height();
-    }
-    break;
-    case Dock::Right: {
-        x = windowRect.topRight().x() - val - margin;
-        y = windowRect.topRight().y();
-        w = m_settings->primaryRect().width();
-        h = m_settings->primaryRect().height();
-    }
-    break;
-    }
+    auto func = [&](MonitRect &monitRect){
+        monitRect.x1 = int(x * scale);
+        monitRect.y1 = int(y * scale);
+        monitRect.x2 = int((x + w) * scale);
+        monitRect.y2 = int((y + h) * scale);
+        monitorAreas << monitRect;
+    };
 
-    m_eventInter->RegisterArea(x * scale, y * scale, w * scale, h * scale, flags);
+    if (screensRect.size()) {
+        MonitRect monitRect;
+        switch (m_curDockPos) {
+        case Dock::Top: {
+            for (QRect rect : screensRect) {
+                x = rect.x();
+                y = rect.y();
+                w = rect.width();
+                h = val;
+                func(monitRect);
+            }
+        }
+            break;
+        case Dock::Bottom: {
+            for (QRect rect : screensRect) {
+                x = rect.x();
+                y = rect.y() + rect.height() - val;
+                w = rect.width();
+                h = val;
+                func(monitRect);
+            }
+        }
+            break;
+        case Dock::Left: {
+            for (QRect rect : screensRect) {
+                x = rect.x();
+                y = rect.y();
+                w = val;
+                h = rect.height();
+                func(monitRect);
+            }
+        }
+            break;
+        case Dock::Right: {
+            for (QRect rect : screensRect) {
+                x = rect.x() + rect.width() - val;
+                y = rect.y();
+                w = val;
+                h = rect.height();
+                func(monitRect);
+            }
+        }
+            break;
+        }
+        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
+    } else {
+        m_registerKey = m_eventInter->RegisterFullScreen();
+    }
 }
 
 
