@@ -48,6 +48,9 @@ public:
     inline bool isCurrent() { return m_current; }
     inline void setCurrent(bool c) { m_current = c; }
 
+    inline bool discover() {return  m_discover;}
+    void setDiscover(bool discover);
+
     void initDevicesList(const QJsonDocument &doc);
     void addDevice(const QJsonObject &deviceObj);
     void removeDevice(const QString &deviceId);
@@ -61,6 +64,7 @@ Q_SIGNALS:
     void deviceAdded(const Device *device) const;
     void deviceRemoved(const Device *device) const;
     void poweredChanged(const bool powered) const;
+    void discoveringChanged(const bool discover) const;
 
 private:
     void divideDevice(const Device *device);
@@ -70,6 +74,7 @@ private:
     QString m_name;
     bool m_powered;
     bool m_current;
+    bool m_discover;
 
     QMap<QString, const Device *> m_devices;
     QMap<QString, const Device *> m_paredDev;

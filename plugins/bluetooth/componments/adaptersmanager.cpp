@@ -162,13 +162,10 @@ void AdaptersManager::onAdapterPropertiesChanged(const QString &json)
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     const QJsonObject obj = doc.object();
     const QString id = obj["Path"].toString();
-    const bool isDiscovering = obj["Discovering"].toBool();
     QDBusObjectPath dPath(id);
 
     Adapter *adapter = const_cast<Adapter *>(m_adapters[id]);
     if (adapter) {
-        if (!isDiscovering)
-            m_bluetoothInter->SetAdapterDiscovering(dPath, true);
         inflateAdapter(adapter, obj);
     }
 }
@@ -276,8 +273,18 @@ void AdaptersManager::inflateAdapter(Adapter *adapter, const QJsonObject &adapte
     const QString path = adapterObj["Path"].toString();
     const QString alias = adapterObj["Alias"].toString();
     const bool powered = adapterObj["Powered"].toBool();
+    const bool discovering = adapterObj["Discovering"].toBool();
 
     adapter->setId(path);
     adapter->setName(alias);
     adapter->setPowered(powered);
+    adapter->setDiscover(discovering);
+}
+
+void AdaptersManager::adapterRefresh(const Adapter *adapter)
+{
+    QDBusObjectPath dPath(adapter->id());
+    m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
+    m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
+    m_bluetoothInter->RequestDiscovery(dPath);
 }

@@ -34,6 +34,7 @@ Adapter::Adapter(QObject *parent)
     , m_name("")
     , m_powered(false)
     , m_current(false)
+    , m_discover(false)
 {
 }
 
@@ -185,3 +186,12 @@ void Adapter::setId(const QString &id)
 {
     m_id = id;
 }
+
+void Adapter::setDiscover(bool discover)
+{
+    if (discover != m_discover) {
+        m_discover = discover;
+        Q_EMIT discoveringChanged(discover);
+    }
+}
+

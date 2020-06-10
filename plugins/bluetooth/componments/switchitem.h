@@ -24,7 +24,10 @@
 #define SWITCHITEM_H
 
 #include <DSwitchButton>
+#include <dloadingindicator.h>
+#include <DGuiApplicationHelper>
 
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class QLabel;
@@ -35,6 +38,8 @@ public:
     explicit SwitchItem(QWidget *parent = nullptr);
     void setChecked(const bool checked = true,bool notify = false);
     void setTitle(const QString &title);
+    void setLoading(const bool bloading);
+    void setLoadIndicatorIcon();
     inline bool checkState() { return m_checkState; }
 
     inline bool isdefault() { return m_default; }
@@ -43,12 +48,17 @@ public:
 signals:
     void checkedChanged(bool checked);
     void justUpdateView(bool checked);
+    void refresh();
+
+protected:
+    bool eventFilter(QObject *obj,QEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QLabel *m_title;
     DSwitchButton *m_switchBtn;
     bool m_default;
     bool m_checkState;
+    DLoadingIndicator *m_loadingIndicator;
 };
 
 #endif // SWITCHITEM_H
