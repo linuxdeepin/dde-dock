@@ -96,7 +96,7 @@ signals:
     void panelGeometryChanged();
 
 private slots:
-    void positionChanged(const Position prevPos, const Position nextPos);
+    void positionChanged();
     void updatePosition();
     void updateGeometry();
     void clearStrutPartial();
@@ -106,8 +106,8 @@ private slots:
     void updateDisplayMode();
 
     void expand();
-    void narrow(const Position prevPos);
-    void resetPanelEnvironment(const bool visible, const bool resetPosition = true);
+    void narrow();
+    void resetPanelEnvironment();
     void updatePanelVisible();
 
     void adjustShadowMask();
@@ -117,6 +117,8 @@ private slots:
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+
+    void newPositionExpand();
 
 private:
     bool m_launched;
@@ -143,8 +145,7 @@ private:
     QString m_sniHostService;
     QSize m_size;
     DragWidget *m_dragWidget;
-    Position m_curDockPos;
-    Position m_newDockPos;
+    Position m_dockPosition;
     bool m_mouseCauseDock;
 };
 

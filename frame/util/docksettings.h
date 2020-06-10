@@ -76,13 +76,15 @@ public:
     bool setDockScreen(const QString &scrName);
     QString &currentDockScreen() { return m_currentScreen; }
     
+    void posChangedUpdateSettings();
+
     QSize m_mainWindowSize;
     DBusDock *m_dockInter;
     bool m_menuVisible;
 
 signals:
     void dataChanged() const;
-    void positionChanged(const Position prevPosition, const Position nextPosition) const;
+    void positionChanged() const;
     void autoHideChanged(const bool autoHide) const;
     void displayModeChanegd() const;
     void windowVisibleChanged() const;
