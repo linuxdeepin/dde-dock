@@ -42,6 +42,7 @@ public:
     void connectDevice(Device *deviceId);
     bool defaultAdapterInitPowerState();
     int adaptersCount();
+    void adapterRefresh(const Adapter *adapter);
 
 signals:
     void adapterIncreased(Adapter *adapter);

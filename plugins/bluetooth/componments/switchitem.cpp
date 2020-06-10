@@ -22,11 +22,14 @@
 
 #include "switchitem.h"
 #include "bluetoothconstants.h"
-#include "bluetoothconstants.h"
+
+#include <DHiDPIHelper>
+#include <DApplicationHelper>
 
 #include <QHBoxLayout>
 #include <QFontMetrics>
 #include <QLabel>
+#include <QEvent>
 
 extern void initFontColor(QWidget *widget);
 
@@ -40,6 +43,24 @@ SwitchItem::SwitchItem(QWidget *parent)
 
     m_switchBtn->setFixedWidth(SWITCHBUTTONWIDTH);
 
+    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_dark.svg");
+
+    m_loadingIndicator = new DLoadingIndicator;
+    m_loadingIndicator->setSmooth(true);
+    m_loadingIndicator->setAniDuration(500);
+    m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
+    m_loadingIndicator->installEventFilter(this);
+    m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
+    m_loadingIndicator->viewport()->setAutoFillBackground(false);
+    m_loadingIndicator->setFrameShape(QFrame::NoFrame);
+    m_loadingIndicator->installEventFilter(this);
+
+    auto themeChanged = [&](DApplicationHelper::ColorType themeType){
+        Q_UNUSED(themeType)
+        setLoadIndicatorIcon();
+    };
+    themeChanged(DApplicationHelper::instance()->themeType());
+
     setFixedHeight(CONTROLHEIGHT);
     auto switchLayout = new QHBoxLayout;
     switchLayout->setSpacing(0);
@@ -47,6 +68,8 @@ SwitchItem::SwitchItem(QWidget *parent)
     switchLayout->addSpacing(MARGIN);
     switchLayout->addWidget(m_title);
     switchLayout->addStretch();
+    switchLayout->addWidget(m_loadingIndicator);
+    switchLayout->addSpacing(MARGIN);
     switchLayout->addWidget(m_switchBtn);
     switchLayout->addSpacing(MARGIN);
     setLayout(switchLayout);
@@ -55,6 +78,7 @@ SwitchItem::SwitchItem(QWidget *parent)
         m_checkState = change;
         emit checkedChanged(change);
     });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, themeChanged);
 }
 
 void SwitchItem::setChecked(const bool checked,bool notify)
@@ -76,6 +100,31 @@ void SwitchItem::setTitle(const QString &title)
     int width = POPUPWIDTH - MARGIN * 2 - m_switchBtn->width() - 3;
     QString strTitle = QFontMetrics(m_title->font()).elidedText(title, Qt::ElideRight, width);
     m_title->setText(strTitle);
+}
+
+bool SwitchItem::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_loadingIndicator) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            if(!m_loadingIndicator->loading())
+                Q_EMIT refresh();
+        }
+    }
+    return false;
+}
+
+void SwitchItem::setLoading(const bool bloading)
+{
+    m_loadingIndicator->setLoading(bloading);
+}
+
+void SwitchItem::setLoadIndicatorIcon()
+{
+    QString filePath =  ":/wireless/resources/wireless/refresh.svg";
+    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        filePath = ":/wireless/resources/wireless/refresh_dark.svg";
+    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(filePath);
+    m_loadingIndicator->setImageSource(pixmap);
 }
 
 //void SwitchItem::mousePressEvent(QMouseEvent *event)

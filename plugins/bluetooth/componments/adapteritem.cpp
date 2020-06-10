@@ -48,6 +48,8 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
 
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered(),false);
+    m_switchItem->setLoading(adapter->discover());
+    m_adaptersManager->setAdapterPowered(m_adapter, adapter->powered());
 
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
@@ -86,6 +88,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     }
 
     connect(m_switchItem, &SwitchItem::checkedChanged, this, &AdapterItem::showAndConnect);
+    connect(m_switchItem, &SwitchItem::refresh, this, &AdapterItem::refresh);
     connect(m_switchItem, &SwitchItem::justUpdateView, [&](bool checked){
         showDevices(checked);
         emit powerChanged(checked);
@@ -95,6 +98,10 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     connect(adapter, &Adapter::deviceRemoved, this, &AdapterItem::removeDeviceItem);
     connect(adapter, &Adapter::poweredChanged, m_switchItem, [=](const bool powered){
         m_switchItem->setChecked(powered, false);
+    });
+
+    connect(adapter, &Adapter::discoveringChanged, m_switchItem, [=](const bool discovering){
+        m_switchItem->setLoading(discovering);
     });
 
     showDevices(adapter->powered());
@@ -306,3 +313,9 @@ void AdapterItem::showDevices(bool powered)
     m_line->setVisible(powered);
     updateView();
 }
+
+void AdapterItem::refresh()
+{
+    m_adaptersManager->adapterRefresh(m_adapter);
+}
+
