@@ -51,7 +51,7 @@ signals:
     void refresh();
 
 protected:
-    bool eventFilter(QObject *obj,QEvent *event) override;
+    bool eventFilter(QObject *obj,QEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QLabel *m_title;
