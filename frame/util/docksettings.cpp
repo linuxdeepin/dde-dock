@@ -507,9 +507,8 @@ void DockSettings::updateFrontendGeometry()
     resetFrontendGeometry();
 }
 
-void DockSettings::setDockScreen(const QString &scrName)
+bool DockSettings::setDockScreen(const QString &scrName)
 {
-    m_isMouseMoveCause = true;
     QList<Monitor*> monitors = m_monitors.keys();
     for (Monitor *monitor : monitors) {
         if (monitor && monitor->name() == scrName) {
@@ -517,6 +516,25 @@ void DockSettings::setDockScreen(const QString &scrName)
             break;
         }
     }
+
+    bool canBeDock = false;
+    switch (m_position) {
+    case Top:
+        canBeDock = m_mouseCauseDockScreen->dockPosition().topDock;
+        break;
+    case Right:
+        canBeDock = m_mouseCauseDockScreen->dockPosition().rightDock;
+        break;
+    case Bottom:
+        canBeDock = m_mouseCauseDockScreen->dockPosition().bottomDock;
+        break;
+    case Left:
+        canBeDock = m_mouseCauseDockScreen->dockPosition().leftDock;
+        break;
+    }
+    m_isMouseMoveCause = canBeDock;
+
+    return canBeDock;
 }
 
 void DockSettings::onOpacityChanged(const double value)

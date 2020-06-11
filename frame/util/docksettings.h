@@ -73,7 +73,7 @@ public:
     void showDockSettingsMenu();
     void updateFrontendGeometry();
 
-    void setDockScreen(const QString &scrName);
+    bool setDockScreen(const QString &scrName);
     QString &currentDockScreen() { return m_currentScreen; }
     
     QSize m_mainWindowSize;

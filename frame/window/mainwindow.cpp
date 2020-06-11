@@ -1049,8 +1049,8 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
     } else {
         // 移动Dock至相应屏相应位置
         m_mouseCauseDock = true;
-        m_settings->setDockScreen(screen->name());
-        positionChanged(m_curDockPos, m_curDockPos);
+        if (m_settings->setDockScreen(screen->name()))
+            positionChanged(m_curDockPos, m_curDockPos);
     }
 }
 
