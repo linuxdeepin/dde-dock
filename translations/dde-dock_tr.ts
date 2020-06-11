@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth ayarları</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Kapat</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth ayarları</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 bağlandı</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Bağlanıyor...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Kapat</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Kablosuz bağlantı</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Kablolu bağlantı</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Kablolu bağlantıyı devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Kablolu bağlantıyı etkinleştir</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Kablosuz bağlantıyı devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Kablosuz bağlantıyı etkinleştir</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Ağı devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ağı etkinleştir</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Ay ayarları</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Aygıt devre dışı</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Kablosuz bağlantı: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Kablolu bağlantı: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Bağlı değil</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Bağlanıyor</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Bağlı ancak İnternet erişimi yok</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Ağ kablosu takılı değil</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Ağ</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kablolu Ağ</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Kablolu Ağ %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Sistem Tepsisi</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Bilinmiyor</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kablolu bağlantı: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Ağ Yok</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Bağlı ancak İnternet erişimi yok</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Kablosuz bağlantı: %1</translation>
     </message>
 </context>
 <context>

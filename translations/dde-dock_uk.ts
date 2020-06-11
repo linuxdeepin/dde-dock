@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Параметри Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Вимкнути</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Увімкнути</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Параметри Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>З&apos;єднано %1</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Встановлюємо з&apos;єднання…</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Вимкнено</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Бездротове підключення</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Дротове підключення</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Вимкнути дротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Увімкнути дротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Вимкнути бездротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Увімкнути бездротове з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Вимкнути мережу</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Увімкнути мережу</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Налаштування Інтернет-мережі</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Пристрій вимкнено</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Бездротове з&apos;єднання: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Дротове з&apos;єднання %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Не підключено</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>З&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>З&apos;єднано, але доступу до інтернету немає</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Вийнято інтернет-кабель</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Мережа</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Провідна мережа</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Дротова мережа %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Системний трей</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Невідомо</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Дротове з&apos;єднання %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Немає мережі</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>З&apos;єднано, але доступу до інтернету немає</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Бездротове з&apos;єднання: %1</translation>
     </message>
 </context>
 <context>

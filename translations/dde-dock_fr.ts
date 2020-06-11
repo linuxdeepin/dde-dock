@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Paramètres Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Éteindre</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Allumer</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Paramètres Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 connecté</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Connexion...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Connexion sans fil</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Connexion filaire</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Désactiver la connexion filaire</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Activer la connexion filaire</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Désactiver la connexion sans fil</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Activer la connexion sans fil</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Désactiver le réseau</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Activer le réseau</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Paramètres réseau</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Périphérique désactivé </translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Connexion sans fil: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Connexion filaire: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Non connecté</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Connexion</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connecté mais pas d’accès internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Câble réseau débranché</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Réseau</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Réseau filaire</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Réseau filaire %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Zone de notification</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Inconnu</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Connexion filaire: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Pas de réseau</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connecté mais pas d’accès internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Connexion sans fil: %1</translation>
     </message>
 </context>
 <context>

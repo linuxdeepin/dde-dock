@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>البلوتوث</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>إعدادات البلوتوث</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>ايقاف</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>تشغيل</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>إعدادات البلوتوث</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>البلوتوث</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>البلوتوث</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>اتصال لاسلكي</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>اتصال سلكي</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>تعطيل الاتصال السلكي</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>تفعيل الاتصال السلكي</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>تعطيل الاتصال اللاسلكي</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>تفعيل الاتصال اللاسلكي</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>تعطيل الشبكة</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>تمكين الشبكة</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>إعدادات الشبكة</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>جهاز ملغى</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>الاتصال اللاسلكي: 1%</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>اتصال سلكي بـ : %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>غير متصل</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>يتصل</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>متصل لكن لا يوجد اتصال بالإنترنت</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>سلك الشبكة غير موصول</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>الشبكة</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>شبكة سلكية</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>شبكة سلكية 1%</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>منطقة إعلام النظام</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>غير معروف</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>اتصال سلكي بـ : %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>لا توجد شبكة</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>متصل لكن لا يوجد اتصال بالإنترنت</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>الاتصال اللاسلكي: 1%</translation>
     </message>
 </context>
 <context>

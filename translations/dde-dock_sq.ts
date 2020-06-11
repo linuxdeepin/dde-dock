@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Rregullime Bluetooth-i</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Çaktivizoje</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Aktivizoje</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Rregullime Bluetooth-i</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 u lidh</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Po lidhet…</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>I aktivizuar</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Lidhje pa fill</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Lidhje me fill</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Çaktivizo lidhje me fill</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Aktivizo lidhje me fill</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Çaktivizo lidhje pa fill</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Aktivizo lidhje pa fill</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Çaktivizo rrjetin</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Aktivizo rrjetin</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Rregullime rrjeti</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Pajisje e çaktivizuar</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Lidhje pa fill: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Lidhje me fill: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Jo e lidhur</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Po bëhet lidhja</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>I lidhur, por pa hyrje Internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Kablloja e rrjetit është e hequr</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Rrjet</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rrjet Me Fill</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Rrjet Me Fill %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Shtyllë Sistemi</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>E panjohur</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Lidhje me fill: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>S’ka Rrjet</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>I lidhur, por pa hyrje Internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Lidhje pa fill: %1</translation>
     </message>
 </context>
 <context>

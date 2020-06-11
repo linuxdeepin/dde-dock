@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Блутут</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Блутут подешавања</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Искључи</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Укључи</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Блутут подешавања</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 повезано</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Повезивање...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Блутут</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Искључен</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Блутут</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Бежична веза</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Жичана веза</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Искључи жичану везу</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Укључи жичану везу</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Искључи бежичану везу</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Укључи бежичану везу</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Искључи мрежу</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Укључи мрежу</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Подешавање мреже</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Уређај је онемогућен</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Бежична веза: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Жичана веза: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Нисте повезани</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Повезивање</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Повезани сте, али нема интернета</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Мрежни кабл је ископчан</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Мрежа</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Жичана мрежа</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Жичана мрежа %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Системска касета</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Непознато</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Жичана веза: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Нема мреже</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Повезани сте, али нема интернета</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Бежична веза: %1</translation>
     </message>
 </context>
 <context>

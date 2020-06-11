@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Nastavení Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Vypnout</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Zapnout</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Nastavení Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 připojeno</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Připojování…</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Vypnuto</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Bezdrátové připojení</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Drátové připojení</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Vypnout drátové připojení</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Zapnout drátové připojení</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Vypnout bezdrátové připojení</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Zapnout bezdrátové připojení</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Zakázat síť</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Povolit síť</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Nastavení sítě</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Zařízení zakázáno</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bezdrátové připojení: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Drátové připojení: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Nepřipojeno</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Připojuje se</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Připojeno, ale bez přístupu k Internetu</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Síťový kabel odpojen</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Síť</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Drátová síť</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Drátová síť %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Oznamovací oblast panelu</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Neznámý</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Drátové připojení: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Žádná síť</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Připojeno, ale bez přístupu k Internetu</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Bezdrátové připojení: %1</translation>
     </message>
 </context>
 <context>

@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Tetapan Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Matikan</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Hidupkan</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Tetapan Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Lumpuhkan rangkaian</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Benarkan rangkaian</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Tetapan rangkaian</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Peranti dilumpuhkan</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Sambungan tanpa wayar: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Sambungan berwayar: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Tidak bersambung</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Menyambung</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Bersambung tetapi tiada capaian Internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Kabel rangkaian telah dicabut</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Rangkaian</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rangkaian Berwayar</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Rangkaian Berwayar %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Talam Sistem</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Tidak diketahui</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Sambungan berwayar: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Tiada Rangkaian</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Bersambung tetapi tiada capaian Internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Sambungan tanpa wayar: %1</translation>
     </message>
 </context>
 <context>

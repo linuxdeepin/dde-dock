@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth-indstillinger</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Sluk</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Tænd</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth-indstillinger</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Trådløs forbindelse</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Kablet forbindelse</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Deaktivér kablet forbindelse</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Aktivér kablet forbindelse</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Deaktivér trådløs forbindelse</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Aktivér trådløs forbindelse</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Deaktivér netværk</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Aktivér netværk</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Netværksindstillinger</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Enhed deaktiveret</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Trådløs forbindelse: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Kablet forbindelse: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Ikke tilsluttet</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Opretter forbindelse</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Tilsluttet men ingen internetadgang</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Netværkskablet er frakoblet</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Netværk</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kablet netværk</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Kablet netværk %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Systembakke</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Ukendt</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kablet forbindelse: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Intet netværk</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Tilsluttet men ingen internetadgang</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Trådløs forbindelse: %1</translation>
     </message>
 </context>
 <context>
