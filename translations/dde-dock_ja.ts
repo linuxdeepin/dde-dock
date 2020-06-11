@@ -20,16 +20,16 @@
         <translation>日時</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12時間表示</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24時間表示</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>時間設定</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>残量 %1、残り %2 時間 %3 分</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">充電完了 %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>充電中 %1、充電完了まで %2 分</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>充電中 %1、充電完了まで %2 時間 %3 分</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>充電中 %1 …</translation>
+        <source>Charged</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>充電中 %1</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>シャットダウン</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>再起動</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>サスペンド</translation>
     </message>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>電源の設定</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>再起動</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>消音</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>音の設定</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>現在の音量 %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>ネットワークなし</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>無線接続: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>接続済み、インターネットアクセスなし</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

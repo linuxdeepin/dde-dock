@@ -20,16 +20,16 @@
         <translation>Ημερομηνία ώρα</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12ωρος Χρόνος</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24ώρος Χρόνος</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Ρυθμίσεις ώρας </translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>Χωρητικότητα %1, απομένουν %2 ώρες και 3% λεπτά</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Φορτισμένη %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Φόρτιση %1, 2% λεπτά μέχρι να γεμίσει</translation>
     </message>
@@ -214,12 +210,24 @@
         <translation>Φόρτιση %1, 2% ώρες και %3 λεπτά μέχρι να γεμίσει</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
+        <translation>Πλήρη Φόρτιση</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Πλήρη Φόρτιση</translation>
+        <source>Charging %1</source>
+        <translation>Φορτίζεται %1</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -244,16 +252,12 @@
         <translation>Τερματισμός λειτουργίας</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Επανεκκίνηση</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Αναστολή</translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Αδράνεια</translation>
+        <translation>Αδρανοποίηση</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>Ρυθμίσεις ενέργειας</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Επανεκκίνηση</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>Σίγαση</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Ρυθμίσεις Ήχου</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Τρέχουσα Ένταση %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>Χωρίς δίκτυο  </translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Ασύρματη Σύνδεση: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Συνδεδεμένο αλλά χωρίς πρόσβαση στο διαδίκτυο</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
