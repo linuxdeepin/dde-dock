@@ -77,7 +77,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
         auto device = const_cast<Device *>(constDevice);
         if (device) {
             if (device->state() == Device::StateAvailable) {
-                m_initDeviceState = Device::StateConnected;
+                m_initDeviceState = Device::StateAvailable;
                 continue;
             }
             if (device->state() == Device::StateConnected) {
@@ -222,7 +222,13 @@ void AdapterItem::deviceChangeState(const Device::State state)
                 }
             }
                 break;
-            case Device::StateAvailable:
+            case Device::StateAvailable: {
+                int index = m_sortUnConnect.indexOf(deviceItem);
+                if (index < 0)
+                    m_sortConnected.removeOne(deviceItem);
+                else
+                    m_sortUnConnect.removeOne(deviceItem);
+            }
                 break;
             case Device::StateConnected: {
                 int index = m_sortConnected.indexOf(deviceItem);
@@ -236,8 +242,15 @@ void AdapterItem::deviceChangeState(const Device::State state)
                 break;
             }
         }
-        m_currentDeviceState = state;
-        emit deviceStateChanged(state);
+
+        if (m_sortConnected.size() > 0)
+            m_currentDeviceState = Device::StateConnected;
+        else if (state == Device::StateAvailable)
+            m_currentDeviceState = Device::StateAvailable;
+        else
+            m_currentDeviceState = Device::StateUnavailable;
+
+        emit deviceStateChanged();
     }
 }
 
