@@ -48,7 +48,7 @@ public:
     QStringList connectedDevsName();
 
 signals:
-    void deviceStateChanged(const Device::State state);
+    void deviceStateChanged();
     void powerChanged(bool powered);
     void sizeChange();
 
@@ -81,6 +81,7 @@ private:
     Device::State m_currentDeviceState;
     QList<DeviceItem *> m_sortConnected;
     QList<DeviceItem *> m_sortUnConnect;
+    QMap<DeviceItem *, Device::State> m_devicesState;
 };
 
 #endif // ADAPTERITEM_H
