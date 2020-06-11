@@ -84,7 +84,7 @@ private:
 
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;
-    QTimer *m_delayTimer;
+    QTimer *m_preChargeTimer;
 };
 
 #endif // POWERPLUGIN_H
