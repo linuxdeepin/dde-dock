@@ -20,16 +20,16 @@
         <translation>তারিখ ও সময়</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12 ঘন্টা সময়</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24 ঘন্টা সময়</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>সময় সেটিংস</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>ধারণ ক্ষমতা %1, %2 hr %3 min বাকি আছে</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 চার্জ করা হয়েছে</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 min বাকি আছে</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 hr %3 min বাকি আছে</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>%1 চার্জ করা হচ্ছে</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>বন্ধ করুন</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation> রিস্টার্ট দিন</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>সাময়িক ভাবে বন্ধ করুন</translation>
     </message>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>পাওয়ার সেটিংস</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>পুনঃরায় চালু করুন</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>নীরব</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>অডিও সেটিংস</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>বর্তমান ভলিউম %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>নেটওয়ার্ক নেই</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>তারবিহীন সংযোগঃ %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

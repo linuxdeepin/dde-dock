@@ -20,16 +20,16 @@
         <translation>تاریخ زمان</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>زمان 12ساعته</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>زمان 24 ساعته</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>تنظیمات زمان</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -151,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>اجرا کننده</translation>
+        <translation>لانچر</translation>
     </message>
 </context>
 <context>
@@ -202,10 +202,6 @@
         <translation>ظرفیت %1 ،%2 ساعت  %3 دقیقه باقی مانده است</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 شارژشد</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>درحال شارژ %1 ، %2 دقیقه تا شارژ کامل</translation>
     </message>
@@ -214,11 +210,23 @@
         <translation>درحال شارژ %1 ، %2 ساعت و  %3 دقیقه تا شارژ کامل</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -244,10 +252,6 @@
         <translation>خاموش شدن</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>راه اندازی مجدد</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>معلق کردن</translation>
     </message>
@@ -257,7 +261,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>قفل کردن</translation>
+        <translation>قفل</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -270,6 +274,10 @@
     <message>
         <source>Power settings</source>
         <translation>تنظیمات برق</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>راه اندازی مجدد</translation>
     </message>
 </context>
 <context>
@@ -294,12 +302,12 @@
         <translation>بی صدا</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>تنظیمات صدا</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>صدای فعلی %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +368,12 @@
         <translation>بدون شبکه</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>اتصال بی سیم %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>متصل است اما دسترسی به اینترنت ندارد</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
