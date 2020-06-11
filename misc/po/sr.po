@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 14:03+0800\n"
+"POT-Creation-Date: 2020-06-11 15:38+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Марко Пејовић <markopejovic@tutanota.com>, 2020\n"
 "Language-Team: Serbian (https://www.transifex.com/linuxdeepin/teams/3617/sr/)\n"
@@ -464,12 +464,12 @@ msgid "%q failed to install."
 msgstr "%q инсталација неуспешна."
 
 #: ../../lastore/notify.go:108
-msgid "%q removed successfully."
-msgstr "%q уклањање успешно."
+msgid "Removed successfully"
+msgstr "Успешно уклоњено"
 
 #: ../../lastore/notify.go:110
-msgid "%q failed to remove."
-msgstr "%q уклањање неуспешно."
+msgid "Failed to remove the app"
+msgstr "Неуспешно уклањање програма"
 
 #: ../../lastore/notify.go:117
 msgid ""
@@ -814,7 +814,7 @@ msgstr "Зависност везе је отказала"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr "RFC 2684 Ентернет грешка повезивања на ADSL"
+msgstr "RFC 2684 Етернет грешка повезивања на ADSL"
 
 #: ../../network/state_handler.go:91
 msgid "ModemManager did not run or quitted unexpectedly"

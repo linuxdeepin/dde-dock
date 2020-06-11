@@ -7,18 +7,18 @@
 # Yuriy Moskalchuk <termosyura@ukr.net>, 2020
 # Roman <dejitaru.tiger@gmail.com>, 2020
 # Marck Hrin, 2020
-# Yuri Chornoivan <yurchor@ukr.net>, 2020
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Cindy0514, 2020
+# Yuri Chornoivan <yurchor@ukr.net>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 14:03+0800\n"
+"POT-Creation-Date: 2020-06-11 15:38+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Cindy0514, 2020\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>, 2020\n"
 "Language-Team: Ukrainian (https://www.transifex.com/linuxdeepin/teams/3617/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -464,12 +464,12 @@ msgid "%q failed to install."
 msgstr "Не вдалося встановити %q."
 
 #: ../../lastore/notify.go:108
-msgid "%q removed successfully."
-msgstr "%q успішно видалено."
+msgid "Removed successfully"
+msgstr "Успішно вилучено"
 
 #: ../../lastore/notify.go:110
-msgid "%q failed to remove."
-msgstr "Не вдалося видалити %q."
+msgid "Failed to remove the app"
+msgstr "Не вдалося вилучити програму"
 
 #: ../../lastore/notify.go:117
 msgid ""

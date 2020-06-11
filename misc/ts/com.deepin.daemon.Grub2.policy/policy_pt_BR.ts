@@ -4,17 +4,17 @@
 		<message>
 			<location filename="com.deepin.daemon.Grub2!message" line="0"/>
 			<source>Authentication is required to change the grub2 configuration</source>
-			<translation>É necessária a autenticação para alterar a configuração do GRUB2</translation>
+			<translation>A autenticação é necessária para alterar as configurações do gerenciador de inicialização</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.Grub2!description" line="0"/>
 			<source>Change the grub2 configuration</source>
-			<translation>Alterar a configuração do GRUB2</translation>
+			<translation>Alterar configurações do Gerenciador de Inicialização</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!message" line="0"/>
 			<source>Authentication is required to prepare grub2 display resolution detection</source>
-			<translation>A autenticação é necessária para preparar a detecção da resolução de exibição do grub2</translation>
+			<translation>A autenticação é necessária para alterar a resolução de exibição do gerenciador de inicialização</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>

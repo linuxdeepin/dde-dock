@@ -105,9 +105,9 @@ func (l *Lastore) notifyInstall(pkgId string, succeed bool, ac []NotifyAction) {
 func (l *Lastore) notifyRemove(pkgId string, succeed bool, ac []NotifyAction) {
 	var msg string
 	if succeed {
-		msg = fmt.Sprintf(gettext.Tr("%q removed successfully."), pkgId)
+		msg = gettext.Tr("Removed successfully")
 	} else {
-		msg = fmt.Sprintf(gettext.Tr("%q failed to remove."), pkgId)
+		msg = gettext.Tr("Failed to remove the app")
 	}
 	l.sendNotify("deepin-appstore", msg, ac, notifyExpireTimeoutDefault, getAppStoreAppName())
 }

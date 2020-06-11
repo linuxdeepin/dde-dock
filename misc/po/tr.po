@@ -9,18 +9,18 @@
 # Kaya Zeren <kayazeren@gmail.com>, 2020
 # yakup <mutouk@yandex.ru>, 2020
 # meda <ademcal@yahoo.com>, 2020
-# Serdar Sağlam <teknomobil@msn.com>, 2020
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Cindy0514, 2020
+# Serdar Sağlam <teknomobil@msn.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 14:03+0800\n"
+"POT-Creation-Date: 2020-06-11 15:38+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Cindy0514, 2020\n"
+"Last-Translator: Serdar Sağlam <teknomobil@msn.com>, 2020\n"
 "Language-Team: Turkish (https://www.transifex.com/linuxdeepin/teams/3617/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -466,12 +466,12 @@ msgid "%q failed to install."
 msgstr "%q kurulamadı."
 
 #: ../../lastore/notify.go:108
-msgid "%q removed successfully."
-msgstr "%q kaldırıldı."
+msgid "Removed successfully"
+msgstr "Kaldırıldı"
 
 #: ../../lastore/notify.go:110
-msgid "%q failed to remove."
-msgstr "%q kaldırılamadı."
+msgid "Failed to remove the app"
+msgstr "Uygulama kaldırılamadı"
 
 #: ../../lastore/notify.go:117
 msgid ""

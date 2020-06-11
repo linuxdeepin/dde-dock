@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!message" line="0"/>
 			<source>Authentication is required to change your own user data</source>
-			<translation>Kullanıcı verilerinizi değiştirmek için kimlik doğrulaması gerekiyor</translation>
+			<translation>Kullanıcı verilerinizi değiştirmek için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.change-own-user-data!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!message" line="0"/>
 			<source>Authentication is required to change user data</source>
-			<translation>Kullanıcı verilerini değiştirmek için kimlik doğrulaması gerekiyor</translation>
+			<translation>Kullanıcı verilerini değiştirmek için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.user-administration!description" line="0"/>
@@ -24,7 +24,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!message" line="0"/>
 			<source>Authentication is required to enable auto login</source>
-			<translation>Otomatik oturum açmayı etkinleştirmek için kimlik doğrulaması gerekiyor</translation>
+			<translation>Otomatik oturum açmayı etkinleştirmek için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-auto-login!description" line="0"/>
@@ -34,17 +34,17 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!message" line="0"/>
 			<source>Authentication is required to disable auto login</source>
-			<translation>Otomatik girişi devre dışı bırakmak için kimlik doğrulaması gerekiyor</translation>
+			<translation>Otomatik girişi devre dışı bırakmak için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-auto-login!description" line="0"/>
 			<source>Disable Auto Login</source>
-			<translation>Otomatik Girişi Devre Dışı Bırak</translation>
+			<translation>Otomatik Giriş Devre Dışı</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!message" line="0"/>
 			<source>Authentication is required to enable login without password</source>
-			<translation>Parola kullanmadan oturum açmak için kimlik doğrulaması gerekiyor</translation>
+			<translation>Parola olmadan oturum açmak için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.enable-nopass-login!description" line="0"/>
@@ -54,7 +54,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!message" line="0"/>
 			<source>Authentication is required to disable login without password</source>
-			<translation>Parola olmadan oturum açmayı devre dışı bırakmak için kimlik doğrulaması gerekiyor</translation>
+			<translation>Parola olmadan oturum açmayı devre dışı bırakmak için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.disable-nopass-login!description" line="0"/>
@@ -64,7 +64,7 @@
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!message" line="0"/>
 			<source>Authentication is required to set keyboard layout</source>
-			<translation>Klavye düzenini ayarlamak için kimlik doğrulaması gerekiyor</translation>
+			<translation>Klavye düzenini ayarlamak için kimlik doğrulaması gerekli</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.daemon.accounts.set-keyboard-layout!description" line="0"/>

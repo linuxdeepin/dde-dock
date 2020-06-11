@@ -19,7 +19,7 @@
 		<message>
 			<location filename="com.deepin.daemon.grub2.prepare-gfxmode-detect!description" line="0"/>
 			<source>Prepare grub2 display resolution detection</source>
-			<translation>Grub2 hazırlama ekran çözünürlüğü algılaması</translation>
+			<translation>Grub2 ekran çözünürlüğü algılaması hazırlama</translation>
 		</message>
 	</context>
 </TS>
