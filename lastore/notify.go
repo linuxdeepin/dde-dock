@@ -130,5 +130,5 @@ func (l *Lastore) notifySourceModified(actions []NotifyAction) {
 
 func (l *Lastore) notifyUpdateSource(actions []NotifyAction) {
 	msg := gettext.Tr("New system edition available")
-	l.sendNotify("dde-control-center", msg, actions, notifyExpireTimeoutNever, "dde-control-center")
+	l.sendNotify("dde-control-center", msg, actions, notifyExpireTimeoutDefault, "dde-control-center")
 }
