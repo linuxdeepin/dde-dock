@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Настройки Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Выключить</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Включить</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Настройки Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 подключено</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Подключение...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Выключен</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Беспроводное соединение</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Проводное соединение</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Отключить проводное соединение</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Включить проводное соединение</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Отключить проводное соединение</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Включить проводное соединение</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Отключить сеть</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Включить сеть</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Настройки сети</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Устройство отключено</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Беспроводное соединение: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Проводное подключение к: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Не подключено</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Соединение</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Подключено, без доступа к Интернету</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Сетевой кабель отключен</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Сеть</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Проводная Сеть</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Проводная Сеть %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Системный Лоток</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Неизвестный</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Проводное подключение к: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Нет Сети</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Подключено, без доступа к Интернету</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Беспроводное соединение: %1</translation>
     </message>
 </context>
 <context>

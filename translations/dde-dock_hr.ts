@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth postavke</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Isključi</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Uključi</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth postavke</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 povezan</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Povezujem...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Bežično povezivanje</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Žično povezivanje</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Onemogući žično povezivanje</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Omogući žično povezivanje</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Onemogući bežično povezivaqnje</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Omogući bežično povezivanje</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Onemogući mrežu</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Omogući mrežu</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Mrežne postavke</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Uređaj je onemogućen</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Bežična veza: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Žična  veza: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Nije spojeno</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Povezujem se</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Spojen ali nema pristupa internetu</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Mrežni kabel je isključen</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Mreža</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Žična mreža</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Žična mreža %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Sustavski pladanj</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Nepoznato</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Žična  veza: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Bez mreže</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Spojen ali nema pristupa internetu</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Bežična veza: %1</translation>
     </message>
 </context>
 <context>

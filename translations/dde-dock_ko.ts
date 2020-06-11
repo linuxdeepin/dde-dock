@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>블루투스</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>블루투스 설정</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>끄기</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>켜기</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>블루투스 설정</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>블루투스</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>블루투스</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>무선 연결</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>유선 연결</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>유선 연결 사용안함</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>유선 연결 사용가능</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>무선 연결 사용안함</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>무선 연결 사용가능</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>네트워크 사용안함</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>네트워크 사용</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>네트워크 설정</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>디바이스 사용해제됨</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>무선 연결: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>유선 연결: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>연결되지 않음</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>연결 중</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>연결됨, 인터넷 없음</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>네트워크 케이블 제거됨</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>네트워크</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>유선 네트워크</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>유선 네트워크 %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>시스템 트레이</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>알 수 없음</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>유선 연결: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>네트워크 없음</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>연결됨, 인터넷 없음</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>무선 연결: %1</translation>
     </message>
 </context>
 <context>

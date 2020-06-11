@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Cài đặt Blurtooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Tắt</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Mở</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Cài đặt Blurtooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 đã kết nối</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Đang kết nối...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Đã tắt</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Kết nội wifi</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Kết nối có dây</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Tắt kết nối mạng dây</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Mở kết nối mạng dây</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Tắt kết nối wifi</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Bật kết nối wifi</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Vô hiệu hóa mạng</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Cho phép mạng</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Thiết lập mạng</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Thiết bị bị vô hiệu hóa</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Kết nối không dây: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Kết nối Có dây: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Không được kết nối</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Đang kết nối</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Đã kết nối nhưng không có truy cập Internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Mạng dây đã ngắt</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Mạng</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Mạng kết nối dây</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Mạng kết nối dây %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Khay Hệ thống</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Không rõ</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kết nối Có dây: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Không có Mạng</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Đã kết nối nhưng không có truy cập Internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Kết nối không dây: %1</translation>
     </message>
 </context>
 <context>

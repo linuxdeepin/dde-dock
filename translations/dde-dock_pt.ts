@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Definições bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Desligar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ligar</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Definições bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 ligado</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>A ligar...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Desligado</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Ligação sem fios</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Ligação por cabo</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Desativar ligação por cabo</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Ativar ligação por cabo</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Desativar ligação sem fios</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Ativar ligação sem fios</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Desativar rede</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ativar rede</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Definições de rede</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Dispositivo desativado</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Ligação sem fios: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Ligação por cabo: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Desligado</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>A ligar</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Ligado mas sem acesso à Internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Cabo de rede desligado</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Rede</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rede por cabo</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Rede por cabo %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Área de notificação do sistema</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Desconhecido</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Ligação por cabo: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Sem Rede</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Ligado mas sem acesso à Internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Ligação sem fios: %1</translation>
     </message>
 </context>
 <context>

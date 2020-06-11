@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Configurações de Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Desativar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ativar</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Configurações de Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 conectado</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Conectando...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Desativado</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Conexão Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Conexão Cabeada</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Desativar a conexão cabeada</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Ativar a conexão cabeada</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Desativar a conexão Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Ativar a conexão Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Desativar rede</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Ativar rede</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Configurações de rede</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Dispositivo desativado</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Conexão Wi-Fi: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Conexão Cabeada: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Não conectado</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Conectando</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Conectado, sem Internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Cabo de rede desconectado</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Rede</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rede Cabeada</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Rede Cabeada %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Bandeja do Sistema</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Desconhecido</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Conexão Cabeada: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Sem Rede</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Conectado, sem Internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Conexão Wi-Fi: %1</translation>
     </message>
 </context>
 <context>

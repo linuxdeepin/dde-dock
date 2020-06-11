@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Ajustes de Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Desactivar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Activar</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Ajustes de Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 conectado</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Conectando...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Apagado</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -166,10 +215,85 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Wireless connection</source>
+        <translation>Conexión inalámbrica</translation>
+    </message>
+    <message>
+        <source>Wired connection</source>
+        <translation>Conexión cableada</translation>
+    </message>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Deshabilitar conexión cableada</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Habilitar conexión cableada</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Deshabilitar conexión inalámbrica</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Habilitar conexión inalámbrica</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Deshabilitar red</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Habilitar red</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Ajustes de red</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Dispositivo deshabilitado</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Conexión inalámbrica: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Conexión cableada: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>No conectado</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Conectando</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Conectado pero sin acceso a internet</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Cable de red desconectado</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>Red</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Red cableada</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Red cableada %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +472,6 @@
     <message>
         <source>System Tray</source>
         <translation>Bandeja de sistema</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Desconocido</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Conexión cableada: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Sin red</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Conectado pero sin acceso a internet</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Conexión inalámbrica: %1</translation>
     </message>
 </context>
 <context>
