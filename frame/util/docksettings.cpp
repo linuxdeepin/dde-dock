@@ -803,64 +803,67 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
     // 对齐
     bool isAligment = false;
     // 左右拼
-    // s1左 s2右
-    if (s1->right() == s2->left() ) {
-        isAligment = (s1->topRight() == s2->topLeft())
-                && (s1->bottomRight() == s2->bottomLeft());
-        if (isAligment) {
-            s1->dockPosition().rightDock = false;
-            s2->dockPosition().leftDock = false;
-        } else {
-            if (!s1->isPrimary())
+    if (s1->bottom() > s2->top() && s1->top() < s2->bottom()) {
+        // s1左 s2右
+        if (s1->right() == s2->left() ) {
+            isAligment = (s1->topRight() == s2->topLeft())
+                    && (s1->bottomRight() == s2->bottomLeft());
+            if (isAligment) {
                 s1->dockPosition().rightDock = false;
-            if (!s2->isPrimary())
                 s2->dockPosition().leftDock = false;
+            } else {
+                if (!s1->isPrimary())
+                    s1->dockPosition().rightDock = false;
+                if (!s2->isPrimary())
+                    s2->dockPosition().leftDock = false;
+            }
         }
-    }
-    // s1右 s2左
-    if (s1->left() == s2->right()) {
-        isAligment = (s1->topLeft() == s2->topRight())
-                && (s1->bottomLeft() == s2->bottomRight());
-        if (isAligment) {
-            s1->dockPosition().leftDock = false;
-            s2->dockPosition().rightDock = false;
-        } else {
-            if (!s1->isPrimary())
+        // s1右 s2左
+        if (s1->left() == s2->right()) {
+            isAligment = (s1->topLeft() == s2->topRight())
+                    && (s1->bottomLeft() == s2->bottomRight());
+            if (isAligment) {
                 s1->dockPosition().leftDock = false;
-            if (!s2->isPrimary())
                 s2->dockPosition().rightDock = false;
+            } else {
+                if (!s1->isPrimary())
+                    s1->dockPosition().leftDock = false;
+                if (!s2->isPrimary())
+                    s2->dockPosition().rightDock = false;
+            }
         }
     }
     // 上下拼
-    // s1上 s2下
-    if (s1->top() == s2->bottom()) {
-        isAligment = (s1->bottomLeft() == s2->topLeft())
-                && (s1->bottomRight() == s2->topRight());
-        if (isAligment) {
-            s1->dockPosition().bottomDock = false;
-            s2->dockPosition().topDock = false;
-        } else {
-            if (!s1->isPrimary())
+    if (s1->right() > s2->left() && s1->left() < s2->right()) {
+        // s1上 s2下
+        if (s1->bottom() == s2->top()) {
+            isAligment = (s1->bottomLeft() == s2->topLeft())
+                    && (s1->bottomRight() == s2->topRight());
+            if (isAligment) {
                 s1->dockPosition().bottomDock = false;
-            if (!s2->isPrimary())
                 s2->dockPosition().topDock = false;
+            } else {
+                if (!s1->isPrimary())
+                    s1->dockPosition().bottomDock = false;
+                if (!s2->isPrimary())
+                    s2->dockPosition().topDock = false;
+            }
         }
-    }
-    // s1下 s2上
-    if (s1->bottom() == s2->top()) {
-        isAligment = (s1->topLeft() == s2->bottomLeft())
-                && (s1->topRight() == s2->bottomRight());
-        if (isAligment) {
-            s1->dockPosition().topDock = false;
-            s2->dockPosition().bottomDock = false;
-        } else {
-            if (!s1->isPrimary())
+        // s1下 s2上
+        if (s1->top() == s2->bottom()) {
+            isAligment = (s1->topLeft() == s2->bottomLeft())
+                    && (s1->topRight() == s2->bottomRight());
+            if (isAligment) {
                 s1->dockPosition().topDock = false;
-            if (!s2->isPrimary())
                 s2->dockPosition().bottomDock = false;
+            } else {
+                if (!s1->isPrimary())
+                    s1->dockPosition().topDock = false;
+                if (!s2->isPrimary())
+                    s2->dockPosition().bottomDock = false;
+            }
         }
     }
-
     // 对角拼
     bool isDiagonal = (s1->topLeft() == s2->bottomRight())
             || (s1->topRight() == s2->bottomLeft())
@@ -868,9 +871,9 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
             || (s1->bottomRight() == s2->topLeft());
     if (isDiagonal) {
         auto position = Monitor::DockPosition(false, false, false, false);
-        if (!s1->isPrimary())
+        if (s1->isPrimary())
             s2->setDockPosition(position);
-        if (!s2->isPrimary())
+        if (s2->isPrimary())
             s1->setDockPosition(position);
 
         switch (m_position) {

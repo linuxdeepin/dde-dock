@@ -721,7 +721,7 @@ void MainWindow::setStrutPartial()
     // pass if strut area is intersect with other screen
     //优化了文件管理的代码 会导致bug 15351 需要注释一下代码
     //    int count = 0;
-    //    const QRect pr = m_settings->primaryRect();
+    //    const QRect pr = m_settings->currentRawRect();
     //    for (auto *screen : qApp->screens()) {
     //        const QRect sr = screen->geometry();
     //        if (sr == pr)
