@@ -23,6 +23,7 @@
 
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QPainterPath>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QIcon>
