@@ -43,7 +43,7 @@ const (
 	dbusInterface   = "com.deepin.daemon.Network"
 )
 
-const maxPortalDetectionTime = 600*time.Second
+const maxPortalDetectionTime = 600 * time.Second
 
 type connectionData map[string]map[string]dbus.Variant
 
@@ -93,6 +93,9 @@ type Manager struct {
 	syncConfig     *dsync.Config
 
 	portalLastDetectionTime time.Time
+
+	WirelessAccessPoints      string `prop:"access:r"` //用于读取AP
+	updateWirelessCountTicker *countTicker
 
 	//nolint
 	signals *struct {
@@ -242,6 +245,7 @@ func (m *Manager) init() {
 		}
 	}()
 
+	m.initCountTicker()
 	// move to power module
 	// connect computer suspend signal
 	// _, err = loginManager.ConnectPrepareForSleep(func(active bool) {
@@ -281,6 +285,11 @@ func (m *Manager) destroy() {
 	// reset dbus properties
 	m.setPropNetworkingEnabled(false)
 	m.updatePropState()
+
+	if m.updateWirelessCountTicker != nil {
+		m.updateWirelessCountTicker.Stop()
+		m.updateWirelessCountTicker = nil
+	}
 }
 
 func watchNetworkManagerRestart(m *Manager) {

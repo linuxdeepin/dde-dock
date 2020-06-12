@@ -21,6 +21,7 @@ package network
 
 import (
 	"errors"
+	"time"
 
 	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/network/nm"
@@ -113,4 +114,18 @@ func (m *Manager) updatePropConnections() {
 	if err != nil {
 		logger.Warning("failed to emit signal:", err)
 	}
+}
+
+func (m *Manager) emitPropChangedWirelessAccessPoints(value string) error {
+	return m.service.EmitPropertyChanged(m, "WirelessAccessPoints", value)
+}
+
+// 每60s自动更新一次WirelessAccessPoints属性，并发送属性改变信号
+func (m *Manager) initCountTicker() {
+	m.updateWirelessCountTicker = newCountTicker(60*time.Second, func(count int) {
+		err := m.RequestWirelessScan()
+		if err != nil {
+			logger.Warning("RequestWirelessScan: ", err)
+		}
+	})
 }

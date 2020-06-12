@@ -50,7 +50,11 @@ func HandlePrepareForSleep(sleep bool) {
 	}
 	// wakeup
 	enableNotify()
+	//value decided the strategy of the wirelessScan
 	_ = manager.RequestWirelessScan()
+	time.AfterFunc(3*time.Second, func() {
+		manager.clearAccessPoints()
+	})
 }
 
 type Module struct {
@@ -141,7 +145,7 @@ func (d *Module) Stop() error {
 	if manager == nil {
 		return nil
 	}
-	
+
 	service := loader.GetService()
 
 	err := service.ReleaseName(dbusServiceName)
