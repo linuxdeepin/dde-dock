@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QAccessible>
+#include <QTextDocument>
 
 TipsWidget::TipsWidget(QWidget *parent) : QFrame(parent)
 {
@@ -11,9 +12,13 @@ TipsWidget::TipsWidget(QWidget *parent) : QFrame(parent)
 void TipsWidget::setText(const QString &text)
 {
     m_type = TipsWidget::SingleLine;
-    m_text = text;
+    // 如果传递的是富文本，获取富文本中的纯文本内容进行显示
+    QTextDocument document;
+    document.setHtml(text);
+    // 同时去掉两边的空白信息，例如qBittorrent的提示
+    m_text = document.toPlainText().simplified();
 
-    setFixedSize(fontMetrics().width(text) + 6, fontMetrics().height());
+    setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
 
     update();
 
