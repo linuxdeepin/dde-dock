@@ -43,12 +43,10 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
-    , m_refreshIconTimer(new QTimer(this))
 {
     m_applet->setVisible(false);
     m_adapterPowered = m_applet->poweredInitState();
-    m_refreshIconTimer->setInterval(100);
-    connect(m_refreshIconTimer, &QTimer::timeout, this, &BluetoothItem::refreshIcon);
+
     connect(m_applet, &BluetoothApplet::powerChanged, [&](bool powered) {
         m_adapterPowered = powered;
         refreshIcon();
@@ -134,17 +132,6 @@ void BluetoothItem::refreshIcon()
             stateString = "active";
             break;
         case Device::StateAvailable: {
-            m_refreshIconTimer->start();
-            stateString = "waiting";
-            iconString = QString("bluetooth-%1-symbolic").arg(stateString);
-            const qreal ratio = devicePixelRatioF();
-            int iconSize = PLUGIN_ICON_MAX_SIZE;
-            if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-                iconString.append(PLUGIN_MIN_ICON_NAME);
-
-            m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-
-            update();
             return ;
         }
         case Device::StateUnavailable: {
@@ -155,7 +142,6 @@ void BluetoothItem::refreshIcon()
         stateString = "disable";
     }
 
-    m_refreshIconTimer->stop();
     iconString = QString("bluetooth-%1-symbolic").arg(stateString);
 
     const qreal ratio = devicePixelRatioF();
@@ -232,9 +218,5 @@ void BluetoothItem::paintEvent(QPaintEvent *event)
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
     painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
-    if (m_devState == Device::StateAvailable) {
-        QTime time = QTime::currentTime();
-        painter.rotate((time.second() + (time.msec() / 1000.0)) * 6.0);
-    }
 }
 
