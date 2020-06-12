@@ -47,9 +47,9 @@ const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qre
 SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     : QWidget(parent)
     , m_inputInter(new DBusSinkInput(inputPath, this))
+    , m_appBtn(new DImageButton(this))
     , m_volumeBtnMin(new DImageButton(this))
     , m_volumeIconMax(new QLabel(this))
-    , m_appBtn(new DImageButton(this))
     , m_volumeSlider(new VolumeSlider(this))
     , m_volumeLabel(new TipsWidget(this))
 {

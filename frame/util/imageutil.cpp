@@ -55,4 +55,5 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, cons
         pixmap.setDevicePixelRatio(ratio);
         return pixmap;
     }
+    return QPixmap();
 }

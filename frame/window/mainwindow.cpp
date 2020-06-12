@@ -468,37 +468,6 @@ void MainWindow::internalMove(const QPoint &p)
         m_mainPanel->move(0, 0);
         return QWidget::move(p);
     }
-
-
-    QPoint rp = rawXPosition(p);
-    const auto ratio = devicePixelRatioF();
-
-    const QRect &r = m_settings->primaryRawRect();
-    switch (m_curDockPos) {
-    case Left:      rp.setX(r.x());             break;
-    case Top:       rp.setY(r.y());             break;
-    case Right:     rp.setX(r.right() - 1);     break;
-    case Bottom:    rp.setY(r.bottom() - 1);    break;
-    }
-
-    int hx = height() * ratio, wx = width() * ratio;
-    if (m_settings->hideMode() != HideMode::KeepShowing &&
-            isHide &&
-            m_panelHideAni->state() == QVariantAnimation::Stopped &&
-            m_panelShowAni->state() == QVariantAnimation::Stopped) {
-        switch (m_curDockPos) {
-        case Top:
-        case Bottom:
-            hx = 2;
-            break;
-        case Left:
-        case Right:
-            wx = 2;
-        }
-    }
-
-    // using platform window to set real window position
-//    windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
 }
 
 void MainWindow::initConnections()
