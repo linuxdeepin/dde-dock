@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
+
 namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
