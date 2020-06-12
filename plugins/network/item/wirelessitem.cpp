@@ -188,6 +188,7 @@ WirelessItem::WirelessStatus WirelessItem::getDeviceState()
     case NetworkDevice::Deactivation:
     case NetworkDevice::Failed:        return Failed;
     }
+    Q_UNREACHABLE();
 }
 
 QJsonObject &WirelessItem::getConnectedApInfo()

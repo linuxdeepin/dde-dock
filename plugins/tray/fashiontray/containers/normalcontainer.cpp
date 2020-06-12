@@ -159,12 +159,12 @@ int NormalContainer::itemCount()
 
 void NormalContainer::setExpand(const bool expand)
 {
-    int itemSize;
+//    int itemSize;
 
-    if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom)
-        itemSize = std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
-    else
-        itemSize = std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
+//    if (dockPosition() == Dock::Position::Top || dockPosition() == Dock::Position::Bottom)
+//        itemSize = std::min(parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
+//    else
+//        itemSize = std::min(parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
 
     for (auto w : wrapperList()) {
         w->setAttention(false);

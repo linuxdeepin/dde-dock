@@ -33,8 +33,8 @@
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
-    , m_pluginLoaded(false)
     , m_interface(nullptr)
+    , m_pluginLoaded(false)
 {
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
     sessionBus.connect("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));

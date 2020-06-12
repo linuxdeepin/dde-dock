@@ -511,7 +511,6 @@ void MainWindow::internalMove(const QPoint &p)
         return QWidget::move(p);
     }
 
-
     QPoint rp = rawXPosition(p);
     const auto ratio = devicePixelRatioF();
 
