@@ -466,7 +466,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 	if settingName == "vpn" {
 		vpnSecretsData := make(map[string]string)
 		if getSettingVpnServiceType(connectionData) == nmOpenConnectServiceType {
-			vpnSecretsData, ok = <- sa.createPendingKey(connectionData, hints, flags)
+			vpnSecretsData, ok = <-sa.createPendingKey(connectionData, hints, flags)
 			if !ok {
 				return nil, errors.New("failed to createPendingKey")
 			}
@@ -542,9 +542,9 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 				resultSaved, err := sa.getAll(connUUID, settingName)
 				if err != nil {
 					return nil, err
-				}		
+				}
 				logger.Debugf("getAll resultSaved: %#v", resultSaved)
-			        if len(resultSaved) == 0 && allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
+				if len(resultSaved) == 0 && allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
 					askItems = append(askItems, secretKey)
 				}
 			}
@@ -555,15 +555,15 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 				settingName, askItems, requestNew)
 			if err != nil {
 				logger.Warning("askPasswords error:", err)
-				if sa.m.ActiveConnectSettingPath == connectionPath {
-					sa.m.DisconnectDevice(sa.m.ActiveConnectDevpath)
+				if sa.m.activeConnectSettingPath == connectionPath {
+					sa.m.DisconnectDevice(sa.m.activeConnectDevpath)
 				}
 			} else {
 				var items []settingItem
 				for key, value := range resultAsk {
 					setting[key] = dbus.MakeVariant(value)
 					secretFlags, _ := getConnectionDataUint32(connectionData, settingName,
-					getSecretFlagsKeyName(key))
+						getSecretFlagsKeyName(key))
 					if secretFlags == secretFlagAgentOwned {
 						valueStr, ok := setting[key].Value().(string)
 						if ok {
@@ -577,7 +577,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 						}
 					}
 				}
-			        for _, item := range items {
+				for _, item := range items {
 					sa.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
 				}
 			}
