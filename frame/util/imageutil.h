@@ -22,6 +22,7 @@
 #ifndef IMAGEUTIL_H
 #define IMAGEUTIL_H
 
+#include <QWidget>
 #include <QPixmap>
 #include <QSvgRenderer>
 

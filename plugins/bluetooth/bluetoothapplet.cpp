@@ -313,8 +313,8 @@ void BluetoothApplet::getDevieInitStatus(AdapterItem *item)
                 emit deviceStateChanged(deviceState);
             else
                 emit deviceStateChanged(otherDeviceState);
-        }
             break;
+        }
     }
 }
 

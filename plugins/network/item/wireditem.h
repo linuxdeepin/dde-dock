@@ -33,6 +33,7 @@ using namespace dde::network;
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+class QLabel;
 class TipsWidget;
 class HorizontalSeperator;
 class StateButton;
@@ -107,14 +108,12 @@ signals:
 private slots:
     void deviceStateChanged(NetworkDevice::DeviceStatus state);
     void changedActiveWiredConnectionInfo(const QJsonObject &connInfo);
-    void buttonEnter();
-    void buttonLeave();
 
 private:
     QString m_deviceName;
     QLabel *m_connectedName;
     QLabel *m_wiredIcon;
-    StateLabel *m_stateButton;
+    StateButton *m_stateButton;
     DSpinner *m_loadingStat;
 
     HorizontalSeperator *m_line;
