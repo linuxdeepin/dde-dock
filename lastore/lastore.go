@@ -313,7 +313,8 @@ func (l *Lastore) notifyJob(path dbus.ObjectPath) {
 			l.notifyAutoClean()
 		}
 	case UpdateSourceJobType:
-		if status == SucceedStatus {
+		val, _ := l.core.UpdatablePackages().Get(0)
+		if status == EndStatus && len(val) > 0 {
 			l.notifyUpdateSource(l.createUpdateActions())
 		}
 	}
