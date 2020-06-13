@@ -27,7 +27,7 @@
 #include <QTimer>
 #include "../widgets/tipswidget.h"
 
-#include <dimagebutton.h>
+#include <DIconButton>
 #include <DWindowManagerHelper>
 
 #include <com_deepin_dde_daemon_dock_entry.h>
@@ -69,14 +69,15 @@ public slots:
     void setWindowInfo(const WindowInfo &info);
 
 private:
-    void dragEnterEvent(QDragEnterEvent *e);
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
     SHMInfo *getImageDSHM();
-    XImage * getImageXlib();
+    XImage *getImageXlib();
     QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);
 
 private:
@@ -90,7 +91,7 @@ private:
 
     TipsWidget *m_title;
     QTimer *m_waitLeaveTimer;
-    DImageButton *m_closeBtn2D;
+    DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
 };
 

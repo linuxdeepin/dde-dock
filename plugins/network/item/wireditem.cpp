@@ -148,6 +148,7 @@ WiredItem::WiredStatus WiredItem::getDeviceState()
     case NetworkDevice::Deactivation:
     case NetworkDevice::Failed:        return Failed;
     }
+    Q_UNREACHABLE();
 }
 
 QJsonObject WiredItem::getActiveWiredConnectionInfo()

@@ -30,7 +30,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
-#include <dimagebutton.h>
+
+#include <DIconButton>
+
+DWIDGET_USE_NAMESPACE
 
 class TipsWidget;
 class SoundApplet : public QScrollArea
@@ -62,7 +65,7 @@ private:
 private:
     QWidget *m_centralWidget;
     QWidget *m_applicationTitle;
-    Dtk::Widget::DImageButton *m_volumeBtn;
+    DIconButton *m_volumeBtn;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
     TipsWidget *m_soundShow;

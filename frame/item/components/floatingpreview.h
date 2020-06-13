@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QPointer>
 
-#include <dimagebutton.h>
+#include <DIconButton>
 #include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
@@ -56,7 +56,7 @@ private slots:
 private:
     QPointer<AppSnapshot> m_tracked;
 
-    DImageButton *m_closeBtn3D;
+    DIconButton *m_closeBtn3D;
     DPushButton *m_titleBtn;
 };
 

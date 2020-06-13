@@ -1245,6 +1245,8 @@ bool NetworkItem::isShowControlCenter()
         case Adisabled:
         case Bdisabled:
             return true;
+        default:
+            break;
         }
     } else {
         switch (m_pluginState) {
@@ -1255,6 +1257,8 @@ bool NetworkItem::isShowControlCenter()
         case Disconnected:
         case Disabled:
             return true;
+        default:
+            break;
         }
     }
 
