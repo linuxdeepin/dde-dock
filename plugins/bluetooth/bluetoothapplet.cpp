@@ -292,18 +292,18 @@ void BluetoothApplet::getDevieInitStatus(AdapterItem *item)
     }
 
     switch (deviceState) {
-    case Device::StateConnected:
-        emit deviceStateChanged(deviceState);
-        break;
-    case Device::StateUnavailable:
-        emit deviceStateChanged(otherDeviceState);
-        break;
-    case Device::StateAvailable: {
-        if (otherDeviceState != Device::StateConnected)
+        case Device::StateConnected:
             emit deviceStateChanged(deviceState);
-        else
+            break;
+        case Device::StateUnavailable:
             emit deviceStateChanged(otherDeviceState);
-    }
-        break;
+            break;
+        case Device::StateAvailable: {
+            if (otherDeviceState != Device::StateConnected)
+                emit deviceStateChanged(deviceState);
+            else
+                emit deviceStateChanged(otherDeviceState);
+        }
+            break;
     }
 }

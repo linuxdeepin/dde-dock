@@ -128,15 +128,15 @@ void BluetoothItem::refreshIcon()
 
     if (m_adapterPowered) {
         switch (m_devState) {
-        case Device::StateConnected:
-            stateString = "active";
-            break;
-        case Device::StateAvailable: {
-            return ;
-        }
-        case Device::StateUnavailable: {
-            stateString = "disable";
-        }      break;
+            case Device::StateConnected:
+                stateString = "active";
+                break;
+            case Device::StateAvailable: {
+                return ;
+            }
+            case Device::StateUnavailable: {
+                stateString = "disable";
+            }      break;
         }
     } else {
         stateString = "disable";

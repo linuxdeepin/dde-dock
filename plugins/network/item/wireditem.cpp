@@ -25,10 +25,14 @@
 #include "applet/horizontalseperator.h"
 #include "../widgets/tipswidget.h"
 #include "util/utils.h"
+#include "util/statebutton.h"
 
 #include <DGuiApplicationHelper>
-#include <NetworkModel>
+
+#include <QLabel>
 #include <QVBoxLayout>
+
+#include <NetworkModel>
 
 DGUI_USE_NAMESPACE
 
@@ -42,7 +46,7 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     , m_deviceName(deviceName)
     , m_connectedName(new QLabel(this))
     , m_wiredIcon(new QLabel(this))
-    , m_stateButton(new StateLabel(this))
+    , m_stateButton(new StateButton(this))
     , m_loadingStat(new DSpinner(this))
 {
     setFixedHeight(ItemHeight);
@@ -56,11 +60,8 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     m_wiredIcon->setPixmap(iconPix);
     m_wiredIcon->setVisible(false);
 
-    pixpath = QString(":/wireless/resources/wireless/select");
-    pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
-    iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-    m_stateButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    m_stateButton->setPixmap(iconPix);
+    m_stateButton->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
+    m_stateButton->setType(StateButton::Check);
     m_stateButton->setVisible(false);
     m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_loadingStat->setVisible(false);
@@ -93,12 +94,10 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
             this, &WiredItem::changedActiveWiredConnectionInfo);
 
-    connect(m_stateButton, &StateLabel::click, this, [&] {
+    connect(m_stateButton, &StateButton::click, this, [&] {
         auto enableState = m_device->enabled();
         emit requestSetDeviceEnable(path(), !enableState);
     });
-    connect(m_stateButton, &StateLabel::enter, this, &WiredItem::buttonEnter);
-    connect(m_stateButton, &StateLabel::leave, this, &WiredItem::buttonLeave);
 
     deviceStateChanged(m_device->status());
 }
@@ -134,19 +133,19 @@ WiredItem::WiredStatus WiredItem::getDeviceState()
     }
 
     switch (m_device->status()) {
-    case NetworkDevice::Unknow:        return Unknow;
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable:   return Nocable;
-    case NetworkDevice::Disconnected:  return Disconnected;
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:        return Connecting;
-    case NetworkDevice::NeedAuth:      return Authenticating;
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries:   return ObtainingIP;
-    case NetworkDevice::Activated:     return Connected;
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed:        return Failed;
+        case NetworkDevice::Unknow:        return Unknow;
+        case NetworkDevice::Unmanaged:
+        case NetworkDevice::Unavailable:   return Nocable;
+        case NetworkDevice::Disconnected:  return Disconnected;
+        case NetworkDevice::Prepare:
+        case NetworkDevice::Config:        return Connecting;
+        case NetworkDevice::NeedAuth:      return Authenticating;
+        case NetworkDevice::IpConfig:
+        case NetworkDevice::IpCheck:
+        case NetworkDevice::Secondaries:   return ObtainingIP;
+        case NetworkDevice::Activated:     return Connected;
+        case NetworkDevice::Deactivation:
+        case NetworkDevice::Failed:        return Failed;
     }
     Q_UNREACHABLE();
 }
@@ -164,53 +163,44 @@ void WiredItem::setThemeType(DGuiApplicationHelper::ColorType themeType)
     pixpath = isLight ? pixpath + "-dark.svg" : pixpath +  LightType;
     auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
     m_wiredIcon->setPixmap(iconPix);
-
-    if (m_device) {
-        if (NetworkDevice::Activated == m_device->status()) {
-            pixpath = QString(":/wireless/resources/wireless/select");
-            pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
-            auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-            m_stateButton->setPixmap(iconPix);
-        }
-    }
 }
 
 void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
     QPixmap iconPix;
     switch (state) {
-    case NetworkDevice::Unknow:
-    case NetworkDevice::Unmanaged:
-    case NetworkDevice::Unavailable:
-    case NetworkDevice::Disconnected:
-    case NetworkDevice::Deactivation:
-    case NetworkDevice::Failed: {
-        m_loadingStat->stop();
-        m_loadingStat->hide();
-        m_loadingStat->setVisible(false);
-        if (!m_device->enabled())
+        case NetworkDevice::Unknow:
+        case NetworkDevice::Unmanaged:
+        case NetworkDevice::Unavailable:
+        case NetworkDevice::Disconnected:
+        case NetworkDevice::Deactivation:
+        case NetworkDevice::Failed: {
+            m_loadingStat->stop();
+            m_loadingStat->hide();
+            m_loadingStat->setVisible(false);
+            if (!m_device->enabled())
+                m_stateButton->setVisible(false);
+        }
+        break;
+        case NetworkDevice::Prepare:
+        case NetworkDevice::Config:
+        case NetworkDevice::NeedAuth:
+        case NetworkDevice::IpConfig:
+        case NetworkDevice::IpCheck:
+        case NetworkDevice::Secondaries: {
             m_stateButton->setVisible(false);
-    }
-    break;
-    case NetworkDevice::Prepare:
-    case NetworkDevice::Config:
-    case NetworkDevice::NeedAuth:
-    case NetworkDevice::IpConfig:
-    case NetworkDevice::IpCheck:
-    case NetworkDevice::Secondaries: {
-        m_stateButton->setVisible(false);
-        m_loadingStat->setVisible(true);
-        m_loadingStat->start();
-        m_loadingStat->show();
-    }
-    break;
-    case NetworkDevice::Activated: {
-        m_loadingStat->stop();
-        m_loadingStat->hide();
-        m_loadingStat->setVisible(false);
-        m_stateButton->setVisible(true);
-    }
-    break;
+            m_loadingStat->setVisible(true);
+            m_loadingStat->start();
+            m_loadingStat->show();
+        }
+        break;
+        case NetworkDevice::Activated: {
+            m_loadingStat->stop();
+            m_loadingStat->hide();
+            m_loadingStat->setVisible(false);
+            m_stateButton->setVisible(true);
+        }
+        break;
     }
 
     emit wiredStateChanged();
@@ -234,30 +224,4 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
         m_connectedName->setText(strTitle);
 
     emit activeConnectionChanged();
-}
-
-void WiredItem::buttonEnter()
-{
-    if (m_device) {
-        bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
-        if (NetworkDevice::Activated == m_device->status()) {
-            auto pixpath = QString(":/wireless/resources/wireless/disconnect");
-            pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
-            auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-            m_stateButton->setPixmap(iconPix);
-        }
-    }
-}
-
-void WiredItem::buttonLeave()
-{
-    if (m_device) {
-        bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
-        if (NetworkDevice::Activated == m_device->status()) {
-            auto pixpath = QString(":/wireless/resources/wireless/select");
-            pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
-            auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-            m_stateButton->setPixmap(iconPix);
-        }
-    }
 }
