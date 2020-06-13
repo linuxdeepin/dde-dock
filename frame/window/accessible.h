@@ -45,7 +45,7 @@
 #include "../plugins/multitasking/multitaskingwidget.h"
 #include "../plugins/overlay-warning/overlaywarningwidget.h"
 
-#include <DImageButton>
+#include <DIconButton>
 #include <DSwitchButton>
 #include <DPushButton>
 
@@ -91,7 +91,7 @@ SET_FORM_ACCESSIBLE(ShowDesktopWidget, "plugin-showdesktop")
 SET_FORM_ACCESSIBLE(OverlayWarningWidget, "plugin-overlaywarningwidget")
 SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
 SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
-SET_BUTTON_ACCESSIBLE(DImageButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
+SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
 SET_BUTTON_ACCESSIBLE(DesktopWidget, "desktopWidget");
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
@@ -141,8 +141,8 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_app");
     USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_tray");
     USE_ACCESSIBLE(classname, QLabel);
-    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-2d");
-    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-3d");
+    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-2d");
+    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-3d");
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
 
     return interface;

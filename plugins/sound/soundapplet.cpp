@@ -43,14 +43,13 @@ SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
     , m_centralWidget(new QWidget)
     , m_applicationTitle(new QWidget)
-    , m_volumeBtn(new DImageButton)
+    , m_volumeBtn(new DIconButton(this))
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
     , m_soundShow(new TipsWidget)
     , m_audioInter(new DBusAudio(this))
     , m_defSinkInter(nullptr)
 {
-    //    QIcon::setThemeName("deepin");
     m_centralWidget->setAccessibleName("volumn-centralwidget");
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeIconMax->setAccessibleName("volume-iconmax");
@@ -66,10 +65,10 @@ SoundApplet::SoundApplet(QWidget *parent)
     TipsWidget *deviceLabel = new TipsWidget;
     deviceLabel->setText(tr("Device"));
 
-    QHBoxLayout *deviceLayout =new QHBoxLayout;
+    QHBoxLayout *deviceLayout = new QHBoxLayout;
     deviceLayout->addSpacing(2);
-    deviceLayout->addWidget(deviceLabel,0, Qt::AlignLeft);
-    deviceLayout->addWidget(m_soundShow,0,Qt::AlignRight);
+    deviceLayout->addWidget(deviceLabel, 0, Qt::AlignLeft);
+    deviceLayout->addWidget(m_soundShow, 0, Qt::AlignRight);
     deviceLayout->setSpacing(0);
     deviceLayout->setMargin(0);
 
@@ -110,6 +109,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_applicationTitle->setAccessibleName("applicationtitle");
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
+    m_volumeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    m_volumeBtn->setFlat(true);
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 100.0f);
 
@@ -131,7 +132,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
 
-    connect(m_volumeBtn, &DImageButton::clicked, this, &SoundApplet::toggleMute);
+    connect(m_volumeBtn, &DIconButton::clicked, this, &SoundApplet::toggleMute);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SoundApplet::onPlaySoundEffect);
     connect(m_audioInter, &DBusAudio::SinkInputsChanged, this, &SoundApplet::sinkInputsChanged);
@@ -259,5 +260,5 @@ void SoundApplet::refreshIcon()
     m_volumeIconMax->setPixmap(ret);
 
     ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
-    m_volumeBtn->setPixmap(ret);
+    m_volumeBtn->setIcon(ret);
 }

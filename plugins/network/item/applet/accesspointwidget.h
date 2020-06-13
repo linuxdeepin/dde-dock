@@ -24,8 +24,6 @@
 
 #include "accesspoint.h"
 
-#include <DImageButton>
-
 #include <NetworkDevice>
 
 #include <QWidget>

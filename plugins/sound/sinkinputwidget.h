@@ -27,10 +27,13 @@
 #include "../widgets/tipswidget.h"
 
 #include <QFrame>
-
-#include <dimagebutton.h>
 #include <QPainter>
 
+#include <DIconButton>
+
+DWIDGET_USE_NAMESPACE
+
+class QLabel;
 class SinkInputWidget : public QWidget
 {
     Q_OBJECT
@@ -51,8 +54,8 @@ private:
 private:
     DBusSinkInput *m_inputInter;
 
-    Dtk::Widget::DImageButton *m_appBtn;
-    Dtk::Widget::DImageButton *m_volumeBtnMin;
+    DIconButton *m_appBtn;
+    DIconButton *m_volumeBtnMin;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
     TipsWidget *m_volumeLabel;
