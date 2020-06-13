@@ -34,10 +34,10 @@ public:
     ~IndicatorTrayWidget();
 
     QString itemKeyForConfig() override;
-    void setActive(const bool active) Q_DECL_OVERRIDE;
-    void updateIcon() Q_DECL_OVERRIDE;
-    const QImage trayImage() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t, int, int) Q_DECL_OVERRIDE;
+    void setActive(const bool active) override;
+    void updateIcon() override;
+    const QImage trayImage() override;
+    void sendClick(uint8_t, int, int) override;
     static QString toIndicatorKey(const QString &indicatorName) { return QString("indicator:%1").arg(indicatorName); }
     static bool isIndicatorKey(const QString &itemKey) { return itemKey.startsWith("indicator:"); }
 

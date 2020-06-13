@@ -44,7 +44,7 @@ class DesktopWidget : public QWidget
     Q_OBJECT
 
 public:
-    DesktopWidget(QWidget *parent) : QWidget(parent){
+    explicit DesktopWidget(QWidget *parent) : QWidget(parent){
     }
 };
 
@@ -55,8 +55,8 @@ class MainPanelControl : public QWidget
 {
     Q_OBJECT
 public:
-    MainPanelControl(QWidget *parent = 0);
-    ~MainPanelControl();
+    explicit MainPanelControl(QWidget *parent = nullptr);
+    ~MainPanelControl() override;
 
     void addFixedAreaItem(int index, QWidget *wdg);
     void addAppAreaItem(int index, QWidget *wdg);

@@ -104,7 +104,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
 }
 
 // 公共的功能
-#define FUNC_CREATE(classname,accessibletype,accessdescription)    Accessible##classname(classname *w) \
+#define FUNC_CREATE(classname,accessibletype,accessdescription) explicit Accessible##classname(classname *w) \
     : QAccessibleWidget(w,accessibletype,#classname)\
     , m_w(w)\
     , m_description(accessdescription)\

@@ -169,7 +169,7 @@ int TrayPlugin::itemSortKey(const QString &itemKey)
         return m_systemTraysController->systemTrayItemSortKey(itemKey);
     }
 
-    const int defaultSort = displayMode() == Dock::DisplayMode::Fashion ? 0 : 0;
+    const int defaultSort = 0;
 
     AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey, nullptr);
     if (trayWidget == nullptr) {

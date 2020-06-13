@@ -35,8 +35,8 @@ class SsidButton : public QLabel
 {
     Q_OBJECT
 public:
-    SsidButton(QWidget *parent = nullptr) : QLabel(parent) {}
-    virtual ~SsidButton() {}
+    explicit SsidButton(QWidget *parent = nullptr) : QLabel(parent) {}
+    virtual ~SsidButton() override {}
 
 signals:
     void clicked();

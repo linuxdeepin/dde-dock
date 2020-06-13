@@ -6,6 +6,7 @@
 
 StateButton::StateButton(QWidget *parent)
     : QWidget(parent)
+    , m_type(Check)
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
 }

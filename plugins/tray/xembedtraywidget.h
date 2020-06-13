@@ -36,10 +36,10 @@ public:
     ~XEmbedTrayWidget();
 
     QString itemKeyForConfig() override;
-    void updateIcon() Q_DECL_OVERRIDE;
-    void setActive(const bool active) Q_DECL_OVERRIDE;
-    const QImage trayImage() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
+    void updateIcon() override;
+    void setActive(const bool active) override;
+    const QImage trayImage() override;
+    void sendClick(uint8_t mouseButton, int x, int y) override;
 
     static QString getWindowProperty(quint32 winId, QString propName);
     static QString toXEmbedKey(quint32 winId);
@@ -47,9 +47,9 @@ public:
     virtual bool isValid() override {return m_valid;}
 
 private:
-    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
     void configContainerPosition();
 
     void wrapWindow();
@@ -57,7 +57,7 @@ private:
     void refershIconImage();
 
     static QString getAppNameForWindow(quint32 winId);
-    static int getTrayWidgetKeySuffix(const QString &appName, quint32 winId);
+//    static int getTrayWidgetKeySuffix(const QString &appName, quint32 winId);
 
 private slots:
     void setX11PassMouseEvent(const bool pass);

@@ -42,7 +42,7 @@ class OverlayWarningPlugin : public QObject, PluginsItemInterface
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "overlay-warning.json")
 
 public:
-    explicit OverlayWarningPlugin(QObject *parent = 0);
+    explicit OverlayWarningPlugin(QObject *parent = nullptr);
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -57,8 +57,8 @@ public:
     const QString itemCommand(const QString &itemKey) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
-    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
-    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
 
 private:
     void loadPlugin();

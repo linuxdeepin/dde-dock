@@ -13,9 +13,9 @@ public:
 
     // AbstractContainer interface
 public:
-    bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
-    void refreshVisible() Q_DECL_OVERRIDE;
-    void addWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
+    bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) override;
+    void refreshVisible() override;
+    void addWrapper(FashionTrayWidgetWrapper *wrapper) override;
 };
 
 #endif // ATTENTIONCONTAINER_H

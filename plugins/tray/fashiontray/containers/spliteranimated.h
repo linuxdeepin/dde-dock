@@ -14,12 +14,12 @@ public:
 
     void setStartValue(const QVariant &value);
     void setEndValue(const QVariant &value);
-    void startAnimation();
-    void stopAnimation();
+//    void startAnimation();
+//    void stopAnimation();
     void setDockPosition(const Dock::Position position);
 
 protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) override;
 
 private Q_SLOTS:
     void onSizeAnimationValueChanged(const QVariant &value);

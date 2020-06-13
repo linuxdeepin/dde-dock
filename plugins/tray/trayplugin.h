@@ -46,17 +46,17 @@ class TrayPlugin : public QObject, PluginsItemInterface
 public:
     explicit TrayPlugin(QObject *parent = 0);
 
-    const QString pluginName() const Q_DECL_OVERRIDE;
-    void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
+    const QString pluginName() const override;
+    void init(PluginProxyInterface *proxyInter) override;
     bool pluginIsDisable() override;
-    void displayModeChanged(const Dock::DisplayMode mode) Q_DECL_OVERRIDE;
-    void positionChanged(const Dock::Position position) Q_DECL_OVERRIDE;
-    QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
-    QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
-    QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
-    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
-    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
-    void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
+    void displayModeChanged(const Dock::DisplayMode mode) override;
+    void positionChanged(const Dock::Position position) override;
+    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemTipsWidget(const QString &itemKey) override;
+    QWidget *itemPopupApplet(const QString &itemKey) override;
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
+    void refreshIcon(const QString &itemKey) override;
     void pluginSettingsChanged() override;
 
     Dock::Position dockPosition() const;

@@ -82,15 +82,15 @@ AdaptersManager::AdaptersManager(QObject *parent)
     }
 }
 
-QMap<QString, const Adapter *> AdaptersManager::adapters() const
-{
-    return m_adapters;
-}
+//QMap<QString, const Adapter *> AdaptersManager::adapters() const
+//{
+//    return m_adapters;
+//}
 
-const Adapter *AdaptersManager::adapterById(const QString &id)
-{
-    return m_adapters.keys().contains(id) ? m_adapters[id] : nullptr;
-}
+//const Adapter *AdaptersManager::adapterById(const QString &id)
+//{
+//    return m_adapters.keys().contains(id) ? m_adapters[id] : nullptr;
+//}
 
 void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powered)
 {
@@ -114,17 +114,17 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
     }
 }
 
-void AdaptersManager::connectAllPairedDevice(const Adapter *adapter)
-{
-    for (const Device *d : adapter->paredDevices()) {
-        Device *vd = const_cast<Device *>(d);
-        if (vd) {
-            QDBusObjectPath path(vd->id());
-            m_bluetoothInter->ConnectDevice(path);
-            qDebug() << "connect to device: " << vd->name();
-        }
-    }
-}
+//void AdaptersManager::connectAllPairedDevice(const Adapter *adapter)
+//{
+//    for (const Device *d : adapter->paredDevices()) {
+//        Device *vd = const_cast<Device *>(d);
+//        if (vd) {
+//            QDBusObjectPath path(vd->id());
+//            m_bluetoothInter->ConnectDevice(path);
+//            qDebug() << "connect to device: " << vd->name();
+//        }
+//    }
+//}
 
 void AdaptersManager::connectDevice(Device *device)
 {

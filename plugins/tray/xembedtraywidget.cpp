@@ -440,44 +440,44 @@ QString XEmbedTrayWidget::getAppNameForWindow(quint32 winId)
     return appName;
 }
 
-int XEmbedTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 winId)
-{
-    int suffix = AppWinidSuffixMap.value(appName).value(winId, 0);
+//int XEmbedTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 winId)
+//{
+//    int suffix = AppWinidSuffixMap.value(appName).value(winId, 0);
 
-    // return the exist suffix
-    if (suffix != 0) {
-        return suffix;
-    }
+//    // return the exist suffix
+//    if (suffix != 0) {
+//        return suffix;
+//    }
 
-    // it is the first window for this application
-    if (!AppWinidSuffixMap.contains(appName)) {
-        QMap<quint32, int> winIdSuffixMap;
-        winIdSuffixMap.insert(winId, 1);
-        AppWinidSuffixMap.insert(appName, winIdSuffixMap);
-        return 1;
-    }
+//    // it is the first window for this application
+//    if (!AppWinidSuffixMap.contains(appName)) {
+//        QMap<quint32, int> winIdSuffixMap;
+//        winIdSuffixMap.insert(winId, 1);
+//        AppWinidSuffixMap.insert(appName, winIdSuffixMap);
+//        return 1;
+//    }
 
-    QMap<quint32, int> subMap = AppWinidSuffixMap.value(appName);
-    QList<int> suffixList = subMap.values();
+//    QMap<quint32, int> subMap = AppWinidSuffixMap.value(appName);
+//    QList<int> suffixList = subMap.values();
 
-    // suffix will never be 0
-    suffixList.removeAll(0);
-    std::sort(suffixList.begin(), suffixList.end());
+//    // suffix will never be 0
+//    suffixList.removeAll(0);
+//    std::sort(suffixList.begin(), suffixList.end());
 
-    // get the minimum of useable suffix
-    int index = 0;
-    for (; index < suffixList.size(); ++index) {
-        if (suffixList.at(index) != index + 1) {
-            break;
-        }
-    }
-    suffix = index + 1;
+//    // get the minimum of useable suffix
+//    int index = 0;
+//    for (; index < suffixList.size(); ++index) {
+//        if (suffixList.at(index) != index + 1) {
+//            break;
+//        }
+//    }
+//    suffix = index + 1;
 
-    subMap.insert(winId, suffix);
-    AppWinidSuffixMap.insert(appName, subMap);
+//    subMap.insert(winId, suffix);
+//    AppWinidSuffixMap.insert(appName, subMap);
 
-    return suffix;
-}
+//    return suffix;
+//}
 
 void XEmbedTrayWidget::setX11PassMouseEvent(const bool pass)
 {

@@ -43,8 +43,8 @@ public:
     explicit AbstractPluginsController(QObject *parent = 0);
 
     // implements PluginProxyInterface
-    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) Q_DECL_OVERRIDE;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) Q_DECL_OVERRIDE;
+    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
     void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
 
 protected:
@@ -64,7 +64,7 @@ private slots:
     void refreshPluginSettings();
 
 private:
-    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;

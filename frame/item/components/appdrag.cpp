@@ -21,10 +21,11 @@
 
 #include "appdrag.h"
 
-AppDrag::AppDrag(QObject *dragSource) : QDrag(dragSource)
+AppDrag::AppDrag(QObject *dragSource)
+    : QDrag(dragSource)
+    , m_appDragWidget(new AppDragWidget)
 {
     // delete by itself
-    m_appDragWidget = new AppDragWidget;
     m_appDragWidget->setVisible(false);
 }
 

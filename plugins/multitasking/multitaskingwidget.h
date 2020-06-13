@@ -32,7 +32,7 @@ class MultitaskingWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit MultitaskingWidget(QWidget *parent = 0);
+    explicit MultitaskingWidget(QWidget *parent = nullptr);
     void refreshIcon();
 
 signals:

@@ -43,23 +43,23 @@ class TrashPlugin : public QObject, PluginsItemInterface
 public:
     explicit TrashPlugin(QObject *parent = 0);
 
-    const QString pluginName() const Q_DECL_OVERRIDE;
+    const QString pluginName() const override;
     const QString pluginDisplayName() const override;
-    void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
+    void init(PluginProxyInterface *proxyInter) override;
 
-    QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
-    QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
-    QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
-    const QString itemCommand(const QString &itemKey) Q_DECL_OVERRIDE;
-    const QString itemContextMenu(const QString &itemKey) Q_DECL_OVERRIDE;
-    void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
+    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemTipsWidget(const QString &itemKey) override;
+    QWidget *itemPopupApplet(const QString &itemKey) override;
+    const QString itemCommand(const QString &itemKey) override;
+    const QString itemContextMenu(const QString &itemKey) override;
+    void refreshIcon(const QString &itemKey) override;
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     bool pluginIsAllowDisable() override { return true; }
     bool pluginIsDisable() override;
     void pluginStateSwitched() override;
-    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
-    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
-    void displayModeChanged(const Dock::DisplayMode displayMode) Q_DECL_OVERRIDE;
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
+    void displayModeChanged(const Dock::DisplayMode displayMode) override;
     void pluginSettingsChanged() override;
 
 private:

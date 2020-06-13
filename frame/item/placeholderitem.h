@@ -31,7 +31,7 @@ class PlaceholderItem : public DockItem
 public:
     explicit PlaceholderItem(QWidget *parent = 0);
 
-    inline ItemType itemType() const { return Placeholder; }
+    inline ItemType itemType() const override { return Placeholder; }
 };
 
 #endif // PLACEHOLDERITEM_H

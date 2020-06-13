@@ -16,7 +16,7 @@
 class IndicatorTrayPrivate
 {
 public:
-    IndicatorTrayPrivate(IndicatorTray *parent) : q_ptr(parent) {}
+    explicit IndicatorTrayPrivate(IndicatorTray *parent) : q_ptr(parent) {}
 
     void init();
 

@@ -67,7 +67,6 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
     const uint value = uint(qMin(100.0, qMax(0.0, data.value("Display"))));
     const int percentage = int(std::round(value));
-//    const int batteryState = m_powerInter->batteryState()["Display"];
     const bool plugged = !m_powerInter->onBattery();
 
     /*根据新需求，电池电量显示分别是*/

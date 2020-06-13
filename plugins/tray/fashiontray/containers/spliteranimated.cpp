@@ -28,36 +28,36 @@ void SpliterAnimated::setEndValue(const QVariant &value)
     m_sizeAnimation->setEndValue(value);
 }
 
-void SpliterAnimated::startAnimation()
-{
-    if (!isVisible()) {
-        return;
-    }
+//void SpliterAnimated::startAnimation()
+//{
+//    if (!isVisible()) {
+//        return;
+//    }
 
-    m_currentOpacity = OpacityMini;
+//    m_currentOpacity = OpacityMini;
 
-    if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
-        m_opacityChangeStep = (OpacityMax - OpacityMini) /
-                (m_sizeAnimation->endValue().toSizeF().height() -
-                 m_sizeAnimation->startValue().toSizeF().height());
-    } else {
-        m_opacityChangeStep = (OpacityMax - OpacityMini) /
-                (m_sizeAnimation->endValue().toSizeF().width() -
-                 m_sizeAnimation->startValue().toSizeF().width());
-    }
+//    if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
+//        m_opacityChangeStep = (OpacityMax - OpacityMini) /
+//                (m_sizeAnimation->endValue().toSizeF().height() -
+//                 m_sizeAnimation->startValue().toSizeF().height());
+//    } else {
+//        m_opacityChangeStep = (OpacityMax - OpacityMini) /
+//                (m_sizeAnimation->endValue().toSizeF().width() -
+//                 m_sizeAnimation->startValue().toSizeF().width());
+//    }
 
-    m_sizeAnimation->start();
+//    m_sizeAnimation->start();
 
-    update();
-}
+//    update();
+//}
 
-void SpliterAnimated::stopAnimation()
-{
-    m_sizeAnimation->stop();
-    m_currentOpacity = OpacityMini;
+//void SpliterAnimated::stopAnimation()
+//{
+//    m_sizeAnimation->stop();
+//    m_currentOpacity = OpacityMini;
 
-    update();
-}
+//    update();
+//}
 
 void SpliterAnimated::setDockPosition(const Dock::Position position)
 {

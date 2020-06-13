@@ -23,13 +23,13 @@
 #include "../fashiontrayconstants.h"
 
 AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
-    : QWidget(parent),
-      m_trayPlugin(trayPlugin),
-      m_wrapperLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
-      m_currentDraggingWrapper(nullptr),
-      m_expand(true),
-      m_dockPosition(Dock::Position::Bottom),
-      m_wrapperSize(QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE))
+    : QWidget(parent)
+    , m_trayPlugin(trayPlugin)
+    , m_wrapperLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
+    , m_currentDraggingWrapper(nullptr)
+    , m_expand(true)
+    , m_dockPosition(Dock::Position::Bottom)
+//    , m_wrapperSize(QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE))
 {
     setAcceptDrops(true);
 
@@ -342,10 +342,10 @@ Dock::Position AbstractContainer::dockPosition() const
     return m_dockPosition;
 }
 
-QSize AbstractContainer::wrapperSize() const
-{
-    return m_wrapperSize;
-}
+//QSize AbstractContainer::wrapperSize() const
+//{
+//    return m_wrapperSize;
+//}
 
 void AbstractContainer::dragEnterEvent(QDragEnterEvent *event)
 {

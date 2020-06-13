@@ -66,7 +66,7 @@ public:
     inline const quint8 Opacity() const { return m_opacity * 255; }
     const int dockMargin() const;
 
-    const QSize panelSize() const;
+//    const QSize panelSize() const;
     const QRect windowRect(const Position position, const bool hide = false);
     qreal dockRatio() const;
 
@@ -115,7 +115,7 @@ private slots:
     void onMonitorListChanged(const QList<QDBusObjectPath> &mons);
 
 private:
-    DockSettings(QWidget *parent = nullptr);
+    explicit DockSettings(QWidget *parent = nullptr);
     DockSettings(DockSettings const &) = delete;
     DockSettings operator =(DockSettings const &) = delete;
 

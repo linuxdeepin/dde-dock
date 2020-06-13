@@ -36,7 +36,7 @@ class ShutdownPlugin : public QObject, PluginsItemInterface
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "shutdown.json")
 
 public:
-    explicit ShutdownPlugin(QObject *parent = 0);
+    explicit ShutdownPlugin(QObject *parent = nullptr);
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -53,8 +53,8 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
-    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
-    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
 
     void pluginSettingsChanged() override;
 

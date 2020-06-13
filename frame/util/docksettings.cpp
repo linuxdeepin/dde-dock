@@ -251,10 +251,10 @@ const int DockSettings::dockMargin() const
     return 10;
 }
 
-const QSize DockSettings::panelSize() const
-{
-    return m_mainWindowSize;
-}
+//const QSize DockSettings::panelSize() const
+//{
+//    return m_mainWindowSize;
+//}
 
 const QRect DockSettings::windowRect(const Position position, const bool hide)
 {

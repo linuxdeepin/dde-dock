@@ -156,10 +156,10 @@ void NetworkPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-bool NetworkPlugin::isConnectivity()
-{
-    return NetworkModel::connectivity() == Connectivity::Full;
-}
+//bool NetworkPlugin::isConnectivity()
+//{
+//    return NetworkModel::connectivity() == Connectivity::Full;
+//}
 
 void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 {

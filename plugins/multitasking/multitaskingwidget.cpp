@@ -28,8 +28,9 @@
 
 MultitaskingWidget::MultitaskingWidget(QWidget *parent)
     : QWidget(parent)
+    , m_icon(QIcon::fromTheme(":/icons/deepin-multitasking-view.svg"))
 {
-    m_icon = QIcon::fromTheme(":/icons/deepin-multitasking-view.svg");
+
 }
 
 void MultitaskingWidget::refreshIcon()

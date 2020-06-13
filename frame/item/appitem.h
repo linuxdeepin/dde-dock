@@ -44,7 +44,7 @@ class AppItem : public DockItem
 
 public:
     explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
-    ~AppItem();
+    ~AppItem() override;
 
     const QString appId() const;
     bool isValid() const;
@@ -53,9 +53,9 @@ public:
     QWidget *appDragWidget();
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
-    inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
+    inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
-    virtual QString accessibleName();
+    virtual QString accessibleName() override;
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -77,10 +77,10 @@ private:
     void leaveEvent(QEvent *e) override;
     void showEvent(QShowEvent *e) override;
 
-    void showHoverTips() Q_DECL_OVERRIDE;
-    void invokedMenuItem(const QString &itemId, const bool checked) Q_DECL_OVERRIDE;
-    const QString contextMenu() const Q_DECL_OVERRIDE;
-    QWidget *popupTips() Q_DECL_OVERRIDE;
+    void showHoverTips() override;
+    void invokedMenuItem(const QString &itemId, const bool checked) override;
+    const QString contextMenu() const override;
+    QWidget *popupTips() override;
     void startDrag();
     bool hasAttention() const;
 
@@ -88,7 +88,7 @@ private:
 
 private slots:
     void updateWindowInfos(const WindowInfoMap &info);
-    void refershIcon() Q_DECL_OVERRIDE;
+    void refershIcon() override;
     void activeChanged();
     void showPreview();
     void playSwingEffect();
