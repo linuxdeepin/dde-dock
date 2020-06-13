@@ -262,9 +262,9 @@ const QRect DockSettings::windowRect(const Position position, const bool hide)
     if (hide) {
         switch (position) {
         case Top:
-        case Bottom:    size.setHeight(2);      break;
+        case Bottom:    size.setHeight(0);      break;
         case Left:
-        case Right:     size.setWidth(2);       break;
+        case Right:     size.setWidth(0);       break;
         }
     }
 
@@ -412,23 +412,14 @@ void DockSettings::onGSettingsChanged(const QString &key)
 
 void DockSettings::onPositionChanged()
 {
-    const Position prevPos = m_position;
     const Position nextPos = Dock::Position(m_dockInter->position());
 
-    if (prevPos == nextPos)
+    if (m_position == nextPos)
         return;
+    m_position = nextPos;
 
-    emit positionChanged(prevPos, nextPos);
-
-    QTimer::singleShot(200, this, [this, nextPos] {
-        m_position = nextPos;
-        DockItem::setDockPosition(nextPos);
-        qApp->setProperty(PROP_POSITION, QVariant::fromValue(nextPos));
-
-        calculateWindowConfig();
-
-        m_itemManager->refershItemsIcon();
-    });
+    // 通知主窗口改变位置
+    emit positionChanged();
 }
 
 void DockSettings::onDisplayModeChanged()
@@ -467,7 +458,7 @@ void DockSettings::hideStateChanged()
 
 void DockSettings::dockItemCountChanged()
 {
-    emit windowGeometryChanged();
+//    emit windowGeometryChanged();
 }
 
 void DockSettings::primaryScreenChanged()
@@ -644,6 +635,16 @@ void DockSettings::checkService()
             }
         });
     }
+}
+
+void DockSettings::posChangedUpdateSettings()
+{
+    DockItem::setDockPosition(m_position);
+    qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
+
+    calculateWindowConfig();
+
+    m_itemManager->refershItemsIcon();
 }
 
 void DockSettings::calculateMultiScreensPos()
