@@ -979,16 +979,6 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
         return;
 
     QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
-    if(!screen) {
-
-        if (m_settings->hideMode() == KeepShowing)
-            return;
-
-        if (!isVisible())
-            setVisible(true);
-
-        return;
-    }
 
     if (screen->name() == m_settings->currentDockScreen()) {
         if (m_settings->hideMode() == KeepShowing)
@@ -1019,14 +1009,15 @@ void MainWindow::updateRegionMonitorWatch()
     QList<QRect> screensRect = m_settings->monitorsRect();
     QList<MonitRect> monitorAreas;
 
+    const qreal scale = devicePixelRatioF();
     int val = 3;
     int x, y, w, h;
 
     auto func = [&](MonitRect &monitRect){
-        monitRect.x1 = x;
-        monitRect.y1 = y;
-        monitRect.x2 = x + w;
-        monitRect.y2 = y + h;
+        monitRect.x1 = int(x * scale);
+        monitRect.y1 = int(y * scale);
+        monitRect.x2 = int((x + w) * scale);
+        monitRect.y2 = int((y + h) * scale);
         monitorAreas << monitRect;
     };
 
