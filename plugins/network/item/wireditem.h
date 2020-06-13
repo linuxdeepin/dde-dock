@@ -29,15 +29,14 @@
 #include <DGuiApplicationHelper>
 #include <DSpinner>
 
-#include <QLabel>
-
 using namespace dde::network;
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+class QLabel;
 class TipsWidget;
 class HorizontalSeperator;
-class StateLabel;
+class StateButton;
 class WiredItem : public DeviceItem
 {
     Q_OBJECT
@@ -78,47 +77,15 @@ signals:
 private slots:
     void deviceStateChanged(NetworkDevice::DeviceStatus state);
     void changedActiveWiredConnectionInfo(const QJsonObject &connInfo);
-    void buttonEnter();
-    void buttonLeave();
 
 private:
     QString m_deviceName;
     QLabel *m_connectedName;
     QLabel *m_wiredIcon;
-    StateLabel *m_stateButton;
+    StateButton *m_stateButton;
     DSpinner *m_loadingStat;
 
     HorizontalSeperator *m_line;
-};
-
-class StateLabel : public QLabel
-{
-    Q_OBJECT
-public:
-    explicit StateLabel(QWidget *parent = nullptr)
-        : QLabel(parent) {}
-
-signals:
-    void enter();
-    void leave();
-    void click();
-
-protected:
-    void mousePressEvent(QMouseEvent *event) override
-    {
-        QLabel::mousePressEvent(event);
-        emit click();
-    }
-    void enterEvent(QEvent *event) override
-    {
-        QLabel::enterEvent(event);
-        emit enter();
-    }
-    void leaveEvent(QEvent *event) override
-    {
-        QLabel::leaveEvent(event);
-        emit leave();
-    }
 };
 
 #endif // WIREDITEM_H

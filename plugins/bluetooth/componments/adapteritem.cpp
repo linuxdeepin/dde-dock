@@ -212,34 +212,34 @@ void AdapterItem::deviceChangeState(const Device::State state)
         DeviceItem *deviceItem = m_deviceItems.value(device->id());
         if (deviceItem) {
             switch (state) {
-            case Device::StateUnavailable: {
-                int index = m_sortUnConnect.indexOf(deviceItem);
-                if (index < 0) {
-                    m_sortConnected.removeOne(deviceItem);
-                    m_sortUnConnect << deviceItem;
-                    qSort(m_sortUnConnect);
-                    moveDeviceItem(state, deviceItem);
+                case Device::StateUnavailable: {
+                    int index = m_sortUnConnect.indexOf(deviceItem);
+                    if (index < 0) {
+                        m_sortConnected.removeOne(deviceItem);
+                        m_sortUnConnect << deviceItem;
+                        qSort(m_sortUnConnect);
+                        moveDeviceItem(state, deviceItem);
+                    }
                 }
-            }
-                break;
-            case Device::StateAvailable: {
-                int index = m_sortUnConnect.indexOf(deviceItem);
-                if (index < 0)
-                    m_sortConnected.removeOne(deviceItem);
-                else
-                    m_sortUnConnect.removeOne(deviceItem);
-            }
-                break;
-            case Device::StateConnected: {
-                int index = m_sortConnected.indexOf(deviceItem);
-                if (index < 0) {
-                    m_sortUnConnect.removeOne(deviceItem);
-                    m_sortConnected << deviceItem;
-                    qSort(m_sortConnected);
-                    moveDeviceItem(state, deviceItem);
+                    break;
+                case Device::StateAvailable: {
+                    int index = m_sortUnConnect.indexOf(deviceItem);
+                    if (index < 0)
+                        m_sortConnected.removeOne(deviceItem);
+                    else
+                        m_sortUnConnect.removeOne(deviceItem);
                 }
-            }
-                break;
+                    break;
+                case Device::StateConnected: {
+                    int index = m_sortConnected.indexOf(deviceItem);
+                    if (index < 0) {
+                        m_sortUnConnect.removeOne(deviceItem);
+                        m_sortConnected << deviceItem;
+                        qSort(m_sortConnected);
+                        moveDeviceItem(state, deviceItem);
+                    }
+                }
+                    break;
             }
         }
 
@@ -259,16 +259,16 @@ void AdapterItem::moveDeviceItem(Device::State state, DeviceItem *item)
     int size = m_sortConnected.size();
     int index = 0;
     switch (state) {
-    case Device::StateUnavailable:
-    case Device::StateAvailable: {
-        index = m_sortUnConnect.indexOf(item);
-        index += size;
-    }
-        break;
-    case Device::StateConnected: {
-        index = m_sortUnConnect.indexOf(item);
-    }
-        break;
+        case Device::StateUnavailable:
+        case Device::StateAvailable: {
+            index = m_sortUnConnect.indexOf(item);
+            index += size;
+        }
+            break;
+        case Device::StateConnected: {
+            index = m_sortUnConnect.indexOf(item);
+        }
+            break;
     }
     index += 2;
     m_deviceLayout->removeWidget(item);

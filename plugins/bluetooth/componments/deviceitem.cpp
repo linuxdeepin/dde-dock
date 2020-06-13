@@ -23,7 +23,8 @@
 #include "deviceitem.h"
 #include "constants.h"
 #include "bluetoothconstants.h"
-#include "../frame/util/imageutil.h"
+#include "util/imageutil.h"
+#include "util/statebutton.h"
 
 #include <DApplicationHelper>
 #include <DStyle>
@@ -38,7 +39,7 @@ extern void initFontColor(QWidget *widget);
 DeviceItem::DeviceItem(Device *d, QWidget *parent)
     : QWidget(parent)
     , m_title(new QLabel(this))
-    , m_state(new QLabel(this))
+    , m_state(new StateButton(this))
     , m_loadingStat(new DSpinner)
     , m_line(new HorizontalSeparator(this))
     , m_typeIcon(new QLabel(this))
@@ -50,21 +51,17 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
         QString iconPrefix;
         QString iconSuffix;
         switch (themeType) {
-        case DApplicationHelper::UnknownType:
-        case DApplicationHelper::LightType: {
-            iconPrefix = LIGHTICON;
-            iconSuffix = LIGHTICONSUFFIX;
-            m_stateSuffix = LIGHTSUFFIX;
+            case DApplicationHelper::UnknownType:
+            case DApplicationHelper::LightType: {
+                iconPrefix = LIGHTICON;
+                iconSuffix = LIGHTICONSUFFIX;
+            }
+                break;
+            case DApplicationHelper::DarkType: {
+                iconPrefix = DARKICON;
+                iconSuffix = DARKICONSUFFIX;
+            }
         }
-            break;
-        case DApplicationHelper::DarkType: {
-            iconPrefix = DARKICON;
-            m_stateSuffix = DARKSUFFIX;
-            iconSuffix = DARKICONSUFFIX;
-        }
-        }
-
-        m_state->setPixmap(QPixmap(":/select" + m_stateSuffix));
 
         QString iconString;
         if (!m_device->deviceType().isEmpty())
@@ -76,11 +73,14 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
 
     themeChanged(DApplicationHelper::instance()->themeType());
 
+    m_state->setType(StateButton::Check);
+    m_state->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
+    m_state->setVisible(false);
+
     m_title->setText(nameDecorated(m_device->name()));
     initFontColor(m_title);
 
     m_line->setVisible(true);
-    m_state->setVisible(false);
     m_loadingStat->setFixedSize(20, 20);
     m_loadingStat->setVisible(false);
 
@@ -123,52 +123,30 @@ void DeviceItem::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
-void DeviceItem::enterEvent(QEvent *event)
-{
-    QWidget::enterEvent(event);
-    if (m_device) {
-        if (Device::StateConnected == m_device->state()) {
-            m_state->setPixmap(QPixmap(":/disconnect" + m_stateSuffix));
-        }
-    }
-}
-
-void DeviceItem::leaveEvent(QEvent *event)
-{
-    QWidget::enterEvent(event);
-    if (m_device) {
-        if (Device::StateConnected == m_device->state()) {
-            m_state->setPixmap(QPixmap(":/select" + m_stateSuffix));
-        }
-    }
-}
-
 void DeviceItem::changeState(const Device::State state)
 {
     switch (state) {
-    case Device::StateUnavailable: {
-        m_state->setPixmap(QPixmap(":/disconnect" + m_stateSuffix));
-        m_state->setVisible(false);
-        m_loadingStat->stop();
-        m_loadingStat->hide();
-        m_loadingStat->setVisible(false);
-    }
-        break;
-    case Device::StateAvailable: {
-        m_state->setVisible(false);
-        m_loadingStat->start();
-        m_loadingStat->show();
-        m_loadingStat->setVisible(true);
-    }
-        break;
-    case Device::StateConnected: {
-        m_state->setPixmap(QPixmap(":/select" + m_stateSuffix));
-        m_loadingStat->stop();
-        m_loadingStat->hide();
-        m_loadingStat->setVisible(false);
-        m_state->setVisible(true);
-    }
-        break;
+        case Device::StateUnavailable: {
+            m_state->setVisible(false);
+            m_loadingStat->stop();
+            m_loadingStat->hide();
+            m_loadingStat->setVisible(false);
+        }
+            break;
+        case Device::StateAvailable: {
+            m_state->setVisible(false);
+            m_loadingStat->start();
+            m_loadingStat->show();
+            m_loadingStat->setVisible(true);
+        }
+            break;
+        case Device::StateConnected: {
+            m_loadingStat->stop();
+            m_loadingStat->hide();
+            m_loadingStat->setVisible(false);
+            m_state->setVisible(true);
+        }
+            break;
     }
 }
 

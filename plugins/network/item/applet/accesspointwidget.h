@@ -30,7 +30,7 @@
 #include <QLabel>
 #include <QDBusObjectPath>
 
-class StateLabel;
+class StateButton;
 class SsidButton : public QLabel
 {
     Q_OBJECT
@@ -77,9 +77,6 @@ private:
 private slots:
     void ssidClicked();
     void disconnectBtnClicked();
-    void buttonEnter();
-    void buttonLeave();
-
 
 private:
     dde::network::NetworkDevice::DeviceStatus m_activeState;
@@ -88,7 +85,7 @@ private:
     SsidButton *m_ssidBtn;
     QLabel *m_securityLabel;
     QLabel *m_strengthLabel;
-    StateLabel *m_stateButton;
+    StateButton *m_stateButton;
 
     QPixmap m_securityPixmap;
     QSize m_securityIconSize;

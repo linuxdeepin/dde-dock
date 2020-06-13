@@ -31,6 +31,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class StateButton;
 class HorizontalSeparator;
 class DeviceItem : public QWidget
 {
@@ -47,8 +48,6 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
-    void enterEvent(QEvent *event) override;
-    void leaveEvent(QEvent *event) override;
 
 signals:
     void clicked(Device *);
@@ -61,11 +60,10 @@ private:
 
 private:
     QLabel *m_title;
-    QLabel *m_state;
+    StateButton *m_state;
     DSpinner *m_loadingStat;
     Device *m_device;
     HorizontalSeparator *m_line;
-    QString m_stateSuffix;
     QLabel *m_typeIcon;
 };
 
