@@ -17,4 +17,26 @@
         <file>resources/icons/battery_plugged.svg</file>
         <file>resources/icons/battery_unknow.svg</file>
     </qresource>
+    <qresource prefix="/icons/deepin/builtin">
+        <file>actions/battery-010-plugged-symbolic_20px.svg</file>
+        <file>actions/battery-010-plugged-symbolic-dark_20px.svg</file>
+        <file>actions/battery-010-symbolic_20px.svg</file>
+        <file>actions/battery-010-symbolic-dark_20px.svg</file>
+        <file>actions/battery-030-plugged-symbolic_20px.svg</file>
+        <file>actions/battery-030-plugged-symbolic-dark_20px.svg</file>
+        <file>actions/battery-030-symbolic_20px.svg</file>
+        <file>actions/battery-030-symbolic-dark_20px.svg</file>
+        <file>actions/battery-050-plugged-symbolic_20px.svg</file>
+        <file>actions/battery-050-plugged-symbolic-dark_20px.svg</file>
+        <file>actions/battery-050-symbolic_20px.svg</file>
+        <file>actions/battery-050-symbolic-dark_20px.svg</file>
+        <file>actions/battery-070-plugged-symbolic_20px.svg</file>
+        <file>actions/battery-070-plugged-symbolic-dark_20px.svg</file>
+        <file>actions/battery-070-symbolic_20px.svg</file>
+        <file>actions/battery-070-symbolic-dark_20px.svg</file>
+        <file>actions/battery-090-plugged-symbolic_20px.svg</file>
+        <file>actions/battery-090-plugged-symbolic-dark_20px.svg</file>
+        <file>actions/battery-090-symbolic_20px.svg</file>
+        <file>actions/battery-090-symbolic-dark_20px.svg</file>
+    </qresource>
 </RCC>
