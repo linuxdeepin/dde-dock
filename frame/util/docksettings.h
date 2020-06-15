@@ -77,6 +77,7 @@ public:
     QString &currentDockScreen() { return m_currentScreen; }
     
     void posChangedUpdateSettings();
+    void calculateWindowConfig();
 
     QSize m_mainWindowSize;
     DBusDock *m_dockInter;
@@ -118,7 +119,6 @@ private:
     DockSettings(DockSettings const &) = delete;
     DockSettings operator =(DockSettings const &) = delete;
 
-    void calculateWindowConfig();
     void gtkIconThemeChanged();
     void checkService();
 
