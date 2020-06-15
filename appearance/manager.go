@@ -36,13 +36,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	imageeffect "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.imageeffect"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	geoclue "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.geoclue2"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-	"github.com/linuxdeepin/go-x11-client"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/theme_thumb"
 	"pkg.deepin.io/dde/daemon/appearance/background"
@@ -51,7 +51,7 @@ import (
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/dde/daemon/session/common"
-	"pkg.deepin.io/gir/gio-2.0"
+	gio "pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -134,8 +134,8 @@ type Manager struct {
 	WallpaperSlideShow gsprop.String `prop:"access:rw"`
 	QtActiveColor      string        `prop:"access:rw"`
 
-	wsLoopMap          map[string]*WSLoop
-	wsSchedulerMap     map[string]*WSScheduler
+	wsLoopMap      map[string]*WSLoop
+	wsSchedulerMap map[string]*WSScheduler
 
 	userObj             *accounts.User
 	imageBlur           *accounts.ImageBlur
@@ -161,10 +161,10 @@ type Manager struct {
 	watcher    *fsnotify.Watcher
 	endWatcher chan struct{}
 
-	desktopBgs []string
-	greeterBg  string
+	desktopBgs      []string
+	greeterBg       string
 	curMonitorSpace string
-	wm *wm.Wm
+	wm              *wm.Wm
 
 	signals *struct {
 		// Theme setting changed
@@ -197,6 +197,7 @@ type Manager struct {
 
 type mapMonitorWorkspaceWSPolicy map[string]string
 type mapMonitorWorkspaceWSConfig map[string]WSConfig
+
 // NewManager will create a 'Manager' object
 func newManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
@@ -301,10 +302,9 @@ func (m *Manager) destroy() {
 
 	m.sysSigLoop.Stop()
 	m.login1Manager.RemoveHandler(proxy.RemoveAllHandlers)
-	for iSche := range m.wsSchedulerMap{
+	for iSche := range m.wsSchedulerMap {
 		m.wsSchedulerMap[iSche].stop()
 	}
-
 
 	if m.setting != nil {
 		m.setting.Unref()
@@ -675,14 +675,14 @@ func (m *Manager) doSetMonitorBackground(monitorName string, imageFile string) (
 	return file, nil
 }
 
-func (m *Manager) doUnmarshalWallpaperSlideshow(jsonString string)(mapMonitorWorkspaceWSPolicy, error){
+func (m *Manager) doUnmarshalWallpaperSlideshow(jsonString string) (mapMonitorWorkspaceWSPolicy, error) {
 	var cfg mapMonitorWorkspaceWSPolicy
 	var byteWallpaperSlideShow []byte = []byte(jsonString)
 	err := json.Unmarshal(byteWallpaperSlideShow, &cfg)
 	return cfg, err
 }
 
-func (m *Manager) doMarshalWallpaperSlideshow(cfg mapMonitorWorkspaceWSPolicy)(string, error){
+func (m *Manager) doMarshalWallpaperSlideshow(cfg mapMonitorWorkspaceWSPolicy) (string, error) {
 	data, err := json.Marshal(cfg)
 	if err != nil {
 		return "", err
@@ -696,7 +696,7 @@ func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow
 		logger.Warning("Get Current Workspace failure:", err)
 		return err
 	}
-	cfg ,err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if cfg == nil {
 		cfg = make(mapMonitorWorkspaceWSPolicy)
 	}
@@ -711,19 +711,19 @@ func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow
 	return nil
 }
 
-func (m *Manager) doGetWallpaperSlideShow(monitorName string)(string, error) {
+func (m *Manager) doGetWallpaperSlideShow(monitorName string) (string, error) {
 	idx, err := m.wm.GetCurrentWorkspace(0)
 	if err != nil {
 		logger.Warning("Get Current Workspace failure:", err)
-		return "",err
+		return "", err
 	}
-	cfg ,err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if err != nil {
 		return "", nil
 	}
 	key := monitorName + "&&" + strconv.Itoa(int(idx))
 	wallpaperSlideShow := cfg[key]
-	return wallpaperSlideShow , nil
+	return wallpaperSlideShow, nil
 }
 
 func (m *Manager) doSetBackground(value string) (string, error) {
@@ -886,7 +886,7 @@ func (*Manager) GetInterfaceName() string {
 	return dbusInterface
 }
 
-func (m *Manager) saveWSConfig(monitorSpace string,t time.Time) error {
+func (m *Manager) saveWSConfig(monitorSpace string, t time.Time) error {
 	cfg, _ := loadWSConfig(wsConfigFile)
 	var tempCfg WSConfig
 	tempCfg.LastChange = t
@@ -894,7 +894,7 @@ func (m *Manager) saveWSConfig(monitorSpace string,t time.Time) error {
 	if cfg == nil {
 		cfg = make(mapMonitorWorkspaceWSConfig)
 	}
-	cfg[monitorSpace]=tempCfg
+	cfg[monitorSpace] = tempCfg
 	return cfg.save(wsConfigFile)
 }
 
@@ -905,7 +905,7 @@ func (m *Manager) autoChangeBg(monitorSpace string, t time.Time) {
 		logger.Warning("file is empty")
 		return
 	}
-	idx, err:= m.wm.GetCurrentWorkspace(0)
+	idx, err := m.wm.GetCurrentWorkspace(0)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -915,8 +915,8 @@ func (m *Manager) autoChangeBg(monitorSpace string, t time.Time) {
 		logger.Warning("monitorSpace format error")
 		return
 	}
-	if strIdx == monitorSpace[splitter + len("&&") :]{
-		_, err := m.doSetMonitorBackground(monitorSpace[:splitter] ,file)
+	if strIdx == monitorSpace[splitter+len("&&"):] {
+		_, err := m.doSetMonitorBackground(monitorSpace[:splitter], file)
 		if err != nil {
 			logger.Warning("failed to set background:", err)
 		}
@@ -943,7 +943,7 @@ func (m *Manager) initWallpaperSlideshow() {
 	m.loadWSConfig()
 	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if err == nil {
-		for icfg := range cfg{
+		for icfg := range cfg {
 			m.wsSchedulerMap[icfg].fn = m.autoChangeBg
 			policy := cfg[icfg]
 			if isValidWSPolicy(policy) {
@@ -955,11 +955,13 @@ func (m *Manager) initWallpaperSlideshow() {
 				} else {
 					nSec, err := strconv.ParseUint(policy, 10, 32)
 					if err == nil {
-						m.wsSchedulerMap[icfg].updateInterval(icfg, time.Duration(nSec) * time.Second)
+						m.wsSchedulerMap[icfg].updateInterval(icfg, time.Duration(nSec)*time.Second)
 					}
 				}
 			}
 		}
+	} else {
+		logger.Debug("doUnmarshalWallpaperSlideshow err is ", err)
 	}
 }
 
@@ -975,7 +977,7 @@ func (m *Manager) changeBgAfterLogin(monitorSpace string) error {
 	}
 
 	var needChangeBg bool
-	markFile := filepath.Join(runDir, "dde-daemon-wallpaper-slideshow-login")
+	markFile := filepath.Join(runDir, "dde-daemon-wallpaper-slideshow-login"+monitorSpace)
 	sessionId, err := getSessionId(markFile)
 	if err == nil {
 		if sessionId != currentSessionId {
@@ -1034,19 +1036,19 @@ func (m *Manager) updateWSPolicy(policy string) {
 	if err == nil {
 		for icfg := range cfg {
 			policy = cfg[icfg]
-			_ ,ok := m.wsSchedulerMap[icfg]
+			_, ok := m.wsSchedulerMap[icfg]
 			if !ok {
-				m.wsSchedulerMap[icfg]=newWSScheduler()
+				m.wsSchedulerMap[icfg] = newWSScheduler()
 			}
-			_ ,ok = m.wsLoopMap[icfg]
+			_, ok = m.wsLoopMap[icfg]
 			if !ok {
-				m.wsLoopMap[icfg]=newWSLoop()
+				m.wsLoopMap[icfg] = newWSLoop()
 			}
 			if m.curMonitorSpace == icfg && isValidWSPolicy(policy) {
 				nSec, err := strconv.ParseUint(policy, 10, 32)
 				if err == nil {
 					m.wsSchedulerMap[m.curMonitorSpace].lastSetBg = time.Now()
-					m.wsSchedulerMap[m.curMonitorSpace].updateInterval(icfg, time.Duration(nSec) * time.Second)
+					m.wsSchedulerMap[m.curMonitorSpace].updateInterval(icfg, time.Duration(nSec)*time.Second)
 					err = m.saveWSConfig(m.curMonitorSpace, time.Now())
 					if err != nil {
 						logger.Warning(err)
