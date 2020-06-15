@@ -276,12 +276,14 @@ MainWindow::MainWindow(QWidget *parent)
             // 动画完成更新dock设置
             m_settings->posChangedUpdateSettings();
 
-            const QRect windowRect = m_settings->windowRect(m_dockPosition, true);
-            QWidget::move(windowRect.topLeft());
-            QWidget::setFixedSize(windowRect.size());
-
             m_mainPanel->move(QPoint(0, 0));
         }
+
+        m_settings->calculateWindowConfig();
+        const QRect windowRect = m_settings->windowRect(m_dockPosition, true);
+        QWidget::move(windowRect.topLeft());
+        QWidget::setFixedSize(windowRect.size());
+        m_mainPanel->setFixedSize(windowRect.size());
     });
 
     updateRegionMonitorWatch();
