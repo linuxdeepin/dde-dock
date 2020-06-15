@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             zhaolong <zhaolong@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +51,7 @@ class MainWindow : public DBlurEffectWidget, public MainPanelDelegate
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setEffectEnabled(const bool enabled);
     void setComposite(const bool hasComposite);
@@ -90,7 +91,7 @@ signals:
     void panelGeometryChanged();
 
 private slots:
-    void positionChanged(const Position prevPos, const Position nextPos);
+    void positionChanged();
     void updatePosition();
     void updateGeometry();
     void clearStrutPartial();
@@ -100,8 +101,8 @@ private slots:
     void updateDisplayMode();
 
     void expand();
-    void narrow(const Position prevPos);
-    void resetPanelEnvironment(const bool visible, const bool resetPosition = true);
+    void narrow();
+    void resetPanelEnvironment();
     void updatePanelVisible();
 
     void adjustShadowMask();
@@ -111,6 +112,8 @@ private slots:
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+
+    void newPositionExpand();
 
 private:
     bool m_launched;
@@ -135,8 +138,7 @@ private:
     QString m_sniHostService;
     QSize m_size;
     DragWidget *m_dragWidget;
-    Position m_curDockPos;
-    Position m_newDockPos;
+    Position m_dockPosition;
 };
 
 #endif // MAINWINDOW_H

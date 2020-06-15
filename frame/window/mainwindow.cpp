@@ -4,6 +4,7 @@
  * Author:     sbw <sbw@sbw.so>
  *
  * Maintainer: sbw <sbw@sbw.so>
+ *             zhaolong <zhaolong@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -178,10 +179,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_dragWidget->setMouseTracking(true);
     m_dragWidget->setFocusPolicy(Qt::NoFocus);
 
-    m_curDockPos = m_settings->position();
-    m_newDockPos = m_curDockPos;
+    m_dockPosition = m_settings->position();
 
-    if ((Top == m_curDockPos) || (Bottom == m_curDockPos)) {
+    if ((Top == m_dockPosition) || (Bottom == m_dockPosition)) {
         m_dragWidget->setCursor(Qt::SizeVerCursor);
     } else {
         m_dragWidget->setCursor(Qt::SizeHorCursor);
@@ -195,12 +195,12 @@ MainWindow::MainWindow(QWidget *parent)
         // dock的宽度或高度值
         int val = value.toInt();
         // 当前dock尺寸
-        const QRectF windowRect = m_settings->windowRect(m_curDockPos, false);
+        const QRect windowRect = m_settings->windowRect(m_dockPosition, false);
 
-        switch (m_curDockPos) {
+        switch (m_dockPosition) {
         case Dock::Top:
             m_mainPanel->move(0, val - windowRect.height());
-            QWidget::move(windowRect.left(), windowRect.top());
+            QWidget::move(windowRect.topLeft());
             break;
         case Dock::Bottom:
             m_mainPanel->move(0, 0);
@@ -208,7 +208,7 @@ MainWindow::MainWindow(QWidget *parent)
             break;
         case Dock::Left:
             m_mainPanel->move(val - windowRect.width(), 0);
-            QWidget::move(windowRect.left(), windowRect.top());
+            QWidget::move(windowRect.topLeft());
             break;
         case Dock::Right:
             m_mainPanel->move(0, 0);
@@ -217,7 +217,7 @@ MainWindow::MainWindow(QWidget *parent)
         default: break;
         }
 
-        if (m_curDockPos == Dock::Top || m_curDockPos == Dock::Bottom) {
+        if (m_dockPosition == Dock::Top || m_dockPosition == Dock::Bottom) {
             QWidget::setFixedHeight(val);
         } else {
             QWidget::setFixedWidth(val);
@@ -232,57 +232,54 @@ MainWindow::MainWindow(QWidget *parent)
         // dock的宽度或高度
         int val = value.toInt();
         // dock隐藏后的rect
-        const QRectF windowRect = m_settings->windowRect(m_curDockPos, false);
+        const QRect windowRect = m_settings->windowRect(m_dockPosition, false);
         const int margin = m_settings->dockMargin();
 
-        switch (m_curDockPos) {
-        case Dock::Top:
-            m_mainPanel->move(0, val - windowRect.height());
-            QWidget::move(windowRect.left(), windowRect.top() - margin);
-            break;
-        case Dock::Bottom:
-            m_mainPanel->move(0, 0);
-            QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
-            break;
-        case Dock::Left:
-            m_mainPanel->move(val - windowRect.width(), 0);
-            QWidget::move(windowRect.left() - margin, windowRect.top());
-            break;
-        case Dock::Right:
-            m_mainPanel->move(0, 0);
-            QWidget::move(windowRect.right() - val + margin, windowRect.top());
-            break;
-        default: break;
+        switch (m_dockPosition) {
+            case Dock::Top:
+                m_mainPanel->move(0, val - windowRect.height());
+                QWidget::move(windowRect.left(), windowRect.top() - margin);
+                break;
+            case Dock::Bottom:
+                m_mainPanel->move(0, 0);
+                QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
+                break;
+            case Dock::Left:
+                m_mainPanel->move(val - windowRect.width(), 0);
+                QWidget::move(windowRect.left() - margin, windowRect.top());
+                break;
+            case Dock::Right:
+                m_mainPanel->move(0, 0);
+                QWidget::move(windowRect.right() - val + margin, windowRect.top());
+                break;
+            default: break;
         }
 
-        if (m_curDockPos == Dock::Top || m_curDockPos == Dock::Bottom) {
+        if (m_dockPosition == Dock::Top || m_dockPosition == Dock::Bottom) {
             QWidget::setFixedHeight(val);
         } else {
             QWidget::setFixedWidth(val);
         }
-
     });
 
-    connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
-        const QRect windowRect = m_settings->windowRect(m_curDockPos, false);
-
-        QWidget::move(windowRect.left(), windowRect.top());
-        QWidget::setFixedSize(windowRect.size());
-
-        m_mainPanel->move(QPoint(0, 0));
-
-        resizeMainPanelWindow();
-    });
+//    connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
+//    });
 
     connect(m_panelHideAni, &QVariantAnimation::finished, [ this ]() {
-        m_curDockPos = m_newDockPos;
-        const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
+        Position settingPosition = m_settings->position();
+        // 位置是否更新
+        if (m_dockPosition != settingPosition) {
+            // 动画完成更新dock位置
+            m_dockPosition = settingPosition;
+            // 动画完成更新dock设置
+            m_settings->posChangedUpdateSettings();
 
-        QWidget::move(windowRect.left(), windowRect.top());
-        QWidget::setFixedSize(windowRect.size());
-        m_mainPanel->move(QPoint(0, 0));
-        if (m_settings->hideMode() != KeepShowing)
-            this->setVisible(false);
+            const QRect windowRect = m_settings->windowRect(m_dockPosition, true);
+            QWidget::move(windowRect.topLeft());
+            QWidget::setFixedSize(windowRect.size());
+
+            m_mainPanel->move(QPoint(0, 0));
+        }
     });
 
     updateRegionMonitorWatch();
@@ -299,10 +296,10 @@ void MainWindow::launch()
     QTimer::singleShot(400, this, [&] {
         m_launched = true;
         qApp->processEvents();
-        QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
+        QWidget::move(m_settings->windowRect(m_dockPosition).topLeft());
         setVisible(true);
         updatePanelVisible();
-        resetPanelEnvironment(false);
+        resetPanelEnvironment();
     });
 }
 
@@ -365,10 +362,6 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 void MainWindow::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
-
-    m_leaveDelayTimer->stop();
-    if (m_settings->hideState() != Show && m_panelShowAni->state() != QPropertyAnimation::Running)
-        m_expandDelayTimer->start();
 
     if (QApplication::overrideCursor() && QApplication::overrideCursor()->shape() != Qt::ArrowCursor)
         QApplication::restoreOverrideCursor();
@@ -465,37 +458,6 @@ void MainWindow::internalMove(const QPoint &p)
         m_mainPanel->move(0, 0);
         return QWidget::move(p);
     }
-
-
-    QPoint rp = rawXPosition(p);
-    const auto ratio = devicePixelRatioF();
-
-    const QRect &r = m_settings->primaryRawRect();
-    switch (m_curDockPos) {
-    case Left:      rp.setX(r.x());             break;
-    case Top:       rp.setY(r.y());             break;
-    case Right:     rp.setX(r.right() - 1);     break;
-    case Bottom:    rp.setY(r.bottom() - 1);    break;
-    }
-
-    int hx = height() * ratio, wx = width() * ratio;
-    if (m_settings->hideMode() != HideMode::KeepShowing &&
-            isHide &&
-            m_panelHideAni->state() == QVariantAnimation::Stopped &&
-            m_panelShowAni->state() == QVariantAnimation::Stopped) {
-        switch (m_curDockPos) {
-        case Top:
-        case Bottom:
-            hx = 2;
-            break;
-        case Left:
-        case Right:
-            wx = 2;
-        }
-    }
-
-    // using platform window to set real window position
-//    windowHandle()->handle()->setGeometry(QRect(rp.x(), rp.y(), wx, hx));
 }
 
 void MainWindow::initConnections()
@@ -506,7 +468,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::trayCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
-    connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
+    connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(); });
     connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
@@ -570,35 +532,13 @@ void MainWindow::x11MoveResizeWindow(const int x, const int y, const int w, cons
     XFlush(disp);
 }
 
-void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
+void MainWindow::positionChanged()
 {
-    m_newDockPos = nextPos;
     // paly hide animation and disable other animation
     clearStrutPartial();
-    narrow(prevPos);
+    narrow();
 
-    // set strut
-    QTimer::singleShot(400, this, [&] {
-        setStrutPartial();
-    });
-
-    // reset to right environment when animation finished
-    QTimer::singleShot(500, this, [&] {
-        m_mainPanel->setPositonValue(m_curDockPos);
-        resetPanelEnvironment(true);
-
-        if ((Top == m_curDockPos) || (Bottom == m_curDockPos))
-        {
-            m_dragWidget->setCursor(Qt::SizeVerCursor);
-        } else
-        {
-            m_dragWidget->setCursor(Qt::SizeHorCursor);
-        }
-
-        updatePanelVisible();
-    });
-
-    updateRegionMonitorWatch();
+    connect(m_panelHideAni, &QVariantAnimation::finished, this, &MainWindow::newPositionExpand);
 }
 
 void MainWindow::updatePosition()
@@ -623,11 +563,11 @@ void MainWindow::updateGeometry()
     setStrutPartial();
 
     m_mainPanel->setDisplayMode(m_settings->displayMode());
-    m_mainPanel->setPositonValue(m_curDockPos);
+    m_mainPanel->setPositonValue(m_dockPosition);
 
     bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
 
-    const QRect windowRect = m_settings->windowRect(m_curDockPos, isHide);
+    const QRect windowRect = m_settings->windowRect(m_dockPosition, isHide);
 
     internalMove(windowRect.topLeft());
 
@@ -642,6 +582,25 @@ void MainWindow::updateGeometry()
 void MainWindow::getTrayVisableItemCount()
 {
    m_mainPanel->getTrayVisableItemCount();
+}
+
+void MainWindow::newPositionExpand()
+{
+    // set strut
+    setStrutPartial();
+
+    // reset to right environment when animation finished
+    m_mainPanel->setPositonValue(m_dockPosition);
+    resetPanelEnvironment();
+
+    if ((Top == m_dockPosition) || (Bottom == m_dockPosition)) {
+        m_dragWidget->setCursor(Qt::SizeVerCursor);
+    } else {
+        m_dragWidget->setCursor(Qt::SizeHorCursor);
+    }
+
+    updatePanelVisible();
+    disconnect(m_panelHideAni, &QVariantAnimation::finished, this, &MainWindow::newPositionExpand);
 }
 
 void MainWindow::clearStrutPartial()
@@ -663,8 +622,7 @@ void MainWindow::setStrutPartial()
     const auto ratio = devicePixelRatioF();
     const int maxScreenHeight = m_settings->screenRawHeight();
     const int maxScreenWidth = m_settings->screenRawWidth();
-    const Position side = m_curDockPos;
-    const QPoint &p = rawXPosition(m_settings->windowRect(m_curDockPos).topLeft());
+    const QPoint &p = rawXPosition(m_settings->windowRect(m_dockPosition).topLeft());
     const QSize &s = m_settings->windowSize();
     const QRect &primaryRawRect = m_settings->primaryRawRect();
 
@@ -674,7 +632,7 @@ void MainWindow::setStrutPartial()
     uint strutEnd = 0;
 
     QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
-    switch (side) {
+    switch (m_dockPosition) {
     case Position::Top:
         orientation = XcbMisc::OrientationTop;
         strut = p.y() + s.height() * ratio;
@@ -728,7 +686,7 @@ void MainWindow::setStrutPartial()
     }
     if (count > 0) {
         qWarning() << "strutArea is intersects with another screen.";
-        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
+        qWarning() << maxScreenHeight << maxScreenWidth << m_dockPosition << p << s;
         return;
     }
 
@@ -737,25 +695,20 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-    qApp->processEvents();
-    setVisible(true);
-
-    if (m_panelHideAni->state() == QPropertyAnimation::Running)
-    {
+    if (m_panelHideAni->state() == QPropertyAnimation::Running) {
         m_panelHideAni->stop();
         emit m_panelHideAni->finished();
     }
 
     const auto showAniState = m_panelShowAni->state();
 
-    int startValue = 2;
-    int endValue = 2;
+    int startValue = 0;
+    int endValue = 0;
 
-    resetPanelEnvironment(true, false);
-    if (showAniState != QPropertyAnimation::Running /*&& pos() != m_panelShowAni->currentValue()*/) {
-        bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
-        const QRectF windowRect = m_settings->windowRect(m_curDockPos, isHide);
-        switch (m_curDockPos) {
+    resetPanelEnvironment();
+    if (showAniState != QPropertyAnimation::Running && pos() != m_panelShowAni->currentValue()) {
+        const QRect windowRect = m_settings->windowRect(m_dockPosition);
+        switch (m_dockPosition) {
         case Top:
         case Bottom:
             startValue = height();
@@ -782,21 +735,21 @@ void MainWindow::expand()
     }
 }
 
-void MainWindow::narrow(const Position prevPos)
+void MainWindow::narrow()
 {
-    int startValue = 2;
-    int endValue = 2;
+    int startValue = 0;
+    int endValue = 0;
 
-    switch (prevPos) {
+    switch (m_dockPosition) {
     case Top:
     case Bottom:
         startValue = height();
-        endValue = 2;
+        endValue = 0;
         break;
     case Left:
     case Right:
         startValue = width();
-        endValue = 2;
+        endValue = 0;
         break;
     }
 
@@ -806,7 +759,7 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->start();
 }
 
-void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosition)
+void MainWindow::resetPanelEnvironment()
 {
     if (!m_launched)
         return;
@@ -835,16 +788,10 @@ void MainWindow::updatePanelVisible()
 
     const Dock::HideState state = m_settings->hideState();
 
-    do {
-        if (state != Hide)
-            break;
-
-        if (!m_settings->autoHide())
-            break;
-
+    if (state == Hide && m_settings->autoHide()) {
         QRectF r(pos(), size());
         const int margin = m_settings->dockMargin();
-        switch (m_curDockPos) {
+        switch (m_dockPosition) {
         case Dock::Top:
             r.setY(r.y() - margin);
             break;
@@ -858,16 +805,10 @@ void MainWindow::updatePanelVisible()
             r.setWidth(r.width() + margin);
             break;
         }
-        if (r.contains(QCursor::pos())) {
-            break;
+        if (!r.contains(QCursor::pos())) {
+            return narrow();
         }
-
-//        const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
-//        move(windowRect.topLeft());
-
-        return narrow(m_curDockPos);
-
-    } while (false);
+    }
 
     return expand();
 }
@@ -934,9 +875,8 @@ bool MainWindow::appIsOnDock(const QString &appDesktop)
 
 void MainWindow::resizeMainWindow()
 {
-    const Position position = m_curDockPos;
     QSize size = m_settings->windowSize();
-    const QRect windowRect = m_settings->windowRect(position, false);
+    const QRect windowRect = m_settings->windowRect(m_dockPosition, false);
     internalMove(windowRect.topLeft());
     resizeMainPanelWindow();
     QWidget::setFixedSize(size);
@@ -946,7 +886,7 @@ void MainWindow::resizeMainPanelWindow()
 {
     m_mainPanel->setFixedSize(m_settings->m_mainWindowSize);
 
-    switch (m_curDockPos) {
+    switch (m_dockPosition) {
     case Dock::Top:
         m_dragWidget->setGeometry(0, height() - DRAG_AREA_SIZE, width(), DRAG_AREA_SIZE);
         break;
@@ -973,13 +913,13 @@ void MainWindow::updateDisplayMode()
 
 void MainWindow::onMainWindowSizeChanged(QPoint offset)
 {
-    if (Dock::Top == m_curDockPos) {
+    if (Dock::Top == m_dockPosition) {
         m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE, m_size.height() + offset.y(), MAINWINDOW_MAX_SIZE));
         m_settings->m_mainWindowSize.setWidth(width());
-    } else if (Dock::Bottom == m_curDockPos) {
+    } else if (Dock::Bottom == m_dockPosition) {
         m_settings->m_mainWindowSize.setHeight(qBound(MAINWINDOW_MIN_SIZE, m_size.height() - offset.y(), MAINWINDOW_MAX_SIZE));
         m_settings->m_mainWindowSize.setWidth(width());
-    } else if (Dock::Left == m_curDockPos) {
+    } else if (Dock::Left == m_dockPosition) {
         m_settings->m_mainWindowSize.setHeight(height());
         m_settings->m_mainWindowSize.setWidth(qBound(MAINWINDOW_MIN_SIZE, m_size.width() + offset.x(), MAINWINDOW_MAX_SIZE));
     } else {
@@ -999,7 +939,7 @@ void MainWindow::onDragFinished()
     m_size = m_settings->m_mainWindowSize;
 
     if (m_settings->displayMode() == Fashion) {
-        if (Dock::Top == m_curDockPos || Dock::Bottom == m_curDockPos) {
+        if (Dock::Top == m_dockPosition || Dock::Bottom == m_dockPosition) {
             m_settings->m_dockInter->setWindowSizeFashion(m_settings->m_mainWindowSize.height());
             m_settings->m_dockInter->setWindowSize(m_settings->m_mainWindowSize.height());
         } else {
@@ -1007,7 +947,7 @@ void MainWindow::onDragFinished()
             m_settings->m_dockInter->setWindowSize(m_settings->m_mainWindowSize.width());
         }
     } else {
-        if (Dock::Top == m_curDockPos || Dock::Bottom == m_curDockPos) {
+        if (Dock::Top == m_dockPosition || Dock::Bottom == m_dockPosition) {
             m_settings->m_dockInter->setWindowSizeEfficient(m_settings->m_mainWindowSize.height());
             m_settings->m_dockInter->setWindowSize(m_settings->m_mainWindowSize.height());
         } else {
@@ -1036,8 +976,7 @@ void MainWindow::onRegionMonitorChanged()
     if (m_settings->hideMode() == KeepShowing)
         return;
 
-    if (!isVisible())
-        setVisible(true);
+    expand();
 }
 
 void MainWindow::updateRegionMonitorWatch()
@@ -1051,16 +990,15 @@ void MainWindow::updateRegionMonitorWatch()
     int x = m_settings->primaryRect().x();
     int y = m_settings->primaryRect().y();
 
-    if (Dock::Top == m_curDockPos) {
+    if (Dock::Top == m_dockPosition) {
         m_regionMonitor->setWatchedRegion(QRegion(x + margin * scale, y, (m_settings->primaryRect().width() - margin*2) * scale, val *scale));
-    } else if (Dock::Bottom == m_curDockPos) {
+    } else if (Dock::Bottom == m_dockPosition) {
         m_regionMonitor->setWatchedRegion(QRegion(x + margin * scale, y + (m_settings->primaryRect().height() - val)* scale, (m_settings->primaryRect().width() - margin*2)*scale, val * scale));
-    } else if (Dock::Left == m_curDockPos) {
+    } else if (Dock::Left == m_dockPosition) {
         m_regionMonitor->setWatchedRegion(QRegion(x, y + margin * scale, val * scale, (m_settings->primaryRect().height() - margin*2) * scale));
     } else {
         m_regionMonitor->setWatchedRegion(QRegion(x + (m_settings->primaryRect().width() - val) * scale, y + margin * scale, val * scale, (m_settings->primaryRect().height()- margin*2)*scale));
     }
 }
-
 
 #include "mainwindow.moc"
