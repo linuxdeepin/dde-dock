@@ -98,6 +98,7 @@ type device struct {
 	// to avoid this situation, remove device only allowed when connected or disconnected finished
 	needRemove bool
 	removeLock sync.Mutex
+	disconnectTime    time.Time
 }
 
 type connectPhase uint32
@@ -518,6 +519,10 @@ func (d *device) doConnect(hasNotify bool) error {
 
 func (d *device) doRealConnect() error {
 	d.setConnectPhase(connectPhaseConnectProfilesStart)
+	sinceDisconnected := time.Since(d.disconnectTime)
+	if sinceDisconnected < 2*time.Second {
+		time.Sleep(2*time.Second - sinceDisconnected)
+	}
 	err := d.core.Connect(0)
 	d.setConnectPhase(connectPhaseConnectProfilesEnd)
 	if err != nil {
@@ -669,6 +674,7 @@ func (d *device) Disconnect() {
 
 	<-ch
 	notifyDisconnected(d.Alias)
+	d.disconnectTime = time.Now()
 }
 
 func (d *device) goWaitDisconnect() chan struct{} {
