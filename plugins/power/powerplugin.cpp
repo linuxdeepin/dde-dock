@@ -209,6 +209,12 @@ void PowerPlugin::refreshTipsData()
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
     const QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
+    const bool onbattery = m_powerInter->property("OnBattery").toBool();
+
+    if (batteryState == BatteryState::NOT_CHARGED && !onbattery) {
+        m_tipsLabel->setText(tr("Capacity %1 ").arg(value));
+        return ;
+    }
 
     if (batteryState == BatteryState::DIS_CHARGING || batteryState == BatteryState::NOT_CHARGED || batteryState == BatteryState::UNKNOWN) {
         qulonglong timeToEmpty = m_systemPowerInter->batteryTimeToEmpty();
