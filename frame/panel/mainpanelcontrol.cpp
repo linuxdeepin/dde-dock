@@ -890,14 +890,14 @@ void MainPanelControl::resizeDockIcon()
         if (trashPlugin) totalLength += trashPlugin->width();
         if (shutdownPlugin) totalLength += shutdownPlugin->width();
         if (keyboardPlugin) totalLength += keyboardPlugin->width();
-        if (notificationPlugin) totalLength += keyboardPlugin->width();
+        if (notificationPlugin) totalLength += notificationPlugin->width();
         totalLength -= m_desktopWidget->width();
     } else {
         totalLength -= m_pluginAreaWidget->height();
         if (trashPlugin) totalLength += trashPlugin->height();
         if (shutdownPlugin) totalLength += shutdownPlugin->height();
         if (keyboardPlugin) totalLength += keyboardPlugin->height();
-        if (notificationPlugin) totalLength += keyboardPlugin->height();
+        if (notificationPlugin) totalLength += notificationPlugin->height();
         totalLength -= m_desktopWidget->height();
     }
 
