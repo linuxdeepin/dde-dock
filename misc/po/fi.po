@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 15:38+0800\n"
+"POT-Creation-Date: 2020-06-16 10:26+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Kimmo Kujansuu <mrkujansuu@gmail.com>, 2020\n"
 "Language-Team: Finnish (https://www.transifex.com/linuxdeepin/teams/3617/fi/)\n"
@@ -370,55 +370,59 @@ msgstr "Vaihda ikkunoita päinvastoin"
 msgid "Show desktop"
 msgstr "Näytä työpöytä"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:95
+msgid "Switch monitors"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Maximize window"
 msgstr "Maksimoi ikkuna"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Restore window"
 msgstr "Palauta ikkuna"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Minimize window"
 msgstr "Pienennä ikkuna"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Close window"
 msgstr "Sulje paneeli"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Move window"
 msgstr "Siirrä ikkuna"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:110
 msgid "Resize window"
 msgstr "Ikkunan koko"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to left workspace"
 msgstr "Siirry vasempaan työtilaan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to right workspace"
 msgstr "Siirry oikeaan työtilaan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to upper workspace"
 msgstr "Siirry ylempään työtilaan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:128
 msgid "Move to lower workspace"
 msgstr "Siirry alempaan työtilaan"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of all workspaces"
 msgstr "Näytä kaikkien työtilojen ikkunat"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display windows of current workspace"
 msgstr "Näytä nykyisen työtilan ikkunat"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:152
 msgid "Display workspace"
 msgstr "Näytä työtila"
 

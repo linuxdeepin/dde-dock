@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 15:38+0800\n"
+"POT-Creation-Date: 2020-06-16 10:26+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Bengali (https://www.transifex.com/linuxdeepin/teams/3617/bn/)\n"
@@ -366,55 +366,59 @@ msgstr "বিপরীতগুলি মধ্যে উইন্ডোতে 
 msgid "Show desktop"
 msgstr "ডেস্কটপ দেখান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:95
+msgid "Switch monitors"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Maximize window"
 msgstr "উইন্ডো বাড়ান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Restore window"
 msgstr "উইন্ডো পুনরুদ্ধার করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Minimize window"
 msgstr "উইন্ডো ছোট করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Close window"
 msgstr "উইন্ডো বন্ধ করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Move window"
 msgstr "উইন্ডোটি সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:110
 msgid "Resize window"
 msgstr "উইন্ডো পুনরায় আকার দিন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to left workspace"
 msgstr "বাম কর্মক্ষেত্রের দিকে সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to right workspace"
 msgstr "ডান কর্মক্ষেত্রের দিকে যান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to upper workspace"
 msgstr "উপরের কাজস্থানে সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:128
 msgid "Move to lower workspace"
 msgstr "নিচের কাজস্থানে সরান"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of all workspaces"
 msgstr "সমস্ত কর্মক্ষেত্রের উইন্ডো প্রদর্শন করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display windows of current workspace"
 msgstr "বর্তমান কর্মক্ষেত্রের উইন্ডো প্রদর্শন করুন"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:152
 msgid "Display workspace"
 msgstr "কর্মক্ষেত্র প্রদর্শন"
 

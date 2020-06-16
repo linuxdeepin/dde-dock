@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 15:38+0800\n"
+"POT-Creation-Date: 2020-06-16 10:26+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>, 2020\n"
 "Language-Team: Korean (https://www.transifex.com/linuxdeepin/teams/3617/ko/)\n"
@@ -148,15 +148,15 @@ msgstr "블루투스 연결 실패"
 
 #: ../../bluetooth/utils_notify.go:139
 msgid "Click here to connect to %q"
-msgstr ""
+msgstr "%q에 연결하려면 여기를 클릭하십시오"
 
 #: ../../bluetooth/utils_notify.go:140
 msgid "Add Bluetooth devices"
-msgstr ""
+msgstr "블루투스 장치 추가"
 
 #: ../../bluetooth/utils_notify.go:150
 msgid "Pair"
-msgstr ""
+msgstr "페어링"
 
 #: ../../calendar/job.go:514 ../../calendar/job.go:521
 msgid "today"
@@ -206,7 +206,7 @@ msgstr "일정 알림"
 
 #: ../../calendar/type.go:40
 msgid "Festival"
-msgstr ""
+msgstr "페스티벌"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -364,55 +364,59 @@ msgstr "반대로 윈도우 바꾸기"
 msgid "Show desktop"
 msgstr "바탕화면 표시"
 
-#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/id_name_map.go:95
+msgid "Switch monitors"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Maximize window"
 msgstr "윈도우 최대화"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:105
 msgid "Restore window"
 msgstr "윈도우 복원"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Minimize window"
 msgstr "창 최소화"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Close window"
 msgstr "창 닫기"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Move window"
 msgstr "창 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:110
 msgid "Resize window"
 msgstr "창 크기 조절"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to left workspace"
 msgstr "왼쪽 작업공간으로 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to right workspace"
 msgstr "오른쪽 작업공간으로 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to upper workspace"
 msgstr "상부 작업공간으로 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:128
 msgid "Move to lower workspace"
 msgstr "하부 작업공간으로 이동"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of all workspaces"
 msgstr "모든 작업공간의 창 표시"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display windows of current workspace"
 msgstr "현재 작업공간의 창 표시"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:152
 msgid "Display workspace"
 msgstr "작업공간 표시"
 
@@ -460,11 +464,11 @@ msgstr "%q(이)가 설치에 실패하였습니다."
 
 #: ../../lastore/notify.go:108
 msgid "Removed successfully"
-msgstr ""
+msgstr "성공적으로 제거됨"
 
 #: ../../lastore/notify.go:110
 msgid "Failed to remove the app"
-msgstr ""
+msgstr "앱을 제거하지 못함"
 
 #: ../../lastore/notify.go:117
 msgid ""
@@ -747,7 +751,7 @@ msgstr "장치가 제거되었습니다"
 
 #: ../../network/state_handler.go:76
 msgid "NetworkManager went to sleep"
-msgstr "네트워크 관리자가 슬립 상태가 되었습니다"
+msgstr "네트워크 관리자가 절전모드로 전환되었습니다"
 
 #: ../../network/state_handler.go:77
 msgid "The device's active connection was removed or disappeared"
@@ -1011,35 +1015,35 @@ msgstr "배터리 부족,. 전원을 연결하세요"
 #: ../../session/power/utils.go:358 ../../session/power/utils.go:362
 #: ../../session/power/utils.go:366 ../../session/power/utils.go:370
 msgid "Power settings changed"
-msgstr ""
+msgstr "전원 설정이 변경됨"
 
 #: ../../session/power/utils.go:383
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "뚜껑이 닫히면, "
 
 #: ../../session/power/utils.go:387
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "전원 버튼을 누르면, "
 
 #: ../../session/power/utils.go:397
 msgid "your computer will shut down"
-msgstr ""
+msgstr "컴퓨터가 종료됩니다"
 
 #: ../../session/power/utils.go:399
 msgid "your computer will suspend"
-msgstr ""
+msgstr "컴퓨터는 대기모드 상태가 됩니다"
 
 #: ../../session/power/utils.go:401
 msgid "your computer will sleep"
-msgstr ""
+msgstr "컴퓨터는 절전모드 상태가 됩니다"
 
 #: ../../session/power/utils.go:403
 msgid "your monitor will turn off"
-msgstr ""
+msgstr "모니터가 꺼집니다"
 
 #: ../../session/power/utils.go:405
 msgid "it will do nothing to your computer"
-msgstr ""
+msgstr "그것은 당신의 컴퓨터에 아무 도움도 되지 않을 것입니다"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"

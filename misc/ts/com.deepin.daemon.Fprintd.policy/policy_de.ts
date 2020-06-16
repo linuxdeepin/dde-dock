@@ -31,5 +31,15 @@
 			<source>Rename fingerprint password</source>
 			<translation>Fingerabdruckpasswort umbenennen</translation>
 		</message>
+		<message>
+			<location filename="com.deepin.daemon.fprintd.manager!message" line="0"/>
+			<source>Password is required to perform this action</source>
+			<translation type="unfinished"/>
+		</message>
+		<message>
+			<location filename="com.deepin.daemon.fprintd.manager!description" line="0"/>
+			<source>Manage fingerprint passwords</source>
+			<translation>Fingerabdruckpasswörter verwalten</translation>
+		</message>
 	</context>
 </TS>
