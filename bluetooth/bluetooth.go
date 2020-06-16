@@ -56,9 +56,25 @@ const (
 	StateConnected   = 2
 )
 
+// device type index
+const (
+	Computer = iota
+	Phone
+	Modem
+	NetworkWireless
+	AudioCard
+	CameraVideo
+	InputGaming
+	InputKeyboard
+	InputTablet
+	InputMouse
+	Printer
+	CameraPhone
+)
+
 var DeviceTypes []string = []string{
 	"computer",
-	//"phone",
+	"phone",
 	"modem",
 	"network-wireless",
 	"audio-card",
@@ -67,7 +83,7 @@ var DeviceTypes []string = []string{
 	"input-keyboard",
 	"input-tablet",
 	"input-mouse",
-	//"printer",
+	"printer",
 	"camera-photo",
 }
 
@@ -94,6 +110,11 @@ type Bluetooth struct {
 
 	PropsMu sync.RWMutex
 	State   uint32 // StateUnavailable/StateAvailable/StateConnected
+
+	// 当发起设备连接成功后，应该把连接的设备添加进设备列表
+	// 为了防止放同类设备被扫描到，且之前已配对过，会发起自动连接，而把当前连接的设备顶掉
+	connectedDevices map[string][]*device
+	connectedLock    sync.RWMutex
 
 	methods *struct {
 		DebugInfo                     func() `out:"info"`
@@ -215,6 +236,10 @@ func (b *Bluetooth) init() {
 	b.devices = make(map[dbus.ObjectPath][]*device)
 
 	systemBus := b.systemSigLoop.Conn()
+
+	b.connectedLock.Lock()
+	b.connectedDevices = make(map[string][]*device, len(DeviceTypes))
+	b.connectedLock.Unlock()
 
 	// start bluetooth goroutine
 	// monitor click signal or time out signal to close notification window
@@ -394,8 +419,31 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 			}
 
 			if paired && !connected {
-				logger.Infof("auto connect %s", d)
-				d.Connect()
+				// only audio card auto connect one device
+				// other devices try to auto connect all devices
+				if d.Icon != DeviceTypes[AudioCard] {
+					logger.Infof("auto connect %s", d)
+					// auto connect, dont show notification window
+					err = d.doConnect(false)
+					// if connect success, add dev into map
+					if err == nil && d.ConnectState == true {
+						b.addConnectedDevice(d)
+					}
+				} else {
+					// check if this type device connected already, if connected, dont connect again
+					// if not, try to auto connect
+					b.connectedLock.Lock()
+					connectedDevicesCount := len(b.connectedDevices[d.Icon])
+					b.connectedLock.Unlock()
+					if connectedDevicesCount == 0 {
+						logger.Infof("auto connect %s", d)
+						err = d.doConnect(false)
+						// if connect success, add dev into map
+						if err == nil && d.ConnectState == true {
+							b.addConnectedDevice(d)
+						}
+					}
+				}
 			}
 		})
 	}
@@ -610,21 +658,25 @@ func (b *Bluetooth) updateState() {
 func (b *Bluetooth) tryConnectPairedDevices() {
 	var devList = b.getPairedDeviceList()
 	for _, dev := range devList {
-		logger.Info("[DEBUG] Auto connect device:", dev.Path)
-		obj, err := b.getDevice(dev.Path)
-		if err != nil {
-			logger.Warning("failed to get device for auto connect:", dev.String(), err)
+		// make sure dev always exist
+		if dev == nil {
 			continue
 		}
+		logger.Info("[DEBUG] Auto connect device:", dev.Path)
 
 		// if device using LE mode, will suspend, try connect should be failed, filter it.
 		if !b.isBREDRDevice(dev) {
 			continue
 		}
-		logger.Debug("Will auto connect device:", obj.String(), obj.adapter.address, obj.Address)
-		err = obj.doConnect(false)
+		logger.Debug("Will auto connect device:", dev.String(), dev.adapter.address, dev.Address)
+		err := dev.doConnect(false)
 		if err != nil {
-			logger.Debug("failed to connect:", obj.String(), err)
+			logger.Debug("failed to connect:", dev.String(), err)
+		} else {
+			// if auto connect success, add device into map connectedDevices
+			if dev.ConnectState == true {
+				b.addConnectedDevice(dev)
+			}
 		}
 	}
 }
@@ -650,7 +702,8 @@ func (b *Bluetooth) getPairedDeviceList() []*device {
 
 		// add devices info to list
 		for _, value := range list {
-			if value == nil {
+			// select already paired but not connected device from list
+			if value == nil || !value.Paired || value.connected {
 				continue
 			}
 			devAddressMap[value.getAddress()] = value
@@ -713,4 +766,26 @@ func (b *Bluetooth) wakeupWorkaround() {
 		}
 		b.tryConnectPairedDevices()
 	})
+}
+
+func (b *Bluetooth) addConnectedDevice(connectedDev *device) {
+	b.connectedLock.Lock()
+	b.connectedDevices[connectedDev.Icon] = append(b.connectedDevices[connectedDev.Icon], connectedDev)
+	b.connectedLock.Unlock()
+}
+
+func (b *Bluetooth) removeConnectedDevice(disconnectedDev *device) {
+	b.connectedLock.Lock()
+	// check if dev exist in connectedDevices map, if exist, remove device
+	if connectedDevices, ok := globalBluetooth.connectedDevices[disconnectedDev.Icon]; ok {
+		var tempDevices []*device
+		for _, dev := range connectedDevices {
+			// check if disconnected device exist in connected devices, if exist, abandon this
+			if dev.Address != disconnectedDev.Address {
+				tempDevices = append(tempDevices, dev)
+			}
+		}
+		globalBluetooth.connectedDevices[disconnectedDev.Icon] = tempDevices
+	}
+	b.connectedLock.Unlock()
 }
