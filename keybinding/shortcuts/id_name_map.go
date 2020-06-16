@@ -47,7 +47,6 @@ func getSystemIdNameMap() map[string]string {
 		"speech-to-text":         gettext.Tr("Speech to Text"),
 		"clipboard":              gettext.Tr("Clipboard"),
 		"translation":            gettext.Tr("Translation"),
-		"switch-monitors":        gettext.Tr("Switch monitors"),
 	}
 	return idNameMap
 }
@@ -208,6 +207,7 @@ func getMediaIdNameMap() map[string]string {
 		"app-left":            "ApplicationLeft",   // XF86ApplicationLeft
 		"app-right":           "ApplicationRight",  // XF86ApplicationRight
 		"meeting":             "Meeting",           // XF86Meeting
+		"switch-monitors":     gettext.Tr("Switch monitors"),
 	}
 	return idNameMap
 }
