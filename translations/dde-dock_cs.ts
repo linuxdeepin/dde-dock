@@ -20,18 +20,6 @@
         <translation>Datum a čas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 hodinový čas</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 hodinový čas</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Nastavení času</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12 hodinový čas</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Bezdrátové připojení</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Drátové připojení</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Vypnout bezdrátové připojení</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Zapnout drátové připojení</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Vypnout bezdrátové připojení</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Zapnout bezdrátové připojení</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Zakázat síť</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Povolit síť</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Nastavení sítě</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Zařízení zakázáno</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Bezdrátové připojení: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Drátové připojení: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Nepřipojeno</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Připojuje se</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Připojeno, ale bez přístupu k Internetu</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Síťový kabel odpojen</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -274,15 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Stav %1, %2 min zbývá</translation>
+        <translation>Energie %1, %2 min zbývá</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
         <translation>Stav %1, %2 h %3 min zbývá</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Nabito %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -293,16 +210,16 @@
         <translation>Nabíjení %1, %2 h %3 min do úplného nabití</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Nabíjení %1…</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 nabito</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Kapacita %1…</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Kapacita %1 </translation>
     </message>
 </context>
 <context>
@@ -324,11 +241,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Vypnout</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Restartovat</translation>
+        <translation>Vypínání</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -344,7 +257,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Odhlásit se</translation>
+        <translation>Odhlašování se</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Ztlumit</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Nastavení zvuku</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Stávající hlasitost %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Žádná síť</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Bezdrátové připojení: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

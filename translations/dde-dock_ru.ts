@@ -20,18 +20,6 @@
         <translation>Дата и время</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12-часовой Формат</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24-часовой Формат</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Настройки Времени</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12-часовой формат времени</translation>
     </message>
@@ -148,11 +136,11 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Местонахождение</translation>
+        <translation>Расположение</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Статус</translation>
+        <translation>Состояние</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -163,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation> Выбор программ</translation>
+        <translation>Запуск программ</translation>
     </message>
 </context>
 <context>
@@ -175,73 +163,6 @@
     <message>
         <source>Undock</source>
         <translation>Открепить</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Беспроводное соединение</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Проводное соединение</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Отключить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Включить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Отключить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Включить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Отключить сеть</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Включить сеть</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Настройки сети</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Устройство отключено</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Беспроводное соединение: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Проводное подключение к: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Не подключено</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Соединение</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Подключено без доступа к Интернет</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Сетевой кабель отключен</translation>
     </message>
 </context>
 <context>
@@ -281,10 +202,6 @@
         <translation>Емкость %1, %2 час. %3 мин. осталось</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Заряжено %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Зарядка %1, %2 мин. до полной зарядки</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>Зарядка %1, %2 час. %3 мин. до полной зарядки</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Зарядка %1 ....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>Заряжено на %1 процентов</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Вместимость %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Заряд %1 </translation>
     </message>
 </context>
 <context>
@@ -327,16 +244,12 @@
         <translation>Выключить</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation type="vanished">Перезагрузить</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>Приостановить</translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Спящий Режим</translation>
+        <translation>Спящий режим</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Приглушить</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Настройки Звука</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Уровень Громкости %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Нет Сети</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Беспроводное Подключение: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

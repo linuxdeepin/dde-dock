@@ -20,18 +20,6 @@
         <translation>Orologio</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Formato 12 ore</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Formato 24 ore</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Impostazioni orarie</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>Formato 12 ore</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Connessione WiFi</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Connessione cablata</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Disattiva connessione cablata</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Attiva connessione cablata</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Disattiva connessione WiFi</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Attiva connessione WiFi</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Disabilita Rete</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Abilita Rete</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Impostazioni Rete</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Dispositivo disattivato</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Connessione WiFi: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Connessione cablata: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Non connesso</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Connessione in corso</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Connesso senza accesso ad internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Cavo di rete scollegato</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -274,15 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacità %1, %2 min. rimanenti</translation>
+        <translation>Autonomia %1, %2 min. rimanenti</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacità %1, %2 ore e %3 min. rimanenti</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Carica %1</translation>
+        <translation>Autonomia %1, %2 ore e %3 min. rimanenti</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -293,16 +210,16 @@
         <translation>Carica %1, %2 ore e %3 min. per la carica completa</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>In carica %1 ....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>Carica %1</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Carica %1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Autonomia %1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Spegni</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Riavvia</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Muto</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Impostazioni Audio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volume attuale %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -455,10 +360,6 @@
         <translation>Nessuna Rete</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Connessione WiFi: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connesso senza accesso ad internet</translation>
     </message>
@@ -471,7 +372,7 @@
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>WiFi</translation>
+        <translation>Rete wireless</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

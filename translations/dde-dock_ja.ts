@@ -20,18 +20,6 @@
         <translation>日時</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12時間表示</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24時間表示</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">時間設定</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation type="unfinished"/>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">ネットワークを無効にする</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">ネットワークを有効にする</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">ネットワーク設定</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">デバイスが無効</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">有線接続: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">未接続</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">接続試行中</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">ネットワークケーブル未接続</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>残量 %1、残り %2 時間 %3 分</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">充電完了 %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>充電中 %1、充電完了まで %2 分</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>充電中 %1、充電完了まで %2 時間 %3 分</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>充電中 %1 …</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>シャットダウン</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">再起動</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>消音</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">音の設定</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">現在の音量 %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>ネットワークなし</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">無線接続: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

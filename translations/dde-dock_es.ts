@@ -20,18 +20,6 @@
         <translation>Fecha y hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Formato de 12 horas</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Formato de 24 horas</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Ajustes de fecha y hora</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>Formato de 12 horas</translation>
     </message>
@@ -75,7 +63,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Esta acción no puede ser restaurada</translation>
+        <translation>Esta acción no se puede deshacer</translation>
     </message>
 </context>
 <context>
@@ -178,77 +166,10 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Conexión inalámbrica</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Conexión cableada</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Deshabilitar conexión cableada</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Habilitar conexión cableada</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Deshabilitar conexión inalámbrica</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Habilitar conexión inalámbrica</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Deshabilitar red</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Habilitar red</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Ajustes de red</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Dispositivo deshabilitado</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Conexión inalámbrica: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Conexión cableada: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">No conectado</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Conectando</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Conectado pero sin acceso a internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Cable de red desconectado</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
-        <translation>Redes</translation>
+        <translation>Red</translation>
     </message>
 </context>
 <context>
@@ -266,7 +187,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energía</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -281,10 +202,6 @@
         <translation>Capacidad %1, %2 h %3 min restante</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Cargado %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Cargando %1, %2 min para completarse</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>Cargando %1, %2 h %3 min para completarse</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Cargando %1…</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 cargada</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Capacidad %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Apagar</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Silenciar</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Ajustes audio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volumen actual %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Sin red</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Conexión inalámbrica: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

@@ -20,18 +20,6 @@
         <translation>Datë dhe kohë</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Format Kohe 12 Orësh</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Format Kohe 24 Orësh</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Rregullime Kohe</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>orë 12-orëshe</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Lidhje pa fill</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Lidhje me fill</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Çaktivizo lidhje me fill</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Aktivizo lidhje me fill</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Çaktivizo lidhje pa fill</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Aktivizo lidhje pa fill</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Çaktivizo rrjetin</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Aktivizo rrjetin</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Rregullime rrjeti</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Pajisje e çaktivizuar</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Lidhje pa fill: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Lidhje me fill: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Jo e lidhur</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Po bëhet lidhja</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Kablloja e rrjetit është e hequr</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,20 +202,12 @@
         <translation>Kapacitet %1, edhe %2 hr %3 min</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">E ngarkuar %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Po ngarkohet %1, edhe %2 min deri sa të jetë plot</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Po ngarkohet %1, edhe %2 hr % e 3min deri sa të jetë plot</translation>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation>Po ngarkohet %1 …</translation>
+        <translation>Po ngarkohet %1, edhe %2 hr e 3% min deri sa të jetë plot</translation>
     </message>
     <message>
         <source>%1 charged</source>
@@ -302,7 +215,11 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitet %1 …</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Kapacitet %1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Fike</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Rinise</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -378,15 +291,7 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Hiqi zërin</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Rregullime Audio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volumi i Tanishëm %1</translation>
+        <translation>Pa zë</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -427,7 +332,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Zbraze</translation>
+        <translation>E zbrazët</translation>
     </message>
 </context>
 <context>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>S’ka Rrjet</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Lidhje Pa Fill: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

@@ -20,18 +20,6 @@
         <translation>Kello</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 tunnin aika</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 tunnin aika</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Ajan asetukset</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12h aika</translation>
     </message>
@@ -48,11 +36,11 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Verkkoyhteys käyttöön</translation>
+        <translation>Kytke verkko käyttöön</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Poista verkkoyhteys</translation>
+        <translation>Poista verkko käytöstä</translation>
     </message>
     <message>
         <source>Network settings</source>
@@ -144,7 +132,7 @@
     </message>
     <message>
         <source>Mode</source>
-        <translation>Asettelu</translation>
+        <translation>Tila</translation>
     </message>
     <message>
         <source>Location</source>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Langaton yhteys</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Yhteys kaapelilla</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Poista kiinteä yhteys</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Kytke kiinteä yhteys</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Poista langaton käytöstä</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Kytke langaton käyttöön</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Poista verkko käytöstä</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Kytke verkko käyttöön</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Verkon asetukset</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Laite suljettu</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Langaton yhteys: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Kaapeli kytketty: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Ei yhteyttä</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Yhdistää</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Yhdistetty, mutta ei Internet-yhteyttä</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Verkkokaapeli irrotettu</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -255,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Näyttönäppäimistö</translation>
+        <translation>Näppäimistö</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -281,10 +202,6 @@
         <translation>Akku %1, %2 t %3 min jäljellä</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Ladattu: %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Lataa %1, %2 min täyteen</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>Lataa %1, %2 t %3 min täyteen</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Ladataan: %1 ....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 ladattu</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Jäljellä %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Kapasiteetti %1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Sammuta</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Käynnistä</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -378,15 +291,7 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Mykistä</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Ääniasetukset</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Äänitaso %1</translation>
+        <translation>Vaienna</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -445,7 +350,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Kaapeli kytketty: %1</translation>
+        <translation>Verkkokaapeli: %1</translation>
     </message>
 </context>
 <context>
@@ -455,16 +360,12 @@
         <translation>Ei verkkoa</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Langaton yhteys: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Yhdistetty, mutta ei internet osoitetta</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Langaton yhteys: %1</translation>
+        <translation>Langaton: %1</translation>
     </message>
 </context>
 <context>

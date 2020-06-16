@@ -20,18 +20,6 @@
         <translation>Tarih Saat</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 Saatlik Zaman</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 Saatlik Zaman</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Zaman Ayarları</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12-saatlik zaman</translation>
     </message>
@@ -56,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Ağ ayarları</translation>
+        <translation>Ay ayarları</translation>
     </message>
 </context>
 <context>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Kablosuz bağlantı</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Kablolu bağlantı</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Kablolu bağlantıyı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Kablolu bağlantıyı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Kablosuz bağlantıyı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Kablosuz bağlantıyı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Ağı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Ağı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Ay ayarları</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Aygıt devre dışı</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Kablosuz bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Kablolu bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Bağlı değil</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Bağlanıyor</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Bağlı ancak İnternet erişimi yok</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Ağ kablosu takılı değil</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>%1 ve azalıyor, %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 Şarj oldu</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>%1 ve doluyor, tam dolmaya %2 dakika kaldı</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>%1 Şarj oluyor...</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 şarj oldu</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Kapasite %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Kapasite %1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Kapat</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Yeniden başlat</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -378,15 +291,7 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Sessiz</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Ses Ayarları</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Mevcut Ses Düzeyi %1</translation>
+        <translation>Sesi kapat</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Ağ Yok</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Kablosuz Bağlantı: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

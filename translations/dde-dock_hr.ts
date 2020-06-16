@@ -7,35 +7,6 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -49,28 +20,16 @@
         <translation>Datum vrijeme</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 satno vrijeme</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 satno vrijeme</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Postavke vremena</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12-satno vrijeme</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24-satno vrijeme</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Postavke vremena</translation>
     </message>
 </context>
 <context>
@@ -207,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -310,10 +202,6 @@
         <translation>Kapacitet %1, %2 hr %3 min preostalo</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Napunjeno %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Punim %1, %2 min dok ne bude potpuno pun</translation>
     </message>
@@ -322,15 +210,15 @@
         <translation>Punim %1, %2 hr %3 min dok ne bude potpuno pun</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation>Kapacitet %1...</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -354,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Isključi</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Ponovno pokreni</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -410,20 +294,12 @@
         <translation>Utišaj</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Zvučne postavke</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Trenutna glasnoća %1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Postavke zvuka</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Glasnoća %1</translation>
     </message>
 </context>
 <context>
@@ -470,30 +346,26 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Nepoznato</translation>
+        <translation>Nepoznato</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">Žična  veza: %1</translation>
+        <translation>Žična  veza: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">Bez mreže</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Bežična veza: %1</translation>
+        <translation>Bez mreže</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">Spojen ali nema pristupa internetu</translation>
+        <translation>Spojen ali nema pristupa internetu</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Bežična veza: %1</translation>
     </message>
 </context>
 <context>

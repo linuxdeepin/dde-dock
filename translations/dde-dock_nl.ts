@@ -20,18 +20,6 @@
         <translation>DatumTijd</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12-uurs weergave</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24-uurs weergave</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Tijdinstellingen</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation type="unfinished"/>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Netwerk uitschakelen</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Netwerk inschakelen</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Netwerkinstellingen</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Apparaat uitgeschakeld</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Bedrade verbinding: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Niet verbonden</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Bezig met verbinden</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Netwerkkabel is niet aangesloten</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Capaciteit %1, %2 hr %3 min resterend</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 Opgeladen</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Opladen %1, %2 min tot vol</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>Opladen %1, %2 hr %3 min tot vol</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Aan het laden %1 ....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -327,12 +244,8 @@
         <translation>Afsluiten</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation type="vanished">Herstarten</translation>
-    </message>
-    <message>
         <source>Suspend</source>
-        <translation>Onderbreken</translation>
+        <translation>Pauzestand</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -381,14 +294,6 @@
         <translation>Dempen</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Geluidsinstellingen</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Huidige Volume %1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
         <translation type="unfinished"/>
     </message>
@@ -427,7 +332,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Legen</translation>
+        <translation>Leeg</translation>
     </message>
 </context>
 <context>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Geen netwerk</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Draadloze Verbinding: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

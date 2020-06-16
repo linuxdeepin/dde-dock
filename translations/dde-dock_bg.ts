@@ -20,18 +20,6 @@
         <translation>Дата и час</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 часово време</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 часово време</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Настройки на времето</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation type="unfinished"/>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Изключи мрежата</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Включи мрежата</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Настройки на мрежата</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Устройството е изключено</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Кабелна връзка: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Няма връзка</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Свързване</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Изключен е мрежовият кабел</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Капацитет %1, остават %2 ч. % 3 мин. </translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Заредено %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Зареждане на %1, %2 мин. до пълно зареждане</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>Зареждане на %1, %2 ч. %3 мин. до пълно зареждане</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Изключване</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Рестартиране</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Заглушаване</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Настройки на звука</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Текущо ниво на звука %1 </translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Няма мрежа</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Безжична връзка: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

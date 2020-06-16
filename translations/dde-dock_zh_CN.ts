@@ -20,18 +20,6 @@
         <translation>时间</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12小时制</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24小时制</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">时间设置</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12小时制</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">无线连接</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">有线连接</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">关闭有线网络</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">启用有线网络</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">关闭无线网络</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">启用无线网络</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">关闭网络</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">启用网络</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">网络设置</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">设备已禁用</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">无线连接：%1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">有线连接：%1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">未连接</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">正在连接</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">已连接网络但无法访问互联网</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">未插入网线</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>电量%1，剩余%2小时%3分钟</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">已充满%1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>正在充电%1，还需%2分钟</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>正在充电%1，还需%2小时%3分钟</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>电量%1...</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>已充满%1</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>电量 %1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>电量%1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>关机</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">重启</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -381,14 +294,6 @@
         <translation>静音</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">音量设置</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">当前音量%1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
         <translation>音量设置</translation>
     </message>
@@ -427,7 +332,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>清空</translation>
+        <translation>清空列表</translation>
     </message>
 </context>
 <context>
@@ -445,7 +350,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>有线连接：%1</translation>
+        <translation>有线网络：%1</translation>
     </message>
 </context>
 <context>
@@ -455,16 +360,12 @@
         <translation>无网络访问</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">无线连接：%1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>已连接网络但无法访问互联网</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>无线连接：%1</translation>
+        <translation>无线网络：%1</translation>
     </message>
 </context>
 <context>

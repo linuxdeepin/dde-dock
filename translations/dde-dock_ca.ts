@@ -20,18 +20,6 @@
         <translation>Dia i hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 hores</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 hores</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Configuració del dia i l&apos;hora</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12 hores</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Connexió sense fil</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Connexió amb fil</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Inhabilita la connexió amb fil</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Habilita la connexió amb fil</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Inhabilita la connexió sense fil</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Habilita la connexió sense fil</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Inhabilita la xarxa</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Habilita la xarxa</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Configuració de la xarxa</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Dispositiu inhabilitat</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Connexió sense fil: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Connexió amb fil: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">No connectat</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Es connecta</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Connectat però sense accés a Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">El cable de xarxa està desendollat.</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Capacitat: %1, %2 h %3 min restants</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Càrrega: %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Es carrega %1, %2 min per completar-la.</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Es carrega %1...</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 carregada</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Capacitat %1....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Capacitat %1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Atura&apos;t</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Reinicia</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -381,14 +294,6 @@
         <translation>Silencia</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Configuració de l&apos;àudio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volum actual: %1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
         <translation>Configuració del so</translation>
     </message>
@@ -427,7 +332,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Buida</translation>
+        <translation>Buit</translation>
     </message>
 </context>
 <context>
@@ -455,10 +360,6 @@
         <translation>Sense xarxa</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Connexió sense fil: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connectat però sense accés a Internet</translation>
     </message>
@@ -471,7 +372,7 @@
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Xarxa sense fils</translation>
+        <translation>Xarxa sense fil</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

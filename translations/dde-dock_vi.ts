@@ -20,18 +20,6 @@
         <translation>Ngày giờ</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Thời gian dạng 12 Giờ</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Thời gian dạng 24 Giờ</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Những Thiết lập Thời gian</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>Chế độ 12 giờ</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Kết nội wifi</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Kết nối có dây</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Tắt kết nối mạng dây</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Mở kết nối mạng dây</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Tắt kết nối wifi</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Bật kết nối wifi</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Vô hiệu hóa mạng</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Cho phép mạng</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Thiết lập mạng</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Thiết bị bị vô hiệu hóa</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Kết nối không dây: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Kết nối Có dây: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Không được kết nối</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Đang kết nối</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Mạng dây đã ngắt</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Năng lượng %1, %2 giờ %3 phút còn lại</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Được nạp %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Đang sạc %1, %2 phút sẽ đầy</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>Đang sạc %1, %2 giờ %3 phút sẽ đầy</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Đang sạc %1 ...</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 đã sạc</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Công suất %1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>Phù hợp %1</translation>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Tắt máy</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Khởi động lại</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Câm</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Thiết lập Âm thanh</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Âm lượng Hiện tại %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Không có Mạng</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Kết nối Không dây: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>
