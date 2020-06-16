@@ -46,15 +46,29 @@ func (m *Manager) registerWindow(win x.Window) {
 	m.windowInfoMap[win] = winInfo
 	m.windowInfoMapMutex.Unlock()
 
-	pid := getWmPid(win)
-	wmClass, _ := getWmClass(win)
-	if pid == 0 || wmClass == nil {
-		time.AfterFunc(300*time.Millisecond, func() {
-			m.attachOrDetachWindow(winInfo)
-		})
-	} else {
-		m.attachOrDetachWindow(winInfo)
-	}
+	// 由于可能存在得不到任何可以识别窗口的信息，导致识别错误的情况，所以要循环判断是否可以获取到可用属性，循环10次，间隔100ms
+	go func() {
+		repeatCount := 0
+		for {
+			if repeatCount > 10 {
+				return
+			}
+			good := isGoodWindow(win)
+			if !good {
+				return
+			}
+			pid := getWmPid(win)
+			wmClass, _ := getWmClass(win)
+			if pid != 0 || wmClass != nil {
+				m.attachOrDetachWindow(winInfo)
+				return
+			}
+			logger.Debug("win id is: ", win)
+			logger.Debug("repeatCount is: ", repeatCount)
+			repeatCount++
+			time.Sleep(100 * time.Millisecond)
+		}
+	}()
 }
 
 func (m *Manager) isWindowRegistered(win x.Window) bool {
