@@ -20,18 +20,6 @@
         <translation>Data ir laikas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 valandų laikas</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 valandų laikas</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Laiko nustatymai</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12 valandų laikas</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Belaidis ryšys</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Laidinis ryšys</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Išjungti laidinį ryšį</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Įjungti laidinį ryšį</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Išjungti belaidį ryšį</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Įjungti belaidį ryšį</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Išjungti tinklą</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Įjungti tinklą</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Tinklo nustatymai</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Įrenginys išjungtas</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Belaidis ryšys: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Laidinis ryšys: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Neprijungta</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Jungiamasi</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Atjungtas tinklo laidas</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Talpa %1, liko %2 val. %3 min.</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Įkrauta %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Įkraunama %1, iki pilnos liko %2 min.</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>Įkraunama %1, iki pilnos liko %2 val. %3 min.</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Įkraunama %1....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 įkrauta</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Talpa %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Išjungti</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Paleisti iš naujo</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Nutildyti</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Garso nustatymai</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Esamas garsis %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Nėra tinklo</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Belaidis ryšys: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

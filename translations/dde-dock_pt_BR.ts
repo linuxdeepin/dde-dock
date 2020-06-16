@@ -20,18 +20,6 @@
         <translation>Data e Hora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Formato de 12 Horas</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Formato de 24 Horas</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Configurações de Data e Hora</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>Formato de 12 Horas</translation>
     </message>
@@ -48,15 +36,15 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Ativar Rede</translation>
+        <translation>Ativar rede</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Desativar Rede</translation>
+        <translation>Desativar rede</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Configurações de Rede</translation>
+        <translation>Configurações de rede</translation>
     </message>
 </context>
 <context>
@@ -108,11 +96,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Fashion</translation>
+        <translation>Modo Fashion</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Eficiente</translation>
+        <translation>Modo Eficiente</translation>
     </message>
     <message>
         <source>Top</source>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Conexão Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Conexão Cabeada</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Desativar a conexão cabeada</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Ativar a conexão cabeada</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Desativar a conexão Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Ativar a conexão Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Desativar rede</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Ativar rede</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Configurações de rede</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Dispositivo desativado</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Conexão Wi-Fi: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Conexão Cabeada: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Não conectado</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Conectando</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Conectado, sem Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Cabo de rede desconectado</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>%1 Carregado - %2h%3 restantes</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 Carregado</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Carregando %1 - %2m até completar</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>Carregando %1 - %2h%3 até completar</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Carregando %1...</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 Carregado</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation>%1 Carregado</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation>%1 Carregado</translation>
     </message>
 </context>
@@ -320,15 +237,11 @@
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Sessão</translation>
+        <translation>Energia</translation>
     </message>
     <message>
         <source>Shut down</source>
         <translation>Desligar</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -344,7 +257,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Sair</translation>
+        <translation>Encerrar sessão</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Sem Áudio</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Configurações de Áudio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volume %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Sem Rede</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Conexão Wi-Fi: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

@@ -20,18 +20,6 @@
         <translation>Datum/Zeit</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12-Stunden-Zeit</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24-Stunden-Zeit</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Zeiteinstellungen</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>12-Stunden-Zeit</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Drahtlosverbindung</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Kabelgebundene Verbindung</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Kabelgebundene Verbindung deaktivieren</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Kabelgebundene Verbindung aktivieren</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Drahtlosverbindung deaktivieren</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Drahtlosverbindung aktivieren</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Netzwerk deaktivieren</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Netzwerk aktivieren</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Netzwerkeinstellungen</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Gerät deaktiviert</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Drahtlosverbindung: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Kabelgebundene Verbindung: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Nicht verbunden</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Verbindungsaufbau</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Verbunden, aber kein Internetzugang</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Netzwerkkabel abgezogen</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -266,7 +187,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Ein/Aus</translation>
+        <translation>Energie</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -281,10 +202,6 @@
         <translation>Kapazität %1, %2 Std. %3 Min. verbleibend</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 aufgeladen</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>%1 wird aufgeladen, %2 Min. bis vollständig geladen</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>%1 wird aufgeladen, %2 Std. %3 Min. bis vollständig geladen</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>%1 wird aufgeladen ....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 aufgeladen</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Kapazität %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Herunterfahren</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Neu starten</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Stummschalten</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Audioeinstellungen</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Aktuelle Lautstärke %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Kein Netzwerk</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Drahtlosverbindung: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

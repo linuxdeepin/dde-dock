@@ -20,28 +20,16 @@
         <translation>時間</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12小時制</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24小時制</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">时间设置</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12小時制</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24小時制</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>時間設置</translation>
     </message>
 </context>
 <context>
@@ -71,7 +59,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>刪除</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -163,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>啟動器</translation>
+        <translation>启动器</translation>
     </message>
 </context>
 <context>
@@ -178,77 +166,10 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">關閉網絡</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">啟用網絡</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">網絡設置</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">設備已禁用</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">有線連接：%1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">未连接</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">連接中</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">未插入網線</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
-        <translation>網路</translation>
+        <translation>网络</translation>
     </message>
 </context>
 <context>
@@ -281,10 +202,6 @@
         <translation>電量%1，剩餘%2小時%3分鐘</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">已充滿%1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>正在充電%1，還需%2分鐘</translation>
     </message>
@@ -293,16 +210,16 @@
         <translation>正在充電%1，還需%2小時%3分鐘</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>電量%1...</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
-        <translation type="unfinished"/>
+        <translation>已充滿%1</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>電量 %1 ...</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation>電量 %1</translation>
     </message>
 </context>
 <context>
@@ -324,15 +241,11 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>關機</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">重新啟動</translation>
+        <translation>关机</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>暫停</translation>
+        <translation>待機</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -344,7 +257,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>登出</translation>
+        <translation>注销</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -381,27 +294,19 @@
         <translation>靜音</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">音量設置</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">當前音量%1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>音量設置</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>當前音量 %1</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation>音效</translation>
+        <translation>声音</translation>
     </message>
 </context>
 <context>
@@ -455,23 +360,19 @@
         <translation>無網絡訪問</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">無線連接：%1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
-        <translation>已連接網路但無法訪問網際網路</translation>
+        <translation>已連接網絡但無法訪問互聯網</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>無線連接：%1</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>無線網絡</translation>
+        <translation>无线网络</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

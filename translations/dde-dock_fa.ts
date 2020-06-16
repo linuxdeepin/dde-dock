@@ -20,18 +20,6 @@
         <translation>تاریخ زمان</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">زمان 12ساعته</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">زمان 24 ساعته</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">تنظیمات زمان</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation type="unfinished"/>
     </message>
@@ -163,7 +151,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>اجرا کننده</translation>
+        <translation>لانچر</translation>
     </message>
 </context>
 <context>
@@ -175,73 +163,6 @@
     <message>
         <source>Undock</source>
         <translation>باز کردن از داک</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">غیر فعال کردن شبکه</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">فعال کردن شبکه</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">تنظیمات شبکه</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">دستگاه غیرفعال است</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">اتصال سیمی %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">متصل نیست</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">در حال اتصال</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">کابل شبکه وصل نشده است</translation>
     </message>
 </context>
 <context>
@@ -281,10 +202,6 @@
         <translation>ظرفیت %1 ،%2 ساعت  %3 دقیقه باقی مانده است</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 شارژشد</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>درحال شارژ %1 ، %2 دقیقه تا شارژ کامل</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>درحال شارژ %1 ، %2 ساعت و  %3 دقیقه تا شارژ کامل</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -327,10 +244,6 @@
         <translation>خاموش شدن</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation type="vanished">راه اندازی مجدد</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>معلق کردن</translation>
     </message>
@@ -340,7 +253,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>قفل کردن</translation>
+        <translation>قفل</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>بی صدا</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">تنظیمات صدا</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">صدای فعلی %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>بدون شبکه</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">اتصال بی سیم %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

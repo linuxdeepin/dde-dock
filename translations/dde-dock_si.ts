@@ -3,189 +3,148 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BluetoothPlugin</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"/>
+        <translation>%1 යෙදවුම මෙම පද්ධතිය සමඟ අනුකූල නොවේ</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>යතුරුපුවරු පිරිසැලසුම එක් කරන්න</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>12 Hour Time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="unfinished"/>
+        <translation>දිනය/වේලාව</translation>
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>පැය-12 වේලාව</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>පැය-24 වේලාව</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>වේලා සැකසුම්</translation>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>ජාලය සක්‍රීය කරන්න</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>ජාලය අක්‍රීය කරන්න</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>ජාල සැකසුම්</translation>
     </message>
 </context>
 <context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>ඔබට අයිතම % 1 ක් ඉවත් කිරීමට අවශ්‍යද?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>අවලංගු කරන්න</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>මකා දමන්න</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation type="unfinished"/>
+        <translation>මෙම ක්‍රියාව ප්‍රතිස්ථාපනය කළ නොහැක</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>හඳුනානොගත් උපකරණය</translation>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>හදුනානොගත් කාණ්ඩයකි</translation>
     </message>
 </context>
 <context>
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>ඩිස්කය</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>විවෘත කරන්න</translation>
     </message>
     <message>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>සියල්ල ගලවන්න</translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>විචිත්‍ර ආකාරය</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>කාර්යක්ෂම ආකාරය</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>ඉහළ</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>පහළ</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"/>
+        <translation>වම</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"/>
+        <translation>දකුණ</translation>
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>පෙනීමට සලස්වා තබන්න</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>සඟවා තබන්න</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>ගැලපෙන ආකාරයට සඟවන්න</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation type="unfinished"/>
+        <translation>ප්‍රකාරය</translation>
     </message>
     <message>
         <source>Location</source>
-        <translation type="unfinished"/>
+        <translation>පිහිටුම</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>තත්ත්වය</translation>
     </message>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>ආධාරක යෙදවුම්</translation>
     </message>
 </context>
 <context>
@@ -199,138 +158,67 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>බහුකාර්ය පෙනුම</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation>අහෝසි කරන්න</translation>
     </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
-        <translation type="unfinished"/>
+        <translation>ජාලය</translation>
     </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>පවතින</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>සැකසුම්</translation>
     </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>බලය</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>බල සැකසුම්</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>ධාරිතාව %1, මිනිත්තු %2 ක් ඉතිරි වී ඇත</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>ධාරිතාව %1, පැය %2 මිනිත්තු %3 ක් ඉතිරි වී ඇත</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 ආරෝපණය වෙමින්, සම්පූර්ණ විමට මිනිත්තු %2</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>%1 ආරෝපණය වෙමින්, සම්පූර්ණ විමට පැය %2 මිනිත්තු %3</translation>
     </message>
     <message>
         <source>%1 charged</source>
-        <translation type="unfinished"/>
+        <translation>%1 ආරෝපිතයි</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation>ධාරිතාවය %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -338,26 +226,22 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation type="unfinished"/>
+        <translation>ඩෙස්ක්ටොප් එක පෙන්වන්න</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>අහෝසි කරන්න</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>බලය</translation>
     </message>
     <message>
         <source>Shut down</source>
         <translation>වසා දමන්න </translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">නැවත පටන්ගන්න </translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -365,72 +249,64 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>ශිශිරකරණය කරන්න</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>අගුළු දමන්න</translation>
     </message>
     <message>
         <source>Log out</source>
-        <translation type="unfinished"/>
+        <translation>ඉවත් වන්න</translation>
     </message>
     <message>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>පරිශීලක ගිණුම මාරු කරන්න</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>බල සැකසුම්</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>පද්ධතිය නැවත අරඹන්න</translation>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
-        <translation type="unfinished"/>
+        <translation>උපාංගය</translation>
     </message>
     <message>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>යෙදවුම</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>හඩ ක්‍රියාත්මක කරන්න</translation>
     </message>
     <message>
         <source>Mute</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>නිහඬ කරන්න</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>ශබ්ද සැකසුම්</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>කාණ්ඩය %1</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"/>
+        <translation>ශබ්දය</translation>
     </message>
 </context>
 <context>
@@ -441,70 +317,66 @@
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>අපද්‍රව්‍ය - %1 ගොනුව</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>අපද්‍රව්‍ය - ගොනු %1 </translation>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>විවෘත කරන්න</translation>
     </message>
     <message>
         <source>Empty</source>
-        <translation type="unfinished"/>
+        <translation>හිස්</translation>
     </message>
 </context>
 <context>
     <name>TrayPlugin</name>
     <message>
         <source>System Tray</source>
-        <translation type="unfinished"/>
+        <translation>පද්ධති තට්ටුව</translation>
     </message>
 </context>
 <context>
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">නොදත් </translation>
+        <translation>නොදත් </translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>රැහැන් සම්බන්ධතාවය: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>ජාලයන් හමුවූයේ නැත</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="unfinished"/>
+        <translation>ජාලගතව ඇතත් අන්තර්ජාල ප්‍රවේශය නොමැත</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>රැහැන් රහිත සම්බන්ධතාවය: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation type="unfinished"/>
+        <translation>රැහැන් රහිත ජාලය</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>රැහැන් රහිත ජාලය %1</translation>
     </message>
 </context>
 </TS>

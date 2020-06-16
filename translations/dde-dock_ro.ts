@@ -20,28 +20,16 @@
         <translation>Data și ora</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Oră în format 12 ore</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Oră în format 24 de ore</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Configurări pentru timp</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>Format 12-ore</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>Format 24-ore</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Configurări pentru timp</translation>
     </message>
 </context>
 <context>
@@ -67,11 +55,11 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anulare</translation>
+        <translation>Anulează</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Ștergere</translation>
+        <translation>Ștergeți</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Dezactivați conexiunea la rețea</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Activați rețeaua</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Configurări de rețea</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Dispozitiv Dezactivat</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Conexiune prin cablu: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Neconectat</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Conectare</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Cablu Reţea Deconectat</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Capacitate %1, %2 Ore %3 Min rămase</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Încărcat %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Încărcare %1, %2 Min până la plin</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>Încărcare %1, %2 Ore %3 Min rămase până la plin</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>%1 charged</source>
-        <translation type="unfinished"/>
+        <translation>%1 încărcat</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation>Capactitate %1 ....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Închidere</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Repornire</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -378,23 +291,15 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Mut</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Setări audio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volumul actual %1</translation>
+        <translation>Mute</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări Sunet</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Volum %1</translation>
     </message>
 </context>
 <context>
@@ -455,16 +360,12 @@
         <translation>Fără conexiune</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Conexiune fără fir: %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Conectat dar fară acces Internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Conexiune fără fir: %1</translation>
     </message>
 </context>
 <context>

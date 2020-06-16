@@ -20,18 +20,6 @@
         <translation>Tarikhwaktu</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">Waktu 12 Jam</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">Waktu 24 Jam</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Tetapan Waktu</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>Waktu 12-jam</translation>
     </message>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Lumpuhkan rangkaian</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Benarkan rangkaian</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Tetapan rangkaian</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Peranti dilumpuhkan</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Sambungan tanpa wayar: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Sambungan berwayar: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Tidak bersambung</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Menyambung</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Bersambung tetapi tiada capaian internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Kabel rangkaian telah dicabut</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -281,10 +202,6 @@
         <translation>Kapasiti %1, %2 j %3 min berbaki</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">%1 dicaskan</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Mengecas %1, %2 min sehingga penuh</translation>
     </message>
@@ -293,15 +210,15 @@
         <translation>Mengecas %1, %2 j %3 min sehingga penuh</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Mengecas %1 ....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 dicas</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -325,10 +242,6 @@
     <message>
         <source>Shut down</source>
         <translation>Matikan</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Mula semula</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -379,14 +292,6 @@
     <message>
         <source>Mute</source>
         <translation>Senyap</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Tetapan Audio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volum Semasa %1</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,10 +358,6 @@
     <message>
         <source>No Network</source>
         <translation>Tiada Rangkaian</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Sambungan Tanpa Wayar: %1</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>

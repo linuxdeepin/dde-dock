@@ -20,18 +20,6 @@
         <translation>Date et heure</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 Heures</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 Heures</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">Réglages de l&apos;heure</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
         <translation>Affichage 12 heures</translation>
     </message>
@@ -56,7 +44,7 @@
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Paramètres du réseau</translation>
+        <translation>Paramètres réseau</translation>
     </message>
 </context>
 <context>
@@ -140,7 +128,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Masquer intelligemment</translation>
+        <translation>Masquage intelligemment</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -178,73 +166,6 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="vanished">Connexion sans fil</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="vanished">Connexion filaire</translation>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="vanished">Désactiver la connexion filaire</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="vanished">Activer la connexion filaire</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="vanished">Désactiver la connexion sans fil</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="vanished">Activer la connexion sans fil</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="vanished">Désactiver le réseau</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="vanished">Activer le réseau</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="vanished">Paramètres réseau</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="vanished">Périphérique désactivé </translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="vanished">Connexion sans fil : %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="vanished">Connexion filaire : %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="vanished">Non connecté</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="vanished">Connexion</translation>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="vanished">Connecté mais pas d’accès internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="vanished">Câble réseau débranché</translation>
-    </message>
-</context>
-<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -274,15 +195,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacité : %1, %2 minutes restantes</translation>
+        <translation>Capacité: %1, %2 minutes restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacité : %1, %2 heures et %3 minutes restantes</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Chargé à %1</translation>
+        <translation>Capacité: %1, %2 heures et %3 minutes restantes</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -293,16 +210,16 @@
         <translation>En charge %1, %2 heures et %3 minutes avant la charge complète</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation>Chargement de %1 en cours....</translation>
-    </message>
-    <message>
         <source>%1 charged</source>
         <translation>%1 chargé</translation>
     </message>
     <message>
         <source>Capacity %1 ....</source>
         <translation>Capacité %1....</translation>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -324,19 +241,15 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Arrêter</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">Redémarrer</translation>
+        <translation>Éteindre</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Mettre en veille </translation>
+        <translation>Mise en veille </translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Hiberner</translation>
+        <translation>Mise en hibernation</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -381,16 +294,8 @@
         <translation>Muet</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">Paramètres audio</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">Volume actuel %1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
-        <translation>Options sonores</translation>
+        <translation>Paramètres sonores</translation>
     </message>
     <message>
         <source>Volume %1</source>
@@ -427,7 +332,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Vider</translation>
+        <translation>Vide</translation>
     </message>
 </context>
 <context>
@@ -445,7 +350,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire : %1</translation>
+        <translation>Connexion filaire: %1</translation>
     </message>
 </context>
 <context>
@@ -455,16 +360,12 @@
         <translation>Pas de réseau</translation>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">Connexion sans fil : %1</translation>
-    </message>
-    <message>
         <source>Connected but no Internet access</source>
         <translation>Connecté mais pas d’accès internet</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Connexion sans fil : %1</translation>
+        <translation>Connexion sans fil: %1</translation>
     </message>
 </context>
 <context>
