@@ -72,10 +72,10 @@ protected:
     void setWrapperLayout(QBoxLayout *layout);
     bool expand() const;
     Dock::Position dockPosition() const;
-    QSize wrapperSize() const;
+//    QSize wrapperSize() const;
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
 private Q_SLOTS:
@@ -94,7 +94,7 @@ private:
     bool m_expand;
     Dock::Position m_dockPosition;
 
-    QSize m_wrapperSize;
+//    QSize m_wrapperSize;
     int m_itemSize = 40;
 };
 

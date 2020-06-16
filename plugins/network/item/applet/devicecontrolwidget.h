@@ -46,7 +46,7 @@ signals:
     void requestRefresh() const;
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) override;
     void refreshIcon();
 
 private slots:

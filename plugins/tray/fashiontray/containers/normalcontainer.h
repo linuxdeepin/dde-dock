@@ -11,16 +11,16 @@ public:
 
     // AbstractContainer interface
 public:
-    bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
-    void addWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
-    void refreshVisible() Q_DECL_OVERRIDE;
-    void setExpand(const bool expand) Q_DECL_OVERRIDE;
+    bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) override;
+    void addWrapper(FashionTrayWidgetWrapper *wrapper) override;
+    void refreshVisible() override;
+    void setExpand(const bool expand) override;
     int itemCount() override;
     QSize sizeHint() const override;
     void updateSize();
 
 protected:
-    int whereToInsert(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
+    int whereToInsert(FashionTrayWidgetWrapper *wrapper) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private:

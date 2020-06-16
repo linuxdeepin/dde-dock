@@ -38,7 +38,7 @@ class DatetimePlugin : public QObject, PluginsItemInterface
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "datetime.json")
 
 public:
-    explicit DatetimePlugin(QObject *parent = 0);
+    explicit DatetimePlugin(QObject *parent = nullptr);
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -48,8 +48,8 @@ public:
     bool pluginIsAllowDisable() override { return true; }
     bool pluginIsDisable() override;
 
-    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
-    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
 
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;

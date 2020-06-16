@@ -29,8 +29,16 @@ const double DoubleZero = 0.000001;
 
 Monitor::Monitor(QObject *parent)
     : QObject(parent)
+    , m_x(0)
+    , m_y(0)
+    , m_w(0)
+    , m_h(0)
+    , m_mmWidth(0)
+    , m_mmHeight(0)
     , m_scale(-1.0)
-    , m_brightness(1.0)
+    , m_rotate(0)
+//    , m_brightness(1.0)
+    , m_enable(false)
 {
 
 }
@@ -114,15 +122,15 @@ void Monitor::setRotate(const quint16 rotate)
     Q_EMIT rotateChanged(m_rotate);
 }
 
-void Monitor::setBrightness(const double brightness)
-{
-    if (fabs(m_brightness - brightness) < DoubleZero)
-        return;
+//void Monitor::setBrightness(const double brightness)
+//{
+//    if (fabs(m_brightness - brightness) < DoubleZero)
+//        return;
 
-    m_brightness = brightness;
+//    m_brightness = brightness;
 
-    Q_EMIT brightnessChanged(m_brightness);
-}
+//    Q_EMIT brightnessChanged(m_brightness);
+//}
 
 void Monitor::setName(const QString &name)
 {
@@ -190,37 +198,36 @@ void Monitor::setMonitorEnable(bool enable)
     Q_EMIT enableChanged(enable);
 }
 
+//bool Monitor::isSameResolution(const Resolution &r1, const Resolution &r2)
+//{
+//    return r1.width() == r2.width() && r1.height() == r2.height();
+//}
 
-bool Monitor::isSameResolution(const Resolution &r1, const Resolution &r2)
-{
-    return r1.width() == r2.width() && r1.height() == r2.height();
-}
+//bool Monitor::isSameRatefresh(const Resolution &r1, const Resolution &r2)
+//{
+//    return fabs(r1.rate() - r2.rate()) < 0.000001;
+//}
 
-bool Monitor::isSameRatefresh(const Resolution &r1, const Resolution &r2)
-{
-    return fabs(r1.rate() - r2.rate()) < 0.000001;
-}
+//bool Monitor::hasResolution(const Resolution &r)
+//{
+//    for (auto m : m_modeList) {
+//        if (isSameResolution(m, r)) {
+//            return true;
+//        }
+//    }
 
-bool Monitor::hasResolution(const Resolution &r)
-{
-    for (auto m : m_modeList) {
-        if (isSameResolution(m, r)) {
-            return true;
-        }
-    }
+//    return false;
+//}
 
-    return false;
-}
+//bool Monitor::hasResolutionAndRate(const Resolution &r)
+//{
+//    for (auto m : m_modeList) {
+//        if (fabs(m.rate() - r.rate()) < 0.000001 &&
+//                m.width() == r.width() &&
+//                m.height() == r.height()) {
+//            return true;
+//        }
+//    }
 
-bool Monitor::hasResolutionAndRate(const Resolution &r)
-{
-    for (auto m : m_modeList) {
-        if (fabs(m.rate() - r.rate()) < 0.000001 &&
-                m.width() == r.width() &&
-                m.height() == r.height()) {
-            return true;
-        }
-    }
-
-    return false;
-}
+//    return false;
+//}

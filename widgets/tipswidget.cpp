@@ -4,7 +4,10 @@
 #include <QAccessible>
 #include <QTextDocument>
 
-TipsWidget::TipsWidget(QWidget *parent) : QFrame(parent)
+TipsWidget::TipsWidget(QWidget *parent)
+    : QFrame(parent)
+    , m_width(0)
+    , m_type(SingleLine)
 {
 
 }

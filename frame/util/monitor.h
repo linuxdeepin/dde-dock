@@ -70,7 +70,7 @@ public:
     inline double scale() const { return m_scale; }
     inline bool isPrimary() const { return m_primary == m_name; }
     inline quint16 rotate() const { return m_rotate; }
-    inline double brightness() const { return m_brightness; }
+//    inline double brightness() const { return m_brightness; }
     inline const QRect rect() const { return QRect(m_x, m_y, m_w, m_h); }
     inline const QString name() const { Q_ASSERT(!m_name.isEmpty()); return m_name; }
     inline const QString path() const { return m_path; }
@@ -89,16 +89,16 @@ Q_SIGNALS:
     void hChanged(const int h) const;
     void scaleChanged(const double scale) const;
     void rotateChanged(const quint16 rotate) const;
-    void brightnessChanged(const double brightness) const;
+//    void brightnessChanged(const double brightness) const;
     void currentModeChanged(const Resolution &resolution) const;
     void modelListChanged(const QList<Resolution> &resolution) const;
     void enableChanged(bool enable) const;
 
-public:
-    static bool isSameResolution(const Resolution &r1,const Resolution &r2);
-    static bool isSameRatefresh(const Resolution &r1,const Resolution &r2);
-    bool hasResolution(const Resolution &r);
-    bool hasResolutionAndRate(const Resolution &r);
+//public:
+//    static bool isSameResolution(const Resolution &r1,const Resolution &r2);
+//    static bool isSameRatefresh(const Resolution &r1,const Resolution &r2);
+//    bool hasResolution(const Resolution &r);
+//    bool hasResolutionAndRate(const Resolution &r);
 
 public Q_SLOTS:
     void setX(const int x);
@@ -110,7 +110,7 @@ public Q_SLOTS:
     void setScale(const double scale);
     void setPrimary(const QString &primaryName);
     void setRotate(const quint16 rotate);
-    void setBrightness(const double brightness);
+//    void setBrightness(const double brightness);
     void setName(const QString &name);
     void setPath(const QString &path);
     void setRotateList(const QList<quint16> &rotateList);
@@ -127,7 +127,8 @@ private:
     uint m_mmHeight;
     double m_scale;
     quint16 m_rotate;
-    double m_brightness;
+//    double m_brightness;
+
     QString m_name;
     QString m_path;
     QString m_primary;

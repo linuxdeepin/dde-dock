@@ -138,7 +138,6 @@ void AppSnapshot::fetchSnapshot()
     SHMInfo *info = nullptr;
     uchar *image_data = nullptr;
     XImage *ximage = nullptr;
-    unsigned char *prop_to_return_gtk = nullptr;
 
     do {
         // get window image from shm(only for deepin app)
@@ -172,7 +171,7 @@ void AppSnapshot::fetchSnapshot()
         Q_ASSERT(!qimage.isNull());
 
         // remove shadow frame
-        m_snapshotSrcRect = rectRemovedShadow(qimage, prop_to_return_gtk);
+        m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
         m_snapshot = qimage;
     } while (false);
 
@@ -191,7 +190,6 @@ void AppSnapshot::fetchSnapshot()
     if (image_data) shmdt(image_data);
     if (ximage) XDestroyImage(ximage);
     if (info) XFree(info);
-    if (prop_to_return_gtk) XFree(prop_to_return_gtk);
 
     update();
 }

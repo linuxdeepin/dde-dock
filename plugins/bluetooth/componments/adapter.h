@@ -55,9 +55,9 @@ public:
     void addDevice(const QJsonObject &deviceObj);
     void removeDevice(const QString &deviceId);
     void updateDevice(const QJsonObject &dviceJson);
-    void removeAllDevices();
+//    void removeAllDevices();
     const QMap<QString, const Device *> &paredDevices() const;
-    int paredDevicesCount() const;
+//    int paredDevicesCount() const;
 
 Q_SIGNALS:
     void nameChanged(const QString &name) const;

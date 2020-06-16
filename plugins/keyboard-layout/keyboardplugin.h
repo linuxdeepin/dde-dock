@@ -23,15 +23,15 @@
 #include "pluginsiteminterface.h"
 #include "dbusadaptors.h"
 
-class KeyboardPlugin : public QObject , PluginsItemInterface
+class KeyboardPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "keyboard.json")
 
 public:
-     KeyboardPlugin(QObject *parent = nullptr);
-    ~KeyboardPlugin();
+    explicit KeyboardPlugin(QObject *parent = nullptr);
+    ~KeyboardPlugin() override;
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;

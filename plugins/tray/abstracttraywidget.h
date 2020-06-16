@@ -54,8 +54,8 @@ Q_SIGNALS:
     void requestRefershWindowVisible();
 
 protected:
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
     void handleMouseRelease();
     const QRect perfectIconRect() const;

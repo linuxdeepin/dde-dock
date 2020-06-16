@@ -41,11 +41,11 @@ public:
 
 public:
     QString itemKeyForConfig() override;
-    void setActive(const bool active) Q_DECL_OVERRIDE;
-    void updateIcon() Q_DECL_OVERRIDE;
-    const QImage trayImage() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
-    inline TrayType trayTyep() const Q_DECL_OVERRIDE { return TrayType::SystemTray; }
+    void setActive(const bool active) override;
+    void updateIcon() override;
+    const QImage trayImage() override;
+    void sendClick(uint8_t mouseButton, int x, int y) override;
+    inline TrayType trayTyep() const override { return TrayType::SystemTray; }
 
     QWidget *trayTipsWidget();
     QWidget *trayPopupApplet();
@@ -66,11 +66,11 @@ signals:
     void itemVisibleChanged(bool visible);
 
 protected:
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    bool event(QEvent *event) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     void showEvent(QShowEvent* event) override;
 
 protected:

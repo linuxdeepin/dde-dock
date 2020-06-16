@@ -10,11 +10,11 @@ public:
     explicit HoldContainer(TrayPlugin *trayPlugin, QWidget *parent = nullptr);
 
 public:
-    bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
-    void addWrapper(FashionTrayWidgetWrapper *wrapper) Q_DECL_OVERRIDE;
-    void refreshVisible() Q_DECL_OVERRIDE;
-    void setDockPosition(const Dock::Position pos) Q_DECL_OVERRIDE;
-//    QSize totalSize() const Q_DECL_OVERRIDE;
+    bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) override;
+    void addWrapper(FashionTrayWidgetWrapper *wrapper) override;
+    void refreshVisible() override;
+    void setDockPosition(const Dock::Position pos) override;
+//    QSize totalSize() const override;
 
 private:
     QBoxLayout *m_mainBoxLayout;

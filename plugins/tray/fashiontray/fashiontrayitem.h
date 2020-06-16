@@ -62,10 +62,10 @@ public slots:
     void onPluginSettingsChanged();
 
 protected:
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
     bool event(QEvent *event) override;
 
 private:

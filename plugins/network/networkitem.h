@@ -66,9 +66,9 @@ public slots:
     void refreshIcon();
 
 protected:
-    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *obj,QEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    bool eventFilter(QObject *obj,QEvent *event) override;
 
 private slots:
     void wiredsEnable(bool enable);

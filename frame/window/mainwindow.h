@@ -69,14 +69,14 @@ public slots:
 
 private:
     using QWidget::show;
-    bool event(QEvent *e);
-    void showEvent(QShowEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
+    bool event(QEvent *e) override;
+    void showEvent(QShowEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
+    void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
 
     void initSNIHost();
     void initComponents();
@@ -84,10 +84,10 @@ private:
     void resizeMainWindow();
     void resizeMainPanelWindow();
 
-    const QPoint x11GetWindowPos();
-    void x11MoveWindow(const int x, const int y);
-    void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
-    bool appIsOnDock(const QString &appDesktop);
+//    const QPoint x11GetWindowPos();
+//    void x11MoveWindow(const int x, const int y);
+//    void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
+    bool appIsOnDock(const QString &appDesktop) override;
     void onRegionMonitorChanged(int x, int y, const QString &key);
     void updateRegionMonitorWatch();
     void getTrayVisableItemCount();

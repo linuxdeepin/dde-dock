@@ -129,7 +129,7 @@ void HomeMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     // 根据上面接口设置的 id 执行不同的操作
     if (menuId == "refresh") {
         m_pluginWidget->storageInfo()->refresh();
-    } else if ("open") {
+    } else if (menuId == "open") {
         QProcess::startDetached("gparted");
     }
 }

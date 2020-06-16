@@ -54,9 +54,9 @@ public:
 
 public:
     explicit WirelessItem(dde::network::WirelessDevice *device);
-    ~WirelessItem();
+    ~WirelessItem() override;
 
-    QWidget *itemApplet();
+    QWidget *itemApplet() override;
     int APcount();
     bool deviceEanbled();
     void setDeviceEnabled(bool enable);

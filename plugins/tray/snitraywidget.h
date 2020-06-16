@@ -49,15 +49,15 @@ public:
 
 public:
     SNITrayWidget(const QString &sniServicePath, QWidget *parent = Q_NULLPTR);
-    virtual ~SNITrayWidget();
+    virtual ~SNITrayWidget() override;
 
     QString itemKeyForConfig() override;
-    void setActive(const bool active) Q_DECL_OVERRIDE;
-    void updateIcon() Q_DECL_OVERRIDE;
-    void sendClick(uint8_t mouseButton, int x, int y) Q_DECL_OVERRIDE;
-    const QImage trayImage() Q_DECL_OVERRIDE;
+    void setActive(const bool active) override;
+    void updateIcon() override;
+    void sendClick(uint8_t mouseButton, int x, int y) override;
+    const QImage trayImage() override;
 
-    bool isValid();
+    bool isValid() override;
     SNITrayWidget::ItemStatus status();
     SNITrayWidget::ItemCategory category();
 
@@ -102,7 +102,7 @@ private Q_SLOTS:
     void leaveEvent(QEvent *event) override;
 
 private:
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) override;
     QPixmap newIconPixmap(IconType iconType);
 
 private:

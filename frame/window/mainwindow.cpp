@@ -58,7 +58,7 @@ private:
     QPoint m_resizePoint;
 
 public:
-    DragWidget(QWidget *parent) : QWidget(parent)
+    explicit DragWidget(QWidget *parent) : QWidget(parent)
     {
         setObjectName("DragWidget");
         m_dragStatus = false;
@@ -505,36 +505,36 @@ void MainWindow::initConnections()
     connect(m_eventInter, &XEventMonitor::CursorMove, this, &MainWindow::onRegionMonitorChanged);
 }
 
-const QPoint MainWindow::x11GetWindowPos()
-{
-    const auto disp = QX11Info::display();
+//const QPoint MainWindow::x11GetWindowPos()
+//{
+//    const auto disp = QX11Info::display();
 
-    unsigned int unused;
-    int x;
-    int y;
-    Window unused_window;
+//    unsigned int unused;
+//    int x;
+//    int y;
+//    Window unused_window;
 
-    XGetGeometry(disp, winId(), &unused_window, &x, &y, &unused, &unused, &unused, &unused);
-    XFlush(disp);
+//    XGetGeometry(disp, winId(), &unused_window, &x, &y, &unused, &unused, &unused, &unused);
+//    XFlush(disp);
 
-    return QPoint(x, y);
-}
+//    return QPoint(x, y);
+//}
 
-void MainWindow::x11MoveWindow(const int x, const int y)
-{
-    const auto disp = QX11Info::display();
+//void MainWindow::x11MoveWindow(const int x, const int y)
+//{
+//    const auto disp = QX11Info::display();
 
-    XMoveWindow(disp, winId(), x, y);
-    XFlush(disp);
-}
+//    XMoveWindow(disp, winId(), x, y);
+//    XFlush(disp);
+//}
 
-void MainWindow::x11MoveResizeWindow(const int x, const int y, const int w, const int h)
-{
-    const auto disp = QX11Info::display();
+//void MainWindow::x11MoveResizeWindow(const int x, const int y, const int w, const int h)
+//{
+//    const auto disp = QX11Info::display();
 
-    XMoveResizeWindow(disp, winId(), x, y, w, h);
-    XFlush(disp);
-}
+//    XMoveResizeWindow(disp, winId(), x, y, w, h);
+//    XFlush(disp);
+//}
 
 void MainWindow::positionChanged()
 {
@@ -713,18 +713,9 @@ void MainWindow::expand()
     resetPanelEnvironment();
     if (showAniState != QPropertyAnimation::Running && pos() != m_panelShowAni->currentValue()) {
         const QRect windowRect = m_settings->windowRect(m_dockPosition);
-        switch (m_dockPosition) {
-        case Top:
-        case Bottom:
-            startValue = height();
-            endValue = windowRect.height();
-            break;
-        case Left:
-        case Right:
-            startValue = width();
-            endValue = windowRect.width();
-            break;
-        }
+
+        startValue = (m_dockPosition == Top || m_dockPosition == Bottom) ? height() : width();
+        endValue = (m_dockPosition == Top || m_dockPosition == Bottom) ? windowRect.height() : windowRect.width();
 
         if (startValue > DOCK_MAX_SIZE || endValue > DOCK_MAX_SIZE) {
             return;
@@ -742,25 +733,11 @@ void MainWindow::expand()
 
 void MainWindow::narrow()
 {
-    int startValue = 0;
-    int endValue = 0;
-
-    switch (m_dockPosition) {
-    case Top:
-    case Bottom:
-        startValue = height();
-        endValue = 0;
-        break;
-    case Left:
-    case Right:
-        startValue = width();
-        endValue = 0;
-        break;
-    }
+    int startValue = ( m_dockPosition == Top || m_dockPosition == Bottom ) ? height() : width();
 
     m_panelShowAni->stop();
     m_panelHideAni->setStartValue(startValue);
-    m_panelHideAni->setEndValue(endValue);
+    m_panelHideAni->setEndValue(0);
     m_panelHideAni->start();
 }
 

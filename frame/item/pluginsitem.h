@@ -60,9 +60,9 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
     void showEvent(QShowEvent *event) override;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;

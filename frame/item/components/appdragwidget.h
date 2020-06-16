@@ -38,8 +38,8 @@ class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
 {
 public:
-    AppDragWidget(QWidget *parent = Q_NULLPTR);
-    virtual ~AppDragWidget();
+    explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
+    virtual ~AppDragWidget() override;
 
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
@@ -47,11 +47,11 @@ public:
     bool isRemoveAble();
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private:
     void initAnimations();

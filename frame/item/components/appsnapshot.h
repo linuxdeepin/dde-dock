@@ -69,13 +69,13 @@ public slots:
     void setWindowInfo(const WindowInfo &info);
 
 private:
-    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
-    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    bool eventFilter(QObject *watched, QEvent *e) override;
     SHMInfo *getImageDSHM();
     XImage *getImageXlib();
     QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);

@@ -26,8 +26,8 @@
 class AppGraphicsObject : public QGraphicsObject
 {
 public:
-    AppGraphicsObject(QGraphicsItem *parent = Q_NULLPTR) : QGraphicsObject(parent) {}
-    ~AppGraphicsObject() { }
+    explicit AppGraphicsObject(QGraphicsItem *parent = Q_NULLPTR) : QGraphicsObject(parent) {}
+    ~AppGraphicsObject() override { }
 
     void setAppPixmap(QPixmap pix)
     {
@@ -44,13 +44,12 @@ public:
         update();
     }
 
-    QRectF boundingRect() const Q_DECL_OVERRIDE
+    QRectF boundingRect() const override
     {
         return m_appPixmap.rect();
     }
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE
-    {
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) override {
         Q_ASSERT(!m_appPixmap.isNull());
 
         painter->drawPixmap(QPoint(0, 0), m_appPixmap);
@@ -89,13 +88,14 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_followMouseTimer->setSingleShot(false);
     m_followMouseTimer->setInterval(1);
     connect(m_followMouseTimer, &QTimer::timeout, [this] {
-                QPoint destPos = QCursor::pos();
-                move(destPos.x() - width() / 2, destPos.y() - height() / 2);
-            });
+        QPoint destPos = QCursor::pos();
+        move(destPos.x() - width() / 2, destPos.y() - height() / 2);
+    });
     m_followMouseTimer->start();
 }
 
-AppDragWidget::~AppDragWidget() {
+AppDragWidget::~AppDragWidget()
+{
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
@@ -203,7 +203,7 @@ void AppDragWidget::showGoBackAnimation()
 }
 
 void AppDragWidget::onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
-        QAbstractAnimation::State oldState)
+                                                  QAbstractAnimation::State oldState)
 {
     if (newState == QAbstractAnimation::Stopped) {
         hide();
@@ -213,28 +213,28 @@ bool AppDragWidget::isRemoveAble()
 {
     const QPoint &p = QCursor::pos();
     switch (m_dockPosition) {
-        case Dock::Position::Left:
-            if ((p.x() - m_dockGeometry.topRight().x()) > (m_dockGeometry.width() * 3)) {
-                return true;
-            }
-            break;
-        case Dock::Position::Top:
-            if ((p.y() - m_dockGeometry.bottomLeft().y()) > (m_dockGeometry.height() * 3)) {
-                return true;
-            }
-            break;
-        case Dock::Position::Right:
-            if ((m_dockGeometry.topLeft().x() - p.x()) > (m_dockGeometry.width() * 3)) {
-                return true;
-            }
-            break;
-        case Dock::Position::Bottom:
-            if ((m_dockGeometry.topLeft().y() - p.y()) > (m_dockGeometry.height() * 3)) {
-                return true;
-            }
-            break;
-        default:
-            break;
+    case Dock::Position::Left:
+        if ((p.x() - m_dockGeometry.topRight().x()) > (m_dockGeometry.width() * 3)) {
+            return true;
+        }
+        break;
+    case Dock::Position::Top:
+        if ((p.y() - m_dockGeometry.bottomLeft().y()) > (m_dockGeometry.height() * 3)) {
+            return true;
+        }
+        break;
+    case Dock::Position::Right:
+        if ((m_dockGeometry.topLeft().x() - p.x()) > (m_dockGeometry.width() * 3)) {
+            return true;
+        }
+        break;
+    case Dock::Position::Bottom:
+        if ((m_dockGeometry.topLeft().y() - p.y()) > (m_dockGeometry.height() * 3)) {
+            return true;
+        }
+        break;
+    default:
+        break;
     }
     return false;
 }

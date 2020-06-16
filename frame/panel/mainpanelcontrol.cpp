@@ -935,7 +935,7 @@ void MainPanelControl::resizeDockIcon()
         iconCount -= pluginCount;
 
         // 余数
-        int yu = (totalLength % iconCount);
+        yu = (totalLength % iconCount);
         // icon宽度 = (总宽度-余数)/icon个数
         iconSize = (totalLength - yu) / iconCount;
     }

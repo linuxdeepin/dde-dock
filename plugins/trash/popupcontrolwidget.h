@@ -40,7 +40,7 @@ public:
     bool empty() const;
     int trashItems() const;
     QSize sizeHint() const;
-    static const QString trashDir();
+//    static const QString trashDir();
 
 public slots:
     void openTrashFloder();
