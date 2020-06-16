@@ -57,7 +57,7 @@ public:
     inline int narrowTimeout() const { return 100; }
     inline bool autoHide() const { return m_autoHide; }
     const QRect primaryRect() const;
-    const QRect currentRect();
+    const QRect currentRect(const bool beNarrow = false);
     const QList<QRect> monitorsRect() const;
     inline const QRect primaryRawRect() const { return m_primaryRawRect; }
     inline const QRect currentRawRect() const { return m_currentRawRect; }
@@ -67,7 +67,7 @@ public:
     const int dockMargin() const;
 
 //    const QSize panelSize() const;
-    const QRect windowRect(const Position position, const bool hide = false);
+    const QRect windowRect(const Position position, const bool hide = false, const bool beNarrow = false);
     qreal dockRatio() const;
 
     void showDockSettingsMenu();
